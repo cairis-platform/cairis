@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE cairis_model SYSTEM "/home/irisuser/cairis/src/config/cairis_model.dtd">
+<!DOCTYPE cairis_model SYSTEM "/home/irisuser/CAIRIS/cairis/src/config/cairis_model.dtd">
 <cairis_model>
 
 <tvtypes>
@@ -458,7 +458,7 @@ The development of a structure for trial image metadata, based on a careful desc
     <vulnerable_asset name="Data node" />
   </vulnerability_environment>
 </vulnerability>
-<attacker name="Carol" image="/home/irisuser/cairis/src/images/Carol.jpg">
+<attacker name="Carol" image="/home/irisuser/CAIRIS/cairis/src/images/Carol.jpg">
   <description>Carol is a freelance journalist working in the South East of England.  Having heard stories about data theft, she is currently investigating a number of e-Science projects, including NeuroGrid, to see if she can find a story.
 As security is a topical subject in the media, Carol has been able to secure some seed money from a national newspaper to fund her investigation.</description>
   <attacker_environment name="Psychosis">
@@ -474,7 +474,7 @@ As security is a topical subject in the media, Carol has been able to secure som
     <capability name="Resources/Funding" value="High" />
   </attacker_environment>
 </attacker>
-<attacker name="Mallory" image="/home/irisuser/cairis/src/images/Mallory.jpg">
+<attacker name="Mallory" image="/home/irisuser/CAIRIS/cairis/src/images/Mallory.jpg">
   <description>Mallory is a freelance Bot maintainer.  He is constantly on the look out for new, powerful machines to add to the bespoke Botnets he builds for his clients.</description>
   <attacker_environment name="Psychosis">
     <attacker_role name="Hacker" />
@@ -507,7 +507,7 @@ As security is a topical subject in the media, Carol has been able to secure som
     <capability name="Software" value="High" />
   </attacker_environment>
 </attacker>
-<attacker name="Trudy" image="/home/irisuser/cairis/src/images/Trudy.jpg">
+<attacker name="Trudy" image="/home/irisuser/CAIRIS/cairis/src/images/Trudy.jpg">
   <description>Trudy is a 1st year undergraduate Computer Science student at Pembroke College, Oxford.  Although she doesn't have any formal computer security education, she likes to visit black hat web-sites and play with known exploits at attack script repositories.  Her interest is not so much personal gain as it is understanding how these scripts work.</description>
   <attacker_environment name="Stroke">
     <attacker_role name="Hacker" />
@@ -528,7 +528,7 @@ As security is a topical subject in the media, Carol has been able to secure som
     <capability name="Knowledge/Books and Manuals" value="High" />
   </attacker_environment>
 </attacker>
-<attacker name="Yves" image="/home/irisuser/cairis/src/images/Yves.jpg">
+<attacker name="Yves" image="/home/irisuser/CAIRIS/cairis/src/images/Yves.jpg">
   <description>Yves is a high-flying post-doctoral research fellow, associated with the Stroke exemplar.  He has very limited access to NeuroGrid, but has some novel theories which could drastically cut the time take to perform clinical trials.  Yves can't wait for ethical approval to access the data he needs, so is looking at other ways of accessing clinical data sets on NeuroGrid.</description>
   <attacker_environment name="Stroke">
     <attacker_role name="Data Consumer" />
@@ -767,7 +767,7 @@ Yves persuades Sally to run a workflow for him because he is a hurry and still d
 </riskanalysis>
 
 <usability>
-<persona name="Claire" type="Primary" assumption_persona="FALSE" image="/home/irisuser/cairis/examples/Claire.jpg" >
+<persona name="Claire" type="Primary" assumption_persona="FALSE" image="/home/irisuser/CAIRIS/cairis/examples/Claire.jpg" >
   <activities>Claire is a clinical researcher within the Psychosis exemplar.  She is responsible for a group which is developing and testing processing pipelines for harmonising MRI images from different centres.
 
 Claire authorises requests that other members of her group make for accessing NeuroGrid, and is officially responsible for making sure her colleagues aren't misusing their access.  In practice, however, she delegates much of her responsibility to one of her more security-knowledgeable colleagues.</activities>
@@ -788,7 +788,7 @@ Because obtaining data is an expensive business, Claire also tries to reuse data
     <narrative>Nothing stipulated</narrative>
   </persona_environment>
 </persona>
-<persona name="Tom" type="Primary" assumption_persona="FALSE" image="/home/irisuser/cairis/examples/Tom.jpg" >
+<persona name="Tom" type="Primary" assumption_persona="FALSE" image="/home/irisuser/CAIRIS/cairis/examples/Tom.jpg" >
   <activities>Tom is an applications developer within the Stroke exemplar.  
 
 Tom collaborates with a his clinical researchers colleagues as part of a number of on-going trials to support their research work.  This includes anonymises images, and uploads these to NeuroGrid.</activities>
@@ -805,7 +805,7 @@ Tom also wants security to be practical.  Tom shares the infrastructure team's v
     <narrative>Nothing stipulated</narrative>
   </persona_environment>
 </persona>
-<persona name="Matt" type="Primary" assumption_persona="FALSE" image="/home/irisuser/cairis/examples/Matt.jpg" >
+<persona name="Matt" type="Primary" assumption_persona="FALSE" image="/home/irisuser/CAIRIS/cairis/examples/Matt.jpg" >
   <activities>Matt is a system administrator on the infrastructure team.  In addition to maintaining the infrastructure, Matt and his team are responsible for securing the NeuroGrid infrastructure; this includes network security and software security on the NeuroGrid node machines.
 
 Matt is also the designated NeuroGrid Certificate Authority and, as such, is often the first line for users in all exemplars if there are NeuroGrid access problems.  As the infrastructure team are also responsible for maintaining the NeuroGrid access control policies, Matt also helps data owners craft the fine grained policies controlling access to managed datasets.</activities>
