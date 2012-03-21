@@ -1,0 +1,15 @@
+<!-- DTD for CAIRIS threat and vulnerability directory -->
+<!-- $URL: svn://edison.comlab.ox.ac.uk/res08/iris/iris/config/directory.dtd $ $Id: directory.dtd 330 2010-10-31 15:01:28Z shaf $ -->
+
+<!ELEMENT directory (vulnerability+,threat+)>
+<!ELEMENT vulnerability (description)>
+<!ATTLIST vulnerability label CDATA #REQUIRED>
+<!ATTLIST vulnerability name CDATA #REQUIRED>
+<!ATTLIST vulnerability type CDATA #REQUIRED>
+<!ATTLIST vulnerability reference CDATA #REQUIRED>
+<!ELEMENT threat (description)>
+<!ATTLIST threat label CDATA #REQUIRED>
+<!ATTLIST threat name CDATA #REQUIRED>
+<!ATTLIST threat type CDATA #REQUIRED>
+<!ATTLIST threat reference CDATA #REQUIRED>
+<!ELEMENT description (#PCDATA)>

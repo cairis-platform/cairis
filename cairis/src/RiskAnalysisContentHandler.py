@@ -1,0 +1,473 @@
+#$URL: svn://edison.comlab.ox.ac.uk/res08/iris/iris/SecurityPatternContentHandler.py $ $Id: RiskAnalysisContentHandler.py 567 2012-03-13 22:31:40Z shaf $
+
+from xml.sax.handler import ContentHandler
+from RoleParameters import RoleParameters
+from AssetParameters import AssetParameters
+from VulnerabilityParameters import VulnerabilityParameters
+from AttackerParameters import AttackerParameters
+from ThreatParameters import ThreatParameters
+from RiskParameters import RiskParameters
+from ResponseParameters import ResponseParameters
+from AssetEnvironmentProperties import AssetEnvironmentProperties
+from VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
+from AttackerEnvironmentProperties import AttackerEnvironmentProperties
+from ThreatEnvironmentProperties import ThreatEnvironmentProperties
+from MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
+from AcceptEnvironmentProperties import AcceptEnvironmentProperties
+from TransferEnvironmentProperties import TransferEnvironmentProperties
+from MitigateEnvironmentProperties import MitigateEnvironmentProperties
+from MisuseCase import MisuseCase
+from ClassAssociationParameters import ClassAssociationParameters
+
+def a2i(spLabel):
+  if spLabel == 'Low':
+    return 1
+  elif spLabel == 'Medium':
+    return 2
+  elif spLabel == 'High':
+    return 3
+  else:
+    return 0
+  
+  
+class RiskAnalysisContentHandler(ContentHandler):
+  def __init__(self):
+    self.theRoleParameters = []
+    self.theAssetParameters = []
+    self.theVulnerabilities = []
+    self.theAttackerParameters = []
+    self.theThreats = []
+    self.theRisks = []
+    self.theResponses = []
+    self.theEnvironmentProperties = []
+    self.theAssociations = []
+    self.resetRoleAttributes()
+    self.resetAssetAttributes()
+    self.resetVulnerabilityAttributes()
+    self.resetAttackerAttributes()
+    self.resetThreatAttributes()
+    self.resetRiskAttributes()
+    self.resetResponseAttributes()
+    self.resetAssociationAttributes()
+
+  def resolveEntity(self,publicId,systemId):
+    return "/home/irisuser/iris/iris/config/riskanalysis.dtd"
+
+
+  def associations(self):
+    return self.theAssociations
+
+  def roles(self):
+    return self.theRoleParameters
+
+  def assets(self):
+    return self.theAssetParameters
+
+  def vulnerabilities(self):
+    return self.theVulnerabilities
+
+  def attackers(self):
+    return self.theAttackerParameters
+
+  def threats(self):
+    return self.theThreats
+
+  def risks(self):
+    return self.theRisks
+
+  def responses(self):
+    return self.theResponses
+
+  def resetRoleAttributes(self):
+    self.inDescription = 0
+    self.theName = ''
+    self.theType = ''
+    self.theShortCode = ''
+    self.theDescription = ''
+
+  def resetAssetAttributes(self):
+    self.inDescription = 0
+    self.inSignificance = 0
+    self.inCritical = 0
+    self.theName = ''
+    self.theShortCode = ''
+    self.theAssetType = ''
+    self.isCritical = False
+    self.theCriticalRationale = ''
+    self.theDescription = ''
+    self.theSignificance = ''
+    self.theEnvironmentProperties = []
+
+  def resetSecurityPropertyAttributes(self):
+    self.theEnvironmentName = ''
+    self.thePropertyName = ''
+    self.thePropertyValue = 'None'
+    self.inRationale = 0
+    self.theRationale = ''
+
+
+  def resetVulnerabilityAttributes(self):
+    self.inDescription = 0
+    self.theName = ''
+    self.theType = ''
+    self.theDescription = ''
+    self.theEnvironmentProperties = []
+    self.resetVulnerabilityEnvironmentAttributes()
+
+  def resetVulnerabilityEnvironmentAttributes(self):
+    self.theEnvironmentName = ''
+    self.theSeverity = ''
+    self.theAssets = []
+
+  def resetAttackerAttributes(self):
+    self.inDescription = 0
+    self.theName = ''
+    self.theImage = ''
+    self.theDescription = ''
+    self.theEnvironmentProperties = []
+    self.resetAttackerEnvironmentAttributes()
+
+  def resetAttackerEnvironmentAttributes(self):
+    self.theEnvironmentName = ''
+    self.theRoles = []
+    self.theMotivations = []
+    self.theCapabilities = []
+
+  def resetThreatAttributes(self):
+    self.inMethod = 0
+    self.theName = ''
+    self.theType = ''
+    self.theMethod = ''
+    self.theEnvironmentProperties = []
+    self.resetThreatEnvironmentAttributes()
+
+  def resetThreatEnvironmentAttributes(self):
+    self.theEnvironmentName = ''
+    self.theLikelihood = ''
+    self.theAttackers = []
+    self.theAssets = []
+    self.theSpDict = {}
+    self.theSpDict['confidentiality'] = (0,'None')
+    self.theSpDict['integrity'] = (0,'None')
+    self.theSpDict['availability'] = (0,'None')
+    self.theSpDict['accountability'] = (0,'None')
+    self.theSpDict['anonymity'] = (0,'None')
+    self.theSpDict['pseudonymity'] = (0,'None')
+    self.theSpDict['unlinkability'] = (0,'None')
+    self.theSpDict['unobservability'] = (0,'None')
+    self.resetThreatenedPropertyAttributes()
+
+  def resetThreatenedPropertyAttributes(self):
+    self.thePropertyName = ''
+    self.thePropertyValue = 'None'
+    self.inRationale = 0
+    self.theRationale = ''
+
+  def resetRiskAttributes(self):
+    self.theName = ''
+    self.theThreat = ''
+    self.theVulnerability = ''
+    self.theEnvironmentProperties = []
+    self.resetRiskEnvironmentAttributes()
+
+  def resetRiskEnvironmentAttributes(self):
+    self.theEnvironmentName = ''
+    self.theDescription = ''
+
+  def resetResponseAttributes(self):
+    self.theRisk = ''
+    self.theType = ''
+    self.theEnvironmentProperties = []
+    self.resetResponseEnvironmentAttributes()
+
+  def resetResponseEnvironmentAttributes(self):
+    self.inDescription = 0
+    self.theEnvironmentName = ''
+    self.theCost = ''
+    self.theDescription = ''
+    self.theResponseRoles = []
+    self.theDetectionPoint = ''
+    self.theDetectionMechanisms = []
+
+  def resetAssociationAttributes(self):
+    self.theEnvironmentName = ''
+    self.theHeadName = ''
+    self.theHeadAdornment = ''
+    self.theHeadNav = ''
+    self.theHeadNry = ''
+    self.theHeadRole = ''
+    self.theTailRole = ''
+    self.theTailNry = ''
+    self.theTailNav = ''
+    self.theTailAdornment = ''
+    self.theTailName = ''
+
+  def startElement(self,name,attrs):
+    self.currentElementName = name
+    if name == 'role':
+      self.theName = attrs['name']
+      self.theShortCode = attrs['short_code']
+      self.theType = attrs['type']
+    elif name == 'asset':
+      self.theName = attrs['name']
+      self.theShortCode = attrs['short_code']
+      self.theAssetType = attrs['type']
+      self.isCritical = attrs['is_critical']
+      self.theSecurityProperties = []
+    elif name == 'security_property':
+      self.theEnvironmentName = attrs['environment'] 
+      self.thePropertyName = attrs['property']
+      self.thePropertyValue = attrs['value']
+    elif name == 'vulnerability':
+      self.theName = attrs['name']
+      self.theType = attrs['type']
+    elif name == 'vulnerability_environment':
+      self.theEnvironmentName = attrs['name']
+      self.theSeverity = attrs['severity']
+    elif name == 'vulnerable_asset':
+      self.theAssets.append(attrs['name'])
+    elif name == 'attacker':
+      self.theName = attrs['name']
+      self.theImage = attrs['image']
+    elif name == 'attacker_environment':
+      self.theEnvironmentName = attrs['name']
+    elif name == 'attacker_role':
+      self.theRoles.append(attrs['name'])
+    elif name == 'motivation':
+      self.theMotivations.append(attrs['name'])
+    elif name == 'capability':
+      self.theCapabilities.append((attrs['name'],attrs['value']))
+    elif name == 'threat':
+      self.theName = attrs['name']
+      self.theType = attrs['type']
+    elif name == 'threat_environment':
+      self.theEnvironmentName = attrs['name']
+      self.theLikelihood = attrs['likelihood']
+    elif name == 'threat_attacker':
+      self.theAttackers.append(attrs['name'])
+    elif name == 'threatened_asset':
+      self.theAssets.append(attrs['name'])
+    elif name == 'threatened_property':
+      self.thePropertyName = attrs['name']
+      self.thePropertyValue = a2i(attrs['value'])
+    elif name == 'risk':
+      self.theName = attrs['name']
+      self.theThreat = attrs['threat']
+      self.theVulnerability = attrs['vulnerability']
+    elif name == 'misusecase':
+      self.theEnvironmentName = attrs['environment']
+    elif name == 'response':
+      self.theRisk = attrs['risk']
+      self.theType = attrs['type']
+    elif name == 'accept_environment':
+      self.theEnvironmentName = attrs['name']
+      self.theCost = attrs['cost']
+    elif name == 'transfer_environment':
+      self.theEnvironmentName = attrs['name']
+    elif name == 'response_role':
+      self.theResponseRoles.append((attrs['name'],attrs['cost']))
+    elif name == 'deter_environment':
+      self.theEnvironmentName = attrs['name']
+      self.theType = 'Deter'
+    elif name == 'prevent_environment':
+      self.theEnvironmentName = attrs['name']
+      self.theType = 'Prevent'
+    elif name == 'detect_environment':
+      self.theEnvironmentName = attrs['name']
+      self.theDetectionPoint = attrs['point']
+      self.theType = 'Detect'
+    elif name == 'react_environment':
+      self.theEnvironmentName = attrs['name']
+      self.theType = 'React'
+    elif name == 'detection_mechanism':
+      self.theDetectionMechanisms.append(attrs['name'])
+    elif name == 'description':
+      self.inDescription = 1
+      self.theDescription = ''
+    elif name == 'method':
+      self.inMethod = 1
+      self.theMethod = ''
+    elif name == 'narrative':
+      self.inDescription = 1
+      self.theDescription = ''
+    elif name == 'rationale':
+      self.inRationale = 1
+      self.theRationale = ''
+    elif name == 'significance':
+      self.inSignificance = 1
+      self.theSignificance = ''
+    elif name == 'critical':
+      self.inCritical = 1
+      self.theCritical = ''
+    elif name == 'asset_association':
+      self.theEnvironmentName = attrs['environment'] 
+      self.theHeadName = attrs['head_name'] 
+      self.theHeadAdornment = attrs['head_adornment']
+      self.theHeadNav = attrs['head_nav']
+      self.theTailNav = attrs['tail_nav']
+
+      rawHeadNry = attrs['head_nry']
+      if (rawHeadNry == 'a'):
+        rawHeadNry = '*'
+      elif (rawHeadNry == '1..a'):
+        rawHeadNry = '1..*'
+      self.theHeadNry = rawHeadNry
+
+      self.theHeadRole = attrs['head_role']
+      self.theTailRole = attrs['tail_role']
+
+      rawTailNry = attrs['tail_nry']
+      if (rawTailNry == 'a'):
+        rawTailNry = '*'
+      elif (rawTailNry == '1..a'):
+        rawTailNry = '1..*'
+      self.theTailNry = rawTailNry
+
+      self.theTailAdornment = attrs['tail_adornment']
+      self.theTailName = attrs['tail_name'] 
+
+  def characters(self,data):
+    if self.inDescription:
+      self.theDescription += data
+    elif self.inSignificance:
+      self.theSignificance += data
+    elif self.inMethod:
+      self.theMethod += data
+    elif self.inRationale:
+      self.theRationale += data
+    elif self.inCritical:
+      self.isCritical = True
+      self.theCriticalRationale += data
+
+  def endElement(self,name):
+    if name == 'role':
+      p = RoleParameters(self.theName,self.theType,self.theShortCode,self.theDescription,[])
+      self.theRoleParameters.append(p)
+      self.resetRoleAttributes()
+    elif name == 'asset':
+      envDict = {}
+      for sp in self.theSecurityProperties:
+        envName = sp[0]
+        spName = sp[1]
+        spValue = a2i(sp[2])
+        spRationale = sp[3]
+        if envName in envDict:
+          (envDict[envName])[spName] = (spValue,spRationale)
+        else:
+          spDict = {}
+          spDict['confidentiality'] = (0,'None')
+          spDict['integrity'] = (0,'None')
+          spDict['availability'] = (0,'None')
+          spDict['accountability'] = (0,'None')
+          spDict['anonymity'] = (0,'None')
+          spDict['pseudonymity'] = (0,'None')
+          spDict['unlinkability'] = (0,'None')
+          spDict['unobservability'] = (0,'None')
+          spDict[spName] = (spValue,spRationale)
+          envDict[envName] = spDict
+      for envName in envDict:
+        spDict = envDict[envName]
+        cProperty,cRationale = spDict['confidentiality']
+        iProperty,iRationale = spDict['integrity']
+        avProperty,avRationale = spDict['availability']
+        acProperty,acRationale = spDict['accountability']
+        anProperty,anRationale = spDict['anonymity']
+        panProperty,panRationale = spDict['pseudonymity']
+        unlProperty,unlRationale = spDict['unlinkability']
+        unoProperty,unoRationale = spDict['unobservability']
+        ep = AssetEnvironmentProperties(envName,[cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty],[cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale])
+        self.theEnvironmentProperties.append(ep)
+      p = AssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.isCritical,self.theCriticalRationale,self.theEnvironmentProperties)
+      self.theAssetParameters.append(p)
+      self.resetAssetAttributes()
+    elif name == 'security_property':
+      self.theSecurityProperties.append((self.theEnvironmentName,self.thePropertyName,self.thePropertyValue,self.theRationale))
+      self.resetSecurityPropertyAttributes() 
+    elif name == 'threatened_property':
+      self.theSpDict[self.thePropertyName] = (self.thePropertyValue,self.theRationale)
+      self.resetThreatenedPropertyAttributes()
+    elif name == 'vulnerability':
+      p = VulnerabilityParameters(self.theName,self.theDescription,self.theType,self.theEnvironmentProperties)
+      self.theVulnerabilities.append(p)
+      self.resetVulnerabilityAttributes()
+    elif name == 'vulnerability_environment':
+      p = VulnerabilityEnvironmentProperties(self.theEnvironmentName,self.theSeverity,self.theAssets)
+      self.theEnvironmentProperties.append(p)
+      self.resetVulnerabilityEnvironmentAttributes()
+    elif name == 'attacker':
+      p = AttackerParameters(self.theName,self.theDescription,self.theImage,self.theEnvironmentProperties)
+      self.theAttackerParameters.append(p)
+      self.resetAttackerAttributes()
+    elif name == 'attacker_environment':
+      p = AttackerEnvironmentProperties(self.theEnvironmentName,self.theRoles,self.theMotivations,self.theCapabilities)
+      self.theEnvironmentProperties.append(p)
+      self.resetAttackerEnvironmentAttributes()
+    elif name == 'threat':
+      p = ThreatParameters(self.theName,self.theType,self.theMethod,self.theEnvironmentProperties)
+      self.theThreats.append(p)
+      self.resetThreatAttributes()
+    elif name == 'threat_environment':
+      cProperty,cRationale = self.theSpDict['confidentiality']
+      iProperty,iRationale = self.theSpDict['integrity']
+      avProperty,avRationale = self.theSpDict['availability']
+      acProperty,acRationale = self.theSpDict['accountability']
+      anProperty,anRationale = self.theSpDict['anonymity']
+      panProperty,panRationale = self.theSpDict['pseudonymity']
+      unlProperty,unlRationale = self.theSpDict['unlinkability']
+      unoProperty,unoRationale = self.theSpDict['unobservability']
+      p = ThreatEnvironmentProperties(self.theEnvironmentName,self.theLikelihood,self.theAssets,self.theAttackers,[cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty],[cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale])
+      self.theEnvironmentProperties.append(p)
+      self.resetThreatEnvironmentAttributes()
+    elif name == 'risk':
+      mc = MisuseCase(-1,'Exploit ' + self.theName,self.theEnvironmentProperties,self.theName)
+      p = RiskParameters(self.theName,self.theThreat,self.theVulnerability,mc)
+      self.theRisks.append(p)
+      self.resetRiskAttributes()
+    elif name == 'misusecase':
+      p = MisuseCaseEnvironmentProperties(self.theEnvironmentName,self.theDescription)
+      self.theEnvironmentProperties.append(p)
+      self.resetRiskEnvironmentAttributes()
+    elif name == 'response':
+      p = ResponseParameters(self.theType + ' ' + self.theRisk,self.theRisk,self.theEnvironmentProperties,self.theType)
+      self.theResponses.append(p)
+      self.resetResponseAttributes()
+    elif name == 'accept_environment':
+      p = AcceptEnvironmentProperties(self.theEnvironmentName,self.theCost,self.theDescription)
+      self.theEnvironmentProperties.append(p)
+      self.resetResponseEnvironmentAttributes()
+    elif name == 'transfer_environment':
+      p = TransferEnvironmentProperties(self.theEnvironmentName,self.theDescription,self.theResponseRoles)
+      self.theEnvironmentProperties.append(p)
+      self.resetResponseEnvironmentAttributes()
+    elif name == 'deter_environment':
+      p = MitigateEnvironmentProperties(self.theEnvironmentName,'Deter')
+      self.theEnvironmentProperties.append(p)
+      self.resetResponseEnvironmentAttributes()
+    elif name == 'prevent_environment':
+      p = MitigateEnvironmentProperties(self.theEnvironmentName,'Prevent')
+      self.theEnvironmentProperties.append(p)
+      self.resetResponseEnvironmentAttributes()
+    elif name == 'detect_environment':
+      p = MitigateEnvironmentProperties(self.theEnvironmentName,'Detect',self.theDetectionPoint)
+      self.theEnvironmentProperties.append(p)
+      self.resetResponseEnvironmentAttributes()
+    elif name == 'react_environment':
+      p = MitigateEnvironmentProperties(self.theEnvironmentName,'React','',self.theDetectionMechanisms)
+      self.theEnvironmentProperties.append(p)
+      self.resetResponseEnvironmentAttributes()
+    elif name == 'asset_association':
+      p = ClassAssociationParameters(self.theEnvironmentName,self.theHeadName,'asset',self.theHeadNav,self.theHeadAdornment,self.theHeadNry,self.theHeadRole,self.theTailRole,self.theTailNry,self.theTailAdornment,self.theTailNav,'asset',self.theTailName)
+      self.theAssociations.append(p)
+      self.resetAssociationAttributes()
+    elif name == 'description':
+      self.inDescription = 0
+    elif name == 'method':
+      self.inMethod = 0
+    elif name == 'narrative':
+      self.inDescription = 0
+    elif name == 'rationale':
+      self.inRationale = 0
+    elif name == 'significance':
+      self.inSignificance = 0
+    elif name == 'critical':
+      self.inCritical = 0

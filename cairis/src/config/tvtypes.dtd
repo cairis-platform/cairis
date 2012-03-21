@@ -1,0 +1,9 @@
+<!-- DTD for template CAIRIS threat and vulnerability types -->
+<!-- $URL: svn://edison.comlab.ox.ac.uk/res08/iris/iris/config/tvtypes.dtd $ $Id: tvtypes.dtd 289 2010-07-07 22:34:14Z shaf $ -->
+
+<!ELEMENT tvtypes (vulnerability_type+,threat_type+)>
+<!ELEMENT vulnerability_type (description)>
+<!ATTLIST vulnerability_type name CDATA #REQUIRED>
+<!ELEMENT threat_type (description)>
+<!ATTLIST threat_type name CDATA #REQUIRED>
+<!ELEMENT description (#PCDATA)>

@@ -1,0 +1,40 @@
+<!-- DTD for CAIRIS security patterns -->
+<!-- $URL: svn://edison.comlab.ox.ac.uk/res08/iris/iris/config/securitypattern.dtd $ $Id: securitypattern.dtd 564 2012-03-12 17:53:00Z shaf $ -->
+
+<!ELEMENT security_patterns (asset*,pattern*)>
+
+<!ELEMENT asset (description,significance?,critical?)>
+<!ATTLIST asset name CDATA #REQUIRED>
+<!ATTLIST asset short_code CDATA #REQUIRED>
+<!ATTLIST asset asset_type (Information | Systems | Software | Hardware | People) #REQUIRED>
+<!ATTLIST asset confidentiality (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST asset integrity (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST asset availability (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST asset accountability (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST asset anonymity (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST asset pseudonymity (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST asset unlinkability (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST asset unobservability (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT significance (#PCDATA)>
+<!ELEMENT critical (#PCDATA)>
+<!ELEMENT pattern (context,problem,solution,structure+,requirement*)>
+<!ATTLIST pattern name CDATA #REQUIRED>
+<!ELEMENT context (#PCDATA)>
+<!ELEMENT problem (#PCDATA)>
+<!ELEMENT solution (#PCDATA)>
+<!ELEMENT structure EMPTY>
+<!ATTLIST structure head_asset CDATA #REQUIRED>
+<!ATTLIST structure head_adornment (Association | Aggregation | Composition | Inheritence) #REQUIRED>
+<!ATTLIST structure head_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST structure head_role CDATA #REQUIRED>
+<!ATTLIST structure tail_role CDATA #REQUIRED>
+<!ATTLIST structure tail_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST structure tail_adornment (Association | Aggregation | Composition | Inheritence) #REQUIRED>
+<!ATTLIST structure tail_asset CDATA #REQUIRED>
+<!ELEMENT requirement (description,rationale,fit_criterion)>
+<!ATTLIST requirement asset CDATA #REQUIRED>
+<!ATTLIST requirement name CDATA #REQUIRED>
+<!ATTLIST requirement type (Functional | Data | Look_and_Feel | Usability | Performance | Operational | Maintainability | Portability | Security | Cultural_and_Political | Legal) #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
+<!ELEMENT fit_criterion (#PCDATA)>

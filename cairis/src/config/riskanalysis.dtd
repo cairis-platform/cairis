@@ -1,0 +1,103 @@
+<!-- DTD for CAIRIS risk analysis export file -->
+<!-- $Id: riskanalysis.dtd 567 2012-03-13 22:31:40Z shaf $ -->
+
+<!ELEMENT riskanalysis (role*,asset*,vulnerability*,attacker*,threat*,risk*,response*,asset_association*)>
+<!ELEMENT role (description)>
+<!ATTLIST role name CDATA #REQUIRED>
+<!ATTLIST role type (Stakeholder | Attacker) #REQUIRED>
+<!ATTLIST role short_code CDATA #REQUIRED>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT asset (description,significance,critical_rationale?,security_property*)>
+<!ATTLIST asset name CDATA #REQUIRED>
+<!ATTLIST asset short_code CDATA #REQUIRED>
+<!ATTLIST asset type CDATA #REQUIRED>
+<!ATTLIST asset is_critical (0 | 1) #REQUIRED>
+<!ELEMENT significance (#PCDATA)>
+<!ELEMENT critical_rationale (#PCDATA)>
+<!ELEMENT security_property (rationale)>
+<!ATTLIST security_property environment CDATA #REQUIRED>
+<!ATTLIST security_property property (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
+<!ATTLIST security_property value (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
+
+<!ELEMENT vulnerability (description,vulnerability_environment+)>
+<!ATTLIST vulnerability name CDATA #REQUIRED>
+<!ATTLIST vulnerability type CDATA #REQUIRED>
+<!ELEMENT vulnerability_environment (vulnerable_asset+)>
+<!ATTLIST vulnerability_environment name CDATA #REQUIRED>
+<!ATTLIST vulnerability_environment severity (Negligible | Marginal | Critical | Catastrophic) #REQUIRED>
+<!ELEMENT vulnerable_asset EMPTY>
+<!ATTLIST vulnerable_asset name CDATA #REQUIRED>
+
+<!ELEMENT attacker (description,attacker_environment+)>
+<!ATTLIST attacker name CDATA #REQUIRED>
+<!ATTLIST attacker image CDATA #REQUIRED>
+<!ELEMENT attacker_environment (attacker_role+,motivation+,capability+)>
+<!ATTLIST attacker_environment name CDATA #REQUIRED>
+<!ELEMENT attacker_role EMPTY>
+<!ATTLIST attacker_role name CDATA #REQUIRED>
+<!ELEMENT motivation EMPTY>
+<!ATTLIST motivation name CDATA #REQUIRED>
+<!ELEMENT capability EMPTY>
+<!ATTLIST capability name CDATA #REQUIRED>
+<!ATTLIST capability value (Low | Medium | High) #REQUIRED>
+
+<!ELEMENT threat (method,threat_environment+)>
+<!ATTLIST threat name CDATA #REQUIRED>
+<!ATTLIST threat type CDATA #REQUIRED>
+<!ELEMENT method (#PCDATA)>
+<!ELEMENT threat_environment (threat_attacker+,threatened_asset+,threatened_property+)>
+<!ATTLIST threat_environment name CDATA #REQUIRED>
+<!ATTLIST threat_environment likelihood (Incredible | Improbable | Remote | Occasional | Probable | Frequent) #REQUIRED>
+<!ELEMENT threat_attacker EMPTY>
+<!ATTLIST threat_attacker name CDATA #REQUIRED>
+<!ELEMENT threatened_asset EMPTY>
+<!ATTLIST threatened_asset name CDATA #REQUIRED>
+<!ELEMENT threatened_property (rationale)>
+<!ATTLIST threatened_property name (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
+<!ATTLIST threatened_property value (None | Low | Medium | High) #REQUIRED>
+
+<!ELEMENT risk (misusecase+)>
+<!ATTLIST risk name CDATA #REQUIRED>
+<!ATTLIST risk vulnerability CDATA #REQUIRED>
+<!ATTLIST risk threat CDATA #REQUIRED>
+<!ELEMENT misusecase (narrative)>
+<!ATTLIST misusecase environment CDATA #REQUIRED>
+<!ELEMENT narrative (#PCDATA)>
+
+<!ELEMENT response (accept_environment*,transfer_environment*,deter_environment*,prevent_environment*,detect_environment*,react_environment*)>
+<!ATTLIST response risk CDATA #REQUIRED>
+<!ATTLIST response type (Accept | Transfer | Mitigate | Prevent | Deter | Detect | React) #REQUIRED>
+<!ELEMENT accept_environment (rationale)>
+<!ATTLIST accept_environment name CDATA #REQUIRED>
+<!ATTLIST accept_environment cost (Low | Medium | High) #REQUIRED>
+<!ELEMENT transfer_environment (response_role+,rationale)>
+<!ATTLIST transfer_environment name CDATA #REQUIRED>
+<!ELEMENT response_role EMPTY>
+<!ATTLIST response_role name CDATA #REQUIRED>
+<!ATTLIST response_role cost (Low | Medium | High) #REQUIRED>
+<!ELEMENT deter_environment EMPTY>
+<!ATTLIST deter_environment name CDATA #REQUIRED>
+<!ELEMENT prevent_environment EMPTY>
+<!ATTLIST prevent_environment name CDATA #REQUIRED>
+<!ELEMENT detect_environment EMPTY>
+<!ATTLIST detect_environment name CDATA #REQUIRED>
+<!ATTLIST detect_environment point (Before | At | After)  #REQUIRED>
+<!ELEMENT react_environment (detection_mechanism+)>
+<!ATTLIST react_environment name CDATA #REQUIRED>
+<!ELEMENT detection_mechanism EMPTY>
+<!ATTLIST detection_mechanism name CDATA #REQUIRED>
+
+<!ELEMENT asset_association EMPTY>
+<!ATTLIST asset_association environment CDATA #REQUIRED>
+<!ATTLIST asset_association head_name CDATA #REQUIRED>
+<!ATTLIST asset_association head_adornment CDATA #REQUIRED>
+<!ATTLIST asset_association head_nav (1 | 0) #REQUIRED>
+<!ATTLIST asset_association head_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST asset_association head_role CDATA #REQUIRED>
+<!ATTLIST asset_association tail_role CDATA #REQUIRED>
+<!ATTLIST asset_association tail_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST asset_association tail_nav (1 | 0) #REQUIRED>
+<!ATTLIST asset_association tail_adornment CDATA #REQUIRED>
+<!ATTLIST asset_association tail_name CDATA #REQUIRED>
+<!ATTLIST asset_association rationale CDATA #IMPLIED>

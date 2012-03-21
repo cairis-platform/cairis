@@ -1,0 +1,15 @@
+<!-- DTD for template CAIRIS domain values -->
+<!-- $URL: svn://edison.cs.ox.ac.uk/res08/iris/iris/config/domainvalues.dtd $ $Id: domainvalues.dtd 289 2010-07-07 22:34:14Z shaf $ -->
+
+<!ELEMENT domainvalues (threat_value+,risk_value+,countermeasure_value+,severity_value+,likelihood_value+)>
+<!ELEMENT threat_value (description)>
+<!ATTLIST threat_value value (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT risk_value (description)>
+<!ATTLIST risk_value value (Negligible | Tolerable | Undesirable | Intolerable) #REQUIRED>
+<!ELEMENT countermeasure_value (description)>
+<!ATTLIST countermeasure_value value (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT severity_value (description)>
+<!ATTLIST severity_value value (Negligible | Marginal | Critical | Catastrophic) #REQUIRED>
+<!ELEMENT likelihood_value (description)>
+<!ATTLIST likelihood_value value (Incredible | Improbable | Remote | Occasional | Probable | Frequent) #REQUIRED>
+<!ELEMENT description (#PCDATA)>
