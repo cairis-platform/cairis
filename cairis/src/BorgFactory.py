@@ -15,22 +15,23 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+DBHOST = "127.0.0.1"
+DBPORT = 3306
+DBUSER = "irisuser"
+DBPASSWD = ""
+DBNAME = "arm"
 
 from Borg import Borg
 import os
 import DatabaseProxyFactory
 
 def initialise():
-  dbIniFile = 'db.ini'
-  f = open(dbIniFile,"r")
-  txt = f.read()
-  vals = txt.split('\n')
   b = Borg()
-  b.dbHost = vals[0]
-  b.dbPort = int(vals[1])
-  b.dbUser = vals[2]
-  b.dbPasswd = vals[3]
-  b.dbName = vals[4]
+  b.dbHost = DBHOST
+  b.dbPort = DBPORT
+  b.dbUser = DBUSER
+  b.dbPasswd = DBPASSWD
+  b.dbName = DBNAME
   b.dbProxy = DatabaseProxyFactory.build()
 
   pSettings = b.dbProxy.getProjectSettings()
