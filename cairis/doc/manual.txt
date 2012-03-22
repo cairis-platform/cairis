@@ -6,7 +6,6 @@ Keywords:			Security Requirements Engineering, User Centered Design, Risk Analys
 Format:				complete  
 LaTeX XSLT:			article.xslt  
 RTF XSLT:			xhtml2rtf
-Revision:                       $URL: svn://edison.comlab.ox.ac.uk/res08/iris/doc/manual.txt $ $Id: manual.txt 298 2010-07-12 00:01:58Z shaf $
 
 # Getting started with CAIRIS #
 
@@ -51,12 +50,13 @@ Before CAIRIS can be used, recent version of the following open-source applicati
 * Glade
 * DocBook
 * dblatex
+* argparse
 
 In theory, CAIRIS will run on any platform which supports Python and above pre-requisites.  In practice, however, running all of these pre-requisites on any operating system other than Linux might be a bit of a challenge.  Therefore, we recommend that CAIRIS is used only on Linux.  We have tested CAIRIS using recent versions of Red Hat and Ubuntu.  In particular, all of the pre-requisites are available via Ubuntu's Synaptic Package Manager.
 
 ## Obtaining CAIRIS ##
 
-A source distribution of CAIRIS can be downloaded by clicking on the Download link at http://www.comlab.ox.ac.uk/cairis .
+A source distribution of CAIRIS can be downloaded by clicking on the Download link at http://www.cs.ox.ac.uk/cairis .
 
 Following checkout, the following directories are created beneath the root iris directory:
 
