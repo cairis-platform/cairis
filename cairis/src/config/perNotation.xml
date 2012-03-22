@@ -4,7 +4,7 @@
   <section><title>Assumption Persona Argumentation Model</title>
     <mediaobject>
       <imageobject>
-        <imagedata align="left" fileref="/home/irisuser/iris/iris/config/APKey.pdf" format="PDF" />"
+        <imagedata align="left" fileref="/home/irisuser/CAIRIS/cairis/src/config/APKey.pdf" format="PDF" />"
       </imageobject>
       <caption><para>Argumentation Model notation</para></caption>
     </mediaobject>
@@ -13,7 +13,7 @@
   <section><title>Task Model</title>
     <mediaobject>
       <imageobject>
-        <imagedata align="left" fileref="/home/irisuser/iris/iris/config/taskModelKey.pdf" format="PDF" />"
+        <imagedata align="left" fileref="/home/irisuser/CAIRIS/cairis/src/config/taskModelKey.pdf" format="PDF" />"
       </imageobject>
       <caption><para>Task Model notation</para></caption>
     </mediaobject>

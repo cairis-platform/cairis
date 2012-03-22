@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#$URL: svn://edison.comlab.ox.ac.uk/res08/iris/iris/xdot.py $ $Id: xdot.py 249 2010-05-30 17:07:31Z shaf $
 #
 # Copyright 2008 Jose Fonseca
 #

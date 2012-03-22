@@ -1,4 +1,20 @@
-#$Id: AssociationsContentHandler.py 380 2010-12-27 23:33:41Z shaf $
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+
 
 from xml.sax.handler import ContentHandler
 from EnvironmentParameters import EnvironmentParameters
@@ -17,7 +33,7 @@ class CairisContentHandler(ContentHandler):
     self.resetAssetValues()
 
   def resolveEntity(self,publicId,systemId):
-    return "/home/irisuser/iris/iris/config/cairis.dtd"
+    return "/home/irisuser/CAIRIS/cairis/src/config/cairis.dtd"
 
   def settings(self):
     return self.theProjectSettings

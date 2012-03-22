@@ -1,4 +1,20 @@
-#$URL: svn://edison.comlab.ox.ac.uk/res08/iris/iris/TVTypeContentHandler.py $ $Id: TVTypeContentHandler.py 567 2012-03-13 22:31:40Z shaf $
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+
 
 from xml.sax.handler import ContentHandler
 from ValueTypeParameters import ValueTypeParameters
@@ -10,7 +26,7 @@ class TVTypeContentHandler(ContentHandler):
     self.resetAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return "/home/irisuser/iris/iris/config/tvtypes.dtd"
+    return "/home/irisuser/CAIRIS/cairis/src/config/tvtypes.dtd"
 
   def types(self):
     return (self.theVulnerabilityTypes,self.theThreatTypes)
