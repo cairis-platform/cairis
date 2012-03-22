@@ -21,7 +21,7 @@ import os
 import DatabaseProxyFactory
 
 def initialise():
-  dbIniFile = os.environ['IRIS_SRC'] + '/db.ini'
+  dbIniFile = 'db.ini'
   f = open(dbIniFile,"r")
   txt = f.read()
   vals = txt.split('\n')

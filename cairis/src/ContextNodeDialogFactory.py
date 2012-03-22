@@ -30,7 +30,7 @@ def build(url):
     b = Borg()
     proxy = b.dbProxy
     builder = gtk.Builder()
-    gladeFile = os.environ['IRIS_CONFIG'] + '/imvnodes/imvnodes.xml'
+    gladeFile = './config/imvnodes/imvnodes.xml'
     builder.add_from_file(gladeFile)
     objt = proxy.dimensionObject(objtName,'domain')
     dlg = DomainNodeDialog(objt,builder)

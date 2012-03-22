@@ -43,9 +43,9 @@ class EnvironmentModel:
     if (os.name == 'nt'):
       self.theGraphName = 'C:\\arm\pydotout.dot'
     elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/pydotout.dot'
+      self.theGraphName = '/tmp/pydotout.dot'
     elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/pydotout.dot'
+      self.theGraphName = '/tmp/pydotout.dot'
     else :
       raise ARM.UnsupportedOperatingSystem(os.name)
 

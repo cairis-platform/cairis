@@ -31,9 +31,9 @@ class EditorBase(wx.Panel):
     if (os.name == 'nt'):
       directoryPrefix += 'C:\\iris\\'
     elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += os.environ['IRIS_IMAGES'] + '/'
+      directoryPrefix += './images/'
     elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += os.environ['IRIS_IMAGES'] + '/'
+      directoryPrefix += './images/'
     else:
       raise UnsupportedOperatingSystem(os.name)
     contextModelBmp = wx.Image(directoryPrefix + 'contextModel.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()

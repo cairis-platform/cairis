@@ -37,9 +37,9 @@ class APModelViewer(apxdot.APDotWindow):
     if (os.name == 'nt'):
       directoryPrefix += 'C:\\iris\\'
     elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += os.environ['IRIS_IMAGES'] + '/'
+      directoryPrefix += './images/'
     elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += os.environ['IRIS_IMAGES'] + '/'
+      directoryPrefix += './images/'
     else:
       raise UnsupportedOperatingSystem(os.name)
 

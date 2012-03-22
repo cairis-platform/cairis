@@ -93,9 +93,9 @@ class RMFrame(wx.Frame):
     if (os.name == 'nt'):
       self.directoryPrefix += 'C:\\iris\\'
     elif (os.uname()[0] == 'Linux'):
-      self.directoryPrefix += os.environ['IRIS_IMAGES'] + '/'
+      self.directoryPrefix += './images/'
     elif (os.uname()[0] == 'Darwin'):
-      self.directoryPrefix += os.environ['IRIS_IMAGE'] + '/'
+      self.directoryPrefix += './images/'
     else:
       raise UnsupportedOperatingSystem(os.name)
 
@@ -798,49 +798,39 @@ class RMFrame(wx.Frame):
       return
 
   def OnSaveProject(self,evt):
-    try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
-      dlg = wx.FileDialog(self,message='Save project data',defaultDir=defaultBackupDir,style=wx.SAVE|wx.OVERWRITE_PROMPT)
-      if (dlg.ShowModal() == wx.ID_OK):
-        backupFile = dlg.GetPath() + '.sql'
-        orderedTableFile = defaultBackupDir + '/orderedTables.txt'
-        fObjt = open(orderedTableFile)
-        tableList = fObjt.read().splitlines()
-        tables = ''
-        for tName in tableList:
-          tables += ' ' + tName
-        b = Borg()
-        cmd = '/usr/bin/mysqldump --add-drop-table -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' ' + b.dbName + ' ' + tables + ' > ' + backupFile
-        os.system(cmd)
-      dlg.Destroy()
-    except KeyError:
-      dlg = wx.MessageDialog(self,'IRIS_BACKUP environment variable not defined','Save project',wx.OK | wx.ICON_ERROR)
-      dlg.ShowModal()
-      dlg.Destroy()
+    defaultBackupDir = './sql'
+    dlg = wx.FileDialog(self,message='Save project data',defaultDir=defaultBackupDir,style=wx.SAVE|wx.OVERWRITE_PROMPT)
+    if (dlg.ShowModal() == wx.ID_OK):
+      backupFile = dlg.GetPath() + '.sql'
+      orderedTableFile = defaultBackupDir + '/orderedTables.txt'
+      fObjt = open(orderedTableFile)
+      tableList = fObjt.read().splitlines()
+      tables = ''
+      for tName in tableList:
+        tables += ' ' + tName
+      b = Borg()
+      cmd = '/usr/bin/mysqldump --add-drop-table -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' ' + b.dbName + ' ' + tables + ' > ' + backupFile
+      os.system(cmd)
+    dlg.Destroy()
 
   def OnOpenProject(self,evt):
-    try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
-      sqlDir = os.environ['IRIS_SRC'] + '/sql'
-      wildcard = "Project files (*.sql) | *.sql |"
-      dlg = wx.FileDialog(None,'Open project data',defaultBackupDir,style=wx.OPEN)
-      b = Borg()
-      if (dlg.ShowModal() == wx.ID_OK):
-        reinitSql = sqlDir + '/init.sql'
-        reinitCmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + reinitSql
-        os.system(reinitCmd)
-        backupFile = dlg.GetPath() 
-        openCmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + backupFile
-        os.system(openCmd)
-      dlg.Destroy()
-      b.dbProxy.reconnect()
-      self.panel.updateObjectSelection()
-      self.panel.updateEnvironmentSelection()
-      self.panel.refresh()
-    except KeyError:
-      dlg = wx.MessageDialog(self,'IRIS environment variables not defined','Open project',wx.OK | wx.ICON_ERROR)
-      dlg.ShowModal()
-      dlg.Destroy()
+    defaultBackupDir = './sql'
+    sqlDir = defaultBackupDir
+    wildcard = "Project files (*.sql) | *.sql |"
+    dlg = wx.FileDialog(None,'Open project data',defaultBackupDir,style=wx.OPEN)
+    b = Borg()
+    if (dlg.ShowModal() == wx.ID_OK):
+      reinitSql = sqlDir + '/init.sql'
+      reinitCmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + reinitSql
+      os.system(reinitCmd)
+      backupFile = dlg.GetPath() 
+      openCmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + backupFile
+      os.system(openCmd)
+    dlg.Destroy()
+    b.dbProxy.reconnect()
+    self.panel.updateObjectSelection()
+    self.panel.updateEnvironmentSelection()
+    self.panel.refresh()
 
   def OnNewProject(self,evt):
     try:
@@ -1121,7 +1111,7 @@ class RMFrame(wx.Frame):
 
   def OnImportSecurityPatterns(self,event):
     try:
-      defaultDir = os.environ['IRIS_BACKUP']
+      defaultDir = './sql'
       wildcard = "Pattern Catalogue (*.xml) | *.xml |"
 
       spdlg = wx.FileDialog(None,'Import Security Patterns',defaultDir,style=wx.OPEN)
@@ -1138,7 +1128,7 @@ class RMFrame(wx.Frame):
 
   def OnImportTVTypes(self,event):
     try:
-      defaultDir = os.environ['IRIS_BACKUP']
+      defaultDir = './sql'
       wildcard = "Types files (*.xml) | *.xml |"
 
       tdlg = wx.FileDialog(None,'Import Types',defaultDir,style=wx.OPEN)
@@ -1155,7 +1145,7 @@ class RMFrame(wx.Frame):
 
   def OnExportTVTypes(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       dlg = wx.FileDialog(self,message='Export threat and vulnerability types',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"
@@ -1174,7 +1164,7 @@ class RMFrame(wx.Frame):
 
   def OnImportDirectories(self,event):
     try:
-      defaultDir = os.environ['IRIS_BACKUP']
+      defaultDir = './sql'
       wildcard = "Types files (*.xml) | *.xml |"
 
       tdlg = wx.FileDialog(None,'Import Directories',defaultDir,style=wx.OPEN)
@@ -1208,7 +1198,7 @@ class RMFrame(wx.Frame):
 
   def OnImportRequirements(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       tdlg = wx.FileDialog(self,message='Import goals and requirements',defaultDir=defaultBackupDir,style=wx.OPEN)
       if (tdlg.ShowModal() == wx.ID_OK):
         msgStr = importRequirementsFile(tdlg.GetPath()) 
@@ -1223,7 +1213,7 @@ class RMFrame(wx.Frame):
 
   def OnExportRequirements(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       dlg = wx.FileDialog(self,message='Export goals and requirements',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"
@@ -1242,7 +1232,7 @@ class RMFrame(wx.Frame):
 
   def OnExportRiskAnalysis(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       dlg = wx.FileDialog(self,message='Export risk data',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT|wx.SAVE)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"
@@ -1262,7 +1252,7 @@ class RMFrame(wx.Frame):
 
   def OnImportRiskAnalysis(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       tdlg = wx.FileDialog(self,message='Import risk data',defaultDir=defaultBackupDir,style=wx.OPEN)
       if (tdlg.ShowModal() == wx.ID_OK):
         msgStr = importRiskAnalysisFile(tdlg.GetPath()) 
@@ -1278,7 +1268,7 @@ class RMFrame(wx.Frame):
 
   def OnExportUsability(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       dlg = wx.FileDialog(self,message='Export usability data',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"
@@ -1299,7 +1289,7 @@ class RMFrame(wx.Frame):
 
   def OnImportUsability(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       tdlg = wx.FileDialog(self,message='Import usability data',defaultDir=defaultBackupDir,style=wx.OPEN)
       if (tdlg.ShowModal() == wx.ID_OK):
         msgStr = importUsabilityFile(tdlg.GetPath()) 
@@ -1315,7 +1305,7 @@ class RMFrame(wx.Frame):
 
   def OnExportUsability(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       dlg = wx.FileDialog(self,message='Export usability data',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"
@@ -1335,7 +1325,7 @@ class RMFrame(wx.Frame):
 
   def OnExportAssociations(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       dlg = wx.FileDialog(self,message='Export association data',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"
@@ -1354,7 +1344,7 @@ class RMFrame(wx.Frame):
   
   def OnImportAssociations(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       tdlg = wx.FileDialog(self,message='Import association data',defaultDir=defaultBackupDir,style=wx.OPEN)
       if (tdlg.ShowModal() == wx.ID_OK):
         msgStr = importAssociationsFile(tdlg.GetPath()) 
@@ -1369,7 +1359,7 @@ class RMFrame(wx.Frame):
 
   def OnExportProject(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       dlg = wx.FileDialog(self,message='Export project data',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"
@@ -1388,7 +1378,7 @@ class RMFrame(wx.Frame):
 
   def OnImportModel(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       tdlg = wx.FileDialog(self,message='Import model',defaultDir=defaultBackupDir,style=wx.OPEN)
       if (tdlg.ShowModal() == wx.ID_OK):
         msgStr = importModelFile(tdlg.GetPath()) 
@@ -1403,7 +1393,7 @@ class RMFrame(wx.Frame):
 
   def OnImportProject(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       tdlg = wx.FileDialog(self,message='Import project data',defaultDir=defaultBackupDir,style=wx.OPEN)
       if (tdlg.ShowModal() == wx.ID_OK):
         msgStr = importProjectFile(tdlg.GetPath()) 
@@ -1418,7 +1408,7 @@ class RMFrame(wx.Frame):
 
   def OnExportModel(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       dlg = wx.FileDialog(self,message='Export model',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"
@@ -1491,7 +1481,7 @@ class RMFrame(wx.Frame):
       cDlg = DimensionNameDialog(self,'persona',personas,'Select')
       if (cDlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
         personaName = cDlg.dimensionName()
-        defaultBackupDir = os.environ['IRIS_BACKUP']
+        defaultBackupDir = './sql'
         dlg = wx.FileDialog(self,message='Export persona',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
         if (dlg.ShowModal() == wx.ID_OK):
           exportFile = dlg.GetPath() + ".xml"
@@ -1539,7 +1529,7 @@ class RMFrame(wx.Frame):
 
   def OnImportDomainValues(self,event):
     try:
-      defaultDir = os.environ['IRIS_BACKUP']
+      defaultDir = './sql'
       wildcard = "Types files (*.xml) | *.xml |"
 
       tdlg = wx.FileDialog(None,'Domain Values',defaultDir,style=wx.OPEN)
@@ -1557,7 +1547,7 @@ class RMFrame(wx.Frame):
 
   def OnExportDomainValues(self,event):
     try:
-      defaultBackupDir = os.environ['IRIS_BACKUP']
+      defaultBackupDir = './sql'
       dlg = wx.FileDialog(self,message='Export domain values',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"

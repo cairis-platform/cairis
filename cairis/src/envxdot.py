@@ -309,7 +309,7 @@ class EnvironmentPolygonShape(xdot.PolygonShape):
       ys = self.points[0][1]
       width = self.points[3][0] - self.points[0][0]
       height = self.points[0][1] - self.points[1][1]
-      iconPath = os.environ['IRIS_IMAGES'] + '/roleNode.png'
+      iconPath = './images/roleNode.png'
       roleSurface = cairo.ImageSurface.create_from_png(iconPath)      
       imageWidth = roleSurface.get_width()
       imageHeight = roleSurface.get_height()

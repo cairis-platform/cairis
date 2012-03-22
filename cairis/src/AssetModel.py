@@ -39,9 +39,9 @@ class AssetModel:
     if (os.name == 'nt'):
       self.theGraphName = 'C:\\arm\\asset.dot'
     elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/asset.dot'
+      self.theGraphName = '/tmp/asset.dot'
     elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/asset.dot'
+      self.theGraphName = '/tmp/asset.dot'
     else :
       raise ARM.UnsupportedOperatingSystem(os.name)
 

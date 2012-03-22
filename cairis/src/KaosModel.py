@@ -44,9 +44,9 @@ class KaosModel:
     if (os.name == 'nt'):
       self.theGraphName = 'C:\\arm\\' + self.theKaosModel + '.dot'
     elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/' + self.theKaosModel + '.dot'
+      self.theGraphName =  '/tmp/' + self.theKaosModel + '.dot'
     elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/' + self.theKaosModel + '.dot'
+      self.theGraphName = '/tmp/' + self.theKaosModel + '.dot'
     else :
       raise ARM.UnsupportedOperatingSystem(os.name)
 

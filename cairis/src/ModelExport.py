@@ -31,7 +31,7 @@ def listToString(l):
   return s
 
 def drawGraph(graph,graphName):
-  tmpDir = os.environ['IRIS_SCRATCH']
+  tmpDir = '/tmp'
   outputDir = os.environ['OUTPUT_DIR']
   tmpFile = tmpDir + '/' + graphName + '.pdf'
   s = cairo.PDFSurface(tmpFile,graph.width,graph.height)

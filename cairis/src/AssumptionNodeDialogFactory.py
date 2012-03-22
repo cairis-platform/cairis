@@ -31,7 +31,7 @@ def build(url,isApModel = True):
   proxy = b.dbProxy
   builder = gtk.Builder()
   
-  gladeFile = os.environ['IRIS_CONFIG'] + '/imvnodes/imvnodes.xml'
+  gladeFile = './config/imvnodes/imvnodes.xml'
   builder.add_from_file(gladeFile)
 
   

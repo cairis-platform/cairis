@@ -69,9 +69,9 @@ class DimensionBaseDialog(BaseDialog):
     if (os.name == 'nt'):
       directoryPrefix += 'C:\\iris\\'
     elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += os.environ['IRIS_IMAGES'] + '/'
+      directoryPrefix += './images/'
     elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += os.environ['IRIS_IMAGES'] + '/'
+      directoryPrefix += './images/'
     else:
       raise ARM.UnsupportedOperatingSystem(os.name)
     dimIcon = wx.Icon(directoryPrefix + dimIconFile,wx.BITMAP_TYPE_PNG)

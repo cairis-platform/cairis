@@ -8330,7 +8330,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def clearDatabase(self):
-    srcDir = os.environ['IRIS_SRC'] + '/sql'
+    srcDir = './sql'
     initSql = srcDir + '/init.sql'
     procsSql = srcDir + '/procs.sql'
     b = Borg()

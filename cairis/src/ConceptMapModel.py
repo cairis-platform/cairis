@@ -46,9 +46,9 @@ class ConceptMapModel:
     if (os.name == 'nt'):
       self.theGraphName = 'C:\\arm\\concept.dot'
     elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/concept.dot'
+      self.theGraphName = '/tmp/concept.dot'
     elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/concept.dot'
+      self.theGraphName = '/tmp/concept.dot'
     else :
       raise ARM.UnsupportedOperatingSystem(os.name)
 

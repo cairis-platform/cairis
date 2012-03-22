@@ -35,9 +35,9 @@ class AssumptionTaskModel:
     if (os.name == 'nt'):
       self.theGraphName = 'C:\\arm\\at.dot'
     elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/at.dot'
+      self.theGraphName = '/tmp/at.dot'
     elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/at.dot'
+      self.theGraphName = '/tmp/at.dot'
     else :
       raise ARM.UnsupportedOperatingSystem(os.name)
     self.theGraph.set_graph_defaults(rankdir='LR')

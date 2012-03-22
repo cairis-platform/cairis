@@ -34,9 +34,9 @@ class AssumptionPersonaModel:
     if (os.name == 'nt'):
       self.theGraphName = 'C:\\arm\\ap.dot'
     elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/ap.dot'
+      self.theGraphName = '/tmp/ap.dot'
     elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = os.environ['IRIS_SCRATCH'] + '/ap.dot'
+      self.theGraphName = '/tmp/ap.dot'
     else :
       raise ARM.UnsupportedOperatingSystem(os.name)
     self.theGraph.set_graph_defaults(rankdir='LR')
