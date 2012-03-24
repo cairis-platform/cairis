@@ -81,17 +81,8 @@ class DirectoryDialog(wx.Dialog):
     wx.EVT_COMBOBOX(self.typeCtrl,armid.DIRECTORYDIALOG_COMBOTYPE_ID,self.onTypeSelected)
     wx.EVT_BUTTON(self,armid.DIRECTORYDIALOG_BUTTONIMPORT_ID,self.onImport)
 
-    directoryPrefix = ''
-    if (os.name == 'nt'):
-      directoryPrefix += 'C:\\iris\\'
-    elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += './images/'
-    elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += './images/'
-    else:
-      raise ARM.UnsupportedOperatingSystem(os.name)
     dimIconFile = dimensionName + '.png'
-    dimIcon = wx.Icon(directoryPrefix + dimIconFile,wx.BITMAP_TYPE_PNG)
+    dimIcon = wx.Icon(b.imageDir + '/' + + dimIconFile,wx.BITMAP_TYPE_PNG)
     self.SetIcon(dimIcon)
 
 

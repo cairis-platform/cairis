@@ -39,15 +39,7 @@ class EnvironmentModel:
     b = Borg()
     self.fontSize = b.fontSize
     self.fontName = b.fontName
-
-    if (os.name == 'nt'):
-      self.theGraphName = 'C:\\arm\pydotout.dot'
-    elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = '/tmp/pydotout.dot'
-    elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = '/tmp/pydotout.dot'
-    else :
-      raise ARM.UnsupportedOperatingSystem(os.name)
+    self.theGraphName = b.tmpDir + '/pydotout.dot'
 
     self.theNodeLookup = {}
 

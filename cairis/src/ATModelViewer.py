@@ -31,18 +31,7 @@ class ATModelViewer(atxdot.ATDotWindow):
     self.dbProxy = b.dbProxy
     self.theInitialTask = tName
     self.widget.connect('clicked', self.on_url_clicked)
-
-    directoryPrefix = ''
-    if (os.name == 'nt'):
-      directoryPrefix += 'C:\\iris\\'
-    elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += './images/'
-    elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += './images/'
-    else:
-      raise UnsupportedOperatingSystem(os.name)
-
-    self.set_icon_from_file(directoryPrefix + 'atModel.png')
+    self.set_icon_from_file(b.imageDir + '/atModel.png')
 
 
   def on_url_clicked(self, widget, url, event):

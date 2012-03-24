@@ -32,14 +32,7 @@ class AssumptionTaskModel:
     self.fontName = b.fontName
     self.fontSize = b.apFontSize
     self.theGraph = pydot.Dot()
-    if (os.name == 'nt'):
-      self.theGraphName = 'C:\\arm\\at.dot'
-    elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = '/tmp/at.dot'
-    elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = '/tmp/at.dot'
-    else :
-      raise ARM.UnsupportedOperatingSystem(os.name)
+    self.theGraphName = b.tmpDir + '/at.dot'
     self.theGraph.set_graph_defaults(rankdir='LR')
 
     self.theNodeLookup = {}

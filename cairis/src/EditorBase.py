@@ -27,15 +27,7 @@ class EditorBase(wx.Panel):
     self.theCurrentEnvironment = -1
     b = Borg()
     self.dbProxy = b.dbProxy
-    directoryPrefix = ''
-    if (os.name == 'nt'):
-      directoryPrefix += 'C:\\iris\\'
-    elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += './images/'
-    elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += './images/'
-    else:
-      raise UnsupportedOperatingSystem(os.name)
+    directoryPrefix = b.imageDir + '/'
     contextModelBmp = wx.Image(directoryPrefix + 'contextModel.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     environmentModelBmp = wx.Image(directoryPrefix + 'environmentModel.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     assetModelBmp = wx.Image(directoryPrefix + 'classModel.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()

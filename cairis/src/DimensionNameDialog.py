@@ -20,6 +20,7 @@ import wx
 import armid
 import os
 import ARM
+from Borg import *
 
 class DimensionNameDialog(wx.Dialog):
   def __init__(self,parent,dimensionName,dimensions,actionVerb,dialogSize=wx.DefaultSize):
@@ -52,17 +53,9 @@ class DimensionNameDialog(wx.Dialog):
     wx.EVT_LIST_ITEM_DESELECTED(self.dimList,armid.DIMNAME_LISTDIM_ID,self.onItemDeselected)
     wx.EVT_BUTTON(self,armid.DIMNAME_BUTTONACTION_ID,self.onAdd)
 
-    directoryPrefix = ''
-    if (os.name == 'nt'):
-      directoryPrefix += 'C:\\iris\\'
-    elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += './images/'
-    elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += './images/'
-    else:
-      raise ARM.UnsupportedOperatingSystem(os.name)
     dimIconFile = self.theDimensionName + '.png'
-    dimIcon = wx.Icon(directoryPrefix + dimIconFile,wx.BITMAP_TYPE_PNG)
+    b = Borg()
+    dimIcon = wx.Icon(b.imageDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
     self.SetIcon(dimIcon)
 
 

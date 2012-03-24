@@ -21,11 +21,13 @@ import armid
 import os
 import ARM
 from DimensionNameDialog import DimensionNameDialog
+from Borg import *
 
 class DimensionUpdateDialog(wx.Dialog):
   def __init__(self,parent,dp,currentDims,dimensionName):
     wx.Dialog.__init__(self,parent,armid.DIMUPDATE_ID,'Edit ' + dimensionName,style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(300,200))
     self.dbProxy = dp
+    b = Borg()
     self.theDimensionName = dimensionName
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     dimSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -53,18 +55,8 @@ class DimensionUpdateDialog(wx.Dialog):
     wx.EVT_BUTTON(self,armid.DIMUPDATE_BUTTONDELETE_ID,self.onDelete)
     wx.EVT_BUTTON(self,armid.DIMUPDATE_BUTTONUPDATE_ID,self.onUpdate)
     wx.EVT_BUTTON(self,wx.ID_CLOSE,self.onClose)
-
-    directoryPrefix = ''
-    if (os.name == 'nt'):
-      directoryPrefix += 'C:\\iris\\'
-    elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += './images/'
-    elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += './images/'
-    else:
-      raise ARM.UnsupportedOperatingSystem(os.name)
     dimIconFile = self.theDimensionName + '.png'
-    dimIcon = wx.Icon(directoryPrefix + dimIconFile,wx.BITMAP_TYPE_PNG)
+    dimIcon = wx.Icon(b.imageDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
     self.SetIcon(dimIcon)
 
 

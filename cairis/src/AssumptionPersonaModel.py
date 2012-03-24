@@ -31,14 +31,7 @@ class AssumptionPersonaModel:
     self.fontName = b.fontName
     self.fontSize = b.apFontSize
     self.theGraph = pydot.Dot()
-    if (os.name == 'nt'):
-      self.theGraphName = 'C:\\arm\\ap.dot'
-    elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = '/tmp/ap.dot'
-    elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = '/tmp/ap.dot'
-    else :
-      raise ARM.UnsupportedOperatingSystem(os.name)
+    self.theGraphName = b.tmpDir + '/ap.dot'
     self.theGraph.set_graph_defaults(rankdir='LR')
 
     self.theNodeLookup = {}

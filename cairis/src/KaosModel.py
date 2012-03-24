@@ -41,14 +41,7 @@ class KaosModel:
       self.theGraph.set_graph_defaults(rankdir='LR')
     else:
       self.theGraph.set_graph_defaults(rankdir='BT')
-    if (os.name == 'nt'):
-      self.theGraphName = 'C:\\arm\\' + self.theKaosModel + '.dot'
-    elif (os.uname()[0] == 'Linux'):
-      self.theGraphName =  '/tmp/' + self.theKaosModel + '.dot'
-    elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = '/tmp/' + self.theKaosModel + '.dot'
-    else :
-      raise ARM.UnsupportedOperatingSystem(os.name)
+    self.theGraphName = b.tmpDir + '/' + self.theKaosModel + '.dot'
 
   def size(self):
     return len(self.theAssociations)

@@ -43,14 +43,7 @@ class ConceptMapModel:
     self.cfSet = cfSet
     self.theClusters = {}
     self.theEdges = []
-    if (os.name == 'nt'):
-      self.theGraphName = 'C:\\arm\\concept.dot'
-    elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = '/tmp/concept.dot'
-    elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = '/tmp/concept.dot'
-    else :
-      raise ARM.UnsupportedOperatingSystem(os.name)
+    self.theGraphName = b.tmpDir + '/concept.dot'
 
   def size(self):
     return len(self.theAssociations)

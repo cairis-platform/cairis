@@ -20,6 +20,8 @@ DBPORT = 3306
 DBUSER = "irisuser"
 DBPASSWD = ""
 DBNAME = "arm"
+CAIRIS_ROOT = '/home/irisuser/CAIRIS/cairis'
+TMP_DIR = '/tmp'
 
 from Borg import Borg
 import os
@@ -32,11 +34,17 @@ def initialise():
   b.dbUser = DBUSER
   b.dbPasswd = DBPASSWD
   b.dbName = DBNAME
+ 
   b.dbProxy = DatabaseProxyFactory.build()
 
   pSettings = b.dbProxy.getProjectSettings()
   b.fontSize = pSettings['Font Size']
   b.apFontSize = pSettings['AP Font Size']
   b.fontName = pSettings['Font Name']
+
+  b.imageDir = CAIRIS_ROOT + '/src/images'
+  b.configDir = CAIRIS_ROOT + '/src/config'
+  b.tmpDir = TMP_DIR
+  
 
   b.mainFrame = None

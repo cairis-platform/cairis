@@ -21,6 +21,7 @@ import gtk.gdk
 import contextxdot
 import ContextNodeDialogFactory
 import os
+from Borg import *
 
 class ContextModelViewer(contextxdot.ContextDotWindow):
   def __init__(self,environmentName,dp):
@@ -32,18 +33,7 @@ class ContextModelViewer(contextxdot.ContextDotWindow):
       self.environment = None
     self.widget.connect('clicked', self.on_url_clicked)
     self.widget.connect('button_press_event', self.onClick)
-
-    directoryPrefix = ''
-    if (os.name == 'nt'):
-      directoryPrefix += 'C:\\iris\\'
-    elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += './images/'
-    elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += './images/'
-    else:
-      raise UnsupportedOperatingSystem(os.name)
-
-    self.set_icon_from_file(directoryPrefix + 'contextModel.png')
+    self.set_icon_from_file(b.imageDir + '/contextModel.png')
 
   def onClick(self,widget,event):
     if event.button == 3:

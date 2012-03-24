@@ -33,17 +33,7 @@ class APModelViewer(apxdot.APDotWindow):
     self.theInitialBv = bvName
     self.widget.connect('clicked', self.on_url_clicked)
 
-    directoryPrefix = ''
-    if (os.name == 'nt'):
-      directoryPrefix += 'C:\\iris\\'
-    elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += './images/'
-    elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += './images/'
-    else:
-      raise UnsupportedOperatingSystem(os.name)
-
-    self.set_icon_from_file(directoryPrefix + 'apModel.png')
+    self.set_icon_from_file(b.imageDir + '/apModel.png')
 
 
   def on_url_clicked(self, widget, url, event):

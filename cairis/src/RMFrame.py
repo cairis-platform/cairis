@@ -89,16 +89,8 @@ class RMFrame(wx.Frame):
     self.statusBar = self.CreateStatusBar()
 
     self.toolbar = self.CreateToolBar()
-    self.directoryPrefix = ''
-    if (os.name == 'nt'):
-      self.directoryPrefix += 'C:\\iris\\'
-    elif (os.uname()[0] == 'Linux'):
-      self.directoryPrefix += './images/'
-    elif (os.uname()[0] == 'Darwin'):
-      self.directoryPrefix += './images/'
-    else:
-      raise UnsupportedOperatingSystem(os.name)
 
+    self.directoryPrefix = self.b.imageDir + '/'
     dimIcon = wx.Icon(self.directoryPrefix + 'iris.png',wx.BITMAP_TYPE_PNG)
     self.SetIcon(dimIcon)
 

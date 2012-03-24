@@ -36,14 +36,7 @@ class AssetModel:
     self.fontSize = b.fontSize
     self.hideConcerns = hideConcerns
     self.nodeList= set([])
-    if (os.name == 'nt'):
-      self.theGraphName = 'C:\\arm\\asset.dot'
-    elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = '/tmp/asset.dot'
-    elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = '/tmp/asset.dot'
-    else :
-      raise ARM.UnsupportedOperatingSystem(os.name)
+    self.theGraphName = b.tmpDir + '/asset.dot'
 
   def size(self):
     return len(self.theAssociations)

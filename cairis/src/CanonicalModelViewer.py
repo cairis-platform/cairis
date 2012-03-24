@@ -23,25 +23,19 @@ import NodeDialogFactory
 import ModelMenuFactory
 import os
 from ARM import *
+from Borg import *
 
 class CanonicalModelViewer(kaosxdot.KaosDotWindow):
   def __init__(self,environmentName,modelType,dp):
     kaosxdot.KaosDotWindow.__init__(self,environmentName,modelType,dp)
+    b = Borg()
     self.dbProxy = dp
     self.environment = self.dbProxy.dimensionObject(environmentName,'environment')
     self.widget.connect('clicked', self.on_url_clicked)
     self.widget.connect('button_press_event', self.onClick)
     self.modelType = modelType
 
-    directoryPrefix = ''
-    if (os.name == 'nt'):
-      directoryPrefix += 'C:\\iris\\'
-    elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += './images/'
-    elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += './images/'
-    else:
-      raise UnsupportedOperatingSystem(os.name)
+    directoryPrefix = b.imageDir + '/'
 
     if (modelType == 'class'):
       self.set_icon_from_file(directoryPrefix + 'classModel.png')

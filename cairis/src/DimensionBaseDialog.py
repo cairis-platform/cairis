@@ -65,16 +65,7 @@ class DimensionBaseDialog(BaseDialog):
     self.theDimensionName = DimensionNameIdentifier.dimensionName(self.__class__.__name__)
     self.selectedLabel = ""
     self.selectedIdx = -1
-    directoryPrefix = ''
-    if (os.name == 'nt'):
-      directoryPrefix += 'C:\\iris\\'
-    elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += './images/'
-    elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += './images/'
-    else:
-      raise ARM.UnsupportedOperatingSystem(os.name)
-    dimIcon = wx.Icon(directoryPrefix + dimIconFile,wx.BITMAP_TYPE_PNG)
+    dimIcon = wx.Icon(b.imageDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
     self.SetIcon(dimIcon)
 
 

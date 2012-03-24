@@ -22,16 +22,6 @@ import os
 class AssociationComboBox(wx.combo.OwnerDrawnComboBox):
 
   def OnDrawItem(self,dc,rect,item,flags):
-    directoryPrefix = ''
-    if (os.name == 'nt'):
-      directoryPrefix += 'C:\\iris\\'
-    elif (os.uname()[0] == 'Linux'):
-      directoryPrefix += './images/'
-    elif (os.uname()[0] == 'Darwin'):
-      directoryPrefix += './images/'
-    else:
-      raise UnsupportedOperatingSystem(os.name)
-
     if item == wx.NOT_FOUND:
       return
 

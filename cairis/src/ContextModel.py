@@ -31,14 +31,7 @@ class ContextModel:
     b = Borg()
     self.dbProxy = b.dbProxy
     self.theGraph = pydot.Dot()
-    if (os.name == 'nt'):
-      self.theGraphName = 'C:\\arm\\context.dot'
-    elif (os.uname()[0] == 'Linux'):
-      self.theGraphName = '/tmp/context.dot'
-    elif (os.uname()[0] == 'Darwin'):
-      self.theGraphName = '/tmp/context.dot'
-    else :
-      raise ARM.UnsupportedOperatingSystem(os.name)
+    self.theGraphName = b.tmpDir + '/context.dot'
     self.theGraph.set_graph_defaults(rankdir='LR')
 
   def size(self):
