@@ -14395,7 +14395,7 @@ begin
   select '','Requirement',concat(a.short_code,'-',r.label) from requirement r,asset a, asset_requirement ar where r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.name like concat('%',inTxt,'%')
   union
   select '','Requirement',concat(a.short_code,'-',r.label) from requirement r,asset a, asset_requirement ar where r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.description like concat('%',inTxt,'%')
-  union
+  union 
   select '','Requirement',concat(a.short_code,'-',r.label) from requirement r,asset a, asset_requirement ar where r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.rationale like concat('%',inTxt,'%')
   union
   select '','Requirement',concat(a.short_code,'-',r.label) from requirement r,asset a, asset_requirement ar where r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.originator like concat('%',inTxt,'%')
