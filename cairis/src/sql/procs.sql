@@ -14394,6 +14394,8 @@ begin
   insert into temp_searchresults (environment_name,dimension_name,object_name)
   select '','Requirement',concat(a.short_code,'-',r.label) from requirement r,asset a, asset_requirement ar where r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.name like concat('%',inTxt,'%')
   union
+  select '','Requirement',concat(a.short_code,'-',r.label) from requirement r,asset a, asset_requirement ar where r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.description like concat('%',inTxt,'%')
+  union
   select '','Requirement',concat(a.short_code,'-',r.label) from requirement r,asset a, asset_requirement ar where r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.rationale like concat('%',inTxt,'%')
   union
   select '','Requirement',concat(a.short_code,'-',r.label) from requirement r,asset a, asset_requirement ar where r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.originator like concat('%',inTxt,'%')
@@ -14403,6 +14405,8 @@ begin
   select '','Requirement',concat(a.short_code,'-',r.label) from requirement r,asset a, asset_requirement ar where r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.supporting_material like concat('%',inTxt,'%')
   union
   select '','Requirement',concat(e.short_code,'-',r.label) from requirement r,environment e, environment_requirement er where r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.name like concat('%',inTxt,'%')
+  union
+  select '','Requirement',concat(e.short_code,'-',r.label) from requirement r,environment e, environment_requirement er where r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.description like concat('%',inTxt,'%')
   union
   select '','Requirement',concat(e.short_code,'-',r.label) from requirement r,environment e, environment_requirement er where r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.rationale like concat('%',inTxt,'%')
   union
