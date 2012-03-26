@@ -31,6 +31,7 @@ def listToString(l):
   return s
 
 def drawGraph(graph,graphName):
+  b = Borg()
   tmpDir = b.tmpDir
   outputDir = os.environ['OUTPUT_DIR']
   tmpFile = tmpDir + '/' + graphName + '.pdf'
