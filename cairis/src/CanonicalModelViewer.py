@@ -128,6 +128,10 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
         asNames = self.dbProxy.environmentAssets(self.environment.name())
         asNames.sort(key=str.lower)
         self.loadFilters(environmentNames,asNames)
+      elif (self.modelType == 'conceptmap'):
+        asNames = self.dbProxy.environmentRequirements(self.environment.name())
+        asNames.sort(key=str.lower)
+        self.loadFilters(environmentNames,asNames)
       elif (self.modelType == 'task'):
         taskNames = self.dbProxy.environmentTasks(self.environment.name())
         mcNames = self.dbProxy.getDimensionNames('misusecase')

@@ -580,7 +580,7 @@ class KaosDotWindow(gtk.Window):
         cBox.pack_start(environmentFrame)
         self.environmentCombo = gtk.ComboBoxEntry()
         environmentFrame.add(self.environmentCombo)
-        if (self.theModelType in ('goal','obstacle','task','responsibility','class')):
+        if (self.theModelType in ('goal','obstacle','task','responsibility','class','conceptmap')):
           sgFrame = gtk.Frame()
           if (self.theModelType == 'goal'):
             sgFrame.set_label("Goal")
@@ -590,6 +590,8 @@ class KaosDotWindow(gtk.Window):
             sgFrame.set_label("Task")
           elif (self.theModelType == 'class'):
             sgFrame.set_label("Asset")
+          elif (self.theModelType == 'conceptmap'):
+            sgFrame.set_label("Requirement")
           else:
             sgFrame.set_label("Role")
           sgFrame.set_shadow_type(gtk.SHADOW_ETCHED_IN)
@@ -660,6 +662,8 @@ class KaosDotWindow(gtk.Window):
           self.layoutCombo.set_active(0)
         elif (self.theModelType == 'responsibility'):
           self.layoutCombo.set_active(2)
+        elif (self.theModelType == 'conceptmap'):
+          self.layoutCombo.set_active(0)
         self.layoutHandlerId = self.layoutCombo.connect('changed',self.onLayoutChange)
 
         self.set_focus(self.widget)
@@ -722,6 +726,8 @@ class KaosDotWindow(gtk.Window):
           self.hideCheck.set_sensitive(True)
         elif (self.theModelType == 'task'):
           self.task = self.dbProxy.dimensionObject(goalName,'task')
+        elif (self.theModelType == 'conceptmap'):
+          self.task = self.dbProxy.dimensionObject(goalName,'requirement')
         else:
           self.role = self.dbProxy.dimensionObject(goalName,'role')
       else:
@@ -794,7 +800,7 @@ class KaosDotWindow(gtk.Window):
       else:
         environmentModel = self.get_title()
 
-      if (self.theModelType in ('goal','obstacle','task','responsibility','class')):
+      if (self.theModelType in ('goal','obstacle','task','responsibility','class','conceptmap')):
         goalIdx = self.goalCombo.get_active()
         if (goalIdx != -1 and goalIdx != 0):
           goalName = self.goalCombo.get_active_text()
@@ -829,7 +835,7 @@ class KaosDotWindow(gtk.Window):
           self.canonicalModel = KaosModel(associationDictionary.values(),environmentName,self.theModelType,goalName)
         elif (self.theModelType == 'conceptmap'):
           cfSet = self.hideCheck.get_active()
-          associationDictionary = proxy.conceptMapModel(environmentName)
+          associationDictionary = proxy.conceptMapModel(environmentName,goalName)
           self.canonicalModel = ConceptMapModel(associationDictionary.values(),environmentName,self.theModelType,cfSet)
           self.widget.cfSet = cfSet
         else:

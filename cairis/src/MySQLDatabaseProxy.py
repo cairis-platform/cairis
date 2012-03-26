@@ -8340,10 +8340,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     os.system(cmd)
 
 
-  def conceptMapModel(self,envName):
+  def conceptMapModel(self,envName,reqName = ''):
     try:
       curs = self.conn.cursor()
-      curs.execute('call conceptMapModel(%s)',(envName))
+      if reqName == '':
+        curs.execute('call conceptMapModel(%s)',(envName))
+      else:
+        curs.execute('call parameterisedConceptMapModel(%s,%s)',(envName,reqName))
+
       if (curs.rowcount == -1):
         exceptionText = 'Error obtaining concept map model'
         raise DatabaseProxyException(exceptionText) 
@@ -8476,3 +8480,23 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting backlog items associated with requirement ' + reqName + '  (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def environmentRequirements(self,envName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call requirementNames(%s)',(envName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining requirements for environment ' + envName
+        raise DatabaseProxyException(exceptionText) 
+      else:
+        reqs = []
+        for row in curs.fetchall():
+          row = list(row)
+          reqs.append(row[0])
+        curs.close()
+        return reqs
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting requirements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+

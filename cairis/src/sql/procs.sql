@@ -649,6 +649,7 @@ drop procedure if exists redmineScenarios;
 drop procedure if exists tvTypesToXml;
 drop procedure if exists domainValuesToXml;
 drop procedure if exists conceptMapModel;
+drop procedure if exists parameterisedConceptMapModel;
 drop function if exists traceabilityScore;
 drop procedure if exists requirementScenarios;
 drop procedure if exists requirementUseCases;
@@ -3417,15 +3418,12 @@ begin
   declare environmentId int;
   if environmentName = ''
   then
-    select concat(a.short_code,'-',r.label) from requirement r,asset a, asset_requirement ar where r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
-    union
-    select concat(e.short_code,'-',r.label) from requirement r,environment e, environment_requirement er where r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
-    order by 1;
+    select r.name from requirement r where r.version = (select max(i.version) from requirement i where i.id = r.id) order by 1;
   else
     select id into environmentId from environment where name = environmentName limit 1;
-    select concat(a.short_code,'-',r.label) from requirement r,asset a, asset_requirement ar, environment_asset ea where ea.environment_id = environmentId and ea.asset_id = ar.asset_id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
+    select r.name from requirement r,asset a, asset_requirement ar, environment_asset ea where ea.environment_id = environmentId and ea.asset_id = ar.asset_id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
     union
-    select concat(e.short_code,'-',r.label) from requirement r,environment e, environment_requirement er where e.id = environmentId and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
+    select r.name from requirement r,environment e, environment_requirement er where e.id = environmentId and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
     order by 1;
   end if;
 end
@@ -17360,6 +17358,29 @@ begin
     select fr.name from_name, tr.name to_name, rr.label,e.name,envName from requirement fr, requirement tr, requirement_requirement rr,environment_requirement er, environment_requirement fer, environment e where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and tr.id = er.requirement_id and er.environment_id = envId and rr.from_id = fer.requirement_id and fer.environment_id = e.id
     union
     select fr.name from_name, tr.name to_name, rr.label,envName,e.name from requirement fr, requirement tr, requirement_requirement rr,environment_requirement er, environment_requirement fer, environment e where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and fr.id = er.requirement_id and er.environment_id = envId and rr.to_id = fer.requirement_id and fer.environment_id = e.id order by 1,2;
+  end if;
+end
+//
+
+create procedure parameterisedConceptMapModel(in envName text, in reqName text)
+begin
+  declare compositeCount int;
+  declare envId int;
+  declare reqId int;
+
+  select id into envId from environment where name = envName;
+  select r.id into reqId from requirement r where r.name = reqName and r.version = (select max(i.version) from requirement i where i.id = r.id);
+
+  select count(environment_id) into compositeCount from composite_environment where composite_environment_id = envId limit 1;
+  if compositeCount > 0
+  then
+    select fr.name from_name, tr.name to_name, rr.label,e.name,envName from requirement fr, requirement tr, requirement_requirement rr,environment_requirement er, environment_requirement fer, environment e where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and tr.id = er.requirement_id and er.environment_id in (select environment_id from composite_environment where composite_environment_id = envId) and rr.from_id = fer.requirement_id and fer.environment_id = e.id and tr.id = reqId
+    union
+    select fr.name from_name, tr.name to_name, rr.label,envName,e.name from requirement fr, requirement tr, requirement_requirement rr,environment_requirement er, environment_requirement fer, environment e where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and fr.id = er.requirement_id and er.environment_id in (select environment_id from composite_environment where composite_environment_id = envId) and rr.to_id = fer.requirement_id and fer.environment_id = e.id and fr.id = reqId order by 1,2;
+  else
+    select fr.name from_name, tr.name to_name, rr.label,e.name,envName from requirement fr, requirement tr, requirement_requirement rr,environment_requirement er, environment_requirement fer, environment e where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and tr.id = er.requirement_id and er.environment_id = envId and rr.from_id = fer.requirement_id and fer.environment_id = e.id and tr.id = reqId
+    union
+    select fr.name from_name, tr.name to_name, rr.label,envName,e.name from requirement fr, requirement tr, requirement_requirement rr,environment_requirement er, environment_requirement fer, environment e where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and fr.id = er.requirement_id and er.environment_id = envId and rr.to_id = fer.requirement_id and fer.environment_id = e.id and fr.id = reqId order by 1,2;
   end if;
 end
 //
