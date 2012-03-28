@@ -17460,7 +17460,7 @@ create procedure requirementScenarios(in reqName text)
 begin
   declare reqId int;
   select r.id into reqId from requirement r where r.name = reqName and r.version = (select max(i.version) from requirement i where i.id = r.id);
-  select distinct concat(t.short_code,': ',t.name) from requirement_task rt, requirement r, task t where rt.requirement_id = reqId and rt.task_id = t.id and rt.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id);
+  select distinct t.short_code from requirement_task rt, requirement r, task t where rt.requirement_id = reqId and rt.task_id = t.id and rt.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id);
 end
 //
 
@@ -17469,7 +17469,7 @@ create procedure requirementUseCases(in reqName text)
 begin
   declare reqId int;
   select r.id into reqId from requirement r where r.name = reqName and r.version = (select max(i.version) from requirement i where i.id = r.id);
-  select distinct concat(u.short_code,': ',u.name) from requirement_usecase ru, requirement r, usecase u  where ru.requirement_id = reqId and ru.usecase_id = u.id and ru.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id);
+  select distinct u.short_code from requirement_usecase ru, requirement r, usecase u  where ru.requirement_id = reqId and ru.usecase_id = u.id and ru.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id);
 
 end
 //
@@ -17479,7 +17479,7 @@ create procedure requirementBacklog(in reqName text)
 begin
   declare reqId int;
   select r.id into reqId from requirement r where r.name = reqName and r.version = (select max(i.version) from requirement i where i.id = r.id);
-  select distinct concat(dr.name,': ',dr.excerpt) from requirement_document_reference rdr, requirement r, document_reference dr  where rdr.requirement_id = reqId and rdr.document_reference_id = dr.id and rdr.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id);
+  select distinct dr.name from requirement_document_reference rdr, requirement r, document_reference dr  where rdr.requirement_id = reqId and rdr.document_reference_id = dr.id and rdr.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id);
 end
 //
 

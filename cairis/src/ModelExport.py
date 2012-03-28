@@ -25,9 +25,13 @@ import os
 
 def listToString(l):
   s = ''
-  noRows = len(l)
-  for idx,row in enumerate(l):
-    s += '** ' + row + '\n'
+  listSize = len(l)
+  if listSize == 0:
+    return 'None'
+  for idx,v in enumerate(l):
+    s += v
+    if idx < (listSize - 1):
+      s += ','
   return s
 
 def drawGraph(graph,graphName):
@@ -108,6 +112,8 @@ def exportRedmineRequirements(outFileName):
     buildConceptMap(b.dbProxy,envName,cmFile)
     buf +='!' + cmFile + '!\n\n'
     
+    buf += '|*Short Name*|*Comments*|*Scenarios*|*Use Cases*|*Backlog*|\n'
+
     for envReq in envReqs:
       reqName = envReq[0]
       reqOrig = envReq[1]
@@ -117,8 +123,8 @@ def exportRedmineRequirements(outFileName):
       reqScs = envReq[6]
       reqUcs = envReq[7]
       reqBis = envReq[8]
-
-      buf += 'h2. ' + reqName + '\n\n* Priority: ' + reqPri + '\n\n* Originator: ' + reqOrig + '\n\n* Comments: ' + reqComments + '\n\n* Related scenarios:\n' + listToString(reqScs) + '\n\n* Related use cases:\n' + listToString(reqUcs) + '\n\n* Related product backlog:\n' + listToString(reqBis) + '\n\n' + reqDesc + '\n\n\n'
+   
+      buf += '|/2.*' + reqName + '*\n' + reqPri + ', ' + reqOrig + '|\\4.' + reqDesc + '|\n|' + reqComments + '|' + listToString(reqScs) + '|' + listToString(reqUcs) + '|' + listToString(reqBis) + '|\n'
     envFile = open(outputDir + '/' + envCode + '-requirements.txt','w,')
     envFile.write(buf)
     envFile.close()
