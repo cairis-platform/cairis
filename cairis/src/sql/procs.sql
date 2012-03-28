@@ -14156,6 +14156,8 @@ begin
   insert into temp_searchresults (environment_name,dimension_name,object_name)
   select e.name,'Task',t.name from environment e, environment_task et, task t where et.environment_id = e.id and et.task_id = t.id and t.objective like concat('%',inTxt,'%')
   union
+  select e.name,'Task',t.name from environment e, environment_task et, task t where et.environment_id = e.id and et.task_id = t.id and t.short_code like concat('%',inTxt,'%')
+  union
   select e.name,'Task',t.name from environment e, environment_task et, task t, task_dependencies td where et.environment_id = e.id and et.task_id = t.id and et.task_id = td.task_id and et.environment_id = td.environment_id and td.dependencies like concat('%',inTxt,'%')
   union
   select e.name,'Task',t.name from environment e, environment_task et, task t, task_narrative tn where et.environment_id = e.id and et.task_id = t.id and et.task_id = tn.task_id and et.environment_id = tn.environment_id and tn.narrative like concat('%',inTxt,'%');
