@@ -3514,9 +3514,17 @@ begin
     union
     select 'requirement',concat(e.short_code,'-',r.label) from requirement r, environment_requirement er, environment e, requirement_usecase ru, environment_usecase eu where er.environment_id = environmentId and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = er.requirement_id and er.environment_id = e.id and ru.requirement_id = r.id and ru.usecase_id = eu.usecase_id and eu.environment_id = er.environment_id
     union
+    select 'requirement',concat(a.short_code,'-',r.label) from requirement r, asset_requirement ar, environment_asset ea, asset a, requirement_task rt, environment_task et where ea.environment_id = environmentId and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = ar.requirement_id and ar.asset_id = a.id and ea.asset_id = a.id and rt.requirement_id = r.id and rt.task_id = et.task_id and et.environment_id = ea.environment_id
+    union
+    select 'requirement',concat(e.short_code,'-',r.label) from requirement r, environment_requirement er, environment e, requirement_task rt, environment_task et where er.environment_id = environmentId and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = er.requirement_id and er.environment_id = e.id and rt.requirement_id = r.id and rt.task_id = et.task_id and et.environment_id = er.environment_id
+    union
     select 'usecase',u.name from usecase u, requirement_usecase ru, asset_requirement ar, environment_asset ea, environment_usecase eu  where eu.environment_id = environmentId and eu.usecase_id = ru.usecase_id and ru.usecase_id = u.id and ru.requirement_id = ar.requirement_id and ar.asset_id = ea.asset_id and ea.environment_id = eu.environment_id
     union
     select 'usecase',u.name from usecase u, requirement_usecase ru, environment_requirement er, environment e, environment_usecase eu  where eu.environment_id = environmentId and eu.usecase_id = ru.usecase_id and ru.usecase_id = u.id and ru.requirement_id = er.requirement_id and er.environment_id = e.id and er.environment_id = eu.environment_id
+    union
+    select 'task',t.name from task t, requirement_task rt, asset_requirement ar, environment_asset ea, environment_task et  where et.environment_id = environmentId and et.task_id = rt.task_id and rt.task_id = t.id and rt.requirement_id = ar.requirement_id and ar.asset_id = ea.asset_id and ea.environment_id = et.environment_id
+    union
+    select 'task',t.name from task t, requirement_task rt, environment_requirement er, environment e, environment_task et  where et.environment_id = environmentId and et.task_id = rt.task_id and rt.task_id = t.id and rt.requirement_id = er.requirement_id and er.environment_id = e.id and er.environment_id = et.environment_id
     union
     select 'role',r.name from role r, goalrole_goalassociation gr where gr.environment_id = environmentId and gr.subgoal_id = r.id
     union
@@ -3590,9 +3598,17 @@ begin
     union
     select 'requirement',concat(e.short_code,'-',r.label) from requirement r, environment_requirement er, environment e, requirement_usecase ru, environment_usecase eu where er.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = er.requirement_id and er.environment_id = e.id and ru.requirement_id = r.id and ru.usecase_id = eu.usecase_id and eu.environment_id = er.environment_id
     union
+    select 'requirement',concat(a.short_code,'-',r.label) from requirement r, asset_requirement ar, environment_asset ea, asset a, requirement_task rt, environment_task et where ea.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = ar.requirement_id and ar.asset_id = a.id and ea.asset_id = a.id and rt.requirement_id = r.id and rt.task_id = et.task_id and et.environment_id = ea.environment_id
+    union
+    select 'requirement',concat(e.short_code,'-',r.label) from requirement r, environment_requirement er, environment e, requirement_task rt, environment_task et where er.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = er.requirement_id and er.environment_id = e.id and rt.requirement_id = r.id and rt.task_id = et.task_id and et.environment_id = er.environment_id
+    union
     select 'usecase',u.name from usecase u, requirement_usecase ru, asset_requirement ar, environment_asset ea, environment_usecase eu  where eu.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and eu.usecase_id = ru.usecase_id and ru.usecase_id = u.id and ru.requirement_id = ar.requirement_id and ar.asset_id = ea.asset_id and ea.environment_id = eu.environment_id
     union
     select 'usecase',u.name from usecase u, requirement_usecase ru, environment_requirement er, environment e, environment_usecase eu  where eu.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and eu.usecase_id = ru.usecase_id and ru.usecase_id = u.id and ru.requirement_id = er.requirement_id and er.environment_id = e.id and er.environment_id = eu.environment_id
+    union
+    select 'task',t.name from task t, requirement_task rt, asset_requirement ar, environment_asset ea, environment_task et  where et.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and et.task_id = rt.task_id and rt.task_id = t.id and rt.requirement_id = ar.requirement_id and ar.asset_id = ea.asset_id and ea.environment_id = et.environment_id
+    union
+    select 'task',t.name from task t, requirement_task rt, environment_requirement er, environment e, environment_task et  where et.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and et.task_id = rt.task_id and rt.task_id = t.id and rt.requirement_id = er.requirement_id and er.environment_id = e.id and er.environment_id = et.environment_id
     union
     select 'role',r.name from role r, goalrole_goalassociation gr where gr.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and gr.subgoal_id = r.id
     union
