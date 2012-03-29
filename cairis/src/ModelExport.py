@@ -128,7 +128,7 @@ def exportRedmineRequirements(outFileName):
     envFile = open(outputDir + '/' + envCode + '-requirements.txt','w,')
     envFile.write(buf)
     envFile.close()
-    outputBuf += buf
+    outputBuf += buf + '\n'
 
   outputFile = open(outFileName,'w')
   outputFile.write(outputBuf)
