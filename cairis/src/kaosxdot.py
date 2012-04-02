@@ -838,6 +838,7 @@ class KaosDotWindow(gtk.Window):
           associationDictionary = proxy.conceptMapModel(environmentName,goalName)
           self.canonicalModel = ConceptMapModel(associationDictionary.values(),environmentName,self.theModelType,cfSet)
           self.widget.cfSet = cfSet
+#          self.reloadFilters(environmentName)
         else:
           associationDictionary = proxy.taskModel(environmentName,goalName,caseFilter)
           self.canonicalModel = KaosModel(associationDictionary.values(),environmentName,self.theModelType,goalName)
@@ -879,3 +880,37 @@ class KaosDotWindow(gtk.Window):
       else:
         chooser.destroy()
 
+
+    def reloadFilters(self,envName):
+      environmentNames = self.dbProxy.getDimensionNames('environment')
+      environmentNames.sort(key=str.lower)
+
+      if (self.modelType == 'goal'):
+        goalNames = self.dbProxy.environmentGoals(envName)
+        goalNames.sort(key=str.lower)
+        ucNames = self.dbProxy.environmentUseCases(envName)
+        ucNames.sort(key=str.lower)
+        self.loadFilters(environmentNames,goalNames,ucNames)
+      elif (self.modelType == 'obstacle'):
+        obsNames = self.dbProxy.environmentObstacles(envName)
+        obsNames.sort(key=str.lower)
+        self.loadFilters(environmentNames,obsNames)
+      elif (self.modelType == 'class'):
+        asNames = self.dbProxy.environmentAssets(envName)
+        asNames.sort(key=str.lower)
+        self.loadFilters(environmentNames,asNames)
+      elif (self.modelType == 'conceptmap'):
+        asNames = self.dbProxy.environmentRequirements(envName)
+        asNames.sort(key=str.lower)
+        self.loadFilters(environmentNames,asNames)
+      elif (self.modelType == 'task'):
+        taskNames = self.dbProxy.environmentTasks(envName)
+        mcNames = self.dbProxy.getDimensionNames('misusecase')
+        taskNames.sort(key=str.lower)
+        self.loadFilters(environmentNames,taskNames,mcNames)
+      elif (self.modelType == 'responsibility'):
+        roleNames = self.dbProxy.getDimensionNames('role')
+        roleNames.sort(key=str.lower)
+        self.loadFilters(environmentNames,roleNames)
+      else:
+        self.loadFilters(environmentNames)

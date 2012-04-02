@@ -16948,7 +16948,7 @@ begin
     then
       leave ucCursor_loop;
     end if;
-    set buf = concat('h1. ',shortCode,': ',ucName,'\n\nAuthor: ',ucAuth,'\n\nActors: ');
+    set buf = concat('h3. ',shortCode,': ',ucName,'\n\nAuthor: ',ucAuth,'\n\nActors: ');
 
     open actorCursor;
     actorCursor_loop: loop
@@ -16967,7 +16967,7 @@ begin
     end loop actorCursor_loop;
     close actorCursor;
     set done = 0;
-    set buf = concat(buf,'\n\nh2. Description\n\n',ucDesc,'\n\nh2. Preconditions\n\n',ucPre,'\n\nh2. Flow\n\n');
+    set buf = concat(buf,'\n\nh4. Description\n\n',ucDesc,'\n\nh4. Preconditions\n\n',ucPre,'\n\nh4. Flow\n\n');
 
    
     open flowCursor;
@@ -16983,7 +16983,7 @@ begin
     set done = 0;
 
     set done = 0;
-    set buf = concat(buf,'\n\nh2. Postconditions\n\n',ucPost,'\n\nh2. Use Case Map\n\n!',shortCode,'.jpg!\n\nh2. Related Scenarios\n\n');
+    set buf = concat(buf,'\n\nh4. Postconditions\n\n',ucPost,'\n\nh4. Use Case Map\n\n!',shortCode,'.jpg!\n\nh4. Related Scenarios\n\n');
 
     select count(*) into scCount from usecase_task where usecase_id = ucId;
     if scCount > 0
@@ -16993,7 +16993,7 @@ begin
         fetch scCursor into scName;
         if done = 1
         then
-          set buf = concat(buf,'\n\nh2. Related Requirements\n\n');
+          set buf = concat(buf,'\n\nh4. Related Requirements\n\n');
           leave scCursor_loop;
         end if;
         set buf = concat(buf,'* ',scName,'\n');
@@ -17169,7 +17169,7 @@ begin
       leave task_loop;
     end if;
     set buf = '';
-    set buf = concat(buf,'h1. ',taskShortCode,': ',taskName,'\n\n','Author: ',taskAuthor,'\n\nh2. Overview\n\n',taskObjt,'\n\nh2. Description\n\n',taskNarrative,'\n\nh2. Issues\n\n',taskConsequences,'\n\nh2. Benefits\n\n',taskBenefits,'\n\nh2. Usability breakdown \n\n');
+    set buf = concat(buf,'h3. ',taskShortCode,': ',taskName,'\n\n','Author: ',taskAuthor,'\n\nh4. Overview\n\n',taskObjt,'\n\nh4. Description\n\n',taskNarrative,'\n\nh4. Issues\n\n',taskConsequences,'\n\nh4. Benefits\n\n',taskBenefits,'\n\nh4. Usability breakdown \n\n');
 
     open taskPersonaCursor;
     tp_loop: loop
@@ -17208,7 +17208,7 @@ begin
     close taskPersonaCursor;
     set done = 0;
 
-    set buf = concat(buf,'h2. Required Use Cases\n\n');
+    set buf = concat(buf,'h4. Required Use Cases\n\n');
 
     open ucCursor;
     uc_loop: loop
