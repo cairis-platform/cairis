@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from xml.sax.handler import ContentHandler
+from xml.sax.handler import ContentHandler,EntityResolver
 from GoalAssociationParameters import GoalAssociationParameters
 from DependencyParameters import DependencyParameters
 from Borg import Borg
@@ -38,10 +38,11 @@ def u2s(aStr):
       outStr += c
   return outStr
   
-class AssociationsContentHandler(ContentHandler):
+class AssociationsContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     b = Borg()
     self.dbProxy = b.dbProxy
+    self.configDir = b.configDir
     self.theManualAssociations = []
     self.theGoalAssociations = []
     self.theDependencyAssociations = []
@@ -51,7 +52,7 @@ class AssociationsContentHandler(ContentHandler):
     self.resetDependencyAssociationAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return "/home/irisuser/CAIRIS/cairis/src/config/associations.dtd"
+    return self.configDir + '/associations.dtd'
 
   def manualAssociations(self):
     return self.theManualAssociations

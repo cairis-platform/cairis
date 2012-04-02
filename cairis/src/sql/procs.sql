@@ -11870,7 +11870,7 @@ begin
   declare tailName varchar(50);
   declare headNav int;
   declare tailNav int;
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE riskanalysis SYSTEM "/home/irisuser/iris/iris/config/riskanalysis.dtd">\n\n<riskanalysis>\n';
+  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE riskanalysis PUBLIC "-//CAIRIS//DTD RISKANALYSIS 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/riskanalysis.dtd">\n\n<riskanalysis>\n';
   declare done int default 0;
   declare roleCursor cursor for  select r.name,rt.name,r.short_code,r.description from role r, role_type rt where r.role_type_id = rt.id;
   declare assetEnvCursor cursor for select ea.environment_id,e.name from environment_asset ea, environment e where ea.asset_id = assetId and ea.environment_id = e.id;
@@ -12389,7 +12389,7 @@ begin
   declare obsCount int default 0;
   declare reqCount int default 0;
   declare cmCount int default 0;
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE goals SYSTEM "/home/irisuser/iris/iris/config/goals.dtd">\n\n<goals>\n';
+  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE goals PUBLIC "-//CAIRIS//DTD REQUIREMENTS 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/goals.dtd">\n\n<goals>\n';
   declare done int default 0;
   declare dpCursor cursor for select dp.name,dp.description,dpt.name,dp.originator from domainproperty dp, domainproperty_type dpt where dp.domainproperty_type_id = dpt.id;
   declare goalCursor cursor for select id,name,originator from goal;
@@ -12786,7 +12786,7 @@ begin
   declare ucExcCategory varchar(50);
   declare ucExcDesc varchar(2000);
   declare ucCount int default 0;
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE usability SYSTEM "/home/irisuser/iris/iris/config/usability.dtd">\n\n<usability>\n';
+  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/usability.dtd">\n\n<usability>\n';
   declare done int default 0;
   declare personaCursor cursor for select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
   declare personaEnvCursor cursor for select ep.environment_id,e.name from environment_persona ep, environment e where ep.persona_id = personaId and ep.environment_id = e.id;
@@ -13318,7 +13318,7 @@ end
 
 create procedure associationsToXml(in includeHeader int)
 begin
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE associations SYSTEM "/home/irisuser/iris/iris/config/associations.dtd">\n\n<associations>\n';
+  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE associations PUBLIC "-//CAIRIS//DTD ASSOCIATIONS 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/associations.dtd">\n\n<associations>\n';
   declare fromDim varchar(50);
   declare fromName varchar(50);
   declare toDim varchar(50);
@@ -13483,7 +13483,7 @@ end
 
 create procedure projectToXml(in includeHeader int)
 begin
-  declare buf varchar(900000000) default '<?xml version="1.0"?>\n<!DOCTYPE cairis SYSTEM "/home/irisuser/iris/iris/config/cairis.dtd">\n\n<cairis>\n'; 
+  declare buf varchar(900000000) default '<?xml version="1.0"?>\n<!DOCTYPE cairis PUBLIC "-//CAIRIS//DTD PROJECT 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/cairis.dtd">\n\n<cairis>\n'; 
   declare projName varchar(4000) default 'None';
   declare background varchar(4000) default '';
   declare strategicGoals varchar(4000) default '';
@@ -15449,7 +15449,7 @@ begin
   declare gwrType varchar(20);
   declare gwrRef varchar(200);
   declare gwrConcept varchar(50);
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE usability SYSTEM "/home/irisuser/iris/iris/config/usability.dtd">\n\n<usability>\n';
+  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/usability.dtd">\n\n<usability>\n';
   declare done int default 0;
   declare personaEnvCursor cursor for select ep.environment_id,e.name from environment_persona ep, environment e where ep.persona_id = personaId and ep.environment_id = e.id;
   declare personaRolesCursor cursor for select r.name from persona_role sr, role r where sr.persona_id = personaId and sr.environment_id = envId and sr.role_id = r.id;
@@ -17235,7 +17235,7 @@ begin
   declare ttCount int default 0;
   declare vtCount int default 0;
   declare done int default 0;
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE tvtypes SYSTEM "/home/irisuser/iris/iris/config/tvtypes.dtd">\n\n<tvtypes>\n';
+  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE tvtypes PUBLIC "-//CAIRIS//DTD TVTYPES 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/tvtypes.dtd">\n\n<tvtypes>\n';
   declare vtCursor cursor for select name,description from vulnerability_type order by 1;
   declare ttCursor cursor for select name,description from threat_type order by 1;
   declare continue handler for not found set done = 1;
@@ -17285,7 +17285,7 @@ begin
   declare svCount int default 0;
   declare lvCount int default 0;
   declare done int default 0;
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE domainvalues SYSTEM "/home/irisuser/iris/iris/config/tvtypes.dtd">\n\n<domainvalues>\n';
+  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE domainvalues PUBLIC "-//CAIRIS//DTD DOMAINVALUES 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/domainvalues.dtd">\n\n<domainvalues>\n';
   declare tvCursor cursor for select name,description from threat_value order by id;
   declare rvCursor cursor for select name,description from risk_class order by id;
   declare cvCursor cursor for select name,description from countermeasure_value order by id;

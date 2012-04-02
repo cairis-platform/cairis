@@ -32,6 +32,7 @@ def importSecurityPatterns(importFile):
   parser = xml.sax.make_parser()
   handler = SecurityPatternContentHandler()
   parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
   parser.parse(importFile)
   taps = handler.assets()
   spps = handler.patterns()
@@ -64,6 +65,7 @@ def importTVTypeFile(importFile):
   parser = xml.sax.make_parser()
   handler = TVTypeContentHandler()
   parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
   parser.parse(importFile)
   vulTypes,threatTypes = handler.types()
   return importTVTypes(vulTypes,threatTypes)
@@ -93,6 +95,7 @@ def importDirectoryFile(importFile):
   parser = xml.sax.make_parser()
   handler = DirectoryContentHandler()
   parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
   parser.parse(importFile)
   vulDir,threatDir = handler.directories()
   vdSize = len(vulDir)
@@ -111,6 +114,7 @@ def importRequirementsFile(importFile):
   parser = xml.sax.make_parser()
   handler = GoalsContentHandler()
   parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
   parser.parse(importFile)
   return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.countermeasures())
 
@@ -146,6 +150,7 @@ def importRiskAnalysisFile(importFile):
   parser = xml.sax.make_parser()
   handler = RiskAnalysisContentHandler()
   parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
   parser.parse(importFile)
   return importRiskAnalysis(handler.roles(),handler.assets(),handler.vulnerabilities(),handler.attackers(),handler.threats(),handler.risks(),handler.responses(),handler.associations())
 
@@ -199,6 +204,7 @@ def importUsabilityFile(importFile):
   parser = xml.sax.make_parser()
   handler = UsabilityContentHandler()
   parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
   parser.parse(importFile)
   return importUsability(handler.personas(),handler.externalDocuments(),handler.documentReferences(),handler.conceptReferences(),handler.personaCharacteristics(),handler.taskCharacteristics(),handler.tasks(),handler.usecases())
 
@@ -245,6 +251,7 @@ def importAssociationsFile(importFile):
   parser = xml.sax.make_parser()
   handler = AssociationsContentHandler()
   parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
   parser.parse(importFile)
   return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations())
   
@@ -293,6 +300,7 @@ def importDomainValuesFile(importFile):
   parser = xml.sax.make_parser()
   handler = DomainValueContentHandler()
   parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
   parser.parse(importFile)
   tvValues,rvValues,cvValues,svValues,lvValues = handler.values()
   return importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues)

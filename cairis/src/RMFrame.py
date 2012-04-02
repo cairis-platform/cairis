@@ -1404,7 +1404,7 @@ class RMFrame(wx.Frame):
       dlg = wx.FileDialog(self,message='Export model',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"
-        xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model SYSTEM "/home/irisuser/CAIRIS/cairis/src/config/cairis_model.dtd">\n<cairis_model>\n\n\n'
+        xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/cairis_model.dtd">\n<cairis_model>\n\n\n'
         xmlBuf+= self.dbProxy.tvTypesToXml(0)[0] + '\n\n'
         xmlBuf+= self.dbProxy.domainValuesToXml(0)[0] + '\n\n'
         xmlBuf+= self.dbProxy.projectToXml(0) + '\n\n'

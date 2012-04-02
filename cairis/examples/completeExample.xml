@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE cairis_model SYSTEM "/home/irisuser/CAIRIS/cairis/src/config/cairis_model.dtd">
+<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/cairis_model.dtd">
 
 <!-- 
   Licensed to the Apache Software Foundation (ASF) under one
@@ -1757,7 +1757,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <grounds type="document" reference="API hides details from users." />
   <warrant type="document" reference="No guarantee that users are not doing things they should not." />
 </persona_characteristic>
-<task name="Upload data" author="Shamal Faily" assumption_task="FALSE" >
+<task name="Upload data" author="Shamal Faily" code="UD" assumption_task="FALSE" >
   <objective>Upload data</objective>
   <task_environment name="Psychosis" >
     <dependencies>Claire's workstation is properly set-up to access the NeuroGrid portal.  Claire has permission to upload data</dependencies>
@@ -1780,7 +1780,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
     <benefits></benefits>
   </task_environment>
 </task>
-<task name="Download data" author="Shamal Faily" assumption_task="FALSE" >
+<task name="Download data" author="Shamal Faily" code="DD" assumption_task="FALSE" >
   <objective>Download data</objective>
   <task_environment name="Psychosis" >
     <dependencies>Permission to login to NeuroGrid.  Permission to download data. Acknowledgement has been sent that results are available for download.</dependencies>
@@ -1805,7 +1805,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
     <benefits></benefits>
   </task_environment>
 </task>
-<task name="Issue User Certificate" author="Shamal Faily" assumption_task="FALSE" >
+<task name="Issue User Certificate" author="Shamal Faily" code="IUC" assumption_task="FALSE" >
   <objective>Issue User Certificate</objective>
   <task_environment name="Core Technology" >
     <dependencies>Prospective users have been made aware of the importance of clinical data security by their sponsoring exemplars.  Prospective users have a sponsor to authorise their request.</dependencies>

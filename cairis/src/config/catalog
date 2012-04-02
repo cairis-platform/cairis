@@ -23,10 +23,10 @@
 -->
 
 <catalog  xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">  
-  <group  prefer="system"  xml:base="file:///home/irisuser/iris/iris/config/" >  
+  <group  prefer="system" >  
 
     <public 
-       publicId="-//University of Oxford//DTD CAIRIS ASSOCIATIONS 1.0//EN"  
+       publicId="-//CAIRIS//DTD ASSOCIATIONS 1.0//EN"  
        uri="associations.dtd"/>
 
     <system
@@ -34,7 +34,7 @@
        uri="associations.dtd"/>
 
     <public 
-       publicId="-//University of Oxford//DTD CAIRIS PROJECT 1.0//EN"  
+       publicId="-//CAIRIS//DTD PROJECT 1.0//EN"  
        uri="cairis.dtd"/>
 
     <system
@@ -42,7 +42,7 @@
        uri="cairis.dtd"/>
 
     <public 
-       publicId="-//University of Oxford//DTD CAIRIS MODEL 1.0//EN"  
+       publicId="-//CAIRIS//DTD MODEL 1.0//EN"  
        uri="cairis_model.dtd"/>
 
     <system
@@ -50,7 +50,7 @@
        uri="cairis_model.dtd"/>
 
     <public 
-       publicId="-//University of Oxford//DTD CAIRIS DIRECTORY 1.0//EN"  
+       publicId="-//CAIRIS//DTD DIRECTORY 1.0//EN"  
        uri="directory.dtd"/>
 
     <system
@@ -58,7 +58,7 @@
        uri="directory.dtd"/>
 
     <public 
-       publicId="-//University of Oxford//DTD CAIRIS DOMAINVALUES 1.0//EN"  
+       publicId="-//CAIRIS//DTD DOMAINVALUES 1.0//EN"  
        uri="domainvalues.dtd"/>
 
     <system
@@ -66,7 +66,7 @@
        uri="domainvalues.dtd"/>
 
     <public 
-       publicId="-//University of Oxford//DTD CAIRIS REQUIREMENTS 1.0//EN"  
+       publicId="-//CAIRIS//DTD REQUIREMENTS 1.0//EN"  
        uri="goals.dtd"/>
 
     <system
@@ -74,7 +74,7 @@
        uri="goals.dtd"/>
 
     <public 
-       publicId="-//University of Oxford//DTD CAIRIS RISKANALYSIS 1.0//EN"  
+       publicId="-//CAIRIS//DTD RISKANALYSIS 1.0//EN"  
        uri="riskanalysis.dtd"/>
 
     <system
@@ -82,7 +82,7 @@
        uri="riskanalysis.dtd"/>
 
     <public 
-       publicId="-//University of Oxford//DTD CAIRIS SECURITYPATTERN 1.0//EN"  
+       publicId="-//CAIRIS//DTD SECURITYPATTERN 1.0//EN"  
        uri="securitypattern.dtd"/>
 
     <system
@@ -90,7 +90,7 @@
        uri="securitypattern.dtd"/>
 
     <public 
-       publicId="-//University of Oxford//DTD CAIRIS TVTYPES 1.0//EN"  
+       publicId="-//CAIRIS//DTD TVTYPES 1.0//EN"  
        uri="tvtypes.dtd"/>
 
     <system
@@ -98,7 +98,7 @@
        uri="tvtypes.dtd"/>
 
     <public 
-       publicId="-//University of Oxford//DTD CAIRIS USABILITY 1.0//EN"  
+       publicId="-//CAIRIS//DTD USABILITY 1.0//EN"  
        uri="usability.dtd"/>
 
     <system

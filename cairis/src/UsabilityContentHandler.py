@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from xml.sax.handler import ContentHandler
+from xml.sax.handler import ContentHandler,EntityResolver
 from PersonaParameters import PersonaParameters
 from PersonaEnvironmentProperties import PersonaEnvironmentProperties
 from ExternalDocumentParameters import ExternalDocumentParameters
@@ -30,6 +30,7 @@ from UseCaseParameters import UseCaseParameters
 from UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
 from Steps import Steps
 from Step import Step
+from Borg import Borg
 
 def a2s(aStr):
   if aStr == 'a':
@@ -64,7 +65,7 @@ def frequencyValue(fLabel):
   else:
     return 'High'
   
-class UsabilityContentHandler(ContentHandler):
+class UsabilityContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.thePersonas = []
     self.theExternalDocuments = []
@@ -74,6 +75,8 @@ class UsabilityContentHandler(ContentHandler):
     self.theTaskCharacteristics = []
     self.theTasks = []
     self.theUseCases = []
+    b = Borg()
+    self.configDir = b.configDir
     self.resetPersonaAttributes()
     self.resetDocumentReferenceAttributes()
     self.resetConceptReferenceAttributes()
@@ -83,7 +86,7 @@ class UsabilityContentHandler(ContentHandler):
     self.resetUseCaseAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return "/home/irisuser/CAIRIS/cairis/src/config/usability.dtd"
+    return self.configDir + '/usability.dtd'
 
   def personas(self):
     return self.thePersonas

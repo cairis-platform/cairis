@@ -16,15 +16,15 @@
 #  under the License.
 
 
-from xml.sax.handler import ContentHandler
+from xml.sax.handler import ContentHandler,EntityResolver
 from EnvironmentParameters import EnvironmentParameters
 from ValueTypeParameters import ValueTypeParameters
 from Borg import Borg
 
-class CairisContentHandler(ContentHandler):
+class CairisContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     b = Borg()
-    self.dbProxy = b.dbProxy
+    self.configDir = b.configDir
     self.theProjectSettings = None
     self.theEnvironments = []
 
@@ -33,7 +33,7 @@ class CairisContentHandler(ContentHandler):
     self.resetAssetValues()
 
   def resolveEntity(self,publicId,systemId):
-    return "/home/irisuser/CAIRIS/cairis/src/config/cairis.dtd"
+    return self.configDir + '/cairis.dtd'
 
   def settings(self):
     return self.theProjectSettings

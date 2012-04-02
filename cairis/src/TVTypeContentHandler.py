@@ -16,17 +16,20 @@
 #  under the License.
 
 
-from xml.sax.handler import ContentHandler
+from xml.sax.handler import ContentHandler,EntityResolver
 from ValueTypeParameters import ValueTypeParameters
+from Borg import Borg
 
-class TVTypeContentHandler(ContentHandler):
+class TVTypeContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theVulnerabilityTypes = []
     self.theThreatTypes = []
     self.resetAttributes()
+    b = Borg()
+    self.configDir = b.configDir
 
   def resolveEntity(self,publicId,systemId):
-    return "/home/irisuser/CAIRIS/cairis/src/config/tvtypes.dtd"
+    return self.configDir + '/tvtypes.dtd'
 
   def types(self):
     return (self.theVulnerabilityTypes,self.theThreatTypes)

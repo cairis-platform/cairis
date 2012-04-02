@@ -16,10 +16,11 @@
 #  under the License.
 
 
-from xml.sax.handler import ContentHandler
+from xml.sax.handler import ContentHandler,EntityResolver
 from ValueTypeParameters import ValueTypeParameters
+from Borg import Borg
 
-class DomainValueContentHandler(ContentHandler):
+class DomainValueContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theValuesMap = {}
     self.theValuesMap['threat_value'] = []
@@ -27,10 +28,12 @@ class DomainValueContentHandler(ContentHandler):
     self.theValuesMap['countermeasure_value'] = []
     self.theValuesMap['severity'] = []
     self.theValuesMap['likelihood'] = []
+    b = Borg()
+    self.configDir = b.configDir
     self.resetAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return "/home/irisuser/CAIRIS/cairis/src/config/domainvalues.dtd"
+    return self.configDir + '/domainvalues.dtd'
 
   def values(self):
     return (self.theValuesMap['threat_value'],self.theValuesMap['risk_class'],self.theValuesMap['countermeasure_value'],self.theValuesMap['severity'],self.theValuesMap['likelihood'])

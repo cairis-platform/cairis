@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from xml.sax.handler import ContentHandler
+from xml.sax.handler import ContentHandler,EntityResolver
 from RoleParameters import RoleParameters
 from AssetParameters import AssetParameters
 from VulnerabilityParameters import VulnerabilityParameters
@@ -34,6 +34,7 @@ from TransferEnvironmentProperties import TransferEnvironmentProperties
 from MitigateEnvironmentProperties import MitigateEnvironmentProperties
 from MisuseCase import MisuseCase
 from ClassAssociationParameters import ClassAssociationParameters
+from Borg import Borg
 
 def a2i(spLabel):
   if spLabel == 'Low':
@@ -46,7 +47,7 @@ def a2i(spLabel):
     return 0
   
   
-class RiskAnalysisContentHandler(ContentHandler):
+class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theRoleParameters = []
     self.theAssetParameters = []
@@ -57,6 +58,8 @@ class RiskAnalysisContentHandler(ContentHandler):
     self.theResponses = []
     self.theEnvironmentProperties = []
     self.theAssociations = []
+    b = Borg()
+    self.configDir = b.configDir
     self.resetRoleAttributes()
     self.resetAssetAttributes()
     self.resetVulnerabilityAttributes()
@@ -67,7 +70,7 @@ class RiskAnalysisContentHandler(ContentHandler):
     self.resetAssociationAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return "/home/irisuser/CAIRIS/cairis/src/config/riskanalysis.dtd"
+    return self.configDir + '/riskanalysis.dtd'
 
 
   def associations(self):

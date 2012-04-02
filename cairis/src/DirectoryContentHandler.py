@@ -16,19 +16,22 @@
 #  under the License.
 
 
-from xml.sax.handler import ContentHandler
+from xml.sax.handler import ContentHandler,EntityResolver
 from ValueTypeParameters import ValueTypeParameters
+from Borg import Borg
 
-class DirectoryContentHandler(ContentHandler):
+class DirectoryContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theVulnerabilityDirectory = []
     self.theThreatDirectory = []
     self.vdId = 0
     self.tdId = 0
+    b = Borg()
+    self.configDir = b.configDir
     self.resetAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return "/home/irisuser/CAIRIS/cairis/src/config/directory.dtd"
+    return self.configDir + '/directory.dtd'
 
   def directories(self):
     return (self.theVulnerabilityDirectory,self.theThreatDirectory)

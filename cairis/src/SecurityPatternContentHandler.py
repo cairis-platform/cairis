@@ -16,19 +16,22 @@
 #  under the License.
 
 
-from xml.sax.handler import ContentHandler
+from xml.sax.handler import ContentHandler,EntityResolver
 from TemplateAssetParameters import TemplateAssetParameters
 from SecurityPatternParameters import SecurityPatternParameters
+from Borg import Borg
 
-class SecurityPatternContentHandler(ContentHandler):
+class SecurityPatternContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theAssets = []
     self.theSecurityPatterns = []
+    b = Borg()
+    self.configDir = b.configDir
     self.resetAssetAttributes()
     self.resetPatternAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return "/home/irisuser/CAIRIS/cairis/src/config/securitypattern.dtd"
+    return self.configDir + '/securitypattern.dtd'
 
 
   def patterns(self):

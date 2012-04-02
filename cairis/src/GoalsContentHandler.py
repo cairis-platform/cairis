@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from xml.sax.handler import ContentHandler
+from xml.sax.handler import ContentHandler,EntityResolver
 from DomainPropertyParameters import DomainPropertyParameters
 from GoalParameters import GoalParameters
 from ObstacleParameters import ObstacleParameters
@@ -55,10 +55,11 @@ def u2s(aStr):
       outStr += c
   return outStr
   
-class GoalsContentHandler(ContentHandler):
+class GoalsContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     b = Borg()
     self.dbProxy = b.dbProxy
+    self.configDir = b.configDir
     self.theDomainProperties = []
     self.theGoals = []
     self.theObstacles = []
@@ -73,7 +74,7 @@ class GoalsContentHandler(ContentHandler):
     self.resetCountermeasureAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return "/home/irisuser/CAIRIS/cairis/src/config/goals.dtd"
+    return self.configDir + '/goals.dtd'
 
   def roles(self):
     return self.theRoles

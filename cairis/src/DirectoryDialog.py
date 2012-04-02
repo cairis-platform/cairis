@@ -82,7 +82,7 @@ class DirectoryDialog(wx.Dialog):
     wx.EVT_BUTTON(self,armid.DIRECTORYDIALOG_BUTTONIMPORT_ID,self.onImport)
 
     dimIconFile = dimensionName + '.png'
-    dimIcon = wx.Icon(b.imageDir + '/' + + dimIconFile,wx.BITMAP_TYPE_PNG)
+    dimIcon = wx.Icon(b.imageDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
     self.SetIcon(dimIcon)
 
 

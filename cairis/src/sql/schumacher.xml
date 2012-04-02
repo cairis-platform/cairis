@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE security_patterns SYSTEM "/home/irisuser/CAIRIS/cairis/src/config/securitypattern.dtd">
+<!DOCTYPE security_pattern PUBLIC "-//CAIRIS//DTD SECURITYPATTERN 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/securitypattern.dtd">
 
 <!-- 
   Licensed to the Apache Software Foundation (ASF) under one
