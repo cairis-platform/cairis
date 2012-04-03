@@ -24,6 +24,12 @@ def initialise():
   b = Borg()
   cairisRoot = '/usr/local/cairis'
 
+  cfgFileName = ''
+  try:
+    cfgFileName = os.environ['CAIRIS_CFG']
+  except KeyError:
+    cfgFileName = 'config/cairis.cnf'    
+
   cfgFile = open('config/cairis.cnf')
   for cfgLine in cfgFile.readlines():
     cfgTuple = cfgLine.split('=')
