@@ -15,26 +15,37 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-DBHOST = "127.0.0.1"
-DBPORT = 3306
-DBUSER = "irisuser"
-DBPASSWD = ""
-DBNAME = "arm"
-CAIRIS_ROOT = '/home/irisuser/CAIRIS/cairis'
-TMP_DIR = '/tmp'
-
 from Borg import Borg
 import os
 import DatabaseProxyFactory
+from string import strip
 
 def initialise():
   b = Borg()
-  b.dbHost = DBHOST
-  b.dbPort = DBPORT
-  b.dbUser = DBUSER
-  b.dbPasswd = DBPASSWD
-  b.dbName = DBNAME
+  cairisRoot = '/usr/local/cairis'
+
+  cfgFile = open('config/cairis.cnf')
+  for cfgLine in cfgFile.readlines():
+    cfgTuple = cfgLine.split('=')
+    cfgKey = strip(cfgTuple[0])
+    cfgVal = strip(cfgTuple[1])
  
+    if cfgKey == 'dbhost':
+      b.dbHost = cfgVal
+    elif cfgKey == 'dbport':
+      b.dbPort = int(cfgVal)
+    elif cfgKey == 'dbuser':
+      b.dbUser = cfgVal
+    elif cfgKey == 'dbpasswd':
+      b.dbPasswd = cfgVal
+    elif cfgKey == 'dbname':
+      b.dbName = cfgVal
+    elif cfgKey == 'tmp_dir': 
+      b.tmpDir = cfgVal
+    elif cfgKey == 'root': 
+      cairisRoot = cfgVal
+  cfgFile.close()
+
   b.dbProxy = DatabaseProxyFactory.build()
 
   pSettings = b.dbProxy.getProjectSettings()
@@ -42,9 +53,7 @@ def initialise():
   b.apFontSize = pSettings['AP Font Size']
   b.fontName = pSettings['Font Name']
 
-  b.imageDir = CAIRIS_ROOT + '/src/images'
-  b.configDir = CAIRIS_ROOT + '/src/config'
-  b.tmpDir = TMP_DIR
-  
+  b.imageDir = cairisRoot + '/src/images'
+  b.configDir = cairisRoot + '/src/config'
 
   b.mainFrame = None
