@@ -43,7 +43,7 @@ def initialise():
     elif cfgKey == 'tmp_dir': 
       b.tmpDir = cfgVal
     elif cfgKey == 'root': 
-      cairisRoot = cfgVal
+      b.cairisRoot = cfgVal
   cfgFile.close()
 
   b.dbProxy = DatabaseProxyFactory.build()
@@ -53,7 +53,7 @@ def initialise():
   b.apFontSize = pSettings['AP Font Size']
   b.fontName = pSettings['Font Name']
 
-  b.imageDir = cairisRoot + '/src/images'
-  b.configDir = cairisRoot + '/src/config'
+  b.imageDir = b.cairisRoot + '/src/images'
+  b.configDir = b.cairisRoot + '/src/config'
 
   b.mainFrame = None

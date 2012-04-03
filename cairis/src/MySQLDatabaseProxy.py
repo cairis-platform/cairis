@@ -8330,15 +8330,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def clearDatabase(self):
-    srcDir = './sql'
+    b = Borg()
+    srcDir = b.cairisRoot + '/src/sql'
     initSql = srcDir + '/init.sql'
     procsSql = srcDir + '/procs.sql'
-    b = Borg()
     cmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + initSql
     os.system(cmd)
     cmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + procsSql
     os.system(cmd)
-
 
   def conceptMapModel(self,envName,reqName = ''):
     try:
