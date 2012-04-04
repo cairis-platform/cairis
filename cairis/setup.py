@@ -6,7 +6,7 @@ setup(name = 'cairis',
       author = 'Shamal Faily',
       author_email = 'shamal.faily@googlemail.com',
       url = 'http://www.cs.ox.ac.uk/cairis',
-      packages=['src'],
-      package_dir={'src': 'src'},
-      package_data={'src':['sql/*.sql','config/*','images/*.png']}
+      packages=['cairis'],
+      package_dir={'src': 'cairis'},
+      package_data={'cairis':['sql/*.sql','config/*.dtd','config/*.xml','config/*.pdf','config/*.png','config/*.xml','images/*.png']}
      )
