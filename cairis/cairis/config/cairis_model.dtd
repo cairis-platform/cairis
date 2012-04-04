@@ -1,0 +1,372 @@
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<!-- DTD for CAIRIS XML model file -->
+
+<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis,riskanalysis,usability,goals,associations)>
+
+<!ELEMENT tvtypes (vulnerability_type+,threat_type+)>
+<!ELEMENT vulnerability_type (description)>
+<!ATTLIST vulnerability_type name CDATA #REQUIRED>
+<!ELEMENT threat_type (description)>
+<!ATTLIST threat_type name CDATA #REQUIRED>
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT domainvalues (threat_value+,risk_value+,countermeasure_value+,severity_value+,likelihood_value+)>
+<!ELEMENT threat_value (description)>
+<!ATTLIST threat_value value (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT risk_value (description)>
+<!ATTLIST risk_value value (Negligible | Tolerable | Undesirable | Intolerable) #REQUIRED>
+<!ELEMENT countermeasure_value (description)>
+<!ATTLIST countermeasure_value value (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT severity_value (description)>
+<!ATTLIST severity_value value (Negligible | Marginal | Critical | Catastrophic) #REQUIRED>
+<!ELEMENT likelihood_value (description)>
+<!ATTLIST likelihood_value value (Incredible | Improbable | Remote | Occasional | Probable | Frequent) #REQUIRED>
+
+<!ELEMENT cairis (project_settings?, environment*)>
+
+<!ELEMENT project_settings (background?,strategic_goals?,rich_picture?,scope?,naming_conventions?,contributors?,revisions?)>
+<!ATTLIST project_settings name CDATA #REQUIRED>
+<!ELEMENT background (#PCDATA)>
+<!ELEMENT strategic_goals (#PCDATA)>
+<!ELEMENT rich_picture EMPTY>
+<!ATTLIST rich_picture image CDATA #REQUIRED>
+<!ELEMENT scope (#PCDATA)>
+<!ELEMENT naming_conventions (entry+)>
+<!ELEMENT entry (definition)>
+<!ATTLIST entry name CDATA #REQUIRED>
+<!ELEMENT definition (#PCDATA)>
+<!ELEMENT contributors (contributor+)>
+<!ELEMENT contributor EMPTY>
+<!ATTLIST contributor first_name CDATA #REQUIRED>
+<!ATTLIST contributor surname CDATA #REQUIRED>
+<!ATTLIST contributor affiliation CDATA #REQUIRED>
+<!ATTLIST contributor role (Participant | Facilitator | Scribe) #REQUIRED>
+<!ELEMENT revisions (revision+)>
+<!ELEMENT revision (remarks)>
+<!ATTLIST revision number CDATA #REQUIRED>
+<!ATTLIST revision date CDATA #REQUIRED>
+<!ELEMENT remarks (#PCDATA)>
+
+<!ELEMENT environment (definition,asset_values,composite_properties?)>
+<!ATTLIST environment name CDATA #REQUIRED>
+<!ATTLIST environment short_code CDATA #REQUIRED>
+<!ELEMENT asset_values (none,low,medium,high)>
+<!ELEMENT none (#PCDATA)>
+<!ELEMENT low (#PCDATA)>
+<!ELEMENT medium (#PCDATA)>
+<!ELEMENT high (#PCDATA)>
+<!ELEMENT composite_properties (sub_environment+)>
+<!ATTLIST composite_properties duplication (Override | Maximise) #REQUIRED>
+<!ATTLIST composite_properties overriding_environment CDATA #IMPLIED>
+<!ELEMENT sub_environment EMPTY>
+<!ATTLIST sub_environment name CDATA #REQUIRED>
+
+<!ELEMENT riskanalysis (role*,asset*,vulnerability*,attacker*,threat*,risk*,response*,asset_association*)>
+<!ELEMENT role (description)>
+<!ATTLIST role name CDATA #REQUIRED>
+<!ATTLIST role type (Stakeholder | Attacker) #REQUIRED>
+<!ATTLIST role short_code CDATA #REQUIRED>
+<!ELEMENT asset (description,significance,critical_rationale?,security_property*)>
+<!ATTLIST asset name CDATA #REQUIRED>
+<!ATTLIST asset short_code CDATA #REQUIRED>
+<!ATTLIST asset type CDATA #REQUIRED>
+<!ATTLIST asset is_critical (0 | 1) #REQUIRED>
+<!ELEMENT significance (#PCDATA)>
+<!ELEMENT critical_rationale (#PCDATA)>
+<!ELEMENT security_property (rationale)>
+<!ATTLIST security_property environment CDATA #REQUIRED>
+<!ATTLIST security_property property (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
+<!ATTLIST security_property value (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
+
+<!ELEMENT vulnerability (description,vulnerability_environment+)>
+<!ATTLIST vulnerability name CDATA #REQUIRED>
+<!ATTLIST vulnerability type CDATA #REQUIRED>
+<!ELEMENT vulnerability_environment (vulnerable_asset+)>
+<!ATTLIST vulnerability_environment name CDATA #REQUIRED>
+<!ATTLIST vulnerability_environment severity (Negligible | Marginal | Critical | Catastrophic) #REQUIRED>
+<!ELEMENT vulnerable_asset EMPTY>
+<!ATTLIST vulnerable_asset name CDATA #REQUIRED>
+
+<!ELEMENT attacker (description,attacker_environment+)>
+<!ATTLIST attacker name CDATA #REQUIRED>
+<!ATTLIST attacker image CDATA #REQUIRED>
+<!ELEMENT attacker_environment (attacker_role+,motivation+,capability+)>
+<!ATTLIST attacker_environment name CDATA #REQUIRED>
+<!ELEMENT attacker_role EMPTY>
+<!ATTLIST attacker_role name CDATA #REQUIRED>
+<!ELEMENT motivation EMPTY>
+<!ATTLIST motivation name CDATA #REQUIRED>
+<!ELEMENT capability EMPTY>
+<!ATTLIST capability name CDATA #REQUIRED>
+<!ATTLIST capability value (Low | Medium | High) #REQUIRED>
+
+<!ELEMENT threat (method,threat_environment+)>
+<!ATTLIST threat name CDATA #REQUIRED>
+<!ATTLIST threat type CDATA #REQUIRED>
+<!ELEMENT method (#PCDATA)>
+<!ELEMENT threat_environment (threat_attacker+,threatened_asset+,threatened_property+)>
+<!ATTLIST threat_environment name CDATA #REQUIRED>
+<!ATTLIST threat_environment likelihood (Incredible | Improbable | Remote | Occasional | Probable | Frequent) #REQUIRED>
+<!ELEMENT threat_attacker EMPTY>
+<!ATTLIST threat_attacker name CDATA #REQUIRED>
+<!ELEMENT threatened_asset EMPTY>
+<!ATTLIST threatened_asset name CDATA #REQUIRED>
+<!ELEMENT threatened_property (rationale)>
+<!ATTLIST threatened_property name (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
+<!ATTLIST threatened_property value (None | Low | Medium | High) #REQUIRED>
+
+<!ELEMENT risk (misusecase+)>
+<!ATTLIST risk name CDATA #REQUIRED>
+<!ATTLIST risk vulnerability CDATA #REQUIRED>
+<!ATTLIST risk threat CDATA #REQUIRED>
+<!ELEMENT misusecase (narrative)>
+<!ATTLIST misusecase environment CDATA #REQUIRED>
+<!ELEMENT narrative (#PCDATA)>
+
+<!ELEMENT response (accept_environment*,transfer_environment*,deter_environment*,prevent_environment*,detect_environment*,react_environment*)>
+<!ATTLIST response risk CDATA #REQUIRED>
+<!ATTLIST response type (Accept | Transfer | Mitigate | Prevent | Deter | Detect | React) #REQUIRED>
+<!ELEMENT accept_environment (rationale)>
+<!ATTLIST accept_environment name CDATA #REQUIRED>
+<!ATTLIST accept_environment cost (Low | Medium | High) #REQUIRED>
+<!ELEMENT transfer_environment (response_role+,rationale)>
+<!ATTLIST transfer_environment name CDATA #REQUIRED>
+<!ELEMENT response_role EMPTY>
+<!ATTLIST response_role name CDATA #REQUIRED>
+<!ATTLIST response_role cost (Low | Medium | High) #REQUIRED>
+<!ELEMENT deter_environment EMPTY>
+<!ATTLIST deter_environment name CDATA #REQUIRED>
+<!ELEMENT prevent_environment EMPTY>
+<!ATTLIST prevent_environment name CDATA #REQUIRED>
+<!ELEMENT detect_environment EMPTY>
+<!ATTLIST detect_environment name CDATA #REQUIRED>
+<!ATTLIST detect_environment point (Before | At | After)  #REQUIRED>
+<!ELEMENT react_environment (detection_mechanism+)>
+<!ATTLIST react_environment name CDATA #REQUIRED>
+<!ELEMENT detection_mechanism EMPTY>
+<!ATTLIST detection_mechanism name CDATA #REQUIRED>
+
+<!ELEMENT asset_association EMPTY>
+<!ATTLIST asset_association environment CDATA #REQUIRED>
+<!ATTLIST asset_association head_name CDATA #REQUIRED>
+<!ATTLIST asset_association head_adornment CDATA #REQUIRED>
+<!ATTLIST asset_association head_nav (1 | 0) #REQUIRED>
+<!ATTLIST asset_association head_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST asset_association head_role CDATA #REQUIRED>
+<!ATTLIST asset_association tail_role CDATA #REQUIRED>
+<!ATTLIST asset_association tail_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST asset_association tail_nav (1 | 0) #REQUIRED>
+<!ATTLIST asset_association tail_adornment CDATA #REQUIRED>
+<!ATTLIST asset_association tail_name CDATA #REQUIRED>
+<!ATTLIST asset_association rationale CDATA #IMPLIED>
+
+<!ELEMENT usability (persona*,external_document*,document_reference*,concept_reference*,persona_characteristic*,task_characteristic*,task*,usecase*)>
+
+<!ELEMENT persona (activities,attitudes,aptitudes,motivations,skills,persona_environment+)>
+<!ATTLIST persona name CDATA #REQUIRED>
+<!ATTLIST persona type (Primary | Secondary | Supplemental | Customer | Served | Negative) #REQUIRED>
+<!ATTLIST persona image CDATA #REQUIRED>
+<!ATTLIST persona assumption_persona (TRUE | FALSE) #REQUIRED>
+<!ELEMENT activities (#PCDATA)>
+<!ELEMENT attitudes (#PCDATA)>
+<!ELEMENT aptitudes (#PCDATA)>
+<!ELEMENT motivations (#PCDATA)>
+<!ELEMENT skills (#PCDATA)>
+<!ELEMENT persona_environment (persona_role+,narrative)>
+<!ATTLIST persona_environment name CDATA #REQUIRED>
+<!ATTLIST persona_environment is_direct (TRUE | FALSE) #REQUIRED>
+<!ELEMENT persona_role EMPTY>
+<!ATTLIST persona_role name CDATA #REQUIRED>
+
+<!ELEMENT external_document (description*)>
+<!ATTLIST external_document name CDATA #REQUIRED>
+<!ATTLIST external_document version CDATA #REQUIRED>
+<!ATTLIST external_document date CDATA #REQUIRED>
+<!ATTLIST external_document authors CDATA #REQUIRED>
+
+<!ELEMENT document_reference (excerpt)>
+<!ATTLIST document_reference name CDATA #REQUIRED>
+<!ATTLIST document_reference document CDATA #REQUIRED>
+<!ATTLIST document_reference contributor CDATA #REQUIRED>
+<!ELEMENT excerpt (#PCDATA)>
+
+<!ELEMENT concept_reference (description)>
+<!ATTLIST concept_reference name CDATA #REQUIRED>
+<!ATTLIST concept_reference concept (asset | attacker | countermeasure | domainproperty | environment | goal | misusecase | obstacle | persona | requirement | response | risk | role | task | threat | vulnerability) #REQUIRED>
+<!ATTLIST concept_reference object CDATA #REQUIRED>
+
+<!ELEMENT persona_characteristic (definition,grounds*,warrant*,rebuttal*)>
+<!ATTLIST persona_characteristic persona CDATA #REQUIRED>
+<!ATTLIST persona_characteristic behavioural_variable (Activities | Attitudes | Aptitudes | Motivations | Skills | Environment_Narrative) #REQUIRED>
+<!ATTLIST persona_characteristic modal_qualifier CDATA #REQUIRED>
+<!ELEMENT grounds EMPTY>
+<!ATTLIST grounds type (document | asset | attacker | countermeasure | domainproperty | environment | goal | misusecase | obstacle | persona | requirement | response | risk | role | task | threat | vulnerability) #REQUIRED>
+<!ATTLIST grounds reference CDATA #REQUIRED>
+<!ELEMENT warrant EMPTY>
+<!ATTLIST warrant type (document | asset | attacker | countermeasure | domainproperty | environment | goal | misusecase | obstacle | persona | requirement | response | risk | role | task | threat | vulnerability) #REQUIRED>
+<!ATTLIST warrant reference CDATA #REQUIRED>
+<!ELEMENT rebuttal EMPTY>
+<!ATTLIST rebuttal type (document | asset | attacker | countermeasure | domainproperty | environment | goal | misusecase | obstacle | persona | requirement | response | risk | role | task | threat | vulnerability) #REQUIRED>
+<!ATTLIST rebuttal reference CDATA #REQUIRED>
+
+<!ELEMENT task_characteristic (definition,grounds+,warrant*,rebuttal*)>
+<!ATTLIST task_characteristic task CDATA #REQUIRED>
+<!ATTLIST task_characteristic modal_qualifier CDATA #REQUIRED>
+
+<!ELEMENT task (objective,task_environment+)>
+<!ATTLIST task name CDATA #REQUIRED>
+<!ATTLIST task code CDATA #REQUIRED>
+<!ATTLIST task author CDATA #REQUIRED>
+<!ATTLIST task assumption_task (TRUE | FALSE) #REQUIRED>
+<!ELEMENT objective (#PCDATA)>
+<!ELEMENT task_environment (dependencies,task_persona+,task_concern*,narrative,consequences,benefits,task_concern_association*)>
+<!ATTLIST task_environment name CDATA #REQUIRED>
+<!ELEMENT dependencies (#PCDATA)>
+<!ELEMENT consequences (#PCDATA)>
+<!ELEMENT benefits (#PCDATA)>
+<!ELEMENT task_persona EMPTY>
+<!ATTLIST task_persona persona CDATA #REQUIRED>
+<!ATTLIST task_persona duration (Seconds | Minutes | Hours_or_longer) #REQUIRED>
+<!ATTLIST task_persona frequency (Hourly_or_more | Daily_-_Weekly | Monthly_or_less) #REQUIRED>
+<!ATTLIST task_persona demands (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST task_persona goal_conflict (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT task_concern EMPTY>
+<!ATTLIST task_concern asset CDATA #REQUIRED>
+<!ELEMENT task_concern_association EMPTY>
+<!ATTLIST task_concern_association source_name CDATA #REQUIRED>
+<!ATTLIST task_concern_association source_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST task_concern_association link_name CDATA #REQUIRED>
+<!ATTLIST task_concern_association target_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST task_concern_association target_name CDATA #REQUIRED>
+
+<!ELEMENT usecase (description,actor+,usecase_environment+)>
+<!ATTLIST usecase name CDATA #REQUIRED>
+<!ATTLIST usecase author CDATA #REQUIRED>
+<!ATTLIST usecase code CDATA #REQUIRED>
+<!ELEMENT actor EMPTY>
+<!ATTLIST actor name CDATA #REQUIRED>
+<!ELEMENT usecase_environment (preconditions,flow,postconditions)>
+<!ATTLIST usecase_environment name CDATA #REQUIRED>
+<!ELEMENT preconditions (#PCDATA)>
+<!ELEMENT flow (step+)>
+<!ELEMENT step (exception*)>
+<!ATTLIST step number CDATA #REQUIRED>
+<!ATTLIST step description CDATA #REQUIRED>
+<!ELEMENT exception (definition)>
+<!ATTLIST exception name CDATA #REQUIRED>
+<!ATTLIST exception type (Goal | Requirement) #REQUIRED>
+<!ATTLIST exception value CDATA #REQUIRED>
+<!ATTLIST exception category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support) #REQUIRED>
+<!ELEMENT postconditions (#PCDATA)>
+
+<!ELEMENT goals (domainproperty*, goal*,obstacle*,requirement*,countermeasure*)>
+
+<!ELEMENT domainproperty (definition)>
+<!ATTLIST domainproperty name CDATA #REQUIRED>
+<!ATTLIST domainproperty type (Hypothesis | Invariant) #REQUIRED>
+<!ATTLIST domainproperty originator CDATA #REQUIRED>
+
+<!ELEMENT goal (goal_environment+)>
+<!ATTLIST goal name CDATA #REQUIRED>
+<!ATTLIST goal originator CDATA #REQUIRED>
+<!ELEMENT goal_environment (definition,fit_criterion,issue,concern*,concern_association*)>
+<!ATTLIST goal_environment name CDATA #REQUIRED>
+<!ATTLIST goal_environment category (Achieve | Maintain | Avoid | Improve | Increase | Maximise | Minimise | Accept | Transfer | Mitigate | Deter | Prevent | Detect | React) #REQUIRED>
+<!ATTLIST goal_environment priority (Low | Medium | High) #REQUIRED>
+<!ELEMENT fit_criterion (#PCDATA)>
+<!ELEMENT issue (#PCDATA)>
+<!ELEMENT concern EMPTY>
+<!ATTLIST concern name CDATA #REQUIRED>
+<!ELEMENT concern_association EMPTY>
+<!ATTLIST concern_association source_name CDATA #REQUIRED>
+<!ATTLIST concern_association source_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST concern_association link_name CDATA #REQUIRED>
+<!ATTLIST concern_association target_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST concern_association target_name CDATA #REQUIRED>
+
+<!ELEMENT obstacle (obstacle_environment+)>
+<!ATTLIST obstacle name CDATA #REQUIRED>
+<!ATTLIST obstacle originator CDATA #REQUIRED>
+<!ELEMENT obstacle_environment (definition,concern*)>
+<!ATTLIST obstacle_environment name CDATA #REQUIRED>
+<!ATTLIST obstacle_environment category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support) #REQUIRED>
+
+<!ELEMENT requirement (description,rationale,fit_criterion,originator)>
+<!ATTLIST requirement reference CDATA #REQUIRED>
+<!ATTLIST requirement name CDATA #IMPLIED>
+<!ATTLIST requirement reference_type (asset | environment) #REQUIRED>
+<!ATTLIST requirement label CDATA #REQUIRED>
+<!ATTLIST requirement type (Functional | Data | Look_and_Feel | Usability | Performance | Operational | Maintainability | Portability | Security | Cultural_and_Political | Legal) #REQUIRED>
+<!ATTLIST requirement priority (1 | 2 | 3) #REQUIRED>
+<!ELEMENT originator (#PCDATA)>
+
+<!ELEMENT countermeasure (description,countermeasure_environment+)>
+<!ATTLIST countermeasure name CDATA #REQUIRED>
+<!ATTLIST countermeasure type CDATA #REQUIRED>
+<!ELEMENT countermeasure_environment (countermeasure_requirement+,target+,mitigating_property*,responsible_role+,responsible_persona+)>
+<!ATTLIST countermeasure_environment name CDATA #REQUIRED>
+<!ATTLIST countermeasure_environment cost (Low | Medium | High | None) #REQUIRED>
+<!ELEMENT countermeasure_requirement EMPTY>
+<!ATTLIST countermeasure_requirement name CDATA #REQUIRED>
+<!ELEMENT target (target_response+,rationale)>
+<!ATTLIST target name CDATA #REQUIRED>
+<!ATTLIST target effectiveness (Low | Medium | High) #REQUIRED>
+<!ELEMENT mitigating_property (rationale)>
+<!ATTLIST mitigating_property name (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
+<!ATTLIST mitigating_property value (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT target_response EMPTY>
+<!ATTLIST target_response name CDATA #REQUIRED>
+<!ELEMENT responsible_role EMPTY>
+<!ATTLIST responsible_role name CDATA #REQUIRED>
+<!ELEMENT responsible_persona EMPTY>
+<!ATTLIST responsible_persona task CDATA #REQUIRED>
+<!ATTLIST responsible_persona persona CDATA #REQUIRED>
+<!ATTLIST responsible_persona duration (High_Help | Medium_Help | Low_Help | None | Low_Hindrance | Medium_Hindrance | High_Hindrance) #REQUIRED>
+<!ATTLIST responsible_persona frequency (High_Help | Medium_Help | Low_Help | None | Low_Hindrance | Medium_Hindrance | High_Hindrance) #REQUIRED>
+<!ATTLIST responsible_persona demands (High_Help | Medium_Help | Low_Help | None | Low_Hindrance | Medium_Hindrance | High_Hindrance) #REQUIRED>
+<!ATTLIST responsible_persona goals (High_Help | Medium_Help | Low_Help | None | Low_Hindrance | Medium_Hindrance | High_Hindrance) #REQUIRED>
+
+<!ELEMENT associations (manual_association*,goal_association*,dependency*)>
+
+<!ELEMENT manual_association EMPTY>
+<!ATTLIST manual_association from_name CDATA #REQUIRED>
+<!ATTLIST manual_association from_dim (requirement | task | asset | domainproperty | usecase | response | countermeasure) #REQUIRED>
+<!ATTLIST manual_association to_name CDATA #REQUIRED>
+<!ATTLIST manual_association to_dim (requirement | task | asset | vulnerability | role | usecase | goal | countermeasure) #REQUIRED>
+<!ATTLIST manual_association label CDATA #IMPLIED>
+
+
+<!ELEMENT goal_association (rationale)>
+<!ATTLIST goal_association environment CDATA #REQUIRED>
+<!ATTLIST goal_association goal_name CDATA #REQUIRED>
+<!ATTLIST goal_association goal_dim (goal | task | usecase | requirement | obstacle | domainproperty | threat | vulnerability | role | response) #REQUIRED>
+<!ATTLIST goal_association ref_type (and | or | conflict | responsible | obstruct | resolve) #REQUIRED>
+<!ATTLIST goal_association subgoal_name CDATA #REQUIRED>
+<!ATTLIST goal_association subgoal_dim (goal | task | usecase | requirement | obstacle | domainproperty | threat | vulnerability | role) #REQUIRED>
+<!ATTLIST goal_association alternative_id (0 | 1) #REQUIRED>
+
+<!ELEMENT dependency (rationale)>
+<!ATTLIST dependency depender CDATA #REQUIRED>
+<!ATTLIST dependency dependee CDATA #REQUIRED>
+<!ATTLIST dependency dependency_type (goal | task | asset) #REQUIRED>
+<!ATTLIST dependency dependency CDATA #REQUIRED>
+<!ATTLIST dependency environment CDATA #REQUIRED>
