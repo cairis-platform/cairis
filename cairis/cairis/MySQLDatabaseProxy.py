@@ -2137,7 +2137,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     for parameters in parameterList:
       riskId = parameters[0]
       mc = self.riskMisuseCase(riskId)
-      parameters = RiskParameters(parameters[1],parameters[2],parameters[3],mc)
+      tags = self.getTags(parameters[1],'risk')
+      parameters = RiskParameters(parameters[1],parameters[2],parameters[3],mc,tags)
       risk = ObjectFactory.build(riskId,parameters)
       risks[risk.name()] = risk
     return risks
@@ -2146,6 +2147,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       threatName = parameters.threat()
       vulName = parameters.vulnerability()
+      tags = parameters.tags()
       riskId = self.newId()
       riskName = parameters.name()
       curs = self.conn.cursor()
@@ -2156,6 +2158,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       mc = parameters.misuseCase()
       mcParameters = MisuseCaseParameters(mc.name(),mc.environmentProperties(),mc.risk())
       self.addMisuseCase(mcParameters)
+      self.addTags(riskName,'risk',tags)
       self.conn.commit()
       curs.close()
       return riskId
@@ -2169,6 +2172,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       riskId = parameters.id()
       threatName = parameters.threat()
       vulName = parameters.vulnerability()
+      tags = parameters.tags()
       riskName = parameters.name()
       curs = self.conn.cursor()
       curs.execute('call updateRisk(%s,%s,%s,%s)',(threatName,vulName,riskId,riskName))
@@ -2179,6 +2183,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       mcParameters = MisuseCaseParameters('Exploit ' + riskName,mc.environmentProperties(),riskName)
       mcParameters.setId(mc.id())
       self.updateMisuseCase(mcParameters)
+      self.addTags(riskName,'risk',tags)
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8331,7 +8336,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def clearDatabase(self):
     b = Borg()
-    srcDir = b.cairisRoot + '/src/sql'
+    srcDir = b.cairisRoot + '/cairis/sql'
     initSql = srcDir + '/init.sql'
     procsSql = srcDir + '/procs.sql'
     cmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + initSql
@@ -8499,3 +8504,61 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting requirements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def addTag(self,tagObjt,tagName,tagDim):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addTag(%s,%s,%s)',(tagObjt,tagName,tagDim))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding tag ' + tagName + ' to ' + tagDim + ' ' + tagObjt
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding tag ' + tagName + ' to ' + tagDim + ' ' + tagObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteTags(self,tagObjt,tagDim):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call deleteTags(%s,%s)',(tagObjt,tagDim))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error deleting tags from ' + tagDim + ' ' + tagObjt
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error deleting tags from ' + tagDim + ' ' + tagObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addTags(self,dimObjt,dimName,tags):
+    try:
+      self.deleteTags(dimObjt,dimName)
+      for tag in tags:
+        self.addTag(dimObjt,tag,dimName)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error deleting tags from ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getTags(self,dimObjt,dimName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getTags(%s,%s)',(dimObjt,dimName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting tags for ' + dimName + ' ' + dimObjt
+        raise DatabaseProxyException(exceptionText) 
+      else:
+        tags = []
+        for row in curs.fetchall():
+          row = list(row)
+          tags.append(row[0])
+        curs.close()
+        return tags
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting tags for ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteTag(self,tagId):
+    self.deleteObject(tagId,'tag')
+    self.conn.commit()

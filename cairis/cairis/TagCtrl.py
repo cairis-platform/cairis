@@ -15,19 +15,24 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+import wx
+from TagDialog import TagDialog
 
-class Risk:
-  def __init__(self,riskId,riskName,threatName,vulName,rTags,mc=None):
-    self.theId = riskId
-    self.theName = riskName
-    self.theThreatName = threatName
-    self.theVulnerabilityName = vulName
-    self.theMisuseCase = mc
-    self.theTags = rTags
+class TagCtrl(wx.TextCtrl):
+  def __init__(self,parent,winId):
+    wx.TextCtrl.__init__(self,parent,winId,'',style=wx.TE_READONLY)
+    self.theTags = []
+    self.Bind(wx.EVT_LEFT_DCLICK,self.onDoubleClick)
 
-  def id(self): return self.theId
-  def name(self): return self.theName
-  def threat(self): return self.theThreatName
-  def vulnerability(self): return self.theVulnerabilityName
-  def misuseCase(self): return self.theMisuseCase
-  def tags(self): return self.theTags
+  def onDoubleClick(self,evt):
+    dlg = TagDialog(self,self.theTags)
+    if (dlg.ShowModal() == wx.ID_OK):
+      self.theTags = dlg.tags()
+    self.SetValue(",".join(self.theTags))
+
+  def set(self,tags):
+    self.theTags = tags
+    self.SetValue(",".join(self.theTags))
+
+  def tags(self):
+    return self.theTags

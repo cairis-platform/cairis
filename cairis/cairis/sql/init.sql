@@ -32,7 +32,6 @@ DROP VIEW IF EXISTS assumption_task_model;
 DROP VIEW IF EXISTS environment_risk;
 DROP VIEW IF EXISTS concept_map;
 
-
 DROP TABLE IF EXISTS usecase_step_synopsis;
 DROP TABLE IF EXISTS usecase_pc_contribution;
 DROP TABLE IF EXISTS usecase_tc_contribution;
@@ -45,6 +44,9 @@ DROP TABLE IF EXISTS persona_characteristic_synopsis;
 DROP TABLE IF EXISTS task_characteristic_synopsis;
 DROP TABLE IF EXISTS contribution_end;
 DROP TABLE IF EXISTS link_contribution;
+DROP TABLE IF EXISTS threat_tag;
+DROP TABLE IF EXISTS vulnerability_tag;
+DROP TABLE IF EXISTS risk_tag;
 
 DROP TABLE IF EXISTS value_tension;
 DROP TABLE IF EXISTS tension;
@@ -260,6 +262,7 @@ DROP TABLE IF EXISTS composite_environment_property;
 DROP TABLE IF EXISTS composite_environment;
 DROP TABLE IF EXISTS duplicate_property;
 DROP TABLE IF EXISTS asset;
+DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS asset_type;
 DROP TABLE IF EXISTS asset_value;
 DROP TABLE IF EXISTS environment;
@@ -2270,6 +2273,36 @@ CREATE TABLE value_tension (
   FOREIGN KEY(security_property_id) REFERENCES security_property(id),
   FOREIGN KEY(privacy_property_id) REFERENCES security_property(id),
   FOREIGN KEY(tension_id) REFERENCES tension(id) 
+) ENGINE=INNODB;
+
+CREATE TABLE tag (
+  id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE threat_tag (
+  threat_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(threat_id,tag_id),
+  FOREIGN KEY(threat_id) REFERENCES threat(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE vulnerability_tag (
+  vulnerability_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(vulnerability_id,tag_id),
+  FOREIGN KEY(vulnerability_id) REFERENCES vulnerability(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE risk_tag (
+  risk_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(risk_id,tag_id),
+  FOREIGN KEY(risk_id) REFERENCES risk(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE contribution_end (

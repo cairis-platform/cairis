@@ -19,14 +19,16 @@
 import ObjectCreationParameters
 
 class RiskParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,riskName,threatName,vulName,mc):
+  def __init__(self,riskName,threatName,vulName,mc,rTags):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theRiskName = riskName
     self.theThreatName = threatName
     self.theVulnerabilityName = vulName
     self.theMisuseCase = mc
+    self.theTags = rTags
 
   def name(self): return self.theRiskName
   def threat(self): return self.theThreatName
   def vulnerability(self): return self.theVulnerabilityName
   def misuseCase(self): return self.theMisuseCase
+  def tags(self): return self.theTags

@@ -300,12 +300,12 @@ def bookFooter():
 
 def reqNotation():
   chapterText = """ 
-  <xi:include href="/home/irisuser/CAIRIS/cairis/src/config/reqNotation.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/> """ 
+  <xi:include href="/home/irisuser/CAIRIS/cairis/cairis/config/reqNotation.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/> """ 
   return chapterText
 
 def perNotation():
   chapterText = """ 
-  <xi:include href="/home/irisuser/CAIRIS/cairis/src/config/perNotation.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/> """ 
+  <xi:include href="/home/irisuser/CAIRIS/cairis/cairis/config/perNotation.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/> """ 
   return chapterText
 
 def projectPurpose(pSettings):

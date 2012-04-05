@@ -658,6 +658,10 @@ drop function if exists groundedTrace;
 drop function if exists preTraceabilityScore;
 drop procedure if exists circularDependencyCheck;
 drop procedure if exists requirementDependencyCheck;
+drop procedure if exists addTag;
+drop procedure if exists deleteTags;
+drop procedure if exists delete_tag;
+drop procedure if exists getTags;
 
 delimiter //
 
@@ -14590,6 +14594,7 @@ begin
   call delete_response(responseId);
 
   delete from risk_reference where risk_id = riskId;
+  delete from risk_tag where risk_id = riskId;
   delete from risk where id = riskId;
 end
 //
@@ -17569,6 +17574,85 @@ begin
     call circularDependencyCheck(startId,parentId,depText,circularDependency);
   end loop parent_loop;
   close parentCursor;
+end
+//
+
+create procedure addTag(in tagObjt text, in tagName text, in tagDim text)
+begin
+  declare dimIdSql varchar(4000);
+  declare addTagSql varchar(4000);
+  declare dimId int;
+  declare tagId int;
+
+  set dimIdSql = concat('select id into @dimId from ',tagDim,' where name = "',tagObjt,'"');
+  set @sql = dimIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set dimId = @dimId;
+  select id into tagId from tag where name = tagName limit 1;
+  if tagId is null
+  then
+    call newId2(tagId);
+    insert into tag (id,name) values (tagId,tagName);
+  end if;
+
+  set addTagSql = concat('insert into ',tagDim,'_tag (',tagDim,'_id, tag_id) values(',dimId,',',tagId,')');
+  select addTagSql;
+  set @sql = addTagSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+end
+//
+
+create procedure delete_tag(in tagId int)
+begin
+  delete from risk_tag where tag_id = tagId;
+  delete from tag where id = tagId;
+end
+//
+
+create procedure deleteTags(in tagObjt text, in tagDim text)
+begin
+  declare dimIdSql varchar(4000);
+  declare deleteTagsSql varchar(4000);
+  declare dimId int;
+
+  set dimIdSql = concat('select id into @dimId from ',tagDim,' where name = "',tagObjt,'"');
+  set @sql = dimIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set dimId = @dimId;
+
+  set deleteTagsSql = concat('delete from ',tagDim,'_tag where ',tagDim,'_id = ',dimId);
+  set @sql = deleteTagsSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+
+end
+//
+
+create procedure getTags(in dimObjt text, in dimName text)
+begin
+  declare dimIdSql varchar(4000);
+  declare getTagsSql varchar(4000);
+  declare dimId int;
+
+  set dimIdSql = concat('select id into @dimId from ',dimName,' where name = "',dimObjt,'"');
+  set @sql = dimIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set dimId = @dimId;
+
+  set getTagsSql = concat('select t.name from ',dimName,'_tag dt, tag t where dt.',dimName,'_id = ',dimId,' and dt.tag_id = t.id');
+  set @sql = getTagsSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
 end
 //
 

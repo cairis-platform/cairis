@@ -118,7 +118,7 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'VulnerabilityParameters'):
     return Vulnerability(objtId,p.name(),p.description(),p.type(),p.environmentProperties())
   if (p.__class__.__name__ == 'RiskParameters'):
-    return Risk(objtId,p.name(),p.threat(),p.vulnerability(),p.misuseCase())
+    return Risk(objtId,p.name(),p.threat(),p.vulnerability(),p.tags(),p.misuseCase())
   if (p.__class__.__name__ == 'ResponseParameters'):
     return Response(objtId,p.name(),p.risk(),p.environmentProperties(),p.responseType())
   if (p.__class__.__name__ == 'CountermeasureParameters'):

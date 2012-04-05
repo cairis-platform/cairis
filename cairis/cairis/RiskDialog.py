@@ -36,6 +36,7 @@ class RiskDialog(wx.Dialog):
     self.theMisuseCase = None
     self.theThreatName = ''
     self.theVulnerabilityName = ''
+    self.theTags = []
     self.panel = 0
     self.buildControls(parameters)
     self.commitVerb = 'Create'
@@ -117,9 +118,12 @@ class RiskDialog(wx.Dialog):
     nameCtrl = self.FindWindowById(armid.RISK_TEXTNAME_ID)
     threatCtrl = self.FindWindowById(armid.RISK_COMBOTHREAT_ID)
     vulCtrl = self.FindWindowById(armid.RISK_COMBOVULNERABILITY_ID)
+    tagCtrl = self.FindWindowById(armid.RISK_TAGS_ID)
 
     commitLabel = self.commitVerb + ' risk'
     self.theRiskName = nameCtrl.GetValue() 
+    self.theTags = tagCtrl.tags()
+
     b = Borg()
     if (self.commitVerb == 'Create'):
       try:
@@ -157,6 +161,6 @@ class RiskDialog(wx.Dialog):
       self.EndModal(armid.RISK_BUTTONCOMMIT_ID)
 
   def parameters(self): 
-    parameters = RiskParameters(self.theRiskName,self.theThreatName,self.theVulnerabilityName,self.theMisuseCase)
+    parameters = RiskParameters(self.theRiskName,self.theThreatName,self.theVulnerabilityName,self.theMisuseCase,self.theTags)
     parameters.setId(self.theRiskId)
     return parameters

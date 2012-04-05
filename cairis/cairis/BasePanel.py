@@ -17,6 +17,7 @@
 
 
 import wx
+from TagCtrl import TagCtrl
 
 class BasePanel(wx.Panel):
   def init(self,parent,winId):
@@ -35,6 +36,23 @@ class BasePanel(wx.Panel):
       textCtrl.SetToolTip(wx.ToolTip(toolTip))
     textSizer.Add(textCtrl,1,wx.EXPAND)
     return textSizer
+
+  def buildTagCtrlSizer(self,widgetSize,winId):
+    tBox = wx.StaticBox(self,-1,'Tags')
+    tagSizer = wx.StaticBoxSizer(tBox,wx.HORIZONTAL)
+    tagCtrl = TagCtrl(self,winId)
+    tagSizer.Add(tagCtrl,1,wx.EXPAND)
+    return tagSizer
+
+  def buildComboSizer(self,labelTxt,widgetSize,winId,objtDictionary):
+    csBox = wx.StaticBox(self,-1,labelTxt)
+    comboSizer = wx.StaticBoxSizer(csBox,wx.HORIZONTAL)
+    objtList = []
+    for key,objt in objtDictionary.iteritems():
+      objtList.append(key)
+    objtComboCtrl = wx.ComboBox(self,winId,"",choices=objtList,size=widgetSize,style=wx.CB_READONLY)
+    comboSizer.Add(objtComboCtrl,1,wx.EXPAND)
+    return comboSizer
 
   def buildComboSizerList(self,labelTxt,widgetSize,winId,objtList):
     cslBox = wx.StaticBox(self,-1,labelTxt)
@@ -103,4 +121,19 @@ class BasePanel(wx.Panel):
     ctrl.SetValue(isChecked)
     checkSizer.Add(ctrl,1,wx.EXPAND)
     return checkSizer
+
+  def buildRiskButtonSizer(self,winId,mcId,isCreate):
+    buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+    commitLabel = ''
+    if (isCreate):
+      commitLabel = 'Create'
+    else:
+      commitLabel = 'Update'
+    createButton = wx.Button(self,winId,commitLabel)
+    buttonSizer.Add(createButton)
+    mcButton = wx.Button(self,mcId,'Create Misuse Case')
+    buttonSizer.Add(mcButton)
+    cancelButton = wx.Button(self,wx.ID_CANCEL,"Close")
+    buttonSizer.Add(cancelButton)
+    return buttonSizer
 

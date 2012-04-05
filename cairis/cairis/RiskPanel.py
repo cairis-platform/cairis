@@ -17,14 +17,14 @@
 
 
 import wx
+from BasePanel import BasePanel
 import armid
-import WidgetFactory
 import RiskParameters
 from Borg import Borg
 
-class RiskPanel(wx.Panel):
+class RiskPanel(BasePanel):
   def __init__(self,parent):
-    wx.Panel.__init__(self,parent,armid.RISK_ID)
+    BasePanel.__init__(self,parent,armid.RISK_ID)
     b = Borg()
     self.dbProxy = b.dbProxy
     self.theThreats = self.dbProxy.getDimensions('threat')
@@ -33,11 +33,12 @@ class RiskPanel(wx.Panel):
  
   def buildControls(self,isCreate,isUpdateable=True):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-    mainSizer.Add(WidgetFactory.buildTextSizer(self,'Name',(87,30),armid.RISK_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.RISK_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.RISK_TAGS_ID),0,wx.EXPAND)
     tvSizer = wx.BoxSizer(wx.HORIZONTAL)
     mainSizer.Add(tvSizer,0,wx.EXPAND)
-    tvSizer.Add(WidgetFactory.buildComboSizer(self,'Threat',(87,30),armid.RISK_COMBOTHREAT_ID,self.theThreats),1,wx.EXPAND)
-    tvSizer.Add(WidgetFactory.buildComboSizer(self,'Vulnerability',(87,30),armid.RISK_COMBOVULNERABILITY_ID,self.theVulnerabilities),1,wx.EXPAND)
+    tvSizer.Add(self.buildComboSizer('Threat',(87,30),armid.RISK_COMBOTHREAT_ID,self.theThreats),1,wx.EXPAND)
+    tvSizer.Add(self.buildComboSizer('Vulnerability',(87,30),armid.RISK_COMBOVULNERABILITY_ID,self.theVulnerabilities),1,wx.EXPAND)
 
     environmentBox = wx.StaticBox(self,-1,'Environments')
     environmentBoxSizer = wx.StaticBoxSizer(environmentBox,wx.VERTICAL)
@@ -45,7 +46,7 @@ class RiskPanel(wx.Panel):
     self.environmentList = wx.ListBox(self,armid.RISK_LISTENVIRONMENTS_ID,size=(150,70),style=wx.LB_SINGLE | wx.LB_SORT)
     environmentBoxSizer.Add(self.environmentList,0,wx.EXPAND)
 
-    mainSizer.Add(WidgetFactory.buildTextSizer(self,'Rating',(87,30),armid.RISK_TEXTRATING_ID,isReadOnly=True),0,wx.EXPAND)
+    mainSizer.Add(self.buildTextSizer('Rating',(87,30),armid.RISK_TEXTRATING_ID,isReadOnly=True),0,wx.EXPAND)
 
     scoreBox = wx.StaticBox(self,-1,'')
     scoreBoxSizer = wx.StaticBoxSizer(scoreBox,wx.VERTICAL)
@@ -68,8 +69,9 @@ class RiskPanel(wx.Panel):
     scoreBoxSizer.Add(self.scoreDetailsSizer,1,wx.EXPAND)
     self.detailsCtrl = wx.TextCtrl(self,armid.RISK_TEXTSCOREDETAILS_ID,style=wx.TE_READONLY | wx.TE_MULTILINE)
     self.scoreDetailsSizer.Add(self.detailsCtrl,1,wx.EXPAND)
-    mainSizer.Add(WidgetFactory.buildRiskButtonSizer(self,armid.RISK_BUTTONCOMMIT_ID,armid.RISK_BUTTONMISUSECASE_ID,isCreate),0,wx.ALIGN_CENTER)
+    mainSizer.Add(self.buildRiskButtonSizer(armid.RISK_BUTTONCOMMIT_ID,armid.RISK_BUTTONMISUSECASE_ID,isCreate),0,wx.ALIGN_CENTER)
     self.nameCtrl = self.FindWindowById(armid.RISK_TEXTNAME_ID)
+    self.tagsCtrl = self.FindWindowById(armid.RISK_TAGS_ID)
     self.threatCombo = self.FindWindowById(armid.RISK_COMBOTHREAT_ID)
     self.vulnerabilityCombo = self.FindWindowById(armid.RISK_COMBOVULNERABILITY_ID)
     self.ratingCtrl = self.FindWindowById(armid.RISK_TEXTRATING_ID)
@@ -86,7 +88,9 @@ class RiskPanel(wx.Panel):
     riskName = risk.name()
     threatName = risk.threat()
     vulName = risk.vulnerability()
+    tags = risk.tags()
     self.nameCtrl.SetValue(riskName)
+    self.tagsCtrl.set(tags)
     self.threatCombo.SetStringSelection(threatName)
     self.vulnerabilityCombo.SetStringSelection(vulName)
     self.evaluateEnvironments()
