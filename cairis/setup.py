@@ -7,5 +7,5 @@ setup(name = 'cairis',
       author_email = 'shamal.faily@googlemail.com',
       url = 'http://www.cs.ox.ac.uk/cairis',
       packages=['cairis'],
-      package_data={'cairis':['sql/*.sql','config/*.dtd','config/*.xml','config/*.pdf','config/*.png','config/*.xml','images/*.png']}
+      package_data={'cairis':['sql/*.sql','config/*.dtd','config/*.xml','config/*.pdf','config/*.png','config/*.xml','config/cairis.cnf','images/*.png']}
      )
