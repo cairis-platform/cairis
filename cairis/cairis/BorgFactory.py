@@ -22,15 +22,15 @@ from string import strip
 
 def initialise():
   b = Borg()
-  cairisRoot = '/usr/local/cairis'
+  cairisRoot = '/home/irisuser/CAIRIS/cairis'
 
   cfgFileName = ''
   try:
     cfgFileName = os.environ['CAIRIS_CFG']
   except KeyError:
-    cfgFileName = 'config/cairis.cnf'    
+    cfgFileName = cairisRoot + '/cairis/config/cairis.cnf'    
 
-  cfgFile = open('config/cairis.cnf')
+  cfgFile = open(cfgFileName)
   for cfgLine in cfgFile.readlines():
     cfgTuple = cfgLine.split('=')
     cfgKey = strip(cfgTuple[0])
