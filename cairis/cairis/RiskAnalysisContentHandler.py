@@ -396,7 +396,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
         unoProperty,unoRationale = spDict['unobservability']
         ep = AssetEnvironmentProperties(envName,[cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty],[cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale])
         self.theEnvironmentProperties.append(ep)
-      p = AssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.isCritical,self.theCriticalRationale,self.theEnvironmentProperties)
+      p = AssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.isCritical,self.theCriticalRationale,[],self.theEnvironmentProperties)
       self.theAssetParameters.append(p)
       self.resetAssetAttributes()
     elif name == 'security_property':
@@ -414,7 +414,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.theEnvironmentProperties.append(p)
       self.resetVulnerabilityEnvironmentAttributes()
     elif name == 'attacker':
-      p = AttackerParameters(self.theName,self.theDescription,self.theImage,self.theEnvironmentProperties)
+      p = AttackerParameters(self.theName,self.theDescription,self.theImage,[],self.theEnvironmentProperties)
       self.theAttackerParameters.append(p)
       self.resetAttackerAttributes()
     elif name == 'attacker_environment':

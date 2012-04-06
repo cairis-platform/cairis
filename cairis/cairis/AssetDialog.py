@@ -32,6 +32,7 @@ class AssetDialog(wx.Dialog):
     self.theAssetDescription = ''
     self.theAssetSignificance = ''
     self.theType = ''
+    self.theTags = []
     self.theCriticalIndicator = False
     self.theCriticalRationale = ''
     self.theEnvironmentProperties = []
@@ -56,6 +57,7 @@ class AssetDialog(wx.Dialog):
   def onCommit(self,evt):
     commitLabel = self.commitVerb + ' asset'
     nameCtrl = self.FindWindowById(armid.ASSET_TEXTNAME_ID)
+    tagCtrl = self.FindWindowById(armid.ASSET_TAGS_ID)
     shortCodeCtrl = self.FindWindowById(armid.ASSET_TEXTSHORTCODE_ID)
     descriptionCtrl = self.FindWindowById(armid.ASSET_TEXTDESCRIPTION_ID)
     sigCtrl = self.FindWindowById(armid.ASSET_TEXTSIGNIFICANCE_ID)
@@ -73,6 +75,7 @@ class AssetDialog(wx.Dialog):
         dlg.ShowModal()
         dlg.Destroy()
         return
+    self.theTags = tagCtrl.tags()
     self.theShortCode = shortCodeCtrl.GetValue()
     self.theAssetDescription = descriptionCtrl.GetValue()
     self.theAssetSignificance = sigCtrl.GetValue()
@@ -117,6 +120,6 @@ class AssetDialog(wx.Dialog):
       self.EndModal(armid.ASSET_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = AssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theCriticalIndicator,self.theCriticalRationale,self.theEnvironmentProperties)
+    parameters = AssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theCriticalIndicator,self.theCriticalRationale,self.theTags,self.theEnvironmentProperties)
     parameters.setId(self.theAssetId)
     return parameters

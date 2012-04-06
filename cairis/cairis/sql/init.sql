@@ -44,6 +44,8 @@ DROP TABLE IF EXISTS persona_characteristic_synopsis;
 DROP TABLE IF EXISTS task_characteristic_synopsis;
 DROP TABLE IF EXISTS contribution_end;
 DROP TABLE IF EXISTS link_contribution;
+DROP TABLE IF EXISTS asset_tag;
+DROP TABLE IF EXISTS attacker_tag;
 DROP TABLE IF EXISTS threat_tag;
 DROP TABLE IF EXISTS vulnerability_tag;
 DROP TABLE IF EXISTS risk_tag;
@@ -2279,6 +2281,22 @@ CREATE TABLE tag (
   id INT NOT NULL,
   name VARCHAR(255) NOT NULL,
   PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE asset_tag (
+  asset_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(asset_id,tag_id),
+  FOREIGN KEY(asset_id) REFERENCES asset(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE attacker_tag (
+  attacker_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(attacker_id,tag_id),
+  FOREIGN KEY(attacker_id) REFERENCES attacker(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE threat_tag (

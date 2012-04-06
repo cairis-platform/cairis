@@ -1541,6 +1541,7 @@ create procedure delete_attacker(in attackerId int)
 begin
   call deleteAttackerComponents(attackerId);
   delete from threat_attacker where attacker_id = attackerId;
+  delete from attacker_tag where attacker_id = attackerId;
   delete from attacker_reference where attacker_id = attackerId;
   delete from attacker where id = attackerId;
 end
@@ -2186,6 +2187,7 @@ begin
   delete from asset_template_asset where asset_id = assetId;
   delete from vulnerability_asset_countermeasure_effect where asset_id = assetId;
   delete from threat_asset_countermeasure_effect where asset_id = assetId;
+  delete from asset_tag where asset_id = assetId;
   delete from asset_reference where asset_id = assetId;
   delete from asset where id = assetId;
 end
@@ -17610,6 +17612,8 @@ end
 
 create procedure delete_tag(in tagId int)
 begin
+  delete from asset_tag where tag_id = tagId;
+  delete from attacker_tag where tag_id = tagId;
   delete from vulnerability_tag where tag_id = tagId;
   delete from threat_tag where tag_id = tagId;
   delete from risk_tag where tag_id = tagId;

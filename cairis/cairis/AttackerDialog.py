@@ -32,6 +32,7 @@ class AttackerDialog(wx.Dialog):
     self.theAttackerName = ''
     self.theAttackerDescription = ''
     self.theAttackerImage = ''
+    self.theTags = []
     self.theEnvironmentProperties = []
     self.panel = 0
     self.buildControls(parameters)
@@ -61,6 +62,7 @@ class AttackerDialog(wx.Dialog):
 
   def onCommit(self,evt):
     nameCtrl = self.FindWindowById(armid.ATTACKER_TEXTNAME_ID)
+    tagCtrl = self.FindWindowById(armid.ATTACKER_TAGS_ID)
     descriptionCtrl = self.FindWindowById(armid.ATTACKER_TEXTDESCRIPTION_ID)
     imageCtrl = self.FindWindowById(armid.ATTACKER_IMAGEATTACKERIMAGE_ID)
     environmentCtrl = self.FindWindowById(armid.ATTACKER_PANELENVIRONMENT_ID)
@@ -78,6 +80,7 @@ class AttackerDialog(wx.Dialog):
 
     self.theAttackerDescription = descriptionCtrl.GetValue()
     self.theAttackerImage = imageCtrl.personaImage()
+    self.theTags = tagCtrl.tags()
     self.theEnvironmentProperties = environmentCtrl.environmentProperties()
 
     commitLabel = self.theCommitVerb + ' attacker'
@@ -114,6 +117,6 @@ class AttackerDialog(wx.Dialog):
       self.EndModal(armid.ATTACKER_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = AttackerParameters(self.theAttackerName,self.theAttackerDescription,self.theAttackerImage,self.theEnvironmentProperties)
+    parameters = AttackerParameters(self.theAttackerName,self.theAttackerDescription,self.theAttackerImage,self.theTags,self.theEnvironmentProperties)
     parameters.setId(self.theAttackerId)
     return parameters

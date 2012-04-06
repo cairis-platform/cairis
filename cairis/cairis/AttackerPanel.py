@@ -37,6 +37,7 @@ class AttackerPanel(BasePanel):
     sumDetailsSizer = wx.BoxSizer(wx.VERTICAL)
     staticCtrlSizer.Add(sumDetailsSizer,1,wx.EXPAND)
     sumDetailsSizer.Add(self.buildTextSizer('Name',(87,30),armid.ATTACKER_TEXTNAME_ID),0,wx.EXPAND)
+    sumDetailsSizer.Add(self.buildTagCtrlSizer((87,30),armid.ATTACKER_TAGS_ID),0,wx.EXPAND)
     sumDetailsSizer.Add(self.buildMLTextSizer('Description',(87,30),armid.ATTACKER_TEXTDESCRIPTION_ID),1,wx.EXPAND)
     iBox = wx.StaticBox(self,-1)
     iSizer = wx.StaticBoxSizer(iBox,wx.HORIZONTAL)
@@ -52,11 +53,13 @@ class AttackerPanel(BasePanel):
 
   def loadControls(self,attacker):
     nameCtrl = self.FindWindowById(armid.ATTACKER_TEXTNAME_ID)
+    tagsCtrl = self.FindWindowById(armid.ATTACKER_TAGS_ID)
     descriptionCtrl = self.FindWindowById(armid.ATTACKER_TEXTDESCRIPTION_ID)
     imageCtrl = self.FindWindowById(armid.ATTACKER_IMAGEATTACKERIMAGE_ID)
     environmentCtrl = self.FindWindowById(armid.ATTACKER_PANELENVIRONMENT_ID)
 
     nameCtrl.SetValue(attacker.name())
+    tagsCtrl.set(attacker.tags())
     descriptionCtrl.SetValue(attacker.description())
     imageCtrl.loadImage(attacker.image())
 

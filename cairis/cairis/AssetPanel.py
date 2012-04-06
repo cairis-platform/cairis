@@ -34,6 +34,7 @@ class AssetPanel(BasePanel):
   def buildControls(self,isCreate,isUpdateable=True):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.ASSET_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.ASSET_TAGS_ID),0,wx.EXPAND)
     mainSizer.Add(self.buildTextSizer('Short Code',(87,30),armid.ASSET_TEXTSHORTCODE_ID),0,wx.EXPAND)
     typeList = self.dbProxy.getDimensionNames('asset_type')
     mainSizer.Add(self.buildComboSizerList('Type',(87,30),armid.ASSET_COMBOTYPE_ID,typeList),0,wx.EXPAND)
@@ -53,6 +54,8 @@ class AssetPanel(BasePanel):
     self.theAssetId = asset.id()
     nameCtrl = self.FindWindowById(armid.ASSET_TEXTNAME_ID)
     nameCtrl.SetValue(asset.name())
+    tagsCtrl = self.FindWindowById(armid.ASSET_TAGS_ID)
+    tagsCtrl.set(asset.tags())
     shortCodeCtrl = self.FindWindowById(armid.ASSET_TEXTSHORTCODE_ID)
     shortCodeCtrl.SetValue(asset.shortCode())
     typeCtrl = self.FindWindowById(armid.ASSET_COMBOTYPE_ID)

@@ -19,11 +19,12 @@
 from AttackerEnvironmentProperties import AttackerEnvironmentProperties
 
 class Attacker:
-  def __init__(self,attackerId,attackerName,attackerDescription,attackerImage,environmentProperties):
+  def __init__(self,attackerId,attackerName,attackerDescription,attackerImage,tags,environmentProperties):
     self.theId = attackerId
     self.theName = attackerName
     self.theDescription = attackerDescription
     self.theImage = attackerImage
+    self.theTags = tags
     self.theEnvironmentProperties = environmentProperties
     self.theEnvironmentDictionary = {}
     for p in self.theEnvironmentProperties:
@@ -34,6 +35,7 @@ class Attacker:
   def name(self): return self.theName
   def description(self): return self.theDescription 
   def image(self): return self.theImage
+  def tags(self): return self.theTags
   def environmentProperties(self): return self.theEnvironmentProperties
 
   def roles(self,environmentName,dupProperty): 

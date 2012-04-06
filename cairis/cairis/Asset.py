@@ -20,7 +20,7 @@ from PropertyHolder import PropertyHolder;
 from numpy import *
 
 class Asset:
-  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,cFlag,cRationale,cProps):
+  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,cFlag,cRationale,tags,cProps):
     self.theId = assetId
     self.theName = assetName
     self.theShortCode = shortCode
@@ -29,6 +29,7 @@ class Asset:
     self.theType = assetType
     self.isCritical = cFlag
     self.theCriticalRationale = cRationale
+    self.theTags = tags
     self.theEnvironmentProperties = cProps
     self.theEnvironmentDictionary = {}
     self.theAssetPropertyDictionary = {}
@@ -66,6 +67,7 @@ class Asset:
   def description(self): return self.theDescription
   def significance(self): return self.theSignificance
   def type(self): return self.theType
+  def tags(self): return self.theTags
   def critical(self): return self.isCritical
   def criticalRationale(self): return self.theCriticalRationale
   def environmentProperties(self): return self.theEnvironmentProperties

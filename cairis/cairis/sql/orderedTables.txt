@@ -14,6 +14,8 @@ tension
 value_tension
 severity
 likelihood
+asset_tag
+attacker_tag
 threat_tag
 vulnerability_tag
 risk_tag

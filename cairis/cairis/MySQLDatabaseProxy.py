@@ -768,6 +768,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         attackerRows.append((attackerId,attackerName,attackerDesc,attackerImage))
       curs.close()
       for attackerId,attackerName,attackerDesc,attackerImage in attackerRows:
+        tags = self.getTags(attackerName,'attacker')
         environmentProperties = []
         for environmentId,environmentName in self.dimensionEnvironments(attackerId,'attacker'):
           roles = self.dimensionRoles(attackerId,environmentId,'attacker')
@@ -775,7 +776,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           motives = self.attackerMotives(attackerId,environmentId)
           properties = AttackerEnvironmentProperties(environmentName,roles,motives,capabilities)
           environmentProperties.append(properties) 
-        p = AttackerParameters(attackerName,attackerDesc,attackerImage,environmentProperties)
+        p = AttackerParameters(attackerName,attackerDesc,attackerImage,tags,environmentProperties)
         attacker = ObjectFactory.build(attackerId,p)
         attackers[attackerName] = attacker
       return attackers
@@ -882,11 +883,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       attackerName = parameters.name()
       attackerDesc = parameters.description()
       attackerImage = parameters.image()
+      tags = parameters.tags()
       curs = self.conn.cursor()
       curs.execute("call addAttacker(%s,%s,%s,%s)",(attackerId,attackerName,attackerDesc,attackerImage))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding attacker ' + attackerName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(attackerName,'attacker',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(attackerId,'attacker',environmentName)
@@ -955,11 +958,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       attackerName = parameters.name()
       attackerDesc = parameters.description()
       attackerImage = parameters.image()
+      tags = parameters.tags()
+
       curs = self.conn.cursor()
       curs.execute("call updateAttacker(%s,%s,%s,%s)",(attackerId,attackerName,attackerDesc,attackerImage))
       if (curs.rowcount == -1):
         exceptionText = 'Error updating attacker ' + attackerName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(attackerName,'attacker',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(attackerId,'attacker',environmentName)
@@ -1003,12 +1009,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     assetType = parameters.type()
     assetCriticality = parameters.critical()
     assetCriticalRationale = parameters.criticalRationale()
+    tags = parameters.tags()
     try:
       curs = self.conn.cursor()
       curs.execute('call addAsset(%s,%s,%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(assetName,'asset',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(assetId,'asset',environmentName)
@@ -1031,9 +1039,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     assetType = parameters.type()
     assetCriticality = parameters.critical()
     assetCriticalRationale = parameters.criticalRationale()
+    tags = parameters.tags()
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteAssetComponents(%s)',(assetId))
+ 
       if (curs.rowcount == -1):
         exceptionText = 'Error updating asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
@@ -1042,6 +1052,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(assetName,'asset',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(assetId,'asset',environmentName)
@@ -1205,13 +1216,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         assetRows.append((assetName,assetId,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale))
       curs.close()
       for assetName,assetId,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale in assetRows:
+        tags = self.getTags(assetName,'asset')
         environmentProperties = []
         for environmentId,environmentName in self.dimensionEnvironments(assetId,'asset'):
           syProperties,pRationale = self.relatedProperties('asset',assetId,environmentId)
           assetAssociations = self.assetAssociations(assetId,environmentId)
           properties = AssetEnvironmentProperties(environmentName,syProperties,pRationale,assetAssociations)
           environmentProperties.append(properties) 
-        parameters = AssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,environmentProperties)
+        parameters = AssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,tags,environmentProperties)
         asset = ObjectFactory.build(assetId,parameters)
         assets[assetName] = asset
       return assets

@@ -19,15 +19,17 @@
 from ObjectCreationParameters import ObjectCreationParameters
 
 class AttackerParameters(ObjectCreationParameters):
-  def __init__(self,name,desc,image,properties):
+  def __init__(self,name,desc,image,tags,properties):
     ObjectCreationParameters.__init__(self)
     self.theName = name
     self.theDescription = desc
     self.theImage = image
+    self.theTags = tags
     self.theEnvironmentProperties = properties
 
 
   def name(self): return self.theName
   def description(self): return self.theDescription
   def image(self): return self.theImage
+  def tags(self): return self.theTags
   def environmentProperties(self): return self.theEnvironmentProperties
