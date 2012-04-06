@@ -20,11 +20,12 @@ from PropertyHolder import PropertyHolder
 from numpy import *
 
 class Threat:
-  def __init__(self,threatId,threatName,threatType,threatMethod,cProps):
+  def __init__(self,threatId,threatName,threatType,threatMethod,tags,cProps):
     self.theId = threatId
     self.theThreatName = threatName
     self.theType = threatType
     self.theMethod = threatMethod
+    self.theTags = tags
     self.theEnvironmentProperties = cProps
     self.theEnvironmentDictionary = {}
     self.theThreatPropertyDictionary = {}
@@ -44,6 +45,7 @@ class Threat:
   def name(self): return self.theThreatName
   def type(self): return self.theType
   def method(self): return self.theMethod
+  def tags(self): return self.theTags
   def environmentProperties(self): return self.theEnvironmentProperties
 
   def likelihood(self,environmentName,dupProperty='',overridingEnvironment=''): 

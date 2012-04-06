@@ -1627,6 +1627,7 @@ end
 create procedure delete_threat(in threatId int)
 begin
   call deleteThreatComponents(threatId);
+  delete from threat_tag where threat_id = threatId;
   delete from threat_reference where threat_id = threatId;
   delete from threat where id = threatId;
 end
@@ -2204,6 +2205,7 @@ begin
   call deleteVulnerabilityComponents(vulId);
   delete from requirement_vulnerability where vulnerability_id = vulId;
   delete from obstaclevulnerability_goalassociation where subgoal_id = vulId;
+  delete from vulnerability_tag where vulnerability_id = vulId;
   delete from vulnerability_reference where vulnerability_id = vulId;
   delete from vulnerability where id = vulId;
 end
@@ -17608,6 +17610,8 @@ end
 
 create procedure delete_tag(in tagId int)
 begin
+  delete from vulnerability_tag where tag_id = tagId;
+  delete from threat_tag where tag_id = tagId;
   delete from risk_tag where tag_id = tagId;
   delete from tag where id = tagId;
 end

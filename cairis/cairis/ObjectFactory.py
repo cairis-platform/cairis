@@ -114,9 +114,9 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'DomainPropertyParameters'):
     return DomainProperty(objtId,p.name(),p.description(),p.type(),p.originator())
   if (p.__class__.__name__ == 'ThreatParameters'):
-    return Threat(objtId,p.name(),p.type(),p.method(),p.environmentProperties())
+    return Threat(objtId,p.name(),p.type(),p.method(),p.tags(),p.environmentProperties())
   if (p.__class__.__name__ == 'VulnerabilityParameters'):
-    return Vulnerability(objtId,p.name(),p.description(),p.type(),p.environmentProperties())
+    return Vulnerability(objtId,p.name(),p.description(),p.type(),p.tags(),p.environmentProperties())
   if (p.__class__.__name__ == 'RiskParameters'):
     return Risk(objtId,p.name(),p.threat(),p.vulnerability(),p.tags(),p.misuseCase())
   if (p.__class__.__name__ == 'ResponseParameters'):

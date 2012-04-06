@@ -18,13 +18,13 @@
 
 import wx
 import armid
-import WidgetFactory
+from BasePanel import BasePanel
 from Borg import Borg
 from ThreatEnvironmentPanel import ThreatEnvironmentPanel
 
-class ThreatPanel(wx.Panel):
+class ThreatPanel(BasePanel):
   def __init__(self,parent):
-    wx.Panel.__init__(self,parent,armid.THREAT_ID)
+    BasePanel.__init__(self,parent,armid.THREAT_ID)
     b = Borg()
     self.dbProxy = b.dbProxy
     self.theLikelihoods = self.dbProxy.getDimensionNames('likelihood')
@@ -32,22 +32,26 @@ class ThreatPanel(wx.Panel):
 
   def buildControls(self,isCreate,isUpdateable=True):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-    mainSizer.Add(WidgetFactory.buildTextSizer(self,'Name',(87,30),armid.THREAT_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.THREAT_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.THREAT_TAGS_ID),0,wx.EXPAND)
+
     threatTypes = self.dbProxy.getDimensionNames('threat_type')
-    mainSizer.Add(WidgetFactory.buildComboSizerList(self,'Type',(87,30),armid.THREAT_THREATTYPE_ID,threatTypes),0,wx.EXPAND)
-    mainSizer.Add(WidgetFactory.buildMLTextSizer(self,'Method',(87,60),armid.THREAT_TEXTMETHOD_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Type',(87,30),armid.THREAT_THREATTYPE_ID,threatTypes),0,wx.EXPAND)
+    mainSizer.Add(self.buildMLTextSizer('Method',(87,60),armid.THREAT_TEXTMETHOD_ID),0,wx.EXPAND)
     mainSizer.Add(ThreatEnvironmentPanel(self,self.dbProxy),1,wx.EXPAND)
 
     if (isUpdateable):
-      mainSizer.Add(WidgetFactory.buildCommitButtonSizer(self,armid.THREAT_BUTTONCOMMIT_ID,isCreate),0,wx.ALIGN_CENTRE)
+      mainSizer.Add(self.buildCommitButtonSizer(armid.THREAT_BUTTONCOMMIT_ID,isCreate),0,wx.ALIGN_CENTRE)
     self.SetSizer(mainSizer)
 
   def loadControls(self,threat,isReadOnly = False):
     nameCtrl = self.FindWindowById(armid.THREAT_TEXTNAME_ID)
+    tagsCtrl = self.FindWindowById(armid.THREAT_TAGS_ID)
     typeCtrl = self.FindWindowById(armid.THREAT_THREATTYPE_ID)
     methodCtrl = self.FindWindowById(armid.THREAT_TEXTMETHOD_ID)
     environmentCtrl = self.FindWindowById(armid.THREAT_PANELENVIRONMENT_ID)
     nameCtrl.SetValue(threat.name())
+    tagsCtrl.set(threat.tags())
     typeCtrl.SetValue(threat.type())
     methodCtrl.SetValue(threat.method())
     environmentCtrl.loadControls(threat)

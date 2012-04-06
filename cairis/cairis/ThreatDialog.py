@@ -31,6 +31,7 @@ class ThreatDialog(wx.Dialog):
     self.theThreatName = ''
     self.theThreatType = ''
     self.theThreatMethod = ''
+    self.theTags = []
     self.theEnvironmentProperties = []
     self.panel = 0
     self.buildControls(parameters)
@@ -52,6 +53,7 @@ class ThreatDialog(wx.Dialog):
 
   def onCommit(self,evt):
     nameCtrl = self.FindWindowById(armid.THREAT_TEXTNAME_ID)
+    tagCtrl = self.FindWindowById(armid.THREAT_TAGS_ID)
     typeCtrl = self.FindWindowById(armid.THREAT_THREATTYPE_ID)
     methodCtrl = self.FindWindowById(armid.THREAT_TEXTMETHOD_ID)
     environmentCtrl = self.FindWindowById(armid.THREAT_PANELENVIRONMENT_ID)
@@ -69,6 +71,7 @@ class ThreatDialog(wx.Dialog):
 
     self.theThreatType = typeCtrl.GetValue()
     self.theThreatMethod = methodCtrl.GetValue()
+    self.theTags = tagCtrl.tags()
     self.theEnvironmentProperties = environmentCtrl.environmentProperties()
 
     commitLabel = self.theCommitVerb + ' threat'
@@ -117,6 +120,6 @@ class ThreatDialog(wx.Dialog):
       self.EndModal(armid.THREAT_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = ThreatParameters(self.theThreatName,self.theThreatType,self.theThreatMethod,self.theEnvironmentProperties)
+    parameters = ThreatParameters(self.theThreatName,self.theThreatType,self.theThreatMethod,self.theTags,self.theEnvironmentProperties)
     parameters.setId(self.theThreatId)
     return parameters

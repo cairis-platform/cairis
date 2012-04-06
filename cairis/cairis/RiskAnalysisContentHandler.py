@@ -406,7 +406,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.theSpDict[self.thePropertyName] = (self.thePropertyValue,self.theRationale)
       self.resetThreatenedPropertyAttributes()
     elif name == 'vulnerability':
-      p = VulnerabilityParameters(self.theName,self.theDescription,self.theType,self.theEnvironmentProperties)
+      p = VulnerabilityParameters(self.theName,self.theDescription,self.theType,[],self.theEnvironmentProperties)
       self.theVulnerabilities.append(p)
       self.resetVulnerabilityAttributes()
     elif name == 'vulnerability_environment':
@@ -422,7 +422,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.theEnvironmentProperties.append(p)
       self.resetAttackerEnvironmentAttributes()
     elif name == 'threat':
-      p = ThreatParameters(self.theName,self.theType,self.theMethod,self.theEnvironmentProperties)
+      p = ThreatParameters(self.theName,self.theType,self.theMethod,[],self.theEnvironmentProperties)
       self.theThreats.append(p)
       self.resetThreatAttributes()
     elif name == 'threat_environment':
@@ -439,7 +439,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.resetThreatEnvironmentAttributes()
     elif name == 'risk':
       mc = MisuseCase(-1,'Exploit ' + self.theName,self.theEnvironmentProperties,self.theName)
-      p = RiskParameters(self.theName,self.theThreat,self.theVulnerability,mc)
+      p = RiskParameters(self.theName,self.theThreat,self.theVulnerability,mc,[])
       self.theRisks.append(p)
       self.resetRiskAttributes()
     elif name == 'misusecase':

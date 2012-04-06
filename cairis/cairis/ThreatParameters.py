@@ -19,14 +19,16 @@
 import ObjectCreationParameters
 
 class ThreatParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,threatName,thrType,thrMethod,cProperties):
+  def __init__(self,threatName,thrType,thrMethod,tags,cProperties):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = threatName
     self.theType = thrType
     self.theMethod = thrMethod
+    self.theTags = tags
     self.theEnvironmentProperties = cProperties
 
   def name(self): return self.theName
   def type(self): return self.theType
   def method(self): return self.theMethod
+  def tags(self): return self.theTags
   def environmentProperties(self): return self.theEnvironmentProperties

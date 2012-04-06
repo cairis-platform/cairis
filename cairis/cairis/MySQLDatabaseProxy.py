@@ -1243,6 +1243,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       threatRows.append((threatId,threatName,threatType,thrMethod))
     curs.close()
     for threatId,threatName,threatType,thrMethod in threatRows: 
+      tags = self.getTags(threatName,'threat')
       environmentProperties = []
       for environmentId,environmentName in self.dimensionEnvironments(threatId,'threat'):
         likelihood = self.threatLikelihood(threatId,environmentId)
@@ -1251,7 +1252,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         syProperties,pRationale = self.relatedProperties('threat',threatId,environmentId)
         properties = ThreatEnvironmentProperties(environmentName,likelihood,assets,attackers,syProperties,pRationale)
         environmentProperties.append(properties)
-      parameters = ThreatParameters(threatName,threatType,thrMethod,environmentProperties)
+      parameters = ThreatParameters(threatName,threatType,thrMethod,tags,environmentProperties)
       threat = ObjectFactory.build(threatId,parameters)
       threats[threatName] = threat
     return threats
@@ -1371,6 +1372,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     threatName = parameters.name()
     threatType = parameters.type()
     threatMethod = parameters.method()
+    tags = parameters.tags()
     try:
       curs = self.conn.cursor()
       curs.execute("call addThreat(%s,%s,%s,%s)",(threatId,threatName,threatType,threatMethod))
@@ -1378,6 +1380,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error adding new threat ' + threatName
         raise DatabaseProxyException(exceptionText) 
 
+      self.addTags(threatName,'threat',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(threatId,'threat',environmentName)
@@ -1411,6 +1414,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     threatName = parameters.name()
     threatType = parameters.type()
     threatMethod = parameters.method()
+    tags = parameters.tags()
 
     try:
       curs = self.conn.cursor()
@@ -1422,6 +1426,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating threat ' + threatName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(threatName,'threat',tags)
 
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
@@ -1470,14 +1475,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       vulnerabilityType = row[VULNERABILITIES_TYPE_COL]
       vulRows.append((vulnerabilityId,vulnerabilityName,vulnerabilityDescription,vulnerabilityType))
     curs.close()
+
     for vulnerabilityId,vulnerabilityName,vulnerabilityDescription,vulnerabilityType in vulRows:
+      tags = self.getTags(vulnerabilityName,'vulnerability')
       environmentProperties = []
       for environmentId,environmentName in self.dimensionEnvironments(vulnerabilityId,'vulnerability'):
         severity = self.vulnerabilitySeverity(vulnerabilityId,environmentId)
         assets = self.vulnerableAssets(vulnerabilityId,environmentId)
         properties = VulnerabilityEnvironmentProperties(environmentName,severity,assets)
         environmentProperties.append(properties)
-      parameters = VulnerabilityParameters(vulnerabilityName,vulnerabilityDescription,vulnerabilityType,environmentProperties)
+      parameters = VulnerabilityParameters(vulnerabilityName,vulnerabilityDescription,vulnerabilityType,tags,environmentProperties)
       vulnerability = ObjectFactory.build(vulnerabilityId,parameters)
       vulnerabilities[vulnerabilityName] = vulnerability
     return vulnerabilities
@@ -1490,6 +1497,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     vulName = parameters.name()
     vulDesc = parameters.description()
     vulType = parameters.type()
+    tags = parameters.tags()
     try:
       vulId = self.newId()
       curs = self.conn.cursor()
@@ -1497,6 +1505,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new vulnerability ' + vulName
         raise DatabaseProxyException(exceptionText) 
+
+      self.addTags(vulName,'vulnerability',tags)
 
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
@@ -1523,6 +1533,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     vulName = parameters.name()
     vulDesc = parameters.description()
     vulType = parameters.type()
+    tags = parameters.tags()
+
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteVulnerabilityComponents(%s)',(vulId))
@@ -1533,6 +1545,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error adding updating vulnerability ' + vulName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(vulName,'vulnerability',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(vulId,'vulnerability',environmentName)
@@ -2142,6 +2155,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       risk = ObjectFactory.build(riskId,parameters)
       risks[risk.name()] = risk
     return risks
+
 
   def addRisk(self,parameters):
     try:
