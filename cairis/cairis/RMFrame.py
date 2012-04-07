@@ -46,6 +46,7 @@ from CountermeasuresDialog import CountermeasuresDialog
 from TracesDialog import TracesDialog
 from EnvironmentModelViewer import EnvironmentModelViewer
 from CanonicalModelViewer import CanonicalModelViewer
+from ComponentModelViewer import ComponentModelViewer
 from APModelViewer import APModelViewer
 from ATModelViewer import ATModelViewer
 from EnvironmentModel import EnvironmentModel
@@ -70,6 +71,7 @@ from ValueTypeParameters import ValueTypeParameters
 from ModelImport import *
 from SearchDialog import SearchDialog
 from ConceptMapModel import ConceptMapModel
+from ComponentModel import ComponentModel
 import DocumentBuilder
 from itertools import izip
 import gtk
@@ -305,6 +307,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_APMODEL,self.OnViewAPModel)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_ATMODEL,self.OnViewATModel)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_CMMODEL,self.OnViewCMModel)
+    wx.EVT_MENU(self,armid.RMFRAME_TOOL_COMPONENTMODEL,self.OnViewComponentModel)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_FIND,self.OnSearchModel)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_DOMAINPROPERTIES,self.OnDomainProperties)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_GOALS,self.OnGoals)
@@ -1594,6 +1597,21 @@ class RMFrame(wx.Frame):
       if (dialog != None):
         dialog.destroy()
       dlg = wx.MessageDialog(self,str(errorText),'View Concept Map',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+
+  def OnViewComponentModel(self,event):
+    dialog = None
+    try: 
+      model = self.dbProxy.componentModel()
+      cModel = ComponentModel(model[0],model[1])
+      dialog = ComponentModelViewer()
+      dialog.ShowModal(cModel)
+    except ARMException,errorText:
+      if (dialog != None):
+        dialog.destroy()
+      dlg = wx.MessageDialog(self,str(errorText),'View Component Diagram',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return

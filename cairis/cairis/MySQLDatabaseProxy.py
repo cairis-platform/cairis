@@ -8588,3 +8588,30 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def deleteTag(self,tagId):
     self.deleteObject(tagId,'tag')
     self.conn.commit()
+
+  def componentModel(self):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('select component,interface,required_id from component_interfaces')
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting component interfaces'
+        raise DatabaseProxyException(exceptionText) 
+      interfaces = []
+      for row in curs.fetchall():
+        row = list(row)
+        interfaces.append((row[0],row[1],row[2]))
+      curs.execute('select from_name,from_interface,to_name,to_interface from component_associations')
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting component associations'
+        raise DatabaseProxyException(exceptionText) 
+      associations = []
+      for row in curs.fetchall():
+        row = list(row)
+        associations.append((row[0],row[1],row[2],row[3]))
+      curs.close()
+      return (interfaces,associations)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting component model (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
