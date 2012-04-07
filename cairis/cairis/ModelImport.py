@@ -25,6 +25,7 @@ from GoalsContentHandler import GoalsContentHandler
 from UsabilityContentHandler import UsabilityContentHandler
 from AssociationsContentHandler import AssociationsContentHandler
 from CairisContentHandler import CairisContentHandler
+from ComponentModelContentHandler import ComponentModelContentHandler
 from Borg import Borg
 import xml.sax
 
@@ -295,6 +296,34 @@ def importProjectData(pSettings,envParameterSet):
     msgText += ', and project settings'
     msgText += '.'
   return msgText
+
+def importComponentModelFile(importFile):
+  parser = xml.sax.make_parser()
+  handler = ComponentModelContentHandler()
+  parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
+  parser.parse(importFile)
+  components = handler.components()
+  associations = handler.associations()
+  return importComponentModelData(components,associations)
+
+def importComponentModelData(components,associations):
+  noOfComponents = len(components)
+  noOfAssocs = len(associations)
+  b = Borg()
+  cCount = 0
+
+  for cParameters in components:
+    b.dbProxy.addComponent(cParameters)
+    cCount += 1
+  
+  caCount = 0
+  for caParameters in associations:
+    b.dbProxy.addComponentAssociation(caParameters)
+    caCount += 1 
+
+  msgStr = 'Imported ' + str(cCount) + ' components, and ' + str(caCount) + ' component associations.'
+  return msgStr
 
 def importDomainValuesFile(importFile):
   parser = xml.sax.make_parser()

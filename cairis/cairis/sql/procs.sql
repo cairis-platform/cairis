@@ -662,6 +662,9 @@ drop procedure if exists addTag;
 drop procedure if exists deleteTags;
 drop procedure if exists delete_tag;
 drop procedure if exists getTags;
+drop procedure if exists addComponent;
+drop procedure if exists addComponentInterface;
+drop procedure if exists addComponentAssociation;
 
 delimiter //
 
@@ -17730,6 +17733,44 @@ begin
   prepare stmt from @sql;
   execute stmt;
   deallocate prepare stmt;
+end
+//
+
+create procedure addComponent(in componentId int, in componentName text, in componentDesc text)
+begin
+  insert into component(id,name,description) values (componentId,componentName,componentDesc);
+end
+//
+
+create procedure addComponentInterface(in componentId int, in interfaceName text, in reqId int)
+begin
+  declare interfaceId int;
+
+  select id into interfaceId from interface where name = interfaceName limit 1;
+  if interfaceId is null
+  then
+    call newId2(interfaceId);
+    insert into interface(id,name) values (interfaceId,interfaceName);
+  end if;
+
+  insert into component_interface(component_id,interface_id,required_id) values (componentId,interfaceId,reqId);
+end
+//
+
+create procedure addComponentAssociation(in fromName text, in fromIf text, in toName text, in toIf text)
+begin
+  declare fromId int;
+  declare fromIfId int;
+  declare toId int;
+  declare toIfId int;
+
+  select id into fromId from component where name = fromName;
+  select id into fromIfId from interface where name = fromIf;
+  select id into toId from component where name = toName;
+  select id into toIfId from interface where name = toIf;
+
+  insert into component_association(from_component_id,from_interface_id,to_component_id,to_interface_id) values (fromId,fromIfId,toId,toIfId);
+
 end
 //
 

@@ -105,5 +105,13 @@
        systemId="http://www.cs.ox.ac.uk/cairis/dtd/usability.dtd"  
        uri="usability.dtd"/>
 
+    <public 
+       publicId="-//CAIRIS//DTD COMPONENT 1.0//EN"  
+       uri="component_model.dtd"/>
+
+    <system
+       systemId="http://www.cs.ox.ac.uk/cairis/dtd/component_model.dtd"  
+       uri="component_model.dtd"/>
+
   </group>
 </catalog>

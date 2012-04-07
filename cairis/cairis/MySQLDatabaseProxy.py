@@ -92,6 +92,8 @@ from Steps import Steps
 from ReferenceSynopsis import ReferenceSynopsis
 from ReferenceContribution import ReferenceContribution
 from ConceptMapAssociationParameters import ConceptMapAssociationParameters
+from ComponentParameters import ComponentParameters;
+from ComponentAssociationParameters import ComponentAssociationParameters;
 import string
 import os
 
@@ -8615,3 +8617,55 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting component model (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def addComponent(self,parameters):
+    componentId = self.newId()
+    componentName = parameters.name()
+    componentDesc = parameters.description()
+
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addComponent(%s,%s,%s)',(componentId,componentName,componentDesc))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding component ' + componentName
+        raise DatabaseProxyException(exceptionText) 
+
+      for ifName,ifType in parameters.interfaces():
+        self.addComponentInterface(componentId,ifName,ifType)
+
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addComponentInterface(self,componentId,ifName,ifType):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addComponentInterface(%s,%s,%s)',(componentId,ifName,ifType))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding interface ' + ifName + ' to  component ' + componentName
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding interface ' + ifName + ' to component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addComponentAssociation(self,parameters):
+    fromName = parameters.fromName()
+    fromIf = parameters.fromInterface()
+    toName = parameters.toName()
+    toIf = parameters.toInterface()
+
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addComponentAssociation(%s,%s,%s,%s)',(fromName,fromIf,toName,toIf))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding association from component ' + fromName + ' to  component ' + toName
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding association from component ' + fromName + ' to component ' + toName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

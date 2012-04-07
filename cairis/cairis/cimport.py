@@ -29,7 +29,7 @@ if __name__ == '__main__':
   try:
     parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Import')
     parser.add_argument('modelFile',help='model file to import')
-    parser.add_argument('--import',dest='modelFormat',help='model type to import.  One of securitypattern, tvtypes, directory, requirements, riskanalysis, usability, project, domainvalues, or all')
+    parser.add_argument('--import',dest='modelFormat',help='model type to import.  One of securitypattern, tvtypes, directory, requirements, riskanalysis, usability, project, domainvalues, component or all')
     args = parser.parse_args() 
     mFormat = args.modelFormat
     importFile = args.modelFile
@@ -55,6 +55,8 @@ if __name__ == '__main__':
       msgStr += importProjectFile(importFile)
     elif (mFormat == 'domainvalues'):
       msgStr += importDomainValuesFile(importFile)
+    elif (mFormat == 'component'):
+      msgStr += importComponentModelFile(importFile)
     elif (mFormat == 'all'):
       msgStr += importModelFile(importFile)
     else:
