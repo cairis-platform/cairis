@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -11,13 +12,9 @@
    width="744.09448819"
    height="1052.3622047"
    id="svg2"
-   sodipodi:version="0.32"
-   inkscape:version="0.46"
-   sodipodi:docname="countermeasure.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="/home/irisuser/iris/countermeasure.png"
-   inkscape:export-xdpi="4.8640223"
-   inkscape:export-ydpi="4.8640223">
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="New document 1">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -33,21 +30,19 @@
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
-     gridtolerance="10000"
-     guidetolerance="10"
-     objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="883.57143"
-     inkscape:cy="520"
+     inkscape:cx="375"
+     inkscape:cy="508.57143"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="986"
-     inkscape:window-height="888"
-     inkscape:window-x="174"
-     inkscape:window-y="27" />
+     inkscape:window-width="963"
+     inkscape:window-height="728"
+     inkscape:window-x="0"
+     inkscape:window-y="49"
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -56,6 +51,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -63,32 +59,19 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <g
-       id="g3152"
-       inkscape:export-filename="/home/irisuser/iris/countermeasure.png"
-       inkscape:export-xdpi="5.6746926"
-       inkscape:export-ydpi="5.6746926">
-      <rect
-         y="245.83751"
-         x="156.33246"
-         height="475.90652"
-         width="438.76367"
-         id="rect2383"
-         style="fill:none;fill-opacity:0.32758619999999999;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.99134197999999996" />
-      <rect
-         y="349.50504"
-         x="51.42857"
-         height="80"
-         width="191.42857"
-         id="rect3159"
-         style="fill:none;fill-opacity:0.875;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.96982757" />
-      <rect
-         y="475.21933"
-         x="50"
-         height="80"
-         width="191.42857"
-         id="rect3161"
-         style="fill:none;fill-opacity:0.875;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.96982757" />
-    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:144px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
+       x="131.42857"
+       y="378.07648"
+       id="text2816"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/irisuser/cm.png"
+       inkscape:export-xdpi="15.53"
+       inkscape:export-ydpi="15.53"><tspan
+         sodipodi:role="line"
+         id="tspan2818"
+         x="131.42857"
+         y="378.07648">CM</tspan></text>
   </g>
 </svg>
