@@ -15,7 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
+RMFRAME_MENU_EXPORT = 88
+RMFRAME_MENU_IMPORT = 89
 RMFRAME_MENU_EXPORTMODEL = 90
 RMFRAME_MENU_IMPORTMODEL = 91
 RMFRAME_MENU_NEW = 96
