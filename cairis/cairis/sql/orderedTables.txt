@@ -1,3 +1,4 @@
+asset_interface
 component_association
 component_interface
 interface

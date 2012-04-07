@@ -19,6 +19,7 @@
 import wx
 import armid
 from DimensionListCtrl import DimensionListCtrl
+from InterfacePage import InterfacePage
 
 class MLTextPage(wx.Panel):
   def __init__(self,parent,winId):
@@ -61,6 +62,8 @@ class AssetSummaryNotebook(wx.Notebook):
     p1 = MLTextPage(self,armid.ASSET_TEXTDESCRIPTION_ID)
     p2 = MLTextPage(self,armid.ASSET_TEXTSIGNIFICANCE_ID)
     p3 = CriticalPage(self)
+    p4 = InterfacePage(self,armid.ASSET_PAGEINTERFACE_ID)
     self.AddPage(p1,'Description')
     self.AddPage(p2,'Significance')
     self.AddPage(p3,'Criticality')
+    self.AddPage(p4,'Interfaces')

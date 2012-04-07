@@ -54,6 +54,7 @@ DROP TABLE IF EXISTS risk_tag;
 
 DROP TABLE IF EXISTS component_association;
 DROP TABLE IF EXISTS component_interface;
+DROP TABLE IF EXISTS asset_interface;
 DROP TABLE IF EXISTS interface;
 DROP TABLE IF EXISTS component;
 
@@ -2481,6 +2482,15 @@ CREATE TABLE component_interface (
   required_id INT NOT NULL,
   PRIMARY KEY(component_id,interface_id),
   FOREIGN KEY(component_id) REFERENCES component(id),
+  FOREIGN KEY(interface_id) REFERENCES interface(id)
+) ENGINE=INNODB;
+
+CREATE TABLE asset_interface (
+  asset_id INT NOT NULL,
+  interface_id INT NOT NULL,
+  required_id INT NOT NULL,
+  PRIMARY KEY(asset_id,interface_id),
+  FOREIGN KEY(asset_id) REFERENCES asset(id),
   FOREIGN KEY(interface_id) REFERENCES interface(id)
 ) ENGINE=INNODB;
 

@@ -665,6 +665,7 @@ drop procedure if exists getTags;
 drop procedure if exists addComponent;
 drop procedure if exists addComponentInterface;
 drop procedure if exists addComponentAssociation;
+drop procedure if exists interfaceNames;
 
 delimiter //
 
@@ -17770,7 +17771,12 @@ begin
   select id into toIfId from interface where name = toIf;
 
   insert into component_association(from_component_id,from_interface_id,to_component_id,to_interface_id) values (fromId,fromIfId,toId,toIfId);
+end
+//
 
+create procedure interfaceNames(in envName text)
+begin
+  select name from interface order by 1;
 end
 //
 
