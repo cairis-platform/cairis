@@ -25,7 +25,11 @@
 <!ATTLIST role type (Stakeholder | Attacker) #REQUIRED>
 <!ATTLIST role short_code CDATA #REQUIRED>
 <!ELEMENT description (#PCDATA)>
-<!ELEMENT asset (description,significance,critical_rationale?,security_property*)>
+
+<!ELEMENT tag EMPTY>
+<!ATTLIST tag name CDATA #REQUIRED>
+
+<!ELEMENT asset (description,tag*,significance,critical_rationale?,security_property*)>
 <!ATTLIST asset name CDATA #REQUIRED>
 <!ATTLIST asset short_code CDATA #REQUIRED>
 <!ATTLIST asset type CDATA #REQUIRED>
@@ -38,7 +42,7 @@
 <!ATTLIST security_property value (None | Low | Medium | High) #REQUIRED>
 <!ELEMENT rationale (#PCDATA)>
 
-<!ELEMENT vulnerability (description,vulnerability_environment+)>
+<!ELEMENT vulnerability (description,tag*,vulnerability_environment+)>
 <!ATTLIST vulnerability name CDATA #REQUIRED>
 <!ATTLIST vulnerability type CDATA #REQUIRED>
 <!ELEMENT vulnerability_environment (vulnerable_asset+)>
@@ -47,7 +51,7 @@
 <!ELEMENT vulnerable_asset EMPTY>
 <!ATTLIST vulnerable_asset name CDATA #REQUIRED>
 
-<!ELEMENT attacker (description,attacker_environment+)>
+<!ELEMENT attacker (description,tag*,attacker_environment+)>
 <!ATTLIST attacker name CDATA #REQUIRED>
 <!ATTLIST attacker image CDATA #REQUIRED>
 <!ELEMENT attacker_environment (attacker_role+,motivation+,capability+)>
@@ -60,7 +64,7 @@
 <!ATTLIST capability name CDATA #REQUIRED>
 <!ATTLIST capability value (Low | Medium | High) #REQUIRED>
 
-<!ELEMENT threat (method,threat_environment+)>
+<!ELEMENT threat (method,tag*,threat_environment+)>
 <!ATTLIST threat name CDATA #REQUIRED>
 <!ATTLIST threat type CDATA #REQUIRED>
 <!ELEMENT method (#PCDATA)>
@@ -75,7 +79,7 @@
 <!ATTLIST threatened_property name (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
 <!ATTLIST threatened_property value (None | Low | Medium | High) #REQUIRED>
 
-<!ELEMENT risk (misusecase+)>
+<!ELEMENT risk (tag*,misusecase+)>
 <!ATTLIST risk name CDATA #REQUIRED>
 <!ATTLIST risk vulnerability CDATA #REQUIRED>
 <!ATTLIST risk threat CDATA #REQUIRED>

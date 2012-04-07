@@ -11807,6 +11807,7 @@ end
 
 create procedure riskAnalysisToXml(in includeHeader int)
 begin
+  declare tagName varchar(255);
   declare roleName varchar(255);
   declare roleType varchar(50);
   declare roleShortCode varchar(100);
@@ -11880,6 +11881,11 @@ begin
   declare tailNav int;
   declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE riskanalysis PUBLIC "-//CAIRIS//DTD RISKANALYSIS 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/riskanalysis.dtd">\n\n<riskanalysis>\n';
   declare done int default 0;
+  declare assetTagCursor cursor for select t.name from asset_tag at, tag t where at.asset_id = assetId and at.tag_id = t.id;
+  declare attackerTagCursor cursor for select t.name from attacker_tag at, tag t where at.attacker_id = attackerId and at.tag_id = t.id;
+  declare vulTagCursor cursor for select t.name from vulnerability_tag vt, tag t where vt.vulnerability_id = vulId and vt.tag_id = t.id;
+  declare threatTagCursor cursor for select t.name from threat_tag tt, tag t where tt.threat_id = threatId and tt.tag_id = t.id;
+  declare riskTagCursor cursor for select t.name from risk_tag rt, tag t where rt.risk_id = riskId and rt.tag_id = t.id;
   declare roleCursor cursor for  select r.name,rt.name,r.short_code,r.description from role r, role_type rt where r.role_type_id = rt.id;
   declare assetEnvCursor cursor for select ea.environment_id,e.name from environment_asset ea, environment e where ea.asset_id = assetId and ea.environment_id = e.id;
   declare vulEnvCursor cursor for select ev.environment_id,e.name from environment_vulnerability ev, environment e where ev.vulnerability_id = vulId and ev.environment_id = e.id;
@@ -11929,7 +11935,21 @@ begin
     then
       leave asset_loop;
     end if;
-    set buf = concat(buf,'<asset name=\"',assetName,'\" short_code=\"',assetShortCode,'\" type=\"',assetType,'\" is_critical=\"',isCritical,'\">\n  <description>',assetDesc,'</description>\n  <significance>',assetSignif,'</significance>\n  <critical_rationale>',assetCr,'</critical_rationale>\n');
+    set buf = concat(buf,'<asset name=\"',assetName,'\" short_code=\"',assetShortCode,'\" type=\"',assetType,'\" is_critical=\"',isCritical,'\">\n  <description>',assetDesc,'</description>\n');
+
+    open assetTagCursor;
+    assetTag_loop: loop
+      fetch assetTagCursor into tagName;
+      if done = 1
+      then
+        leave assetTag_loop;
+      end if;
+      set buf = concat(buf,'  <tag name=\"',tagName,'\" />\n'); 
+    end loop assetTag_loop;
+    close assetTagCursor;
+    set done = 0;
+
+    set buf = concat(buf,'  <significance>',assetSignif,'</significance>\n  <critical_rationale>',assetCr,'</critical_rationale>\n');
 
     open assetEnvCursor;
     assetEnv_loop: loop
@@ -11996,6 +12016,19 @@ begin
     end if;
     set buf = concat(buf,'<vulnerability name=\"',vulName,'\" type=\"',vulType,'\">\n  <description>',vulDesc,'</description>\n');
     set vulCount = vulCount + 1;
+
+    open vulTagCursor;
+    vulTag_loop: loop
+      fetch vulTagCursor into tagName;
+      if done = 1
+      then
+        leave vulTag_loop;
+      end if;
+      set buf = concat(buf,'  <tag name=\"',tagName,'\" />\n'); 
+    end loop vulTag_loop;
+    close vulTagCursor;
+    set done = 0;
+
     open vulEnvCursor;
     vulEnv_loop: loop
       fetch vulEnvCursor into envId, envName;
@@ -12037,6 +12070,18 @@ begin
     end if;
     set buf = concat(buf,'<attacker name=\"',attackerName,'\" image=\"',attackerImage,'\">\n  <description>',attackerDesc,'</description>\n');
     set attackerCount = attackerCount + 1;
+
+    open attackerTagCursor;
+    attackerTag_loop: loop
+      fetch attackerTagCursor into tagName;
+      if done = 1
+      then
+        leave attackerTag_loop;
+      end if;
+      set buf = concat(buf,'  <tag name=\"',tagName,'\" />\n'); 
+    end loop attackerTag_loop;
+    close attackerTagCursor;
+    set done = 0;
 
     open attackerEnvCursor;
     attackerEnv_loop: loop
@@ -12102,6 +12147,18 @@ begin
     end if;
     set buf = concat(buf,'<threat name=\"',threatName,'\" type=\"',threatType,'\">\n  <method>',threatMethod,'</method>\n');
     set threatCount = threatCount + 1;
+
+    open threatTagCursor;
+    threatTag_loop: loop
+      fetch threatTagCursor into tagName;
+      if done = 1
+      then
+        leave threatTag_loop;
+      end if;
+      set buf = concat(buf,'  <tag name=\"',tagName,'\" />\n'); 
+    end loop threatTag_loop;
+    close threatTagCursor;
+    set done = 0;
 
     open threatEnvCursor;
     threatEnv_loop: loop
@@ -12196,6 +12253,18 @@ begin
     end if;
     set buf = concat(buf,'<risk name=\"',riskName,'\" vulnerability=\"',vulName,'\" threat=\"',threatName,'\">\n');
     set riskCount = riskCount + 1;
+
+    open riskTagCursor;
+    riskTag_loop: loop
+      fetch riskTagCursor into tagName;
+      if done = 1
+      then
+        leave riskTag_loop;
+      end if;
+      set buf = concat(buf,'  <tag name=\"',tagName,'\" />\n'); 
+    end loop riskTag_loop;
+    close riskTagCursor;
+    set done = 0;
 
     open mcCursor;
     mc_loop: loop
