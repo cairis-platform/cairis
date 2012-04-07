@@ -50,6 +50,11 @@ DROP TABLE IF EXISTS threat_tag;
 DROP TABLE IF EXISTS vulnerability_tag;
 DROP TABLE IF EXISTS risk_tag;
 
+DROP TABLE IF EXISTS component_association;
+DROP TABLE IF EXISTS component_interface;
+DROP TABLE IF EXISTS interface;
+DROP TABLE IF EXISTS component;
+
 DROP TABLE IF EXISTS value_tension;
 DROP TABLE IF EXISTS tension;
 DROP TABLE IF EXISTS vulnerability_asset_countermeasure_effect;
@@ -2453,6 +2458,40 @@ CREATE TABLE requirement_reference_contribution (
   FOREIGN KEY(reference_id) REFERENCES requirement_reference_synopsis(id),
   FOREIGN KEY(end_id) REFERENCES contribution_end(id),
   FOREIGN KEY(contribution_id) REFERENCES link_contribution(id)
+) ENGINE=INNODB;
+
+CREATE TABLE component (
+  id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE interface (
+  id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE component_interface (
+  component_id INT NOT NULL,
+  interface_id INT NOT NULL,
+  required_id INT NOT NULL,
+  PRIMARY KEY(component_id,interface_id),
+  FOREIGN KEY(component_id) REFERENCES component(id),
+  FOREIGN KEY(interface_id) REFERENCES interface(id)
+) ENGINE=INNODB;
+
+CREATE TABLE component_association (
+  from_component_id INT NOT NULL,
+  from_interface_id INT NOT NULL,
+  to_component_id INT NOT NULL,
+  to_interface_id INT NOT NULL,
+  PRIMARY KEY(from_component_id,from_interface_id,to_component_id,to_interface_id),
+  FOREIGN KEY(from_component_id) REFERENCES component(id),
+  FOREIGN KEY(from_interface_id) REFERENCES interface(id),
+  FOREIGN KEY(to_component_id) REFERENCES component(id),
+  FOREIGN KEY(to_interface_id) REFERENCES interface(id)
 ) ENGINE=INNODB;
 
 CREATE VIEW countermeasure_vulnerability_response_target as 
