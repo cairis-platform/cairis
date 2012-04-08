@@ -20,13 +20,42 @@
 
 <!-- DTD for template CAIRIS component models -->
 
-<!ELEMENT component_model (component*,component_association*)>
-<!ELEMENT component (description,interface*)>
-<!ATTLIST component name CDATA #REQUIRED>
+<!ELEMENT component_model (asset*,component*,component_association*)>
+
+<!ELEMENT asset (description,tag*,significance,interface*,security_property*)>
+<!ATTLIST asset name CDATA #REQUIRED>
+<!ATTLIST asset short_code CDATA #REQUIRED>
+<!ATTLIST asset asset_type (Information | Systems | Software | Hardware | People) #REQUIRED>
+
+<!ELEMENT security_property (rationale)>
+<!ATTLIST security_property property (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
+<!ATTLIST security_property value (None | Low | Medium | High) #REQUIRED>
+
 <!ELEMENT description (#PCDATA)>
+<!ELEMENT significance (#PCDATA)>
+
 <!ELEMENT interface EMPTY>
 <!ATTLIST interface name CDATA #REQUIRED>
 <!ATTLIST interface type (provided | required) #REQUIRED> 
+
+<!ELEMENT component (description,interface*,structure*,requirement*)>
+<!ATTLIST component name CDATA #REQUIRED>
+
+<!ELEMENT structure EMPTY>
+<!ATTLIST structure head_asset CDATA #REQUIRED>
+<!ATTLIST structure head_adornment (Association | Aggregation | Composition | Inheritence) #REQUIRED>
+<!ATTLIST structure head_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST structure head_role CDATA #REQUIRED>
+<!ATTLIST structure tail_role CDATA #REQUIRED>
+<!ATTLIST structure tail_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST structure tail_adornment (Association | Aggregation | Composition | Inheritence) #REQUIRED>
+<!ATTLIST structure tail_asset CDATA #REQUIRED>
+<!ELEMENT requirement (description,rationale,fit_criterion)>
+<!ATTLIST requirement asset CDATA #REQUIRED>
+<!ATTLIST requirement name CDATA #REQUIRED>
+<!ATTLIST requirement type (Functional | Data | Look_and_Feel | Usability | Performance | Operational | Maintainability | Portability | Security | Cultural_and_Political | Legal) #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
+<!ELEMENT fit_criterion (#PCDATA)>
 
 <!ELEMENT component_association EMPTY>
 <!ATTLIST component_association from_component CDATA #REQUIRED>

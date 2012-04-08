@@ -32,6 +32,8 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
     self.theComponents = []
     self.theAssociations = []
     self.resetComponentAttributes()
+    self.resetAssetAttributes()
+    self.resetSecurityPropertyAttributes()
     self.resetComponentAssociationAttributes()
     b = Borg()
     self.configDir = b.configDir
@@ -51,6 +53,28 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
     self.theDescription = ''
     self.theInterfaces = []
 
+  def resetAssetAttributes(self):
+    self.inDescription = 0
+    self.inSignificance = 0
+    self.inCritical = 0
+    self.theName = ''
+    self.theShortCode = ''
+    self.theAssetType = ''
+    self.isCritical = False
+    self.theCriticalRationale = ''
+    self.theDescription = ''
+    self.theSignificance = ''
+    self.theTags = []
+    self.theInterfaces = []
+    self.theSecurityProperties = []
+
+  def resetSecurityPropertyAttributes(self):
+    self.thePropertyName = ''
+    self.thePropertyValue = 'None'
+    self.inRationale = 0
+    self.theRationale = ''
+
+
   def resetComponentAssociationAttributes(self):
     self.theFromName = ''
     self.theFromInterface = ''
@@ -63,8 +87,19 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name']
     elif (name == 'description'):
       self.inDescription = 1
-    elif (name == 'interface'):
+    elif name == 'significance':
+      self.inSignificance = 1
+      self.theSignificance = ''
+    elif name == 'interface':
       self.theInterfaces.append((attrs['name'],it2Id(attrs['type'])))
+    elif name == 'asset':
+      self.theName = attrs['name']
+      self.theShortCode = attrs['short_code']
+      self.theAssetType = attrs['type']
+      self.theSecurityProperties = []
+    elif name == 'security_property':
+      self.thePropertyName = attrs['property']
+      self.thePropertyValue = attrs['value']
     elif (name == 'component_association'):
       self.theFromName = attrs['from_component']
       self.theFromInterface = attrs['from_interface']
@@ -73,14 +108,55 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
 
   def characters(self,data):
     if self.inDescription:
-      self.theDescription = data
-      self.inDescription = 0
+      self.theDescription += data
+    elif self.inSignificance:
+      self.theSignificance += data
+    elif self.inRationale:
+      self.theRationale += data
+
 
   def endElement(self,name):
     if (name == 'component'):
       p = ComponentParameters(self.theName,self.theDescription,self.theInterfaces)
       self.theComponents.append(p)
       self.resetComponentAttributes() 
+    elif name == 'asset':
+      spDict = {}
+      spDict['confidentiality'] = (0,'None')
+      spDict['integrity'] = (0,'None')
+      spDict['availability'] = (0,'None')
+      spDict['accountability'] = (0,'None')
+      spDict['anonymity'] = (0,'None')
+      spDict['pseudonymity'] = (0,'None')
+      spDict['unlinkability'] = (0,'None')
+      spDict['unobservability'] = (0,'None')
+      for sp in self.theSecurityProperties:
+        spName = sp[0]
+        spValue = a2i(sp[1])
+        spRationale = sp[2]
+        if spName in spDict:
+          spDict[spName] = (spValue,spRationale)
+      
+      spValues.append(spDict['confidentiality'])
+      spValues.append(spDict['integrity'])
+      spValues.append(spDict['availability'])
+      spValues.append(spDict['accountability'])
+      spValues.append(spDict['anonymity'])
+      spValues.append(spDict['pseudonymity'])
+      spValues.append(spDict['unlinkability'])
+      spValues.append(spDict['unobservability'])
+      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.theInterfaces,spValues)
+      self.theAssetParameters.append(p)
+      self.resetAssetAttributes()
+    elif name == 'security_property':
+      self.theSecurityProperties.append((self.theEnvironmentName,self.thePropertyName,self.thePropertyValue,self.theRationale))
+      self.resetSecurityPropertyAttributes()
+
+
+
+
+
+
     if name == 'component_association':
       p = ComponentAssociationParameters(self.theFromName,self.theFromInterface,self.theToName,self.theToInterface)
       self.theAssociations.append(p)
