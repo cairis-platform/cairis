@@ -1071,6 +1071,62 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error updating asset ' + assetName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def addTemplateAssetProperties(self,taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat):
+    sqlTxt = 'call add_template_asset_properties(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
+    try:
+      curs = self.conn.cursor()
+      curs.execute(sqlTxt,(taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error setting security properties for template asset id ' + str(taId)
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding security properties for template asset id ' + str(taId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def updateTemplateAssetProperties(self,taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat):
+    sqlTxt += 'update template_asset_property set property_value_id=%s, property_rationale=%s where template_asset_id = %s and property_id = %s'
+    try:
+      curs = self.conn.cursor()
+      curs.execute(sqlTxt,(cProp,cRat,taId,armid.C_PROPERTY))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating confidentiality property for template asset id ' + str(taId)
+        raise DatabaseProxyException(exceptionText) 
+      curs.execute(sqlTxt,(iProp,iRat,taId,armid.I_PROPERTY))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating integrity property for template asset id ' + str(taId)
+        raise DatabaseProxyException(exceptionText) 
+      curs.execute(sqlTxt,(avProp,avRat,taId,armid.AV_PROPERTY))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating availability property for template asset id ' + str(taId)
+        raise DatabaseProxyException(exceptionText) 
+      curs.execute(sqlTxt,(acProp,acRat,taId,armid.AC_PROPERTY))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating accountability property for template asset id ' + str(taId)
+        raise DatabaseProxyException(exceptionText) 
+      curs.execute(sqlTxt,(anProp,anRat,taId,armid.AN_PROPERTY))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating anonymity property for template asset id ' + str(taId)
+        raise DatabaseProxyException(exceptionText) 
+      curs.execute(sqlTxt,(panProp,panRat,taId,armid.PAN_PROPERTY))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating pseudonymity property for template asset id ' + str(taId)
+        raise DatabaseProxyException(exceptionText) 
+      curs.execute(sqlTxt,(unlProp,unlRat,taId,armid.UNL_PROPERTY))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating unlinkability property for template asset id ' + str(taId)
+        raise DatabaseProxyException(exceptionText) 
+      curs.execute(sqlTxt,(unoProp,unoRat,taId,armid.UNO_PROPERTY))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating unobservability property for template asset id ' + str(taId)
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating security properties for template asset id ' + str(taId) +  ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
   def addSecurityProperties(self,dimTable,objtId,environmentName,securityProperties,pRationale):
     sqlTxt = 'call add_' + dimTable + '_properties(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
     try:
@@ -1601,6 +1657,31 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting ' + dimTable + ' properties in environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def templateAssetProperties(self,taId):
+    try:
+        curs = self.conn.cursor()
+        sqlTxt = 'call template_assetProperties(%s)'
+        curs.execute(sqlTxt,(taId))
+        if (curs.rowcount == -1):
+          exceptionText = 'Error getting template asset properties'
+          raise DatabaseProxyException(exceptionText) 
+        properties = []
+        row = curs.fetchone()
+        properties.append((row[0],row[8]))
+        properties.append((row[1],row[9]))
+        properties.append((row[2],row[10]))
+        properties.append((row[3],row[11]))
+        properties.append((row[4],row[12]))
+        properties.append((row[5],row[13]))
+        properties.append((row[6],row[14]))
+        properties.append((row[7],row[15]))
+        curs.close()
+        return properties
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting template asset properties  (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def getPersonas(self,constraintId = -1):
@@ -5704,25 +5785,32 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     assetDesc = parameters.description()
     assetSig = parameters.significance()
     assetType = parameters.type()
-    assetCriticality = parameters.critical()
-    assetCriticalRationale = parameters.criticalRationale()
-    cProperty = parameters.confidentialityProperty()
-    iProperty = parameters.integrityProperty()
-    avProperty = parameters.availabilityProperty()
-    acProperty = parameters.accountabilityProperty()
-    anProperty = parameters.anonymityProperty()
-    panProperty = parameters.pseudonymityProperty()
-    unlProperty = parameters.unlinkabilityProperty()
-    unoProperty = parameters.unobservabilityProperty()
+    cProp = parameters.confidentialityProperty()
+    cRat = parameters.confidentialityRationale()
+    iProp = parameters.integrityProperty()
+    iRat = parameters.integrityRationale()
+    avProp = parameters.availabilityProperty()
+    avRat = parameters.availabilityRationale()
+    acProp = parameters.accountabilityProperty()
+    acRat = parameters.accountabilityRationale()
+    anProp = parameters.anonymityProperty()
+    anRat = parameters.anonymityRationale()
+    panProp = parameters.pseudonymityProperty()
+    panRat = parameters.pseudonymityRationale()
+    unlProp = parameters.unlinkabilityProperty()
+    unlRat = parameters.unlinkabilityRationale()
+    unoProp = parameters.unobservabilityProperty()
+    unoRat = parameters.unobservabilityRationale()
     ifs = parameters.interfaces()
     try:
       curs = self.conn.cursor()
-      curs.execute('call addTemplateAsset(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty))
+      curs.execute('call addTemplateAsset(%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
 
       self.addInterfaces(assetName,'template_asset',ifs)
+      self.addTemplateAssetProperties(assetId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat)
       self.conn.commit()
       curs.close()
       return assetId
@@ -5738,18 +5826,32 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     assetDesc = parameters.description()
     assetSig = parameters.significance()
     assetType = parameters.type()
-    assetCriticality = parameters.critical()
-    assetCriticalRationale = parameters.criticalRationale()
-    cProperty = parameters.confidentialityProperty()
-    iProperty = parameters.integrityProperty()
-    avProperty = parameters.availabilityProperty()
-    acProperty = parameters.accountabilityProperty()
+    cProp = parameters.confidentialityProperty()
+    cRat = parameters.confidentialityRationale()
+    iProp = parameters.integrityProperty()
+    iRat = parameters.integrityRationale()
+    avProp = parameters.availabilityProperty()
+    avRat = parameters.availabilityRationale()
+    acProp = parameters.accountabilityProperty()
+    acRat = parameters.accountabilityRationale()
+    anProp = parameters.anonymityProperty()
+    anRat = parameters.anonymityRationale()
+    panProp = parameters.pseudonymityProperty()
+    panRat = parameters.pseudonymityRationale()
+    unlProp = parameters.unlinkabilityProperty()
+    unlRat = parameters.unlinkabilityRationale()
+    unoProp = parameters.unobservabilityProperty()
+    unoRat = parameters.unobservabilityRationale()
+    ifs = parameters.interfaces()
+
     try:
       curs = self.conn.cursor()
-      curs.execute('call updateTemplateAsset(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,cProperty,iProperty,avProperty,acProperty))
+      curs.execute('call updateTemplateAsset(%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
+      self.addInterfaces(assetName,'template_asset',ifs)
+      self.updateTemplateAssetProperties(assetId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat)
       self.conn.commit()
       curs.close()
       return assetId
@@ -5775,21 +5877,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         assetDesc = row[ASSETS_DESCRIPTION_COL]
         assetSig = row[ASSETS_SIGNIFICANCE_COL]
         assetType = row[ASSETS_TYPE_COL]
-        assetCriticality = row[ASSETS_CRITICAL_COL]
-        assetCriticalRationale = row[ASSETS_CRITICALRATIONALE_COL]
-        cProperty = row[TEMPLATEASSETS_CPROPERTY_COL]
-        iProperty = row[TEMPLATEASSETS_IPROPERTY_COL]
-        avProperty = row[TEMPLATEASSETS_AVPROPERTY_COL]
-        acProperty = row[TEMPLATEASSETS_ACPROPERTY_COL]
-        anProperty = row[TEMPLATEASSETS_ANPROPERTY_COL]
-        panProperty = row[TEMPLATEASSETS_PANPROPERTY_COL]
-        unlProperty = row[TEMPLATEASSETS_UNLPROPERTY_COL]
-        unoProperty = row[TEMPLATEASSETS_UNOPROPERTY_COL]
-        vals.append((assetName,shortCode,assetId,assetDesc,assetType,assetCriticality,assetCriticalRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty))
+        vals.append((assetName,shortCode,assetId,assetDesc,assetType))
       curs.close()
-      for assetName,shortCode,assetId,assetDesc,assetType,assetCriticality,assetCriticalRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty in vals:
+      for assetName,shortCode,assetId,assetDesc,assetType in vals:
         ifs = self.getInterfaces(assetName,'template_asset')
-        parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty,ifs)
+        taProps = self.templateAssetProperties(assetId)
+        parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,taProps,ifs)
         templateAsset = ObjectFactory.build(assetId,parameters)
         templateAssets[assetName] = templateAsset
       return templateAssets

@@ -21,21 +21,19 @@
 
 <!ELEMENT security_patterns (asset*,pattern*)>
 
-<!ELEMENT asset (description,significance?,critical?)>
+<!ELEMENT asset (description,significance,interface*,security_property*)>
 <!ATTLIST asset name CDATA #REQUIRED>
 <!ATTLIST asset short_code CDATA #REQUIRED>
-<!ATTLIST asset asset_type (Information | Systems | Software | Hardware | People) #REQUIRED>
-<!ATTLIST asset confidentiality (None | Low | Medium | High) #REQUIRED>
-<!ATTLIST asset integrity (None | Low | Medium | High) #REQUIRED>
-<!ATTLIST asset availability (None | Low | Medium | High) #REQUIRED>
-<!ATTLIST asset accountability (None | Low | Medium | High) #REQUIRED>
-<!ATTLIST asset anonymity (None | Low | Medium | High) #REQUIRED>
-<!ATTLIST asset pseudonymity (None | Low | Medium | High) #REQUIRED>
-<!ATTLIST asset unlinkability (None | Low | Medium | High) #REQUIRED>
-<!ATTLIST asset unobservability (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST asset type (Information | Systems | Software | Hardware | People) #REQUIRED>
+
+<!ELEMENT security_property (rationale)>
+<!ATTLIST security_property property (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
+<!ATTLIST security_property value (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
+
 <!ELEMENT description (#PCDATA)>
 <!ELEMENT significance (#PCDATA)>
-<!ELEMENT critical (#PCDATA)>
+
 <!ELEMENT pattern (context,problem,solution,structure+,requirement*)>
 <!ATTLIST pattern name CDATA #REQUIRED>
 <!ELEMENT context (#PCDATA)>
@@ -54,5 +52,4 @@
 <!ATTLIST requirement asset CDATA #REQUIRED>
 <!ATTLIST requirement name CDATA #REQUIRED>
 <!ATTLIST requirement type (Functional | Data | Look_and_Feel | Usability | Performance | Operational | Maintainability | Portability | Security | Cultural_and_Political | Legal) #REQUIRED>
-<!ELEMENT rationale (#PCDATA)>
 <!ELEMENT fit_criterion (#PCDATA)>

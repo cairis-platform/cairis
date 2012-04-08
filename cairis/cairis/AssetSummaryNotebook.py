@@ -57,13 +57,14 @@ class CriticalPage(wx.Panel):
       self.criticalRationaleCtrl.Clear()
 
 class AssetSummaryNotebook(wx.Notebook):
-  def __init__(self,parent):
+  def __init__(self,parent,isTemplateAsset = False):
     wx.Notebook.__init__(self,parent,armid.ASSET_NOTEBOOKSUMMARY_ID)
     p1 = MLTextPage(self,armid.ASSET_TEXTDESCRIPTION_ID)
     p2 = MLTextPage(self,armid.ASSET_TEXTSIGNIFICANCE_ID)
-    p3 = CriticalPage(self)
     p4 = InterfacePage(self,armid.ASSET_PAGEINTERFACE_ID)
     self.AddPage(p1,'Description')
     self.AddPage(p2,'Significance')
-    self.AddPage(p3,'Criticality')
+    if (isTemplateAsset == False):
+      p3 = CriticalPage(self)
+      self.AddPage(p3,'Criticality')
     self.AddPage(p4,'Interfaces')

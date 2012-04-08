@@ -48,6 +48,7 @@ task_reference
 usecase_reference
 threat_reference
 vulnerability_reference
+template_asset_property
 template_asset
 securitypattern
 securitypattern_classassociation

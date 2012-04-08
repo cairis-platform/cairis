@@ -21,6 +21,23 @@ from TemplateAssetParameters import TemplateAssetParameters
 from SecurityPatternParameters import SecurityPatternParameters
 from Borg import Borg
 
+
+def a2i(spLabel):
+  if spLabel == 'Low':
+    return 1
+  elif spLabel == 'Medium':
+    return 2
+  elif spLabel == 'High':
+    return 3
+  else:
+    return 0
+
+def it2Id(itLabel):
+  if itLabel == 'required':
+    return 1
+  else:
+    return 0
+
 class SecurityPatternContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theAssets = []
@@ -28,11 +45,11 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
     b = Borg()
     self.configDir = b.configDir
     self.resetAssetAttributes()
+    self.resetSecurityPropertyAttributes()
     self.resetPatternAttributes()
 
   def resolveEntity(self,publicId,systemId):
     return self.configDir + '/securitypattern.dtd'
-
 
   def patterns(self):
     return self.theSecurityPatterns
@@ -59,23 +76,19 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
   def resetAssetAttributes(self):
     self.inDescription = 0
     self.inSignificance = 0
-    self.inCritical = 0
     self.theName = ''
     self.theShortCode = ''
     self.theAssetType = ''
-    self.isCritical = False
-    self.theCriticalRationale = ''
     self.theDescription = ''
     self.theSignificance = ''
-    self.theConfidentialityValue = 'None'
-    self.theIntegrityValue = 'None'
-    self.theAvailabilityValue = 'None'
-    self.theAccountabilityValue = 'None'
-    self.theAnonymityValue = 'None'
-    self.thePseudonymityValue = 'None'
-    self.theUnlinkabilityValue = 'None'
-    self.theUnobservabilityValue = 'None'
+    self.theInterfaces = []
+    self.theSecurityProperties = []
 
+  def resetSecurityPropertyAttributes(self):
+    self.thePropertyName = ''
+    self.thePropertyValue = 'None'
+    self.inRationale = 0
+    self.theRationale = ''
 
   def resetStructure(self):
     self.theHeadName = ''
@@ -101,21 +114,19 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
     if name == 'asset':
       self.theName = attrs['name']
       self.theShortCode = attrs['short_code']
-      self.theAssetType = attrs['asset_type']
-      self.theConfidentialityValue = attrs['confidentiality']
-      self.theIntegrityValue = attrs['integrity']
-      self.theAvailabilityValue = attrs['availability']
-      self.theAccountabilityValue = attrs['accountability']
-      self.theAnonymityValue = attrs['anonymity']
-      self.thePseudonymityValue = attrs['pseudonymity']
-      self.theUnlinkabilityValue = attrs['unlinkability']
-      self.theUnobservabilityValue = attrs['unobservability']
+      self.theAssetType = attrs['type']
+      self.theSecurityProperties = []
+    elif name == 'interface':
+      self.theInterfaces.append((attrs['name'],it2Id(attrs['type'])))
+    elif name == 'security_property':
+      self.thePropertyName = attrs['property']
+      self.thePropertyValue = attrs['value']
     elif name == 'description':
       self.inDescription = 1
+      self.theDescripton = ''
     elif name == 'significance':
       self.inSignificance = 1
-    elif name == 'critical':
-      self.inCritical = 1
+      self.theSignificance = ''
     elif name == 'pattern':
       self.theName = attrs['name']
     elif name == 'structure':
@@ -144,47 +155,68 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
       self.theType = rawType.replace('_',' ')
     elif name == 'context':
       self.inContext = 1
+      self.theContext = ''
     elif name == 'problem':
       self.inProblem = 1
+      self.theProblem = ''
     elif name == 'solution':
       self.inSolution = 1
+      self.theSolution = ''
     elif name == 'rationale':
       self.inRationale = 1
+      self.theRationale = ''
     elif name == 'fit_criterion':
       self.inFitCriterion = 1
+      self.theFitCriterion = ''
 
   def characters(self,data):
     if self.inDescription:
-      self.theDescription = data
-      self.inDescription = 0
+      self.theDescription += data
     elif self.inSignificance:
-      self.theSignificance = data
-      self.inSignificance = 0
-    elif self.inCritical:
-      self.isCritical = True
-      self.theCriticalRationale = data
-      self.inCritical = 0
+      self.theSignificance += data
     elif self.inContext:
-      self.theContext = data
-      self.inContext = 0
+      self.theContext += data
     elif self.inProblem:
-      self.theProblem = data
-      self.inProblem = 0
+      self.theProblem += data
     elif self.inSolution:
-      self.theSolution = data
-      self.inSolution = 0
+      self.theSolution += data
     elif self.inRationale:
-      self.theRationale = data
-      self.inRationale = 0
+      self.theRationale += data
     elif self.inFitCriterion:
-      self.theFitCriterion = data
-      self.inFitCriterion = 0
+      self.theFitCriterion += data
 
   def endElement(self,name):
     if name == 'asset':
-      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.isCritical,self.theCriticalRationale,self.theConfidentialityValue,self.theIntegrityValue,self.theAvailabilityValue,self.theAccountabilityValue,self.theAnonymityValue,self.thePseudonymityValue,self.theUnlinkabilityValue,self.theUnobservabilityValue)
+      spDict = {}
+      spDict['confidentiality'] = (0,'None')
+      spDict['integrity'] = (0,'None')
+      spDict['availability'] = (0,'None')
+      spDict['accountability'] = (0,'None')
+      spDict['anonymity'] = (0,'None')
+      spDict['pseudonymity'] = (0,'None')
+      spDict['unlinkability'] = (0,'None')
+      spDict['unobservability'] = (0,'None')
+      for sp in self.theSecurityProperties:
+        spName = sp[0]
+        spValue = a2i(sp[1])
+        spRationale = sp[2]
+        if spName in spDict:
+          spDict[spName] = (spValue,spRationale)
+      spValues = []
+      spValues.append(spDict['confidentiality'])
+      spValues.append(spDict['integrity'])
+      spValues.append(spDict['availability'])
+      spValues.append(spDict['accountability'])
+      spValues.append(spDict['anonymity'])
+      spValues.append(spDict['pseudonymity'])
+      spValues.append(spDict['unlinkability'])
+      spValues.append(spDict['unobservability'])
+      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,spValues,self.theInterfaces)
       self.theAssets.append(p)
       self.resetAssetAttributes()
+    elif name == 'security_property':
+      self.theSecurityProperties.append((self.thePropertyName,self.thePropertyValue,self.theRationale))
+      self.resetSecurityPropertyAttributes()
     elif name == 'pattern':
       p = SecurityPatternParameters(self.theName,self.theContext,self.theProblem,self.theSolution,self.theRequirements,self.theStructure)
       self.theSecurityPatterns.append(p)
@@ -195,3 +227,17 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
     elif name == 'requirement':
       self.theRequirements.append((self.theReqName,self.theDescription,self.theType,self.theRationale,self.theFitCriterion,self.theAsset))
       self.resetRequirement()
+    elif name == 'description':
+      self.inDescription = 0
+    elif name == 'rationale':
+      self.inRationale = 0
+    elif name == 'significance':
+      self.inSignificance = 0
+    elif name == 'context':
+      self.inContext = 0
+    elif name == 'problem':
+      self.inProblem = 0
+    elif name == 'solution':
+      self.inSolution = 0
+    elif name == 'fit_criterion':
+      self.inFitCriterion = 0

@@ -21,6 +21,16 @@ from ComponentParameters import ComponentParameters
 from ComponentAssociationParameters import ComponentAssociationParameters
 from Borg import Borg
 
+def a2i(spLabel):
+  if spLabel == 'Low':
+    return 1
+  elif spLabel == 'Medium':
+    return 2
+  elif spLabel == 'High':
+    return 3
+  else:
+    return 0
+
 def it2Id(itLabel):
   if itLabel == 'required':
     return 1
@@ -56,15 +66,11 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
   def resetAssetAttributes(self):
     self.inDescription = 0
     self.inSignificance = 0
-    self.inCritical = 0
     self.theName = ''
     self.theShortCode = ''
     self.theAssetType = ''
-    self.isCritical = False
-    self.theCriticalRationale = ''
     self.theDescription = ''
     self.theSignificance = ''
-    self.theTags = []
     self.theInterfaces = []
     self.theSecurityProperties = []
 
@@ -136,7 +142,7 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
         spRationale = sp[2]
         if spName in spDict:
           spDict[spName] = (spValue,spRationale)
-      
+      spValues = [] 
       spValues.append(spDict['confidentiality'])
       spValues.append(spDict['integrity'])
       spValues.append(spDict['availability'])
@@ -149,15 +155,15 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
       self.theAssetParameters.append(p)
       self.resetAssetAttributes()
     elif name == 'security_property':
-      self.theSecurityProperties.append((self.theEnvironmentName,self.thePropertyName,self.thePropertyValue,self.theRationale))
+      self.theSecurityProperties.append((self.thePropertyName,self.thePropertyValue,self.theRationale))
       self.resetSecurityPropertyAttributes()
-
-
-
-
-
-
     if name == 'component_association':
       p = ComponentAssociationParameters(self.theFromName,self.theFromInterface,self.theToName,self.theToInterface)
       self.theAssociations.append(p)
       self.resetComponentAssociationAttributes() 
+    elif name == 'description':
+      self.inDescription = 0
+    elif name == 'rationale':
+      self.inRationale = 0
+    elif name == 'significance':
+      self.inSignificance = 0

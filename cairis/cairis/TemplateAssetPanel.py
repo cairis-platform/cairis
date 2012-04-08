@@ -42,10 +42,9 @@ class TemplateAssetPanel(wx.Panel):
     nbBox = wx.StaticBox(self,-1)
     nbSizer = wx.StaticBoxSizer(nbBox,wx.VERTICAL)
     mainSizer.Add(nbSizer,1,wx.EXPAND)
-    nbSizer.Add(AssetSummaryNotebook(self),1,wx.EXPAND)
+    nbSizer.Add(AssetSummaryNotebook(self,True),1,wx.EXPAND)
 
-    values = self.dbProxy.getDimensionNames('asset_value')
-    valueLookup = ValueDictionary(values)
+    valueLookup = ValueDictionary(['None','Low','Medium','High'])
     pBox = wx.StaticBox(self,-1)
     pSizer = wx.StaticBoxSizer(pBox,wx.VERTICAL)
     mainSizer.Add(pSizer,1,wx.EXPAND)
@@ -67,13 +66,8 @@ class TemplateAssetPanel(wx.Panel):
     descriptionCtrl.SetValue(asset.description())
     sigCtrl = self.FindWindowById(armid.ASSET_TEXTSIGNIFICANCE_ID)
     sigCtrl.SetValue(asset.significance())
-    criticalCtrl = self.FindWindowById(armid.ASSET_CHECKCRITICAL_ID)
-    criticalCtrl.SetValue(asset.critical())
     ifCtrl = self.FindWindowById(armid.ASSET_PAGEINTERFACE_ID)
     ifCtrl.load(asset.interfaces())
-    if (asset.critical() == True):
-      criticalRationaleCtrl = self.FindWindowById(armid.ASSET_TEXTCRITICALRATIONALE_ID)
-      criticalRationaleCtrl.Enable()
-      criticalRationaleCtrl.SetValue(asset.criticalRationale())
     propertiesCtrl = self.FindWindowById(armid.TEMPLATEASSET_LISTPROPERTIES_ID)
-    propertiesCtrl.load(asset.confidentialityProperty(),asset.integrityProperty(),asset.availabilityProperty(),asset.accountabilityProperty(),asset.anonymityProperty(),asset.pseudonymityProperty(),asset.unlinkabilityProperty(),asset.unobservabilityProperty())
+    propertiesCtrl.load(asset.properties())
+

@@ -17,31 +17,30 @@
 
 
 class TemplateAsset:
-  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,cFlag,cRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty,ifs,cRat = '',iRat = '',avRat = '',acRat = '',anRat = '',panRat = '',unlRat = '',unoRat = ''):
+  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,spValues,ifs):
     self.theId = assetId
     self.theName = assetName
     self.theShortCode = shortCode
     self.theDescription = assetDescription
     self.theSignificance = assetSig
     self.theType = assetType
-    self.isCritical = cFlag
-    self.theCriticalRationale = cRationale
-    self.theConfidentialityProperty = cProperty
-    self.theIntegrityProperty = iProperty
-    self.theAvailabilityProperty = avProperty
-    self.theAccountabilityProperty = acProperty
-    self.theAnonymityProperty = anProperty
-    self.thePseudonymityProperty = panProperty
-    self.theUnlinkabilityProperty = unlProperty
-    self.theUnobservabilityProperty = unoProperty
-    self.theConfidentialityRationale = cRat
-    self.theIntegrityRationale = iRat
-    self.theAvailabilityRationale = avRat
-    self.theAccountabilityRationale = acRat
-    self.theAnonymityRationale = anRat
-    self.thePseudonymityRationale = panRat
-    self.theUnlinkabilityRationale = unlRat
-    self.theUnobservabilityRationale = unoRat
+    self.theProperties = spValues
+    self.theConfidentialityProperty = spValues[0][0]
+    self.theConfidentialityRationale = spValues[0][1]
+    self.theIntegrityProperty = spValues[1][0]
+    self.theIntegrityRationale = spValues[1][0]
+    self.theAvailabilityProperty = spValues[2][0]
+    self.theAvailabilityRationale = spValues[2][1]
+    self.theAccountabilityProperty = spValues[3][0]
+    self.theAccountabilityRationale = spValues[3][1]
+    self.theAnonymityProperty = spValues[4][0]
+    self.theAnonymityRationale = spValues[4][1]
+    self.thePseudonymityProperty = spValues[5][0]
+    self.thePseudonymityRationale = spValues[5][1]
+    self.theUnlinkabilityProperty = spValues[6][0]
+    self.theUnlinkabilityRationale = spValues[6][1]
+    self.theUnobservabilityProperty = spValues[7][0]
+    self.theUnobservabilityRationale = spValues[7][1]
     self.theInterfaces = ifs
 
     self.valueLookup = {}
@@ -52,22 +51,30 @@ class TemplateAsset:
 
   def id(self): return self.theId
   def name(self): return self.theName
+  def properties(self): return self.theProperties
   def shortCode(self): return self.theShortCode
   def description(self): return self.theDescription
   def significance(self): return self.theSignificance
   def type(self): return self.theType
-  def critical(self): return self.isCritical
-  def criticalRationale(self): return self.theCriticalRationale
-  def confidentialityProperty(self): return self.theConfidentialityProperty
-  def integrityProperty(self): return self.theIntegrityProperty
-  def availabilityProperty(self): return self.theAvailabilityProperty
-  def accountabilityProperty(self): return self.theAccountabilityProperty
-  def anonymityProperty(self): return self.theAnonymityProperty
-  def pseudonymityProperty(self): return self.thePseudonymityProperty
-  def unlinkabilityProperty(self): return self.theUnlinkabilityProperty
-  def unobservabilityProperty(self): return self.theUnobservabilityProperty
-  def interfaces(self): return self.theInterfaces
 
+  def confidentialityProperty(self): return self.theConfidentialityProperty
+  def confidentialityRationale(self): return self.theConfidentialityRationale
+  def integrityProperty(self): return self.theIntegrityProperty
+  def integrityRationale(self): return self.theIntegrityRationale
+  def availabilityProperty(self): return self.theAvailabilityProperty
+  def availabilityRationale(self): return self.theAvailabilityRationale
+  def accountabilityProperty(self): return self.theAccountabilityProperty
+  def accountabilityRationale(self): return self.theAccountabilityRationale
+  def anonymityProperty(self): return self.theAnonymityProperty
+  def anonymityRationale(self): return self.theAnonymityRationale
+  def pseudonymityProperty(self): return self.thePseudonymityProperty
+  def pseudonymityRationale(self): return self.thePseudonymityRationale
+  def unlinkabilityProperty(self): return self.theUnlinkabilityProperty
+  def unlinkabilityRationale(self): return self.theUnlinkabilityRationale
+  def unobservabilityProperty(self): return self.theUnobservabilityProperty
+  def unobservabilityRationale(self): return self.theUnobservabilityRationale
+
+  def interfaces(self): return self.theInterfaces
   def securityProperties(self):
     cValue = self.valueLookup[self.theConfidentialityProperty]
     iValue = self.valueLookup[self.theIntegrityProperty]

@@ -19,16 +19,17 @@
 import ObjectCreationParameters
 
 class TemplateAssetParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,assetName,shortCode,assetDesc,assetSig,assetType,ifs,spValues):
+  def __init__(self,assetName,shortCode,assetDesc,assetSig,assetType,spValues,ifs):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = assetName
     self.theShortCode = shortCode
     self.theDescription = assetDesc
     self.theSignificance = assetSig
+    self.theProperties = spValues
     self.theConfidentialityProperty = spValues[0][0]
     self.theConfidentialityRationale = spValues[0][1]
     self.theIntegrityProperty = spValues[1][0]
-    self.theIntegrityRationale = spValues[1][0]
+    self.theIntegrityRationale = spValues[1][1]
     self.theAvailabilityProperty = spValues[2][0]
     self.theAvailabilityRationale = spValues[2][1]
     self.theAccountabilityProperty = spValues[3][0]
@@ -45,6 +46,7 @@ class TemplateAssetParameters(ObjectCreationParameters.ObjectCreationParameters)
     self.theInterfaces = ifs
 
   def name(self): return self.theName
+  def properties(self): return self.theProperties
   def shortCode(self): return self.theShortCode
   def description(self): return self.theDescription
   def significance(self): return self.theSignificance

@@ -30,24 +30,21 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
     self.SetColumnWidth(0,150)
     self.InsertColumn(1,'Value')
     self.SetColumnWidth(1,300)
+    self.InsertColumn(2,'Rationale')
+    self.SetColumnWidth(1,300)
     self.theDimMenu = wx.Menu()
     self.theDimMenu.Append(armid.PROPERTIESLISTCTRL_MENUADD_ID,'Add')
     self.theDimMenu.Append(armid.PROPERTIESLISTCTRL_MENUDELETE_ID,'Delete')
     self.theSelectedValue = ''
     self.theSelectedIdx = -1
     self.valueLookup = values
+
     self.setProperties = set([])
-    self.theConfidentialityValue = 'None'
-    self.theIntegrityValue = 'None'
-    self.theAvailabilityValue = 'None'
-    self.theAccountabilityValue = 'None'
-    self.theAnonymityValue = 'None'
-    self.thePseudonymityValue = 'None'
-    self.theUnlinkabilityValue = 'None'
-    self.theUnobservabilityValue = 'None'
     self.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK,self.OnRightDown)
     self.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnItemSelected)
     self.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.OnItemDeselected)
+    self.Bind(wx.EVT_LIST_ITEM_ACTIVATED,self.onItemActivated)
+
     wx.EVT_MENU(self.theDimMenu,armid.PROPERTIESLISTCTRL_MENUADD_ID,self.onAddProperty)
     wx.EVT_MENU(self.theDimMenu,armid.PROPERTIESLISTCTRL_MENUDELETE_ID,self.onDeleteProperty)
 
@@ -60,14 +57,35 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
   def OnRightDown(self,evt):
     self.PopupMenu(self.theDimMenu)
 
+  def onItemActivated(self,evt):
+    x = evt.GetIndex()
+    propertyName = self.GetItemText(x)
+    valueItem = self.GetItem(x,1)
+    rItem = self.GetItem(x,2)
+    dlg = PropertyDialog(self,self.setProperties,self.valueLookup.values())
+    dlg.load(propertyName,valueItem.GetText(),rItem.GetText())
+    if (dlg.ShowModal() == armid.PROPERTY_BUTTONADD_ID):
+      pName = dlg.property()
+      pValue = dlg.value()
+      pRationale = dlg.rationale()
+      idx = self.GetItemCount()
+      self.SetStringItem(x,0,pName)
+      self.SetStringItem(x,1,pValue)
+      self.SetStringItem(x,2,pRationale)
+      self.theSelectedValue = propertyName
+      self.setProperties.add(propertyName)
+
+
   def onAddProperty(self,evt):
     dlg = PropertyDialog(self,self.setProperties,self.valueLookup.values())
     if (dlg.ShowModal() == armid.PROPERTY_BUTTONADD_ID):
       propertyName = dlg.property()
       propertyValue = dlg.value()
+      pRationale = dlg.rationale()
       idx = self.GetItemCount()
       self.InsertStringItem(idx,propertyName)
       self.SetStringItem(idx,1,propertyValue)
+      self.SetStringItem(x,2,pRationale)
       self.theSelectedValue = propertyName
       self.setProperties.add(propertyName)
 
@@ -83,74 +101,111 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
       self.DeleteItem(self.theSelectedIdx)
       self.setProperties.remove(selectedValue)
 
-  def load(self,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty):
-    if (cProperty != 'None'):
+  def load(self,syProperties):
+    cProperty = syProperties[armid.C_PROPERTY][0]
+    cRationale = syProperties[armid.C_PROPERTY][1]
+    if (cProperty != armid.NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Confidentiality')
-      self.SetStringItem(idx,1,cProperty)
+      self.SetStringItem(idx,1,self.valueLookup.name(cProperty))
+      self.SetStringItem(idx,2,cRationale)
       self.setProperties.add('Confidentiality')
 
-    if (iProperty != 'None'):
+    iProperty = syProperties[armid.I_PROPERTY][0]
+    iRationale = syProperties[armid.I_PROPERTY][1]
+    if (iProperty != armid.NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Integrity')
-      self.SetStringItem(idx,1,iProperty)
+      self.SetStringItem(idx,1,self.valueLookup.name(iProperty))
+      self.SetStringItem(idx,2,iRationale)
       self.setProperties.add('Integrity')
 
-    if (avProperty != 'None'):
+    avProperty = syProperties[armid.AV_PROPERTY][0]
+    avRationale = syProperties[armid.AV_PROPERTY][1]
+    if (avProperty != armid.NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Availability')
-      self.SetStringItem(idx,1,avProperty)
+      self.SetStringItem(idx,1,self.valueLookup.name(avProperty))
+      self.SetStringItem(idx,2,avRationale)
       self.setProperties.add('Availability')
 
-    if (acProperty != 'None'):
+    acProperty = syProperties[armid.AC_PROPERTY][0]
+    acRationale = syProperties[armid.AC_PROPERTY][1]
+    if (acProperty != armid.NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Accountability')
-      self.SetStringItem(idx,1,acProperty)
+      self.SetStringItem(idx,1,self.valueLookup.name(acProperty))
+      self.SetStringItem(idx,2,acRationale)
       self.setProperties.add('Accountability')
 
-    if (anProperty != 'None'):
+    anProperty = syProperties[armid.AN_PROPERTY][0]
+    anRationale = syProperties[armid.AN_PROPERTY][1]
+    if (anProperty != armid.NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Anonymity')
-      self.SetStringItem(idx,1,anProperty)
+      self.SetStringItem(idx,1,self.valueLookup.name(anProperty))
+      self.SetStringItem(idx,2,anRationale)
       self.setProperties.add('Anonymity')
 
-    if (panProperty != 'None'):
+    panProperty = syProperties[armid.PAN_PROPERTY][0]
+    panRationale = syProperties[armid.PAN_PROPERTY][1]
+    if (panProperty != armid.NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Pseudonymity')
-      self.SetStringItem(idx,1,panProperty)
+      self.SetStringItem(idx,1,self.valueLookup.name(panProperty))
+      self.SetStringItem(idx,2,panRationale)
       self.setProperties.add('Pseudonymity')
 
-    if (unlProperty != 'None'):
+    unlProperty = syProperties[armid.UNL_PROPERTY][0]
+    unlRationale = syProperties[armid.UNL_PROPERTY][1]
+    if (unlProperty != armid.NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Unlinkability')
-      self.SetStringItem(idx,1,unlProperty)
+      self.SetStringItem(idx,1,self.valueLookup.name(unlProperty))
+      self.SetStringItem(idx,2,unlRationale)
       self.setProperties.add('Unlinkability')
 
-    if (unoProperty != 'None'):
+    unoProperty = syProperties[armid.UNO_PROPERTY][0]
+    unoRationale = syProperties[armid.UNO_PROPERTY][1]
+    if (unoProperty != armid.NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Unobservability')
-      self.SetStringItem(idx,1,unoProperty)
+      self.SetStringItem(idx,1,self.valueLookup.name(unoProperty))
+      self.SetStringItem(idx,2,unoRationale)
       self.setProperties.add('Unobservability')
 
+
   def properties(self):
+    cProp = iProp = avProp = acProp = anProp = panProp = unlProp = unoProp = 0
+    cRat = iRat = avRat = acRat = anRat = panRat = unlRat = unoRat = 0
     for x in range(self.GetItemCount()):
       propertyName = self.GetItemText(x)
       valueItem = self.GetItem(x,1)
+      rItem = self.GetItem(x,2)
       propertyValue = valueItem.GetText()
+      propertyRationale = rItem.GetText()
       if (propertyName == 'Confidentiality'):
-        self.theConfidentialityValue = propertyValue 
+        cProp = self.valueLookup.id(propertyValue)
+        cRat = propertyRationale
       elif (propertyName == 'Integrity'):
-        self.theIntegrityValue = propertyValue 
+        iProp = self.valueLookup.id(propertyValue)
+        iRat = propertyRationale
       elif (propertyName == 'Availability'):
-        self.theAvailabilityValue = propertyValue 
+        avProp = self.valueLookup.id(propertyValue)
+        avRat = propertyRationale
       elif (propertyName == 'Accountability'):
-        self.theAccountabilityValue = propertyValue 
+        acProp = self.valueLookup.id(propertyValue)
+        acRat = propertyRationale
       elif (propertyName == 'Anonymity'):
-        self.theAnonymityValue = propertyValue 
+        anProp = self.valueLookup.id(propertyValue)
+        anRat = propertyRationale
       elif (propertyName == 'Pseudonymity'):
-        self.thePseudonymityValue = propertyValue 
+        panProp = self.valueLookup.id(propertyValue)
+        panRat = propertyRationale
       elif (propertyName == 'Unlinkability'):
-        self.theUnlinkabilityValue = propertyValue 
+        unlProp = self.valueLookup.id(propertyValue)
+        unlRat = propertyRationale
       elif (propertyName == 'Unobservability'):
-        self.theUnobservabilityValue = propertyValue 
-    return [self.theConfidentialityValue,self.theIntegrityValue,self.theAvailabilityValue,self.theAccountabilityValue,self.theAnonymityValue,self.thePseudonymityValue,self.theUnlinkabilityValue,self.theUnobservabilityValue]
+        unoProp = self.valueLookup.id(propertyValue)
+        unoRat = propertyRationale
+    return [(cProp,cRat),(iProp,iRat),(avProp,avRat),(acProp,acRat),(anProp,anRat),(panProp,panRat),(unlProp,unlRat),(unoProp,unoRat)]

@@ -669,6 +669,9 @@ drop procedure if exists interfaceNames;
 drop procedure if exists deleteInterfaces;
 drop procedure if exists addInterface;
 drop procedure if exists getInterfaces;
+drop procedure if exists add_template_asset_properties;
+drop procedure if exists delete_template_asset_properties;
+drop procedure if exists template_assetProperties;
 
 delimiter //
 
@@ -9763,53 +9766,21 @@ begin
 end
 //
 
-create procedure addTemplateAsset(in assetId int,in assetName text, in shortCode text, in assetDesc text, in assetSignificance text,in assetType text,in cFlag int,in cRationale text, in cProperty text, in iProperty text, in avProperty text, in acProperty text, in anProperty text, in panProperty text, in unlProperty text, in unoProperty text)
+create procedure addTemplateAsset(in assetId int,in assetName text, in shortCode text, in assetDesc text, in assetSignificance text,in assetType text)
 begin
   declare assetTypeId int;
-  declare cPropertyId int;
-  declare iPropertyId int;
-  declare avPropertyId int;
-  declare acPropertyId int;
-  declare anPropertyId int;
-  declare panPropertyId int;
-  declare unlPropertyId int;
-  declare unoPropertyId int;
   select id into assetTypeId from asset_type where name = assetType;
-  select id into cPropertyId from security_property_value where name = cProperty;
-  select id into iPropertyId from security_property_value where name = iProperty;
-  select id into avPropertyId from security_property_value where name = avProperty;
-  select id into acPropertyId from security_property_value where name = acProperty;
-  select id into anPropertyId from security_property_value where name = anProperty;
-  select id into panPropertyId from security_property_value where name = panProperty;
-  select id into unlPropertyId from security_property_value where name = unlProperty;
-  select id into unoPropertyId from security_property_value where name = unoProperty;
   
-  insert into template_asset(id,name,short_code,description,significance,asset_type_id,is_critical,critical_rationale,confidentiality_value_id,integrity_value_id,availability_value_id,accountability_value_id,anonymity_value_id,pseudonymity_value_id,unlinkability_value_id,unobservability_value_id) values (assetId,assetName,shortCode,assetDesc,assetSignificance,assetTypeId,cFlag,cRationale,cPropertyId,iPropertyId,avPropertyId,acPropertyId,anPropertyId,panPropertyId,unlPropertyId,unoPropertyId);
+  insert into template_asset(id,name,short_code,description,significance,asset_type_id) values (assetId,assetName,shortCode,assetDesc,assetSignificance,assetTypeId);
 end
 //
 
-create procedure updateTemplateAsset(in assetId int,in assetName text, in shortCode text, in assetDesc text, in assetSignificance text,in assetType text,in cFlag int,in cRationale text, in cProperty text, in iProperty text, in avProperty text, in acProperty text, in anProperty text, in panProperty text, in unlProperty text, in unoProperty text)
+create procedure updateTemplateAsset(in assetId int,in assetName text, in shortCode text, in assetDesc text, in assetSignificance text,in assetType text)
 begin
   declare assetTypeId int;
-  declare cPropertyId int;
-  declare iPropertyId int;
-  declare avPropertyId int;
-  declare acPropertyId int;
-  declare anPropertyId int;
-  declare panPropertyId int;
-  declare unlPropertyId int;
-  declare unoPropertyId int;
   select id into assetTypeId from asset_type where name = assetType;
-  select id into cPropertyId from security_property_value where name = cProperty;
-  select id into iPropertyId from security_property_value where name = iProperty;
-  select id into avPropertyId from security_property_value where name = avProperty;
-  select id into acPropertyId from security_property_value where name = acProperty;
-  select id into anPropertyId from security_property_value where name = anProperty;
-  select id into panPropertyId from security_property_value where name = panProperty;
-  select id into unlPropertyId from security_property_value where name = unlProperty;
-  select id into unoPropertyId from security_property_value where name = unoProperty;
   
-  update template_asset set name = assetName, short_code = shortCode, description = assetDesc, significance = assetSignificance,asset_type_id = assetTypeId,is_critical = cFlag,critical_rationale = cRationale, confidentiality_value_id = cPropertyId, integrity_value_id = iPropertyId, availability_value_id = avPropertyId, accountability_value_id = acPropertyId, anonymity_value_id = anPropertyId, pseudonymity_value_id = panPropertyId, unlinkability_value_id = unlPropertyId, unobservability_value_id = unoPropertyId where id = assetId;
+  update template_asset set name = assetName, short_code = shortCode, description = assetDesc, significance = assetSignificance,asset_type_id = assetTypeId where id = assetId;
 end
 //
 
@@ -9833,9 +9804,9 @@ create procedure getTemplateAssets(in constraintId int)
 begin
   if constraintId = -1
   then
-    select a.id,a.name,a.short_code,a.description,a.significance,at.name,a.is_critical,a.critical_rationale,cv.name,iv.name,avv.name,acv.name,anv.name,panv.name,unlv.name,unov.name from template_asset a,asset_type at,security_property_value cv, security_property_value iv, security_property_value avv, security_property_value acv, security_property_value anv, security_property_value panv, security_property_value unlv, security_property_value unov where a.asset_type_id = at.id and a.confidentiality_value_id = cv.id and a.integrity_value_id = iv.id and a.availability_value_id = avv.id and a.accountability_value_id = acv.id and a.anonymity_value_id = anv.id and a.pseudonymity_value_id = panv.id and a.unlinkability_value_id = unlv.id and a.unobservability_value_id = unov.id;
+    select a.id,a.name,a.short_code,a.description,a.significance,at.name from template_asset a, asset_type at where a.asset_type_id = at.id;
   else
-    select a.id,a.name,a.short_code,a.description,a.significance,at.name,a.is_critical,a.critical_rationale,cv.name,iv.name,avv.name,acv.name,anv.name,panv.name,unlv.name,unov.name from template_asset a,asset_type at,security_property_value cv, security_property_value iv, security_property_value avv, security_property_value acv, security_property_value anv, security_property_value panv, security_property_value unlv, security_property_value unov where a.id = constraintId and a.asset_type_id = at.id and a.confidentiality_value_id = cv.id and a.integrity_value_id = iv.id and a.availability_value_id = avv.id and a.accountability_value_id = acv.id and a.anonymity_value_id = anv.id and a.pseudonymity_value_id = panv.id and a.unlinkability_value_id = unlv.id and a.unobservability_value_id = unov.id;
+    select a.id,a.name,a.short_code,a.description,a.significance,at.name from template_asset a,asset_type at where a.id = constraintId and a.asset_type_id = at.id;
   end if;
 end
 //
@@ -17886,4 +17857,53 @@ begin
 end
 //
 
+create procedure add_template_asset_properties(in assetId int, in cProperty int, in iProperty int, in avProperty int, in acProperty int, in anProperty int, in panProperty int, in unlProperty int, in unoProperty int, in cRationale text, in iRationale text, in avRationale text, in acRationale text, in anRationale text, in panRationale text, in unlRationale text, in unoRationale text)
+begin
+  insert into template_asset_property(template_asset_id,property_id,property_value_id,property_rationale) values(assetId,0,cProperty,cRationale);
+  insert into template_asset_property(template_asset_id,property_id,property_value_id,property_rationale) values(assetId,1,iProperty,iRationale);
+  insert into template_asset_property(template_asset_id,property_id,property_value_id,property_rationale) values(assetId,2,avProperty,avRationale);
+  insert into template_asset_property(template_asset_id,property_id,property_value_id,property_rationale) values(assetId,3,acProperty,acRationale);
+  insert into template_asset_property(template_asset_id,property_id,property_value_id,property_rationale) values(assetId,4,anProperty,anRationale);
+  insert into template_asset_property(template_asset_id,property_id,property_value_id,property_rationale) values(assetId,5,panProperty,panRationale);
+  insert into template_asset_property(template_asset_id,property_id,property_value_id,property_rationale) values(assetId,6,unlProperty,unlRationale);
+  insert into template_asset_property(template_asset_id,property_id,property_value_id,property_rationale) values(assetId,7,unoProperty,unoRationale);
+end
+//
+
+create procedure delete_template_asset_properties(in assetId int)
+begin
+  delete from template_asset_property where asset_id = assetId;
+end
+//
+
+create procedure template_assetProperties(in assetId int)
+begin
+  declare cProperty int;
+  declare iProperty int;
+  declare avProperty int;
+  declare acProperty int;
+  declare anProperty int;
+  declare panProperty int;
+  declare unlProperty int;
+  declare unoProperty int;
+  declare cRationale varchar(4000);
+  declare iRationale varchar(4000);
+  declare avRationale varchar(4000);
+  declare acRationale varchar(4000);
+  declare anRationale varchar(4000);
+  declare panRationale varchar(4000);
+  declare unlRationale varchar(4000);
+  declare unoRationale varchar(4000);
+
+  select property_value_id,property_rationale into cProperty,cRationale from template_asset_property where template_asset_id = assetId and property_id = 0;
+  select property_value_id,property_rationale into iProperty,iRationale from template_asset_property where template_asset_id = assetId and property_id = 1;
+  select property_value_id,property_rationale into avProperty,avRationale from template_asset_property where template_asset_id = assetId and property_id = 2;
+  select property_value_id,property_rationale into acProperty,acRationale from template_asset_property where template_asset_id = assetId and property_id = 3;
+  select property_value_id,property_rationale into anProperty,anRationale from template_asset_property where template_asset_id = assetId and property_id = 4;
+  select property_value_id,property_rationale into panProperty,panRationale from template_asset_property where template_asset_id = assetId and property_id = 5;
+  select property_value_id,property_rationale into unlProperty,unlRationale from template_asset_property where template_asset_id = assetId and property_id = 6;
+  select property_value_id,property_rationale into unoProperty,unoRationale from template_asset_property where template_asset_id = assetId and property_id = 7;
+  select ifnull(cProperty,0),ifnull(iProperty,0),ifnull(avProperty,0),ifnull(acProperty,0),ifnull(anProperty,0),ifnull(panProperty,0),ifnull(unlProperty,0),ifnull(unoProperty,0),cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale;
+end
+//
 delimiter ;

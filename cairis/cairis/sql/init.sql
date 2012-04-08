@@ -68,6 +68,7 @@ DROP TABLE IF EXISTS countermeasure_securitypattern;
 DROP TABLE IF EXISTS securitypattern_classassociation;
 DROP TABLE IF EXISTS securitypattern_requirement;
 DROP TABLE IF EXISTS securitypattern;
+DROP TABLE IF EXISTS template_asset_property;
 DROP TABLE IF EXISTS template_asset;
 DROP TABLE IF EXISTS project_dictionary;
 DROP TABLE IF EXISTS project_setting;
@@ -1808,26 +1809,18 @@ CREATE TABLE template_asset (
   description VARCHAR(1000),
   significance VARCHAR(1000),
   asset_type_id INT NOT NULL,
-  is_critical INT NOT NULL,
-  critical_rationale VARCHAR(1000),
-  confidentiality_value_id INT NOT NULL,
-  integrity_value_id INT NOT NULL,
-  availability_value_id INT NOT NULL,
-  accountability_value_id INT NOT NULL,
-  anonymity_value_id INT NOT NULL,
-  pseudonymity_value_id INT NOT NULL,
-  unlinkability_value_id INT NOT NULL,
-  unobservability_value_id INT NOT NULL,
   PRIMARY KEY(id),
-  FOREIGN KEY(asset_type_id) REFERENCES asset_type(id),
-  FOREIGN KEY(confidentiality_value_id) REFERENCES security_property_value(id),
-  FOREIGN KEY(integrity_value_id) REFERENCES security_property_value(id),
-  FOREIGN KEY(availability_value_id) REFERENCES security_property_value(id),
-  FOREIGN KEY(accountability_value_id) REFERENCES security_property_value(id),
-  FOREIGN KEY(anonymity_value_id) REFERENCES security_property_value(id),
-  FOREIGN KEY(pseudonymity_value_id) REFERENCES security_property_value(id),
-  FOREIGN KEY(unlinkability_value_id) REFERENCES security_property_value(id),
-  FOREIGN KEY(unobservability_value_id) REFERENCES security_property_value(id)
+  FOREIGN KEY(asset_type_id) REFERENCES asset_type(id)
+) ENGINE=INNODB;
+CREATE TABLE template_asset_property (
+  template_asset_id INT NOT NULL,
+  property_id INT NOT NULL,
+  property_value_id INT NOT NULL,
+  property_rationale varchar(4000),
+  PRIMARY KEY(template_asset_id,property_id),
+  FOREIGN KEY(template_asset_id) REFERENCES template_asset(id),
+  FOREIGN KEY(property_id) REFERENCES security_property(id),
+  FOREIGN KEY(property_value_id) REFERENCES security_property_value(id)
 ) ENGINE=INNODB;
 CREATE TABLE securitypattern (
   id INT NOT NULL,

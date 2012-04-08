@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE security_pattern PUBLIC "-//CAIRIS//DTD SECURITYPATTERN 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/securitypattern.dtd">
+<!DOCTYPE security_patterns PUBLIC "-//CAIRIS//DTD SECURITYPATTERN 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/securitypattern.dtd">
 
 <!-- 
   Licensed to the Apache Software Foundation (ASF) under one
@@ -22,61 +22,179 @@
 
 
 <security_patterns>
-<asset name="PFFirewall" short_code ="PFF" asset_type = "Software" confidentiality="None" integrity="Medium" availability="High" accountability="None" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="PFFirewall" short_code ="PFF" type = "Software">
   <description>Intercepts all traffic coming and going from a port P and inspects its packets.</description>
   <significance>Effectiveness and speed may be limited due to its rule set.  Can only enforce traffic going through the firewall.  Can't stop attacks at anything higher than an IP level.  Performance impact due to analysing each and every packet.</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="RuleBase" short_code ="FRB" asset_type = "Software" confidentiality="None" integrity="Medium" availability="High" accountability="None" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="RuleBase" short_code ="FRB" type = "Software">
   <description>Encapsulates data structures and operations to manage rules in a conventional way.</description>
   <significance>Addition of new rules may interfere with existing rules, so a careful approach should be taken in adding and updating access rules.</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="Rule" short_code ="FR" asset_type = "Information" confidentiality="None" integrity="None" availability="High" accountability="None" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="Rule" short_code ="FR" type = "Information">
   <description>Encapsulates organisational policy.</description>
+  <significance>None</significance>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="ExternalHost" short_code ="EH" asset_type = "Systems" confidentiality="None" integrity="None" availability="None" accountability="None" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="ExternalHost" short_code ="EH" type = "Systems">
   <description>External Host interface</description>
+  <significance>None</significance>
 </asset>
-<asset name="LocalHost" short_code ="LH" asset_type = "Systems" confidentiality="None" integrity="None" availability="None" accountability="None" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="LocalHost" short_code ="LH" type = "Systems">
   <description>Local Host interface</description>
+  <significance>None</significance>
 </asset>
-<asset name="Proxy-Based Firewall" short_code ="PBF" asset_type = "Systems" confidentiality="None" integrity="Medium" availability="High" accountability="None" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="Proxy-Based Firewall" short_code = "PBF" type = "Systems">
   <description>Inspects and filters incoming and outgoing network traffic based on the type of application service to be accessed, or performing the access.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="Service" short_code ="GS" asset_type = "Software" confidentiality="None" integrity="None" availability="None" accountability="None" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="Service" short_code ="GS" type = "Software">
   <description>Service interface</description>
+  <significance>None</significance>
 </asset>
-<asset name="Proxy" short_code ="GP" asset_type = "Software" confidentiality="None" integrity="None" availability="None" accountability="None" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="Proxy" short_code ="GP" type = "Software">
   <description>Proxy interface</description>
+  <significance>None</significance>
 </asset>
-<asset name="Stateful Firewall" short_code ="SFF" asset_type = "Systems" confidentiality="None" integrity="Medium" availability="High" accountability="None" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="Stateful Firewall" short_code ="SFF" type = "Systems">
   <description>Filters incoming and outgoing network traffic in a computer system based on state information derived from past communications.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="State Table" short_code ="SFT" asset_type = "Information" confidentiality="None" integrity="High" availability="High" accountability="None" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="State Table" short_code ="SFT" type = "Information">
   <description>Describes existing network connections.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="Client browser" short_code = "GCB" asset_type = "Software" confidentiality="None" integrity="Medium" availability="Medium" accountability="None" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="Client browser" short_code = "GCB" type = "Software">
   <description>Vanilla web-browser used by end-user.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="External router" short_code = "GER" asset_type = "Software" confidentiality="None" integrity="High" availability="High" accountability="Low" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="External router" short_code = "GER" type = "Software">
   <description>External filtering router, whose principle responsibility is to ensure thal all inbound traffic is directed to the firewall. Its secondary responsibility may be to keep out random traffic generated by attackers.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="Firewall" short_code = "GF" asset_type = "Software" confidentiality="None" integrity="High" availability="High" accountability="Low" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="Firewall" short_code = "GF" type = "Software">
   <description>Responsible for receiving inbound requests from the external router and subjecting them to more sophisticated analysis, such as stateful inspection.  Legitimate requests are forwarded to an appropriate web server.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="Web Server" short_code = "GWS" asset_type = "Software" confidentiality="None" integrity="High" availability="High" accountability="Medium" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="Web Server" short_code = "GWS" type = "Software">
   <description>Provides access to application functionality and information.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="Internal router" short_code = "GIR" asset_type = "Software" confidentiality="None" integrity="High" availability="High" accountability="Low" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="Internal router" short_code = "GIR" type = "Software">
   <description>Internal filtering router, whose principle responsibility is to ensure it only passes legitimate traffic from the Wb servers through to the internal network.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="Application Server" short_code = "GAS" asset_type = "Software" confidentiality="None" integrity="High" availability="High" accountability="Low" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="Application Server" short_code = "GAS" type = "Software">
   <description>A platform on which the application's code runs, typically in the form of Web components.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="Reverse Proxy" short_code = "GRP" asset_type = "Software" confidentiality="None" integrity="High" availability="High" accountability="Low" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="Reverse Proxy" short_code = "GRP" type = "Software">
   <description>Reverse Proxy</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
-<asset name="BackEnd Server" short_code = "GBS" asset_type = "Systems" confidentiality="None" integrity="High" availability="High" accountability="Low" anonymity="None" pseudonymity="None" unlinkability="None" unobservability="None">
+<asset name="BackEnd Server" short_code = "GBS" type = "Systems">
   <description>Back-end server</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
 </asset>
 <pattern name = "Packet Filter Firewall">
   <context>Computer systems on a local network connected to the Internet and to other networks with different levels of trust.  A host in a local network receives and sends traffic to other networks.  This traffic has several layers or levels.  THe most basic level is the IP level, made up of packets consisting of headers and bodies (payloads).  The headers include the source and destination addresses as well as other routing information, while the bodies include the message payloads.</context>
