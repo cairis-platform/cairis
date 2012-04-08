@@ -93,9 +93,13 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name']
     elif (name == 'description'):
       self.inDescription = 1
+      self.theDescription = ''
     elif name == 'significance':
       self.inSignificance = 1
       self.theSignificance = ''
+    elif name == 'rationale':
+      self.inRationale = 1
+      self.theRationale = ''
     elif name == 'interface':
       self.theInterfaces.append((attrs['name'],it2Id(attrs['type'])))
     elif name == 'asset':
