@@ -11834,6 +11834,9 @@ begin
   declare assetSignif varchar(1000);
   declare assetType varchar(50);
   declare isCritical int;
+  declare ifName varchar(255);
+  declare reqId int;
+  declare ifType varchar(50);
   declare assetCr varchar(1000);
   declare cProperty varchar(50);
   declare iProperty varchar(50);
@@ -11891,6 +11894,7 @@ begin
   declare tailNav int;
   declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE riskanalysis PUBLIC "-//CAIRIS//DTD RISKANALYSIS 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/riskanalysis.dtd">\n\n<riskanalysis>\n';
   declare done int default 0;
+  declare assetIFCursor cursor for select i.name,ai.required_id from asset_interface ai, interface i where ai.asset_id = assetId and ai.interface_id = i.id;
   declare assetTagCursor cursor for select t.name from asset_tag at, tag t where at.asset_id = assetId and at.tag_id = t.id;
   declare attackerTagCursor cursor for select t.name from attacker_tag at, tag t where at.attacker_id = attackerId and at.tag_id = t.id;
   declare vulTagCursor cursor for select t.name from vulnerability_tag vt, tag t where vt.vulnerability_id = vulId and vt.tag_id = t.id;
@@ -11960,6 +11964,24 @@ begin
     set done = 0;
 
     set buf = concat(buf,'  <significance>',assetSignif,'</significance>\n  <critical_rationale>',assetCr,'</critical_rationale>\n');
+
+    open assetIFCursor;
+    assetIF_loop: loop
+      fetch assetIFCursor into ifName,reqId;
+      if done = 1
+      then
+        leave assetIF_loop;
+      end if;
+      if reqId = 1
+      then
+        set ifType = 'required';
+      else
+        set ifType = 'provided';
+      end if;
+      set buf = concat(buf,'  <interface name=\"',ifName,'\" type=\"',ifType,'\" />\n');
+    end loop assetIF_loop;
+    close assetIFCursor;
+    set done = 0;
 
     open assetEnvCursor;
     assetEnv_loop: loop
