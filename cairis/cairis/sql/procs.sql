@@ -666,6 +666,9 @@ drop procedure if exists addComponent;
 drop procedure if exists addComponentInterface;
 drop procedure if exists addComponentAssociation;
 drop procedure if exists interfaceNames;
+drop procedure if exists deleteInterfaces;
+drop procedure if exists addInterface;
+drop procedure if exists getInterfaces;
 
 delimiter //
 
@@ -2170,6 +2173,7 @@ create procedure deleteAssetComponents(in assetId int)
 begin
   delete from environment_asset where asset_id = assetId;
   delete from asset_property where asset_id = assetId;
+  delete from asset_interface where asset_id = assetId;
   delete from classassociation where head_id = assetId;
 end
 //
@@ -17712,7 +17716,6 @@ begin
   prepare stmt from @sql;
   execute stmt;
   deallocate prepare stmt;
-
 end
 //
 
@@ -17777,6 +17780,85 @@ end
 create procedure interfaceNames(in envName text)
 begin
   select name from interface order by 1;
+end
+//
+
+create procedure deleteInterfaces(in ifObjt text, in ifDim text)
+begin
+  declare dimIdSql varchar(4000);
+  declare deleteIfsSql varchar(4000);
+  declare dimId int;
+
+  set dimIdSql = concat('select id into @dimId from ',ifDim,' where name = "',ifObjt,'"');
+  set @sql = dimIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set dimId = @dimId;
+
+  set deleteIfsSql = concat('delete from ',ifDim,'_interface where ',ifDim,'_id = ',dimId);
+  set @sql = deleteIfsSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+end
+//
+
+create procedure addInterface(in ifObjt text, in ifName text, in ifType text, in ifDim text)
+begin
+  declare dimIdSql varchar(4000);
+  declare addIfSql varchar(4000);
+  declare dimId int;
+  declare ifId int;
+  declare reqId int default 0;
+
+  set dimIdSql = concat('select id into @dimId from ',ifDim,' where name = "',ifObjt,'"');
+  set @sql = dimIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set dimId = @dimId;
+  select id into ifId from interface where name = ifName limit 1;
+  if ifId is null
+  then
+    call newId2(ifId);
+    insert into interface (id,name) values (ifId,ifName);
+  end if;
+
+  if ifType = 'Required'
+  then
+    set reqId = 1;
+  else
+    set reqId = 0;
+  end if;
+  
+  set addIfSql = concat('insert into ',ifDim,'_interface (',ifDim,'_id, interface_id,required_id) values(',dimId,',',ifId,',',reqId,')');
+  select addIfSql;
+  set @sql = addIfSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+end
+//
+
+create procedure getInterfaces(in dimObjt text, in dimName text)
+begin
+  declare dimIdSql varchar(4000);
+  declare getIfsSql varchar(4000);
+  declare dimId int;
+
+  set dimIdSql = concat('select id into @dimId from ',dimName,' where name = "',dimObjt,'"');
+  set @sql = dimIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set dimId = @dimId;
+
+  set getIfsSql = concat('select i.name,di.required_id from ',dimName,'_interface di, interface i where di.',dimName,'_id = ',dimId,' and di.interface_id = i.id');
+  set @sql = getIfsSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
 end
 //
 

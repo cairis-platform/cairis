@@ -403,7 +403,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
         unoProperty,unoRationale = spDict['unobservability']
         ep = AssetEnvironmentProperties(envName,[cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty],[cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale])
         self.theEnvironmentProperties.append(ep)
-      p = AssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.isCritical,self.theCriticalRationale,self.theTags,self.theEnvironmentProperties)
+      p = AssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.isCritical,self.theCriticalRationale,self.theTags,[],self.theEnvironmentProperties)
       self.theAssetParameters.append(p)
       self.resetAssetAttributes()
     elif name == 'security_property':

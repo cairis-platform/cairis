@@ -1012,6 +1012,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     assetCriticality = parameters.critical()
     assetCriticalRationale = parameters.criticalRationale()
     tags = parameters.tags()
+    ifs = parameters.interfaces()
     try:
       curs = self.conn.cursor()
       curs.execute('call addAsset(%s,%s,%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale))
@@ -1019,6 +1020,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error adding new asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
       self.addTags(assetName,'asset',tags)
+      self.addInterfaces(assetName,'asset',ifs)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(assetId,'asset',environmentName)
@@ -1042,6 +1044,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     assetCriticality = parameters.critical()
     assetCriticalRationale = parameters.criticalRationale()
     tags = parameters.tags()
+    ifs = parameters.interfaces()
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteAssetComponents(%s)',(assetId))
@@ -1055,6 +1058,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error updating asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
       self.addTags(assetName,'asset',tags)
+      self.addInterfaces(assetName,'asset',ifs)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(assetId,'asset',environmentName)
@@ -1219,13 +1223,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
       for assetName,assetId,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale in assetRows:
         tags = self.getTags(assetName,'asset')
+        ifs = self.getInterfaces(assetName,'asset')
         environmentProperties = []
         for environmentId,environmentName in self.dimensionEnvironments(assetId,'asset'):
           syProperties,pRationale = self.relatedProperties('asset',assetId,environmentId)
           assetAssociations = self.assetAssociations(assetId,environmentId)
           properties = AssetEnvironmentProperties(environmentName,syProperties,pRationale,assetAssociations)
           environmentProperties.append(properties) 
-        parameters = AssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,tags,environmentProperties)
+        parameters = AssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,tags,ifs,environmentProperties)
         asset = ObjectFactory.build(assetId,parameters)
         assets[assetName] = asset
       return assets
@@ -8668,4 +8673,64 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding association from component ' + fromName + ' to component ' + toName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getInterfaces(self,dimObjt,dimName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getInterfaces(%s,%s)',(dimObjt,dimName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting interfaces for ' + dimName + ' ' + dimObjt
+        raise DatabaseProxyException(exceptionText) 
+      else:
+        tags = []
+        for row in curs.fetchall():
+          row = list(row)
+          ifName = row[0]
+          ifTypeId = row[1]
+          ifType = 'Provided'
+          if (ifTypeId == 1):
+            ifType = 'Required'
+          tags.append((ifName,ifType))
+        curs.close()
+        return tags
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting interfaces for ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addInterfaces(self,dimObjt,dimName,ifs):
+    try:
+      self.deleteInterfaces(dimObjt,dimName)
+      for ifName,ifType in ifs:
+        self.addInterface(dimObjt,ifName,ifType,dimName)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding interfaces to ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteInterfaces(self,ifName,ifDim):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call deleteInterfaces(%s,%s)',(ifName,ifDim))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error deleting interfaces from ' + ifDim + ' ' + ifName
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error deleting interfaces from ' + ifDim + ' ' + ifName +  ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addInterface(self,ifObjt,ifName,ifType,ifDim):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addInterface(%s,%s,%s,%s)',(ifObjt,ifName,ifType,ifDim))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding interface ' + ifName + ' to ' + ifDim + ' ' + ifObjt
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding interface ' + ifName + ' to ' + ifDim + ' ' + ifObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

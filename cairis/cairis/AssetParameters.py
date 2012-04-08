@@ -19,7 +19,7 @@
 import ObjectCreationParameters
 
 class AssetParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,assetName,shortCode,assetDesc,assetSig,assetType,cFlag,cRationale,tags,cProperties):
+  def __init__(self,assetName,shortCode,assetDesc,assetSig,assetType,cFlag,cRationale,tags,ifs,cProperties):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = assetName
     self.theShortCode = shortCode
@@ -30,6 +30,7 @@ class AssetParameters(ObjectCreationParameters.ObjectCreationParameters):
     self.isCritical = cFlag
     self.theCriticalRationale = cRationale
     self.theTags = tags
+    self.theInterfaces = ifs
 
   def name(self): return self.theName
   def shortCode(self): return self.theShortCode
@@ -40,3 +41,4 @@ class AssetParameters(ObjectCreationParameters.ObjectCreationParameters):
   def critical(self): return self.isCritical
   def criticalRationale(self): return self.theCriticalRationale
   def tags(self): return self.theTags
+  def interfaces(self): return self.theInterfaces

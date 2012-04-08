@@ -56,6 +56,8 @@ class AssetPanel(BasePanel):
     nameCtrl.SetValue(asset.name())
     tagsCtrl = self.FindWindowById(armid.ASSET_TAGS_ID)
     tagsCtrl.set(asset.tags())
+    ifCtrl = self.FindWindowById(armid.ASSET_PAGEINTERFACE_ID)
+    ifCtrl.load(asset.interfaces())
     shortCodeCtrl = self.FindWindowById(armid.ASSET_TEXTSHORTCODE_ID)
     shortCodeCtrl.SetValue(asset.shortCode())
     typeCtrl = self.FindWindowById(armid.ASSET_COMBOTYPE_ID)

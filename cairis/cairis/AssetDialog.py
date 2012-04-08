@@ -33,6 +33,7 @@ class AssetDialog(wx.Dialog):
     self.theAssetSignificance = ''
     self.theType = ''
     self.theTags = []
+    self.theInterfaces = []
     self.theCriticalIndicator = False
     self.theCriticalRationale = ''
     self.theEnvironmentProperties = []
@@ -64,6 +65,7 @@ class AssetDialog(wx.Dialog):
     typeCtrl = self.FindWindowById(armid.ASSET_COMBOTYPE_ID)
     criticalCtrl = self.FindWindowById(armid.ASSET_CHECKCRITICAL_ID)
     criticalRationaleCtrl = self.FindWindowById(armid.ASSET_TEXTCRITICALRATIONALE_ID)
+    interfacesCtrl = self.FindWindowById(armid.ASSET_PAGEINTERFACE_ID)
     environmentCtrl = self.FindWindowById(armid.ASSET_PANELENVIRONMENT_ID)
     self.theAssetName = nameCtrl.GetValue()
     if (self.commitVerb == 'Add'):
@@ -82,6 +84,7 @@ class AssetDialog(wx.Dialog):
     self.theType = typeCtrl.GetValue()
     self.theCriticalIndicator = criticalCtrl.GetValue()
     self.theCriticalRationale = criticalRationaleCtrl.GetValue()
+    self.theInterfaces = interfacesCtrl.dimensions()
     self.theEnvironmentProperties = environmentCtrl.environmentProperties()
 
     if len(self.theAssetName) == 0:
@@ -120,6 +123,6 @@ class AssetDialog(wx.Dialog):
       self.EndModal(armid.ASSET_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = AssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theCriticalIndicator,self.theCriticalRationale,self.theTags,self.theEnvironmentProperties)
+    parameters = AssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theCriticalIndicator,self.theCriticalRationale,self.theTags,self.theInterfaces,self.theEnvironmentProperties)
     parameters.setId(self.theAssetId)
     return parameters
