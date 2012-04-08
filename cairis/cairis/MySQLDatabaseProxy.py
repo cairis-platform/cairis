@@ -5714,12 +5714,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     panProperty = parameters.pseudonymityProperty()
     unlProperty = parameters.unlinkabilityProperty()
     unoProperty = parameters.unobservabilityProperty()
+    ifs = parameters.interfaces()
     try:
       curs = self.conn.cursor()
       curs.execute('call addTemplateAsset(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
+
+      self.addInterfaces(assetName,'template_asset',ifs)
       self.conn.commit()
       curs.close()
       return assetId
@@ -5763,6 +5766,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error obtaining assets'
         raise DatabaseProxyException(exceptionText) 
       templateAssets = {}
+      vals = []
       for row in curs.fetchall():
         row = list(row)
         assetName = row[ASSETS_NAME_COL]
@@ -5781,11 +5785,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         panProperty = row[TEMPLATEASSETS_PANPROPERTY_COL]
         unlProperty = row[TEMPLATEASSETS_UNLPROPERTY_COL]
         unoProperty = row[TEMPLATEASSETS_UNOPROPERTY_COL]
-        parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty)
+        vals.append((assetName,shortCode,assetId,assetDesc,assetType,assetCriticality,assetCriticalRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty))
+      curs.close()
+      for assetName,shortCode,assetId,assetDesc,assetType,assetCriticality,assetCriticalRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty in vals:
+        ifs = self.getInterfaces(assetName,'template_asset')
+        parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty,ifs)
         templateAsset = ObjectFactory.build(assetId,parameters)
         templateAssets[assetName] = templateAsset
       return templateAssets
-      curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting template assets (id:' + str(id) + ',message:' + msg + ')'
@@ -8683,7 +8690,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error getting interfaces for ' + dimName + ' ' + dimObjt
         raise DatabaseProxyException(exceptionText) 
       else:
-        tags = []
+        ifs = []
         for row in curs.fetchall():
           row = list(row)
           ifName = row[0]
@@ -8691,9 +8698,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           ifType = 'Provided'
           if (ifTypeId == 1):
             ifType = 'Required'
-          tags.append((ifName,ifType))
+          ifs.append((ifName,ifType))
         curs.close()
-        return tags
+        return ifs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting interfaces for ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'

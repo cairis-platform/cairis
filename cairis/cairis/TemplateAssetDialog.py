@@ -33,6 +33,7 @@ class TemplateAssetDialog(wx.Dialog):
     self.theCriticalIndicator = False
     self.theCriticalRationale = ''
     self.theSecurityProperties = []
+    self.theInterfaces = []
     self.theAssetId = -1
     self.panel = 0
     self.buildControls(parameters)
@@ -61,6 +62,7 @@ class TemplateAssetDialog(wx.Dialog):
     criticalCtrl = self.FindWindowById(armid.ASSET_CHECKCRITICAL_ID)
     criticalRationaleCtrl = self.FindWindowById(armid.ASSET_TEXTCRITICALRATIONALE_ID)
     propertiesCtrl = self.FindWindowById(armid.TEMPLATEASSET_LISTPROPERTIES_ID)
+    ifCtrl = self.FindWindowById(armid.ASSET_PAGEINTERFACE_ID)
     self.theAssetName = nameCtrl.GetValue()
     self.theShortCode = shortCodeCtrl.GetValue()
     self.theAssetDescription = descriptionCtrl.GetValue()
@@ -69,6 +71,7 @@ class TemplateAssetDialog(wx.Dialog):
     self.theCriticalIndicator = criticalCtrl.GetValue()
     self.theCriticalRationale = criticalRationaleCtrl.GetValue()
     self.theSecurityProperties = propertiesCtrl.properties()
+    self.theInterfaces = ifCtrl.dimensions()
 
     if len(self.theAssetName) == 0:
       dlg = wx.MessageDialog(self,'Asset name cannot be empty',commitLabel,wx.OK) 
@@ -99,6 +102,6 @@ class TemplateAssetDialog(wx.Dialog):
       self.EndModal(armid.TEMPLATEASSET_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = TemplateAssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theCriticalIndicator,self.theCriticalRationale,self.theSecurityProperties[0],self.theSecurityProperties[1],self.theSecurityProperties[2],self.theSecurityProperties[3])
+    parameters = TemplateAssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theCriticalIndicator,self.theCriticalRationale,self.theSecurityProperties[0],self.theSecurityProperties[1],self.theSecurityProperties[2],self.theSecurityProperties[3],self.theSecurityProperties[4],self.theSecurityProperties[5],self.theSecurityProperties[6],self.theSecurityProperties[7],self.theInterfaces)
     parameters.setId(self.theAssetId)
     return parameters

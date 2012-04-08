@@ -69,9 +69,11 @@ class TemplateAssetPanel(wx.Panel):
     sigCtrl.SetValue(asset.significance())
     criticalCtrl = self.FindWindowById(armid.ASSET_CHECKCRITICAL_ID)
     criticalCtrl.SetValue(asset.critical())
+    ifCtrl = self.FindWindowById(armid.ASSET_PAGEINTERFACE_ID)
+    ifCtrl.load(asset.interfaces())
     if (asset.critical() == True):
       criticalRationaleCtrl = self.FindWindowById(armid.ASSET_TEXTCRITICALRATIONALE_ID)
       criticalRationaleCtrl.Enable()
       criticalRationaleCtrl.SetValue(asset.criticalRationale())
     propertiesCtrl = self.FindWindowById(armid.TEMPLATEASSET_LISTPROPERTIES_ID)
-    propertiesCtrl.load(asset.confidentialityProperty(),asset.integrityProperty(),asset.availabilityProperty(),asset.accountabilityProperty())
+    propertiesCtrl.load(asset.confidentialityProperty(),asset.integrityProperty(),asset.availabilityProperty(),asset.accountabilityProperty(),asset.anonymityProperty(),asset.pseudonymityProperty(),asset.unlinkabilityProperty(),asset.unobservabilityProperty())

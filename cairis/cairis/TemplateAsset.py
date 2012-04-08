@@ -17,7 +17,7 @@
 
 
 class TemplateAsset:
-  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,cFlag,cRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty,cRat = '',iRat = '',avRat = '',acRat = '',anRat = '',panRat = '',unlRat = '',unoRat = ''):
+  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,cFlag,cRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty,ifs,cRat = '',iRat = '',avRat = '',acRat = '',anRat = '',panRat = '',unlRat = '',unoRat = ''):
     self.theId = assetId
     self.theName = assetName
     self.theShortCode = shortCode
@@ -42,7 +42,7 @@ class TemplateAsset:
     self.thePseudonymityRationale = panRat
     self.theUnlinkabilityRationale = unlRat
     self.theUnobservabilityRationale = unoRat
-
+    self.theInterfaces = ifs
 
     self.valueLookup = {}
     self.valueLookup['None'] = 0
@@ -66,6 +66,7 @@ class TemplateAsset:
   def pseudonymityProperty(self): return self.thePseudonymityProperty
   def unlinkabilityProperty(self): return self.theUnlinkabilityProperty
   def unobservabilityProperty(self): return self.theUnobservabilityProperty
+  def interfaces(self): return self.theInterfaces
 
   def securityProperties(self):
     cValue = self.valueLookup[self.theConfidentialityProperty]

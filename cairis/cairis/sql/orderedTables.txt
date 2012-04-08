@@ -1,4 +1,5 @@
 asset_interface
+template_asset_interface
 component_association
 component_interface
 interface

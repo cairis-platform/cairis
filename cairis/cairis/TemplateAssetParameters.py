@@ -19,7 +19,7 @@
 import ObjectCreationParameters
 
 class TemplateAssetParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,assetName,shortCode,assetDesc,assetSig,assetType,cFlag,cRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty):
+  def __init__(self,assetName,shortCode,assetDesc,assetSig,assetType,cFlag,cRationale,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty,ifs):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = assetName
     self.theShortCode = shortCode
@@ -36,6 +36,7 @@ class TemplateAssetParameters(ObjectCreationParameters.ObjectCreationParameters)
     self.theType = assetType
     self.isCritical = cFlag
     self.theCriticalRationale = cRationale
+    self.theInterfaces = ifs
 
   def name(self): return self.theName
   def shortCode(self): return self.theShortCode
@@ -52,3 +53,4 @@ class TemplateAssetParameters(ObjectCreationParameters.ObjectCreationParameters)
   def unobservabilityProperty(self): return self.theUnobservabilityProperty
   def critical(self): return self.isCritical
   def criticalRationale(self): return self.theCriticalRationale
+  def interfaces(self): return self.theInterfaces

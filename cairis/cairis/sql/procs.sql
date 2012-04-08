@@ -9819,8 +9819,10 @@ begin
   if assetId = -1
   then
     delete from asset_template_asset;
+    delete from template_asset_interface;
     delete from template_asset;
   else
+    delete from template_asset_interface where template_asset_id = assetId;
     delete from asset_template_asset where template_asset_id = assetId;
     delete from template_asset where id = assetId;
   end if;
