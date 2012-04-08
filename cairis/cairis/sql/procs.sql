@@ -17827,7 +17827,7 @@ begin
     insert into interface (id,name) values (ifId,ifName);
   end if;
 
-  if ifType = 'Required'
+  if ifType = 'required'
   then
     set reqId = 1;
   else

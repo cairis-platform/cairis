@@ -8695,9 +8695,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           row = list(row)
           ifName = row[0]
           ifTypeId = row[1]
-          ifType = 'Provided'
+          ifType = 'provided'
           if (ifTypeId == 1):
-            ifType = 'Required'
+            ifType = 'required'
           ifs.append((ifName,ifType))
         curs.close()
         return ifs

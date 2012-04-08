@@ -28,7 +28,7 @@ class InterfaceListPanel(BasePanel):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     ifList = b.dbProxy.getDimensionNames('interface')
     mainSizer.Add(self.buildComboSizerList('Name',(87,30),armid.INTERFACELISTDIALOG_COMBONAME_ID,ifList),0,wx.EXPAND)
-    mainSizer.Add(self.buildComboSizerList('Type',(87,30),armid.INTERFACELISTDIALOG_COMBOTYPE_ID,['Provided','Required']),0,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Type',(87,30),armid.INTERFACELISTDIALOG_COMBOTYPE_ID,['provided','required']),0,wx.EXPAND)
     mainSizer.Add(wx.StaticText(self,-1,''),1,wx.EXPAND)
     mainSizer.Add(self.buildCommitButtonSizer(wx.ID_OK,True),0,wx.CENTER)
     self.SetSizer(mainSizer)

@@ -46,7 +46,12 @@ def a2i(spLabel):
   else:
     return 0
   
-  
+def it2Id(itLabel):
+  if itLabel == 'required':
+    return 1
+  else:
+    return 0
+
 class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theRoleParameters = []
@@ -116,6 +121,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
     self.theDescription = ''
     self.theSignificance = ''
     self.theTags = []
+    self.theInterfaces = []
     self.theEnvironmentProperties = []
 
   def resetSecurityPropertyAttributes(self):
@@ -240,6 +246,8 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.theAssetType = attrs['type']
       self.isCritical = attrs['is_critical']
       self.theSecurityProperties = []
+    elif (name == 'interface'):
+      self.theInterfaces.append((attrs['name'],it2Id(attrs['type'])))
     elif name == 'security_property':
       self.theEnvironmentName = attrs['environment'] 
       self.thePropertyName = attrs['property']
@@ -403,7 +411,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
         unoProperty,unoRationale = spDict['unobservability']
         ep = AssetEnvironmentProperties(envName,[cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty],[cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale])
         self.theEnvironmentProperties.append(ep)
-      p = AssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.isCritical,self.theCriticalRationale,self.theTags,[],self.theEnvironmentProperties)
+      p = AssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.isCritical,self.theCriticalRationale,self.theTags,self.theInterfaces,self.theEnvironmentProperties)
       self.theAssetParameters.append(p)
       self.resetAssetAttributes()
     elif name == 'security_property':

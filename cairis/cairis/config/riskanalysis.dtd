@@ -29,13 +29,18 @@
 <!ELEMENT tag EMPTY>
 <!ATTLIST tag name CDATA #REQUIRED>
 
-<!ELEMENT asset (description,tag*,significance,critical_rationale?,security_property*)>
+<!ELEMENT asset (description,tag*,significance,critical_rationale?,interface*,security_property*)>
 <!ATTLIST asset name CDATA #REQUIRED>
 <!ATTLIST asset short_code CDATA #REQUIRED>
 <!ATTLIST asset type CDATA #REQUIRED>
 <!ATTLIST asset is_critical (0 | 1) #REQUIRED>
 <!ELEMENT significance (#PCDATA)>
 <!ELEMENT critical_rationale (#PCDATA)>
+
+<!ELEMENT interface EMPTY>
+<!ATTLIST interface name CDATA #REQUIRED>
+<!ATTLIST interface type (provided | required) #REQUIRED>
+
 <!ELEMENT security_property (rationale)>
 <!ATTLIST security_property environment CDATA #REQUIRED>
 <!ATTLIST security_property property (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
