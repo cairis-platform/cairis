@@ -52,7 +52,8 @@ class ComponentModel:
     componentUrl = 'component#' + componentName
     if componentName not in self.theComponentNames:
       self.theComponentNames.add(componentName)
-      self.theGraph.add_node(pydot.Node(componentName,shape='component',fontname=self.fontName,fontsize=self.fontSize,URL=componentUrl))
+      componentLabel = "<<component>>\\n" + componentName
+      self.theGraph.add_node(pydot.Node(componentName,label=componentLabel,shape='rectangle',fontname=self.fontName,fontsize=self.fontSize,URL=componentUrl))
 
     if interfaceName not in self.theInterfaceNames:
       self.theInterfaceNames.add(interfaceName)
@@ -65,12 +66,12 @@ class ComponentModel:
       interfaceUrl += objtName
       self.theGraph.add_node(pydot.Node(objtName,shape='circle',label='',width='.2',height='.2',fontname=self.fontName,fontsize=self.fontSize,URL=interfaceUrl))
 
-    self.theGraph.add_edge(pydot.Edge(componentName,objtName,dir='none',arrowhead='vee',weight='1'))
+    self.theGraph.add_edge(pydot.Edge(componentName,objtName,arrowhead='none',arrowtail='obox',dir='both',weight='1'))
 
   def buildAssociation(self,fromName,fromInterface,toName,toInterface):
     fromObjtName = fromName + '_' + fromInterface
     toObjtName = toName + '_' + toInterface
-    self.theGraph.add_edge(pydot.Edge(fromObjtName,toObjtName,style='dashed',arrowhead='vee',weight='1'))
+    self.theGraph.add_edge(pydot.Edge(fromObjtName,toObjtName,dir='none',weight='1'))
 
   def layout(self,renderer = ''):
     self.theGraph.write_xdot(self.theGraphName,prog='dot')

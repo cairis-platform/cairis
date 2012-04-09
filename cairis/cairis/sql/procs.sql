@@ -11613,7 +11613,7 @@ begin
   declare continue handler for not found set done = 1;
   
   drop table if exists temp_classtree;
-  create temporary table temp_classtree (id int,environment varchar(50),head_name varchar(50), head_dim varchar(50), head_assoc varchar(50), head_mult varchar(50), head_role varchar(50), tail_role varchar(50), tail_mult varchar(50), tail_assoc varchar(50), tail_dim varchar(50), tail_name varchar(50), rationale varchar(1000));
+  create temporary table temp_classtree (id int,environment varchar(50),head_name varchar(50), head_dim varchar(50), head_nav int, head_assoc varchar(50), head_mult varchar(50), head_role varchar(50), tail_role varchar(50), tail_mult varchar(50), tail_assoc varchar(50), tail_nav int, tail_dim varchar(50), tail_name varchar(50), rationale varchar(1000));
 
   select id into assetId from asset where name = assetName;
   select id into environmentId from environment where name = envName;
@@ -11622,7 +11622,7 @@ begin
 
   if compositeCount <= 0
   then
-    insert into temp_classtree(id,environment,head_name,head_dim,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_dim,tail_name,rationale)
+    insert into temp_classtree(id,environment,head_name,head_dim,head_nav,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_nav,tail_dim,tail_name,rationale)
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.head_id = assetId and a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
     union
     select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,concat('Concerns Security Pattern ',sp.name) rationale from securitypattern_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, asset_template_asset hata, asset_template_asset tata,securitypattern sp where a.head_id = assetId and hea.environment_id = environmentId and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and a.pattern_id = sp.id
@@ -11649,7 +11649,7 @@ begin
     union
     select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,concat('Concerns Security Pattern ',sp.name) rationale from securitypattern_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, asset_template_asset hata, asset_template_asset tata,securitypattern sp where a.tail_id = assetId and hea.environment_id = environmentId and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and a.pattern_id = sp.id;
   else
-    insert into temp_classtree(id,environment,head_name,head_dim,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_dim,tail_name,rationale)
+    insert into temp_classtree(id,environment,head_name,head_dim,head_nav,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_nav,tail_dim,tail_name,rationale)
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.head_id = assetId and a.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
     union
     select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,concat('Concerns Security Pattern ',sp.name) rationale from securitypattern_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, asset_template_asset hata, asset_template_asset tata,securitypattern sp where a.head_id = assetId and hea.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and a.pattern_id = sp.id
@@ -11677,7 +11677,7 @@ begin
     select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,concat('Concerns Security Pattern ',sp.name) rationale from securitypattern_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, asset_template_asset hata, asset_template_asset tata,securitypattern sp where a.tail_id = assetId and hea.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and a.pattern_id = sp.id;
   end if;
 
-  select id,environment,head_name,head_dim,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_dim,tail_name,rationale from temp_classtree;
+  select id,environment,head_name,head_dim,head_nav,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_nav,tail_dim,tail_name,rationale from temp_classtree;
 end
 //
 
@@ -11692,7 +11692,7 @@ begin
   declare continue handler for not found set done = 1;
   
   drop table if exists temp_classtree;
-  create temporary table temp_classtree (id int,environment varchar(50),head_name varchar(50), head_dim varchar(50), head_assoc varchar(50), head_mult varchar(50), head_role varchar(50), tail_role varchar(50), tail_mult varchar(50), tail_assoc varchar(50), tail_dim varchar(50), tail_name varchar(50), rationale varchar(1000));
+  create temporary table temp_classtree (id int,environment varchar(50),head_name varchar(50), head_dim varchar(50), head_nav int, head_assoc varchar(50), head_mult varchar(50), head_role varchar(50), tail_role varchar(50), tail_mult varchar(50), tail_assoc varchar(50), tail_nav int, tail_dim varchar(50), tail_name varchar(50), rationale varchar(1000));
 
   select id into assetId from asset where name = assetName;
   select id into environmentId from environment where name = envName;
@@ -11701,7 +11701,7 @@ begin
 
   if compositeCount <= 0
   then
-    insert into temp_classtree(id,environment,head_name,head_dim,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_dim,tail_name,rationale)
+    insert into temp_classtree(id,environment,head_name,head_dim,head_nav,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_nav,tail_dim,tail_name,rationale)
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.head_id = assetId and a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
     union
     select -1,e.name,va.name,'asset',0,'Dependency','1','&lt;&lt;safeguards&gt;&gt;','','1','Association',0,'asset',ma.name,'' rationale from asset ma, asset va, environment e, countermeasure_asset ca, countermeasure_threat_target ctt, asset_threat at where ma.id = ca.asset_id and ca.asset_id = assetId and ca.countermeasure_id = ctt.countermeasure_id and ctt.threat_id = at.threat_id and at.asset_id = va.id and ctt.environment_id = environmentId and at.environment_id = environmentId and at.environment_id = e.id
@@ -11712,7 +11712,7 @@ begin
     union
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.tail_id = assetId and a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id;
   else
-    insert into temp_classtree(id,environment,head_name,head_dim,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_dim,tail_name,rationale)
+    insert into temp_classtree(id,environment,head_name,head_dim,head_nav,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_nav,tail_dim,tail_name,rationale)
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.head_id = assetId and a.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
     union
     select -1,e.name,va.name,'asset',0,'Dependency','1','&lt;&lt;safeguards&gt;&gt;','','1','Association',0,'asset',ma.name,'' rationale from asset ma, asset va, environment e, countermeasure_asset ca, countermeasure_threat_target ctt, asset_threat at where ma.id = ca.asset_id and ca.asset_id = assetId and ca.countermeasure_id = ctt.countermeasure_id and ctt.threat_id = at.threat_id and at.asset_id = va.id and ctt.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and at.environment_id = environmentId and at.environment_id = e.id
@@ -11723,7 +11723,7 @@ begin
     union
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.tail_id = assetId and a.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id;
   end if;
-  select id,environment,head_name,head_dim,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_dim,tail_name,rationale from temp_classtree;
+  select id,environment,head_name,head_dim,head_nav,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_nav,tail_dim,tail_name,rationale from temp_classtree;
 end
 //
 

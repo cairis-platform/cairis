@@ -8762,7 +8762,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     fromIf = parameters.fromInterface()
     toName = parameters.toName()
     toIf = parameters.toInterface()
-
+    print fromName,' ',fromIf,' ',toName,' ',toIf
     try:
       curs = self.conn.cursor()
       curs.execute('call addComponentAssociation(%s,%s,%s,%s)',(fromName,fromIf,toName,toIf))
@@ -8770,6 +8770,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error adding association from component ' + fromName + ' to  component ' + toName
         raise DatabaseProxyException(exceptionText) 
       curs.close()
+      self.conn.commit()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding association from component ' + fromName + ' to component ' + toName + ' (id:' + str(id) + ',message:' + msg + ')'
