@@ -664,7 +664,7 @@ drop procedure if exists delete_tag;
 drop procedure if exists getTags;
 drop procedure if exists addComponent;
 drop procedure if exists addComponentInterface;
-drop procedure if exists addComponentAssociation;
+drop procedure if exists addConnector;
 drop procedure if exists interfaceNames;
 drop procedure if exists deleteInterfaces;
 drop procedure if exists addInterface;
@@ -17756,7 +17756,7 @@ begin
 end
 //
 
-create procedure addComponentAssociation(in fromName text, in fromIf text, in toName text, in toIf text)
+create procedure addConnector(in cName text, in fromName text, in fromIf text, in toName text, in toIf text)
 begin
   declare fromId int;
   declare fromIfId int;
@@ -17768,7 +17768,7 @@ begin
   select id into toId from component where name = toName;
   select id into toIfId from interface where name = toIf;
 
-  insert into component_association(from_component_id,from_interface_id,to_component_id,to_interface_id) values (fromId,fromIfId,toId,toIfId);
+  insert into connector(name,from_component_id,from_interface_id,to_component_id,to_interface_id) values (cName,fromId,fromIfId,toId,toIfId);
 end
 //
 

@@ -20,12 +20,12 @@
 
 <!-- DTD for template CAIRIS component models -->
 
-<!ELEMENT component_model (asset*,component*,component_association*)>
+<!ELEMENT component_model (asset*,component*,connector*)>
 
 <!ELEMENT asset (description,tag*,significance,interface*,security_property*)>
 <!ATTLIST asset name CDATA #REQUIRED>
 <!ATTLIST asset short_code CDATA #REQUIRED>
-<!ATTLIST asset asset_type (Information | Systems | Software | Hardware | People) #REQUIRED>
+<!ATTLIST asset type (Information | Systems | Software | Hardware | People) #REQUIRED>
 
 <!ELEMENT security_property (rationale)>
 <!ATTLIST security_property property (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
@@ -57,8 +57,9 @@
 <!ELEMENT rationale (#PCDATA)>
 <!ELEMENT fit_criterion (#PCDATA)>
 
-<!ELEMENT component_association EMPTY>
-<!ATTLIST component_association from_component CDATA #REQUIRED>
-<!ATTLIST component_association from_interface CDATA #REQUIRED>
-<!ATTLIST component_association to_component CDATA #REQUIRED>
-<!ATTLIST component_association to_interface CDATA #REQUIRED>
+<!ELEMENT connector EMPTY>
+<!ATTLIST connector name CDATA #REQUIRED>
+<!ATTLIST connector from_component CDATA #REQUIRED>
+<!ATTLIST connector from_interface CDATA #REQUIRED>
+<!ATTLIST connector to_component CDATA #REQUIRED>
+<!ATTLIST connector to_interface CDATA #REQUIRED>

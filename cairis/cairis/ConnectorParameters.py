@@ -18,14 +18,16 @@
 
 import ObjectCreationParameters
 
-class ComponentAssociationParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,fName,fInf,tName,tInf):
+class ConnectorParameters(ObjectCreationParameters.ObjectCreationParameters):
+  def __init__(self,cName,fName,fInf,tName,tInf):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
+    self.theName = cName
     self.theFromName = fName
     self.theFromInterface = fInf
     self.theToName = tName
     self.theToInterface = tInf
 
+  def name(self): return self.theName
   def fromName(self): return self.theFromName
   def fromInterface(self): return self.theFromInterface
   def toName(self): return self.theToName

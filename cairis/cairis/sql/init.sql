@@ -32,7 +32,7 @@ DROP VIEW IF EXISTS assumption_task_model;
 DROP VIEW IF EXISTS environment_risk;
 DROP VIEW IF EXISTS concept_map;
 DROP VIEW IF EXISTS component_interfaces;
-DROP VIEW IF EXISTS component_associations;
+DROP VIEW IF EXISTS connectors;
 
 DROP TABLE IF EXISTS usecase_step_synopsis;
 DROP TABLE IF EXISTS usecase_pc_contribution;
@@ -52,7 +52,7 @@ DROP TABLE IF EXISTS threat_tag;
 DROP TABLE IF EXISTS vulnerability_tag;
 DROP TABLE IF EXISTS risk_tag;
 
-DROP TABLE IF EXISTS component_association;
+DROP TABLE IF EXISTS connector;
 DROP TABLE IF EXISTS component_interface;
 DROP TABLE IF EXISTS asset_interface;
 DROP TABLE IF EXISTS template_asset_interface;
@@ -2497,7 +2497,8 @@ CREATE TABLE template_asset_interface (
   FOREIGN KEY(interface_id) REFERENCES interface(id)
 ) ENGINE=INNODB;
 
-CREATE TABLE component_association (
+CREATE TABLE connector (
+  name VARCHAR(255) NOT NULL,
   from_component_id INT NOT NULL,
   from_interface_id INT NOT NULL,
   to_component_id INT NOT NULL,
@@ -2844,8 +2845,8 @@ CREATE VIEW concept_map as
 CREATE VIEW component_interfaces as
   select c.name component,i.name interface,ci.required_id from component c, interface i, component_interface ci where ci.component_id = c.id and ci.interface_id = i.id;
 
-CREATE VIEW component_associations as
-  select fc.name from_name, fi.name from_interface, tc.name to_name, ti.name to_interface from component_association ca, component fc, component tc, interface fi, interface ti where ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id;
+CREATE VIEW connectors as
+  select ca.name connector, fc.name from_name, fi.name from_interface, tc.name to_name, ti.name to_interface from connector ca, component fc, component tc, interface fi, interface ti where ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id;
 
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');

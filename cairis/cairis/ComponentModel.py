@@ -25,9 +25,9 @@ import ARM
 import gtk
 
 class ComponentModel:
-  def __init__(self,interfaces,associations):
+  def __init__(self,interfaces,connectors):
     self.theInterfaces = interfaces
-    self.theAssociations = associations
+    self.theConnectors = connectors
     self.theComponentNames = set([])
     self.theInterfaceNames = set([])
 
@@ -42,8 +42,8 @@ class ComponentModel:
     for componentName,interfaceName,reqId in interfaces:
       self.buildInterface(componentName,interfaceName,reqId)
 
-    for fromName,fromIF,toName,toIF in associations:
-      self.buildAssociation(fromName,fromIF,toName,toIF)
+    for cnName,fromName,fromIF,toName,toIF in connectors:
+      self.buildConnector(cnName,fromName,fromIF,toName,toIF)
 
   def size(self):
     return len(self.theAssociations)
@@ -55,9 +55,9 @@ class ComponentModel:
       componentLabel = "<<component>>\\n" + componentName
       self.theGraph.add_node(pydot.Node(componentName,label=componentLabel,shape='rectangle',fontname=self.fontName,fontsize=self.fontSize,URL=componentUrl))
 
-    if interfaceName not in self.theInterfaceNames:
-      self.theInterfaceNames.add(interfaceName)
-      objtName = componentName + '_' + interfaceName
+    objtName = componentName + '_' + interfaceName
+    if objtName not in self.theInterfaceNames:
+      self.theInterfaceNames.add(objtName)
       interfaceUrl = ''
       if reqId == 1:
         interfaceUrl = 'required_interface#'
@@ -66,12 +66,15 @@ class ComponentModel:
       interfaceUrl += objtName
       self.theGraph.add_node(pydot.Node(objtName,shape='circle',label='',width='.2',height='.2',fontname=self.fontName,fontsize=self.fontSize,URL=interfaceUrl))
 
-    self.theGraph.add_edge(pydot.Edge(componentName,objtName,arrowhead='none',arrowtail='obox',dir='both',weight='1'))
+    ifEdgeUrl = 'component_interface#' + objtName
+    self.theGraph.add_edge(pydot.Edge(componentName,objtName,arrowhead='none',arrowtail='obox',dir='both',weight='1',URL=ifEdgeUrl))
 
-  def buildAssociation(self,fromName,fromInterface,toName,toInterface):
+  def buildConnector(self,cnName,fromName,fromInterface,toName,toInterface):
     fromObjtName = fromName + '_' + fromInterface
     toObjtName = toName + '_' + toInterface
-    self.theGraph.add_edge(pydot.Edge(fromObjtName,toObjtName,dir='none',weight='1'))
+    lbl = "\<<" + cnName + "\>>"
+    urlName = 'connector#' + fromObjtName + '_' + toObjtName
+    self.theGraph.add_edge(pydot.Edge(fromObjtName,toObjtName,label=lbl,dir='none',weight='1',URL=urlName))
 
   def layout(self,renderer = ''):
     self.theGraph.write_xdot(self.theGraphName,prog='dot')

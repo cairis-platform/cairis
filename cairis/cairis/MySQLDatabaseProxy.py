@@ -93,7 +93,7 @@ from ReferenceSynopsis import ReferenceSynopsis
 from ReferenceContribution import ReferenceContribution
 from ConceptMapAssociationParameters import ConceptMapAssociationParameters
 from ComponentParameters import ComponentParameters;
-from ComponentAssociationParameters import ComponentAssociationParameters;
+from ConnectorParameters import ConnectorParameters;
 import string
 import os
 
@@ -8707,14 +8707,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in curs.fetchall():
         row = list(row)
         interfaces.append((row[0],row[1],row[2]))
-      curs.execute('select from_name,from_interface,to_name,to_interface from component_associations')
+      curs.execute('select connector,from_name,from_interface,to_name,to_interface from connectors')
       if (curs.rowcount == -1):
         exceptionText = 'Error getting component associations'
         raise DatabaseProxyException(exceptionText) 
       associations = []
       for row in curs.fetchall():
         row = list(row)
-        associations.append((row[0],row[1],row[2],row[3]))
+        associations.append((row[0],row[1],row[2],row[3],row[4]))
       curs.close()
       return (interfaces,associations)
     except _mysql_exceptions.DatabaseError, e:
@@ -8757,23 +8757,23 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error adding interface ' + ifName + ' to component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addComponentAssociation(self,parameters):
+  def addConnector(self,parameters):
+    cName = parameters.name()
     fromName = parameters.fromName()
     fromIf = parameters.fromInterface()
     toName = parameters.toName()
     toIf = parameters.toInterface()
-    print fromName,' ',fromIf,' ',toName,' ',toIf
     try:
       curs = self.conn.cursor()
-      curs.execute('call addComponentAssociation(%s,%s,%s,%s)',(fromName,fromIf,toName,toIf))
+      curs.execute('call addConnector(%s,%s,%s,%s,%s)',(cName,fromName,fromIf,toName,toIf))
       if (curs.rowcount == -1):
-        exceptionText = 'Error adding association from component ' + fromName + ' to  component ' + toName
+        exceptionText = 'Error adding connector from component ' + fromName + ' to  component ' + toName
         raise DatabaseProxyException(exceptionText) 
       curs.close()
       self.conn.commit()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL error adding association from component ' + fromName + ' to component ' + toName + ' (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error adding connector from component ' + fromName + ' to component ' + toName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def getInterfaces(self,dimObjt,dimName):

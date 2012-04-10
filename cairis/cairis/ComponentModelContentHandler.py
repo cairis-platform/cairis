@@ -18,7 +18,7 @@
 
 from xml.sax.handler import ContentHandler,EntityResolver
 from ComponentParameters import ComponentParameters
-from ComponentAssociationParameters import ComponentAssociationParameters
+from ConnectorParameters import ConnectorParameters
 from Borg import Borg
 
 def a2i(spLabel):
@@ -40,11 +40,11 @@ def it2Id(itLabel):
 class ComponentModelContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theComponents = []
-    self.theAssociations = []
+    self.theConnectors = []
     self.resetComponentAttributes()
     self.resetAssetAttributes()
     self.resetSecurityPropertyAttributes()
-    self.resetComponentAssociationAttributes()
+    self.resetConnectorAttributes()
     b = Borg()
     self.configDir = b.configDir
 
@@ -54,8 +54,8 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
   def components(self):
     return self.theComponents
 
-  def associations(self):
-    return self.theAssociations
+  def connectors(self):
+    return self.theConnectors
 
   def resetComponentAttributes(self):
     self.inDescription = 0
@@ -81,7 +81,8 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
     self.theRationale = ''
 
 
-  def resetComponentAssociationAttributes(self):
+  def resetConnectorAttributes(self):
+    self.theName = ''
     self.theFromName = ''
     self.theFromInterface = ''
     self.theToName = ''
@@ -110,7 +111,8 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
     elif name == 'security_property':
       self.thePropertyName = attrs['property']
       self.thePropertyValue = attrs['value']
-    elif (name == 'component_association'):
+    elif (name == 'connector'):
+      self.theName = attrs['name']
       self.theFromName = attrs['from_component']
       self.theFromInterface = attrs['from_interface']
       self.theToName = attrs['to_component']
@@ -161,10 +163,10 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
     elif name == 'security_property':
       self.theSecurityProperties.append((self.thePropertyName,self.thePropertyValue,self.theRationale))
       self.resetSecurityPropertyAttributes()
-    if name == 'component_association':
-      p = ComponentAssociationParameters(self.theFromName,self.theFromInterface,self.theToName,self.theToInterface)
-      self.theAssociations.append(p)
-      self.resetComponentAssociationAttributes() 
+    if name == 'connector':
+      p = ConnectorParameters(self.theName,self.theFromName,self.theFromInterface,self.theToName,self.theToInterface)
+      self.theConnectors.append(p)
+      self.resetConnectorAttributes() 
     elif name == 'description':
       self.inDescription = 0
     elif name == 'rationale':

@@ -304,12 +304,12 @@ def importComponentModelFile(importFile):
   parser.setEntityResolver(handler)
   parser.parse(importFile)
   components = handler.components()
-  associations = handler.associations()
-  return importComponentModelData(components,associations)
+  connectors = handler.connectors()
+  return importComponentModelData(components,connectors)
 
-def importComponentModelData(components,associations):
+def importComponentModelData(components,connectors):
   noOfComponents = len(components)
-  noOfAssocs = len(associations)
+  noOfConns = len(connectors)
   b = Borg()
   cCount = 0
 
@@ -317,12 +317,12 @@ def importComponentModelData(components,associations):
     b.dbProxy.addComponent(cParameters)
     cCount += 1
   
-  caCount = 0
-  for caParameters in associations:
-    b.dbProxy.addComponentAssociation(caParameters)
-    caCount += 1 
+  cnCount = 0
+  for cnParameters in connectors:
+    b.dbProxy.addConnector(cnParameters)
+    cnCount += 1 
 
-  msgStr = 'Imported ' + str(cCount) + ' components, and ' + str(caCount) + ' component associations.'
+  msgStr = 'Imported ' + str(cCount) + ' components, and ' + str(cnCount) + ' connectors.'
   return msgStr
 
 def importDomainValuesFile(importFile):
