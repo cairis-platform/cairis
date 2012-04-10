@@ -19,6 +19,7 @@
 from xml.sax.handler import ContentHandler,EntityResolver
 from ComponentParameters import ComponentParameters
 from ConnectorParameters import ConnectorParameters
+from TemplateAssetParameters import TemplateAssetParameters
 from Borg import Borg
 
 def a2i(spLabel):
@@ -39,6 +40,7 @@ def it2Id(itLabel):
 
 class ComponentModelContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
+    self.theAssets = []
     self.theComponents = []
     self.theConnectors = []
     self.resetComponentAttributes()
@@ -51,6 +53,9 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
   def resolveEntity(self,publicId,systemId):
     return self.configDir + '/component_model.dtd'
 
+  def assets(self):
+    return self.theAssets
+
   def components(self):
     return self.theComponents
 
@@ -62,6 +67,33 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
     self.theName = ''
     self.theDescription = ''
     self.theInterfaces = []
+    self.theStructure = []
+    self.theRequirements = []
+    self.resetStructure()
+    self.resetRequirement()
+
+  def resetStructure(self):
+    self.theHeadName = ''
+    self.theHeadAdornment = ''
+    self.theHeadNav = ''
+    self.theHeadNry = ''
+    self.theHeadRole = ''
+    self.theTailRole = ''
+    self.theTailNry = ''
+    self.theTailNav = ''
+    self.theTailAdornment = ''
+    self.theTailName = ''
+
+  def resetRequirement(self):
+    self.inDescription = 0
+    self.inRationale = 0
+    self.inFitCriterion = 0
+    self.theAsset = ''
+    self.theType = ''
+    self.theReqName = ''
+    self.theDescription = ''
+    self.theRationale = ''
+    self.theFitCriterion = ''
 
   def resetAssetAttributes(self):
     self.inDescription = 0
@@ -95,6 +127,9 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
     elif (name == 'description'):
       self.inDescription = 1
       self.theDescription = ''
+    elif (name == 'fit_criterion'):
+      self.inFitCriterion = 1
+      self.theFitCriterion = ''
     elif name == 'significance':
       self.inSignificance = 1
       self.theSignificance = ''
@@ -117,6 +152,32 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
       self.theFromInterface = attrs['from_interface']
       self.theToName = attrs['to_component']
       self.theToInterface = attrs['to_interface']
+    elif name == 'structure':
+      self.theHeadName = attrs['head_asset']
+      self.theHeadAdornment = attrs['head_adornment']
+      self.theHeadNav = attrs['head_nav']
+      rawHeadNry = attrs['head_nry']
+      if (rawHeadNry == 'a'):
+        rawHeadNry = '*'
+      elif (rawHeadNry == '1..a'):
+        rawHeadNry = '1..*'
+      self.theHeadNry = rawHeadNry
+      self.theHeadRole = attrs['head_role']
+      self.theTailRole = attrs['tail_role']
+      rawTailNry = attrs['tail_nry']
+      if (rawTailNry == 'a'):
+        rawTailNry = '*'
+      elif (rawTailNry == '1..a'):
+        rawTailNry = '1..*'
+      self.theTailNry = rawTailNry
+      self.theTailNav = attrs['tail_nav']
+      self.theTailAdornment = attrs['tail_adornment']
+      self.theTailName = attrs['tail_asset']
+    elif name == 'requirement':
+      self.theReqName = attrs['name']
+      self.theAsset = attrs['asset']
+      rawType = attrs['type']
+      self.theType = rawType.replace('_',' ')
 
   def characters(self,data):
     if self.inDescription:
@@ -125,6 +186,8 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
       self.theSignificance += data
     elif self.inRationale:
       self.theRationale += data
+    elif self.inFitCriterion:
+      self.theFitCriterion += data
 
 
   def endElement(self,name):
@@ -157,13 +220,19 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
       spValues.append(spDict['pseudonymity'])
       spValues.append(spDict['unlinkability'])
       spValues.append(spDict['unobservability'])
-      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.theInterfaces,spValues)
-      self.theAssetParameters.append(p)
+      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,spValues,self.theInterfaces)
+      self.theAssets.append(p)
       self.resetAssetAttributes()
     elif name == 'security_property':
       self.theSecurityProperties.append((self.thePropertyName,self.thePropertyValue,self.theRationale))
       self.resetSecurityPropertyAttributes()
-    if name == 'connector':
+    elif name == 'structure':
+      self.theStructure.append((self.theHeadName,self.theHeadAdornment,self.theHeadNav,self.theHeadNry,self.theHeadRole,self.theTailRole,self.theTailNry,self.theTailNav,self.theTailAdornment,self.theTailName))
+      self.resetStructure()
+    elif name == 'requirement':
+      self.theRequirements.append((self.theReqName,self.theDescription,self.theType,self.theRationale,self.theFitCriterion,self.theAsset))
+      self.resetRequirement()
+    elif name == 'connector':
       p = ConnectorParameters(self.theName,self.theFromName,self.theFromInterface,self.theToName,self.theToInterface)
       self.theConnectors.append(p)
       self.resetConnectorAttributes() 
@@ -173,3 +242,5 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
       self.inRationale = 0
     elif name == 'significance':
       self.inSignificance = 0
+    elif name == 'fit_criterion':
+      self.inFitCriterion = 0
