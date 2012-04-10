@@ -672,6 +672,10 @@ drop procedure if exists getInterfaces;
 drop procedure if exists add_template_asset_properties;
 drop procedure if exists delete_template_asset_properties;
 drop procedure if exists template_assetProperties;
+drop procedure if exists addComponentStructure;
+drop procedure if exists getComponentStructure;
+drop procedure if exists addComponentRequirement;
+drop procedure if exists getComponentRequirements;
 
 delimiter //
 
@@ -17906,4 +17910,49 @@ begin
   select ifnull(cProperty,0),ifnull(iProperty,0),ifnull(avProperty,0),ifnull(acProperty,0),ifnull(anProperty,0),ifnull(panProperty,0),ifnull(unlProperty,0),ifnull(unoProperty,0),cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale;
 end
 //
+
+create procedure addComponentStructure(in assocId int,in componentId int, in headAsset text, in headType text, in headNav int, in headMult text,in headRole text, in tailRole text, in tailMult text, in tailNav int, in tailType text, in tailAsset text)
+begin
+  declare headAssetId int;
+  declare headTypeId int;
+  declare headMultId int;
+  declare tailMultId int;
+  declare tailTypeId int;
+  declare tailAssetId int;
+
+  select id into headAssetId from template_asset where name = headAsset limit 1;
+  select id into headTypeId from association_type where name = headType limit 1;
+  select id into headMultId from multiplicity_type where name = headMult limit 1;
+  select id into tailMultId from multiplicity_type where name = tailMult limit 1;
+  select id into tailTypeId from association_type where name = tailType limit 1;
+  select id into tailAssetId from template_asset where name = tailAsset limit 1;
+
+  insert into component_classassociation(id,component_id,head_id,head_association_type_id,head_navigation,head_multiplicity_id,head_role_name,tail_role_name,tail_multiplicity_id,tail_navigation,tail_association_type_id,tail_id) values(assocId,componentId,headAssetId,headTypeId,headNav,headMultId,headRole,tailRole,tailMultId,tailNav,tailTypeId,tailAssetId);
+end
+//
+
+create procedure getComponentStructure(in componentId int)
+begin
+    select ha.name,hat.name,a.head_navigation,hm.name,a.head_role_name,a.tail_role_name,tm.name,a.tail_navigation,tat.name,ta.name from component_classassociation a, template_asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, template_asset ta where a.component_id = componentId and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id;
+end
+//
+
+create procedure addComponentRequirement(in reqLabel int, in componentId int, in reqType text, in reqName text, in reqDesc text, in reqRationale text, in reqFC text, in reqAsset text)
+begin
+  declare reqTypeId int;
+  declare assetId int;
+
+  select id into reqTypeId from requirement_type where name = reqType;
+  select id into assetId from template_asset where name = reqAsset;
+
+  insert into component_requirement(label,component_id,type_id,name,description,rationale,fit_criterion,asset_id) values (reqLabel,componentId,reqTypeId,reqName,reqDesc,reqRationale,reqFC,assetId);
+end
+//
+
+create procedure getComponentRequirements(in componentId int)
+begin
+  select rt.name,cr.name,cr.description,cr.rationale,cr.fit_criterion,ta.name from component_requirement cr, requirement_type rt, template_asset ta where cr.component_id = componentId and cr.asset_id = ta.id and cr.type_id = rt.id order by cr.label;
+end
+//
+
 delimiter ;

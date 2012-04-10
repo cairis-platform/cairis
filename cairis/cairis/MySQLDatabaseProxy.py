@@ -8726,6 +8726,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     componentId = self.newId()
     componentName = parameters.name()
     componentDesc = parameters.description()
+    structure = parameters.structure()
+    requirements = parameters.requirements()
 
     try:
       curs = self.conn.cursor()
@@ -8736,7 +8738,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
       for ifName,ifType in parameters.interfaces():
         self.addComponentInterface(componentId,ifName,ifType)
-
+      self.addComponentStructure(componentId,structure)
+      self.addComponentRequirements(componentId,requirements)
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8834,4 +8837,58 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding interface ' + ifName + ' to ' + ifDim + ' ' + ifObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addComponentStructure(self,componentId,componentStructure):
+    for headAsset,headAdornment,headNav,headNry,headRole,tailRole,tailNry,tailNav,tailAdornment,tailAsset in componentStructure:
+      self.addComponentAssetAssociation(componentId,headAsset,headAdornment,headNav,headNry,headRole,tailRole,tailNry,tailNav,tailAdornment,tailAsset)
+
+  def addComponentAssetAssociation(self,componentId,headAsset,headAdornment,headNav,headNry,headRole,tailRole,tailNry,tailNav,tailAdornment,tailAsset):
+    assocId = self.newId()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addComponentStructure(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(assocId,componentId,headAsset,headAdornment,headNav,headNry,headRole,tailRole,tailNry,tailNav,tailAdornment,tailAsset))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding structure to component id ' + str(componentId) 
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding structure to component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def componentStructure(self,componentId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getComponentStructure(%s)',(componentId))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error obtaining component structure'
+        raise DatabaseProxyException(exceptionText) 
+      pStruct = []
+      for row in curs.fetchall():
+        row = list(row)
+        pStruct.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9]))
+      curs.close()
+      return pStruct
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting structure for component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addComponentRequirements(self,componentId,componentRequirements):
+    for idx,reqData in enumerate(componentRequirements):
+      self.addComponentRequirement(idx+1,componentId,reqData[0],reqData[1],reqData[2],reqData[3],reqData[4],reqData[5])
+
+  def addComponentRequirement(self,reqLabel,componentId,reqName,reqDesc,reqType,reqRationale,reqFC,reqAsset):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addComponentRequirement(%s,%s,%s,%s,%s,%s,%s,%s)',(reqLabel,componentId,reqType,reqName,reqDesc,reqRationale,reqFC,reqAsset))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding requirement to component id ' + str(componentId) 
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding requirement to component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

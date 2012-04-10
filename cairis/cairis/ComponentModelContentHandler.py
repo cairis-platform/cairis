@@ -192,7 +192,7 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if (name == 'component'):
-      p = ComponentParameters(self.theName,self.theDescription,self.theInterfaces)
+      p = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theRequirements)
       self.theComponents.append(p)
       self.resetComponentAttributes() 
     elif name == 'asset':

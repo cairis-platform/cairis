@@ -57,6 +57,8 @@ DROP TABLE IF EXISTS component_interface;
 DROP TABLE IF EXISTS asset_interface;
 DROP TABLE IF EXISTS template_asset_interface;
 DROP TABLE IF EXISTS interface;
+DROP TABLE IF EXISTS component_classassociation;
+DROP TABLE IF EXISTS component_requirement;
 DROP TABLE IF EXISTS component;
 
 DROP TABLE IF EXISTS value_tension;
@@ -2508,6 +2510,44 @@ CREATE TABLE connector (
   FOREIGN KEY(from_interface_id) REFERENCES interface(id),
   FOREIGN KEY(to_component_id) REFERENCES component(id),
   FOREIGN KEY(to_interface_id) REFERENCES interface(id)
+) ENGINE=INNODB;
+
+CREATE TABLE component_classassociation (
+  id INT NOT NULL,
+  component_id INT NOT NULL,
+  head_id INT NOT NULL,
+  head_association_type_id INT NOT NULL,
+  head_navigation INT NOT NULL default 0,
+  head_multiplicity_id INT NOT NULL,
+  head_role_name VARCHAR(50) NOT NULL,
+  tail_role_name VARCHAR(50) NOT NULL,
+  tail_multiplicity_id INT NOT NULL,
+  tail_navigation INT NOT NULL default 0,
+  tail_association_type_id INT NOT NULL,
+  tail_id INT NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(component_id) REFERENCES component(id),
+  FOREIGN KEY(head_id) REFERENCES template_asset(id),
+  FOREIGN KEY(head_association_type_id) REFERENCES association_type(id),
+  FOREIGN KEY(head_multiplicity_id) REFERENCES multiplicity_type(id), 
+  FOREIGN KEY(tail_multiplicity_id) REFERENCES multiplicity_type(id), 
+  FOREIGN KEY(tail_association_type_id) REFERENCES association_type(id),
+  FOREIGN KEY(tail_id) REFERENCES template_asset(id)
+) ENGINE=INNODB;
+
+CREATE TABLE component_requirement(
+  label INT NOT NULL,
+  component_id INT NOT NULL,
+  type_id INT NOT NULL,
+  name VARCHAR(255),
+  description VARCHAR(4000),
+  rationale VARCHAR(255) NOT NULL,
+  fit_criterion VARCHAR(255) NOT NULL,
+  asset_id INT NOT NULL,
+  PRIMARY KEY(label,component_id),
+  FOREIGN KEY (component_id) REFERENCES component(id),
+  FOREIGN KEY (type_id) REFERENCES requirement_type(id),
+  FOREIGN KEY (asset_id) REFERENCES template_asset(id)
 ) ENGINE=INNODB;
 
 CREATE VIEW countermeasure_vulnerability_response_target as 

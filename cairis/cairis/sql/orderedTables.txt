@@ -1,6 +1,8 @@
 asset_interface
 template_asset_interface
-component_association
+connector
+component_classassociation
+component_requirement
 component_interface
 interface
 component
