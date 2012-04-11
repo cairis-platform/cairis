@@ -17071,24 +17071,24 @@ begin
     set buf = concat(buf,'\n\nh4. Postconditions\n\n',ucPost,'\n\nh4. Use Case Map\n\n!',shortCode,'.jpg!\n\nh4. Related Scenarios\n\n');
 
     select count(*) into scCount from usecase_task where usecase_id = ucId;
-    if scCount > 0
+    if scCount = 0
     then
+      set buf = concat(buf,'* None\n');
+    else
       open scCursor;
       scCursor_loop: loop
         fetch scCursor into scName;
         if done = 1
         then
-          set buf = concat(buf,'\n\nh4. Related Requirements\n\n');
           leave scCursor_loop;
         end if;
         set buf = concat(buf,'* ',scName,'\n');
       end loop scCursor_loop;
       close scCursor;
-    else
-      set buf = concat(buf,'* None\n');
     end if;
     set done = 0;
 
+    set buf = concat(buf,'\n\nh4. Related Requirements\n\n');
     select count(*) into reqCount from requirement_usecase where usecase_id = ucId;
     if reqCount > 0
     then
