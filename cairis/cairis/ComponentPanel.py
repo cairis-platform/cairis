@@ -19,41 +19,39 @@
 import wx
 import armid
 from BasePanel import BasePanel
-import SecurityPattern
+import Component
 from Borg import Borg
-from SecurityPatternNotebook import SecurityPatternNotebook
+from ComponentNotebook import ComponentNotebook
 
-class SecurityPatternPanel(BasePanel):
+class ComponentPanel(BasePanel):
   def __init__(self,parent):
-    BasePanel.__init__(self,parent,armid.SECURITYPATTERN_ID)
-    self.thePatternId = None
+    BasePanel.__init__(self,parent,armid.COMPONENT_ID)
+    self.theComponentId = None
     b = Borg()
     self.dbProxy = b.dbProxy
     
   def buildControls(self,isCreate,isUpdateable=True):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-    mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.SECURITYPATTERN_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.COMPONENT_TEXTNAME_ID),0,wx.EXPAND)
 
     nbBox = wx.StaticBox(self,-1)
     nbSizer = wx.StaticBoxSizer(nbBox,wx.VERTICAL)
     mainSizer.Add(nbSizer,1,wx.EXPAND)
-    nbSizer.Add(SecurityPatternNotebook(self),1,wx.EXPAND)
+    nbSizer.Add(ComponentNotebook(self),1,wx.EXPAND)
 
-    mainSizer.Add(self.buildCommitButtonSizer(armid.SECURITYPATTERN_BUTTONCOMMIT_ID,isCreate),0,wx.CENTER)
+    mainSizer.Add(self.buildCommitButtonSizer(armid.COMPONENT_BUTTONCOMMIT_ID,isCreate),0,wx.CENTER)
     self.SetSizer(mainSizer)
 
   def loadControls(self,pattern,isReadOnly=False):
     self.thePatternId = pattern.id()
-    nameCtrl = self.FindWindowById(armid.SECURITYPATTERN_TEXTNAME_ID)
-    contextCtrl = self.FindWindowById(armid.SECURITYPATTERN_TEXTCONTEXT_ID)
-    problemCtrl = self.FindWindowById(armid.SECURITYPATTERN_TEXTPROBLEM_ID)
-    solutionCtrl = self.FindWindowById(armid.SECURITYPATTERN_TEXTSOLUTION_ID)
-    concernsCtrl = self.FindWindowById(armid.SECURITYPATTERN_LISTPATTERNSTRUCTURE_ID)
-    reqsCtrl = self.FindWindowById(armid.SECURITYPATTERN_LISTREQUIREMENTS_ID)
+    nameCtrl = self.FindWindowById(armid.COMPONENT_TEXTNAME_ID)
+    descCtrl = self.FindWindowById(armid.COMPONENT_TEXTDESCRIPTION_ID)
+    ifCtrl = self.FindWindowById(armid.COMPONENT_LISTINTERFACES_ID)
+    structCtrl = self.FindWindowById(armid.COMPONENT_LISTSTRUCTURE_ID)
+    reqsCtrl = self.FindWindowById(armid.COMPONENT_LISTREQUIREMENTS_ID)
 
     nameCtrl.SetValue(pattern.name())
-    contextCtrl.SetValue(pattern.context())
-    problemCtrl.SetValue(pattern.problem())
-    solutionCtrl.SetValue(pattern.solution())
-    concernsCtrl.load(pattern.associations())
+    descCtrl.SetValue(pattern.description())
+    ifCtrl.load(pattern.interfaces())
+    structCtrl.load(pattern.structure())
     reqsCtrl.load(pattern.requirements()) 

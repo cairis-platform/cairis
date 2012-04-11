@@ -25,6 +25,7 @@ from DomainProperty import DomainProperty
 from Asset import Asset
 from TemplateAsset import TemplateAsset
 from SecurityPattern import SecurityPattern
+from Component import Component
 from Threat import Threat
 from Vulnerability import Vulnerability
 from Risk import Risk
@@ -53,6 +54,7 @@ from ObstacleParameters import ObstacleParameters
 from AssetParameters import AssetParameters
 from TemplateAssetParameters import TemplateAssetParameters
 from SecurityPatternParameters import SecurityPatternParameters
+from ComponentParameters import ComponentParameters
 from ThreatParameters import ThreatParameters
 from VulnerabilityParameters import VulnerabilityParameters
 from RiskParameters import RiskParameters
@@ -97,6 +99,8 @@ def build(objtId,p):
     return TemplateAsset(objtId,p.name(),p.shortCode(),p.description(),p.significance(),p.type(),p.properties(),p.interfaces())
   if (p.__class__.__name__ == 'SecurityPatternParameters'):
     return SecurityPattern(objtId,p.name(),p.context(),p.problem(),p.solution(),p.requirements(),p.associations())
+  if (p.__class__.__name__ == 'ComponentParameters'):
+    return Component(objtId,p.name(),p.description(),p.interfaces(),p.structure(),p.requirements())
   if (p.__class__.__name__ == 'ValueTypeParameters'):
     return ValueType(objtId,p.name(),p.description(),p.type())
   if (p.__class__.__name__ == 'ClassAssociationParameters'):

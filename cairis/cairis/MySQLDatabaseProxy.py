@@ -1203,6 +1203,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       objts = self.getTemplateAssets(constraintId)
     if (dimensionTable == 'securitypattern'):
       objts = self.getSecurityPatterns(constraintId)
+    if (dimensionTable == 'component'):
+      objts = self.getComponents(constraintId)
     if (dimensionTable == 'classassociation'):
       objts = self.getClassAssociations(constraintId)
     if (dimensionTable == 'goal'):
@@ -5973,8 +5975,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting requirements for pattern id ' + str(patternId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-
-
   def addSecurityPattern(self,parameters):
     patternId = parameters.id()
     if (patternId == -1):
@@ -8747,6 +8747,35 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error adding component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def updateComponent(self,parameters):
+    componentId = parameters.id()
+    componentName = parameters.name()
+    componentDesc = parameters.description()
+    structure = parameters.structure()
+    requirements = parameters.requirements()
+
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call deleteComponentComponents(%s)',(patternId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating component ' + componentName
+        raise DatabaseProxyException(exceptionText) 
+      curs.execute('call updateComponent(%s,%s,%s)',(componentId,componentName,componentDesc))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating component ' + componentName
+        raise DatabaseProxyException(exceptionText) 
+
+      for ifName,ifType in parameters.interfaces():
+        self.addComponentInterface(componentId,ifName,ifType)
+      self.addComponentStructure(componentId,structure)
+      self.addComponentRequirements(componentId,requirements)
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
   def addComponentInterface(self,componentId,ifName,ifType):
     try:
       curs = self.conn.cursor()
@@ -8891,4 +8920,81 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding requirement to component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getComponents(self,constraintId = -1):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getComponents(%s)',(constraintId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining security patterns'
+        raise DatabaseProxyException(exceptionText) 
+      components = {}
+      componentRows = []
+      for row in curs.fetchall():
+        row = list(row)
+        componentId = row[0]
+        componentName = row[1]
+        componentDesc = row[2]
+        componentRows.append((componentId,componentName,componentDesc))
+      curs.close()
+      for componentId,componentName,componentDesc in componentRows:
+        componentInterfaces = self.componentInterfaces(componentId)
+        componentStructure = self.componentStructure(componentId)
+        componentReqs = self.componentRequirements(componentId)
+        parameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs)
+        component = ObjectFactory.build(componentId,parameters)
+        components[componentName] = component
+      return components
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting components (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def componentRequirements(self,componentId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getComponentRequirements(%s)',(componentId))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error obtaining component requirements'
+        raise DatabaseProxyException(exceptionText) 
+      pStruct = []
+      for row in curs.fetchall():
+        row = list(row)
+        reqType = row[0]
+        reqName = row[1]
+        reqDesc = row[2]
+        reqRationale = row[3]
+        reqFc = row[4]
+        reqAsset = row[5]
+        pStruct.append((reqName,reqDesc,reqType,reqRationale,reqFc,reqAsset))
+      curs.close()
+      return pStruct
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting requirements for component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def componentInterfaces(self,componentId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentInterfaces(%s)',(componentId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting component interfaces'
+        raise DatabaseProxyException(exceptionText) 
+      interfaces = []
+      for row in curs.fetchall():
+        row = list(row)
+        ifName = row[1]
+        ifType = row[2]
+        ifTypeName = 'provided'
+        if ifType == 1:
+          ifTypeName = 'required'
+        interfaces.append((ifName,ifTypeName))
+      curs.close()
+      return interfaces
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting component interfaces (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

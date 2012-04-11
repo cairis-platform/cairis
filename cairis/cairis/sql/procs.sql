@@ -429,8 +429,10 @@ drop procedure if exists getTemplateAssets;
 drop procedure if exists addSecurityPattern;
 drop procedure if exists updateSecurityPattern;
 drop procedure if exists delete_securitypattern;
+drop procedure if exists delete_component;
 drop procedure if exists template_assetNames;
 drop procedure if exists deleteSecurityPatternComponents;
+drop procedure if exists deleteComponentComponents;
 drop procedure if exists addSecurityPatternRequirement;
 drop procedure if exists getSecurityPatternRequirements;
 drop procedure if exists addSecurityPatternStructure;
@@ -663,6 +665,7 @@ drop procedure if exists deleteTags;
 drop procedure if exists delete_tag;
 drop procedure if exists getTags;
 drop procedure if exists addComponent;
+drop procedure if exists updateComponent;
 drop procedure if exists addComponentInterface;
 drop procedure if exists addConnector;
 drop procedure if exists interfaceNames;
@@ -676,6 +679,8 @@ drop procedure if exists addComponentStructure;
 drop procedure if exists getComponentStructure;
 drop procedure if exists addComponentRequirement;
 drop procedure if exists getComponentRequirements;
+drop procedure if exists getComponents;
+drop procedure if exists componentInterfaces;
 
 delimiter //
 
@@ -17933,7 +17938,12 @@ end
 
 create procedure getComponentStructure(in componentId int)
 begin
-    select ha.name,hat.name,a.head_navigation,hm.name,a.head_role_name,a.tail_role_name,tm.name,a.tail_navigation,tat.name,ta.name from component_classassociation a, template_asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, template_asset ta where a.component_id = componentId and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id;
+    if componentId = -1
+    then
+      select ha.name,hat.name,a.head_navigation,hm.name,a.head_role_name,a.tail_role_name,tm.name,a.tail_navigation,tat.name,ta.name from component_classassociation a, template_asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, template_asset ta where a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id;
+    else
+      select ha.name,hat.name,a.head_navigation,hm.name,a.head_role_name,a.tail_role_name,tm.name,a.tail_navigation,tat.name,ta.name from component_classassociation a, template_asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, template_asset ta where a.component_id = componentId and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id;
+    end if;
 end
 //
 
@@ -17952,6 +17962,59 @@ end
 create procedure getComponentRequirements(in componentId int)
 begin
   select rt.name,cr.name,cr.description,cr.rationale,cr.fit_criterion,ta.name from component_requirement cr, requirement_type rt, template_asset ta where cr.component_id = componentId and cr.asset_id = ta.id and cr.type_id = rt.id order by cr.label;
+end
+//
+
+create procedure getComponents(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select id,name,description from component;
+  else
+    select id,name,description from component where id = constraintId;
+  end if;
+end
+//
+
+create procedure componentInterfaces(in constraintId int)
+begin
+  select c.name component,i.name interface,ci.required_id from component c, interface i, component_interface ci where ci.component_id = constraintId and ci.component_id = c.id and ci.interface_id = i.id;
+end
+//
+
+create procedure updateComponent(in componentId int, in componentName text, in componentDesc text)
+begin
+  update component set name = componentName, description = componentDesc where id = componentId;
+end
+//
+
+create procedure delete_component(in componentId int)
+begin
+  call deleteComponentComponents(componentId);
+  if componentId = -1
+  then
+    delete from component;
+  else
+    delete from component where id = componentId;
+  end if;
+end
+//
+
+create procedure deleteComponentComponents(in componentId int)
+begin
+  if componentId = -1
+  then
+    delete from connector;
+    delete from component_interface;
+    delete from component_classassociation;
+    delete from component_requirement;
+  else
+    delete from connector where from_component_id = componentId;
+    delete from connector where to_component_id = componentId;
+    delete from component_interface where component_id = componentId;
+    delete from component_classassociation where component_id = componentId;
+    delete from component_requirement where component_id = componentId;
+  end if;
 end
 //
 

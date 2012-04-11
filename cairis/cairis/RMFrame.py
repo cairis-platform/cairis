@@ -25,6 +25,7 @@ from ARM import *
 from Environment import Environment
 import armid
 from EnvironmentsDialog import EnvironmentsDialog
+from ComponentsDialog import ComponentsDialog
 from AttackersDialog import AttackersDialog
 from DomainPropertiesDialog import DomainPropertiesDialog
 from GoalsDialog import GoalsDialog
@@ -102,6 +103,7 @@ class RMFrame(wx.Frame):
     findBmp = wx.ArtProvider.GetBitmap(wx.ART_FIND,wx.ART_TOOLBAR,(30,30))
     settingsBmp = wx.Image(self.directoryPrefix + 'projectSettings.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     environmentBmp = wx.Image(self.directoryPrefix + 'environment.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+    componentBmp = wx.Image(self.directoryPrefix + 'component.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     domainPropertiesBmp = wx.Image(self.directoryPrefix + 'domainproperty.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     goalsBmp = wx.Image(self.directoryPrefix + 'goal.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     obstaclesBmp = wx.Image(self.directoryPrefix + 'obstacle.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
@@ -127,6 +129,7 @@ class RMFrame(wx.Frame):
     self.toolbar.AddSeparator()
     self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_SETTINGS,settingsBmp,'Edit Project Settings')
     self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_CON,environmentBmp,'Edit Environments')
+    self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_COM,componentBmp,'Edit Component Models')
     self.toolbar.AddSeparator()
     self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_ADD,addBmp,'Add new requirement')
     self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_DELETE,deleteBmp,'Delete requirement')
@@ -266,8 +269,6 @@ class RMFrame(wx.Frame):
 
     menubar.Append(gridm,'&Grid')
     
-
-
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ENVIRONMENT,self.OnViewEnvironment)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ASSETMODEL,self.OnViewAssets)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_GOALMODEL,self.OnViewGoals)
@@ -297,6 +298,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_ADD,self.OnAddEditorObject)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_DELETE,self.OnDeleteEditorObject)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_CON,self.OnEnvironments)
+    wx.EVT_MENU(self,armid.RMFRAME_TOOL_COM,self.OnComponents)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_SETTINGS,self.OnSettings)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_ENVIRONMENTMODEL,self.OnViewEnvironment)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_ASSETMODEL,self.OnViewAssets)
@@ -461,6 +463,17 @@ class RMFrame(wx.Frame):
       dialog.Destroy()
     except ARMException,errorText:
       dlg = wx.MessageDialog(self,str(errorText),'Edit Environments',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+
+  def OnComponents(self,event):
+    try:
+      dialog = ComponentsDialog(self)
+      dialog.ShowModal()
+      dialog.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Edit Components',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return
@@ -1604,10 +1617,16 @@ class RMFrame(wx.Frame):
   def OnViewComponentModel(self,event):
     dialog = None
     try: 
-      model = self.dbProxy.componentModel()
-      cModel = ComponentModel(model[0],model[1])
-      dialog = ComponentModelViewer()
-      dialog.ShowModal(cModel)
+      interfaces,connectors = self.dbProxy.componentModel()
+      if (len(interfaces) == 0):
+        dlg = wx.MessageDialog(self,'No components defined','View Component Model',wx.OK | wx.ICON_EXCLAMATION)
+        dlg.ShowModal()
+        dlg.Destroy()
+      else: 
+        cModel = ComponentModel(interfaces,connectors)
+        dialog = ComponentModelViewer()
+        dialog.ShowModal(cModel)
+        dialog.destroy()
     except ARMException,errorText:
       if (dialog != None):
         dialog.destroy()

@@ -41,7 +41,7 @@ class EditorBase(wx.Panel):
     dependenciesBmp = wx.Image(directoryPrefix + 'dependencyassociation.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     goalAssociationsBmp = wx.Image(directoryPrefix + 'goalassociation.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     cmModelBmp = wx.Image(directoryPrefix + 'conceptMapModel.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
-    componentModelBmp = wx.Image(directoryPrefix + 'component.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+    componentModelBmp = wx.Image(directoryPrefix + 'componentModel.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
 
     self.visToolbar = wx.ToolBar(self,style=wx.TB_HORIZONTAL | wx.TB_DOCKABLE)
     self.visToolbar.AddSimpleTool(armid.RMFRAME_TOOL_DEPENDENCIES,dependenciesBmp,'Edit Dependencies')
