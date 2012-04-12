@@ -79,7 +79,6 @@ class InterfaceListCtrl(wx.ListCtrl):
       self.SetStringItem(self.theSelectedIdx,1,dlg.interfaceType())
 
   def load(self,ifs):
-    print ifs
     for ifName,ifType in ifs:
       idx = self.GetItemCount()
       self.InsertStringItem(idx,ifName)

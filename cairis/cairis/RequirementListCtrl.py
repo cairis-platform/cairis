@@ -23,8 +23,8 @@ from Borg import Borg
 from RequirementDialog import RequirementDialog
 
 class RequirementListCtrl(wx.ListCtrl):
-  def __init__(self,parent,structCtrl):
-    wx.ListCtrl.__init__(self,parent,armid.SECURITYPATTERN_LISTREQUIREMENTS_ID,size=wx.DefaultSize,style=wx.LC_REPORT)
+  def __init__(self,parent,structCtrl,winId = armid.SECURITYPATTERN_LISTREQUIREMENTS_ID):
+    wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT)
     b = Borg()
     self.dbProxy = b.dbProxy
     self.reqs = {}

@@ -52,7 +52,7 @@ class RequirementsPage(wx.Panel):
     asBox = wx.StaticBox(self,-1)
     asBoxSizer = wx.StaticBoxSizer(asBox,wx.HORIZONTAL)
     topSizer.Add(asBoxSizer,1,wx.EXPAND)
-    self.requirementList = RequirementListCtrl(self,structPage.associationList)
+    self.requirementList = RequirementListCtrl(self,structPage.associationList,armid.COMPONENT_LISTREQUIREMENTS_ID)
     asBoxSizer.Add(self.requirementList,1,wx.EXPAND)
     self.SetSizer(topSizer)
 

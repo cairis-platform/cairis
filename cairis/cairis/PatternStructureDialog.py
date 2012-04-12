@@ -23,7 +23,7 @@ from Borg import Borg
 
 class PatternStructureDialog(wx.Dialog):
   def __init__(self,parent,headName = '',headAdornment = '',headNav = '',headNry = '',headRole='',tailRole='',tailNry='',tailNav = '',tailAdornment='',tailName = ''):
-    wx.Dialog.__init__(self,parent,armid.PATTERNSTRUCTURE_ID,'Add Structure',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,475))
+    wx.Dialog.__init__(self,parent,armid.PATTERNSTRUCTURE_ID,'Add Structure',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,575))
     b = Borg()
     self.dbProxy = b.dbProxy
     self.theHeadName = headName

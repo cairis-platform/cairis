@@ -121,17 +121,17 @@ class PatternStructureListCtrl(wx.ListCtrl):
       self.SetStringItem(self.theSelectedIdx,8,dlg.tailAdornment())
       self.SetStringItem(self.theSelectedIdx,9,dlg.tailAsset())
 
-  def load(self,assets):
-    for headAsset,headAdornment,headNav,headNry,headRole,tailRole,tailNry,tailNav,tailAdornment,tailAsset in assets:
+  def load(self,assocs):
+    for headAsset,headAdornment,headNav,headNry,headRole,tailRole,tailNry,tailNav,tailAdornment,tailAsset in assocs:
       idx = self.GetItemCount()
       self.InsertStringItem(idx,headAsset)
       self.SetStringItem(idx,1,headAdornment)
-      self.SetStringItem(idx,2,headNav)
+      self.SetStringItem(idx,2,str(headNav))
       self.SetStringItem(idx,3,headNry)
       self.SetStringItem(idx,4,headRole)
       self.SetStringItem(idx,5,tailRole)
       self.SetStringItem(idx,6,tailNry)
-      self.SetStringItem(idx,7,tailNav)
+      self.SetStringItem(idx,7,str(tailNav))
       self.SetStringItem(idx,8,tailAdornment)
       self.SetStringItem(idx,9,tailAsset)
 
@@ -148,7 +148,7 @@ class PatternStructureListCtrl(wx.ListCtrl):
       tailNav = self.GetItem(x,7)
       tailAdornment = self.GetItem(x,8)
       tailAsset = self.GetItem(x,9)
-      assocs.append((headAsset,headAdornment.GetText(),headNav.GetText(),headNry.GetText(),headRole.GetText(),tailRole.GetText(),tailNry.GetText(),tailNav.GetText(),tailAdornment.GetText(),tailAsset.GetText()))
+      assocs.append((headAsset,headAdornment.GetText(),int(headNav.GetText()),headNry.GetText(),headRole.GetText(),tailRole.GetText(),tailNry.GetText(),int(tailNav.GetText()),tailAdornment.GetText(),tailAsset.GetText()))
     return assocs
 
   def assets(self):

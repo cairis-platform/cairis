@@ -42,16 +42,16 @@ class ComponentPanel(BasePanel):
     mainSizer.Add(self.buildCommitButtonSizer(armid.COMPONENT_BUTTONCOMMIT_ID,isCreate),0,wx.CENTER)
     self.SetSizer(mainSizer)
 
-  def loadControls(self,pattern,isReadOnly=False):
-    self.thePatternId = pattern.id()
+  def loadControls(self,component,isReadOnly=False):
+    self.thePatternId = component.id()
     nameCtrl = self.FindWindowById(armid.COMPONENT_TEXTNAME_ID)
     descCtrl = self.FindWindowById(armid.COMPONENT_TEXTDESCRIPTION_ID)
     ifCtrl = self.FindWindowById(armid.COMPONENT_LISTINTERFACES_ID)
     structCtrl = self.FindWindowById(armid.COMPONENT_LISTSTRUCTURE_ID)
     reqsCtrl = self.FindWindowById(armid.COMPONENT_LISTREQUIREMENTS_ID)
 
-    nameCtrl.SetValue(pattern.name())
-    descCtrl.SetValue(pattern.description())
-    ifCtrl.load(pattern.interfaces())
-    structCtrl.load(pattern.structure())
-    reqsCtrl.load(pattern.requirements()) 
+    nameCtrl.SetValue(component.name())
+    descCtrl.SetValue(component.description())
+    ifCtrl.load(component.interfaces())
+    structCtrl.load(component.structure())
+    reqsCtrl.load(component.requirements()) 
