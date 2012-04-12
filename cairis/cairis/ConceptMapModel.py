@@ -72,6 +72,11 @@ class ConceptMapModel:
     self.conceptNameSet = set([])
     self.assocSet = set([])
 
+    reqNodes = self.dbProxy.getDimensionNames('requirement',self.theEnvironmentName)
+    for nodeName in reqNodes:
+      self.buildNode(nodeName,self.theEnvironmentName)
+      self.conceptNameSet.add(nodeName)
+    
     for association in self.theAssociations:
       fromName = association.fromName()
       toName = association.toName()
