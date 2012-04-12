@@ -153,11 +153,11 @@ class PatternStructureDialog(wx.Dialog):
 
   def headAsset(self): return self.theHeadName
   def headAdornment(self): return self.theHeadAdornment
-  def headNavigation(self): return self.theHeadNavigation
+  def headNavigation(self): return self.theHeadNav
   def headMultiplicity(self): return self.theHeadNry
   def headRole(self): return self.theHeadRole
   def tailRole(self): return self.theTailRole
   def tailMultiplicity(self): return self.theTailNry
-  def tailNavigation(self): return self.theTailNavigation
+  def tailNavigation(self): return self.theTailNav
   def tailAdornment(self): return self.theTailAdornment
   def tailAsset(self): return self.theTailName
