@@ -8756,7 +8756,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
     try:
       curs = self.conn.cursor()
-      curs.execute('call deleteComponentComponents(%s)',(patternId))
+      curs.execute('call deleteComponentComponents(%s)',(componentId))
       if (curs.rowcount == -1):
         exceptionText = 'Error updating component ' + componentName
         raise DatabaseProxyException(exceptionText) 
@@ -8777,9 +8777,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addComponentInterface(self,componentId,ifName,ifType):
+    ifTypeId = 1
+    if ifType == 'provided':
+      ifTypeId = 0
     try:
       curs = self.conn.cursor()
-      curs.execute('call addComponentInterface(%s,%s,%s)',(componentId,ifName,ifType))
+      curs.execute('call addComponentInterface(%s,%s,%s)',(componentId,ifName,ifTypeId))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding interface ' + ifName + ' to  component ' + componentName
         raise DatabaseProxyException(exceptionText) 
@@ -8836,7 +8839,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       self.deleteInterfaces(dimObjt,dimName)
       for ifName,ifType in ifs:
-        self.addInterface(dimObjt,ifName,ifType,dimName)
+        ifTypeId = 1
+        if ifType == 'provided':
+          ifTypeId = 0
+        self.addInterface(dimObjt,ifName,ifTypeId,dimName)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding interfaces to ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'

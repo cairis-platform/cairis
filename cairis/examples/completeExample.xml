@@ -2281,127 +2281,127 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement name="" reference="User certificate" reference_type="asset" label="3" type="Functional" priority="1" >
+<requirement name="Certificate storage" reference="User certificate" reference_type="asset" label="3" type="Functional" priority="1" >
   <description>NeuroGrid digital certificates shall not be stored on a machine accessible from the public internet.</description>
   <rationale>Hacking a weakly defined machine can give an attacker access to NeuroGrid and any authorised data sets.</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Certificate replay Misuse Case</originator>
 </requirement>
-<requirement name="" reference="User certificate" reference_type="asset" label="4" type="Security" priority="1" >
+<requirement name="Incorrect access response" reference="User certificate" reference_type="asset" label="4" type="Security" priority="1" >
   <description>Data requests sent from an account with incorrect access permissions shall be sent a 'no data received' message.</description>
   <rationale>Do not want attackers to know if they have valid access permissions or not.</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement name="" reference="Access Control Policy" reference_type="asset" label="1" type="Functional" priority="1" >
+<requirement name="Dataset policy" reference="Access Control Policy" reference_type="asset" label="1" type="Functional" priority="1" >
   <description>Access to a NeuroGrid data-set shall be governed by an access control policy.</description>
   <rationale>Need to determine which users can do what.</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement name="" reference="Access Control Policy" reference_type="asset" label="2" type="Operational" priority="1" >
+<requirement name="Access sponsor" reference="Access Control Policy" reference_type="asset" label="2" type="Operational" priority="1" >
   <description>Requests for NeuroGrid access shall be authorised by the nominated clinical exemplar sponsor.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement name="" reference="Access Control Policy" reference_type="asset" label="3" type="Security" priority="1" >
+<requirement name="Sponsor clearance" reference="Access Control Policy" reference_type="asset" label="3" type="Security" priority="1" >
   <description>Clearance shall be granted by the exemplar sponsor before a user is provided access to a NeuroGrid data set.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Background material</originator>
 </requirement>
-<requirement name="" reference="Analysis data" reference_type="asset" label="2" type="Functional" priority="1" >
+<requirement name="XML response" reference="Analysis data" reference_type="asset" label="2" type="Functional" priority="1" >
   <description>Data retrieved from an API request shall be marked-up in XML.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement reference="Analysis data" reference_type="asset" label="3" type="Functional" priority="1" >
+<requirement name="Analysis data location" reference="Analysis data" reference_type="asset" label="3" type="Functional" priority="1" >
   <description>Generated analysis data shall be stored in a different location to the raw clinical data.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Background material</originator>
 </requirement>
-<requirement reference="Analysis data" reference_type="asset" label="5" type="Functional" priority="1" >
+<requirement name="Intermediate data removal" reference="Analysis data" reference_type="asset" label="5" type="Functional" priority="1" >
   <description>Intermediate data used to produce analysis data shall be removed on completion of a workflow.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Background material</originator>
 </requirement>
-<requirement reference="Analysis data" reference_type="asset" label="4" type="Functional" priority="1" >
+<requirement name="Analysis anonymisation" reference="Analysis data" reference_type="asset" label="4" type="Functional" priority="1" >
   <description>Analysis data shall be checked to ensure it is fully anonymised before it is allowed to be downloaded.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Download task</originator>
 </requirement>
-<requirement reference="Analysis data" reference_type="asset" label="1" type="Performance" priority="2" >
+<requirement name="Retrieval rate" reference="Analysis data" reference_type="asset" label="1" type="Performance" priority="2" >
   <description>100 50kb image thumbnails from Stroke meta-data shall be retrieved within 20 seconds of a query submission.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Inteview data</originator>
 </requirement>
-<requirement reference="Guest Certificate" reference_type="asset" label="2" type="Functional" priority="1" >
+<requirement name="Guest workflow submission" reference="Guest Certificate" reference_type="asset" label="2" type="Functional" priority="1" >
   <description>Guest users shall not be able to submit NeuroGrid workflows.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement reference="Guest Certificate" reference_type="asset" label="1" type="Security" priority="1" >
+<requirement name="Guest node restriction" reference="Guest Certificate" reference_type="asset" label="1" type="Security" priority="1" >
   <description>Guests Certificate may be restricted to data nodes where access has been explicitly granted.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement reference="WebDav folder" reference_type="asset" label="1" type="Functional" priority="1" >
+<requirement name="WebDav client" reference="WebDav folder" reference_type="asset" label="1" type="Functional" priority="1" >
   <description>NeuroGrid data folders shall be accessible to authorised users via a WebDav client.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement reference="WebDav folder" reference_type="asset" label="4" type="Functional" priority="1" >
+<requirement name="WebDav folder retention" reference="WebDav folder" reference_type="asset" label="4" type="Functional" priority="1" >
   <description>WebDav folders shall be retained on a NeuroGrid data node for 24 hours after its initial creation.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement reference="WebDav folder" reference_type="asset" label="2" type="Portability" priority="1" >
+<requirement name="Folder visibility" reference="WebDav folder" reference_type="asset" label="2" type="Portability" priority="1" >
   <description>WebDav folder names shall be viewable from any WebDav client.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement reference="WebDav folder" reference_type="asset" label="3" type="Security" priority="1" >
+<requirement name="Folder permissions" reference="WebDav folder" reference_type="asset" label="3" type="Security" priority="1" >
   <description>WebDav folders viewed from an account without correct access permissions shall be shown an empty folder.</description>
   <rationale>Do not want attackers to know if they have valid access permissions or not.</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement reference="Grid meta-data" reference_type="asset" label="1" type="Functional" priority="2" >
+<requirement name="Meta-data query" reference="Grid meta-data" reference_type="asset" label="1" type="Functional" priority="2" >
   <description>Meta-data query results shall be directly downloadable or stored locally on the NeuroGrid node.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement reference="Portal" reference_type="asset" label="1" type="Functional" priority="1" >
+<requirement name="HTTPS data transfer" reference="Portal" reference_type="asset" label="1" type="Functional" priority="1" >
   <description>Each NeuroGrid data request from the NeuroGrid portal shall be transmitted using https.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement reference="Portal" reference_type="asset" label="2" type="Functional" priority="1" >
+<requirement name="Encrypted data transfer" reference="Portal" reference_type="asset" label="2" type="Functional" priority="1" >
   <description>All data transmission within NeuroGrid shall be encrypted and signed.</description>
   <rationale>Safeguard confidentiality and integrity.</rationale>
   <fit_criterion>If any given packet is sniffed, no plaintext data is read.</fit_criterion>
   <originator>Validation session.</originator>
 </requirement>
-<requirement reference="Workflow" reference_type="asset" label="1" type="Functional" priority="3" >
+<requirement name="Completion email" reference="Workflow" reference_type="asset" label="1" type="Functional" priority="3" >
   <description>When data analysis is complete, an email shall be sent to the workflow submitter informing him of the result.</description>
   <rationale>Useful reminder for submitters.</rationale>
   <fit_criterion>Email acknowledgement received after a simple job completes.</fit_criterion>
   <originator>Goal Model</originator>
 </requirement>
-<requirement reference="Workflow" reference_type="asset" label="2" type="Functional" priority="1" >
+<requirement name="API data transfer" reference="Workflow" reference_type="asset" label="2" type="Functional" priority="1" >
   <description>Data shall be uploadable or downloadable via a Java API</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>

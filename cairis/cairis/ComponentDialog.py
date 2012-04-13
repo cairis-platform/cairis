@@ -61,7 +61,7 @@ class ComponentDialog(wx.Dialog):
     self.theStructure = structCtrl.associations()
     self.theRequirements = reqsCtrl.requirements()
 
-    if len(self.theComponentName) == 0:
+    if len(self.theName) == 0:
       dlg = wx.MessageDialog(self,'Component name cannot be empty',commitLabel,wx.OK) 
       dlg.ShowModal()
       dlg.Destroy()
@@ -81,5 +81,5 @@ class ComponentDialog(wx.Dialog):
 
   def parameters(self):
     parameters = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theRequirements)
-    parameters.setId(self.thePatternId)
+    parameters.setId(self.theComponentId)
     return parameters
