@@ -35,6 +35,7 @@ class ConceptMapModel:
     self.fontName = b.fontName
     self.fontSize = b.fontSize
     self.theGraph = pydot.Dot()
+    self.theGraph.set_graph_defaults(rankdir='LR')
     if (cfSet == True):
       self.theGraph.set_node_defaults(shape='ellipse',colorscheme='set14',color='1',fontname=self.fontName,fontsize=self.fontSize,style='filled')
     else:

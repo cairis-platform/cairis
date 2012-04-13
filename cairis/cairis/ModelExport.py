@@ -47,6 +47,16 @@ def drawGraph(graph,graphName):
   graph.zoom_ratio = 1
   graph.draw(c2)
   s.finish()
+  svgFile = tmpDir + '/' + graphName + '.svg'
+  s = cairo.SVGSurface(svgFile,graph.width,graph.height)
+  c1 = cairo.Context(s)
+  c2 = pangocairo.CairoContext(c1)
+  c2.set_line_cap(cairo.LINE_CAP_BUTT)
+  c2.set_line_join(cairo.LINE_JOIN_MITER)
+  graph.zoom_ratio = 1
+  graph.draw(c2)
+  s.finish()
+
   ppmFile = tmpDir + '/' + graphName + '.ppm'
   jpgFile = outputDir + '/' + graphName
   cmd1 = 'pdftoppm ' + tmpFile + ' > ' + ppmFile
@@ -108,7 +118,7 @@ def exportRedmineRequirements(outFileName):
     envCode = envReqs[0][5]
     buf = 'h1. ' + envName + ' requirements\n\n' 
 
-    cmFile = envCode + '_conceptMap.jpg'
+    cmFile = envCode + '_conceptMap'
     buildConceptMap(b.dbProxy,envName,cmFile)
     buf +='!' + cmFile + '!\n\n'
     
