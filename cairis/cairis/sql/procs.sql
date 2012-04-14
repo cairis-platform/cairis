@@ -679,8 +679,21 @@ drop procedure if exists addComponentStructure;
 drop procedure if exists getComponentStructure;
 drop procedure if exists addComponentRequirement;
 drop procedure if exists getComponentRequirements;
-drop procedure if exists getComponents;
+drop procedure if exists getComponentView;
 drop procedure if exists componentInterfaces;
+drop procedure if exists riskyAssets;
+drop procedure if exists getComponents;
+drop procedure if exists getConnectors;
+drop procedure if exists addComponentView;
+drop procedure if exists updateComponentView;
+drop procedure if exists addComponentToView;
+drop procedure if exists delete_component_view;
+drop procedure if exists componentViewInterfaces;
+drop procedure if exists componentViewConnectors;
+drop procedure if exists component_viewNames;
+drop procedure if exists deleteComponentViewComponents;
+drop procedure if exists componentNames;
+drop procedure if exists connectorNames;
 
 delimiter //
 
@@ -9778,9 +9791,14 @@ end
 create procedure addTemplateAsset(in assetId int,in assetName text, in shortCode text, in assetDesc text, in assetSignificance text,in assetType text)
 begin
   declare assetTypeId int;
-  select id into assetTypeId from asset_type where name = assetType;
-  
-  insert into template_asset(id,name,short_code,description,significance,asset_type_id) values (assetId,assetName,shortCode,assetDesc,assetSignificance,assetTypeId);
+  declare taCount int;
+
+  select count(id) into taCount from template_asset where name = assetName;
+  if taCount = 0
+  then
+    select id into assetTypeId from asset_type where name = assetType;
+    insert into template_asset(id,name,short_code,description,significance,asset_type_id) values (assetId,assetName,shortCode,assetDesc,assetSignificance,assetTypeId);
+  end if;
 end
 //
 
@@ -17765,19 +17783,23 @@ begin
 end
 //
 
-create procedure addConnector(in cName text, in fromName text, in fromIf text, in toName text, in toIf text)
+create procedure addConnector(in connId int, in cvName text, in cName text, in fromName text, in fromIf text, in toName text, in toIf text, in taName text)
 begin
+  declare cvId int;
   declare fromId int;
   declare fromIfId int;
   declare toId int;
   declare toIfId int;
-
+  declare taId int;
+  
+  select id into cvId from component_view where name = cvName;
   select id into fromId from component where name = fromName;
   select id into fromIfId from interface where name = fromIf;
   select id into toId from component where name = toName;
   select id into toIfId from interface where name = toIf;
+  select id into taId from template_asset where name = taName;
 
-  insert into connector(name,from_component_id,from_interface_id,to_component_id,to_interface_id) values (cName,fromId,fromIfId,toId,toIfId);
+  insert into connector(id,name,component_view_id,from_component_id,from_interface_id,to_component_id,to_interface_id,template_asset_id) values (connId,cName,cvId,fromId,fromIfId,toId,toIfId,taId);
 end
 //
 
@@ -17789,22 +17811,34 @@ end
 
 create procedure deleteInterfaces(in ifObjt text, in ifDim text)
 begin
+  declare objtCountSql varchar(4000);
   declare dimIdSql varchar(4000);
   declare deleteIfsSql varchar(4000);
   declare dimId int;
+  declare objtCount int;
 
-  set dimIdSql = concat('select id into @dimId from ',ifDim,' where name = "',ifObjt,'"');
-  set @sql = dimIdSql;
+  set objtCountSql = concat('select count(id) into @objtCount from ',ifDim,' where name = "',ifObjt,'"');
+  set @sql = objtCountSql;
   prepare stmt from @sql;
   execute stmt;
   deallocate prepare stmt;
-  set dimId = @dimId;
+  set objtCount = @objtCount;
 
-  set deleteIfsSql = concat('delete from ',ifDim,'_interface where ',ifDim,'_id = ',dimId);
-  set @sql = deleteIfsSql;
-  prepare stmt from @sql;
-  execute stmt;
-  deallocate prepare stmt;
+  if objtCount > 0
+  then
+    set dimIdSql = concat('select id into @dimId from ',ifDim,' where name = "',ifObjt,'"');
+    set @sql = dimIdSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
+    set dimId = @dimId;
+
+    set deleteIfsSql = concat('delete from ',ifDim,'_interface where ',ifDim,'_id = ',dimId);
+    set @sql = deleteIfsSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
+  end if;
 end
 //
 
@@ -17965,13 +17999,13 @@ begin
 end
 //
 
-create procedure getComponents(in constraintId int)
+create procedure getComponentView(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,description from component;
+    select id,name,synopsis from component_view;
   else
-    select id,name,description from component where id = constraintId;
+    select id,name,synopsis from component_view where id = constraintId;
   end if;
 end
 //
@@ -17993,8 +18027,10 @@ begin
   call deleteComponentComponents(componentId);
   if componentId = -1
   then
+    delete from component_view_component;
     delete from component;
   else
+    delete from component_view_component where id = componentId;
     delete from component where id = componentId;
   end if;
 end
@@ -18004,17 +18040,130 @@ create procedure deleteComponentComponents(in componentId int)
 begin
   if componentId = -1
   then
-    delete from connector;
     delete from component_interface;
     delete from component_classassociation;
     delete from component_requirement;
   else
-    delete from connector where from_component_id = componentId;
-    delete from connector where to_component_id = componentId;
     delete from component_interface where component_id = componentId;
     delete from component_classassociation where component_id = componentId;
     delete from component_requirement where component_id = componentId;
   end if;
+end
+//
+
+create procedure riskyAssets(in componentName text)
+begin
+  declare cId int;
+  declare envId int;
+  drop table if exists temp_templateasset_asset;
+  create temporary table temp_templateasset_asset (template_asset_name varchar(255),asset_name varchar(255),risk_name varchar(255),target_type varchar(50),target_name varchar(255));
+
+  set envId = 104;
+  select id into cId from component where name = componentName;
+
+/* get assets with the same name */
+
+  insert into temp_templateasset_asset
+  select ta.name,a.name,r.name,'vulnerability',v.name from component_classassociation ca, asset a, template_asset ta, asset_vulnerability av, vulnerability v, risk r where ca.component_id = cId and ca.head_id = ta.id and ta.name = a.name and a.id = av.asset_id and av.environment_id = envId and av.vulnerability_id = v.id and av.vulnerability_id = r.vulnerability_id
+  union
+  select ta.name,a.name,r.name,'vulnerability',v.name from component_classassociation ca, asset a, template_asset ta, asset_vulnerability av, vulnerability v, risk r where ca.component_id = cId and ca.tail_id = ta.id and ta.name = a.name and a.id = av.asset_id and av.environment_id = envId and av.vulnerability_id = v.id and av.vulnerability_id = r.vulnerability_id
+  union
+  select ta.name,a.name,r.name,'threat',t.name from component_classassociation ca, asset a, template_asset ta, asset_threat at, threat t, risk r where ca.component_id = cId and ca.head_id = ta.id and ta.name = a.name and a.id = at.asset_id and at.environment_id = envId and at.threat_id = t.id and at.threat_id = r.threat_id
+  union
+  select ta.name,a.name,r.name,'threat',t.name from component_classassociation ca, asset a, template_asset ta, asset_threat at, threat t, risk r where ca.component_id = cId and ca.tail_id = ta.id and ta.name = a.name and a.id = at.asset_id and at.environment_id = envId and at.threat_id = t.id and at.threat_id = r.threat_id;
+
+
+  select template_asset_name, asset_name, risk_name, target_name,target_type from temp_templateasset_asset;
+
+end
+//
+
+create procedure getComponents(in cvId int)
+begin
+  select c.id,c.name,c.description from component c, component_view_component cvc where cvc.component_view_id = cvId and cvc.component_id = c.id;
+end
+//
+
+create procedure getConnectors(in cmId int)
+begin
+  select ca.name connector, fc.name from_name, fi.name from_interface, tc.name to_name, ti.name to_interface from connector ca, component fc, component tc, interface fi, interface ti, component_model_connector cmc where ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id and ca.id = cmc.connector_id and cmc.component_model_id = cmId;
+end
+//
+
+create procedure addComponentView(in cvId int, in cvName text, in cvSyn text)
+begin
+  insert into component_view(id,name,synopsis) values (cvId,cvName,cvSyn);
+end
+//
+
+create procedure updateComponentView(in cvId int, in cvName text, in cvSyn text)
+begin
+  update component_view set name = cvName, synopsis = cvSyn where id = cvId;
+end
+//
+
+create procedure addComponentToView(in cId int, in cvId int)
+begin
+  insert into component_view_component(component_id,component_view_id) values (cId,cvId);
+end
+//
+
+create procedure delete_component_view(in cvId int)
+begin
+  if cvId = -1
+  then
+    delete from component_view_component;
+    delete from connector;
+    delete from component_view;
+  else
+    delete from component_view_component where component_view_id = cvId;
+    delete from connector where component_view_id = cvId;
+    delete from component_view where id = cvId;
+  end if;
+
+end
+//
+
+create procedure componentViewInterfaces(in cvName text)
+begin
+  declare cvId int;
+
+  select id into cvId from component_view where name = cvName;
+  select c.name component,i.name interface,ci.required_id from component c, interface i, component_interface ci, component_view_component cvc where cvc.component_view_id = cvId and cvc.component_id = ci.component_id  and ci.component_id = c.id and ci.interface_id = i.id;
+end
+//
+
+create procedure componentViewConnectors(in cvName text)
+begin
+  declare cvId int;
+
+  select id into cvId from component_view where name = cvName;
+  select ca.name connector, fc.name from_name, fi.name from_interface, tc.name to_name, ti.name to_interface, ta.name from connector ca, component fc, component tc, interface fi, interface ti, template_asset ta where ca.component_view_id = cvId and ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id and ca.template_asset_id = ta.id;
+end
+//
+
+create procedure component_viewNames(in environmentName text)
+begin
+  select name from component_view order by 1;
+end
+//
+
+create procedure deleteComponentViewComponents(in cvId int)
+begin
+  delete from component_view_component where component_view_id = cvId;
+  delete from connector where component_view_id = cvId;
+end
+//
+
+create procedure componentNames(in constraintName text)
+begin
+  select name from component order by 1;
+end
+//
+
+create procedure connectorNames(in constraintName text)
+begin
+  select name from connector order by 1;
 end
 //
 

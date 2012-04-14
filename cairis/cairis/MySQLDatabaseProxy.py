@@ -92,6 +92,7 @@ from Steps import Steps
 from ReferenceSynopsis import ReferenceSynopsis
 from ReferenceContribution import ReferenceContribution
 from ConceptMapAssociationParameters import ConceptMapAssociationParameters
+from ComponentViewParameters import ComponentViewParameters;
 from ComponentParameters import ComponentParameters;
 from ConnectorParameters import ConnectorParameters;
 import string
@@ -1203,8 +1204,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       objts = self.getTemplateAssets(constraintId)
     if (dimensionTable == 'securitypattern'):
       objts = self.getSecurityPatterns(constraintId)
-    if (dimensionTable == 'component'):
-      objts = self.getComponents(constraintId)
+    if (dimensionTable == 'component_view'):
+      objts = self.getComponentViews(constraintId)
     if (dimensionTable == 'classassociation'):
       objts = self.getClassAssociations(constraintId)
     if (dimensionTable == 'goal'):
@@ -5778,10 +5779,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addTemplateAsset(self,parameters):
-    assetId = parameters.id()
-    if (assetId == -1):
-      assetId = self.newId()
-
+    assetId = self.newId()
     assetName = parameters.name()
     shortCode = parameters.shortCode()
     assetDesc = parameters.description()
@@ -8696,33 +8694,44 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.deleteObject(tagId,'tag')
     self.conn.commit()
 
-  def componentModel(self):
+  def componentView(self,cvName):
     try:
       curs = self.conn.cursor()
-      curs.execute('select component,interface,required_id from component_interfaces')
+      curs.execute('call componentViewInterfaces(%s)',(cvName))
       if (curs.rowcount == -1):
-        exceptionText = 'Error getting component interfaces'
+        exceptionText = 'Error getting component view interfaces'
         raise DatabaseProxyException(exceptionText) 
       interfaces = []
       for row in curs.fetchall():
         row = list(row)
         interfaces.append((row[0],row[1],row[2]))
-      curs.execute('select connector,from_name,from_interface,to_name,to_interface from connectors')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting component associations'
-        raise DatabaseProxyException(exceptionText) 
-      associations = []
-      for row in curs.fetchall():
-        row = list(row)
-        associations.append((row[0],row[1],row[2],row[3],row[4]))
       curs.close()
-      return (interfaces,associations)
+      connectors = self.componentViewConnectors(cvName)
+      return (interfaces,connectors)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL error getting component model (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error getting component view (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addComponent(self,parameters):
+  def componentViewConnectors(self,cvName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentViewConnectors(%s)',(cvName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting component view connectors'
+        raise DatabaseProxyException(exceptionText) 
+      connectors = []
+      for row in curs.fetchall():
+        row = list(row)
+        connectors.append((row[0],row[1],row[2],row[3],row[4],row[5]))
+      curs.close()
+      return connectors
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting connectors for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addComponent(self,parameters,cvId = -1):
     componentId = self.newId()
     componentName = parameters.name()
     componentDesc = parameters.description()
@@ -8735,7 +8744,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error adding component ' + componentName
         raise DatabaseProxyException(exceptionText) 
-
+      if cvId != -1:
+        curs.execute('call addComponentToView(%s,%s)',(componentId,cvId))
+        if (curs.rowcount == -1):
+          exceptionText = 'Error adding component ' + componentName + ' to view '
+          raise DatabaseProxyException(exceptionText) 
+     
       for ifName,ifType in parameters.interfaces():
         self.addComponentInterface(componentId,ifName,ifType)
       self.addComponentStructure(componentId,structure)
@@ -8747,7 +8761,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error adding component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def updateComponent(self,parameters):
+  def updateComponent(self,parameters,cvId = -1):
     componentId = parameters.id()
     componentName = parameters.name()
     componentDesc = parameters.description()
@@ -8764,6 +8778,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating component ' + componentName
         raise DatabaseProxyException(exceptionText) 
+      if cvId != -1:
+        curs.execute('call addComponentToView(%s,%s)',(componentId,cvId))
+        if (curs.rowcount == -1):
+          exceptionText = 'Error adding component ' + componentName + ' to view '
+          raise DatabaseProxyException(exceptionText) 
+     
+      for ifName,ifType in parameters.interfaces():
+        self.addComponentInterface(componentId,ifName,ifType)
+      self.addComponentStructure(componentId,structure)
 
       for ifName,ifType in parameters.interfaces():
         self.addComponentInterface(componentId,ifName,ifType)
@@ -8784,31 +8807,34 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       curs.execute('call addComponentInterface(%s,%s,%s)',(componentId,ifName,ifTypeId))
       if (curs.rowcount == -1):
-        exceptionText = 'Error adding interface ' + ifName + ' to  component ' + componentName
+        exceptionText = 'Error adding interface ' + ifName + ' to  component ' + str(componentId)
         raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL error adding interface ' + ifName + ' to component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error adding interface ' + ifName + ' to component ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def addConnector(self,parameters):
+    connId = self.newId()
     cName = parameters.name()
+    cvName = parameters.view()
     fromName = parameters.fromName()
     fromIf = parameters.fromInterface()
     toName = parameters.toName()
     toIf = parameters.toInterface()
+    conAsset = parameters.asset()
     try:
       curs = self.conn.cursor()
-      curs.execute('call addConnector(%s,%s,%s,%s,%s)',(cName,fromName,fromIf,toName,toIf))
+      curs.execute('call addConnector(%s,%s,%s,%s,%s,%s,%s,%s)',(connId,cvName,cName,fromName,fromIf,toName,toIf,conAsset))
       if (curs.rowcount == -1):
-        exceptionText = 'Error adding connector from component ' + fromName + ' to  component ' + toName
+        exceptionText = 'Error adding connector ' + cName
         raise DatabaseProxyException(exceptionText) 
       curs.close()
       self.conn.commit()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL error adding connector from component ' + fromName + ' to component ' + toName + ' (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error adding connector ' + cName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def getInterfaces(self,dimObjt,dimName):
@@ -8928,30 +8954,38 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error adding requirement to component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def getComponents(self,constraintId = -1):
+  def getComponentViews(self,constraintId = -1):
     try:
       curs = self.conn.cursor()
-      curs.execute('call getComponents(%s)',(constraintId))
+      curs.execute('call getComponentView(%s)',(constraintId))
       if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining security patterns'
+        exceptionText = 'Error obtaining component models'
         raise DatabaseProxyException(exceptionText) 
-      components = {}
-      componentRows = []
+      cvs = {}
+      cvRows = []
       for row in curs.fetchall():
         row = list(row)
-        componentId = row[0]
-        componentName = row[1]
-        componentDesc = row[2]
-        componentRows.append((componentId,componentName,componentDesc))
+        cvId = row[0]
+        cvName = row[1]
+        cvSyn = row[2]
+        cvRows.append((cvId,cvName,cvSyn))
       curs.close()
-      for componentId,componentName,componentDesc in componentRows:
-        componentInterfaces = self.componentInterfaces(componentId)
-        componentStructure = self.componentStructure(componentId)
-        componentReqs = self.componentRequirements(componentId)
-        parameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs)
-        component = ObjectFactory.build(componentId,parameters)
-        components[componentName] = component
-      return components
+
+      for cvId,cvName,cvSyn in cvRows:
+        viewComponents = self.componentViewComponents(cvId)
+        components = []
+        for componentId,componentName,componentDesc in viewComponents:
+          componentInterfaces = self.componentInterfaces(componentId)
+          componentStructure = self.componentStructure(componentId)
+          componentReqs = self.componentRequirements(componentId)
+          comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs)
+          comParameters.setId(componentId)
+          components.append(comParameters)
+        connectors = self.componentViewConnectors(cvName)
+        parameters = ComponentViewParameters(cvName,cvSyn,[],components,connectors)
+        cv = ObjectFactory.build(cvId,parameters)
+        cvs[cvName] = cv
+      return cvs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting components (id:' + str(id) + ',message:' + msg + ')'
@@ -9003,4 +9037,92 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting component interfaces (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addComponentView(self,parameters):
+    cvId = self.newId()
+    cvName = parameters.name()
+    cvSyn = parameters.synopsis()
+    cvAssets = parameters.assets()
+    cvComs = parameters.components()
+    cvCons = parameters.connectors()
+
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addComponentView(%s,%s,%s)',(cvId,cvName,cvSyn))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding new component view ' + cvName
+        raise DatabaseProxyException(exceptionText) 
+
+      for taParameters in cvAssets:
+        self.addTemplateAsset(taParameters)
+      for comParameters in cvComs:
+        self.addComponent(comParameters,cvId)
+      for conParameters in cvCons:
+        self.addConnector(conParameters)
+      self.conn.commit()
+      curs.close()
+      return cvId
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding component view (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def updateComponentView(self,parameters):
+    cvId = parameters.id()
+    cvName = parameters.name()
+    cvSyn = parameters.synopsis()
+    cvAssets = parameters.assets()
+    cvComs = parameters.components()
+    cvCons = parameters.connectors()
+
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call deleteComponentViewComponents(%s)',(cvId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error deleting components for component view ' + cvName
+        raise DatabaseProxyException(exceptionText) 
+
+      curs.execute('call updateComponentView(%s,%s,%s)',(cvId,cvName,cvSyn))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating component view ' + cvName
+        raise DatabaseProxyException(exceptionText) 
+
+      for taParameters in cvAssets:
+        self.updateTemplateAsset(taParameters)
+      for comParameters in cvComs:
+        self.updateComponent(comParameters,cvId)
+      for conParameters in cvCons:
+        self.addConnector(conParameters)
+      self.conn.commit()
+      curs.close()
+      return cvId
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating component view (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteComponentView(self,cvId):
+    self.deleteObject(cvId,'component_view')
+    self.conn.commit()
+
+  def componentViewComponents(self,cvId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getComponents(%s)',(cvId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting components'
+        raise DatabaseProxyException(exceptionText) 
+      components = []
+      for row in curs.fetchall():
+        row = list(row)
+        cId = row[0]
+        cName = row[1]
+        cDesc = row[2]
+        components.append((cId,cName,cDesc))
+      curs.close()
+      return components
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting components (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

@@ -1,5 +1,8 @@
 asset_interface
 template_asset_interface
+component_view_component
+component_view_connector
+component_view
 connector
 component_classassociation
 component_requirement
@@ -23,6 +26,7 @@ value_tension
 severity
 likelihood
 asset_tag
+template_asset_tag
 attacker_tag
 threat_tag
 vulnerability_tag

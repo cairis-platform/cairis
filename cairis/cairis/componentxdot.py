@@ -603,10 +603,10 @@ class ComponentDotWindow(gtk.Window):
     </ui>
     '''
 
-    def __init__(self,windowTitle):
+    def __init__(self,windowTitle,cvName):
         gtk.Window.__init__(self)
         self.graph = xdot.Graph()
-
+        self.theViewName = cvName
         window = self
 
         window.set_title(windowTitle)
@@ -717,7 +717,7 @@ class ComponentDotWindow(gtk.Window):
         b = Borg()
         proxy = b.dbProxy
         
-        self.traceModel = ComponentModel(b.dbProxy.componentModel())
+        self.traceModel = ComponentModel(b.dbProxy.componentView(self.theViewName))
         self.set_xdotcode(self.traceModel.graph())
         self.widget.zoom_to_fit()
 

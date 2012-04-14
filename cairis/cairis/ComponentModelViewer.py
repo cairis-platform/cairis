@@ -26,13 +26,13 @@ from ARM import *
 from Borg import Borg
 
 class ComponentModelViewer(componentxdot.ComponentDotWindow):
-  def __init__(self):
-    componentxdot.ComponentDotWindow.__init__(self,'')
+  def __init__(self,cvName):
+    componentxdot.ComponentDotWindow.__init__(self,'',cvName)
     self.widget.connect('clicked', self.on_url_clicked)
     self.widget.connect('button_press_event', self.onClick)
     b = Borg()
     directoryPrefix = b.imageDir + '/'
-    self.set_icon_from_file(directoryPrefix + 'componentModel.png')
+    self.set_icon_from_file(directoryPrefix + 'component_view.png')
 
 
   def onClick(self,widget,event):

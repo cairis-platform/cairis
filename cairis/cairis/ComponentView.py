@@ -16,23 +16,16 @@
 #  under the License.
 
 
-import ObjectCreationParameters
+class ComponentView:
+  def __init__(self,cvId,cvName,cvSyn,cvComs,cvCons):
+    self.theId = cvId
+    self.theName = cvName
+    self.theSynopsis = cvSyn
+    self.theComponents = cvComs
+    self.theConnectors = cvCons
 
-class ConnectorParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,cName,cvName,fName,fInf,tName,tInf,caName):
-    ObjectCreationParameters.ObjectCreationParameters.__init__(self)
-    self.theName = cName
-    self.theViewName = cvName
-    self.theFromName = fName
-    self.theFromInterface = fInf
-    self.theToName = tName
-    self.theToInterface = tInf
-    self.theAssetName = caName
-
+  def id(self): return self.theId
   def name(self): return self.theName
-  def view(self): return self.theViewName
-  def fromName(self): return self.theFromName
-  def fromInterface(self): return self.theFromInterface
-  def toName(self): return self.theToName
-  def toInterface(self): return self.theToInterface
-  def asset(self): return self.theAssetName
+  def synopsis(self): return self.theSynopsis
+  def components(self): return self.theComponents
+  def connectors(self): return self.theConnectors

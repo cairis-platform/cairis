@@ -23,22 +23,24 @@ from ComponentParameters import ComponentParameters
 import DialogClassParameters
 
 class ComponentDialog(wx.Dialog):
-  def __init__(self,parent,parameters):
-    wx.Dialog.__init__(self,parent,parameters.id(),parameters.label(),style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,500))
+  def __init__(self,parent):
+    wx.Dialog.__init__(self,parent,armid.COMPONENT_ID,'Edit Component',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,500))
     self.theName = ''
     self.theDescription = ''
+    self.theComponents = []
+    self.theConnectors = []
     self.theInterfaces = []
     self.theStructure = []
     self.theRequirements = []
     self.theComponentId = -1
     self.panel = 0
-    self.buildControls(parameters)
+    self.buildControls()
     self.commitVerb = 'Add'
     
-  def buildControls(self,parameters):
+  def buildControls(self):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     self.panel = ComponentPanel(self)
-    self.panel.buildControls(parameters.createFlag())
+    self.panel.buildControls()
     mainSizer.Add(self.panel,1,wx.EXPAND)
     self.SetSizer(mainSizer)
     wx.EVT_BUTTON(self,armid.COMPONENT_BUTTONCOMMIT_ID,self.onCommit)
@@ -52,10 +54,14 @@ class ComponentDialog(wx.Dialog):
     commitLabel = self.commitVerb + ' component'
     nameCtrl = self.FindWindowById(armid.COMPONENT_TEXTNAME_ID)
     descCtrl = self.FindWindowById(armid.COMPONENT_TEXTDESCRIPTION_ID)
+    comCtrl = self.FindWindowById(armid.COMPONENT_LISTCOMPONENTS_ID)
+    conCtrl = self.FindWindowById(armid.COMPONENT_LISTCONNECTORS_ID)
     ifCtrl = self.FindWindowById(armid.COMPONENT_LISTINTERFACES_ID)
     structCtrl = self.FindWindowById(armid.COMPONENT_LISTSTRUCTURE_ID)
     reqsCtrl = self.FindWindowById(armid.COMPONENT_LISTREQUIREMENTS_ID)
     self.theName = nameCtrl.GetValue()
+    self.theComponents = comCtrl.dimensions()
+    self.theConnectors = conCtrl.dimensions()
     self.theDescription = descCtrl.GetValue()
     self.theInterfaces = ifCtrl.dimensions()
     self.theStructure = structCtrl.associations()
@@ -80,6 +86,6 @@ class ComponentDialog(wx.Dialog):
       self.EndModal(armid.COMPONENT_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theRequirements)
+    parameters = ComponentParameters(self.theName,self.theDescription,self.theComponents,self.theConnectors,self.theInterfaces,self.theStructure,self.theRequirements)
     parameters.setId(self.theComponentId)
     return parameters

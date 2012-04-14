@@ -19,39 +19,39 @@
 import wx
 import armid
 from BasePanel import BasePanel
-import Component
+import ComponentView
 from Borg import Borg
-from ComponentNotebook import ComponentNotebook
+from ComponentViewNotebook import ComponentViewNotebook
 
-class ComponentPanel(BasePanel):
+class ComponentViewPanel(BasePanel):
   def __init__(self,parent):
-    BasePanel.__init__(self,parent,armid.COMPONENT_ID)
+    BasePanel.__init__(self,parent,armid.COMPONENTVIEW_ID)
     self.theComponentId = None
     b = Borg()
     self.dbProxy = b.dbProxy
     
-  def buildControls(self):
+  def buildControls(self,isCreate,isUpdateable=True):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-    mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.COMPONENT_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.COMPONENTVIEW_TEXTNAME_ID),0,wx.EXPAND)
 
     nbBox = wx.StaticBox(self,-1)
     nbSizer = wx.StaticBoxSizer(nbBox,wx.VERTICAL)
     mainSizer.Add(nbSizer,1,wx.EXPAND)
-    nbSizer.Add(ComponentNotebook(self),1,wx.EXPAND)
+    nbSizer.Add(ComponentViewNotebook(self),1,wx.EXPAND)
 
-    mainSizer.Add(self.buildCommitButtonSizer(armid.COMPONENT_BUTTONCOMMIT_ID,True),0,wx.CENTER)
+    mainSizer.Add(self.buildCommitButtonSizer(armid.COMPONENTVIEW_BUTTONCOMMIT_ID,isCreate),0,wx.CENTER)
     self.SetSizer(mainSizer)
 
-  def loadControls(self,component,isReadOnly=False):
-    self.theComponentId = component.id()
-    nameCtrl = self.FindWindowById(armid.COMPONENT_TEXTNAME_ID)
-    descCtrl = self.FindWindowById(armid.COMPONENT_TEXTDESCRIPTION_ID)
-    ifCtrl = self.FindWindowById(armid.COMPONENT_LISTINTERFACES_ID)
-    structCtrl = self.FindWindowById(armid.COMPONENT_LISTSTRUCTURE_ID)
-    reqsCtrl = self.FindWindowById(armid.COMPONENT_LISTREQUIREMENTS_ID)
+  def loadControls(self,cv,isReadOnly=False):
+    self.theComponentId = cv.id()
+    nbCtrl = self.FindWindowById(armid.COMPONENTVIEW_NOTEBOOKCOMPONENTVIEW_ID)
+    nameCtrl = self.FindWindowById(armid.COMPONENTVIEW_TEXTNAME_ID)
+    synCtrl = self.FindWindowById(armid.COMPONENTVIEW_TEXTSYNOPSIS_ID)
+    comCtrl = self.FindWindowById(armid.COMPONENTVIEW_LISTCOMPONENTS_ID)
+    conCtrl = self.FindWindowById(armid.COMPONENTVIEW_LISTCONNECTORS_ID)
 
-    nameCtrl.SetValue(component.name())
-    descCtrl.SetValue(component.description())
-    ifCtrl.load(component.interfaces())
-    structCtrl.load(component.structure())
-    reqsCtrl.load(component.requirements()) 
+    nbCtrl.setView(cv.name())
+    nameCtrl.SetValue(cv.name())
+    synCtrl.SetValue(cv.synopsis())
+    comCtrl.load(cv.components())
+    conCtrl.load(cv.connectors())

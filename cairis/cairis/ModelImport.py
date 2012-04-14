@@ -25,7 +25,7 @@ from GoalsContentHandler import GoalsContentHandler
 from UsabilityContentHandler import UsabilityContentHandler
 from AssociationsContentHandler import AssociationsContentHandler
 from CairisContentHandler import CairisContentHandler
-from ComponentModelContentHandler import ComponentModelContentHandler
+from ComponentViewContentHandler import ComponentViewContentHandler
 from Borg import Borg
 import xml.sax
 
@@ -297,41 +297,19 @@ def importProjectData(pSettings,envParameterSet):
     msgText += '.'
   return msgText
 
-def importComponentModelFile(importFile):
+def importComponentViewFile(importFile):
   parser = xml.sax.make_parser()
-  handler = ComponentModelContentHandler()
+  handler = ComponentViewContentHandler()
   parser.setContentHandler(handler)
   parser.setEntityResolver(handler)
   parser.parse(importFile)
-  assets = handler.assets()
-  components = handler.components()
-  connectors = handler.connectors()
-  return importComponentModelData(assets,components,connectors)
+  view = handler.view()
+  return importComponentViewData(view)
 
-def importComponentModelData(assets,components,connectors):
-  noOfAssets = len(assets)
-  noOfComponents = len(components)
-  noOfConns = len(connectors)
+def importComponentViewData(view):
   b = Borg()
-  cCount = 0
-
-  b.dbProxy.deleteTemplateAsset(-1)
-  assetId = 0
-  for asset in assets:
-    asset.setId(assetId)
-    b.dbProxy.addTemplateAsset(asset)
-    assetId += 1
-
-  for cParameters in components:
-    b.dbProxy.addComponent(cParameters)
-    cCount += 1
-  
-  cnCount = 0
-  for cnParameters in connectors:
-    b.dbProxy.addConnector(cnParameters)
-    cnCount += 1 
-
-  msgStr = 'Imported ' + str(assetId) + ' assets, ' + str(cCount) + ' components, and ' + str(cnCount) + ' connectors.'
+  b.dbProxy.addComponentView(view)
+  msgStr = 'Imported component view'
   return msgStr
 
 def importDomainValuesFile(importFile):

@@ -17,6 +17,7 @@
 
 
 from xml.sax.handler import ContentHandler,EntityResolver
+from ComponentViewParameters import ComponentViewParameters
 from ComponentParameters import ComponentParameters
 from ConnectorParameters import ConnectorParameters
 from TemplateAssetParameters import TemplateAssetParameters
@@ -38,8 +39,12 @@ def it2Id(itLabel):
   else:
     return 0
 
-class ComponentModelContentHandler(ContentHandler,EntityResolver):
+class ComponentViewContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
+    self.theViewParameters = None
+    self.theViewName = ''
+    self.theSynopsis = ''
+    self.inSynopsis = 0
     self.theAssets = []
     self.theComponents = []
     self.theConnectors = []
@@ -51,16 +56,10 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
     self.configDir = b.configDir
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/component_model.dtd'
+    return self.configDir + '/component_view.dtd'
 
-  def assets(self):
-    return self.theAssets
-
-  def components(self):
-    return self.theComponents
-
-  def connectors(self):
-    return self.theConnectors
+  def view(self):
+    return self.theViewParameters
 
   def resetComponentAttributes(self):
     self.inDescription = 0
@@ -119,10 +118,16 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
     self.theFromInterface = ''
     self.theToName = ''
     self.theToInterface = ''
+    self.theConnectorAsset = ''
 
 
   def startElement(self,name,attrs):
-    if (name == 'component'):
+    if (name == 'component_view'):
+      self.theViewName = attrs['name']
+    elif (name == 'synopsis'):
+      self.inSynopsis = 1
+      self.theSynopsis = ''
+    elif (name == 'component'):
       self.theName = attrs['name']
     elif (name == 'description'):
       self.inDescription = 1
@@ -152,6 +157,7 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
       self.theFromInterface = attrs['from_interface']
       self.theToName = attrs['to_component']
       self.theToInterface = attrs['to_interface']
+      self.theConnectorAsset = attrs['asset_name']
     elif name == 'structure':
       self.theHeadName = attrs['head_asset']
       self.theHeadAdornment = attrs['head_adornment']
@@ -182,6 +188,8 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
   def characters(self,data):
     if self.inDescription:
       self.theDescription += data
+    elif self.inSynopsis:
+      self.theSynopsis += data
     elif self.inSignificance:
       self.theSignificance += data
     elif self.inRationale:
@@ -233,14 +241,18 @@ class ComponentModelContentHandler(ContentHandler,EntityResolver):
       self.theRequirements.append((self.theReqName,self.theDescription,self.theType,self.theRationale,self.theFitCriterion,self.theAsset))
       self.resetRequirement()
     elif name == 'connector':
-      p = ConnectorParameters(self.theName,self.theFromName,self.theFromInterface,self.theToName,self.theToInterface)
+      p = ConnectorParameters(self.theName,self.theViewName,self.theFromName,self.theFromInterface,self.theToName,self.theToInterface,self.theConnectorAsset)
       self.theConnectors.append(p)
       self.resetConnectorAttributes() 
     elif name == 'description':
       self.inDescription = 0
+    elif name == 'synopsis':
+      self.inSynopsis = 0
     elif name == 'rationale':
       self.inRationale = 0
     elif name == 'significance':
       self.inSignificance = 0
     elif name == 'fit_criterion':
       self.inFitCriterion = 0
+    elif name == 'component_view':
+      self.theViewParameters = ComponentViewParameters(self.theViewName,self.theSynopsis,self.theAssets,self.theComponents,self.theConnectors)

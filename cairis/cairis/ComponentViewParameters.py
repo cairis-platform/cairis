@@ -18,21 +18,17 @@
 
 import ObjectCreationParameters
 
-class ConnectorParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,cName,cvName,fName,fInf,tName,tInf,caName):
+class ComponentViewParameters(ObjectCreationParameters.ObjectCreationParameters):
+  def __init__(self,cName,cSyn,cAssets,cCom,cCon):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = cName
-    self.theViewName = cvName
-    self.theFromName = fName
-    self.theFromInterface = fInf
-    self.theToName = tName
-    self.theToInterface = tInf
-    self.theAssetName = caName
+    self.theSynopsis = cSyn
+    self.theAssets = cAssets
+    self.theComponents = cCom
+    self.theConnectors = cCon
 
   def name(self): return self.theName
-  def view(self): return self.theViewName
-  def fromName(self): return self.theFromName
-  def fromInterface(self): return self.theFromInterface
-  def toName(self): return self.theToName
-  def toInterface(self): return self.theToInterface
-  def asset(self): return self.theAssetName
+  def synopsis(self): return self.theSynopsis
+  def assets(self): return self.theAssets
+  def components(self): return self.theComponents
+  def connectors(self): return self.theConnectors

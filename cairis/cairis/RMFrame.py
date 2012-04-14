@@ -25,7 +25,7 @@ from ARM import *
 from Environment import Environment
 import armid
 from EnvironmentsDialog import EnvironmentsDialog
-from ComponentsDialog import ComponentsDialog
+from ComponentViewsDialog import ComponentViewsDialog
 from AttackersDialog import AttackersDialog
 from DomainPropertiesDialog import DomainPropertiesDialog
 from GoalsDialog import GoalsDialog
@@ -469,11 +469,11 @@ class RMFrame(wx.Frame):
 
   def OnComponents(self,event):
     try:
-      dialog = ComponentsDialog(self)
+      dialog = ComponentViewsDialog(self)
       dialog.ShowModal()
       dialog.Destroy()
     except ARMException,errorText:
-      dlg = wx.MessageDialog(self,str(errorText),'Edit Components',wx.OK | wx.ICON_ERROR)
+      dlg = wx.MessageDialog(self,str(errorText),'Edit ComponentViews',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return
@@ -1617,16 +1617,21 @@ class RMFrame(wx.Frame):
   def OnViewComponentModel(self,event):
     dialog = None
     try: 
-      interfaces,connectors = self.dbProxy.componentModel()
-      if (len(interfaces) == 0):
-        dlg = wx.MessageDialog(self,'No components defined','View Component Model',wx.OK | wx.ICON_EXCLAMATION)
-        dlg.ShowModal()
-        dlg.Destroy()
-      else: 
-        cModel = ComponentModel(interfaces,connectors)
-        dialog = ComponentModelViewer()
-        dialog.ShowModal(cModel)
-        dialog.destroy()
+      proxy = self.b.dbProxy
+      cvs = proxy.getDimensionNames('component_view',False)
+      cDlg = DimensionNameDialog(self,'component_view',cvs,'Select')
+      if (cDlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
+        cvName = cDlg.dimensionName()
+        interfaces,connectors = self.dbProxy.componentView(cvName)
+        if (len(interfaces) == 0):
+          dlg = wx.MessageDialog(self,'No components defined','View Component Model',wx.OK | wx.ICON_EXCLAMATION)
+          dlg.ShowModal()
+          dlg.Destroy()
+        else: 
+          cModel = ComponentModel(interfaces,connectors)
+          dialog = ComponentModelViewer(cvName)
+          dialog.ShowModal(cModel)
+          dialog.destroy()
     except ARMException,errorText:
       if (dialog != None):
         dialog.destroy()

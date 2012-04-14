@@ -56,7 +56,7 @@ if __name__ == '__main__':
     elif (mFormat == 'domainvalues'):
       msgStr += importDomainValuesFile(importFile)
     elif (mFormat == 'component'):
-      msgStr += importComponentModelFile(importFile)
+      msgStr += importComponentViewFile(importFile)
     elif (mFormat == 'all'):
       msgStr += importModelFile(importFile)
     else:

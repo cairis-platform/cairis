@@ -47,12 +47,15 @@ DROP TABLE IF EXISTS task_characteristic_synopsis;
 DROP TABLE IF EXISTS contribution_end;
 DROP TABLE IF EXISTS link_contribution;
 DROP TABLE IF EXISTS asset_tag;
+DROP TABLE IF EXISTS template_asset_tag;
 DROP TABLE IF EXISTS attacker_tag;
 DROP TABLE IF EXISTS threat_tag;
 DROP TABLE IF EXISTS vulnerability_tag;
 DROP TABLE IF EXISTS risk_tag;
 
+DROP TABLE IF EXISTS component_view_component;
 DROP TABLE IF EXISTS connector;
+DROP TABLE IF EXISTS component_view;
 DROP TABLE IF EXISTS component_interface;
 DROP TABLE IF EXISTS asset_interface;
 DROP TABLE IF EXISTS template_asset_interface;
@@ -2295,6 +2298,14 @@ CREATE TABLE asset_tag (
   FOREIGN KEY(tag_id) REFERENCES tag(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE template_asset_tag (
+  template_asset_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(template_asset_id,tag_id),
+  FOREIGN KEY(template_asset_id) REFERENCES template_asset(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
 CREATE TABLE attacker_tag (
   attacker_id INT NOT NULL,
   tag_id INT NOT NULL,
@@ -2499,18 +2510,31 @@ CREATE TABLE template_asset_interface (
   FOREIGN KEY(interface_id) REFERENCES interface(id)
 ) ENGINE=INNODB;
 
-CREATE TABLE connector (
+CREATE TABLE component_view(
+  id INT NOT NULL,
   name VARCHAR(255) NOT NULL,
+  synopsis VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE connector (
+  id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  component_view_id INT NOT NULL,
   from_component_id INT NOT NULL,
   from_interface_id INT NOT NULL,
   to_component_id INT NOT NULL,
   to_interface_id INT NOT NULL,
-  PRIMARY KEY(from_component_id,from_interface_id,to_component_id,to_interface_id),
+  template_asset_id INT NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(component_view_id) REFERENCES component_view(id),
   FOREIGN KEY(from_component_id) REFERENCES component(id),
   FOREIGN KEY(from_interface_id) REFERENCES interface(id),
   FOREIGN KEY(to_component_id) REFERENCES component(id),
-  FOREIGN KEY(to_interface_id) REFERENCES interface(id)
+  FOREIGN KEY(to_interface_id) REFERENCES interface(id),
+  FOREIGN KEY(template_asset_id) REFERENCES template_asset(id)
 ) ENGINE=INNODB;
+
 
 CREATE TABLE component_classassociation (
   id INT NOT NULL,
@@ -2548,6 +2572,14 @@ CREATE TABLE component_requirement(
   FOREIGN KEY (component_id) REFERENCES component(id),
   FOREIGN KEY (type_id) REFERENCES requirement_type(id),
   FOREIGN KEY (asset_id) REFERENCES template_asset(id)
+) ENGINE=INNODB;
+
+CREATE TABLE component_view_component(
+  component_view_id INT NOT NULL,
+  component_id INT NOT NULL,
+  PRIMARY KEY(component_view_id,component_id),
+  FOREIGN KEY (component_view_id) REFERENCES component_view(id),
+  FOREIGN KEY (component_id) REFERENCES component(id)
 ) ENGINE=INNODB;
 
 CREATE VIEW countermeasure_vulnerability_response_target as 
