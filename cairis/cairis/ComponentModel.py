@@ -42,7 +42,7 @@ class ComponentModel:
     for componentName,interfaceName,reqId in interfaces:
       self.buildInterface(componentName,interfaceName,reqId)
 
-    for cnName,fromName,fromIF,toName,toIF in connectors:
+    for cnName,fromName,fromIF,toName,toIF,assetName in connectors:
       self.buildConnector(cnName,fromName,fromIF,toName,toIF)
 
   def size(self):

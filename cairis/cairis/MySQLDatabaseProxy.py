@@ -8787,10 +8787,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for ifName,ifType in parameters.interfaces():
         self.addComponentInterface(componentId,ifName,ifType)
       self.addComponentStructure(componentId,structure)
-
-      for ifName,ifType in parameters.interfaces():
-        self.addComponentInterface(componentId,ifName,ifType)
-      self.addComponentStructure(componentId,structure)
       self.addComponentRequirements(componentId,requirements)
       self.conn.commit()
       curs.close()

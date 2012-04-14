@@ -87,9 +87,10 @@ class ComponentListCtrl(wx.ListCtrl):
     inParameters = self.theComponents[self.theSelectedIdx]
     dlg.load(inParameters)
     if (dlg.ShowModal() == armid.COMPONENT_BUTTONCOMMIT_ID):
-      parameters = dlg.parameters()
-      self.SetStringItem(self.theSelectedIdx,0,parameters.name())
-      self.SetStringItem(self.theSelectedIdx,1,parameters.description())
+      outParameters = dlg.parameters()
+      self.theComponents[self.theSelectedIdx] = outParameters
+      self.SetStringItem(self.theSelectedIdx,0,outParameters.name())
+      self.SetStringItem(self.theSelectedIdx,1,outParameters.description())
 
   def load(self,components):
     self.theComponents = components
