@@ -23,7 +23,7 @@ from Borg import Borg
 
 class ConnectorDialog(wx.Dialog):
   def __init__(self,parent,conName = '',fromComponent = '',fromInterface = '',toComponent = '',toInterface ='',assetName=''):
-    wx.Dialog.__init__(self,parent,armid.PATTERNSTRUCTURE_ID,'Add Structure',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,575))
+    wx.Dialog.__init__(self,parent,armid.PATTERNSTRUCTURE_ID,'Add Structure',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME,size=(400,350))
     b = Borg()
     self.dbProxy = b.dbProxy
     self.theConnectorName = conName
@@ -94,7 +94,7 @@ class ConnectorDialog(wx.Dialog):
       dlg.ShowModal()
       dlg.Destroy()
       return
-    elif (len(self.theFromInterfave) == 0):
+    elif (len(self.theFromInterface) == 0):
       dlg = wx.MessageDialog(self,'No from interface selected',self.commitLabel + ' Connector',wx.OK)
       dlg.ShowModal()
       dlg.Destroy()
