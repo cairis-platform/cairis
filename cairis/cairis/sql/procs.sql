@@ -3992,9 +3992,7 @@ end
 
 create procedure countermeasureRequirements(in cmId int,in environmentId int)
 begin
-  select distinct concat(a.short_code,'-',r.label) from requirement_countermeasure rc, requirement r,asset_requirement ar,asset a where rc.countermeasure_id = cmId and rc.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and rc.environment_id = environmentId and r.id = ar.requirement_id and ar.asset_id = a.id
-  union
-  select distinct concat(e.short_code,'-',r.label) from requirement_countermeasure rc, requirement r,environment_requirement er,environment e where rc.countermeasure_id = cmId and rc.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and rc.environment_id = environmentId and r.id = er.requirement_id and er.environment_id = e.id;
+  select distinct r.name from requirement_countermeasure rc, requirement r where rc.countermeasure_id = cmId and rc.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and rc.environment_id = environmentId;
 end
 //
 
@@ -4006,12 +4004,7 @@ begin
   declare reqLabel int;
 
   select id into environmentId from environment where name = environmentName limit 1;
-  call requirementLabelComponents(viewLabel,shortCode,reqLabel);
-  select o.id into reqId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-  if reqId is null
-  then
-    select o.id into reqId from requirement o, environment_requirement ar, environment a where o.label = reqLabel and o.id = ar.requirement_id and ar.environment_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-  end if;
+  select o.id into reqId from requirement o where o.name = viewLabel and o.version = (select max(i.version) from requirement i where i.id = o.id);
   insert into requirement_countermeasure(countermeasure_id,environment_id,requirement_id) values (cmId,environmentId,reqId);
 end
 //
@@ -4024,12 +4017,7 @@ begin
   declare reqLabel int;
 
   select id into environmentId from environment where name = environmentName limit 1;
-  call requirementLabelComponents(viewLabel,shortCode,reqLabel);
-  select o.id into reqId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-  if reqId is null
-  then
-    select o.id into reqId from requirement o, environment_requirement ar, environment a where o.label = reqLabel and o.id = ar.requirement_id and ar.environment_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-  end if;
+  select o.id into reqId from requirement o where o.name = viewLabel and o.version = (select max(i.version) from requirement i where i.id = o.id);
   insert into requirement_countermeasure(countermeasure_id,environment_id,requirement_id) values (cmId,environmentId,reqId);
 end
 //
@@ -6006,12 +5994,7 @@ begin
   elseif goalDimName = 'goal' and subGoalDimName = 'requirement'
   then 
     select id into goalId from goal where name = goalName;    
-    call requirementLabelComponents(subGoalName,shortCode,reqLabel);
-    select o.id into subGoalId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    if subGoalId is null
-    then
-      select o.id into subGoalId from requirement o, environment_requirement er, environment e where o.label = reqLabel and o.id = er.requirement_id and er.environment_id = e.id and e.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    end if;
+    select o.id into subGoalId from requirement o where o.name = subGoalName and o.version = (select max(i.version) from requirement i where i.id = o.id);
     insert into goalrequirement_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values(associationId,environmentId,goalId,aTypeId,subGoalId,alternativeId,rationaleName);
   elseif goalDimName = 'goal' and subGoalDimName = 'task'
   then
@@ -6035,12 +6018,7 @@ begin
     insert into goalusecase_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values(associationId,environmentId,goalId,aTypeId,subGoalId,alternativeId,rationaleName);
   elseif goalDimName = 'requirement' and subGoalDimName = 'goal'
   then 
-    call requirementLabelComponents(goalName,shortCode,reqLabel);
-    select o.id into goalId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    if subGoalId is null
-    then
-      select o.id into goalId from requirement o, environment_requirement er, environment e where o.label = reqLabel and o.id = er.requirement_id and er.environment_id = e.id and e.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    end if;
+    select o.id into goalId from requirement o where o.name = goalName and o.version = (select max(i.version) from requirement i where i.id = o.id);
 
     select id into subGoalId from goal where name = subGoalName;    
     insert into requirementgoal_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values(associationId,environmentId,goalId,aTypeId,subGoalId,alternativeId,rationaleName);
@@ -6089,20 +6067,11 @@ begin
   then
     select id into goalId from obstacle where name = goalName;    
     call requirementLabelComponents(subGoalName,shortCode,reqLabel);
-    select o.id into subGoalId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    if subGoalId is null
-    then
-      select o.id into subGoalId from requirement o, environment_requirement er, environment e where o.label = reqLabel and o.id = er.requirement_id and er.environment_id = e.id and e.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    end if;
+    select o.id into subGoalId from requirement o where o.name = reqLabel and o.version = (select max(i.version) from requirement i where i.id = o.id);
     insert into obstaclerequirement_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values(associationId,environmentId,goalId,aTypeId,subGoalId,alternativeId,rationaleName);
   elseif goalDimName = 'requirement' and subGoalDimName = 'obstacle'
   then
-    call requirementLabelComponents(goalName,shortCode,reqLabel);
-    select o.id into goalId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    if goalId is null
-    then
-      select o.id into goalId from requirement o, environment_requirement er, environment e where o.label = reqLabel and o.id = er.requirement_id and er.environment_id = e.id and e.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    end if;
+    select o.id into goalId from requirement o where o.name = goalName and o.version = (select max(i.version) from requirement i where i.id = o.id);
     select id into subGoalId from obstacle where name = subGoalName;    
     insert into requirementobstacle_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values(associationId,environmentId,goalId,aTypeId,subGoalId,alternativeId,rationaleName);
   elseif goalDimName = 'obstacle' and subGoalDimName = 'threat'
@@ -6221,12 +6190,7 @@ begin
   elseif goalDimName = 'obstacle' and subGoalDimName = 'requirement'
   then
     select id into goalId from obstacle where name = goalName;    
-    call requirementLabelComponents(subGoalName,shortCode,reqLabel);
-    select o.id into subGoalId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    if subGoalId is null
-    then
-      select o.id into subGoalId from requirement o, environment_requirement er, environment e where o.label = reqLabel and o.id = er.requirement_id and er.environment_id = e.id and e.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    end if;
+    select o.id into subGoalId from requirement o where o.name = subGoalName and o.version = (select max(i.version) from requirement i where i.id = o.id);
     update obstaclerequirement_goalassociation set environment_id = environmentId, goal_id = goalId, ref_type_id = aTypeId, subgoal_id = subGoalId,alternative_id = alternativeId, rationale = rationaleName where id = associationId;
   elseif goalDimName = 'obstacle' and subGoalDimName = 'threat'
   then
@@ -6897,12 +6861,7 @@ begin
   select id into roleId from role where name = roleName limit 1;
   select id into envId from environment where name = envName limit 1;
 
-  call requirementLabelComponents(viewLabel,shortCode,reqLabel);
-  select o.id into reqId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-  if reqId is null
-  then
-    select o.id into reqId from requirement o, environment_requirement ar, environment a where o.label = reqLabel and o.id = ar.requirement_id and ar.environment_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-  end if;
+  select o.id into reqId from requirement o where o.name = viewLabel and o.version = (select max(i.version) from requirement i where i.id = o.id);
   insert into requirementrole_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values (associationId,envId,reqId,3,roleId,0,rationaleText);
 end
 //
@@ -6919,13 +6878,7 @@ begin
   set rationaleText = concat('Role ',roleName,' is responsible for Countermeasure ',cmName);
   select id into roleId from role where name = roleName limit 1;
   select id into envId from environment where name = envName limit 1;
-  call requirementLabelComponents(viewLabel,shortCode,reqLabel);
-  select o.id into reqId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-  if reqId is null
-  then
-    select o.id into reqId from requirement o, environment_requirement ar, environment a where o.label = reqLabel and o.id = ar.requirement_id and ar.environment_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-  end if;
-
+  select o.id into reqId from requirement o where o.name = viewLabel and o.version = (select max(i.version) from requirement i where i.id = o.id);
   insert into requirementrole_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values (associationId,envId,reqId,3,roleId,0,rationaleText);
 end
 //

@@ -364,10 +364,12 @@ def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues):
   return msgStr
 
 
-def importModelFile(importFile):
+def importModelFile(importFile,isOverwrite = 1):
   b = Borg()
-  b.dbProxy.clearDatabase()
-  modelTxt = importTVTypeFile(importFile) + '  '
+  modelTxt = ''
+  if isOverwrite == 1:
+    b.dbProxy.clearDatabase()
+    modelTxt += importTVTypeFile(importFile) + '  '
   modelTxt += importDomainValuesFile(importFile) + ' '
   modelTxt += importProjectFile(importFile) + ' '
   modelTxt += importRiskAnalysisFile(importFile) + ' '

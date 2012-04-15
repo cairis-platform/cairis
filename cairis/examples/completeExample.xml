@@ -2237,7 +2237,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
     <definition>Workflow publishes data as HTML to an accessible web-site directly or indirectly (via ftp).</definition>
   </obstacle_environment>
 </obstacle>
-<obstacle name="Guest workflow submission" originator="Shamal Faily" >
+<obstacle name="Guest workflow submissions" originator="Shamal Faily" >
   <obstacle_environment name="Core Technology" category="Accountability_Threat" >
     <definition>Guest users are able to submit workflows to NeuroGrid for processing.</definition>
   </obstacle_environment>
@@ -2410,7 +2410,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 <countermeasure name="Location-based X.509 extension" type="Information" >
   <description>X.509 certificates extended to tie client workstations so NeuroGrid tasks can only be carried out on these.</description>
   <countermeasure_environment name="Psychosis" cost="Medium" >
-    <countermeasure_requirement name="UC-1" />
+    <countermeasure_requirement name="User certificate" />
     <target name="Certificate ubiquity" effectiveness="High" >
       <target_response name="Prevent Unauthorised Certificate Access" />
       <rationale>Discourages certificate sharing</rationale>
@@ -2421,7 +2421,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
     <responsible_persona task="Download data" persona="Claire" duration="None" frequency="None" demands="None" goals="Low_Hindrance" />
   </countermeasure_environment>
   <countermeasure_environment name="Stroke" cost="Medium" >
-    <countermeasure_requirement name="UC-1" />
+    <countermeasure_requirement name="User certificate" />
     <target name="Certificate ubiquity" effectiveness="High" >
       <target_response name="Prevent Unauthorised Certificate Access" />
       <rationale>Discourages certificate sharing</rationale>
@@ -2568,130 +2568,130 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 <goal_association environment="Stroke"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="Download to WebDav folder" subgoal_dim="goal" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Anonymise data" goal_dim="goal" ref_type="and" subgoal_name="CD-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Anonymise data" goal_dim="goal" ref_type="and" subgoal_name="Anonymisation guidelines" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Anonymise data" goal_dim="goal" ref_type="and" subgoal_name="CD-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Anonymise data" goal_dim="goal" ref_type="and" subgoal_name="Anonymised data" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Location-based Authentication" goal_dim="goal" ref_type="and" subgoal_name="UC-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Location-based Authentication" goal_dim="goal" ref_type="and" subgoal_name="User certificate" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="NeuroGrid user authorisation" goal_dim="goal" ref_type="and" subgoal_name="UC-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="NeuroGrid user authorisation" goal_dim="goal" ref_type="and" subgoal_name="Truststores" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Certificate installation" goal_dim="goal" ref_type="and" subgoal_name="UC-3" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Certificate installation" goal_dim="goal" ref_type="and" subgoal_name="Certificate storage" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Upload authorisation" goal_dim="goal" ref_type="and" subgoal_name="UC-4" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Upload authorisation" goal_dim="goal" ref_type="and" subgoal_name="Incorrect access response" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="AC-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="Dataset policy" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="AC-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="Access sponsor" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="AC-3" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="Sponsor clearance" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="AD-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="XML response" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="AD-3" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Analysis data location" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="AD-5" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Intermediate data removal" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="AD-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="Retrieval rate" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Upload workflows to NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="GC-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Upload workflows to NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Guest workflow submission" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="WD-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="WebDav client" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="WD-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="Folder visibility" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="WD-3" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="Folder permissions" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Secure data transmission" goal_dim="goal" ref_type="and" subgoal_name="P-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Secure data transmission" goal_dim="goal" ref_type="and" subgoal_name="HTTPS data transfer" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Secure data transmission" goal_dim="goal" ref_type="and" subgoal_name="P-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Secure data transmission" goal_dim="goal" ref_type="and" subgoal_name="Encrypted data transfer" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Analysis complete acknowledgement" goal_dim="goal" ref_type="and" subgoal_name="WF-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Analysis complete acknowledgement" goal_dim="goal" ref_type="and" subgoal_name="Completion email" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Upload clinical data to NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="WF-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Upload clinical data to NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="API data transfer" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Anonymise data" goal_dim="goal" ref_type="and" subgoal_name="CD-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Anonymise data" goal_dim="goal" ref_type="and" subgoal_name="Anonymisation guidelines" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Anonymise data" goal_dim="goal" ref_type="and" subgoal_name="CD-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Anonymise data" goal_dim="goal" ref_type="and" subgoal_name="Anonymised data" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Location-based Authentication" goal_dim="goal" ref_type="and" subgoal_name="UC-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Location-based Authentication" goal_dim="goal" ref_type="and" subgoal_name="User certificate" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="NeuroGrid user authorisation" goal_dim="goal" ref_type="and" subgoal_name="UC-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="NeuroGrid user authorisation" goal_dim="goal" ref_type="and" subgoal_name="Truststores" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Certificate installation" goal_dim="goal" ref_type="and" subgoal_name="UC-3" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Certificate installation" goal_dim="goal" ref_type="and" subgoal_name="Certificate storage" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Upload authorisation" goal_dim="goal" ref_type="and" subgoal_name="UC-4" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Upload authorisation" goal_dim="goal" ref_type="and" subgoal_name="Incorrect access response" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="AC-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="Dataset policy" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="AC-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="Access sponsor" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="AC-3" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Data-set access" goal_dim="goal" ref_type="and" subgoal_name="Sponsor clearance" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="AD-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="XML response" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="AD-3" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Analysis data location" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="AD-5" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Intermediate data removal" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="AD-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="Retrieval rate" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Upload workflows to NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="GC-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Upload workflows to NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Guest workflow submission" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="WD-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="WebDav client" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="WD-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="Folder visibility" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="WD-3" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="Folder permissions" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Secure data transmission" goal_dim="goal" ref_type="and" subgoal_name="P-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Secure data transmission" goal_dim="goal" ref_type="and" subgoal_name="HTTPS data transfer" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Secure data transmission" goal_dim="goal" ref_type="and" subgoal_name="P-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Secure data transmission" goal_dim="goal" ref_type="and" subgoal_name="Encrypted data transfer" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Analysis complete acknowledgement" goal_dim="goal" ref_type="and" subgoal_name="WF-1" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Analysis complete acknowledgement" goal_dim="goal" ref_type="and" subgoal_name="Completion email" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Upload clinical data to NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="WF-2" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Upload clinical data to NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="API data transfer" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Psychosis"  goal_name="Download authorisation" goal_dim="goal" ref_type="and" subgoal_name="Download data" subgoal_dim="task" alternative_id="0" >
@@ -2811,16 +2811,16 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 <goal_association environment="Core Technology"  goal_name="Insecure internal data transmission" goal_dim="obstacle" ref_type="or" subgoal_name="Unsigned data transmission" subgoal_dim="obstacle" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="AC-3" goal_dim="requirement" ref_type="obstruct" subgoal_name="Unauthorised clinical data access" subgoal_dim="obstacle" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Sponsor clearance" goal_dim="requirement" ref_type="obstruct" subgoal_name="Unauthorised clinical data access" subgoal_dim="obstacle" alternative_id="0" >
   <rationale>None.</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="AD-5" goal_dim="requirement" ref_type="obstruct" subgoal_name="Intermediate data not destroyed." subgoal_dim="obstacle" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Intermediate data removal" goal_dim="requirement" ref_type="obstruct" subgoal_name="Intermediate data not destroyed." subgoal_dim="obstacle" alternative_id="0" >
   <rationale>None.</rationale>
 </goal_association>
-<goal_association environment="Core Technology"  goal_name="P-2" goal_dim="requirement" ref_type="obstruct" subgoal_name="Insecure internal data transmission" subgoal_dim="obstacle" alternative_id="0" >
+<goal_association environment="Core Technology"  goal_name="Encrypted data transfer" goal_dim="requirement" ref_type="obstruct" subgoal_name="Insecure internal data transmission" subgoal_dim="obstacle" alternative_id="0" >
   <rationale>None.</rationale>
 </goal_association>
-<goal_association environment="Core Technology"  goal_name="GC-2" goal_dim="requirement" ref_type="obstruct" subgoal_name="Guest workflow submission" subgoal_dim="obstacle" alternative_id="0" >
+<goal_association environment="Core Technology"  goal_name="Guest workflow submission" goal_dim="requirement" ref_type="obstruct" subgoal_name="Guest workflow submissions" subgoal_dim="obstacle" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Stroke"  goal_name="Intermediate data access" goal_dim="obstacle" ref_type="and" subgoal_name="Intermediate data accessibility" subgoal_dim="vulnerability" alternative_id="0" >

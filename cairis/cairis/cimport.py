@@ -30,9 +30,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Import')
     parser.add_argument('modelFile',help='model file to import')
     parser.add_argument('--import',dest='modelFormat',help='model type to import.  One of securitypattern, tvtypes, directory, requirements, riskanalysis, usability, project, domainvalues, component or all')
+    parser.add_argument('--overwrite',dest='isOverwrite',help='Where appropriate, overwrite an existing CAIRIS model with this model')
     args = parser.parse_args() 
     mFormat = args.modelFormat
     importFile = args.modelFile
+    overwriteFlag = args.isOverwrite
+    if overwriteFlag == None:
+      overwriteFlag = 1
 
     BorgFactory.initialise()
    
@@ -58,7 +62,7 @@ if __name__ == '__main__':
     elif (mFormat == 'component'):
       msgStr += importComponentViewFile(importFile)
     elif (mFormat == 'all'):
-      msgStr += importModelFile(importFile)
+      msgStr += importModelFile(importFile,int(overwriteFlag))
     else:
       raise ARMException('Input model type ' + mFormat + ' not recognised')
     print msgStr
