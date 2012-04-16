@@ -21,7 +21,10 @@
 
 <!ELEMENT security_patterns (asset*,pattern*)>
 
-<!ELEMENT asset (description,significance,interface*,security_property*)>
+<!ELEMENT tag EMPTY>
+<!ATTLIST tag name CDATA #REQUIRED>
+
+<!ELEMENT asset (description,tag*,significance,interface*,security_property*)>
 <!ATTLIST asset name CDATA #REQUIRED>
 <!ATTLIST asset short_code CDATA #REQUIRED>
 <!ATTLIST asset type (Information | Systems | Software | Hardware | People) #REQUIRED>

@@ -81,6 +81,7 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
     self.theAssetType = ''
     self.theDescription = ''
     self.theSignificance = ''
+    self.theTags = []
     self.theInterfaces = []
     self.theSecurityProperties = []
 
@@ -116,6 +117,8 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
       self.theShortCode = attrs['short_code']
       self.theAssetType = attrs['type']
       self.theSecurityProperties = []
+    elif name == 'tag':
+      self.theTags.append(attrs['name'])
     elif name == 'interface':
       self.theInterfaces.append((attrs['name'],it2Id(attrs['type'])))
     elif name == 'security_property':
@@ -211,7 +214,7 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
       spValues.append(spDict['pseudonymity'])
       spValues.append(spDict['unlinkability'])
       spValues.append(spDict['unobservability'])
-      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,spValues,self.theInterfaces)
+      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,spValues,self.theTags,self.theInterfaces)
       self.theAssets.append(p)
       self.resetAssetAttributes()
     elif name == 'security_property':

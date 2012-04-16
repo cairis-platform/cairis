@@ -186,6 +186,7 @@ class RMFrame(wx.Frame):
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTDOMAINVALUES,'Domain Values','Import Domain Values')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTDIRECTORIES,'Threat and Vulnerability Directory','Import Threat and Vulnerability Directory')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTSECURITYPATTERNS,'Security Patterns','Import Security Patterns')
+    importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTCOMPONENTVIEW,'Component View','Import Component View')
     file.AppendMenu(armid.RMFRAME_MENU_IMPORT,'Import',importMenu)
 
 
@@ -391,6 +392,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_TASKCHARACTERISTICS,self.OnTaskCharacteristics)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTDIRECTORIES,self.OnImportDirectories)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTSECURITYPATTERNS,self.OnImportSecurityPatterns)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTCOMPONENTVIEW,self.OnImportComponentView)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ENVIRONMENT,self.OnViewEnvironment)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ASSETMODEL,self.OnViewAssets)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_GOALMODEL,self.OnViewGoals)
@@ -1146,6 +1148,23 @@ class RMFrame(wx.Frame):
       spdlg.Destroy()
     except ARMException,errorText:
       dlg = wx.MessageDialog(self,str(errorText),'Import Security Patterns',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+
+  def OnImportComponentView(self,event):
+    try:
+      defaultDir = './sql'
+      wildcard = "Component View (*.xml) | *.xml |"
+
+      cvdlg = wx.FileDialog(None,'Import Component View',defaultDir,style=wx.OPEN)
+      if (cvdlg.ShowModal() == wx.ID_OK):
+        msgStr = importComponentViewFile(cvdlg.GetPath()) 
+        dlg = wx.MessageDialog(self,msgStr,'Import Component View',wx.OK | wx.ICON_INFORMATION )
+        dlg.ShowModal()
+        dlg.Destroy()
+      cvdlg.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Import Component View',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
 
