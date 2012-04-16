@@ -1087,7 +1087,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def updateTemplateAssetProperties(self,taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat):
-    sqlTxt += 'update template_asset_property set property_value_id=%s, property_rationale=%s where template_asset_id = %s and property_id = %s'
+    sqlTxt = 'update template_asset_property set property_value_id=%s, property_rationale=%s where template_asset_id = %s and property_id = %s'
     try:
       curs = self.conn.cursor()
       curs.execute(sqlTxt,(cProp,cRat,taId,armid.C_PROPERTY))
