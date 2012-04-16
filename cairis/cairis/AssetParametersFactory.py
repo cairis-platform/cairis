@@ -46,6 +46,8 @@ def buildFromTemplate(assetName,assetEnvs):
   assetEnvironmentProperties = []
   secProperties = taObjt.securityProperties()
   pRationale = taObjt.rationale()
+  tags = taObjt.tags()
+  ifs = taObjt.interfaces()
   for envName in assetEnvs:
     assetEnvironmentProperties.append(AssetEnvironmentProperties(envName,secProperties,pRationale))
-  return AssetParameters(assetName,shortCode,assetDesc,significanceText,assetType,False,'',assetEnvironmentProperties)  
+  return AssetParameters(assetName,shortCode,assetDesc,significanceText,assetType,False,'',tags,ifs,assetEnvironmentProperties)  

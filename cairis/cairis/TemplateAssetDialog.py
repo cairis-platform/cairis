@@ -32,6 +32,7 @@ class TemplateAssetDialog(wx.Dialog):
     self.theType = ''
     self.theSecurityProperties = []
     self.theInterfaces = []
+    self.theTags = []
     self.theAssetId = -1
     self.panel = 0
     self.buildControls(parameters)
@@ -53,6 +54,7 @@ class TemplateAssetDialog(wx.Dialog):
   def onCommit(self,evt):
     commitLabel = self.commitVerb + ' template asset'
     nameCtrl = self.FindWindowById(armid.ASSET_TEXTNAME_ID)
+    tagCtrl = self.FindWindowById(armid.ASSET_TAGS_ID)
     shortCodeCtrl = self.FindWindowById(armid.ASSET_TEXTSHORTCODE_ID)
     descriptionCtrl = self.FindWindowById(armid.ASSET_TEXTDESCRIPTION_ID)
     sigCtrl = self.FindWindowById(armid.ASSET_TEXTSIGNIFICANCE_ID)
@@ -60,6 +62,7 @@ class TemplateAssetDialog(wx.Dialog):
     propertiesCtrl = self.FindWindowById(armid.TEMPLATEASSET_LISTPROPERTIES_ID)
     ifCtrl = self.FindWindowById(armid.ASSET_PAGEINTERFACE_ID)
     self.theAssetName = nameCtrl.GetValue()
+    self.theTags = tagCtrl.tags()
     self.theShortCode = shortCodeCtrl.GetValue()
     self.theAssetDescription = descriptionCtrl.GetValue()
     self.theAssetSignificance = sigCtrl.GetValue()
@@ -96,6 +99,6 @@ class TemplateAssetDialog(wx.Dialog):
       self.EndModal(armid.TEMPLATEASSET_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = TemplateAssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theSecurityProperties,self.theInterfaces)
+    parameters = TemplateAssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theSecurityProperties,self.theTags,self.theInterfaces)
     parameters.setId(self.theAssetId)
     return parameters

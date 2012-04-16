@@ -15,9 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 class TemplateAsset:
-  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,spValues,ifs):
+  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,spValues,tags,ifs):
     self.theId = assetId
     self.theName = assetName
     self.theShortCode = shortCode
@@ -41,13 +40,8 @@ class TemplateAsset:
     self.theUnlinkabilityRationale = spValues[6][1]
     self.theUnobservabilityProperty = spValues[7][0]
     self.theUnobservabilityRationale = spValues[7][1]
+    self.theTags = tags
     self.theInterfaces = ifs
-
-    self.valueLookup = {}
-    self.valueLookup['None'] = 0
-    self.valueLookup['Low'] = 1
-    self.valueLookup['Medium'] = 2
-    self.valueLookup['High'] = 3
 
   def id(self): return self.theId
   def name(self): return self.theName
@@ -75,15 +69,16 @@ class TemplateAsset:
   def unobservabilityRationale(self): return self.theUnobservabilityRationale
 
   def interfaces(self): return self.theInterfaces
+  def tags(self): return self.theTags
   def securityProperties(self):
-    cValue = self.valueLookup[self.theConfidentialityProperty]
-    iValue = self.valueLookup[self.theIntegrityProperty]
-    avValue = self.valueLookup[self.theAvailabilityProperty]
-    acValue = self.valueLookup[self.theAccountabilityProperty]
-    anValue = self.valueLookup[self.theAnonymityProperty]
-    panValue = self.valueLookup[self.thePseudonymityProperty]
-    unlValue = self.valueLookup[self.theUnlinkabilityProperty]
-    unoValue = self.valueLookup[self.theUnobservabilityProperty]
+    cValue = self.theConfidentialityProperty
+    iValue = self.theIntegrityProperty
+    avValue = self.theAvailabilityProperty
+    acValue = self.theAccountabilityProperty
+    anValue = self.theAnonymityProperty
+    panValue = self.thePseudonymityProperty
+    unlValue = self.theUnlinkabilityProperty
+    unoValue = self.theUnobservabilityProperty
     return [cValue,iValue,avValue,acValue,anValue,panValue,unlValue,unoValue]
 
   def rationale(self):

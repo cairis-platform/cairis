@@ -18,26 +18,27 @@
 
 import wx
 import armid
-import WidgetFactory
+from BasePanel import BasePanel
 import TemplateAsset
 from Borg import Borg
 from ValueDictionary import ValueDictionary
 from AssetSummaryNotebook import AssetSummaryNotebook
 from SingleEnvironmentPropertiesListCtrl import SingleEnvironmentPropertiesListCtrl
 
-class TemplateAssetPanel(wx.Panel):
+class TemplateAssetPanel(BasePanel):
   def __init__(self,parent):
-    wx.Panel.__init__(self,parent,armid.TEMPLATEASSET_ID)
+    BasePanel.__init__(self,parent,armid.TEMPLATEASSET_ID)
     self.theAssetId = None
     b = Borg()
     self.dbProxy = b.dbProxy
     
   def buildControls(self,isCreate,isUpdateable=True):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-    mainSizer.Add(WidgetFactory.buildTextSizer(self,'Name',(87,30),armid.ASSET_TEXTNAME_ID),0,wx.EXPAND)
-    mainSizer.Add(WidgetFactory.buildTextSizer(self,'Short Code',(87,30),armid.ASSET_TEXTSHORTCODE_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.ASSET_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.ASSET_TAGS_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTextSizer('Short Code',(87,30),armid.ASSET_TEXTSHORTCODE_ID),0,wx.EXPAND)
     typeList = self.dbProxy.getDimensionNames('asset_type')
-    mainSizer.Add(WidgetFactory.buildComboSizerList(self,'Type',(87,30),armid.ASSET_COMBOTYPE_ID,typeList),0,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Type',(87,30),armid.ASSET_COMBOTYPE_ID,typeList),0,wx.EXPAND)
 
     nbBox = wx.StaticBox(self,-1)
     nbSizer = wx.StaticBoxSizer(nbBox,wx.VERTICAL)
@@ -51,13 +52,15 @@ class TemplateAssetPanel(wx.Panel):
     self.propertiesList = SingleEnvironmentPropertiesListCtrl(self,armid.TEMPLATEASSET_LISTPROPERTIES_ID,valueLookup)
     pSizer.Add(self.propertiesList,1,wx.EXPAND)
 
-    mainSizer.Add(WidgetFactory.buildCommitButtonSizer(self,armid.TEMPLATEASSET_BUTTONCOMMIT_ID,isCreate),0,wx.CENTER)
+    mainSizer.Add(self.buildCommitButtonSizer(armid.TEMPLATEASSET_BUTTONCOMMIT_ID,isCreate),0,wx.CENTER)
     self.SetSizer(mainSizer)
 
   def loadControls(self,asset,isReadOnly=False):
     self.theAssetId = asset.id()
     nameCtrl = self.FindWindowById(armid.ASSET_TEXTNAME_ID)
     nameCtrl.SetValue(asset.name())
+    tagsCtrl = self.FindWindowById(armid.ASSET_TAGS_ID)
+    tagsCtrl.set(asset.tags())
     shortCodeCtrl = self.FindWindowById(armid.ASSET_TEXTSHORTCODE_ID)
     shortCodeCtrl.SetValue(asset.shortCode())
     typeCtrl = self.FindWindowById(armid.ASSET_COMBOTYPE_ID)

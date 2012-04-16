@@ -5801,6 +5801,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     unlRat = parameters.unlinkabilityRationale()
     unoProp = parameters.unobservabilityProperty()
     unoRat = parameters.unobservabilityRationale()
+    tags = parameters.tags()
     ifs = parameters.interfaces()
     try:
       curs = self.conn.cursor()
@@ -5809,6 +5810,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error adding new asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
 
+      self.addTags(assetName,'template_asset',tags)
       self.addInterfaces(assetName,'template_asset',ifs)
       self.addTemplateAssetProperties(assetId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat)
       self.conn.commit()
@@ -5843,6 +5845,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     unoProp = parameters.unobservabilityProperty()
     unoRat = parameters.unobservabilityRationale()
     ifs = parameters.interfaces()
+    tags = parameters.tags()
 
     try:
       curs = self.conn.cursor()
@@ -5850,6 +5853,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(assetName,'template_asset',tags)
       self.addInterfaces(assetName,'template_asset',ifs)
       self.updateTemplateAssetProperties(assetId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat)
       self.conn.commit()
@@ -5881,8 +5885,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
       for assetName,shortCode,assetId,assetDesc,assetType in vals:
         ifs = self.getInterfaces(assetName,'template_asset')
+        tags = self.getTags(assetName,'template_asset')
         taProps = self.templateAssetProperties(assetId)
-        parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,taProps,ifs)
+        parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,taProps,tags,ifs)
         templateAsset = ObjectFactory.build(assetId,parameters)
         templateAssets[assetName] = templateAsset
       return templateAssets

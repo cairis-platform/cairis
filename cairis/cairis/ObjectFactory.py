@@ -98,7 +98,7 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'AssetParameters'):
     return Asset(objtId,p.name(),p.shortCode(),p.description(),p.significance(),p.type(),p.critical(),p.criticalRationale(),p.tags(),p.interfaces(),p.environmentProperties())
   if (p.__class__.__name__ == 'TemplateAssetParameters'):
-    return TemplateAsset(objtId,p.name(),p.shortCode(),p.description(),p.significance(),p.type(),p.properties(),p.interfaces())
+    return TemplateAsset(objtId,p.name(),p.shortCode(),p.description(),p.significance(),p.type(),p.properties(),p.tags(),p.interfaces())
   if (p.__class__.__name__ == 'SecurityPatternParameters'):
     return SecurityPattern(objtId,p.name(),p.context(),p.problem(),p.solution(),p.requirements(),p.associations())
   if (p.__class__.__name__ == 'ComponentParameters'):
