@@ -8,6 +8,8 @@ component_classassociation
 component_requirement
 component_interface
 interface
+component_vulnerability_target
+component_threat_target
 component
 usecase_step_synopsis
 usecase_pc_contribution

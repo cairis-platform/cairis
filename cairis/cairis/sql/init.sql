@@ -62,6 +62,8 @@ DROP TABLE IF EXISTS template_asset_interface;
 DROP TABLE IF EXISTS interface;
 DROP TABLE IF EXISTS component_classassociation;
 DROP TABLE IF EXISTS component_requirement;
+DROP TABLE IF EXISTS component_vulnerability_target;
+DROP TABLE IF EXISTS component_threat_target;
 DROP TABLE IF EXISTS component;
 
 DROP TABLE IF EXISTS value_tension;
@@ -2580,6 +2582,32 @@ CREATE TABLE component_view_component(
   PRIMARY KEY(component_view_id,component_id),
   FOREIGN KEY (component_view_id) REFERENCES component_view(id),
   FOREIGN KEY (component_id) REFERENCES component(id)
+) ENGINE=INNODB;
+
+CREATE TABLE component_vulnerability_target (
+  component_id INT NOT NULL,
+  vulnerability_id INT NOT NULL,
+  effectiveness_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  effectiveness_rationale VARCHAR(4000),
+  PRIMARY KEY(component_id,vulnerability_id,environment_id),
+  FOREIGN KEY(component_id) REFERENCES component(id),
+  FOREIGN KEY(vulnerability_id) REFERENCES vulnerability(id),
+  FOREIGN KEY(effectiveness_id) REFERENCES target_effectiveness(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id)
+) ENGINE=INNODB;
+
+CREATE TABLE component_threat_target (
+  component_id INT NOT NULL,
+  threat_id INT NOT NULL,
+  effectiveness_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  effectiveness_rationale VARCHAR(4000),
+  PRIMARY KEY(component_id,threat_id,environment_id),
+  FOREIGN KEY(component_id) REFERENCES component(id),
+  FOREIGN KEY(threat_id) REFERENCES threat(id),
+  FOREIGN KEY(effectiveness_id) REFERENCES target_effectiveness(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id)
 ) ENGINE=INNODB;
 
 CREATE VIEW countermeasure_vulnerability_response_target as 

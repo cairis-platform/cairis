@@ -6363,19 +6363,12 @@ begin
   declare subGoalId int;
   declare workingGoalId int;
   declare workingResponseId int;
-  declare shortCode varchar(10);
-  declare reqLabel int;
   declare done int default 0;
   declare goalCursor cursor for select goal_id from goalgoal_goalassociation where environment_id = envId and subgoal_id = subGoalId and ref_type_id in (0,1);
   declare goalReqCursor cursor for select goal_id from goalrequirement_goalassociation where subgoal_id = reqId and environment_id = envId;
   declare continue handler for not found set done = 1;
 
-  call requirementLabelComponents(viewLabel,shortCode,reqLabel);
-  select o.id into reqId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-  if reqId is null
-  then
-    select o.id into reqId from requirement o, environment_requirement er, environment e where o.label = reqLabel and o.id = er.requirement_id and er.environment_id = e.id and e.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-  end if;
+  select o.id into reqId from requirement o where o.name = viewLabel and o.version = (select max(i.version) from requirement i where i.id = o.id);
 
   select id into envId from environment where name = envName;
   drop table if exists temp_target;
