@@ -24,6 +24,7 @@ import math
 import cairo
 import pangocairo
 import armid
+from ComponentModel import ComponentModel
 
 class ComponentTextShape(xdot.TextShape):
   def __init__(self, pen, x, y, j, w, t,dim):
@@ -607,7 +608,11 @@ class ComponentDotWindow(gtk.Window):
         gtk.Window.__init__(self)
         self.graph = xdot.Graph()
         self.theViewName = cvName
+        self.traceModel = None
         window = self
+
+        b = Borg()
+        self.dbProxy = b.dbProxy
 
         window.set_title(windowTitle)
         window.set_default_size(512, 512)
@@ -681,6 +686,10 @@ class ComponentDotWindow(gtk.Window):
         renderer = 'twopi'
       elif (layoutName == 'Circular'):
         renderer = 'circo'
+
+      if (self.traceModel == None):
+        interfaces,connectors = self.dbProxy.componentView(self.theViewName)
+        self.traceModel = ComponentModel(interfaces,connectors)
       self.set_xdotcode(self.traceModel.layout(renderer))
 
     def set_filter(self, filter):
@@ -714,8 +723,7 @@ class ComponentDotWindow(gtk.Window):
 
     def refreshModel(self):
       try:
-        b = Borg()
-        proxy = b.dbProxy
+        proxy = self.dbProxy
         
         self.traceModel = ComponentModel(b.dbProxy.componentView(self.theViewName))
         self.set_xdotcode(self.traceModel.graph())

@@ -341,14 +341,14 @@ CREATE TABLE environment(
   id INT NOT NULL, 
   name VARCHAR(50), 
   description VARCHAR(4000), 
-  short_code VARCHAR(10) NOT NULL,
+  short_code VARCHAR(20) NOT NULL,
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 CREATE TABLE tension (
   id INT NOT NULL, 
   name VARCHAR(50), 
   description VARCHAR(4000), 
-  short_code VARCHAR(10) NOT NULL,
+  short_code VARCHAR(20) NOT NULL,
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 CREATE TABLE asset_value (
@@ -498,7 +498,7 @@ CREATE TABLE asset_type (
 CREATE TABLE asset (
   id INT NOT NULL,
   name VARCHAR(50) NOT NULL,
-  short_code VARCHAR(10) NOT NULL,
+  short_code VARCHAR(20) NOT NULL,
   description VARCHAR(1000),
   significance VARCHAR(1000),
   asset_type_id INT NOT NULL,
@@ -1812,7 +1812,7 @@ CREATE TABLE roleassetrole_dependency (
 CREATE TABLE template_asset (
   id INT NOT NULL,
   name VARCHAR(50) NOT NULL,
-  short_code VARCHAR(10) NOT NULL,
+  short_code VARCHAR(20) NOT NULL,
   description VARCHAR(1000),
   significance VARCHAR(1000),
   asset_type_id INT NOT NULL,

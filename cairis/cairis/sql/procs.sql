@@ -694,6 +694,8 @@ drop procedure if exists component_viewNames;
 drop procedure if exists deleteComponentViewComponents;
 drop procedure if exists componentNames;
 drop procedure if exists connectorNames;
+drop function if exists mitigated_likelihood;
+drop function if exists mitigated_severity;
 
 delimiter //
 
@@ -1660,6 +1662,7 @@ end
 create procedure delete_threat(in threatId int)
 begin
   call deleteThreatComponents(threatId);
+  delete from component_threat_target where threat_id = threatId;
   delete from threat_tag where threat_id = threatId;
   delete from threat_reference where threat_id = threatId;
   delete from threat where id = threatId;
@@ -2039,6 +2042,8 @@ begin
       then
         leave lhood_loop;
       end if;
+      select mitigated_likelihood(threatId,currentEnvironmentId) into currentLikelihoodId;
+       
       if duplicatePolicy = 'Override'
       then
         if currentEnvironmentId = overridingEnvironmentId
@@ -2055,7 +2060,8 @@ begin
     close lhoodCursor;
     select name into likelihoodName from likelihood where id = workingLikelihoodId;
   else
-    select l.name into likelihoodName from threat_likelihood tl, likelihood l where tl.threat_id = threatId and tl.environment_id = environmentId and tl.likelihood_id = l.id;
+    select mitigated_likelihood(threatId,environmentId) into currentLikelihoodId;
+    select l.name into likelihoodName from likelihood l where l.id = currentLikelihoodId;
   end if;
   return likelihoodName;
 end
@@ -2092,6 +2098,8 @@ begin
       then
         leave sev_loop;
       end if;
+      select mitigated_severity(vulId,currentEnvironmentId) into currentSeverityId;
+
       if duplicatePolicy = 'Override'
       then
         if currentEnvironmentId = overridingEnvironmentId
@@ -2108,7 +2116,8 @@ begin
     close sevCursor;
     select name into severityName from severity where id = workingSeverityId;
   else
-    select s.name into severityName from vulnerability_severity vs, severity s where vs.vulnerability_id = vulId and vs.environment_id = environmentId and vs.severity_id = s.id;
+    select mitigated_severity(vulId,environmentId) into currentSeverityId;
+    select s.name into severityName from severity s where s.id = currentSeverityId;
   end if;
   return (severityName);
 end
@@ -2238,6 +2247,7 @@ end
 create procedure delete_vulnerability(in vulId int)
 begin
   call deleteVulnerabilityComponents(vulId);
+  delete from component_vulnerability_target where threat_id = threatId;
   delete from requirement_vulnerability where vulnerability_id = vulId;
   delete from obstaclevulnerability_goalassociation where subgoal_id = vulId;
   delete from vulnerability_tag where vulnerability_id = vulId;
@@ -17976,9 +17986,13 @@ begin
   call deleteComponentComponents(componentId);
   if componentId = -1
   then
+    delete from component_threat_target;
+    delete from component_vulnerability_target;
     delete from component_view_component;
     delete from component;
   else
+    delete from component_threat_target where component_id = componentId;
+    delete from component_vulnerability_target where component_id = componentId;
     delete from component_view_component where id = componentId;
     delete from component where id = componentId;
   end if;
@@ -18000,29 +18014,29 @@ begin
 end
 //
 
-create procedure riskyAssets(in componentName text)
+create procedure riskyAssets(in cvName text)
 begin
-  declare cId int;
+  declare cvId int;
   declare envId int;
   drop table if exists temp_templateasset_asset;
-  create temporary table temp_templateasset_asset (template_asset_name varchar(255),asset_name varchar(255),risk_name varchar(255),target_type varchar(50),target_name varchar(255));
+  create temporary table temp_templateasset_asset (component_name varchar(255),template_asset_name varchar(255),asset_name varchar(255),target_type varchar(50),target_name varchar(255));
 
   set envId = 104;
-  select id into cId from component where name = componentName;
+  select id into cvId from component_view where name = cvName;
 
 /* get assets with the same name */
 
   insert into temp_templateasset_asset
-  select ta.name,a.name,r.name,'vulnerability',v.name from component_classassociation ca, asset a, template_asset ta, asset_vulnerability av, vulnerability v, risk r where ca.component_id = cId and ca.head_id = ta.id and ta.name = a.name and a.id = av.asset_id and av.environment_id = envId and av.vulnerability_id = v.id and av.vulnerability_id = r.vulnerability_id
+  select c.name,ta.name,a.name,'vulnerability',v.name from component c, component_classassociation ca, asset a, template_asset ta, asset_vulnerability av, vulnerability v where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = cvId) and ca.head_id = ta.id and ta.name = a.name and a.id = av.asset_id and av.environment_id = envId and av.vulnerability_id = v.id
   union
-  select ta.name,a.name,r.name,'vulnerability',v.name from component_classassociation ca, asset a, template_asset ta, asset_vulnerability av, vulnerability v, risk r where ca.component_id = cId and ca.tail_id = ta.id and ta.name = a.name and a.id = av.asset_id and av.environment_id = envId and av.vulnerability_id = v.id and av.vulnerability_id = r.vulnerability_id
+  select c.name,ta.name,a.name,'vulnerability',v.name from component c, component_classassociation ca, asset a, template_asset ta, asset_vulnerability av, vulnerability v where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = cvId) and ca.tail_id = ta.id and ta.name = a.name and a.id = av.asset_id and av.environment_id = envId and av.vulnerability_id = v.id
   union
-  select ta.name,a.name,r.name,'threat',t.name from component_classassociation ca, asset a, template_asset ta, asset_threat at, threat t, risk r where ca.component_id = cId and ca.head_id = ta.id and ta.name = a.name and a.id = at.asset_id and at.environment_id = envId and at.threat_id = t.id and at.threat_id = r.threat_id
+  select c.name,ta.name,a.name,'threat',t.name from component c, component_classassociation ca, asset a, template_asset ta, asset_threat at, threat t where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = cvId) and ca.head_id = ta.id and ta.name = a.name and a.id = at.asset_id and at.environment_id = envId and at.threat_id = t.id
   union
-  select ta.name,a.name,r.name,'threat',t.name from component_classassociation ca, asset a, template_asset ta, asset_threat at, threat t, risk r where ca.component_id = cId and ca.tail_id = ta.id and ta.name = a.name and a.id = at.asset_id and at.environment_id = envId and at.threat_id = t.id and at.threat_id = r.threat_id;
+  select c.name,ta.name,a.name,'threat',t.name from component c, component_classassociation ca, asset a, template_asset ta, asset_threat at, threat t where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = cvId) and ca.tail_id = ta.id and ta.name = a.name and a.id = at.asset_id and at.environment_id = envId and at.threat_id = t.id;
 
 
-  select template_asset_name, asset_name, risk_name, target_name,target_type from temp_templateasset_asset;
+  select component_name, template_asset_name, asset_name, target_name,target_type from temp_templateasset_asset;
 
 end
 //
@@ -18113,6 +18127,44 @@ end
 create procedure connectorNames(in constraintName text)
 begin
   select name from connector order by 1;
+end
+//
+
+create function mitigated_likelihood(threatId int,environmentId int) 
+returns int
+deterministic 
+begin
+  declare lhScore int;
+  declare effectivenessScore int;
+  declare mitigatedScore int;
+
+  select likelihood_id into lhScore from threat_likelihood where threat_id = threatId and environment_id = environmentId;
+  select ifnull(max(ctt.effectiveness_id),0) into effectivenessScore from component_threat_target ctt where threat_id = threatId and environment_id = environmentId;
+  set mitigatedScore = lhScore - effectivenessScore;
+  if mitigatedScore < 0
+  then
+    set mitigatedScore = 0;
+  end if;
+  return mitigatedScore;
+end
+//
+
+create function mitigated_severity(vulId int,environmentId int) 
+returns int
+deterministic 
+begin
+  declare sevScore int;
+  declare effectivenessScore int;
+  declare mitigatedScore int;
+
+  select severity_id into sevScore from vulnerability_severity where vulnerability_id = vulId and environment_id = environmentId;
+  select ifnull(max(cvt.effectiveness_id),0) into effectivenessScore from component_vulnerability_target cvt where vulnerability_id = vulId and environment_id = environmentId;
+  set mitigatedScore = sevScore - effectivenessScore;
+  if mitigatedScore < 0
+  then
+    set mitigatedScore = 0;
+  end if;
+  return mitigatedScore;
 end
 //
 

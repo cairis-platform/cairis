@@ -8801,12 +8801,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addComponentInterface(self,componentId,ifName,ifType):
-    ifTypeId = 1
-    if ifType == 'provided':
-      ifTypeId = 0
     try:
       curs = self.conn.cursor()
-      curs.execute('call addComponentInterface(%s,%s,%s)',(componentId,ifName,ifTypeId))
+      curs.execute('call addComponentInterface(%s,%s,%s)',(componentId,ifName,ifType))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding interface ' + ifName + ' to  component ' + str(componentId)
         raise DatabaseProxyException(exceptionText) 
