@@ -9124,3 +9124,38 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting components (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def componentViewWeaknesses(self,cvName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentViewWeaknesses(%s)',(cvName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting weaknesses associated with the ' + cvName + ' component view'
+        raise DatabaseProxyException(exceptionText) 
+      thrDict = {}
+      vulDict = {}
+      for row in curs.fetchall():
+        row = list(row)
+        cName = row[0]
+        taName = row[1]
+        aName = row[2]
+        targetName = row[3]
+        targetType = row[4]
+        if targetType == 'threat':
+          if targetName not in thrDict:
+            thrDict[targetName] = (set([]),set([]),set([]))
+          thrDict[targetName][0].add(taName)
+          thrDict[targetName][1].add(aName)
+          thrDict[targetName][2].add(cName)
+        else:
+          if targetName not in vulDict:
+            vulDict[targetName] = (set([]),set([]),set([]))
+          vulDict[targetName][0].add(taName)
+          vulDict[targetName][1].add(aName)
+          vulDict[targetName][2].add(cName)
+      curs.close()
+      return (thrDict,vulDict)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting weaknesses associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

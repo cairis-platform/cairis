@@ -19,7 +19,7 @@
 import wx
 import armid
 from Borg import Borg
-from ComponentViewMitigationDialog import ComponentViewMitigationDialog
+from WeaknessAnalysisDialog import WeaknessAnalysisDialog
 from ARM import *
 
 class ComponentViewListCtrl(wx.ListCtrl):
@@ -38,22 +38,13 @@ class ComponentViewListCtrl(wx.ListCtrl):
 
   def onSituate(self,evt):
     cvObjt = self.theParentDialog.objts[self.theParentDialog.selectedLabel]
-    cvId = cvObjt.id()
     try:
-      dlg = ComponentViewMitigationDialog(self,patternId)
-      if (dlg.ShowModal() == armid.COMPONENTVIEWMITIGATION_BUTTONCOMMIT_ID):
-        self.situatePattern(patternId,dlg.assetEnvironments())
+      dlg = WeaknessAnalysisDialog(self,cvObjt.name())
+      if (dlg.ShowModal() == armid.WEAKNESSANALYSIS_BUTTONCOMMIT_ID):
+        pass
       dlg.Destroy()
     except ARMException,errorText:
-      dlg = wx.MessageDialog(self,str(errorText),'Situate view',wx.OK | wx.ICON_ERROR)
+      dlg = wx.MessageDialog(self,str(errorText),'Situate component view',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return
-
-  def situatePattern(self,patternId,assetEnvs):
-    assetParametersList = []
-    for assetName,envs in assetEnvs.iteritems():
-      assetParametersList.append(AssetParametersFactory.buildFromTemplate(assetName,envs))
-    b = Borg()
-    b.dbProxy.addSituatedAssets(patternId,assetParametersList)
-    self.theParentDialog.theMainWindow.updateObjectSelection()

@@ -681,7 +681,7 @@ drop procedure if exists addComponentRequirement;
 drop procedure if exists getComponentRequirements;
 drop procedure if exists getComponentView;
 drop procedure if exists componentInterfaces;
-drop procedure if exists riskyAssets;
+drop procedure if exists componentViewWeaknesses;
 drop procedure if exists getComponents;
 drop procedure if exists getConnectors;
 drop procedure if exists addComponentView;
@@ -18014,7 +18014,7 @@ begin
 end
 //
 
-create procedure riskyAssets(in cvName text)
+create procedure componentViewWeaknesses(in cvName text)
 begin
   declare cvId int;
   declare envId int;

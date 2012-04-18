@@ -26,6 +26,7 @@ from TraceableList import TraceableList
 from ReferencedCharacteristicsListCtrl import ReferencedCharacteristicsListCtrl
 from UseCaseListCtrl import UseCaseListCtrl
 from ObjectListCtrl import ObjectListCtrl
+from ComponentViewListCtrl import ComponentViewListCtrl
 
 
 class BaseDialog(wx.Dialog):
@@ -79,6 +80,8 @@ class BaseDialog(wx.Dialog):
       listCtrl = ReferencedCharacteristicsListCtrl(parent,winId,'concept_reference')
     elif (dimName == 'usecase'):
       listCtrl = UseCaseListCtrl(parent,winId)
+    elif (dimName == 'component_view'):
+      listCtrl = ComponentViewListCtrl(parent,winId)
     else:
       listCtrl = ObjectListCtrl(parent,winId)
 
