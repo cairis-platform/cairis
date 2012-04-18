@@ -18036,7 +18036,7 @@ begin
   select c.name,ta.name,a.name,'threat',t.name from component c, component_classassociation ca, asset a, template_asset ta, asset_threat at, threat t where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = cvId) and ca.tail_id = ta.id and ta.name = a.name and a.id = at.asset_id and at.environment_id = envId and at.threat_id = t.id;
 
 
-  select component_name, template_asset_name, asset_name, target_name,target_type from temp_templateasset_asset;
+  select component_name, template_asset_name, asset_name, target_name,target_type from temp_templateasset_asset order by 4,1,2;
 
 end
 //

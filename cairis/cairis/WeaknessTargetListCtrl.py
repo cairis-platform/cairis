@@ -31,9 +31,9 @@ class WeaknessTargetListCtrl(wx.ListCtrl):
     self.InsertColumn(0,'Target')
     self.SetColumnWidth(0,100)
     self.InsertColumn(1,'Components')
-    self.SetColumnWidth(1,100)
+    self.SetColumnWidth(1,250)
     self.InsertColumn(2,'Assets')
-    self.SetColumnWidth(2,100)
+    self.SetColumnWidth(2,250)
     self.theSelectedIdx = -1
     self.theDimMenu = wx.Menu()
     self.theDimMenu.Append(armid.AA_MENUADD_ID,'Add')
@@ -64,11 +64,12 @@ class WeaknessTargetListCtrl(wx.ListCtrl):
 #      self.SetStringItem(self.theSelectedIdx,1,outParameters.description())
 
   def load(self,targets):
-    for targetName,components,assets in self.theTargetss:
+    for targetKey in targets:
       idx = self.GetItemCount()
-      self.InsertStringItem(idx,targetName)
-      self.SetStringItem(idx,1,components)
-      self.SetStringItem(idx,2,assets)
+      self.InsertStringItem(idx,targetKey)
+      target = targets[targetKey]      
+      self.SetStringItem(idx,1,",".join(target.components()))
+      self.SetStringItem(idx,2,",".join(target.templateAssets()))
 
   def dimensions(self):
     return []

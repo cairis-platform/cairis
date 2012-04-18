@@ -20,20 +20,15 @@ import wx
 import armid
 from BasePanel import BasePanel
 import Asset
-from Borg import Borg
 from WeaknessAnalysisNotebook import WeaknessAnalysisNotebook
 
 class WeaknessAnalysisPanel(BasePanel):
-  def __init__(self,parent):
+  def __init__(self,parent,cvName):
     BasePanel.__init__(self,parent,armid.WEAKNESSANALYSIS_ID)
     self.theAssetId = None
-    b = Borg()
-    self.dbProxy = b.dbProxy
-    
-  def buildControls(self):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     nbBox = wx.StaticBox(self,-1)
     nbSizer = wx.StaticBoxSizer(nbBox,wx.VERTICAL)
     mainSizer.Add(nbSizer,1,wx.EXPAND)
-    nbSizer.Add(WeaknessAnalysisNotebook(self),1,wx.EXPAND)
+    nbSizer.Add(WeaknessAnalysisNotebook(self,cvName),1,wx.EXPAND)
     self.SetSizer(mainSizer)

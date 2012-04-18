@@ -95,6 +95,7 @@ from ConceptMapAssociationParameters import ConceptMapAssociationParameters
 from ComponentViewParameters import ComponentViewParameters;
 from ComponentParameters import ComponentParameters;
 from ConnectorParameters import ConnectorParameters;
+from WeaknessTarget import WeaknessTarget
 import string
 import os
 
@@ -9141,18 +9142,25 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         aName = row[2]
         targetName = row[3]
         targetType = row[4]
+        t = None
         if targetType == 'threat':
           if targetName not in thrDict:
-            thrDict[targetName] = (set([]),set([]),set([]))
-          thrDict[targetName][0].add(taName)
-          thrDict[targetName][1].add(aName)
-          thrDict[targetName][2].add(cName)
+            t = WeaknessTarget(targetName)
+          else:
+            t = thrDict[targetName]
+          t.addTemplateAsset(taName)
+          t.addAsset(aName)
+          t.addComponent(cName)
+          thrDict[targetName] = t
         else:
           if targetName not in vulDict:
-            vulDict[targetName] = (set([]),set([]),set([]))
-          vulDict[targetName][0].add(taName)
-          vulDict[targetName][1].add(aName)
-          vulDict[targetName][2].add(cName)
+            t = WeaknessTarget(targetName)
+          else:
+            t = vulDict[targetName]
+          t.addTemplateAsset(taName)
+          t.addAsset(aName)
+          t.addComponent(cName)
+          vulDict[targetName] = t
       curs.close()
       return (thrDict,vulDict)
     except _mysql_exceptions.DatabaseError, e:

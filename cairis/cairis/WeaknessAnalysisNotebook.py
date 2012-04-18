@@ -18,23 +18,27 @@
 
 import wx
 import armid
+from Borg import Borg
 from WeaknessTargetListCtrl import WeaknessTargetListCtrl
 
 class WeaknessTargetPage(wx.Panel):
-  def __init__(self,parent,winId):
+  def __init__(self,parent,winId,targets):
     wx.Panel.__init__(self,parent)
     topSizer = wx.BoxSizer(wx.VERTICAL)
     asBox = wx.StaticBox(self,-1)
     asBoxSizer = wx.StaticBoxSizer(asBox,wx.HORIZONTAL)
     topSizer.Add(asBoxSizer,1,wx.EXPAND)
     self.targetList = WeaknessTargetListCtrl(self,winId)
+    self.targetList.load(targets)
     asBoxSizer.Add(self.targetList,1,wx.EXPAND)
     self.SetSizer(topSizer)
 
 class WeaknessAnalysisNotebook(wx.Notebook):
-  def __init__(self,parent):
+  def __init__(self,parent,cvName):
     wx.Notebook.__init__(self,parent,armid.WEAKNESSANALYSIS_NOTEBOOKWEAKNESS_ID)
-    p1 = WeaknessTargetPage(self,armid.WEAKNESSANALYSIS_LISTTHREATS_ID)
-    p2 = WeaknessTargetPage(self,armid.WEAKNESSANALYSIS_LISTVULNERABILITIES_ID)
+    b = Borg()
+    thrTargets,vulTargets = b.dbProxy.componentViewWeaknesses(cvName)
+    p1 = WeaknessTargetPage(self,armid.WEAKNESSANALYSIS_LISTTHREATS_ID,thrTargets)
+    p2 = WeaknessTargetPage(self,armid.WEAKNESSANALYSIS_LISTVULNERABILITIES_ID,vulTargets)
     self.AddPage(p1,'Threats')
     self.AddPage(p2,'Vulnerabilities')

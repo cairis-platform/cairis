@@ -16,21 +16,19 @@
 #  under the License.
 
 
-import wx
-import armid
-import ARM
-from WeaknessAnalysisPanel import WeaknessAnalysisPanel
-from Borg import Borg
+class WeaknessTarget:
+  def __init__(self,targetName):
+    self.theTargetName = targetName
+    self.theComponents = set([])
+    self.theTemplateAssets = set([])
+    self.theAssets = set([])
 
-class WeaknessAnalysisDialog(wx.Dialog):
-  def __init__(self,parent,cvName):
-    wx.Dialog.__init__(self,parent,-1,'Weakness analysis for ' + cvName,style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(600,350))
-    self.panel = 0
-    mainSizer = wx.BoxSizer(wx.VERTICAL)
-    self.panel = WeaknessAnalysisPanel(self,cvName)
-    mainSizer.Add(self.panel,1,wx.EXPAND)
-    self.SetSizer(mainSizer)
-    wx.EVT_BUTTON(self,armid.WEAKNESSANALYSIS_BUTTONCOMMIT_ID,self.onCommit)
+  def name(self): return self.theTargetName
+  def components(self): return self.theComponents
+  def templateAssets(self): return self.theTemplateAssets
+  def assets(self): return self.theAssets
 
-  def onCommit(self,evt):
-    pass
+  def addComponent(self,cName): self.theComponents.add(cName)
+  def addAsset(self,aName): self.theAssets.add(aName)
+  def addTemplateAsset(self,taName): 
+    self.theTemplateAssets.add(taName)
