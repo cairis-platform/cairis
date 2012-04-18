@@ -31,4 +31,12 @@ class WeaknessAnalysisPanel(BasePanel):
     nbSizer = wx.StaticBoxSizer(nbBox,wx.VERTICAL)
     mainSizer.Add(nbSizer,1,wx.EXPAND)
     nbSizer.Add(WeaknessAnalysisNotebook(self,cvName),1,wx.EXPAND)
+
+    buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+    applyButton = wx.Button(self,armid.WEAKNESSANALYSIS_BUTTONCOMMIT_ID,"Apply")
+    buttonSizer.Add(applyButton)
+    closeButton = wx.Button(self,wx.ID_CANCEL,"Cancel")
+    buttonSizer.Add(closeButton)
+    mainSizer.Add(buttonSizer,0,wx.CENTER)
+
     self.SetSizer(mainSizer)

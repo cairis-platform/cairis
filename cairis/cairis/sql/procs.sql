@@ -696,6 +696,8 @@ drop procedure if exists componentNames;
 drop procedure if exists connectorNames;
 drop function if exists mitigated_likelihood;
 drop function if exists mitigated_severity;
+drop procedure if exists componentRequirements;
+drop procedure if exists componentAssets;
 
 delimiter //
 
@@ -18165,6 +18167,27 @@ begin
     set mitigatedScore = 0;
   end if;
   return mitigatedScore;
+end
+//
+
+create procedure componentRequirements(in cvName text)
+begin
+  declare cvId int;
+
+  select id into cvId from component_view where name = cvName;
+  select cr.name from component_requirement cr, component_view_component cvc where cvc.component_view_id = cvId and cvc.component_id = cr.component_id order by 1;
+end
+//
+
+create procedure componentAssets(in cvName text, in reqName text)
+begin
+  declare cvId int;
+  declare reqId int;
+
+  select id into cvId from component_view where name = cvName;
+  select ta.name from component_classassociation ca, component_view_component cvc, template_asset ta, component_requirement cr where cvc.component_view_id = cvId and cvc.component_id = ca.component_id and ca.head_id = ta.id and ca.head_id = cr.asset_id and cr.name = reqName
+  union
+  select ta.name from component_classassociation ca, component_view_component cvc, template_asset ta, component_requirement cr where cvc.component_view_id = cvId and cvc.component_id = ca.component_id and ca.tail_id = ta.id and ca.tail_id = cr.asset_id and cr.name = reqName;
 end
 //
 

@@ -20,13 +20,14 @@ import wx
 import armid
 import ARM
 from Borg import Borg
+from WeaknessTreatmentDialog import WeaknessTreatmentDialog
 
 class WeaknessTargetListCtrl(wx.ListCtrl):
-  def __init__(self,parent,winId):
+  def __init__(self,parent,winId,cvName):
     wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT)
     b = Borg()
     self.dbProxy = b.dbProxy
-    self.theViewName = ''
+    self.theViewName = cvName
     self.theComponents = []
     self.InsertColumn(0,'Target')
     self.SetColumnWidth(0,100)
@@ -35,16 +36,9 @@ class WeaknessTargetListCtrl(wx.ListCtrl):
     self.InsertColumn(2,'Assets')
     self.SetColumnWidth(2,250)
     self.theSelectedIdx = -1
-    self.theDimMenu = wx.Menu()
-    self.theDimMenu.Append(armid.AA_MENUADD_ID,'Add')
-    self.theDimMenu.Append(armid.AA_MENUDELETE_ID,'Delete')
-    self.Bind(wx.EVT_RIGHT_DOWN,self.OnRightDown)
     self.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnItemSelected)
     self.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.OnItemDeselected)
     self.Bind(wx.EVT_LIST_ITEM_ACTIVATED,self.onTargetActivated)
-
-  def OnRightDown(self,evt):
-    self.PopupMenu(self.theDimMenu)
 
   def OnItemSelected(self,evt):
     self.theSelectedIdx = evt.GetIndex()
@@ -53,17 +47,19 @@ class WeaknessTargetListCtrl(wx.ListCtrl):
     self.theSelectedIdx = -1
 
   def onTargetActivated(self,evt):
-    self.theSelectedIdx = evt.GetIndex()
-#    dlg = ComponentDialog(self)
-#    inParameters = self.theComponents[self.theSelectedIdx]
-#    dlg.load(inParameters)
-#    if (dlg.ShowModal() == armid.COMPONENT_BUTTONCOMMIT_ID):
-#      outParameters = dlg.parameters()
-#      self.theComponents[self.theSelectedIdx] = outParameters
-#      self.SetStringItem(self.theSelectedIdx,0,outParameters.name())
-#      self.SetStringItem(self.theSelectedIdx,1,outParameters.description())
+    try:
+      targetName = evt.GetLabel()
+      target = self.theTargets[targetName]
+      dlg = WeaknessTreatmentDialog(self,targetName,self.theViewName,target.requirement(),target.asset(),target.effectiveness())  
+      if (dlg.ShowModal() == armid.WEAKNESSTREATMENT_BUTTONCOMMIT_ID):
+        target.addTreatment(dlg.requirement(),dlg.asset(),dlg.effectiveness())
+        self.theTargets[targetName] = target
+      dlg.Destroy()
+    except KeyError:
+      return
 
   def load(self,targets):
+    self.theTargets = targets
     for targetKey in targets:
       idx = self.GetItemCount()
       self.InsertStringItem(idx,targetKey)
@@ -72,4 +68,4 @@ class WeaknessTargetListCtrl(wx.ListCtrl):
       self.SetStringItem(idx,2,",".join(target.templateAssets()))
 
   def dimensions(self):
-    return []
+    return self.theTargets

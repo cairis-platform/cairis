@@ -9167,3 +9167,39 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting weaknesses associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def componentRequirements(self,cvName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentRequirements(%s)',(cvName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting requirements associated with the ' + cvName + ' component view'
+        raise DatabaseProxyException(exceptionText) 
+      rows = []
+      for row in curs.fetchall():
+        row = list(row)
+        rows.append(row[0])
+      curs.close()   
+      return rows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting requirements associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def componentAssets(self,cvName,reqName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentAssets(%s,%s)',(cvName,reqName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting assets associated with the ' + cvName + ' component view'
+        raise DatabaseProxyException(exceptionText) 
+      rows = []
+      for row in curs.fetchall():
+        row = list(row)
+        rows.append(row[0])
+      curs.close()   
+      return rows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting assets associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
