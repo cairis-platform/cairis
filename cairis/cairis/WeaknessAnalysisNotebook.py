@@ -34,10 +34,10 @@ class WeaknessTargetPage(wx.Panel):
     self.SetSizer(topSizer)
 
 class WeaknessAnalysisNotebook(wx.Notebook):
-  def __init__(self,parent,cvName):
+  def __init__(self,parent,cvName,envName):
     wx.Notebook.__init__(self,parent,armid.WEAKNESSANALYSIS_NOTEBOOKWEAKNESS_ID)
     b = Borg()
-    thrTargets,vulTargets = b.dbProxy.componentViewWeaknesses(cvName)
+    thrTargets,vulTargets = b.dbProxy.componentViewWeaknesses(cvName,envName)
     p1 = WeaknessTargetPage(self,armid.WEAKNESSANALYSIS_LISTTHREATS_ID,cvName,thrTargets)
     p2 = WeaknessTargetPage(self,armid.WEAKNESSANALYSIS_LISTVULNERABILITIES_ID,cvName,vulTargets)
     self.AddPage(p1,'Threats')

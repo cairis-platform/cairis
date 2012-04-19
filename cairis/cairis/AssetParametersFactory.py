@@ -21,18 +21,22 @@ from AssetEnvironmentProperties import AssetEnvironmentProperties
 from Response import Response
 from Borg import Borg
 
-def build(cm):
-  assetName = cm.name() + ' CM'
-  assetDesc = cm.description()
-  assetType = cm.type()
+def build(target):
+  if target.__class__.__name__ == 'countermeasure':
+    buildCMAsset(target)
+
+def buildCM(target):
+  assetName = target.name() + ' CM'
+  assetDesc = target.description()
+  assetType = target.type()
   shortCode = 'XX'
   significanceText = 'Mitigates risk '
   b = Borg()
   proxy = b.dbProxy
-  risks = proxy.mitigatedRisks(cm.id())
+  risks = proxy.mitigatedRisks(target.id())
   significanceText += risks[0]
   assetEnvironmentProperties = []
-  for cProps in cm.environmentProperties():
+  for cProps in target.environmentProperties():
     assetEnvironmentProperties.append(AssetEnvironmentProperties(cProps.name(),cProps.properties(),cProps.rationale()))
   return AssetParameters(assetName,shortCode,assetDesc,significanceText,assetType,False,'',assetEnvironmentProperties)
 

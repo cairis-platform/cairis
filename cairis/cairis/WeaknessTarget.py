@@ -25,6 +25,7 @@ class WeaknessTarget:
     self.theTreatmentRequirement = ''
     self.theTreatmentAsset = ''
     self.theTreatmentEffectiveness = 'None'
+    self.theTreatmentRationale = ''
 
   def name(self): return self.theTargetName
   def components(self): return self.theComponents
@@ -36,11 +37,13 @@ class WeaknessTarget:
   def addTemplateAsset(self,taName): 
     self.theTemplateAssets.add(taName)
 
-  def addTreatment(self,reqName,assetName,effValue):
+  def addTreatment(self,reqName,assetName,effValue,effRationale):
     self.theTreatmentRequirement = reqName
     self.theTreatmentAsset = assetName
     self.theTreatmentEffectiveness = effValue
+    self.theTreatmentRationale = effRationale
 
   def requirement(self): return self.theTreatmentRequirement
   def asset(self): return self.theTreatmentAsset
   def effectiveness(self): return self.theTreatmentEffectiveness
+  def rationale(self): return self.theTreatmentRationale

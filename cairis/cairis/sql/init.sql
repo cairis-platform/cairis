@@ -33,6 +33,7 @@ DROP VIEW IF EXISTS environment_risk;
 DROP VIEW IF EXISTS concept_map;
 DROP VIEW IF EXISTS component_interfaces;
 DROP VIEW IF EXISTS connectors;
+DROP VIEW IF EXISTS component_asset;
 
 DROP TABLE IF EXISTS usecase_step_synopsis;
 DROP TABLE IF EXISTS usecase_pc_contribution;
@@ -2947,6 +2948,11 @@ CREATE VIEW component_interfaces as
 
 CREATE VIEW connectors as
   select ca.name connector, fc.name from_name, fi.name from_interface, tc.name to_name, ti.name to_interface from connector ca, component fc, component tc, interface fi, interface ti where ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id;
+
+CREATE VIEW component_asset as
+  select component_id, head_id asset_id from component_classassociation
+  union
+  select component_id, tail_id asset_id from component_classassociation;
 
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');

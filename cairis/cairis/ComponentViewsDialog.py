@@ -28,6 +28,7 @@ from DimensionBaseDialog import DimensionBaseDialog
 class ComponentViewsDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,armid.COMPONENTVIEWS_ID,'Component Views',(930,300),'component_view.png')
+    self.theMainWindow = parent
     self.rmFrame = parent
     idList = [armid.COMPONENTVIEWS_LISTCOMPONENTVIEWS_ID,armid.COMPONENTVIEWS_BUTTONADD_ID,armid.COMPONENTVIEWS_BUTTONDELETE_ID]
     columnList = ['Model','Description']

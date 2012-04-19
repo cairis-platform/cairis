@@ -22,6 +22,7 @@ import cairo
 import pangocairo
 from ConceptMapModel import ConceptMapModel
 import os
+import re
 
 def listToString(l):
   s = ''
@@ -95,9 +96,18 @@ def exportRedmineUseCases(outFile):
 
   buf = ''
   noUseCases = 0
+  ucDict = {'ID':[],'DA':[],'NM':[],'PS':[],'NC':[],'LC':[],'CAP':[],'TMS':[]}
+
   for ucName,ucShortCode,ucAuthor,ucTxt in rmUseCases:
-    buf += ucTxt + '\n'
-    noUseCases += 1
+    ucCat = re.sub('[0-9]','',ucShortCode)
+    ucDict[ucCat].append( (ucName,ucShortCode,ucAuthor,ucTxt))
+  fnlCats = ucDict.keys()
+  fnlCats.sort()
+
+  for fnlCat in fnlCats:
+    for ucName,ucShortCode,ucAuthor,ucTxt in ucDict[fnlCat]: 
+      buf += ucTxt + '\n'
+      noUseCases += 1
   ucFile = open(outFile,'w')
   ucFile.write(buf)
   ucFile.close()

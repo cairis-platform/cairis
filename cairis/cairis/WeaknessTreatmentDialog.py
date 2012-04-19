@@ -22,11 +22,12 @@ import ARM
 from WeaknessTreatmentPanel import WeaknessTreatmentPanel
 
 class WeaknessTreatmentDialog(wx.Dialog):
-  def __init__(self,parent,targetName,cvName,reqName = '',assetName = '',effValue = ''):
-    wx.Dialog.__init__(self,parent,-1,'Edit ' + targetName + ' treatment',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,200))
+  def __init__(self,parent,targetName,cvName,reqName = '',assetName = '',effValue = '',tRat = ''):
+    wx.Dialog.__init__(self,parent,-1,'Edit ' + targetName + ' treatment',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,300))
     self.theRequirementName = reqName
     self.theAssetName = assetName
     self.theEffectivenessValue = effValue
+    self.theRationale = tRat
     
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     self.panel = WeaknessTreatmentPanel(self,cvName)
@@ -41,10 +42,12 @@ class WeaknessTreatmentDialog(wx.Dialog):
     reqCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOREQUIREMENT_ID)
     assetCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOASSET_ID)
     effCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOEFFECTIVENESS_ID)
+    ratCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_TEXTRATIONALE_ID)
 
     self.theRequirementName = reqCtrl.GetValue()
     self.theAssetName = assetCtrl.GetValue()
     self.theEffectivenessValue = effCtrl.GetValue()
+    self.theRationale = ratCtrl.GetValue()
 
     commitLabel = 'Edit weakness treatment'
     if len(self.theRequirementName) == 0:
@@ -62,11 +65,15 @@ class WeaknessTreatmentDialog(wx.Dialog):
       dlg.ShowModal()
       dlg.Destroy()
       return
+    if len(self.theRationale) == 0:
+      dlg = wx.MessageDialog(self,'Rationale cannot be empty',commitLabel,wx.OK) 
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
     else:
       self.EndModal(armid.WEAKNESSTREATMENT_BUTTONCOMMIT_ID)
 
   def requirement(self): return self.theRequirementName
-
   def asset(self): return self.theAssetName
-
   def effectiveness(self): return self.theEffectivenessValue
+  def rationale(self): return self.theRationale

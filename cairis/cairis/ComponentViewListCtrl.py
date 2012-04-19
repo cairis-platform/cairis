@@ -20,12 +20,16 @@ import wx
 import armid
 from Borg import Borg
 from WeaknessAnalysisDialog import WeaknessAnalysisDialog
+from DimensionNameDialog import DimensionNameDialog
+import AssetParametersFactory
 from ARM import *
 
 class ComponentViewListCtrl(wx.ListCtrl):
 
   def __init__(self,parent,winId):
     wx.ListCtrl.__init__(self,parent,winId,style=wx.LC_REPORT)
+    b = Borg()
+    self.dbProxy = b.dbProxy
     self.theParentDialog = parent
     self.theTraceMenu = wx.Menu()
     self.theTraceMenu.Append(armid.TRACE_MENUTRACE_GENERATESPECIFIC_ID,'Situate view')
@@ -38,13 +42,31 @@ class ComponentViewListCtrl(wx.ListCtrl):
 
   def onSituate(self,evt):
     cvObjt = self.theParentDialog.objts[self.theParentDialog.selectedLabel]
+    cvName = cvObjt.name()
     try:
-      dlg = WeaknessAnalysisDialog(self,cvObjt.name())
-      if (dlg.ShowModal() == armid.WEAKNESSANALYSIS_BUTTONCOMMIT_ID):
-        pass
-      dlg.Destroy()
+      environments = self.dbProxy.getDimensionNames('environment',False)
+      cDlg = DimensionNameDialog(self,'environment',environments,'Select')
+      if (cDlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
+        envName = cDlg.dimensionName()
+        dlg = WeaknessAnalysisDialog(self,cvName,envName)
+        if (dlg.ShowModal() == armid.WEAKNESSANALYSIS_BUTTONCOMMIT_ID):
+          self.situateComponentView(cvName,envName,dlg.targets())
+        dlg.Destroy()
+      cDlg.Destroy()
     except ARMException,errorText:
       dlg = wx.MessageDialog(self,str(errorText),'Situate component view',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return
+
+  def situateComponentView(self,cvName,envName,targets):
+    assetParametersList = []
+    componentAssets = self.dbProxy.componentAssets(cvName)
+    
+    acDict = {}
+    for assetName,componentName in componentAssets:
+      assetParametersList.append(AssetParametersFactory.buildFromTemplate(assetName,[envName]))
+      if assetName not in acDict:
+        acDict[assetName] = componentName
+    self.dbProxy.situateComponentView(cvName,envName,acDict,assetParametersList,targets)
+    self.theParentDialog.theMainWindow.updateObjectSelection()

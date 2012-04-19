@@ -495,7 +495,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error getting last id'
         raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
-      return row[0]
+      lastId = row[0]
+      curs.close()
+      return lastId
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting latest identifier (id:' + str(id) + ',message:' + msg
@@ -6940,7 +6942,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error getting last requirement label for asset ',assetName
         raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
-      return row[0]
+      lastLabel = row[0]
+      curs.close()
+      return lastLabel
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting last requirement label for asset ' + assetName + ' (id:' + str(id) + ',message:' + msg
@@ -7258,7 +7262,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error checking if ' + candidateRiskName + ' is a risk'
         raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
-      return row[0]
+      isRiskInd = row[0]
+      curs.close()
+      return isRiskInd
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error checking if ' + candateRiskName + 'is a risk (id:' + str(id) + ',message:' + msg
@@ -9126,10 +9132,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting components (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def componentViewWeaknesses(self,cvName):
+  def componentViewWeaknesses(self,cvName,envName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call componentViewWeaknesses(%s)',(cvName))
+      curs.execute('call componentViewWeaknesses(%s,%s)',(cvName,envName))
       if (curs.rowcount == -1):
         exceptionText = 'Error getting weaknesses associated with the ' + cvName + ' component view'
         raise DatabaseProxyException(exceptionText) 
@@ -9186,7 +9192,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting requirements associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def componentAssets(self,cvName,reqName):
+  def componentAssets(self,cvName,reqName = ''):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentAssets(%s,%s)',(cvName,reqName))
@@ -9196,10 +9202,74 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       rows = []
       for row in curs.fetchall():
         row = list(row)
-        rows.append(row[0])
+        rows.append((row[0],row[1]))
       curs.close()   
       return rows
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting assets associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def existingObject(self,objtName,dimName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call existing_object(%s,%s)',(objtName,dimName))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error checking the existence of ' + dimName + ' ' + objtName 
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      objtId = row[0]
+      curs.close()
+      return objtId
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error checking the existence of ' + dimName + ' ' + objtName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+
+  def situateComponentView(self,cvName,envName,acDict,assetParametersList,targets):
+    try:
+      for assetParameters in assetParametersList:
+        assetName = assetParameters.name()
+        assetId = self.existingObject(assetName,'asset')
+        if assetId == None:
+          assetId = self.addAsset(assetParameters)
+        self.situateComponentAsset(acDict[assetName],assetId)
+      for target in targets:
+        self.addComponentViewTargets(target,envName)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error situating ' + cvName + ' component view in ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def situateComponentAsset(self,componentName,assetId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call situateComponentAsset(%s,%s)',(assetId,componentName))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error situating asset id ' + str(assetId) 
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error situating asset id ' + str(assetId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addComponentViewTargets(self,target,envName):
+    try:
+      curs = self.conn.cursor()
+      for componentName in target.components():
+        curs.execute('call addComponentTarget(%s,%s,%s,%s,%s)',(componentName,target.name(),target.effectiveness(),target.rationale(),envName))
+        if (curs.rowcount == -1):
+          curs.close()
+          exceptionText = 'Error targetting ' + target.name() + ' with components ' + ",".join(target.components())
+          raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error targetting  ' + target.name() + ' with components ' + ",".join(target.components()) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

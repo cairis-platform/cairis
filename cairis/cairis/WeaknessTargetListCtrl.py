@@ -52,7 +52,7 @@ class WeaknessTargetListCtrl(wx.ListCtrl):
       target = self.theTargets[targetName]
       dlg = WeaknessTreatmentDialog(self,targetName,self.theViewName,target.requirement(),target.asset(),target.effectiveness())  
       if (dlg.ShowModal() == armid.WEAKNESSTREATMENT_BUTTONCOMMIT_ID):
-        target.addTreatment(dlg.requirement(),dlg.asset(),dlg.effectiveness())
+        target.addTreatment(dlg.requirement(),dlg.asset(),dlg.effectiveness(),dlg.rationale())
         self.theTargets[targetName] = target
       dlg.Destroy()
     except KeyError:
