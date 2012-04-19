@@ -701,6 +701,7 @@ drop procedure if exists componentAssets;
 drop procedure if exists situateComponentAsset;
 drop procedure if exists existing_object;
 drop procedure if exists addComponentTarget;
+drop procedure if exists assetComponents;
 
 delimiter //
 
@@ -5485,7 +5486,9 @@ begin
     union 
     select -1,e.name,va.name,'asset',0,'Dependency','1','&lt;&lt;safeguards&gt;&gt;','','1','Association',0,'asset',ma.name,'' rationale from asset ma, asset va, environment e,countermeasure_asset ca, countermeasure_vulnerability_target cvt, asset_vulnerability av where ma.id = ca.asset_id and ca.countermeasure_id = cvt.countermeasure_id and cvt.vulnerability_id = av.vulnerability_id and av.asset_id = va.id and cvt.environment_id = environmentId and av.environment_id = environmentId and av.environment_id = e.id
     union
-    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Association',0,'asset', a.name,'' rationale from persona p, asset a, environment e, task_asset ta, task_persona tp where p.id = tp.persona_id and tp.environment_id = environmentId and tp.task_id = ta.task_id and ta.environment_id = tp.environment_id and ta.asset_id = a.id and ta.environment_id = e.id;
+    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Association',0,'asset', a.name,'' rationale from persona p, asset a, environment e, task_asset ta, task_persona tp where p.id = tp.persona_id and tp.environment_id = environmentId and tp.task_id = ta.task_id and ta.environment_id = tp.environment_id and ta.asset_id = a.id and ta.environment_id = e.id
+    union
+    select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,'' rationale from component_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, asset_template_asset hata, asset_template_asset tata,component c where hea.environment_id = environmentId and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and a.component_id = c.id;
   else
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
     union
@@ -5495,7 +5498,9 @@ begin
     union 
     select -1,e.name,va.name,'asset',0,'Dependency','1','&lt;&lt;safeguards&gt;&gt;','','1','Association',0,'asset',ma.name,'' rationale from asset ma, asset va, environment e,countermeasure_asset ca, countermeasure_vulnerability_target cvt, asset_vulnerability av where ma.id = ca.asset_id and ca.countermeasure_id = cvt.countermeasure_id and cvt.vulnerability_id = av.vulnerability_id and av.asset_id = va.id and cvt.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and av.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and av.environment_id = e.id
     union
-    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Association',0,'asset',a.name,'' rationale from persona p, asset a, environment e, task_asset ta, task_persona tp where p.id = tp.persona_id and tp.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and tp.task_id = ta.task_id and ta.environment_id = tp.environment_id and ta.asset_id = a.id and ta.environment_id = e.id;
+    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Association',0,'asset',a.name,'' rationale from persona p, asset a, environment e, task_asset ta, task_persona tp where p.id = tp.persona_id and tp.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and tp.task_id = ta.task_id and ta.environment_id = tp.environment_id and ta.asset_id = a.id and ta.environment_id = e.id
+    union
+    select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,'' rationale from component_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, asset_template_asset hata, asset_template_asset tata,component c where hea.environment_id in (select component_id from composite_component where composite_component_id = environmentId) and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and a.component_id = c.id;
   end if;
 end
 //
@@ -18052,14 +18057,9 @@ begin
 /* get assets with the same name */
 
   insert into temp_templateasset_asset
-  select c.name,ta.name,a.name,'vulnerability',v.name from component c, component_classassociation ca, asset a, template_asset ta, asset_vulnerability av, vulnerability v where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = cvId) and ca.head_id = ta.id and ta.name = a.name and a.id = av.asset_id and av.environment_id = envId and av.vulnerability_id = v.id
+  select c.name,ta.name,a.name,'vulnerability',v.name from component c, component_asset ca, asset a, template_asset ta, asset_vulnerability av, vulnerability v where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = cvId) and ca.asset_id = ta.id and ta.name = a.name and a.id = av.asset_id and av.environment_id = envId and av.vulnerability_id = v.id
   union
-  select c.name,ta.name,a.name,'vulnerability',v.name from component c, component_classassociation ca, asset a, template_asset ta, asset_vulnerability av, vulnerability v where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = cvId) and ca.tail_id = ta.id and ta.name = a.name and a.id = av.asset_id and av.environment_id = envId and av.vulnerability_id = v.id
-  union
-  select c.name,ta.name,a.name,'threat',t.name from component c, component_classassociation ca, asset a, template_asset ta, asset_threat at, threat t where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = cvId) and ca.head_id = ta.id and ta.name = a.name and a.id = at.asset_id and at.environment_id = envId and at.threat_id = t.id
-  union
-  select c.name,ta.name,a.name,'threat',t.name from component c, component_classassociation ca, asset a, template_asset ta, asset_threat at, threat t where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = cvId) and ca.tail_id = ta.id and ta.name = a.name and a.id = at.asset_id and at.environment_id = envId and at.threat_id = t.id;
-
+  select c.name,ta.name,a.name,'threat',t.name from component c, component_asset ca, asset a, template_asset ta, asset_threat at, threat t where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = cvId) and ca.asset_id = ta.id and ta.name = a.name and a.id = at.asset_id and at.environment_id = envId and at.threat_id = t.id;
 
   select component_name, template_asset_name, asset_name, target_name,target_type from temp_templateasset_asset order by 4,1,2;
 
@@ -18298,6 +18298,18 @@ begin
     select id into targetId from vulnerability where name = targetName;
     insert into component_vulnerability_target(component_id,environment_id,vulnerability_id,effectiveness_id,effectiveness_rationale) values (componentId,environmentId,targetId,effectivenessId,effRationale);
   end if;
+end
+//
+
+create procedure assetComponents(in assetName text,in environmentName text)
+begin
+  declare assetId int;
+  declare envId int;
+  declare cName varchar(255); 
+
+  select id into assetId from asset where name = assetName;
+  select id into envId from environment where name = environmentName;
+  select c.name from component c, component_asset ca, asset_template_asset ata, environment_asset ea where ea.environment_id = envId and ea.asset_id = assetId and ea.asset_id = ata.asset_id and ata.template_asset_id = ca.asset_id and ca.component_id = c.id;
 end
 //
 

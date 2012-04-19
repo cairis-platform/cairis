@@ -59,7 +59,9 @@ class AssetModel:
       borderColour = 'black'
       if (assetObjt.critical()):
         borderColour = 'red'
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+    
+      assetNode = pydot.Node(objtName,shape='record',color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
+      self.theGraph.add_node(assetNode)
     self.nodeList.add(objtName)
 
   def layout(self,renderer = 'dot'):
@@ -101,9 +103,11 @@ class AssetModel:
       tailName = association.tailAsset()
       tailDim = association.tailDimension()
 
+      headObjt = headName
+      tailObjt = tailName
       if (self.theAssetName != '' and headName not in self.nodeList):
         self.buildNode(headDim,headName)
-        self.nodeList.add(headName)
+        fromself.nodeList.add(headName)
       if (self.theAssetName != '' and tailName not in self.nodeList):
         self.buildNode(tailDim,tailName)
         self.nodeList.add(tailName)
@@ -161,20 +165,20 @@ class AssetModel:
           if (assocRationale not in self.nodeList):
             self.theGraph.add_node(pydot.Node(assocRationale,shape='note',fontsize=fontSize,fontcolor='blue',color='blue',URL=objtUrl))
           if ((assocRationale,headName) not in edgeList):
-            edge1 = pydot.Edge(assocRationale,headName,dir='none',fontsize=fontSize,color='blue',URL=objtUrl)
+            edge1 = pydot.Edge(assocRationale,headObjt,dir='none',fontsize=fontSize,color='blue',URL=objtUrl)
             self.theGraph.add_edge(edge1)
             edgeList.add((assocRationale,headName))
           if ((assocRationale,tailName) not in edgeList):
-            edge2 = pydot.Edge(assocRationale,tailName,dir='none',fontsize=fontSize,color='blue',URL=objtUrl)
+            edge2 = pydot.Edge(assocRationale,tailObjt,dir='none',fontsize=fontSize,color='blue',URL=objtUrl)
             self.theGraph.add_edge(edge2)
             edgeList.add((assocRationale,tailName))
 
         if (headDim == 'goalconcern' or headDim == 'obstacleconcern' or headDim == 'taskconcern'):
           objtUrl = headDim + '#' + headName
-          edge = pydot.Edge(headName,tailName,label=edgeLabel,headlabel=hLabel,taillabel=tLabel,arrowhead=aHead,arrowtail=aTail,style=edgeStyle,dir='none',fontcolor=fontColour,color=edgeColour,fontsize=fontSize,URL=objtUrl)
+          edge = pydot.Edge(headObjt,tailObjt,label=edgeLabel,headlabel=hLabel,taillabel=tLabel,arrowhead=aHead,arrowtail=aTail,style=edgeStyle,dir='none',fontcolor=fontColour,color=edgeColour,fontsize=fontSize,URL=objtUrl)
         else:
 # head and tail are visually different to head/tail in model terms, so switch the arrows and labels around
-          edge = pydot.Edge(headName,tailName,label=edgeLabel,headlabel=tLabel,taillabel=hLabel,arrowhead=aTail,arrowtail=aHead,style=edgeStyle,dir='none',fontcolor=fontColour,color=edgeColour,fontsize=fontSize)
+          edge = pydot.Edge(headObjt,tailObjt,label=edgeLabel,headlabel=tLabel,taillabel=hLabel,arrowhead=aTail,arrowtail=aHead,style=edgeStyle,dir='none',fontcolor=fontColour,color=edgeColour,fontsize=fontSize)
         self.theGraph.add_edge(edge)
         edgeList.add((headName,tailName))
     return self.layout()

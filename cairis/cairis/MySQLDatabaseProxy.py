@@ -9273,3 +9273,22 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error targetting  ' + target.name() + ' with components ' + ",".join(target.components()) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def assetComponents(self,assetName,envName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call assetComponents(%s,%s)',(assetName,envName))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error getting component associated with asset ' + assetName 
+        raise DatabaseProxyException(exceptionText) 
+      rows = []
+      for row in curs.fetchall():
+        if (row != None):
+          rows.append(row[0])
+      curs.close()
+      return rows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting component associated with asset ' + assetName  + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
