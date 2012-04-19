@@ -4916,7 +4916,11 @@ begin
     union
     select 'asset' from_objt, a.name from_name, 'requirement' to_objt, concat(a.short_code,'-',r.label) to_name from asset a, environment_asset ea, requirement r, asset_requirement ar where ea.environment_id = environmentId and ea.asset_id = a.id and a.id = ar.asset_id and ar.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
     union
-    select 'domainproperty' from_objt, d.name from_name, 'asset' to_objt, a.name to_name from asset a, environment_asset ea, domainproperty_asset da, domainproperty d where ea.environment_id = environmentId and ea.asset_id = a.id and a.id = da.asset_id and da.domainproperty_id = d.id;
+    select 'domainproperty' from_objt, d.name from_name, 'asset' to_objt, a.name to_name from asset a, environment_asset ea, domainproperty_asset da, domainproperty d where ea.environment_id = environmentId and ea.asset_id = a.id and a.id = da.asset_id and da.domainproperty_id = d.id
+    union
+    select 'component' from_objt, c.name from_name, 'vulnerability' to_objt, v.name to_name from component c, component_vulnerability_target cvt, vulnerability v where cvt.environment_id = environmentId and cvt.component_id = c.id and cvt.vulnerability_id = v.id
+    union
+    select 'component' from_objt, c.name from_name, 'vulnerability' to_objt, t.name to_name from component c, component_threat_target ctt, threat t where ctt.environment_id = environmentId and ctt.component_id = c.id and ctt.threat_id = t.id;
   else
     select 'asset' from_objt,a.name from_name, 'threat' to_objt,t.name to_name from asset_threat at,asset a, threat t where at.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and at.asset_id = a.id and at.threat_id = t.id
     union
@@ -4978,7 +4982,11 @@ begin
     union
     select 'asset' from_objt, a.name from_name, 'requirement' to_objt, concat(a.short_code,'-',r.label) to_name from asset a, environment_asset ea, requirement r, asset_requirement ar where ea.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ea.asset_id = a.id and a.id = ar.asset_id and ar.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
     union
-    select 'domainproperty' from_objt, d.name from_name, 'asset' to_objt, a.name to_name from asset a, environment_asset ea, domainproperty_asset da, domainproperty d where ea.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ea.asset_id = a.id and a.id = da.asset_id and da.domainproperty_id = d.id;
+    select 'domainproperty' from_objt, d.name from_name, 'asset' to_objt, a.name to_name from asset a, environment_asset ea, domainproperty_asset da, domainproperty d where ea.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ea.asset_id = a.id and a.id = da.asset_id and da.domainproperty_id = d.id
+    union
+    select 'component' from_objt, c.name from_name, 'vulnerability' to_objt, v.name to_name from component c, component_vulnerability_target cvt, vulnerability v where cvt.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and cvt.component_id = c.id and cvt.vulnerability_id = v.id
+    union
+    select 'component' from_objt, c.name from_name, 'vulnerability' to_objt, t.name to_name from component c, component_threat_target ctt, threat t where ctt.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ctt.component_id = c.id and ctt.threat_id = t.id;
   end if;
 end
 //
