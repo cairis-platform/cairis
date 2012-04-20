@@ -109,11 +109,11 @@
   <structure head_asset="Data Reader" head_adornment="Association" head_nav="0" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_nav="1" tail_adornment="Association" tail_asset="Request Context" />
   <structure head_asset="Access Manager" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="PDP Cache" />
   <structure head_asset="PDP Cache" head_adornment="Aggregation" head_nav="1" head_nry="a" head_role="" tail_role="loads" tail_nry="1..a" tail_nav="0" tail_adornment="Association" tail_asset="Policy File" />
-  <component_requirement name="API control" label="1" />
-  <component_requirement name="Device policy" label="2" />
-  <component_requirement name="Policy synchronisation" label="3" />
-  <component_requirement name="Context-sensitive access control" label="4" />
-  <component_requirement name="Qualified data use" label="5" />
+  <component_requirement name="API control" />
+  <component_requirement name="Device policy" />
+  <component_requirement name="Policy synchronisation" />
+  <component_requirement name="Context-sensitive access control" />
+  <component_requirement name="Qualified data use" />
 </component>
 
 <component name="Discovery Module">

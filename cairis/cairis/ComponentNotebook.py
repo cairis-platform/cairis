@@ -19,8 +19,9 @@
 import wx
 import armid
 from PatternStructureListCtrl import PatternStructureListCtrl
-from RequirementListCtrl import RequirementListCtrl
+from DimensionListCtrl import DimensionListCtrl
 from InterfacePage import InterfacePage
+from Borg import Borg
 
 class MLTextPage(wx.Panel):
   def __init__(self,parent,winId):
@@ -52,7 +53,8 @@ class RequirementsPage(wx.Panel):
     asBox = wx.StaticBox(self,-1)
     asBoxSizer = wx.StaticBoxSizer(asBox,wx.HORIZONTAL)
     topSizer.Add(asBoxSizer,1,wx.EXPAND)
-    self.requirementList = RequirementListCtrl(self,structPage.associationList,armid.COMPONENT_LISTREQUIREMENTS_ID)
+    b = Borg()
+    self.requirementList = DimensionListCtrl(self,armid.COMPONENT_LISTREQUIREMENTS_ID,wx.DefaultSize,'Requirement','template_requirement',b.dbProxy)
     asBoxSizer.Add(self.requirementList,1,wx.EXPAND)
     self.SetSizer(topSizer)
 

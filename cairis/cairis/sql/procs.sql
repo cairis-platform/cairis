@@ -9896,15 +9896,13 @@ begin
 end
 //
 
-create procedure addSecurityPatternRequirement(in reqLabel int, in patternId int, in reqType text, in reqName text, in reqDesc text, in reqRationale text, in reqFC text, in reqAsset text)
+create procedure addSecurityPatternRequirement(in reqLabel int, in patternId int, in reqName text)
 begin
   declare reqTypeId int;
-  declare assetId int;
+  declare reqId int;
 
-  select id into reqTypeId from requirement_type where name = reqType;
-  select id into assetId from template_asset where name = reqAsset;
-
-  insert into securitypattern_requirement(label,pattern_id,type_id,name,description,rationale,fit_criterion,asset_id) values (reqLabel,patternId,reqTypeId,reqName,reqDesc,reqRationale,reqFC,assetId);
+  select id into reqId from template_requirement where name = reqName;
+  insert into securitypattern_template_requirement(template_requirement_id,pattern_id,label) values (reqId,patternId,reqLabel);
 end
 //
 
@@ -17997,21 +17995,17 @@ begin
 end
 //
 
-create procedure addComponentRequirement(in reqLabel int, in componentId int, in reqType text, in reqName text, in reqDesc text, in reqRationale text, in reqFC text, in reqAsset text)
+create procedure addComponentRequirement(in reqLabel int, in componentId int, in reqName text)
 begin
-  declare reqTypeId int;
-  declare assetId int;
-
-  select id into reqTypeId from requirement_type where name = reqType;
-  select id into assetId from template_asset where name = reqAsset;
-
-  insert into component_requirement(label,component_id,type_id,name,description,rationale,fit_criterion,asset_id) values (reqLabel,componentId,reqTypeId,reqName,reqDesc,reqRationale,reqFC,assetId);
+  declare reqId int;
+  select id into reqId from template_requirement where name = reqName;
+  insert into component_template_requirement(template_requirement_id,component_id,label) values (reqId,componentId,reqLabel);
 end
 //
 
 create procedure getComponentRequirements(in componentId int)
 begin
-  select rt.name,cr.name,cr.description,cr.rationale,cr.fit_criterion,ta.name from component_requirement cr, requirement_type rt, template_asset ta where cr.component_id = componentId and cr.asset_id = ta.id and cr.type_id = rt.id order by cr.label;
+  select tr.name,ctr.label from component_template_requirement ctr, template_requirement tr where ctr.component_id = componentId and ctr.template_requirement_id = tr.id order by 2;
 end
 //
 
@@ -18062,11 +18056,11 @@ begin
   then
     delete from component_interface;
     delete from component_classassociation;
-    delete from component_requirement;
+    delete from component_template_requirement;
   else
     delete from component_interface where component_id = componentId;
     delete from component_classassociation where component_id = componentId;
-    delete from component_requirement where component_id = componentId;
+    delete from component_template_requirement where component_id = componentId;
   end if;
 end
 //

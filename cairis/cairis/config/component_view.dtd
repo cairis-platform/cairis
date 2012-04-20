@@ -67,7 +67,6 @@
 <!ATTLIST structure tail_asset CDATA #REQUIRED>
 <!ELEMENT component_requirement EMPTY>
 <!ATTLIST component_requirement name CDATA #REQUIRED>
-<!ATTLIST component_requirement label CDATA #REQUIRED>
 
 <!ELEMENT connector EMPTY>
 <!ATTLIST connector name CDATA #REQUIRED>

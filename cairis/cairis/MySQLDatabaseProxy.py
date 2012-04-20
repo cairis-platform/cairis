@@ -8947,13 +8947,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addComponentRequirements(self,componentId,componentRequirements):
-    for idx,reqData in enumerate(componentRequirements):
-      self.addComponentRequirement(idx+1,componentId,reqData[0],reqData[1],reqData[2],reqData[3],reqData[4],reqData[5])
+    for idx,reqName in enumerate(componentRequirements):
+      self.addComponentRequirement(idx+1,componentId,reqName)
 
-  def addComponentRequirement(self,reqLabel,componentId,reqName,reqDesc,reqType,reqRationale,reqFC,reqAsset):
+  def addComponentRequirement(self,reqLabel,componentId,reqName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call addComponentRequirement(%s,%s,%s,%s,%s,%s,%s,%s)',(reqLabel,componentId,reqType,reqName,reqDesc,reqRationale,reqFC,reqAsset))
+      curs.execute('call addComponentRequirement(%s,%s,%s)',(reqLabel,componentId,reqName))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding requirement to component id ' + str(componentId) 
         raise DatabaseProxyException(exceptionText) 
@@ -8991,7 +8991,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           comParameters.setId(componentId)
           components.append(comParameters)
         connectors = self.componentViewConnectors(cvName)
-        parameters = ComponentViewParameters(cvName,cvSyn,[],components,connectors)
+        parameters = ComponentViewParameters(cvName,cvSyn,[],[],components,connectors)
         cv = ObjectFactory.build(cvId,parameters)
         cvs[cvName] = cv
       return cvs
@@ -9008,18 +9008,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         curs.close()
         exceptionText = 'Error obtaining component requirements'
         raise DatabaseProxyException(exceptionText) 
-      pStruct = []
+      rows = []
       for row in curs.fetchall():
         row = list(row)
-        reqType = row[0]
-        reqName = row[1]
-        reqDesc = row[2]
-        reqRationale = row[3]
-        reqFc = row[4]
-        reqAsset = row[5]
-        pStruct.append((reqName,reqDesc,reqType,reqRationale,reqFc,reqAsset))
+        rows.append(row[0])
       curs.close()
-      return pStruct
+      return rows
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting requirements for component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -9053,6 +9047,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     cvName = parameters.name()
     cvSyn = parameters.synopsis()
     cvAssets = parameters.assets()
+    cvReqs = parameters.requirements()
     cvComs = parameters.components()
     cvCons = parameters.connectors()
 
@@ -9064,7 +9059,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         raise DatabaseProxyException(exceptionText) 
 
       for taParameters in cvAssets:
-        self.addTemplateAsset(taParameters)
+        taId = self.existingObject(taParameters.name(),'template_asset')
+        if taId == -1:
+          self.addTemplateAsset(taParameters)
+      for trParameters in cvReqs:
+        trId = self.existingObject(trParameters.name(),'template_requirement')
+        if trId == -1:
+          self.addTemplateRequirement(trParameters)
       for comParameters in cvComs:
         self.addComponent(comParameters,cvId)
       for conParameters in cvCons:
@@ -9082,6 +9083,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     cvName = parameters.name()
     cvSyn = parameters.synopsis()
     cvAssets = parameters.assets()
+    cvReqs = parameters.requirements()
     cvComs = parameters.components()
     cvCons = parameters.connectors()
 
@@ -9099,6 +9101,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
       for taParameters in cvAssets:
         self.updateTemplateAsset(taParameters)
+      for trParameters in cvAssets:
+        self.updateTemplateRequirement(trParameters)
       for comParameters in cvComs:
         self.updateComponent(comParameters,cvId)
       for conParameters in cvCons:
@@ -9176,24 +9180,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting weaknesses associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
-  def componentRequirements(self,cvName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call componentRequirements(%s)',(cvName))
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting requirements associated with the ' + cvName + ' component view'
-        raise DatabaseProxyException(exceptionText) 
-      rows = []
-      for row in curs.fetchall():
-        row = list(row)
-        rows.append(row[0])
-      curs.close()   
-      return rows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting requirements associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def componentAssets(self,cvName,reqName = ''):

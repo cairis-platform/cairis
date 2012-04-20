@@ -19,16 +19,18 @@
 import ObjectCreationParameters
 
 class ComponentViewParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,cName,cSyn,cAssets,cCom,cCon):
+  def __init__(self,cName,cSyn,cAssets,cReqs,cCom,cCon):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = cName
     self.theSynopsis = cSyn
     self.theAssets = cAssets
+    self.theRequirements = cReqs
     self.theComponents = cCom
     self.theConnectors = cCon
 
   def name(self): return self.theName
   def synopsis(self): return self.theSynopsis
   def assets(self): return self.theAssets
+  def requirements(self): return self.theRequirements
   def components(self): return self.theComponents
   def connectors(self): return self.theConnectors

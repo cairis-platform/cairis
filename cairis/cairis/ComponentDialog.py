@@ -59,7 +59,7 @@ class ComponentDialog(wx.Dialog):
     self.theDescription = descCtrl.GetValue()
     self.theInterfaces = ifCtrl.dimensions()
     self.theStructure = structCtrl.associations()
-    self.theRequirements = reqsCtrl.requirements()
+    self.theRequirements = reqsCtrl.dimensions()
 
     if len(self.theName) == 0:
       dlg = wx.MessageDialog(self,'Component name cannot be empty',commitLabel,wx.OK) 
