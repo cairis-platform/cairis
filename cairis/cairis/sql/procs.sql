@@ -702,6 +702,11 @@ drop procedure if exists situateComponentAsset;
 drop procedure if exists existing_object;
 drop procedure if exists addComponentTarget;
 drop procedure if exists assetComponents;
+drop procedure if exists addTemplateRequirement;
+drop procedure if exists updateTemplateRequirement;
+drop procedure if exists delete_template_requirement;
+drop procedure if exists getTemplateRequirements;
+drop procedure if exists template_requirementNames;
 
 delimiter //
 
@@ -18348,8 +18353,64 @@ begin
   select id into assetId from asset where name = assetName;
   select id into envId from environment where name = environmentName;
   select c.name from component c, component_asset_template_asset ata, environment_asset ea where ea.environment_id = envId and ea.asset_id = assetId and ea.asset_id = ata.asset_id and ata.component_id = c.id;
-
 end
 //
+
+create procedure addTemplateRequirement(in reqId int, in reqName text, in reqAsset text, in reqType text, in reqDesc text, in reqRat text, in reqFC text)
+begin
+  declare reqTypeId int;
+  declare assetId int;
+
+  select id into reqTypeId from requirement_type where name = reqType;
+  select id into assetId from template_asset where name = reqAsset;
+
+  insert into template_requirement(id,name,type_id,description,rationale,fit_criterion,asset_id) values (reqId,reqName,reqTypeId,reqDesc,reqRat,reqFC,assetId);
+end
+//
+
+create procedure updateTemplateRequirement(in reqId int, in reqName text, in reqAsset text, in reqType text, in reqDesc text, in reqRat text, in reqFC text)
+begin
+  declare reqTypeId int;
+  declare assetId int;
+
+  select id into reqTypeId from requirement_type where name = reqType;
+  select id into assetId from template_asset where name = reqAsset;
+
+  update template_requirement set name = reqName, type_id = reqTypeId, description = reqDesc, rationale = reqRat, fit_criterion = reqFC, asset_id = assetId where id = reqId;
+end
+//
+
+create procedure delete_template_requirement(in reqId int)
+begin
+  if reqId = -1
+  then
+    delete from securitypattern_template_requirement;
+    delete from component_template_requirement;
+    delete from template_requirement;
+  else
+    delete from securitypattern_template_requirement where template_requirement_id = reqId;
+    delete from component_template_requirement where template_requirement_id = reqId;
+    delete from template_requirement where id = reqId;
+  end if;
+end
+//
+
+create procedure getTemplateRequirements(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select tr.id, tr.name, ta.name, rt.name, tr.description, tr.rationale, tr.fit_criterion from template_requirement tr, template_asset ta, requirement_type rt where tr.type_id = rt.id and tr.asset_id = ta.id;
+  else
+    select tr.id, tr.name, ta.name, rt.name, r.description, tr.rationale, tr.fit_criterion from template_requirement tr, template_asset ta, requirement_type rt where tr.id = constraintId and tr.type_id = rt.id and tr.asset_id = ta.id;
+  end if;
+end
+//
+
+create procedure template_requirementNames()
+begin
+  select name from template_requirement order by 1;
+end
+//
+
 
 delimiter ;

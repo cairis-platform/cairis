@@ -19,9 +19,9 @@
 import ObjectCreationParameters
 
 class TemplateRequirementParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,assetName,shortCode,assetDesc,assetSig,assetType,spValues,tags,ifs):
+  def __init__(self,reqName,assetName,reqType,reqDesc,reqRat,reqFC):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
-    self.theName = assetName
+    self.theName = reqName
     self.theAssetName = assetName
     self.theType = reqType
     self.theDescription= reqDesc

@@ -1844,25 +1844,27 @@ CREATE TABLE securitypattern (
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 CREATE TABLE template_requirement(
+  id INT NOT NULL,
   name VARCHAR(255),
   type_id INT NOT NULL,
   description VARCHAR(4000),
   rationale VARCHAR(255) NOT NULL,
   fit_criterion VARCHAR(255) NOT NULL,
   asset_id INT NOT NULL,
-  PRIMARY KEY (name),
+  PRIMARY KEY (id),
   FOREIGN KEY (type_id) REFERENCES requirement_type(id),
   FOREIGN KEY (asset_id) REFERENCES template_asset(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE securitypattern_template_requirement (
-  label INT NOT NULL,
+  template_requirement_id INT NOT NULL,
   pattern_id INT NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  PRIMARY KEY(name,pattern_id),
+  label INT NOT NULL,
+  PRIMARY KEY(template_requirement_id,pattern_id),
   FOREIGN KEY (pattern_id) REFERENCES securitypattern(id),
-  FOREIGN KEY (name) REFERENCES template_requirement(name)
+  FOREIGN KEY (template_requirement_id) REFERENCES template_requirement(id)
 ) ENGINE=INNODB;
+
 
 CREATE TABLE securitypattern_classassociation (
   id INT NOT NULL,
@@ -2589,13 +2591,15 @@ CREATE TABLE component_classassociation (
 
 
 CREATE TABLE component_template_requirement (
-  label INT NOT NULL,
+  template_requirement_id INT NOT NULL,
   component_id INT NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  PRIMARY KEY(name,component_id),
+  label INT NOT NULL,
+  PRIMARY KEY(template_requirement_id,component_id),
   FOREIGN KEY (component_id) REFERENCES component(id),
-  FOREIGN KEY (name) REFERENCES template_requirement(name)
+  FOREIGN KEY (template_requirement_id) REFERENCES template_requirement(id)
 ) ENGINE=INNODB;
+
+
 
 CREATE TABLE component_view_component(
   component_view_id INT NOT NULL,
@@ -2984,10 +2988,10 @@ CREATE VIEW asset_template_asset as
   select template_asset_id, asset_id from securitypattern_asset_template_asset;
 
 CREATE VIEW component_requirement as
-  select ctr.label, ctr.component_id, tr.type_id, tr.name, tr.description, tr.rationale, tr.fit_criterion, tr.asset_id from component_template_requirement ctr, template_requirement tr where ctr.name = tr.name;
+  select ctr.label, ctr.component_id, tr.type_id, tr.name, tr.description, tr.rationale, tr.fit_criterion, tr.asset_id from component_template_requirement ctr, template_requirement tr where ctr.template_requirement_id = tr.id;
 
 CREATE VIEW securitypattern_requirement as
-  select str.label, str.pattern_id, tr.type_id, tr.name, tr.description, tr.rationale, tr.fit_criterion, tr.asset_id from securitypattern_template_requirement str, template_requirement tr where str.name = tr.name;
+  select str.label, str.pattern_id, tr.type_id, tr.name, tr.description, tr.rationale, tr.fit_criterion, tr.asset_id from securitypattern_template_requirement str, template_requirement tr where str.template_requirement_id = tr.id;
 
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');

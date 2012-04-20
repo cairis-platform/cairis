@@ -39,6 +39,7 @@ from GoalParameters import GoalParameters
 from ObstacleParameters import ObstacleParameters
 from AssetParameters import AssetParameters
 from TemplateAssetParameters import TemplateAssetParameters
+from TemplateRequirementParameters import TemplateRequirementParameters
 from SecurityPatternParameters import SecurityPatternParameters
 from ThreatParameters import ThreatParameters
 from VulnerabilityParameters import VulnerabilityParameters
@@ -1205,6 +1206,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       objts = self.getAssets(constraintId)
     if (dimensionTable == 'template_asset'):
       objts = self.getTemplateAssets(constraintId)
+    if (dimensionTable == 'template_requirement'):
+      objts = self.getTemplateRequirements(constraintId)
     if (dimensionTable == 'securitypattern'):
       objts = self.getSecurityPatterns(constraintId)
     if (dimensionTable == 'component_view'):
@@ -1408,11 +1411,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       dimensions = []
       curs = self.conn.cursor()
-      if (dimensionTable != 'template_asset'):
+      if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement'):
         sqlText = 'call ' + dimensionTable + 'Names(%s)' 
         curs.execute(sqlText,(currentEnvironment))
-      else:
+      elif (dimensionTable == 'template_asset'):
         curs.execute('call template_assetNames()')
+      elif (dimensionTable == 'template_requirement'):
+        curs.execute('call template_requirementNames()')
       if (curs.rowcount == -1):
         exceptionText = 'Error obtaining ' + dimensionTable + 's'
         raise DatabaseProxyException(exceptionText) 
@@ -5854,7 +5859,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       curs.execute('call updateTemplateAsset(%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType))
       if (curs.rowcount == -1):
-        exceptionText = 'Error adding new asset ' + assetName
+        exceptionText = 'Error updating template asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
       self.addTags(assetName,'template_asset',tags)
       self.addInterfaces(assetName,'template_asset',ifs)
@@ -5872,7 +5877,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       curs.execute('call getTemplateAssets(%s)',(constraintId))
       if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining assets'
+        exceptionText = 'Error obtaining template assets'
         raise DatabaseProxyException(exceptionText) 
       templateAssets = {}
       vals = []
@@ -9292,3 +9297,76 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting component associated with asset ' + assetName  + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def addTemplateRequirement(self,parameters):
+    reqId = self.newId()
+    reqName = parameters.name()
+    reqAsset = parameters.asset()
+    reqType = parameters.type()
+    reqDesc = parameters.description()
+    reqRat = parameters.rationale()
+    reqFC = parameters.fitCriterion()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addTemplateRequirement(%s,%s,%s,%s,%s,%s,%s)',(reqId,reqName,reqAsset,reqType,reqDesc,reqRat,reqFC))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding template requirement ' + reqName
+      self.conn.commit()
+      curs.close()
+      return reqId
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding template requirement ' + reqName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def updateTemplateRequirement(self,parameters):
+    reqId = parameters.id()
+    reqName = parameters.name()
+    reqAsset = parameters.asset()
+    reqType = parameters.type()
+    reqDesc = parameters.description()
+    reqRat = parameters.rationale()
+    reqFC = parameters.fitCriterion()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call updateTemplateRequirement(%s,%s,%s,%s,%s,%s,%s)',(reqId,reqName,reqAsset,reqType,reqDesc,reqRat,reqFC))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating template requirement ' + reqName
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating template requirement ' + reqName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getTemplateRequirements(self,constraintId = -1):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getTemplateRequirements(%s)',(constraintId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining template requirements'
+        raise DatabaseProxyException(exceptionText) 
+      templateReqs = {}
+      vals = []
+      for row in curs.fetchall():
+        row = list(row)
+        reqId = row[0]
+        reqName = row[1]
+        assetName = row[2]
+        reqType = row[3]
+        reqDesc = row[4]
+        reqRat = row[5]
+        reqFC = row[6]
+        parameters = TemplateRequirementParameters(reqName,assetName,reqType,reqDesc,reqRat,reqFC)
+        templateReq = ObjectFactory.build(reqId,parameters)
+        templateReqs[reqName] = templateReq
+      curs.close()
+      return templateReqs
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting template requirements (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteTemplateRequirement(self,reqId):
+    self.deleteObject(reqId,'template_requirement')
+    self.conn.commit()

@@ -16,14 +16,16 @@
 #  under the License.
 
 class TemplateRequirement:
-  def __init__(self,reqName,assetName,reqType,reqDesc,reqRat,reqFC):
-    self.theName = assetName
+  def __init__(self,reqId,reqName,assetName,reqType,reqDesc,reqRat,reqFC):
+    self.theId = reqId
+    self.theName = reqName
     self.theAssetName = assetName
     self.theType = reqType
     self.theDescription= reqDesc
     self.theRationale = reqRat
     self.theFitCriterion = reqFC
 
+  def id(self): return self.theId
   def name(self): return self.theName
   def asset(self): return self.theAssetName
   def type(self): return self.theType

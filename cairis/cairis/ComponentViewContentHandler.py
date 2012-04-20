@@ -271,4 +271,4 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theViewParameters = ComponentViewParameters(self.theViewName,self.theSynopsis,self.theAssets,self.theComponents,self.theConnectors)
     elif name == 'component_requirement':
       self.theComponentRequirements.append((self.theComponentReqName,self.theLabel))
-     self.resetComponentRequirement()
+      self.resetComponentRequirement()

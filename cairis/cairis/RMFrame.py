@@ -32,6 +32,7 @@ from GoalsDialog import GoalsDialog
 from ObstaclesDialog import ObstaclesDialog
 from AssetsDialog import AssetsDialog
 from TemplateAssetsDialog import TemplateAssetsDialog
+from TemplateRequirementsDialog import TemplateRequirementsDialog
 from SecurityPatternsDialog import SecurityPatternsDialog
 from ClassAssociationsDialog import ClassAssociationsDialog
 from GoalAssociationsDialog import GoalAssociationsDialog
@@ -246,6 +247,7 @@ class RMFrame(wx.Frame):
     optionm.Append(armid.RMFRAME_MENU_OPTIONS_RISKS,'Risk values','Edit Risk values')
     optionm.AppendSeparator()
     optionm.Append(armid.RMFRAME_MENU_OPTIONS_TEMPLATEASSETS,'Template Assets','Edit Template Assets')
+    optionm.Append(armid.RMFRAME_MENU_OPTIONS_TEMPLATEREQUIREMENTS,'Template Requirements','Edit Template Requirements')
     optionm.Append(armid.RMFRAME_MENU_OPTIONS_COUNTERMEASURES,'Countermeasure values','Edit Countermeasure values')
     menubar.Append(optionm,'&Options')
 
@@ -384,6 +386,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_SEVERITIES,self.OnSeverityOptions)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_LIKELIHOODS,self.OnLikelihoodOptions)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_TEMPLATEASSETS,self.OnTemplateAssets)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_TEMPLATEREQUIREMENTS,self.OnTemplateRequirements)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_SECURITYPATTERNS,self.OnSecurityPatterns)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_EXTERNALDOCUMENTS,self.OnExternalDocuments)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_DOCUMENTREFERENCES,self.OnDocumentReferences)
@@ -1066,6 +1069,18 @@ class RMFrame(wx.Frame):
       dlg.ShowModal()
       dlg.Destroy()
       return
+
+  def OnTemplateRequirements(self,event):
+    try:
+      dialog = TemplateRequirementsDialog(self)
+      dialog.ShowModal()
+      dialog.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Edit Template Requirements',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+
 
   def OnSecurityPatterns(self,event):
     try:

@@ -101,7 +101,7 @@ def build(objtId,p):
     return Asset(objtId,p.name(),p.shortCode(),p.description(),p.significance(),p.type(),p.critical(),p.criticalRationale(),p.tags(),p.interfaces(),p.environmentProperties())
   if (p.__class__.__name__ == 'TemplateAssetParameters'):
     return TemplateAsset(objtId,p.name(),p.shortCode(),p.description(),p.significance(),p.type(),p.properties(),p.tags(),p.interfaces())
-  if (p.__class__.__name__ == 'TemplateRequirements'):
+  if (p.__class__.__name__ == 'TemplateRequirementParameters'):
     return TemplateRequirement(objtId,p.name(),p.asset(),p.type(),p.description(),p.rationale(),p.fitCriterion())
   if (p.__class__.__name__ == 'SecurityPatternParameters'):
     return SecurityPattern(objtId,p.name(),p.context(),p.problem(),p.solution(),p.requirements(),p.associations())
@@ -166,4 +166,4 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'TaskCharacteristicParameters'):
     return TaskCharacteristic(objtId,p.task(),p.qualifier(),p.characteristic(),p.grounds(),p.warrant(),p.backing(),p.rebuttal())
   else:
-    raise UnknownParameterClass(str(objectId))
+    raise UnknownParameterClass(str(objtId))
