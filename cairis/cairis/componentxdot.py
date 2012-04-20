@@ -150,6 +150,13 @@ class RequiredInterfaceShape(xdot.EllipseShape):
         cr.set_source_rgba(*pen.color)
         cr.stroke()
 
+class ProvidedInterfaceShape(xdot.EllipseShape):
+    def __init__(self, pen, x0, y0, w, h, objtName, filled=False):
+      xdot.EllipseShape.__init__(self,pen,x0,y0,w,h,filled)
+
+    def draw(self, cr, highlight=False,zoom_ratio=-1):
+      xdot.EllipseShape.draw(self,cr,highlight,zoom_ratio)
+
 class MisuseCaseShape(xdot.EllipseShape):
     def __init__(self, pen, x0, y0, w, h, filled=False):
       xdot.EllipseShape.__init__(self,pen,x0,y0,w,h,filled)
@@ -504,6 +511,11 @@ class XDotAttrParser(xdot.XDotAttrParser):
         if filled:
           self.shapes.append(RequiredInterfaceShape(self.pen, x0, y0, w, h,self.objt,filled=True))
         self.shapes.append(RequiredInterfaceShape(self.pen, x0, y0, w, h,self.objt))
+        self.shapes.append(InterfaceLabelShape(self.pen, x0, y0 + 13, 0, w * 2,self.objt))
+      elif (self.dim == 'provided_interface'):
+        if filled:
+          self.shapes.append(ProvidedInterfaceShape(self.pen, x0, y0, w, h,self.objt,filled=True))
+        self.shapes.append(ProvidedInterfaceShape(self.pen, x0, y0, w, h,self.objt))
         self.shapes.append(InterfaceLabelShape(self.pen, x0, y0 + 13, 0, w * 2,self.objt))
       elif (self.dim == ''):
         if filled:
