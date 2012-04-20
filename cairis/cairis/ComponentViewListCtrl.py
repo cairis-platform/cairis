@@ -67,6 +67,7 @@ class ComponentViewListCtrl(wx.ListCtrl):
     for assetName,componentName in componentAssets:
       assetParametersList.append(AssetParametersFactory.buildFromTemplate(assetName,[envName]))
       if assetName not in acDict:
-        acDict[assetName] = componentName
+        acDict[assetName] = []
+      acDict[assetName].append(componentName)
     self.dbProxy.situateComponentView(cvName,envName,acDict,assetParametersList,targets)
     self.theParentDialog.theMainWindow.updateObjectSelection()

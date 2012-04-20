@@ -8051,7 +8051,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def pcToGrl(self,pName,tName,envName):
     try:
       curs = self.conn.cursor()
-      print 'call pcToGrl(',pName,',',tName,',',envName,')'
       curs.execute('call pcToGrl(%s,%s,%s)',(pName,tName,envName))
       if (curs.rowcount == -1):
         exceptionText = 'Error exporting persona and task to GRL'
@@ -9233,9 +9232,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for assetParameters in assetParametersList:
         assetName = assetParameters.name()
         assetId = self.existingObject(assetName,'asset')
-        if assetId == None:
+        if assetId == -1:
           assetId = self.addAsset(assetParameters)
-        self.situateComponentAsset(acDict[assetName],assetId)
+        for cName in acDict[assetName]:
+          self.situateComponentAsset(cName,assetId)
       for target in targets:
         self.addComponentViewTargets(target,envName)
     except _mysql_exceptions.DatabaseError, e:
@@ -9262,7 +9262,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       for componentName in target.components():
-        curs.execute('call addComponentTarget(%s,%s,%s,%s,%s)',(componentName,target.name(),target.effectiveness(),target.rationale(),envName))
+        curs.execute('call addComponentTarget(%s,%s,%s,%s,%s,%s)',(componentName,target.asset(),target.name(),target.effectiveness(),target.rationale(),envName))
         if (curs.rowcount == -1):
           curs.close()
           exceptionText = 'Error targetting ' + target.name() + ' with components ' + ",".join(target.components())

@@ -34,6 +34,7 @@ DROP VIEW IF EXISTS concept_map;
 DROP VIEW IF EXISTS component_interfaces;
 DROP VIEW IF EXISTS connectors;
 DROP VIEW IF EXISTS component_asset;
+DROP VIEW IF EXISTS asset_template_asset;
 
 DROP TABLE IF EXISTS usecase_step_synopsis;
 DROP TABLE IF EXISTS usecase_pc_contribution;
@@ -61,6 +62,7 @@ DROP TABLE IF EXISTS component_interface;
 DROP TABLE IF EXISTS asset_interface;
 DROP TABLE IF EXISTS template_asset_interface;
 DROP TABLE IF EXISTS interface;
+DROP TABLE IF EXISTS component_asset_template_asset;
 DROP TABLE IF EXISTS component_classassociation;
 DROP TABLE IF EXISTS component_requirement;
 DROP TABLE IF EXISTS component_vulnerability_target;
@@ -71,7 +73,7 @@ DROP TABLE IF EXISTS value_tension;
 DROP TABLE IF EXISTS tension;
 DROP TABLE IF EXISTS vulnerability_asset_countermeasure_effect;
 DROP TABLE IF EXISTS threat_asset_countermeasure_effect;
-DROP TABLE IF EXISTS asset_template_asset;
+DROP TABLE IF EXISTS securitypattern_asset_template_asset;
 DROP TABLE IF EXISTS countermeasure_securitypattern;
 DROP TABLE IF EXISTS securitypattern_classassociation;
 DROP TABLE IF EXISTS securitypattern_requirement;
@@ -1872,12 +1874,14 @@ CREATE TABLE securitypattern_classassociation (
   FOREIGN KEY(tail_association_type_id) REFERENCES association_type(id),
   FOREIGN KEY(tail_id) REFERENCES template_asset(id)
 ) ENGINE=INNODB;
-CREATE TABLE asset_template_asset (
+CREATE TABLE securitypattern_asset_template_asset (
   asset_id INT NOT NULL,
   template_asset_id INT NOT NULL,
-  PRIMARY KEY(asset_id,template_asset_id),
+  pattern_id INT NOT NULL,
+  PRIMARY KEY(asset_id,template_asset_id,pattern_id),
   FOREIGN KEY(asset_id) REFERENCES asset(id),
-  FOREIGN KEY(template_asset_id) REFERENCES template_asset(id)
+  FOREIGN KEY(template_asset_id) REFERENCES template_asset(id),
+  FOREIGN KEY(pattern_id) REFERENCES securitypattern(id)
 ) ENGINE=INNODB;
 CREATE TABLE countermeasure_securitypattern ( 
   countermeasure_id INT NOT NULL,
@@ -2495,6 +2499,17 @@ CREATE TABLE component_interface (
   FOREIGN KEY(interface_id) REFERENCES interface(id)
 ) ENGINE=INNODB;
 
+
+CREATE TABLE component_asset_template_asset (
+  asset_id INT NOT NULL,
+  template_asset_id INT NOT NULL,
+  component_id INT NOT NULL,
+  PRIMARY KEY(asset_id,template_asset_id,component_id),
+  FOREIGN KEY(asset_id) REFERENCES asset(id),
+  FOREIGN KEY(template_asset_id) REFERENCES template_asset(id),
+  FOREIGN KEY(component_id) REFERENCES component(id)
+) ENGINE=INNODB;
+
 CREATE TABLE asset_interface (
   asset_id INT NOT NULL,
   interface_id INT NOT NULL,
@@ -2587,12 +2602,14 @@ CREATE TABLE component_view_component(
 
 CREATE TABLE component_vulnerability_target (
   component_id INT NOT NULL,
+  asset_id INT NOT NULL,
   vulnerability_id INT NOT NULL,
   effectiveness_id INT NOT NULL,
   environment_id INT NOT NULL,
   effectiveness_rationale VARCHAR(4000),
   PRIMARY KEY(component_id,vulnerability_id,environment_id),
   FOREIGN KEY(component_id) REFERENCES component(id),
+  FOREIGN KEY(asset_id) REFERENCES asset(id),
   FOREIGN KEY(vulnerability_id) REFERENCES vulnerability(id),
   FOREIGN KEY(effectiveness_id) REFERENCES target_effectiveness(id),
   FOREIGN KEY(environment_id) REFERENCES environment(id)
@@ -2600,12 +2617,14 @@ CREATE TABLE component_vulnerability_target (
 
 CREATE TABLE component_threat_target (
   component_id INT NOT NULL,
+  asset_id INT NOT NULL,
   threat_id INT NOT NULL,
   effectiveness_id INT NOT NULL,
   environment_id INT NOT NULL,
   effectiveness_rationale VARCHAR(4000),
   PRIMARY KEY(component_id,threat_id,environment_id),
   FOREIGN KEY(component_id) REFERENCES component(id),
+  FOREIGN KEY(asset_id) REFERENCES asset(id),
   FOREIGN KEY(threat_id) REFERENCES threat(id),
   FOREIGN KEY(effectiveness_id) REFERENCES target_effectiveness(id),
   FOREIGN KEY(environment_id) REFERENCES environment(id)
@@ -2953,6 +2972,11 @@ CREATE VIEW component_asset as
   select component_id, head_id asset_id from component_classassociation
   union
   select component_id, tail_id asset_id from component_classassociation;
+
+CREATE VIEW asset_template_asset as
+  select template_asset_id, asset_id from component_asset_template_asset
+  union
+  select template_asset_id, asset_id from securitypattern_asset_template_asset;
 
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');

@@ -175,10 +175,10 @@ class AssetModel:
 
         if (headDim == 'goalconcern' or headDim == 'obstacleconcern' or headDim == 'taskconcern'):
           objtUrl = headDim + '#' + headName
-          edge = pydot.Edge(headObjt,tailObjt,label=edgeLabel,headlabel=hLabel,taillabel=tLabel,arrowhead=aHead,arrowtail=aTail,style=edgeStyle,dir='none',fontcolor=fontColour,color=edgeColour,fontsize=fontSize,URL=objtUrl)
+          edge = pydot.Edge(headObjt,tailObjt,label=edgeLabel,headlabel=hLabel,taillabel=tLabel,arrowhead=aHead,arrowtail=aTail,style=edgeStyle,dir='both',fontcolor=fontColour,color=edgeColour,fontsize=fontSize,URL=objtUrl)
         else:
 # head and tail are visually different to head/tail in model terms, so switch the arrows and labels around
-          edge = pydot.Edge(headObjt,tailObjt,label=edgeLabel,headlabel=tLabel,taillabel=hLabel,arrowhead=aTail,arrowtail=aHead,style=edgeStyle,dir='none',fontcolor=fontColour,color=edgeColour,fontsize=fontSize)
+          edge = pydot.Edge(headObjt,tailObjt,label=edgeLabel,headlabel=tLabel,taillabel=hLabel,arrowhead=aTail,arrowtail=aHead,style=edgeStyle,dir='both',fontcolor=fontColour,color=edgeColour,fontsize=fontSize)
         self.theGraph.add_edge(edge)
         edgeList.add((headName,tailName))
     return self.layout()
