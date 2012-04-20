@@ -24,6 +24,7 @@ from Obstacle import Obstacle
 from DomainProperty import DomainProperty
 from Asset import Asset
 from TemplateAsset import TemplateAsset
+from TemplateRequirement import TemplateRequirement
 from SecurityPattern import SecurityPattern
 from Component import Component
 from ComponentView import ComponentView
@@ -54,6 +55,7 @@ from GoalParameters import GoalParameters
 from ObstacleParameters import ObstacleParameters
 from AssetParameters import AssetParameters
 from TemplateAssetParameters import TemplateAssetParameters
+from TemplateRequirementParameters import TemplateRequirementParameters
 from SecurityPatternParameters import SecurityPatternParameters
 from ComponentParameters import ComponentParameters
 from ComponentViewParameters import ComponentViewParameters
@@ -99,6 +101,8 @@ def build(objtId,p):
     return Asset(objtId,p.name(),p.shortCode(),p.description(),p.significance(),p.type(),p.critical(),p.criticalRationale(),p.tags(),p.interfaces(),p.environmentProperties())
   if (p.__class__.__name__ == 'TemplateAssetParameters'):
     return TemplateAsset(objtId,p.name(),p.shortCode(),p.description(),p.significance(),p.type(),p.properties(),p.tags(),p.interfaces())
+  if (p.__class__.__name__ == 'TemplateRequirements'):
+    return TemplateRequirement(objtId,p.name(),p.asset(),p.type(),p.description(),p.rationale(),p.fitCriterion())
   if (p.__class__.__name__ == 'SecurityPatternParameters'):
     return SecurityPattern(objtId,p.name(),p.context(),p.problem(),p.solution(),p.requirements(),p.associations())
   if (p.__class__.__name__ == 'ComponentParameters'):

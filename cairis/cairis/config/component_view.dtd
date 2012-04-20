@@ -20,7 +20,7 @@
 
 <!-- DTD for template CAIRIS component views -->
 
-<!ELEMENT component_view (synopsis,asset*,component*,connector*)>
+<!ELEMENT component_view (synopsis,asset*,requirement*,component*,connector*)>
 <!ATTLIST component_view name CDATA #REQUIRED>
 <!ELEMENT synopsis (#PCDATA)>
 
@@ -43,7 +43,14 @@
 <!ATTLIST interface name CDATA #REQUIRED>
 <!ATTLIST interface type (provided | required) #REQUIRED> 
 
-<!ELEMENT component (description,interface*,structure*,requirement*)>
+<!ELEMENT requirement (description,rationale,fit_criterion)>
+<!ATTLIST requirement asset CDATA #REQUIRED>
+<!ATTLIST requirement name CDATA #REQUIRED>
+<!ATTLIST requirement type (Functional | Data | Look_and_Feel | Usability | Performance | Operational | Maintainability | Portability | Security | Cultural_and_Political | Legal) #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
+<!ELEMENT fit_criterion (#PCDATA)>
+
+<!ELEMENT component (description,interface*,structure*,component_requirement*)>
 <!ATTLIST component name CDATA #REQUIRED>
 <!ELEMENT description (#PCDATA)>
 
@@ -58,12 +65,9 @@
 <!ATTLIST structure tail_nav (1 | 0) #REQUIRED>
 <!ATTLIST structure tail_adornment (Association | Aggregation | Composition | Inheritence) #REQUIRED>
 <!ATTLIST structure tail_asset CDATA #REQUIRED>
-<!ELEMENT requirement (description,rationale,fit_criterion)>
-<!ATTLIST requirement asset CDATA #REQUIRED>
-<!ATTLIST requirement name CDATA #REQUIRED>
-<!ATTLIST requirement type (Functional | Data | Look_and_Feel | Usability | Performance | Operational | Maintainability | Portability | Security | Cultural_and_Political | Legal) #REQUIRED>
-<!ELEMENT rationale (#PCDATA)>
-<!ELEMENT fit_criterion (#PCDATA)>
+<!ELEMENT component_requirement EMPTY>
+<!ATTLIST component_requirement name CDATA #REQUIRED>
+<!ATTLIST component_requirement label CDATA #REQUIRED>
 
 <!ELEMENT connector EMPTY>
 <!ATTLIST connector name CDATA #REQUIRED>

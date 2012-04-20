@@ -5,7 +5,7 @@ component_view_connector
 component_view
 connector
 component_classassociation
-component_requirement
+component_template_requirement
 component_interface
 interface
 component_vulnerability_target
@@ -60,7 +60,8 @@ template_asset_property
 template_asset
 securitypattern
 securitypattern_classassociation
-securitypattern_requirement
+securitypattern_template_requirement
+template_requirement
 countermeasure_securitypattern
 component_asset_template_asset
 securitypattern_asset_template_asset

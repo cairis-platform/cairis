@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<!DOCTYPE component_view PUBLIC "-//CAIRIS//DTD COMPONENT 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/component_view.dtd">
+
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+
+<component_view name="Policy architecture">
+<synopsis>Model illustrating policy architecture</synopsis>
+<asset name="Policy File" short_code="POL" type="Information">
+  <description>XACML Policy File</description>
+  <tag name="Policy" />
+  <significance>Defines the basis of policy decisions.</significance>
+</asset>
+<asset name="Access Request" short_code="AC_REQ" type="Information">
+  <description>Request for a resources</description>
+  <tag name="Access Request" />
+  <significance>Request for a resources</significance>
+</asset>
+<asset name="Access Requestor" short_code="AC_RE" type="Software">
+  <description>Requests access to resources</description>
+  <tag name="Access Requestor" />
+  <significance>Requests access to resources</significance>
+</asset>
+<asset name="Decision Wrapper" short_code="DE_WR" type="Software">
+  <description>Policy enforcement query wrapper</description>
+  <significance>Creates the initial policy enforcement query based on incoming requests.</significance>
+</asset>
+<asset name="Access Manager" short_code="AC_MA" type="Software">
+  <description>Makes policy decisions</description>
+  <significance>Makes the final decision by combining XACML access control with DHDF data</significance>
+</asset>
+<asset name="Data Reader" short_code="DA_RE" type="Software">
+  <description>Data Reader</description>
+  <significance>Responsible for abstracting the communication between the DHDF Engine and the Request Context</significance>
+</asset>
+<asset name="Request Context" short_code="RE_CO" type="Information">
+  <description>The Request Context stores all the data and credentials released by a user in a given session.</description>
+  <tag name="Request Context" />
+  <significance>Responsible for managing all contextual information.</significance>
+</asset>
+<asset name="DHDF Engine" short_code="DHDF_ENG" type="Software">
+  <description>Data Handling Decision Function Engine</description>
+  <significance>Provides privacy and data handling functionality</significance>
+</asset>
+<asset name="PDP Cache" short_code="PDPC" type="Software">
+  <description>PDP Cache</description>
+  <significance>Stores PDP decisions that could be shared among personal devices.</significance>
+</asset>
+<asset name="JSON-RPC Object" short_code="JSON-RPC_OBJT" type="Information">
+  <description>JSON-RPC Object</description>
+  <significance>Encapsulates data sent between API clients and API implementations</significance>
+</asset>
+<asset name="JSON Object" short_code="JSON_OBJT" type="Information">
+  <description>JSON Object</description>
+  <significance>Encapsulates data sent between components within the same node process</significance>
+</asset>
+<requirement asset="Access Requestor" name="API control" type="Functional">
+  <description>Users and other stakeholders shall be able to control access by web applications to JavaScript APIs.  These APIs may allow access to local and remote resources.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+</requirement>
+<requirement asset="Access Requestor" name="Device policy" type="Functional">
+  <description>Users shall be able to create both device-specific and device-agnostic policies.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+</requirement>
+<requirement asset="PDP Cache" name="Policy synchronisation" type="Functional">
+  <description>The platform shall provide synchronisation for access control policies, so that policies can be desceibed on one platform and enforced on all.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+</requirement>
+<requirement asset="Request Context" name="Context-sensitive access control" type="Functional">
+  <description>The platform shall allow context-sensitive access control decisions: e.g. these may change depending on the environment.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+</requirement>
+<requirement asset="Request Context" name="Qualified data use" type="Functional">
+  <description>The platform shall protect user privacy: access requestors shall be able to qualify how they will use the data they are requesting, and users shall be able to express constraints about data disclosure.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+</requirement>
+
+
+
+<component name="Policy Manager">
+  <description>XACML based policy manager component.</description>
+  <interface name="enforceRequest" type="provided" />
+  <structure head_asset="Decision Wrapper" head_adornment="Association" head_nav="1" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_nav="0" tail_adornment="Association" tail_asset="Access Request" />
+  <structure head_asset="Decision Wrapper" head_adornment="Association" head_nav="0" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_nav="1" tail_adornment="Association" tail_asset="Access Manager" />
+  <structure head_asset="Access Manager" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="DHDF Engine" />
+  <structure head_asset="DHDF Engine" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="Data Reader" />
+  <structure head_asset="Data Reader" head_adornment="Association" head_nav="0" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_nav="1" tail_adornment="Association" tail_asset="Request Context" />
+  <structure head_asset="Access Manager" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="PDP Cache" />
+  <structure head_asset="PDP Cache" head_adornment="Aggregation" head_nav="1" head_nry="a" head_role="" tail_role="loads" tail_nry="1..a" tail_nav="0" tail_adornment="Association" tail_asset="Policy File" />
+  <component_requirement name="API control" label="1" />
+  <component_requirement name="Device policy" label="2" />
+  <component_requirement name="Policy synchronisation" label="3" />
+  <component_requirement name="Context-sensitive access control" label="4" />
+  <component_requirement name="Qualified data use" label="5" />
+</component>
+
+<component name="Discovery Module">
+  <description>Discovery API implementation</description>
+  <interface name="enforceRequest" type="required" />
+  <interface name="authenticate" type="provided" />
+  <structure head_asset="Access Request" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="JSON Object" />
+</component>
+
+<component name="Discovery Client">
+  <description>Discovery API client</description>
+  <interface name="authenticate" type="required" />
+  <structure head_asset="Access Requestor" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="Access Request" />
+  <structure head_asset="Access Request" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="JSON-RPC Object" />
+
+</component>
+
+<connector name="JSON-RPC" from_component="Discovery Client" from_interface="authenticate" to_component="Discovery Module" to_interface="authenticate" asset_name="JSON-RPC Object" />
+<connector name="Enforce Method" from_component="Discovery Module" from_interface="enforceRequest" to_component="Policy Manager" to_interface="enforceRequest" asset_name="JSON Object" />
+</component_view>

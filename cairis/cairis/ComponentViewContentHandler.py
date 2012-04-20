@@ -21,6 +21,7 @@ from ComponentViewParameters import ComponentViewParameters
 from ComponentParameters import ComponentParameters
 from ConnectorParameters import ConnectorParameters
 from TemplateAssetParameters import TemplateAssetParameters
+from TemplateRequirementParameters import TemplateRequirementParameters
 from Borg import Borg
 
 def a2i(spLabel):
@@ -46,6 +47,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theSynopsis = ''
     self.inSynopsis = 0
     self.theAssets = []
+    self.theRequirements = []
     self.theComponents = []
     self.theConnectors = []
     self.resetComponentAttributes()
@@ -67,9 +69,9 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theDescription = ''
     self.theInterfaces = []
     self.theStructure = []
-    self.theRequirements = []
+    self.theComponentRequirements = []
     self.resetStructure()
-    self.resetRequirement()
+    self.resetComponentRequirement()
 
   def resetStructure(self):
     self.theHeadName = ''
@@ -83,7 +85,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theTailAdornment = ''
     self.theTailName = ''
 
-  def resetRequirement(self):
+  def resetRequirementAttributes(self):
     self.inDescription = 0
     self.inRationale = 0
     self.inFitCriterion = 0
@@ -93,6 +95,10 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theDescription = ''
     self.theRationale = ''
     self.theFitCriterion = ''
+
+  def resetComponentRequirement(self):
+    self.theComponentReqName = ''
+    self.theLabel = ''
 
   def resetAssetAttributes(self):
     self.inDescription = 0
@@ -187,6 +193,9 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theAsset = attrs['asset']
       rawType = attrs['type']
       self.theType = rawType.replace('_',' ')
+    elif name == 'component_requirement':
+      self.theComponentReqName = attrs['name']
+      self.theLabel = attrs['label']
 
   def characters(self,data):
     if self.inDescription:
@@ -241,8 +250,9 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theStructure.append((self.theHeadName,self.theHeadAdornment,self.theHeadNav,self.theHeadNry,self.theHeadRole,self.theTailRole,self.theTailNry,self.theTailNav,self.theTailAdornment,self.theTailName))
       self.resetStructure()
     elif name == 'requirement':
-      self.theRequirements.append((self.theReqName,self.theDescription,self.theType,self.theRationale,self.theFitCriterion,self.theAsset))
-      self.resetRequirement()
+      p = TemplateRequirement(self.theReqName,self,theAsset,self.theType,self.theDescription,self.theRationale,self.theFitCriterion)
+      self.theRequirements.append(p)
+      self.resetRequirementAttributes()
     elif name == 'connector':
       p = ConnectorParameters(self.theName,self.theViewName,self.theFromName,self.theFromInterface,self.theToName,self.theToInterface,self.theConnectorAsset)
       self.theConnectors.append(p)
@@ -259,3 +269,6 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.inFitCriterion = 0
     elif name == 'component_view':
       self.theViewParameters = ComponentViewParameters(self.theViewName,self.theSynopsis,self.theAssets,self.theComponents,self.theConnectors)
+    elif name == 'component_requirement':
+      self.theComponentRequirements.append((self.theComponentReqName,self.theLabel))
+     self.resetComponentRequirement()

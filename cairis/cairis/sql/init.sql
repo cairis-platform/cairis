@@ -35,6 +35,8 @@ DROP VIEW IF EXISTS component_interfaces;
 DROP VIEW IF EXISTS connectors;
 DROP VIEW IF EXISTS component_asset;
 DROP VIEW IF EXISTS asset_template_asset;
+DROP VIEW IF EXISTS securitypattern_requirement;
+DROP VIEW IF EXISTS component_requirement;
 
 DROP TABLE IF EXISTS usecase_step_synopsis;
 DROP TABLE IF EXISTS usecase_pc_contribution;
@@ -64,7 +66,7 @@ DROP TABLE IF EXISTS template_asset_interface;
 DROP TABLE IF EXISTS interface;
 DROP TABLE IF EXISTS component_asset_template_asset;
 DROP TABLE IF EXISTS component_classassociation;
-DROP TABLE IF EXISTS component_requirement;
+DROP TABLE IF EXISTS component_template_requirement;
 DROP TABLE IF EXISTS component_vulnerability_target;
 DROP TABLE IF EXISTS component_threat_target;
 DROP TABLE IF EXISTS component;
@@ -76,9 +78,10 @@ DROP TABLE IF EXISTS threat_asset_countermeasure_effect;
 DROP TABLE IF EXISTS securitypattern_asset_template_asset;
 DROP TABLE IF EXISTS countermeasure_securitypattern;
 DROP TABLE IF EXISTS securitypattern_classassociation;
-DROP TABLE IF EXISTS securitypattern_requirement;
+DROP TABLE IF EXISTS securitypattern_template_requirement;
 DROP TABLE IF EXISTS securitypattern;
 DROP TABLE IF EXISTS template_asset_property;
+DROP TABLE IF EXISTS template_requirement;
 DROP TABLE IF EXISTS template_asset;
 DROP TABLE IF EXISTS project_dictionary;
 DROP TABLE IF EXISTS project_setting;
@@ -1840,20 +1843,27 @@ CREATE TABLE securitypattern (
   solution VARCHAR(4000) NOT NULL,
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
-CREATE TABLE securitypattern_requirement(
-  label INT NOT NULL,
-  pattern_id INT NOT NULL,
-  type_id INT NOT NULL,
+CREATE TABLE template_requirement(
   name VARCHAR(255),
+  type_id INT NOT NULL,
   description VARCHAR(4000),
   rationale VARCHAR(255) NOT NULL,
   fit_criterion VARCHAR(255) NOT NULL,
   asset_id INT NOT NULL,
-  PRIMARY KEY(label,pattern_id),
-  FOREIGN KEY (pattern_id) REFERENCES securitypattern(id),
+  PRIMARY KEY (name),
   FOREIGN KEY (type_id) REFERENCES requirement_type(id),
   FOREIGN KEY (asset_id) REFERENCES template_asset(id)
 ) ENGINE=INNODB;
+
+CREATE TABLE securitypattern_template_requirement (
+  label INT NOT NULL,
+  pattern_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(name,pattern_id),
+  FOREIGN KEY (pattern_id) REFERENCES securitypattern(id),
+  FOREIGN KEY (name) REFERENCES template_requirement(name)
+) ENGINE=INNODB;
+
 CREATE TABLE securitypattern_classassociation (
   id INT NOT NULL,
   pattern_id INT NOT NULL,
@@ -2577,19 +2587,14 @@ CREATE TABLE component_classassociation (
   FOREIGN KEY(tail_id) REFERENCES template_asset(id)
 ) ENGINE=INNODB;
 
-CREATE TABLE component_requirement(
+
+CREATE TABLE component_template_requirement (
   label INT NOT NULL,
   component_id INT NOT NULL,
-  type_id INT NOT NULL,
-  name VARCHAR(255),
-  description VARCHAR(4000),
-  rationale VARCHAR(255) NOT NULL,
-  fit_criterion VARCHAR(255) NOT NULL,
-  asset_id INT NOT NULL,
-  PRIMARY KEY(label,component_id),
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(name,component_id),
   FOREIGN KEY (component_id) REFERENCES component(id),
-  FOREIGN KEY (type_id) REFERENCES requirement_type(id),
-  FOREIGN KEY (asset_id) REFERENCES template_asset(id)
+  FOREIGN KEY (name) REFERENCES template_requirement(name)
 ) ENGINE=INNODB;
 
 CREATE TABLE component_view_component(
@@ -2977,6 +2982,12 @@ CREATE VIEW asset_template_asset as
   select template_asset_id, asset_id from component_asset_template_asset
   union
   select template_asset_id, asset_id from securitypattern_asset_template_asset;
+
+CREATE VIEW component_requirement as
+  select ctr.label, ctr.component_id, tr.type_id, tr.name, tr.description, tr.rationale, tr.fit_criterion, tr.asset_id from component_template_requirement ctr, template_requirement tr where ctr.name = tr.name;
+
+CREATE VIEW securitypattern_requirement as
+  select str.label, str.pattern_id, tr.type_id, tr.name, tr.description, tr.rationale, tr.fit_criterion, tr.asset_id from securitypattern_template_requirement str, template_requirement tr where str.name = tr.name;
 
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');
