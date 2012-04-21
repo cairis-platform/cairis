@@ -9227,6 +9227,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           assetId = self.addAsset(assetParameters)
         for cName in acDict[assetName]:
           self.situateComponentAsset(cName,assetId)
+      self.situateComponentViewRequirements(cvName)
       for target in targets:
         self.addComponentViewTargets(target,envName)
     except _mysql_exceptions.DatabaseError, e:
@@ -9374,4 +9375,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting requirements for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def situateComponentViewRequirements(self,cvName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call situateComponentViewRequirements(%s)',(cvName))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error situating requirements for component view' + cvName
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error situating requirements for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

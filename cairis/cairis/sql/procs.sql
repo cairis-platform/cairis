@@ -433,6 +433,7 @@ drop procedure if exists delete_component;
 drop procedure if exists template_assetNames;
 drop procedure if exists deleteSecurityPatternComponents;
 drop procedure if exists deleteComponentComponents;
+drop procedure if exists deleteComponentViewComponents;
 drop procedure if exists addSecurityPatternRequirement;
 drop procedure if exists getSecurityPatternRequirements;
 drop procedure if exists addSecurityPatternStructure;
@@ -691,7 +692,7 @@ drop procedure if exists delete_component_view;
 drop procedure if exists componentViewInterfaces;
 drop procedure if exists componentViewConnectors;
 drop procedure if exists component_viewNames;
-drop procedure if exists deleteComponentViewComponents;
+drop procedure if exists deleteSituatedComponentView;
 drop procedure if exists componentNames;
 drop procedure if exists connectorNames;
 drop function if exists mitigated_likelihood;
@@ -707,6 +708,8 @@ drop procedure if exists updateTemplateRequirement;
 drop procedure if exists delete_template_requirement;
 drop procedure if exists getTemplateRequirements;
 drop procedure if exists template_requirementNames;
+drop procedure if exists situateComponentViewRequirements;
+drop procedure if exists situateComponentViewRequirement;
 
 delimiter //
 
@@ -18119,6 +18122,8 @@ end
 
 create procedure delete_component_view(in cvId int)
 begin
+  call deleteSituatedComponentView(cvId);
+  call deleteComponentViewComponents(cvId);
   if cvId = -1
   then
     delete from component_view_component;
@@ -18247,16 +18252,8 @@ begin
   declare done int default 0;
   declare templateAssetId int;
   declare assetName varchar(50);
-  declare typeName varchar(50);
-  declare reqDesc varchar(255);
-  declare reqName varchar(4000);
-  declare reqRationale varchar(255);
-  declare reqFc varchar(255);
-  declare reqLabel int;
-  declare reqId int;
   declare componentId int;
   declare assetTemplateAssetCount int;
-  declare componentReqsCursor cursor for select cr.label,rt.name,cr.name,cr.description,cr.rationale,cr.fit_criterion from component_requirement cr, requirement_type rt where cr.component_id = componentId and cr.asset_id = templateAssetId and cr.type_id = rt.id order by cr.label;
   declare continue handler for not found set done = 1;
 
   select name into assetName from asset where id = assetId;
@@ -18264,18 +18261,6 @@ begin
   select id into componentId from component where name = componentName;
 
   set done = 0;
-
-  open componentReqsCursor;
-  reqs_loop: loop
-    fetch componentReqsCursor into reqLabel,typeName,reqName,reqDesc,reqRationale,reqFc;
-    if done = 1
-    then
-      leave reqs_loop;
-    end if;
-    call newId1(reqId);
-    call addRequirement(reqLabel,reqId,1,reqName,reqDesc,reqRationale,concat(componentName,' component'),reqFc,1,typeName,assetName,1);
-  end loop reqs_loop;
-  close componentReqsCursor;
 
   select count(*) into assetTemplateAssetCount from component_asset_template_asset where asset_id = assetId and template_asset_id = templateAssetId and component_id = componentId;
   if assetTemplateAssetCount = 0
@@ -18403,6 +18388,113 @@ end
 create procedure template_requirementNames()
 begin
   select name from template_requirement order by 1;
+end
+//
+
+create procedure deleteSituatedComponentView(in cvId int)
+begin
+  declare cId int; 
+  declare assetId int; 
+  declare reqId int; 
+  declare done int default 0;
+  declare componentCursor cursor for select component_id from component_view_component where component_view_id = cvId;
+  declare assetCursor cursor for select id from asset where id in (select asset_id from component_asset_template_asset where component_id = cId);
+  declare reqCursor cursor for select id from requirement where id in (select requirement_id from component_requirement_template_requirement where requirement_id = cId);
+  declare continue handler for not found set done = 1;
+
+  open componentCursor;
+  component_loop: loop
+    fetch componentCursor into cId;
+
+    if done = 1
+    then
+      leave component_loop;
+    end if;
+
+    set done = 0;
+    open assetCursor;
+    asset_loop: loop
+      fetch assetCursor into assetId;
+      if done = 1
+      then
+        leave asset_loop;
+      end if;
+      call delete_asset(assetId);
+    end loop asset_loop;
+    close assetCursor;
+    delete from component_asset_template_asset where component_id = cId;
+
+    set done = 0;
+    open reqCursor;
+    req_loop: loop
+      fetch reqCursor into reqId;
+      if done = 1
+      then
+        leave req_loop;
+      end if;
+      call delete_requirement(reqId);
+    end loop req_loop;
+    close reqCursor;
+    delete from component_requirement_template_requirement where component_id = cId;
+
+  end loop component_loop;
+  close componentCursor;
+
+end
+//
+
+create procedure situateComponentViewRequirements(in cvName text)
+begin
+  declare cvId int;
+  declare cId int;
+  declare cName varchar(255);
+  declare done int;
+  declare componentCursor cursor for select cvc.component_id,c.name from component_view_component cvc, component c where cvc.component_view_id = cvId and cvc.component_id = c.id;
+  declare continue handler for not found set done = 1;
+
+  select id into cvId from component_view where name = cvName;
+
+  open componentCursor;
+  component_loop: loop
+    fetch componentCursor into cId,cName;
+    if done = 1
+    then
+      leave component_loop;
+    end if;
+    call situateComponentViewRequirement(cvId,cId,cName);
+  end loop component_loop;
+  close componentCursor;
+end
+//
+
+create procedure situateComponentViewRequirement(in cvId int, in cId int, in cName text)
+begin
+  declare reqLabel int;
+  declare typeName varchar(50);
+  declare reqName varchar(4000);
+  declare reqDesc varchar(255);
+  declare reqRationale varchar(255);
+  declare reqFc varchar(255);
+  declare reqId int;
+  declare trId int;
+  declare assetName varchar(50);
+  declare done int;
+  declare reqCursor cursor for select cr.label,rt.name,cr.name,cr.description,cr.rationale,cr.fit_criterion,ta.name from component_view_component cvc, component_requirement cr, requirement_type rt, template_asset ta where cvc.component_view_id = cvId and cvc.component_id = cr.component_id and cr.component_id = cId and cr.type_id = rt.id and cr.asset_id = ta.id order by cr.label;
+  declare continue handler for not found set done = 1;
+
+  open reqCursor;
+  req_loop: loop
+    fetch reqCursor into reqLabel,typeName,reqName,reqDesc,reqRationale,reqFC,assetName;
+    if done = 1
+    then
+      leave req_loop;
+    end if;
+    call newId1(reqId);
+    call addRequirement(reqLabel,reqId,1,reqName,reqDesc,reqRationale,concat(cName,' component'),reqFc,1,typeName,assetName,1);
+    select id into trId from template_requirement where name = reqName;
+    insert into component_requirement_template_requirement(requirement_id,template_requirement_id,component_id) values (reqId,trId,cId); 
+  end loop req_loop;
+  close reqCursor;
 end
 //
 

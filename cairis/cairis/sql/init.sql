@@ -65,6 +65,7 @@ DROP TABLE IF EXISTS asset_interface;
 DROP TABLE IF EXISTS template_asset_interface;
 DROP TABLE IF EXISTS interface;
 DROP TABLE IF EXISTS component_asset_template_asset;
+DROP TABLE IF EXISTS component_requirement_template_requirement;
 DROP TABLE IF EXISTS component_classassociation;
 DROP TABLE IF EXISTS component_template_requirement;
 DROP TABLE IF EXISTS component_vulnerability_target;
@@ -2599,7 +2600,15 @@ CREATE TABLE component_template_requirement (
   FOREIGN KEY (template_requirement_id) REFERENCES template_requirement(id)
 ) ENGINE=INNODB;
 
-
+CREATE TABLE component_requirement_template_requirement (
+  requirement_id INT NOT NULL,
+  template_requirement_id INT NOT NULL,
+  component_id INT NOT NULL,
+  PRIMARY KEY(requirement_id,template_requirement_id,component_id),
+  FOREIGN KEY (requirement_id) REFERENCES requirement(id),
+  FOREIGN KEY (component_id) REFERENCES component(id),
+  FOREIGN KEY (template_requirement_id) REFERENCES template_requirement(id)
+) ENGINE=INNODB;
 
 CREATE TABLE component_view_component(
   component_view_id INT NOT NULL,
