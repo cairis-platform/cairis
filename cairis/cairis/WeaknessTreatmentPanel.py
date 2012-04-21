@@ -27,7 +27,7 @@ class WeaknessTreatmentPanel(BasePanel):
     self.theViewName = cvName
     b = Borg()
     self.dbProxy = b.dbProxy
-    reqList = self.dbProxy.componentRequirements(cvName)
+    reqList = self.dbProxy.componentViewRequirements(cvName)
     assetList = []
     effValues = ['None','Low','Medium','High']
     mainSizer = wx.BoxSizer(wx.VERTICAL)

@@ -9356,3 +9356,22 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def deleteTemplateRequirement(self,reqId):
     self.deleteObject(reqId,'template_requirement')
     self.conn.commit()
+
+  def componentViewRequirements(self,cvName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentViewRequirements(%s)',(cvName))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error obtaining requirements for component view'
+        raise DatabaseProxyException(exceptionText) 
+      rows = []
+      for row in curs.fetchall():
+        row = list(row)
+        rows.append(row[0])
+      curs.close()
+      return rows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting requirements for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

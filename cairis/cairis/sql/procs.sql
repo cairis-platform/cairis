@@ -696,7 +696,7 @@ drop procedure if exists componentNames;
 drop procedure if exists connectorNames;
 drop function if exists mitigated_likelihood;
 drop function if exists mitigated_severity;
-drop procedure if exists componentRequirements;
+drop procedure if exists componentViewRequirements;
 drop procedure if exists componentAssets;
 drop procedure if exists situateComponentAsset;
 drop procedure if exists existing_object;
@@ -18214,7 +18214,7 @@ begin
 end
 //
 
-create procedure componentRequirements(in cvName text)
+create procedure componentViewRequirements(in cvName text)
 begin
   declare cvId int;
 
