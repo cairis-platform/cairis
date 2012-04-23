@@ -20,14 +20,32 @@
 
 <!-- DTD for template CAIRIS component views -->
 
-<!ELEMENT component_view (synopsis,asset*,requirement*,component*,connector*)>
+<!ELEMENT component_view (synopsis,access_right*,protocol*,privilege*,surface_type*,asset*,requirement*,component*,connector*)>
 <!ATTLIST component_view name CDATA #REQUIRED>
 <!ELEMENT synopsis (#PCDATA)>
+
+<!ELEMENT access_right (rationale)>
+<!ATTLIST access_right name CDATA #REQUIRED>
+<!ATTLIST access_right value CDATA #REQUIRED>
+
+<!ELEMENT protocol (rationale)>
+<!ATTLIST protocol name CDATA #REQUIRED>
+<!ATTLIST protocol value CDATA #REQUIRED>
+
+<!ELEMENT privilege (rationale)>
+<!ATTLIST privilege name CDATA #REQUIRED>
+<!ATTLIST privilege value CDATA #REQUIRED>
+
+<!ELEMENT surface_type (rationale)>
+<!ATTLIST surface_type name CDATA #REQUIRED>
+<!ATTLIST surface_type value CDATA #REQUIRED>
 
 <!ELEMENT asset (description,tag*,significance,interface*,security_property*)>
 <!ATTLIST asset name CDATA #REQUIRED>
 <!ATTLIST asset short_code CDATA #REQUIRED>
 <!ATTLIST asset type (Information | Systems | Software | Hardware | People) #REQUIRED>
+<!ATTLIST asset surface_type CDATA #REQUIRED>
+<!ATTLIST asset access_right CDATA #REQUIRED>
 
 <!ELEMENT security_property (rationale)>
 <!ATTLIST security_property property (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
@@ -42,6 +60,8 @@
 <!ELEMENT interface EMPTY>
 <!ATTLIST interface name CDATA #REQUIRED>
 <!ATTLIST interface type (provided | required) #REQUIRED> 
+<!ATTLIST interface access_right CDATA #REQUIRED>
+<!ATTLIST interface privilege CDATA #REQUIRED>
 
 <!ELEMENT requirement (description,rationale,fit_criterion)>
 <!ATTLIST requirement asset CDATA #REQUIRED>
@@ -75,4 +95,5 @@
 <!ATTLIST connector from_interface CDATA #REQUIRED>
 <!ATTLIST connector to_component CDATA #REQUIRED>
 <!ATTLIST connector to_interface CDATA #REQUIRED>
+<!ATTLIST connector access_right CDATA #REQUIRED>
 <!ATTLIST connector asset_name CDATA #REQUIRED>

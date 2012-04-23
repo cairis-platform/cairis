@@ -23,51 +23,93 @@
 
 <component_view name="Policy architecture">
 <synopsis>Model illustrating policy architecture</synopsis>
-<asset name="Policy File" short_code="POL" type="Information">
+
+<access_right name="trusted" value="10">
+  <rationale>None</rationale>
+</access_right>
+<access_right name="authenticated" value="5">
+  <rationale>None</rationale>
+</access_right>
+<access_right name="anonymous" value="1">
+  <rationale>None</rationale>
+</access_right>
+
+<protocol name="JSON-RPC" value="10">
+  <rationale>None</rationale>
+</protocol>
+<protocol name="TLS" value="1">
+  <rationale>None</rationale>
+</protocol>
+
+<privilege name="privileged" value="10">
+  <rationale>None</rationale>
+</privilege>
+<privilege name="normal" value="1">
+  <rationale>None</rationale>
+</privilege>
+
+<surface_type name="JSON" value="10">
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Unconstrained XML" value="5">
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Constrained XML" value="1">
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Client application" value="10">
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Privileged application" value="1">
+  <rationale>None</rationale>
+</surface_type>
+
+
+<asset name="Policy File" short_code="POL" type="Information" surface_type="Unconstrained XML" access_right="trusted">
   <description>XACML Policy File</description>
   <tag name="Policy" />
   <significance>Defines the basis of policy decisions.</significance>
 </asset>
-<asset name="Access Request" short_code="AC_REQ" type="Information">
+<asset name="Access Request" short_code="AC_REQ" type="Information" surface_type="JSON" access_right="authenticated">
   <description>Request for a resources</description>
   <tag name="Access Request" />
   <significance>Request for a resources</significance>
 </asset>
-<asset name="Access Requestor" short_code="AC_RE" type="Software">
+<asset name="Access Requestor" short_code="AC_RE" type="Software" surface_type="Client application" access_right="authenticated">
   <description>Requests access to resources</description>
   <tag name="Access Requestor" />
   <significance>Requests access to resources</significance>
 </asset>
-<asset name="Decision Wrapper" short_code="DE_WR" type="Software">
+<asset name="Decision Wrapper" short_code="DE_WR" type="Software" surface_type="Privileged application" access_right="trusted">
   <description>Manages the dialogue between clients and the policy manager</description>
   <significance>Response for the dialogue between clients and the policy manager</significance>
 </asset>
-<asset name="Access Manager" short_code="AC_MA" type="Software">
+<asset name="Access Manager" short_code="AC_MA" type="Software" surface_type="Privileged application" access_right="trusted">
   <description>Makes policy decisions</description>
   <significance>Makes the final decision by combining XACML access control with DHDF data</significance>
 </asset>
-<asset name="Data Reader" short_code="DA_RE" type="Software">
+<asset name="Data Reader" short_code="DA_RE" type="Software" surface_type="Privileged application" access_right="trusted">
   <description>Data Reader</description>
   <significance>Responsible for abstracting the communication between the DHDF Engine and the Request Context</significance>
 </asset>
-<asset name="Request Context" short_code="RE_CO" type="Information">
+<asset name="Request Context" short_code="RE_CO" type="Information" surface_type="Unconstrained XML" access_right="trusted">
   <description>Encapsulates the data and credentials released by a user in a given session.</description>
   <tag name="Request Context" />
   <significance>Responsible for converting the request data into the canonical form required for evaluation</significance>
 </asset>
-<asset name="DHDF Engine" short_code="DHDF_ENG" type="Software">
+<asset name="DHDF Engine" short_code="DHDF_ENG" type="Software" surface_type="Privileged application" access_right="trusted">
   <description>Provides privacy and data handling functionality</description>
   <significance>Responsible for managing and evaluating relevant data handling (privacy) policies</significance>
 </asset>
-<asset name="PDP Cache" short_code="PDPC" type="Software">
+<asset name="PDP Cache" short_code="PDPC" type="Software" surface_type="Privileged application" access_right="trusted">
   <description>PDP Cache</description>
   <significance>Stores PDP decisions that could be shared among personal devices.</significance>
 </asset>
-<asset name="JSON-RPC Object" short_code="JSON-RPC_OBJT" type="Information">
+<asset name="JSON-RPC Object" short_code="JSON-RPC_OBJT" type="Information" surface_type="JSON" access_right="authenticated">
   <description>JSON-RPC Object</description>
   <significance>Encapsulates data sent between API clients and API implementations</significance>
 </asset>
-<asset name="JSON Object" short_code="JSON_OBJT" type="Information">
+<asset name="JSON Object" short_code="JSON_OBJT" type="Information" surface_type="JSON" access_right="authenticated">
   <description>JSON Object</description>
   <significance>Encapsulates data sent between components within the same node process</significance>
 </asset>
@@ -98,10 +140,9 @@
 </requirement>
 
 
-
 <component name="Policy Manager">
   <description>XACML based policy manager component.</description>
-  <interface name="enforceRequest" type="provided" />
+  <interface name="enforceRequest" type="provided" access_right="trusted" privilege="normal" />
   <structure head_asset="Decision Wrapper" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_nav="1" tail_adornment="Association" tail_asset="Access Request" />
   <structure head_asset="Decision Wrapper" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="Access Manager" />
   <structure head_asset="Access Manager" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="DHDF Engine" />
@@ -118,19 +159,18 @@
 
 <component name="Discovery Module">
   <description>Discovery API implementation</description>
-  <interface name="enforceRequest" type="required" />
-  <interface name="authenticate" type="provided" />
+  <interface name="enforceRequest" type="required" access_right="trusted" privilege="normal" />
+  <interface name="authenticate" type="provided" access_right="trusted" privilege="normal" />
   <structure head_asset="Access Request" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="JSON Object" />
 </component>
 
 <component name="Discovery Client">
   <description>Discovery API client</description>
-  <interface name="authenticate" type="required" />
+  <interface name="authenticate" type="required" access_right="authenticated" privilege="normal" />
   <structure head_asset="Access Requestor" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="Access Request" />
   <structure head_asset="Access Request" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="JSON-RPC Object" />
 </component>
 
-<connector name="Client connection" protocol="JSON-RPC" from_component="Discovery Client" from_interface="authenticate" to_component="Discovery Module" to_interface="authenticate" asset_name="JSON-RPC Object" />
-<connector name="Authn connection" protocol="JSON-RPC" from_component="Discovery Client" from_interface="authenticate" to_component="Discovery Client" to_interface="authenticate" asset_name="JSON-RPC Object" />
-<connector name="Policy connection" protocol="JSON" from_component="Discovery Module" from_interface="enforceRequest" to_component="Policy Manager" to_interface="enforceRequest" asset_name="JSON Object" />
+<connector name="Discovery AuthN" from_component="Discovery Client" from_interface="authenticate" to_component="Discovery Module" to_interface="authenticate" protocol="JSON-RPC" access_right="trusted" asset_name="JSON-RPC Object" />
+<connector name="Policy connection" from_component="Discovery Module" from_interface="enforceRequest" to_component="Policy Manager" to_interface="enforceRequest" protocol="TLS" access_right="trusted" asset_name="JSON Object" />
 </component_view>
