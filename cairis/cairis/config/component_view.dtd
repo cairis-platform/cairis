@@ -70,6 +70,7 @@
 
 <!ELEMENT connector EMPTY>
 <!ATTLIST connector name CDATA #REQUIRED>
+<!ATTLIST connector protocol CDATA #REQUIRED>
 <!ATTLIST connector from_component CDATA #REQUIRED>
 <!ATTLIST connector from_interface CDATA #REQUIRED>
 <!ATTLIST connector to_component CDATA #REQUIRED>

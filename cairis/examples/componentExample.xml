@@ -128,9 +128,9 @@
   <interface name="authenticate" type="required" />
   <structure head_asset="Access Requestor" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="Access Request" />
   <structure head_asset="Access Request" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="JSON-RPC Object" />
-
 </component>
 
-<connector name="JSON-RPC" from_component="Discovery Client" from_interface="authenticate" to_component="Discovery Module" to_interface="authenticate" asset_name="JSON-RPC Object" />
-<connector name="Enforce Method" from_component="Discovery Module" from_interface="enforceRequest" to_component="Policy Manager" to_interface="enforceRequest" asset_name="JSON Object" />
+<connector name="Client connection" protocol="JSON-RPC" from_component="Discovery Client" from_interface="authenticate" to_component="Discovery Module" to_interface="authenticate" asset_name="JSON-RPC Object" />
+<connector name="Authn connection" protocol="JSON-RPC" from_component="Discovery Client" from_interface="authenticate" to_component="Discovery Client" to_interface="authenticate" asset_name="JSON-RPC Object" />
+<connector name="Policy connection" protocol="JSON" from_component="Discovery Module" from_interface="enforceRequest" to_component="Policy Manager" to_interface="enforceRequest" asset_name="JSON Object" />
 </component_view>
