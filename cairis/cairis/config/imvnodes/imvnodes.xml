@@ -5907,7 +5907,6 @@
                               <object class="GtkTreeView" id="componentInterfacesCtrl">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="headers_visible">False</property>
                               </object>
                             </child>
                           </object>
@@ -5945,7 +5944,6 @@
                           <object class="GtkTreeView" id="componentStructureCtrl">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="headers_visible">False</property>
                           </object>
                         </child>
                       </object>
@@ -5981,7 +5979,6 @@
                           <object class="GtkTreeView" id="componentRequirementsCtrl">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="headers_visible">False</property>
                           </object>
                         </child>
                       </object>

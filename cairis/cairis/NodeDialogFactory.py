@@ -55,9 +55,9 @@ def buildComponentModelNode(url):
   gladeFile = './config/imvnodes/imvnodes.xml'
   builder.add_from_file(gladeFile)
 
-  objt = proxy.dimensionObject(objtName,dim)
   dlg = 0
   if (dim == 'component'):
+    objt = proxy.dimensionObject(objtName,dim)
     dlg = ComponentNodeDialog(objt,builder)
   else:
     return 

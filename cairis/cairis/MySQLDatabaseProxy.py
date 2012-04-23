@@ -1200,6 +1200,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     if (dimensionTable != 'requirement'):
       constraintId = self.getDimensionId(constraintName,dimensionTable)
     objts = {}
+    if (dimensionTable == 'provided_interface' or dimensionTable == 'required_interface'):
+      objts = self.getInterfaces(constraintId)
     if (dimensionTable == 'goalassociation'):
       objts = self.getGoalAssociations(constraintId)
     if (dimensionTable == 'asset'):
@@ -1357,6 +1359,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           curs.execute('select goalAssociationId(%s,%s,%s,%s,%s)',(associationComponents[0],associationComponents[1],associationComponents[2],associationComponents[3],associationComponents[4]))
         elif (dimensionTable == 'classassociation'):
           curs.execute('select classAssociationId(%s,%s,%s)',(associationComponents[0],associationComponents[1],associationComponents[2]))
+      elif ((dimensionTable == 'provided_interface') or (dimensionTable == 'required_interface')):
+        cName,ifName = dimensionName.split('_')
+        curs.execute('select interfaceId(%s)',(ifName))
       else:
         curs.execute('call dimensionId(%s,%s)',(dimensionName,dimensionTable))
 

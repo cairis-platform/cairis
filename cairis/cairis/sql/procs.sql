@@ -711,6 +711,7 @@ drop procedure if exists getTemplateRequirements;
 drop procedure if exists template_requirementNames;
 drop procedure if exists situateComponentViewRequirements;
 drop procedure if exists situateComponentViewRequirement;
+drop function if exists interfaceId;
 
 delimiter //
 
@@ -18507,6 +18508,16 @@ begin
   else
     select c.id,c.name,c.description from component c where c.id = constraintId;
   end if;
+end
+//
+
+create function interfaceId(ifName text) 
+returns int
+deterministic 
+begin
+  declare dimId int;
+  select id into dimId from interface where name = ifName;
+  return dimId;
 end
 //
 
