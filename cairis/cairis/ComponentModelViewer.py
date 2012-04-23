@@ -34,7 +34,6 @@ class ComponentModelViewer(componentxdot.ComponentDotWindow):
     directoryPrefix = b.imageDir + '/'
     self.set_icon_from_file(directoryPrefix + 'component_view.png')
 
-
   def onClick(self,widget,event):
     if event.button == 3:
       self.url = self.widget.get_url(event.x,event.y).url
@@ -45,8 +44,8 @@ class ComponentModelViewer(componentxdot.ComponentDotWindow):
   def on_url_clicked(self, widget, url, event):
     self.url = url
     urlElements = url.split('#')
-    if (urlElements[0] != 'link'):
-      dialog = NodeDialogFactory.build(url,self.environment.name())
+    if (urlElements[0] != 'connector'):
+      dialog = NodeDialogFactory.buildComponentModelNode(url)
     return True
 
   def ShowModal(self, associations):

@@ -42,8 +42,28 @@ from MitigateNodeDialog import MitigateNodeDialog
 from CountermeasureNodeDialog import CountermeasureNodeDialog
 from DomainPropertyNodeDialog import DomainPropertyNodeDialog
 from AssignResponsibilityNodeDialog import AssignResponsibilityNodeDialog
+from ComponentNodeDialog import ComponentNodeDialog
 
 from Borg import Borg
+
+
+def buildComponentModelNode(url):
+  dim,objtName = url.split('#')
+  b = Borg()
+  proxy = b.dbProxy
+  builder = gtk.Builder()
+  gladeFile = './config/imvnodes/imvnodes.xml'
+  builder.add_from_file(gladeFile)
+
+  objt = proxy.dimensionObject(objtName,dim)
+  dlg = 0
+  if (dim == 'component'):
+    dlg = ComponentNodeDialog(objt,builder)
+  else:
+    return 
+  dlg.show()
+  builder.connect_signals(dlg)
+
 
 def build(url,environmentName,newNode = False,objtName = None,assocType = None,goalIndicator = None):
   dim,objtName = url.split('#')

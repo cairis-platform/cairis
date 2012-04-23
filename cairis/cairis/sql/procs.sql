@@ -684,6 +684,7 @@ drop procedure if exists getComponentView;
 drop procedure if exists componentInterfaces;
 drop procedure if exists componentViewWeaknesses;
 drop procedure if exists getComponents;
+drop procedure if exists getAllComponents;
 drop procedure if exists getConnectors;
 drop procedure if exists addComponentView;
 drop procedure if exists updateComponentView;
@@ -18495,6 +18496,17 @@ begin
     insert into component_requirement_template_requirement(requirement_id,template_requirement_id,component_id) values (reqId,trId,cId); 
   end loop req_loop;
   close reqCursor;
+end
+//
+
+create procedure getAllComponents(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select c.id,c.name,c.description from component c;
+  else
+    select c.id,c.name,c.description from component c where c.id = constraintId;
+  end if;
 end
 //
 

@@ -1212,6 +1212,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       objts = self.getSecurityPatterns(constraintId)
     if (dimensionTable == 'component_view'):
       objts = self.getComponentViews(constraintId)
+    if (dimensionTable == 'component'):
+      objts = self.getComponents(constraintId)
     if (dimensionTable == 'classassociation'):
       objts = self.getClassAssociations(constraintId)
     if (dimensionTable == 'goal'):
@@ -9390,4 +9392,35 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error situating requirements for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getComponents(self,constraintId = -1):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getAllComponents(%s)',(constraintId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining assets'
+        raise DatabaseProxyException(exceptionText) 
+      components = {}
+      componentRows = []
+      for row in curs.fetchall():
+        row = list(row)
+        componentId = row[0]
+        componentName = row[1]
+        componentDesc = row[2]
+        componentRows.append((componentId,componentName,componentDesc))
+      curs.close()
+
+      for componentId,componentName,componentDesc in componentRows:
+        componentInterfaces = self.componentInterfaces(componentId)
+        componentStructure = self.componentStructure(componentId)
+        componentReqs = self.componentRequirements(componentId)
+        comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs)
+        comParameters.setId(componentId)
+        component = ObjectFactory.build(componentId,comParameters)
+        components[componentName] = component
+      return components
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting components (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
