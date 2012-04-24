@@ -18,13 +18,17 @@
 
 
 class ValueType:
-  def __init__(self,valueTypeId,valueTypeName,valueTypeDescription,vType):
+  def __init__(self,valueTypeId,valueTypeName,valueTypeDescription,vType,vScore = 0,vRat = ''):
     self.theId = valueTypeId
     self.theName = valueTypeName
     self.theDescription = valueTypeDescription
     self.theType = vType
+    self.theScore = vScore
+    self.theRationale = vRat
 
   def id(self): return self.theId
   def name(self): return self.theName
   def description(self): return self.theDescription
   def type(self): return self.theType
+  def score(self): return self.theScore
+  def rationale(self): return self.theRationale

@@ -62,6 +62,18 @@ class ValueTypesDialog(DimensionBaseDialog):
     elif (self.theValueType == 'risk_class'): 
       label = 'Risk category values'
       imageFile = 'risk.png'
+    elif (self.theValueType == 'access_right'): 
+      label = 'Access right values'
+      imageFile = 'asset.png'
+    elif (self.theValueType == 'protocol'): 
+      label = 'Protocol values'
+      imageFile = 'vulnerability.png'
+    elif (self.theValueType == 'privilege'): 
+      label = 'Privilege values'
+      imageFile = 'threat.png'
+    elif (self.theValueType == 'surface_type'): 
+      label = 'Surface type values'
+      imageFile = 'asset.png'
     else:
       exceptionText = 'Unknown value type ' + value_type
       raise ARM.ARMException(exceptionText)

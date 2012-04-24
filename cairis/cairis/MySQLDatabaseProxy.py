@@ -5293,7 +5293,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def getValueTypes(self,dimName,envName = ''):
     try:
-      customisableValues = set(['asset_value','threat_value','risk_class','countermeasure_value','capability','motivation','asset_type','threat_type','vulnerability_type','severity','likelihood'])
+      customisableValues = set(['asset_value','threat_value','risk_class','countermeasure_value','capability','motivation','asset_type','threat_type','vulnerability_type','severity','likelihood','access_right','protocol','privilege','surface_type'])
       if (dimName not in customisableValues):
         exceptionText = 'Values for ' + dimName + ' are not customisable.'
         raise DatabaseProxyException(exceptionText) 
@@ -5309,7 +5309,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           typeId = row[0]
           typeName = row[1]
           typeDesc = row[2]
-          parameters = ValueTypeParameters(typeName,typeDesc,dimName,envName)
+          typeValue = str(row[3])
+          typeRat = row[4]
+          parameters = ValueTypeParameters(typeName,typeDesc,dimName,envName,typeValue,typeRat)
           objt = ObjectFactory.build(typeId,parameters)
           values.append(objt)
         curs.close()
@@ -5350,13 +5352,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     vtName = parameters.name()
     vtDesc = parameters.description()
     vtType = parameters.type()
+    vtScore = int(parameters.score())
+    vtRat = parameters.rationale()
     if ((vtType == 'asset_value') or (vtType == 'threat_value') or (vtType == 'risk_class') or (vtType == 'countermeasure_value')):
       exceptionText = 'Cannot add ' + vtType + 's'
       raise DatabaseProxyException(exceptionText) 
 
     try:
       curs = self.conn.cursor()
-      curs.execute('call addValueType(%s,%s,%s,%s)',(valueTypeId,vtName,vtDesc,vtType))
+      curs.execute('call addValueType(%s,%s,%s,%s,%s,%s)',(valueTypeId,vtName,vtDesc,vtType,vtScore,vtRat))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding ' + vtType + ' ' + vtName
         raise DatabaseProxyException(exceptionText) 
@@ -5374,9 +5378,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     vtDesc = parameters.description()
     vtType = parameters.type()
     envName = parameters.environment()
+    vtScore = parameters.score()
+    vtRat = parameters.rationale()
     try:
       curs = self.conn.cursor()
-      curs.execute('call updateValueType(%s,%s,%s,%s,%s)',(valueTypeId,vtName,vtDesc,vtType,envName))
+      curs.execute('call updateValueType(%s,%s,%s,%s,%s,%s,%s)',(valueTypeId,vtName,vtDesc,vtType,envName,vtScore,vtRat))
       if (curs.rowcount == -1):
         exceptionText = 'Error updating ' + vtType + ' ' + vtName
         raise DatabaseProxyException(exceptionText) 
@@ -9053,6 +9059,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     cvId = self.newId()
     cvName = parameters.name()
     cvSyn = parameters.synopsis()
+    cvValueTypes = parameters.metricTypes()
     cvAssets = parameters.assets()
     cvReqs = parameters.requirements()
     cvComs = parameters.components()
@@ -9065,6 +9072,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error adding new component view ' + cvName
         raise DatabaseProxyException(exceptionText) 
 
+      for vtParameters in cvValueTypes:
+        self.addValueType(vtParameters)
       for taParameters in cvAssets:
         taId = self.existingObject(taParameters.name(),'template_asset')
         if taId == -1:

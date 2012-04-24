@@ -88,7 +88,7 @@ class BaseDialog(wx.Dialog):
     for idx,columnName in enumerate(columnNames):
       listCtrl.InsertColumn(idx,columnName)
 
-    valueTypes = set(['asset_value','threat_value','risk_class','countermeasure_value','capability','motivation','asset_type','threat_type','vulnerability_type','severity','likelihood'])
+    valueTypes = set(['asset_value','threat_value','risk_class','countermeasure_value','capability','motivation','asset_type','threat_type','vulnerability_type','severity','likelihood','access_right','protocol','privilege','surface_type'])
     if (dimName in valueTypes):
       if envName == '':
         parent.objts = objtFn(dimName)

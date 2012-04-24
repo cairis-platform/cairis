@@ -84,6 +84,10 @@ DROP TABLE IF EXISTS securitypattern;
 DROP TABLE IF EXISTS template_asset_property;
 DROP TABLE IF EXISTS template_requirement;
 DROP TABLE IF EXISTS template_asset;
+DROP TABLE IF EXISTS access_right;
+DROP TABLE IF EXISTS protocol;
+DROP TABLE IF EXISTS privilege;
+DROP TABLE IF EXISTS surface_type;
 DROP TABLE IF EXISTS project_dictionary;
 DROP TABLE IF EXISTS project_setting;
 DROP TABLE IF EXISTS project_contributor;
@@ -1815,6 +1819,38 @@ CREATE TABLE roleassetrole_dependency (
   FOREIGN KEY(depender_id) REFERENCES role(id),
   FOREIGN KEY(dependency_id) REFERENCES asset(id),
   FOREIGN KEY(dependee_id) REFERENCES role(id)
+) ENGINE=INNODB;
+CREATE TABLE access_right (
+  id INT NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  description VARCHAR(1000),
+  value INT NOT NULL,
+  rationale VARCHAR(1000),
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+CREATE TABLE protocol (
+  id INT NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  description VARCHAR(1000),
+  value INT NOT NULL,
+  rationale VARCHAR(1000),
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+CREATE TABLE privilege (
+  id INT NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  description VARCHAR(1000),
+  value INT NOT NULL,
+  rationale VARCHAR(1000),
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+CREATE TABLE surface_type (
+  id INT NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  description VARCHAR(1000),
+  value INT NOT NULL,
+  rationale VARCHAR(1000),
+  PRIMARY KEY(id)
 ) ENGINE=INNODB;
 CREATE TABLE template_asset (
   id INT NOT NULL,

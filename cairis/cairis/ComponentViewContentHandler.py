@@ -20,6 +20,7 @@ from xml.sax.handler import ContentHandler,EntityResolver
 from ComponentViewParameters import ComponentViewParameters
 from ComponentParameters import ComponentParameters
 from ConnectorParameters import ConnectorParameters
+from ValueTypeParameters import ValueTypeParameters
 from TemplateAssetParameters import TemplateAssetParameters
 from TemplateRequirementParameters import TemplateRequirementParameters
 from Borg import Borg
@@ -46,6 +47,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theViewName = ''
     self.theSynopsis = ''
     self.inSynopsis = 0
+    self.theMetricTypes = []
     self.theAssets = []
     self.theRequirements = []
     self.theComponents = []
@@ -63,6 +65,14 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
 
   def view(self):
     return self.theViewParameters
+
+  def resetValueTypeAttributes(self):
+    self.inDescription = 0
+    self.inRationale = 0
+    self.theName = ''
+    self.theDescription = ''
+    self.theRationale = ''
+    self.theScore = 0
 
   def resetComponentAttributes(self):
     self.inDescription = 0
@@ -191,6 +201,9 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theType = rawType.replace('_',' ')
     elif name == 'component_requirement':
       self.theComponentRequirements.append(attrs['name'])
+    elif name == 'access_right' or name == 'protocol' or name == 'privilege' or name == 'surface_type':
+      self.theName = attrs['name']
+      self.theScore = int(attrs['value'])
 
   def characters(self,data):
     if self.inDescription:
@@ -262,5 +275,9 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.inSignificance = 0
     elif name == 'fit_criterion':
       self.inFitCriterion = 0
+    elif name == 'access_right' or name == 'protocol' or name == 'privilege' or name == 'surface_type':
+      p = ValueTypeParameters(self.theName,self.theDescription,name,'',self.theScore,self.theRationale)
+      self.theMetricTypes.append(p)
+      self.resetValueTypeAttributes()
     elif name == 'component_view':
-      self.theViewParameters = ComponentViewParameters(self.theViewName,self.theSynopsis,self.theAssets,self.theRequirements,self.theComponents,self.theConnectors)
+      self.theViewParameters = ComponentViewParameters(self.theViewName,self.theSynopsis,self.theMetricTypes,self.theAssets,self.theRequirements,self.theComponents,self.theConnectors)

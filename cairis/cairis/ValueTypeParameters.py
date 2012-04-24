@@ -19,14 +19,18 @@
 import ObjectCreationParameters
 
 class ValueTypeParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,vtName,vtDesc,vType,envName = ''):
+  def __init__(self,vtName,vtDesc,vType,envName = '',vtScore = '',vtRat = ''):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = vtName
     self.theDescription = vtDesc
     self.theType = vType
     self.theEnvironmentName = envName
+    self.theScore = vtScore
+    self.theRationale = vtRat
 
   def name(self): return self.theName
   def description(self): return self.theDescription
   def type(self): return self.theType
   def environment(self): return self.theEnvironmentName
+  def score(self): return self.theScore
+  def rationale(self): return self.theRationale

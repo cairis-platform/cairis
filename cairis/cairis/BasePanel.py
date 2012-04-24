@@ -35,6 +35,20 @@ class BasePanel(wx.Panel):
     if (toolTip != ''):
       textCtrl.SetToolTip(wx.ToolTip(toolTip))
     textSizer.Add(textCtrl,1,wx.EXPAND)
+
+    def buildNumSizer(self,labelTxt,widgetSize,winId,toolTip='',isReadOnly=False):
+      tBox = wx.StaticBox(self,-1,labelTxt)
+      textSizer = wx.StaticBoxSizer(tBox,wx.HORIZONTAL)
+      textCtrl = 0
+      if (isReadOnly):
+	textCtrl = wx.NumCtrl(self,winId,"",style=wx.TE_READONLY)
+      else:
+	textCtrl = wx.NumCtrl(self,winId,"")
+
+      if (toolTip != ''):
+	textCtrl.SetToolTip(wx.ToolTip(toolTip))
+      textSizer.Add(textCtrl,1,wx.EXPAND)
+      return textSizer
     return textSizer
 
   def buildTagCtrlSizer(self,widgetSize,winId):

@@ -58,6 +58,10 @@ threat_reference
 vulnerability_reference
 template_asset_property
 template_asset
+access_right
+protocol
+privilege
+surface_type
 securitypattern
 securitypattern_classassociation
 securitypattern_template_requirement

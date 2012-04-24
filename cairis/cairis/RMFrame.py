@@ -237,6 +237,11 @@ class RMFrame(wx.Frame):
     optionm.Append(armid.RMFRAME_MENU_OPTIONS_ASSETS,'Asset values','Edit Asset values')
     optionm.Append(armid.RMFRAME_MENU_OPTIONS_ASSETTYPES,'Asset Types','Edit Asset Types')
     optionm.AppendSeparator()
+    optionm.Append(armid.RMFRAME_MENU_OPTIONS_ACCESSRIGHTS,'Access rights','Edit Access rights')
+    optionm.Append(armid.RMFRAME_MENU_OPTIONS_PROTOCOLS,'Protocols','Edit Protocols')
+    optionm.Append(armid.RMFRAME_MENU_OPTIONS_PRIVILEGES,'Privileges','Edit Privileges')
+    optionm.Append(armid.RMFRAME_MENU_OPTIONS_SURFACETYPES,'Surface types','Edit Surface types')
+    optionm.AppendSeparator()
     optionm.Append(armid.RMFRAME_MENU_OPTIONS_VULNERABILITYTYPES,'Vulnerability Types','Edit Vulnerability Types')
     optionm.Append(armid.RMFRAME_MENU_OPTIONS_SEVERITIES,'Vulnerability Severities','Edit Vulnerability Severities')
     optionm.Append(armid.RMFRAME_MENU_OPTIONS_CAPABILITIES,'Capabilities','Edit Attacker Capabilities')
@@ -377,6 +382,10 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_CAPABILITIES,self.OnCapabilityOptions)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_MOTIVATIONS,self.OnMotivationOptions)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_ASSETTYPES,self.OnAssetTypeOptions)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_ACCESSRIGHTS,self.OnAccessRightOptions)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_PROTOCOLS,self.OnProtocolOptions)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_PRIVILEGES,self.OnPrivilegeOptions)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_SURFACETYPES,self.OnSurfaceTypeOptions)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_VULNERABILITYTYPES,self.OnVulnerabilityTypeOptions)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_THREATTYPES,self.OnThreatTypeOptions)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTTVTYPES,self.OnImportTVTypes)
@@ -1014,6 +1023,48 @@ class RMFrame(wx.Frame):
       dlg.ShowModal()
       dlg.Destroy()
       return
+
+  def OnAccessRightOptions(self,event):
+    try:
+      dialog = ValueTypesDialog(self,'access_right')
+      dialog.ShowModal()
+      dialog.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Edit Access Right',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+
+  def OnProtocolOptions(self,event):
+    try:
+      dialog = ValueTypesDialog(self,'protocol')
+      dialog.ShowModal()
+      dialog.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Edit Protocol',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+
+  def OnPrivilegeOptions(self,event):
+    try:
+      dialog = ValueTypesDialog(self,'privilege')
+      dialog.ShowModal()
+      dialog.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Edit Privilege',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+
+  def OnSurfaceTypeOptions(self,event):
+    try:
+      dialog = ValueTypesDialog(self,'surface_type')
+      dialog.ShowModal()
+      dialog.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Edit Surface Type',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
 
   def OnVulnerabilityTypeOptions(self,event): 
     try:

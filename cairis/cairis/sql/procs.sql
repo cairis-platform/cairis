@@ -712,6 +712,10 @@ drop procedure if exists template_requirementNames;
 drop procedure if exists situateComponentViewRequirements;
 drop procedure if exists situateComponentViewRequirement;
 drop function if exists interfaceId;
+drop procedure if exists access_rightNames;
+drop procedure if exists protocolNames;
+drop procedure if exists privilegeNames;
+drop procedure if exists surface_typeNames;
 
 delimiter //
 
@@ -8680,7 +8684,7 @@ begin
 end
 //
 
-create procedure addValueType(in vtId int,in vtName text, in vtDesc text, in vtType text)
+create procedure addValueType(in vtId int,in vtName text, in vtDesc text, in vtType text, in vtScore int, in vtRat text)
 begin
   if vtType = 'capability'
   then
@@ -8694,13 +8698,25 @@ begin
   elseif vtType = 'threat_type'
   then
     insert into threat_type(id,name,description) values (vtId,vtName,vtDesc);
+  elseif vtType = 'access_right'
+  then
+    insert into access_right(id,name,description,value,rationale) values (vtId,vtName,vtDesc,vtScore,vtRat);
+  elseif vtType = 'protocol'
+  then
+    insert into protocol(id,name,description,value,rationale) values (vtId,vtName,vtDesc,vtScore,vtRat);
+  elseif vtType = 'privilege'
+  then
+    insert into privilege(id,name,description,value,rationale) values (vtId,vtName,vtDesc,vtScore,vtRat);
+  elseif vtType = 'surface_type'
+  then
+    insert into surface_type(id,name,description,value,rationale) values (vtId,vtName,vtDesc,vtScore,vtRat);
   else
     insert into vulnerability_type(id,name,description) values (vtId,vtName,vtDesc);
   end if;
 end
 //
 
-create procedure updateValueType(in vtId int,in vtName text, in vtDesc text, in vtType text, in envName text)
+create procedure updateValueType(in vtId int,in vtName text, in vtDesc text, in vtType text, in envName text, in vtScore int, in vtRat text)
 begin
   declare envId int default 0;
 
@@ -8735,6 +8751,18 @@ begin
   elseif vtType = 'risk_class'
   then
     update risk_class set description=vtDesc where id = vtId;
+  elseif vtType = 'access_right'
+  then
+    update access_right set name = vtName, description = vtDesc, value = vtScore, rationale = vtRat where id = vtId;
+  elseif vtType = 'protocol'
+  then
+    update protocol set name = vtName, description = vtDesc, value = vtScore, rationale = vtRat where id = vtId;
+  elseif vtType = 'privilege'
+  then
+    update privilege set name = vtName, description = vtDesc, value = vtScore, rationale = vtRat where id = vtId;
+  elseif vtType = 'surface_type'
+  then
+    update surface_type set name = vtName, description = vtDesc, value = vtScore, rationale = vtRat where id = vtId;
   else
     update likelihood set description=vtDesc where id = vtId;
   end if;
@@ -15737,36 +15765,48 @@ begin
   if dimensionName = 'asset_value'
   then
     select id into envId from environment where name = envName;
-    select id,name,description from asset_value where environment_id = envId order by 1;
+    select id,name,description,'','' from asset_value where environment_id = envId order by 1;
   elseif dimensionName = 'threat_value'
   then
-    select id,name,description from threat_value order by 1;
+    select id,name,description,'','' from threat_value order by 1;
   elseif dimensionName = 'countermeasure_value'
   then
-    select id,name,description from countermeasure_value order by 1;
+    select id,name,description,'','' from countermeasure_value order by 1;
   elseif dimensionName = 'capability'
   then
-    select id,name,description from capability order by 1;
+    select id,name,description,'','' from capability order by 1;
   elseif dimensionName = 'motivation'
   then
-    select id,name,description from motivation order by 1;
+    select id,name,description,'','' from motivation order by 1;
   elseif dimensionName = 'asset_type'
   then
-    select id,name,description from asset_type order by 1;
+    select id,name,description,'','' from asset_type order by 1;
   elseif dimensionName = 'threat_type'
   then
-    select id,name,description from threat_type order by 1;
+    select id,name,description,'','' from threat_type order by 1;
   elseif dimensionName = 'vulnerability_type'
   then
-    select id,name,description from vulnerability_type order by 1;
+    select id,name,description,'','' from vulnerability_type order by 1;
   elseif dimensionName = 'severity'
   then
-    select id,name,description from severity order by 1;
+    select id,name,description,'','' from severity order by 1;
   elseif dimensionName = 'risk_class'
   then
-    select id,name,ifnull(description,'') from risk_class order by 1;
+    select id,name,ifnull(description,''),'','' from risk_class order by 1;
+  elseif dimensionName = 'access_right'
+  then
+    select id,name,description,value,rationale from access_right order by 1;
+  elseif dimensionName = 'protocol'
+  then
+    select id,name,description,value,rationale from protocol order by 1;
+  elseif dimensionName = 'privilege'
+  then
+    select id,name,description,value,rationale from privilege order by 1;
+  elseif dimensionName = 'surface_type'
+  then
+    select id,name,description,value,rationale from surface_type order by 1;
   else
-    select id,name,description from likelihood order by 1;
+    select id,name,description,'','' from likelihood order by 1;
   end if;
 end
 //
@@ -18518,6 +18558,30 @@ begin
   declare dimId int;
   select id into dimId from interface where name = ifName;
   return dimId;
+end
+//
+
+create procedure access_rightNames(in environmentName text)
+begin
+  select distinct name from access_right order by 1;
+end
+//
+
+create procedure protocolNames(in environmentName text)
+begin
+  select distinct name from protocol order by 1;
+end
+//
+
+create procedure privilegeNames(in environmentName text)
+begin
+  select distinct name from privilege order by 1;
+end
+//
+
+create procedure surface_typeNames(in environmentName text)
+begin
+  select distinct name from surface_type order by 1;
 end
 //
 

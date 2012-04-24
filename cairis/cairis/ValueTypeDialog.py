@@ -29,6 +29,8 @@ class ValueTypeDialog(wx.Dialog):
     self.theValueType = parameters.type()
     self.theName = ''
     self.theDescription = ''
+    self.theScore = ''
+    self.theRationale = ''
     self.theEnvironmentName = parameters.environment()
     self.panel = 0
     self.buildControls(parameters)
@@ -49,14 +51,24 @@ class ValueTypeDialog(wx.Dialog):
     if (self.theValueType == 'severity' or self.theValueType == 'likelihood'):
       nameCtrl = self.FindWindowById(armid.VALUETYPE_TEXTNAME_ID)
       nameCtrl.Disable()
+    if (self.theValueType != 'access_right' and self.theValueType != 'protocol' and self.theValueType != 'privilege' and self.theValueType != 'surface_type'):
+      scoreCtrl = self.FindWindowById(armid.VALUETYPE_TEXTSCORE_ID)
+      scoreCtrl.Hide()
+      ratCtrl = self.FindWindowById(armid.VALUETYPE_TEXTRATIONALE_ID)
+      ratCtrl.Hide()
+
      
    
   def onCommit(self,evt):
     nameCtrl = self.FindWindowById(armid.VALUETYPE_TEXTNAME_ID)
+    scoreCtrl = self.FindWindowById(armid.VALUETYPE_TEXTSCORE_ID)
     descCtrl = self.FindWindowById(armid.VALUETYPE_TEXTDESCRIPTION_ID)
+    ratCtrl = self.FindWindowById(armid.VALUETYPE_TEXTRATIONALE_ID)
 
     self.theName = nameCtrl.GetValue()
+    self.theScore = scoreCtrl.GetValue()
     self.theDescription = descCtrl.GetValue()
+    self.theRationale = ratCtrl.GetValue()
 
     commitLabel = self.theCommitVerb + ' value type'
 
@@ -70,10 +82,21 @@ class ValueTypeDialog(wx.Dialog):
       dlg.ShowModal()
       dlg.Destroy()
       return
+    if (self.theValueType == 'access_right' or self.theValueType == 'protocol' or self.theValueType == 'privilege' or self.theValueType == 'surface_type'):
+      if len(self.theScore) == 0:
+        dlg = wx.MessageDialog(self,'Score cannot be empty',commitLabel,wx.OK) 
+        dlg.ShowModal()
+        dlg.Destroy()
+        return
+      if len(self.theRationale) == 0:
+        dlg = wx.MessageDialog(self,'Rationale cannot be empty',commitLabel,wx.OK) 
+        dlg.ShowModal()
+        dlg.Destroy()
+        return
     else:
       self.EndModal(armid.VALUETYPE_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = ValueTypeParameters(self.theName,self.theDescription,self.theValueType,self.theEnvironmentName)
+    parameters = ValueTypeParameters(self.theName,self.theDescription,self.theValueType,self.theEnvironmentName,self.theScore,self.theRationale)
     parameters.setId(self.theValueTypeId)
     return parameters

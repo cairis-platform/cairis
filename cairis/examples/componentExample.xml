@@ -25,42 +25,54 @@
 <synopsis>Model illustrating policy architecture</synopsis>
 
 <access_right name="trusted" value="10">
+  <description>None</description>
   <rationale>None</rationale>
 </access_right>
 <access_right name="authenticated" value="5">
+  <description>None</description>
   <rationale>None</rationale>
 </access_right>
 <access_right name="anonymous" value="1">
+  <description>None</description>
   <rationale>None</rationale>
 </access_right>
 
 <protocol name="JSON-RPC" value="10">
+  <description>None</description>
   <rationale>None</rationale>
 </protocol>
 <protocol name="TLS" value="1">
+  <description>None</description>
   <rationale>None</rationale>
 </protocol>
 
 <privilege name="privileged" value="10">
+  <description>None</description>
   <rationale>None</rationale>
 </privilege>
 <privilege name="normal" value="1">
+  <description>None</description>
   <rationale>None</rationale>
 </privilege>
 
 <surface_type name="JSON" value="10">
+  <description>None</description>
   <rationale>None</rationale>
 </surface_type>
 <surface_type name="Unconstrained XML" value="5">
+  <description>None</description>
   <rationale>None</rationale>
 </surface_type>
 <surface_type name="Constrained XML" value="1">
+  <description>None</description>
   <rationale>None</rationale>
 </surface_type>
 <surface_type name="Client application" value="10">
+  <description>None</description>
   <rationale>None</rationale>
 </surface_type>
 <surface_type name="Privileged application" value="1">
+  <description>None</description>
   <rationale>None</rationale>
 </surface_type>
 
