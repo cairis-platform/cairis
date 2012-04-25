@@ -44,9 +44,6 @@ class UseCaseListCtrl(TraceableList):
     self.rsItem = self.theTraceMenu.FindItemById(armid.CLC_MENU_REFERENCECONTRIBUTION_ID)
     self.rsItem.Enable(False)
 
-#  def onRightClick(self,evt):
-#    self.PopupMenu(self.theMenu)
-
   def OnItemSelected(self,evt):
     self.theSelectedLabel = evt.GetLabel()
     self.theSelectedIdx = evt.GetIndex()

@@ -70,7 +70,6 @@ DROP TABLE IF EXISTS component_classassociation;
 DROP TABLE IF EXISTS component_template_requirement;
 DROP TABLE IF EXISTS component_vulnerability_target;
 DROP TABLE IF EXISTS component_threat_target;
-DROP TABLE IF EXISTS component;
 
 DROP TABLE IF EXISTS value_tension;
 DROP TABLE IF EXISTS tension;
@@ -216,10 +215,12 @@ DROP TABLE IF EXISTS goal;
 DROP TABLE IF EXISTS requirement_usecase;
 DROP TABLE IF EXISTS requirement_requirement;
 DROP TABLE IF EXISTS usecase_task;
+DROP TABLE IF EXISTS component_usecase;
 DROP TABLE IF EXISTS usecase_conditions;
 DROP TABLE IF EXISTS usecase_step;
 DROP TABLE IF EXISTS usecase_role;
 DROP TABLE IF EXISTS usecase;
+DROP TABLE IF EXISTS component;
 DROP TABLE IF EXISTS reference_type;
 DROP TABLE IF EXISTS task;
 DROP TABLE IF EXISTS misusecase;
@@ -2537,6 +2538,14 @@ CREATE TABLE component (
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE component_usecase (
+  component_id INT NOT NULL,
+  usecase_id INT NOT NULL,
+  PRIMARY KEY(component_id,usecase_id),
+  FOREIGN KEY(component_id) REFERENCES component(id),
+  FOREIGN KEY(usecase_id) REFERENCES usecase(id)
+) ENGINE=INNODB;
+
 CREATE TABLE interface (
   id INT NOT NULL,
   name VARCHAR(255) NOT NULL,
@@ -3080,6 +3089,7 @@ INSERT INTO trace_dimension values (17,'obstacle');
 INSERT INTO trace_dimension values (18,'usecase');
 INSERT INTO trace_dimension values (19,'softgoal');
 INSERT INTO trace_dimension values (20,'document_reference');
+INSERT INTO trace_dimension values (21,'component');
 INSERT INTO severity values (0,'Negligible','');
 INSERT INTO severity values (1,'Marginal','');
 INSERT INTO severity values (2,'Critical','');
@@ -3188,6 +3198,7 @@ INSERT INTO allowable_trace values(17,6);
 INSERT INTO allowable_trace values(0,0);
 INSERT INTO allowable_trace values(20,0);
 INSERT INTO allowable_trace values(0,20);
+INSERT INTO allowable_trace values(21,18);
 INSERT INTO requirement_type values(0,'Functional');
 INSERT INTO requirement_type values(1,'Data');
 INSERT INTO requirement_type values(2,'Look and Feel');

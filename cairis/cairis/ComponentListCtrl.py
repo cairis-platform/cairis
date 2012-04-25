@@ -20,14 +20,18 @@ import wx
 import armid
 import ARM
 from Borg import Borg
+from TraceableList import TraceableList
 from ComponentDialog import ComponentDialog
 from ComponentParameters import ComponentParameters
 
-class ComponentListCtrl(wx.ListCtrl):
+class ComponentListCtrl(TraceableList):
   def __init__(self,parent,winId = armid.COMPONENTVIEW_LISTCOMPONENTS_ID):
-    wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT)
+    TraceableList.__init__(self,parent,winId,'component')
+    self.theParentDialog = parent
     b = Borg()
     self.dbProxy = b.dbProxy
+    self.theSelectedLabel = ""
+    self.theSelectedIdx = -1
     self.theViewName = ''
     self.theComponents = []
     self.InsertColumn(0,'Component')
@@ -37,21 +41,17 @@ class ComponentListCtrl(wx.ListCtrl):
     self.InsertColumn(2,'Interface')
     self.SetColumnWidth(2,100)
     self.theSelectedIdx = -1
-    self.theDimMenu = wx.Menu()
-    self.theDimMenu.Append(armid.AA_MENUADD_ID,'Add')
-    self.theDimMenu.Append(armid.AA_MENUDELETE_ID,'Delete')
-    self.Bind(wx.EVT_RIGHT_DOWN,self.OnRightDown)
-    wx.EVT_MENU(self.theDimMenu,armid.AA_MENUADD_ID,self.onAddComponent)
-    wx.EVT_MENU(self.theDimMenu,armid.AA_MENUDELETE_ID,self.onDeleteComponent)
+    self.theTraceMenu.Append(armid.AA_MENUADD_ID,'Add')
+    self.theTraceMenu.Append(armid.AA_MENUDELETE_ID,'Delete')
+    self.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK,self.onRightClick)
+    wx.EVT_MENU(self.theTraceMenu,armid.AA_MENUADD_ID,self.onAddComponent)
+    wx.EVT_MENU(self.theTraceMenu,armid.AA_MENUDELETE_ID,self.onDeleteComponent)
 
     self.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnItemSelected)
     self.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.OnItemDeselected)
     self.Bind(wx.EVT_LIST_ITEM_ACTIVATED,self.onComponentActivated)
 
   def setView(self,cvName): self.theViewName = cvName
-
-  def OnRightDown(self,evt):
-    self.PopupMenu(self.theDimMenu)
 
   def onAddComponent(self,evt):
     dlg = ComponentDialog(self)
@@ -76,6 +76,7 @@ class ComponentListCtrl(wx.ListCtrl):
 
   
   def OnItemSelected(self,evt):
+    self.theSelectedLabel = evt.GetLabel()
     self.theSelectedIdx = evt.GetIndex()
 
   def OnItemDeselected(self,evt):

@@ -46,18 +46,22 @@ class TraceableList(wx.ListCtrl):
     self.PopupMenu(self.theTraceMenu)
 
   def selectedId(self):
-    if (len(self.theParentDialog.objts) == 0):
-      dlg = wx.MessageDialog(self,'No Use Cases and Misuse Cases defined','Edit Scenarios', wx.OK | wx.ICON_EXCLAMATION)
+    if (self.__class__.__name__ != 'ComponentListCtrl' and len(self.theParentDialog.objts) == 0):
+      dlg = wx.MessageDialog(self,'No objects defined','Edit links', wx.OK | wx.ICON_EXCLAMATION)
       dlg.ShowModal()
       dlg.Destroy() 
       return -1
     else:
       selectedLabel = ''
-      if self.__class__.__name__ != 'UseCaseListCtrl':
+      if self.__class__.__name__ != 'UseCaseListCtrl' and self.__class__.__name__ != 'ComponentListCtrl':
         selectedLabel = self.theParentDialog.selectedLabel
       else:
         selectedLabel = self.theSelectedLabel
-      selectedObjt = self.theParentDialog.objts[selectedLabel]
+      if (self.__class__.__name__ != 'ComponentListCtrl'):
+        selectedObjt = self.theParentDialog.objts[selectedLabel]
+      else:
+        selectedObjt = self.theComponents[self.theSelectedIdx]
+
       return selectedObjt.id()
 
   def onAddContributionLink(self,evt):

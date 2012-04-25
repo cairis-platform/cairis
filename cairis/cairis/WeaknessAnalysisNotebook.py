@@ -33,6 +33,16 @@ class WeaknessTargetPage(wx.Panel):
     asBoxSizer.Add(self.targetList,1,wx.EXPAND)
     self.SetSizer(topSizer)
 
+class PersonaImpactPage(wx.Panel):
+  def __init__(self,parent,winId,cvName,targets):
+    wx.Panel.__init__(self,parent)
+    topSizer = wx.BoxSizer(wx.VERTICAL)
+    asBox = wx.StaticBox(self,-1)
+    asBoxSizer = wx.StaticBoxSizer(asBox,wx.HORIZONTAL)
+    topSizer.Add(asBoxSizer,1,wx.EXPAND)
+    self.personaImpactList = PersonaImpactListCtrl(self,winId,cvName,envName)
+    asBoxSizer.Add(self.personaImpactList,1,wx.EXPAND)
+
 class WeaknessAnalysisNotebook(wx.Notebook):
   def __init__(self,parent,cvName,envName):
     wx.Notebook.__init__(self,parent,armid.WEAKNESSANALYSIS_NOTEBOOKWEAKNESS_ID)
@@ -40,5 +50,7 @@ class WeaknessAnalysisNotebook(wx.Notebook):
     thrTargets,vulTargets = b.dbProxy.componentViewWeaknesses(cvName,envName)
     p1 = WeaknessTargetPage(self,armid.WEAKNESSANALYSIS_LISTTHREATS_ID,cvName,thrTargets)
     p2 = WeaknessTargetPage(self,armid.WEAKNESSANALYSIS_LISTVULNERABILITIES_ID,cvName,vulTargets)
+    p3 = PersonaImpactPage(self,armid.WEAKNESSANALYSIS_LISTPERSONAIMPACT_ID,cvName,envName)
     self.AddPage(p1,'Threats')
     self.AddPage(p2,'Vulnerabilities')
+    self.AddPage(p3,'Persona Impact')

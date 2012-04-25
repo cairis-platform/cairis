@@ -720,6 +720,7 @@ drop procedure if exists attackSurfaceMetric;
 drop procedure if exists derRatio_entryExitPoints;
 drop procedure if exists derRatio_channels;
 drop procedure if exists derRatio_untrustedSurface;
+drop procedure if exists personasImpact;
 drop procedure if exists personaImpact;
 
 delimiter //
@@ -3348,6 +3349,7 @@ begin
   delete from requirement_usecase where usecase_id = ucId;
   delete from obstacleusecase_goalassociation where subgoal_id = ucId;
   delete from usecase_reference where usecase_id = ucId;
+  delete from component_usecase where usecase_id = ucId;
   delete from usecase where id = ucId;
 end
 //
@@ -18112,11 +18114,13 @@ begin
     delete from component_threat_target;
     delete from component_vulnerability_target;
     delete from component_view_component;
+    delete from component_usecase;
     delete from component;
   else
     delete from component_threat_target where component_id = componentId;
     delete from component_vulnerability_target where component_id = componentId;
     delete from component_view_component where id = componentId;
+    delete from component_usecase where component_id = componentId;
     delete from component where id = componentId;
   end if;
 end
@@ -18695,18 +18699,45 @@ begin
 end
 //
 
-create procedure personaImpact(in cvName text, in personaName text,in envName text) 
+create procedure personasImpact(in cvName text, in envName text)
+begin
+  declare personaName varchar(50);
+  declare impactScore int;
+  declare done int default 0;
+  declare personaCursor cursor for select name from persona order by 1;
+  declare continue handler for not found set done = 1;
+
+  drop table if exists temp_personaImpact;
+  create temporary table temp_personaImpact (name varchar(50),impact int);
+
+  open personaCursor;
+  persona_loop: loop
+    fetch personaCursor into personaName;
+    if done = 1
+    then
+      leave persona_loop;
+    end if;
+    call personaImpact(cvName,personaName,envName,impactScore);
+    insert into temp_personaImpact (name,impact) values (personaName,impactScore);
+  end loop persona_loop;
+  close personaCursor;
+  select name,impact from temp_personaImpact having impact > 0 order by 2 desc;
+end
+//
+
+create procedure personaImpact(in cvName text, in personaName text,in envName text,out impactScore int) 
 begin
   declare cvId int;
   declare personaId int;
   declare environmentId int;
   declare taskId int;
   declare done int default 0;
-  declare taskCursor cursor for select tp.task_id from task_persona tp, task_asset taa, asset a, template_asset ta, component_asset ca, component_view_component cvc where tp.persona_id = personaId and tp.environment_id = environmentId and tp.task_id = taa.task_id and taa.asset_id = a.id and a.name = ta.name and ca.asset_id = ta.id and ca.component_id = cvc.component_id and cvc.component_view_id = cvId;
+  declare impactCount int;
+  declare taskCursor cursor for select tp.task_id from task_persona tp, persona_role pr, usecase_role ur, component_usecase cu, component_view_component cvc where tp.persona_id = personaId and tp.environment_id = environmentId and tp.persona_id = pr.persona_id and tp.environment_id = pr.environment_id and pr.role_id = ur.role_id and ur.usecase_id = cu.usecase_id and cu.component_id = cvc.component_id and cvc.component_view_id = cvId;
   declare continue handler for not found set done = 1;
 
-  drop table if exists temp_personaImpact;
-  create temporary table temp_personaImpact (impact int);
+  drop table if exists temp_impact;
+  create temporary table temp_impact (impact int);
 
   select id into cvId from component_view where name = cvName;
   select id into personaId from persona where name = personaName;
@@ -18719,11 +18750,11 @@ begin
     then
       leave task_loop;
     end if;
-    insert into temp_personaImpact
+    insert into temp_impact
     select ifnull(avg((duration_id + frequency_id)/2) + avg(demands_id) + avg(goalsupport_id),1) from task_persona where task_id = taskId and persona_id = personaId and environment_id = environmentId;
   end loop task_loop;
   close taskCursor;
-  select impact from temp_personaImpact;
+  select ifnull(avg(impact),0) into impactScore from temp_impact;
 end
 //
 

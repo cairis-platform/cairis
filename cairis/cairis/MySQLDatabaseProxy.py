@@ -9455,3 +9455,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting components (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def personaImpact(self,cvName,envName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call personasImpact(%s,%s)',(cvName,envName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting personas impact'
+        raise DatabaseProxyException(exceptionText) 
+      pImpact = []
+      for row in curs.fetchall():
+        row = list(row)
+        pImpact.append(row[0],row[1])
+      curs.close()
+      return pImpact
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting personas impact (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
