@@ -41,6 +41,10 @@ class ConnectorListCtrl(wx.ListCtrl):
     self.SetColumnWidth(4,100)
     self.InsertColumn(5,'Asset')
     self.SetColumnWidth(5,100)
+    self.InsertColumn(6,'Protocol')
+    self.SetColumnWidth(6,100)
+    self.InsertColumn(7,'Access Right')
+    self.SetColumnWidth(7,100)
     self.theSelectedIdx = -1
     self.theDimMenu = wx.Menu()
     self.theDimMenu.Append(armid.AA_MENUADD_ID,'Add')
@@ -68,6 +72,8 @@ class ConnectorListCtrl(wx.ListCtrl):
       self.SetStringItem(self.theSelectedIdx,3,dlg.toComponent())
       self.SetStringItem(self.theSelectedIdx,4,dlg.toInterface())
       self.SetStringItem(self.theSelectedIdx,5,dlg.asset())
+      self.SetStringItem(self.theSelectedIdx,6,dlg.protocol())
+      self.SetStringItem(self.theSelectedIdx,7,dlg.accessRight())
 
   def onDeleteConnector(self,evt):
     if (self.theSelectedIdx == -1):
@@ -95,8 +101,10 @@ class ConnectorListCtrl(wx.ListCtrl):
     toComponent = self.GetItem(self.theSelectedIdx,3)
     toInterface = self.GetItem(self.theSelectedIdx,4)
     assetName = self.GetItem(self.theSelectedIdx,5)
+    pName = self.GetItem(self.theSelectedIdx,6)
+    arName = self.GetItem(self.theSelectedIdx,7)
      
-    dlg = ConnectorDialog(self,conName,fromComponent.GetText(),fromInterface.GetText(),toComponent.GetText(),toInterface.GetText(),assetName.GetText())
+    dlg = ConnectorDialog(self,conName,fromComponent.GetText(),fromInterface.GetText(),toComponent.GetText(),toInterface.GetText(),assetName.GetText(),pName.GetText(),arName.GetText())
     if (dlg.ShowModal() == armid.CONNECTOR_BUTTONCOMMIT_ID):
       self.SetStringItem(self.theSelectedIdx,0,dlg.name())
       self.SetStringItem(self.theSelectedIdx,1,dlg.fromComponent())
@@ -104,9 +112,11 @@ class ConnectorListCtrl(wx.ListCtrl):
       self.SetStringItem(self.theSelectedIdx,3,dlg.toComponent())
       self.SetStringItem(self.theSelectedIdx,4,dlg.toInterface())
       self.SetStringItem(self.theSelectedIdx,5,dlg.asset())
+      self.SetStringItem(self.theSelectedIdx,6,dlg.protocol())
+      self.SetStringItem(self.theSelectedIdx,7,dlg.accessRight())
 
   def load(self,cons):
-    for conName,fromComponent,fromInterface,toComponent,toInterface,assetName in cons:
+    for conName,fromComponent,fromInterface,toComponent,toInterface,assetName,pName,arName in cons:
       idx = self.GetItemCount()
       self.InsertStringItem(idx,conName)
       self.SetStringItem(idx,1,fromComponent)
@@ -114,6 +124,8 @@ class ConnectorListCtrl(wx.ListCtrl):
       self.SetStringItem(idx,3,toComponent)
       self.SetStringItem(idx,4,toInterface)
       self.SetStringItem(idx,5,assetName)
+      self.SetStringItem(idx,6,pName)
+      self.SetStringItem(idx,7,arName)
 
   def dimensions(self):
     cons = []
@@ -124,6 +136,8 @@ class ConnectorListCtrl(wx.ListCtrl):
       toComponent = self.GetItem(x,3)
       toInterface = self.GetItem(x,4)
       assetName = self.GetItem(x,5)
-      p = ConnectorParameters(conName,self.theViewName,fromComponent.GetText(),fromInterface.GetText(),toComponent.GetText(),toInterface.GetText(),assetName.GetText())
+      pName = self.GetItem(x,6)
+      arName = self.GetItem(x,7)
+      p = ConnectorParameters(conName,self.theViewName,fromComponent.GetText(),fromInterface.GetText(),toComponent.GetText(),toInterface.GetText(),assetName.GetText(),pName.GetText(),arName.GetText())
       cons.append(p)
     return cons

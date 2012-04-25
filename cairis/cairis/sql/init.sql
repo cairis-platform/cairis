@@ -2605,13 +2605,17 @@ CREATE TABLE connector (
   to_component_id INT NOT NULL,
   to_interface_id INT NOT NULL,
   template_asset_id INT NOT NULL,
+  protocol_id INT NOT NULL,
+  access_right_id INT NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(component_view_id) REFERENCES component_view(id),
   FOREIGN KEY(from_component_id) REFERENCES component(id),
   FOREIGN KEY(from_interface_id) REFERENCES interface(id),
   FOREIGN KEY(to_component_id) REFERENCES component(id),
   FOREIGN KEY(to_interface_id) REFERENCES interface(id),
-  FOREIGN KEY(template_asset_id) REFERENCES template_asset(id)
+  FOREIGN KEY(template_asset_id) REFERENCES template_asset(id),
+  FOREIGN KEY(protocol_id) REFERENCES protocol(id),
+  FOREIGN KEY(access_right_id) REFERENCES access_right(id)
 ) ENGINE=INNODB;
 
 

@@ -134,6 +134,8 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theToName = ''
     self.theToInterface = ''
     self.theConnectorAsset = ''
+    self.theProtocolName = ''
+    self.theAccessRight = ''
 
 
   def startElement(self,name,attrs):
@@ -177,6 +179,8 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theToName = attrs['to_component']
       self.theToInterface = attrs['to_interface']
       self.theConnectorAsset = attrs['asset_name']
+      self.theProtocolName = attrs['protocol']
+      self.theAccessRight = attrs['access_right']
     elif name == 'structure':
       self.theHeadName = attrs['head_asset']
       self.theHeadAdornment = attrs['head_adornment']
@@ -266,7 +270,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theRequirements.append(p)
       self.resetRequirementAttributes()
     elif name == 'connector':
-      p = ConnectorParameters(self.theName,self.theViewName,self.theFromName,self.theFromInterface,self.theToName,self.theToInterface,self.theConnectorAsset)
+      p = ConnectorParameters(self.theName,self.theViewName,self.theFromName,self.theFromInterface,self.theToName,self.theToInterface,self.theConnectorAsset,self.theProtocolName,self.theAccessRight)
       self.theConnectors.append(p)
       self.resetConnectorAttributes() 
     elif name == 'description':
