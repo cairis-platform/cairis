@@ -9832,26 +9832,34 @@ begin
 end
 //
 
-create procedure addTemplateAsset(in assetId int,in assetName text, in shortCode text, in assetDesc text, in assetSignificance text,in assetType text)
+create procedure addTemplateAsset(in assetId int,in assetName text, in shortCode text, in assetDesc text, in assetSignificance text,in assetType text,in sType text,in aRight text)
 begin
   declare assetTypeId int;
   declare taCount int;
+  declare stId int;
+  declare arId int;
 
   select count(id) into taCount from template_asset where name = assetName;
   if taCount = 0
   then
     select id into assetTypeId from asset_type where name = assetType;
-    insert into template_asset(id,name,short_code,description,significance,asset_type_id) values (assetId,assetName,shortCode,assetDesc,assetSignificance,assetTypeId);
+    select id into stId from surface_type where name = sType;
+    select id into arId from access_right where name = aRight;
+    insert into template_asset(id,name,short_code,description,significance,asset_type_id,surface_type_id,access_right_id) values (assetId,assetName,shortCode,assetDesc,assetSignificance,assetTypeId,stId,arId);
   end if;
 end
 //
 
-create procedure updateTemplateAsset(in assetId int,in assetName text, in shortCode text, in assetDesc text, in assetSignificance text,in assetType text)
+create procedure updateTemplateAsset(in assetId int,in assetName text, in shortCode text, in assetDesc text, in assetSignificance text,in assetType text, in sType text, in aRight text)
 begin
   declare assetTypeId int;
+  declare stId int;
+  declare arId int;
   select id into assetTypeId from asset_type where name = assetType;
+  select id into stId from surface_type where name = sType;
+  select id into arId from access_right where name = aRight;
   
-  update template_asset set name = assetName, short_code = shortCode, description = assetDesc, significance = assetSignificance,asset_type_id = assetTypeId where id = assetId;
+  update template_asset set name = assetName, short_code = shortCode, description = assetDesc, significance = assetSignificance, asset_type_id = assetTypeId, surface_type_id = stId, access_right_id = arId where id = assetId;
 end
 //
 
@@ -9879,9 +9887,9 @@ create procedure getTemplateAssets(in constraintId int)
 begin
   if constraintId = -1
   then
-    select a.id,a.name,a.short_code,a.description,a.significance,at.name from template_asset a, asset_type at where a.asset_type_id = at.id;
+    select a.id,a.name,a.short_code,a.description,a.significance,at.name,st.name,ar.name from template_asset a, asset_type at,surface_type st, access_right ar where a.asset_type_id = at.id and a.surface_type_id = st.id and a.access_right_id = ar.id;
   else
-    select a.id,a.name,a.short_code,a.description,a.significance,at.name from template_asset a,asset_type at where a.id = constraintId and a.asset_type_id = at.id;
+    select a.id,a.name,a.short_code,a.description,a.significance,at.name,st.name,ar.name from template_asset a,asset_type at,surface_type st, access_right ar where a.id = constraintId and a.asset_type_id = at.id and a.surface_type_id = st.id and a.access_right_id = ar.id;
   end if;
 end
 //

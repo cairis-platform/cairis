@@ -19,7 +19,7 @@
 import ObjectCreationParameters
 
 class TemplateAssetParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,assetName,shortCode,assetDesc,assetSig,assetType,spValues,tags,ifs):
+  def __init__(self,assetName,shortCode,assetDesc,assetSig,assetType,sType,aRight,spValues,tags,ifs):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = assetName
     self.theShortCode = shortCode
@@ -43,6 +43,8 @@ class TemplateAssetParameters(ObjectCreationParameters.ObjectCreationParameters)
     self.theUnobservabilityProperty = spValues[7][0]
     self.theUnobservabilityRationale = spValues[7][1]
     self.theType = assetType
+    self.theSurfaceType = sType
+    self.theAccessRight = aRight
     self.theTags = tags
     self.theInterfaces = ifs
 
@@ -52,6 +54,8 @@ class TemplateAssetParameters(ObjectCreationParameters.ObjectCreationParameters)
   def description(self): return self.theDescription
   def significance(self): return self.theSignificance
   def type(self): return self.theType
+  def surfaceType(self): return self.theSurfaceType
+  def accessRight(self): return self.theAccessRight
   def confidentialityProperty(self): return self.theConfidentialityProperty
   def confidentialityRationale(self): return self.theConfidentialityRationale
   def integrityProperty(self): return self.theIntegrityProperty

@@ -5352,7 +5352,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     vtName = parameters.name()
     vtDesc = parameters.description()
     vtType = parameters.type()
-    vtScore = int(parameters.score())
+    vtScore = parameters.score()
+    if vtScore == '':
+      vtScore = 0
+    else:
+      vtScore = int(vtScore)
     vtRat = parameters.rationale()
     if ((vtType == 'asset_value') or (vtType == 'threat_value') or (vtType == 'risk_class') or (vtType == 'countermeasure_value')):
       exceptionText = 'Cannot add ' + vtType + 's'
@@ -5806,6 +5810,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     assetDesc = parameters.description()
     assetSig = parameters.significance()
     assetType = parameters.type()
+    surfaceType = parameters.surfaceType()
+    accessRight = parameters.accessRight()
     cProp = parameters.confidentialityProperty()
     cRat = parameters.confidentialityRationale()
     iProp = parameters.integrityProperty()
@@ -5826,7 +5832,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     ifs = parameters.interfaces()
     try:
       curs = self.conn.cursor()
-      curs.execute('call addTemplateAsset(%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType))
+      curs.execute('call addTemplateAsset(%s,%s,%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType,surfaceType,accessRight))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
@@ -5849,6 +5855,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     assetDesc = parameters.description()
     assetSig = parameters.significance()
     assetType = parameters.type()
+    surfaceType = parameters.surfaceType()
+    accessRight = parameters.accessRight()
     cProp = parameters.confidentialityProperty()
     cRat = parameters.confidentialityRationale()
     iProp = parameters.integrityProperty()
@@ -5870,7 +5878,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
     try:
       curs = self.conn.cursor()
-      curs.execute('call updateTemplateAsset(%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType))
+      curs.execute('call updateTemplateAsset(%s,%s,%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType,surfaceType,accessRight))
       if (curs.rowcount == -1):
         exceptionText = 'Error updating template asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
@@ -5902,13 +5910,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         assetDesc = row[ASSETS_DESCRIPTION_COL]
         assetSig = row[ASSETS_SIGNIFICANCE_COL]
         assetType = row[ASSETS_TYPE_COL]
-        vals.append((assetName,shortCode,assetId,assetDesc,assetType))
+        surfaceType = row[6]
+        accessRight = row[7]
+        vals.append((assetName,shortCode,assetId,assetDesc,assetType,surfaceType,accessRight))
       curs.close()
-      for assetName,shortCode,assetId,assetDesc,assetType in vals:
+      for assetName,shortCode,assetId,assetDesc,assetType,surfaceType,accessRight in vals:
         ifs = self.getInterfaces(assetName,'template_asset')
         tags = self.getTags(assetName,'template_asset')
         taProps = self.templateAssetProperties(assetId)
-        parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,taProps,tags,ifs)
+        parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,surfaceType,accessRight,taProps,tags,ifs)
         templateAsset = ObjectFactory.build(assetId,parameters)
         templateAssets[assetName] = templateAsset
       return templateAssets

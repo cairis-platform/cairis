@@ -16,13 +16,15 @@
 #  under the License.
 
 class TemplateAsset:
-  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,spValues,tags,ifs):
+  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,sType,aRight,spValues,tags,ifs):
     self.theId = assetId
     self.theName = assetName
     self.theShortCode = shortCode
     self.theDescription = assetDescription
     self.theSignificance = assetSig
     self.theType = assetType
+    self.theSurfaceType = sType
+    self.theAccessRight = aRight
     self.theProperties = spValues
     self.theConfidentialityProperty = spValues[0][0]
     self.theConfidentialityRationale = spValues[0][1]
@@ -50,6 +52,8 @@ class TemplateAsset:
   def description(self): return self.theDescription
   def significance(self): return self.theSignificance
   def type(self): return self.theType
+  def surfaceType(self): return self.theSurfaceType
+  def accessRight(self): return self.theAccessRight
 
   def confidentialityProperty(self): return self.theConfidentialityProperty
   def confidentialityRationale(self): return self.theConfidentialityRationale

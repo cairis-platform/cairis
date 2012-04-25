@@ -40,6 +40,11 @@ class TemplateAssetPanel(BasePanel):
     typeList = self.dbProxy.getDimensionNames('asset_type')
     mainSizer.Add(self.buildComboSizerList('Type',(87,30),armid.ASSET_COMBOTYPE_ID,typeList),0,wx.EXPAND)
 
+    stList =self.dbProxy.getDimensionNames('surface_type')
+    arList =self.dbProxy.getDimensionNames('access_right')
+    mainSizer.Add(self.buildComboSizerList('Surface Type',(87,30),armid.ASSET_COMBOSURFACETYPE_ID,stList),0,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Access Right',(87,30),armid.ASSET_COMBOACCESSRIGHT_ID,arList),0,wx.EXPAND)
+
     nbBox = wx.StaticBox(self,-1)
     nbSizer = wx.StaticBoxSizer(nbBox,wx.VERTICAL)
     mainSizer.Add(nbSizer,1,wx.EXPAND)
@@ -65,6 +70,10 @@ class TemplateAssetPanel(BasePanel):
     shortCodeCtrl.SetValue(asset.shortCode())
     typeCtrl = self.FindWindowById(armid.ASSET_COMBOTYPE_ID)
     typeCtrl.SetValue(asset.type())
+    stCtrl = self.FindWindowById(armid.ASSET_COMBOSURFACETYPE_ID)
+    stCtrl.SetValue(asset.surfaceType())
+    arCtrl = self.FindWindowById(armid.ASSET_COMBOACCESSRIGHT_ID)
+    arCtrl.SetValue(asset.accessRight())
     descriptionCtrl = self.FindWindowById(armid.ASSET_TEXTDESCRIPTION_ID)
     descriptionCtrl.SetValue(asset.description())
     sigCtrl = self.FindWindowById(armid.ASSET_TEXTSIGNIFICANCE_ID)

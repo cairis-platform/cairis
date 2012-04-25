@@ -112,6 +112,8 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theName = ''
     self.theShortCode = ''
     self.theAssetType = ''
+    self.theSurfaceType = ''
+    self.theAccessRight = ''
     self.theDescription = ''
     self.theSignificance = ''
     self.theTags = []
@@ -160,6 +162,8 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name']
       self.theShortCode = attrs['short_code']
       self.theAssetType = attrs['type']
+      self.theSurfaceType = attrs['surface_type']
+      self.theAccessRight = attrs['access_right']
       self.theSecurityProperties = []
     elif name == 'tag':
       self.theTags.append(attrs['name'])
@@ -248,7 +252,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       spValues.append(spDict['pseudonymity'])
       spValues.append(spDict['unlinkability'])
       spValues.append(spDict['unobservability'])
-      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,spValues,self.theTags,self.theInterfaces)
+      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.theSurfaceType,self.theAccessRight,spValues,self.theTags,self.theInterfaces)
       self.theAssets.append(p)
       self.resetAssetAttributes()
     elif name == 'security_property':

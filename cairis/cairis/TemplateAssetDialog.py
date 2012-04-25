@@ -30,6 +30,8 @@ class TemplateAssetDialog(wx.Dialog):
     self.theAssetDescription = ''
     self.theAssetSignificance = ''
     self.theType = ''
+    self.theSurfaceType = ''
+    self.theAccessRight = ''
     self.theSecurityProperties = []
     self.theInterfaces = []
     self.theTags = []
@@ -59,6 +61,8 @@ class TemplateAssetDialog(wx.Dialog):
     descriptionCtrl = self.FindWindowById(armid.ASSET_TEXTDESCRIPTION_ID)
     sigCtrl = self.FindWindowById(armid.ASSET_TEXTSIGNIFICANCE_ID)
     typeCtrl = self.FindWindowById(armid.ASSET_COMBOTYPE_ID)
+    stCtrl = self.FindWindowById(armid.ASSET_COMBOSURFACETYPE_ID)
+    arCtrl = self.FindWindowById(armid.ASSET_COMBOACCESSRIGHT_ID)
     propertiesCtrl = self.FindWindowById(armid.TEMPLATEASSET_LISTPROPERTIES_ID)
     ifCtrl = self.FindWindowById(armid.ASSET_PAGEINTERFACE_ID)
     self.theAssetName = nameCtrl.GetValue()
@@ -67,6 +71,8 @@ class TemplateAssetDialog(wx.Dialog):
     self.theAssetDescription = descriptionCtrl.GetValue()
     self.theAssetSignificance = sigCtrl.GetValue()
     self.theType = typeCtrl.GetValue()
+    self.theSurfaceType = stCtrl.GetValue()
+    self.theAccessRight = artCtrl.GetValue()
     self.theSecurityProperties = propertiesCtrl.properties()
     self.theInterfaces = ifCtrl.dimensions()
 
@@ -95,10 +101,20 @@ class TemplateAssetDialog(wx.Dialog):
       dlg.ShowModal()
       dlg.Destroy()
       return
+    elif (len(self.theSurfaceType) == 0):
+      dlg = wx.MessageDialog(self,'Surface type cannot be empty',commitLabel,wx.OK) 
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+    elif (len(self.theAccessRight) == 0):
+      dlg = wx.MessageDialog(self,'Access right cannot be empty',commitLabel,wx.OK) 
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
     else:
       self.EndModal(armid.TEMPLATEASSET_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = TemplateAssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theSecurityProperties,self.theTags,self.theInterfaces)
+    parameters = TemplateAssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theSurfaceType,self.theAccessRight,self.theSecurityProperties,self.theTags,self.theInterfaces)
     parameters.setId(self.theAssetId)
     return parameters

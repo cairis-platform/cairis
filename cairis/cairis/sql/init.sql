@@ -1859,8 +1859,12 @@ CREATE TABLE template_asset (
   description VARCHAR(1000),
   significance VARCHAR(1000),
   asset_type_id INT NOT NULL,
+  surface_type_id INT NOT NULL,
+  access_right_id INT NOT NULL,
   PRIMARY KEY(id),
-  FOREIGN KEY(asset_type_id) REFERENCES asset_type(id)
+  FOREIGN KEY(asset_type_id) REFERENCES asset_type(id),
+  FOREIGN KEY(surface_type_id) REFERENCES surface_type(id),
+  FOREIGN KEY(access_right_id) REFERENCES access_right(id)
 ) ENGINE=INNODB;
 CREATE TABLE template_asset_property (
   template_asset_id INT NOT NULL,
