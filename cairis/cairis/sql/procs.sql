@@ -17835,9 +17835,14 @@ begin
 end
 //
 
-create procedure addComponentInterface(in componentId int, in interfaceName text, in reqId int)
+create procedure addComponentInterface(in componentId int, in interfaceName text, in reqId int, in arName text, in pName text)
 begin
   declare interfaceId int;
+  declare arId int;
+  declare pId int;
+
+  select id into arId from access_right where name = arName;
+  select id into pId from privilege where name = pName;
 
   select id into interfaceId from interface where name = interfaceName limit 1;
   if interfaceId is null
@@ -17846,7 +17851,7 @@ begin
     insert into interface(id,name) values (interfaceId,interfaceName);
   end if;
 
-  insert into component_interface(component_id,interface_id,required_id) values (componentId,interfaceId,reqId);
+  insert into component_interface(component_id,interface_id,required_id,access_right_id,privilege_id) values (componentId,interfaceId,reqId,arId,pId);
 end
 //
 
@@ -17909,13 +17914,18 @@ begin
 end
 //
 
-create procedure addInterface(in ifObjt text, in ifName text, in ifType text, in ifDim text)
+create procedure addInterface(in ifObjt text, in ifName text, in ifType text, in arName text, in pName text, in ifDim text)
 begin
   declare dimIdSql varchar(4000);
   declare addIfSql varchar(4000);
   declare dimId int;
   declare ifId int;
+  declare arId int;
+  declare privId int;
   declare reqId int default 0;
+
+  select id into arId from access_right where name = arName;
+  select id into privId from privilege where name = pName;
 
   set dimIdSql = concat('select id into @dimId from ',ifDim,' where name = "',ifObjt,'"');
   set @sql = dimIdSql;
@@ -17937,7 +17947,7 @@ begin
     set reqId = 0;
   end if;
   
-  set addIfSql = concat('insert into ',ifDim,'_interface (',ifDim,'_id, interface_id,required_id) values(',dimId,',',ifId,',',reqId,')');
+  set addIfSql = concat('insert into ',ifDim,'_interface (',ifDim,'_id, interface_id,required_id,access_right_id,privilege_id) values(',dimId,',',ifId,',',reqId,',',arId,',',privId,')');
   select addIfSql;
   set @sql = addIfSql;
   prepare stmt from @sql;
@@ -17959,7 +17969,7 @@ begin
   deallocate prepare stmt;
   set dimId = @dimId;
 
-  set getIfsSql = concat('select i.name,di.required_id from ',dimName,'_interface di, interface i where di.',dimName,'_id = ',dimId,' and di.interface_id = i.id');
+  set getIfsSql = concat('select i.name,di.required_id,ar.name,pr.name from ',dimName,'_interface di, interface i,access_right ar, privilege pr where di.',dimName,'_id = ',dimId,' and di.interface_id = i.id and di.access_right_id = ar.id and di.privilege_id = pr.id');
   set @sql = getIfsSql;
   prepare stmt from @sql;
   execute stmt;
@@ -18075,7 +18085,7 @@ end
 
 create procedure componentInterfaces(in constraintId int)
 begin
-  select c.name component,i.name interface,ci.required_id from component c, interface i, component_interface ci where ci.component_id = constraintId and ci.component_id = c.id and ci.interface_id = i.id;
+  select c.name component,i.name interface,ci.required_id,ar.name,p.name from component c, interface i, component_interface ci,access_right ar,privilege p where ci.component_id = constraintId and ci.component_id = c.id and ci.interface_id = i.id and ci.access_right_id = ar.id and ci.privilege_id = p.id;
 end
 //
 

@@ -21,12 +21,14 @@ import armid
 from InterfaceListPanel import InterfaceListPanel
 
 class InterfaceListDialog(wx.Dialog):
-  def __init__(self,parent,ifName = '',ifType = ''):
-    wx.Dialog.__init__(self,parent,armid.INTERFACELISTDIALOG_ID,'Add Interface',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(200,175))
+  def __init__(self,parent,ifName = '',ifType = '',arName = '',pName = ''):
+    wx.Dialog.__init__(self,parent,armid.INTERFACELISTDIALOG_ID,'Add Interface',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(300,200))
     self.theInterfaceName = ifName
     self.theInterfaceType = ifType
+    self.theAccessRight = arName
+    self.thePrivilege = pName
     self.buildControls()
-    self.load(ifName,ifType)
+    self.load(ifName,ifType,arName,pName)
 
   def buildControls(self):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -35,17 +37,23 @@ class InterfaceListDialog(wx.Dialog):
     self.SetSizer(mainSizer)
     wx.EVT_BUTTON(self,wx.ID_OK,self.onCommit)
 
-  def load(self,ifName,ifType):
-    self.panel.load(ifName,ifType)
+  def load(self,ifName,ifType,arName,pName):
+    self.panel.load(ifName,ifType,arName,pName)
 
 
   def onCommit(self,evt):
     nameCtrl = self.FindWindowById(armid.INTERFACELISTDIALOG_COMBONAME_ID)
     typeCtrl = self.FindWindowById(armid.INTERFACELISTDIALOG_COMBOTYPE_ID)
+    arCtrl = self.FindWindowById(armid.INTERFACELISTDIALOG_COMBOACCESSRIGHT_ID)
+    pCtrl = self.FindWindowById(armid.INTERFACELISTDIALOG_COMBOPRIVILEGE_ID)
 
     self.theInterfaceName = nameCtrl.GetValue()
     self.theInterfaceType = typeCtrl.GetValue()
+    self.theAccessRight = arCtrl.GetValue()
+    self.thePrivilege = pCtrl.GetValue()
     self.EndModal(wx.ID_OK)
 
   def interface(self): return self.theInterfaceName
   def interfaceType(self): return self.theInterfaceType
+  def accessRight(self): return self.theAccessRight
+  def privilege(self): return self.thePrivilege

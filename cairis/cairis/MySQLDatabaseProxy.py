@@ -8789,8 +8789,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           exceptionText = 'Error adding component ' + componentName + ' to view '
           raise DatabaseProxyException(exceptionText) 
      
-      for ifName,ifType in parameters.interfaces():
-        self.addComponentInterface(componentId,ifName,ifType)
+      for ifName,ifType,arName,pName in parameters.interfaces():
+        self.addComponentInterface(componentId,ifName,ifType,arName,pName)
       self.addComponentStructure(componentId,structure)
       self.addComponentRequirements(componentId,requirements)
       self.conn.commit()
@@ -8823,8 +8823,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           exceptionText = 'Error adding component ' + componentName + ' to view '
           raise DatabaseProxyException(exceptionText) 
      
-      for ifName,ifType in parameters.interfaces():
-        self.addComponentInterface(componentId,ifName,ifType)
+      for ifName,ifType,arName,pName in parameters.interfaces():
+        self.addComponentInterface(componentId,ifName,ifType,arName,pName)
       self.addComponentStructure(componentId,structure)
       self.addComponentRequirements(componentId,requirements)
       self.conn.commit()
@@ -8834,10 +8834,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error adding component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addComponentInterface(self,componentId,ifName,ifType):
+  def addComponentInterface(self,componentId,ifName,ifType,arName,pName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call addComponentInterface(%s,%s,%s)',(componentId,ifName,ifType))
+      curs.execute('call addComponentInterface(%s,%s,%s,%s,%s)',(componentId,ifName,ifType,arName,pName))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding interface ' + ifName + ' to  component ' + str(componentId)
         raise DatabaseProxyException(exceptionText) 
@@ -8885,7 +8885,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           ifType = 'provided'
           if (ifTypeId == 1):
             ifType = 'required'
-          ifs.append((ifName,ifType))
+          arName = row[2]
+          prName = row[3]
+          ifs.append((ifName,ifType,arName,prName))
         curs.close()
         return ifs
     except _mysql_exceptions.DatabaseError, e:
@@ -8896,11 +8898,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addInterfaces(self,dimObjt,dimName,ifs):
     try:
       self.deleteInterfaces(dimObjt,dimName)
-      for ifName,ifType in ifs:
+      for ifName,ifType,arName,pName in ifs:
         ifTypeId = 1
         if ifType == 'provided':
           ifTypeId = 0
-        self.addInterface(dimObjt,ifName,ifTypeId,dimName)
+        self.addInterface(dimObjt,ifName,ifTypeId,arName,pName,dimName)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding interfaces to ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
@@ -8919,10 +8921,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error deleting interfaces from ' + ifDim + ' ' + ifName +  ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addInterface(self,ifObjt,ifName,ifType,ifDim):
+  def addInterface(self,ifObjt,ifName,ifType,arName,pName,ifDim):
     try:
       curs = self.conn.cursor()
-      curs.execute('call addInterface(%s,%s,%s,%s)',(ifObjt,ifName,ifType,ifDim))
+      curs.execute('call addInterface(%s,%s,%s,%s,%s,%s)',(ifObjt,ifName,ifType,arName,pName,ifDim))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding interface ' + ifName + ' to ' + ifDim + ' ' + ifObjt
         raise DatabaseProxyException(exceptionText) 
@@ -9014,7 +9016,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           comParameters.setId(componentId)
           components.append(comParameters)
         connectors = self.componentViewConnectors(cvName)
-        parameters = ComponentViewParameters(cvName,cvSyn,[],[],components,connectors)
+        parameters = ComponentViewParameters(cvName,cvSyn,[],[],[],components,connectors)
         cv = ObjectFactory.build(cvId,parameters)
         cvs[cvName] = cv
       return cvs
@@ -9057,7 +9059,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         ifTypeName = 'provided'
         if ifType == 1:
           ifTypeName = 'required'
-        interfaces.append((ifName,ifTypeName))
+        arName = row[3]
+        pName = row[4]
+        interfaces.append((ifName,ifTypeName,arName,pName))
       curs.close()
       return interfaces
     except _mysql_exceptions.DatabaseError, e:

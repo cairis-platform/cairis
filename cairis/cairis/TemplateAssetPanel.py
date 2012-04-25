@@ -34,16 +34,20 @@ class TemplateAssetPanel(BasePanel):
     
   def buildControls(self,isCreate,isUpdateable=True):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-    mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.ASSET_TEXTNAME_ID),0,wx.EXPAND)
-    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.ASSET_TAGS_ID),0,wx.EXPAND)
-    mainSizer.Add(self.buildTextSizer('Short Code',(87,30),armid.ASSET_TEXTSHORTCODE_ID),0,wx.EXPAND)
+    nameSizer = wx.BoxSizer(wx.HORIZONTAL)
+    mainSizer.Add(nameSizer,0,wx.EXPAND)
+    nameSizer.Add(self.buildTextSizer('Name',(87,30),armid.ASSET_TEXTNAME_ID),1,wx.EXPAND)
+    nameSizer.Add(self.buildTextSizer('Short Code',(87,30),armid.ASSET_TEXTSHORTCODE_ID),1,wx.EXPAND)
     typeList = self.dbProxy.getDimensionNames('asset_type')
     mainSizer.Add(self.buildComboSizerList('Type',(87,30),armid.ASSET_COMBOTYPE_ID,typeList),0,wx.EXPAND)
 
     stList =self.dbProxy.getDimensionNames('surface_type')
     arList =self.dbProxy.getDimensionNames('access_right')
-    mainSizer.Add(self.buildComboSizerList('Surface Type',(87,30),armid.ASSET_COMBOSURFACETYPE_ID,stList),0,wx.EXPAND)
-    mainSizer.Add(self.buildComboSizerList('Access Right',(87,30),armid.ASSET_COMBOACCESSRIGHT_ID,arList),0,wx.EXPAND)
+    metricsSizer = wx.BoxSizer(wx.HORIZONTAL)
+    mainSizer.Add(metricsSizer,0,wx.EXPAND)
+    metricsSizer.Add(self.buildComboSizerList('Surface Type',(87,30),armid.ASSET_COMBOSURFACETYPE_ID,stList),1,wx.EXPAND)
+    metricsSizer.Add(self.buildComboSizerList('Access Right',(87,30),armid.ASSET_COMBOACCESSRIGHT_ID,arList),1,wx.EXPAND)
+    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.ASSET_TAGS_ID),0,wx.EXPAND)
 
     nbBox = wx.StaticBox(self,-1)
     nbSizer = wx.StaticBoxSizer(nbBox,wx.VERTICAL)

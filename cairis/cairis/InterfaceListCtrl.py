@@ -28,6 +28,10 @@ class InterfaceListCtrl(wx.ListCtrl):
     self.SetColumnWidth(0,200)
     self.InsertColumn(1,'Type')
     self.SetColumnWidth(1,100)
+    self.InsertColumn(2,'Access Right')
+    self.SetColumnWidth(2,100)
+    self.InsertColumn(3,'Privilege')
+    self.SetColumnWidth(3,100)
     self.theSelectedIdx = -1
     self.theDimMenu = wx.Menu()
     self.theDimMenu.Append(armid.INTERFACELIST_MENUADD_ID,'Add')
@@ -49,6 +53,8 @@ class InterfaceListCtrl(wx.ListCtrl):
       self.theSelectedIdx = self.GetItemCount()
       self.InsertStringItem(self.theSelectedIdx,dlg.interface())
       self.SetStringItem(self.theSelectedIdx,1,dlg.interfaceType())
+      self.SetStringItem(self.theSelectedIdx,2,dlg.accessRight())
+      self.SetStringItem(self.theSelectedIdx,3,dlg.privilege())
 
   def onDeleteInterface(self,evt):
     if (self.theSelectedIdx == -1):
@@ -72,22 +78,30 @@ class InterfaceListCtrl(wx.ListCtrl):
     self.theSelectedIdx = evt.GetIndex()
     ifName = self.GetItemText(self.theSelectedIdx)
     ifType = self.GetItem(self.theSelectedIdx,1)
+    arName = self.GetItem(self.theSelectedIdx,2)
+    pName = self.GetItem(self.theSelectedIdx,3)
      
-    dlg = InterfaceListDialog(self,ifName,ifType.GetText())
+    dlg = InterfaceListDialog(self,ifName,ifType.GetText(),arName.GetText(),pName.GetText())
     if (dlg.ShowModal() == wx.ID_OK):
       self.SetStringItem(self.theSelectedIdx,0,dlg.interface())
       self.SetStringItem(self.theSelectedIdx,1,dlg.interfaceType())
+      self.SetStringItem(self.theSelectedIdx,2,dlg.accessRight())
+      self.SetStringItem(self.theSelectedIdx,3,dlg.privilege())
 
   def load(self,ifs):
-    for ifName,ifType in ifs:
+    for ifName,ifType,arName,pName in ifs:
       idx = self.GetItemCount()
       self.InsertStringItem(idx,ifName)
       self.SetStringItem(idx,1,ifType)
+      self.SetStringItem(idx,2,arName)
+      self.SetStringItem(idx,3,pName)
 
   def dimensions(self):
     ifs = []
     for x in range(self.GetItemCount()):
       ifName = self.GetItemText(x)
       ifType = self.GetItem(x,1)
-      ifs.append((ifName,ifType.GetText()))
+      arName = self.GetItem(x,2)
+      pName = self.GetItem(x,3)
+      ifs.append((ifName,ifType.GetText(),arName.GetText(),pName.GetText()))
     return ifs

@@ -157,7 +157,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.inRationale = 1
       self.theRationale = ''
     elif name == 'interface':
-      self.theInterfaces.append((attrs['name'],it2Id(attrs['type'])))
+      self.theInterfaces.append((attrs['name'],it2Id(attrs['type']),attrs['access_right'],attrs['privilege']))
     elif name == 'asset':
       self.theName = attrs['name']
       self.theShortCode = attrs['short_code']

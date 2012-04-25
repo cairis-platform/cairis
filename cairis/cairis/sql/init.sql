@@ -2547,9 +2547,13 @@ CREATE TABLE component_interface (
   component_id INT NOT NULL,
   interface_id INT NOT NULL,
   required_id INT NOT NULL,
+  access_right_id INT NOT NULL,
+  privilege_id INT NOT NULL,
   PRIMARY KEY(component_id,interface_id),
   FOREIGN KEY(component_id) REFERENCES component(id),
-  FOREIGN KEY(interface_id) REFERENCES interface(id)
+  FOREIGN KEY(interface_id) REFERENCES interface(id),
+  FOREIGN KEY(access_right_id) REFERENCES access_right(id),
+  FOREIGN KEY(privilege_id) REFERENCES privilege(id)
 ) ENGINE=INNODB;
 
 
@@ -2567,9 +2571,13 @@ CREATE TABLE asset_interface (
   asset_id INT NOT NULL,
   interface_id INT NOT NULL,
   required_id INT NOT NULL,
+  access_right_id INT NOT NULL,
+  privilege_id INT NOT NULL,
   PRIMARY KEY(asset_id,interface_id),
   FOREIGN KEY(asset_id) REFERENCES asset(id),
-  FOREIGN KEY(interface_id) REFERENCES interface(id)
+  FOREIGN KEY(interface_id) REFERENCES interface(id),
+  FOREIGN KEY(access_right_id) REFERENCES access_right(id),
+  FOREIGN KEY(privilege_id) REFERENCES privilege(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE template_asset_interface (
