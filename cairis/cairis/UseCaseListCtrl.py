@@ -20,32 +20,32 @@ import wx
 import armid
 from Borg import Borg
 from ARM import *
+from TraceableList import TraceableList
 from UseCaseContributionDialog import UseCaseContributionDialog
 from DimensionNameDialog import DimensionNameDialog
 from ReferenceContribution import ReferenceContribution
 
-class UseCaseListCtrl(wx.ListCtrl):
+class UseCaseListCtrl(TraceableList):
 
   def __init__(self,parent,winId):
-    wx.ListCtrl.__init__(self,parent,winId,style=wx.LC_REPORT)
+    TraceableList.__init__(self,parent,winId,'usecase')
     self.theParentDialog = parent
     b = Borg()
     self.dbProxy = b.dbProxy
     self.theSelectedLabel = ""
     self.theSelectedIdx = -1
-    self.theMenu = wx.Menu()
-    self.theMenu.Append(armid.CLC_MENU_REFERENCECONTRIBUTION_ID,'Use Case Contribution')
+    self.theTraceMenu.Append(armid.CLC_MENU_REFERENCECONTRIBUTION_ID,'Use Case Contribution')
     wx.EVT_MENU(self,armid.CLC_MENU_REFERENCECONTRIBUTION_ID,self.onUseCaseContribution)
 
     self.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.onRightClick)
     self.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnItemSelected)
     self.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.OnItemDeselected)
 
-    self.rsItem = self.theMenu.FindItemById(armid.CLC_MENU_REFERENCECONTRIBUTION_ID)
+    self.rsItem = self.theTraceMenu.FindItemById(armid.CLC_MENU_REFERENCECONTRIBUTION_ID)
     self.rsItem.Enable(False)
 
-  def onRightClick(self,evt):
-    self.PopupMenu(self.theMenu)
+#  def onRightClick(self,evt):
+#    self.PopupMenu(self.theMenu)
 
   def OnItemSelected(self,evt):
     self.theSelectedLabel = evt.GetLabel()

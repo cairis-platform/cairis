@@ -84,10 +84,6 @@ DROP TABLE IF EXISTS securitypattern;
 DROP TABLE IF EXISTS template_asset_property;
 DROP TABLE IF EXISTS template_requirement;
 DROP TABLE IF EXISTS template_asset;
-DROP TABLE IF EXISTS access_right;
-DROP TABLE IF EXISTS protocol;
-DROP TABLE IF EXISTS privilege;
-DROP TABLE IF EXISTS surface_type;
 DROP TABLE IF EXISTS project_dictionary;
 DROP TABLE IF EXISTS project_setting;
 DROP TABLE IF EXISTS project_contributor;
@@ -292,6 +288,10 @@ DROP TABLE IF EXISTS composite_environment_property;
 DROP TABLE IF EXISTS composite_environment;
 DROP TABLE IF EXISTS duplicate_property;
 DROP TABLE IF EXISTS asset;
+DROP TABLE IF EXISTS access_right;
+DROP TABLE IF EXISTS protocol;
+DROP TABLE IF EXISTS privilege;
+DROP TABLE IF EXISTS surface_type;
 DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS asset_type;
 DROP TABLE IF EXISTS asset_value;
@@ -2584,9 +2584,13 @@ CREATE TABLE template_asset_interface (
   template_asset_id INT NOT NULL,
   interface_id INT NOT NULL,
   required_id INT NOT NULL,
+  access_right_id INT NOT NULL,
+  privilege_id INT NOT NULL,
   PRIMARY KEY(template_asset_id,interface_id),
   FOREIGN KEY(template_asset_id) REFERENCES template_asset(id),
-  FOREIGN KEY(interface_id) REFERENCES interface(id)
+  FOREIGN KEY(interface_id) REFERENCES interface(id),
+  FOREIGN KEY(access_right_id) REFERENCES access_right(id),
+  FOREIGN KEY(privilege_id) REFERENCES privilege(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE component_view(

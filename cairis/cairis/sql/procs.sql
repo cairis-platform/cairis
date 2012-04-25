@@ -720,6 +720,7 @@ drop procedure if exists attackSurfaceMetric;
 drop procedure if exists derRatio_entryExitPoints;
 drop procedure if exists derRatio_channels;
 drop procedure if exists derRatio_untrustedSurface;
+drop procedure if exists personaImpact;
 
 delimiter //
 
@@ -18694,5 +18695,36 @@ begin
 end
 //
 
+create procedure personaImpact(in cvName text, in personaName text,in envName text) 
+begin
+  declare cvId int;
+  declare personaId int;
+  declare environmentId int;
+  declare taskId int;
+  declare done int default 0;
+  declare taskCursor cursor for select tp.task_id from task_persona tp, task_asset taa, asset a, template_asset ta, component_asset ca, component_view_component cvc where tp.persona_id = personaId and tp.environment_id = environmentId and tp.task_id = taa.task_id and taa.asset_id = a.id and a.name = ta.name and ca.asset_id = ta.id and ca.component_id = cvc.component_id and cvc.component_view_id = cvId;
+  declare continue handler for not found set done = 1;
+
+  drop table if exists temp_personaImpact;
+  create temporary table temp_personaImpact (impact int);
+
+  select id into cvId from component_view where name = cvName;
+  select id into personaId from persona where name = personaName;
+  select id into environmentId from environment where name = envName;
+
+  open taskCursor;
+  task_loop: loop
+    fetch taskCursor into taskId;
+    if done = 1
+    then
+      leave task_loop;
+    end if;
+    insert into temp_personaImpact
+    select ifnull(avg((duration_id + frequency_id)/2) + avg(demands_id) + avg(goalsupport_id),1) from task_persona where task_id = taskId and persona_id = personaId and environment_id = environmentId;
+  end loop task_loop;
+  close taskCursor;
+  select impact from temp_personaImpact;
+end
+//
 
 delimiter ;

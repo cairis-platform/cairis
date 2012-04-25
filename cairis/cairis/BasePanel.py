@@ -151,3 +151,13 @@ class BasePanel(wx.Panel):
     buttonSizer.Add(cancelButton)
     return buttonSizer
 
+  def buildRadioButtonSizer(self,winLabel,labelSize,ctrlList):
+    radioBox = wx.StaticBox(self,-1,winLabel)
+    radioSizer = wx.StaticBoxSizer(radioBox,wx.HORIZONTAL)
+    for idx, ctrlTuple in enumerate(ctrlList):
+      radioStyle = 0
+      if (idx == 0):
+        radioStyle = wx.RB_GROUP
+      radio = wx.RadioButton(self,ctrlTuple[0],ctrlTuple[1],style=radioStyle)
+      radioSizer.Add(radio)
+    return radioSizer

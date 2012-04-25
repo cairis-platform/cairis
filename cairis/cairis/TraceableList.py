@@ -52,7 +52,12 @@ class TraceableList(wx.ListCtrl):
       dlg.Destroy() 
       return -1
     else:
-      selectedObjt = self.theParentDialog.objts[self.theParentDialog.selectedLabel]
+      selectedLabel = ''
+      if self.__class__.__name__ != 'UseCaseListCtrl':
+        selectedLabel = self.theParentDialog.selectedLabel
+      else:
+        selectedLabel = self.theSelectedLabel
+      selectedObjt = self.theParentDialog.objts[selectedLabel]
       return selectedObjt.id()
 
   def onAddContributionLink(self,evt):

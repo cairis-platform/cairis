@@ -20,23 +20,24 @@
 import wx
 import armid
 from Borg import Borg
+from BasePanel import BasePanel
 
-class UseCaseContributionPanel(wx.Panel):
+class UseCaseContributionPanel(BasePanel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,armid.USECASECONTRIBUTION_ID)
     b = Borg()
     self.dbProxy = b.dbProxy
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     ucs = self.dbProxy.getDimensionNames('usecase')
-    mainSizer.Add(WidgetFactory.buildComboSizerList(self,'Use Case',(87,30),armid.REFERENCECONTRIBUTION_COMBOSOURCE_ID,ucs),0,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Use Case',(87,30),armid.REFERENCECONTRIBUTION_COMBOSOURCE_ID,ucs),0,wx.EXPAND)
     charSynopses = self.dbProxy.getDimensionNames('characteristic_synopsis')
-    mainSizer.Add(WidgetFactory.buildRadioButtonSizer(self,'Referent',(87,30),[(armid.REFERENCECONTRIBUTION_RADIOREFERENCE_ID,'Reference'),(armid.REFERENCECONTRIBUTION_RADIOCHARACTERISTIC_ID,'Characteristic')]))
+    mainSizer.Add(self.buildRadioButtonSizer('Referent',(87,30),[(armid.REFERENCECONTRIBUTION_RADIOREFERENCE_ID,'Reference'),(armid.REFERENCECONTRIBUTION_RADIOCHARACTERISTIC_ID,'Characteristic')]))
     refs = self.dbProxy.getDimensionNames('reference_synopsis')
-    mainSizer.Add(WidgetFactory.buildComboSizerList(self,'Reference',(87,30),armid.REFERENCECONTRIBUTION_COMBODESTINATION_ID,refs),0,wx.EXPAND)
-    mainSizer.Add(WidgetFactory.buildComboSizerList(self,'Means/End',(87,30),armid.REFERENCECONTRIBUTION_COMBOMEANSEND_ID,['means','end']),0,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Reference',(87,30),armid.REFERENCECONTRIBUTION_COMBODESTINATION_ID,refs),0,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Means/End',(87,30),armid.REFERENCECONTRIBUTION_COMBOMEANSEND_ID,['means','end']),0,wx.EXPAND)
     contType = ['Make','SomePositive','Help','Hurt','SomeNegative','Break']
-    mainSizer.Add(WidgetFactory.buildComboSizerList(self,'Contribution',(87,30),armid.REFERENCECONTRIBUTION_COMBOCONTRIBUTION_ID,contType),0,wx.EXPAND)
-    mainSizer.Add(WidgetFactory.buildCommitButtonSizer(self,armid.REFERENCECONTRIBUTION_BUTTONCOMMIT_ID,True),0,wx.ALIGN_CENTER)
+    mainSizer.Add(self.buildComboSizerList('Contribution',(87,30),armid.REFERENCECONTRIBUTION_COMBOCONTRIBUTION_ID,contType),0,wx.EXPAND)
+    mainSizer.Add(self.buildCommitButtonSizer(armid.REFERENCECONTRIBUTION_BUTTONCOMMIT_ID,True),0,wx.ALIGN_CENTER)
     wx.EVT_RADIOBUTTON(self,armid.REFERENCECONTRIBUTION_RADIOREFERENCE_ID,self.onReferenceSelected)
     wx.EVT_RADIOBUTTON(self,armid.REFERENCECONTRIBUTION_RADIOCHARACTERISTIC_ID,self.onCharacteristicSelected)
     self.SetSizer(mainSizer)
