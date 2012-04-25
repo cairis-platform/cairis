@@ -20,6 +20,7 @@ import wx
 import armid
 from Borg import Borg
 from WeaknessTargetListCtrl import WeaknessTargetListCtrl
+from PersonaImpactListCtrl import PersonaImpactListCtrl
 
 class WeaknessTargetPage(wx.Panel):
   def __init__(self,parent,winId,cvName,targets):
@@ -34,7 +35,7 @@ class WeaknessTargetPage(wx.Panel):
     self.SetSizer(topSizer)
 
 class PersonaImpactPage(wx.Panel):
-  def __init__(self,parent,winId,cvName,targets):
+  def __init__(self,parent,winId,cvName,envName):
     wx.Panel.__init__(self,parent)
     topSizer = wx.BoxSizer(wx.VERTICAL)
     asBox = wx.StaticBox(self,-1)
@@ -42,6 +43,8 @@ class PersonaImpactPage(wx.Panel):
     topSizer.Add(asBoxSizer,1,wx.EXPAND)
     self.personaImpactList = PersonaImpactListCtrl(self,winId,cvName,envName)
     asBoxSizer.Add(self.personaImpactList,1,wx.EXPAND)
+    self.SetSizer(topSizer)
+    
 
 class WeaknessAnalysisNotebook(wx.Notebook):
   def __init__(self,parent,cvName,envName):

@@ -9456,7 +9456,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting components (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def personaImpact(self,cvName,envName):
+  def personasImpact(self,cvName,envName):
     try:
       curs = self.conn.cursor()
       curs.execute('call personasImpact(%s,%s)',(cvName,envName))
@@ -9466,7 +9466,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       pImpact = []
       for row in curs.fetchall():
         row = list(row)
-        pImpact.append(row[0],row[1])
+        pImpact.append((row[0],str(row[1])))
       curs.close()
       return pImpact
     except _mysql_exceptions.DatabaseError, e:
