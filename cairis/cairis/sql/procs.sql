@@ -716,6 +716,10 @@ drop procedure if exists access_rightNames;
 drop procedure if exists protocolNames;
 drop procedure if exists privilegeNames;
 drop procedure if exists surface_typeNames;
+drop procedure if exists attackSurfaceMetric;
+drop procedure if exists derRatio_entryExitPoints;
+drop procedure if exists derRatio_channels;
+drop procedure if exists derRatio_untrustedSurface;
 
 delimiter //
 
@@ -18606,5 +18610,89 @@ begin
   select distinct name from surface_type order by 1;
 end
 //
+
+create procedure attackSurfaceMetric(in cvName text)
+begin
+  declare cvId int;
+  declare der_m float default 0;
+  declare der_c float default 0;
+  declare der_i float default 0;
+
+  select id into cvId from component_view where name = cvName;
+
+  call derRatio_entryExitPoints(cvId,der_m);
+  call derRatio_channels(cvId,der_c);
+  call derRatio_untrustedSurface(cvId,der_i);
+
+  select der_m,der_c,der_i;
+end
+//
+
+create procedure derRatio_entryExitPoints(in cvId int, inout derValue float)
+begin
+  declare priValue int;
+  declare arValue int;
+  declare done int default 0;
+  declare derCursor cursor for select pr.value,ar.value from access_right ar, privilege pr, component_interface ci, component_view cv, component_view_component cvc where cv.id = cvId and cv.id = cvc.component_view_id and cvc.component_id = ci.component_id and ci.access_right_id = ar.id and ci.privilege_id = pr.id;
+  declare continue handler for not found set done = 1;
+
+  open derCursor;
+  der_loop: loop
+    fetch derCursor into priValue,arValue;
+    if done = 1
+    then
+      leave der_loop;
+    end if;
+    set derValue = derValue + (priValue / arValue);
+  end loop der_loop;
+  close derCursor;
+end
+//
+
+
+
+
+create procedure derRatio_channels(in cvId int,inout derValue float)
+begin
+  declare proValue int;
+  declare arValue int;
+  declare done int default 0;
+  declare derCursor cursor for select pr.value,ar.value from protocol pr, access_right ar, connector c where c.component_view_id = cvId and c.protocol_id = pr.id and c.access_right_id = ar.id;
+  declare continue handler for not found set done = 1;
+
+  open derCursor;
+  der_loop: loop
+    fetch derCursor into proValue,arValue;
+    if done = 1
+    then
+      leave der_loop;
+    end if;
+    set derValue = derValue + (proValue / arValue);
+  end loop der_loop;
+  close derCursor;
+end
+//
+
+create procedure derRatio_untrustedSurface(in cvId int, inout derValue float)
+begin
+  declare stValue int;
+  declare arValue int;
+  declare done int default 0;
+  declare derCursor cursor for select st.value,ar.value from surface_type st, access_right ar, component_view_component cvc, component_asset ca, template_asset ta where cvc.component_view_id = cvId and cvc.component_id = ca.component_id and ca.asset_id = ta.id and ta.surface_type_id = st.id and ta.access_right_id = ar.id;
+  declare continue handler for not found set done = 1;
+
+  open derCursor;
+  der_loop: loop
+    fetch derCursor into stValue,arValue;
+    if done = 1
+    then
+      leave der_loop;
+    end if;
+    set derValue = derValue + (stValue / arValue);
+  end loop der_loop;
+  close derCursor;
+end
+//
+
 
 delimiter ;
