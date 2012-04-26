@@ -17,15 +17,17 @@
 
 
 class ComponentView:
-  def __init__(self,cvId,cvName,cvSyn,cvComs,cvCons):
+  def __init__(self,cvId,cvName,cvSyn,cvComs,cvCons,asm = ''):
     self.theId = cvId
     self.theName = cvName
     self.theSynopsis = cvSyn
     self.theComponents = cvComs
     self.theConnectors = cvCons
+    self.theAttackSurfaceMetric = asm
 
   def id(self): return self.theId
   def name(self): return self.theName
   def synopsis(self): return self.theSynopsis
   def components(self): return self.theComponents
   def connectors(self): return self.theConnectors
+  def attackSurfaceMetric(self): return self.theAttackSurfaceMetric

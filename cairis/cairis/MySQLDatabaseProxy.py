@@ -9019,7 +9019,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           comParameters.setId(componentId)
           components.append(comParameters)
         connectors = self.componentViewConnectors(cvName)
-        parameters = ComponentViewParameters(cvName,cvSyn,[],[],[],components,connectors)
+        asm = self.attackSurfaceMetric(cvName)
+        parameters = ComponentViewParameters(cvName,cvSyn,[],[],[],components,connectors,asm)
         cv = ObjectFactory.build(cvId,parameters)
         cvs[cvName] = cv
       return cvs
@@ -9545,4 +9546,22 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
      id,msg = e
      exceptionText = 'MySQL error getting components associated with use case ' + ucName + ' (id:' + str(id) + ',message:' + msg + ')'
+     raise DatabaseProxyException(exceptionText) 
+
+  def attackSurfaceMetric(self,cvName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call attackSurfaceMetric(%s)',(cvName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting attack surface metric for ' + cvName
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      der_m = row[0]
+      der_c = row[1]
+      der_i = row[2]
+      curs.close()
+      return (der_m,der_c,der_i)
+    except _mysql_exceptions.DatabaseError, e:
+     id,msg = e
+     exceptionText = 'MySQL error getting attack surface metric for ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
      raise DatabaseProxyException(exceptionText) 

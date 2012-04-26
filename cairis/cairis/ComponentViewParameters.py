@@ -19,7 +19,7 @@
 import ObjectCreationParameters
 
 class ComponentViewParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,cName,cSyn,cmt,cAssets,cReqs,cCom,cCon):
+  def __init__(self,cName,cSyn,cmt,cAssets,cReqs,cCom,cCon,asm = ''):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = cName
     self.theSynopsis = cSyn
@@ -28,6 +28,7 @@ class ComponentViewParameters(ObjectCreationParameters.ObjectCreationParameters)
     self.theRequirements = cReqs
     self.theComponents = cCom
     self.theConnectors = cCon
+    self.theAttackSurfaceMetric = asm
 
   def name(self): return self.theName
   def synopsis(self): return self.theSynopsis
@@ -36,3 +37,4 @@ class ComponentViewParameters(ObjectCreationParameters.ObjectCreationParameters)
   def requirements(self): return self.theRequirements
   def components(self): return self.theComponents
   def connectors(self): return self.theConnectors
+  def attackSurfaceMetric(self): return self.theAttackSurfaceMetric

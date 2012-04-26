@@ -108,7 +108,7 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'ComponentParameters'):
     return Component(objtId,p.name(),p.description(),p.interfaces(),p.structure(),p.requirements())
   if (p.__class__.__name__ == 'ComponentViewParameters'):
-    return ComponentView(objtId,p.name(),p.synopsis(),p.components(),p.connectors())
+    return ComponentView(objtId,p.name(),p.synopsis(),p.components(),p.connectors(),p.attackSurfaceMetric())
   if (p.__class__.__name__ == 'ValueTypeParameters'):
     return ValueType(objtId,p.name(),p.description(),p.type(),p.score(),p.rationale())
   if (p.__class__.__name__ == 'ClassAssociationParameters'):

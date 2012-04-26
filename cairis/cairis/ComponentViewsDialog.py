@@ -31,15 +31,20 @@ class ComponentViewsDialog(DimensionBaseDialog):
     self.theMainWindow = parent
     self.rmFrame = parent
     idList = [armid.COMPONENTVIEWS_LISTCOMPONENTVIEWS_ID,armid.COMPONENTVIEWS_BUTTONADD_ID,armid.COMPONENTVIEWS_BUTTONDELETE_ID]
-    columnList = ['Model','Description']
+    columnList = ['Model','Interfaces DER Ratio','Channels DER Ratio','Untrusted Surface DER Ratio']
     self.buildControls(idList,columnList,self.dbProxy.getComponentViews,'component_view')
     listCtrl = self.FindWindowById(armid.COMPONENTVIEWS_LISTCOMPONENTVIEWS_ID)
     listCtrl.SetColumnWidth(0,150)
-    listCtrl.SetColumnWidth(1,600)
+    listCtrl.SetColumnWidth(1,200)
+    listCtrl.SetColumnWidth(2,200)
+    listCtrl.SetColumnWidth(3,200)
 
   def addObjectRow(self,componentListCtrl,listRow,component):
     componentListCtrl.InsertStringItem(listRow,component.name())
-    componentListCtrl.SetStringItem(listRow,1,component.synopsis())
+    asm = component.attackSurfaceMetric()
+    componentListCtrl.SetStringItem(listRow,1,str(asm[0]))
+    componentListCtrl.SetStringItem(listRow,2,str(asm[1]))
+    componentListCtrl.SetStringItem(listRow,3,str(asm[2]))
 
   def onAdd(self,evt):
     try:
