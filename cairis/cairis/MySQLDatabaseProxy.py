@@ -9473,3 +9473,76 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting personas impact (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def personaImpactRationale(self,cvName,personaName,envName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call personaImpactRationale(%s,%s,%s)',(cvName,personaName,envName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting personas impact'
+        raise DatabaseProxyException(exceptionText) 
+      piRationale = {}
+      for row in curs.fetchall():
+        row = list(row)
+        taskName = row[0] 
+        durLabel = row[1]
+        freqLabel = row[2]
+        pdLabel = row[3]
+        gcLabel = row[4]
+        piRationale[taskName] = [durLabel,freqLabel,pdLabel,gcLabel]
+      curs.close()
+     
+      for taskName in piRationale:
+        ucDict = {}
+        taskUseCases = self.taskUseCases(taskName)
+        for ucName in taskUseCases:
+          ucComs = self.usecaseComponents(ucName) 
+          ucDict[ucName] = []
+          for componentName in ucComs:
+            ucDict[ucName].append(componentName)
+        piRationale[taskName].append(ucDict) 
+      return piRationale
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting rationale for persona impact (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def taskUseCases(self,taskName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call taskUseCases(%s)',(taskName))
+      rowCount = curs.rowcount
+      ucs = []
+      if (rowCount == -1):
+        exceptionText = 'Error obtaining use cases associated with task ' + taskName
+        raise DatabaseProxyException(exceptionText) 
+      elif (rowCount > 0):
+        for row in curs.fetchall():
+          row = list(row)
+          ucs.append(row[0])
+      curs.close()
+      return ucs 
+    except _mysql_exceptions.DatabaseError, e:
+     id,msg = e
+     exceptionText = 'MySQL error getting use cases associated with task ' + taskName + ' (id:' + str(id) + ',message:' + msg + ')'
+     raise DatabaseProxyException(exceptionText) 
+
+  def usecaseComponents(self,ucName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call usecaseComponents(%s)',(ucName))
+      rowCount = curs.rowcount
+      coms = []
+      if (rowCount == -1):
+        exceptionText = 'Error obtaining components associated with use case ' + ucName
+        raise DatabaseProxyException(exceptionText) 
+      elif (rowCount > 0):
+        for row in curs.fetchall():
+          row = list(row)
+          coms.append(row[0])
+      curs.close()
+      return coms 
+    except _mysql_exceptions.DatabaseError, e:
+     id,msg = e
+     exceptionText = 'MySQL error getting components associated with use case ' + ucName + ' (id:' + str(id) + ',message:' + msg + ')'
+     raise DatabaseProxyException(exceptionText) 

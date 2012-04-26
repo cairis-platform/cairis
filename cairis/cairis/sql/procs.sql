@@ -722,6 +722,9 @@ drop procedure if exists derRatio_channels;
 drop procedure if exists derRatio_untrustedSurface;
 drop procedure if exists personasImpact;
 drop procedure if exists personaImpact;
+drop procedure if exists personaImpactRationale;
+drop procedure if exists taskUseCases;
+drop procedure if exists usecaseComponents;
 
 delimiter //
 
@@ -18755,6 +18758,59 @@ begin
   end loop task_loop;
   close taskCursor;
   select ifnull(avg(impact),0) into impactScore from temp_impact;
+end
+//
+
+create procedure personaImpactRationale(in cvName text, in personaName text, in envName text)
+begin
+  declare cvId int;
+  declare personaId int;
+  declare envId int;
+  declare taskName varchar(200);
+  declare durLabel varchar(50);
+  declare freqLabel varchar(50);
+  declare pdLabel varchar(50);
+  declare gcLabel varchar(50);
+  declare done int default 0;
+  declare taskCursor cursor for select distinct t.name,durationLabel(duv.name),frequencyLabel(fv.name),dev.name,gv.name from persona p, task_persona tp, security_property_value duv, security_property_value fv, security_property_value dev, security_property_value gv, task t, persona_role pr, usecase_role ur, component_usecase cu, component_view_component cvc where tp.task_id = t.id and tp.environment_id = envId and tp.persona_id = p.id and tp.duration_id = duv.id and tp.frequency_id = fv.id and tp.demands_id = dev.id and tp.goalsupport_id = gv.id and tp.persona_id = personaId and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and ur.usecase_id = cu.usecase_id and cu.component_id = cvc.component_id and cvc.component_view_id = cvId;
+  declare continue handler for not found set done = 1;
+ 
+  drop table if exists temp_impactrationale;
+  create temporary table temp_impactrationale (task_name varchar(200),duration_label varchar(50), frequency_label varchar(50), demand_label varchar(50), goalconflict_label varchar(50));
+
+  select id into cvId from component_view where name = cvName;
+  select id into personaId from persona where name = personaName;
+  select id into envId from environment where name = envName;
+
+  open taskCursor;
+  task_loop: loop
+    fetch taskCursor into taskName,durLabel,freqLabel,pdLabel,gcLabel;
+    if done = 1
+    then
+      leave task_loop;
+    end if;
+    insert into temp_impactrationale(task_name,duration_label,frequency_label,demand_label,goalconflict_label) values (taskName,durLabel,freqLabel,pdLabel,gcLabel);
+  end loop task_loop;
+  select task_name,duration_label,frequency_label,demand_label,goalconflict_label from temp_impactrationale;
+end
+//
+
+create procedure taskUseCases(in taskName text)
+begin
+  declare taskId int;
+
+  select id into taskId from task where name = taskName;
+  select u.name from usecase u, usecase_task ut where ut.task_id = taskId and ut.usecase_id = u.id order by 1;
+end
+//
+
+create procedure usecaseComponents(in ucName text)
+begin
+  declare ucId int;
+
+  select id into ucId from usecase where name = ucName;
+
+  select c.name from component_usecase cu, component c where cu.usecase_id = ucId and cu.component_id = c.id order by 1;
 end
 //
 
