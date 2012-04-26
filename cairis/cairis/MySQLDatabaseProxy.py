@@ -5507,10 +5507,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     goalRefinements,subGoalRefinements = self.goalRefinements(obsId,environmentId)
     return ObstacleEnvironmentProperties(environmentName,'',obsDef,obsType,goalRefinements,subGoalRefinements)
 
-  def getVulnerabilityDirectory(self):
+  def getVulnerabilityDirectory(self,vulName = ''):
     try:
       curs = self.conn.cursor()
-      curs.execute('call getVulnerabilityDirectory()')
+      curs.execute('call getVulnerabilityDirectory(%s)',(vulName))
       if (curs.rowcount == -1):
         exceptionText = 'Error getting vulnerability directory'
         raise DatabaseProxyException(exceptionText) 
@@ -5530,10 +5530,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting vulnerability directory (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def getThreatDirectory(self):
+  def getThreatDirectory(self,thrName = ''):
     try:
       curs = self.conn.cursor()
-      curs.execute('call getThreatDirectory()')
+      curs.execute('call getThreatDirectory(%s)',(thrName))
       if (curs.rowcount == -1):
         exceptionText = 'Error getting threat directory'
         raise DatabaseProxyException(exceptionText) 

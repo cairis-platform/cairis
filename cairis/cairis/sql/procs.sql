@@ -8956,15 +8956,25 @@ begin
 end
 //
 
-create procedure getVulnerabilityDirectory()
+create procedure getVulnerabilityDirectory(in vulName text)
 begin
-  select vd.label,vd.name,vd.description,vt.name,vd.reference from vulnerability_directory vd, vulnerability_type vt where vd.vulnerability_type_id = vt.id;
+  if vulName = ''
+  then
+    select vd.label,vd.name,vd.description,vt.name,vd.reference from vulnerability_directory vd, vulnerability_type vt where vd.vulnerability_type_id = vt.id;
+  else
+    select vd.label,vd.name,vd.description,vt.name,vd.reference from vulnerability_directory vd, vulnerability_type vt where vd.name = vulName and vd.vulnerability_type_id = vt.id;
+  end if;
 end
 //
 
-create procedure getThreatDirectory()
+create procedure getThreatDirectory(in thrName text)
 begin
-  select td.label,td.name,td.description,tt.name,td.reference from threat_directory td, threat_type tt where td.threat_type_id = tt.id;
+  if thrName = ''
+  then
+    select td.label,td.name,td.description,tt.name,td.reference from threat_directory td, threat_type tt where td.threat_type_id = tt.id;
+  else
+    select td.label,td.name,td.description,tt.name,td.reference from threat_directory td, threat_type tt where td.name = thrName and td.threat_type_id = tt.id;
+  end if;
 end
 //
 

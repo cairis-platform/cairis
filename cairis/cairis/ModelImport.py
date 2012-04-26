@@ -17,6 +17,7 @@
 
 
 from SecurityPatternContentHandler import SecurityPatternContentHandler
+from AttackPatternContentHandler import AttackPatternContentHandler
 from TVTypeContentHandler import TVTypeContentHandler
 from DomainValueContentHandler import DomainValueContentHandler
 from DirectoryContentHandler import DirectoryContentHandler
@@ -61,6 +62,20 @@ def importSecurityPatterns(importFile):
         spId += 1
       msgStr =  'Imported ' + str(noOfTaps) + ' template assets and ' + str(noOfSpps) + ' security patterns'
   return msgStr
+
+def importAttackPattern(importFile):
+  parser = xml.sax.make_parser()
+  handler = AttackPatternContentHandler()
+  parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
+  parser.parse(importFile)
+
+  assets = handler.assets()
+  attackers = handler.attackers()
+  vulnerability = handler.vulnerability()
+  threat = handler.threat()
+  risk = handler.risk()
+  return importRiskAnalysis([],assets,[vulnerability],attackers,[threat],[risk],[],[])
 
 def importTVTypeFile(importFile):
   parser = xml.sax.make_parser()
@@ -165,33 +180,45 @@ def importRiskAnalysis(roleParameterSet,assetParameterSet,vulParameterSet,attack
 
   assetCount = 0
   for assetParameters in assetParameterSet:
-    b.dbProxy.addAsset(assetParameters)
-    assetCount += 1
+    objtId = b.dbProxy.existingObject(assetParameters.name(),'asset')
+    if objtId == -1:
+      b.dbProxy.addAsset(assetParameters)
+      assetCount += 1
 
   vulCount = 0
   for vulParameters in vulParameterSet:
-    b.dbProxy.addVulnerability(vulParameters)
-    vulCount += 1
+    objtId = b.dbProxy.existingObject(vulParameters.name(),'vulnerability')
+    if objtId == -1:
+      b.dbProxy.addVulnerability(vulParameters)
+      vulCount += 1
 
   attackerCount = 0
   for attackerParameters in attackerParameterSet:
-    b.dbProxy.addAttacker(attackerParameters)
-    attackerCount += 1
+    objtId = b.dbProxy.existingObject(attackerParameters.name(),'attacker')
+    if objtId == -1:
+      b.dbProxy.addAttacker(attackerParameters)
+      attackerCount += 1
 
   threatCount = 0
   for threatParameters in threatParameterSet:
-    b.dbProxy.addThreat(threatParameters)
-    threatCount += 1
+    objtId = b.dbProxy.existingObject(threatParameters.name(),'threat')
+    if objtId == -1:
+      b.dbProxy.addThreat(threatParameters)
+      threatCount += 1
 
   riskCount = 0
   for riskParameters in riskParameterSet:
-    b.dbProxy.addRisk(riskParameters)
-    riskCount += 1
+    objtId = b.dbProxy.existingObject(riskParameters.name(),'risk')
+    if objtId == -1:
+      b.dbProxy.addRisk(riskParameters)
+      riskCount += 1
 
   responseCount = 0
   for responseParameters in responseParameterSet:
-    b.dbProxy.addResponse(responseParameters)
-    responseCount += 1
+    objtId = b.dbProxy.existingObject(responseParameters.name(),'response')
+    if objtId == -1:
+      b.dbProxy.addResponse(responseParameters)
+      responseCount += 1
 
   rshipCount = 0
   for assocParameters in assocParameterSet:

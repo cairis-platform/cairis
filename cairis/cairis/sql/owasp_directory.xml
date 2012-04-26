@@ -121,6 +121,9 @@ The WebLogic deployment descriptor should specify a session identifier length of
 <vulnerability label="Capture-replay" name="Capture-replay" type="Synchronisation and Timing Vulnerability" reference="OWASP">
   <description>A capture-relay protocol flaw exists when it\'s possible for a malicious user to sniff network traffic and replay it to the server in question to the same effect as the original message (or with minor changes).</description>
 </vulnerability>
+<vulnerability label="Missing XML Validation" name="Missing XML Validation" type="Input Validation Vulnerability" reference="OASIS">
+  <description>Failure to enable validation when parsing XML gives an attacker the opportunity to supply malicious input.</description>
+</vulnerability>
 <threat label="Account Lockout" name="Account Lockout Attack" type="Abuse of Functionality" reference="OWASP">
   <description>In an account lockout attack, the attacker attempts to lock out all user accounts, typically by failing login more times than the threshold defined by the authentication system. For example, if users are locked out of their accounts after three failed login attempts, an attacker can lock out their account for them simply by failing login three times. This attack can result in a large scale denial of service attack if all user accounts are locked out, especially if the amount of work required to reset the accounts is signficant.</description>
 </threat>
@@ -489,4 +492,5 @@ Points of effect:
 * API-Hooking – this is the technique used by Man-in-the-Browser to perform its Man-in-the-Middle between the executable application (EXE) and its libraries (DLL).
 * Javascript – By using a malicious Ajax worm, as described on Ajax Sniffer - Proof of Concept</description>
 </threat>
+
 </directory>

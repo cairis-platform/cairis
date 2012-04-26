@@ -90,6 +90,14 @@
        uri="securitypattern.dtd"/>
 
     <public 
+       publicId="-//CAIRIS//DTD ATTACKPATTERN 1.0//EN"  
+       uri="attack_pattern.dtd"/>
+
+    <system
+       systemId="http://www.cs.ox.ac.uk/cairis/dtd/attack_pattern.dtd"  
+       uri="attack_pattern.dtd"/>
+
+    <public 
        publicId="-//CAIRIS//DTD TVTYPES 1.0//EN"  
        uri="tvtypes.dtd"/>
 
