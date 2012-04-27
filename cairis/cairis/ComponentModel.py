@@ -42,8 +42,8 @@ class ComponentModel:
     for componentName,interfaceName,reqId in interfaces:
       self.buildInterface(componentName,interfaceName,reqId)
 
-    for cnName,fromName,fromIF,toName,toIF,assetName in connectors:
-      self.buildConnector(cnName,fromName,fromIF,toName,toIF)
+    for cnName,fromName,fromIF,toName,toIF,assetName,pName,arName in connectors:
+      self.buildConnector(cnName,fromName,fromIF,toName,toIF,pName,arName)
 
   def size(self):
     return len(self.theAssociations)
@@ -69,10 +69,10 @@ class ComponentModel:
     ifEdgeUrl = 'component_interface#' + objtName
     self.theGraph.add_edge(pydot.Edge(componentName,objtName,arrowhead='none',arrowtail='obox',dir='both',weight='1',URL=ifEdgeUrl))
 
-  def buildConnector(self,cnName,fromName,fromInterface,toName,toInterface):
+  def buildConnector(self,cnName,fromName,fromInterface,toName,toInterface,protocolName,arName):
     fromObjtName = fromName + '_' + fromInterface
     toObjtName = toName + '_' + toInterface
-    lbl = "\<<" + cnName + "\>>"
+    lbl = "\<<" + protocolName + "\>>"
     urlName = 'connector#' + fromObjtName + '_' + toObjtName
     self.theGraph.add_edge(pydot.Edge(fromObjtName,toObjtName,label=lbl,dir='none',weight='1',URL=urlName))
 
