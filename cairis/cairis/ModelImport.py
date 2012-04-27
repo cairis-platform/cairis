@@ -138,26 +138,54 @@ def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParame
   b = Borg()
   dpCount = 0
   for dpParameters in dpParameterSet:
-    b.dbProxy.addDomainProperty(dpParameters)
+    objtId = b.dbProxy.existingObject(dpParameters.name(),'domainproperty')
+    if objtId == -1:
+      b.dbProxy.addDomainProperty(dpParameters)
+    else:
+      dpParameters.setId(objtId)
+      b.dbProxy.updateDomainProperty(dpParameters)
     dpCount += 1
+
   goalCount = 0
   for goalParameters in goalParameterSet:
-    b.dbProxy.addGoal(goalParameters)
+    objtId = b.dbProxy.existingObject(goalParameters.name(),'goal')
+    if objtId == -1:
+      b.dbProxy.addGoal(goalParameters)
+    else:
+      goalParameters.setId(objtId)
+      b.dbProxy.updateGoal(goalParameters)
     goalCount += 1
+
   obsCount = 0
   for obsParameters in obsParameterSet:
-    b.dbProxy.addObstacle(obsParameters)
+    objtId = b.dbProxy.existingObject(obsParameters.name(),'obstacle')
+    if objtId == -1:
+      b.dbProxy.addObstacle(obsParameters)
+    else:
+      obsParameters.setId(objtId)
+      b.dbProxy.updateObstacle(obsParameters)
     obsCount += 1
+
   reqCount = 0
   for req,refName,refType in reqParameterSet:
-    isAsset = True
-    if (refType == 'environment'):
-      isAsset = False
-    b.dbProxy.addRequirement(req,refName,isAsset)
+    objtId = b.dbProxy.existingObject(req.name(),'requirement')
+    if objtId == -1:
+      isAsset = True
+      if (refType == 'environment'):
+        isAsset = False
+      b.dbProxy.addRequirement(req,refName,isAsset)
+    else:
+      b.dbProxy.updateRequirement(req)
     reqCount += 1
+
   cmCount = 0
   for cmParameters in cmParameterSet:
-    b.dbProxy.addCountermeasure(cmParameters)
+    objtId = b.dbProxy.existingObject(cmParameters.name(),'countermeasure')
+    if objtId == -1:
+      b.dbProxy.addCountermeasure(cmParameters)
+    else:
+      cmParameters.setId(objtId)
+      b.dbProxy.updateCountermeasure(cmParameters)
     cmCount += 1
   msgStr = 'Imported ' + str(dpCount) + ' domain properties, ' + str(goalCount) + ' goals, ' + str(obsCount) + ' obstacles, ' + str(reqCount) + ' requirements, and ' + str(cmCount) + ' countermeasures.'
   return msgStr
@@ -175,7 +203,12 @@ def importRiskAnalysis(roleParameterSet,assetParameterSet,vulParameterSet,attack
   b = Borg()
   roleCount = 0
   for roleParameters in roleParameterSet:
-    b.dbProxy.addRole(roleParameters)
+    objtId = b.dbProxy.existingObject(roleParameters.name(),'role')
+    if objtId == -1:
+      b.dbProxy.addRole(roleParameters)
+    else:
+      roleParameters.setId(objtId)
+      b.dbProxy.updateRole(roleParameters)
     roleCount += 1
 
   assetCount = 0
@@ -183,42 +216,60 @@ def importRiskAnalysis(roleParameterSet,assetParameterSet,vulParameterSet,attack
     objtId = b.dbProxy.existingObject(assetParameters.name(),'asset')
     if objtId == -1:
       b.dbProxy.addAsset(assetParameters)
-      assetCount += 1
+    else:
+      assetParameters.setId(objtId)
+      b.dbProxy.updateAsset(assetParameters)
+    assetCount += 1
 
   vulCount = 0
   for vulParameters in vulParameterSet:
     objtId = b.dbProxy.existingObject(vulParameters.name(),'vulnerability')
     if objtId == -1:
       b.dbProxy.addVulnerability(vulParameters)
-      vulCount += 1
+    else:
+      vulParameters.setId(objtId)
+      b.dbProxy.updateVulnerability(vulParameters)
+    vulCount += 1
 
   attackerCount = 0
   for attackerParameters in attackerParameterSet:
     objtId = b.dbProxy.existingObject(attackerParameters.name(),'attacker')
     if objtId == -1:
       b.dbProxy.addAttacker(attackerParameters)
-      attackerCount += 1
+    else:
+      attackerParameters.setId(objtId)
+      b.dbProxy.updateAttacker(attackerParameters)
+    attackerCount += 1
 
   threatCount = 0
   for threatParameters in threatParameterSet:
     objtId = b.dbProxy.existingObject(threatParameters.name(),'threat')
     if objtId == -1:
       b.dbProxy.addThreat(threatParameters)
-      threatCount += 1
+    else:
+      threatParameters.setId(objtId)
+      b.dbProxy.updateThreat(threatParameters)
+    threatCount += 1
 
   riskCount = 0
   for riskParameters in riskParameterSet:
     objtId = b.dbProxy.existingObject(riskParameters.name(),'risk')
     if objtId == -1:
       b.dbProxy.addRisk(riskParameters)
-      riskCount += 1
+    else:
+      riskParameters.setId(objtId)
+      b.dbProxy.updateRisk(riskParameters)
+    riskCount += 1
 
   responseCount = 0
   for responseParameters in responseParameterSet:
     objtId = b.dbProxy.existingObject(responseParameters.name(),'response')
     if objtId == -1:
       b.dbProxy.addResponse(responseParameters)
-      responseCount += 1
+    else:
+      responseParameters.setId(objtId)
+      b.dbProxy.updateResponse(responseParameters)
+    responseCount += 1
 
   rshipCount = 0
   for assocParameters in assocParameterSet:
@@ -242,35 +293,77 @@ def importUsability(personaParameterSet,edParameterSet,drParameterSet,crParamete
 
   personaCount = 0
   for personaParameters in personaParameterSet:
-    b.dbProxy.addPersona(personaParameters)
+    objtId = b.dbProxy.existingObject(personaParameters.name(),'persona')
+    if objtId == -1:
+      b.dbProxy.addPersona(personaParameters)
+    else:
+      personaParameters.setId(objtId)
+      b.dbProxy.updatePersona(personaParameters)
     personaCount += 1
+
   edCount = 0
   for edParameters in edParameterSet:
-    b.dbProxy.addExternalDocument(edParameters)
+    objtId = b.dbProxy.existingObject(edParameters.name(),'external_document')
+    if objtId == -1:
+      b.dbProxy.addExternalDocument(edParameters)
+    else:
+      edParameters.setId(objtId)
+      b.dbProxy.updateExternalDocument(edParameters)
     edCount += 1
+
   drCount = 0
   for drParameters in drParameterSet:
-    b.dbProxy.addDocumentReference(drParameters)
+    objtId = b.dbProxy.existingObject(drParameters.name(),'document_reference')
+    if objtId == -1:
+      b.dbProxy.addDocumentReference(drParameters)
+    else:
+      drParameters.setId(objtId)
+      b.dbProxy.updateDocumentReference(drParameters)
     drCount += 1
+
   taskCount = 0
   for taskParameters in taskParameterSet:
-    b.dbProxy.addTask(taskParameters)
+    objtId = b.dbProxy.existingObject(taskParameters.name(),'task')
+    if objtId == -1:
+      b.dbProxy.addTask(taskParameters)
+    else:
+      taskParameters.setId(objtId)
+      b.dbProxy.updateTask(drParameters)
     taskCount += 1
+
   ucCount = 0
   for ucParameters in ucParameterSet:
-    b.dbProxy.addUseCase(ucParameters)
+    objtId = b.dbProxy.existingObject(ucParameters.name(),'usecase')
+    if objtId == -1:
+      b.dbProxy.addUseCase(ucParameters)
+    else:
+      ucParameters.setId(objtId)
+      b.dbProxy.updateUseCase(ucParameters)
     ucCount += 1
+
   crCount = 0
   for crParameters in crParameterSet:
-    b.dbProxy.addConceptReference(crParameters)
+    objtId = b.dbProxy.existingObject(crParameters.name(),'concept_reference')
+    if objtId == -1:
+      b.dbProxy.addConceptReference(crParameters)
+    else:
+      crParameters.setId(objtId)
+      b.dbProxy.updateConceptReference(crParameters)
     crCount += 1
+
   pcCount = 0
   for pcParameters in pcParameterSet:
     b.dbProxy.addPersonaCharacteristic(pcParameters)
     pcCount += 1
+
   tcCount = 0
   for tcParameters in tcParameterSet:
-    b.dbProxy.addTaskCharacteristic(tcParameters)
+    objtId = b.dbProxy.existingObject(tcParameters.name(),'task_characteristic')
+    if objtId == -1:
+      b.dbProxy.addTaskCharacteristic(tcParameters)
+    else:
+      tcParameters.setId(objtId)
+      b.dbProxy.updateTaskCharacterisric(tcParameters)
     tcCount += 1
   msgStr = 'Imported ' + str(personaCount) + ' personas, ' + str(edCount) + ' external documents, ' + str(drCount) + ' document references, ' + str(crCount) + ' concept references, ' + str(pcCount) + ' persona characteristics, ' + str(tcCount) + ' task characteristics, ' + str(taskCount) + ' tasks, and ' + str(ucCount) + ' use cases.'
   return msgStr
@@ -316,7 +409,12 @@ def importProjectData(pSettings,envParameterSet):
     b.dbProxy.updateSettings(pSettings[0],pSettings[1],pSettings[2],pSettings[3],pSettings[4],pSettings[5],pSettings[6],pSettings[7])
   envCount = 0
   for envParameters in envParameterSet:
-    b.dbProxy.addEnvironment(envParameters)
+    objtId = b.dbProxy.existingObject(envParameters.name(),'environment')
+    if objtId == -1:
+      b.dbProxy.addEnvironment(envParameters)
+    else:
+      envParameters.setId(objtId)
+      b.dbProxy.updateEnvironment(envParameters)
     envCount += 1
   msgText = 'Imported ' + str(envCount) + ' environments'
   if (pSettings != None):
