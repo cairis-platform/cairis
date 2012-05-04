@@ -19,7 +19,7 @@
 import ObjectCreationParameters
 
 class ValueTypeParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,vtName,vtDesc,vType,envName = '',vtScore = '',vtRat = ''):
+  def __init__(self,vtName,vtDesc,vType,envName = '',vtScore = -1,vtRat = ''):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = vtName
     self.theDescription = vtDesc
