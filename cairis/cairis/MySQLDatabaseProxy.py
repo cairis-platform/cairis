@@ -313,9 +313,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
     self.theDimIdLookup, self.theDimNameLookup = self.buildDimensionLookup()
 
-  def reconnect(self):
+  def reconnect(self,closeConn = True):
     try:
-      self.conn.close()
+      if (closeConn):
+        self.conn.close()
       b = Borg()
       self.conn = MySQLdb.connect(host=b.dbHost,port=b.dbPort,user=b.dbUser,passwd=b.dbPasswd,db=b.dbName)
     except _mysql_exceptions.DatabaseError, e:
@@ -8506,6 +8507,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def clearDatabase(self):
     b = Borg()
+    b.dbProxy.close()
     srcDir = b.cairisRoot + '/cairis/sql'
     initSql = srcDir + '/init.sql'
     procsSql = srcDir + '/procs.sql'
@@ -8513,6 +8515,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     os.system(cmd)
     cmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + procsSql
     os.system(cmd)
+    b.dbProxy.reconnect(False)
 
   def conceptMapModel(self,envName,reqName = ''):
     try:
