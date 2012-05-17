@@ -532,7 +532,10 @@ class KaosDotWindow(gtk.Window):
         window = self
 
         window.set_title(windowTitle)
-        self.environment = self.dbProxy.dimensionObject(windowTitle,'environment')
+        if windowTitle != '':
+          self.environment = self.dbProxy.dimensionObject(windowTitle,'environment')
+        else:
+          self.environment = ''
         window.set_default_size(512, 512)
         vbox = gtk.VBox()
         window.add(vbox)

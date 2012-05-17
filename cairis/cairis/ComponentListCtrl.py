@@ -18,11 +18,13 @@
 
 import wx
 import armid
-import ARM
+from ARM import *
+from AssetModel import AssetModel
 from Borg import Borg
 from TraceableList import TraceableList
 from ComponentDialog import ComponentDialog
 from ComponentParameters import ComponentParameters
+from CanonicalModelViewer import CanonicalModelViewer
 
 class ComponentListCtrl(TraceableList):
   def __init__(self,parent,winId = armid.COMPONENTVIEW_LISTCOMPONENTS_ID):
@@ -43,9 +45,12 @@ class ComponentListCtrl(TraceableList):
     self.theSelectedIdx = -1
     self.theTraceMenu.Append(armid.AA_MENUADD_ID,'Add')
     self.theTraceMenu.Append(armid.AA_MENUDELETE_ID,'Delete')
+    self.theTraceMenu.AppendSeparator()
+    self.theTraceMenu.Append(armid.COMPONENTLIST_VIEWASSETS_ID,'View Assets')
     self.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK,self.onRightClick)
     wx.EVT_MENU(self.theTraceMenu,armid.AA_MENUADD_ID,self.onAddComponent)
     wx.EVT_MENU(self.theTraceMenu,armid.AA_MENUDELETE_ID,self.onDeleteComponent)
+    wx.EVT_MENU(self.theTraceMenu,armid.COMPONENTLIST_VIEWASSETS_ID,self.onViewAssets)
 
     self.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnItemSelected)
     self.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.OnItemDeselected)
@@ -100,5 +105,30 @@ class ComponentListCtrl(TraceableList):
       self.InsertStringItem(idx,p.name())
       self.SetStringItem(idx,1,p.description())
 
+  def onViewAssets(self,evt):
+    cName = self.GetItemText(self.theSelectedIdx)
+    dialog = None
+    try:
+      b = Borg()
+      modelAssocs = b.dbProxy.componentAssetModel(cName)
+      if (len(modelAssocs) > 0):
+        associations = AssetModel(modelAssocs.values(),'')
+        dialog = CanonicalModelViewer('','class',b.dbProxy)
+        dialog.ShowModal(associations)
+      else:
+        errorTxt = 'No asset associations defined'
+        dlg = wx.MessageDialog(self,errorTxt,'View Component Assets',wx.OK | wx.ICON_EXCLAMATION)
+        dlg.ShowModal()
+        dlg.Destroy()
+    except ARMException,errorText:
+      if (dialog != None):
+        dialog.destroy()
+      dlg = wx.MessageDialog(self,str(errorText),'View Component Assets',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+
+
+
   def dimensions(self):
     return self.theComponents
+

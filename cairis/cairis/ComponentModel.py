@@ -74,6 +74,7 @@ class ComponentModel:
     toObjtName = toName + '_' + toInterface
     lbl = "\<<" + protocolName + "\>>"
     urlName = 'connector#' + fromObjtName + '_' + toObjtName
+
     self.theGraph.add_edge(pydot.Edge(fromObjtName,toObjtName,label=lbl,dir='none',weight='1',URL=urlName))
 
   def layout(self,renderer = ''):

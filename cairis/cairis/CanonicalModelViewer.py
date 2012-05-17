@@ -30,7 +30,10 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
     kaosxdot.KaosDotWindow.__init__(self,environmentName,modelType,dp)
     b = Borg()
     self.dbProxy = dp
-    self.environment = self.dbProxy.dimensionObject(environmentName,'environment')
+    if environmentName != '':
+      self.environment = self.dbProxy.dimensionObject(environmentName,'environment')
+    else:
+      self.environment = ''
     self.widget.connect('clicked', self.on_url_clicked)
     self.widget.connect('button_press_event', self.onClick)
     self.modelType = modelType
@@ -92,7 +95,8 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
     self.url = url
     urlElements = url.split('#')
     if (urlElements[0] != 'link'):
-      dialog = NodeDialogFactory.build(url,self.environment.name())
+      if self.environment != '':
+        dialog = NodeDialogFactory.build(url,self.environment.name())
     return True
 
   def onTypeClicked(self, widget, event):
@@ -104,7 +108,7 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
   def ShowModal(self, associations):
     self.updateModel(associations)
     self.connect('destroy', gtk.main_quit)
-    self.set_modal(False)
+    self.set_modal(True)
     gtk.main()
 
   def updateModel(self,associations):
@@ -125,7 +129,9 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
         obsNames.sort(key=str.lower)
         self.loadFilters(environmentNames,obsNames)
       elif (self.modelType == 'class'):
-        asNames = self.dbProxy.environmentAssets(self.environment.name())
+        asNames = []
+        if self.environment != '':
+          asNames = self.dbProxy.environmentAssets(self.environment.name())
         asNames.sort(key=str.lower)
         self.loadFilters(environmentNames,asNames)
       elif (self.modelType == 'conceptmap'):
@@ -145,7 +151,8 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
         self.loadFilters(environmentNames)
       self.set_xdotcode(xdotcode)
       self.blockHandlers()
-      self.environmentCombo.set_active(environmentNames.index(self.environment.name()))
+      if self.environment != '':
+        self.environmentCombo.set_active(environmentNames.index(self.environment.name()))
       self.unblockHandlers()
       self.widget.zoom_to_fit()
     except ARMException,errorText:

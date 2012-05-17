@@ -55,11 +55,10 @@ class AssetModel:
     elif (dimName == 'obstacleconcern'):
       self.theGraph.add_node(pydot.Node(objtName,shape='note',fontname=self.fontName,fontsize=self.fontSize,fontcolor='red',color='red',URL=objtUrl))
     else:
-      assetObjt = self.dbProxy.dimensionObject(objtName,'asset')
+      assetObjt = self.dbProxy.dimensionObject(objtName,dimName)
       borderColour = 'black'
-      if (assetObjt.critical()):
+      if (dimName == 'asset' and assetObjt.critical()):
         borderColour = 'red'
-    
       assetNode = pydot.Node(objtName,shape='record',color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
       self.theGraph.add_node(assetNode)
     self.nodeList.add(objtName)
@@ -91,6 +90,8 @@ class AssetModel:
     assets = []
     if (self.theAssetName == ''):
       assets = self.dbProxy.classModelElements(self.theEnvironmentName,self.hideConcerns)
+    if (len(assets) == 0 and self.theEnvironmentName == ''):
+      self.theAssetName = 'Component'
     self.nodeList = set([])
     for asset in assets:
       self.buildNode(asset[0],asset[1])
@@ -107,7 +108,7 @@ class AssetModel:
       tailObjt = tailName
       if (self.theAssetName != '' and headName not in self.nodeList):
         self.buildNode(headDim,headName)
-        fromself.nodeList.add(headName)
+        self.nodeList.add(headName)
       if (self.theAssetName != '' and tailName not in self.nodeList):
         self.buildNode(tailDim,tailName)
         self.nodeList.add(tailName)

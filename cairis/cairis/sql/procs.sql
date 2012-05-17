@@ -725,6 +725,7 @@ drop procedure if exists personaImpact;
 drop procedure if exists personaImpactRationale;
 drop procedure if exists taskUseCases;
 drop procedure if exists usecaseComponents;
+drop procedure if exists componentClassModel;
 
 delimiter //
 
@@ -18803,6 +18804,16 @@ begin
   select id into ucId from usecase where name = ucName;
 
   select c.name from component_usecase cu, component c where cu.usecase_id = ucId and cu.component_id = c.id order by 1;
+end
+//
+
+create procedure componentClassModel(in cName text)
+begin
+  declare cId int;
+
+  select id into cId from component where name = cName;
+
+  call getComponentStructure(cId);
 end
 //
 

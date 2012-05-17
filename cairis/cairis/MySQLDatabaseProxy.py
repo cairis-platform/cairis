@@ -4147,6 +4147,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting class model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+
   def classModel(self,envName,asName = '',hideConcerns = False):
     if (hideConcerns == True):
       if (asName == ''):
@@ -9568,3 +9569,39 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
      id,msg = e
      exceptionText = 'MySQL error getting attack surface metric for ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
      raise DatabaseProxyException(exceptionText) 
+
+  def componentAssetModel(self,componentName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentClassModel(%s)',componentName)
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining component class associations'
+        raise DatabaseProxyException(exceptionText) 
+      associations = {}
+      for row in curs.fetchall():
+        row = list(row)
+        associationId = -1
+        envName = ''
+        headName = row[0]
+        headDim  = 'template_asset'
+        headNav =  row[2]
+        headType = row[1]
+        headMult = row[3]
+        headRole = row[4]
+        tailRole = row[5]
+        tailMult = row[6]
+        tailType = row[8]
+        tailNav =  row[7]
+        tailDim  = 'template_asset'
+        tailName = row[9]
+        rationale = ''
+        parameters = ClassAssociationParameters(envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale)
+        association = ObjectFactory.build(associationId,parameters)
+        asLabel = envName + '/' + headName + '/' + tailName
+        associations[asLabel] = association
+      curs.close()
+      return associations
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting component class associations (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
