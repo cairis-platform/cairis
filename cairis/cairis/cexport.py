@@ -29,7 +29,10 @@ if __name__ == '__main__':
   try:
     parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Export to Redmine')
     parser.add_argument('outputFile',help='output file name')
-    parser.add_argument('--export',dest='modelFormat',help='model type to export.  One of requirements, scenarios, or usecases')
+    parser.add_argument('--export',dest='modelFormat',help='model type to export.  One of requirements, scenarios, usecases, or GRL')
+    parser.add_argument('--persona',dest='personaName',help='Persona name (relevant for GRL export only)')
+    parser.add_argument('--task',dest='taskName',help='Task name (relevant for GRL export only)')
+    parser.add_argument('--environment',dest='envName',help='Environment name (relevant for GRL export only)')
     args = parser.parse_args() 
 
     BorgFactory.initialise()
@@ -41,6 +44,15 @@ if __name__ == '__main__':
       msgStr += exportRedmineRequirements(args.outputFile)
     elif (args.modelFormat == 'usecases'):
       msgStr += exportRedmineUseCases(args.outputFile)
+    elif (args.modelFormat == 'GRL'):
+      if args.personaName == None:
+        raise ARMException('Persona name not specified for GRL export')
+      elif args.taskName == None:
+        raise ARMException('Task name not specified for GRL export')
+      elif args.envName == None:
+        raise ARMException('Environment name not specified for GRL export')
+      else:
+        msgStr += exportGRL(args.outputFile,args.personaName,args.taskName,args.envName)
     else:
       raise ARMException('Export model type ' + args.modelFormat + ' not recognised')
     print msgStr

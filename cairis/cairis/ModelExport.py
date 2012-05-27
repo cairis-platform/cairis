@@ -154,3 +154,11 @@ def exportRedmineRequirements(outFileName):
   outputFile.write(outputBuf)
   outputFile.close()
   return 'Exported requirements'
+
+def exportGRL(outFileName,personaName,taskName,envName):
+  b = Borg()
+  buf = b.dbProxy.pcToGrl(personaName,taskName,envName)
+  rFile = open(outFileName,'w')
+  rFile.write(buf)
+  rFile.close()
+  return 'Exported GRL for ' + personaName + ' in ' + taskName + ' situated in environment ' + envName
