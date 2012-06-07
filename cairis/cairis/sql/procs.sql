@@ -18910,7 +18910,7 @@ end
 
 create procedure documentCodes(in docName text)
 begin
-  declare docId int;
+  declare docId int; 
 
   select id into docId from internal_document where name = docName;
   select c.name,idc.start_index,idc.end_index from internal_document_code idc, code c where idc.internal_document_id = docId and idc.code_id = c.id order by 1,2,3;
