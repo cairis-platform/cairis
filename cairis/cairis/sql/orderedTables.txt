@@ -39,6 +39,9 @@ risk_class
 characteristic_reference_type
 behavioural_variable
 external_document
+internal_document
+code
+internal_document_code
 document_reference
 asset_reference
 attacker_reference

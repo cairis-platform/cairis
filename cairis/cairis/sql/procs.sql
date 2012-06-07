@@ -726,6 +726,10 @@ drop procedure if exists personaImpactRationale;
 drop procedure if exists taskUseCases;
 drop procedure if exists usecaseComponents;
 drop procedure if exists componentClassModel;
+drop procedure if exists addInternalDocument;
+drop procedure if exists updateInternalDocument;
+drop procedure if exists getInternalDocuments;
+drop procedure if exists delete_internal_document;
 
 delimiter //
 
@@ -18814,6 +18818,45 @@ begin
   select id into cId from component where name = cName;
 
   call getComponentStructure(cId);
+end
+//
+
+create procedure addInternalDocument(in docId int, in docName text, in idDesc text, in idContent text)
+begin
+  declare idId int;
+  select id into idId from internal_document where name = docName;
+  if idId is null
+  then 
+    insert into internal_document(id,name,description,content) values (docId,docName,idDesc,idContent);
+  end if;
+end
+//
+
+create procedure updateInternalDocument(in docId int, in docName text, in idDesc text, in idContent text)
+begin
+  update internal_document set name = docName, description = idDesc, content = idContent where id = docId;
+end
+//
+
+create procedure getInternalDocuments(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select id,name,ifnull(description,''),ifnull(content,'') from internal_document;
+  else
+    select id,name,ifnull(description,''),ifnull(content,'') from internal_document where id = constraintId;
+  end if;
+end
+//
+
+create procedure delete_internal_document(in docId int)
+begin
+  if docId != -1
+  then
+    delete from internal_document where id = docId;
+  else
+    delete from internal_document;
+  end if;
 end
 //
 

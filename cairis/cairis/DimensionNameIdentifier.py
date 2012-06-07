@@ -46,6 +46,7 @@ def dimensionName(className):
   if (className == 'ValueTypesDialog'): return 'value_type'
   if (className == 'DependenciesDialog'): return 'dependencyassociation'
   if (className == 'ExternalDocumentsDialog'): return 'external_document'
+  if (className == 'InternalDocumentsDialog'): return 'internal_document'
   if (className == 'DocumentReferencesDialog'): return 'document_reference'
   if (className == 'PersonaCharacteristicsDialog'): return 'persona_characteristic'
   if (className == 'TaskCharacteristicsDialog'): return 'task_characteristic'

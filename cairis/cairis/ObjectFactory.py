@@ -40,6 +40,7 @@ from DotTrace import DotTrace
 from Environment import Environment
 from Role import Role
 from ExternalDocument import ExternalDocument
+from InternalDocument import InternalDocument
 from DocumentReference import DocumentReference
 from ConceptReference import ConceptReference
 from PersonaCharacteristic import PersonaCharacteristic
@@ -87,6 +88,7 @@ from Domain import Domain
 from ValueType import ValueType
 from ValueTypeParameters import ValueTypeParameters
 from ExternalDocumentParameters import ExternalDocumentParameters
+from InternalDocumentParameters import InternalDocumentParameters
 from PersonaCharacteristicParameters import PersonaCharacteristicParameters
 from TaskCharacteristicParameters import TaskCharacteristicParameters
 from UseCase import UseCase
@@ -157,6 +159,8 @@ def build(objtId,p):
     return Domain(objtId,p.name(),p.shortCode(),p.description(),p.type(),p.given(),p.domains())
   if (p.__class__.__name__ == 'ExternalDocumentParameters'):
     return ExternalDocument(objtId,p.name(),p.version(),p.date(),p.authors(),p.description())
+  if (p.__class__.__name__ == 'InternalDocumentParameters'):
+    return InternalDocument(objtId,p.name(),p.description(),p.content())
   if (p.__class__.__name__ == 'DocumentReferenceParameters'):
     return DocumentReference(objtId,p.name(),p.document(),p.contributor(),p.description())
   if (p.__class__.__name__ == 'ConceptReferenceParameters'):

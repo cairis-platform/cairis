@@ -17,6 +17,7 @@
 
 
 import wx
+from CodingTextCtrl import CodingTextCtrl
 import armid
 from ARM import *
 from BehaviouralCharacteristicsDialog import BehaviouralCharacteristicsDialog
@@ -24,23 +25,25 @@ from Borg import Borg
 from AssumptionPersonaModel import AssumptionPersonaModel
 from APModelViewer import APModelViewer
 
-class BVNarrativeTextCtrl(wx.TextCtrl):
+class BVNarrativeTextCtrl(CodingTextCtrl):
   def __init__(self, parent, winId):
-    wx.TextCtrl.__init__(self,parent,winId,style=wx.TE_MULTILINE)
+    CodingTextCtrl.__init__(self,parent,winId)
     self.ctrlMenu = wx.Menu()
     self.cmItem = self.ctrlMenu.Append(armid.BVNTC_LISTCHARACTERISTICS_ID,'Characteristics')
     self.viItem = self.ctrlMenu.Append(armid.BVNTC_VISCHARACTERISTICS_ID,'Visualise')
+    self.ctrlMenu.AppendMenu(armid.BVNTC_MENU_CODING,'Coding',self.codingMenu)
+
     wx.EVT_MENU(self,armid.BVNTC_LISTCHARACTERISTICS_ID,self.onListCharacteristics)
     wx.EVT_MENU(self,armid.BVNTC_VISCHARACTERISTICS_ID,self.onVisualiseCharacteristics)
+    wx.EVT_MENU(self,armid.BVNTC_TEXTOPENCODING_ID,self.onOpenCoding)
+    wx.EVT_MENU(self,armid.BVNTC_LISTALPHABET_ID,self.onListAlphabet)
     self.Bind(wx.EVT_RIGHT_DOWN, self.onRightClick)
 
     self.thePersonaName = ''
     self.theBehaviouralVariable = ''
 
-    self.cmItem.Enable(False)
-    self.viItem.Enable(False)
-
   def onRightClick(self,evt):
+    self.enableCodingCtrls()
     self.PopupMenu(self.ctrlMenu)
 
   def onListCharacteristics(self,evt):

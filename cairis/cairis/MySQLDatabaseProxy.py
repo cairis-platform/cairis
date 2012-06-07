@@ -80,6 +80,7 @@ from DomainParameters import DomainParameters
 from DomainAssociation import DomainAssociation
 from ValueTypeParameters import ValueTypeParameters
 from ExternalDocumentParameters import ExternalDocumentParameters
+from InternalDocumentParameters import InternalDocumentParameters
 from DocumentReferenceParameters import DocumentReferenceParameters
 from ConceptReferenceParameters import ConceptReferenceParameters
 from PersonaCharacteristicParameters import PersonaCharacteristicParameters
@@ -1263,6 +1264,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       objts = self.getTaskCharacteristics(constraintId)
     elif (dimensionTable == 'external_document'):
       objts = self.getExternalDocuments(constraintId)
+    elif (dimensionTable == 'internal_document'):
+      objts = self.getInternalDocuments(constraintId)
     elif (dimensionTable == 'reference_synopsis'):
       objts = self.getReferenceSynopsis(constraintId)
     elif (dimensionTable == 'reference_contribution'):
@@ -9604,4 +9607,69 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting component class associations (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getInternalDocuments(self,constraintId = -1):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getInternalDocuments(%s)',(constraintId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining internal documents'
+        raise DatabaseProxyException(exceptionText) 
+      eDocs = {}
+      for row in curs.fetchall():
+        row = list(row)
+        docId = row[0]
+        docName = row[1]
+        docDesc = row[2]
+        docContent = row[3]
+        parameters = InternalDocumentParameters(docName,docDesc,docContent)
+        eDoc = ObjectFactory.build(docId,parameters)
+        eDocs[docName] = eDoc
+      return eDocs
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting internal documents (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteInternalDocument(self,docId = -1):
+    self.deleteObject(docId,'internal_document')
+    self.conn.commit()
+
+  def addInternalDocument(self,parameters):
+    docId = self.newId()
+    docName = parameters.name()
+    docDesc = parameters.description()
+    docContent = parameters.content()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addInternalDocument(%s,%s,%s,%s)',(docId,docName.encode('utf-8'),docDesc.encode('utf-8'),docContent.encode('utf-8')))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding internal document ' + docName
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+      return docId
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding internal document ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+
+  def updateInternalDocument(self,parameters):
+    docId = parameters.id()
+    docName = parameters.name()
+    docDesc = parameters.description()
+    docContent = parameters.content()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call updateInternalDocument(%s,%s,%s,%s)',(docId,docName.encode('utf-8'),docDesc.encode('utf-8'),docContent.encode('utf-8')))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating internal document ' + docName
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating internal document ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

@@ -71,6 +71,9 @@ DROP TABLE IF EXISTS component_template_requirement;
 DROP TABLE IF EXISTS component_vulnerability_target;
 DROP TABLE IF EXISTS component_threat_target;
 
+DROP TABLE IF EXISTS internal_document_code;
+DROP TABLE IF EXISTS internal_document;
+DROP TABLE IF EXISTS code;
 DROP TABLE IF EXISTS value_tension;
 DROP TABLE IF EXISTS tension;
 DROP TABLE IF EXISTS vulnerability_asset_countermeasure_effect;
@@ -2711,6 +2714,33 @@ CREATE TABLE component_threat_target (
   FOREIGN KEY(threat_id) REFERENCES threat(id),
   FOREIGN KEY(effectiveness_id) REFERENCES target_effectiveness(id),
   FOREIGN KEY(environment_id) REFERENCES environment(id)
+) ENGINE=INNODB;
+
+CREATE TABLE code (
+  id INT NOT NULL,
+  name VARCHAR(200) NOT NULL,
+  description VARCHAR(2000) NOT NULL,
+  inclusion_criteria VARCHAR(2000) NOT NULL,
+  example VARCHAR(2000) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE internal_document (
+  id INT NOT NULL,
+  name VARCHAR(2000) NOT NULL,
+  description VARCHAR(2000) NOT NULL,
+  content VARCHAR(9000),
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE internal_document_code (
+  internal_document_id INT NOT NULL,
+  code_id INT NOT NULL,
+  start_index INT NOT NULL,
+  end_index INT NOT NULL,
+  PRIMARY KEY(internal_document_id,code_id,start_index,end_index),
+  FOREIGN KEY(internal_document_id) REFERENCES internal_document(id),
+  FOREIGN KEY(code_id) REFERENCES code(id)
 ) ENGINE=INNODB;
 
 CREATE VIEW countermeasure_vulnerability_response_target as 
