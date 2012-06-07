@@ -81,6 +81,7 @@ from DomainAssociation import DomainAssociation
 from ValueTypeParameters import ValueTypeParameters
 from ExternalDocumentParameters import ExternalDocumentParameters
 from InternalDocumentParameters import InternalDocumentParameters
+from CodeParameters import CodeParameters
 from DocumentReferenceParameters import DocumentReferenceParameters
 from ConceptReferenceParameters import ConceptReferenceParameters
 from PersonaCharacteristicParameters import PersonaCharacteristicParameters
@@ -1266,6 +1267,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       objts = self.getExternalDocuments(constraintId)
     elif (dimensionTable == 'internal_document'):
       objts = self.getInternalDocuments(constraintId)
+    elif (dimensionTable == 'code'):
+      objts = self.getCodes(constraintId)
     elif (dimensionTable == 'reference_synopsis'):
       objts = self.getReferenceSynopsis(constraintId)
     elif (dimensionTable == 'reference_contribution'):
@@ -9672,4 +9675,72 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error updating internal document ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getCodes(self,constraintId = -1):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getCodes(%s)',(constraintId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining codes'
+        raise DatabaseProxyException(exceptionText) 
+      cObjts = {}
+      for row in curs.fetchall():
+        row = list(row)
+        codeId = row[0]
+        codeName = row[1]
+        codeDesc = row[2]
+        incCriteria = row[3]
+        codeEg = row[4]
+        parameters = CodeParameters(codeName,codeDesc,incCriteria,codeEg)
+        cObjt = ObjectFactory.build(codeId,parameters)
+        cObjts[codeName] = cObjt
+      return cObjts
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting codes (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteCode(self,codeId = -1):
+    self.deleteObject(codeId,'code')
+    self.conn.commit()
+
+  def addCode(self,parameters):
+    codeId = self.newId()
+    codeName = parameters.name()
+    codeDesc = parameters.description()
+    incCriteria = parameters.inclusionCriteria()
+    codeEg  = parameters.example()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addCode(%s,%s,%s,%s,%s)',(codeId,codeName.encode('utf-8'),codeDesc.encode('utf-8'),incCriteria.encode('utf-8'),codeEg.encode('utf-8')))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding code ' + codeName
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+      return codeId
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding code ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+
+  def updateCode(self,parameters):
+    codeId = parameters.id()
+    codeName = parameters.name()
+    codeDesc = parameters.description()
+    incCriteria = parameters.inclusionCriteria()
+    codeEg  = parameters.example()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call updateCode(%s,%s,%s,%s,%s)',(codeId,codeName.encode('utf-8'),codeDesc.encode('utf-8'),incCriteria.encode('utf-8'),codeEg.encode('utf-8')))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating code ' + codeName
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating code ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

@@ -41,6 +41,7 @@ from Environment import Environment
 from Role import Role
 from ExternalDocument import ExternalDocument
 from InternalDocument import InternalDocument
+from Code import Code
 from DocumentReference import DocumentReference
 from ConceptReference import ConceptReference
 from PersonaCharacteristic import PersonaCharacteristic
@@ -89,6 +90,7 @@ from ValueType import ValueType
 from ValueTypeParameters import ValueTypeParameters
 from ExternalDocumentParameters import ExternalDocumentParameters
 from InternalDocumentParameters import InternalDocumentParameters
+from CodeParameters import CodeParameters
 from PersonaCharacteristicParameters import PersonaCharacteristicParameters
 from TaskCharacteristicParameters import TaskCharacteristicParameters
 from UseCase import UseCase
@@ -161,6 +163,8 @@ def build(objtId,p):
     return ExternalDocument(objtId,p.name(),p.version(),p.date(),p.authors(),p.description())
   if (p.__class__.__name__ == 'InternalDocumentParameters'):
     return InternalDocument(objtId,p.name(),p.description(),p.content())
+  if (p.__class__.__name__ == 'CodeParameters'):
+    return Code(objtId,p.name(),p.description(),p.inclusionCriteria(),p.example())
   if (p.__class__.__name__ == 'DocumentReferenceParameters'):
     return DocumentReference(objtId,p.name(),p.document(),p.contributor(),p.description())
   if (p.__class__.__name__ == 'ConceptReferenceParameters'):

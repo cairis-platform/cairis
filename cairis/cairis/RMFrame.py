@@ -66,6 +66,7 @@ from ProjectSettingsDialog import ProjectSettingsDialog
 from ValueTypesDialog import ValueTypesDialog
 from ExternalDocumentsDialog import ExternalDocumentsDialog
 from InternalDocumentsDialog import InternalDocumentsDialog
+from CodesDialog import CodesDialog
 from DocumentReferencesDialog import DocumentReferencesDialog
 from ConceptReferencesDialog import ConceptReferencesDialog
 from PersonaCharacteristicsDialog import PersonaCharacteristicsDialog
@@ -229,6 +230,7 @@ class RMFrame(wx.Frame):
     iris.AppendSeparator()
     iris.Append(armid.RMFRAME_MENU_OPTIONS_EXTERNALDOCUMENTS,'External Documents','Edit External Documents')
     iris.Append(armid.RMFRAME_MENU_OPTIONS_INTERNALDOCUMENTS,'Internal Documents','Edit Internal Documents')
+    iris.Append(armid.RMFRAME_MENU_OPTIONS_CODES,'Codes','Edit Codes')
     iris.Append(armid.RMFRAME_MENU_OPTIONS_DOCUMENTREFERENCES,'Document References','Edit Document References')
     iris.Append(armid.RMFRAME_MENU_OPTIONS_CONCEPTREFERENCES,'Concept References','Edit Concept References')
     iris.Append(armid.RMFRAME_MENU_OPTIONS_PERSONACHARACTERISTICS,'Persona Characteristics','Edit Persona Characteristics')
@@ -401,6 +403,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_SECURITYPATTERNS,self.OnSecurityPatterns)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_EXTERNALDOCUMENTS,self.OnExternalDocuments)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_INTERNALDOCUMENTS,self.OnInternalDocuments)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_CODES,self.OnCodes)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_DOCUMENTREFERENCES,self.OnDocumentReferences)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_CONCEPTREFERENCES,self.OnConceptReferences)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_PERSONACHARACTERISTICS,self.OnPersonaCharacteristics)
@@ -1165,6 +1168,17 @@ class RMFrame(wx.Frame):
       dialog.Destroy()
     except ARMException,errorText:
       dlg = wx.MessageDialog(self,str(errorText),'Edit Internal Documents',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+
+  def OnCodes(self,event):
+    try:
+      dialog = CodesDialog(self)
+      dialog.ShowModal()
+      dialog.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Edit Codes',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return

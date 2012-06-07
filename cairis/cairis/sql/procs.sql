@@ -730,6 +730,10 @@ drop procedure if exists addInternalDocument;
 drop procedure if exists updateInternalDocument;
 drop procedure if exists getInternalDocuments;
 drop procedure if exists delete_internal_document;
+drop procedure if exists addCode;
+drop procedure if exists updateCode;
+drop procedure if exists getCodes;
+drop procedure if exists delete_code;
 
 delimiter //
 
@@ -18856,6 +18860,45 @@ begin
     delete from internal_document where id = docId;
   else
     delete from internal_document;
+  end if;
+end
+//
+
+create procedure addCode(in codeId int, in codeName text, in codeDesc text, in incCriteria text, in codeExample text)
+begin
+  declare cId int;
+  select id into cId from code where name = codeName;
+  if cId is null
+  then 
+    insert into code(id,name,description,inclusion_criteria,example) values (codeId,codeName,codeDesc,incCriteria,codeExample);
+  end if;
+end
+//
+
+create procedure updateCode(in codeId int, in codeName text, in codeDesc text, in incCriteria text, in codeExample text)
+begin
+  update code set name = codeName, description = codeDesc, inclusion_criteria = incCriteria, example = codeExample where id = codeId;
+end
+//
+
+create procedure getCodes(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select id,name,ifnull(description,''),ifnull(inclusion_criteria,''),ifnull(example,'') from code;
+  else
+    select id,name,ifnull(description,''),ifnull(inclusion_criteria,''),ifnull(example,'') from code where id = constraintId;
+  end if;
+end
+//
+
+create procedure delete_code(in codeId int)
+begin
+  if codeId != -1
+  then
+    delete from code where id = codeId;
+  else
+    delete from code;
   end if;
 end
 //
