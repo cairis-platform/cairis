@@ -19,12 +19,14 @@
 from ObjectCreationParameters import ObjectCreationParameters
 
 class InternalDocumentParameters(ObjectCreationParameters):
-  def __init__(self,idName,idDesc,idContent):
+  def __init__(self,idName,idDesc,idContent,idCodes):
     ObjectCreationParameters.__init__(self)
     self.theName = idName
     self.theDescription = idDesc
     self.theContent = idContent
+    self.theCodes = idCodes
 
   def name(self): return self.theName
   def description(self): return self.theDescription
   def content(self): return self.theContent
+  def codes(self): return self.theCodes

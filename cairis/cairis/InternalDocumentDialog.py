@@ -28,6 +28,7 @@ class InternalDocumentDialog(wx.Dialog):
     self.theName = ''
     self.theDescription = ''
     self.theContent = ''
+    self.theCodes = {}
     self.theId = -1
     self.panel = 0
     self.buildControls(parameters)
@@ -51,9 +52,11 @@ class InternalDocumentDialog(wx.Dialog):
     nameCtrl = self.FindWindowById(armid.INTERNALDOCUMENT_TEXTNAME_ID)
     descCtrl = self.FindWindowById(armid.INTERNALDOCUMENT_TEXTDESCRIPTION_ID)
     contCtrl = self.FindWindowById(armid.INTERNALDOCUMENT_TEXTCONTENT_ID)
+
     self.theName = nameCtrl.GetValue()
     self.theDescription = descCtrl.GetValue()
     self.theContent = contCtrl.GetValue()
+    self.theCodes = contCtrl.codes()
 
     if len(self.theName) == 0:
       dlg = wx.MessageDialog(self,'Name cannot be empty',commitLabel,wx.OK) 
@@ -74,6 +77,6 @@ class InternalDocumentDialog(wx.Dialog):
       self.EndModal(armid.INTERNALDOCUMENT_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = InternalDocumentParameters(self.theName,self.theDescription,self.theContent)
+    parameters = InternalDocumentParameters(self.theName,self.theDescription,self.theContent,self.theCodes)
     parameters.setId(self.theId)
     return parameters

@@ -44,3 +44,4 @@ class InternalDocumentPanel(BasePanel):
     nameCtrl.SetValue(objt.name())
     descCtrl.SetValue(objt.description())
     contCtrl.SetValue(objt.content())
+    contCtrl.setCodes(objt.codes())

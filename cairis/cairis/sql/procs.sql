@@ -729,11 +729,15 @@ drop procedure if exists componentClassModel;
 drop procedure if exists addInternalDocument;
 drop procedure if exists updateInternalDocument;
 drop procedure if exists getInternalDocuments;
+drop procedure if exists deleteInternalDocumentComponents;
 drop procedure if exists delete_internal_document;
 drop procedure if exists addCode;
 drop procedure if exists updateCode;
 drop procedure if exists getCodes;
 drop procedure if exists delete_code;
+drop procedure if exists documentCodes;
+drop procedure if exists addDocumentCode;
+drop procedure if exists codeNames;
 
 delimiter //
 
@@ -18855,6 +18859,7 @@ end
 
 create procedure delete_internal_document(in docId int)
 begin
+  call deleteInternalDocumentComponents(docId);
   if docId != -1
   then
     delete from internal_document where id = docId;
@@ -18900,6 +18905,49 @@ begin
   else
     delete from code;
   end if;
+end
+//
+
+create procedure documentCodes(in docName text)
+begin
+  declare docId int;
+
+  select id into docId from internal_document where name = docName;
+  select c.name,idc.start_index,idc.end_index from internal_document_code idc, code c where idc.internal_document_id = docId and idc.code_id = c.id order by 1,2,3;
+end
+//
+
+create procedure deleteInternalDocumentComponents(in docId int)
+begin
+  if docId != -1
+  then
+    delete from internal_document_code where internal_document_id = docId;
+  else
+    delete from internal_document_code;
+  end if;
+end
+//
+
+create procedure addDocumentCode(in docName text, in docCode text, in startIdx int, in endIdx int)
+begin
+  declare docId int;
+  declare codeId int;
+
+  select id into docId from internal_document where name = docName;
+  select id into codeId from code where name = docCode;
+  if codeId is null
+  then
+    call newId2(codeId);
+    call addCode(codeId,docCode,'None','None','None');
+  end if;
+  insert into internal_document_code(internal_document_id,code_id,start_index,end_index) values (docId,codeId,startIdx,endIdx);
+
+end
+//
+
+create procedure codeNames(in environmentName text)
+begin
+  select name from code order by 1;
 end
 //
 

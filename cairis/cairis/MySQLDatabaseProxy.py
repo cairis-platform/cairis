@@ -9619,17 +9619,23 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error obtaining internal documents'
         raise DatabaseProxyException(exceptionText) 
-      eDocs = {}
+      idObjts = {}
+      rows = []
       for row in curs.fetchall():
         row = list(row)
         docId = row[0]
         docName = row[1]
         docDesc = row[2]
         docContent = row[3]
-        parameters = InternalDocumentParameters(docName,docDesc,docContent)
-        eDoc = ObjectFactory.build(docId,parameters)
-        eDocs[docName] = eDoc
-      return eDocs
+        rows.append((docId,docName,docDesc,docContent))
+      curs.close()
+
+      for docId,docName,docDesc,docContent in rows:
+        docCodes = self.documentCodes(docName)
+        parameters = InternalDocumentParameters(docName,docDesc,docContent,docCodes)
+        idObjt = ObjectFactory.build(docId,parameters)
+        idObjts[docName] = idObjt
+      return idObjts
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting internal documents (id:' + str(id) + ',message:' + msg + ')'
@@ -9644,12 +9650,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docName = parameters.name()
     docDesc = parameters.description()
     docContent = parameters.content()
+    docCodes = parameters.codes()
     try:
       curs = self.conn.cursor()
       curs.execute('call addInternalDocument(%s,%s,%s,%s)',(docId,docName.encode('utf-8'),docDesc.encode('utf-8'),docContent.encode('utf-8')))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding internal document ' + docName
         raise DatabaseProxyException(exceptionText) 
+      self.addDocumentCodes(docName,docCodes)
       self.conn.commit()
       curs.close()
       return docId
@@ -9664,12 +9672,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docName = parameters.name()
     docDesc = parameters.description()
     docContent = parameters.content()
+    docCodes = parameters.codes()
     try:
       curs = self.conn.cursor()
+      curs.execute('call deleteInternalDocumentComponents(%s)',(docId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error deleting components of ' + docName
+        raise DatabaseProxyException(exceptionText) 
+
       curs.execute('call updateInternalDocument(%s,%s,%s,%s)',(docId,docName.encode('utf-8'),docDesc.encode('utf-8'),docContent.encode('utf-8')))
       if (curs.rowcount == -1):
         exceptionText = 'Error updating internal document ' + docName
         raise DatabaseProxyException(exceptionText) 
+      self.addDocumentCodes(docName,docCodes)
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -9743,4 +9758,43 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error updating code ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def documentCodes(self,docName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call documentCodes(%s)',(docName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting codes for ' + docName
+        raise DatabaseProxyException(exceptionText) 
+      codes = {}
+      for row in curs.fetchall():
+        row = list(row)
+        codeName = row[0]
+        startIdx = int(row[1])
+        endIdx = int(row[2])
+        codes[(startIdx,endIdx)] = codeName
+      curs.close()
+      return codes
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting codes for ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+  
+  def addDocumentCodes(self,docName,docCodes):
+    for (startIdx,endIdx) in docCodes:
+      docCode = docCodes[(startIdx,endIdx)]
+      self.addDocumentCode(docName,docCode,startIdx,endIdx)
+
+  def addDocumentCode(self,docName,docCode,startIdx,endIdx):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addDocumentCode(%s,%s,%s,%s)',(docName,docCode,startIdx,endIdx))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding code ' + docCode + ' to ' + docName
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding code ' + docCode + ' to '  + docName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

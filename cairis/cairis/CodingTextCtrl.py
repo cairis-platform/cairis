@@ -21,6 +21,7 @@ import wx.richtext
 import armid
 from ARM import *
 from Borg import Borg
+from DimensionNameDialog import DimensionNameDialog
 
 class CodingTextCtrl(wx.richtext.RichTextCtrl):
   def __init__(self, parent, winId):
@@ -33,6 +34,7 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
     wx.EVT_MENU(self,armid.BVNTC_TEXTOPENCODING_ID,self.onOpenCoding)
     wx.EVT_MENU(self,armid.BVNTC_LISTALPHABET_ID,self.onListAlphabet)
     self.Bind(wx.EVT_RIGHT_DOWN, self.onRightClick)
+    self.Bind(wx.EVT_TEXT_URL,self.onUrl)
 
     self.theSelectionStart = -1
     self.theSelectionEnd = -1
@@ -40,6 +42,9 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
     self.clItem.Enable(False)
     self.dcItem.Enable(False)
     self.theCodes = {}
+
+  def codes(self):
+    return self.theCodes
 
   def onRightClick(self,evt):
     self.enableCodingCtrls()
@@ -64,26 +69,45 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
       else:
         self.codingMenu.Enable(armid.BVNTC_CMDUNLINKCODES_ID,False) 
 
+  def addCode(self,codeName):
+    urlStyle = wx.richtext.TextAttrEx()
+    urlStyle.SetTextColour(wx.LIGHT_GREY)
+    urlStyle.SetFontUnderlined(True)
+    codeRef = str(self.theSelectionStart) + ',' + str(self.theSelectionEnd)
+    urlStyle.SetURL(codeRef)
+    self.theCodes[(self.theSelectionStart,self.theSelectionEnd)] = codeName
+    self.SetStyle(wx.richtext.RichTextRange(self.theSelectionStart,self.theSelectionEnd),urlStyle)
+
+  def onListAlphabet(self,evt):
+    b = Borg()
+    codes = b.dbProxy.getDimensionNames('code',False)
+    cDlg = DimensionNameDialog(self,'code',codes,'Select')
+    if (cDlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
+      codeName = cDlg.dimensionName()
+      self.addCode(codeName)
+    cDlg.Destroy()
+
   def onOpenCoding(self,evt):
     dlg = wx.TextEntryDialog(self,'Enter alphabet code','Alphabet code')
     if (dlg.ShowModal() == wx.ID_OK):
       codeName = dlg.GetValue()
       if codeName != '':
-        urlStyle = wx.richtext.TextAttrEx()
-        urlStyle.SetTextColour(wx.LIGHT_GREY)
-        urlStyle.SetFontUnderlined(True)
-        codeRef = str(self.theSelectionStart) + ',' + str(self.theSelectionEnd)
-        urlStyle.SetURL(codeRef)
-        self.Bind(wx.EVT_TEXT_URL,self.onUrl)
-        self.theCodes[(self.theSelectionStart,self.theSelectionEnd)] = codeName
-        self.SetStyle(wx.richtext.RichTextRange(self.theSelectionStart,self.theSelectionEnd),urlStyle)
+        self.addCode(codeName)
     dlg.Destroy()
-
-  def onListAlphabet(self,evt):
-    pass
 
   def onUrl(self,evt):
     urlValue = evt.GetString()
     codeRefs = urlValue.split(',')
     codeValue = self.theCodes[(int(codeRefs[0]),int(codeRefs[1]))]
     wx.MessageBox(codeValue,"Alphabet code")
+
+  def setCodes(self,codes):
+    self.theCodes = codes
+    for startIdx,endIdx in codes:
+      codeName = self.theCodes[(startIdx,endIdx)] 
+      urlStyle = wx.richtext.TextAttrEx()
+      urlStyle.SetTextColour(wx.LIGHT_GREY)
+      urlStyle.SetFontUnderlined(True)
+      codeRef = str(startIdx) + ',' + str(endIdx)
+      urlStyle.SetURL(codeRef)
+      self.SetStyle(wx.richtext.RichTextRange(startIdx,endIdx),urlStyle)

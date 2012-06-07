@@ -162,7 +162,7 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'ExternalDocumentParameters'):
     return ExternalDocument(objtId,p.name(),p.version(),p.date(),p.authors(),p.description())
   if (p.__class__.__name__ == 'InternalDocumentParameters'):
-    return InternalDocument(objtId,p.name(),p.description(),p.content())
+    return InternalDocument(objtId,p.name(),p.description(),p.content(),p.codes())
   if (p.__class__.__name__ == 'CodeParameters'):
     return Code(objtId,p.name(),p.description(),p.inclusionCriteria(),p.example())
   if (p.__class__.__name__ == 'DocumentReferenceParameters'):
