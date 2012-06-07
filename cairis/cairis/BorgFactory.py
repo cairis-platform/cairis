@@ -23,7 +23,10 @@ from string import strip
 def initialise():
   b = Borg()
   cairisRoot = '/home/irisuser/CAIRIS/cairis'
-
+  homeDir = os.getenv("HOME")
+  if homeDir is not None:
+    cairisRoot = homeDir + "/CAIRIS/cairis"
+ 
   cfgFileName = ''
   try:
     cfgFileName = os.environ['CAIRIS_CFG']
