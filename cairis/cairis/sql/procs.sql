@@ -742,6 +742,8 @@ drop procedure if exists addDocumentCode;
 drop procedure if exists codeNames;
 drop procedure if exists addArtifactCode;
 drop procedure if exists addArtifactEnvironmentCode;
+drop procedure if exists addArtifactCodeNetwork;
+drop procedure if exists artifactCodeNetwork;
 
 delimiter //
 
@@ -19067,6 +19069,55 @@ begin
 
   set codeSql = concat('select c.name,ac.start_index,ac.end_index from ',artType,'_environment_code ac, code c where ac.',artType,'_id = ',artId,' and ac.environment_id = ',envId,' and ac.section_id = ',sectId,' and ac.code_id = c.id order by 1,2,3');
   set @sql = codeSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+end
+//
+
+create procedure addArtifactCodeNetwork(in artName text, in artType text, in fromCode text, in toCode text, in rshipTypeName text)
+begin
+  declare rshipTypeId int;
+  declare artId int; 
+  declare fromId int;
+  declare toId int;
+  declare artIdSql varchar(4000);
+  declare codeNetSql varchar(4000);
+
+  select id into rshipTypeId from relationship_type where name = rshipTypeName limit 1;
+  select id into fromId from code where name = fromCode limit 1;
+  select id into toId from code where name = toCode limit 1;
+
+  set artIdSql = concat('select id into @artId from ',artType,' where name = "',artName,'" limit 1');
+  set @sql = artIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set artId = @artId;
+
+  set codeNetSql = concat('insert into ',artType,'_code_network(',artType,'_id,from_code_id,to_code_id,relationship_type_id) values (',artId,',',fromId,',',toId,',',rshipTypeId,')');
+  set @sql = codeNetSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+end
+//
+
+create procedure artifactCodeNetwork(in artName text, in artType text)
+begin
+  declare artId int; 
+  declare artIdSql varchar(4000);
+  declare codeNetSql varchar(4000);
+
+  set artIdSql = concat('select id into @artId from ',artType,' where name = "',artName,'" limit 1');
+  set @sql = artIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set artId = @artId;
+
+  set codeNetSql = concat('select fc.name, tc.name, rt.name from code fc, code tc, relationship_type rt, ',artType,'_code_network acn where acn.',artType,'_id = ',artId,' and acn.from_code_id = fc.id and acn.to_code_id = tc.id and acn.relationship_type_id = rt.id');
+  set @sql = codeNetSql;
   prepare stmt from @sql;
   execute stmt;
   deallocate prepare stmt;

@@ -9922,3 +9922,25 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error adding code ' + docCode + ' to '  + artType + ' ' + artName + ' in environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def personaCodeNetwork(self,personaName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call artifactCodeNetwork(%s,%s)',(personaName,'persona'))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting code network for persona ' + personaName
+        raise DatabaseProxyException(exceptionText) 
+      network = []
+      for row in curs.fetchall():
+        row = list(row)
+        fromCode = row[0]
+        toCode = row[1]
+        rType = row[2]
+        network.append((fromCode,toCode,rType))
+      curs.close()
+      return network
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting code network for persona ' + personaName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
