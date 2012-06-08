@@ -18998,8 +18998,13 @@ begin
   prepare stmt from @sql;
   execute stmt;
   deallocate prepare stmt;
+  set artId = @artId;
 
   set codeSql = concat('insert into ',artType,'_code(',artType,'_id,code_id,section_id,start_index,end_index) values (',artId,',',codeId,',',sectId,',',startIdx,',',endIdx,')');
+  set @sql = codeSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
 end
 //
 
