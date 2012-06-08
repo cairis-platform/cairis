@@ -19081,6 +19081,7 @@ begin
   declare artId int; 
   declare fromId int;
   declare toId int;
+  declare cnId int;
   declare artIdSql varchar(4000);
   declare codeNetSql varchar(4000);
 
@@ -19095,7 +19096,9 @@ begin
   deallocate prepare stmt;
   set artId = @artId;
 
-  set codeNetSql = concat('insert into ',artType,'_code_network(',artType,'_id,from_code_id,to_code_id,relationship_type_id) values (',artId,',',fromId,',',toId,',',rshipTypeId,')');
+  call newId2(cnId);
+
+  set codeNetSql = concat('insert into ',artType,'_code_network(id,',artType,'_id,from_code_id,to_code_id,relationship_type_id) values (',cnId,',',artId,',',fromId,',',toId,',',rshipTypeId,')');
   set @sql = codeNetSql;
   prepare stmt from @sql;
   execute stmt;

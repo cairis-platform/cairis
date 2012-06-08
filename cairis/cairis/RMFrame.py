@@ -76,6 +76,8 @@ from ModelImport import *
 from SearchDialog import SearchDialog
 from ConceptMapModel import ConceptMapModel
 from ComponentModel import ComponentModel
+from CodeNetworkModel import CodeNetworkModel
+from CodeNetworkViewer import CodeNetworkViewer
 import DocumentBuilder
 from itertools import izip
 import gtk
@@ -269,6 +271,7 @@ class RMFrame(wx.Frame):
     viewm.Append(armid.RMFRAME_MENU_VIEW_TASKMODEL,'Task Model','View task model')
     viewm.Append(armid.RMFRAME_MENU_VIEW_APMODEL,'Assumption Persona Model','View assumption persona model')
     viewm.Append(armid.RMFRAME_MENU_VIEW_ATMODEL,'Assumption Task Model','View assumption task model')
+    viewm.Append(armid.RMFRAME_MENU_VIEW_CODENETWORK,'Code Network','View code network')
     viewm.Append(armid.RMFRAME_MENU_VIEW_TRACEABILITY,'Traceability','View Traceability relations')
     menubar.Append(viewm,'&View')
   
@@ -289,6 +292,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_TASKMODEL,self.OnViewTasks)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_APMODEL,self.OnViewAPModel)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ATMODEL,self.OnViewATModel)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_CODENETWORK,self.OnViewCodeNetwork)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_TRACEABILITY,self.OnViewTraceability)
 
     wx.EVT_MENU(self,armid.RMFRAME_MENU_GRID_REQUIREMENTS,self.OnGridRequirements)
@@ -1749,6 +1753,30 @@ class RMFrame(wx.Frame):
       if (dialog != None):
         dialog.destroy()
       dlg = wx.MessageDialog(self,str(errorText),'View Component Diagram',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+
+  def OnViewCodeNetwork(self,event):
+    dialog = None
+    try:
+      proxy = self.b.dbProxy
+      personas = proxy.getDimensionNames('persona')
+      cDlg = DimensionNameDialog(self,'persona',personas,'Select')
+      if (cDlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
+        personaName = cDlg.dimensionName()
+        codeNet = CodeNetworkModel(proxy.personaCodeNetwork(personaName),personaName)
+        codeNet.graph()
+        cDlg.Destroy() 
+        dialog = CodeNetworkViewer(self,personaName,codeNet)
+        dialog.ShowModal()
+        dialog.Destroy()
+      else:
+        cDlg.Destroy() 
+    except ARMException,errorText:
+      if (dialog != None):
+        dialog.destroy()
+      dlg = wx.MessageDialog(self,str(errorText),'View Code Network',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return

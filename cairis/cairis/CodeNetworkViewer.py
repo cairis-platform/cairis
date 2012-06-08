@@ -15,21 +15,20 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from Borg import Borg
-import wx.lib.imagebrowser
+
+import wx
 import armid
+import os
+from Borg import Borg
+import ARM
+from CodeNetworkPanel import CodeNetworkPanel
 
-class CodeNetworkView(wx.lib.imagebrowser.ImageView):
-  def __init__(self,parent,winId):
-    wx.lib.imagebrowser.ImageView.__init__(self,parent,winId)
-    self.parent = parent
-    b = Borg()
-    self.theImageFile = b.tmpDir + '/codenetwork.png'
-    self.Bind(wx.EVT_RIGHT_DOWN,self.onRightDown)
-
-  def onRightDown(self,evt):
-    self.PopupMenu(self.parent.theViewMenu)
-
-  def reloadImage(self):
-    self.SetValue(self.theImageFile)
-
+class CodeNetworkViewer(wx.Dialog):
+  def __init__(self,parent,personaName,codeNet):
+    wx.Dialog.__init__(self,parent,-1,'Code network',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(500,800))
+    self.theParent = parent 
+    self.panel = 0
+    mainSizer = wx.BoxSizer(wx.VERTICAL)
+    self.panel = CodeNetworkPanel(self,personaName,codeNet)
+    mainSizer.Add(self.panel,1,wx.EXPAND)
+    self.SetSizer(mainSizer)

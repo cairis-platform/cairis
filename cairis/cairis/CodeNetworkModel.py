@@ -27,11 +27,8 @@ class CodeNetworkModel:
   def __init__(self,codeNetwork,personaName):
     self.theCodeNetwork = codeNetwork
     self.thePersonaName = personaName
-    self.theGoalName = goalName
     b = Borg()
     self.dbProxy = b.dbProxy
-    self.fontName = b.fontName
-    self.fontSize = b.fontSize
     self.theGraph = pydot.Dot()
     self.theGraph.set_graph_defaults(rankdir='LR')
     self.theGraph.set_node_defaults(shape='rectangle')
@@ -39,15 +36,8 @@ class CodeNetworkModel:
     self.theGraphName = b.tmpDir + '/codenetwork.dot'
     self.theGraphImage = b.tmpDir + '/codenetwork.png'
 
-  def size(self):
-    return len(self.theAssociations)
-
   def buildNode(self,objtName):
     self.theGraph.add_node(pydot.Node(objtName))
-
-  def layout(self,renderer = ''):
-    self.theGraph.write_png(self.theGraphImage,prog='dot')
-    return open(self.theGraphName).read()
 
   def graph(self):
     self.nodeNameSet = set([])
@@ -61,14 +51,14 @@ class CodeNetworkModel:
 
       rTypeLabel = ''
       if rType == 'associated':
-        rTypeLabel = '==':
+        rTypeLabel = '=='
       elif rType == 'implies':
-        rTypeLabel = '=>':
+        rTypeLabel = '=>'
       elif rType == 'conflict':
-        rTypeLabel = '<>':
+        rTypeLabel = '<>'
       elif rType == 'part-of':
-        rTypeLabel = '<>':
+        rTypeLabel = '<>'
 
       edge = pydot.Edge(fromName,toName,label=rTypeLabel)
       self.theGraph.add_edge(edge)
-    return self.layout()
+    self.theGraph.write_png(self.theGraphImage,prog='dot')

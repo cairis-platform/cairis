@@ -9944,3 +9944,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting code network for persona ' + personaName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def addCodeRelationship(self,personaName,fromName,toName,rshipType):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addArtifactCodeNetwork(%s,%s,%s,%s,%s)',(personaName,'persona',fromName,toName,rshipType))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding ' + rshipType + ' to ' + personaName + ' code network'
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding ' + rshipType + ' to ' + personaName + ' code network (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
