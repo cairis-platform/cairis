@@ -73,7 +73,9 @@ DROP TABLE IF EXISTS component_threat_target;
 
 DROP TABLE IF EXISTS internal_document_code;
 DROP TABLE IF EXISTS internal_document;
+DROP TABLE IF EXISTS persona_environment_code;
 DROP TABLE IF EXISTS persona_code;
+DROP TABLE IF EXISTS task_environment_code;
 DROP TABLE IF EXISTS task_code;
 DROP TABLE IF EXISTS artifact_section;
 DROP TABLE IF EXISTS code;
@@ -2764,6 +2766,20 @@ CREATE TABLE persona_code (
   FOREIGN KEY(section_id) REFERENCES artifact_section(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE persona_environment_code (
+  persona_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  code_id INT NOT NULL,
+  section_id INT NOT NULL,
+  start_index INT NOT NULL,
+  end_index INT NOT NULL,
+  PRIMARY KEY(persona_id,environment_id,code_id,section_id,start_index,end_index),
+  FOREIGN KEY(persona_id) REFERENCES persona(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id),
+  FOREIGN KEY(code_id) REFERENCES code(id),
+  FOREIGN KEY(section_id) REFERENCES artifact_section(id)
+) ENGINE=INNODB;
+
 CREATE TABLE task_code (
   task_id INT NOT NULL,
   code_id INT NOT NULL,
@@ -2772,6 +2788,20 @@ CREATE TABLE task_code (
   end_index INT NOT NULL,
   PRIMARY KEY(task_id,code_id,section_id,start_index,end_index),
   FOREIGN KEY(task_id) REFERENCES task(id),
+  FOREIGN KEY(code_id) REFERENCES code(id),
+  FOREIGN KEY(section_id) REFERENCES artifact_section(id)
+) ENGINE=INNODB;
+
+CREATE TABLE task_environment_code (
+  task_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  code_id INT NOT NULL,
+  section_id INT NOT NULL,
+  start_index INT NOT NULL,
+  end_index INT NOT NULL,
+  PRIMARY KEY(task_id,environment_id,code_id,section_id,start_index,end_index),
+  FOREIGN KEY(task_id) REFERENCES task(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id),
   FOREIGN KEY(code_id) REFERENCES code(id),
   FOREIGN KEY(section_id) REFERENCES artifact_section(id)
 ) ENGINE=INNODB;

@@ -78,6 +78,7 @@ class PersonaEnvironmentPanel(wx.Panel):
     else:
       self.directCtrl.SetValue(False)
     self.descriptionCtrl.Set(self.thePersonaName,'Environment Narrative',p.narrative())
+    self.descriptionCtrl.setCodes(p.codes('narrative'))
     self.roleList.setEnvironment(environmentName)
     self.roleList.load(p.roles()) 
 
@@ -99,6 +100,7 @@ class PersonaEnvironmentPanel(wx.Panel):
     else:
       self.directCtrl.SetValue(False)
     self.descriptionCtrl.Set(self.thePersonaName,'Environment Narrative',p.narrative())
+    self.descriptionCtrl.setCodes(p.codes('narrative'))
     self.roleList.setEnvironment(environmentName)
     self.roleList.load(p.roles()) 
     self.directCtrl.Enable()
@@ -108,10 +110,12 @@ class PersonaEnvironmentPanel(wx.Panel):
   def OnEnvironmentDeselected(self,evt):
     self.theSelectedIdx = evt.GetIndex()
     environmentName = self.environmentList.GetItemText(self.theSelectedIdx)
+    envCodebook = {'narrative':self.descriptionCtrl.codes()}
     self.theEnvironmentDictionary[environmentName] = PersonaEnvironmentProperties(environmentName,str(self.directCtrl.GetValue()),self.descriptionCtrl.GetValue(),self.roleList.dimensions())
 
     self.directCtrl.SetValue(False)
     self.descriptionCtrl.Set(self.thePersonaName,'Environment Narrative','')
+    self.descriptionCtrl.setCodes({})
     self.roleList.setEnvironment('')
     self.roleList.DeleteAllItems() 
     self.theSelectedIdx = -1
@@ -126,6 +130,7 @@ class PersonaEnvironmentPanel(wx.Panel):
     self.environmentList.Select(self.theSelectedIdx)
     self.directCtrl.SetValue(False)
     self.descriptionCtrl.Set(self.thePersonaName,'Environment Narrative','')
+    self.descriptionCtrl.setCodes({})
     self.roleList.setEnvironment(environmentName)
     self.roleList.DeleteAllItems() 
     self.directCtrl.Enable()
@@ -139,6 +144,7 @@ class PersonaEnvironmentPanel(wx.Panel):
     self.theSelectedIdx = -1
     self.directCtrl.SetValue(False)
     self.descriptionCtrl.Set(self.thePersonaName,'Environment Narrative','')
+    self.descriptionCtrl.setCodes({})
     self.roleList.setEnvironment('')
     self.roleList.DeleteAllItems() 
     self.theSelectedIdx = -1
@@ -150,11 +156,6 @@ class PersonaEnvironmentPanel(wx.Panel):
   def environmentProperties(self):
     if (self.theSelectedIdx != -1):
       environmentName = self.environmentList.GetItemText(self.theSelectedIdx)
-      self.theEnvironmentDictionary[environmentName] = PersonaEnvironmentProperties(environmentName,str(self.directCtrl.GetValue()),self.descriptionCtrl.GetValue(),self.roleList.dimensions())
+      envCodebook = {'narrative':self.descriptionCtrl.codes()}
+      self.theEnvironmentDictionary[environmentName] = PersonaEnvironmentProperties(environmentName,str(self.directCtrl.GetValue()),self.descriptionCtrl.GetValue(),self.roleList.dimensions(),envCodebook)
     return self.theEnvironmentDictionary.values() 
-
-  def codes(self):
-    return self.descriptionCtrl.codes()
-
-  def setCodes(self,codes):
-    return self.descriptionCtrl.setCodes(codes)

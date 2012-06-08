@@ -19,12 +19,19 @@
 from EnvironmentProperties import EnvironmentProperties
 
 class PersonaEnvironmentProperties(EnvironmentProperties):
-  def __init__(self,environmentName,direct=False,description='',roles=[]):
+  def __init__(self,environmentName,direct=False,description='',roles=[],pCodes={'narrative':{}}):
     EnvironmentProperties.__init__(self,environmentName)
     self.theDirectFlag = direct 
     self.theNarrative = description
     self.theRoles = roles
+    self.theCodes = pCodes
 
   def directFlag(self): return self.theDirectFlag
   def narrative(self): return self.theNarrative
   def roles(self): return self.theRoles
+  def codes(self,sectName = ''): 
+    if sectName == '':
+      return self.theCodes
+    else:
+      return self.theCodes[sectName]
+

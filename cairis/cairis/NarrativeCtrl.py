@@ -40,7 +40,7 @@ class NarrativeCtrl(CodingTextCtrl):
     self.theDimMenu.Append(armid.NARCTRL_MENUGOAL_ID,'Refining Goal')
     self.theDimMenu.Append(armid.NARCTRL_MENUOBSTACLE_ID,'Refining Obstacle')
     self.theDimMenu.Append(armid.NARCTRL_MENUREQUIREMENT_ID,'Refining Requirement')
-    self.theDimMenu.Append(armid.BVNTC_MENU_CODING,'Coding',self.codingMenu)
+    self.theDimMenu.AppendMenu(armid.BVNTC_MENU_CODING,'Coding',self.codingMenu)
 
     self.Bind(wx.EVT_RIGHT_DOWN,self.OnRightDown)
     wx.EVT_MENU(self.theDimMenu,armid.NARCTRL_MENUGOAL_ID,self.onGoal)

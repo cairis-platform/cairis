@@ -17,7 +17,7 @@
 
 
 class Task:
-  def __init__(self,tId,tName,tShortCode,tObjt,isAssumption,tAuth,cProps,tCodes):
+  def __init__(self,tId,tName,tShortCode,tObjt,isAssumption,tAuth,cProps):
     self.theId = tId
     self.theName = tName
     self.theShortCode = tShortCode
@@ -34,7 +34,6 @@ class Task:
     self.scoreLookup['Low'] = 1
     self.scoreLookup['Medium'] = 2
     self.scoreLookup['High'] = 3
-    self.theCodes = tCodes
 
   def environmentProperties(self): return self.theEnvironmentProperties
 
@@ -44,7 +43,6 @@ class Task:
   def objective(self): return self.theObjective
   def assumption(self): return self.isAssumption
   def author(self): return self.theAuthor
-  def codes(self,sectName): return self.theCodes[sectName]
 
   def dependencies(self,environmentName,dupProperty):
     if (dupProperty == ''):

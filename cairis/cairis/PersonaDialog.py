@@ -39,7 +39,7 @@ class PersonaDialog(wx.Dialog):
     self.theSkills = ''
     self.theImage = ''
     self.theType = ''
-    self.theCodes = {'activities':{}, 'attitudes':{}, 'motivations':{}, 'skills':{}, 'narrative':{} }
+    self.theCodes = {'activities':{}, 'attitudes':{}, 'motivations':{}, 'skills':{}}
     self.theEnvironmentProperties = []
     self.panel = 0
     self.buildControls(parameters)
@@ -105,7 +105,6 @@ class PersonaDialog(wx.Dialog):
     self.theImage = imageCtrl.personaImage()
     
     self.theEnvironmentProperties = environmentCtrl.environmentProperties()
-    self.theCodes['narrative'] = environmentCtrl.codes()
 
     commitLabel = self.theCommitVerb + ' persona'
 

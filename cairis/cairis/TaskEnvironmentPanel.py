@@ -105,6 +105,9 @@ class TaskEnvironmentPanel(wx.Panel):
     self.narrativeCtrl.SetValue(p.narrative())
     self.consequencesCtrl.SetValue(p.consequences())
     self.benefitsCtrl.SetValue(p.benefits())
+    self.narrativeCtrl.setCodes(p.codes('narrative'))
+    self.consequencesCtrl.setCodes(p.codes('consequences'))
+    self.benefitsCtrl.setCodes(p.codes('benefits'))
 
     self.environmentList.Select(0)
     self.environmentList.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnEnvironmentSelected)
@@ -134,6 +137,9 @@ class TaskEnvironmentPanel(wx.Panel):
     self.narrativeCtrl.SetValue(p.narrative())
     self.consequencesCtrl.SetValue(p.consequences())
     self.benefitsCtrl.SetValue(p.benefits())
+    self.narrativeCtrl.setCodes(p.codes('narrative'))
+    self.consequencesCtrl.setCodes(p.codes('consequences'))
+    self.benefitsCtrl.setCodes(p.codes('benefits'))
     self.dependenciesCtrl.Enable()
     self.personaList.Enable() 
     self.assetList.Enable() 
@@ -146,7 +152,9 @@ class TaskEnvironmentPanel(wx.Panel):
   def OnEnvironmentDeselected(self,evt):
     self.theSelectedIdx = evt.GetIndex()
     environmentName = self.environmentList.GetItemText(self.theSelectedIdx)
-    self.theEnvironmentDictionary[environmentName] = TaskEnvironmentProperties(environmentName,self.dependenciesCtrl.GetValue(),self.personaList.dimensions(),self.assetList.dimensions(),self.caList.dimensions(),self.narrativeCtrl.GetValue(),self.consequencesCtrl.GetValue(),self.benefitsCtrl.GetValue())
+
+    envCodebook = {'narrative':self.narrativeCtrl.codes(),'consequences':self.consequencesCtrl.codes(),'benefits':self.benefitsCtrl.codes()}
+    self.theEnvironmentDictionary[environmentName] = TaskEnvironmentProperties(environmentName,self.dependenciesCtrl.GetValue(),self.personaList.dimensions(),self.assetList.dimensions(),self.caList.dimensions(),self.narrativeCtrl.GetValue(),self.consequencesCtrl.GetValue(),self.benefitsCtrl.GetValue(),envCodebook)
     self.dependenciesCtrl.SetValue('')
     self.personaList.setEnvironment('')
     self.assetList.setEnvironment('')
@@ -158,6 +166,9 @@ class TaskEnvironmentPanel(wx.Panel):
     self.narrativeCtrl.SetValue('')
     self.consequencesCtrl.SetValue('')
     self.benefitsCtrl.SetValue('')
+    self.narrativeCtrl.setCodes({})
+    self.consequencesCtrl.setCodes({})
+    self.benefitsCtrl.setCodes({})
     self.theSelectedIdx = -1
     self.dependenciesCtrl.Disable()
     self.personaList.Disable() 
@@ -183,6 +194,9 @@ class TaskEnvironmentPanel(wx.Panel):
     self.narrativeCtrl.SetValue('')
     self.consequencesCtrl.SetValue('')
     self.benefitsCtrl.SetValue('')
+    self.narrativeCtrl.setCodes({})
+    self.consequencesCtrl.setCodes({})
+    self.benefitsCtrl.setCodes({})
     self.dependenciesCtrl.Enable()
     self.personaList.Enable() 
     self.assetList.Enable() 
@@ -205,6 +219,10 @@ class TaskEnvironmentPanel(wx.Panel):
       self.narrativeCtrl.SetValue(p.narrative())
       self.consequencesCtrl.SetValue(p.consequences())
       self.benefitsCtrl.SetValue(p.benefits())
+      self.narrativeCtrl.setCodes(p.codes('narrative'))
+      self.consequencesCtrl.setCodes(p.codes('consequences'))
+      self.benefitsCtrl.setCodes(p.codes('benefits'))
+
       self.dependenciesCtrl.Enable()
       self.personaList.Enable() 
       self.assetList.Enable() 
@@ -229,6 +247,9 @@ class TaskEnvironmentPanel(wx.Panel):
     self.narrativeCtrl.SetValue('')
     self.consequencesCtrl.SetValue('')
     self.benefitsCtrl.SetValue('')
+    self.narrativeCtrl.setCodes({})
+    self.consequencesCtrl.setCodes({})
+    self.benefitsCtrl.setCodes({})
     self.dependenciesCtrl.Disable()
     self.personaList.Disable() 
     self.assetList.Disable() 
@@ -241,15 +262,6 @@ class TaskEnvironmentPanel(wx.Panel):
   def environmentProperties(self):
     if (self.theSelectedIdx != -1):
       environmentName = self.environmentList.GetItemText(self.theSelectedIdx)
-      self.theEnvironmentDictionary[environmentName] = TaskEnvironmentProperties(environmentName,self.dependenciesCtrl.GetValue(),self.personaList.dimensions(),self.assetList.dimensions(),self.caList.dimensions(),self.narrativeCtrl.GetValue(),self.consequencesCtrl.GetValue(),self.benefitsCtrl.GetValue())
+      envCodebook = {'narrative':self.narrativeCtrl.codes(),'consequences':self.consequencesCtrl.codes(),'benefits':self.benefitsCtrl.codes()}
+      self.theEnvironmentDictionary[environmentName] = TaskEnvironmentProperties(environmentName,self.dependenciesCtrl.GetValue(),self.personaList.dimensions(),self.assetList.dimensions(),self.caList.dimensions(),self.narrativeCtrl.GetValue(),self.consequencesCtrl.GetValue(),self.benefitsCtrl.GetValue(),envCodebook)
     return self.theEnvironmentDictionary.values() 
-
-  def codes(self,sectName):
-    if sectName == 'narrative':
-      return self.narrativeCtrl.codes()
-    elif sectName == 'benefits':
-      return self.benefitsCtrl.codes()
-    elif sectName == 'consequences':
-      return self.consequencesCtrl.codes()
-    else:
-      return {}

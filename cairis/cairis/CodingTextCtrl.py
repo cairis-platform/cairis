@@ -70,6 +70,10 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
         self.codingMenu.Enable(armid.BVNTC_CMDUNLINKCODES_ID,False) 
 
   def addCode(self,codeName):
+    self.theSelection = self.GetStringSelection()
+    selRange = self.GetSelectionRange()
+    self.theSelectionStart = selRange.GetStart()
+    self.theSelectionEnd = selRange.GetEnd()
     urlStyle = wx.richtext.TextAttrEx()
     urlStyle.SetTextColour(wx.LIGHT_GREY)
     urlStyle.SetFontUnderlined(True)

@@ -399,7 +399,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.thePersonas.append(p)
       self.resetPersonaAttributes()
     elif name == 'persona_environment':
-      p = PersonaEnvironmentProperties(self.theEnvironmentName,self.isDirect,self.theNarrative,self.theRoles)
+      p = PersonaEnvironmentProperties(self.theEnvironmentName,self.isDirect,self.theNarrative,self.theRoles,{'narrative':{}})
       self.theEnvironmentProperties.append(p)
       self.resetPersonaEnvironmentAttributes()
     elif name == 'external_document':
@@ -423,11 +423,11 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.theTaskCharacteristics.append(p)
       self.resetTaskCharacteristicAttributes()
     elif name == 'task':
-      p = TaskParameters(self.theName,self.theCode,self.theObjective,self.isAssumptionTask,self.theAuthor,self.theEnvironmentProperties,{})
+      p = TaskParameters(self.theName,self.theCode,self.theObjective,self.isAssumptionTask,self.theAuthor,self.theEnvironmentProperties)
       self.theTasks.append(p)
       self.resetTaskAttributes()
     elif name == 'task_environment':
-      p = TaskEnvironmentProperties(self.theEnvironmentName,self.theDependencies,self.theTaskPersonas,self.theConcerns,self.theConcernAssociations,self.theNarrative,self.theConsequences,self.theBenefits)
+      p = TaskEnvironmentProperties(self.theEnvironmentName,self.theDependencies,self.theTaskPersonas,self.theConcerns,self.theConcernAssociations,self.theNarrative,self.theConsequences,self.theBenefits,{'narrative':{},'consequences':{},'benefits':{}})
       self.theEnvironmentProperties.append(p)
       self.resetTaskEnvironmentAttributes()
     elif name == 'exception':

@@ -45,6 +45,8 @@ artifact_section
 internal_document_code
 persona_code
 task_code
+persona_environment_code
+task_environment_code
 document_reference
 asset_reference
 attacker_reference
