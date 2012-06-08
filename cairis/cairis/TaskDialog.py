@@ -35,6 +35,8 @@ class TaskDialog(BaseDialog):
     self.theObjective = ''
     self.isAssumption = False
     self.theAuthor = ''
+    self.theCodes = {'narrative':{}, 'benefits':{}, 'consequences':{} }
+    
     self.theEnvironmentProperties = []
     self.panel = 0
     self.buildControls(parameters)
@@ -67,6 +69,10 @@ class TaskDialog(BaseDialog):
     self.isAssumption = assumptionCtrl.GetValue()
     self.theObjective = objectiveCtrl.GetValue()
     self.theEnvironmentProperties = environmentCtrl.environmentProperties()
+    self.theCodes['narrative'] = environmentCtrl.codes('narrative')
+    self.theCodes['benefits'] = environmentCtrl.codes('benefits')
+    self.theCodes['consequences'] = environmentCtrl.codes('consequences')
+
     commitLabel = self.theCommitVerb +  ' Task' 
 
     if (len(self.theName) == 0):
@@ -112,6 +118,6 @@ class TaskDialog(BaseDialog):
     self.EndModal(armid.TASK_BUTTONCOMMIT_ID)
 
   def parameters(self): 
-    parameters = TaskParameters(self.theName,self.theShortCode,self.theObjective,self.isAssumption,self.theAuthor,self.theEnvironmentProperties)
+    parameters = TaskParameters(self.theName,self.theShortCode,self.theObjective,self.isAssumption,self.theAuthor,self.theEnvironmentProperties,self.theCodes)
     parameters.setId(self.theTaskId)
     return parameters

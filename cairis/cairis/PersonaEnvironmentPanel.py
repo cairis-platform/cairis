@@ -152,3 +152,9 @@ class PersonaEnvironmentPanel(wx.Panel):
       environmentName = self.environmentList.GetItemText(self.theSelectedIdx)
       self.theEnvironmentDictionary[environmentName] = PersonaEnvironmentProperties(environmentName,str(self.directCtrl.GetValue()),self.descriptionCtrl.GetValue(),self.roleList.dimensions())
     return self.theEnvironmentDictionary.values() 
+
+  def codes(self):
+    return self.descriptionCtrl.codes()
+
+  def setCodes(self,codes):
+    return self.descriptionCtrl.setCodes(codes)

@@ -395,7 +395,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'persona':
-      p = PersonaParameters(self.theName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theImage,self.isAssumptionPersona,self.theType,self.theEnvironmentProperties)
+      p = PersonaParameters(self.theName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theImage,self.isAssumptionPersona,self.theType,self.theEnvironmentProperties,{})
       self.thePersonas.append(p)
       self.resetPersonaAttributes()
     elif name == 'persona_environment':
@@ -423,7 +423,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.theTaskCharacteristics.append(p)
       self.resetTaskCharacteristicAttributes()
     elif name == 'task':
-      p = TaskParameters(self.theName,self.theCode,self.theObjective,self.isAssumptionTask,self.theAuthor,self.theEnvironmentProperties)
+      p = TaskParameters(self.theName,self.theCode,self.theObjective,self.isAssumptionTask,self.theAuthor,self.theEnvironmentProperties,{})
       self.theTasks.append(p)
       self.resetTaskAttributes()
     elif name == 'task_environment':

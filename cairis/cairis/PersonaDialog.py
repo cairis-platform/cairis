@@ -39,6 +39,7 @@ class PersonaDialog(wx.Dialog):
     self.theSkills = ''
     self.theImage = ''
     self.theType = ''
+    self.theCodes = {'activities':{}, 'attitudes':{}, 'motivations':{}, 'skills':{}, 'narrative':{} }
     self.theEnvironmentProperties = []
     self.panel = 0
     self.buildControls(parameters)
@@ -92,13 +93,19 @@ class PersonaDialog(wx.Dialog):
     self.theType = typeCtrl.GetValue()
     self.isAssumption = assumptionCtrl.GetValue()
     self.theActivities = activitiesCtrl.GetValue()
+    self.theCodes['activities'] = activitiesCtrl.codes()
     self.theAttitudes = attitudesCtrl.GetValue()
+    self.theCodes['attitudes'] = attitudesCtrl.codes()
     self.theAptitudes = aptitudesCtrl.GetValue()
+    self.theCodes['aptitudes'] = aptitudesCtrl.codes()
     self.theMotivations = motivationsCtrl.GetValue()
+    self.theCodes['motivations'] = motivationsCtrl.codes()
     self.theSkills = skillsCtrl.GetValue()
+    self.theCodes['skills'] = skillsCtrl.codes()
     self.theImage = imageCtrl.personaImage()
     
     self.theEnvironmentProperties = environmentCtrl.environmentProperties()
+    self.theCodes['narrative'] = environmentCtrl.codes()
 
     commitLabel = self.theCommitVerb + ' persona'
 
@@ -165,6 +172,6 @@ class PersonaDialog(wx.Dialog):
       self.EndModal(armid.PERSONA_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = PersonaParameters(self.thePersonaName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theImage,self.isAssumption,self.theType,self.theEnvironmentProperties)
+    parameters = PersonaParameters(self.thePersonaName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theImage,self.isAssumption,self.theType,self.theEnvironmentProperties,self.theCodes)
     parameters.setId(self.thePersonaId)
     return parameters

@@ -17,7 +17,7 @@
 
 
 class Persona:
-  def __init__(self,personaId,personaName,pActivities,pAttitudes,pAptitudes,pMotivations,pSkills,image,isAssumption,pType,environmentProperties):
+  def __init__(self,personaId,personaName,pActivities,pAttitudes,pAptitudes,pMotivations,pSkills,image,isAssumption,pType,environmentProperties,pCodes):
     self.theId = personaId
     self.theName = personaName
     self.theActivities = pActivities
@@ -33,6 +33,7 @@ class Persona:
     for p in self.theEnvironmentProperties:
       environmentName = p.name()
       self.theEnvironmentDictionary[environmentName] = p
+    self.theCodes = pCodes
 
   def id(self): return self.theId
   def name(self): return self.theName
@@ -45,6 +46,7 @@ class Persona:
   def assumption(self): return self.isAssumption
   def type(self): return self.thePersonaType
   def environmentProperties(self): return self.theEnvironmentProperties
+  def codes(self,sectName): return self.theCodes[sectName]
 
   def narrative(self,environmentName,dupProperty):
     if (dupProperty == ''):

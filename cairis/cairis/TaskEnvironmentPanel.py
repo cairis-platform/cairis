@@ -243,3 +243,13 @@ class TaskEnvironmentPanel(wx.Panel):
       environmentName = self.environmentList.GetItemText(self.theSelectedIdx)
       self.theEnvironmentDictionary[environmentName] = TaskEnvironmentProperties(environmentName,self.dependenciesCtrl.GetValue(),self.personaList.dimensions(),self.assetList.dimensions(),self.caList.dimensions(),self.narrativeCtrl.GetValue(),self.consequencesCtrl.GetValue(),self.benefitsCtrl.GetValue())
     return self.theEnvironmentDictionary.values() 
+
+  def codes(self,sectName):
+    if sectName == 'narrative':
+      return self.narrativeCtrl.codes()
+    elif sectName == 'benefits':
+      return self.benefitsCtrl.codes()
+    elif sectName == 'consequences':
+      return self.consequencesCtrl.codes()
+    else:
+      return {}

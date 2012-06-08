@@ -19,7 +19,7 @@
 import ObjectCreationParameters
 
 class PersonaParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,name,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType,properties):
+  def __init__(self,name,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType,properties,pCodes):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = name
     self.theActivities = activities
@@ -31,6 +31,7 @@ class PersonaParameters(ObjectCreationParameters.ObjectCreationParameters):
     self.isAssumption = isAssumption
     self.thePersonaType = pType
     self.theEnvironmentProperties = properties
+    self.theCodes = pCodes
 
   def name(self): return self.theName
   def attitudes(self): return self.theAttitudes
@@ -42,3 +43,4 @@ class PersonaParameters(ObjectCreationParameters.ObjectCreationParameters):
   def assumption(self): return self.isAssumption
   def type(self): return self.thePersonaType
   def environmentProperties(self): return self.theEnvironmentProperties
+  def codes(self): return self.theCodes

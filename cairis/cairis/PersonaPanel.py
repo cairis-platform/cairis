@@ -80,5 +80,13 @@ class PersonaPanel(BasePanel):
     motivationsCtrl.Set(persona.name(),'Motivations',persona.motivations())
     skillsCtrl.Set(persona.name(),'Skills',persona.skills())
     imageCtrl.loadImage(persona.image())
+
+    activitiesCtrl.setCodes(persona.codes('activities'))
+    attitudesCtrl.setCodes(persona.codes('attitudes'))
+    aptitudesCtrl.setCodes(persona.codes('aptitudes'))
+    motivationsCtrl.setCodes(persona.codes('motivations'))
+    skillsCtrl.setCodes(persona.codes('skills'))
+
     self.environmentPanel.loadControls(persona)
+
     self.thePersonaId = persona.id()

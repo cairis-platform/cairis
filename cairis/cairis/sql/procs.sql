@@ -3011,6 +3011,7 @@ begin
   delete from environment_persona where persona_id = pId;
   delete from persona_role where persona_id = pId;
   delete from persona_direct where persona_id = pId;
+  delete from persona_code where persona_id = pId;
   delete from persona_narrative where persona_id = pId;
 end
 //
@@ -3294,6 +3295,7 @@ begin
   delete from environment_task where task_id = scId;
   delete from task_persona where task_id = scId;
   delete from task_asset where task_id = scId;
+  delete from task_code where task_id = scId;
   delete from task_narrative where task_id = scId;
   delete from task_dependencies where task_id = scId;
   delete from task_concernassociation where task_id = scId;

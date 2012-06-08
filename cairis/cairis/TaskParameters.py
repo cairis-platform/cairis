@@ -19,7 +19,7 @@
 import ObjectCreationParameters
 
 class TaskParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,tName,tSName,tObjt,isAssumption,tAuth,cProps):
+  def __init__(self,tName,tSName,tObjt,isAssumption,tAuth,cProps,tCodes):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = tName
     self.theShortCode = tSName
@@ -27,6 +27,7 @@ class TaskParameters(ObjectCreationParameters.ObjectCreationParameters):
     self.isAssumption = isAssumption
     self.theAuthor = tAuth
     self.theEnvironmentProperties = cProps
+    self.theCodes  = tCodes
 
   def name(self): return self.theName
   def shortCode(self): return self.theShortCode
@@ -34,3 +35,4 @@ class TaskParameters(ObjectCreationParameters.ObjectCreationParameters):
   def assumption(self): return self.isAssumption
   def author(self): return self.theAuthor
   def environmentProperties(self): return self.theEnvironmentProperties
+  def codes(self): return self.theCodes

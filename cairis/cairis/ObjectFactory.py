@@ -100,7 +100,7 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'AttackerParameters'):
     return Attacker(objtId,p.name(),p.description(),p.image(),p.tags(),p.environmentProperties())
   if (p.__class__.__name__ == 'PersonaParameters'):
-    return Persona(objtId,p.name(),p.activities(),p.attitudes(),p.aptitudes(),p.motivations(),p.skills(),p.image(),p.assumption(),p.type(),p.environmentProperties())
+    return Persona(objtId,p.name(),p.activities(),p.attitudes(),p.aptitudes(),p.motivations(),p.skills(),p.image(),p.assumption(),p.type(),p.environmentProperties(),p.codes())
   if (p.__class__.__name__ == 'AssetParameters'):
     return Asset(objtId,p.name(),p.shortCode(),p.description(),p.significance(),p.type(),p.critical(),p.criticalRationale(),p.tags(),p.interfaces(),p.environmentProperties())
   if (p.__class__.__name__ == 'TemplateAssetParameters'):
@@ -140,7 +140,7 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'CountermeasureParameters'):
     return Countermeasure(objtId,p.name(),p.description(),p.type(),p.environmentProperties())
   if (p.__class__.__name__ == 'TaskParameters'):
-    return Task(objtId,p.name(),p.shortCode(),p.objective(),p.assumption(),p.author(),p.environmentProperties())
+    return Task(objtId,p.name(),p.shortCode(),p.objective(),p.assumption(),p.author(),p.environmentProperties(),p.codes())
   if (p.__class__.__name__ == 'UseCaseParameters'):
     return UseCase(objtId,p.name(),p.author(),p.code(),p.actors(),p.description(),p.environmentProperties())
   if (p.__class__.__name__ == 'MisuseCaseParameters'):

@@ -1742,7 +1742,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           roles = self.dimensionRoles(personaId,environmentId,'persona')
           properties = PersonaEnvironmentProperties(environmentName,directFlag,personaDesc,roles)
           environmentProperties.append(properties)
-        parameters = PersonaParameters(personaName,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType,environmentProperties)
+        codes = self.personaCodes(personaName)
+        parameters = PersonaParameters(personaName,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType,environmentProperties,codes)
         persona = ObjectFactory.build(personaId,parameters)
         personas[personaName] = persona
       return personas
@@ -1824,12 +1825,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       image = parameters.image()
       isAssumption = parameters.assumption()
       pType = parameters.type()
+      codes = parameters.codes()
 
       curs = self.conn.cursor()
       curs.execute('call addPersona(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(personaId,personaName,activities.encode('utf-8'),attitudes.encode('utf-8'),aptitudes.encode('utf-8'),motivations.encode('utf-8'),skills.encode('utf-8'),image,isAssumption,pType))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new persona ' + personaName
         raise DatabaseProxyException(exceptionText) 
+      self.addPersonaCodes(personaName,codes)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(personaId,'persona',environmentName)
@@ -1870,6 +1873,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     image = parameters.image()
     isAssumption = parameters.assumption()
     pType = parameters.type()
+    codes = parameters.codes()
+
     try:
       curs = self.conn.cursor()
       curs.execute('call deletePersonaComponents(%s)',(personaId))
@@ -1881,6 +1886,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating persona ' + personaName
         raise DatabaseProxyException(exceptionText) 
+      self.addPersonaCodes(personaName,codes)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(personaId,'persona',environmentName)
@@ -1931,9 +1937,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           concernAssociations = self.taskConcernAssociations(taskId,environmentId)
           properties = TaskEnvironmentProperties(environmentName,dependencies,personas,assets,concernAssociations,narrative,consequences,benefits)
           environmentProperties.append(properties)
-          parameters = TaskParameters(taskName,taskShortCode,taskObjective,isAssumption,taskAuthor,environmentProperties)
-          task = ObjectFactory.build(taskId,parameters)
-          tasks[taskName] = task
+        codes = self.personaCodes(personaName)
+        parameters = TaskParameters(taskName,taskShortCode,taskObjective,isAssumption,taskAuthor,environmentProperties,codes)
+        task = ObjectFactory.build(taskId,parameters)
+        tasks[taskName] = task
       return tasks
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -2071,6 +2078,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     taskObjective = self.conn.escape_string(parameters.objective())
     isAssumption = parameters.assumption()
     taskAuthor = parameters.author()
+    codes = parameters.codes()
     try:
       taskId = self.newId()
       curs = self.conn.cursor()
@@ -2078,6 +2086,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new task ' + taskName
         raise DatabaseProxyException(exceptionText) 
+      self.addTaskCodes(taskName,codes)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(taskId,'task',environmentName)
@@ -2126,6 +2135,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     taskObjective = parameters.objective()
     isAssumption = parameters.assumption()
     taskAuthor = parameters.author()
+    codes = parameters.codes()
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteTaskComponents(%s)',(taskId))
@@ -2136,6 +2146,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating task ' + taskName
         raise DatabaseProxyException(exceptionText) 
+      self.addTaskCodes(taskName,codes)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(taskId,'task',environmentName)
@@ -9820,6 +9831,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting codes for ' + artType + ' ' + artName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def addPersonaCodes(self,pName,codes):
+    if len(codes) > 0:
+      for sectName in ['activities','attitudes','aptitudes','motivations','skills','narrative']:
+        self.addArtifactCodes(pName,'persona',sectName,codes[sectName])
+
+  def addTaskCodes(self,tName,codes):
+    if len(codes) > 0:
+      for sectName in ['narrative','benefits','consequences']:
+        self.addArtifactCodes(tName,'task',sectName,codes[sectName])
 
   def addArtifactCodes(self,artName,artType,sectName,docCodes):
     for (startIdx,endIdx) in docCodes:
@@ -9838,3 +9858,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error adding code ' + docCode + ' to '  + artType + ' ' + artName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def personaCodes(self,pName):
+    codeBook = {}
+    for sectName in ['activities','attitudes','aptitudes','motivations','skills','narrative']:
+      codeBook[sectName] = self.artifactCodes(pName,'persona',sectName)
+    return codeBook
+
+  def taskCodes(self,tName):
+    codeBook = {}
+    for sectName in ['narrative','benefits','consequences']:
+      codeBook[sectName] = self.artifactCodes(tName,'task',sectName)
+    return codeBook

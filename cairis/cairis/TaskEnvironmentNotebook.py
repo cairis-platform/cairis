@@ -22,6 +22,7 @@ from TaskPersonaListCtrl import TaskPersonaListCtrl
 from ConcernAssociationListCtrl import ConcernAssociationListCtrl
 from NarrativeCtrl import NarrativeCtrl
 from DimensionListCtrl import DimensionListCtrl
+from CodingTextCtrl import CodingTextCtrl
 
 class SummaryPage(wx.Panel):
   def __init__(self,parent,dp):
@@ -68,7 +69,7 @@ class MLTextPage(wx.Panel):
     narrativeBox = wx.StaticBox(self,-1)
     narrativeBoxSizer = wx.StaticBoxSizer(narrativeBox,wx.HORIZONTAL)
     topSizer.Add(narrativeBoxSizer,1,wx.EXPAND)
-    self.narrativeCtrl = wx.TextCtrl(self,winId,'',style=wx.TE_MULTILINE)
+    self.narrativeCtrl = CodingTextCtrl(self,winId)
     narrativeBoxSizer.Add(self.narrativeCtrl,1,wx.EXPAND)
     self.SetSizer(topSizer)
 

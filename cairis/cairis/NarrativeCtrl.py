@@ -20,6 +20,7 @@ import wx
 import armid
 from ARM import *
 from Borg import Borg
+from CodingTextCtrl import CodingTextCtrl
 from SingleGoalDialog import SingleGoalDialog
 from SingleObstacleDialog import SingleObstacleDialog
 from SingleRequirementDialog import SingleRequirementDialog
@@ -27,9 +28,9 @@ from GoalAssociationParameters import GoalAssociationParameters
 import RequirementFactory
 
 
-class NarrativeCtrl(wx.TextCtrl):
+class NarrativeCtrl(CodingTextCtrl):
   def __init__(self,parent,winId):
-    wx.TextCtrl.__init__(self,parent,winId,'',style=wx.TE_MULTILINE)
+    CodingTextCtrl.__init__(self,parent,winId)
     b = Borg()
     self.dbProxy = b.dbProxy
     self.theTaskName = ''
@@ -39,6 +40,8 @@ class NarrativeCtrl(wx.TextCtrl):
     self.theDimMenu.Append(armid.NARCTRL_MENUGOAL_ID,'Refining Goal')
     self.theDimMenu.Append(armid.NARCTRL_MENUOBSTACLE_ID,'Refining Obstacle')
     self.theDimMenu.Append(armid.NARCTRL_MENUREQUIREMENT_ID,'Refining Requirement')
+    self.theDimMenu.Append(armid.BVNTC_MENU_CODING,'Coding',self.codingMenu)
+
     self.Bind(wx.EVT_RIGHT_DOWN,self.OnRightDown)
     wx.EVT_MENU(self.theDimMenu,armid.NARCTRL_MENUGOAL_ID,self.onGoal)
     wx.EVT_MENU(self.theDimMenu,armid.NARCTRL_MENUOBSTACLE_ID,self.onObstacle)
