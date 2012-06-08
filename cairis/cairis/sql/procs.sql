@@ -739,6 +739,7 @@ drop procedure if exists documentCodes;
 drop procedure if exists artifactCodes;
 drop procedure if exists addDocumentCode;
 drop procedure if exists codeNames;
+drop procedure if exists addArtifactCode;
 
 delimiter //
 
@@ -18966,13 +18967,39 @@ begin
   prepare stmt from @sql;
   execute stmt;
   deallocate prepare stmt;
-
   set artId = @artId;
+
   set codeSql = concat('select c.name,ac.start_index,ac.end_index from ',artType,'_code ac, code c where ac.',artType,'_id = ',artId,' and ac.section_id = ',sectId,' and ac.code_id = c.id order by 1,2,3');
   set @sql = codeSql;
   prepare stmt from @sql;
   execute stmt;
   deallocate prepare stmt;
+end
+//
+
+create procedure addArtifactCode(in artName text, in artType text, in sectName text, in docCode text, in startIdx int, in endIdx int)
+begin
+  declare codeId int;
+  declare sectId int;
+  declare artId int;
+  declare artIdSql varchar(4000);
+  declare codeSql varchar(4000);
+
+  select id into sectId from artifact_section where name = sectName;
+  select id into codeId from code where name = docCode;
+  if codeId is null
+  then
+    call newId2(codeId);
+    call addCode(codeId,docCode,'None','None','None');
+  end if;
+
+  set artIdSql = concat('select id into @artId from ',artType,' where name = "',artName,'" limit 1');
+  set @sql = artIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+
+  set codeSql = concat('insert into ',artType,'_code(',artType,'_id,code_id,section_id,start_index,end_index) values (',artId,',',codeId,',',sectId,',',startIdx,',',endIdx,')');
 end
 //
 

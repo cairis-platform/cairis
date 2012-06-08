@@ -9798,3 +9798,43 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error adding code ' + docCode + ' to '  + docName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def artifactCodes(self,artName,artType,sectName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call artifactCodes(%s,%s,%s)',(artName,artType,sectName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting codes for ' + artType + ' ' + artName
+        raise DatabaseProxyException(exceptionText) 
+      codes = {}
+      for row in curs.fetchall():
+        row = list(row)
+        codeName = row[0]
+        startIdx = int(row[1])
+        endIdx = int(row[2])
+        codes[(startIdx,endIdx)] = codeName
+      curs.close()
+      return codes
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting codes for ' + artType + ' ' + artName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+
+  def addArtifactCodes(self,artName,artType,sectName,docCodes):
+    for (startIdx,endIdx) in docCodes:
+      docCode = docCodes[(startIdx,endIdx)]
+      self.addArtifactCode(artName,artType,sectName,docCode,startIdx,endIdx)
+
+  def addArtifactCode(self,artName,artType,sectName,docCode,startIdx,endIdx):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addArtifactCode(%s,%s,%s,%s,%s,%s)',(artName,artType,sectName,docCode,startIdx,endIdx))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding code ' + docCode + ' to ' + artType + ' ' + artName
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding code ' + docCode + ' to '  + artType + ' ' + artName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
