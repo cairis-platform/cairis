@@ -73,6 +73,9 @@ DROP TABLE IF EXISTS component_threat_target;
 
 DROP TABLE IF EXISTS internal_document_code;
 DROP TABLE IF EXISTS internal_document;
+DROP TABLE IF EXISTS persona_code;
+DROP TABLE IF EXISTS task_code;
+DROP TABLE IF EXISTS artifact_section;
 DROP TABLE IF EXISTS code;
 DROP TABLE IF EXISTS value_tension;
 DROP TABLE IF EXISTS tension;
@@ -2743,6 +2746,36 @@ CREATE TABLE internal_document_code (
   FOREIGN KEY(code_id) REFERENCES code(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE artifact_section (
+  id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE persona_code (
+  persona_id INT NOT NULL,
+  code_id INT NOT NULL,
+  section_id INT NOT NULL,
+  start_index INT NOT NULL,
+  end_index INT NOT NULL,
+  PRIMARY KEY(persona_id,code_id,section_id,start_index,end_index),
+  FOREIGN KEY(persona_id) REFERENCES persona(id),
+  FOREIGN KEY(code_id) REFERENCES code(id),
+  FOREIGN KEY(section_id) REFERENCES artifact_section(id)
+) ENGINE=INNODB;
+
+CREATE TABLE task_code (
+  task_id INT NOT NULL,
+  code_id INT NOT NULL,
+  section_id INT NOT NULL,
+  start_index INT NOT NULL,
+  end_index INT NOT NULL,
+  PRIMARY KEY(task_id,code_id,section_id,start_index,end_index),
+  FOREIGN KEY(task_id) REFERENCES task(id),
+  FOREIGN KEY(code_id) REFERENCES code(id),
+  FOREIGN KEY(section_id) REFERENCES artifact_section(id)
+) ENGINE=INNODB;
+
 CREATE VIEW countermeasure_vulnerability_response_target as 
   select distinct cvt.countermeasure_id,re.id response_id,cvt.vulnerability_id,cvt.environment_id from countermeasure_vulnerability_target cvt, environment_vulnerability ev, risk ri,response re where cvt.vulnerability_id = ev.vulnerability_id and cvt.environment_id = ev.environment_id and ev.vulnerability_id = ri.vulnerability_id and ri.id = re.risk_id;
 
@@ -3361,4 +3394,10 @@ insert into link_contribution (id,name) values (1,'Help');
 insert into link_contribution (id,name) values (-1,'Hurt');
 insert into link_contribution (id,name) values (-2,'SomeNegative');
 insert into link_contribution (id,name) values (-3,'Break');
-
+insert into artifact_section (id,name) values (0,'activities');
+insert into artifact_section (id,name) values (1,'attitudes');
+insert into artifact_section (id,name) values (2,'motivations');
+insert into artifact_section (id,name) values (3,'skills');
+insert into artifact_section (id,name) values (4,'narrative');
+insert into artifact_section (id,name) values (5,'benefits');
+insert into artifact_section (id,name) values (6,'consequences');

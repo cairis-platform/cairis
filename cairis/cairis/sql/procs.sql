@@ -736,6 +736,7 @@ drop procedure if exists updateCode;
 drop procedure if exists getCodes;
 drop procedure if exists delete_code;
 drop procedure if exists documentCodes;
+drop procedure if exists artifactCodes;
 drop procedure if exists addDocumentCode;
 drop procedure if exists codeNames;
 
@@ -18948,6 +18949,30 @@ end
 create procedure codeNames(in environmentName text)
 begin
   select name from code order by 1;
+end
+//
+
+create procedure artifactCodes(in artName text, in artType text, in sectName text)
+begin
+  declare sectId int;
+  declare artId int; 
+  declare artIdSql varchar(4000);
+  declare codeSql varchar(4000);
+
+  select id into sectId from artifact_section where name = sectName limit 1;
+
+  set artIdSql = concat('select id into @artId from ',artType,' where name = "',artName,'" limit 1');
+  set @sql = artIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+
+  set artId = @artId;
+  set codeSql = concat('select c.name,ac.start_index,ac.end_index from ',artType,'_code ac, code c where ac.',artType,'_id = ',artId,' and ac.section_id = ',sectId,' and ac.code_id = c.id order by 1,2,3');
+  set @sql = codeSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
 end
 //
 
