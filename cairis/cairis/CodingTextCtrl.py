@@ -22,6 +22,8 @@ import armid
 from ARM import *
 from Borg import Borg
 from DimensionNameDialog import DimensionNameDialog
+from CodeDialog import CodeDialog
+from DialogClassParameters import DialogClassParameters
 
 class CodingTextCtrl(wx.richtext.RichTextCtrl):
   def __init__(self, parent, winId):
@@ -103,7 +105,11 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
     urlValue = evt.GetString()
     codeRefs = urlValue.split(',')
     codeValue = self.theCodes[(int(codeRefs[0]),int(codeRefs[1]))]
-    wx.MessageBox(codeValue,"Alphabet code")
+    b = Borg() 
+    codeObjt = b.dbProxy.dimensionObject(codeValue,'code') 
+    dlg = CodeDialog(self,DialogClassParameters(armid.CODE_ID,'View Code'))
+    dlg.load(codeObjt)
+    dlg.ShowModal()
 
   def setCodes(self,codes):
     self.theCodes = codes
@@ -114,4 +120,5 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
       urlStyle.SetFontUnderlined(True)
       codeRef = str(startIdx) + ',' + str(endIdx)
       urlStyle.SetURL(codeRef)
-      self.SetStyle(wx.richtext.RichTextRange(startIdx,endIdx),urlStyle)
+      codeRange = wx.richtext.RichTextRange(startIdx,endIdx)
+      self.SetStyle(codeRange,urlStyle)

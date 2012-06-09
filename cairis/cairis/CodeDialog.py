@@ -37,7 +37,7 @@ class CodeDialog(wx.Dialog):
   def buildControls(self,parameters):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     self.panel = CodePanel(self)
-    self.panel.buildControls(parameters.createFlag())
+    self.panel.buildControls(parameters.createFlag(),parameters.label())
     mainSizer.Add(self.panel,1,wx.EXPAND)
     self.SetSizer(mainSizer)
     wx.EVT_BUTTON(self,armid.CODE_BUTTONCOMMIT_ID,self.onCommit)

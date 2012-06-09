@@ -27,12 +27,23 @@ class CodePanel(BasePanel):
     BasePanel.__init__(self,parent,armid.CODE_ID)
     self.theId = None
     
-  def buildControls(self,isCreate,isUpdateable=True):
+  def buildControls(self,isCreate,lbl=''):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
 
     nb = CodeNotebook(self)
     mainSizer.Add(nb,1,wx.EXPAND)
-    mainSizer.Add(self.buildCommitButtonSizer(armid.CODE_BUTTONCOMMIT_ID,isCreate),0,wx.CENTER)
+    if lbl != 'View Code':
+      mainSizer.Add(self.buildCommitButtonSizer(armid.CODE_BUTTONCOMMIT_ID,isCreate),0,wx.CENTER)
+    else:
+      nameCtrl = self.FindWindowById(armid.CODE_TEXTNAME_ID)
+      descCtrl = self.FindWindowById(armid.CODE_TEXTDESCRIPTION_ID)
+      incCritCtrl = self.FindWindowById(armid.CODE_TEXTINCLUSIONCRITERIA_ID)
+      codeEgCtrl = self.FindWindowById(armid.CODE_TEXTEXAMPLE_ID)
+      nameCtrl.Disable()
+      descCtrl.Disable()
+      incCritCtrl.Disable()
+      codeEgCtrl.Disable()
+
     self.SetSizer(mainSizer)
 
   def loadControls(self,objt,isReadOnly=False):
