@@ -95,6 +95,8 @@ from PersonaCharacteristicParameters import PersonaCharacteristicParameters
 from TaskCharacteristicParameters import TaskCharacteristicParameters
 from UseCase import UseCase
 from UseCaseParameters import UseCaseParameters
+from ImpliedProcess import ImpliedProcess
+from ImpliedProcessParameters import ImpliedProcessParameters
 
 def build(objtId,p):
   if (p.__class__.__name__ == 'AttackerParameters'):
@@ -173,5 +175,7 @@ def build(objtId,p):
     return PersonaCharacteristic(objtId,p.persona(),p.qualifier(),p.behaviouralVariable(),p.characteristic(),p.grounds(),p.warrant(),p.backing(),p.rebuttal())
   if (p.__class__.__name__ == 'TaskCharacteristicParameters'):
     return TaskCharacteristic(objtId,p.task(),p.qualifier(),p.characteristic(),p.grounds(),p.warrant(),p.backing(),p.rebuttal())
+  if (p.__class__.__name__ == 'ImpliedProcessParameters'):
+    return ImpliedProcess(objtId,p.name(),p.description(),p.persona(),p.network(),p.specification())
   else:
     raise UnknownParameterClass(str(objtId))

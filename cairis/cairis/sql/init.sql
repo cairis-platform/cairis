@@ -78,7 +78,7 @@ DROP TABLE IF EXISTS persona_code;
 DROP TABLE IF EXISTS task_environment_code;
 DROP TABLE IF EXISTS task_code;
 DROP TABLE IF EXISTS artifact_section;
-DROP TABLE IF EXISTS code_network_set;
+DROP TABLE IF EXISTS persona_implied_process_network;
 DROP TABLE IF EXISTS persona_implied_process;
 DROP TABLE IF EXISTS persona_code_network;
 DROP TABLE IF EXISTS code;
@@ -2753,23 +2753,23 @@ CREATE TABLE persona_code_network (
   FOREIGN KEY(persona_id) REFERENCES persona(id)
 ) ENGINE=INNODB;
 
-CREATE TABLE code_network_set (
-  id INT NOT NULL,
-  code_network_id INT NOT NULL,
-  PRIMARY KEY(id),
-  FOREIGN KEY(code_network_id) REFERENCES persona_code_network(id)
-) ENGINE=INNODB;
 
 CREATE TABLE persona_implied_process (
   id INT NOT NULL,
   name VARCHAR(200) NOT NULL,
   description VARCHAR(2000) NOT NULL,
   persona_id INT NOT NULL,
-  implied_code_network_id INT NOT NULL,
   specification VARCHAR(2000) NOT NULL,
   PRIMARY KEY(id),
-  FOREIGN KEY(persona_id) REFERENCES persona(id),
-  FOREIGN KEY(implied_code_network_id) REFERENCES code_network_set(id)
+  FOREIGN KEY(persona_id) REFERENCES persona(id)
+) ENGINE=INNODB;
+
+CREATE TABLE persona_implied_process_network (
+  persona_implied_process_id INT NOT NULL,
+  persona_code_network_id INT NOT NULL,
+  PRIMARY KEY(persona_implied_process_id,persona_code_network_id),
+  FOREIGN KEY(persona_implied_process_id) REFERENCES persona_implied_process(id),
+  FOREIGN KEY(persona_code_network_id) REFERENCES persona_code_network(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE internal_document (

@@ -745,6 +745,13 @@ drop procedure if exists addArtifactEnvironmentCode;
 drop procedure if exists addArtifactCodeNetwork;
 drop procedure if exists artifactCodeNetwork;
 drop procedure if exists deleteArtifactCodeNetwork;
+drop procedure if exists getImpliedProcesses;
+drop procedure if exists addImpliedProcess;
+drop procedure if exists updateImpliedProcess;
+drop procedure if exists deleteImpliedProcessComponents;
+drop procedure if exists delete_implied_process;
+drop procedure if exists impliedProcessNetwork;
+drop procedure if exists addImpliedProcessNetworkRelationship;
 
 delimiter //
 
@@ -19147,6 +19154,73 @@ begin
   execute stmt;
   deallocate prepare stmt;
 
+end
+//
+
+create procedure getImpliedProcesses(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select ip.id,ip.name,ip.description,p.name,ip.specification from persona_implied_process ip, persona p where ip.persona_id = p.id;
+  else
+    select ip.id,ip.name,ip.description,p.name,ip.specification from persona_implied_process ip, persona p where ip.id = constraintId and  ip.persona_id = p.id;
+  end if;
+end
+//
+
+create procedure addImpliedProcess(in ipId int, in ipName text, in ipDesc text, in pName text, in ipSpec text)
+begin
+  declare personaId int;
+  select id into personaId from persona where name = pName;
+  insert into persona_implied_process(id,name,description,persona_id,specification) values (ipId,ipName,ipDesc,personaId,ipSpec);
+end
+//
+
+create procedure updateImpliedProcess(in ipId int, in ipName text, in ipDesc text, in pName text, in ipSpec text)
+begin
+  declare personaId int;
+  select id into personaId from persona where name = pName;
+  update persona_implied_process set name = ipName, description = ipDesc, persona_id = personaId, specification = ipSpec where id = ipId;
+end
+//
+
+create procedure deleteImpliedProcessComponents(in ipId int)
+begin
+  delete from persona_implied_process_network where persona_implied_process_id = ipId;
+end
+//
+
+create procedure delete_implied_process(in ipId int)
+begin
+  call deleteImpliedProcessComponents(ipId);
+  delete from persona_implied_process where id = ipId;
+end
+//
+
+create procedure impliedProcessNetwork(in ipName text)
+begin
+  declare ipId int;
+  select id into ipId from persona_implied_process where name = ipName;
+  select fc.name, tc.name, rt.name from persona_code_network pcn, code fc, code tc, relationship_type rt, persona_implied_process_network pipn where pipn.persona_implied_process_id = ipId and pipn.persona_code_network_id = pcn.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id;
+end
+//
+
+create procedure addImpliedProcessNetworkRelationship(in ipId int, in personaName text, in fromName text, in toName text, in rType text)
+begin
+  declare pId int;
+  declare fromId int;
+  declare toId int;
+  declare rTypeId int;
+  declare pcnId int;
+
+  select id into pId from persona where name = personaName limit 1;
+  select id into fromId from code where name = fromName limit 1;
+  select id into toId from code where name = toName limit 1;
+  select id into rTypeId from relationship_type where name = rType limit 1;
+
+  select id into pcnId from persona_code_network where persona_id = pId and from_code_id = fromId and to_code_id = toId and relationship_type_id = rTypeId limit 1;
+
+  insert into persona_implied_process_network(persona_implied_process_id,persona_code_network_id) values (ipId,pcnId);
 end
 //
 

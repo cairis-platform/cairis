@@ -23,6 +23,22 @@ from BasePanel import BasePanel
 from CodeNetworkView import CodeNetworkView
 from CodeNetworkModel import CodeNetworkModel
 
+class SummaryPage(wx.Panel):
+  def __init__(self,parent):
+    wx.Panel.__init__(self,parent,armid.IMPLIEDPROCESS_PAGESUMMARY_ID)
+    topSizer = wx.BoxSizer(wx.VERTICAL)
+
+    nameBox = wx.StaticBox(self,-1,'Name')
+    nameBoxSizer = wx.StaticBoxSizer(nameBox,wx.HORIZONTAL)
+    topSizer.Add(nameBoxSizer,0,wx.EXPAND)
+    nameBoxSizer.Add(wx.TextCtrl(self,armid.IMPLIEDPROCESS_TEXTNAME_ID,''),1,wx.EXPAND)
+
+    descBox = wx.StaticBox(self,-1,'Description')
+    descBoxSizer = wx.StaticBoxSizer(descBox,wx.HORIZONTAL)
+    topSizer.Add(descBoxSizer,1,wx.EXPAND)
+    descBoxSizer.Add(wx.TextCtrl(self,armid.IMPLIEDPROCESS_TEXTDESCRIPTION_ID,'None',style=wx.TE_MULTILINE),1,wx.EXPAND)
+    self.SetSizer(topSizer)
+
 class SpecificationPage(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,armid.IMPLIEDPROCESS_PAGESPECIFICATION_ID)
@@ -35,7 +51,7 @@ class SpecificationPage(wx.Panel):
     self.SetSizer(topSizer)
 
 class RelationshipPage(wx.Panel):
-  def __init__(self,parent,personaName):
+  def __init__(self,parent):
     wx.Panel.__init__(self,parent,armid.IMPLIEDPROCESS_PAGERELATIONSHIP_ID)
     topSizer = wx.BoxSizer(wx.VERTICAL)
     rshipBox = wx.StaticBox(self,-1)
@@ -49,7 +65,6 @@ class RelationshipPage(wx.Panel):
     self.codeRelationships.InsertColumn(2,'To')
     self.codeRelationships.SetColumnWidth(2,150)
     rshipBoxSizer.Add(self.codeRelationships,1,wx.EXPAND)
-    self.buildList(personaName)
     self.SetSizer(topSizer)
 
   def buildList(self,personaName):
@@ -61,18 +76,30 @@ class RelationshipPage(wx.Panel):
       self.codeRelationships.SetStringItem(idx,1,rType)
       self.codeRelationships.SetStringItem(idx,2,toName)
 
+  def highlightSet(self,rshipSet):
+    for idx in range(self.codeRelationships.GetItemCount()):
+      fromName = self.codeRelationships.GetItemText(idx)
+      rtItem = self.codeRelationships.GetItem(idx,1)
+      toItem = self.codeRelationships.GetItem(idx,2)
+      rtName = rtItem.GetText()
+      toName = toItem.GetText()
+      if (fromName,toName,rtName) in rshipSet:
+        self.codeRelationships.Select(idx) 
+
 
 class ImpliedProcessNotebook(wx.Notebook):
-  def __init__(self,parent,personaName):
+  def __init__(self,parent):
     wx.Notebook.__init__(self,parent,armid.IMPLIEDPROCESS_NOTEBOOKSPECIFICATION_ID)
-    p1 = RelationshipPage(self,personaName)
-    p2 = SpecificationPage(self)
-    self.AddPage(p1,'Relationships')
-    self.AddPage(p2,'Specification')
+    p1 = SummaryPage(self)
+    p2 = RelationshipPage(self)
+    p3 = SpecificationPage(self)
+    self.AddPage(p1,'Summary')
+    self.AddPage(p2,'Relationships')
+    self.AddPage(p3,'Specification')
 
 
 class ImpliedProcessPanel(BasePanel):
-  def __init__(self,parent,personaName):
+  def __init__(self,parent,isCreate):
     BasePanel.__init__(self,parent,armid.IMPLIEDPROCESS_ID)
     b = Borg()
     self.dbProxy = b.dbProxy
@@ -92,17 +119,34 @@ class ImpliedProcessPanel(BasePanel):
 
     idnSizer = wx.BoxSizer(wx.HORIZONTAL)
     mainSizer.Add(idnSizer,1,wx.EXPAND)
-    idnSizer.Add(ImpliedProcessNotebook(self,personaName),1,wx.EXPAND)
+    idnSizer.Add(ImpliedProcessNotebook(self),1,wx.EXPAND)
 
     self.codeRelationships = self.FindWindowById(armid.IMPLIEDPROCESS_LISTRELATIONSHIPS_ID)
     self.codeRelationships.Bind(wx.EVT_LIST_ITEM_SELECTED,self.onRelationshipAdded)
     self.codeRelationships.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.onRelationshipRemoved)
 
     self.personaCtrl = self.FindWindowById(armid.IMPLIEDPROCESS_COMBOPERSONA_ID)
-    self.personaCtrl.SetValue(personaName)
     self.personaCtrl.Bind(wx.EVT_COMBOBOX,self.onPersonaChange)
+
+    mainSizer.Add(self.buildCommitButtonSizer(armid.IMPLIEDPROCESS_BUTTONCOMMIT_ID,isCreate),0,wx.ALIGN_CENTER)
+
     self.SetSizer(mainSizer)
+
+  def loadControls(self,implProc):
+    nameCtrl = self.FindWindowById(armid.IMPLIEDPROCESS_TEXTNAME_ID)
+    descCtrl = self.FindWindowById(armid.IMPLIEDPROCESS_TEXTDESCRIPTION_ID)
+    specCtrl = self.FindWindowById(armid.IMPLIEDPROCESS_TEXTSPECIFICATION_ID)
+    nameCtrl.SetValue(implProc.name())
+    descCtrl.SetValue(implProc.description())
+    personaName = implProc.persona()
+    self.personaCtrl.SetValue(personaName)
+    self.theSelectedSet = set(implProc.network())
+
+    relationshipPage = self.FindWindowById(armid.IMPLIEDPROCESS_PAGERELATIONSHIP_ID)
+    relationshipPage.buildList(personaName)
+    relationshipPage.highlightSet(self.theSelectedSet)
     self.regenerateView(personaName)
+    specCtrl.SetValue(implProc.specification())
 
   def onRelationshipAdded(self,evt):
     personaName = self.personaCtrl.GetValue()
@@ -136,3 +180,4 @@ class ImpliedProcessPanel(BasePanel):
     self.theCodeNetwork.graph()
     self.codeNetView.reloadImage()
 
+  def dimensions(self):  return list(self.theSelectedSet)

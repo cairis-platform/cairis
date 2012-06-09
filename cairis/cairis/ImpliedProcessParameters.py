@@ -16,19 +16,19 @@
 #  under the License.
 
 
-import wx
-import armid
-import os
-from Borg import Borg
-import ARM
-from ImpliedProcessPanel import ImpliedProcessPanel
+import ObjectCreationParameters
 
-class ImpliedProcessViewer(wx.Dialog):
-  def __init__(self,parent,personaName):
-    wx.Dialog.__init__(self,parent,-1,'Implied Proces',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(500,800))
-    self.theParent = parent 
-    self.panel = 0
-    mainSizer = wx.BoxSizer(wx.VERTICAL)
-    self.panel = ImpliedProcessPanel(self,personaName)
-    mainSizer.Add(self.panel,1,wx.EXPAND)
-    self.SetSizer(mainSizer)
+class ImpliedProcessParameters(ObjectCreationParameters.ObjectCreationParameters):
+  def __init__(self,ipName,ipDesc,pName,cNet,ipSpec):
+    ObjectCreationParameters.ObjectCreationParameters.__init__(self)
+    self.theName = ipName
+    self.theDescription = ipDesc
+    self.thePersonaName = pName
+    self.theCodeNetwork = cNet
+    self.theSpecification = ipSpec
+
+  def name(self): return self.theName
+  def description(self): return self.theDescription
+  def persona(self): return self.thePersonaName
+  def network(self): return self.theCodeNetwork
+  def specification(self): return self.theSpecification

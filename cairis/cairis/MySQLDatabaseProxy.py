@@ -99,6 +99,9 @@ from ComponentViewParameters import ComponentViewParameters;
 from ComponentParameters import ComponentParameters;
 from ConnectorParameters import ConnectorParameters;
 from WeaknessTarget import WeaknessTarget
+from ImpliedProcess import ImpliedProcess
+from ImpliedProcessParameters import ImpliedProcessParameters
+
 import string
 import os
 
@@ -1273,6 +1276,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       objts = self.getReferenceSynopsis(constraintId)
     elif (dimensionTable == 'reference_contribution'):
       objts = self.getReferenceContributions(constraintId)
+    elif (dimensionTable == 'persona_implied_process'):
+      objts = self.getImpliedProcesses(constraintId)
 
     return (objts.values())[0]
 
@@ -9973,3 +9978,126 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error updating code network for ' + ' personaName (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def getImpliedProcesses(self,constraintId = -1):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getImpliedProcesses(%s)',(constraintId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining implied processes'
+        raise DatabaseProxyException(exceptionText) 
+
+      ipRows = []
+      for row in curs.fetchall():
+        row = list(row)
+        ipId = row[0]
+        ipName = row[1]
+        ipDesc = row[2]
+        pName = row[3]
+        ipSpec = row[4]
+        ipRows.append((ipId,ipName,ipDesc,pName,ipSpec))
+      curs.close()
+
+      ips = {}
+      for ipId,ipName,ipDesc,pName,ipSpec in ipRows:
+        ipNet = self.impliedProcessNetwork(ipName)
+        parameters = ImpliedProcessParameters(ipName,ipDesc,pName,ipNet,ipSpec)
+        ip = ObjectFactory.build(ipId,parameters)
+        ips[ipName] = ip
+      return ips
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting implied processes (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def impliedProcessNetwork(self,ipName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call impliedProcessNetwork(%s)',(ipName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining implied process network ' + ipName
+        raise DatabaseProxyException(exceptionText) 
+      rows = []
+      for row in curs.fetchall():
+        row = list(row)
+        fromName = row[0]
+        toName = row[1]
+        rType = row[2]
+        rows.append((fromName,toName,rType))
+      curs.close()
+      return rows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting implied process network ' + ipName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addImpliedProcess(self,parameters):
+    try:
+      ipId = self.newId()
+      ipName = parameters.name()
+      ipDesc = parameters.description()
+      pName = parameters.persona()
+      cNet = parameters.network()
+      ipSpec = parameters.specification()
+
+      curs = self.conn.cursor()
+      curs.execute('call addImpliedProcess(%s,%s,%s,%s,%s)',(ipId,ipName,ipDesc.encode('utf-8'),pName,ipSpec.encode('utf-8')))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding implied process ' + ipName
+        raise DatabaseProxyException(exceptionText) 
+      self.addImpliedProcessNetwork(ipId,pName,cNet)
+      self.conn.commit()
+      curs.close()
+      return ipId
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding implied process ' + ipName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def updateImpliedProcess(self,parameters):
+    try:
+      ipId = parameters.id()
+      ipName = parameters.name()
+      ipDesc = parameters.description()
+      pName = parameters.persona()
+      cNet = parameters.network()
+      ipSpec = parameters.specification()
+
+      curs = self.conn.cursor()
+      curs.execute('call deleteImpliedProcessComponents(%s)',(ipId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating implied process ' + ipName
+        raise DatabaseProxyException(exceptionText) 
+
+      curs.execute('call updateImpliedProcess(%s,%s,%s,%s,%s)',(ipId,ipName,ipDesc.encode('utf-8'),pName,ipSpec.encode('utf-8')))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating implied process ' + ipName
+        raise DatabaseProxyException(exceptionText) 
+      self.addImpliedProcessNetwork(ipId,pName,cNet)
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating implied process ' + ipName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addImpliedProcessNetwork(self,ipId,personaName,cNet):
+    for fromName,toName,rType in cNet:
+      self.addImpliedProcessNetworkRelationship(ipId,personaName,fromName,toName,rType)
+
+  def addImpliedProcessNetworkRelationship(self,ipId,personaName,fromName,toName,rType):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addImpliedProcessNetworkRelationship(%s,%s,%s,%s,%s)',(ipId,personaName,fromName,toName,rType))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating implied process '
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating implied process  (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteImpliedProcess(self,ipId):
+    self.deleteObject(ipId,'persona_implied_process')
+    self.conn.commit()

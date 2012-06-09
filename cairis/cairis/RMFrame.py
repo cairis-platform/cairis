@@ -78,7 +78,7 @@ from ConceptMapModel import ConceptMapModel
 from ComponentModel import ComponentModel
 from CodeNetworkModel import CodeNetworkModel
 from CodeNetworkViewer import CodeNetworkViewer
-from ImpliedProcessViewer import ImpliedProcessViewer
+from ImpliedProcessesDialog import ImpliedProcessesDialog
 import DocumentBuilder
 from itertools import izip
 import gtk
@@ -295,7 +295,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_APMODEL,self.OnViewAPModel)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ATMODEL,self.OnViewATModel)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_CODENETWORK,self.OnViewCodeNetwork)
-    wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_IMPLIEDPROCESSES,self.OnViewImpliedProcesses)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_IMPLIEDPROCESSES,self.OnImpliedProcesses)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_TRACEABILITY,self.OnViewTraceability)
 
     wx.EVT_MENU(self,armid.RMFRAME_MENU_GRID_REQUIREMENTS,self.OnGridRequirements)
@@ -1784,24 +1784,13 @@ class RMFrame(wx.Frame):
       dlg.Destroy()
       return
 
-  def OnViewImpliedProcesses(self,event):
-    dialog = None
+  def OnImpliedProcesses(self,event):
     try:
-      proxy = self.b.dbProxy
-      personas = proxy.getDimensionNames('persona')
-      cDlg = DimensionNameDialog(self,'persona',personas,'Select')
-      if (cDlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
-        personaName = cDlg.dimensionName()
-        cDlg.Destroy() 
-        dialog = ImpliedProcessViewer(self,personaName)
-        dialog.ShowModal()
-        dialog.Destroy()
-      else:
-        cDlg.Destroy() 
+      dialog = ImpliedProcessesDialog(self)
+      dialog.ShowModal()
+      dialog.Destroy()
     except ARMException,errorText:
-      if (dialog != None):
-        dialog.destroy()
-      dlg = wx.MessageDialog(self,str(errorText),'View Implied Process',wx.OK | wx.ICON_ERROR)
+      dlg = wx.MessageDialog(self,str(errorText),'Edit Implied Processes',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return
