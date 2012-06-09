@@ -24,7 +24,7 @@ import os
 import ARM
 
 class CodeNetworkModel:
-  def __init__(self,codeNetwork,personaName):
+  def __init__(self,codeNetwork,personaName,graphName = 'codenetwork'):
     self.theCodeNetwork = codeNetwork
     self.thePersonaName = personaName
     b = Borg()
@@ -33,8 +33,8 @@ class CodeNetworkModel:
     self.theGraph.set_graph_defaults(rankdir='LR')
     self.theGraph.set_node_defaults(shape='rectangle')
     self.theGraph.set_edge_defaults(arrowhead='vee')
-    self.theGraphName = b.tmpDir + '/codenetwork.dot'
-    self.theGraphImage = b.tmpDir + '/codenetwork.png'
+    self.theGraphName = b.tmpDir + '/' + graphName + '.dot'
+    self.theGraphImage = b.tmpDir + '/' + graphName + '.png'
 
   def buildNode(self,objtName):
     self.theGraph.add_node(pydot.Node(objtName))

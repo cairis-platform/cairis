@@ -18,26 +18,42 @@
 
 import wx
 import armid
-from datetime import datetime
-from RevisionEntryDialog import RevisionEntryDialog
+from CodeRelationshipDialog import CodeRelationshipDialog
+from Borg import Borg
 
-class RevisionListCtrl(wx.ListCtrl):
-  def __init__(self,parent):
-    wx.ListCtrl.__init__(self,parent,armid.PROJECTSETTINGS_LISTREVISIONS_ID,size=wx.DefaultSize,style=wx.LC_REPORT | wx.LC_SORT_ASCENDING)
-    self.InsertColumn(0,'No')
-    self.SetColumnWidth(0,100)
-    self.InsertColumn(1,'Date')
-    self.SetColumnWidth(1,100)
-    self.InsertColumn(2,'Remarks')
-    self.SetColumnWidth(2,100)
+class CodeRelationshipListCtrl(wx.ListCtrl):
+  def __init__(self,parent,personaName):
+    wx.ListCtrl.__init__(self,parent,armid.CODERELATIONSHIP_LISTRELATIONSHIPS_ID,size=wx.DefaultSize,style=wx.LC_REPORT | wx.LC_SORT_ASCENDING)
+    b = Borg()
+    self.dbProxy = b.dbProxy
+
+    self.rtLookup = {'associated':'==','implies':'=>','conflict':'<>','part-of':'[]'}
+
+
+    self.InsertColumn(0,'From')
+    self.SetColumnWidth(0,150)
+    self.InsertColumn(1,'Relationship')
+    self.SetColumnWidth(1,75)
+    self.InsertColumn(2,'To')
+    self.SetColumnWidth(2,150)
     self.theSelectedIdx = -1
     self.theLastRevision = 0
     self.theMenu = wx.Menu()
-    self.theMenu.Append(armid.CONTRIBUTORLISTCTRL_MENUADD_ID,'Add')
+    self.theMenu.Append(armid.CODERELATIONSHIPLISTCTRL_MENUADD_ID,'Add')
+    self.theMenu.Append(armid.CODERELATIONSHIPLISTCTRL_MENUDELETE_ID,'Delete')
     self.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK,self.OnRightDown)
     self.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnItemSelected)
     self.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.OnItemDeselected)
-    wx.EVT_MENU(self.theMenu,armid.CONTRIBUTORLISTCTRL_MENUADD_ID,self.onAddEntry)
+    self.Bind(wx.EVT_LIST_ITEM_ACTIVATED,self.onItemActivated)
+
+    wx.EVT_MENU(self.theMenu,armid.CODERELATIONSHIPLISTCTRL_MENUADD_ID,self.onAddRelationship)
+    wx.EVT_MENU(self.theMenu,armid.CODERELATIONSHIPLISTCTRL_MENUDELETE_ID,self.onDeleteRelationship)
+
+    for fromName,toName,rType in self.dbProxy.personaCodeNetwork(personaName):
+      idx = self.GetItemCount()
+      self.InsertStringItem(idx,fromName)
+      self.SetStringItem(idx,1,rType)
+      self.SetStringItem(idx,2,toName)
 
   def OnItemSelected(self,evt):
     self.theSelectedIdx = evt.GetIndex()
@@ -48,31 +64,46 @@ class RevisionListCtrl(wx.ListCtrl):
   def OnRightDown(self,evt):
     self.PopupMenu(self.theMenu)
 
-  def onAddEntry(self,evt):
-    dlg = RevisionEntryDialog(self)
-    if (dlg.ShowModal() == armid.REVISIONENTRY_BUTTONCOMMIT_ID):
-      revRemarks = dlg.remarks()
-      self.theLastRevision += 1
-      revNo = self.theLastRevision
-      revDate = datetime.now().strftime("%y-%m-%d %H:%M:%S")
+  def onAddRelationship(self,evt):
+    dlg = CodeRelationshipDialog(self)
+    if (dlg.ShowModal() == armid.CODERELATIONSHIP_BUTTONADD_ID):
       idx = self.GetItemCount()
-      self.InsertStringItem(idx,str(revNo))
-      self.SetStringItem(idx,1,revDate)
-      self.SetStringItem(idx,2,revRemarks)
+      fromName = dlg.fromName()
+      toName = dlg.toName()
+      rshipType = dlg.relationship()
+      self.InsertStringItem(idx,fromName)
+      self.SetStringItem(idx,1,rshipType)
+      self.SetStringItem(idx,2,toName)
 
-  def load(self,entries):
-    for revNo,revDate,revRemarks in entries:
-      idx = self.GetItemCount()
-      self.InsertStringItem(idx,str(revNo))
-      self.theLastRevision = revNo
-      self.SetStringItem(idx,1,revDate)
-      self.SetStringItem(idx,2,revRemarks)
+  def onItemActivated(self,evt):
+    fromName = self.GetItemText(self.theSelectedIdx)
+    rType = self.GetItem(self.theSelectedIdx,1)
+    toName = self.GetItem(self.theSelectedIdx,2)
+    dlg = CodeRelationshipDialog(self,fromName,toName.GetText(),rType.GetText())
+    if (dlg.ShowModal() == armid.CODERELATIONSHIP_BUTTONADD_ID):
+      fromName = dlg.fromName()
+      toName = dlg.toName()
+      rshipType = dlg.relationship()
+      self.SetStringItem(self.theSelectedIdx,0,fromName)
+      self.SetStringItem(self.theSelectedIdx,1,rshipType)
+      self.SetStringItem(self.theSelectedIdx,2,toName)
+
+
+  def onDeleteRelationship(self,evt):
+    if (self.theSelectedIdx == -1):
+      errorText = 'No relatioship selected'
+      errorLabel = 'Delete Code Relationship'
+      dlg = wx.MessageDialog(self,errorText,errorLabel,wx.OK)
+      dlg.ShowModal()
+      dlg.Destroy()
+    else:
+      self.DeleteItem(self.theSelectedIdx)
 
   def dimensions(self):
     entries = []
     for x in range(self.GetItemCount()):
-      revNo = self.GetItemText(x)
-      revDate = self.GetItem(x,1)
-      revRemarks = self.GetItem(x,2)
-      entries.append((int(revNo),revDate.GetText(),revRemarks.GetText()))
+      fromName = self.GetItemText(x)
+      rType = self.GetItem(x,1)
+      toName = self.GetItem(x,2)
+      entries.append((fromName,toName.GetText(),rType.GetText()))
     return entries

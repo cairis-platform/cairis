@@ -25,13 +25,15 @@ class CodeRelationshipDialog(wx.Dialog):
   def __init__(self,parent,fromName = '',toName = '',rType = ''):
     wx.Dialog.__init__(self,parent,armid.CODERELATIONSHIP_ID,'Add Code Relationship',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,200))
 
-    self.theFromName = ''
-    self.theToName = ''
-    self.theRelationship = ''
+    self.rtLookup = {'==':'associated','=>':'implies','<>':'conflict','[]':'part-of'}
+    self.lookupRt = {'':'','associated':'==','implies':'=>','conflict':'<>','part-of':'[]'}
+
+    self.theFromName = fromName
+    self.theToName = toName
+    self.theRelationship = self.lookupRt[rType]
     self.commitLabel = 'Add'
     mainSizer = wx.BoxSizer(wx.VERTICAL)
 
-    self.rtLookup = {'==':'associated','=>':'implies','<>':'conflict','[]':'part-of'}
 
     b = Borg()
     codeList = b.dbProxy.getDimensionNames('code')
@@ -43,6 +45,14 @@ class CodeRelationshipDialog(wx.Dialog):
     mainSizer.Add(WidgetFactory.buildAddCancelButtonSizer(self,armid.CODERELATIONSHIP_BUTTONADD_ID),0,wx.ALIGN_CENTER)
     self.SetSizer(mainSizer)
     wx.EVT_BUTTON(self,armid.CODERELATIONSHIP_BUTTONADD_ID,self.onCommit)
+
+    if self.theFromName != '':
+      fromCtrl = self.FindWindowById(armid.CODERELATIONSHIP_COMBOFROMCODE_ID)
+      toCtrl = self.FindWindowById(armid.CODERELATIONSHIP_COMBOTOCODE_ID)
+      rtCtrl = self.FindWindowById(armid.CODERELATIONSHIP_COMBORTTYPE_ID)
+      fromCtrl.SetValue(self.theFromName)
+      toCtrl.SetValue(self.theToName)
+      rtCtrl.SetValue(self.theRelationship)
 
   def load(self,fromName,toValue,rType):
     fromCtrl = self.FindWindowById(armid.CODERELATIONSHIP_COMBOFROMCODE_ID)

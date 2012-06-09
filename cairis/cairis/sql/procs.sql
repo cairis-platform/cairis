@@ -744,6 +744,7 @@ drop procedure if exists addArtifactCode;
 drop procedure if exists addArtifactEnvironmentCode;
 drop procedure if exists addArtifactCodeNetwork;
 drop procedure if exists artifactCodeNetwork;
+drop procedure if exists deleteArtifactCodeNetwork;
 
 delimiter //
 
@@ -19124,6 +19125,28 @@ begin
   prepare stmt from @sql;
   execute stmt;
   deallocate prepare stmt;
+end
+//
+
+create procedure deleteArtifactCodeNetwork(in artName text, in artType text)
+begin
+  declare artId int; 
+  declare artIdSql varchar(4000);
+  declare delSql varchar(4000);
+
+  set artIdSql = concat('select id into @artId from ',artType,' where name = "',artName,'" limit 1');
+  set @sql = artIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set artId = @artId;
+
+  set delSql = concat('delete from ',artType,'_code_network where ',artType,'_id = ',artId);
+  set @sql = delSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+
 end
 //
 

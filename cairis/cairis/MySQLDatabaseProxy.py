@@ -9957,3 +9957,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error adding ' + rshipType + ' to ' + personaName + ' code network (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def updateCodeNetwork(self,personaName,rships):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call deleteArtifactCodeNetwork(%s,%s)',(personaName,'persona'))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating code network for ' + personaName
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+      self.conn.commit()
+      for fromName,toName,rshipType in rships:
+        self.addCodeRelationship(personaName,fromName,toName,rshipType)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating code network for ' + ' personaName (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

@@ -23,6 +23,7 @@ from BasePanel import BasePanel
 from CodeNetworkView import CodeNetworkView
 from CodeNetworkModel import CodeNetworkModel
 from CodeRelationshipDialog import CodeRelationshipDialog
+from CodeRelationshipEditor import CodeRelationshipEditor
 
 class CodeNetworkPanel(BasePanel):
   def __init__(self,parent,personaName,codeNet):
@@ -33,7 +34,9 @@ class CodeNetworkPanel(BasePanel):
 
     self.theViewMenu = wx.Menu()
     self.theViewMenu.Append(armid.CNV_MENU_ADD_ID,'Add')
+    self.theViewMenu.Append(armid.CNV_MENU_EDIT_ID,'Edit')
     wx.EVT_MENU(self,armid.CNV_MENU_ADD_ID,self.onAddRelationship)
+    wx.EVT_MENU(self,armid.CNV_MENU_EDIT_ID,self.onEditRelationship)
 
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     personas = self.dbProxy.getDimensionNames('persona')
@@ -43,6 +46,7 @@ class CodeNetworkPanel(BasePanel):
     cnSizer = wx.StaticBoxSizer(cnBox,wx.HORIZONTAL)
     mainSizer.Add(cnSizer,1,wx.EXPAND)
     self.codeNetView = CodeNetworkView(self,armid.CODENETWORK_IMAGENETWORK_ID)
+    self.codeNetView.Bind(wx.EVT_RIGHT_DOWN,self.onRightDown)
     self.codeNetView.reloadImage()
     cnSizer.Add(self.codeNetView,1,wx.EXPAND)
 
@@ -72,3 +76,13 @@ class CodeNetworkPanel(BasePanel):
       b.dbProxy.addCodeRelationship(personaName,fromName,toName,rshipType)
       self.regenerateView(personaName)
     dlg.Destroy() 
+
+  def onEditRelationship(self,evt):
+    personaName = self.personaCtrl.GetValue()
+    dlg = CodeRelationshipEditor(self,personaName)
+    if (dlg.ShowModal() == armid.CODERELATIONSHIP_BUTTONCOMMIT_ID):
+      self.codeNetView.reloadImage()
+
+  def onRightDown(self,evt):
+    self.PopupMenu(self.theViewMenu)
+

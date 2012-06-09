@@ -15,22 +15,20 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from Borg import Borg
-import wx.lib.imagebrowser
-import os
+
+import wx
 import armid
+import os
+from Borg import Borg
+import ARM
+from ImpliedProcessPanel import ImpliedProcessPanel
 
-class CodeNetworkView(wx.lib.imagebrowser.ImageView):
-  def __init__(self,parent,winId,fileName = 'codenetwork'):
-    wx.lib.imagebrowser.ImageView.__init__(self,parent,winId)
-    self.parent = parent
-    b = Borg()
-    self.theImageFile = b.tmpDir + '/' + fileName + '.png'
-
-  def onRightDown(self,evt):
-    self.PopupMenu(self.parent.theViewMenu)
-
-  def reloadImage(self):
-    if os.path.exists(self.theImageFile):
-      self.SetValue(self.theImageFile)
-
+class ImpliedProcessViewer(wx.Dialog):
+  def __init__(self,parent,personaName):
+    wx.Dialog.__init__(self,parent,-1,'Implied Proces',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(500,800))
+    self.theParent = parent 
+    self.panel = 0
+    mainSizer = wx.BoxSizer(wx.VERTICAL)
+    self.panel = ImpliedProcessPanel(self,personaName)
+    mainSizer.Add(self.panel,1,wx.EXPAND)
+    self.SetSizer(mainSizer)
