@@ -32,7 +32,7 @@ class CodeNetworkModel:
     self.theGraph = pydot.Dot()
     self.theGraph.set_graph_defaults(rankdir='LR')
     self.theGraph.set_node_defaults(shape='rectangle')
-    self.theGraph.set_edge_defaults(arrowhead='vee')
+    self.theGraph.set_edge_defaults(arrowhead='vee',dir='both',arrowtail='none')
     self.theGraphName = b.tmpDir + '/' + graphName + '.dot'
     self.theGraphImage = b.tmpDir + '/' + graphName + '.png'
 
@@ -59,6 +59,9 @@ class CodeNetworkModel:
       elif rType == 'part-of':
         rTypeLabel = '<>'
 
-      edge = pydot.Edge(fromName,toName,label=rTypeLabel)
+      tailLabel = 'none'
+      if rTypeLabel == '==' or rTypeLabel == '<>':
+        tailLabel = 'vee'
+      edge = pydot.Edge(fromName,toName,arrowtail=tailLabel,label=rTypeLabel)
       self.theGraph.add_edge(edge)
     self.theGraph.write_png(self.theGraphImage,prog='dot')
