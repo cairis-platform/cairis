@@ -9721,10 +9721,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         row = list(row)
         codeId = row[0]
         codeName = row[1]
-        codeDesc = row[2]
-        incCriteria = row[3]
-        codeEg = row[4]
-        parameters = CodeParameters(codeName,codeDesc,incCriteria,codeEg)
+        codeType = row[2]
+        codeDesc = row[3]
+        incCriteria = row[4]
+        codeEg = row[5]
+        parameters = CodeParameters(codeName,codeType,codeDesc,incCriteria,codeEg)
         cObjt = ObjectFactory.build(codeId,parameters)
         cObjts[codeName] = cObjt
       return cObjts
@@ -9740,12 +9741,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addCode(self,parameters):
     codeId = self.newId()
     codeName = parameters.name()
+    codeType = parameters.type()
     codeDesc = parameters.description()
     incCriteria = parameters.inclusionCriteria()
     codeEg  = parameters.example()
     try:
       curs = self.conn.cursor()
-      curs.execute('call addCode(%s,%s,%s,%s,%s)',(codeId,codeName.encode('utf-8'),codeDesc.encode('utf-8'),incCriteria.encode('utf-8'),codeEg.encode('utf-8')))
+      curs.execute('call addCode(%s,%s,%s,%s,%s,%s)',(codeId,codeName.encode('utf-8'),codeType,codeDesc.encode('utf-8'),incCriteria.encode('utf-8'),codeEg.encode('utf-8')))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding code ' + codeName
         raise DatabaseProxyException(exceptionText) 
@@ -9761,12 +9763,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def updateCode(self,parameters):
     codeId = parameters.id()
     codeName = parameters.name()
+    codeType = parameters.type()
     codeDesc = parameters.description()
     incCriteria = parameters.inclusionCriteria()
     codeEg  = parameters.example()
     try:
       curs = self.conn.cursor()
-      curs.execute('call updateCode(%s,%s,%s,%s,%s)',(codeId,codeName.encode('utf-8'),codeDesc.encode('utf-8'),incCriteria.encode('utf-8'),codeEg.encode('utf-8')))
+      curs.execute('call updateCode(%s,%s,%s,%s,%s,%s)',(codeId,codeName.encode('utf-8'),codeType,codeDesc.encode('utf-8'),incCriteria.encode('utf-8'),codeEg.encode('utf-8')))
       if (curs.rowcount == -1):
         exceptionText = 'Error updating code ' + codeName
         raise DatabaseProxyException(exceptionText) 
@@ -9939,9 +9942,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in curs.fetchall():
         row = list(row)
         fromCode = row[0]
-        toCode = row[1]
-        rType = row[2]
-        network.append((fromCode,toCode,rType))
+        fromType = row[1]
+        toCode = row[2]
+        toType = row[3]
+        rType = row[4]
+        network.append((fromCode,fromType,toCode,toType,rType))
       curs.close()
       return network
     except _mysql_exceptions.DatabaseError, e:
@@ -10021,9 +10026,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in curs.fetchall():
         row = list(row)
         fromName = row[0]
-        toName = row[1]
-        rType = row[2]
-        rows.append((fromName,toName,rType))
+        fromType = row[1]
+        toName = row[2]
+        toType = row[3]
+        rType = row[4]
+        rows.append((fromName,fromType,toName,toType,rType))
       curs.close()
       return rows
     except _mysql_exceptions.DatabaseError, e:
@@ -10082,7 +10089,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addImpliedProcessNetwork(self,ipId,personaName,cNet):
-    for fromName,toName,rType in cNet:
+    for fromName,fromType,toName,toType,rType in cNet:
       self.addImpliedProcessNetworkRelationship(ipId,personaName,fromName,toName,rType)
 
   def addImpliedProcessNetworkRelationship(self,ipId,personaName,fromName,toName,rType):

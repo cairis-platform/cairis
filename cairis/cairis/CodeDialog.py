@@ -26,6 +26,7 @@ class CodeDialog(wx.Dialog):
   def __init__(self,parent,parameters):
     wx.Dialog.__init__(self,parent,parameters.id(),parameters.label(),style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,300))
     self.theName = ''
+    self.theType = ''
     self.theDescription = ''
     self.theInclusionCriteria = ''
     self.theExample = ''
@@ -50,16 +51,23 @@ class CodeDialog(wx.Dialog):
   def onCommit(self,evt):
     commitLabel = self.commitVerb + ' code'
     nameCtrl = self.FindWindowById(armid.CODE_TEXTNAME_ID)
+    typeCtrl = self.FindWindowById(armid.CODE_COMBOTYPE_ID)
     descCtrl = self.FindWindowById(armid.CODE_TEXTDESCRIPTION_ID)
     incCritCtrl = self.FindWindowById(armid.CODE_TEXTINCLUSIONCRITERIA_ID)
     codeEgCtrl = self.FindWindowById(armid.CODE_TEXTEXAMPLE_ID)
     self.theName = nameCtrl.GetValue()
+    self.theType = typeCtrl.GetValue()
     self.theDescription = descCtrl.GetValue()
     self.theInclusionCriteria = incCritCtrl.GetValue()
     self.theExample = codeEgCtrl.GetValue()
 
     if len(self.theName) == 0:
       dlg = wx.MessageDialog(self,'Name cannot be empty',commitLabel,wx.OK) 
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+    if len(self.theType) == 0:
+      dlg = wx.MessageDialog(self,'Type must be selected',commitLabel,wx.OK) 
       dlg.ShowModal()
       dlg.Destroy()
       return
@@ -82,6 +90,6 @@ class CodeDialog(wx.Dialog):
       self.EndModal(armid.CODE_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = CodeParameters(self.theName,self.theDescription,self.theInclusionCriteria,self.theExample)
+    parameters = CodeParameters(self.theName,self.theType,self.theDescription,self.theInclusionCriteria,self.theExample)
     parameters.setId(self.theId)
     return parameters

@@ -19,14 +19,16 @@
 from ObjectCreationParameters import ObjectCreationParameters
 
 class CodeParameters(ObjectCreationParameters):
-  def __init__(self,codeName,codeDesc,incCriteria,codeEg):
+  def __init__(self,codeName,cType,codeDesc,incCriteria,codeEg):
     ObjectCreationParameters.__init__(self)
     self.theName = codeName
+    self.theType = cType
     self.theDescription = codeDesc
     self.theInclusionCriteria = incCriteria
     self.theExample = codeEg
 
   def name(self): return self.theName
+  def type(self): return self.theType
   def description(self): return self.theDescription
   def inclusionCriteria(self): return self.theInclusionCriteria
   def example(self): return self.theExample

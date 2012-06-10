@@ -166,7 +166,7 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'InternalDocumentParameters'):
     return InternalDocument(objtId,p.name(),p.description(),p.content(),p.codes())
   if (p.__class__.__name__ == 'CodeParameters'):
-    return Code(objtId,p.name(),p.description(),p.inclusionCriteria(),p.example())
+    return Code(objtId,p.name(),p.type(),p.description(),p.inclusionCriteria(),p.example())
   if (p.__class__.__name__ == 'DocumentReferenceParameters'):
     return DocumentReference(objtId,p.name(),p.document(),p.contributor(),p.description())
   if (p.__class__.__name__ == 'ConceptReferenceParameters'):

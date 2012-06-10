@@ -82,6 +82,7 @@ DROP TABLE IF EXISTS persona_implied_process_network;
 DROP TABLE IF EXISTS persona_implied_process;
 DROP TABLE IF EXISTS persona_code_network;
 DROP TABLE IF EXISTS code;
+DROP TABLE IF EXISTS code_type;
 DROP TABLE IF EXISTS relationship_type;
 DROP TABLE IF EXISTS value_tension;
 DROP TABLE IF EXISTS tension;
@@ -2731,13 +2732,21 @@ CREATE TABLE relationship_type (
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE code_type (
+  id INT NOT NULL,
+  name VARCHAR(200) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
 CREATE TABLE code (
   id INT NOT NULL,
+  code_type_id INT NOT NULL,
   name VARCHAR(200) NOT NULL,
   description VARCHAR(2000) NOT NULL,
   inclusion_criteria VARCHAR(2000) NOT NULL,
   example VARCHAR(2000) NOT NULL,
-  PRIMARY KEY(id)
+  PRIMARY KEY(id),
+  FOREIGN KEY(code_type_id) REFERENCES code_type(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE persona_code_network (
@@ -3478,3 +3487,5 @@ insert into relationship_type (id,name) values(0,'associated');
 insert into relationship_type (id,name) values(1,'implies');
 insert into relationship_type (id,name) values(2,'conflict');
 insert into relationship_type (id,name) values(3,'part-of');
+insert into code_type (id,name) values (0,'event');
+insert into code_type (id,name) values (1,'context');

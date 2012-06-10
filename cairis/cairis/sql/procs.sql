@@ -18887,20 +18887,27 @@ begin
 end
 //
 
-create procedure addCode(in codeId int, in codeName text, in codeDesc text, in incCriteria text, in codeExample text)
+create procedure addCode(in codeId int, in codeName text, in typeName text, in codeDesc text, in incCriteria text, in codeExample text)
 begin
   declare cId int;
+  declare ctId int;
+  
+  select id into ctId from code_type where name = typeName;
   select id into cId from code where name = codeName;
   if cId is null
   then 
-    insert into code(id,name,description,inclusion_criteria,example) values (codeId,codeName,codeDesc,incCriteria,codeExample);
+    insert into code(id,name,code_type_id,description,inclusion_criteria,example) values (codeId,codeName,ctId,codeDesc,incCriteria,codeExample);
   end if;
 end
 //
 
-create procedure updateCode(in codeId int, in codeName text, in codeDesc text, in incCriteria text, in codeExample text)
+create procedure updateCode(in codeId int, in codeName text, in typeName text, in codeDesc text, in incCriteria text, in codeExample text)
 begin
-  update code set name = codeName, description = codeDesc, inclusion_criteria = incCriteria, example = codeExample where id = codeId;
+  declare ctId int;
+  
+  select id into ctId from code_type where name = typeName;
+
+  update code set name = codeName, code_type_id = ctId, description = codeDesc, inclusion_criteria = incCriteria, example = codeExample where id = codeId;
 end
 //
 
@@ -18908,9 +18915,9 @@ create procedure getCodes(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,ifnull(description,''),ifnull(inclusion_criteria,''),ifnull(example,'') from code;
+    select c.id,c.name,ct.name,ifnull(c.description,''),ifnull(c.inclusion_criteria,''),ifnull(c.example,'') from code c, code_type ct where c.code_type_id = ct.id;
   else
-    select id,name,ifnull(description,''),ifnull(inclusion_criteria,''),ifnull(example,'') from code where id = constraintId;
+    select c.id,c.name,ct.name,ifnull(c.description,''),ifnull(c.inclusion_criteria,''),ifnull(c.example,'') from code c, code_type ct where c.id = constraintId and c.code_type_id = ct.id;
   end if;
 end
 //
@@ -19127,7 +19134,7 @@ begin
   deallocate prepare stmt;
   set artId = @artId;
 
-  set codeNetSql = concat('select fc.name, tc.name, rt.name from code fc, code tc, relationship_type rt, ',artType,'_code_network acn where acn.',artType,'_id = ',artId,' and acn.from_code_id = fc.id and acn.to_code_id = tc.id and acn.relationship_type_id = rt.id');
+  set codeNetSql = concat('select fc.name, fct.name, tc.name, tct.name, rt.name from code fc, code_type fct, code tc, code_type tct, relationship_type rt, ',artType,'_code_network acn where acn.',artType,'_id = ',artId,' and acn.from_code_id = fc.id and acn.to_code_id = tc.id and acn.relationship_type_id = rt.id and fc.code_type_id = fct.id and tc.code_type_id = tct.id');
   set @sql = codeNetSql;
   prepare stmt from @sql;
   execute stmt;
@@ -19201,7 +19208,7 @@ create procedure impliedProcessNetwork(in ipName text)
 begin
   declare ipId int;
   select id into ipId from persona_implied_process where name = ipName;
-  select fc.name, tc.name, rt.name from persona_code_network pcn, code fc, code tc, relationship_type rt, persona_implied_process_network pipn where pipn.persona_implied_process_id = ipId and pipn.persona_code_network_id = pcn.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id;
+  select fc.name, fct.name, tc.name, tct.name, rt.name from persona_code_network pcn, code fc, code_type fct, code tc, code_type tct, relationship_type rt, persona_implied_process_network pipn where pipn.persona_implied_process_id = ipId and pipn.persona_code_network_id = pcn.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id and fc.code_type_id = fct.id and tc.code_type_id = tct.id;
 end
 //
 

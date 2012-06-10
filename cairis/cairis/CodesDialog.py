@@ -29,15 +29,18 @@ class CodesDialog(DimensionBaseDialog):
     DimensionBaseDialog.__init__(self,parent,armid.CODES_ID,'Codes',(930,300),'persona.png')
     self.theMainWindow = parent
     idList = [armid.CODES_DOCLIST_ID,armid.CODES_BUTTONADD_ID,armid.CODES_BUTTONDELETE_ID]
-    columnList = ['Name','Description']
+    columnList = ['Name','Type','Description']
     self.buildControls(idList,columnList,self.dbProxy.getCodes,'code')
     listCtrl = self.FindWindowById(armid.CODES_DOCLIST_ID)
-    listCtrl.SetColumnWidth(0,300)
+    listCtrl.SetColumnWidth(0,100)
+    listCtrl.SetColumnWidth(1,100)
+    listCtrl.SetColumnWidth(2,300)
 
 
   def addObjectRow(self,listCtrl,listRow,objt):
     listCtrl.InsertStringItem(listRow,objt.name())
-    listCtrl.SetStringItem(listRow,1,objt.description())
+    listCtrl.SetStringItem(listRow,1,objt.type())
+    listCtrl.SetStringItem(listRow,2,objt.description())
 
   def onAdd(self,evt):
     try:

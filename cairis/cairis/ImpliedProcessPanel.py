@@ -60,30 +60,40 @@ class RelationshipPage(wx.Panel):
     self.codeRelationships = wx.ListCtrl(self,armid.IMPLIEDPROCESS_LISTRELATIONSHIPS_ID,size=wx.DefaultSize,style=wx.LC_REPORT)
     self.codeRelationships.InsertColumn(0,'From')
     self.codeRelationships.SetColumnWidth(0,150)
-    self.codeRelationships.InsertColumn(1,'Relationship')
-    self.codeRelationships.SetColumnWidth(1,150)
-    self.codeRelationships.InsertColumn(2,'To')
+    self.codeRelationships.InsertColumn(1,'Type')
+    self.codeRelationships.SetColumnWidth(0,150)
+    self.codeRelationships.InsertColumn(2,'Relationship')
     self.codeRelationships.SetColumnWidth(2,150)
+    self.codeRelationships.InsertColumn(3,'To')
+    self.codeRelationships.SetColumnWidth(3,150)
+    self.codeRelationships.InsertColumn(4,'Type')
+    self.codeRelationships.SetColumnWidth(4,150)
     rshipBoxSizer.Add(self.codeRelationships,1,wx.EXPAND)
     self.SetSizer(topSizer)
 
   def buildList(self,personaName):
     self.codeRelationships.DeleteAllItems()
     b = Borg()
-    for fromName,toName,rType in b.dbProxy.personaCodeNetwork(personaName):
+    for fromName,fromType,toName,toType,rType in b.dbProxy.personaCodeNetwork(personaName):
       idx = self.codeRelationships.GetItemCount()
       self.codeRelationships.InsertStringItem(idx,fromName)
-      self.codeRelationships.SetStringItem(idx,1,rType)
-      self.codeRelationships.SetStringItem(idx,2,toName)
+      self.codeRelationships.SetStringItem(idx,1,fromType)
+      self.codeRelationships.SetStringItem(idx,2,rType)
+      self.codeRelationships.SetStringItem(idx,3,toName)
+      self.codeRelationships.SetStringItem(idx,4,toType)
 
   def highlightSet(self,rshipSet):
     for idx in range(self.codeRelationships.GetItemCount()):
       fromName = self.codeRelationships.GetItemText(idx)
-      rtItem = self.codeRelationships.GetItem(idx,1)
-      toItem = self.codeRelationships.GetItem(idx,2)
+      fromTypeItem = self.codeRelationships.GetItem(idx,1)
+      rtItem = self.codeRelationships.GetItem(idx,2)
+      toItem = self.codeRelationships.GetItem(idx,3)
+      toTypeItem = self.codeRelationships.GetItem(idx,4)
+      fromType = fromTypeItem.GetText()
       rtName = rtItem.GetText()
       toName = toItem.GetText()
-      if (fromName,toName,rtName) in rshipSet:
+      toType = toTypeItem.GetText()
+      if (fromName,fromType,toName,toType,rtName) in rshipSet:
         self.codeRelationships.Select(idx) 
 
 
@@ -152,9 +162,11 @@ class ImpliedProcessPanel(BasePanel):
     personaName = self.personaCtrl.GetValue()
     idx = evt.GetIndex()
     fromName = self.codeRelationships.GetItemText(idx)
-    rType = self.codeRelationships.GetItem(idx,1)
-    toName = self.codeRelationships.GetItem(idx,2)
-    sKey = (fromName,toName.GetText(),rType.GetText())
+    fromType = self.codeRelationships.GetItem(idx,1)
+    rType = self.codeRelationships.GetItem(idx,2)
+    toName = self.codeRelationships.GetItem(idx,3)
+    toType = self.codeRelationships.GetItem(idx,4)
+    sKey = (fromName,fromType.GetText(),toName.GetText(),toType.GetText(),rType.GetText())
     self.theSelectedSet.add(sKey)
     self.regenerateView(personaName)
 
@@ -162,9 +174,11 @@ class ImpliedProcessPanel(BasePanel):
     personaName = self.personaCtrl.GetValue()
     idx = evt.GetIndex()
     fromName = self.codeRelationships.GetItemText(idx)
-    rType = self.codeRelationships.GetItem(idx,1)
-    toName = self.codeRelationships.GetItem(idx,2)
-    sKey = (fromName,toName.GetText(),rType.GetText())
+    fromType = self.codeRelationships.GetItem(idx,1)
+    rType = self.codeRelationships.GetItem(idx,2)
+    toName = self.codeRelationships.GetItem(idx,3)
+    toType = self.codeRelationships.GetItem(idx,4)
+    sKey = (fromName,fromType.GetText(),toName.GetText(),toType.GetText(),rType.GetText())
     self.theSelectedSet.remove(sKey)
     self.regenerateView(personaName)
 

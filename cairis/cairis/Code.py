@@ -17,15 +17,17 @@
 
 
 class Code:
-  def __init__(self,codeId,codeName,codeDesc,incCriteria,codeEg):
+  def __init__(self,codeId,codeName,cType,codeDesc,incCriteria,codeEg):
     self.theId = codeId
     self.theName = codeName
+    self.theType = cType
     self.theDescription = codeDesc
     self.theInclusionCriteria = incCriteria
     self.theExample = codeEg
 
   def id(self): return self.theId
   def name(self): return self.theName
+  def type(self): return self.theType
   def description(self): return self.theDescription
   def inclusionCriteria(self): return self.theInclusionCriteria
   def example(self): return self.theExample

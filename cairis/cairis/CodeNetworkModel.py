@@ -31,22 +31,25 @@ class CodeNetworkModel:
     self.dbProxy = b.dbProxy
     self.theGraph = pydot.Dot()
     self.theGraph.set_graph_defaults(rankdir='LR')
-    self.theGraph.set_node_defaults(shape='rectangle')
+    self.theGraph.set_node_defaults(shape='rectangle',style='filled',color='gray')
     self.theGraph.set_edge_defaults(arrowhead='vee',dir='both',arrowtail='none')
     self.theGraphName = b.tmpDir + '/' + graphName + '.dot'
     self.theGraphImage = b.tmpDir + '/' + graphName + '.png'
 
-  def buildNode(self,objtName):
-    self.theGraph.add_node(pydot.Node(objtName))
+  def buildNode(self,objtName,codeType):
+    typeColour = 'gray'
+    if codeType == 'context':
+      typeColour = 'cadetblue1'
+    self.theGraph.add_node(pydot.Node(objtName,color=typeColour))
 
   def graph(self):
     self.nodeNameSet = set([])
-    for fromName,toName,rType in self.theCodeNetwork:
+    for fromName,fromType,toName,toType,rType in self.theCodeNetwork:
       if (fromName not in self.nodeNameSet):
-        self.buildNode(fromName)
+        self.buildNode(fromName,fromType)
         self.nodeNameSet.add(fromName)
       if (toName not in self.nodeNameSet):
-        self.buildNode(toName)
+        self.buildNode(toName,toType)
         self.nodeNameSet.add(toName)
 
       rTypeLabel = ''

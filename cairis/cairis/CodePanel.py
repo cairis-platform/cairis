@@ -36,10 +36,12 @@ class CodePanel(BasePanel):
       mainSizer.Add(self.buildCommitButtonSizer(armid.CODE_BUTTONCOMMIT_ID,isCreate),0,wx.CENTER)
     else:
       nameCtrl = self.FindWindowById(armid.CODE_TEXTNAME_ID)
+      typeCtrl = self.FindWindowById(armid.CODE_COMBOTYPE_ID)
       descCtrl = self.FindWindowById(armid.CODE_TEXTDESCRIPTION_ID)
       incCritCtrl = self.FindWindowById(armid.CODE_TEXTINCLUSIONCRITERIA_ID)
       codeEgCtrl = self.FindWindowById(armid.CODE_TEXTEXAMPLE_ID)
       nameCtrl.Disable()
+      typeCtrl.Disable()
       descCtrl.Disable()
       incCritCtrl.Disable()
       codeEgCtrl.Disable()
@@ -49,11 +51,13 @@ class CodePanel(BasePanel):
   def loadControls(self,objt,isReadOnly=False):
     self.theId = objt.id()
     nameCtrl = self.FindWindowById(armid.CODE_TEXTNAME_ID)
+    typeCtrl = self.FindWindowById(armid.CODE_COMBOTYPE_ID)
     descCtrl = self.FindWindowById(armid.CODE_TEXTDESCRIPTION_ID)
     incCritCtrl = self.FindWindowById(armid.CODE_TEXTINCLUSIONCRITERIA_ID)
     codeEgCtrl = self.FindWindowById(armid.CODE_TEXTEXAMPLE_ID)
 
     nameCtrl.SetValue(objt.name())
+    typeCtrl.SetValue(objt.type())
     descCtrl.SetValue(objt.description())
     incCritCtrl.SetValue(objt.inclusionCriteria())
     codeEgCtrl.SetValue(objt.example())
