@@ -749,7 +749,7 @@ drop procedure if exists getImpliedProcesses;
 drop procedure if exists addImpliedProcess;
 drop procedure if exists updateImpliedProcess;
 drop procedure if exists deleteImpliedProcessComponents;
-drop procedure if exists delete_implied_process;
+drop procedure if exists delete_persona_implied_process;
 drop procedure if exists impliedProcessNetwork;
 drop procedure if exists addImpliedProcessNetworkRelationship;
 
@@ -19197,7 +19197,7 @@ begin
 end
 //
 
-create procedure delete_implied_process(in ipId int)
+create procedure delete_persona_implied_process(in ipId int)
 begin
   call deleteImpliedProcessComponents(ipId);
   delete from persona_implied_process where id = ipId;

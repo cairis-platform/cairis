@@ -49,7 +49,7 @@ class CodeRelationshipListCtrl(wx.ListCtrl):
     wx.EVT_MENU(self.theMenu,armid.CODERELATIONSHIPLISTCTRL_MENUADD_ID,self.onAddRelationship)
     wx.EVT_MENU(self.theMenu,armid.CODERELATIONSHIPLISTCTRL_MENUDELETE_ID,self.onDeleteRelationship)
 
-    for fromName,toName,rType in self.dbProxy.personaCodeNetwork(personaName):
+    for fromName,fromType,toName,toType,rType in self.dbProxy.personaCodeNetwork(personaName):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,fromName)
       self.SetStringItem(idx,1,rType)
