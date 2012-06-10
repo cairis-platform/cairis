@@ -1,7 +1,6 @@
 asset_interface
 template_asset_interface
 component_view_component
-component_view_connector
 component_view
 connector
 component_classassociation
@@ -42,8 +41,8 @@ external_document
 internal_document
 code
 persona_code_network
-code_network_set
 persona_implied_process
+persona_implied_process_network
 artifact_section
 internal_document_code
 persona_code
@@ -104,7 +103,6 @@ environment
 composite_environment_override
 composite_environment
 composite_environment_property
-requirement_requirement
 requirement
 attributes
 attacker

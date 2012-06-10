@@ -40,7 +40,7 @@ class CodeRelationshipDialog(wx.Dialog):
     mainSizer.Add(WidgetFactory.buildComboSizerList(self,'From',(87,30),armid.CODERELATIONSHIP_COMBOFROMCODE_ID,codeList),0,wx.EXPAND)
     mainSizer.Add(WidgetFactory.buildComboSizerList(self,'To',(87,30),armid.CODERELATIONSHIP_COMBOTOCODE_ID,codeList),0,wx.EXPAND)
     rtList = ['==','=>','<>','[]']
-    mainSizer.Add(WidgetFactory.buildComboSizerList(self,'To',(87,30),armid.CODERELATIONSHIP_COMBORTTYPE_ID,rtList),0,wx.EXPAND)
+    mainSizer.Add(WidgetFactory.buildComboSizerList(self,'Relationship',(87,30),armid.CODERELATIONSHIP_COMBORTTYPE_ID,rtList),0,wx.EXPAND)
     mainSizer.Add(wx.StaticText(self,-1,''),1,wx.EXPAND)
     mainSizer.Add(WidgetFactory.buildAddCancelButtonSizer(self,armid.CODERELATIONSHIP_BUTTONADD_ID),0,wx.ALIGN_CENTER)
     self.SetSizer(mainSizer)
