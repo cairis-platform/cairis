@@ -1740,6 +1740,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
       personas = {}
       for personaId,personaName,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType in personaRows:
+        tags = self.getTags(personaName,'persona')
         environmentProperties = []
         for environmentId,environmentName in self.dimensionEnvironments(personaId,'persona'):
           personaDesc = self.personaNarrative(personaId,environmentId)
@@ -1749,7 +1750,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           properties = PersonaEnvironmentProperties(environmentName,directFlag,personaDesc,roles,envCodes)
           environmentProperties.append(properties)
         codes = self.personaCodes(personaName)
-        parameters = PersonaParameters(personaName,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType,environmentProperties,codes)
+        parameters = PersonaParameters(personaName,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType,tags,environmentProperties,codes)
         persona = ObjectFactory.build(personaId,parameters)
         personas[personaName] = persona
       return personas
@@ -1832,6 +1833,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       isAssumption = parameters.assumption()
       pType = parameters.type()
       codes = parameters.codes()
+      tags = parameters.tags()
 
       curs = self.conn.cursor()
       curs.execute('call addPersona(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(personaId,personaName,activities.encode('utf-8'),attitudes.encode('utf-8'),aptitudes.encode('utf-8'),motivations.encode('utf-8'),skills.encode('utf-8'),image,isAssumption,pType))
@@ -1839,6 +1841,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error adding new persona ' + personaName
         raise DatabaseProxyException(exceptionText) 
       self.addPersonaCodes(personaName,codes)
+      self.addTags(personaName,'persona',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(personaId,'persona',environmentName)
@@ -1881,6 +1884,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     isAssumption = parameters.assumption()
     pType = parameters.type()
     codes = parameters.codes()
+    tags = parameters.tags()
 
     try:
       curs = self.conn.cursor()
@@ -1894,6 +1898,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error updating persona ' + personaName
         raise DatabaseProxyException(exceptionText) 
       self.addPersonaCodes(personaName,codes)
+      self.addTags(personaName,'persona',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(personaId,'persona',environmentName)
@@ -1934,6 +1939,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
 
       for taskId,taskName,taskShortCode,taskObjective,isAssumption,taskAuthor in taskRows:
+        tags = self.getTags(taskName,'task')
         environmentProperties = []
         for environmentId,environmentName in self.dimensionEnvironments(taskId,'task'):
           dependencies = self.taskDependencies(taskId,environmentId)
@@ -1946,7 +1952,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           envCodes = self.taskEnvironmentCodes(taskName,environmentName)
           properties = TaskEnvironmentProperties(environmentName,dependencies,personas,assets,concernAssociations,narrative,consequences,benefits,envCodes)
           environmentProperties.append(properties)
-        parameters = TaskParameters(taskName,taskShortCode,taskObjective,isAssumption,taskAuthor,environmentProperties)
+        parameters = TaskParameters(taskName,taskShortCode,taskObjective,isAssumption,taskAuthor,tags,environmentProperties)
         task = ObjectFactory.build(taskId,parameters)
         tasks[taskName] = task
       return tasks
@@ -2086,6 +2092,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     taskObjective = self.conn.escape_string(parameters.objective())
     isAssumption = parameters.assumption()
     taskAuthor = parameters.author()
+    tags = parameters.tags()
     try:
       taskId = self.newId()
       curs = self.conn.cursor()
@@ -2093,6 +2100,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new task ' + taskName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(taskName,'task',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(taskId,'task',environmentName)
@@ -2142,6 +2150,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     taskObjective = parameters.objective()
     isAssumption = parameters.assumption()
     taskAuthor = parameters.author()
+    tags = parameters.tags()
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteTaskComponents(%s)',(taskId))
@@ -2152,6 +2161,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating task ' + taskName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(taskName,'task',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(taskId,'task',environmentName)
@@ -7026,13 +7036,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
       for ucId,ucName,ucAuth,ucCode,ucDesc in ucRows:
         ucRoles = self.useCaseRoles(ucId)
+        tags = self.getTags(ucName,'usecase')
         environmentProperties = []
         for environmentId,environmentName in self.dimensionEnvironments(ucId,'usecase'):
           preConds,postConds = self.useCaseConditions(ucId,environmentId)
           ucSteps = self.useCaseSteps(ucId,environmentId)
           properties = UseCaseEnvironmentProperties(environmentName,preConds,ucSteps,postConds)
           environmentProperties.append(properties)
-          parameters = UseCaseParameters(ucName,ucAuth,ucCode,ucRoles,ucDesc,environmentProperties)
+          parameters = UseCaseParameters(ucName,ucAuth,ucCode,ucRoles,ucDesc,tags,environmentProperties)
           uc = ObjectFactory.build(ucId,parameters)
           ucs[ucName] = uc
       return ucs
@@ -7128,6 +7139,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     ucCode = parameters.code()
     ucActors = parameters.actors()
     ucDesc = parameters.description()
+    tags = parameters.tags()
     try:
       ucId = self.newId()
       curs = self.conn.cursor()
@@ -7137,6 +7149,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         raise DatabaseProxyException(exceptionText) 
       for actor in ucActors:
         self.addUseCaseRole(ucId,actor)
+      self.addTags(ucName,'usecase',tags)
 
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
@@ -7218,6 +7231,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     ucCode = parameters.code()
     ucActors = parameters.actors()
     ucDesc = parameters.description()
+    tags = parameters.tags()
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteUseCaseComponents(%s)',(ucId))
@@ -7230,6 +7244,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         raise DatabaseProxyException(exceptionText) 
       for actor in ucActors:
         self.addUseCaseRole(ucId,actor)
+      self.addTags(ucName,'usecase',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(ucId,'usecase',environmentName)

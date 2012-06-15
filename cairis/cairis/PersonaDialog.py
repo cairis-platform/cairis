@@ -31,6 +31,7 @@ class PersonaDialog(wx.Dialog):
     self.theParent = parent 
     self.thePersonaId = -1
     self.thePersonaName = ''
+    self.theTags = []
     self.isAssumption = False
     self.theActivities = ''
     self.theAttitudes = ''
@@ -69,6 +70,7 @@ class PersonaDialog(wx.Dialog):
 
   def onCommit(self,evt):
     nameCtrl = self.FindWindowById(armid.PERSONA_TEXTNAME_ID)
+    tagCtrl = self.FindWindowById(armid.PERSONA_TAGS_ID)
     typeCtrl = self.FindWindowById(armid.PERSONA_COMBOTYPE_ID)
     assumptionCtrl = self.FindWindowById(armid.PERSONA_CHECKASSUMPTION_ID)
     activitiesCtrl = self.FindWindowById(armid.PERSONA_TEXTACTIVITIES_ID)
@@ -80,6 +82,7 @@ class PersonaDialog(wx.Dialog):
     environmentCtrl = self.FindWindowById(armid.PERSONA_PANELENVIRONMENT_ID)
 
     self.thePersonaName = nameCtrl.GetValue()
+    self.theTags = tagCtrl.tags()
     if (self.theCommitVerb == 'Create'):
       b = Borg()
       try:
@@ -171,6 +174,6 @@ class PersonaDialog(wx.Dialog):
       self.EndModal(armid.PERSONA_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = PersonaParameters(self.thePersonaName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theImage,self.isAssumption,self.theType,self.theEnvironmentProperties,self.theCodes)
+    parameters = PersonaParameters(self.thePersonaName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theImage,self.isAssumption,self.theType,self.theTags,self.theEnvironmentProperties,self.theCodes)
     parameters.setId(self.thePersonaId)
     return parameters

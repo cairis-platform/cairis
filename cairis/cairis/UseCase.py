@@ -19,9 +19,10 @@
 #$URL$ $Id: UseCase.py 530 2011-11-16 19:29:16Z shaf $
 
 class UseCase:
-  def __init__(self,ucId,ucName,ucAuth,ucCode,ucActors,ucDesc,cProps):
+  def __init__(self,ucId,ucName,ucAuth,ucCode,ucActors,ucDesc,tags,cProps):
     self.theId = ucId
     self.theName = ucName
+    self.theTags = tags
     self.theAuthor = ucAuth
     self.theCode = ucCode
     self.theActors = ucActors
@@ -36,6 +37,7 @@ class UseCase:
 
   def id(self): return self.theId
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def author(self): return self.theAuthor
   def code(self): return self.theCode
   def actors(self): return self.theActors

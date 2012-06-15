@@ -119,6 +119,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     self.inMotivations = 0
     self.inSkills = 0
     self.theName = ''
+    self.theTags = []
     self.theType = ''
     self.theImage = ''
     self.isAssumptionPersona = False
@@ -179,6 +180,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
 
   def resetTaskAttributes(self):
     self.theName = ''
+    self.theTags = []
     self.theCode = ''
     self.theAuthor = ''
     self.isAssumptionTask = False
@@ -203,6 +205,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
 
   def resetUseCaseAttributes(self):
     self.theName = ''
+    self.theTags = []
     self.theAuthor = ''
     self.theCode = ''
     self.inDescription = 0
@@ -360,6 +363,8 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     elif name == 'postconditions':
       self.inPostconditions = 1
       self.thePostconditions = ''
+    elif name == 'tag':
+      self.theTags.append(attrs['name'])
 
   def characters(self,data):
     if self.inActivities:
@@ -395,7 +400,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'persona':
-      p = PersonaParameters(self.theName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theImage,self.isAssumptionPersona,self.theType,self.theEnvironmentProperties,{})
+      p = PersonaParameters(self.theName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theImage,self.isAssumptionPersona,self.theType,self.theTags,self.theEnvironmentProperties,{})
       self.thePersonas.append(p)
       self.resetPersonaAttributes()
     elif name == 'persona_environment':
@@ -423,7 +428,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.theTaskCharacteristics.append(p)
       self.resetTaskCharacteristicAttributes()
     elif name == 'task':
-      p = TaskParameters(self.theName,self.theCode,self.theObjective,self.isAssumptionTask,self.theAuthor,self.theEnvironmentProperties)
+      p = TaskParameters(self.theName,self.theCode,self.theObjective,self.isAssumptionTask,self.theAuthor,self.theTags,self.theEnvironmentProperties)
       self.theTasks.append(p)
       self.resetTaskAttributes()
     elif name == 'task_environment':
@@ -440,7 +445,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.theEnvironmentProperties.append(p)
       self.resetUseCaseEnvironmentAttributes()
     elif name == 'usecase':
-      p = UseCaseParameters(self.theName,self.theAuthor,self.theCode,self.theActors,self.theDescription,self.theEnvironmentProperties)
+      p = UseCaseParameters(self.theName,self.theAuthor,self.theCode,self.theActors,self.theDescription,self.theTags,self.theEnvironmentProperties)
       self.theUseCases.append(p)
       self.resetUseCaseAttributes()
     elif name == 'activities':

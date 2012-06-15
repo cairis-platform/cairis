@@ -31,6 +31,7 @@ class TaskDialog(BaseDialog):
     self.dbProxy = b.dbProxy
     self.theTaskId = -1
     self.theName = ''
+    self.theTags = []
     self.theShortCode = ''
     self.theObjective = ''
     self.isAssumption = False
@@ -56,6 +57,7 @@ class TaskDialog(BaseDialog):
 
   def onCommit(self,evt):
     nameCtrl = self.FindWindowById(armid.TASK_TEXTNAME_ID)
+    tagCtrl = self.FindWindowById(armid.TASK_TAGS_ID)
     shortCodeCtrl = self.FindWindowById(armid.TASK_TEXTSHORTCODE_ID)
     authorCtrl = self.FindWindowById(armid.TASK_TEXTAUTHOR_ID)
     objectiveCtrl = self.FindWindowById(armid.TASK_TEXTOBJECTIVE_ID)
@@ -67,6 +69,7 @@ class TaskDialog(BaseDialog):
     self.theAuthor = authorCtrl.GetValue()
     self.isAssumption = assumptionCtrl.GetValue()
     self.theObjective = objectiveCtrl.GetValue()
+    self.theTags = tagCtrl.tags()
     self.theEnvironmentProperties = environmentCtrl.environmentProperties()
 
     commitLabel = self.theCommitVerb +  ' Task' 
@@ -114,6 +117,6 @@ class TaskDialog(BaseDialog):
     self.EndModal(armid.TASK_BUTTONCOMMIT_ID)
 
   def parameters(self): 
-    parameters = TaskParameters(self.theName,self.theShortCode,self.theObjective,self.isAssumption,self.theAuthor,self.theEnvironmentProperties)
+    parameters = TaskParameters(self.theName,self.theShortCode,self.theObjective,self.isAssumption,self.theAuthor,self.theTags,self.theEnvironmentProperties)
     parameters.setId(self.theTaskId)
     return parameters

@@ -20,9 +20,10 @@
 from ObjectCreationParameters import ObjectCreationParameters
 
 class UseCaseParameters(ObjectCreationParameters):
-  def __init__(self,ucName,ucAuth,ucCode,ucActors,ucDesc,cProps):
+  def __init__(self,ucName,ucAuth,ucCode,ucActors,ucDesc,tags,cProps):
     ObjectCreationParameters.__init__(self)
     self.theName = ucName
+    self.theTags = tags
     self.theAuthor = ucAuth
     self.theCode = ucCode
     self.theActors = ucActors
@@ -31,6 +32,7 @@ class UseCaseParameters(ObjectCreationParameters):
 
 
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def author(self): return self.theAuthor
   def code(self): return self.theCode
   def actors(self): return self.theActors

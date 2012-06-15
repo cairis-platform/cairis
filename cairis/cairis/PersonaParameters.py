@@ -19,9 +19,10 @@
 import ObjectCreationParameters
 
 class PersonaParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,name,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType,properties,pCodes):
+  def __init__(self,name,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType,tags,properties,pCodes):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = name
+    self.theTags = tags
     self.theActivities = activities
     self.theAttitudes = attitudes
     self.theAptitudes = aptitudes
@@ -34,6 +35,7 @@ class PersonaParameters(ObjectCreationParameters.ObjectCreationParameters):
     self.theCodes = pCodes
 
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def attitudes(self): return self.theAttitudes
   def activities(self): return self.theActivities
   def aptitudes(self): return self.theAptitudes

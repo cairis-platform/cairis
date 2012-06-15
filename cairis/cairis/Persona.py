@@ -17,9 +17,10 @@
 
 
 class Persona:
-  def __init__(self,personaId,personaName,pActivities,pAttitudes,pAptitudes,pMotivations,pSkills,image,isAssumption,pType,environmentProperties,pCodes):
+  def __init__(self,personaId,personaName,pActivities,pAttitudes,pAptitudes,pMotivations,pSkills,image,isAssumption,pType,tags,environmentProperties,pCodes):
     self.theId = personaId
     self.theName = personaName
+    self.theTags = tags
     self.theActivities = pActivities
     self.theAttitudes = pAttitudes
     self.theAptitudes = pAptitudes
@@ -37,6 +38,7 @@ class Persona:
 
   def id(self): return self.theId
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def activities(self): return self.theActivities
   def attitudes(self): return self.theAttitudes
   def aptitudes(self): return self.theAptitudes

@@ -17,13 +17,14 @@
 
 
 class Task:
-  def __init__(self,tId,tName,tShortCode,tObjt,isAssumption,tAuth,cProps):
+  def __init__(self,tId,tName,tShortCode,tObjt,isAssumption,tAuth,tags,cProps):
     self.theId = tId
     self.theName = tName
     self.theShortCode = tShortCode
     self.theObjective = tObjt
     self.isAssumption = isAssumption
     self.theAuthor = tAuth
+    self.theTags = tags
     self.theEnvironmentProperties = cProps
     self.theEnvironmentDictionary = {}
     for p in self.theEnvironmentProperties:
@@ -43,6 +44,7 @@ class Task:
   def objective(self): return self.theObjective
   def assumption(self): return self.isAssumption
   def author(self): return self.theAuthor
+  def tags(self): return self.theTags
 
   def dependencies(self,environmentName,dupProperty):
     if (dupProperty == ''):

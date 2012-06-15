@@ -50,6 +50,9 @@ DROP TABLE IF EXISTS persona_characteristic_synopsis;
 DROP TABLE IF EXISTS task_characteristic_synopsis;
 DROP TABLE IF EXISTS contribution_end;
 DROP TABLE IF EXISTS link_contribution;
+DROP TABLE IF EXISTS task_tag;
+DROP TABLE IF EXISTS usecase_tag;
+DROP TABLE IF EXISTS persona_tag;
 DROP TABLE IF EXISTS asset_tag;
 DROP TABLE IF EXISTS template_asset_tag;
 DROP TABLE IF EXISTS attacker_tag;
@@ -2409,6 +2412,30 @@ CREATE TABLE risk_tag (
   tag_id INT NOT NULL,
   PRIMARY KEY(risk_id,tag_id),
   FOREIGN KEY(risk_id) REFERENCES risk(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE task_tag (
+  task_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(task_id,tag_id),
+  FOREIGN KEY(task_id) REFERENCES task(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE usecase_tag (
+  usecase_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(usecase_id,tag_id),
+  FOREIGN KEY(usecase_id) REFERENCES usecase(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE persona_tag (
+  persona_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(persona_id,tag_id),
+  FOREIGN KEY(persona_id) REFERENCES persona(id), 
   FOREIGN KEY(tag_id) REFERENCES tag(id)
 ) ENGINE=INNODB;
 

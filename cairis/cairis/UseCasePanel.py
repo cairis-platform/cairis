@@ -37,6 +37,7 @@ class UseCasePanel(BasePanel):
     mainSizer.Add(summBoxSizer,0,wx.EXPAND)
     summBoxSizer.Add(self.buildTextSizer('Name',(87,30),armid.USECASE_TEXTNAME_ID),1,wx.EXPAND)
     summBoxSizer.Add(self.buildTextSizer('Code',(87,30),armid.USECASE_TEXTSHORTCODE_ID),1,wx.EXPAND)
+    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.USECASE_TAGS_ID),0,wx.EXPAND)
     mainSizer.Add(self.buildTextSizer('Author/s',(87,30),armid.USECASE_TEXTAUTHOR_ID),0,wx.EXPAND)
 
     objtBoxSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -57,6 +58,8 @@ class UseCasePanel(BasePanel):
   def loadControls(self,uc,isReadOnly=False):
     nameCtrl = self.FindWindowById(armid.USECASE_TEXTNAME_ID)
     nameCtrl.SetValue(uc.name())
+    tagsCtrl = self.FindWindowById(armid.USECASE_TAGS_ID)
+    tagsCtrl.set(uc.tags())
     authCtrl = self.FindWindowById(armid.USECASE_TEXTAUTHOR_ID)
     authCtrl.SetValue(uc.author())
     codeCtrl = self.FindWindowById(armid.USECASE_TEXTSHORTCODE_ID)

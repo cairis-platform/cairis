@@ -33,6 +33,8 @@ class PersonaPanel(BasePanel):
   def buildControls(self,isCreate,isUpdateable = True):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.PERSONA_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.PERSONA_TAGS_ID),0,wx.EXPAND)
+
 
     pTypes = self.dbProxy.getDimensionNames('persona_type')
     mainSizer.Add(self.buildComboSizerList('Type',(87,30),armid.PERSONA_COMBOTYPE_ID,pTypes),0,wx.EXPAND)
@@ -63,6 +65,9 @@ class PersonaPanel(BasePanel):
 
   def loadControls(self,persona):
     nameCtrl = self.FindWindowById(armid.PERSONA_TEXTNAME_ID)
+    tagsCtrl = self.FindWindowById(armid.PERSONA_TAGS_ID)
+    tagsCtrl.set(persona.tags())
+
     typeCtrl = self.FindWindowById(armid.PERSONA_COMBOTYPE_ID)
     assumptionCtrl = self.FindWindowById(armid.PERSONA_CHECKASSUMPTION_ID)
     activitiesCtrl = self.nb.FindWindowById(armid.PERSONA_TEXTACTIVITIES_ID)

@@ -34,6 +34,7 @@ class TaskPanel(BasePanel):
     mainSizer.Add(summBoxSizer,0,wx.EXPAND)
     summBoxSizer.Add(self.buildTextSizer('Name',(87,30),armid.TASK_TEXTNAME_ID),1,wx.EXPAND)
     summBoxSizer.Add(self.buildTextSizer('Code',(87,30),armid.TASK_TEXTSHORTCODE_ID),1,wx.EXPAND)
+    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.TASK_TAGS_ID),0,wx.EXPAND)
     mainSizer.Add(self.buildTextSizer('Author',(87,30),armid.TASK_TEXTAUTHOR_ID),0,wx.EXPAND)
     mainSizer.Add(self.buildCheckSizer('Assumption Task',armid.TASK_CHECKASSUMPTION_ID,False),0,wx.EXPAND)
 
@@ -50,6 +51,8 @@ class TaskPanel(BasePanel):
   def loadControls(self,task,isReadOnly=False):
     nameCtrl = self.FindWindowById(armid.TASK_TEXTNAME_ID)
     nameCtrl.SetValue(task.name())
+    tagsCtrl = self.FindWindowById(armid.TASK_TAGS_ID)
+    tagsCtrl.set(task.tags())
     shortCodeCtrl = self.FindWindowById(armid.TASK_TEXTSHORTCODE_ID)
     shortCodeCtrl.SetValue(task.shortCode())
     authorCtrl = self.FindWindowById(armid.TASK_TEXTAUTHOR_ID)

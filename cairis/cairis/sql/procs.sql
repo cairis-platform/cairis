@@ -3052,6 +3052,7 @@ begin
   
   delete from task_persona where persona_id = pId;
   delete from persona_reference where persona_id = pId;
+  delete from persona_tag where persona_id = pId;
   delete from persona where id = pId;
 end
 //
@@ -3353,6 +3354,7 @@ begin
   delete from obstacletask_goalassociation where subgoal_id = tId;
   delete from roletaskrole_dependency where dependency_id = tId;
   delete from task_reference where task_id = tId;
+  delete from task_tag where task_id = tId;
   delete from task where id = tId;
 end
 //
@@ -3384,6 +3386,7 @@ begin
   delete from obstacleusecase_goalassociation where subgoal_id = ucId;
   delete from usecase_reference where usecase_id = ucId;
   delete from component_usecase where usecase_id = ucId;
+  delete from usecase_tag where usecase_id = ucId;
   delete from usecase where id = ucId;
 end
 //

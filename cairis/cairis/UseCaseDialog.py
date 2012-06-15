@@ -32,6 +32,7 @@ class UseCaseDialog(wx.Dialog):
     self.dbProxy = b.dbProxy
     self.theUseCaseId = -1
     self.theName = ''
+    self.theTags = []
     self.theAuthor = ''
     self.theCode = '' 
     self.theActors = []
@@ -60,6 +61,7 @@ class UseCaseDialog(wx.Dialog):
 
   def onCommit(self,evt):
     nameCtrl = self.FindWindowById(armid.USECASE_TEXTNAME_ID)
+    tagCtrl = self.FindWindowById(armid.USECASE_TAGS_ID)
     authCtrl = self.FindWindowById(armid.USECASE_TEXTAUTHOR_ID)
     codeCtrl = self.FindWindowById(armid.USECASE_TEXTSHORTCODE_ID)
     actorsCtrl = self.FindWindowById(armid.USECASE_LISTACTORS_ID)
@@ -67,6 +69,7 @@ class UseCaseDialog(wx.Dialog):
     environmentCtrl = self.FindWindowById(armid.USECASE_PANELENVIRONMENT_ID)
 
     self.theName = nameCtrl.GetValue()
+    self.theTags = tagCtrl.tags()
     self.theAuthor = authCtrl.GetValue()
     self.theCode = codeCtrl.GetValue()
     self.theActors = actorsCtrl.dimensions()
@@ -130,6 +133,6 @@ class UseCaseDialog(wx.Dialog):
     self.EndModal(armid.USECASE_BUTTONCOMMIT_ID)
 
   def parameters(self): 
-    parameters = UseCaseParameters(self.theName,self.theAuthor,self.theCode,self.theActors,self.theDescription,self.theEnvironmentProperties)
+    parameters = UseCaseParameters(self.theName,self.theAuthor,self.theCode,self.theActors,self.theDescription,self.theTags,self.theEnvironmentProperties)
     parameters.setId(self.theUseCaseId)
     return parameters

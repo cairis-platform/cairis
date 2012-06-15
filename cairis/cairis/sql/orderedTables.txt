@@ -33,6 +33,9 @@ attacker_tag
 threat_tag
 vulnerability_tag
 risk_tag
+task_tag
+usecase_tag
+persona_tag
 tag
 risk_class
 characteristic_reference_type
