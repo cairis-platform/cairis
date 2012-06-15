@@ -19,14 +19,16 @@
 import ObjectCreationParameters
 
 class ResponseParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,respName,respRisk,cProps,rType):
+  def __init__(self,respName,respRisk,tags,cProps,rType):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = respName
+    self.theTags = tags
     self.theRisk = respRisk
     self.theEnvironmentProperties = cProps
     self.theResponseType = rType
 
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def risk(self): return self.theRisk
   def environmentProperties(self): return self.theEnvironmentProperties
   def responseType(self): return self.theResponseType

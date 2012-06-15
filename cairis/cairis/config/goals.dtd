@@ -22,13 +22,16 @@
 
 <!ELEMENT goals (domainproperty*, goal*,obstacle*,requirement*,countermeasure*)>
 
-<!ELEMENT domainproperty (definition)>
+<!ELEMENT tag EMPTY>
+<!ATTLIST tag name CDATA #REQUIRED>
+
+<!ELEMENT domainproperty (tag*,definition)>
 <!ATTLIST domainproperty name CDATA #REQUIRED>
 <!ATTLIST domainproperty type (Hypothesis | Invariant) #REQUIRED>
 <!ATTLIST domainproperty originator CDATA #REQUIRED>
 <!ELEMENT definition (#PCDATA)>
 
-<!ELEMENT goal (goal_environment+)>
+<!ELEMENT goal (tag*,goal_environment+)>
 <!ATTLIST goal name CDATA #REQUIRED>
 <!ATTLIST goal originator CDATA #REQUIRED>
 <!ELEMENT goal_environment (definition,fit_criterion,issue,concern*,concern_association*)>
@@ -46,7 +49,7 @@
 <!ATTLIST concern_association target_nry (1 | a | 1..a) #REQUIRED>
 <!ATTLIST concern_association target_name CDATA #REQUIRED>
 
-<!ELEMENT obstacle (obstacle_environment+)>
+<!ELEMENT obstacle (tag*,obstacle_environment+)>
 <!ATTLIST obstacle name CDATA #REQUIRED>
 <!ATTLIST obstacle originator CDATA #REQUIRED>
 <!ELEMENT obstacle_environment (definition,concern*)>
@@ -64,7 +67,7 @@
 <!ELEMENT rationale (#PCDATA)>
 <!ELEMENT originator (#PCDATA)>
 
-<!ELEMENT countermeasure (description,countermeasure_environment+)>
+<!ELEMENT countermeasure (tag*,description,countermeasure_environment+)>
 <!ATTLIST countermeasure name CDATA #REQUIRED>
 <!ATTLIST countermeasure type CDATA #REQUIRED>
 <!ELEMENT countermeasure_environment (countermeasure_requirement+,target+,mitigating_property*,responsible_role+,responsible_persona+)>

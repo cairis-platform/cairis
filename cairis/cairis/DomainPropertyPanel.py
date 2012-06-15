@@ -31,6 +31,7 @@ class DomainPropertyPanel(BasePanel):
   def buildControls(self,isCreate,isUpdateable=True):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.DOMAINPROPERTY_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.DOMAINPROPERTY_TAGS_ID),0,wx.EXPAND)
     typeList = ['Hypothesis','Invariant']
     mainSizer.Add(self.buildComboSizerList('Type',(87,30),armid.DOMAINPROPERTY_COMBOTYPE_ID,typeList),0,wx.EXPAND)
     mainSizer.Add(self.buildTextSizer('Originator',(87,30),armid.DOMAINPROPERTY_TEXTORIGINATOR_ID),0,wx.EXPAND)
@@ -40,6 +41,9 @@ class DomainPropertyPanel(BasePanel):
 
   def loadControls(self,dp,isReadOnly=False):
     nameCtrl = self.FindWindowById(armid.DOMAINPROPERTY_TEXTNAME_ID)
+    tagsCtrl = self.FindWindowById(armid.DOMAINPROPERTY_TAGS_ID)
+    tagsCtrl.set(dp.tags())
+
     typeCtrl = self.FindWindowById(armid.DOMAINPROPERTY_COMBOTYPE_ID)
     origCtrl = self.FindWindowById(armid.DOMAINPROPERTY_TEXTORIGINATOR_ID)
     descCtrl = self.FindWindowById(armid.DOMAINPROPERTY_TEXTDESCRIPTION_ID)

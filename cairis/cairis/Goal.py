@@ -19,9 +19,10 @@
 from GoalEnvironmentProperties import GoalEnvironmentProperties
 
 class Goal:
-  def __init__(self,goalId,goalName,goalOrig,environmentProperties):
+  def __init__(self,goalId,goalName,goalOrig,tags,environmentProperties):
     self.theId = goalId
     self.theName = goalName
+    self.theTags = tags
     self.theOriginator = goalOrig
     self.theColour = 'black'
     self.theEnvironmentProperties = environmentProperties
@@ -33,6 +34,7 @@ class Goal:
   def id(self): return self.theId
   def setId(self,v): self.theId = v
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def originator(self): return self.theOriginator
   def environmentProperties(self): return self.theEnvironmentProperties
   def environmentProperty(self,envName): return self.theEnvironmentDictionary[envName]

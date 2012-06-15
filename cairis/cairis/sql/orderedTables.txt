@@ -36,6 +36,11 @@ risk_tag
 task_tag
 usecase_tag
 persona_tag
+goal_tag
+obstacle_tag
+domainproperty_tag
+countermeasure_tag
+response_tag
 tag
 risk_class
 characteristic_reference_type

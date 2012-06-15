@@ -30,6 +30,7 @@ class CountermeasurePanel(BasePanel):
     b = Borg()
     self.dbProxy = b.dbProxy
     self.theCountermeasureName = ''
+    self.theTags = []
     self.theCountermeasureDescription = ''
     self.theCountermeasureType = ''
     self.theCommitVerb = 'Create'
@@ -39,6 +40,7 @@ class CountermeasurePanel(BasePanel):
   def buildControls(self,isCreate,isUpdateable = True):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     mainSizer.Add(self.buildTextSizer('Name',(87,60),armid.COUNTERMEASURE_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.COUNTERMEASURE_TAGS_ID),0,wx.EXPAND)
     typeList = ['Information','Systems','Software','Hardware','People']
     mainSizer.Add(self.buildComboSizerList('Type',(87,30),armid.COUNTERMEASURE_COMBOTYPE_ID,typeList),0,wx.EXPAND)
     mainSizer.Add(self.buildMLTextSizer('Description',(87,60),armid.COUNTERMEASURE_TEXTDESCRIPTION_ID),0,wx.EXPAND)
@@ -48,6 +50,9 @@ class CountermeasurePanel(BasePanel):
 
   def loadControls(self,countermeasure,isReadOnly = False):
     nameCtrl = self.FindWindowById(armid.COUNTERMEASURE_TEXTNAME_ID)
+    tagsCtrl = self.FindWindowById(armid.COUNTERMEASURE_TAGS_ID)
+    tagsCtrl.set(countermeasure.tags())
+
     descriptionCtrl = self.FindWindowById(armid.COUNTERMEASURE_TEXTDESCRIPTION_ID)
     nameCtrl.SetValue(countermeasure.name())
     descriptionCtrl.SetValue(countermeasure.description())
@@ -60,6 +65,8 @@ class CountermeasurePanel(BasePanel):
   def commit(self):
     commitLabel = self.theCommitVerb + ' countermeasure'
     nameCtrl = self.FindWindowById(armid.COUNTERMEASURE_TEXTNAME_ID)
+    tagsCtrl = self.FindWindowById(armid.COUNTERMEASURE_TAGS_ID)
+    self.theTags = tagsCtrl.tags()
     descriptionCtrl = self.FindWindowById(armid.COUNTERMEASURE_TEXTDESCRIPTION_ID)
     typeCtrl = self.FindWindowById(armid.COUNTERMEASURE_COMBOTYPE_ID)
     self.theCountermeasureName = nameCtrl.GetValue()
@@ -109,4 +116,4 @@ class CountermeasurePanel(BasePanel):
       return 0
 
   def parameters(self):
-    return CountermeasureParameters(self.theCountermeasureName,self.theCountermeasureDescription,self.theCountermeasureType,self.theEnvironmentProperties)
+    return CountermeasureParameters(self.theCountermeasureName,self.theCountermeasureDescription,self.theCountermeasureType,self.theTags,self.theEnvironmentProperties)

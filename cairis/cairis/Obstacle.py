@@ -19,9 +19,10 @@
 from ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
 
 class Obstacle:
-  def __init__(self,obsId,obsName,obsOrig,environmentProperties):
+  def __init__(self,obsId,obsName,obsOrig,tags,environmentProperties):
     self.theId = obsId
     self.theName = obsName
+    self.theTags = tags
     self.theOriginator = obsOrig
     self.theEnvironmentProperties = environmentProperties
     self.theEnvironmentDictionary = {}
@@ -32,6 +33,7 @@ class Obstacle:
   def id(self): return self.theId
   def setId(self,v): self.theId = v
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def originator(self): return self.theOriginator
   def environmentProperties(self): return self.theEnvironmentProperties
   def environmentProperty(self,envName): return self.theEnvironmentDictionary[envName]

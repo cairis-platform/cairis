@@ -27,6 +27,7 @@ class DomainPropertyDialog(wx.Dialog):
     wx.Dialog.__init__(self,parent,parameters.id(),parameters.label(),style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(600,400))
     self.theId = -1
     self.theName = ''
+    self.theTags = []
     self.theType = ''
     self.theOriginator = ''
     self.theDescription = ''
@@ -49,11 +50,13 @@ class DomainPropertyDialog(wx.Dialog):
 
   def onCommit(self,evt):
     nameCtrl = self.FindWindowById(armid.DOMAINPROPERTY_TEXTNAME_ID)
+    tagsCtrl = self.FindWindowById(armid.DOMAINPROPERTY_TAGS_ID)
     typeCtrl = self.FindWindowById(armid.DOMAINPROPERTY_COMBOTYPE_ID)
     origCtrl = self.FindWindowById(armid.DOMAINPROPERTY_TEXTORIGINATOR_ID)
     descCtrl = self.FindWindowById(armid.DOMAINPROPERTY_TEXTDESCRIPTION_ID)
 
     self.theName = nameCtrl.GetValue()
+    self.theTags = tagsCtrl.tags()
     self.theType = typeCtrl.GetValue()
     self.theOriginator = origCtrl.GetValue()
     self.theDescription = descCtrl.GetValue()
@@ -83,6 +86,6 @@ class DomainPropertyDialog(wx.Dialog):
       self.EndModal(armid.DOMAINPROPERTY_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = DomainPropertyParameters(self.theName,self.theDescription,self.theType,self.theOriginator)
+    parameters = DomainPropertyParameters(self.theName,self.theDescription,self.theType,self.theOriginator,self.theTags)
     parameters.setId(self.theId)
     return parameters

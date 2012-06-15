@@ -2534,6 +2534,7 @@ begin
   delete from response_goal where response_id = responseId;
   delete from countermeasure_threat_response_target where response_id = responseId;
   delete from countermeasure_vulnerability_response_target where response_id = responseId;
+  delete from response_tag where response_id = responseId;
   delete from response where id = responseId;
 end
 //
@@ -2703,6 +2704,7 @@ begin
   delete from countermeasuretask_goalassociation where goal_id = cmId;
   delete from countermeasure_reference where countermeasure_id = cmId;
   delete from requirement_countermeasure where countermeasure_id = cmId;
+  delete from countermeasure_tag where countermeasure_id = cmId;
   delete from countermeasure where id = cmId;
 end
 //
@@ -5085,6 +5087,7 @@ begin
   delete from response_goal where goal_id = goalId;
   delete from rolegoalrole_dependency where dependency_id = goalId;
   delete from goal_reference where goal_id = goalId;
+  delete from goal_tag where goal_id = goalId;
   delete from goal where id = goalId;
 end
 //
@@ -8015,6 +8018,7 @@ begin
   delete from goaldomainproperty_goalassociation where subgoal_id = dpId;
   delete from domainproperty_asset where domainproperty_id = dpId;
   delete from domainproperty_reference where domainproperty_id = dpId;
+  delete from domainproperty_tag where domainproperty_id = dpId;
   delete from domainproperty where id = dpId;
 end
 //
@@ -8041,6 +8045,7 @@ create procedure delete_obstacle(in obsId int)
 begin
   call deleteObstacleComponents(obsId);
   delete from obstacle_reference where obstacle_id = obsId;
+  delete from obstalce_tag where obstacle_id = obsId;
   delete from obstacle where id = obsId;
 end
 //

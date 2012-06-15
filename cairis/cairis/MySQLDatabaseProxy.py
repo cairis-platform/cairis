@@ -2384,6 +2384,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         responseRows.append((respId,respName,respType,respRisk))
       curs.close()
       for respId,respName,respType,respRisk in responseRows:
+        tags = self.getTags(respName,'response')
         environmentProperties = []
         for environmentId,environmentName in self.dimensionEnvironments(respId,'response'):
           if (respType == 'Accept'):
@@ -2407,7 +2408,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
             properties = MitigateEnvironmentProperties(environmentName,mitType,detPoint,detMechs)
             environmentProperties.append(properties) 
          
-        parameters = ResponseParameters(respName,respRisk,environmentProperties,respType)
+        parameters = ResponseParameters(respName,respRisk,tags,environmentProperties,respType)
         response = ObjectFactory.build(respId,parameters)
         responses[respName] = response
       return responses
@@ -2505,12 +2506,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       respName = parameters.name()
       respRisk = parameters.risk()
       respType = parameters.responseType()
+      tags = parameters.tags()
       respId = self.newId()
       curs = self.conn.cursor()
       curs.execute('call addResponse(%s,%s,%s,%s)',(respId,respName,respType,respRisk))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new response ' + mitName
         raise DatabaseProxyException(exceptionText) 
+
+      self.addTags(respName,'response',tags)
 
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
@@ -2596,6 +2600,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     respName = parameters.name()
     respRisk = parameters.risk()
     respType = parameters.responseType()
+    tags = parameters.tags()
     respId = parameters.id()
     try:
       curs = self.conn.cursor()
@@ -2608,6 +2613,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error adding updating response ' + respName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(respName,'response',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(respId,'response',environmentName)
@@ -3076,6 +3082,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         cmRows.append((cmId,cmName,cmDesc,cmType))
       curs.close()
       for cmId,cmName,cmDesc,cmType in cmRows:
+        tags = self.getTags(cmName,'countermeasure')
         environmentProperties = []
         for environmentId,environmentName in self.dimensionEnvironments(cmId,'countermeasure'):
           reqs,targets = self.countermeasureTargets(cmId,environmentId)
@@ -3085,7 +3092,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           personas = self.countermeasurePersonas(cmId,environmentId)
           properties = CountermeasureEnvironmentProperties(environmentName,reqs,targets,properties,pRationale,cost,roles,personas)
           environmentProperties.append(properties) 
-        parameters = CountermeasureParameters(cmName,cmDesc,cmType,environmentProperties)
+        parameters = CountermeasureParameters(cmName,cmDesc,cmType,tags,environmentProperties)
         countermeasure = ObjectFactory.build(cmId,parameters)
         countermeasures[cmName] = countermeasure
       return countermeasures
@@ -3185,6 +3192,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     cmName = parameters.name()
     cmDesc = parameters.description()
     cmType = parameters.type()
+    tags = parameters.tags()
     cmId = self.newId()
     try:
       curs = self.conn.cursor()
@@ -3192,6 +3200,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new countermeasure ' + cmName
         raise DatabaseProxyException(exceptionText) 
+
+      self.addTags(cmName,'countermeasure',tags)
 
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
@@ -3214,6 +3224,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     cmName = parameters.name()
     cmDesc = parameters.description()
     cmType = parameters.type()
+    tags = parameters.tags()
     cmId = parameters.id()
     environmentProperties = parameters.environmentProperties()
     try:
@@ -3226,6 +3237,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating countermeasure ' + cmName
         raise DatabaseProxyException(exceptionText) 
+
+      self.addTags(cmName,'countermeasure',tags)
 
       for cProperties in environmentProperties:
         environmentName = cProperties.name()
@@ -3717,12 +3730,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     goalId = self.newId()
     goalName = parameters.name()
     goalOrig = parameters.originator()
+    tags = parameters.tags()
     try:
       curs = self.conn.cursor()
       curs.execute('call addGoal(%s,%s,%s)',(goalId,goalName,goalOrig))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new goal ' + goalName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(goalName,'goal',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(goalId,'goal',environmentName)
@@ -3746,6 +3761,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     goalId = parameters.id()
     goalName = parameters.name()
     goalOrig = parameters.originator()
+    tags = parameters.tags()
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteGoalComponents(%s)',(goalId))
@@ -3756,6 +3772,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating goal ' + goalName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(goalName,'goal',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(goalId,'goal',environmentName)
@@ -3792,8 +3809,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
 
       for goalId,goalName,goalOrig in goalRows:
+        tags = self.getTags(goalName,'goal')
         environmentProperties = self.goalEnvironmentProperties(goalId)
-        parameters = GoalParameters(goalName,goalOrig,self.goalEnvironmentProperties(goalId))
+        parameters = GoalParameters(goalName,goalOrig,tags,self.goalEnvironmentProperties(goalId))
         goal = ObjectFactory.build(goalId,parameters)
         goals[goalName] = goal
       return goals
@@ -3821,8 +3839,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
 
       for goalId,goalName,goalOrig,goalColour in goalRows:
+        tags = self.getTags(goalName,'goal')
         environmentProperties = self.goalEnvironmentProperties(goalId)
-        parameters = GoalParameters(goalName,goalOrig,self.goalEnvironmentProperties(goalId))
+        parameters = GoalParameters(goalName,goalOrig,tags,self.goalEnvironmentProperties(goalId))
         goal = ObjectFactory.build(goalId,parameters)
         goal.setColour(goalColour)
         goals[goalName] = goal
@@ -4863,6 +4882,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error obtaining domainProperties'
         raise DatabaseProxyException(exceptionText) 
       dps = {}
+      dpRows = []
       for row in curs.fetchall():
         row = list(row)
         dpId = row[0]
@@ -4870,10 +4890,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         dpDesc = row[2]
         dpType = row[3]
         dpOrig = row[4]
-        parameters = DomainPropertyParameters(dpName,dpDesc,dpType,dpOrig)
+        dpRows.append((dpId,dpName,dpDesc,dpType,dpOrig))
+      curs.close() 
+      for dpId,dpName,dpDesc,dpType,dpOrig in dpRows:
+        tags = self.getTags(dpName,'domainproperty')
+        parameters = DomainPropertyParameters(dpName,dpDesc,dpType,dpOrig,tags)
         dp = ObjectFactory.build(dpId,parameters)
         dps[dpName] = dp
-      curs.close() 
       return dps
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4886,6 +4909,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     dpDesc = parameters.description()
     dpType = parameters.type()
     dpOrig = parameters.originator()
+    tags = parameters.tags()
     try:
       curs = self.conn.cursor()
       curs.execute('call addDomainProperty(%s,%s,%s,%s,%s)',(dpId,dpName,dpDesc,dpType,dpOrig))
@@ -4893,6 +4917,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         curs.close()
         exceptionText = 'Error adding new domain property ' + dpName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(dpName,'domainproperty',tags)
       self.conn.commit()
       curs.close()
       return dpId
@@ -4907,6 +4932,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     dpDesc = parameters.description()
     dpType = parameters.type()
     dpOrig = parameters.originator()
+    tags = parameters.tags()
     try:
       curs = self.conn.cursor()
       curs.execute('call updateDomainProperty(%s,%s,%s,%s,%s)',(dpId,dpName,dpDesc,dpType,dpOrig))
@@ -4914,6 +4940,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         curs.close()
         exceptionText = 'Error updating domain property ' + dpName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(dpName,'domainproperty',tags)
       self.conn.commit()
       curs.close()
       return dpId
@@ -4944,8 +4971,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
 
       for obsId,obsName,obsOrig in obstacleRows:
+        tags = self.getTags(obsName,'obstacle')
         environmentProperties = self.obstacleEnvironmentProperties(obsId)
-        parameters = ObstacleParameters(obsName,obsOrig,environmentProperties)
+        parameters = ObstacleParameters(obsName,obsOrig,tags,environmentProperties)
         obstacle = ObjectFactory.build(obsId,parameters)
         obstacles[obsName] = obstacle
       return obstacles
@@ -5009,12 +5037,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     obsId = self.newId()
     obsName = parameters.name()
     obsOrig = parameters.originator()
+    tags = parameters.tags()
     try:
       curs = self.conn.cursor()
       curs.execute('call addObstacle(%s,%s,%s)',(obsId,obsName,obsOrig))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new obstacle ' + obsName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(obsName,'obstacle',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(obsId,'obstacle',environmentName)
@@ -5034,6 +5064,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     obsId = parameters.id()
     obsName = parameters.name()
     obsOrig = parameters.originator()
+    tags = parameters.tags()
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteObstacleComponents(%s)',(obsId))
@@ -5044,6 +5075,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating obstacle ' + obsName
         raise DatabaseProxyException(exceptionText) 
+      self.addTags(obsName,'obstacle',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(obsId,'obstacle',environmentName)

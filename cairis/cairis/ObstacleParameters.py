@@ -19,12 +19,14 @@
 import ObjectCreationParameters
 
 class ObstacleParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,obsName,obsOrig,properties):
+  def __init__(self,obsName,obsOrig,tags,properties):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = obsName
+    self.theTags = tags
     self.theOriginator = obsOrig
     self.theEnvironmentProperties = properties
 
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def originator(self): return self.theOriginator
   def environmentProperties(self): return self.theEnvironmentProperties

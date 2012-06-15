@@ -92,7 +92,7 @@
 <!ATTLIST misusecase environment CDATA #REQUIRED>
 <!ELEMENT narrative (#PCDATA)>
 
-<!ELEMENT response (accept_environment*,transfer_environment*,deter_environment*,prevent_environment*,detect_environment*,react_environment*)>
+<!ELEMENT response (tag*,accept_environment*,transfer_environment*,deter_environment*,prevent_environment*,detect_environment*,react_environment*)>
 <!ATTLIST response risk CDATA #REQUIRED>
 <!ATTLIST response type (Accept | Transfer | Mitigate | Prevent | Deter | Detect | React) #REQUIRED>
 <!ELEMENT accept_environment (rationale)>

@@ -96,18 +96,21 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
 
   def resetDomainPropertyAttributes(self):
     self.theName = ''
+    self.theTags = []
     self.theType = ''
     self.theDescription = ''
     self.theOriginator = ''
 
   def resetGoalAttributes(self):
     self.theName = ''
+    self.theTags = []
     self.theOriginator = ''
     self.theEnvironmentProperties = []
     self.resetGoalEnvironmentAttributes()
 
   def resetObstacleAttributes(self):
     self.theName = ''
+    self.theTags = []
     self.theOriginator = ''
     self.theEnvironmentProperties = []
     self.resetObstacleEnvironmentAttributes()
@@ -252,6 +255,8 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     elif name == 'originator':
       self.inOriginator = 1
       self.theOriginator = ''
+    elif name == 'tag':
+      self.theTags.append(attrs['name'])
 
   def characters(self,data):
     if self.inDescription:
@@ -267,7 +272,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'domainproperty':
-      p = DomainPropertyParameters(self.theName,self.theDescription,self.theType,self.theOriginator)
+      p = DomainPropertyParameters(self.theName,self.theDescription,self.theType,self.theOriginator,self.theTags)
       self.theDomainProperties.append(p)
       self.resetDomainPropertyAttributes()
     elif name == 'goal_environment':
@@ -279,11 +284,11 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theEnvironmentProperties.append(p)
       self.resetObstacleEnvironmentAttributes()
     elif name == 'goal':
-      p = GoalParameters(self.theName,self.theOriginator,self.theEnvironmentProperties)
+      p = GoalParameters(self.theName,self.theOriginator,self.theTags,self.theEnvironmentProperties)
       self.theGoals.append(p)
       self.resetGoalAttributes()
     elif name == 'obstacle':
-      p = ObstacleParameters(self.theName,self.theOriginator,self.theEnvironmentProperties)
+      p = ObstacleParameters(self.theName,self.theOriginator,self.theTags,self.theEnvironmentProperties)
       self.theObstacles.append(p)
       self.resetObstacleAttributes()
     elif name == 'requirement':
@@ -292,7 +297,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theRequirements.append((r,self.theReference,self.theReferenceType))
       self.resetRequirementAttributes()
     elif name == 'countermeasure':
-      p = CountermeasureParameters(self.theName,self.theDescription,self.theType,self.theEnvironmentProperties)
+      p = CountermeasureParameters(self.theName,self.theDescription,self.theType,self.theTags,self.theEnvironmentProperties)
       self.theCountermeasures.append(p)
       self.resetCountermeasureAttributes()
     elif name == 'mitigating_property':

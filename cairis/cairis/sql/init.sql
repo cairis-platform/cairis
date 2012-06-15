@@ -59,6 +59,11 @@ DROP TABLE IF EXISTS attacker_tag;
 DROP TABLE IF EXISTS threat_tag;
 DROP TABLE IF EXISTS vulnerability_tag;
 DROP TABLE IF EXISTS risk_tag;
+DROP TABLE IF EXISTS goal_tag;
+DROP TABLE IF EXISTS obstacle_tag;
+DROP TABLE IF EXISTS domainproperty_tag;
+DROP TABLE IF EXISTS countermeasure_tag;
+DROP TABLE IF EXISTS response_tag;
 
 DROP TABLE IF EXISTS component_view_component;
 DROP TABLE IF EXISTS connector;
@@ -2436,6 +2441,46 @@ CREATE TABLE persona_tag (
   tag_id INT NOT NULL,
   PRIMARY KEY(persona_id,tag_id),
   FOREIGN KEY(persona_id) REFERENCES persona(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE goal_tag (
+  goal_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(goal_id,tag_id),
+  FOREIGN KEY(goal_id) REFERENCES goal(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE obstacle_tag (
+  obstacle_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(obstacle_id,tag_id),
+  FOREIGN KEY(obstacle_id) REFERENCES obstacle(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE domainproperty_tag (
+  domainproperty_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(domainproperty_id,tag_id),
+  FOREIGN KEY(domainproperty_id) REFERENCES domainproperty(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE countermeasure_tag (
+  countermeasure_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(countermeasure_id,tag_id),
+  FOREIGN KEY(countermeasure_id) REFERENCES countermeasure(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE response_tag (
+  response_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(response_id,tag_id),
+  FOREIGN KEY(response_id) REFERENCES response(id), 
   FOREIGN KEY(tag_id) REFERENCES tag(id)
 ) ENGINE=INNODB;
 

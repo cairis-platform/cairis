@@ -207,6 +207,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
   def resetResponseAttributes(self):
     self.theRisk = ''
     self.theType = ''
+    self.theTags = []
     self.theEnvironmentProperties = []
     self.resetResponseEnvironmentAttributes()
 
@@ -462,7 +463,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.theEnvironmentProperties.append(p)
       self.resetRiskEnvironmentAttributes()
     elif name == 'response':
-      p = ResponseParameters(self.theType + ' ' + self.theRisk,self.theRisk,self.theEnvironmentProperties,self.theType)
+      p = ResponseParameters(self.theType + ' ' + self.theRisk,self.theRisk,self.theTags,self.theEnvironmentProperties,self.theType)
       self.theResponses.append(p)
       self.resetResponseAttributes()
     elif name == 'accept_environment':

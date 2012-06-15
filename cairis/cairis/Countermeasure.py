@@ -20,9 +20,10 @@ from PropertyHolder import PropertyHolder;
 from numpy import *
 
 class Countermeasure:
-  def __init__(self,cmId,cmName,cmDesc,cmType,cProps):
+  def __init__(self,cmId,cmName,cmDesc,cmType,tags,cProps):
     self.theId = cmId
     self.theName = cmName
+    self.theTags = tags
     self.theDescription = cmDesc
     self.theType = cmType
     self.theEnvironmentProperties = cProps
@@ -44,6 +45,7 @@ class Countermeasure:
 
   def id(self): return self.theId
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def type(self): return self.theType
   def description(self): return self.theDescription
   def environmentProperties(self): return self.theEnvironmentProperties

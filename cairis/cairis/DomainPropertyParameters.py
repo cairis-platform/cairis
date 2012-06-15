@@ -19,14 +19,16 @@
 from ObjectCreationParameters import ObjectCreationParameters
 
 class DomainPropertyParameters(ObjectCreationParameters):
-  def __init__(self,name,desc,dpType,dpOrig):
+  def __init__(self,name,desc,dpType,dpOrig,tags):
     ObjectCreationParameters.__init__(self)
     self.theName = name
+    self.theTags = tags
     self.theDescription = desc
     self.theType = dpType
     self.theOriginator = dpOrig
 
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def description(self): return self.theDescription
   def type(self): return self.theType
   def originator(self): return self.theOriginator

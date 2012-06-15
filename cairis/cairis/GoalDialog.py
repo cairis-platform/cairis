@@ -29,6 +29,7 @@ class GoalDialog(wx.Dialog):
     wx.Dialog.__init__(self,parent,parameters.id(),parameters.label(),style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(600,400))
     self.theGoalId = -1
     self.theGoalName = ''
+    self.theTags = []
     self.theGoalOriginator = ''
     self.theEnvironmentProperties = []
     self.panel = 0
@@ -50,10 +51,12 @@ class GoalDialog(wx.Dialog):
 
   def onCommit(self,evt):
     nameCtrl = self.FindWindowById(armid.GOAL_TEXTNAME_ID)
+    tagsCtrl = self.FindWindowById(armid.GOAL_TAGS_ID)
     origCtrl = self.FindWindowById(armid.GOAL_TEXTORIGINATOR_ID)
     environmentCtrl = self.FindWindowById(armid.GOAL_PANELENVIRONMENT_ID)
 
     self.theGoalName = nameCtrl.GetValue()
+    self.theTags = tagsCtrl.tags()
     self.theGoalOriginator = origCtrl.GetValue()
 
     if (self.commitVerb == 'Add'):
@@ -118,6 +121,6 @@ class GoalDialog(wx.Dialog):
       self.EndModal(armid.GOAL_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = GoalParameters(self.theGoalName,self.theGoalOriginator,self.theEnvironmentProperties)
+    parameters = GoalParameters(self.theGoalName,self.theGoalOriginator,self.theTags,self.theEnvironmentProperties)
     parameters.setId(self.theGoalId)
     return parameters

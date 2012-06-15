@@ -29,6 +29,7 @@ class ObstacleDialog(wx.Dialog):
     wx.Dialog.__init__(self,parent,parameters.id(),parameters.label(),style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(600,400))
     self.theObstacleId = -1
     self.theObstacleName = ''
+    self.theTags = []
     self.theObstacleOriginator = ''
     self.theEnvironmentProperties = []
     self.panel = 0
@@ -50,10 +51,12 @@ class ObstacleDialog(wx.Dialog):
 
   def onCommit(self,evt):
     nameCtrl = self.FindWindowById(armid.OBSTACLE_TEXTNAME_ID)
+    tagsCtrl = self.FindWindowById(armid.OBSTACLE_TAGS_ID)
     origCtrl = self.FindWindowById(armid.OBSTACLE_TEXTORIGINATOR_ID)
     environmentCtrl = self.FindWindowById(armid.OBSTACLE_PANELENVIRONMENT_ID)
 
     self.theObstacleName = nameCtrl.GetValue()
+    self.theTags = tagsCtrl.tags()
     self.theObstacleOriginator = origCtrl.GetValue()
     if (self.commitVerb == 'Add'):
       b = Borg()
@@ -100,6 +103,6 @@ class ObstacleDialog(wx.Dialog):
       self.EndModal(armid.OBSTACLE_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = ObstacleParameters(self.theObstacleName,self.theObstacleOriginator,self.theEnvironmentProperties)
+    parameters = ObstacleParameters(self.theObstacleName,self.theObstacleOriginator,self.theTags,self.theEnvironmentProperties)
     parameters.setId(self.theObstacleId)
     return parameters

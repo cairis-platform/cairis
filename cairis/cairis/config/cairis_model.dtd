@@ -151,7 +151,7 @@
 <!ATTLIST misusecase environment CDATA #REQUIRED>
 <!ELEMENT narrative (#PCDATA)>
 
-<!ELEMENT response (accept_environment*,transfer_environment*,deter_environment*,prevent_environment*,detect_environment*,react_environment*)>
+<!ELEMENT response (tag*,accept_environment*,transfer_environment*,deter_environment*,prevent_environment*,detect_environment*,react_environment*)>
 <!ATTLIST response risk CDATA #REQUIRED>
 <!ATTLIST response type (Accept | Transfer | Mitigate | Prevent | Deter | Detect | React) #REQUIRED>
 <!ELEMENT accept_environment (rationale)>
@@ -289,12 +289,12 @@
 
 <!ELEMENT goals (domainproperty*, goal*,obstacle*,requirement*,countermeasure*)>
 
-<!ELEMENT domainproperty (definition)>
+<!ELEMENT domainproperty (tag*,definition)>
 <!ATTLIST domainproperty name CDATA #REQUIRED>
 <!ATTLIST domainproperty type (Hypothesis | Invariant) #REQUIRED>
 <!ATTLIST domainproperty originator CDATA #REQUIRED>
 
-<!ELEMENT goal (goal_environment+)>
+<!ELEMENT goal (tag*,goal_environment+)>
 <!ATTLIST goal name CDATA #REQUIRED>
 <!ATTLIST goal originator CDATA #REQUIRED>
 <!ELEMENT goal_environment (definition,fit_criterion,issue,concern*,concern_association*)>
@@ -312,7 +312,7 @@
 <!ATTLIST concern_association target_nry (1 | a | 1..a) #REQUIRED>
 <!ATTLIST concern_association target_name CDATA #REQUIRED>
 
-<!ELEMENT obstacle (obstacle_environment+)>
+<!ELEMENT obstacle (tag*,obstacle_environment+)>
 <!ATTLIST obstacle name CDATA #REQUIRED>
 <!ATTLIST obstacle originator CDATA #REQUIRED>
 <!ELEMENT obstacle_environment (definition,concern*)>
@@ -328,7 +328,7 @@
 <!ATTLIST requirement priority (1 | 2 | 3) #REQUIRED>
 <!ELEMENT originator (#PCDATA)>
 
-<!ELEMENT countermeasure (description,countermeasure_environment+)>
+<!ELEMENT countermeasure (tag*,description,countermeasure_environment+)>
 <!ATTLIST countermeasure name CDATA #REQUIRED>
 <!ATTLIST countermeasure type CDATA #REQUIRED>
 <!ELEMENT countermeasure_environment (countermeasure_requirement+,target+,mitigating_property*,responsible_role+,responsible_persona+)>

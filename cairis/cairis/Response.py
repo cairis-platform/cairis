@@ -17,9 +17,10 @@
 
 
 class Response:
-  def __init__(self,respId,respName,respRisk,cProps,respType):
+  def __init__(self,respId,respName,respRisk,tags,cProps,respType):
     self.theId = respId
     self.theName = respName
+    self.theTags = tags
     self.theRisk = respRisk
     self.theEnvironmentProperties = cProps
     self.theResponseType = respType
@@ -35,6 +36,7 @@ class Response:
 
   def id(self): return self.theId
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def risk(self): return self.theRisk
   def environmentProperties(self): return self.theEnvironmentProperties
   def responseType(self): return self.theResponseType

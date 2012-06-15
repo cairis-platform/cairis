@@ -17,15 +17,17 @@
 
 
 class DomainProperty:
-  def __init__(self,dpId,dpName,dpDesc,dpType,dpOrig):
+  def __init__(self,dpId,dpName,dpDesc,dpType,dpOrig,tags):
     self.theId = dpId
     self.theName = dpName
+    self.theTags = tags
     self.theDescription = dpDesc
     self.theType = dpType
     self.theOriginator = dpOrig
 
   def id(self): return self.theId
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def description(self): return self.theDescription
   def type(self): return self.theType
   def originator(self): return self.theOriginator

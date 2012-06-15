@@ -19,20 +19,21 @@
 import wx
 import ARM
 import armid
-import WidgetFactory
 from Borg import Borg
+from BasePanel import BasePanel
 from ResponseParameters import ResponseParameters
 from AcceptEnvironmentPanel import AcceptEnvironmentPanel
 from TransferEnvironmentPanel import TransferEnvironmentPanel
 from MitigateEnvironmentPanel import MitigateEnvironmentPanel
 
-class ResponsePanel(wx.Panel):
+class ResponsePanel(BasePanel):
   def __init__(self,parent,responseType,panel):
-    wx.Panel.__init__(self,parent,armid.RESPONSE_ID)
+    BasePanel.__init__(self,parent,armid.RESPONSE_ID)
     b = Borg()
     self.dbProxy = b.dbProxy
     self.theResponseName = ''
     self.theRiskName = ''
+    self.theTags = []
     self.theCommitVerb = 'Create'
     self.environmentPanel = panel(self,self.dbProxy)
     self.theEnvironmentProperties = []
@@ -40,11 +41,12 @@ class ResponsePanel(wx.Panel):
 
   def buildControls(self,isCreate,isUpdateable = True):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-    mainSizer.Add(WidgetFactory.buildTextSizer(self,'Name',(87,60),armid.RESPONSE_TEXTNAME_ID,isReadOnly=True),0,wx.EXPAND)
-    mainSizer.Add(WidgetFactory.buildComboSizerList(self,'Risk',(87,30),armid.RESPONSE_COMBORISK_ID,self.dbProxy.getDimensionNames('risk')),0,wx.EXPAND)
+    mainSizer.Add(self.buildTextSizer('Name',(87,60),armid.RESPONSE_TEXTNAME_ID,isReadOnly=True),0,wx.EXPAND)
+    mainSizer.Add(self.buildTagCtrlSizer((87,30),armid.RESPONSE_TAGS_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Risk',(87,30),armid.RESPONSE_COMBORISK_ID,self.dbProxy.getDimensionNames('risk')),0,wx.EXPAND)
     mainSizer.Add(self.environmentPanel,1,wx.EXPAND)
     if (isUpdateable):
-      mainSizer.Add(WidgetFactory.buildCommitButtonSizer(self,armid.RESPONSE_BUTTONCOMMIT_ID,isCreate),0,wx.ALIGN_CENTRE)
+      mainSizer.Add(self.buildCommitButtonSizer(armid.RESPONSE_BUTTONCOMMIT_ID,isCreate),0,wx.ALIGN_CENTRE)
     self.SetSizer(mainSizer)
     self.nameCtrl = self.FindWindowById(armid.RESPONSE_TEXTNAME_ID)
     self.nameCtrl.Disable()
@@ -69,6 +71,9 @@ class ResponsePanel(wx.Panel):
 
   def loadControls(self,response,isReadOnly = False):
     self.nameCtrl.SetValue(response.name())
+    tagsCtrl = self.FindWindowById(armid.RESPONSE_TAGS_ID)
+    tagsCtrl.set(response.tags())
+
     self.riskCtrl.SetStringSelection(response.risk())
     self.environmentPanel.loadControls(response)
     self.theCommitVerb = 'Edit'
@@ -87,6 +92,8 @@ class ResponsePanel(wx.Panel):
         return
 
     self.theRiskName = self.riskCtrl.GetStringSelection()
+    tagsCtrl = self.FindWindowById(armid.RESPONSE_TAGS_ID)
+    self.theTags = tagsCtrl.tags()
     try:
       self.theEnvironmentProperties = self.environmentPanel.environmentProperties()
     except ARM.EnvironmentValidationError, errorText:
@@ -116,4 +123,4 @@ class ResponsePanel(wx.Panel):
       return 0
 
   def parameters(self):
-    return ResponseParameters(self.theResponseName,self.theRiskName,self.theEnvironmentProperties,self.theResponseVerb)
+    return ResponseParameters(self.theResponseName,self.theRiskName,self.theTags,self.theEnvironmentProperties,self.theResponseVerb)

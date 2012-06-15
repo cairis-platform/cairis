@@ -126,11 +126,11 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'DependencyParameters'):
     return Dependency(objtId,p.environment(),p.depender(),p.dependee(),p.dependencyType(),p.dependency(),p.rationale())
   if (p.__class__.__name__ == 'GoalParameters'):
-    return Goal(objtId,p.name(),p.originator(),p.environmentProperties())
+    return Goal(objtId,p.name(),p.originator(),p.tags(),p.environmentProperties())
   if (p.__class__.__name__ == 'ObstacleParameters'):
-    return Obstacle(objtId,p.name(),p.originator(),p.environmentProperties())
+    return Obstacle(objtId,p.name(),p.originator(),p.tags(),p.environmentProperties())
   if (p.__class__.__name__ == 'DomainPropertyParameters'):
-    return DomainProperty(objtId,p.name(),p.description(),p.type(),p.originator())
+    return DomainProperty(objtId,p.name(),p.description(),p.type(),p.originator(),p.tags())
   if (p.__class__.__name__ == 'ThreatParameters'):
     return Threat(objtId,p.name(),p.type(),p.method(),p.tags(),p.environmentProperties())
   if (p.__class__.__name__ == 'VulnerabilityParameters'):
@@ -138,9 +138,9 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'RiskParameters'):
     return Risk(objtId,p.name(),p.threat(),p.vulnerability(),p.tags(),p.misuseCase())
   if (p.__class__.__name__ == 'ResponseParameters'):
-    return Response(objtId,p.name(),p.risk(),p.environmentProperties(),p.responseType())
+    return Response(objtId,p.name(),p.risk(),p.tags(),p.environmentProperties(),p.responseType())
   if (p.__class__.__name__ == 'CountermeasureParameters'):
-    return Countermeasure(objtId,p.name(),p.description(),p.type(),p.environmentProperties())
+    return Countermeasure(objtId,p.name(),p.description(),p.type(),p.tags(),p.environmentProperties())
   if (p.__class__.__name__ == 'TaskParameters'):
     return Task(objtId,p.name(),p.shortCode(),p.objective(),p.assumption(),p.author(),p.tags(),p.environmentProperties())
   if (p.__class__.__name__ == 'UseCaseParameters'):

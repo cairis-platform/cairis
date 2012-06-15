@@ -19,12 +19,14 @@
 import ObjectCreationParameters
 
 class GoalParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,goalName,goalOrig,properties):
+  def __init__(self,goalName,goalOrig,tags,properties):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = goalName
+    self.theTags = tags
     self.theOriginator = goalOrig
     self.theEnvironmentProperties = properties
 
   def name(self): return self.theName
+  def tags(self): return self.theTags
   def originator(self): return self.theOriginator
   def environmentProperties(self): return self.theEnvironmentProperties
