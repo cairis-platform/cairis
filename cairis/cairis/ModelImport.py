@@ -328,7 +328,7 @@ def importUsability(personaParameterSet,edParameterSet,drParameterSet,crParamete
       b.dbProxy.addTask(taskParameters)
     else:
       taskParameters.setId(objtId)
-      b.dbProxy.updateTask(drParameters)
+      b.dbProxy.updateTask(taskParameters)
     taskCount += 1
 
   ucCount = 0
@@ -358,7 +358,7 @@ def importUsability(personaParameterSet,edParameterSet,drParameterSet,crParamete
 
   tcCount = 0
   for tcParameters in tcParameterSet:
-    objtId = b.dbProxy.existingObject(tcParameters.name(),'task_characteristic')
+    objtId = b.dbProxy.existingObject(tcParameters.task(),'task_characteristic')
     if objtId == -1:
       b.dbProxy.addTaskCharacteristic(tcParameters)
     else:

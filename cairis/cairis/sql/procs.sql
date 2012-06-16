@@ -702,6 +702,7 @@ drop procedure if exists componentViewRequirements;
 drop procedure if exists componentAssets;
 drop procedure if exists situateComponentAsset;
 drop procedure if exists existing_object;
+drop procedure if exists existing_characteristic;
 drop procedure if exists addComponentTarget;
 drop procedure if exists assetComponents;
 drop procedure if exists addTemplateRequirement;
@@ -10847,12 +10848,7 @@ begin
     insert into persona_reference(id,persona_id,name,description) values (refId,objtId,refName,cDesc);
   elseif dimName = 'requirement'
   then
-    call requirementLabelComponents(objtName,shortCode,reqLabel);
-    select o.id into objtId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    if objtId is null
-    then
-      select o.id into objtId from requirement o, environment_requirement ar, environment a where o.label = reqLabel and o.id = ar.requirement_id and ar.environment_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    end if;
+    select o.id into objtId from requirement o where o.name = objtName and o.version = (select max(i.version) from requirement i where i.id = o.id);
     insert into requirement_reference(id,requirement_id,name,description) values (refId,objtId,refName,cDesc);
   elseif dimName = 'response'
   then
@@ -10874,6 +10870,10 @@ begin
   then
     select id into objtId from threat where name = objtName;
     insert into threat_reference(id,threat_id,name,description) values (refId,objtId,refName,cDesc);
+  elseif dimName = 'usecase'
+  then
+    select id into objtId from usecase where name = objtName;
+    insert into usecase_reference(id,usecase_id,name,description) values (refId,objtId,refName,cDesc);
   else
     select id into objtId from vulnerability where name = objtName;
     insert into vulnerability_reference(id,vulnerability_id,name,description) values (refId,objtId,refName,cDesc);
@@ -10925,12 +10925,7 @@ begin
     update persona_reference set persona_id = objtId, name = refName, description = cDesc where id = refId;
   elseif dimName = 'requirement'
   then
-    call requirementLabelComponents(objtName,shortCode,reqLabel);
-    select o.id into objtId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    if objtId is null
-    then
-      select o.id into objtId from requirement o, environment_requirement ar, environment a where o.label = reqLabel and o.id = ar.requirement_id and ar.environment_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    end if;
+    select o.id into objtId from requirement o where o.name = objtName and o.version = (select max(i.version) from requirement i where i.id = o.id);
     update requirement_reference set requirement_id = objtId, name = refName, description = cDesc where id = refId;
   elseif dimName = 'response'
   then
@@ -10952,6 +10947,10 @@ begin
   then
     select id into objtId from threat where name = objtName;
     update threat_reference set threat_id = objtId, name = refName, description = cDesc where id = refId;
+  elseif dimName = 'usecase'
+  then
+    select id into objtId from usecase where name = objtName;
+    update usecase_reference set usecase_id = objtId, name = refName, description = cDesc where id = refId;
   else
     select id into objtId from vulnerability where name = objtName;
     update vulnerability_reference set vulnerability_id = objtId, name = refName, description = cDesc where id = refId;
@@ -19238,5 +19237,35 @@ begin
   insert into persona_implied_process_network(persona_implied_process_id,persona_code_network_id) values (ipId,pcnId);
 end
 //
+
+create procedure existing_characteristic(in objtName text,in dimName text) 
+begin
+  declare countSql varchar(4000);
+  declare exSql varchar(4000);
+  declare objtId int default -1;
+  declare objtCount int;
+
+  set countSql = concat('select count(id) into @objtCount from ',dimName,' where description = "',objtName,'" limit 1');
+  set @sql = countSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set objtCount = @objtCount;
+
+  if objtCount = 0
+  then
+    select -1;
+  else
+    set exSql = concat('select id into @objtId from ',dimName,' where description = "',objtName,'" limit 1');
+    set @sql = exSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
+    set objtId = @objtId;
+    select objtId;
+  end if;
+end
+//
+
 
 delimiter ;

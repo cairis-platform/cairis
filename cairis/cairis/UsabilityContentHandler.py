@@ -268,22 +268,16 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       refName = attrs['reference']
       refType = attrs['type']
       refArtifact = ''
-      if (refType != 'document'):
-        refArtifact = attrs['artifact']
       self.theGrounds.append((refName,'',refType))
     elif name == 'warrant':
       refName = attrs['reference']
       refType = attrs['type']
       refArtifact = ''
-      if (refType != 'document'):
-        refArtifact = attrs['artifact']
       self.theWarrants.append((refName,'',refType))
     elif name == 'rebuttal':
       refName = attrs['reference']
       refType = attrs['type']
       refArtifact = ''
-      if (refType != 'document'):
-        refArtifact = attrs['artifact']
       self.theRebuttals.append((refName,'',refType))
     elif name == 'task':
       self.theName = attrs['name']

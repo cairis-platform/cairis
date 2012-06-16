@@ -9311,7 +9311,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def existingObject(self,objtName,dimName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call existing_object(%s,%s)',(objtName,dimName))
+      existingSql = 'call existing_object(%s,%s)'
+      if (dimName == 'persona_characteristic' or dimName == 'task_characteristic'):
+        existingSql = 'call existing_characteristic(%s,%s)'
+      curs.execute(existingSql,(objtName,dimName))
       if (curs.rowcount == -1):
         curs.close()
         exceptionText = 'Error checking the existence of ' + dimName + ' ' + objtName 
