@@ -4922,6 +4922,8 @@ begin
   then
     select 'asset' from_objt,a.name from_name, 'threat' to_objt,t.name to_name from asset_threat at,asset a, threat t where at.environment_id = environmentId and at.asset_id = a.id and at.threat_id = t.id
     union
+    select 'asset' from_objt,a.name from_name, 'tag' to_objt,t.name to_name from asset_tag at,asset a, tag t, environment_asset ea where ea.environment_id = environmentId and ea.asset_id = a.id and at.asset_id = ea.asset_id and at.tag_id = t.id
+    union
     select 'asset' from_objt,a.name from_name,'vulnerability' to_objt, v.name to_name from asset_vulnerability av, asset a, vulnerability v where av.environment_id = environmentId and av.vulnerability_id = v.id and  av.asset_id = a.id
     union
     select 'attacker' from_objt, a.name from_name, 'threat' to_objt, t.name to_name from threat_attacker ta, threat t, attacker a, environment_attacker ea, environment_threat et where ta.environment_id = environmentId and ta.attacker_id = a.id and ta.threat_id = t.id and ta.environment_id = ea.environment_id and ta.environment_id = et.environment_id and ea.environment_id = environmentId and et.environment_id = environmentId
@@ -4993,6 +4995,8 @@ begin
     select 'asset' from_objt, a.name from_name, 'component' to_objt, c.name to_name from component c, component_threat_target ctt, asset a where ctt.environment_id = environmentId and ctt.component_id = c.id and ctt.asset_id = a.id;
   else
     select 'asset' from_objt,a.name from_name, 'threat' to_objt,t.name to_name from asset_threat at,asset a, threat t where at.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and at.asset_id = a.id and at.threat_id = t.id
+    union
+    select 'asset' from_objt,a.name from_name, 'tag' to_objt,t.name to_name from asset_tag at,asset a, tag t, environment_asset ea where ea.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ea.asset_id = a.id and at.asset_id = ea.asset_id and at.tag_id = t.id
     union
     select 'asset' from_objt,a.name from_name,'vulnerability' to_objt, v.name to_name from asset_vulnerability av, asset a, vulnerability v where av.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and av.vulnerability_id = v.id and  av.asset_id = a.id
     union

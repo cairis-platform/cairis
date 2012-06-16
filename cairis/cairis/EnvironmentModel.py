@@ -53,6 +53,8 @@ class EnvironmentModel:
     objtUrl = dimName + '#' + str(objtName)
     if (dimName == 'persona'):
       self.theGraph.add_node(pydot.Node(objtName,shape='circle',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+    elif (dimName == 'tag'):
+      self.theGraph.add_node(pydot.Node(objtName,shape='note',style='filled',pencolor='black',color='yellow',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'attacker'):
       self.theGraph.add_node(pydot.Node(objtName,shape='circle',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'asset'):
