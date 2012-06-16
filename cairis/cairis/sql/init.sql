@@ -37,6 +37,7 @@ DROP VIEW IF EXISTS component_asset;
 DROP VIEW IF EXISTS asset_template_asset;
 DROP VIEW IF EXISTS securitypattern_requirement;
 DROP VIEW IF EXISTS component_requirement;
+DROP VIEW IF EXISTS misusability_case;
 
 DROP TABLE IF EXISTS usecase_step_synopsis;
 DROP TABLE IF EXISTS usecase_pc_contribution;
@@ -228,6 +229,7 @@ DROP TABLE IF EXISTS threat_reference;
 DROP TABLE IF EXISTS vulnerability_reference;
 DROP TABLE IF EXISTS behavioural_variable;
 DROP TABLE IF EXISTS characteristic_reference_type;
+DROP TABLE IF EXISTS domainproperty_task;
 DROP TABLE IF EXISTS domainproperty;
 DROP TABLE IF EXISTS domainproperty_type;
 DROP TABLE IF EXISTS usecase_step_goal_exception;
@@ -908,6 +910,13 @@ CREATE TABLE usecase_task (
   task_id INT NOT NULL,
   PRIMARY KEY(usecase_id,task_id),
   FOREIGN KEY(usecase_id) REFERENCES usecase(id),
+  FOREIGN KEY(task_id) REFERENCES task(id)
+) ENGINE=INNODB;
+CREATE TABLE domainproperty_task (
+  domainproperty_id INT NOT NULL,
+  task_id INT NOT NULL,
+  PRIMARY KEY(domainproperty_id,task_id),
+  FOREIGN KEY(domainproperty_id) REFERENCES domainproperty(id),
   FOREIGN KEY(task_id) REFERENCES task(id)
 ) ENGINE=INNODB;
 CREATE TABLE usecase_role (
@@ -3100,7 +3109,9 @@ CREATE VIEW assumption_task_model as
   union
   select concat('gwb_',pc.description) from_name, 'gwb' from_dim, concat('qual_',pc.description) to_name, 'qual' to_dim, p.name task_name, pc.description characteristic_name from task_characteristic pc, task p where pc.task_id = p.id
   union
-  select concat('qual_',pc.description) from_name, 'qual' from_dim, pc.description to_name, 'task_characteristic' to_dim, p.name task_name, pc.description characteristic_name from task_characteristic pc, task p where pc.task_id = p.id;
+  select concat('qual_',pc.description) from_name, 'qual' from_dim, pc.description to_name, 'task_characteristic' to_dim, p.name task_name, pc.description characteristic_name from task_characteristic pc, task p where pc.task_id = p.id
+  union
+  select t.name from_name, 'task' from_dim, dp.name to_name, 'domainproperty' to_dim, t.name task_name, '' characteristic_name from task t, domainproperty dp,domainproperty_task dt where dt.task_id = t.id and dt.task_id = dt.task_id and dt.domainproperty_id = dp.id;
 
 
 CREATE VIEW assumption_persona_model as
@@ -3283,6 +3294,9 @@ CREATE VIEW component_requirement as
 CREATE VIEW securitypattern_requirement as
   select str.label, str.pattern_id, tr.type_id, tr.name, tr.description, tr.rationale, tr.fit_criterion, tr.asset_id from securitypattern_template_requirement str, template_requirement tr where str.template_requirement_id = tr.id;
 
+CREATE VIEW misusability_case as
+  select id,name from task where id in (select task_id from task_characteristic);
+
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');
 INSERT INTO trace_dimension values (1,'persona');
@@ -3415,6 +3429,7 @@ INSERT INTO allowable_trace values(0,0);
 INSERT INTO allowable_trace values(20,0);
 INSERT INTO allowable_trace values(0,20);
 INSERT INTO allowable_trace values(21,18);
+INSERT INTO allowable_trace values(16,2);
 INSERT INTO requirement_type values(0,'Functional');
 INSERT INTO requirement_type values(1,'Data');
 INSERT INTO requirement_type values(2,'Look and Feel');

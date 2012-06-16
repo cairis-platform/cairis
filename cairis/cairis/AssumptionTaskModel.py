@@ -47,6 +47,8 @@ class AssumptionTaskModel:
     objtUrl = dimName + '#' + str(objtName)
     if (dimName == 'task'):
       self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+    elif (dimName == 'domainproperty'):
+      self.theGraph.add_node(pydot.Node(objtName,shape='house',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task_characteristic'):
       self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,style='filled',fillcolor='green',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'rebuttal'):

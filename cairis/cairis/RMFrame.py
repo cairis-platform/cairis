@@ -1579,8 +1579,8 @@ class RMFrame(wx.Frame):
     dialog = None
     try:
       proxy = self.b.dbProxy
-      tasks = proxy.getDimensionNames('task')
-      cDlg = DimensionNameDialog(self,'task',tasks,'Select')
+      tasks = proxy.getDimensionNames('misusability_case')
+      cDlg = DimensionNameDialog(self,'misusability_case',tasks,'Select')
       if (cDlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
         taskName = cDlg.dimensionName()
         cDlg.Destroy() 

@@ -257,3 +257,4 @@ rolegoalrole_dependency
 roletaskrole_dependency
 roleassetrole_dependency
 usecase_task
+domainproperty_task

@@ -202,6 +202,7 @@ drop procedure if exists delete_usecase;
 drop procedure if exists updateTask;
 drop procedure if exists updateMisuseCase;
 drop procedure if exists taskNames;
+drop procedure if exists misusability_caseNames;
 drop procedure if exists usecaseNames;
 drop procedure if exists misusecaseNames;
 drop procedure if exists addMisuseCaseRisk;
@@ -19264,6 +19265,12 @@ begin
     set objtId = @objtId;
     select objtId;
   end if;
+end
+//
+
+create procedure misusability_caseNames(in envName text)
+begin
+  select name from misusability_case;
 end
 //
 
