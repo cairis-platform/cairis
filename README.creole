@@ -14,7 +14,7 @@ CAIRIS (Computer Aided Integration of Requirements and Information Security) is 
 The easiest way to get up and running is by download a copy of a VM with CAIRIS pre-installed from http://www.cs.ox.ac.uk/cairis.
 
 Other than that, CAIRIS should run on most recent flavours of Linux.  The dependencies that need to be pre-installed are described in the manual.
-Sadly, the manual itself is a little out-of-date but, from our experience, people who understand the concepts used by the tool can usallly get up and running pretty quickly :-)
+Sadly, the manual itself is a little out-of-date but, from our experience, people who understand the concepts used by the tool can usally get up and running pretty quickly.
 
 
 == Get in Touch ==
