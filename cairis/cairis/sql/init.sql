@@ -912,13 +912,6 @@ CREATE TABLE usecase_task (
   FOREIGN KEY(usecase_id) REFERENCES usecase(id),
   FOREIGN KEY(task_id) REFERENCES task(id)
 ) ENGINE=INNODB;
-CREATE TABLE domainproperty_task (
-  domainproperty_id INT NOT NULL,
-  task_id INT NOT NULL,
-  PRIMARY KEY(domainproperty_id,task_id),
-  FOREIGN KEY(domainproperty_id) REFERENCES domainproperty(id),
-  FOREIGN KEY(task_id) REFERENCES task(id)
-) ENGINE=INNODB;
 CREATE TABLE usecase_role (
   usecase_id INT NOT NULL,
   role_id INT NOT NULL,
@@ -1358,6 +1351,13 @@ CREATE TABLE domainproperty (
   originator VARCHAR(100) NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(domainproperty_type_id) REFERENCES domainproperty_type(id)
+) ENGINE=INNODB;
+CREATE TABLE domainproperty_task (
+  domainproperty_id INT NOT NULL,
+  task_id INT NOT NULL,
+  PRIMARY KEY(domainproperty_id,task_id),
+  FOREIGN KEY(domainproperty_id) REFERENCES domainproperty(id),
+  FOREIGN KEY(task_id) REFERENCES task(id)
 ) ENGINE=INNODB;
 CREATE TABLE domainproperty_asset (
   domainproperty_id INT NOT NULL,

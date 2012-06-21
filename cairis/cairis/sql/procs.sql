@@ -13892,13 +13892,17 @@ end
 
 create procedure assumptionTaskModel_t(in taskName text, in tcName text)
 begin
-  select from_name, from_dim, to_name, to_dim, task_name, characteristic_name from assumption_task_model where task_name = taskName;
+  select from_name, from_dim, to_name, to_dim, task_name, characteristic_name from assumption_task_model where task_name = taskName
+  union
+  select atm.from_name, atm.from_dim, atm.to_name, atm.to_dim, atm.task_name, atm.characteristic_name from assumption_task_model atm where from_name = taskName and from_dim = 'task';
 end
 //
 
 create procedure assumptionTaskModel_tc(in taskName text, in tcName text)
 begin
-  select from_name, from_dim, to_name, to_dim, task_name, characteristic_name from assumption_task_model where task_name = taskName and characteristic_name = tcName;
+  select from_name, from_dim, to_name, to_dim, task_name, characteristic_name from assumption_task_model where task_name = taskName and characteristic_name = tcName
+  union
+  select atm.from_name, atm.from_dim, atm.to_name, atm.to_dim, atm.task_name, atm.characteristic_name from assumption_task_model atm where from_name = taskName and from_dim = 'task';
 end
 //
 
@@ -19025,7 +19029,7 @@ begin
   if codeId is null
   then
     call newId2(codeId);
-    call addCode(codeId,docCode,'None','None','None');
+    call addCode(codeId,docCode,'context','None','None','None');
   end if;
 
   set artIdSql = concat('select id into @artId from ',artType,' where name = "',artName,'" limit 1');
