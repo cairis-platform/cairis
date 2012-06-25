@@ -3133,7 +3133,10 @@ begin
   insert into usecase_step(usecase_id,environment_id,step_no,description) values (ucId,envId,stepNo,stepDesc);
 
   select name into ucName from usecase where id = ucId;
-  call addStepSynopsis(ucName,envName,stepNo,stepSyn,stepActor,stepActorType);
+  if stepSyn != ''
+  then
+    call addStepSynopsis(ucName,envName,stepNo,stepSyn,stepActor,stepActorType);
+  end if;
 end
 //
 
@@ -19290,20 +19293,22 @@ begin
   declare ucId int;
   declare envId int;
   declare actorId int;
+  declare actorIdSql varchar(4000);
   declare actorTypeId int;
 
   select id into ucId from usecase where name = ucName;
   select id into envId from environment where name = envName;
+  select id into actorTypeId from trace_dimension where name = stepActorType;
+
+  set actorIdSql = concat('select id into @actorId from ',stepActorType,' where name = \"',stepActor,'\"');
+  set @sql = actorIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set actorId = @actorId;
 
   call newId2(stepSynId);
 
-  select id into actorTypeId from trace_dimension where name = stepActorType;
-  if stepActorType = 'role'
-  then
-    select id into actorId from role where name = stepActor;
-  else
-    select id into actorId from asset where name = stepActor;
-  end if;
   insert into usecase_step_synopsis(id,usecase_id,step_no,environment_id,synopsis,actor_id,actor_type_id) values (stepSynId,ucId,stepNo,envId,stepSyn,actorId,actorTypeId); 
 end
 //

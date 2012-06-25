@@ -35,7 +35,7 @@ class ReferenceSynopsisPanel(BasePanel):
 
     actorSizer = wx.BoxSizer(wx.HORIZONTAL)
     mainSizer.Add(actorSizer,0,wx.EXPAND)
-    actorSizer.Add(self.buildComboSizerList('Actor Type',(87,30),armid.REFERENCESYNOPSIS_COMBOACTORTYPE_ID,['asset','persona']),1,wx.EXPAND)
+    actorSizer.Add(self.buildComboSizerList('Actor Type',(87,30),armid.REFERENCESYNOPSIS_COMBOACTORTYPE_ID,['asset','persona','component']),1,wx.EXPAND)
     actorSizer.Add(self.buildComboSizerList('Actor',(87,30),armid.REFERENCESYNOPSIS_COMBOACTORNAME_ID,['']),1,wx.EXPAND)
     mainSizer.Add(wx.StaticText(self,-1,''),1,wx.EXPAND)
     mainSizer.Add(self.buildCommitButtonSizer(armid.REFERENCESYNOPSIS_BUTTONCOMMIT_ID,True),0,wx.ALIGN_CENTER)

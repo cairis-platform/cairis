@@ -7230,8 +7230,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addUseCaseStep(self,ucId,envName,stepNo,step):
     try:
       curs = self.conn.cursor()
-      synId = self.newId()
-      curs.execute('call addUseCaseStep(%s,%s,%s,%s,%s,%s,%s,%s)',(ucId,envName,stepNo,step.text(),synId,step.synopsis(),step.actor(),step.actorType())) 
+      curs.execute('call addUseCaseStep(%s,%s,%s,%s,%s,%s,%s)',(ucId,envName,stepNo,step.text(),step.synopsis(),step.actor(),step.actorType())) 
       if (curs.rowcount == -1):
         exceptionText = 'Error adding step: ' + step.text() + ' to use case id ' + str(ucId)
         raise DatabaseProxyException(exceptionText) 
@@ -10162,7 +10161,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addStepSynopsis(self,ucName,envName,stepNo,synName,aType,aName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call addStepSynopsis(%s,%s,%s,%s,%s,%s)',(ucName,envName,stepNo,synName,aType,aName))
+      curs.execute('call addStepSynopsis(%s,%s,%s,%s,%s,%s)',(ucName,envName,stepNo,synName,aName,aType))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding step synopsis ' + synName
         raise DatabaseProxyException(exceptionText) 
