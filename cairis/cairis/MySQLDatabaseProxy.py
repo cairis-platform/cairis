@@ -10158,3 +10158,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def deleteImpliedProcess(self,ipId):
     self.deleteObject(ipId,'persona_implied_process')
     self.conn.commit()
+
+  def addStepSynopsis(self,ucName,envName,stepNo,synName,aType,aName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addStepSynopsis(%s,%s,%s,%s,%s,%s)',(ucName,envName,stepNo,synName,aType,aName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding step synopsis ' + synName
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding step synopsis ' + synName + '  (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

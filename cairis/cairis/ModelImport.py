@@ -452,6 +452,19 @@ def importSynopsesFile(importFile):
   return importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts)
 
 def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts):
+  b = Borg()
+  for cs in charSyns:
+    b.dbProxy.addCharacteristicSynopsis(cs)
+  for rs in refSyns:
+    b.dbProxy.addReferenceSynopsis(rs)
+  for ucName,envName,stepNo,synName,aType,aName in stepSyns:
+    b.dbProxy.addStepSynopsis(ucName,envName,stepNo,synName,aType,aName)
+  b.dbProxy.conn.commit()
+  for rc in refConts:
+    b.dbProxy.addReferenceContribution(rc)
+  for uc in ucConts:
+    b.dbProxy.addUseCaseContribution(uc)
+
   msgStr = 'Imported ' + str(len(charSyns)) + ' characteristic synopses, ' + str(len(refSyns)) + ' reference synopses, ' + str(len(stepSyns)) + ' step synopses, ' + str(len(refConts)) + ' reference contributions, and ' + str(len(ucConts)) + ' use case contributions.'
   return msgStr
 
@@ -518,5 +531,6 @@ def importModelFile(importFile,isOverwrite = 1):
   modelTxt += importRiskAnalysisFile(importFile) + ' '
   modelTxt += importUsabilityFile(importFile) + ' '
   modelTxt += importRequirementsFile(importFile) + ' '
-  modelTxt += importAssociationsFile(importFile)
+  modelTxt += importAssociationsFile(importFile) + ' '
+  modelTxt += importSynopsesFile(importFile)
   return modelTxt

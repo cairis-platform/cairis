@@ -755,6 +755,7 @@ drop procedure if exists delete_persona_implied_process;
 drop procedure if exists impliedProcessNetwork;
 drop procedure if exists addImpliedProcessNetworkRelationship;
 drop procedure if exists usecaseStepSynopses;
+drop procedure if exists addStepSynopsis;
 
 delimiter //
 
@@ -3123,25 +3124,16 @@ begin
 end
 //
 
-create procedure addUseCaseStep(in ucId int, in envName text, in stepNo int, in stepDesc text, in stepSynId int, in stepSyn text, in stepActor text, in stepActorType text)
+create procedure addUseCaseStep(in ucId int, in envName text, in stepNo int, in stepDesc text, in stepSyn text, in stepActor text, in stepActorType text)
 begin
   declare envId int;
-  declare actorId int;
-  declare actorTypeId int;
+  declare ucName varchar(200);
+
   select id into envId from environment where name = envName;
   insert into usecase_step(usecase_id,environment_id,step_no,description) values (ucId,envId,stepNo,stepDesc);
 
-  select id into actorTypeId from trace_dimension where name = stepActorType;
-  if stepSyn != ''
-  then
-    if stepActorType = 'role'
-    then
-      select id into actorId from role where name = stepActor;
-    else
-      select id into actorId from asset where name = stepActor;
-    end if;
-    insert into usecase_step_synopsis(id,usecase_id,step_no,environment_id,synopsis,actor_id,actor_type_id) values (stepSynId,ucId,stepNo,envId,stepSyn,actorId,actorTypeId); 
-  end if;
+  select name into ucName from usecase where id = ucId;
+  call addStepSynopsis(ucName,envName,stepNo,stepSyn,stepActor,stepActorType);
 end
 //
 
@@ -19292,5 +19284,28 @@ begin
 end
 //
 
+create procedure addStepSynopsis(in ucName text, in envName text, in stepNo int, in stepSyn text, in stepActor text, in stepActorType text)
+begin
+  declare stepSynId int;
+  declare ucId int;
+  declare envId int;
+  declare actorId int;
+  declare actorTypeId int;
+
+  select id into ucId from usecase where name = ucName;
+  select id into envId from environment where name = envName;
+
+  call newId2(stepSynId);
+
+  select id into actorTypeId from trace_dimension where name = stepActorType;
+  if stepActorType = 'role'
+  then
+    select id into actorId from role where name = stepActor;
+  else
+    select id into actorId from asset where name = stepActor;
+  end if;
+  insert into usecase_step_synopsis(id,usecase_id,step_no,environment_id,synopsis,actor_id,actor_type_id) values (stepSynId,ucId,stepNo,envId,stepSyn,actorId,actorTypeId); 
+end
+//
 
 delimiter ;

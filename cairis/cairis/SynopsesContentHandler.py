@@ -85,4 +85,4 @@ class SynopsesContentHandler(ContentHandler,EntityResolver):
       refName = attrs['referent']
       me = attrs['means_end']
       cont = attrs['contribution']
-      self.theUseCaseContributions.append((ucName,refName,me,cont))
+      self.theUseCaseContributions.append(ReferenceContribution(ucName,refName,me,cont))

@@ -193,7 +193,8 @@ class RMFrame(wx.Frame):
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTDIRECTORIES,'Threat and Vulnerability Directory','Import Threat and Vulnerability Directory')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTSECURITYPATTERNS,'Security Patterns','Import Security Patterns')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTCOMPONENTVIEW,'Component View','Import Component View')
-    importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTSYNOPSES,'Synoposes','Import Synopses and Contributions')
+    importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTATTACKPATTERN,'Attack Pattern','Import Attack Pattern')
+    importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTSYNOPSES,'Synopses','Import Synopses and Contributions')
     file.AppendMenu(armid.RMFRAME_MENU_IMPORT,'Import',importMenu)
 
 
@@ -419,6 +420,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTDIRECTORIES,self.OnImportDirectories)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTSECURITYPATTERNS,self.OnImportSecurityPatterns)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTCOMPONENTVIEW,self.OnImportComponentView)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTATTACKPATTERN,self.OnImportAttackPattern)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTSYNOPSES,self.OnImportSynopses)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ENVIRONMENT,self.OnViewEnvironment)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ASSETMODEL,self.OnViewAssets)
@@ -1268,6 +1270,23 @@ class RMFrame(wx.Frame):
       cvdlg.Destroy()
     except ARMException,errorText:
       dlg = wx.MessageDialog(self,str(errorText),'Import Component View',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+
+  def OnImportAttackPattern(self,event):
+    try:
+      defaultDir = './sql'
+      wildcard = "Attack Pattern (*.xml) | *.xml |"
+
+      cvdlg = wx.FileDialog(None,'Import Attack Pattern',defaultDir,style=wx.OPEN)
+      if (cvdlg.ShowModal() == wx.ID_OK):
+        msgStr = importAttackPattern(cvdlg.GetPath()) 
+        dlg = wx.MessageDialog(self,msgStr,'Import Attack Pattern',wx.OK | wx.ICON_INFORMATION )
+        dlg.ShowModal()
+        dlg.Destroy()
+      cvdlg.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Import Attack Pattern',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
 
