@@ -193,6 +193,7 @@ class RMFrame(wx.Frame):
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTDIRECTORIES,'Threat and Vulnerability Directory','Import Threat and Vulnerability Directory')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTSECURITYPATTERNS,'Security Patterns','Import Security Patterns')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTCOMPONENTVIEW,'Component View','Import Component View')
+    importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTSYNOPSES,'Synoposes','Import Synopses and Contributions')
     file.AppendMenu(armid.RMFRAME_MENU_IMPORT,'Import',importMenu)
 
 
@@ -418,6 +419,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTDIRECTORIES,self.OnImportDirectories)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTSECURITYPATTERNS,self.OnImportSecurityPatterns)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTCOMPONENTVIEW,self.OnImportComponentView)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTSYNOPSES,self.OnImportSynopses)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ENVIRONMENT,self.OnViewEnvironment)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ASSETMODEL,self.OnViewAssets)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_GOALMODEL,self.OnViewGoals)
@@ -1266,6 +1268,23 @@ class RMFrame(wx.Frame):
       cvdlg.Destroy()
     except ARMException,errorText:
       dlg = wx.MessageDialog(self,str(errorText),'Import Component View',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+
+  def OnImportSynopses(self,event):
+    try:
+      defaultDir = './sql'
+      wildcard = "Synopses (*.xml) | *.xml |"
+
+      cvdlg = wx.FileDialog(None,'Import Synopses',defaultDir,style=wx.OPEN)
+      if (cvdlg.ShowModal() == wx.ID_OK):
+        msgStr = importSynopsesFile(cvdlg.GetPath()) 
+        dlg = wx.MessageDialog(self,msgStr,'Import Synopses',wx.OK | wx.ICON_INFORMATION )
+        dlg.ShowModal()
+        dlg.Destroy()
+      cvdlg.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Import Synopses',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
 

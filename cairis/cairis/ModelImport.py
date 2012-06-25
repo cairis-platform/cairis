@@ -27,6 +27,7 @@ from UsabilityContentHandler import UsabilityContentHandler
 from AssociationsContentHandler import AssociationsContentHandler
 from CairisContentHandler import CairisContentHandler
 from ComponentViewContentHandler import ComponentViewContentHandler
+from SynopsesContentHandler import SynopsesContentHandler
 from Borg import Borg
 import xml.sax
 
@@ -435,6 +436,23 @@ def importComponentViewData(view):
   b = Borg()
   b.dbProxy.addComponentView(view)
   msgStr = 'Imported component view'
+  return msgStr
+
+def importSynopsesFile(importFile):
+  parser = xml.sax.make_parser()
+  handler = SynopsesContentHandler()
+  parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
+  parser.parse(importFile)
+  charSyns = handler.characteristicSynopses()
+  refSyns = handler.referenceSynopses()
+  stepSyns = handler.stepSynopses()
+  refConts = handler.referenceContributions()
+  ucConts = handler.useCaseContributions()
+  return importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts)
+
+def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts):
+  msgStr = 'Imported ' + str(len(charSyns)) + ' characteristic synopses, ' + str(len(refSyns)) + ' reference synopses, ' + str(len(stepSyns)) + ' step synopses, ' + str(len(refConts)) + ' reference contributions, and ' + str(len(ucConts)) + ' use case contributions.'
   return msgStr
 
 def importDomainValuesFile(importFile):
