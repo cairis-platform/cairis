@@ -754,6 +754,7 @@ drop procedure if exists deleteImpliedProcessComponents;
 drop procedure if exists delete_persona_implied_process;
 drop procedure if exists impliedProcessNetwork;
 drop procedure if exists addImpliedProcessNetworkRelationship;
+drop procedure if exists usecaseStepSynopses;
 
 delimiter //
 
@@ -19279,6 +19280,15 @@ end
 create procedure misusability_caseNames(in envName text)
 begin
   select name from misusability_case;
+end
+//
+
+create procedure usecaseStepSynopses(in ucId int, in envId int)
+begin
+  select uc.name,e.name,uss.step_no,uss.synopsis,r.name,td.name from usecase uc, environment e, role r, trace_dimension td, usecase_step_synopsis uss where uss.usecase_id = ucId and uss.environment_id = envId and uss.usecase_id = uc.id and uss.environment_id = e.id and uss.actor_id = r.id and uss.actor_type_id = td.id
+  union
+  select uc.name,e.name,uss.step_no,uss.synopsis,a.name,td.name from usecase uc, environment e, asset a, trace_dimension td, usecase_step_synopsis uss where uss.usecase_id = ucId and uss.environment_id = envId and uss.usecase_id = uc.id and uss.environment_id = e.id and uss.actor_id = a.id and uss.actor_type_id = td.id
+  order by step_no;
 end
 //
 

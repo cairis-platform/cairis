@@ -121,5 +121,13 @@
        systemId="http://www.cs.ox.ac.uk/cairis/dtd/component_view.dtd"  
        uri="component_view.dtd"/>
 
+    <public 
+       publicId="-//CAIRIS//DTD SYNOPSES  1.0//EN"  
+       uri="synopses.dtd"/>
+
+    <system
+       systemId="http://www.cs.ox.ac.uk/cairis/dtd/synopses.dtd"  
+       uri="synopses.dtd"/>
+
   </group>
 </catalog>

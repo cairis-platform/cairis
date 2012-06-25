@@ -28,7 +28,7 @@ from ReferenceContributionPanel import ReferenceContributionPanel
 
 class ReferenceContributionDialog(BaseDialog):
   def __init__(self,parent,objt):
-    BaseDialog.__init__(self,parent,-1,'Edit Reference Contribution',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX,size=(475,250))
+    BaseDialog.__init__(self,parent,-1,'Edit Reference Contribution',(475,250))
     self.theSource = objt.source()
     self.theDestination = objt.destination()
     self.theMeansEnd = objt.meansEnd()

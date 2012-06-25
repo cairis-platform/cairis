@@ -29,13 +29,13 @@ class ReferenceContributionPanel(BasePanel):
     self.dbProxy = b.dbProxy
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     refSynopses = self.dbProxy.getDimensionNames('reference_synopsis')
-    mainSizer.Add(self.buildComboSizerList(self,'Source',(87,30),armid.REFERENCECONTRIBUTION_COMBOSOURCE_ID,refSynopses),0,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Source',(87,30),armid.REFERENCECONTRIBUTION_COMBOSOURCE_ID,refSynopses),0,wx.EXPAND)
     charSynopses = self.dbProxy.getDimensionNames('characteristic_synopsis')
-    mainSizer.Add(self.buildComboSizerList(self,'Destination',(87,30),armid.REFERENCECONTRIBUTION_COMBODESTINATION_ID,charSynopses),0,wx.EXPAND)
-    mainSizer.Add(self.buildComboSizerList(self,'Means/End',(87,30),armid.REFERENCECONTRIBUTION_COMBOMEANSEND_ID,['means','end']),0,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Destination',(87,30),armid.REFERENCECONTRIBUTION_COMBODESTINATION_ID,charSynopses),0,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Means/End',(87,30),armid.REFERENCECONTRIBUTION_COMBOMEANSEND_ID,['means','end']),0,wx.EXPAND)
     contType = ['Make','SomePositive','Help','Hurt','SomeNegative','Break']
-    mainSizer.Add(self.buildComboSizerList(self,'Contribution',(87,30),armid.REFERENCECONTRIBUTION_COMBOCONTRIBUTION_ID,contType),0,wx.EXPAND)
-    mainSizer.Add(self.buildCommitButtonSizer(self,armid.REFERENCECONTRIBUTION_BUTTONCOMMIT_ID,True),0,wx.ALIGN_CENTER)
+    mainSizer.Add(self.buildComboSizerList('Contribution',(87,30),armid.REFERENCECONTRIBUTION_COMBOCONTRIBUTION_ID,contType),0,wx.EXPAND)
+    mainSizer.Add(self.buildCommitButtonSizer(armid.REFERENCECONTRIBUTION_BUTTONCOMMIT_ID,True),0,wx.ALIGN_CENTER)
     self.SetSizer(mainSizer)
 
 
