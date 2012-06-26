@@ -3083,44 +3083,11 @@ end
 
 create procedure useCaseSteps(in ucId int, in envId int)
 begin
-  declare stepNo int;
-  declare stepSyn varchar(500) default '';
-  declare actorId int;
-  declare actorName varchar(50) default '';
-  declare actorType varchar(50) default '';
-  declare done int default 0;
-  declare stepCursor cursor for select step_no from temp_usecase_step;
-  declare continue handler for not found set done = 1;
 
-  drop table if exists temp_usecase_step;
-  create temporary table temp_usecase_step (step_no int not null, description varchar(2000), synopsis varchar(500) default '', actor_name varchar(50) default '', actor_type varchar(50) default '');
-  insert into temp_usecase_step (step_no,description)
-  select us.step_no,us.description from usecase_step us where us.usecase_id = ucId and us.environment_id = envId order by 1;
-
-  open stepCursor;
-  step_loop: loop
-    fetch stepCursor into stepNo;
-    if done = 1
-    then
-      leave step_loop;
-    end if;
-    select uss.synopsis,uss.actor_id,td.name into stepSyn,actorId,actorType from usecase_step_synopsis uss, trace_dimension td where uss.usecase_id = ucId and uss.step_no = stepNo and uss.environment_id = envId and uss.actor_type_id = td.id;
-    if stepSyn is not null
-    then
-      if actorType = 'role'
-      then
-        select name into actorName from role where id = actorId;
-      else
-        select name into actorName from asset where id = actorId;
-      end if; 
-      update temp_usecase_step set synopsis = stepSyn, actor_name = actorName, actor_type = actorType where step_no = stepNo;
-      set stepSyn = '';
-      set actorName = '';
-      set actorType = '';
-    end if;
-  end loop step_loop;
-  close stepCursor;
-  select step_no,description,synopsis,actor_name,actor_type from temp_usecase_step;
+  select us.step_no,us.description,ifnull(uss.synopsis,''),ifnull(uss.actor,''),ifnull(uss.actor_type,'') 
+  from usecase_step us 
+  left join usecase_step_synopsis_actor uss on (us.usecase_id = uss.usecase_id and us.environment_id = uss.environment_id and us.step_no = uss.step_no) 
+  where us.usecase_id = ucId and us.environment_id = envId;
 end
 //
 

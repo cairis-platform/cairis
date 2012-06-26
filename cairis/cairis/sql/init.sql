@@ -38,6 +38,7 @@ DROP VIEW IF EXISTS asset_template_asset;
 DROP VIEW IF EXISTS securitypattern_requirement;
 DROP VIEW IF EXISTS component_requirement;
 DROP VIEW IF EXISTS misusability_case;
+DROP VIEW IF EXISTS usecase_step_synopsis_actor
 
 DROP TABLE IF EXISTS usecase_step_synopsis;
 DROP TABLE IF EXISTS usecase_pc_contribution;
@@ -2957,6 +2958,13 @@ CREATE VIEW synopsis as
   select id,synopsis,'requirement' synopsis_type from requirement_reference_synopsis
   union
   select id,synopsis,'usecase' synopsis_type from usecase_step_synopsis;
+
+CREATE VIEW usecase_step_synopsis_actor as
+  select uss.id,uss.usecase_id,uss.step_no,uss.environment_id,uss.synopsis,r.name actor,td.name actor_type from usecase_step_synopsis uss, role r, trace_dimension td where uss.actor_id = r.id and uss.actor_type_id = td.id
+  union
+  select uss.id,uss.usecase_id,uss.step_no,uss.environment_id,uss.synopsis,a.name actor,td.name actor_type from usecase_step_synopsis uss, asset a, trace_dimension td where uss.actor_id = a.id and uss.actor_type_id = td.id
+  union
+  select uss.id,uss.usecase_id,uss.step_no,uss.environment_id,uss.synopsis,c.name actor,td.name actor_type from usecase_step_synopsis uss, component c, trace_dimension td where uss.actor_id = c.id and uss.actor_type_id = td.id;
 
 
 CREATE VIEW environment_risk as
