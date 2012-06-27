@@ -38,7 +38,7 @@ DROP VIEW IF EXISTS asset_template_asset;
 DROP VIEW IF EXISTS securitypattern_requirement;
 DROP VIEW IF EXISTS component_requirement;
 DROP VIEW IF EXISTS misusability_case;
-DROP VIEW IF EXISTS usecase_step_synopsis_actor
+DROP VIEW IF EXISTS usecase_step_synopsis_actor;
 
 DROP TABLE IF EXISTS usecase_step_synopsis;
 DROP TABLE IF EXISTS usecase_pc_contribution;
