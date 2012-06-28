@@ -8835,7 +8835,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       connectors = []
       for row in curs.fetchall():
         row = list(row)
-        connectors.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
+        connectors.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9]))
       curs.close()
       return connectors
     except _mysql_exceptions.DatabaseError, e:
@@ -8925,16 +8925,18 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     cName = parameters.name()
     cvName = parameters.view()
     fromName = parameters.fromName()
+    fromRole = parameters.fromRole()
     fromIf = parameters.fromInterface()
     toName = parameters.toName()
     toIf = parameters.toInterface()
+    toRole = parameters.toRole()
     conAsset = parameters.asset()
     pName = parameters.protocol()
     arName = parameters.accessRight()
 
     try:
       curs = self.conn.cursor()
-      curs.execute('call addConnector(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(connId,cvName,cName,fromName,fromIf,toName,toIf,conAsset,pName,arName))
+      curs.execute('call addConnector(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(connId,cvName,cName,fromName,fromRole,fromIf,toName,toIf,toRole,conAsset,pName,arName))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding connector ' + cName
         raise DatabaseProxyException(exceptionText) 

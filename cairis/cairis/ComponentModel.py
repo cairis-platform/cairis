@@ -42,8 +42,8 @@ class ComponentModel:
     for componentName,interfaceName,reqId in interfaces:
       self.buildInterface(componentName,interfaceName,reqId)
 
-    for cnName,fromName,fromIF,toName,toIF,assetName,pName,arName in connectors:
-      self.buildConnector(cnName,fromName,fromIF,toName,toIF,pName,arName)
+    for cnName,fromName,fromRole,fromIF,toName,toIF,toRole,assetName,pName,arName in connectors:
+      self.buildConnector(cnName,fromName,toName,pName,arName)
 
   def size(self):
     return len(self.theAssociations)
@@ -55,27 +55,13 @@ class ComponentModel:
       componentLabel = "<<component>>\\n" + componentName
       self.theGraph.add_node(pydot.Node(componentName,label=componentLabel,shape='rectangle',fontname=self.fontName,fontsize=self.fontSize,URL=componentUrl))
 
-    objtName = componentName + '_' + interfaceName
-    if objtName not in self.theInterfaceNames:
-      self.theInterfaceNames.add(objtName)
-      interfaceUrl = ''
-      if reqId == 1:
-        interfaceUrl = 'required_interface#'
-      else:
-        interfaceUrl = 'provided_interface#'
-      interfaceUrl += objtName
-      self.theGraph.add_node(pydot.Node(objtName,shape='circle',label='',width='.2',height='.2',fontname=self.fontName,fontsize=self.fontSize,URL=interfaceUrl))
-
-    ifEdgeUrl = 'component_interface#' + objtName
-    self.theGraph.add_edge(pydot.Edge(componentName,objtName,arrowhead='none',arrowtail='obox',dir='both',weight='1',URL=ifEdgeUrl))
-
-  def buildConnector(self,cnName,fromName,fromInterface,toName,toInterface,protocolName,arName):
-    fromObjtName = fromName + '_' + fromInterface
-    toObjtName = toName + '_' + toInterface
+  def buildConnector(self,cnName,fromName,toName,protocolName,arName):
+    fromObjtName = fromName
+    toObjtName = toName 
     lbl = "\<<" + protocolName + "\>>"
     urlName = 'connector#' + fromObjtName + '_' + toObjtName
 
-    self.theGraph.add_edge(pydot.Edge(fromObjtName,toObjtName,label=lbl,dir='none',weight='1',URL=urlName))
+    self.theGraph.add_edge(pydot.Edge(fromObjtName,toObjtName,label=lbl,dir='both',arrowhead='obox',arrowtail='obox',weight='1',URL=urlName))
 
   def layout(self,renderer = ''):
     self.theGraph.write_xdot(self.theGraphName,prog='dot')

@@ -130,8 +130,10 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
   def resetConnectorAttributes(self):
     self.theName = ''
     self.theFromName = ''
+    self.theFromRole = ''
     self.theFromInterface = ''
     self.theToName = ''
+    self.theToRole = ''
     self.theToInterface = ''
     self.theConnectorAsset = ''
     self.theProtocolName = ''
@@ -176,8 +178,10 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name']
       self.theFromName = attrs['from_component']
       self.theFromInterface = attrs['from_interface']
+      self.theFromRole = attrs['from_role']
       self.theToName = attrs['to_component']
       self.theToInterface = attrs['to_interface']
+      self.theToRole = attrs['to_role']
       self.theConnectorAsset = attrs['asset_name']
       self.theProtocolName = attrs['protocol']
       self.theAccessRight = attrs['access_right']
@@ -270,7 +274,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theRequirements.append(p)
       self.resetRequirementAttributes()
     elif name == 'connector':
-      p = ConnectorParameters(self.theName,self.theViewName,self.theFromName,self.theFromInterface,self.theToName,self.theToInterface,self.theConnectorAsset,self.theProtocolName,self.theAccessRight)
+      p = ConnectorParameters(self.theName,self.theViewName,self.theFromName,self.theFromRole,self.theFromInterface,self.theToName,self.theToInterface,self.theToRole,self.theConnectorAsset,self.theProtocolName,self.theAccessRight)
       self.theConnectors.append(p)
       self.resetConnectorAttributes() 
     elif name == 'description':

@@ -160,3 +160,32 @@ class BaseDialog(wx.Dialog):
     return buttonSizer
 
 
+  def buildTextSizer(self,labelTxt,widgetSize,winId,toolTip='',isReadOnly=False):
+    tBox = wx.StaticBox(self,-1,labelTxt)
+    textSizer = wx.StaticBoxSizer(tBox,wx.HORIZONTAL)
+    textCtrl = 0
+    if (isReadOnly):
+      textCtrl = wx.TextCtrl(self,winId,"",style=wx.TE_READONLY)
+    else:
+      textCtrl = wx.TextCtrl(self,winId,"")
+
+    if (toolTip != ''):
+      textCtrl.SetToolTip(wx.ToolTip(toolTip))
+    textSizer.Add(textCtrl,1,wx.EXPAND)
+    return textSizer
+
+  def buildComboSizerList(self,labelTxt,widgetSize,winId,objtList):
+    cslBox = wx.StaticBox(self,-1,labelTxt)
+    comboSizer = wx.StaticBoxSizer(cslBox,wx.HORIZONTAL)
+    objtComboCtrl = wx.ComboBox(self,winId,"",choices=objtList,size=widgetSize,style=wx.CB_READONLY)
+    comboSizer.Add(objtComboCtrl,1,wx.EXPAND)
+    return comboSizer
+
+  def buildAddCancelButtonSizer(self,addId,orientation=wx.HORIZONTAL):
+    buttonSizer = wx.BoxSizer(orientation)
+    addButton = wx.Button(self,addId,"Add")
+    buttonSizer.Add(addButton)
+    cancelButton = wx.Button(self,wx.ID_CANCEL,"Cancel")
+    buttonSizer.Add(cancelButton)
+    return buttonSizer
+

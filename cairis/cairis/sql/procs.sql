@@ -17867,7 +17867,7 @@ begin
 end
 //
 
-create procedure addConnector(in connId int, in cvName text, in cName text, in fromName text, in fromIf text, in toName text, in toIf text, in taName text, in pName text, in arName text)
+create procedure addConnector(in connId int, in cvName text, in cName text, in fromName text, in fromRole text, in fromIf text, in toName text, in toIf text, in toRole text, in taName text, in pName text, in arName text)
 begin
   declare cvId int;
   declare fromId int;
@@ -17887,7 +17887,7 @@ begin
   select id into pId from protocol where name = pName;
   select id into arId from access_right where name = arName;
 
-  insert into connector(id,name,component_view_id,from_component_id,from_interface_id,to_component_id,to_interface_id,template_asset_id,protocol_id,access_right_id) values (connId,cName,cvId,fromId,fromIfId,toId,toIfId,taId,pId,arId);
+  insert into connector(id,name,component_view_id,from_component_id,from_role,from_interface_id,to_component_id,to_interface_id,to_role,template_asset_id,protocol_id,access_right_id) values (connId,cName,cvId,fromId,fromRole,fromIfId,toId,toIfId,toRole,taId,pId,arId);
 end
 //
 
@@ -18176,7 +18176,7 @@ end
 
 create procedure getConnectors(in cmId int)
 begin
-  select ca.name connector, fc.name from_name, fi.name from_interface, tc.name to_name, ti.name,p.name,ar.name to_interface from connector ca, component fc, component tc, interface fi, interface ti, component_model_connector cmc, protocol p,access_right ar where ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id and ca.id = cmc.connector_id and cmc.component_model_id = cmId and ca.protocol_id = p.id and ca.access_right_id = ar.id;
+  select ca.name connector, fc.name from_name, ca.from_role,fi.name from_interface, tc.name to_name, ti.name,ca.to_role,p.name,ar.name to_interface from connector ca, component fc, component tc, interface fi, interface ti, component_model_connector cmc, protocol p,access_right ar where ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id and ca.id = cmc.connector_id and cmc.component_model_id = cmId and ca.protocol_id = p.id and ca.access_right_id = ar.id;
 end
 //
 
@@ -18230,7 +18230,7 @@ begin
   declare cvId int;
 
   select id into cvId from component_view where name = cvName;
-  select ca.name connector, fc.name from_name, fi.name from_interface, tc.name to_name, ti.name to_interface, ta.name,p.name,ar.name from connector ca, component fc, component tc, interface fi, interface ti, template_asset ta, protocol p, access_right ar where ca.component_view_id = cvId and ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id and ca.template_asset_id = ta.id and ca.protocol_id = p.id and ca.access_right_id = ar.id;
+  select ca.name connector, fc.name from_name, ca.from_role, fi.name from_interface, tc.name to_name, ti.name to_interface, ca.to_role, ta.name,p.name,ar.name from connector ca, component fc, component tc, interface fi, interface ti, template_asset ta, protocol p, access_right ar where ca.component_view_id = cvId and ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id and ca.template_asset_id = ta.id and ca.protocol_id = p.id and ca.access_right_id = ar.id;
 end
 //
 
