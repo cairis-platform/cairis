@@ -15957,7 +15957,9 @@ begin
     union
     select distinct drs.actor_id, drs.id from requirement_reference_synopsis drs, task_characteristic_requirement tcd, task_characteristic tc where drs.reference_id = tcd.reference_id and tcd.characteristic_id = tc.id and tc.task_id = tId
     union
-    select uss.actor_id,uss.id from usecase_step_synopsis uss, usecase_role ur, persona_role pr, task_persona tp, usecase_task ut where uss.usecase_id = ur.usecase_id and ur.usecase_id = ut.usecase_id and uss.environment_id = tp.environment_id and tp.environment_id = pr.environment_id and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and uss.environment_id = envId and pr.persona_id = pId and tp.task_id = tId and uss.actor_type_id in (3,10,21) and tp.task_id = ut.task_id;
+    select uss.actor_id,uss.id from usecase_step_synopsis uss, usecase_role ur, persona_role pr, task_persona tp, usecase_task ut where uss.usecase_id = ur.usecase_id and ur.usecase_id = ut.usecase_id and uss.environment_id = tp.environment_id and tp.environment_id = pr.environment_id and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and uss.environment_id = envId and pr.persona_id = pId and tp.task_id = tId and uss.actor_type_id in (3,21) and tp.task_id = ut.task_id
+    union
+    select pr.persona_id,uss.id from usecase_step_synopsis uss, usecase_role ur, persona_role pr, task_persona tp, usecase_task ut where uss.usecase_id = ur.usecase_id and ur.usecase_id = ut.usecase_id and uss.environment_id = tp.environment_id and tp.environment_id = pr.environment_id and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and uss.environment_id = envId and pr.persona_id = pId and tp.task_id = tId and uss.actor_type_id = 10 and tp.task_id = ut.task_id;
 
   declare continue handler for not found set done = 1;
 
