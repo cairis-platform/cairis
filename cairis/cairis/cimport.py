@@ -29,7 +29,7 @@ if __name__ == '__main__':
   try:
     parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Import')
     parser.add_argument('modelFile',help='model file to import')
-    parser.add_argument('--import',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, project, domainvalues, component,synopses or all')
+    parser.add_argument('--type',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, project, domainvalues, component,synopses or all')
     parser.add_argument('--overwrite',dest='isOverwrite',help='Where appropriate, overwrite an existing CAIRIS model with this model')
     args = parser.parse_args() 
     mFormat = args.modelFormat
