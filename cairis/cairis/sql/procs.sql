@@ -15970,6 +15970,7 @@ begin
   select id into tId from task where name = tName;
   select id into envId from environment where name = envName;
 
+  set done = 0;
   open refCursor;
   ref_loop: loop
     fetch refCursor into refId, refSyn, dimName,actorId,actorType;
