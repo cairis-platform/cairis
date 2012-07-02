@@ -20,6 +20,7 @@ import wx
 import armid
 import DialogClassParametersFactory
 from ProjectSettingsDialog import ProjectSettingsDialog
+from DirectoryEntryDialog import DirectoryEntryDialog
 from SearchOptionsPanel import SearchOptionsPanel
 from Borg import Borg
 
@@ -95,6 +96,16 @@ class SearchPanel(wx.Panel):
       if (dlg.ShowModal() == armid.PROJECTSETTINGS_BUTTONCOMMIT_ID):
         self.dbProxy.updateSettings(dlg.name(),dlg.background(),dlg.goals(),dlg.scope(),dlg.definitions(),dlg.contributors(),dlg.revisions(),dlg.richPicture(),self.b.fontSize,self.b.fontName)
       dlg.Destroy()
+    elif (dimLabel == 'Template Threat'):
+      eName,eDesc,eType = self.dbProxy.directoryEntry(objtName,'threat')
+      dlg = DirectoryEntryDialog(self,objtName,eName,eType,eDesc)
+      dlg.ShowModal()
+      dlg.Destroy()   
+    elif (dimLabel == 'Template Vulnerability'):
+      eName,eDesc,eType = self.dbProxy.directoryEntry(objtName,'vulnerability')
+      dlg = DirectoryEntryDialog(self,objtName,eName,eType,eDesc)
+      dlg.ShowModal()
+      dlg.Destroy()   
     else:
       dcp,dimName,dimDlg,dlgCode,dimFn = DialogClassParametersFactory.build(dimLabel)
       if (dimDlg != None):

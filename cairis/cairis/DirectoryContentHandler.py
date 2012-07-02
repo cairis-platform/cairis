@@ -24,8 +24,6 @@ class DirectoryContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theVulnerabilityDirectory = []
     self.theThreatDirectory = []
-    self.vdId = 0
-    self.tdId = 0
     b = Borg()
     self.configDir = b.configDir
     self.resetAttributes()
@@ -61,10 +59,8 @@ class DirectoryContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if (name == 'vulnerability'):
-      self.theVulnerabilityDirectory.append((self.vdId,self.theLabel,self.theName,self.theDescription,self.theType,self.theReference))
-      self.vdId += 1 
+      self.theVulnerabilityDirectory.append((self.theLabel,self.theName,self.theDescription,self.theType,self.theReference))
       self.resetAttributes() 
     if name == 'threat':
-      self.theThreatDirectory.append((self.tdId,self.theLabel,self.theName,self.theDescription,self.theType,self.theReference))
-      self.tdId += 1 
+      self.theThreatDirectory.append((self.theLabel,self.theName,self.theDescription,self.theType,self.theReference))
       self.resetAttributes() 

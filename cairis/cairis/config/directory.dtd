@@ -19,7 +19,7 @@
 
 <!-- DTD for CAIRIS threat and vulnerability directory -->
 
-<!ELEMENT directory (vulnerability+,threat+)>
+<!ELEMENT directory (vulnerability*,threat*)>
 <!ELEMENT vulnerability (description)>
 <!ATTLIST vulnerability label CDATA #REQUIRED>
 <!ATTLIST vulnerability name CDATA #REQUIRED>

@@ -582,6 +582,7 @@ drop procedure if exists grepRisks;
 drop procedure if exists grepResponses;
 drop procedure if exists grepProjectSettings;
 drop procedure if exists grepCountermeasures;
+drop procedure if exists grepDirectories;
 drop procedure if exists grepRequirements;
 drop procedure if exists grepModel;
 drop procedure if exists dimensionNameByShortCode;
@@ -756,6 +757,7 @@ drop procedure if exists impliedProcessNetwork;
 drop procedure if exists addImpliedProcessNetworkRelationship;
 drop procedure if exists usecaseStepSynopses;
 drop procedure if exists addStepSynopsis;
+drop procedure if exists directoryEntry;
 
 delimiter //
 
@@ -11429,14 +11431,18 @@ begin
 end
 //
 
-create procedure addThreatDirectoryEntry(in dId int, in dLabel text, in dName text, in dDesc text, in dTypeId int, in dRef text)
+create procedure addThreatDirectoryEntry(in dLabel text, in dName text, in dDesc text, in dTypeId int, in dRef text)
 begin
+  declare dId int;
+  call newId2(dId);
   insert into threat_directory(id,label,name,description,threat_type_id,reference) values (dId,dLabel,dName,dDesc,dTypeId,dRef);
 end
 //
 
-create procedure addVulnerabilityDirectoryEntry(in dId int, in dLabel text, in dName text, in dDesc text, in dTypeId int, in dRef text)
+create procedure addVulnerabilityDirectoryEntry(in dLabel text, in dName text, in dDesc text, in dTypeId int, in dRef text)
 begin
+  declare dId int;
+  call newId2(dId);
   insert into vulnerability_directory(id,label,name,description,vulnerability_type_id,reference) values (dId,dLabel,dName,dDesc,dTypeId,dRef);
 end
 //
@@ -14580,6 +14586,19 @@ begin
 end
 //
 
+create procedure grepDirectories(in inTxt text)
+begin
+  insert into temp_searchresults (environment_name,dimension_name,object_name)
+  select '','Template Threat',d.label from threat_directory d where d.name like concat('%',inTxt,'%')
+  union
+  select '','Template Threat',d.label from threat_directory d where d.description like concat('%',inTxt,'%')
+  union
+  select '','Template Vulnerability',d.label from vulnerability_directory d where d.name like concat('%',inTxt,'%')
+  union
+  select '','Template Vulnerability',d.label from vulnerability_directory d where d.description like concat('%',inTxt,'%');
+end
+//
+
 create procedure grepRequirements(in inTxt text)
 begin
   insert into temp_searchresults (environment_name,dimension_name,object_name)
@@ -14609,7 +14628,7 @@ begin
 end
 //
 
-create procedure grepModel(in inTxt text, in psFlag int, in envFlag int, in roleFlag int, in pcFlag int, in tcFlag int, in refFlag int, in pFlag int, in taskFlag int, in ucFlag int, in dpFlag int, in goalFlag int, in obsFlag int, in reqFlag int, in assetFlag int, in vulFlag int, in attackerFlag int, in thrFlag int, in riskFlag int, in respFlag int, in cmFlag int)
+create procedure grepModel(in inTxt text, in psFlag int, in envFlag int, in roleFlag int, in pcFlag int, in tcFlag int, in refFlag int, in pFlag int, in taskFlag int, in ucFlag int, in dpFlag int, in goalFlag int, in obsFlag int, in reqFlag int, in assetFlag int, in vulFlag int, in attackerFlag int, in thrFlag int, in riskFlag int, in respFlag int, in cmFlag int, in dirFlag int)
 begin
 
   drop table if exists temp_searchresults;
@@ -14713,6 +14732,11 @@ begin
   if cmFlag = 1
   then
     call grepCountermeasures(inTxt);
+  end if;
+
+  if dirFlag = 1
+  then
+    call grepDirectories(inTxt);
   end if;
 
   select environment_name, dimension_name,object_name from temp_searchresults;
@@ -19278,6 +19302,25 @@ begin
   call newId2(stepSynId);
 
   insert into usecase_step_synopsis(id,usecase_id,step_no,environment_id,synopsis,actor_id,actor_type_id) values (stepSynId,ucId,stepNo,envId,stepSyn,actorId,actorTypeId); 
+end
+//
+
+create procedure directoryEntry(in eLabel text, in dType text)
+begin
+  declare eName varchar(100);
+  declare eDesc varchar (4000);
+  declare eType varchar (100);
+  declare eSql varchar(4000);
+
+  set eSql = concat('select d.name,d.description,dt.name into @eName,@eDesc,@eType from ',dType,'_directory d,',dType,'_type dt where d.label=\"',eLabel,'\" and d.',dType,'_type_id = dt.id'); 
+  set @sql = eSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set eName = @eName;
+  set eDesc = @eDesc;
+  set eType = @eType;
+  select eName,eDesc,eType;
 end
 //
 

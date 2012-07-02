@@ -6996,29 +6996,30 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting ' + atName + ':' + constraintName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addThreatDirectory(self,tDir):
-    self.addDirectory(tDir,'threat')
+  def addThreatDirectory(self,tDir,isOverwrite = 1):
+    self.addDirectory(tDir,'threat',isOverwrite)
 
-  def addVulnerabilityDirectory(self,vDir):
-    self.addDirectory(vDir,'vulnerability')
+  def addVulnerabilityDirectory(self,vDir,isOverwrite = 1):
+    self.addDirectory(vDir,'vulnerability',isOverwrite)
 
-  def addDirectory(self,gDir,dimName):
+  def addDirectory(self,gDir,dimName,isOverwrite):
     try:
-      self.deleteObject(-1,dimName + '_directory')
-      for dirId,dLabel,dName,dDesc,dType,dRef in gDir:
+      if (isOverwrite):
+        self.deleteObject(-1,dimName + '_directory')
+      for dLabel,dName,dDesc,dType,dRef in gDir:
         dTypeId = self.getDimensionId(dType,dimName + '_type')
-        self.addDirectoryEntry(dirId,dLabel,dName,dDesc,dTypeId,dRef,dimName)
+        self.addDirectoryEntry(dLabel,dName,dDesc,dTypeId,dRef,dimName)
       self.conn.commit()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error importing ' + dimName + ' directory (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addDirectoryEntry(self,dirId,dLabel,dName,dDesc,dTypeId,dRef,dimName):
+  def addDirectoryEntry(self,dLabel,dName,dDesc,dTypeId,dRef,dimName):
     try:
       dimName = string.upper(dimName[0]) + dimName[1:]
       curs = self.conn.cursor()
-      curs.execute('call add' + dimName + 'DirectoryEntry(%s,%s,%s,%s,%s,%s)',(dirId,dLabel,dName,dDesc,dTypeId,dRef))
+      curs.execute('call add' + dimName + 'DirectoryEntry(%s,%s,%s,%s,%s)',(dLabel,dName,dDesc.encode('utf-8'),dTypeId,dRef))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding ' + dimName + ' directory entry ' + dLabel
         curs.close()
@@ -7705,8 +7706,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       riskFlag = opts[17]
       respFlag = opts[18]
       cmFlag = opts[19]
+      dirFlag = opts[20]
 
-      curs.execute('call grepModel(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(inTxt,psFlag,envFlag,roleFlag,pcFlag,tcFlag,refFlag,pFlag,taskFlag,ucFlag,dpFlag,goalFlag,obsFlag,reqFlag,assetFlag,vulFlag,attackerFlag,thrFlag,riskFlag,respFlag,cmFlag))
+      curs.execute('call grepModel(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(inTxt,psFlag,envFlag,roleFlag,pcFlag,tcFlag,refFlag,pFlag,taskFlag,ucFlag,dpFlag,goalFlag,obsFlag,reqFlag,assetFlag,vulFlag,attackerFlag,thrFlag,riskFlag,respFlag,cmFlag,dirFlag))
       if (curs.rowcount == -1):
         exceptionText = 'Error searching model'
         raise DatabaseProxyException(exceptionText) 
@@ -10171,4 +10173,22 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding step synopsis ' + synName + '  (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def directoryEntry(self,objtName,dType):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call directoryEntry(%s,%s)',(objtName,dType))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting details for ' + objtName + ' from ' + dType + ' directory'
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      eName = row[0]
+      eDesc = row[1]
+      eType = row[2]
+      curs.close()
+      return (eName,eDesc,eType)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting details for ' + objtName + ' from ' + dType + ' directory  (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

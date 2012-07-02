@@ -64,6 +64,8 @@ class SearchOptionsPanel(wx.Panel):
     self.respCheck.SetValue(True)
     self.cmCheck = wx.CheckBox(self,armid.SEARCHPANEL_CHECKCM_ID,'Countermeasures')
     self.cmCheck.SetValue(True)
+    self.dirCheck = wx.CheckBox(self,armid.SEARCHPANEL_CHECKDIR_ID,'Directories')
+    self.dirCheck.SetValue(True)
 
     mainSizer.Add(self.psCheck)
     mainSizer.Add(self.envCheck)
@@ -85,6 +87,7 @@ class SearchOptionsPanel(wx.Panel):
     mainSizer.Add(self.riskCheck)
     mainSizer.Add(self.respCheck)
     mainSizer.Add(self.cmCheck)
+    mainSizer.Add(self.dirCheck)
 
     self.SetSizer(mainSizer)
 
@@ -109,6 +112,7 @@ class SearchOptionsPanel(wx.Panel):
       self.thrCheck.GetValue(),
       self.riskCheck.GetValue(),
       self.respCheck.GetValue(),
-      self.cmCheck.GetValue()]
+      self.cmCheck.GetValue(),
+      self.dirCheck.GetValue()]
     return flags
 

@@ -46,9 +46,9 @@ if __name__ == '__main__':
     if (mFormat == 'attackpattern'):
       msgStr += importAttackPattern(importFile)
     elif (mFormat == 'tvtypes'):
-      msgStr += importTVTypeFile(importFile)
+      msgStr += importTVTypeFile(importFile,int(overwriteFlag))
     elif (mFormat == 'directory'):
-      msgStr += importDirectoryFile(importFile)
+      msgStr += importDirectoryFile(importFile,int(overwriteFlag))
     elif (mFormat == 'requirements'):
       msgStr += importRequirementsFile(importFile)
     elif (mFormat == 'riskanalysis'):

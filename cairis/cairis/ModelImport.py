@@ -78,37 +78,33 @@ def importAttackPattern(importFile):
   risk = handler.risk()
   return importRiskAnalysis([],assets,[vulnerability],attackers,[threat],[risk],[],[])
 
-def importTVTypeFile(importFile):
+def importTVTypeFile(importFile,isOverwrite=1):
   parser = xml.sax.make_parser()
   handler = TVTypeContentHandler()
   parser.setContentHandler(handler)
   parser.setEntityResolver(handler)
   parser.parse(importFile)
   vulTypes,threatTypes = handler.types()
-  return importTVTypes(vulTypes,threatTypes)
+  return importTVTypes(vulTypes,threatTypes,isOverwrite)
  
-def importTVTypes(vulTypes,threatTypes):
+def importTVTypes(vulTypes,threatTypes,isOverwrite):
   b = Borg()
   noOfVts = len(vulTypes)
   noOfTts = len(threatTypes)
-  tId = 0
   if (noOfVts > 0):
-    b.dbProxy.deleteVulnerabilityType(-1)
+    if (isOverwrite):
+      b.dbProxy.deleteVulnerabilityType(-1)
     for vt in vulTypes:
-      vt.setId(tId)
       b.dbProxy.addValueType(vt)
-      tId += 1
-  tId = 0
   if (noOfTts > 0):
-    b.dbProxy.deleteThreatType(-1)
+    if (isOverwrite):
+      b.dbProxy.deleteThreatType(-1)
     for tt in threatTypes:
-      tt.setId(tId)
       b.dbProxy.addValueType(tt)
-      tId += 1
   msgStr = 'Imported ' + str(noOfVts) + ' vulnerability types and ' + str(noOfTts) + ' threat types.'
   return msgStr
 
-def importDirectoryFile(importFile):
+def importDirectoryFile(importFile,isOverwrite=1):
   parser = xml.sax.make_parser()
   handler = DirectoryContentHandler()
   parser.setContentHandler(handler)
@@ -117,12 +113,11 @@ def importDirectoryFile(importFile):
   vulDir,threatDir = handler.directories()
   vdSize = len(vulDir)
   tdSize = len(threatDir)
-  tId = 0
   b = Borg()
   if (vdSize > 0):
-    b.dbProxy.addVulnerabilityDirectory(vulDir)
+    b.dbProxy.addVulnerabilityDirectory(vulDir,isOverwrite)
   if (tdSize > 0):
-    b.dbProxy.addThreatDirectory(threatDir)
+    b.dbProxy.addThreatDirectory(threatDir,isOverwrite)
   msgStr = 'Imported ' + str(vdSize) + ' template vulnerabilities and ' + str(tdSize) + ' template threats.'
   return msgStr
 
