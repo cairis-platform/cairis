@@ -72,7 +72,7 @@ class TemplateAssetDialog(wx.Dialog):
     self.theAssetSignificance = sigCtrl.GetValue()
     self.theType = typeCtrl.GetValue()
     self.theSurfaceType = stCtrl.GetValue()
-    self.theAccessRight = artCtrl.GetValue()
+    self.theAccessRight = arCtrl.GetValue()
     self.theSecurityProperties = propertiesCtrl.properties()
     self.theInterfaces = ifCtrl.dimensions()
 

@@ -76,14 +76,14 @@
 
 <!ELEMENT structure EMPTY>
 <!ATTLIST structure head_asset CDATA #REQUIRED>
-<!ATTLIST structure head_adornment (Association | Aggregation | Composition | Inheritence) #REQUIRED>
+<!ATTLIST structure head_adornment (Association | Aggregation | Composition | Inheritance) #REQUIRED>
 <!ATTLIST structure head_nav (1 | 0) #REQUIRED>
 <!ATTLIST structure head_nry (1 | a | 1..a) #REQUIRED>
 <!ATTLIST structure head_role CDATA #REQUIRED>
 <!ATTLIST structure tail_role CDATA #REQUIRED>
 <!ATTLIST structure tail_nry (1 | a | 1..a) #REQUIRED>
 <!ATTLIST structure tail_nav (1 | 0) #REQUIRED>
-<!ATTLIST structure tail_adornment (Association | Aggregation | Composition | Inheritence) #REQUIRED>
+<!ATTLIST structure tail_adornment (Association | Aggregation | Composition | Inheritance) #REQUIRED>
 <!ATTLIST structure tail_asset CDATA #REQUIRED>
 <!ELEMENT component_requirement EMPTY>
 <!ATTLIST component_requirement name CDATA #REQUIRED>
