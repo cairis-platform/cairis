@@ -18,19 +18,19 @@
 
 import wx
 import armid
-import WidgetFactory
+from BasePanel import BasePanel 
 
-class ValueTypePanel(wx.Panel):
+class ValueTypePanel(BasePanel):
   def __init__(self,parent):
-    wx.Panel.__init__(self,parent,armid.ROLE_ID)
+    BasePanel.__init__(self,parent,armid.VALUETYPE_ID)
 
   def buildControls(self,isCreate):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-    mainSizer.Add(WidgetFactory.buildTextSizer(self,'Name',(87,30),armid.VALUETYPE_TEXTNAME_ID),0,wx.EXPAND)
-    mainSizer.Add(WidgetFactory.buildTextSizer(self,'Score',(87,30),armid.VALUETYPE_TEXTSCORE_ID),0,wx.EXPAND)
-    mainSizer.Add(WidgetFactory.buildMLTextSizer(self,'Description',(87,80),armid.VALUETYPE_TEXTDESCRIPTION_ID),1,wx.EXPAND)
-    mainSizer.Add(WidgetFactory.buildMLTextSizer(self,'Rationale',(87,80),armid.VALUETYPE_TEXTRATIONALE_ID),1,wx.EXPAND)
-    mainSizer.Add(WidgetFactory.buildCommitButtonSizer(self,armid.VALUETYPE_BUTTONCOMMIT_ID,isCreate),0,wx.ALIGN_CENTER)
+    mainSizer.Add(self.buildTextSizer('Name',(87,30),armid.VALUETYPE_TEXTNAME_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildTextSizer('Score',(87,30),armid.VALUETYPE_TEXTSCORE_ID),0,wx.EXPAND)
+    mainSizer.Add(self.buildMLTextSizer('Description',(87,80),armid.VALUETYPE_TEXTDESCRIPTION_ID),1,wx.EXPAND)
+    mainSizer.Add(self.buildMLTextSizer('Rationale',(87,80),armid.VALUETYPE_TEXTRATIONALE_ID),1,wx.EXPAND)
+    mainSizer.Add(self.buildCommitButtonSizer(armid.VALUETYPE_BUTTONCOMMIT_ID,isCreate),0,wx.ALIGN_CENTER)
     self.SetSizer(mainSizer)
 
   def loadControls(self,objt):

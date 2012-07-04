@@ -8706,32 +8706,21 @@ end
 
 create procedure addValueType(in vtId int,in vtName text, in vtDesc text, in vtType text, in vtScore int, in vtRat text)
 begin
-  if vtType = 'capability'
+  declare vtSql varchar(4000);
+  
+  if vtType = 'capability' or vtType = 'motivation' or vtType = 'asset_type' or vtType = 'threat_type' or vtType = 'vulnerability_type'
   then
-    insert into capability(id,name,description) values (vtId,vtName,vtDesc);
-  elseif vtType = 'motivation'
-  then
-    insert into motivation(id,name,description) values (vtId,vtName,vtDesc);
-  elseif vtType = 'asset_type'
-  then
-    insert into asset_type(id,name,description) values (vtId,vtName,vtDesc);
-  elseif vtType = 'threat_type'
-  then
-    insert into threat_type(id,name,description) values (vtId,vtName,vtDesc);
-  elseif vtType = 'access_right'
-  then
-    insert into access_right(id,name,description,value,rationale) values (vtId,vtName,vtDesc,vtScore,vtRat);
-  elseif vtType = 'protocol'
-  then
-    insert into protocol(id,name,description,value,rationale) values (vtId,vtName,vtDesc,vtScore,vtRat);
-  elseif vtType = 'privilege'
-  then
-    insert into privilege(id,name,description,value,rationale) values (vtId,vtName,vtDesc,vtScore,vtRat);
-  elseif vtType = 'surface_type'
-  then
-    insert into surface_type(id,name,description,value,rationale) values (vtId,vtName,vtDesc,vtScore,vtRat);
+    set vtSql = concat('insert into ',vtType,'(id,name,description) values (',vtId,',\"',vtName,'\",\"',vtDesc,'\")');
+    set @sql = vtSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
   else
-    insert into vulnerability_type(id,name,description) values (vtId,vtName,vtDesc);
+    set vtSql = concat('insert into ',vtType,'(id,name,description,value,rationale) values (',vtId,',\"',vtName,'\",\"',vtDesc,'\",',vtScore,',\"',vtRat,'\")');
+    set @sql = vtSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
   end if;
 end
 //
@@ -8739,52 +8728,32 @@ end
 create procedure updateValueType(in vtId int,in vtName text, in vtDesc text, in vtType text, in envName text, in vtScore int, in vtRat text)
 begin
   declare envId int default 0;
+  declare vtSql varchar(4000);
 
   if vtType = 'asset_value'
   then
     select id into envId from environment where name = envName;
     update asset_value set name=vtName, description=vtDesc where id = vtId and environment_id = envId;
-  elseif vtType = 'threat_value'
+  elseif vtType = 'threat_value' or vtType = 'countermeasure_value' or vtType = 'capability' or vtType = 'motivation' or vtType = 'asset_type' or vtType = 'threat_type' or vtType = 'vulnerability_type'
   then
-    update threat_value set name=vtName, description=vtDesc where id = vtId;
-  elseif vtType = 'countermeasure_value'
+    set vtSql = concat('update ',vtType,' set name=\"',vtName,'\", description=\"',vtDesc,'\" where id = ',vtId);
+    set @sql = vtSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
+  elseif vtType = 'severity' or vtType = 'likelihood'
   then
-    update countermeasure_value set name=vtName, description=vtDesc where id = vtId;
-  elseif vtType = 'capability'
-  then
-    update capability set name=vtName, description=vtDesc where id = vtId;
-  elseif vtType = 'motivation'
-  then
-    update motivation set name=vtName, description=vtDesc where id = vtId;
-  elseif vtType = 'asset_type'
-  then
-    update asset_type set name=vtName, description=vtDesc where id = vtId;
-  elseif vtType = 'threat_type'
-  then
-    update threat_type set name=vtName, description=vtDesc where id = vtId;
-  elseif vtType = 'vulnerability_type'
-  then
-    update vulnerability_type set name=vtName, description=vtDesc where id = vtId;
-  elseif vtType = 'severity'
-  then
-    update severity set description=vtDesc where id = vtId;
-  elseif vtType = 'risk_class'
-  then
-    update risk_class set description=vtDesc where id = vtId;
-  elseif vtType = 'access_right'
-  then
-    update access_right set name = vtName, description = vtDesc, value = vtScore, rationale = vtRat where id = vtId;
-  elseif vtType = 'protocol'
-  then
-    update protocol set name = vtName, description = vtDesc, value = vtScore, rationale = vtRat where id = vtId;
-  elseif vtType = 'privilege'
-  then
-    update privilege set name = vtName, description = vtDesc, value = vtScore, rationale = vtRat where id = vtId;
-  elseif vtType = 'surface_type'
-  then
-    update surface_type set name = vtName, description = vtDesc, value = vtScore, rationale = vtRat where id = vtId;
+    set vtSql = concat('update ',vtType,' set name=\"',vtName,'\", description=\"',vtDesc,'\" where id = ',vtId);
+    set @sql = vtSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
   else
-    update likelihood set description=vtDesc where id = vtId;
+    set vtSql = concat('update ',vtType,' set name=\"',vtName,'\", description=\"',vtDesc,'\", value = ',vtScore,', rationale=\"',vtRat,'\"  where id = ',vtId);
+    set @sql = vtSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
   end if;
 end
 //

@@ -82,17 +82,16 @@ class ValueTypeDialog(wx.Dialog):
       dlg.ShowModal()
       dlg.Destroy()
       return
-    if (self.theValueType == 'access_right' or self.theValueType == 'protocol' or self.theValueType == 'privilege' or self.theValueType == 'surface_type'):
-      if len(self.theScore) == 0:
-        dlg = wx.MessageDialog(self,'Score cannot be empty',commitLabel,wx.OK) 
-        dlg.ShowModal()
-        dlg.Destroy()
-        return
-      if len(self.theRationale) == 0:
-        dlg = wx.MessageDialog(self,'Rationale cannot be empty',commitLabel,wx.OK) 
-        dlg.ShowModal()
-        dlg.Destroy()
-        return
+    elif (self.theValueType == 'access_right' or self.theValueType == 'protocol' or self.theValueType == 'privilege' or self.theValueType == 'surface_type') and len(self.theScore) == 0:
+      dlg = wx.MessageDialog(self,'Score cannot be empty',commitLabel,wx.OK) 
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+    elif (self.theValueType == 'access_right' or self.theValueType == 'protocol' or self.theValueType == 'privilege' or self.theValueType == 'surface_type') and len(self.theRationale) == 0:
+      dlg = wx.MessageDialog(self,'Rationale cannot be empty',commitLabel,wx.OK) 
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
     else:
       self.EndModal(armid.VALUETYPE_BUTTONCOMMIT_ID)
 
