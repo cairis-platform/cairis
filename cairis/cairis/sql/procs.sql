@@ -8706,21 +8706,35 @@ end
 
 create procedure addValueType(in vtId int,in vtName text, in vtDesc text, in vtType text, in vtScore int, in vtRat text)
 begin
+  declare existingId int;
+  declare existingIdSql varchar(4000);
   declare vtSql varchar(4000);
   
-  if vtType = 'capability' or vtType = 'motivation' or vtType = 'asset_type' or vtType = 'threat_type' or vtType = 'vulnerability_type'
+  set existingIdSql = concat('select id into @existingId from ',vtType,' where name = \"',vtName,'\" limit 1');
+  set @sql = existingIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set existingId = @existingId;
+  
+  if existingId is not null
   then
-    set vtSql = concat('insert into ',vtType,'(id,name,description) values (',vtId,',\"',vtName,'\",\"',vtDesc,'\")');
-    set @sql = vtSql;
-    prepare stmt from @sql;
-    execute stmt;
-    deallocate prepare stmt;
+    call updateValueType(existingId,vtName,vtDesc,vtType,'',vtScore,vtRat);
   else
-    set vtSql = concat('insert into ',vtType,'(id,name,description,value,rationale) values (',vtId,',\"',vtName,'\",\"',vtDesc,'\",',vtScore,',\"',vtRat,'\")');
-    set @sql = vtSql;
-    prepare stmt from @sql;
-    execute stmt;
-    deallocate prepare stmt;
+    if vtType = 'capability' or vtType = 'motivation' or vtType = 'asset_type' or vtType = 'threat_type' or vtType = 'vulnerability_type'
+    then
+      set vtSql = concat('insert into ',vtType,'(id,name,description) values (',vtId,',\"',vtName,'\",\"',vtDesc,'\")');
+      set @sql = vtSql;
+      prepare stmt from @sql;
+      execute stmt;
+      deallocate prepare stmt;
+    else
+      set vtSql = concat('insert into ',vtType,'(id,name,description,value,rationale) values (',vtId,',\"',vtName,'\",\"',vtDesc,'\",',vtScore,',\"',vtRat,'\")');
+      set @sql = vtSql;
+      prepare stmt from @sql;
+      execute stmt;
+      deallocate prepare stmt;
+    end if;
   end if;
 end
 //

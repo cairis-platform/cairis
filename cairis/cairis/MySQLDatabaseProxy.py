@@ -9168,7 +9168,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         raise DatabaseProxyException(exceptionText) 
 
       for vtParameters in cvValueTypes:
-        self.addValueType(vtParameters)
+        vtId = self.existingObject(vtParameters.name(),vtParameters.type())
+        if vtId == -1:
+          self.addValueType(vtParameters)
       for taParameters in cvAssets:
         taId = self.existingObject(taParameters.name(),'template_asset')
         if taId == -1:
