@@ -1216,6 +1216,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       objts = self.getTemplateAssets(constraintId)
     if (dimensionTable == 'template_requirement'):
       objts = self.getTemplateRequirements(constraintId)
+    if (dimensionTable == 'template_goal'):
+      objts = self.getTemplateGoals(constraintId)
     if (dimensionTable == 'securitypattern'):
       objts = self.getSecurityPatterns(constraintId)
     if (dimensionTable == 'component_view'):
@@ -9097,7 +9099,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           components.append(comParameters)
         connectors = self.componentViewConnectors(cvName)
         asm = self.attackSurfaceMetric(cvName)
-        parameters = ComponentViewParameters(cvName,cvSyn,[],[],[],components,connectors,asm)
+        parameters = ComponentViewParameters(cvName,cvSyn,[],[],[],[],components,connectors,asm)
         cv = ObjectFactory.build(cvId,parameters)
         cvs[cvName] = cv
       return cvs
@@ -9157,6 +9159,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     cvValueTypes = parameters.metricTypes()
     cvAssets = parameters.assets()
     cvReqs = parameters.requirements()
+    cvGoals = parameters.goals()
     cvComs = parameters.components()
     cvCons = parameters.connectors()
 
@@ -9179,8 +9182,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         trId = self.existingObject(trParameters.name(),'template_requirement')
         if trId == -1:
           self.addTemplateRequirement(trParameters)
+      for tgParameters in cvGoals:
+        tgId = self.existingObject(tgParameters.name(),'template_goal')
+        if tgId == -1:
+          self.addTemplateGoal(tgParameters)
       for comParameters in cvComs:
-        self.addComponent(comParameters,cvId)
+        cId = self.existingObject(comParameters.name(),'component')
+        if cId == -1:
+          self.addComponent(comParameters,cvId)
       for conParameters in cvCons:
         self.addConnector(conParameters)
       self.conn.commit()
@@ -10193,4 +10202,153 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting details for ' + objtName + ' from ' + dType + ' directory  (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getTemplateGoals(self,constraintId = -1):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getTemplateGoals(%s)',(constraintId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining template requirements'
+        raise DatabaseProxyException(exceptionText) 
+      templateGoal = {}
+      tgRows = []
+      for row in curs.fetchall():
+        row = list(row)
+        tgId = row[0]
+        tgName = row[1]
+        tgDef = row[2]
+        tgRat = row[3]
+        tgRows.append((tgId,tgName,tgDef,tgRat))
+      curs.close()
+      for tgId,tgName,tgDef,tgRat in tgRows:
+        tgConcerns = self.templateGoalConcerns(tgId)
+        parameters = TemplateGoalParameters(tgName,tgDef,tgRat,tgConcerns)
+        templateGoal = ObjectFactory.build(tgId,parameters)
+        templateGoals[tgName] = templateGoal
+      curs.close()
+      return templateGoal
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting template goals (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteTemplateGoal(self,tgId):
+    self.deleteObject(tgId,'template_goal')
+    self.conn.commit()
+
+  def componentViewGoals(self,cvName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentViewGoals(%s)',(cvName))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error obtaining goals for component view'
+        raise DatabaseProxyException(exceptionText) 
+      rows = []
+      for row in curs.fetchall():
+        row = list(row)
+        rows.append(row[0])
+      curs.close()
+      return rows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting goals for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def situateComponentViewGoals(self,cvName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call situateComponentViewGoal(%s)',(cvName))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error situating goals for component view' + cvName
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error situating goals for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def templateGoalConcerns(self,tgId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call templateGoalConcerns(%s)',(tgId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining concerns for template goal id ' + str(tgId)
+        raise DatabaseProxyException(exceptionText) 
+      else:
+        concs = []
+        for row in curs.fetchall():
+          row = list(row)
+          concs.append(row[0])
+        curs.close()
+        return concs
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting concerns for template goal id ' + str(tgId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addTemplateGoal(self,parameters):
+    goalId = self.newId()
+    goalName = parameters.name()
+    goalDef = parameters.definition()
+    goalRat = parameters.rationale()
+    goalConcerns = parameters.concerns()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addTemplateGoal(%s,%s,%s,%s)',(goalId,goalName,goalDef,goalRat))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding template goal ' + goalName
+      self.addTemplateGoalConcerns(goalId,goalConcerns)
+      self.conn.commit()
+      curs.close()
+      return reqId
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding template goal ' + goalName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def updateTemplateGoal(self,parameters):
+    goalId = parameters.id()
+    goalName = parameters.name()
+    goalDef = parameters.definition()
+    goalRat = parameters.rationale()
+    goalConcerns = parameters.concerns()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call deleteTemplateGoalComponents(%s)',(goalId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating goal ' + goalName
+        raise DatabaseProxyException(exceptionText) 
+      curs.execute('call updateTemplateGoal(%s,%s,%s,%s)',(goalId,goalName,goalDef,goalRat))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating template goal ' + reqName
+      self.addTemplateGoalConcerns(goalId,goalConcerns)
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating template requirement ' + reqName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+
+  def addTemplateGoalConcerns(self,goalId,concerns):
+    for concern in concerns:
+      if concern != '':
+        self.addTemplateGoalConcern(goalId,concern)
+
+  def addTemplateGoalConcern(self,goalId,concern):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call add_template_goal_concern(%s,%s)',(goalId,concern))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error adding template goal concern ' + concern
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding template goal concern ' + concern + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
