@@ -37,6 +37,7 @@ DROP VIEW IF EXISTS component_asset;
 DROP VIEW IF EXISTS asset_template_asset;
 DROP VIEW IF EXISTS securitypattern_requirement;
 DROP VIEW IF EXISTS component_requirement;
+DROP VIEW IF EXISTS component_goal;
 DROP VIEW IF EXISTS misusability_case;
 DROP VIEW IF EXISTS usecase_step_synopsis_actor;
 
@@ -76,8 +77,10 @@ DROP TABLE IF EXISTS template_asset_interface;
 DROP TABLE IF EXISTS interface;
 DROP TABLE IF EXISTS component_asset_template_asset;
 DROP TABLE IF EXISTS component_requirement_template_requirement;
+DROP TABLE IF EXISTS component_goal_template_goal;
 DROP TABLE IF EXISTS component_classassociation;
 DROP TABLE IF EXISTS component_template_requirement;
+DROP TABLE IF EXISTS component_template_goal;
 DROP TABLE IF EXISTS component_vulnerability_target;
 DROP TABLE IF EXISTS component_threat_target;
 
@@ -105,6 +108,8 @@ DROP TABLE IF EXISTS securitypattern_template_requirement;
 DROP TABLE IF EXISTS securitypattern;
 DROP TABLE IF EXISTS template_asset_property;
 DROP TABLE IF EXISTS template_requirement;
+DROP TABLE IF EXISTS template_goal_concern;
+DROP TABLE IF EXISTS template_goal;
 DROP TABLE IF EXISTS template_asset;
 DROP TABLE IF EXISTS project_dictionary;
 DROP TABLE IF EXISTS project_setting;
@@ -1928,7 +1933,20 @@ CREATE TABLE template_requirement(
   FOREIGN KEY (type_id) REFERENCES requirement_type(id),
   FOREIGN KEY (asset_id) REFERENCES template_asset(id)
 ) ENGINE=INNODB;
-
+CREATE TABLE template_goal(
+  id INT NOT NULL,
+  name VARCHAR(255),
+  definition VARCHAR(4000),
+  rationale VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=INNODB;
+CREATE TABLE template_goal_concern (
+  template_goal_id INT NOT NULL,
+  template_asset_id INT NOT NULL,
+  PRIMARY KEY(template_goal_id,template_asset_id),
+  FOREIGN KEY(template_goal_id) REFERENCES template_goal(id),
+  FOREIGN KEY(template_asset_id) REFERENCES template_asset(id)
+) ENGINE=INNODB;
 CREATE TABLE securitypattern_template_requirement (
   template_requirement_id INT NOT NULL,
   pattern_id INT NOT NULL,
@@ -2762,6 +2780,14 @@ CREATE TABLE component_template_requirement (
   FOREIGN KEY (template_requirement_id) REFERENCES template_requirement(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE component_template_goal (
+  template_goal_id INT NOT NULL,
+  component_id INT NOT NULL,
+  PRIMARY KEY(template_goal_id,component_id),
+  FOREIGN KEY (component_id) REFERENCES component(id),
+  FOREIGN KEY (template_goal_id) REFERENCES template_goal(id)
+) ENGINE=INNODB;
+
 CREATE TABLE component_requirement_template_requirement (
   requirement_id INT NOT NULL,
   template_requirement_id INT NOT NULL,
@@ -2770,6 +2796,16 @@ CREATE TABLE component_requirement_template_requirement (
   FOREIGN KEY (requirement_id) REFERENCES requirement(id),
   FOREIGN KEY (component_id) REFERENCES component(id),
   FOREIGN KEY (template_requirement_id) REFERENCES template_requirement(id)
+) ENGINE=INNODB;
+
+CREATE TABLE component_goal_template_goal (
+  goal_id INT NOT NULL,
+  template_goal_id INT NOT NULL,
+  component_id INT NOT NULL,
+  PRIMARY KEY(goal_id,template_goal_id,component_id),
+  FOREIGN KEY (goal_id) REFERENCES goal(id),
+  FOREIGN KEY (component_id) REFERENCES component(id),
+  FOREIGN KEY (template_goal_id) REFERENCES template_goal(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE component_view_component(
@@ -3300,6 +3336,9 @@ CREATE VIEW asset_template_asset as
 
 CREATE VIEW component_requirement as
   select ctr.label, ctr.component_id, tr.type_id, tr.name, tr.description, tr.rationale, tr.fit_criterion, tr.asset_id from component_template_requirement ctr, template_requirement tr where ctr.template_requirement_id = tr.id;
+
+CREATE VIEW component_goal as
+  select ctg.component_id, tg.name, tg.definition, tg.rationale from component_template_goal ctg, template_goal tg where ctg.template_goal_id = tg.id;
 
 CREATE VIEW securitypattern_requirement as
   select str.label, str.pattern_id, tr.type_id, tr.name, tr.description, tr.rationale, tr.fit_criterion, tr.asset_id from securitypattern_template_requirement str, template_requirement tr where str.template_requirement_id = tr.id;

@@ -20,23 +20,23 @@
 
 <!-- DTD for template CAIRIS component views -->
 
-<!ELEMENT component_view (synopsis,access_right*,protocol*,privilege*,surface_type*,asset*,requirement*,component*,connector*)>
+<!ELEMENT component_view (synopsis,access_right*,protocol*,privilege*,surface_type*,asset*,requirement*,goal*,component*,connector*)>
 <!ATTLIST component_view name CDATA #REQUIRED>
 <!ELEMENT synopsis (#PCDATA)>
 
-<!ELEMENT access_right (rationale)>
+<!ELEMENT access_right (description,rationale)>
 <!ATTLIST access_right name CDATA #REQUIRED>
 <!ATTLIST access_right value CDATA #REQUIRED>
 
-<!ELEMENT protocol (rationale)>
+<!ELEMENT protocol (description,rationale)>
 <!ATTLIST protocol name CDATA #REQUIRED>
 <!ATTLIST protocol value CDATA #REQUIRED>
 
-<!ELEMENT privilege (rationale)>
+<!ELEMENT privilege (description,rationale)>
 <!ATTLIST privilege name CDATA #REQUIRED>
 <!ATTLIST privilege value CDATA #REQUIRED>
 
-<!ELEMENT surface_type (rationale)>
+<!ELEMENT surface_type (description,rationale)>
 <!ATTLIST surface_type name CDATA #REQUIRED>
 <!ATTLIST surface_type value CDATA #REQUIRED>
 
@@ -70,7 +70,13 @@
 <!ELEMENT rationale (#PCDATA)>
 <!ELEMENT fit_criterion (#PCDATA)>
 
-<!ELEMENT component (description,interface*,structure*,component_requirement*)>
+<!ELEMENT goal (definition,rationale,concern)>
+<!ATTLIST goal name CDATA #REQUIRED>
+<!ELEMENT definition (#PCDATA)>
+<!ELEMENT concern EMPTY>
+<!ATTLIST concern name CDATA #REQUIRED>
+
+<!ELEMENT component (description,interface*,structure*,component_requirement*,component_goal*,component_goal_association*)>
 <!ATTLIST component name CDATA #REQUIRED>
 <!ELEMENT description (#PCDATA)>
 
@@ -87,6 +93,14 @@
 <!ATTLIST structure tail_asset CDATA #REQUIRED>
 <!ELEMENT component_requirement EMPTY>
 <!ATTLIST component_requirement name CDATA #REQUIRED>
+<!ELEMENT component_goal EMPTY>
+<!ATTLIST component_goal name CDATA #REQUIRED>
+
+<!ELEMENT component_goal_association (rationale)>
+<!ATTLIST component_goal_association goal_name CDATA #REQUIRED>
+<!ATTLIST component_goal_association ref_type (and | or) #REQUIRED>
+<!ATTLIST component_goal_association subgoal_name CDATA #REQUIRED>
+
 
 <!ELEMENT connector EMPTY>
 <!ATTLIST connector name CDATA #REQUIRED>

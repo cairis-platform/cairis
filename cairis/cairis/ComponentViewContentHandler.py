@@ -23,6 +23,7 @@ from ConnectorParameters import ConnectorParameters
 from ValueTypeParameters import ValueTypeParameters
 from TemplateAssetParameters import TemplateAssetParameters
 from TemplateRequirementParameters import TemplateRequirementParameters
+from TemplateGoalParameters import TemplateGoalParameters
 from Borg import Borg
 
 def a2i(spLabel):
@@ -50,10 +51,12 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theMetricTypes = []
     self.theAssets = []
     self.theRequirements = []
+    self.theGoals = []
     self.theComponents = []
     self.theConnectors = []
     self.resetAssetAttributes()
     self.resetRequirementAttributes()
+    self.resetGoalAttributes()
     self.resetComponentAttributes()
     self.resetSecurityPropertyAttributes()
     self.resetConnectorAttributes()
@@ -81,6 +84,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theInterfaces = []
     self.theStructure = []
     self.theComponentRequirements = []
+    self.theComponentGoals = []
     self.resetStructure()
 
   def resetStructure(self):
@@ -105,6 +109,14 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theDescription = ''
     self.theRationale = ''
     self.theFitCriterion = ''
+
+  def resetGoalAttributes(self):
+    self.inDefinition = 0
+    self.inRationale = 0
+    self.theName = ''
+    self.theDefinition = ''
+    self.theRationale = ''
+    self.theConcerns = []
 
   def resetAssetAttributes(self):
     self.inDescription = 0
@@ -151,6 +163,9 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     elif (name == 'description'):
       self.inDescription = 1
       self.theDescription = ''
+    elif (name == 'definition'):
+      self.inDefinition = 1
+      self.theDefinition = ''
     elif (name == 'fit_criterion'):
       self.inFitCriterion = 1
       self.theFitCriterion = ''
@@ -162,6 +177,8 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theRationale = ''
     elif name == 'interface':
       self.theInterfaces.append((attrs['name'],it2Id(attrs['type']),attrs['access_right'],attrs['privilege']))
+    elif name == 'concern':
+      self.theConcerns.append(attrs['name'])
     elif name == 'asset':
       self.theName = attrs['name']
       self.theShortCode = attrs['short_code']
@@ -211,8 +228,12 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theAsset = attrs['asset']
       rawType = attrs['type']
       self.theType = rawType.replace('_',' ')
+    elif name == 'goal':
+      self.theName = attrs['name']
     elif name == 'component_requirement':
       self.theComponentRequirements.append(attrs['name'])
+    elif name == 'component_goal':
+      self.theComponentGoals.append(attrs['name'])
     elif name == 'access_right' or name == 'protocol' or name == 'privilege' or name == 'surface_type':
       self.theName = attrs['name']
       self.theScore = int(attrs['value'])
@@ -220,6 +241,8 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
   def characters(self,data):
     if self.inDescription:
       self.theDescription += data
+    elif self.inDefinition:
+      self.theDefinition += data
     elif self.inSynopsis:
       self.theSynopsis += data
     elif self.inSignificance:
@@ -273,12 +296,18 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       p = TemplateRequirementParameters(self.theReqName,self.theAsset,self.theType,self.theDescription,self.theRationale,self.theFitCriterion)
       self.theRequirements.append(p)
       self.resetRequirementAttributes()
+    elif name == 'goal':
+      p = TemplateGoalParameters(self.theName,self.theDefinition,self.theRationale,self.theConcerns)
+      self.theGoals.append(p)
+      self.resetGoalAttributes()
     elif name == 'connector':
       p = ConnectorParameters(self.theName,self.theViewName,self.theFromName,self.theFromRole,self.theFromInterface,self.theToName,self.theToInterface,self.theToRole,self.theConnectorAsset,self.theProtocolName,self.theAccessRight)
       self.theConnectors.append(p)
       self.resetConnectorAttributes() 
     elif name == 'description':
       self.inDescription = 0
+    elif name == 'definition':
+      self.inDefinition = 0
     elif name == 'synopsis':
       self.inSynopsis = 0
     elif name == 'rationale':
@@ -292,4 +321,4 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theMetricTypes.append(p)
       self.resetValueTypeAttributes()
     elif name == 'component_view':
-      self.theViewParameters = ComponentViewParameters(self.theViewName,self.theSynopsis,self.theMetricTypes,self.theAssets,self.theRequirements,self.theComponents,self.theConnectors)
+      self.theViewParameters = ComponentViewParameters(self.theViewName,self.theSynopsis,self.theMetricTypes,self.theAssets,self.theRequirements,self.theGoals,self.theComponents,self.theConnectors)

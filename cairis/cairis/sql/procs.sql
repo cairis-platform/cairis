@@ -264,6 +264,7 @@ drop procedure if exists countermeasureNames;
 drop function if exists classAssociationId;
 drop function if exists goalAssociationId;
 drop procedure if exists deleteGoalComponents;
+drop procedure if exists deleteTemplateGoalComponents;
 drop procedure if exists addGoalDefinition;
 drop procedure if exists addGoalCategory;
 drop procedure if exists addGoalPriority;
@@ -701,6 +702,7 @@ drop procedure if exists connectorNames;
 drop function if exists mitigated_likelihood;
 drop function if exists mitigated_severity;
 drop procedure if exists componentViewRequirements;
+drop procedure if exists componentViewGoals;
 drop procedure if exists componentAssets;
 drop procedure if exists situateComponentAsset;
 drop procedure if exists existing_object;
@@ -709,11 +711,18 @@ drop procedure if exists addComponentTarget;
 drop procedure if exists assetComponents;
 drop procedure if exists addTemplateRequirement;
 drop procedure if exists updateTemplateRequirement;
+drop procedure if exists addTemplateGoal;
+drop procedure if exists updateTemplateGoal;
 drop procedure if exists delete_template_requirement;
+drop procedure if exists delete_template_goal;
 drop procedure if exists getTemplateRequirements;
+drop procedure if exists getTemplateGoals;
 drop procedure if exists template_requirementNames;
+drop procedure if exists template_goalNames;
 drop procedure if exists situateComponentViewRequirements;
 drop procedure if exists situateComponentViewRequirement;
+drop procedure if exists situateComponentViewGoals;
+drop procedure if exists situateComponentViewGoal;
 drop function if exists interfaceId;
 drop procedure if exists access_rightNames;
 drop procedure if exists protocolNames;
@@ -758,6 +767,9 @@ drop procedure if exists addImpliedProcessNetworkRelationship;
 drop procedure if exists usecaseStepSynopses;
 drop procedure if exists addStepSynopsis;
 drop procedure if exists directoryEntry;
+drop procedure if exists addComponentGoal;
+drop procedure if exists getComponentGoals;
+drop procedure if exists templateGoalConcerns;
 
 delimiter //
 
@@ -18146,10 +18158,12 @@ begin
     delete from component_interface;
     delete from component_classassociation;
     delete from component_template_requirement;
+    delete from component_template_goal;
   else
     delete from component_interface where component_id = componentId;
     delete from component_classassociation where component_id = componentId;
     delete from component_template_requirement where component_id = componentId;
+    delete from component_template_goal where component_id = componentId;
   end if;
 end
 //
@@ -18482,10 +18496,12 @@ begin
   declare cId int; 
   declare assetId int; 
   declare reqId int; 
+  declare goalId int; 
   declare done int default 0;
   declare componentCursor cursor for select component_id from component_view_component where component_view_id = cvId;
   declare assetCursor cursor for select id from asset where id in (select asset_id from component_asset_template_asset where component_id = cId);
   declare reqCursor cursor for select id from requirement where id in (select requirement_id from component_requirement_template_requirement where requirement_id = cId);
+  declare goalCursor cursor for select id from goal where id in (select goal_id from component_goal_template_goal where goal_id = cId);
   declare continue handler for not found set done = 1;
 
   open componentCursor;
@@ -18522,6 +18538,19 @@ begin
     end loop req_loop;
     close reqCursor;
     delete from component_requirement_template_requirement where component_id = cId;
+
+    set done = 0;
+    open goalCursor;
+    goal_loop: loop
+      fetch goalCursor into goalId;
+      if done = 1
+      then
+        leave goal_loop;
+      end if;
+      call delete_goal(goalId);
+    end loop goal_loop;
+    close goalCursor;
+    delete from component_goal_template_goal where component_id = cId;
 
   end loop component_loop;
   close componentCursor;
@@ -19304,6 +19333,164 @@ begin
   set eDesc = @eDesc;
   set eType = @eType;
   select eName,eDesc,eType;
+end
+//
+
+create procedure delete_template_goal(in goalId int)
+begin
+  if goalId = -1
+  then
+    delete from component_template_goal;
+    delete from template_goal_concern;
+    delete from template_goal;
+  else
+    delete from component_template_goal where template_goal_id = goalId;
+    call deleteTemplateGoalComponents(goalId);
+    delete from template_goal where id = goalId;
+  end if;
+end
+//
+
+create procedure template_goalNames()
+begin
+  select name from template_goal order by 1;
+end
+//
+
+create procedure addComponentGoal(in componentId int, in goalName text)
+begin
+  declare goalId int;
+  select id into goalId from template_goal where name = goalName;
+  insert into component_template_goal(template_goal_id,component_id) values (goalId,componentId);
+end
+//
+
+create procedure getComponentGoals(in componentId int)
+begin
+  select tg.name from component_template_goal ctg, template_goal tg where ctg.component_id = componentId and ctg.template_goal_id = tg.id order by 1;
+end
+//
+
+create procedure addTemplateGoal(in goalId int, in goalName text, in goalDef text, in goalRat text)
+begin
+  insert into template_goal(id,name,definition,rationale) values (goalId,goalName,goalDef,goalRat);
+end
+//
+
+create procedure updateTemplateGoal(in goalId int, in goalName text, in goalDef text, in goalRat text)
+begin
+  update template_goal set name = goalName, definition = goalDef, rationale = reqRat where id = goalId;
+end
+//
+
+create procedure componentViewGoals(in cvName text)
+begin
+  declare cvId int;
+
+  select id into cvId from component_view where name = cvName;
+  select cg.name from component_goal cg, component_view_component cvc where cvc.component_view_id = cvId and cvc.component_id = cg.component_id order by 1;
+end
+//
+
+create procedure situateComponentViewGoals(in cvName text,in envName text)
+begin
+  declare cvId int;
+  declare cId int;
+  declare cName varchar(255);
+  declare done int;
+  declare componentCursor cursor for select cvc.component_id,c.name from component_view_component cvc, component c where cvc.component_view_id = cvId and cvc.component_id = c.id;
+  declare continue handler for not found set done = 1;
+
+  select id into cvId from component_view where name = cvName;
+
+  open componentCursor;
+  component_loop: loop
+    fetch componentCursor into cId,cName;
+    if done = 1
+    then
+      leave component_loop;
+    end if;
+    call situateComponentViewGoal(cvId,cId,cName,envName);
+  end loop component_loop;
+  close componentCursor;
+end
+//
+
+create procedure situateComponentViewGoal(in cvId int, in cId int, in cName text, in envName text)
+begin
+  declare goalName varchar(4000);
+  declare assetName varchar(50);
+  declare assetId int;
+  declare goalDef varchar(255);
+  declare goalRationale varchar(255);
+  declare goalId int;
+  declare tgId int;
+  declare done int;
+  declare envId int;
+  declare cvName varchar(255);
+  declare goalCursor cursor for select cg.name,cg.definition,cg.rationale from component_view_component cvc, component_goal cg where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId order by cg.name;
+  declare concernCursor cursor for select ta.name from component_view_component cvc, component_goal cg, template_goal_concern gc, template_asset ta where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId and cg.component_id = gc.component_id and gc.template_asset_id = ta.template_asset_id order by ta.name;
+  declare continue handler for not found set done = 1;
+
+  select id into envId from environment where name = envName;
+  select name into cvName from component_view where id = cvId;
+
+  set done = 0;
+  open goalCursor;
+  goal_loop: loop
+    fetch goalCursor into goalName,goalDef,goalRationale;
+    if done = 1
+    then
+      leave goal_loop;
+    end if;
+    call newId1(goalId);
+    call addGoal(goalId,goalName,cvName);
+    call add_goal_environment(goalId,envId);
+    call addGoalDefinition(goalId,envId,goalDef);
+    call addGoalCategory(goalId,envId,'Maintain');
+    call addGoalPriority(goalId,envId,'Low');
+    call addGoalFitCriterion(goalId,envId,'None');
+    call addGoalIssue(goalId,envId,goalRationale);
+
+    open concernCursor;
+    concern_loop: loop
+      fetch concernCursor into assetName;
+      if done = 1
+      then
+        leave concern_loop;
+      end if;
+      call add_goal_concern(goalId,envName,assetName);
+    end loop concern_loop;
+    close concernCursor;
+    set done = 0;
+
+    select id into tgId from template_goal where name = goalName;
+    insert into component_goal_template_goal(goal_id,template_goal_id,component_id) values (goalId,tgId,cId); 
+  end loop goal_loop;
+  close goalCursor;
+end
+//
+
+create procedure getTemplateGoals(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select id, name, definition, rationale from template_goal;
+  else
+    select id, name, definition, rationale from template_goal where id = constraintId;
+  end if;
+end
+//
+
+create procedure templateGoalConcerns(in tgId int)
+begin
+  select ta.name from template_goal_concern tgc, template_asset ta where tgc.goal_id = tgId and tgc.template_asset_id = ta.id;
+end
+//
+
+create procedure deleteTemplateGoalComponents(in goalId int)
+begin
+  delete from template_goal_concern where goal_id = goalId;
 end
 //
 

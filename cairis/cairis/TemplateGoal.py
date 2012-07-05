@@ -15,21 +15,16 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-class Component:
-  def __init__(self,cId,cName,cDesc,cIfs,cStruct,cReqs,cGoals):
-    self.theId = cId
-    self.theName = cName
-    self.theDescription = cDesc
-    self.theInterfaces = cIfs
-    self.theStructure = cStruct
-    self.theRequirements = cReqs
-    self.theGoals = cGoals
+class TemplateGoal:
+  def __init__(self,goalId,goalName,goalDef,goalRat,goalConcerns):
+    self.theId = goalId
+    self.theName = goalName
+    self.theDefinition= goalDef
+    self.theRationale = goalRat
+    self.theConcerns = goalConcerns
 
   def id(self): return self.theId
   def name(self): return self.theName
-  def description(self): return self.theDescription
-  def interfaces(self): return self.theInterfaces
-  def structure(self): return self.theStructure
-  def requirements(self): return self.theRequirements
-  def goals(self): return self.theGoals
+  def description(self): return self.theDefinition
+  def rationale(self): return self.theRationale
+  def concerns(self): return self.theConcerns
