@@ -19,16 +19,18 @@
 import ObjectCreationParameters
 
 class ComponentParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,cName,cDesc,cInterfaces,cStruct,cReq):
+  def __init__(self,cName,cDesc,cInterfaces,cStruct,cReq,cGoals):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = cName
     self.theDescription = cDesc
     self.theInterfaces = cInterfaces
     self.theStructure = cStruct
     self.theRequirements = cReq
+    self.theGoals = cGoals
 
   def name(self): return self.theName
   def description(self): return self.theDescription
   def interfaces(self): return self.theInterfaces
   def structure(self): return self.theStructure
   def requirements(self): return self.theRequirements
+  def goals(self): return self.theGoals

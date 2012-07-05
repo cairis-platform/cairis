@@ -1432,13 +1432,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       dimensions = []
       curs = self.conn.cursor()
-      if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement'):
+      if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement' and dimensionTable != 'template_goal'):
         sqlText = 'call ' + dimensionTable + 'Names(%s)' 
         curs.execute(sqlText,(currentEnvironment))
       elif (dimensionTable == 'template_asset'):
         curs.execute('call template_assetNames()')
       elif (dimensionTable == 'template_requirement'):
         curs.execute('call template_requirementNames()')
+      elif (dimensionTable == 'template_goal'):
+        curs.execute('call template_goalNames()')
       if (curs.rowcount == -1):
         exceptionText = 'Error obtaining ' + dimensionTable + 's'
         raise DatabaseProxyException(exceptionText) 
@@ -9094,7 +9096,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           componentInterfaces = self.componentInterfaces(componentId)
           componentStructure = self.componentStructure(componentId)
           componentReqs = self.componentRequirements(componentId)
-          comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs)
+          componentGoals = self.componentGoals(componentId)
+          comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs,componentGoals)
           comParameters.setId(componentId)
           components.append(comParameters)
         connectors = self.componentViewConnectors(cvName)
@@ -10304,7 +10307,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addTemplateGoalConcerns(goalId,goalConcerns)
       self.conn.commit()
       curs.close()
-      return reqId
+      return goalId
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding template goal ' + goalName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -10352,3 +10355,23 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error adding template goal concern ' + concern + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def componentGoals(self,componentId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getComponentGoals(%s)',(componentId))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error obtaining component goals'
+        raise DatabaseProxyException(exceptionText) 
+      rows = []
+      for row in curs.fetchall():
+        row = list(row)
+        rows.append(row[0])
+      curs.close()
+      return rows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting goals for component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+

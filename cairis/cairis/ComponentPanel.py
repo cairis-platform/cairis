@@ -49,9 +49,11 @@ class ComponentPanel(BasePanel):
     ifCtrl = self.FindWindowById(armid.COMPONENT_LISTINTERFACES_ID)
     structCtrl = self.FindWindowById(armid.COMPONENT_LISTSTRUCTURE_ID)
     reqsCtrl = self.FindWindowById(armid.COMPONENT_LISTREQUIREMENTS_ID)
+    goalsCtrl = self.FindWindowById(armid.COMPONENT_LISTGOALS_ID)
 
     nameCtrl.SetValue(component.name())
     descCtrl.SetValue(component.description())
     ifCtrl.load(component.interfaces())
     structCtrl.load(component.structure())
     reqsCtrl.load(component.requirements()) 
+    goalsCtrl.load(component.goals()) 

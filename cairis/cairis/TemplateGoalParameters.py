@@ -29,4 +29,4 @@ class TemplateGoalParameters(ObjectCreationParameters.ObjectCreationParameters):
   def name(self): return self.theName
   def definition(self): return self.theDefinition
   def rationale(self): return self.theRationale
-  def fitCriterion(self): return self.theFitCriterion
+  def concerns(self): return self.theConcerns

@@ -402,6 +402,7 @@ drop procedure if exists goalConcernAssociations;
 drop procedure if exists addTaskConcernAssociation;
 drop procedure if exists taskConcernAssociations;
 drop procedure if exists add_goal_concern;
+drop procedure if exists add_template_goal_concern;
 drop procedure if exists goalConcerns;
 drop procedure if exists addDependency;
 drop procedure if exists updateDependency;
@@ -19491,6 +19492,14 @@ end
 create procedure deleteTemplateGoalComponents(in goalId int)
 begin
   delete from template_goal_concern where goal_id = goalId;
+end
+//
+
+create procedure add_template_goal_concern(goalId int, assetName text)
+begin
+  declare assetId int;
+  select id into assetId from template_asset where name = assetName;
+  insert into template_goal_concern(template_goal_id,template_asset_id) values (goalId,assetId);
 end
 //
 

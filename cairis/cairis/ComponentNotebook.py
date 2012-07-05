@@ -58,6 +58,18 @@ class RequirementsPage(wx.Panel):
     asBoxSizer.Add(self.requirementList,1,wx.EXPAND)
     self.SetSizer(topSizer)
 
+class GoalsPage(wx.Panel):
+  def __init__(self,parent):
+    wx.Panel.__init__(self,parent)
+    topSizer = wx.BoxSizer(wx.VERTICAL)
+    asBox = wx.StaticBox(self,-1)
+    asBoxSizer = wx.StaticBoxSizer(asBox,wx.HORIZONTAL)
+    topSizer.Add(asBoxSizer,1,wx.EXPAND)
+    b = Borg()
+    self.goalList = DimensionListCtrl(self,armid.COMPONENT_LISTGOALS_ID,wx.DefaultSize,'Goal','template_goal',b.dbProxy)
+    asBoxSizer.Add(self.goalList,1,wx.EXPAND)
+    self.SetSizer(topSizer)
+
 class ComponentNotebook(wx.Notebook):
   def __init__(self,parent):
     wx.Notebook.__init__(self,parent,armid.SECURITYPATTERN_NOTEBOOKPATTERN_ID)
@@ -65,7 +77,9 @@ class ComponentNotebook(wx.Notebook):
     p2 = InterfacePage(self,armid.COMPONENT_LISTINTERFACES_ID)
     p3 = StructurePage(self,armid.COMPONENT_LISTSTRUCTURE_ID)
     p4 = RequirementsPage(self,p3)
+    p5 = GoalsPage(self)
     self.AddPage(p1,'Description')
     self.AddPage(p2,'Interfaces')
     self.AddPage(p3,'Structure')
     self.AddPage(p4,'Requirements')
+    self.AddPage(p5,'Goals')

@@ -30,6 +30,7 @@ class ComponentDialog(wx.Dialog):
     self.theInterfaces = []
     self.theStructure = []
     self.theRequirements = []
+    self.theGoals = []
     self.theComponentId = -1
     self.panel = 0
     self.buildControls()
@@ -55,11 +56,13 @@ class ComponentDialog(wx.Dialog):
     ifCtrl = self.FindWindowById(armid.COMPONENT_LISTINTERFACES_ID)
     structCtrl = self.FindWindowById(armid.COMPONENT_LISTSTRUCTURE_ID)
     reqsCtrl = self.FindWindowById(armid.COMPONENT_LISTREQUIREMENTS_ID)
+    goalsCtrl = self.FindWindowById(armid.COMPONENT_LISTGOALS_ID)
     self.theName = nameCtrl.GetValue()
     self.theDescription = descCtrl.GetValue()
     self.theInterfaces = ifCtrl.dimensions()
     self.theStructure = structCtrl.associations()
     self.theRequirements = reqsCtrl.dimensions()
+    self.theGoals = reqsCtrl.dimensions()
 
     if len(self.theName) == 0:
       dlg = wx.MessageDialog(self,'Component name cannot be empty',commitLabel,wx.OK) 
@@ -80,6 +83,6 @@ class ComponentDialog(wx.Dialog):
       self.EndModal(armid.COMPONENT_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theRequirements)
+    parameters = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theRequirements,self.theGoals)
     parameters.setId(self.theComponentId)
     return parameters
