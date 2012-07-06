@@ -8849,6 +8849,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting connectors for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def addComponentToView(self,cId,cvId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addComponentToView(%s,%s)',(cId,cvId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding component to view '
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding component to view (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+
   def addComponent(self,parameters,cvId = -1):
     componentId = self.newId()
     componentName = parameters.name()
@@ -9197,6 +9212,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         cId = self.existingObject(comParameters.name(),'component')
         if cId == -1:
           self.addComponent(comParameters,cvId)
+        else:
+          self.addComponentToView(cId,cvId)
+
       for conParameters in cvCons:
         self.addConnector(conParameters)
       self.conn.commit()
@@ -9546,7 +9564,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         componentInterfaces = self.componentInterfaces(componentId)
         componentStructure = self.componentStructure(componentId)
         componentReqs = self.componentRequirements(componentId)
-        comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs)
+        componentGoals = self.componentGoals(componentId)
+        comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs,componentGoals)
         comParameters.setId(componentId)
         component = ObjectFactory.build(componentId,comParameters)
         components[componentName] = component
