@@ -8855,6 +8855,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     componentDesc = parameters.description()
     structure = parameters.structure()
     requirements = parameters.requirements()
+    goals = parameters.goals()
 
     try:
       curs = self.conn.cursor()
@@ -8872,6 +8873,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         self.addComponentInterface(componentId,ifName,ifType,arName,pName)
       self.addComponentStructure(componentId,structure)
       self.addComponentRequirements(componentId,requirements)
+      self.addComponentGoals(componentId,goals)
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8885,6 +8887,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     componentDesc = parameters.description()
     structure = parameters.structure()
     requirements = parameters.requirements()
+    goals = parameters.goals()
 
     try:
       curs = self.conn.cursor()
@@ -8906,6 +8909,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         self.addComponentInterface(componentId,ifName,ifType,arName,pName)
       self.addComponentStructure(componentId,structure)
       self.addComponentRequirements(componentId,requirements)
+      self.addComponentGoals(componentId,goals)
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -10375,3 +10379,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting goals for component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def addComponentGoals(self,componentId,componentGoals):
+    for idx,goalName in enumerate(componentGoals):
+      self.addComponentGoal(componentId,goalName)
+
+  def addComponentGoal(self,componentId,goalName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addComponentGoal(%s,%s)',(componentId,goalName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding goal to component id ' + str(componentId) 
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding goal to component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
