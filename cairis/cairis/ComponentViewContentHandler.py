@@ -255,7 +255,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if (name == 'component'):
-      p = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theComponentRequirements)
+      p = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theComponentRequirements,self.theComponentGoals)
       self.theComponents.append(p)
       self.resetComponentAttributes() 
     elif name == 'asset':
