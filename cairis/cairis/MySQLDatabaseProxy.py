@@ -9360,6 +9360,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         for cName in acDict[assetName]:
           self.situateComponentAsset(cName,assetId)
       self.situateComponentViewRequirements(cvName)
+      self.situateComponentViewGoals(cvName,envName)
       for target in targets:
         self.addComponentViewTargets(target,envName)
     except _mysql_exceptions.DatabaseError, e:
@@ -10263,10 +10264,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting goals for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def situateComponentViewGoals(self,cvName):
+  def situateComponentViewGoals(self,cvName,envName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call situateComponentViewGoal(%s)',(cvName))
+      curs.execute('call situateComponentViewGoals(%s,%s)',(cvName,envName))
       if (curs.rowcount == -1):
         curs.close()
         exceptionText = 'Error situating goals for component view' + cvName

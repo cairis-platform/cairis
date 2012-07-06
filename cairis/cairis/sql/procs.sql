@@ -19427,13 +19427,11 @@ begin
   declare goalId int;
   declare tgId int;
   declare done int;
-  declare envId int;
   declare cvName varchar(255);
   declare goalCursor cursor for select cg.name,cg.definition,cg.rationale from component_view_component cvc, component_goal cg where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId order by cg.name;
-  declare concernCursor cursor for select ta.name from component_view_component cvc, component_goal cg, template_goal_concern gc, template_asset ta where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId and cg.component_id = gc.component_id and gc.template_asset_id = ta.template_asset_id order by ta.name;
+  declare concernCursor cursor for select distinct ta.name from component_view_component cvc, component_template_goal cg, template_goal_concern gc, template_asset ta where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId and cg.template_goal_id = gc.template_goal_id and gc.template_asset_id = ta.id order by ta.name;
   declare continue handler for not found set done = 1;
 
-  select id into envId from environment where name = envName;
   select name into cvName from component_view where id = cvId;
 
   set done = 0;
@@ -19446,12 +19444,12 @@ begin
     end if;
     call newId1(goalId);
     call addGoal(goalId,goalName,cvName);
-    call add_goal_environment(goalId,envId);
-    call addGoalDefinition(goalId,envId,goalDef);
-    call addGoalCategory(goalId,envId,'Maintain');
-    call addGoalPriority(goalId,envId,'Low');
-    call addGoalFitCriterion(goalId,envId,'None');
-    call addGoalIssue(goalId,envId,goalRationale);
+    call add_goal_environment(goalId,envName);
+    call addGoalDefinition(goalId,envName,goalDef);
+    call addGoalCategory(goalId,envName,'Maintain');
+    call addGoalPriority(goalId,envName,'Low');
+    call addGoalFitCriterion(goalId,envName,'None');
+    call addGoalIssue(goalId,envName,goalRationale);
 
     open concernCursor;
     concern_loop: loop
