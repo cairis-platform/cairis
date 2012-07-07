@@ -19448,29 +19448,33 @@ begin
     then
       leave goal_loop;
     end if;
-    call newId1(goalId);
-    call addGoal(goalId,goalName,cvName);
-    call add_goal_environment(goalId,envName);
-    call addGoalDefinition(goalId,envName,goalDef);
-    call addGoalCategory(goalId,envName,'Maintain');
-    call addGoalPriority(goalId,envName,'Low');
-    call addGoalFitCriterion(goalId,envName,'None');
-    call addGoalIssue(goalId,envName,goalRationale);
+    
+    select count(id) into goalId from goal where name = goalName;
+    if goalId = 0
+    then
+      call newId1(goalId);
+      call addGoal(goalId,goalName,cvName);
+      call add_goal_environment(goalId,envName);
+      call addGoalDefinition(goalId,envName,goalDef);
+      call addGoalCategory(goalId,envName,'Maintain');
+      call addGoalPriority(goalId,envName,'Low');
+      call addGoalFitCriterion(goalId,envName,'None');
+      call addGoalIssue(goalId,envName,goalRationale);
 
-    open concernCursor;
-    concern_loop: loop
-      fetch concernCursor into assetName;
-      if done = 1
-      then
-        leave concern_loop;
-      end if;
-      call add_goal_concern(goalId,envName,assetName);
-    end loop concern_loop;
-    close concernCursor;
-    set done = 0;
-
-    select id into tgId from template_goal where name = goalName;
-    insert into component_goal_template_goal(goal_id,template_goal_id,component_id) values (goalId,tgId,cId); 
+      open concernCursor;
+      concern_loop: loop
+        fetch concernCursor into assetName;
+        if done = 1
+        then
+          leave concern_loop;
+        end if;
+        call add_goal_concern(goalId,envName,assetName);
+      end loop concern_loop;
+      close concernCursor;
+      set done = 0;
+      select id into tgId from template_goal where name = goalName;
+      insert into component_goal_template_goal(goal_id,template_goal_id,component_id) values (goalId,tgId,cId); 
+    end if;
   end loop goal_loop;
   close goalCursor;
 end
