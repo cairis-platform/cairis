@@ -116,7 +116,7 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'SecurityPatternParameters'):
     return SecurityPattern(objtId,p.name(),p.context(),p.problem(),p.solution(),p.requirements(),p.associations())
   if (p.__class__.__name__ == 'ComponentParameters'):
-    return Component(objtId,p.name(),p.description(),p.interfaces(),p.structure(),p.requirements(),p.goals())
+    return Component(objtId,p.name(),p.description(),p.interfaces(),p.structure(),p.requirements(),p.goals(),p.associations())
   if (p.__class__.__name__ == 'ComponentViewParameters'):
     return ComponentView(objtId,p.name(),p.synopsis(),p.components(),p.connectors(),p.attackSurfaceMetric())
   if (p.__class__.__name__ == 'ValueTypeParameters'):

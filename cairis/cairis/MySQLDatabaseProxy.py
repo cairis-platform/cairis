@@ -8871,6 +8871,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     structure = parameters.structure()
     requirements = parameters.requirements()
     goals = parameters.goals()
+    assocs = parameters.associations()
 
     try:
       curs = self.conn.cursor()
@@ -8889,6 +8890,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addComponentStructure(componentId,structure)
       self.addComponentRequirements(componentId,requirements)
       self.addComponentGoals(componentId,goals)
+      self.addComponentAssociations(componentId,assocs)
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8903,6 +8905,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     structure = parameters.structure()
     requirements = parameters.requirements()
     goals = parameters.goals()
+    assocs = parameters.associations()
 
     try:
       curs = self.conn.cursor()
@@ -8925,6 +8928,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addComponentStructure(componentId,structure)
       self.addComponentRequirements(componentId,requirements)
       self.addComponentGoals(componentId,goals)
+      self.addComponentAssociations(componentId,assocs)
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -9116,7 +9120,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           componentStructure = self.componentStructure(componentId)
           componentReqs = self.componentRequirements(componentId)
           componentGoals = self.componentGoals(componentId)
-          comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs,componentGoals)
+          goalAssocs = self.componentGoalAssociations(componentId)
+          comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs,componentGoals,goalAssocs)
           comParameters.setId(componentId)
           components.append(comParameters)
         connectors = self.componentViewConnectors(cvName)
@@ -9379,6 +9384,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           self.situateComponentAsset(cName,assetId)
       self.situateComponentViewRequirements(cvName)
       self.situateComponentViewGoals(cvName,envName)
+      self.situateComponentViewGoalAssociations(cvName,envName)
       for target in targets:
         self.addComponentViewTargets(target,envName)
     except _mysql_exceptions.DatabaseError, e:
@@ -9565,7 +9571,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         componentStructure = self.componentStructure(componentId)
         componentReqs = self.componentRequirements(componentId)
         componentGoals = self.componentGoals(componentId)
-        comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs,componentGoals)
+        assocs = self.componentGoalAssociations(componentId)
+        comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs,componentGoals,assocs)
         comParameters.setId(componentId)
         component = ObjectFactory.build(componentId,comParameters)
         components[componentName] = component
@@ -10298,6 +10305,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error situating goals for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def situateComponentViewGoalAssociations(self,cvName,envName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call situateComponentViewGoalAssociations(%s,%s)',(cvName,envName))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error situating goal associations for component view' + cvName
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error situating goal associations for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
   def templateGoalConcerns(self,tgId):
     try:
       curs = self.conn.cursor()
@@ -10414,4 +10436,40 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding goal to component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addComponentAssociations(self,componentId,assocs):
+    for idx,assoc in enumerate(assocs):
+      self.addComponentGoalAssociation(componentId,assoc[0],assoc[1],assoc[2],assoc[3])
+
+  def addComponentGoalAssociation(self,componentId,goalName,subGoalName,refType,rationale):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addComponentGoalAssociation(%s,%s,%s,%s,%s)',(componentId,goalName,subGoalName,refType,rationale))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding goal association to component id ' + str(componentId) 
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding goal association to component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def componentGoalAssociations(self,componentId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentGoalAssociations(%s)',(componentId))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error getting component goal associations'
+        raise DatabaseProxyException(exceptionText) 
+      assocs = []
+      for row in curs.fetchall():
+        row = list(row)
+        assocs.append((row[0],row[1],row[2],row[3]))
+      curs.close()
+      return assocs
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting component goal associations (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

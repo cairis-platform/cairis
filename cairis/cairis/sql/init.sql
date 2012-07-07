@@ -78,6 +78,7 @@ DROP TABLE IF EXISTS interface;
 DROP TABLE IF EXISTS component_asset_template_asset;
 DROP TABLE IF EXISTS component_requirement_template_requirement;
 DROP TABLE IF EXISTS component_goal_template_goal;
+DROP TABLE IF EXISTS component_goalgoal_goalassociation;
 DROP TABLE IF EXISTS component_classassociation;
 DROP TABLE IF EXISTS component_template_requirement;
 DROP TABLE IF EXISTS component_template_goal;
@@ -2806,6 +2807,18 @@ CREATE TABLE component_goal_template_goal (
   FOREIGN KEY (goal_id) REFERENCES goal(id),
   FOREIGN KEY (component_id) REFERENCES component(id),
   FOREIGN KEY (template_goal_id) REFERENCES template_goal(id)
+) ENGINE=INNODB;
+
+CREATE TABLE component_goalgoal_goalassociation (
+  component_id INT NOT NULL,
+  goal_id INT NOT NULL,
+  ref_type_id INT NOT NULL,
+  subgoal_id INT NOT NULL,
+  rationale VARCHAR(1000) NOT NULL,
+  PRIMARY KEY(component_id,goal_id,ref_type_id,subgoal_id),
+  FOREIGN KEY(goal_id) REFERENCES template_goal(id),
+  FOREIGN KEY(ref_type_id) REFERENCES reference_type(id),
+  FOREIGN KEY(subgoal_id) REFERENCES template_goal(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE component_view_component(

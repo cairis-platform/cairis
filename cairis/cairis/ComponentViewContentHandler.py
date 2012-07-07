@@ -60,6 +60,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.resetComponentAttributes()
     self.resetSecurityPropertyAttributes()
     self.resetConnectorAttributes()
+    self.resetComponentGoalAssociationAttributes()
     b = Borg()
     self.configDir = b.configDir
 
@@ -85,6 +86,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theStructure = []
     self.theComponentRequirements = []
     self.theComponentGoals = []
+    self.theComponentGoalAssociations = []
     self.resetStructure()
 
   def resetStructure(self):
@@ -150,6 +152,13 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theConnectorAsset = ''
     self.theProtocolName = ''
     self.theAccessRight = ''
+
+  def resetComponentGoalAssociationAttributes(self):
+    self.inRationale = 0
+    self.theGoalName = ''
+    self.theSubGoalName = ''
+    self.theRefType = ''
+    self.theRationale = ''
 
 
   def startElement(self,name,attrs):
@@ -237,6 +246,10 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     elif name == 'access_right' or name == 'protocol' or name == 'privilege' or name == 'surface_type':
       self.theName = attrs['name']
       self.theScore = int(attrs['value'])
+    elif name == 'component_goal_association':
+      self.theGoalName = attrs['goal_name']
+      self.theSubGoalName = attrs['subgoal_name']
+      self.theRefType = attrs['ref_type']
 
   def characters(self,data):
     if self.inDescription:
@@ -255,7 +268,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if (name == 'component'):
-      p = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theComponentRequirements,self.theComponentGoals)
+      p = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theComponentRequirements,self.theComponentGoals,self.theComponentGoalAssociations)
       self.theComponents.append(p)
       self.resetComponentAttributes() 
     elif name == 'asset':
@@ -304,6 +317,9 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       p = ConnectorParameters(self.theName,self.theViewName,self.theFromName,self.theFromRole,self.theFromInterface,self.theToName,self.theToInterface,self.theToRole,self.theConnectorAsset,self.theProtocolName,self.theAccessRight)
       self.theConnectors.append(p)
       self.resetConnectorAttributes() 
+    elif name == 'component_goal_association':
+      self.theComponentGoalAssociations.append((self.theGoalName,self.theSubGoalName,self.theRefType,self.theRationale))
+      self.resetComponentGoalAssociationAttributes()
     elif name == 'description':
       self.inDescription = 0
     elif name == 'definition':

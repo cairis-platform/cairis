@@ -19,7 +19,7 @@
 import ObjectCreationParameters
 
 class ComponentParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,cName,cDesc,cInterfaces,cStruct,cReq,cGoals):
+  def __init__(self,cName,cDesc,cInterfaces,cStruct,cReq,cGoals,cAssocs):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = cName
     self.theDescription = cDesc
@@ -27,6 +27,7 @@ class ComponentParameters(ObjectCreationParameters.ObjectCreationParameters):
     self.theStructure = cStruct
     self.theRequirements = cReq
     self.theGoals = cGoals
+    self.theGoalAssociations = cAssocs
 
   def name(self): return self.theName
   def description(self): return self.theDescription
@@ -34,3 +35,4 @@ class ComponentParameters(ObjectCreationParameters.ObjectCreationParameters):
   def structure(self): return self.theStructure
   def requirements(self): return self.theRequirements
   def goals(self): return self.theGoals
+  def associations(self): return self.theGoalAssociations

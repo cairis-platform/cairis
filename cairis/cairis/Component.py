@@ -17,7 +17,7 @@
 
 
 class Component:
-  def __init__(self,cId,cName,cDesc,cIfs,cStruct,cReqs,cGoals):
+  def __init__(self,cId,cName,cDesc,cIfs,cStruct,cReqs,cGoals,cAssocs):
     self.theId = cId
     self.theName = cName
     self.theDescription = cDesc
@@ -25,6 +25,7 @@ class Component:
     self.theStructure = cStruct
     self.theRequirements = cReqs
     self.theGoals = cGoals
+    self.theGoalAssociations = cAssocs
 
   def id(self): return self.theId
   def name(self): return self.theName
@@ -33,3 +34,4 @@ class Component:
   def structure(self): return self.theStructure
   def requirements(self): return self.theRequirements
   def goals(self): return self.theGoals
+  def associations(self): return self.theGoalAssociations

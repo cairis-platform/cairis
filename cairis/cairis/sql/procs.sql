@@ -771,6 +771,10 @@ drop procedure if exists directoryEntry;
 drop procedure if exists addComponentGoal;
 drop procedure if exists getComponentGoals;
 drop procedure if exists templateGoalConcerns;
+drop procedure if exists addComponentGoalAssociation;
+drop procedure if exists situateComponentViewGoalAssociations;
+drop procedure if exists situateComponentViewGoalAssociation;
+drop procedure if exists componentGoalAssociations;
 
 delimiter //
 
@@ -18160,11 +18164,13 @@ begin
     delete from component_classassociation;
     delete from component_template_requirement;
     delete from component_template_goal;
+    delete from component_goalgoal_goalassociation;
   else
     delete from component_interface where component_id = componentId;
     delete from component_classassociation where component_id = componentId;
     delete from component_template_requirement where component_id = componentId;
     delete from component_template_goal where component_id = componentId;
+    delete from component_goalgoal_goalassociation where component_id = componentId;
   end if;
 end
 //
@@ -19498,6 +19504,76 @@ begin
   declare assetId int;
   select id into assetId from template_asset where name = assetName;
   insert into template_goal_concern(template_goal_id,template_asset_id) values (goalId,assetId);
+end
+//
+
+create procedure addComponentGoalAssociation(in componentId int, in goalName text, in subGoalName text, in refType text, in gaRationale text)
+begin
+  declare goalId int;
+  declare subGoalId int;
+  declare refTypeId int;
+
+  select id into goalId from template_goal where name = goalName;
+  select id into subGoalId from template_goal where name = subGoalName;
+  select id into refTypeId from reference_type where name = refType;
+
+  insert into component_goalgoal_goalassociation(component_id,goal_id,subgoal_id,ref_type_id,rationale) values(componentId,goalId,subGoalId,refTypeId,gaRationale);
+end
+//
+
+create procedure situateComponentViewGoalAssociations(in cvName text,in envName text)
+begin
+  declare cvId int;
+  declare cId int;
+  declare cName varchar(255);
+  declare done int;
+  declare componentCursor cursor for select cvc.component_id,c.name from component_view_component cvc, component c where cvc.component_view_id = cvId and cvc.component_id = c.id;
+  declare continue handler for not found set done = 1;
+
+  select id into cvId from component_view where name = cvName;
+
+  open componentCursor;
+  component_loop: loop
+    fetch componentCursor into cId,cName;
+    if done = 1
+    then
+      leave component_loop;
+    end if;
+    call situateComponentViewGoalAssociation(cvId,cId,cName,envName);
+  end loop component_loop;
+  close componentCursor;
+end
+//
+
+create procedure situateComponentViewGoalAssociation(in cvId int, in cId int, in cName text, in envName text)
+begin
+  declare assocId int;
+  declare goalName varchar(255);
+  declare subGoalName varchar(255);
+  declare refType varchar(50);
+  declare gRationale varchar(1000);
+  declare done int;
+  declare assocCursor cursor for select hg.name,rt.name,tg.name,ga.rationale from template_goal hg, template_goal tg, reference_type rt, component_goalgoal_goalassociation ga, component_view_component cvc where cvc.component_view_id = cvId and cvc.component_id = cId and cvc.component_id = ga.component_id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id;
+  declare continue handler for not found set done = 1;
+
+  open assocCursor;
+  assoc_loop: loop
+    fetch assocCursor into goalName,refType,subGoalName,gRationale;
+    if done = 1
+    then
+      leave assoc_loop;
+    end if;
+    call newId1(assocId);
+    call addGoalAssociation(assocId,envName,goalName,'goal',refType,subGoalName,'goal',0,gRationale);
+  end loop assoc_loop;
+  close assocCursor;
+
+end
+//
+
+create procedure componentGoalAssociations(in cId int)
+begin
+  select hg.name,rt.name,tg.name,ga.rationale from template_goal hg, template_goal tg, reference_type rt, component_goalgoal_goalassociation ga where ga.component_id = cId and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id;
 end
 //
 

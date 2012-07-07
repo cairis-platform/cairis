@@ -3,6 +3,7 @@ template_asset_interface
 component_view_component
 component_view
 connector
+component_goalgoal_goalassociation
 component_classassociation
 component_template_requirement
 component_interface
