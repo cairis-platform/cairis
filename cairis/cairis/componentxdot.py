@@ -551,6 +551,8 @@ class ComponentXDotParser(xdot.XDotParser):
 
     def __init__(self, xdotcode):
         xdot.XDotParser.__init__(self,xdotcode)
+        b = Borg()
+        self.dbProxy = b.dbProxy
         
     def handle_node(self, id, attrs):
         try:
@@ -572,6 +574,8 @@ class ComponentXDotParser(xdot.XDotParser):
         self.node_by_name[id] = node
         if shapes:
             self.nodes.append(node)
+
+
 
 class ComponentDotWidget(xdot.DotWidget):
   def __init__(self):

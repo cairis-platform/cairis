@@ -116,5 +116,5 @@ class SingleGoalDialog(wx.Dialog):
 
   def parameters(self):
     properties = GoalEnvironmentProperties(self.theEnvironmentName,'',self.theGoalDefinition,self.theGoalCategory,self.theGoalPriority,self.theGoalFitCriterion,self.theGoalIssues,self.theAssociations,self.theSubAssociations,self.theConcerns,self.theConcernAssociations)
-    parameters = GoalParameters(self.theGoalName,self.theGoalOriginator,[properties])
+    parameters = GoalParameters(self.theGoalName,self.theGoalOriginator,[],[properties])
     return parameters

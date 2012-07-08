@@ -61,7 +61,7 @@ class ObstacleNodeDialog:
   def newObstacleParameters(self):
     obsName = self.decorator.getText("obstacleNameCtrl")
     envProperties = self.environmentProperties()
-    parameters = ObstacleParameters(obsName,[envProperties])
+    parameters = ObstacleParameters(obsName,'Obstacle refinement',[],[envProperties])
     parameters.setId(self.theObstacleId)
     return parameters
 
@@ -72,7 +72,7 @@ class ObstacleNodeDialog:
     for idx,p in enumerate(envProperties):
       if (p.name() == self.theEnvironmentName):
         envProperties[idx] = modifiedProperties
-    parameters = ObstacleParameters(obsName,envProperties)
+    parameters = ObstacleParameters(obsName,'Obstacle refinement',[],envProperties)
     parameters.setId(self.theObstacleId)
     return parameters
 

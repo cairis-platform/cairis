@@ -775,7 +775,7 @@ drop procedure if exists addComponentGoalAssociation;
 drop procedure if exists situateComponentViewGoalAssociations;
 drop procedure if exists situateComponentViewGoalAssociation;
 drop procedure if exists componentGoalAssociations;
-
+drop procedure if exists componentAttackSurfaceMetric;
 delimiter //
 
 create procedure assetProperties(in assetId int,in environmentId int)
@@ -19578,6 +19578,34 @@ end
 create procedure componentGoalAssociations(in cId int)
 begin
   select hg.name,rt.name,tg.name,ga.rationale from template_goal hg, template_goal tg, reference_type rt, component_goalgoal_goalassociation ga where ga.component_id = cId and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id;
+end
+//
+
+create procedure componentAttackSurfaceMetric(in cName text)
+begin
+  declare cId int;
+  declare stValue int;
+  declare arValue int;
+  declare derValue float default 0;
+  declare done int default 0;
+  declare derCursor cursor for select st.value,ar.value from surface_type st, access_right ar, component_asset ca, template_asset ta where ca.component_id = cId and ca.asset_id = ta.id and ta.surface_type_id = st.id and ta.access_right_id = ar.id;
+  declare continue handler for not found set done = 1;
+
+  select id into cId from component where name = cName;
+
+  set done = 0;
+  open derCursor;
+  der_loop: loop
+    fetch derCursor into stValue,arValue;
+    if done = 1
+    then
+      leave der_loop;
+    end if;
+    set derValue = derValue + (stValue / arValue);
+  end loop der_loop;
+  close derCursor;
+
+  select derValue;
 end
 //
 

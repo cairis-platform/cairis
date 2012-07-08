@@ -24,6 +24,22 @@ import os
 import ARM
 import gtk
 
+LOW_VALUE = 5
+MED_VALUE =  10
+HIGH_VALUE = 15
+
+LOW_COLOR = "1" 
+MED_COLOR = "2"
+HIGH_COLOR = "3"
+
+def resolveColour(cValue):
+  if cValue <= LOW_VALUE:
+    return LOW_COLOR
+  elif cValue > LOW_VALUE and cValue < HIGH_VALUE:
+    return MED_COLOR
+  else:
+    return HIGH_COLOR
+
 class ComponentModel:
   def __init__(self,interfaces,connectors):
     self.theInterfaces = interfaces
@@ -37,6 +53,8 @@ class ComponentModel:
     self.fontSize = b.fontSize
     self.theGraph = pydot.Dot()
     self.theGraph.set_graph_defaults(rankdir='LR')
+    self.theGraph.set_node_defaults(shape="rectangle",pencolor="black",style="filled",colorscheme="reds3",fontname=self.fontName,fontsize=self.fontSize);
+    self.theGraph.set_edge_defaults(dir="both",arrowhead="obox",arrowtail="obox",weight="1");
     self.theGraphName = b.tmpDir + '/component.dot'
 
     for componentName,interfaceName,reqId in interfaces:
@@ -53,15 +71,15 @@ class ComponentModel:
     if componentName not in self.theComponentNames:
       self.theComponentNames.add(componentName)
       componentLabel = "<<component>>\\n" + componentName
-      self.theGraph.add_node(pydot.Node(componentName,label=componentLabel,shape='rectangle',fontname=self.fontName,fontsize=self.fontSize,URL=componentUrl))
+      self.theGraph.add_node(pydot.Node(componentName,label=componentLabel,fillcolor=resolveColour(self.dbProxy.componentAttackSurface(componentName)),URL=componentUrl))
 
   def buildConnector(self,cnName,fromName,toName,protocolName,arName):
     fromObjtName = fromName
     toObjtName = toName 
     lbl = "\<<" + protocolName + "\>>"
-    urlName = 'connector#' + fromObjtName + '_' + toObjtName
+    urlName = 'connector#' + toObjtName + '_' + fromObjtName
 
-    self.theGraph.add_edge(pydot.Edge(fromObjtName,toObjtName,label=lbl,dir='both',arrowhead='obox',arrowtail='obox',weight='1',URL=urlName))
+    self.theGraph.add_edge(pydot.Edge(fromObjtName,toObjtName,label=lbl,URL=urlName))
 
   def layout(self,renderer = ''):
     self.theGraph.write_xdot(self.theGraphName,prog='dot')

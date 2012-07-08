@@ -148,7 +148,7 @@ def build(response):
     for p in environmentProperties:
       envName = p.name()
       goalEnvProperties.append(GoalEnvironmentProperties(envName,'',goalDef,goalCategory,goalPriority,goalFitCriterion,goalIssue))
-    tParameters = GoalParameters(goalName,goalOriginator,goalEnvProperties)
+    tParameters = GoalParameters(goalName,goalOriginator,[],goalEnvProperties)
     return [tParameters]
   else:
     mitText = mitigateText(response)
@@ -179,19 +179,19 @@ def build(response):
   for p in environmentProperties:
     envName = p.name()
     riskGoalEnvProperties.append(GoalEnvironmentProperties(envName,'',riskGoalDef,riskGoalCategory,goalPriority,goalFitCriterion,goalIssue))
-  riskParameters = GoalParameters(riskGoalName,goalOriginator,riskGoalEnvProperties)
+  riskParameters = GoalParameters(riskGoalName,goalOriginator,[],riskGoalEnvProperties)
 
   for p in environmentProperties:
     envName = p.name()
     thrGoalRef = [(riskGoalName,'goal','or','No','')]
     thrGoalEnvProperties.append(GoalEnvironmentProperties(envName,'',thrGoalDef,thrGoalCategory,goalPriority,goalFitCriterion,goalIssue,thrGoalRef))
-  threatParameters = GoalParameters(thrGoalName,goalOriginator,thrGoalEnvProperties)
+  threatParameters = GoalParameters(thrGoalName,goalOriginator,[],thrGoalEnvProperties)
 
   for p in environmentProperties:
     envName = p.name()
     vulGoalRef = [(riskGoalName,'goal','or','No','')]
     vulGoalEnvProperties.append(GoalEnvironmentProperties(envName,'',vulGoalDef,vulGoalCategory,goalPriority,goalFitCriterion,goalIssue,vulGoalRef))
-  vulnerabilityParameters = GoalParameters(vulGoalName,goalOriginator,vulGoalEnvProperties)
+  vulnerabilityParameters = GoalParameters(vulGoalName,goalOriginator,[],vulGoalEnvProperties)
 
   return [riskParameters,threatParameters,vulnerabilityParameters]
 

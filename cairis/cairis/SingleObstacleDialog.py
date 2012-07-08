@@ -79,5 +79,5 @@ class SingleObstacleDialog(wx.Dialog):
 
   def parameters(self):
     properties = ObstacleEnvironmentProperties(self.theEnvironmentName,'',self.theObstacleDefinition,self.theObstacleCategory,self.theAssociations,self.theSubAssociations,self.theConcerns)
-    parameters = ObstacleParameters(self.theObstacleName,[properties])
+    parameters = ObstacleParameters(self.theObstacleName,[],[properties])
     return parameters

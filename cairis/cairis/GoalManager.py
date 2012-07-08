@@ -88,7 +88,7 @@ class GoalManager:
 
     ep = GoalEnvironmentProperties(envName,'',newDefinition,newCategory,newPriority,newFitCriterion,newIssue,[(parentGoalName,'goal','and','No','None')])
     g = Goal(-1,goalName,newOriginator,[ep])
-    gp = GoalParameters(goalName,newOriginator,[ep])
+    gp = GoalParameters(goalName,newOriginator,[],[ep])
     g.setId(self.dbProxy.addGoal(gp))
     if (idx != -1):
       self.goals.insert(idx,g)

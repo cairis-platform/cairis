@@ -82,6 +82,6 @@ class ReqToGoalDialog(wx.Dialog):
       self.EndModal(armid.GOAL_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = GoalParameters(self.theGoalName,self.theGoalOriginator,self.theEnvironmentProperties)
+    parameters = GoalParameters(self.theGoalName,self.theGoalOriginator,[],self.theEnvironmentProperties)
     parameters.setId(self.theGoalId)
     return parameters

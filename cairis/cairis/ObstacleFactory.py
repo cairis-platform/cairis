@@ -30,5 +30,5 @@ def build(envName,excDetails):
   excCat = excDetails[3]
   sgRef = [(excVal,excDim,'obstruct','No','use case exception')]
   envProperties = [ObstacleEnvironmentProperties(envName,'',excDef,excCat,sgRef,[])]
-  parameters = ObstacleParameters(obsName,envProperties)
+  parameters = ObstacleParameters(obsName,[],envProperties)
   return parameters 

@@ -8187,7 +8187,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
       for goalId,goalName,goalOrig in goalRows:
         environmentProperties = self.goalEnvironmentProperties(goalId)
-        parameters = GoalParameters(goalName,goalOrig,self.goalEnvironmentProperties(goalId))
+        parameters = GoalParameters(goalName,goalOrig,[],self.goalEnvironmentProperties(goalId))
         goal = ObjectFactory.build(goalId,parameters)
         goals.append(goal)
       return goals
@@ -8421,7 +8421,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
       for goalId,goalName,goalOrig in goalRows:
         environmentProperties = self.goalEnvironmentProperties(goalId)
-        parameters = GoalParameters(goalName,goalOrig,self.goalEnvironmentProperties(goalId))
+        parameters = GoalParameters(goalName,goalOrig,[],self.goalEnvironmentProperties(goalId))
         g = ObjectFactory.build(goalId,parameters)
         lbl = g.label(envName)
         goals[lbl] = g
@@ -8461,7 +8461,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         concerns = self.goalConcerns(goalId,envId)
         concernAssociations = self.goalConcernAssociations(goalId,envId)
         ep = GoalEnvironmentProperties(envName,goalLabel,goalDef,'Maintain',goalPri,goalFC,goalIssue,goalRefinements,subGoalRefinements,concerns,concernAssociations)
-        parameters = GoalParameters(goalName,goalOrig,[ep])
+        parameters = GoalParameters(goalName,goalOrig,[],[ep])
         g = ObjectFactory.build(goalId,parameters)
         lbl = g.label(envName)
         goals[lbl] = g
@@ -10472,4 +10472,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting component goal associations (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def componentAttackSurface(self,cName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentAttackSurfaceMetric(%s)',(cName))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error getting attack surface for component ' + cName
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      asValue = row[0]
+      curs.close()
+      return asValue
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting attack surface for component ' + cName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

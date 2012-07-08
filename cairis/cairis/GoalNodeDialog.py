@@ -70,7 +70,7 @@ class GoalNodeDialog:
   def newGoalParameters(self):
     goalName = self.decorator.getText("goalNameCtrl")
     envProperties = self.environmentProperties()
-    parameters = GoalParameters(goalName,'None',[envProperties]) 
+    parameters = GoalParameters(goalName,'None',[],[envProperties]) 
     parameters.setId(self.theGoalId)
     return parameters
 
@@ -81,7 +81,7 @@ class GoalNodeDialog:
     for idx,p in enumerate(goalEnvProperties):
       if (p.name() == self.theEnvironmentName):
         goalEnvProperties[idx] = modifiedProperties
-    parameters = GoalParameters(goalName,'None',goalEnvProperties) 
+    parameters = GoalParameters(goalName,'None',[],goalEnvProperties) 
     parameters.setId(self.theGoalId)
     return parameters
 

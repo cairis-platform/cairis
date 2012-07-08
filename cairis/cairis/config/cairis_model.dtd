@@ -19,7 +19,7 @@
 
 <!-- DTD for CAIRIS XML model file -->
 
-<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis,riskanalysis,usability,goals,associations,synopses)>
+<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis?,riskanalysis?,usability?,goals?,associations?,synopses?)>
 
 <!ELEMENT tvtypes (vulnerability_type+,threat_type+)>
 <!ELEMENT vulnerability_type (description)>
