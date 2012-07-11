@@ -17878,6 +17878,7 @@ begin
   declare interfaceId int;
   declare arId int;
   declare pId int;
+  declare ciCount int;
 
   select id into arId from access_right where name = arName;
   select id into pId from privilege where name = pName;
@@ -17889,7 +17890,13 @@ begin
     insert into interface(id,name) values (interfaceId,interfaceName);
   end if;
 
-  insert into component_interface(component_id,interface_id,required_id,access_right_id,privilege_id) values (componentId,interfaceId,reqId,arId,pId);
+  select count(*) into ciCount from component_interface where component_id = componentId and interface_id = interfaceId;
+  if ciCount = 0
+  then
+    insert into component_interface(component_id,interface_id,required_id,access_right_id,privilege_id) values (componentId,interfaceId,reqId,arId,pId);
+  else
+    update component_interface set required_id = reqId, access_right_id = arId, privilege_id = pId where component_id = componentId and interface_id = interfaceId;
+  end if;
 end
 //
 

@@ -9218,7 +9218,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         if cId == -1:
           self.addComponent(comParameters,cvId)
         else:
+          comParameters.setId(cId)
           self.addComponentToView(cId,cvId)
+          self.mergeComponent(comParameters)
 
       for conParameters in cvCons:
         self.addConnector(conParameters)
@@ -10519,4 +10521,26 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting goal associations (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def mergeComponent(self,parameters):
+    componentId = parameters.id()
+    componentName = parameters.name()
+    componentDesc = parameters.description()
+    structure = parameters.structure()
+    requirements = parameters.requirements()
+    goals = parameters.goals()
+    assocs = parameters.associations()
+
+    try:
+      for ifName,ifType,arName,pName in parameters.interfaces():
+        self.addComponentInterface(componentId,ifName,ifType,arName,pName)
+      self.addComponentStructure(componentId,structure)
+      self.addComponentRequirements(componentId,requirements)
+      self.addComponentGoals(componentId,goals)
+      self.addComponentAssociations(componentId,assocs)
+      self.conn.commit()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error merging component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
