@@ -20,6 +20,7 @@ import wx
 import armid
 from ARM import *
 from AssetModel import AssetModel
+from KaosModel import KaosModel
 from Borg import Borg
 from TraceableList import TraceableList
 from ComponentDialog import ComponentDialog
@@ -47,10 +48,12 @@ class ComponentListCtrl(TraceableList):
     self.theTraceMenu.Append(armid.AA_MENUDELETE_ID,'Delete')
     self.theTraceMenu.AppendSeparator()
     self.theTraceMenu.Append(armid.COMPONENTLIST_VIEWASSETS_ID,'View Assets')
+    self.theTraceMenu.Append(armid.COMPONENTLIST_VIEWGOALS_ID,'View Goals')
     self.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK,self.onRightClick)
     wx.EVT_MENU(self.theTraceMenu,armid.AA_MENUADD_ID,self.onAddComponent)
     wx.EVT_MENU(self.theTraceMenu,armid.AA_MENUDELETE_ID,self.onDeleteComponent)
     wx.EVT_MENU(self.theTraceMenu,armid.COMPONENTLIST_VIEWASSETS_ID,self.onViewAssets)
+    wx.EVT_MENU(self.theTraceMenu,armid.COMPONENTLIST_VIEWGOALS_ID,self.onViewGoals)
 
     self.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnItemSelected)
     self.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.OnItemDeselected)
@@ -127,6 +130,27 @@ class ComponentListCtrl(TraceableList):
       dlg.ShowModal()
       dlg.Destroy()
 
+  def onViewGoals(self,evt):
+    cName = self.GetItemText(self.theSelectedIdx)
+    dialog = None
+    try:
+      b = Borg()
+      modelAssocs = b.dbProxy.componentGoalModel(cName)
+      if (len(modelAssocs) > 0):
+        associations = KaosModel(modelAssocs.values(),'','template_goal')
+        dialog = CanonicalModelViewer('','template_goal',b.dbProxy)
+        dialog.ShowModal(associations)
+      else:
+        errorTxt = 'No goal associations defined'
+        dlg = wx.MessageDialog(self,errorTxt,'View Component Goals',wx.OK | wx.ICON_EXCLAMATION)
+        dlg.ShowModal()
+        dlg.Destroy()
+    except ARMException,errorText:
+      if (dialog != None):
+        dialog.destroy()
+      dlg = wx.MessageDialog(self,str(errorText),'View Component Goals',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
 
 
   def dimensions(self):

@@ -42,7 +42,7 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
 
     if (modelType == 'class'):
       self.set_icon_from_file(directoryPrefix + 'classModel.png')
-    elif (modelType == 'goal'):
+    elif (modelType == 'goal' or modelType == 'template_goal'):
       self.set_icon_from_file(directoryPrefix + 'goalModel.png')
     elif (modelType == 'obstacle'):
       self.set_icon_from_file(directoryPrefix + 'obstacleModel.png')
@@ -118,11 +118,13 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
       environmentNames = self.dbProxy.getDimensionNames('environment')
       environmentNames.sort(key=str.lower)
 
-      if (self.modelType == 'goal'):
-        goalNames = self.dbProxy.environmentGoals(self.environment.name())
-        goalNames.sort(key=str.lower)
-        ucNames = self.dbProxy.environmentUseCases(self.environment.name())
-        ucNames.sort(key=str.lower)
+      if (self.modelType == 'goal' or self.modelType == 'template_goal'):
+        goalNames = ucNames = []
+        if self.environment != '':
+          goalNames = self.dbProxy.environmentGoals(self.environment.name())
+          goalNames.sort(key=str.lower)
+          ucNames = self.dbProxy.environmentUseCases(self.environment.name())
+          ucNames.sort(key=str.lower)
         self.loadFilters(environmentNames,goalNames,ucNames)
       elif (self.modelType == 'obstacle'):
         obsNames = self.dbProxy.environmentObstacles(self.environment.name())

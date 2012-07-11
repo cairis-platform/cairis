@@ -110,7 +110,7 @@ class KaosModel:
 
   def layout(self,renderer = ''):
     if (renderer == ''):
-      if ((self.theKaosModel == 'goal') or (self.theKaosModel == 'obstacle')):
+      if ((self.theKaosModel == 'goal') or (self.theKaosModel == 'template_goal') or (self.theKaosModel == 'obstacle')):
         renderer = 'dot'
       if (self.theKaosModel == 'responsibility'):
         renderer = 'twopi'
@@ -119,7 +119,7 @@ class KaosModel:
     self.theGraph.write_xdot(self.theGraphName,prog=renderer)
     return open(self.theGraphName).read()
 
-  def buildGoalModel(self):
+  def buildGoalModel(self,isComponent=False):
     self.nodeNameSet = set([])
     refNodes = set([])
     # the Graph get_edge function doesn't appear to work, so we'll keep a set of edges ourselves.
@@ -134,9 +134,9 @@ class KaosModel:
       subGoalDimName = association.subGoalDimension()
       goalEnv = association.environment()
 
-      if (self.theGoalName != '' and goalName not in self.nodeNameSet):
+      if ((self.theGoalName != '' or isComponent == True) and goalName not in self.nodeNameSet):
         self.buildNode(goalDimName,goalName)
-      if (self.theGoalName != '' and subGoalName not in self.nodeNameSet):
+      if ((self.theGoalName != '' or isComponent == True) and subGoalName not in self.nodeNameSet):
         self.buildNode(subGoalDimName,subGoalName)
 
       if ((associationType == 'obstruct') or (associationType == 'resolve')):
@@ -272,6 +272,8 @@ class KaosModel:
 
       if ((self.theKaosModel == 'goal') or (self.theKaosModel == 'responsibility') or (self.theKaosModel == 'obstacle')):
         self.buildGoalModel()
+      elif (self.theKaosModel == 'template_goal'):
+        self.buildGoalModel(True)
       else:
         self.buildTaskModel()
 

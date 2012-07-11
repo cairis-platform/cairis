@@ -10490,3 +10490,33 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting attack surface for component ' + cName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def componentGoalModel(self,componentName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentGoalModel(%s)',componentName)
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining component class associations'
+        raise DatabaseProxyException(exceptionText) 
+      associations = {}
+      for row in curs.fetchall():
+        row = list(row)
+        associationId = row[GOALASSOCIATIONS_ID_COL]
+        envName = row[GOALASSOCIATIONS_ENV_COL]
+        goalName = row[GOALASSOCIATIONS_GOAL_COL]
+        goalDimName = row[GOALASSOCIATIONS_GOALDIM_COL]
+        aType = row[GOALASSOCIATIONS_TYPE_COL]
+        subGoalName = row[GOALASSOCIATIONS_SUBGOAL_COL]
+        subGoalDimName = row[GOALASSOCIATIONS_SUBGOALDIM_COL]
+        alternativeId = row[GOALASSOCIATIONS_ALTERNATIVE_COL]
+        rationale = row[GOALASSOCIATIONS_RATIONALE_COL]
+        parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
+        association = ObjectFactory.build(associationId,parameters)
+        asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
+        associations[asLabel] = association
+      curs.close()
+      return associations
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting goal associations (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

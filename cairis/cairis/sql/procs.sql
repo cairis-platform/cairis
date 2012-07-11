@@ -776,6 +776,7 @@ drop procedure if exists situateComponentViewGoalAssociations;
 drop procedure if exists situateComponentViewGoalAssociation;
 drop procedure if exists componentGoalAssociations;
 drop procedure if exists componentAttackSurfaceMetric;
+drop procedure if exists componentGoalModel;
 delimiter //
 
 create procedure assetProperties(in assetId int,in environmentId int)
@@ -19606,6 +19607,15 @@ begin
   close derCursor;
 
   select derValue;
+end
+//
+
+create procedure componentGoalModel(in componentName text)
+begin
+  declare cId int;
+
+  select id into cId from component where name = componentName;
+  select -1 id, '' environment,hg.name goal_name,'goal' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,'0' alternative_id,ga.rationale from component_goalgoal_goalassociation ga, template_goal hg, reference_type rt, template_goal tg where ga.component_id = cId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id;
 end
 //
 
