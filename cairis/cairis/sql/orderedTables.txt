@@ -49,6 +49,9 @@ behavioural_variable
 external_document
 internal_document
 code
+parameter
+channel_parameter
+channel
 persona_code_network
 persona_implied_process
 persona_implied_process_network

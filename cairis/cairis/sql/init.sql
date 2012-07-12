@@ -95,6 +95,9 @@ DROP TABLE IF EXISTS artifact_section;
 DROP TABLE IF EXISTS persona_implied_process_network;
 DROP TABLE IF EXISTS persona_implied_process;
 DROP TABLE IF EXISTS persona_code_network;
+DROP TABLE IF EXISTS channel_parameter;
+DROP TABLE IF EXISTS channel;
+DROP TABLE IF EXISTS parameter;
 DROP TABLE IF EXISTS code;
 DROP TABLE IF EXISTS code_type;
 DROP TABLE IF EXISTS relationship_type;
@@ -2880,6 +2883,30 @@ CREATE TABLE code (
   example VARCHAR(2000) NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(code_type_id) REFERENCES code_type(id)
+) ENGINE=INNODB;
+
+CREATE TABLE parameter (
+  id INT NOT NULL,
+  name VARCHAR(200) NOT NULL,
+  description VARCHAR(2000) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE channel (
+  id INT NOT NULL,
+  name VARCHAR(200) NOT NULL,
+  description VARCHAR(2000) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE channel_parameter (
+  channel_id INT NOT NULL,
+  code_id INT NOT NULL,
+  parameter_id INT NOT NULL,
+  PRIMARY KEY(channel_id,code_id,parameter_id),  
+  FOREIGN KEY(channel_id) REFERENCES channel(id),
+  FOREIGN KEY(code_id) REFERENCES code(id),
+  FOREIGN KEY(parameter_id) REFERENCES parameter(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE persona_code_network (
