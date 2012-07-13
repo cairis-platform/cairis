@@ -29,6 +29,9 @@ from MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from MisuseCase import MisuseCase
 from RiskParameters import RiskParameters
 from TemplateObstacleParameters import TemplateObstacleParameters
+from ObstacleParameters import ObstacleParameters
+from ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
+from GoalAssociationParameters import GoalAssociationParameters
 
 from Borg import Borg
 
@@ -76,6 +79,8 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     self.configDir = b.configDir
     self.dbProxy = b.dbProxy
 
+    self.theObstacleParameters = []
+    self.theObstacleAssociationParameters = []
     self.theAssetParameters = []
     self.theAttackerParameters = []
     self.theVulnerabilityParameters = None
@@ -238,7 +243,17 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
         self.theAttackerParameters.append(p) 
         attackerNames.append(attackerName)
   
-      
+      for tObs in self.theObstacles:
+        ep = ObstacleEnvironmentProperties(self.theEnvironment,'',tObs.definition(),tObs.category())
+        self.theObstacleParameters.append(ObstacleParameters(tObs.name(),self.thePatternName,[],ep))
+
+      for obsAssoc in self.theObstacleAssociations:
+        obsName = obsAssoc[0]
+        refType = obsAssoc[1]
+        subObsName = obsAssoc[2]
+        assocRationale = obsAssoc[3]  
+        self.theObstacleAssociationParameters.append(GoalAssociationParameters(self.theEnvironment,obsName,'obstacle',refType,subObsName,'obstacle',0,assocRationale))
+ 
       vp = VulnerabilityEnvironmentProperties(self.theEnvironment,self.theSeverity,self.theExploits)
       vulRows = self.dbProxy.getVulnerabilityDirectory(self.theExploit)
       vulData = vulRows[0]
