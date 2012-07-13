@@ -76,7 +76,10 @@ def importAttackPattern(importFile):
   vulnerability = handler.vulnerability()
   threat = handler.threat()
   risk = handler.risk()
-  return importRiskAnalysis([],assets,[vulnerability],attackers,[threat],[risk],[],[])
+
+  obsTxt = importRequirements([],[],handler.obstacles(),[],[])
+  assocTxt = importAssociations([],handler.obstacleAssociations(),[])
+  return obsTxt + assocTxt + importRiskAnalysis([],assets,[vulnerability],attackers,[threat],[risk],[],[])
 
 def importTVTypeFile(importFile,isOverwrite=1):
   parser = xml.sax.make_parser()

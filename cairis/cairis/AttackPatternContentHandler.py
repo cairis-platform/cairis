@@ -92,8 +92,8 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     self.resetMotivationElements()
     self.resetParticipantElements()
 
-  def obstacles(self): return self.theObstacles
-  def obstacleAssociations(self): return self.theObstacleAssociations
+  def obstacles(self): return self.theObstacleParameters
+  def obstacleAssociations(self): return self.theObstacleAssociationParameters
   def assets(self): return self.theAssetParameters
   def attackers(self): return self.theAttackerParameters
   def vulnerability(self): return self.theVulnerabilityParameters
@@ -245,7 +245,7 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
   
       for tObs in self.theObstacles:
         ep = ObstacleEnvironmentProperties(self.theEnvironment,'',tObs.definition(),tObs.category())
-        self.theObstacleParameters.append(ObstacleParameters(tObs.name(),self.thePatternName,[],ep))
+        self.theObstacleParameters.append(ObstacleParameters(tObs.name(),self.thePatternName,[],[ep]))
 
       for obsAssoc in self.theObstacleAssociations:
         obsName = obsAssoc[0]
