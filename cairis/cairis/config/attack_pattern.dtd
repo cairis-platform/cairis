@@ -19,11 +19,16 @@
 
 <!-- DTD for CAIRIS attack patterns -->
 
-<!ELEMENT attack_pattern (intent,motivation+,applicability,structure,participant+,collaboration,consequences,implementation,known_uses?,related_patterns?)>
+<!ELEMENT attack_pattern (obstacle*,intent,motivation+,applicability,structure,participant+,collaboration,consequences,implementation,known_uses?,related_patterns?)>
 
 <!ATTLIST attack_pattern name CDATA #REQUIRED>
 <!ATTLIST attack_pattern likelihood (Incredible | Improbable | Remote | Occasional | Probable | Frequent) #REQUIRED>
 <!ATTLIST attack_pattern severity (Negligible | Marginal | Critical | Catastrophic) #REQUIRED>
+
+<!ELEMENT obstacle (definition)>
+<!ATTLIST obstacle name CDATA #REQUIRED>
+<!ATTLIST obstacle category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support) #REQUIRED>
+<!ELEMENT definition (#PCDATA)>
 
 <!ELEMENT intent (#PCDATA)>
 
@@ -54,6 +59,13 @@
 <!ATTLIST exploit name CDATA #REQUIRED>
 
 <!ELEMENT consequences (#PCDATA)>
-<!ELEMENT implementation (#PCDATA)>
+<!ELEMENT implementation (description,obstacle_association*)>
+
+<!ELEMENT obstacle_association (rationale)>
+<!ATTLIST obstacle_association obstacle_name CDATA #REQUIRED>
+<!ATTLIST obstacle_association ref_type (and | or) #REQUIRED>
+<!ATTLIST obstacle_association subobstacle_name CDATA #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
+
 <!ELEMENT known_uses (#PCDATA)>
 <!ELEMENT related_patterns (#PCDATA)>

@@ -28,6 +28,7 @@ from ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from MisuseCase import MisuseCase
 from RiskParameters import RiskParameters
+from TemplateObstacleParameters import TemplateObstacleParameters
 
 from Borg import Borg
 
@@ -52,6 +53,8 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     self.thePatternName = ''
     self.theLikelihood = ''
     self.theSeverity = ''
+    self.theObstacles = []
+    self.theObstacleAssociations = []
     self.inIntent = 0
     self.theIntent = ''
     self.theMotivations = []
@@ -79,14 +82,31 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     self.theThreatParameters = None
     self.theRiskParameters = None
 
+    self.resetObstacleElements()
+    self.resetObstacleAssociationElements()
     self.resetMotivationElements()
     self.resetParticipantElements()
 
+  def obstacles(self): return self.theObstacles
+  def obstacleAssociations(self): return self.theObstacleAssociations
   def assets(self): return self.theAssetParameters
   def attackers(self): return self.theAttackerParameters
   def vulnerability(self): return self.theVulnerabilityParameters
   def threat(self): return self.theThreatParameters
   def risk(self): return self.theRiskParameters
+
+  def resetObstacleElements(self):
+    self.theObstacleName = ''
+    self.theObstacleCategory = ''
+    self.inDefinition = 0
+    self.theDefinition = ''
+
+  def resetObstacleAssociationElements(self):
+    self.theObstacleName = ''
+    self.theRefType = ''
+    self.theSubObstacleName = ''
+    self.inRationale = 0
+    self.theRationale = ''
 
   def resetMotivationElements(self):
     self.theGoal = ''
@@ -107,6 +127,19 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
       self.thePatternName = attrs['name']
       self.theLikelihood = attrs['likelihood']
       self.theSeverity = attrs['severity']
+    elif (name == 'obstacle'):
+      self.theObstacleName = attrs['name']
+      self.theObstacleCategory = attrs['category']
+    elif (name == 'obstacle_association'):
+      self.theObstacleName = attrs['obstacle_name']
+      self.theSubObstacleName = attrs['subobstacle_name']
+      self.theRefType = attrs['ref_type']
+    elif (name == 'definition'):
+      self.inDefinition = 1
+      self.theDefinition = ''
+    elif (name == 'rationale'):
+      self.inRationale = 1
+      self.theRationale = ''
     elif (name == 'intent'):
       self.inIntent = 1
       self.theIntent = ''
@@ -145,7 +178,11 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
       self.theRelatedPatterns = ''
 
   def characters(self,data):
-    if self.inIntent:
+    if self.inDefinition:
+      self.theDefinition += data
+    elif self.inRationale:
+      self.theRationale += data
+    elif self.inIntent:
       self.theIntent += data
     elif self.inDescription:
       self.theDescription += data
@@ -162,6 +199,10 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
   def endElement(self,name):
     if name == 'intent':
       self.inIntent = 0
+    elif name == 'definition':
+      self.inDefinition = 0
+    elif name == 'rationale':
+      self.inRationale = 0
     elif name == 'motivation':
       self.theMotivations.append((self.theGoal,self.theValue,self.theDescription))
       self.resetMotivationElements()
@@ -178,6 +219,12 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
       self.inKnownUses = 0
     elif name == 'related_patterns':
       self.inRelatedPatterns = 0
+    elif name == 'obstacle':
+      self.theObstacles.append( TemplateObstacleParameters(self.theObstacleName,self.theObstacleCategory,self.theDefinition))
+      self.resetObstacleElements()
+    elif name == 'obstacle_association':
+      self.theObstacleAssociations.append((self.theObstacleName,self.theRefType,self.theSubObstacleName,self.theRationale))
+      self.resetObstacleAssociationElements()
     elif name == 'attack_pattern':
       assetList = self.theTargets + self.theExploits
       for assetName in assetList:
