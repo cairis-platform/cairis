@@ -19,14 +19,16 @@
 import ObjectCreationParameters
 
 class TemplateGoalParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,goalName,goalDef,goalRat,goalConcerns):
+  def __init__(self,goalName,goalDef,goalRat,goalConcerns,goalResp):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = goalName
     self.theDefinition = goalDef
     self.theRationale = goalRat
     self.theConcerns = goalConcerns
+    self.theResponsibilities = goalResp
 
   def name(self): return self.theName
   def definition(self): return self.theDefinition
   def rationale(self): return self.theRationale
   def concerns(self): return self.theConcerns
+  def responsibilities(self): return self.theResponsibilities

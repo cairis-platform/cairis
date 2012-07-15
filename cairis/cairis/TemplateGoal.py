@@ -16,15 +16,17 @@
 #  under the License.
 
 class TemplateGoal:
-  def __init__(self,goalId,goalName,goalDef,goalRat,goalConcerns):
+  def __init__(self,goalId,goalName,goalDef,goalRat,goalConcerns,goalResp):
     self.theId = goalId
     self.theName = goalName
     self.theDefinition= goalDef
     self.theRationale = goalRat
     self.theConcerns = goalConcerns
+    self.theResponsibilities = goalResp
 
   def id(self): return self.theId
   def name(self): return self.theName
   def description(self): return self.theDefinition
   def rationale(self): return self.theRationale
   def concerns(self): return self.theConcerns
+  def responsibilities(self): return self.theResponsibilities

@@ -112,7 +112,7 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'TemplateRequirementParameters'):
     return TemplateRequirement(objtId,p.name(),p.asset(),p.type(),p.description(),p.rationale(),p.fitCriterion())
   if (p.__class__.__name__ == 'TemplateGoalParameters'):
-    return TemplateGoal(objtId,p.name(),p.definition(),p.rationale(),p.concerns())
+    return TemplateGoal(objtId,p.name(),p.definition(),p.rationale(),p.concerns(),p.responsibilities())
   if (p.__class__.__name__ == 'SecurityPatternParameters'):
     return SecurityPattern(objtId,p.name(),p.context(),p.problem(),p.solution(),p.requirements(),p.associations())
   if (p.__class__.__name__ == 'ComponentParameters'):

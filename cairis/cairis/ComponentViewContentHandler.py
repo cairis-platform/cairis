@@ -20,6 +20,7 @@ from xml.sax.handler import ContentHandler,EntityResolver
 from ComponentViewParameters import ComponentViewParameters
 from ComponentParameters import ComponentParameters
 from ConnectorParameters import ConnectorParameters
+from RoleParameters import RoleParameters
 from ValueTypeParameters import ValueTypeParameters
 from TemplateAssetParameters import TemplateAssetParameters
 from TemplateRequirementParameters import TemplateRequirementParameters
@@ -49,11 +50,13 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theSynopsis = ''
     self.inSynopsis = 0
     self.theMetricTypes = []
+    self.theRoles = []
     self.theAssets = []
     self.theRequirements = []
     self.theGoals = []
     self.theComponents = []
     self.theConnectors = []
+    self.resetRoleAttributes()
     self.resetAssetAttributes()
     self.resetRequirementAttributes()
     self.resetGoalAttributes()
@@ -69,6 +72,14 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
 
   def view(self):
     return self.theViewParameters
+
+  def resetRoleAttributes(self):
+    self.inDescription = 0
+    self.theName = ''
+    self.theType = ''
+    self.theShortCode = ''
+    self.theDescription = ''
+
 
   def resetValueTypeAttributes(self):
     self.inDescription = 0
@@ -119,6 +130,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.theDefinition = ''
     self.theRationale = ''
     self.theConcerns = []
+    self.theResponsibilities = []
 
   def resetAssetAttributes(self):
     self.inDescription = 0
@@ -167,6 +179,10 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     elif (name == 'synopsis'):
       self.inSynopsis = 1
       self.theSynopsis = ''
+    elif (name == 'role'):
+      self.theName = attrs['name']
+      self.theShortCode = attrs['short_code']
+      self.theType = attrs['type']
     elif (name == 'component'):
       self.theName = attrs['name']
     elif (name == 'description'):
@@ -188,6 +204,8 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theInterfaces.append((attrs['name'],it2Id(attrs['type']),attrs['access_right'],attrs['privilege']))
     elif name == 'concern':
       self.theConcerns.append(attrs['name'])
+    elif name == 'responsibility':
+      self.theResponsibilities.append(attrs['name'])
     elif name == 'asset':
       self.theName = attrs['name']
       self.theShortCode = attrs['short_code']
@@ -271,6 +289,10 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       p = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theComponentRequirements,self.theComponentGoals,self.theComponentGoalAssociations)
       self.theComponents.append(p)
       self.resetComponentAttributes() 
+    elif name == 'role':
+      p = RoleParameters(self.theName,self.theType,self.theShortCode,self.theDescription,[])
+      self.theRoles.append(p)
+      self.resetRoleAttributes()
     elif name == 'asset':
       spDict = {}
       spDict['confidentiality'] = (0,'None')
@@ -310,7 +332,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theRequirements.append(p)
       self.resetRequirementAttributes()
     elif name == 'goal':
-      p = TemplateGoalParameters(self.theName,self.theDefinition,self.theRationale,self.theConcerns)
+      p = TemplateGoalParameters(self.theName,self.theDefinition,self.theRationale,self.theConcerns,self.theResponsibilities)
       self.theGoals.append(p)
       self.resetGoalAttributes()
     elif name == 'connector':
@@ -337,4 +359,4 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       self.theMetricTypes.append(p)
       self.resetValueTypeAttributes()
     elif name == 'component_view':
-      self.theViewParameters = ComponentViewParameters(self.theViewName,self.theSynopsis,self.theMetricTypes,self.theAssets,self.theRequirements,self.theGoals,self.theComponents,self.theConnectors)
+      self.theViewParameters = ComponentViewParameters(self.theViewName,self.theSynopsis,self.theMetricTypes,self.theRoles,self.theAssets,self.theRequirements,self.theGoals,self.theComponents,self.theConnectors)

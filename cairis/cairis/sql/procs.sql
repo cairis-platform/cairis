@@ -403,6 +403,7 @@ drop procedure if exists addTaskConcernAssociation;
 drop procedure if exists taskConcernAssociations;
 drop procedure if exists add_goal_concern;
 drop procedure if exists add_template_goal_concern;
+drop procedure if exists add_template_goal_responsibility;
 drop procedure if exists goalConcerns;
 drop procedure if exists addDependency;
 drop procedure if exists updateDependency;
@@ -771,6 +772,7 @@ drop procedure if exists directoryEntry;
 drop procedure if exists addComponentGoal;
 drop procedure if exists getComponentGoals;
 drop procedure if exists templateGoalConcerns;
+drop procedure if exists templateGoalResponsibilities;
 drop procedure if exists addComponentGoalAssociation;
 drop procedure if exists situateComponentViewGoalAssociations;
 drop procedure if exists situateComponentViewGoalAssociation;
@@ -19357,6 +19359,7 @@ begin
   then
     delete from component_template_goal;
     delete from template_goal_concern;
+    delete from template_goal_responsibility;
     delete from template_goal;
   else
     delete from component_template_goal where template_goal_id = goalId;
@@ -19435,15 +19438,18 @@ create procedure situateComponentViewGoal(in cvId int, in cId int, in cName text
 begin
   declare goalName varchar(4000);
   declare assetName varchar(50);
+  declare roleName varchar(255);
   declare assetId int;
   declare goalDef varchar(255);
   declare goalRationale varchar(255);
   declare goalId int;
   declare tgId int;
+  declare assocId int;
   declare done int;
   declare cvName varchar(255);
   declare goalCursor cursor for select cg.name,cg.definition,cg.rationale from component_view_component cvc, component_goal cg where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId order by cg.name;
   declare concernCursor cursor for select distinct ta.name from component_view_component cvc, component_template_goal cg, template_goal_concern gc, template_asset ta where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId and cg.template_goal_id = gc.template_goal_id and gc.template_asset_id = ta.id order by ta.name;
+  declare respCursor cursor for select distinct r.name from component_view_component cvc, component_template_goal cg, template_goal_responsibility gr, role r where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId and cg.template_goal_id = gr.template_goal_id and gr.role_id = r.id order by r.name;
   declare continue handler for not found set done = 1;
 
   select name into cvName from component_view where id = cvId;
@@ -19480,6 +19486,20 @@ begin
       end loop concern_loop;
       close concernCursor;
       set done = 0;
+
+      open respCursor;
+      resp_loop: loop
+        fetch respCursor into roleName;
+        if done = 1
+        then
+          leave resp_loop;
+        end if;
+        call newId1(assocId);
+        call addGoalAssociation(assocId,envName,goalName,'goal','responsible',roleName,'role',0,'None');
+      end loop resp_loop;
+      close respCursor;
+      set done = 0;
+
       select id into tgId from template_goal where name = goalName;
       insert into component_goal_template_goal(goal_id,template_goal_id,component_id) values (goalId,tgId,cId); 
     end if;
@@ -19508,6 +19528,7 @@ end
 create procedure deleteTemplateGoalComponents(in goalId int)
 begin
   delete from template_goal_concern where goal_id = goalId;
+  delete from template_goal_responsibility where goal_id = goalId;
 end
 //
 
@@ -19585,7 +19606,11 @@ end
 
 create procedure componentGoalAssociations(in cId int)
 begin
-  select hg.name,rt.name,tg.name,ga.rationale from template_goal hg, template_goal tg, reference_type rt, component_goalgoal_goalassociation ga where ga.component_id = cId and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id;
+  select hg.name,rt.name,tg.name,ga.rationale from template_goal hg, template_goal tg, reference_type rt, component_goalgoal_goalassociation ga where ga.component_id = cId and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select hg.name,'responsible',tg.name,'None' from template_goal hg, role tg, component_goalgoal_goalassociation ga, template_goal_responsibility tgr where ga.component_id = cId and tgr.template_goal_id = hg.id and tgr.role_id = tg.id and tgr.template_goal_id = ga.goal_id
+  union
+  select hg.name,'responsible',tg.name,'None' from template_goal hg, role tg, component_goalgoal_goalassociation ga, template_goal_responsibility tgr where ga.component_id = cId and tgr.template_goal_id = hg.id and tgr.role_id = tg.id and tgr.template_goal_id = ga.subgoal_id;
 end
 //
 
@@ -19622,7 +19647,25 @@ begin
   declare cId int;
 
   select id into cId from component where name = componentName;
-  select -1 id, '' environment,hg.name goal_name,'goal' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,'0' alternative_id,ga.rationale from component_goalgoal_goalassociation ga, template_goal hg, reference_type rt, template_goal tg where ga.component_id = cId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id;
+  select -1 id, '' environment,hg.name goal_name,'goal' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,'0' alternative_id,ga.rationale from component_goalgoal_goalassociation ga, template_goal hg, reference_type rt, template_goal tg where ga.component_id = cId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id
+  union
+  select -1 id, '' environment, hg.name goal_name,'goal' goal_dim,'responsible' ref_type,tg.name subgoal_name,'role' subgoal_dim,'0' alternative_id,'None' rationale from template_goal hg, role tg, component_goalgoal_goalassociation ga, template_goal_responsibility tgr where ga.component_id = cId and tgr.template_goal_id = hg.id and tgr.role_id = tg.id and tgr.template_goal_id = ga.goal_id
+  union
+  select -1 id, '' environment, hg.name goal_name,'goal' goal_dim,'responsible' ref_type,tg.name subgoal_name,'role' subgoal_dim,'0' alternative_id,'None' rationale from template_goal hg, role tg, component_goalgoal_goalassociation ga, template_goal_responsibility tgr where ga.component_id = cId and tgr.template_goal_id = hg.id and tgr.role_id = tg.id and tgr.template_goal_id = ga.subgoal_id;
+end
+//
+
+create procedure add_template_goal_responsibility(goalId int, roleName text)
+begin
+  declare roleId int;
+  select id into roleId from role where name = roleName;
+  insert into template_goal_responsibility(template_goal_id,role_id) values (goalId,roleId);
+end
+//
+
+create procedure templateGoalResponsibilities(in tgId int)
+begin
+  select r.name from template_goal_responsibility tgr, role where tgr.goal_id = tgId and tgr.role_id = r.id;
 end
 //
 

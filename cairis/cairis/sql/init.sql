@@ -112,6 +112,7 @@ DROP TABLE IF EXISTS securitypattern_template_requirement;
 DROP TABLE IF EXISTS securitypattern;
 DROP TABLE IF EXISTS template_asset_property;
 DROP TABLE IF EXISTS template_requirement;
+DROP TABLE IF EXISTS template_goal_responsibility;
 DROP TABLE IF EXISTS template_goal_concern;
 DROP TABLE IF EXISTS template_goal;
 DROP TABLE IF EXISTS template_asset;
@@ -1950,6 +1951,13 @@ CREATE TABLE template_goal_concern (
   PRIMARY KEY(template_goal_id,template_asset_id),
   FOREIGN KEY(template_goal_id) REFERENCES template_goal(id),
   FOREIGN KEY(template_asset_id) REFERENCES template_asset(id)
+) ENGINE=INNODB;
+CREATE TABLE template_goal_responsibility (
+  template_goal_id INT NOT NULL,
+  role_id INT NOT NULL,
+  PRIMARY KEY(template_goal_id,role_id),
+  FOREIGN KEY(template_goal_id) REFERENCES template_goal(id),
+  FOREIGN KEY(role_id) REFERENCES role(id)
 ) ENGINE=INNODB;
 CREATE TABLE securitypattern_template_requirement (
   template_requirement_id INT NOT NULL,

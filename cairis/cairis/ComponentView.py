@@ -17,7 +17,7 @@
 
 
 class ComponentView:
-  def __init__(self,cvId,cvName,cvSyn,cvComs,cvCons,asm = ''):
+  def __init__(self,cvId,cvName,cvSyn,cvComs,cvCons,asm = [0,0,0]):
     self.theId = cvId
     self.theName = cvName
     self.theSynopsis = cvSyn

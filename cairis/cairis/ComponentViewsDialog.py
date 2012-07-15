@@ -39,9 +39,9 @@ class ComponentViewsDialog(DimensionBaseDialog):
     listCtrl.SetColumnWidth(2,200)
     listCtrl.SetColumnWidth(3,200)
 
-  def addObjectRow(self,componentListCtrl,listRow,component):
-    componentListCtrl.InsertStringItem(listRow,component.name())
-    asm = component.attackSurfaceMetric()
+  def addObjectRow(self,componentListCtrl,listRow,objt):
+    componentListCtrl.InsertStringItem(listRow,objt.name())
+    asm = objt.attackSurfaceMetric()
     componentListCtrl.SetStringItem(listRow,1,str(asm[0]))
     componentListCtrl.SetStringItem(listRow,2,str(asm[1]))
     componentListCtrl.SetStringItem(listRow,3,str(asm[2]))

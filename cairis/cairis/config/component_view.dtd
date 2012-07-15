@@ -20,7 +20,7 @@
 
 <!-- DTD for template CAIRIS component views -->
 
-<!ELEMENT component_view (synopsis,access_right*,protocol*,privilege*,surface_type*,asset*,requirement*,goal*,component*,connector*)>
+<!ELEMENT component_view (synopsis,access_right*,protocol*,privilege*,surface_type*,role*,asset*,requirement*,goal*,component*,connector*)>
 <!ATTLIST component_view name CDATA #REQUIRED>
 <!ELEMENT synopsis (#PCDATA)>
 
@@ -39,6 +39,12 @@
 <!ELEMENT surface_type (description,rationale)>
 <!ATTLIST surface_type name CDATA #REQUIRED>
 <!ATTLIST surface_type value CDATA #REQUIRED>
+
+<!ELEMENT role (description)>
+<!ATTLIST role name CDATA #REQUIRED>
+<!ATTLIST role type (Stakeholder | Attacker) #REQUIRED>
+<!ATTLIST role short_code CDATA #REQUIRED>
+<!ELEMENT description (#PCDATA)>
 
 <!ELEMENT asset (description,tag*,significance,interface*,security_property*)>
 <!ATTLIST asset name CDATA #REQUIRED>
@@ -70,11 +76,13 @@
 <!ELEMENT rationale (#PCDATA)>
 <!ELEMENT fit_criterion (#PCDATA)>
 
-<!ELEMENT goal (definition,rationale,concern)>
+<!ELEMENT goal (definition,rationale,concern*,responsibility*)>
 <!ATTLIST goal name CDATA #REQUIRED>
 <!ELEMENT definition (#PCDATA)>
 <!ELEMENT concern EMPTY>
 <!ATTLIST concern name CDATA #REQUIRED>
+<!ELEMENT responsibility EMPTY>
+<!ATTLIST responsibility name CDATA #REQUIRED>
 
 <!ELEMENT component (description,interface*,structure*,component_requirement*,component_goal*,component_goal_association*)>
 <!ATTLIST component name CDATA #REQUIRED>

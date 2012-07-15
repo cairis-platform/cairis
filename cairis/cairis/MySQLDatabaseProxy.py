@@ -9126,7 +9126,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           components.append(comParameters)
         connectors = self.componentViewConnectors(cvName)
         asm = self.attackSurfaceMetric(cvName)
-        parameters = ComponentViewParameters(cvName,cvSyn,[],[],[],[],components,connectors,asm)
+        parameters = ComponentViewParameters(cvName,cvSyn,[],[],[],[],[],components,connectors,asm)
         cv = ObjectFactory.build(cvId,parameters)
         cvs[cvName] = cv
       return cvs
@@ -9184,6 +9184,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     cvName = parameters.name()
     cvSyn = parameters.synopsis()
     cvValueTypes = parameters.metricTypes()
+    cvRoles = parameters.roles()
     cvAssets = parameters.assets()
     cvReqs = parameters.requirements()
     cvGoals = parameters.goals()
@@ -9201,6 +9202,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         vtId = self.existingObject(vtParameters.name(),vtParameters.type())
         if vtId == -1:
           self.addValueType(vtParameters)
+      for rParameters in cvRoles:
+        rId = self.existingObject(rParameters.name(),'role')
+        if rId == -1:
+          self.addRole(rParameters)
       for taParameters in cvAssets:
         taId = self.existingObject(taParameters.name(),'template_asset')
         if taId == -1:
@@ -10259,7 +10264,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
       for tgId,tgName,tgDef,tgRat in tgRows:
         tgConcerns = self.templateGoalConcerns(tgId)
-        parameters = TemplateGoalParameters(tgName,tgDef,tgRat,tgConcerns)
+        tgResps = self.templateGoalResponsibilitis(tgId)
+        parameters = TemplateGoalParameters(tgName,tgDef,tgRat,tgConcerns,tgResps)
         templateGoal = ObjectFactory.build(tgId,parameters)
         templateGoals[tgName] = templateGoal
       curs.close()
@@ -10347,12 +10353,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     goalDef = parameters.definition()
     goalRat = parameters.rationale()
     goalConcerns = parameters.concerns()
+    goalResponsibilities = parameters.responsibilities()
     try:
       curs = self.conn.cursor()
       curs.execute('call addTemplateGoal(%s,%s,%s,%s)',(goalId,goalName,goalDef,goalRat))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding template goal ' + goalName
       self.addTemplateGoalConcerns(goalId,goalConcerns)
+      self.addTemplateGoalResponsibilities(goalId,goalResponsibilities)
       self.conn.commit()
       curs.close()
       return goalId
@@ -10367,6 +10375,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     goalDef = parameters.definition()
     goalRat = parameters.rationale()
     goalConcerns = parameters.concerns()
+    goalResponsibilities = parameters.responsibilities()
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteTemplateGoalComponents(%s)',(goalId))
@@ -10377,6 +10386,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating template goal ' + reqName
       self.addTemplateGoalConcerns(goalId,goalConcerns)
+      self.addTemplateGoalResponsibilities(goalId,goalResponsibilities)
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -10543,4 +10553,42 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error merging component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addTemplateGoalResponsibilities(self,goalId,resps):
+    for resp in resps:
+      if resp != '':
+        self.addTemplateGoalResponsibility(goalId,resp)
+
+  def addTemplateGoalResponsibility(self,goalId,resp):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call add_template_goal_responsibility(%s,%s)',(goalId,resp))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error adding template goal responsibility ' + resp
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding template goal responsibility ' + resp + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def templateGoalResponsibilities(self,tgId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call templateGoalResponsibilities(%s)',(tgId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining responsibilities for template goal id ' + str(tgId)
+        raise DatabaseProxyException(exceptionText) 
+      else:
+        concs = []
+        for row in curs.fetchall():
+          row = list(row)
+          concs.append(row[0])
+        curs.close()
+        return concs
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting responsibilities for template goal id ' + str(tgId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
