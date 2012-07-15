@@ -9385,6 +9385,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for assetParameters in assetParametersList:
         assetName = assetParameters.name()
         assetId = self.existingObject(assetName,'asset')
+        print assetName,' id: ',assetId
         if assetId == -1:
           assetId = self.addAsset(assetParameters)
         for cName in acDict[assetName]:

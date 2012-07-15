@@ -19482,7 +19482,7 @@ begin
         then
           leave concern_loop;
         end if;
-        call add_goal_concern(goalId,envName,assetName);
+/*        call add_goal_concern(goalId,envName,assetName); */
       end loop concern_loop;
       close concernCursor;
       set done = 0;
@@ -19495,7 +19495,7 @@ begin
           leave resp_loop;
         end if;
         call newId1(assocId);
-        call addGoalAssociation(assocId,envName,goalName,'goal','responsible',roleName,'role',0,'None');
+        call addGoalAssociation(assocId,envName,goalName,'goal','responsible',roleName,'role',0,'None'); 
       end loop resp_loop;
       close respCursor;
       set done = 0;
