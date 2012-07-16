@@ -779,6 +779,7 @@ drop procedure if exists situateComponentViewGoalAssociation;
 drop procedure if exists componentGoalAssociations;
 drop procedure if exists componentAttackSurfaceMetric;
 drop procedure if exists componentGoalModel;
+drop procedure if exists importTemplateAsset;
 delimiter //
 
 create procedure assetProperties(in assetId int,in environmentId int)
@@ -9083,7 +9084,7 @@ begin
 end
 //
 
-create procedure add_goal_concern(goalId int, envName text, assetName text)
+create procedure add_goal_concern(in goalId int, in envName text, in assetName text)
 begin
   declare envId int;
   declare assetId int;
@@ -19421,6 +19422,7 @@ begin
 
   select id into cvId from component_view where name = cvName;
 
+  set done = 0;
   open componentCursor;
   component_loop: loop
     fetch componentCursor into cId,cName;
@@ -19449,7 +19451,7 @@ begin
   declare cvName varchar(255);
   declare goalCursor cursor for select cg.name,cg.definition,cg.rationale from component_view_component cvc, component_goal cg where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId order by cg.name;
   declare concernCursor cursor for select distinct ta.name from component_view_component cvc, component_template_goal cg, template_goal_concern gc, template_asset ta where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId and cg.template_goal_id = gc.template_goal_id and gc.template_asset_id = ta.id order by ta.name;
-  declare respCursor cursor for select distinct r.name from component_view_component cvc, component_template_goal cg, template_goal_responsibility gr, role r where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId and cg.template_goal_id = gr.template_goal_id and gr.role_id = r.id order by r.name;
+  declare respCursor cursor for select distinct r.name from component_view_component cvc, component_template_goal cg, template_goal_responsibility gr, role r where cvc.component_view_id = cvId and cvc.component_id = cg.component_id and cg.component_id = cId and cg.template_goal_id = tgId and cg.template_goal_id = gr.template_goal_id and gr.role_id = r.id order by r.name;
   declare continue handler for not found set done = 1;
 
   select name into cvName from component_view where id = cvId;
@@ -19475,6 +19477,7 @@ begin
       call addGoalFitCriterion(goalId,envName,'None');
       call addGoalIssue(goalId,envName,goalRationale);
 
+      set done = 0;
       open concernCursor;
       concern_loop: loop
         fetch concernCursor into assetName;
@@ -19482,11 +19485,20 @@ begin
         then
           leave concern_loop;
         end if;
-/*        call add_goal_concern(goalId,envName,assetName); */
+        set assetId = null;
+        select id into assetId from asset where name = assetName;
+        if assetId is null
+        then
+          call importTemplateAsset(assetName,assetId);
+          call situateComponentAsset(cName,assetId);
+        end if;
+        call add_goal_concern(goalId,envName,assetName); 
       end loop concern_loop;
       close concernCursor;
-      set done = 0;
 
+      select id into tgId from template_goal where name = goalName;
+
+      set done = 0;
       open respCursor;
       resp_loop: loop
         fetch respCursor into roleName;
@@ -19500,7 +19512,6 @@ begin
       close respCursor;
       set done = 0;
 
-      select id into tgId from template_goal where name = goalName;
       insert into component_goal_template_goal(goal_id,template_goal_id,component_id) values (goalId,tgId,cId); 
     end if;
   end loop goal_loop;
@@ -19666,6 +19677,53 @@ end
 create procedure templateGoalResponsibilities(in tgId int)
 begin
   select r.name from template_goal_responsibility tgr, role where tgr.goal_id = tgId and tgr.role_id = r.id;
+end
+//
+
+create procedure importTemplateAsset(in assetName text, inout assetId int)
+begin
+  declare taId int;
+  declare shortCode varchar(20);
+  declare assetDesc varchar(1000);
+  declare assetSig varchar(1000);
+  declare assetType varchar(50);
+  declare ifName varchar(255);
+  declare ifTypeId int;
+  declare ifType varchar(50);
+  declare arName varchar(50);
+  declare pName varchar(50);
+  declare done int default 0;
+  declare ifCursor cursor for select i.name, tai.required_id, ar.name, p.name from template_asset_interface tai, interface i, access_right ar, privilege p where tai.template_asset_id = taId and tai.interface_id = i.id and tai.access_right_id = ar.id and tai.privilege_id = p.id;
+  declare continue handler for not found set done = 1;
+
+  select id into taId from template_asset where name = assetName;
+  call newId1(assetId);
+  select short_code into shortCode from template_asset where id = taId;
+  select description into assetDesc from template_asset where id = taId;
+  select significance into assetSig from template_asset where id = taId;
+  select at.name into assetType from template_asset ta, asset_type at where ta.id = taId and ta.asset_type_id = at.id;
+
+  call addAsset(assetId,assetName,shortCode,assetDesc,assetSig,assetType,0,'None');
+
+  set done = 0;
+  open ifCursor;
+  if_loop: loop
+    fetch ifCursor into ifName,ifTypeId,arName,pName;
+    if done = 1
+    then
+      leave if_loop;
+    end if;
+
+    if ifTypeId = 1
+    then
+      set ifType = 'required';
+    else
+      set ifType = 'provided';
+    end if;
+    call addInterface(assetName,ifName,ifType,arName,pName,'asset');
+    set done = 0;
+  end loop if_loop;
+  close ifCursor;
 end
 //
 
