@@ -39,7 +39,7 @@ class WeaknessTreatmentDialog(wx.Dialog):
       self.panel.loadControls(reqName,assetName,effValue)
 
   def onCommit(self,evt):
-    reqCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOREQUIREMENT_ID)
+    reqCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOREQGOAL_ID)
     assetCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOASSET_ID)
     effCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOEFFECTIVENESS_ID)
     ratCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_TEXTRATIONALE_ID)

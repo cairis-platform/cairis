@@ -706,6 +706,7 @@ drop function if exists mitigated_severity;
 drop procedure if exists componentViewRequirements;
 drop procedure if exists componentViewGoals;
 drop procedure if exists componentAssets;
+drop procedure if exists componentGoalAssets;
 drop procedure if exists situateComponentAsset;
 drop procedure if exists existing_object;
 drop procedure if exists existing_characteristic;
@@ -19724,6 +19725,25 @@ begin
     set done = 0;
   end loop if_loop;
   close ifCursor;
+end
+//
+
+create procedure componentGoalAssets(in cvName text, in goalName text)
+begin
+  declare cvId int;
+  declare reqId int;
+
+  select id into cvId from component_view where name = cvName;
+  if goalName != ''
+  then
+    select ta.name,c.name from component_classassociation ca, component_view_component cvc, template_asset ta, component_template_goal ctg, template_goal_concern tgc, template_goal tg, component c where cvc.component_view_id = cvId and cvc.component_id = ca.component_id and ca.head_id = ta.id and ca.head_id = tgc.template_asset_id and tgc.template_goal_id = tg.id and tg.name = goalName and tgc.template_goal_id = ctg.template_goal_id and ctg.component_id = ca.component_id and ca.component_id = c.id
+    union
+    select ta.name,c.name from component_classassociation ca, component_view_component cvc, template_asset ta, component_template_goal ctg, template_goal_concern tgc, template_goal tg, component c where cvc.component_view_id = cvId and cvc.component_id = ca.component_id and ca.tail_id = ta.id and ca.tail_id = tgc.template_asset_id and tgc.template_goal_id = tg.id and tg.name = goalName and tgc.template_goal_id = ctg.template_goal_id and ctg.component_id = ca.component_id and ca.component_id = c.id;
+  else
+    select ta.name,c.name from component_classassociation ca, component_view_component cvc, template_asset ta, component c where cvc.component_view_id = cvId and cvc.component_id = ca.component_id and ca.head_id = ta.id and ca.component_id = c.id
+    union
+    select ta.name,c.name from component_classassociation ca, component_view_component cvc, template_asset ta, component c where cvc.component_view_id = cvId and cvc.component_id = ca.component_id and ca.tail_id = ta.id and ca.component_id = c.id;
+  end if;
 end
 //
 

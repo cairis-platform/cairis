@@ -27,21 +27,42 @@ class WeaknessTreatmentPanel(BasePanel):
     self.theViewName = cvName
     b = Borg()
     self.dbProxy = b.dbProxy
+    self.theGoalIndicator = 0
     reqList = self.dbProxy.componentViewRequirements(cvName)
     assetList = []
     effValues = ['None','Low','Medium','High']
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-    mainSizer.Add(self.buildComboSizerList('Requirement',(87,30),armid.WEAKNESSTREATMENT_COMBOREQUIREMENT_ID,reqList),0,wx.EXPAND)
+    mainSizer.Add(self.buildRadioButtonSizer('Type',(87,30),[(armid.WEAKNESSTREATMENT_RADIOGOAL_ID,'Goal'),(armid.WEAKNESSTREATMENT_RADIOREQUIREMENT_ID,'Requirement')]))
+    mainSizer.Add(self.buildComboSizerList('',(87,30),armid.WEAKNESSTREATMENT_COMBOREQGOAL_ID,reqList),0,wx.EXPAND)
     mainSizer.Add(self.buildComboSizerList('Asset',(87,30),armid.WEAKNESSTREATMENT_COMBOASSET_ID,assetList),0,wx.EXPAND)
     mainSizer.Add(self.buildComboSizerList('Effectiveness',(87,30),armid.WEAKNESSTREATMENT_COMBOEFFECTIVENESS_ID,effValues),0,wx.EXPAND)
     mainSizer.Add(self.buildMLTextSizer('Rationale',(87,60),armid.WEAKNESSTREATMENT_TEXTRATIONALE_ID),1,wx.EXPAND)
     mainSizer.Add(self.buildCommitButtonSizer(armid.WEAKNESSTREATMENT_BUTTONCOMMIT_ID,False),0,wx.CENTER)
     self.SetSizer(mainSizer)
-    reqCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOREQUIREMENT_ID)
+    reqCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOREQGOAL_ID)
     reqCtrl.Bind(wx.EVT_COMBOBOX,self.onRequirementChange)
+    wx.EVT_RADIOBUTTON(self,armid.WEAKNESSTREATMENT_RADIOGOAL_ID,self.onGoalSelected)
+    wx.EVT_RADIOBUTTON(self,armid.WEAKNESSTREATMENT_RADIOREQUIREMENT_ID,self.onRequirementSelected)
+    reqRadioCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_RADIOREQUIREMENT_ID)
+    reqRadioCtrl.SetValue(True)
+
+  def onGoalSelected(self,evt):
+    self.theGoalIndicator = 1
+    rgCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOREQGOAL_ID)
+    goals = self.dbProxy.componentViewGoals(self.theViewName)
+    rgCtrl.SetItems(goals)
+    rgCtrl.SetValue('')
+
+  def onRequirementSelected(self,evt):
+    self.theGoalIndicator = 0
+    rgCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOREQGOAL_ID)
+    reqs = self.dbProxy.componentViewRequirements(self.theViewName)
+    rgCtrl.SetItems(reqs)
+    rgCtrl.SetValue('')
+
 
   def loadControls(self,reqName,assetName,effValue,tRat):
-    reqCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOREQUIREMENT_ID)
+    reqCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOREQGOAL_ID)
     reqCtrl.SetValue(reqName)
     assetCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOASSET_ID)
     assetCtrl.SetValue(assetName)
@@ -51,10 +72,14 @@ class WeaknessTreatmentPanel(BasePanel):
     ratCtrl.SetValue(tRat)
 
   def onRequirementChange(self,evt):
-    reqCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOREQUIREMENT_ID)
+    reqCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOREQGOAL_ID)
     assetCtrl = self.FindWindowById(armid.WEAKNESSTREATMENT_COMBOASSET_ID)
     reqName = reqCtrl.GetValue()
-    componentAssets = self.dbProxy.componentAssets(self.theViewName,reqName)
+    componentAssets = []
+    if self.theGoalIndicator == 0:
+      componentAssets = self.dbProxy.componentAssets(self.theViewName,reqName)
+    else:
+      componentAssets = self.dbProxy.componentGoalAssets(self.theViewName,reqName)
     assetList = []
     for caPair in componentAssets:
       assetList.append(caPair[0])

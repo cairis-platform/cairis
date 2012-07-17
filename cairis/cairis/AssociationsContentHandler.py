@@ -20,6 +20,7 @@ from xml.sax.handler import ContentHandler,EntityResolver
 from GoalAssociationParameters import GoalAssociationParameters
 from DependencyParameters import DependencyParameters
 from Borg import Borg
+from ARM import *
 
 def a2s(aStr):
   if aStr == 'a':
@@ -133,9 +134,12 @@ class AssociationsContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'manual_association':
-      fromId = self.dbProxy.getDimensionId(self.theFromName,self.theFromDim)
-      toId = self.dbProxy.getDimensionId(self.theToName,self.theToDim)
-      self.theManualAssociations.append((self.theFromDim + '_' + self.theToDim,fromId,toId,self.theReferenceType))
+      try:
+        fromId = self.dbProxy.getDimensionId(self.theFromName,self.theFromDim)
+        toId = self.dbProxy.getDimensionId(self.theToName,self.theToDim)
+        self.theManualAssociations.append((self.theFromDim + '_' + self.theToDim,fromId,toId,self.theReferenceType))
+      except DatabaseProxyException, e:
+        pass # skipping invalid trace
       self.resetManualAssociationAttributes()
     elif name == 'goal_association':
       p = GoalAssociationParameters(self.theEnvironmentName,self.theGoalName,self.theGoalDim,self.theReferenceType,self.theSubGoalName,self.theSubGoalDim,self.isAlternative,self.theRationale)

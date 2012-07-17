@@ -9359,6 +9359,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting assets associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def componentGoalAssets(self,cvName,goalName = ''):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentGoalAssets(%s,%s)',(cvName,goalName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting assets associated with the ' + cvName + ' component view'
+        raise DatabaseProxyException(exceptionText) 
+      rows = []
+      for row in curs.fetchall():
+        row = list(row)
+        rows.append((row[0],row[1]))
+      curs.close()   
+      return rows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting assets associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
   def existingObject(self,objtName,dimName):
     try:
       curs = self.conn.cursor()
@@ -9539,6 +9557,25 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting requirements for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def componentViewGoals(self,cvName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call componentViewGoals(%s)',(cvName))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error obtaining goals for component view'
+        raise DatabaseProxyException(exceptionText) 
+      rows = []
+      for row in curs.fetchall():
+        row = list(row)
+        rows.append(row[0])
+      curs.close()
+      return rows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting goals for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def situateComponentViewRequirements(self,cvName):
