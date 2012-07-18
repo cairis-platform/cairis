@@ -19,12 +19,16 @@
 import ObjectCreationParameters
 
 class TemplateObstacleParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,obsName,obsCat,obsDef):
+  def __init__(self,obsName,obsCat,obsDef,obsConcerns,obsResp):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = obsName
     self.theCategory = obsCat
     self.theDefinition = obsDef
+    self.theConcerns = obsConcerns
+    self.theResponsibilities = obsResp
 
   def name(self): return self.theName
   def category(self): return self.theCategory
   def definition(self): return self.theDefinition
+  def concerns(self): return self.theConcerns
+  def responsibilities(self): return self.theResponsibilities

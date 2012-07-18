@@ -135,7 +135,7 @@ class RMFrame(wx.Frame):
     self.toolbar.AddSeparator()
     self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_SETTINGS,settingsBmp,'Edit Project Settings')
     self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_CON,environmentBmp,'Edit Environments')
-    self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_COM,componentBmp,'Edit Component Models')
+    self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_COM,componentBmp,'Edit Architectural Patterns')
     self.toolbar.AddSeparator()
     self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_ADD,addBmp,'Add new requirement')
     self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_DELETE,deleteBmp,'Delete requirement')

@@ -49,13 +49,13 @@
 <!ATTLIST structure attack CDATA #REQUIRED>
 <!ATTLIST structure exploit CDATA #REQUIRED>
 
-<!ELEMENT participant (motive+,responsibility+)>
+<!ELEMENT participant (motive+,capability+)>
 <!ATTLIST participant name CDATA #REQUIRED>
 <!ELEMENT motive EMPTY>
 <!ATTLIST motive name CDATA #REQUIRED>
-<!ELEMENT responsibility EMPTY>
-<!ATTLIST responsibility name CDATA #REQUIRED>
-<!ATTLIST responsibility value (Low | Medium | High) #REQUIRED>
+<!ELEMENT capability EMPTY>
+<!ATTLIST capability name CDATA #REQUIRED>
+<!ATTLIST capability value (Low | Medium | High) #REQUIRED>
 
 <!ELEMENT collaboration (target,exploit)>
 <!ELEMENT target EMPTY>

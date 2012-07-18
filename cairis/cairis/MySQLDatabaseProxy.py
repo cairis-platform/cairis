@@ -4643,6 +4643,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addObstacleConcerns(self,obsId,environmentName,concerns):
     for concern in concerns:
+      assetId = self.existingObject(concern,'asset')
+      if assetId == -1:
+        assetId = self.existingObject(concern,'template_asset')
+        if assetId != -1:
+          self.importTemplateAsset(concern,environmentName)
+        else:
+          exceptionText = 'Cannot add obstacle concern: asset or template asset ' + concern + ' does not exist.'
+          raise DatabaseProxyException(exceptionText)
       self.addObstacleConcern(obsId,environmentName,concern)
 
   def addObstacleConcern(self,obsId,environmentName,concern):
@@ -10628,4 +10636,18 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting responsibilities for template goal id ' + str(tgId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def importTemplateAsset(self,taName,environmentName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call importTemplateAssetIntoEnvironment(%s,%s)',(taName,environmentName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding importing asset ' + taName + ' into environment ' + environmentName
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+      self.conn.commit()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error importing asset ' + taName + ' into environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
