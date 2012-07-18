@@ -56,7 +56,7 @@ class WeaknessTreatmentDialog(wx.Dialog):
       dlg.Destroy()
       return
     if len(self.theAssetName) == 0:
-      dlg = wx.MessageDialog(self,'Asset name be empty',commitLabel,wx.OK) 
+      dlg = wx.MessageDialog(self,'Asset name cannot be empty',commitLabel,wx.OK) 
       dlg.ShowModal()
       dlg.Destroy()
       return

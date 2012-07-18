@@ -43,7 +43,7 @@ def it2Id(itLabel):
   else:
     return 0
 
-class ComponentViewContentHandler(ContentHandler,EntityResolver):
+class ArchitecturalPatternContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theViewParameters = None
     self.theViewName = ''
@@ -68,7 +68,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
     self.configDir = b.configDir
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/component_view.dtd'
+    return self.configDir + '/architectural_pattern.dtd'
 
   def view(self):
     return self.theViewParameters
@@ -174,7 +174,7 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
 
 
   def startElement(self,name,attrs):
-    if (name == 'component_view'):
+    if (name == 'architectural_pattern'):
       self.theViewName = attrs['name']
     elif (name == 'synopsis'):
       self.inSynopsis = 1
@@ -358,5 +358,5 @@ class ComponentViewContentHandler(ContentHandler,EntityResolver):
       p = ValueTypeParameters(self.theName,self.theDescription,name,'',self.theScore,self.theRationale)
       self.theMetricTypes.append(p)
       self.resetValueTypeAttributes()
-    elif name == 'component_view':
+    elif name == 'architectural_pattern':
       self.theViewParameters = ComponentViewParameters(self.theViewName,self.theSynopsis,self.theMetricTypes,self.theRoles,self.theAssets,self.theRequirements,self.theGoals,self.theComponents,self.theConnectors)

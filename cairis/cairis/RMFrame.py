@@ -25,7 +25,7 @@ from ARM import *
 from Environment import Environment
 import armid
 from EnvironmentsDialog import EnvironmentsDialog
-from ComponentViewsDialog import ComponentViewsDialog
+from ArchitecturalPatternsDialog import ArchitecturalPatternsDialog
 from AttackersDialog import AttackersDialog
 from DomainPropertiesDialog import DomainPropertiesDialog
 from GoalsDialog import GoalsDialog
@@ -191,8 +191,8 @@ class RMFrame(wx.Frame):
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTTVTYPES,'Threat and Vulnerability Types','Import Threat and Vulnerability Types')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTDOMAINVALUES,'Domain Values','Import Domain Values')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTDIRECTORIES,'Threat and Vulnerability Directory','Import Threat and Vulnerability Directory')
-    importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTSECURITYPATTERNS,'Security Patterns','Import Security Patterns')
-    importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTCOMPONENTVIEW,'Component View','Import Component View')
+    importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTSECURITYPATTERNS,'Security Pattern','Import Security Pattern')
+    importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTCOMPONENTVIEW,'Architectural Pattern','Import Architectural Pattern')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTATTACKPATTERN,'Attack Pattern','Import Attack Pattern')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTSYNOPSES,'Synopses','Import Synopses and Contributions')
     file.AppendMenu(armid.RMFRAME_MENU_IMPORT,'Import',importMenu)
@@ -500,11 +500,11 @@ class RMFrame(wx.Frame):
 
   def OnComponents(self,event):
     try:
-      dialog = ComponentViewsDialog(self)
+      dialog = ArchitecturalPatternsDialog(self)
       dialog.ShowModal()
       dialog.Destroy()
     except ARMException,errorText:
-      dlg = wx.MessageDialog(self,str(errorText),'Edit ComponentViews',wx.OK | wx.ICON_ERROR)
+      dlg = wx.MessageDialog(self,str(errorText),'Edit Architectural Patterns',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return

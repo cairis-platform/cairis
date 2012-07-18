@@ -25,9 +25,9 @@ from DialogClassParameters import DialogClassParameters
 from ComponentViewParameters import ComponentViewParameters
 from DimensionBaseDialog import DimensionBaseDialog
 
-class ComponentViewsDialog(DimensionBaseDialog):
+class ArchitecturalPatternsDialog(DimensionBaseDialog):
   def __init__(self,parent):
-    DimensionBaseDialog.__init__(self,parent,armid.COMPONENTVIEWS_ID,'Component Views',(930,300),'component_view.png')
+    DimensionBaseDialog.__init__(self,parent,armid.COMPONENTVIEWS_ID,'Architectural Patternss',(930,300),'component_view.png')
     self.theMainWindow = parent
     self.rmFrame = parent
     idList = [armid.COMPONENTVIEWS_LISTCOMPONENTVIEWS_ID,armid.COMPONENTVIEWS_BUTTONADD_ID,armid.COMPONENTVIEWS_BUTTONDELETE_ID]
@@ -48,10 +48,10 @@ class ComponentViewsDialog(DimensionBaseDialog):
 
   def onAdd(self,evt):
     try:
-      addParameters = DialogClassParameters(armid.COMPONENTVIEW_ID,'Add component view',ComponentViewDialog,armid.COMPONENTVIEW_BUTTONCOMMIT_ID,self.dbProxy.addComponentView,True)
+      addParameters = DialogClassParameters(armid.COMPONENTVIEW_ID,'Add architectural pattern',ComponentViewDialog,armid.COMPONENTVIEW_BUTTONCOMMIT_ID,self.dbProxy.addComponentView,True)
       self.addObject(addParameters)
     except ARM.ARMException,errorText:
-      dlg = wx.MessageDialog(self,str(errorText),'Add component view',wx.OK | wx.ICON_ERROR)
+      dlg = wx.MessageDialog(self,str(errorText),'Add architectural pattern',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return
@@ -59,17 +59,17 @@ class ComponentViewsDialog(DimensionBaseDialog):
   def onUpdate(self,evt):
     selectedObjt = self.objts[self.selectedLabel]
     try:
-      updateParameters = DialogClassParameters(armid.COMPONENTVIEW_ID,'Edit component view',ComponentViewDialog,armid.COMPONENTVIEW_BUTTONCOMMIT_ID,self.dbProxy.updateComponentView,False)
+      updateParameters = DialogClassParameters(armid.COMPONENTVIEW_ID,'Edit architectural pattern',ComponentViewDialog,armid.COMPONENTVIEW_BUTTONCOMMIT_ID,self.dbProxy.updateComponentView,False)
       self.updateObject(selectedObjt,updateParameters)
     except ARM.ARMException,errorText:
-      dlg = wx.MessageDialog(self,str(errorText),'Edit component view',wx.OK | wx.ICON_ERROR)
+      dlg = wx.MessageDialog(self,str(errorText),'Edit architectural pattern',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy
 
   def onDelete(self,evt):
     try:
-      self.deleteObject('No component view','Delete component view',self.dbProxy.deleteComponentView)
+      self.deleteObject('No component view','Delete architectural pattern',self.dbProxy.deleteComponentView)
     except ARM.ARMException,errorText:
-      dlg = wx.MessageDialog(self,str(errorText),'Delete component view',wx.OK | wx.ICON_ERROR)
+      dlg = wx.MessageDialog(self,str(errorText),'Delete architectural pattern',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy

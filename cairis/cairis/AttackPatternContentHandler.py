@@ -125,7 +125,7 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     self.theResponsibilities = []
      
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/component_view.dtd'
+    return self.configDir + '/attack_pattern.dtd'
 
   def startElement(self,name,attrs):
     if (name == 'attack_pattern'):

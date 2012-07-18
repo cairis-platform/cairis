@@ -24,7 +24,7 @@ def dimensionName(className):
   if (className == 'TemplateAssetsDialog'): return 'template_asset'
   if (className == 'TemplateRequirementsDialog'): return 'template_requirement'
   if (className == 'SecurityPatternsDialog'): return 'securitypattern'
-  if (className == 'ComponentViewsDialog'): return 'component_view'
+  if (className == 'ArchitecturalPatternsDialog'): return 'architectural_pattern'
   if (className == 'ClassAssociationsDialog'): return 'classassociation'
   if (className == 'GoalAssociationsDialog'): return 'goalassociation'
   if (className == 'GoalsDialog'): return 'goal'

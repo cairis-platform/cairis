@@ -26,7 +26,7 @@ from GoalsContentHandler import GoalsContentHandler
 from UsabilityContentHandler import UsabilityContentHandler
 from AssociationsContentHandler import AssociationsContentHandler
 from CairisContentHandler import CairisContentHandler
-from ComponentViewContentHandler import ComponentViewContentHandler
+from ArchitecturalPatternContentHandler import ArchitecturalPatternContentHandler
 from SynopsesContentHandler import SynopsesContentHandler
 from Borg import Borg
 import xml.sax
@@ -423,7 +423,7 @@ def importProjectData(pSettings,envParameterSet):
 
 def importComponentViewFile(importFile):
   parser = xml.sax.make_parser()
-  handler = ComponentViewContentHandler()
+  handler = ArchitecturalPatternContentHandler()
   parser.setContentHandler(handler)
   parser.setEntityResolver(handler)
   parser.parse(importFile)
@@ -433,7 +433,7 @@ def importComponentViewFile(importFile):
 def importComponentViewData(view):
   b = Borg()
   b.dbProxy.addComponentView(view)
-  msgStr = 'Imported component view'
+  msgStr = 'Imported architectural pattern'
   return msgStr
 
 def importSynopsesFile(importFile):

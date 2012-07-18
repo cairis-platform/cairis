@@ -18,10 +18,10 @@
 -->
 
 
-<!-- DTD for template CAIRIS component views -->
+<!-- DTD for template CAIRIS architectural patterns -->
 
-<!ELEMENT component_view (synopsis,access_right*,protocol*,privilege*,surface_type*,role*,asset*,requirement*,goal*,component*,connector*)>
-<!ATTLIST component_view name CDATA #REQUIRED>
+<!ELEMENT architectural_pattern (synopsis,access_right*,protocol*,privilege*,surface_type*,role*,asset*,requirement*,goal*,component*,connector*)>
+<!ATTLIST architectural_pattern name CDATA #REQUIRED>
 <!ELEMENT synopsis (#PCDATA)>
 
 <!ELEMENT access_right (description,rationale)>
