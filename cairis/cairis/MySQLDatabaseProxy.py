@@ -4667,10 +4667,18 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error adding concern ' + concern + ' to obstacle id ' + str(obsId) + ' in environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addGoalConcerns(self,goalId,environmentName,concerns):
+  def addGoalConcerns(self,obsId,environmentName,concerns):
     for concern in concerns:
-      if concern != '':
-        self.addGoalConcern(goalId,environmentName,concern)
+      assetId = self.existingObject(concern,'asset')
+      if assetId == -1:
+        assetId = self.existingObject(concern,'template_asset')
+        if assetId != -1:
+          self.importTemplateAsset(concern,environmentName)
+        else:
+          exceptionText = 'Cannot add goal concern: asset or template asset ' + concern + ' does not exist.'
+          raise DatabaseProxyException(exceptionText)
+      self.addGoalConcern(obsId,environmentName,concern)
+
 
   def addGoalConcern(self,goalId,environmentName,concern):
     try:

@@ -782,6 +782,7 @@ drop procedure if exists componentAttackSurfaceMetric;
 drop procedure if exists componentGoalModel;
 drop procedure if exists importTemplateAsset;
 drop procedure if exists importTemplateAssetIntoEnvironment;
+drop procedure if exists importTemplateAssetIntoComponent;
 delimiter //
 
 create procedure assetProperties(in assetId int,in environmentId int)
@@ -9089,9 +9090,15 @@ end
 create procedure add_goal_concern(in goalId int, in envName text, in assetName text)
 begin
   declare envId int;
-  declare assetId int;
+  declare assetId int default -1;
   select id into envId from environment where name = envName;
   select id into assetId from asset where name = assetName;
+
+  if assetId = -1
+  then
+    call importTemplateAssetIntoEnvironment(assetName,envName); 
+  end if;
+
   insert into goal_concern(goal_id,environment_id,asset_id) values (goalId,envId,assetId);
 end
 //
@@ -19491,8 +19498,7 @@ begin
         select id into assetId from asset where name = assetName;
         if assetId is null
         then
-          call importTemplateAsset(assetName,assetId);
-          call situateComponentAsset(cName,assetId);
+          call importTemplateAssetIntoComponent(assetName,envName,cName);
         end if;
         call add_goal_concern(goalId,envName,assetName); 
       end loop concern_loop;
@@ -19794,4 +19800,54 @@ begin
   call add_asset_properties(assetId,envName,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty,cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale);
 end
 //
+
+create procedure importTemplateAssetIntoComponent(in assetName text, in envName text, in cName text)
+begin
+  declare taId int;
+  declare assetId int;
+  declare cProperty int;
+  declare iProperty int;
+  declare avProperty int;
+  declare acProperty int;
+  declare anProperty int;
+  declare panProperty int;
+  declare unlProperty int;
+  declare unoProperty int;
+  declare cRationale varchar(4000);
+  declare iRationale varchar(4000);
+  declare avRationale varchar(4000);
+  declare acRationale varchar(4000);
+  declare anRationale varchar(4000);
+  declare panRationale varchar(4000);
+  declare unlRationale varchar(4000);
+  declare unoRationale varchar(4000);
+
+
+  select id into taId from template_asset where name = assetName;
+  select property_value_id into cProperty from template_asset_property where template_asset_id = taId and property_id = 0;
+  select property_value_id into iProperty from template_asset_property where template_asset_id = taId and property_id = 1;
+  select property_value_id into avProperty from template_asset_property where template_asset_id = taId and property_id = 2;
+  select property_value_id into acProperty from template_asset_property where template_asset_id = taId and property_id = 3;
+  select property_value_id into anProperty from template_asset_property where template_asset_id = taId and property_id = 4;
+  select property_value_id into panProperty from template_asset_property where template_asset_id = taId and property_id = 5;
+  select property_value_id into unlProperty from template_asset_property where template_asset_id = taId and property_id = 6;
+  select property_value_id into unoProperty from template_asset_property where template_asset_id = taId and property_id = 7;
+
+  select property_rationale into cRationale from template_asset_property where template_asset_id = taId and property_id = 0;
+  select property_rationale into iRationale from template_asset_property where template_asset_id = taId and property_id = 1;
+  select property_rationale into avRationale from template_asset_property where template_asset_id = taId and property_id = 2;
+  select property_rationale into acRationale from template_asset_property where template_asset_id = taId and property_id = 3;
+  select property_rationale into anRationale from template_asset_property where template_asset_id = taId and property_id = 4;
+  select property_rationale into panRationale from template_asset_property where template_asset_id = taId and property_id = 5;
+  select property_rationale into unlRationale from template_asset_property where template_asset_id = taId and property_id = 6;
+  select property_rationale into unoRationale from template_asset_property where template_asset_id = taId and property_id = 7;
+
+  call importTemplateAsset(assetName,assetId);
+  call add_asset_environment(assetId,envName);
+  call add_asset_properties(assetId,envName,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty,cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale);
+
+  call situateComponentAsset(cName,assetId);
+end
+//
+
 delimiter ;
