@@ -5055,7 +5055,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       return obsAttr
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL error getting probability for obstacle id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error getting probability for obstacle id ' + str(obsId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
 
@@ -9437,7 +9437,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
 
-  def situateComponentView(self,cvName,envName,acDict,assetParametersList,targets):
+  def situateComponentView(self,cvName,envName,acDict,assetParametersList,targets,obstructParameters):
     try:
       for assetParameters in assetParametersList:
         assetName = assetParameters.name()
@@ -9451,6 +9451,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.situateComponentViewGoalAssociations(cvName,envName)
       for target in targets:
         self.addComponentViewTargets(target,envName)
+      for op in obstructParameters:
+        self.addGoalAssociation(op)
+ 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error situating ' + cvName + ' component view in ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -10681,4 +10684,39 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error importing asset ' + taName + ' into environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def candidateGoalObstacles(self,cvName,envName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call candidateGoalObstacles(%s,%s)',(cvName,envName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting candidate obstacles associated with architetural pattern ' + cvName + ' and environment ' + envName
+        raise DatabaseProxyException(exceptionText) 
+      else:
+        gos = []
+        for row in curs.fetchall():
+          row = list(row)
+          gos.append((row[0],row[1]))
+        curs.close()
+        return gos
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting candidate obstacles associated with architectural pattern ' + cvName + ' and environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def templateGoalDefinition(self,tgId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('select definition from template_goal where id = %s',(tgId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting definition for template goal id ' + str(tgId)
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      tgDef = row[0]
+      curs.close()
+      return tgDef
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting definition for template goal id ' + str(tgId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

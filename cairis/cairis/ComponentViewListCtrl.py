@@ -21,6 +21,7 @@ import armid
 from Borg import Borg
 from WeaknessAnalysisDialog import WeaknessAnalysisDialog
 from DimensionNameDialog import DimensionNameDialog
+from GoalAssociationParameters import GoalAssociationParameters
 import AssetParametersFactory
 from ARM import *
 
@@ -50,7 +51,7 @@ class ComponentViewListCtrl(wx.ListCtrl):
         envName = cDlg.dimensionName()
         dlg = WeaknessAnalysisDialog(self,cvName,envName)
         if (dlg.ShowModal() == armid.WEAKNESSANALYSIS_BUTTONCOMMIT_ID):
-          self.situateComponentView(cvName,envName,dlg.targets())
+          self.situateComponentView(cvName,envName,dlg.targets(),dlg.goalObstacles())
         dlg.Destroy()
       cDlg.Destroy()
     except ARMException,errorText:
@@ -59,7 +60,7 @@ class ComponentViewListCtrl(wx.ListCtrl):
       dlg.Destroy()
       return
 
-  def situateComponentView(self,cvName,envName,targets):
+  def situateComponentView(self,cvName,envName,targets,goalObstacles):
     assetParametersList = []
     componentAssets = self.dbProxy.componentAssets(cvName)
     
@@ -69,5 +70,9 @@ class ComponentViewListCtrl(wx.ListCtrl):
       if assetName not in acDict:
         acDict[assetName] = []
       acDict[assetName].append(componentName)
-    self.dbProxy.situateComponentView(cvName,envName,acDict,assetParametersList,targets)
+
+    ops = []
+    for goalName,obsName in goalObstacles:
+      ops.append(GoalAssociationParameters(envName,goalName,'goal','obstruct',obsName,'obstacle',0,cvName + ' weakness analysis'))
+    self.dbProxy.situateComponentView(cvName,envName,acDict,assetParametersList,targets,ops)
     self.theParentDialog.theMainWindow.updateObjectSelection()

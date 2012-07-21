@@ -21,6 +21,7 @@ import armid
 from Borg import Borg
 from WeaknessTargetListCtrl import WeaknessTargetListCtrl
 from PersonaImpactListCtrl import PersonaImpactListCtrl
+from GoalObstacleListCtrl import GoalObstacleListCtrl
 
 class WeaknessTargetPage(wx.Panel):
   def __init__(self,parent,winId,cvName,targets):
@@ -44,7 +45,17 @@ class PersonaImpactPage(wx.Panel):
     self.personaImpactList = PersonaImpactListCtrl(self,winId,cvName,envName)
     asBoxSizer.Add(self.personaImpactList,1,wx.EXPAND)
     self.SetSizer(topSizer)
-    
+
+class GoalObstaclePage(wx.Panel):
+  def __init__(self,parent,winId,cvName,envName):
+    wx.Panel.__init__(self,parent)
+    topSizer = wx.BoxSizer(wx.VERTICAL)
+    asBox = wx.StaticBox(self,-1)
+    asBoxSizer = wx.StaticBoxSizer(asBox,wx.HORIZONTAL)
+    topSizer.Add(asBoxSizer,1,wx.EXPAND)
+    self.goalObstacleList = GoalObstacleListCtrl(self,winId,cvName,envName)
+    asBoxSizer.Add(self.goalObstacleList,1,wx.EXPAND)
+    self.SetSizer(topSizer)
 
 class WeaknessAnalysisNotebook(wx.Notebook):
   def __init__(self,parent,cvName,envName):
@@ -54,6 +65,9 @@ class WeaknessAnalysisNotebook(wx.Notebook):
     p1 = WeaknessTargetPage(self,armid.WEAKNESSANALYSIS_LISTTHREATS_ID,cvName,thrTargets)
     p2 = WeaknessTargetPage(self,armid.WEAKNESSANALYSIS_LISTVULNERABILITIES_ID,cvName,vulTargets)
     p3 = PersonaImpactPage(self,armid.WEAKNESSANALYSIS_LISTPERSONAIMPACT_ID,cvName,envName)
+    p4 = GoalObstaclePage(self,armid.WEAKNESSANALYSIS_LISTGOALOBSTACLE_ID,cvName,envName)
+
     self.AddPage(p1,'Threats')
     self.AddPage(p2,'Vulnerabilities')
     self.AddPage(p3,'Persona Impact')
+    self.AddPage(p4,'Obstacles')

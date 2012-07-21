@@ -28,6 +28,7 @@ class WeaknessAnalysisDialog(wx.Dialog):
     self.panel = 0
     self.theThreatTargets = []
     self.theVulnerabilityTargets = []
+    self.theGoalObstacles = []
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     self.panel = WeaknessAnalysisPanel(self,cvName,envName)
     mainSizer.Add(self.panel,1,wx.EXPAND)
@@ -37,6 +38,7 @@ class WeaknessAnalysisDialog(wx.Dialog):
   def onCommit(self,evt):
     thrList = self.FindWindowById(armid.WEAKNESSANALYSIS_LISTTHREATS_ID)
     vulList = self.FindWindowById(armid.WEAKNESSANALYSIS_LISTVULNERABILITIES_ID)
+    goList = self.FindWindowById(armid.WEAKNESSANALYSIS_LISTGOALOBSTACLE_ID)
 
     thrDict = thrList.dimensions() 
     for thrName in thrDict:
@@ -48,6 +50,11 @@ class WeaknessAnalysisDialog(wx.Dialog):
       target = vulDict[vulName]
       if target.requirement() != '':
         self.theVulnerabilityTargets.append(target) 
+
+    self.theGoalObstacles = goList.dimensions()
     self.EndModal(armid.WEAKNESSANALYSIS_BUTTONCOMMIT_ID)
   def targets(self):
     return self.theThreatTargets + self.theVulnerabilityTargets
+
+  def goalObstacles(self):
+    return self.theGoalObstacles

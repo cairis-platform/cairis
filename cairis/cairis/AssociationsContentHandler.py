@@ -44,7 +44,7 @@ class AssociationsContentHandler(ContentHandler,EntityResolver):
     b = Borg()
     self.dbProxy = b.dbProxy
     self.configDir = b.configDir
-    self.theManualAssociations = []
+    self.theManualAssociations = set([])
     self.theGoalAssociations = []
     self.theDependencyAssociations = []
 
@@ -137,7 +137,9 @@ class AssociationsContentHandler(ContentHandler,EntityResolver):
       try:
         fromId = self.dbProxy.getDimensionId(self.theFromName,self.theFromDim)
         toId = self.dbProxy.getDimensionId(self.theToName,self.theToDim)
-        self.theManualAssociations.append((self.theFromDim + '_' + self.theToDim,fromId,toId,self.theReferenceType))
+        tableName = self.theFromDim + '_' + self.theToDim
+        if (tableName,fromId,toId,self.theReferenceType) not in self.theManualAssociations:
+          self.theManualAssociations.add((tableName,fromId,toId,self.theReferenceType))
       except DatabaseProxyException, e:
         pass # skipping invalid trace
       self.resetManualAssociationAttributes()
