@@ -783,6 +783,9 @@ drop procedure if exists componentGoalModel;
 drop procedure if exists importTemplateAsset;
 drop procedure if exists importTemplateAssetIntoEnvironment;
 drop procedure if exists importTemplateAssetIntoComponent;
+drop procedure if exists obstacleProbability;
+drop procedure if exists obstacle_probability;
+
 delimiter //
 
 create procedure assetProperties(in assetId int,in environmentId int)
@@ -8068,11 +8071,11 @@ begin
 end
 //
 
-create procedure addObstacleDefinition(in obsId int,in environmentName text, in defName text)
+create procedure addObstacleDefinition(in obsId int,in environmentName text, in defName text, in obsProb float, in ObsProbRat text)
 begin
   declare environmentId int;
   select id into environmentId from environment where name = environmentName limit 1;
-  insert into obstacle_definition(obstacle_id,environment_id,definition) values (obsId,environmentId,defName);
+  insert into obstacle_definition(obstacle_id,environment_id,definition,probability,rationale) values (obsId,environmentId,defName,obsProb,obsProbRat);
 end
 //
 
@@ -19847,6 +19850,71 @@ begin
   call add_asset_properties(assetId,envName,cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty,cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale);
 
   call situateComponentAsset(cName,assetId);
+end
+//
+
+create procedure obstacleProbability(in obsId int,in envId int, out workingProbability float)
+begin
+  declare done int default 0;
+  declare leafObsId int;
+  declare leafObsProb float;
+  declare andCount int;
+  declare orCount int;
+  declare andProb float default 0;
+  declare orProb float default 0;
+  declare andCursor cursor for select ga.subgoal_id from obstacleobstacle_goalassociation ga where ga.goal_id = obsId and ga.environment_id = envId and ga.ref_type_id = 0;
+  declare orCursor cursor for select ga.subgoal_id from obstacleobstacle_goalassociation ga where ga.goal_id = obsId and ga.environment_id = envId and ga.ref_type_id = 1;
+  declare continue handler for not found set done = 1;
+
+  select count(subgoal_id) into andCount from obstacleobstacle_goalassociation where goal_id = obsId and environment_id = envId and ref_type_id = 0;
+  if (andCount > 0)
+  then
+    set done = 0;
+    open andCursor;
+    and_loop: loop
+      fetch andCursor into leafObsId;
+      if done = 1
+      then
+        leave and_loop;
+      end if;
+      call obstacleProbability(leafObsId,envId,leafObsProb);
+      set andProb = andProb * leafObsProb;
+    end loop and_loop;
+    close andCursor;
+  end if;
+  
+  select count(subgoal_id) into orCount from obstacleobstacle_goalassociation where goal_id = obsId and environment_id = envId and ref_type_id = 1;
+  if (orCount > 0)
+  then
+    set done = 0;
+    open orCursor;
+    or_loop: loop
+      fetch orCursor into leafObsId;
+      if done = 1
+      then
+        leave or_loop;
+      end if;
+      call obstacleProbability(leafObsId,envId,leafObsProb);
+      set orProb = orProb + leafObsProb;
+    end loop or_loop;
+    close orCursor;
+  end if;
+
+  if (andCount = 0 and orCount = 0)
+  then
+    select probability into workingProbability from obstacle_definition where obstacle_id = obsId and environment_id = envId;
+  else
+    set workingProbability = andProb + orProb;
+  end if;
+end
+//
+
+create procedure obstacle_probability(in obsId int, in envId int)
+begin
+  declare obsProb float;
+
+  call obstacleProbability(obsId,envId,obsProb);
+  select obsProb;
 end
 //
 

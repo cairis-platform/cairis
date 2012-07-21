@@ -107,6 +107,12 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     self.theDefinition = ''
     self.theConcerns = []
     self.theResponsibilities = []
+    self.resetProbabilityElements()
+
+  def resetProbabilityElements(self):
+    self.theProbability = 0.0
+    self.inRationale = 0
+    self.theRationale = ''
 
   def resetObstacleAssociationElements(self):
     self.theObstacleName = ''
@@ -137,6 +143,8 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     elif (name == 'obstacle'):
       self.theObstacleName = attrs['name']
       self.theObstacleCategory = attrs['category']
+    elif (name == 'probability'):
+      self.theProbability = attrs['value']
     elif (name == 'obstacle_association'):
       self.theObstacleName = attrs['obstacle_name']
       self.theSubObstacleName = attrs['subobstacle_name']
@@ -232,7 +240,7 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
       self.inRelatedPatterns = 0
     elif name == 'obstacle':
 
-      self.theObstacles.append( TemplateObstacleParameters(self.theObstacleName,self.theObstacleCategory,self.theDefinition,self.theConcerns,self.theResponsibilities))
+      self.theObstacles.append( TemplateObstacleParameters(self.theObstacleName,self.theObstacleCategory,self.theDefinition,self.theConcerns,self.theResponsibilities,self.theProbability,self.theRationale))
       self.resetObstacleElements()
     elif name == 'obstacle_association':
       self.theObstacleAssociations.append((self.theObstacleName,self.theRefType,self.theSubObstacleName,self.theRationale))
@@ -255,6 +263,8 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
         for resp in tObs.responsibilities():
           sgRefs.append((resp,'role','responsible',0,'None')) 
         ep = ObstacleEnvironmentProperties(self.theEnvironment,'',tObs.definition(),tObs.category(),[],sgRefs,tObs.concerns())
+        ep.theProbability = tObs.probability()
+        ep.theProbabilityRationale = tObs.probabilityRationale()
         self.theObstacleParameters.append(ObstacleParameters(tObs.name(),self.thePatternName,[],[ep]))
 
       for obsAssoc in self.theObstacleAssociations:

@@ -46,6 +46,7 @@ class ObstacleEnvironmentPanel(wx.Panel):
     nbSizer.Add(self.notebook,1,wx.EXPAND)
 
     self.labelCtrl = self.notebook.FindWindowById(armid.OBSTACLE_TEXTLABEL_ID)
+    self.probCtrl = self.notebook.FindWindowById(armid.OBSTACLE_TEXTPROBABILITY_ID)
     self.categoryCtrl = self.notebook.FindWindowById(armid.OBSTACLE_COMBOCATEGORY_ID)
     self.definitionCtrl = self.notebook.FindWindowById(armid.OBSTACLE_TEXTDEFINITION_ID)
     self.goalAssociationCtrl = self.notebook.FindWindowById(armid.OBSTACLE_LISTGOALS_ID)
@@ -80,6 +81,7 @@ class ObstacleEnvironmentPanel(wx.Panel):
     p = self.theEnvironmentDictionary[environmentName]
 
     self.labelCtrl.SetValue(p.label())
+    self.probCtrl.SetValue(str(p.probability()))
     self.categoryCtrl.SetValue(p.category())
     self.definitionCtrl.SetValue(p.definition())
     self.goalAssociationCtrl.setEnvironment(environmentName)
@@ -106,6 +108,7 @@ class ObstacleEnvironmentPanel(wx.Panel):
     p = self.theEnvironmentDictionary[environmentName]
 
     self.labelCtrl.SetValue(p.label())
+    self.probCtrl.SetValue(str(p.probability()))
     self.categoryCtrl.SetValue(p.category())
     self.definitionCtrl.SetValue(p.definition())
     self.goalAssociationCtrl.setEnvironment(environmentName)
@@ -126,6 +129,7 @@ class ObstacleEnvironmentPanel(wx.Panel):
     environmentName = self.environmentList.GetItemText(self.theSelectedIdx)
     self.theEnvironmentDictionary[environmentName] = ObstacleEnvironmentProperties(environmentName,self.labelCtrl.GetValue(),self.definitionCtrl.GetValue(),self.categoryCtrl.GetValue(),self.goalAssociationCtrl.dimensions(),self.subGoalAssociationCtrl.dimensions(),self.concernsCtrl.dimensions())
     self.labelCtrl.SetValue('')
+    self.probCtrl.SetValue('')
     self.categoryCtrl.SetValue('')
     self.definitionCtrl.SetValue('')
     self.goalAssociationCtrl.DeleteAllItems()
@@ -147,6 +151,7 @@ class ObstacleEnvironmentPanel(wx.Panel):
     self.theEnvironmentDictionary[environmentName] = ObstacleEnvironmentProperties(environmentName)
     self.environmentList.Select(self.theSelectedIdx)
     self.labelCtrl.SetValue('')
+    self.probCtrl.SetValue('')
     self.categoryCtrl.SetValue('')
     self.definitionCtrl.SetValue('None')
     self.goalAssociationCtrl.setEnvironment(environmentName)
@@ -165,6 +170,7 @@ class ObstacleEnvironmentPanel(wx.Panel):
       p = self.dbProxy.inheritedObstacleProperties(self.theObstacleId,inheritedEnv)
       self.theEnvironmentDictionary[environmentName] = p
       self.labelCtrl.SetValue(p.label())
+      self.labelCtrl.SetValue(str(p.probability()))
       self.categoryCtrl.SetValue(p.category())
       self.definitionCtrl.SetValue(p.definition())
       self.goalAssociationCtrl.setEnvironment(environmentName)
@@ -180,6 +186,7 @@ class ObstacleEnvironmentPanel(wx.Panel):
     del self.theEnvironmentDictionary[environmentName]
     self.theSelectedIdx = -1
     self.labelCtrl.SetValue('')
+    self.probCtrl.SetValue('')
     self.categoryCtrl.SetValue('')
     self.definitionCtrl.SetValue('')
     self.goalAssociationCtrl.DeleteAllItems()

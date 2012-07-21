@@ -1325,6 +1325,8 @@ CREATE TABLE obstacle_definition (
   obstacle_id INT NOT NULL,
   environment_id INT NOT NULL,
   definition VARCHAR(1000) NOT NULL,
+  probability FLOAT DEFAULT 0.0,
+  rationale VARCHAR (4000) DEFAULT 'None',
   PRIMARY KEY(obstacle_id,environment_id),
   FOREIGN KEY(obstacle_id) REFERENCES obstacle(id),
   FOREIGN KEY(environment_id) REFERENCES environment(id)

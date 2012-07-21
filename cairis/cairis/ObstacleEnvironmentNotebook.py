@@ -35,7 +35,6 @@ class SummaryPage(wx.Panel):
     self.labelCtrl = wx.TextCtrl(self,armid.OBSTACLE_TEXTLABEL_ID,"",pos=wx.DefaultPosition,size=wx.Size(150,30),style=wx.TE_READONLY)
     self.labelCtrl.Disable()
     lblBoxSizer.Add(self.labelCtrl,1,wx.EXPAND)
-
     
     catBox = wx.StaticBox(self,-1,'Category')
     catBoxSizer = wx.StaticBoxSizer(catBox,wx.VERTICAL)
@@ -49,6 +48,13 @@ class SummaryPage(wx.Panel):
     topSizer.Add(defBoxSizer,1,wx.EXPAND)
     self.definitionCtrl = wx.TextCtrl(self,armid.OBSTACLE_TEXTDEFINITION_ID,'',style= wx.TE_MULTILINE)
     defBoxSizer.Add(self.definitionCtrl,1,wx.EXPAND)
+
+    probBox = wx.StaticBox(self,-1,'Probability')
+    probBoxSizer = wx.StaticBoxSizer(probBox,wx.VERTICAL)
+    topRowSizer.Add(probBoxSizer,0,wx.EXPAND)
+    self.probCtrl = wx.TextCtrl(self,armid.OBSTACLE_TEXTPROBABILITY_ID,"",pos=wx.DefaultPosition,size=wx.Size(150,30),style=wx.TE_READONLY)
+    self.probCtrl.Disable()
+    probBoxSizer.Add(self.probCtrl,1,wx.EXPAND)
 
     self.SetSizer(topSizer)
 

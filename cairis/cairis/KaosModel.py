@@ -25,6 +25,7 @@ import ARM
 import gtk
 from colourcodes import usabilityColourCode
 from colourcodes import threatColourCode
+from colourcodes import obstacleColourCode
 
 class KaosModel:
   def __init__(self,associations,envName,kaosModelType = 'goal',goalName = ''):
@@ -52,7 +53,9 @@ class KaosModel:
       self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
 # soft-goal attributes      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',style='rounded',sides='6',distortion='-0.537997',orientation='52',skew='-0.960726',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'obstacle'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',skew='-1',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      obsId = self.dbProxy.getDimensionId(objtName,'obstacle')
+      envId = self.dbProxy.getDimensionId(self.theEnvironmentName,'environment')
+      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',skew='-1',style='filled',pencolor='black',colorscheme='ylorrd9',fillcolor=obstacleColourCode(self.dbProxy.obstacleProbability(obsId,envId)),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'domainproperty'):
       self.theGraph.add_node(pydot.Node(objtName,shape='house',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'requirement'):

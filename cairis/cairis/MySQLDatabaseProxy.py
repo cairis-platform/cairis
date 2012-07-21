@@ -5007,11 +5007,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       environmentProperties = []
       for environmentId,environmentName in self.dimensionEnvironments(obsId,'obstacle'):
         obsLabel = self.obstacleLabel(obsId,environmentId)
-        obsDef = self.obstacleDefinition(obsId,environmentId)
+        obsDef,obsProb,obsProbRat = self.obstacleDefinition(obsId,environmentId)
         obsType = self.obstacleCategory(obsId,environmentId)
         goalRefinements,subGoalRefinements = self.goalRefinements(obsId,environmentId)
         concerns = self.obstacleConcerns(obsId,environmentId)
         properties = ObstacleEnvironmentProperties(environmentName,obsLabel,obsDef,obsType,goalRefinements,subGoalRefinements,concerns)
+        properties.theProbability = obsProb
+        properties.theProbabilityRationale = obsProbRat
         environmentProperties.append(properties) 
       return environmentProperties
     except _mysql_exceptions.DatabaseError, e:
@@ -5028,13 +5030,34 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error obtaining definition for obstacle id ' + str(obsId) + ' in environment id ' + str(environmentId)
         raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
+      obsDef = row[0] 
+      curs.close()
+
+      obsProb = self.obstacleProbability(obsId,environmentId)
+      obsProbRat = ''
+      return (obsDef,obsProb,obsProbRat)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting definition for obstacle id ' + str(obsId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def obstacleProbability(self,obsId,environmentId):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call obstacle_probability(%s,%s)',(obsId,environmentId))
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error obtaining probability for obstacle id ' + str(obsId) + ' in environment id ' + str(environmentId)
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
       obsAttr = row[0] 
       curs.close()
       return obsAttr
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL error getting definition for obstacle id ' + str(obsId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error getting probability for obstacle id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
 
   def obstacleCategory(self,obsId,environmentId):
     try:
@@ -5068,7 +5091,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(obsId,'obstacle',environmentName)
-        self.addObstacleDefinition(obsId,environmentName,environmentProperties.definition())
+        self.addObstacleDefinition(obsId,environmentName,environmentProperties.definition(),environmentProperties.probability(),environmentProperties.probabilityRationale())
         self.addObstacleCategory(obsId,environmentName,environmentProperties.category())
         self.addObstacleRefinements(obsId,obsName,environmentName,environmentProperties.goalRefinements(),environmentProperties.subGoalRefinements())
         self.addObstacleConcerns(obsId,environmentName,environmentProperties.concerns())
@@ -5099,7 +5122,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
         self.addDimensionEnvironment(obsId,'obstacle',environmentName)
-        self.addObstacleDefinition(obsId,environmentName,environmentProperties.definition())
+        self.addObstacleDefinition(obsId,environmentName,environmentProperties.definition(),environmentProperties.probability(),environmentProperties.probabilityRationale())
         self.addObstacleCategory(obsId,environmentName,environmentProperties.category())
         self.addObstacleRefinements(obsId,obsName,environmentName,environmentProperties.goalRefinements(),environmentProperties.subGoalRefinements())
         self.addObstacleConcerns(obsId,environmentName,environmentProperties.concerns())
@@ -5110,10 +5133,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error updating obstacle ' + obsName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addObstacleDefinition(self,obsId,environmentName,obsDef):
+  def addObstacleDefinition(self,obsId,environmentName,obsDef,obsProb,obsProbRat):
     try:
       curs = self.conn.cursor()
-      curs.execute('call addObstacleDefinition(%s,%s,%s)',(obsId,environmentName,obsDef))
+      curs.execute('call addObstacleDefinition(%s,%s,%s,%s,%s)',(obsId,environmentName,obsDef,obsProb,obsProbRat))
       if (curs.rowcount == -1):
         exceptionText = 'Error associating obstacle id ' + str(obsId) + ' with definition:' + obsDef
         raise DatabaseProxyException(exceptionText) 

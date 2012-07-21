@@ -27,6 +27,8 @@ class ObstacleEnvironmentProperties(EnvironmentProperties):
     self.theGoalRefinements = gRefs
     self.theSubGoalRefinements = sgRefs
     self.theConcerns = concs
+    self.theProbability = 0.0
+    self.theProbabilityRationale = 'None'
 
   def label(self): return self.theLabel
   def definition(self): return self.theDefinition
@@ -34,6 +36,8 @@ class ObstacleEnvironmentProperties(EnvironmentProperties):
   def goalRefinements(self): return self.theGoalRefinements
   def subGoalRefinements(self): return self.theSubGoalRefinements
   def concerns(self): return self.theConcerns
+  def probability(self): return self.theProbability
+  def probabilityRationale(self): return self.theProbabilityRationale
 
   def setDefinition(self,v): self.theDefinition = v
   def setCategory(self,v): self.theCategory = v

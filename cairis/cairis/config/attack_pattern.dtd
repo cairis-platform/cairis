@@ -25,7 +25,7 @@
 <!ATTLIST attack_pattern likelihood (Incredible | Improbable | Remote | Occasional | Probable | Frequent) #REQUIRED>
 <!ATTLIST attack_pattern severity (Negligible | Marginal | Critical | Catastrophic) #REQUIRED>
 
-<!ELEMENT obstacle (definition,concern*,responsibility*)>
+<!ELEMENT obstacle (definition,concern*,responsibility*,probability?)>
 <!ATTLIST obstacle name CDATA #REQUIRED>
 <!ATTLIST obstacle category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support) #REQUIRED>
 <!ELEMENT definition (#PCDATA)>
@@ -33,6 +33,9 @@
 <!ATTLIST concern name CDATA #REQUIRED>
 <!ELEMENT responsibility EMPTY>
 <!ATTLIST responsibility name CDATA #REQUIRED>
+<!ELEMENT probability (rationale)>
+<!ATTLIST probability value CDATA #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
 
 
 <!ELEMENT intent (#PCDATA)>
@@ -70,7 +73,6 @@
 <!ATTLIST obstacle_association obstacle_name CDATA #REQUIRED>
 <!ATTLIST obstacle_association ref_type (and | or) #REQUIRED>
 <!ATTLIST obstacle_association subobstacle_name CDATA #REQUIRED>
-<!ELEMENT rationale (#PCDATA)>
 
 <!ELEMENT known_uses (#PCDATA)>
 <!ELEMENT related_patterns (#PCDATA)>
