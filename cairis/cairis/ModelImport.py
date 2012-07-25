@@ -28,6 +28,7 @@ from AssociationsContentHandler import AssociationsContentHandler
 from CairisContentHandler import CairisContentHandler
 from ArchitecturalPatternContentHandler import ArchitecturalPatternContentHandler
 from SynopsesContentHandler import SynopsesContentHandler
+from TemplateAssetsContentHandler import TemplateAssetsContentHandler
 from Borg import Borg
 import xml.sax
 
@@ -429,6 +430,31 @@ def importComponentViewFile(importFile):
   parser.parse(importFile)
   view = handler.view()
   return importComponentViewData(view)
+
+def importAssetsFile(importFile):
+  parser = xml.sax.make_parser()
+  handler = TemplateAssetsContentHandler()
+  parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
+  parser.parse(importFile)
+  return importAssets(handler.valueTypes(),handler.assets())
+
+def importAssets(valueTypes,assets):
+  b = Borg()
+  vtCount = 0
+  taCount = 0
+
+  for vtParameters in valueTypes:
+    vtId = b.dbProxy.existingObject(vtParameters.name(),vtParameters.type())
+    if vtId == -1:
+      b.dbProxy.addValueType(vtParameters)
+      vtCount += 1
+  for taParameters in assets:
+    taId = b.dbProxy.existingObject(taParameters.name(),'template_asset')
+    if taId == -1:
+      b.dbProxy.addTemplateAsset(taParameters)
+      taCount += 1
+  return 'Imported ' + str(vtCount) + ' value types, and ' + str(taCount) + ' template assets.'
 
 def importComponentViewData(view):
   b = Borg()

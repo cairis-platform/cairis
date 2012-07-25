@@ -195,6 +195,7 @@ class RMFrame(wx.Frame):
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTCOMPONENTVIEW,'Architectural Pattern','Import Architectural Pattern')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTATTACKPATTERN,'Attack Pattern','Import Attack Pattern')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTSYNOPSES,'Synopses','Import Synopses and Contributions')
+    importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTASSETS,'Assets','Import Template Assets')
     file.AppendMenu(armid.RMFRAME_MENU_IMPORT,'Import',importMenu)
 
 
@@ -422,6 +423,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTCOMPONENTVIEW,self.OnImportComponentView)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTATTACKPATTERN,self.OnImportAttackPattern)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTSYNOPSES,self.OnImportSynopses)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTASSETS,self.OnImportAssets)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ENVIRONMENT,self.OnViewEnvironment)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ASSETMODEL,self.OnViewAssets)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_GOALMODEL,self.OnViewGoals)
@@ -1304,6 +1306,23 @@ class RMFrame(wx.Frame):
       cvdlg.Destroy()
     except ARMException,errorText:
       dlg = wx.MessageDialog(self,str(errorText),'Import Synopses',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+
+  def OnImportAssets(self,event):
+    try:
+      defaultDir = './sql'
+      wildcard = "Template Assets (*.xml) | *.xml |"
+
+      cvdlg = wx.FileDialog(None,'Import Assets',defaultDir,style=wx.OPEN)
+      if (cvdlg.ShowModal() == wx.ID_OK):
+        msgStr = importAssetsFile(cvdlg.GetPath()) 
+        dlg = wx.MessageDialog(self,msgStr,'Import Assets',wx.OK | wx.ICON_INFORMATION )
+        dlg.ShowModal()
+        dlg.Destroy()
+      cvdlg.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Import Assets',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
 

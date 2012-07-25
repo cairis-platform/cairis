@@ -129,5 +129,13 @@
        systemId="http://www.cs.ox.ac.uk/cairis/dtd/synopses.dtd"  
        uri="synopses.dtd"/>
 
+    <public 
+       publicId="-//CAIRIS//DTD ASSETS  1.0//EN"  
+       uri="template_assets.dtd"/>
+
+    <system
+       systemId="http://www.cs.ox.ac.uk/cairis/dtd/template_assets.dtd"  
+       uri="template_assets.dtd"/>
+
   </group>
 </catalog>
