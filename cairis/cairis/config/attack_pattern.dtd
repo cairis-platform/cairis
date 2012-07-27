@@ -60,7 +60,7 @@
 <!ATTLIST capability name CDATA #REQUIRED>
 <!ATTLIST capability value (Low | Medium | High) #REQUIRED>
 
-<!ELEMENT collaboration (target,exploit)>
+<!ELEMENT collaboration (target+,exploit+)>
 <!ELEMENT target EMPTY>
 <!ATTLIST target name CDATA #REQUIRED>
 <!ELEMENT exploit EMPTY>

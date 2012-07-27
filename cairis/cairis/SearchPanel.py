@@ -97,13 +97,17 @@ class SearchPanel(wx.Panel):
         self.dbProxy.updateSettings(dlg.name(),dlg.background(),dlg.goals(),dlg.scope(),dlg.definitions(),dlg.contributors(),dlg.revisions(),dlg.richPicture(),self.b.fontSize,self.b.fontName)
       dlg.Destroy()
     elif (dimLabel == 'Template Threat'):
-      eName,eDesc,eType = self.dbProxy.directoryEntry(objtName,'threat')
-      dlg = DirectoryEntryDialog(self,objtName,eName,eType,eDesc)
+      objtValues = objtName.split(':')
+      objtLabel = objtValues[0]
+      eName,eDesc,eType = self.dbProxy.directoryEntry(objtLabel,'threat')
+      dlg = DirectoryEntryDialog(self,objtLabel,eName,eType,eDesc)
       dlg.ShowModal()
       dlg.Destroy()   
     elif (dimLabel == 'Template Vulnerability'):
-      eName,eDesc,eType = self.dbProxy.directoryEntry(objtName,'vulnerability')
-      dlg = DirectoryEntryDialog(self,objtName,eName,eType,eDesc)
+      objtValues = objtName.split(':')
+      objtLabel = objtValues[0]
+      eName,eDesc,eType = self.dbProxy.directoryEntry(objtLabel,'vulnerability')
+      dlg = DirectoryEntryDialog(self,objtLabel,eName,eType,eDesc)
       dlg.ShowModal()
       dlg.Destroy()   
     else:

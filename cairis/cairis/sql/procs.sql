@@ -14606,13 +14606,13 @@ end
 create procedure grepDirectories(in inTxt text)
 begin
   insert into temp_searchresults (environment_name,dimension_name,object_name)
-  select '','Template Threat',d.label from threat_directory d where d.name like concat('%',inTxt,'%')
+  select '','Template Threat',concat(d.label,': ',d.name) from threat_directory d where d.name like concat('%',inTxt,'%')
   union
-  select '','Template Threat',d.label from threat_directory d where d.description like concat('%',inTxt,'%')
+  select '','Template Threat',concat(d.label,': ',d.name) from threat_directory d where d.description like concat('%',inTxt,'%')
   union
-  select '','Template Vulnerability',d.label from vulnerability_directory d where d.name like concat('%',inTxt,'%')
+  select '','Template Vulnerability',concat(d.label,': ',d.name) from vulnerability_directory d where d.name like concat('%',inTxt,'%')
   union
-  select '','Template Vulnerability',d.label from vulnerability_directory d where d.description like concat('%',inTxt,'%');
+  select '','Template Vulnerability',concat(d.label,': ',d.name) from vulnerability_directory d where d.description like concat('%',inTxt,'%');
 end
 //
 

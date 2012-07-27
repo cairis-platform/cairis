@@ -203,6 +203,8 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
       self.theRationale += data
     elif self.inIntent:
       self.theIntent += data
+    elif self.inDescription and self.inImplementation:
+      self.theImplementation += data
     elif self.inDescription:
       self.theDescription += data
     elif self.inConsequences:
