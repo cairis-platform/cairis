@@ -264,6 +264,8 @@ DROP TABLE IF EXISTS requirement;
 DROP TABLE IF EXISTS requirement_type;
 DROP TABLE IF EXISTS persona_direct;
 DROP TABLE IF EXISTS persona_narrative;
+DROP TABLE IF EXISTS persona_motivation;
+DROP TABLE IF EXISTS persona_capability;
 DROP TABLE IF EXISTS persona;
 DROP TABLE IF EXISTS persona_type;
 DROP TABLE IF EXISTS response_role;
@@ -753,6 +755,26 @@ CREATE TABLE persona (
   PRIMARY KEY(id),
   FOREIGN KEY(persona_type_id) REFERENCES persona_type(id)
 ) ENGINE=INNODB; 
+CREATE TABLE persona_capability (
+  persona_id INT NOT NULL,
+  capability_id INT NOT NULL,
+  capability_value_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  PRIMARY KEY(persona_id,capability_id,environment_id),
+  FOREIGN KEY(persona_id) REFERENCES persona(id),
+  FOREIGN KEY(capability_id) REFERENCES capability(id),
+  FOREIGN KEY(capability_value_id) REFERENCES capability_value(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id)
+) ENGINE=INNODB;
+CREATE TABLE persona_motivation (
+  persona_id INT NOT NULL,
+  motivation_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  PRIMARY KEY(persona_id,motivation_id,environment_id),
+  FOREIGN KEY(persona_id) REFERENCES persona(id),
+  FOREIGN KEY(motivation_id) REFERENCES motivation(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id)
+) ENGINE=INNODB;
 CREATE TABLE behavioural_variable (
   id INT NOT NULL,
   name VARCHAR(50) NOT NULL,
@@ -3529,6 +3551,7 @@ INSERT INTO allowable_trace values(20,0);
 INSERT INTO allowable_trace values(0,20);
 INSERT INTO allowable_trace values(21,18);
 INSERT INTO allowable_trace values(16,2);
+INSERT INTO allowable_trace values(1,4);
 INSERT INTO requirement_type values(0,'Functional');
 INSERT INTO requirement_type values(1,'Data');
 INSERT INTO requirement_type values(2,'Look and Feel');

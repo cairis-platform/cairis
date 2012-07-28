@@ -30,6 +30,7 @@ class Attacker:
     for p in self.theEnvironmentProperties:
       environmentName = p.name()
       self.theEnvironmentDictionary[environmentName] = p
+    self.isPersona = False
 
   def id(self): return self.theId
   def name(self): return self.theName
@@ -37,6 +38,7 @@ class Attacker:
   def image(self): return self.theImage
   def tags(self): return self.theTags
   def environmentProperties(self): return self.theEnvironmentProperties
+  def persona(self): return self.isPersona
 
   def roles(self,environmentName,dupProperty): 
     if (dupProperty == ''):

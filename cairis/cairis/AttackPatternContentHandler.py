@@ -257,6 +257,7 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
         attackerRoles = self.dbProxy.dimensionRoles(self.dbProxy.getDimensionId(attackerName,'persona'),self.dbProxy.getDimensionId(self.theEnvironment,'environment'),'persona')
         ep = AttackerEnvironmentProperties(self.theEnvironment,attackerRoles,attackerMotives,attackerCapabilities)
         p = AttackerParameters(attackerName,'','',[],[ep])
+        p.isPersona = True
         self.theAttackerParameters.append(p) 
         attackerNames.append(attackerName)
   

@@ -786,6 +786,8 @@ drop procedure if exists importTemplateAssetIntoComponent;
 drop procedure if exists obstacleProbability;
 drop procedure if exists obstacle_probability;
 drop procedure if exists candidateGoalObstacles;
+drop procedure if exists addPersonaMotive;
+drop procedure if exists addPersonaCapability;
 
 delimiter //
 
@@ -19972,5 +19974,29 @@ begin
   select goal_name, obstacle_name from temp_goalobstacle order by probability;
 end
 //
+
+create procedure addPersonaCapability(in personaId int,in environmentName text, in capabilityName text,in capabilityValue text)
+begin
+  declare capabilityId int;
+  declare capabilityValueId int;
+  declare environmentId int;
+  select id into capabilityId from capability where name = capabilityName limit 1;
+  select id into capabilityValueId from capability_value where name = capabilityValue limit 1;
+  select id into environmentId from environment where name = environmentName;
+  insert into persona_capability(persona_id,capability_id,capability_value_id,environment_id) values (personaId,capabilityId,capabilityValueId,environmentId);
+end
+//
+
+create procedure addPersonaMotive(in personaId int,in environmentName text, in motiveName text)
+begin
+  declare motiveId int;
+  declare environmentId int;
+  select id into motiveId from motivation where name = motiveName limit 1;
+  select id into environmentId from environment where name = environmentName limit 1;
+  insert into persona_motivation(persona_id,motivation_id,environment_id) values (attackerId,motiveId,environmentId);
+end
+//
+
+
 
 delimiter ;

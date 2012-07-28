@@ -26,6 +26,7 @@ class AttackerParameters(ObjectCreationParameters):
     self.theImage = image
     self.theTags = tags
     self.theEnvironmentProperties = properties
+    self.isPersona = False
 
 
   def name(self): return self.theName
@@ -33,3 +34,4 @@ class AttackerParameters(ObjectCreationParameters):
   def image(self): return self.theImage
   def tags(self): return self.theTags
   def environmentProperties(self): return self.theEnvironmentProperties
+  def persona(self): return self.isPersona
