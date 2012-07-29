@@ -124,9 +124,7 @@ requirement
 attributes
 attacker
 attacker_motivation
-persona_motivation
 attacker_capability 
-persona_capability
 environment_attacker
 asset
 asset_property
