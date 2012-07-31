@@ -34,7 +34,6 @@ if __name__ == '__main__':
     parser.add_argument('--task',dest='taskName',help='Task name (relevant for GRL export only)')
     parser.add_argument('--environment',dest='envName',help='Environment name (relevant for GRL export only)')
     args = parser.parse_args() 
-
     BorgFactory.initialise()
    
     msgStr = ''
