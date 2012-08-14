@@ -18286,8 +18286,13 @@ create procedure componentViewInterfaces(in cvName text)
 begin
   declare cvId int;
 
-  select id into cvId from component_view where name = cvName;
-  select c.name component,i.name interface,ci.required_id from component c, interface i, component_interface ci, component_view_component cvc where cvc.component_view_id = cvId and cvc.component_id = ci.component_id  and ci.component_id = c.id and ci.interface_id = i.id;
+  if cvName != 'ALL'
+  then
+    select id into cvId from component_view where name = cvName;
+    select c.name component,i.name interface,ci.required_id from component c, interface i, component_interface ci, component_view_component cvc where cvc.component_view_id = cvId and cvc.component_id = ci.component_id  and ci.component_id = c.id and ci.interface_id = i.id;
+  else
+    select c.name component,i.name interface,ci.required_id from component c, interface i, component_interface ci, component_view_component cvc where cvc.component_id = ci.component_id  and ci.component_id = c.id and ci.interface_id = i.id;
+  end if;
 end
 //
 
@@ -18295,8 +18300,13 @@ create procedure componentViewConnectors(in cvName text)
 begin
   declare cvId int;
 
-  select id into cvId from component_view where name = cvName;
-  select ca.name connector, fc.name from_name, ca.from_role, fi.name from_interface, tc.name to_name, ti.name to_interface, ca.to_role, ta.name,p.name,ar.name from connector ca, component fc, component tc, interface fi, interface ti, template_asset ta, protocol p, access_right ar where ca.component_view_id = cvId and ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id and ca.template_asset_id = ta.id and ca.protocol_id = p.id and ca.access_right_id = ar.id;
+  if cvName != 'ALL'
+  then
+    select id into cvId from component_view where name = cvName;
+    select ca.name connector, fc.name from_name, ca.from_role, fi.name from_interface, tc.name to_name, ti.name to_interface, ca.to_role, ta.name,p.name,ar.name from connector ca, component fc, component tc, interface fi, interface ti, template_asset ta, protocol p, access_right ar where ca.component_view_id = cvId and ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id and ca.template_asset_id = ta.id and ca.protocol_id = p.id and ca.access_right_id = ar.id;
+  else
+    select ca.name connector, fc.name from_name, ca.from_role, fi.name from_interface, tc.name to_name, ti.name to_interface, ca.to_role, ta.name,p.name,ar.name from connector ca, component fc, component tc, interface fi, interface ti, template_asset ta, protocol p, access_right ar where ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id and ca.template_asset_id = ta.id and ca.protocol_id = p.id and ca.access_right_id = ar.id;
+  end if;
 end
 //
 

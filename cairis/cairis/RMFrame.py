@@ -1795,7 +1795,8 @@ class RMFrame(wx.Frame):
     dialog = None
     try: 
       proxy = self.b.dbProxy
-      cvs = proxy.getDimensionNames('component_view',False)
+      cvs = ['ALL']
+      cvs += proxy.getDimensionNames('component_view',False)
       cDlg = DimensionNameDialog(self,'component_view',cvs,'Select')
       if (cDlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
         cvName = cDlg.dimensionName()
