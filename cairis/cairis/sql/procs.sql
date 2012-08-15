@@ -4280,7 +4280,7 @@ end
 create procedure attackerDependents(in attackerId int)
 begin
   declare threatId int;
-  declare threatName varchar(50);
+  declare threatName varchar(200);
   declare done int default 0;
   declare threatAttackers int;
   declare threatCursor cursor for select distinct ta.threat_id,t.name from threat_attacker ta, threat t where ta.attacker_id = attackerId and ta.threat_id = t.id;  
@@ -4307,7 +4307,7 @@ end
 create procedure threatDependents(in threatId int)
 begin
   declare riskId int;
-  declare riskName varchar(50);
+  declare riskName varchar(200);
   declare done int default 0;
   declare riskCursor cursor for select distinct id,name from risk where threat_id = threatId;  
   declare continue handler for not found set done = 1;
@@ -4378,7 +4378,7 @@ begin
   declare assetId int;
   declare assetName varchar(50);
   declare vulId int;
-  declare vulName varchar(50);
+  declare vulName varchar(200);
   declare obsId int;
   declare obsName varchar(100);
   declare countermeasureRequirements int;
@@ -4521,9 +4521,9 @@ begin
   declare reqId int;
   declare reqName varchar(255);
   declare threatId int;
-  declare threatName varchar(50);
+  declare threatName varchar(200);
   declare vulId int;
-  declare vulName varchar(50);
+  declare vulName varchar(200);
   declare taskId int;
   declare taskName varchar(50);
   declare reqAssets int;
@@ -4634,7 +4634,7 @@ end
 create procedure vulnerabilityDependents(in vulId int)
 begin
   declare riskId int;
-  declare riskName varchar(50);
+  declare riskName varchar(200);
   declare done int default 0;
   declare riskCursor cursor for select distinct id,name from risk where vulnerability_id = vulId;  
   declare continue handler for not found set done = 1;
@@ -4668,19 +4668,19 @@ begin
   drop table if exists temp_task;
   drop table if exists temp_usecase;
   drop table if exists temp_persona;
-  create temporary table temp_asset (id INT NOT NULL,name VARCHAR(50) NOT NULL);
-  create temporary table temp_domainproperty (id INT NOT NULL,name VARCHAR(50) NOT NULL);
-  create temporary table temp_threat (id INT NOT NULL,name VARCHAR(50) NOT NULL);
-  create temporary table temp_vulnerability (id INT NOT NULL,name VARCHAR(50) NOT NULL);
-  create temporary table temp_risk (id INT NOT NULL,name VARCHAR(50) NOT NULL);
-  create temporary table temp_response (id INT NOT NULL,name VARCHAR(50) NOT NULL);
+  create temporary table temp_asset (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_domainproperty (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_threat (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_vulnerability (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_risk (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_response (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_requirement (id INT NOT NULL,name VARCHAR(255) NOT NULL);
-  create temporary table temp_countermeasure (id INT NOT NULL,name VARCHAR(50) NOT NULL);
-  create temporary table temp_goal (id INT NOT NULL,name VARCHAR(50) NOT NULL);
-  create temporary table temp_obstacle (id INT NOT NULL,name VARCHAR(50) NOT NULL);
-  create temporary table temp_task (id INT NOT NULL,name VARCHAR(50) NOT NULL);
-  create temporary table temp_usecase (id INT NOT NULL,name VARCHAR(50) NOT NULL);
-  create temporary table temp_persona (id INT NOT NULL,name VARCHAR(50) NOT NULL);
+  create temporary table temp_countermeasure (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_goal (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_obstacle (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_task (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_usecase (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_persona (id INT NOT NULL,name VARCHAR(200) NOT NULL);
 
   if (dimName = 'attacker')
   then
@@ -5096,7 +5096,7 @@ end
 create procedure goalDependents(in asId int)
 begin
   declare assetId int;
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare goalId int;
   declare goalName varchar(100);
   declare obsId int;
@@ -5106,17 +5106,17 @@ begin
   declare requirementId int;
   declare requirementLabel int;
   declare taskId int;
-  declare taskName varchar(50);
+  declare taskName varchar(200);
   declare usecaseId int;
-  declare usecaseName varchar(50);
+  declare usecaseName varchar(200);
   declare roleId int;
-  declare roleName varchar(50);
+  declare roleName varchar(200);
   declare personaId int;
   declare personaName varchar(50);
   declare threatId int;
-  declare threatName varchar(50);
+  declare threatName varchar(200);
   declare vulId int;
-  declare vulName varchar(50);
+  declare vulName varchar(200);
 
   declare assetGoals int;
   declare goalGoals int;
@@ -5271,9 +5271,9 @@ end
 create procedure taskDependents(in taskId int)
 begin
   declare cmId int;
-  declare cmName varchar(50);
+  declare cmName varchar(200);
   declare assetId int;
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare cmTasks int;
   declare done int default 0;
   declare cmCursor cursor for select distinct cm.id,cm.name from countermeasure_task_persona ctp, countermeasure cm where ctp.task_id = taskId and ctp.countermeasure_id = cm.id;  
@@ -5301,7 +5301,7 @@ end
 create procedure usecaseDependents(in ucId int)
 begin
   declare assetId int;
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare done int default 0;
   declare assetCursor cursor for select distinct tc.asset_id,a.name from usecase_asset tc, asset a where tc.usecase_id = ucId and tc.asset_id = a.id;
   declare continue handler for not found set done = 1;
@@ -6494,7 +6494,7 @@ begin
 
   select id into envId from environment where name = envName;
   drop table if exists temp_target;
-  create temporary table temp_target (target_name VARCHAR(50) NOT NULL,response_name VARCHAR(50) NOT NULL);
+  create temporary table temp_target (target_name VARCHAR(200) NOT NULL,response_name VARCHAR(200) NOT NULL);
 
   set done = 0;
   open goalReqCursor;  
@@ -9825,8 +9825,8 @@ create procedure criticalAssetThreatCheck(in threatId int, in envId int, inout d
 begin
   declare done int default 0;
   declare criticalId int default 0;
-  declare threatName varchar(50);
-  declare assetName varchar(50);
+  declare threatName varchar(200);
+  declare assetName varchar(200);
   declare criticalCursor cursor for select a.is_critical,a.name from asset a, environment_asset ea,environment_threat et where ea.environment_id = envId and ea.asset_id = a.id and ea.environment_id = et.environment_id and et.threat_id = threatId;
   declare continue handler for not found set done = 1;
 
@@ -11971,12 +11971,12 @@ begin
   declare capabilityName varchar(50);
   declare capabilityValue varchar(50);
   declare threatId int;
-  declare threatName varchar(50);
+  declare threatName varchar(200);
   declare threatType varchar(100);
   declare threatMethod varchar(500);
   declare threatCount int default 0;
   declare riskId int;
-  declare riskName varchar(50);
+  declare riskName varchar(200);
   declare riskCount int default 0;
   declare mcNarrative varchar(5000);
   declare responseId int;
@@ -16681,9 +16681,9 @@ begin
   declare personaId int;
   declare personaName varchar(50);
   declare threatId int;
-  declare threatName varchar(50);
+  declare threatName varchar(200);
   declare vulId int;
-  declare vulName varchar(50);
+  declare vulName varchar(200);
 
   declare assetGoals int;
   declare goalGoals int;

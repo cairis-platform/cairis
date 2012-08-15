@@ -950,7 +950,7 @@ CREATE TABLE usecase_step (
 ) ENGINE=INNODB;
 CREATE TABLE misusecase (
   id INT NOT NULL,
-  name VARCHAR(50) NOT NULL,
+  name VARCHAR(200) NOT NULL,
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 CREATE TABLE task_persona (
@@ -1075,7 +1075,7 @@ CREATE TABLE score (
 ) ENGINE=INNODB;
 CREATE TABLE risk (
   id INT NOT NULL,
-  name VARCHAR(100) NOT NULL,
+  name VARCHAR(200) NOT NULL,
   threat_id INT NOT NULL,
   vulnerability_id INT NOT NULL,
   PRIMARY KEY(id,threat_id,vulnerability_id),
