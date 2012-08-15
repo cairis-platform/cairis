@@ -55,7 +55,7 @@ class KaosModel:
     elif (dimName == 'obstacle'):
       obsId = self.dbProxy.getDimensionId(objtName,'obstacle')
       envId = self.dbProxy.getDimensionId(self.theEnvironmentName,'environment')
-      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',skew='-1',style='filled',pencolor='black',colorscheme='ylorrd9',fillcolor=obstacleColourCode(self.dbProxy.obstacleProbability(obsId,envId)),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',skew='-0.4',style='filled',pencolor='black',colorscheme='ylorrd9',fillcolor=obstacleColourCode(self.dbProxy.obstacleProbability(obsId,envId)),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'domainproperty'):
       self.theGraph.add_node(pydot.Node(objtName,shape='house',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'requirement'):
