@@ -9294,7 +9294,7 @@ begin
   declare continue handler for not found set done = 1;
   
   drop table if exists temp_goaltree;
-  create temporary table temp_goaltree (id int,environment varchar(50),goal_name varchar(50), goal_dim varchar(50), ref_type varchar(50), subgoal_name varchar(50), subgoal_dim varchar(50), alternative_id int, rationale varchar(1000));
+  create temporary table temp_goaltree (id int,environment varchar(50),goal_name varchar(200), goal_dim varchar(50), ref_type varchar(50), subgoal_name varchar(200), subgoal_dim varchar(50), alternative_id int, rationale varchar(1000));
 
   if caseFilter = 1
   then
@@ -11574,7 +11574,7 @@ begin
   declare continue handler for not found set done = 1;
   
   drop table if exists temp_obstacletree;
-  create temporary table temp_obstacletree (id int,environment varchar(50),goal_name varchar(50), goal_dim varchar(50), ref_type varchar(50), subgoal_name varchar(50), subgoal_dim varchar(50), alternative_id int, rationale varchar(1000));
+  create temporary table temp_obstacletree (id int,environment varchar(50),goal_name varchar(200), goal_dim varchar(50), ref_type varchar(50), subgoal_name varchar(200), subgoal_dim varchar(50), alternative_id int, rationale varchar(1000));
 
   select id into obsId from obstacle where name = obsName;
   select id into environmentId from environment where name = envName;
