@@ -1377,6 +1377,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         cName,ifName = dimensionName.split('_')
         curs.execute('select interfaceId(%s)',(ifName))
       else:
+        dimensionName = self.conn.escape_string(dimensionName)
         curs.execute('call dimensionId(%s,%s)',(dimensionName,dimensionTable))
 
       if (curs.rowcount == -1):
