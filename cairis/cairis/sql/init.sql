@@ -625,7 +625,7 @@ CREATE TABLE threat_type (
 ) ENGINE=INNODB;
 CREATE TABLE threat (
   id INT NOT NULL,
-  name VARCHAR(50) NOT NULL,
+  name VARCHAR(200) NOT NULL,
   threat_type_id INT NOT NULL,
   method VARCHAR(4000) NOT NULL,
   PRIMARY KEY(id),
@@ -633,8 +633,8 @@ CREATE TABLE threat (
 ) ENGINE=INNODB;
 CREATE TABLE threat_directory (
   id INT NOT NULL,
-  label VARCHAR(50) NOT NULL,
-  name VARCHAR(100) NOT NULL,
+  label VARCHAR(200) NOT NULL,
+  name VARCHAR(200) NOT NULL,
   description VARCHAR(4000) NOT NULL,
   threat_type_id INT NOT NULL,
   reference VARCHAR(100) NOT NULL,
@@ -694,8 +694,8 @@ CREATE TABLE vulnerability (
 ) ENGINE=INNODB;
 CREATE TABLE vulnerability_directory (
   id INT NOT NULL,
-  label VARCHAR(50) NOT NULL,
-  name VARCHAR(100) NOT NULL,
+  label VARCHAR(200) NOT NULL,
+  name VARCHAR(200) NOT NULL,
   description VARCHAR(4000) NOT NULL,
   vulnerability_type_id INT NOT NULL,
   reference VARCHAR(100) NOT NULL,
