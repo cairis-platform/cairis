@@ -794,7 +794,7 @@ delimiter //
 create procedure assetProperties(in assetId int,in environmentId int)
 begin
   declare compositeCount int;
-  declare duplicatePolicy varchar(50);
+  declare duplicatePolicy varchar(200);
   declare overridingEnvironmentId int;
   declare cProperty int;
   declare iProperty int;
@@ -934,7 +934,7 @@ end;
 create procedure suppressedAssetProperties(in assetId int,in environmentId int)
 begin
   declare compositeCount int;
-  declare duplicatePolicy varchar(50);
+  declare duplicatePolicy varchar(200);
   declare overridingEnvironmentId int;
   declare cProperty int;
   declare iProperty int;
@@ -1077,7 +1077,7 @@ end;
 create procedure threatProperties(in threatId int,in environmentId int)
 begin
   declare compositeCount int;
-  declare duplicatePolicy varchar(50);
+  declare duplicatePolicy varchar(200);
   declare overridingEnvironmentId int;
   declare cProperty int;
   declare iProperty int;
@@ -1217,7 +1217,7 @@ end;
 create procedure suppressedThreatProperties(in threatId int,in environmentId int)
 begin
   declare compositeCount int;
-  declare duplicatePolicy varchar(50);
+  declare duplicatePolicy varchar(200);
   declare overridingEnvironmentId int;
   declare cProperty int;
   declare iProperty int;
@@ -1359,7 +1359,7 @@ end;
 create procedure countermeasureProperties(in cmId int,in environmentId int)
 begin
   declare compositeCount int;
-  declare duplicatePolicy varchar(50);
+  declare duplicatePolicy varchar(200);
   declare overridingEnvironmentId int;
   declare cProperty int;
   declare iProperty int;
@@ -1499,7 +1499,7 @@ end;
 create procedure suppressedCountermeasureProperties(in cmId int,in environmentId int)
 begin
   declare compositeCount int;
-  declare duplicatePolicy varchar(50);
+  declare duplicatePolicy varchar(200);
   declare overridingEnvironmentId int;
   declare cProperty int;
   declare iProperty int;
@@ -2103,16 +2103,16 @@ end
 //
 
 create function threat_likelihood(threatId int,environmentId int) 
-returns varchar(50)
+returns varchar(200)
 deterministic 
 begin
   declare compositeCount int;
-  declare duplicatePolicy varchar(50);
+  declare duplicatePolicy varchar(200);
   declare overridingEnvironmentId int;
   declare workingLikelihoodId int;
   declare currentEnvironmentId int;
   declare currentLikelihoodId int;
-  declare likelihoodName varchar(50);
+  declare likelihoodName varchar(200);
   declare done int default 0;
   declare lhoodCursor cursor for select environment_id,likelihood_id from threat_likelihood where threat_id = threatId and environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId);
   declare continue handler for not found set done = 1;
@@ -2160,16 +2160,16 @@ end
 //
 
 create function vulnerability_severity(vulId int,environmentId int)
-returns varchar(50)
+returns varchar(200)
 deterministic
 begin
   declare compositeCount int;
-  declare duplicatePolicy varchar(50);
+  declare duplicatePolicy varchar(200);
   declare overridingEnvironmentId int;
   declare workingSeverityId int;
   declare currentEnvironmentId int;
   declare currentSeverityId int;
-  declare severityName varchar(50);
+  declare severityName varchar(200);
   declare done int default 0;
   declare sevCursor cursor for select environment_id,severity_id from vulnerability_severity where vulnerability_id = vulId and environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId);
   declare continue handler for not found set done = 1;

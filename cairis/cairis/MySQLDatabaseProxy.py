@@ -5078,8 +5078,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addObstacle(self,parameters):
     obsId = self.newId()
-    obsName = parameters.name()
-    obsOrig = parameters.originator()
+    obsName = parameters.name().encode('utf-8')
+    obsOrig = parameters.originator().encode('utf-8')
     tags = parameters.tags()
     try:
       curs = self.conn.cursor()

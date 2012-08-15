@@ -379,7 +379,7 @@ CREATE TABLE countermeasure_value (
 ) ENGINE=INNODB;
 CREATE TABLE threat_value (
   id INT NOT NULL, 
-  name VARCHAR(50), 
+  name VARCHAR(200), 
   description VARCHAR(4000), 
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
