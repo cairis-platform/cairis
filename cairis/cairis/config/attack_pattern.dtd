@@ -51,6 +51,8 @@
 <!ELEMENT structure EMPTY>
 <!ATTLIST structure attack CDATA #REQUIRED>
 <!ATTLIST structure exploit CDATA #REQUIRED>
+<!ATTLIST structure attack_obstacle CDATA #IMPLIED>
+<!ATTLIST structure exploit_obstacle CDATA #IMPLIED>
 
 <!ELEMENT participant (motive+,capability+)>
 <!ATTLIST participant name CDATA #REQUIRED>

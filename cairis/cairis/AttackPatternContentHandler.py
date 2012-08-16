@@ -64,6 +64,8 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     self.theEnvironment = ''
     self.theAttack = ''
     self.theExploit = ''
+    self.theAttackObstacle = ''
+    self.theExploitObstacle = ''
     self.theParticipants = []
     self.theTargets = []
     self.theExploits = []
@@ -169,6 +171,16 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     elif (name == 'structure'):
       self.theAttack = attrs['attack']
       self.theExploit = attrs['exploit']
+      try:
+        self.theAttackObstacle = attrs['attack_obstacle']
+      except KeyError:
+        self.theAttackObstacle = '' 
+
+      try:
+        self.theExploitObstacle = attrs['exploit_obstacle']
+      except KeyError:
+        self.theExploitObstacle = '' 
+
     elif (name == 'participant'):
       self.theParticipant = attrs['name']
     elif (name == 'motive'):
@@ -311,6 +323,11 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
       thrRows = self.dbProxy.getThreatDirectory(self.theAttack)
       thrData = thrRows[0]
       self.theThreatParameters = ThreatParameters(self.theAttack,thrData[3],thrData[2],[],[tp])
+
+      if (self.theAttackObstacle != ''):
+        self.theObstacleAssociationParameters.append(GoalAssociationParameters(self.theEnvironment,self.theAttackObstacle,'obstacle','and',self.theAttack,'threat',0,'None'))
+      if (self.theExploitObstacle != ''):
+        self.theObstacleAssociationParameters.append(GoalAssociationParameters(self.theEnvironment,self.theExploitObstacle,'obstacle','and',self.theExploit,'vulnerability',0,'None'))
 
       rep = MisuseCaseEnvironmentProperties(self.theEnvironment,self.theImplementation )
       mc = MisuseCase(-1,'Exploit ' + self.thePatternName,[rep],self.thePatternName)

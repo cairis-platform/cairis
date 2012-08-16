@@ -28,6 +28,8 @@ class DomainValueContentHandler(ContentHandler,EntityResolver):
     self.theValuesMap['countermeasure_value'] = []
     self.theValuesMap['severity'] = []
     self.theValuesMap['likelihood'] = []
+    self.theValuesMap['capability'] = []
+    self.theValuesMap['motivation'] = []
     b = Borg()
     self.configDir = b.configDir
     self.resetAttributes()
@@ -36,7 +38,7 @@ class DomainValueContentHandler(ContentHandler,EntityResolver):
     return self.configDir + '/domainvalues.dtd'
 
   def values(self):
-    return (self.theValuesMap['threat_value'],self.theValuesMap['risk_class'],self.theValuesMap['countermeasure_value'],self.theValuesMap['severity'],self.theValuesMap['likelihood'])
+    return (self.theValuesMap['threat_value'],self.theValuesMap['risk_class'],self.theValuesMap['countermeasure_value'],self.theValuesMap['severity'],self.theValuesMap['likelihood'],self.theValuesMap['capability'],self.theValuesMap['motivation'])
 
   def resetAttributes(self):
     self.inDescription = 0
@@ -49,6 +51,12 @@ class DomainValueContentHandler(ContentHandler,EntityResolver):
     elif (name == 'threat_value') or (name == 'countermeasure_value'):
       self.theName = attrs['name']
       self.theTypeName = name
+    elif (name == 'capability_value'):
+      self.theName = attrs['name']
+      self.theTypeName = 'capability'
+    elif (name == 'motivation_value'):
+      self.theName = attrs['name']
+      self.theTypeName = 'motivation'
     elif name == 'risk_value':
       self.theName = attrs['name']
       self.theTypeName = 'risk_class'
@@ -65,7 +73,7 @@ class DomainValueContentHandler(ContentHandler,EntityResolver):
       self.inDescription = 0
 
   def endElement(self,name):
-    if (name == 'threat_value') or (name == 'risk_value') or (name == 'countermeasure_value') or (name == 'severity_value') or (name == 'likelihood_value'):
+    if (name == 'threat_value') or (name == 'risk_value') or (name == 'countermeasure_value') or (name == 'severity_value') or (name == 'likelihood_value') or (name == 'capability') or (name == 'motivation'):
       p = ValueTypeParameters(self.theName,self.theDescription,self.theTypeName)
       self.theValuesMap[self.theTypeName].append(p)
       self.resetAttributes()

@@ -19,7 +19,7 @@
 
 <!-- DTD for template CAIRIS domain values -->
 
-<!ELEMENT domainvalues (threat_value+,risk_value+,countermeasure_value+,severity_value+,likelihood_value+)>
+<!ELEMENT domainvalues (threat_value*,risk_value*,countermeasure_value*,severity_value*,likelihood_value*,motivation_value*,capability_value*)>
 <!ELEMENT threat_value (description)>
 <!ATTLIST threat_value value (None | Low | Medium | High) #REQUIRED>
 <!ELEMENT risk_value (description)>
@@ -30,4 +30,8 @@
 <!ATTLIST severity_value value (Negligible | Marginal | Critical | Catastrophic) #REQUIRED>
 <!ELEMENT likelihood_value (description)>
 <!ATTLIST likelihood_value value (Incredible | Improbable | Remote | Occasional | Probable | Frequent) #REQUIRED>
+<!ELEMENT motivation_value (description)>
+<!ATTLIST motivation_value name CDATA #REQUIRED>
+<!ELEMENT capability_value (description)>
+<!ATTLIST capability_value name CDATA #REQUIRED>
 <!ELEMENT description (#PCDATA)>

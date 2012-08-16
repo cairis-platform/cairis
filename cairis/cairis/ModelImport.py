@@ -79,8 +79,9 @@ def importAttackPattern(importFile):
   risk = handler.risk()
 
   obsTxt = importRequirements([],[],handler.obstacles(),[],[])
+  raTxt = importRiskAnalysis([],assets,[vulnerability],attackers,[threat],[risk],[],[])
   assocTxt = importAssociations([],handler.obstacleAssociations(),[])
-  return obsTxt + assocTxt + importRiskAnalysis([],assets,[vulnerability],attackers,[threat],[risk],[],[])
+  return obsTxt + assocTxt + raTxt
 
 def importTVTypeFile(importFile,isOverwrite=1):
   parser = xml.sax.make_parser()
@@ -498,15 +499,17 @@ def importDomainValuesFile(importFile):
   parser.setContentHandler(handler)
   parser.setEntityResolver(handler)
   parser.parse(importFile)
-  tvValues,rvValues,cvValues,svValues,lvValues = handler.values()
-  return importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues)
+  tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues = handler.values()
+  return importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues)
 
-def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues):
+def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues):
   noOfTvs = len(tvValues)
   noOfRvs = len(rvValues)
   noOfCvs = len(cvValues)
   noOfSvs = len(svValues)
   noOfLvs = len(lvValues)
+  noOfCapVs = len(capValues)
+  noOfMotVs = len(motValues)
  
   b = Borg()
 
@@ -540,6 +543,13 @@ def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues):
       lvp.setId(tId)
       b.dbProxy.updateValueType(lvp)
       tId += 1
+  if (noOfCapVs > 0):
+    for capvp in capValues:
+      b.dbProxy.addValueType(capvp)
+  if (noOfMotVs > 0):
+    for motvp in motValues:
+      b.dbProxy.addValueType(motvp)
+
   msgStr = 'Imported domain values'
   return msgStr
 
