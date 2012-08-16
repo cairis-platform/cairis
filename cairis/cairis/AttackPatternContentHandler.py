@@ -144,7 +144,7 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
       self.theSeverity = attrs['severity']
     elif (name == 'obstacle'):
       self.theObstacleName = attrs['name']
-      self.theObstacleCategory = attrs['category']
+      self.theObstacleCategory = attrs['category'].replace('_',' ')
     elif (name == 'probability'):
       self.theProbability = attrs['value']
     elif (name == 'obstacle_association'):
