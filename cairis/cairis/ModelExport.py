@@ -203,12 +203,12 @@ def exportArchitecture(outFile):
     buf += sTxt + '\n'
     noAPs += 1
     if (aType == 'component'):
-      caName = aName.replace(' ','_') + 'AssetModel'
-      cgName = aName.replace(' ','_') + 'GoalModel'
+      caName = aName.replace(' ','_') + 'AssetModel.jpg'
+      cgName = aName.replace(' ','_') + 'GoalModel.jpg'
       buildComponentAssetModel(b.dbProxy,aName,caName)
       buildComponentGoalModel(b.dbProxy,aName,cgName)
     else:
-      graphName = aName.replace(' ','_') + 'ComponentModel'
+      graphName = aName.replace(' ','_') + 'ComponentModel.jpg'
       buildComponentModel(b.dbProxy,aName,graphName)
   
   aFile = open(outFile,'w')

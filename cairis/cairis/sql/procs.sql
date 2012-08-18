@@ -20007,6 +20007,10 @@ begin
   declare ifType varchar(20);
   declare arName varchar(50);
   declare prName varchar(50);
+  declare taName varchar(50);
+  declare taType varchar(50);
+  declare taDesc varchar(1000);
+  declare suName varchar(50);
   declare cgId int;
   declare cgName varchar(255);
   declare cgDesc varchar(4000);
@@ -20030,6 +20034,7 @@ begin
   declare done int default 0;
   declare cCursor cursor for select id,name,description from component order by 2;
   declare cifCursor cursor for select i.name,ci.required_id,ar.name,pr.name from component_interface ci, interface i, access_right ar, privilege pr where ci.component_id = cId and ci.interface_id = i.id and ci.access_right_id = ar.id and ci.privilege_id = pr.id;
+  declare caCursor cursor for select ta.name,at.name,ta.description,su.name,ar.name from component_asset ca, template_asset ta, asset_type at, surface_type su, access_right ar where ca.component_id = cId and ca.asset_id = ta.id and ta.asset_type_id = at.id and ta.surface_type_id = su.id and ta.access_right_id = ar.id order by 1;
   declare cgCursor cursor for select tg.id,tg.name,tg.definition from template_goal tg, component_template_goal ctg where ctg.component_id = cId and ctg.template_goal_id = tg.id order by 2;
   declare cgConcernCursor cursor for select ifnull(ta.name,'None') from template_goal_concern tgc, template_asset ta where tgc.template_goal_id = cgId and tgc.template_asset_id = ta.id order by 1; 
   declare cgRespCursor cursor for select ifnull(r.name,'None') from template_goal_responsibility tgr, role r where tgr.template_goal_id = cgId and tgr.role_id = r.id order by 1;
@@ -20070,7 +20075,21 @@ begin
     close cifCursor;
     set done = 0;
 
-    set buf = concat(buf,'\nh3. Structure\n\n!',replace(cName,' ','_'),'ComponentModel.jpg\n\nh3. Component Requirements\n\n!',replace(cName,' ','_'),'GoalModel.jpg\n\n| Name | Definition | Concerns | Responsibility |\n');
+    set buf = concat(buf,'\nh3. Structure\n\n!',replace(cName,' ','_'),'AssetModel.jpg\n\n| Name | Type | Description | Surface | Access Rights |\n');
+
+    open caCursor;
+    ca_loop: loop
+      fetch caCursor into taName, taType, taDesc, suName, arName;
+      if done = 1
+      then
+        leave ca_loop;
+      end if;
+      set buf = concat(buf,'| ',taName,' | ',taType,' | ',taDesc,' | ',suName,' | ',arName,' |\n');
+    end loop ca_loop;
+    close caCursor;
+    set done = 0;
+
+    set buf = concat(buf,'\nh3. Component Requirements\n\n!',replace(cName,' ','_'),'GoalModel.jpg\n\n| Name | Definition | Concerns | Responsibility |\n');
     open cgCursor;
     cg_loop: loop
       fetch cgCursor into cgId, cgName, cgDesc;
@@ -20128,7 +20147,7 @@ begin
     then
       leave ap_loop;
     end if;
-    set buf = concat('h2. ',apName,'\n\n!',replace(apName,' ','_'),'CC.jpg!\n\nh3. Synopsis\n\n',apDesc,'\n\nh3. Components\n\n');
+    set buf = concat('h2. ',apName,'\n\n!',replace(apName,' ','_'),'ComponentModel.jpg!\n\nh3. Synopsis\n\n',apDesc,'\n\nh3. Components\n\n');
 
     open apcCursor;
     apc_loop: loop
