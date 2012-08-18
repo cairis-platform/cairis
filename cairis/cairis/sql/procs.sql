@@ -654,6 +654,7 @@ drop procedure if exists redmineGoals;
 drop procedure if exists redmineSubGoals;
 drop procedure if exists dependentLabels;
 drop procedure if exists redmineScenarios;
+drop procedure if exists redmineArchitecture;
 drop procedure if exists tvTypesToXml;
 drop procedure if exists domainValuesToXml;
 drop procedure if exists conceptMapModel;
@@ -19993,6 +19994,172 @@ begin
     set done = 0;
   end loop tg_loop;
   select goal_name, obstacle_name from temp_goalobstacle order by probability;
+end
+//
+
+create procedure redmineArchitecture()
+begin
+  declare cId int;
+  declare cName varchar(255);
+  declare cDesc varchar(255);
+  declare ifName varchar(255);
+  declare reqId int;
+  declare ifType varchar(20);
+  declare arName varchar(50);
+  declare prName varchar(50);
+  declare cgId int;
+  declare cgName varchar(255);
+  declare cgDesc varchar(4000);
+  declare apId int;
+  declare cgConcerns varchar(1000);
+  declare cgResponsibilities varchar(1000);
+  declare concernName varchar(50);
+  declare respName varchar(255);
+  declare apName varchar(255);
+  declare apDesc varchar(255);
+  declare connName varchar(255);
+  declare fromName varchar(255);
+  declare fromRole varchar(255);
+  declare fromIf varchar(255);
+  declare toName varchar(255);
+  declare toRole varchar(255);
+  declare toIf varchar(255);
+  declare connAsset varchar(50);
+  declare buf varchar(90000000) default '';
+
+  declare done int default 0;
+  declare cCursor cursor for select id,name,description from component order by 2;
+  declare cifCursor cursor for select i.name,ci.required_id,ar.name,pr.name from component_interface ci, interface i, access_right ar, privilege pr where ci.component_id = cId and ci.interface_id = i.id and ci.access_right_id = ar.id and ci.privilege_id = pr.id;
+  declare cgCursor cursor for select tg.id,tg.name,tg.definition from template_goal tg, component_template_goal ctg where ctg.component_id = cId and ctg.template_goal_id = tg.id order by 2;
+  declare cgConcernCursor cursor for select ifnull(ta.name,'None') from template_goal_concern tgc, template_asset ta where tgc.template_goal_id = cgId and tgc.template_asset_id = ta.id order by 1; 
+  declare cgRespCursor cursor for select ifnull(r.name,'None') from template_goal_responsibility tgr, role r where tgr.template_goal_id = cgId and tgr.role_id = r.id order by 1;
+  declare apCursor cursor for select id,name,synopsis from component_view;
+  declare apcCursor cursor for select c.name from component_view_component cvc, component c where cvc.component_view_id = apId and cvc.component_id = c.id order by 1;
+  declare connCursor cursor for select c.name,fc.name,c.from_role,fif.name,tc.name,c.to_role,tif.name,ta.name,pr.name,ar.name from connector c, component fc, component tc, interface fif, interface tif, template_asset ta, protocol pr, access_right ar where c.component_view_id = apId and c.from_component_id = fc.id and c.from_interface_id = fif.id and c.to_component_id = tc.id and c.to_interface_id = tif.id and c.template_asset_id = ta.id and c.protocol_id = pr.id and c.access_right_id = ar.id order by 1;
+
+  declare continue handler for not found set done = 1;
+
+  drop table if exists temp_architecture;
+  create temporary table temp_architecture (name varchar(200),artifact_type varchar(50),text varchar(90000000));
+
+  set done = 0;
+
+  open cCursor;
+  c_loop: loop
+    fetch cCursor into cId,cName,cDesc;
+    if done = 1
+    then
+      leave c_loop;
+    end if;
+    set buf = concat('h2. ',cName,'\n\n','h3. Description\n\n',cDesc,'\n\nh3. Interfaces\n\n| Interface | Type | Access Right | Privilege |\n');
+    open cifCursor;
+    cif_loop: loop
+      fetch cifCursor into ifName,reqId,arName,prName;
+      if done = 1
+      then
+        leave cif_loop;
+      end if;
+      if reqId = 1
+      then
+        set ifType = 'provided';
+      else
+        set ifType = 'required';
+      end if;
+      set buf = concat(buf,'| ',ifName,' | ',ifType,' | ',arName,' | ',prName,' |\n');
+    end loop cif_loop;
+    close cifCursor;
+    set done = 0;
+
+    set buf = concat(buf,'\nh3. Structure\n\n!',replace(cName,' ','_'),'ComponentModel.jpg\n\nh3. Component Requirements\n\n!',replace(cName,' ','_'),'GoalModel.jpg\n\n| Name | Definition | Concerns | Responsibility |\n');
+    open cgCursor;
+    cg_loop: loop
+      fetch cgCursor into cgId, cgName, cgDesc;
+      if done = 1
+      then
+        leave cg_loop;
+      end if;
+      set cgConcerns = '';
+      open cgConcernCursor;
+      cgConcern_loop: loop
+        fetch cgConcernCursor into concernName;
+        if done = 1
+        then
+          leave cgConcern_loop;
+        end if;
+        if cgConcerns != ''
+        then
+          set cgConcerns = concat(cgConcerns,', ');
+        end if;
+        set cgConcerns = concat(cgConcerns,concernName);
+      end loop cgConcern_loop;
+      close cgConcernCursor;
+      set done = 0;
+
+      set cgResponsibilities = '';
+      open cgRespCursor;
+      cgResp_loop: loop
+        fetch cgRespCursor into respName;
+        if done = 1
+        then
+          leave cgResp_loop;
+        end if;
+        if cgResponsibilities != ''
+        then
+          set cgResponsibilities = concat(cgResponsibilities,', ');
+        end if;
+        set cgResponsibilities = concat(cgResponsibilities,respName);
+      end loop cgResp_loop;
+      close cgRespCursor;
+      set done = 0;
+      set buf = concat(buf,'| ',cgName,' | ',cgDesc,' | ',cgConcerns,' | ',cgResponsibilities,' |\n');
+    end loop cg_loop;
+    close cgCursor;
+    set done = 0;
+
+    insert into temp_architecture (name,artifact_type,text) values(cName,'component',ifnull(buf,''));
+  end loop c_loop;
+  close cCursor;
+  set done = 0;
+
+  open apCursor;
+  ap_loop: loop
+    fetch apCursor into apId,apName,apDesc;
+    if done = 1
+    then
+      leave ap_loop;
+    end if;
+    set buf = concat('h2. ',apName,'\n\n!',replace(apName,' ','_'),'CC.jpg!\n\nh3. Synopsis\n\n',apDesc,'\n\nh3. Components\n\n');
+
+    open apcCursor;
+    apc_loop: loop
+      fetch apcCursor into cName;
+      if done = 1
+      then
+        leave apc_loop;
+      end if;
+      set buf = concat(buf,'* ',cName,'\n');
+    end loop apc_loop;
+    close apcCursor;
+    set done = 0;
+    set buf = concat(buf,'\nh2. Connectors\n\n| Connector | From | Role | Interface | To | Role | Interface | Asset | Protocol | Access Right |\n');
+
+    open connCursor;
+    conn_loop: loop
+      fetch connCursor into connName,fromName,fromRole,fromIf,toName,toRole,toIf,connAsset,prName,arName;
+      if done = 1
+      then
+        leave conn_loop;
+      end if;
+      set buf = concat(buf,'| ',connName,' | ',fromName,' | ',fromRole,' | ',fromIf,' | ',toName,' | ',toRole,' | ',toIf,' | ',connAsset,' | ',prName,' | ',arName,' |\n');
+    end loop conn_loop;
+    close connCursor;
+    set done = 0;
+    set buf = concat(buf,'\n');
+    insert into temp_architecture (name,artifact_type,text) values(apName,'architectural_pattern',ifnull(buf,''));
+  end loop ap_loop;
+  close apCursor;
+
+  select name,artifact_type,text from temp_architecture;
 end
 //
 

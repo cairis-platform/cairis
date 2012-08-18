@@ -18,9 +18,13 @@
 
 from Borg import Borg
 from kaosxdot import KaosXDotParser
+from componentxdot import ComponentXDotParser
 import cairo
 import pangocairo
 from ConceptMapModel import ConceptMapModel
+from ComponentModel import ComponentModel
+from AssetModel import AssetModel
+from KaosModel import KaosModel
 import os
 import re
 
@@ -89,6 +93,7 @@ def exportRedmineScenarios(outFile):
   sFile.write(buf)
   sFile.close()
   return 'Exported ' + str(noScenarios) + ' scenarios.'
+
   
 def exportRedmineUseCases(outFile):
   b = Borg()
@@ -162,3 +167,51 @@ def exportGRL(outFileName,personaName,taskName,envName):
   rFile.write(buf)
   rFile.close()
   return 'Exported GRL for ' + personaName + ' in ' + taskName + ' situated in environment ' + envName
+
+def buildComponentModel(p,apName,graphName):
+  interfaces,connectors = p.componentView(apName)
+  model = ComponentModel(interfaces,connectors)
+  parser = ComponentXDotParser(model.graph())
+  graph = parser.parse()
+  drawGraph(graph,graphName)
+  return True
+
+def buildComponentAssetModel(p,cName,graphName):
+  assocs = p.componentAssetModel(cName)
+  model = AssetModel(assocs.values(),'')
+  parser = KaosXDotParser('class',model.graph())
+  graph = parser.parse()
+  drawGraph(graph,graphName)
+  return True
+
+def buildComponentGoalModel(p,cName,graphName):
+  assocs = p.componentGoalModel(cName)
+  model = KaosModel(assocs.values(),'','template_goal')
+  parser = KaosXDotParser('goal',model.graph())
+  graph = parser.parse()
+  drawGraph(graph,graphName)
+  return True
+
+
+def exportArchitecture(outFile):
+  b = Borg()
+  rmArchitecture = b.dbProxy.redmineArchitecture()
+
+  buf = ''
+  noAPs = 0
+  for aName,aType,sTxt in rmArchitecture:
+    buf += sTxt + '\n'
+    noAPs += 1
+    if (aType == 'component'):
+      caName = aName.replace(' ','_') + 'AssetModel'
+      cgName = aName.replace(' ','_') + 'GoalModel'
+      buildComponentAssetModel(b.dbProxy,aName,caName)
+      buildComponentGoalModel(b.dbProxy,aName,cgName)
+    else:
+      graphName = aName.replace(' ','_') + 'ComponentModel'
+      buildComponentModel(b.dbProxy,aName,graphName)
+  
+  aFile = open(outFile,'w')
+  aFile.write(buf)
+  aFile.close()
+  return 'Exported ' + str(noAPs) + ' architectural patterns.'

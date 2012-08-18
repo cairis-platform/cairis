@@ -8559,6 +8559,27 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL exporting scenarios to Redmine (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def redmineArchitecture(self):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call redmineArchitecture()')
+      if (curs.rowcount == -1):
+        exceptionText = 'Error exporting architecture to Redmine'
+        raise DatabaseProxyException(exceptionText) 
+      aps = []
+      for row in curs.fetchall():
+        row = list(row)
+        aName = row[0]
+        aType = row[1]
+        aTxt = row[2]
+        aps.append((row[0],row[1],row[2]))
+      curs.close()
+      return aps
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL exporting architecture to Redmine (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
   def tvTypesToXml(self,includeHeader=True):
     try:
       curs = self.conn.cursor()
