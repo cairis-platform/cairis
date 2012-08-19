@@ -1078,6 +1078,7 @@ CREATE TABLE risk (
   name VARCHAR(200) NOT NULL,
   threat_id INT NOT NULL,
   vulnerability_id INT NOT NULL,
+  notes VARCHAR(4000) DEFAULT '',
   PRIMARY KEY(id,threat_id,vulnerability_id),
   FOREIGN KEY(threat_id) REFERENCES threat(id),
   FOREIGN KEY(vulnerability_id) REFERENCES vulnerability(id)

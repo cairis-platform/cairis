@@ -789,6 +789,8 @@ drop procedure if exists obstacle_probability;
 drop procedure if exists candidateGoalObstacles;
 drop procedure if exists addPersonaMotive;
 drop procedure if exists addPersonaCapability;
+drop procedure if exists riskObstacleTree;
+drop procedure if exists obstacleParents;
 
 delimiter //
 
@@ -7806,23 +7808,23 @@ begin
 end
 //
 
-create procedure addRisk(in threatName text, in vulName text, in riskId int, in riskName text)
+create procedure addRisk(in threatName text, in vulName text, in riskId int, in riskName text,in cTxt text)
 begin
   declare threatId int;
   declare vulId int;
   select id into threatId from threat where name = threatName;
   select id into vulId from vulnerability where name = vulName;
-  insert into risk(id,name,threat_id,vulnerability_id) values (riskId,riskName,threatId,vulId);
+  insert into risk(id,name,threat_id,vulnerability_id,notes) values (riskId,riskName,threatId,vulId,cTxt);
 end
 //
 
-create procedure updateRisk(in threatName text, in vulName text, in riskId int, in riskName text)
+create procedure updateRisk(in threatName text, in vulName text, in riskId int, in riskName text,in cTxt text)
 begin
   declare threatId int;
   declare vulId int;
   select id into threatId from threat where name = threatName;
   select id into vulId from vulnerability where name = vulName;
-  update risk set name = riskName,threat_id = threatId,vulnerability_id = vulId where id = riskId;
+  update risk set name = riskName,threat_id = threatId,vulnerability_id = vulId,notes = cTxt where id = riskId;
 
 end
 //
@@ -20179,6 +20181,127 @@ begin
   close apCursor;
 
   select name,artifact_type,text from temp_architecture;
+end
+//
+
+create procedure riskObstacleTree(in riskName text, in envName text)
+begin
+  declare riskId int;
+  declare obsId int;
+  declare soId int;
+  declare envId int;
+  declare done int default 0;
+  declare rootCount int;
+  declare obsCursor cursor for select goal_id from obstacleobstacle_goalassociation where environment_id = envId and subgoal_id in 
+    (select ga.goal_id from obstaclevulnerability_goalassociation ga, risk r, environment_vulnerability ev where r.id = riskId and r.vulnerability_id = ev.vulnerability_id and ev.environment_id = envId and ev.vulnerability_id = ga.subgoal_id and ev.environment_id = ga.environment_id
+     union
+     select ga.goal_id from obstaclethreat_goalassociation ga, risk r, environment_threat et where r.id = riskId and r.threat_id = et.threat_id and et.environment_id = envId and et.threat_id = ga.subgoal_id and et.environment_id = ga.environment_id);
+
+  declare soCursor cursor for select subgoal_id from obstacleobstacle_goalassociation where goal_id = obsId and environment_id = envId;
+  declare rootCursor cursor for select obstacle_id from temp_rootobstacle;
+  declare continue handler for not found set done = 1;
+
+  drop table if exists temp_rootobstacle;
+  create temporary table temp_rootobstacle (obstacle_id int,obstacle_name varchar(200));
+
+  drop table if exists temp_obstacletree;
+  create temporary table temp_obstacletree (id int,environment varchar(50),goal_name varchar(200), goal_dim varchar(50), ref_type varchar(50), subgoal_name varchar(200), subgoal_dim varchar(50), alternative_id int, rationale varchar(1000));
+
+  select id into riskId from risk where name = riskName;
+  select id into envId from environment where name = envName;
+
+  select count(goal_id) into rootCount from obstacleobstacle_goalassociation where environment_id = envId and subgoal_id in
+    (select ga.goal_id from obstaclevulnerability_goalassociation ga, risk r, environment_vulnerability ev where r.id = riskId and r.vulnerability_id = ev.vulnerability_id and ev.environment_id = envId and ev.vulnerability_id = ga.subgoal_id and ev.environment_id = ga.environment_id
+     union
+     select ga.goal_id from obstaclethreat_goalassociation ga, risk r, environment_threat et where r.id = riskId and r.threat_id = et.threat_id and et.environment_id = envId and et.threat_id = ga.subgoal_id and et.environment_id = ga.environment_id);
+    
+  if rootCount = 0
+  then
+    insert into temp_rootobstacle(obstacle_id,obstacle_name) select id,name from obstacle where id = leafObsId;
+  end if;
+
+  open obsCursor;
+  obs_loop: loop
+    fetch obsCursor into obsId;
+    if done = 1
+    then
+      leave obs_loop;
+    end if;
+    call obstacleParents(obsId,envId);
+    set done = 0;
+  end loop obs_loop;
+  close obsCursor;
+  set done = 0;
+
+  open rootCursor;
+  root_loop: loop
+    fetch rootCursor into obsId;
+    if done = 1
+    then
+      leave root_loop;
+    end if;
+
+    insert into temp_obstacletree (id,environment,goal_name,goal_dim,ref_type,subgoal_name,subgoal_dim,alternative_id,rationale)
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'obstacle' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacleobstacle_goalassociation ga, environment e, obstacle hg, reference_type rt, obstacle tg where ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = envId
+    union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'role' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclerole_goalassociation ga, environment e, obstacle hg, reference_type rt, role tg where ga.environment_id = envId and ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclegoal_goalassociation ga, environment e, obstacle hg, reference_type rt, goal tg where ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = envId
+    union
+    select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclethreat_goalassociation ot, risk ri, response re, response_goal rg, environment_obstacle eo, environment_threat et, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ot.goal_id = obsId and et.environment_id = envId and et.environment_id = eo.environment_id and eo.environment_id = er.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and et.environment_id = e.id and et.threat_id = ot.subgoal_id and et.environment_id = ot.environment_id and ot.goal_id = hg.id and ot.subgoal_id = ri.threat_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
+    union
+    select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclevulnerability_goalassociation ov, risk ri, response re, response_goal rg, environment_obstacle eo, environment_vulnerability ev, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ov.goal_id = obsId and ev.environment_id = envId and ev.environment_id = eo.environment_id and eo.environment_id = er.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and ev.environment_id = e.id and ev.vulnerability_id = ov.subgoal_id and ev.environment_id = ov.environment_id and ov.goal_id = hg.id and ov.subgoal_id = ri.vulnerability_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
+    union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,concat(rm.short_code,'-',tg.label) subgoal_name,'requirement' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclerequirement_goalassociation ga, environment e, obstacle hg, reference_type rt, requirement tg, asset_requirement rmr, asset rm where ga.goal_id = obsId and ga.environment_id = envId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and tg.version = (select max(i.version) from requirement i where i.id = tg.id) and ga.environment_id = e.id and tg.id = rmr.requirement_id and rmr.asset_id = rm.id
+    union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,concat(rm.short_code,'-',tg.label) subgoal_name,'requirement' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclerequirement_goalassociation ga, environment e, obstacle hg, reference_type rt, requirement tg, environment_requirement rmr, environment rm where ga.goal_id = obsId and ga.environment_id = envId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and tg.version = (select max(i.version) from requirement i where i.id = tg.id) and rmr.environment_id = e.id and tg.id = rmr.requirement_id and rmr.environment_id = rm.id and rmr.environment_id = ga.environment_id; 
+
+    set done = 0;
+    open soCursor;
+    so_loop: loop
+      fetch soCursor into soId;
+      if done = 1
+      then
+        leave so_loop;
+      end if;
+      call subObstacleTree(soId,envId);
+    end loop so_loop;
+    close soCursor;
+    set done = 0;
+  end loop root_loop;
+  close rootCursor;
+  
+  select distinct goal_name,goal_dim,ref_type,subgoal_name,subgoal_dim,alternative_id,rationale from temp_obstacletree;
+
+
+end
+//
+
+create procedure obstacleParents(in leafObsId int, in envId int)
+begin
+  declare obsId int;
+  declare done int default 0;
+  declare rootCount int;
+  declare obsCursor cursor for select goal_id from obstacleobstacle_goalassociation where environment_id = envId and subgoal_id = leafObsId;
+  declare continue handler for not found set done = 1;
+
+  select count(goal_id) into rootCount from obstacleobstacle_goalassociation where environment_id = envId and subgoal_id = leafObsId;
+  if rootCount = 0
+  then
+    insert into temp_rootobstacle(obstacle_id,obstacle_name) select id,name from obstacle where id = leafObsId;
+  end if;
+
+  open obsCursor;
+  obs_loop: loop
+    fetch obsCursor into obsId;
+    if done = 1
+    then
+      leave obs_loop;
+    end if;
+    call obstacleParents(obsId,envId);
+    set done = 0;
+  end loop obs_loop;
+  close obsCursor;
 end
 //
 

@@ -2321,8 +2321,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       tags = parameters.tags()
       riskId = self.newId()
       riskName = parameters.name()
+      cTxt = parameters.comments()
       curs = self.conn.cursor()
-      curs.execute('call addRisk(%s,%s,%s,%s)',(threatName,vulName,riskId,riskName))
+      curs.execute('call addRisk(%s,%s,%s,%s,%s)',(threatName,vulName,riskId,riskName,cTxt))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new risk ' + str(riskId)
         raise DatabaseProxyException(exceptionText) 
@@ -2345,8 +2346,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       vulName = parameters.vulnerability()
       tags = parameters.tags()
       riskName = parameters.name()
+      cTxt = parameters.comments()
       curs = self.conn.cursor()
-      curs.execute('call updateRisk(%s,%s,%s,%s)',(threatName,vulName,riskId,riskName))
+      curs.execute('call updateRisk(%s,%s,%s,%s,%s)',(threatName,vulName,riskId,riskName,cTxt))
       if (curs.rowcount == -1):
         exceptionText = 'Error updating risk ' + str(riskId)
         raise DatabaseProxyException(exceptionText) 
