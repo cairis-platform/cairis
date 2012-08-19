@@ -29,7 +29,7 @@ if __name__ == '__main__':
   try:
     parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Export to Redmine')
     parser.add_argument('outputFile',help='output file name')
-    parser.add_argument('--type',dest='modelFormat',help='model type to export.  One of requirements, scenarios, usecases, architecture, or GRL')
+    parser.add_argument('--type',dest='modelFormat',help='model type to export.  One of requirements, scenarios, usecases, architecture, attackpatterns or GRL')
     parser.add_argument('--persona',dest='personaName',help='Persona name (relevant for GRL export only)')
     parser.add_argument('--task',dest='taskName',help='Task name (relevant for GRL export only)')
     parser.add_argument('--environment',dest='envName',help='Environment name (relevant for GRL export only)')
@@ -45,6 +45,8 @@ if __name__ == '__main__':
       msgStr += exportRedmineUseCases(args.outputFile)
     elif (args.modelFormat == 'architecture'):
       msgStr += exportArchitecture(args.outputFile)
+    elif (args.modelFormat == 'attackpatterns'):
+      msgStr += exportAttackPatterns(args.outputFile)
     elif (args.modelFormat == 'GRL'):
       if args.personaName == None:
         raise ARMException('Persona name not specified for GRL export')

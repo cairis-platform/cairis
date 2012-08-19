@@ -4373,6 +4373,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     else:
       return self.goalTreeAssociations('call obstacleTree(%s,%s,%s,%s)',goalName,envName,topLevelGoals)
  
+
+
   def taskModel(self,envName,taskName = '',mcFilter=False):
     if (taskName == ''):
       return self.goalAssociations('call taskModel(%s)',envName)
@@ -4413,6 +4415,36 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting goal associations (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def riskObstacleModel(self,riskName,envName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call riskObstacleModel(%s,%s)',(riskName,envName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining risk obstacle model'
+        raise DatabaseProxyException(exceptionText) 
+      associations = {}
+      for row in curs.fetchall():
+        row = list(row)
+        associationId = row[GOALASSOCIATIONS_ID_COL]
+        envName = row[GOALASSOCIATIONS_ENV_COL]
+        goalName = row[GOALASSOCIATIONS_GOAL_COL]
+        goalDimName = row[GOALASSOCIATIONS_GOALDIM_COL]
+        aType = row[GOALASSOCIATIONS_TYPE_COL]
+        subGoalName = row[GOALASSOCIATIONS_SUBGOAL_COL]
+        subGoalDimName = row[GOALASSOCIATIONS_SUBGOALDIM_COL]
+        alternativeId = row[GOALASSOCIATIONS_ALTERNATIVE_COL]
+        rationale = row[GOALASSOCIATIONS_RATIONALE_COL]
+        parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
+        association = ObjectFactory.build(associationId,parameters)
+        asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
+        associations[asLabel] = association
+      curs.close()
+      return associations
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting risk obstacle model (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def goalTreeAssociations(self,procName,goalName,envName,topLevelGoals = 0,caseFilter = 0):
@@ -8580,6 +8612,26 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL exporting architecture to Redmine (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def redmineAttackPatterns(self):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call redmineAttackPatterns()')
+      if (curs.rowcount == -1):
+        exceptionText = 'Error exporting attack patterns Redmine'
+        raise DatabaseProxyException(exceptionText) 
+      aps = []
+      for row in curs.fetchall():
+        row = list(row)
+        aName = row[0]
+        aTxt = row[1]
+        aps.append((row[0],row[1]))
+      curs.close()
+      return aps
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL exporting attack patterns to Redmine (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def tvTypesToXml(self,includeHeader=True):

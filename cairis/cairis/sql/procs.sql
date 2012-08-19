@@ -655,6 +655,7 @@ drop procedure if exists redmineSubGoals;
 drop procedure if exists dependentLabels;
 drop procedure if exists redmineScenarios;
 drop procedure if exists redmineArchitecture;
+drop procedure if exists redmineAttackPatterns;
 drop procedure if exists tvTypesToXml;
 drop procedure if exists domainValuesToXml;
 drop procedure if exists conceptMapModel;
@@ -20271,7 +20272,7 @@ begin
   end loop root_loop;
   close rootCursor;
   
-  select distinct goal_name,goal_dim,ref_type,subgoal_name,subgoal_dim,alternative_id,rationale from temp_obstacletree;
+  select distinct -1,envName,goal_name,goal_dim,ref_type,subgoal_name,subgoal_dim,alternative_id,rationale from temp_obstacletree;
 
 
 end
@@ -20302,6 +20303,41 @@ begin
     set done = 0;
   end loop obs_loop;
   close obsCursor;
+end
+//
+
+create procedure redmineAttackPatterns()
+begin
+  declare riskName varchar(200);
+  declare threatId int;
+  declare vulId int;
+  declare envId int;
+  declare envName varchar(4000);
+  declare buf varchar(90000000) default '';
+  declare done int default 0;
+  declare apCursor cursor for select name,threat_id,vulnerability_id,notes from risk order by 1;
+  declare continue handler for not found set done = 1;
+
+  drop table if exists temp_attackpattern;
+  create temporary table temp_attackpattern (name varchar(200),text varchar(90000000));
+
+  open apCursor;
+  ap_loop: loop
+    fetch apCursor into riskName,threatId,vulId,envName;
+    if done = 1
+    then
+      leave ap_loop;
+    end if;
+    select id into envId from environment where name = envName;
+    if envId is not null
+    then
+      set buf = concat('h2. ',riskName,'\n\nh3. Intent\n\n');
+      insert into temp_attackpattern(name,text) values(riskName,buf);
+    end if;
+  end loop ap_loop;
+  close apCursor;
+
+  select name,text from temp_attackpattern;
 end
 //
 

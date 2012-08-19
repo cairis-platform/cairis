@@ -192,6 +192,13 @@ def buildComponentGoalModel(p,cName,graphName):
   drawGraph(graph,graphName)
   return True
 
+def buildRiskObstacleModel(p,apName,graphName):
+  assocs = p.riskObstacleModel(apName)
+  model = KaosModel(assocs.values(),'','obstacle')
+  parser = KaosXDotParser('obstacle',model.graph())
+  graph = parser.parse()
+  drawGraph(graph,graphName)
+  return True
 
 def exportArchitecture(outFile):
   b = Borg()
@@ -215,3 +222,20 @@ def exportArchitecture(outFile):
   aFile.write(buf)
   aFile.close()
   return 'Exported ' + str(noAPs) + ' architectural patterns.'
+
+def exportAttackPatterns(outFile):
+  b = Borg()
+  rmAttackPatterns = b.dbProxy.redmineAttackPatterns()
+
+  buf = ''
+  noAPs = 0
+  for apName,apTxt in rmAttackPatterns:
+    buf += apTxt + '\n'
+    noAPs += 1
+    gmName = apName.replace(' ','_') + 'ObstacleModel.jpg'
+    buildRiskObstacleModel(b.dbProxy,apName,gmName)
+
+  aFile = open(outFile,'w')
+  aFile.write(buf)
+  aFile.close()
+  return 'Exported ' + str(noAPs) + ' attack patterns.'
