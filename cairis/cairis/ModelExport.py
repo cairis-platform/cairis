@@ -192,9 +192,9 @@ def buildComponentGoalModel(p,cName,graphName):
   drawGraph(graph,graphName)
   return True
 
-def buildRiskObstacleModel(p,apName,graphName):
-  assocs = p.riskObstacleModel(apName)
-  model = KaosModel(assocs.values(),'','obstacle')
+def buildRiskObstacleModel(p,apName,envName,graphName):
+  assocs = p.riskObstacleModel(apName,envName)
+  model = KaosModel(assocs.values(),envName,'obstacle',apName)
   parser = KaosXDotParser('obstacle',model.graph())
   graph = parser.parse()
   drawGraph(graph,graphName)
@@ -229,11 +229,11 @@ def exportAttackPatterns(outFile):
 
   buf = ''
   noAPs = 0
-  for apName,apTxt in rmAttackPatterns:
+  for apName,envName,apTxt in rmAttackPatterns:
     buf += apTxt + '\n'
     noAPs += 1
     gmName = apName.replace(' ','_') + 'ObstacleModel.jpg'
-    buildRiskObstacleModel(b.dbProxy,apName,gmName)
+    buildRiskObstacleModel(b.dbProxy,apName,envName,gmName)
 
   aFile = open(outFile,'w')
   aFile.write(buf)

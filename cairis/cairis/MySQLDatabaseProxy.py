@@ -2321,9 +2321,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       tags = parameters.tags()
       riskId = self.newId()
       riskName = parameters.name()
-      cTxt = parameters.comments()
+      inTxt = parameters.intent()
+      envName = parameters.environment()
       curs = self.conn.cursor()
-      curs.execute('call addRisk(%s,%s,%s,%s,%s)',(threatName,vulName,riskId,riskName,cTxt))
+      curs.execute('call addRisk(%s,%s,%s,%s,%s,%s)',(threatName,vulName,riskId,riskName,inTxt,envName))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new risk ' + str(riskId)
         raise DatabaseProxyException(exceptionText) 
@@ -2346,9 +2347,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       vulName = parameters.vulnerability()
       tags = parameters.tags()
       riskName = parameters.name()
-      cTxt = parameters.comments()
+      inTxt = parameters.intent()
+      envName = parameters.environment()
       curs = self.conn.cursor()
-      curs.execute('call updateRisk(%s,%s,%s,%s,%s)',(threatName,vulName,riskId,riskName,cTxt))
+      curs.execute('call updateRisk(%s,%s,%s,%s,%s,%s)',(threatName,vulName,riskId,riskName,inTxt,envName))
       if (curs.rowcount == -1):
         exceptionText = 'Error updating risk ' + str(riskId)
         raise DatabaseProxyException(exceptionText) 
@@ -4420,7 +4422,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def riskObstacleModel(self,riskName,envName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call riskObstacleModel(%s,%s)',(riskName,envName))
+      curs.execute('call riskObstacleTree(%s,%s)',(riskName,envName))
       if (curs.rowcount == -1):
         exceptionText = 'Error obtaining risk obstacle model'
         raise DatabaseProxyException(exceptionText) 
@@ -8625,8 +8627,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in curs.fetchall():
         row = list(row)
         aName = row[0]
-        aTxt = row[1]
-        aps.append((row[0],row[1]))
+        envName = row[1]
+        aTxt = row[2]
+        aps.append((row[0],row[1],row[2]))
       curs.close()
       return aps
     except _mysql_exceptions.DatabaseError, e:

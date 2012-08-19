@@ -7809,23 +7809,39 @@ begin
 end
 //
 
-create procedure addRisk(in threatName text, in vulName text, in riskId int, in riskName text,in cTxt text)
+create procedure addRisk(in threatName text, in vulName text, in riskId int, in riskName text,in inTxt text, in envName text)
 begin
   declare threatId int;
   declare vulId int;
+  declare envId int;
+
   select id into threatId from threat where name = threatName;
   select id into vulId from vulnerability where name = vulName;
-  insert into risk(id,name,threat_id,vulnerability_id,notes) values (riskId,riskName,threatId,vulId,cTxt);
+  select id into envId from environment where name = envName;
+  if envId is null
+  then
+    set envId = -1;
+  end if;
+
+  insert into risk(id,name,threat_id,vulnerability_id,intent,environment_id) values (riskId,riskName,threatId,vulId,inTxt,envId);
 end
 //
 
-create procedure updateRisk(in threatName text, in vulName text, in riskId int, in riskName text,in cTxt text)
+create procedure updateRisk(in threatName text, in vulName text, in riskId int, in riskName text,in inTxt text, in envName text)
 begin
   declare threatId int;
   declare vulId int;
+  declare envId int;
+
   select id into threatId from threat where name = threatName;
   select id into vulId from vulnerability where name = vulName;
-  update risk set name = riskName,threat_id = threatId,vulnerability_id = vulId,notes = cTxt where id = riskId;
+  select id into envId from environment where name = envName;
+  if envId is null
+  then
+    set envId = -1;
+  end if;
+
+  update risk set name = riskName,threat_id = threatId,vulnerability_id = vulId,intent = inTxt,environment_id = envId where id = riskId;
 
 end
 //
@@ -20218,7 +20234,10 @@ begin
     
   if rootCount = 0
   then
-    insert into temp_rootobstacle(obstacle_id,obstacle_name) select id,name from obstacle where id = leafObsId;
+    insert into temp_rootobstacle(obstacle_id,obstacle_name) select id,name from obstacle where id in 
+    (select ga.goal_id from obstaclevulnerability_goalassociation ga, risk r, environment_vulnerability ev where r.id = riskId and r.vulnerability_id = ev.vulnerability_id and ev.environment_id = envId and ev.vulnerability_id = ga.subgoal_id and ev.environment_id = ga.environment_id
+     union
+     select ga.goal_id from obstaclethreat_goalassociation ga, risk r, environment_threat et where r.id = riskId and r.threat_id = et.threat_id and et.environment_id = envId and et.threat_id = ga.subgoal_id and et.environment_id = ga.environment_id);
   end if;
 
   open obsCursor;
@@ -20312,32 +20331,136 @@ begin
   declare threatId int;
   declare vulId int;
   declare envId int;
-  declare envName varchar(4000);
+  declare envName varchar(50);
+  declare intentTxt varchar(4000);
+  declare tpName varchar(50);
+  declare tpValue varchar(50);
+  declare tpRationale varchar(4000);
+  declare thrName varchar(200);
+  declare thrObsName varchar(100);
+  declare vulName varchar(200);
+  declare vulObsName varchar(100);
+  declare attackerId int;
+  declare attackerName varchar(50);
+  declare motiveName varchar(50);
+  declare capName varchar(50);
+  declare capValue varchar(50);
+  declare isFirst int default 1;
   declare buf varchar(90000000) default '';
   declare done int default 0;
-  declare apCursor cursor for select name,threat_id,vulnerability_id,notes from risk order by 1;
+  declare apCursor cursor for select name,threat_id,vulnerability_id,intent,environment_id from risk order by 1;
+  declare tpCursor cursor for select sp.name,spv.name,tp.property_rationale from threat_property tp, security_property sp, security_property_value spv where tp.threat_id = threatId and tp.environment_id = envId and tp.property_value_id != 0 and tp.property_id = sp.id and tp.property_value_id = spv.id order by 1;
+  declare attackerCursor cursor for select a.id,a.name from threat_attacker ta, attacker a where ta.threat_id = threatId and ta.environment_id = envId and ta.attacker_id = a.id order by 1;
+  declare motiveCursor cursor for select m.name from attacker_motivation am, motivation m where am.attacker_id = attackerId and am.environment_id = envId and am.motivation_id = m.id order by 1;
+  declare capCursor cursor for select c.name,spv.name from attacker_capability ac, capability c, security_property_value spv where ac.attacker_id = attackerId and ac.environment_id = envId and ac.capability_id = c.id and ac.capability_value_id = spv.id order by 1;
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_attackpattern;
-  create temporary table temp_attackpattern (name varchar(200),text varchar(90000000));
+  create temporary table temp_attackpattern (name varchar(200),environment_name varchar(50), text varchar(90000000));
 
   open apCursor;
   ap_loop: loop
-    fetch apCursor into riskName,threatId,vulId,envName;
+    fetch apCursor into riskName,threatId,vulId,intentTxt,envId;
     if done = 1
     then
       leave ap_loop;
     end if;
-    select id into envId from environment where name = envName;
-    if envId is not null
+    select name into envName from environment where id = envId;
+    if envName is not null
     then
-      set buf = concat('h2. ',riskName,'\n\nh3. Intent\n\n');
-      insert into temp_attackpattern(name,text) values(riskName,buf);
+      set buf = concat('h2. ',riskName,'\n\nh3. Intent\n\n',intentTxt,'\n\nh3. Motivation\n\n| Security Goal | Value | Description |\n'); 
+      open tpCursor;
+      tp_loop: loop
+        fetch tpCursor into tpName,tpValue,tpRationale;
+        if done = 1
+        then
+          leave tp_loop;
+        end if;
+        set buf = concat(buf,'| ',tpName,' | ',tpValue,' | ',tpRationale,' |\n'); 
+      end loop tp_loop; 
+      close tpCursor; 
+      set done = 0;
+      select name into thrName from threat where id = threatId;
+      select name into vulName from vulnerability where id = vulId;
+
+      set thrObsName = null;
+      set vulObsName = null;
+
+      select o.name into thrObsName from obstacle o, obstaclethreat_goalassociation ga where ga.environment_id = envId and ga.goal_id = o.id and ga.subgoal_id = threatId;
+      if thrObsName is null
+      then
+        set thrObsName = 'None';
+      end if;
+      set done = 0;
+
+      select o.name into vulObsName from obstacle o, obstaclevulnerability_goalassociation ga where ga.environment_id = envId and ga.goal_id = o.id and ga.subgoal_id = vulId;
+      if vulObsName is null
+      then
+        set vulObsName = 'None';
+      end if;
+      set done = 0;
+
+      set buf = concat(buf,'\nh3. Structure\n\n| Attack: ',thrName,' | Obstacle: ',thrObsName,' |\n| Exploit: ',vulName,' | Obstacle: ',vulObsName,' |\n\nh3. Participants\n\n');
+      set buf = concat(buf,'| Attacker | Motives | Capabilities (Value) |\n');
+      open attackerCursor;
+      attacker_loop: loop
+        fetch attackerCursor into attackerId,attackerName;
+        if done = 1
+        then
+          leave attacker_loop;
+        end if;
+        set buf = concat(buf,'| ',attackerName,' | ');
+        open motiveCursor;
+        motive_loop: loop
+          fetch motiveCursor into motiveName;
+          if done = 1
+          then
+            leave motive_loop;
+          else
+            if isFirst = 1
+            then  
+              set isFirst = 0;
+            else
+              set buf = concat(buf,', '); 
+            end if;
+          end if;
+          set buf = concat(buf,motiveName);
+        end loop motive_loop;
+        close motiveCursor;
+        set done = 0;
+        set isFirst = 1;
+        set buf = concat(buf,' | ');
+        open capCursor;
+        cap_loop: loop
+          fetch capCursor into capName,capValue;
+          if done = 1
+          then
+            leave cap_loop;
+          else
+            if isFirst = 1
+            then
+              set isFirst = 0;
+            else
+              set buf = concat(buf,', '); 
+            end if;
+          end if;
+          set buf = concat(buf,capName,'(',capValue,')');
+        end loop cap_loop;
+        close capCursor;
+        set done = 0;
+        set isFirst = 1;
+        set buf = concat(buf,' |\n');
+
+      end loop attacker_loop;
+      close attackerCursor;
+      set done = 0;
+
+      insert into temp_attackpattern(name,environment_name,text) values(riskName,envName,buf);
     end if;
   end loop ap_loop;
   close apCursor;
 
-  select name,text from temp_attackpattern;
+  select name,environment_name,text from temp_attackpattern;
 end
 //
 

@@ -331,4 +331,4 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
 
       rep = MisuseCaseEnvironmentProperties(self.theEnvironment,self.theImplementation )
       mc = MisuseCase(-1,'Exploit ' + self.thePatternName,[rep],self.thePatternName)
-      self.theRiskParameters = RiskParameters(self.thePatternName,self.theAttack,self.theExploit,mc,[],self.theEnvironment)
+      self.theRiskParameters = RiskParameters(self.thePatternName,self.theAttack,self.theExploit,mc,[],self.theIntent,self.theEnvironment)
