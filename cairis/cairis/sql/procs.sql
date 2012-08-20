@@ -20327,6 +20327,7 @@ end
 
 create procedure redmineAttackPatterns()
 begin
+  declare riskId int;
   declare riskName varchar(200);
   declare threatId int;
   declare vulId int;
@@ -20345,14 +20346,18 @@ begin
   declare motiveName varchar(50);
   declare capName varchar(50);
   declare capValue varchar(50);
+  declare assetName varchar(50);
+  declare implDesc varchar(5000);
   declare isFirst int default 1;
   declare buf varchar(90000000) default '';
   declare done int default 0;
-  declare apCursor cursor for select name,threat_id,vulnerability_id,intent,environment_id from risk order by 1;
+  declare apCursor cursor for select id,name,threat_id,vulnerability_id,intent,environment_id from risk order by 1;
   declare tpCursor cursor for select sp.name,spv.name,tp.property_rationale from threat_property tp, security_property sp, security_property_value spv where tp.threat_id = threatId and tp.environment_id = envId and tp.property_value_id != 0 and tp.property_id = sp.id and tp.property_value_id = spv.id order by 1;
   declare attackerCursor cursor for select a.id,a.name from threat_attacker ta, attacker a where ta.threat_id = threatId and ta.environment_id = envId and ta.attacker_id = a.id order by 1;
   declare motiveCursor cursor for select m.name from attacker_motivation am, motivation m where am.attacker_id = attackerId and am.environment_id = envId and am.motivation_id = m.id order by 1;
   declare capCursor cursor for select c.name,spv.name from attacker_capability ac, capability c, security_property_value spv where ac.attacker_id = attackerId and ac.environment_id = envId and ac.capability_id = c.id and ac.capability_value_id = spv.id order by 1;
+  declare targetCursor cursor for select a.name from asset_threat at, asset a where at.threat_id = threatId and at.environment_id = envId and at.asset_id = a.id;
+  declare exploitCursor cursor for select a.name from asset_vulnerability av, asset a where av.vulnerability_id = vulId and av.environment_id = envId and av.asset_id = a.id;
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_attackpattern;
@@ -20360,7 +20365,7 @@ begin
 
   open apCursor;
   ap_loop: loop
-    fetch apCursor into riskName,threatId,vulId,intentTxt,envId;
+    fetch apCursor into riskId,riskName,threatId,vulId,intentTxt,envId;
     if done = 1
     then
       leave ap_loop;
@@ -20450,10 +20455,54 @@ begin
         set done = 0;
         set isFirst = 1;
         set buf = concat(buf,' |\n');
-
       end loop attacker_loop;
       close attackerCursor;
       set done = 0;
+      set buf = concat(buf,'\nh3. Collaboration\n\n| Target | ');
+
+      open targetCursor;
+      target_loop: loop
+        fetch targetCursor into assetName;
+        if done = 1
+        then
+          leave target_loop;
+        else
+          if isFirst = 1
+          then
+            set isFirst = 0;
+          else
+            set buf = concat(buf,', ');
+          end if;
+        end if;
+        set buf = concat(buf,assetName);
+      end loop target_loop;
+      close targetCursor;
+      set done = 0;
+      set isFirst = 1;
+      set buf = concat(buf,' |\n| Exploit | ');
+
+      open exploitCursor;
+      exploit_loop: loop
+        fetch exploitCursor into assetName;
+        if done = 1
+        then 
+          leave exploit_loop;
+        else
+          if isFirst = 1
+          then
+            set isFirst = 0;
+          else
+            set buf = concat(buf,', ');
+          end if;
+        end if; 
+        set buf = concat(buf,assetName);
+      end loop exploit_loop;
+      close exploitCursor;
+      set done = 0;
+      set isFirst = 1;
+
+      select mn.narrative into implDesc from misusecase_risk mr, misusecase_narrative mn where mr.risk_id = riskId and mr.misusecase_id = mn.misusecase_id and mn.environment_id = envId;
+      set buf = concat(buf,' |\n\nh3. Implementation\n\n!',replace(riskName,' ','_'),'ObstacleModel.jpg!\n\n',implDesc,'\n\n');
 
       insert into temp_attackpattern(name,environment_name,text) values(riskName,envName,buf);
     end if;
