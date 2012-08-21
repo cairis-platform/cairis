@@ -166,6 +166,8 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     elif (name == 'description'):
       self.inDescription = 1
       self.theDescription = ''
+      if self.inImplementation:
+        self.theImplementation = ''
     elif (name == 'applicability'):
       self.theEnvironment = attrs['environment']
     elif (name == 'structure'):
@@ -244,6 +246,8 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
       self.resetParticipantElements()
     elif name == 'description':
       self.inDescription = 0
+      if self.inImplementation:
+        self.inImplementation = 0
     elif name == 'consequences':
       self.inConsequences = 0
     elif name == 'implementation':
@@ -328,7 +332,6 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
         self.theObstacleAssociationParameters.append(GoalAssociationParameters(self.theEnvironment,self.theAttackObstacle,'obstacle','and',self.theAttack,'threat',0,'None'))
       if (self.theExploitObstacle != ''):
         self.theObstacleAssociationParameters.append(GoalAssociationParameters(self.theEnvironment,self.theExploitObstacle,'obstacle','and',self.theExploit,'vulnerability',0,'None'))
-
       rep = MisuseCaseEnvironmentProperties(self.theEnvironment,self.theImplementation )
       mc = MisuseCase(-1,'Exploit ' + self.thePatternName,[rep],self.thePatternName)
       self.theRiskParameters = RiskParameters(self.thePatternName,self.theAttack,self.theExploit,mc,[],self.theIntent,self.theEnvironment)

@@ -4422,7 +4422,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def riskObstacleModel(self,riskName,envName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call riskObstacleTree(%s,%s)',(riskName,envName))
+      curs.execute('call riskObstacleTree(%s,%s,0)',(riskName,envName))
       if (curs.rowcount == -1):
         exceptionText = 'Error obtaining risk obstacle model'
         raise DatabaseProxyException(exceptionText) 
@@ -8628,8 +8628,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         row = list(row)
         aName = row[0]
         envName = row[1]
-        aTxt = row[2]
-        aps.append((row[0],row[1],row[2]))
+        cType = row[2]
+        aTxt = row[3]
+        aps.append((row[0],row[1],row[2],row[3]))
       curs.close()
       return aps
     except _mysql_exceptions.DatabaseError, e:

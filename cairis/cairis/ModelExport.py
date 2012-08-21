@@ -228,14 +228,24 @@ def exportAttackPatterns(outFile):
   rmAttackPatterns = b.dbProxy.redmineAttackPatterns()
 
   buf = ''
+  apdxBuf = ''
   noAPs = 0
-  for apName,envName,apTxt in rmAttackPatterns:
-    buf += apTxt + '\n'
+  for apName,envName,cType,apTxt in rmAttackPatterns:
+    if (cType == 'body'):
+      buf += apTxt + '\n'
+      gmName = apName.replace(' ','_') + 'ObstacleModel.jpg'
+      buildRiskObstacleModel(b.dbProxy,apName,envName,gmName)
+    else:
+      apdxBuf += apTxt + '\n' 
     noAPs += 1
-    gmName = apName.replace(' ','_') + 'ObstacleModel.jpg'
-    buildRiskObstacleModel(b.dbProxy,apName,envName,gmName)
-
   aFile = open(outFile,'w')
   aFile.write(buf)
   aFile.close()
+
+  fileName,filePostfix = outFile.split('.')
+  apdxFileName = fileName + '_appendix.txt'
+  apdxFile = open(apdxFileName,'w')
+  apdxFile.write(apdxBuf)
+  apdxFile.close()
+
   return 'Exported ' + str(noAPs) + ' attack patterns.'

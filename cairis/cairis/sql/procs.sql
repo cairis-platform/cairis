@@ -20201,7 +20201,7 @@ begin
 end
 //
 
-create procedure riskObstacleTree(in riskName text, in envName text)
+create procedure riskObstacleTree(in riskName text, in envName text, in suppressOutput int)
 begin
   declare riskId int;
   declare obsId int;
@@ -20222,7 +20222,7 @@ begin
   create temporary table temp_rootobstacle (obstacle_id int,obstacle_name varchar(200));
 
   drop table if exists temp_obstacletree;
-  create temporary table temp_obstacletree (id int,environment varchar(50),goal_name varchar(200), goal_dim varchar(50), ref_type varchar(50), subgoal_name varchar(200), subgoal_dim varchar(50), alternative_id int, rationale varchar(1000));
+  create table temp_obstacletree (id int,environment varchar(50),goal_name varchar(200), goal_dim varchar(50), ref_type varchar(50), subgoal_name varchar(200), subgoal_dim varchar(50), alternative_id int, rationale varchar(1000));
 
   select id into riskId from risk where name = riskName;
   select id into envId from environment where name = envName;
@@ -20291,8 +20291,10 @@ begin
   end loop root_loop;
   close rootCursor;
   
-  select distinct -1,envName,goal_name,goal_dim,ref_type,subgoal_name,subgoal_dim,alternative_id,rationale from temp_obstacletree;
-
+  if suppressOutput != 1
+  then
+    select distinct -1,envName,goal_name,goal_dim,ref_type,subgoal_name,subgoal_dim,alternative_id,rationale from temp_obstacletree;
+  end if;
 
 end
 //
@@ -20348,7 +20350,11 @@ begin
   declare capValue varchar(50);
   declare assetName varchar(50);
   declare implDesc varchar(5000);
+  declare rotObsName varchar(200);
   declare isFirst int default 1;
+  declare obsName varchar(100);
+  declare obsCat varchar(50);
+  declare obsDef varchar(1000);
   declare buf varchar(90000000) default '';
   declare done int default 0;
   declare apCursor cursor for select id,name,threat_id,vulnerability_id,intent,environment_id from risk order by 1;
@@ -20358,10 +20364,20 @@ begin
   declare capCursor cursor for select c.name,spv.name from attacker_capability ac, capability c, security_property_value spv where ac.attacker_id = attackerId and ac.environment_id = envId and ac.capability_id = c.id and ac.capability_value_id = spv.id order by 1;
   declare targetCursor cursor for select a.name from asset_threat at, asset a where at.threat_id = threatId and at.environment_id = envId and at.asset_id = a.id;
   declare exploitCursor cursor for select a.name from asset_vulnerability av, asset a where av.vulnerability_id = vulId and av.environment_id = envId and av.asset_id = a.id;
+  declare rotObsCursor cursor for 
+    select goal_name from temp_obstacletree where goal_dim = 'obstacle'
+    union
+    select subgoal_name from temp_obstacletree where subgoal_dim = 'obstacle' order by 1;
+  declare apObsCursor cursor for 
+    select o.name,oct.name,od.definition from obstacle o, obstacle_definition od, obstacle_category oc, obstacle_category_type oct, temp_obstacletree tot where od.environment_id = envId and od.obstacle_id = o.id and o.name = tot.goal_name and tot.goal_dim = 'obstacle' and od.obstacle_id = oc.obstacle_id and od.environment_id = oc.environment_id and oc.obstacle_category_type_id = oct.id
+    union
+    select o.name,oct.name,od.definition from obstacle o, obstacle_definition od, obstacle_category oc, obstacle_category_type oct, temp_obstacletree tot where od.environment_id = envId and od.obstacle_id = o.id and o.name = tot.subgoal_name and tot.subgoal_dim = 'obstacle' and od.obstacle_id = oc.obstacle_id and od.environment_id = oc.environment_id and oc.obstacle_category_type_id = oct.id order by 1;
+
+
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_attackpattern;
-  create temporary table temp_attackpattern (name varchar(200),environment_name varchar(50), text varchar(90000000));
+  create temporary table temp_attackpattern (name varchar(200),environment_name varchar(50), content_type varchar(50), text varchar(90000000));
 
   open apCursor;
   ap_loop: loop
@@ -20500,16 +20516,32 @@ begin
       close exploitCursor;
       set done = 0;
       set isFirst = 1;
-
+      set implDesc = '';
       select mn.narrative into implDesc from misusecase_risk mr, misusecase_narrative mn where mr.risk_id = riskId and mr.misusecase_id = mn.misusecase_id and mn.environment_id = envId;
       set buf = concat(buf,' |\n\nh3. Implementation\n\n!',replace(riskName,' ','_'),'ObstacleModel.jpg!\n\n',implDesc,'\n\n');
 
-      insert into temp_attackpattern(name,environment_name,text) values(riskName,envName,buf);
+      insert into temp_attackpattern(name,environment_name,content_type,text) values(riskName,envName,'body',buf);
+
+      call riskObstacleTree(riskName,envName,1);
+
+      set buf = concat('h2. ',riskName,'\n\nh3. Obstacles\n\n| Obstacle | Category | Definition |\n');
+      open apObsCursor;
+      apObs_loop: loop
+        fetch apObsCursor into obsName,obsCat,obsDef;
+        if done = 1
+        then
+          leave apObs_loop;
+        end if;
+        set buf = concat(buf,'| ',obsName,' | ',obsCat,' | ',obsDef,' |\n');
+      end loop apObs_loop;
+      close apObsCursor;
+      set done = 0;
+      insert into temp_attackpattern(name,environment_name,content_type,text) values(riskName,envName,'appendix',buf);
     end if;
   end loop ap_loop;
   close apCursor;
 
-  select name,environment_name,text from temp_attackpattern;
+  select distinct name,environment_name,content_type,text from temp_attackpattern;
 end
 //
 
