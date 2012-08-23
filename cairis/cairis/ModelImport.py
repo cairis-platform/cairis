@@ -78,8 +78,8 @@ def importAttackPattern(importFile):
   threat = handler.threat()
   risk = handler.risk()
 
-  obsTxt = importRequirements([],[],handler.obstacles(),[],[])
   raTxt = importRiskAnalysis([],assets,[vulnerability],attackers,[threat],[risk],[],[])
+  obsTxt = importRequirements([],[],handler.obstacles(),[],[])
   assocTxt = importAssociations([],handler.obstacleAssociations(),[])
   return obsTxt + assocTxt + raTxt
 
