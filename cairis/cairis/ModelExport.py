@@ -44,12 +44,15 @@ def drawGraph(graph,graphName):
   tmpDir = b.tmpDir
   outputDir = os.environ['OUTPUT_DIR']
   tmpFile = tmpDir + '/' + graphName + '.pdf'
-  s = cairo.PDFSurface(tmpFile,graph.width,graph.height)
+#Make the surface a bit bigger to account for graphviz positioning the image too far left
+  s = cairo.PDFSurface(tmpFile,graph.width + 5,graph.height + 5)
   c1 = cairo.Context(s)
   c2 = pangocairo.CairoContext(c1)
   c2.set_line_cap(cairo.LINE_CAP_BUTT)
   c2.set_line_join(cairo.LINE_JOIN_MITER)
   graph.zoom_ratio = 1
+#Reposition the co-ordinates to start a bit more to the right
+  c2.translate(3,3)
   graph.draw(c2)
   s.finish()
   svgFile = tmpDir + '/' + graphName + '.svg'
@@ -204,7 +207,7 @@ def exportArchitecture(outFile):
   b = Borg()
   rmArchitecture = b.dbProxy.redmineArchitecture()
 
-  buf = ''
+  buf = 'h1. Architectural patterns\n\n'
   noAPs = 0
   for aName,aType,sTxt in rmArchitecture:
     buf += sTxt + '\n'

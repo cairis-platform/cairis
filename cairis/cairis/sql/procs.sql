@@ -20048,6 +20048,8 @@ begin
   declare toRole varchar(255);
   declare toIf varchar(255);
   declare connAsset varchar(50);
+  declare caCount int;
+  declare cgCount int;
   declare buf varchar(90000000) default '';
 
   declare done int default 0;
@@ -20094,65 +20096,80 @@ begin
     close cifCursor;
     set done = 0;
 
-    set buf = concat(buf,'\nh3. Structure\n\n!',replace(cName,' ','_'),'AssetModel.jpg\n\n| Name | Type | Description | Surface | Access Rights |\n');
+    set buf = concat(buf,'\nh3. Structure\n\n');
 
-    open caCursor;
-    ca_loop: loop
-      fetch caCursor into taName, taType, taDesc, suName, arName;
-      if done = 1
-      then
-        leave ca_loop;
-      end if;
-      set buf = concat(buf,'| ',taName,' | ',taType,' | ',taDesc,' | ',suName,' | ',arName,' |\n');
-    end loop ca_loop;
-    close caCursor;
-    set done = 0;
-
-    set buf = concat(buf,'\nh3. Component Requirements\n\n!',replace(cName,' ','_'),'GoalModel.jpg\n\n| Name | Definition | Concerns | Responsibility |\n');
-    open cgCursor;
-    cg_loop: loop
-      fetch cgCursor into cgId, cgName, cgDesc;
-      if done = 1
-      then
-        leave cg_loop;
-      end if;
-      set cgConcerns = '';
-      open cgConcernCursor;
-      cgConcern_loop: loop
-        fetch cgConcernCursor into concernName;
+    select count(ta.name) into caCount from component_asset ca, template_asset ta, asset_type at, surface_type su, access_right ar where ca.component_id = cId and ca.asset_id = ta.id and ta.asset_type_id = at.id and ta.surface_type_id = su.id and ta.access_right_id = ar.id;
+    if caCount = 0
+    then
+      set buf = concat(buf,'None\n\n');
+    else
+      set buf = concat(buf,'!',replace(cName,' ','_'),'AssetModel.jpg!\n\n| Name | Type | Description | Surface | Access Rights |\n');
+      open caCursor;
+      ca_loop: loop
+        fetch caCursor into taName, taType, taDesc, suName, arName;
         if done = 1
         then
-          leave cgConcern_loop;
+          leave ca_loop;
         end if;
-        if cgConcerns != ''
-        then
-          set cgConcerns = concat(cgConcerns,', ');
-        end if;
-        set cgConcerns = concat(cgConcerns,concernName);
-      end loop cgConcern_loop;
-      close cgConcernCursor;
+        set buf = concat(buf,'| ',taName,' | ',taType,' | ',taDesc,' | ',suName,' | ',arName,' |\n');
+      end loop ca_loop;
+      close caCursor;
       set done = 0;
+    end if;
 
-      set cgResponsibilities = '';
-      open cgRespCursor;
-      cgResp_loop: loop
-        fetch cgRespCursor into respName;
+    
+    set buf = concat(buf,'\nh3. Component Requirements\n\n');
+    select count(tg.id) into cgCount from template_goal tg, component_template_goal ctg where ctg.component_id = cId and ctg.template_goal_id = tg.id;
+    if cgCount = 0
+    then
+      set buf = concat(buf,'None\n\n');
+    else
+      set buf = concat(buf,'!',replace(cName,' ','_'),'GoalModel.jpg!\n\n| Name | Definition | Concerns | Responsibility |\n');
+      open cgCursor;
+      cg_loop: loop
+        fetch cgCursor into cgId, cgName, cgDesc;
         if done = 1
         then
-          leave cgResp_loop;
+          leave cg_loop;
         end if;
-        if cgResponsibilities != ''
-        then
-          set cgResponsibilities = concat(cgResponsibilities,', ');
-        end if;
-        set cgResponsibilities = concat(cgResponsibilities,respName);
-      end loop cgResp_loop;
-      close cgRespCursor;
+        set cgConcerns = '';
+        open cgConcernCursor;
+        cgConcern_loop: loop
+          fetch cgConcernCursor into concernName;
+          if done = 1
+          then
+            leave cgConcern_loop;
+          end if;
+          if cgConcerns != ''
+          then
+            set cgConcerns = concat(cgConcerns,', ');
+          end if;
+          set cgConcerns = concat(cgConcerns,concernName);
+        end loop cgConcern_loop;
+        close cgConcernCursor;
+        set done = 0;
+
+        set cgResponsibilities = '';
+        open cgRespCursor;
+        cgResp_loop: loop
+          fetch cgRespCursor into respName;
+          if done = 1
+          then
+            leave cgResp_loop;
+          end if;
+          if cgResponsibilities != ''
+          then
+            set cgResponsibilities = concat(cgResponsibilities,', ');
+          end if;
+          set cgResponsibilities = concat(cgResponsibilities,respName);
+        end loop cgResp_loop;
+        close cgRespCursor;
+        set done = 0;
+        set buf = concat(buf,'| ',cgName,' | ',cgDesc,' | ',cgConcerns,' | ',cgResponsibilities,' |\n');
+      end loop cg_loop;
+      close cgCursor;
       set done = 0;
-      set buf = concat(buf,'| ',cgName,' | ',cgDesc,' | ',cgConcerns,' | ',cgResponsibilities,' |\n');
-    end loop cg_loop;
-    close cgCursor;
-    set done = 0;
+    end if;
 
     insert into temp_architecture (name,artifact_type,text) values(cName,'component',ifnull(buf,''));
   end loop c_loop;

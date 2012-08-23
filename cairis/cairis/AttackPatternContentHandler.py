@@ -329,9 +329,9 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
       self.theThreatParameters = ThreatParameters(self.theAttack,thrData[3],thrData[2],[],[tp])
 
       if (self.theAttackObstacle != ''):
-        self.theObstacleAssociationParameters.append(GoalAssociationParameters(self.theEnvironment,self.theAttackObstacle,'obstacle','and',self.theAttack,'threat',0,'None'))
+        self.theObstacleAssociationParameters.append(GoalAssociationParameters(self.theEnvironment,self.theAttackObstacle,'obstacle','or',self.theAttack,'threat',0,'None'))
       if (self.theExploitObstacle != ''):
-        self.theObstacleAssociationParameters.append(GoalAssociationParameters(self.theEnvironment,self.theExploitObstacle,'obstacle','and',self.theExploit,'vulnerability',0,'None'))
+        self.theObstacleAssociationParameters.append(GoalAssociationParameters(self.theEnvironment,self.theExploitObstacle,'obstacle','or',self.theExploit,'vulnerability',0,'None'))
       rep = MisuseCaseEnvironmentProperties(self.theEnvironment,self.theImplementation )
       mc = MisuseCase(-1,'Exploit ' + self.thePatternName,[rep],self.thePatternName)
       self.theRiskParameters = RiskParameters(self.thePatternName,self.theAttack,self.theExploit,mc,[],self.theIntent,self.theEnvironment)
