@@ -230,7 +230,7 @@ def exportAttackPatterns(outFile):
   b = Borg()
   rmAttackPatterns = b.dbProxy.redmineAttackPatterns()
 
-  buf = ''
+  buf = 'h1. Attack Patterns\n\n'
   apdxBuf = ''
   noAPs = 0
   for apName,envName,cType,apTxt in rmAttackPatterns:

@@ -20077,7 +20077,7 @@ begin
     then
       leave c_loop;
     end if;
-    set buf = concat('h2. ',cName,'\n\n','h3. Description\n\n',cDesc,'\n\nh3. Interfaces\n\n| Interface | Type | Access Right | Privilege |\n');
+    set buf = concat('h2. ',cName,'\n\n','h3. Description\n\n',cDesc,'\n\nh3. Interfaces\n\n|_.Interface |_.Type |_.Access Right |_.Privilege |\n');
     open cifCursor;
     cif_loop: loop
       fetch cifCursor into ifName,reqId,arName,prName;
@@ -20103,7 +20103,7 @@ begin
     then
       set buf = concat(buf,'None\n\n');
     else
-      set buf = concat(buf,'!',replace(cName,' ','_'),'AssetModel.jpg!\n\n| Name | Type | Description | Surface | Access Rights |\n');
+      set buf = concat(buf,'!{width:1000px}',replace(cName,' ','_'),'AssetModel.jpg!\n\n|_.Name |_.Type |_.Description |_.Surface |_.Access Rights |\n');
       open caCursor;
       ca_loop: loop
         fetch caCursor into taName, taType, taDesc, suName, arName;
@@ -20124,7 +20124,7 @@ begin
     then
       set buf = concat(buf,'None\n\n');
     else
-      set buf = concat(buf,'!',replace(cName,' ','_'),'GoalModel.jpg!\n\n| Name | Definition | Concerns | Responsibility |\n');
+      set buf = concat(buf,'!{width:1000px}',replace(cName,' ','_'),'GoalModel.jpg!\n\n|_.Name |_.Definition |_.Concerns |_.Responsibility |\n');
       open cgCursor;
       cg_loop: loop
         fetch cgCursor into cgId, cgName, cgDesc;
@@ -20183,7 +20183,7 @@ begin
     then
       leave ap_loop;
     end if;
-    set buf = concat('h2. ',apName,'\n\n!',replace(apName,' ','_'),'ComponentModel.jpg!\n\nh3. Synopsis\n\n',apDesc,'\n\nh3. Components\n\n');
+    set buf = concat('h2. ',apName,'\n\n!{width:1000px}',replace(apName,' ','_'),'ComponentModel.jpg!\n\nh3. Synopsis\n\n',apDesc,'\n\nh3. Components\n\n');
 
     open apcCursor;
     apc_loop: loop
@@ -20196,7 +20196,8 @@ begin
     end loop apc_loop;
     close apcCursor;
     set done = 0;
-    set buf = concat(buf,'\nh2. Connectors\n\n| Connector | From | Role | Interface | To | Role | Interface | Asset | Protocol | Access Right |\n');
+    set buf = concat(buf,'\nh2. Connectors\n\n|_.Connector |_.From |_.Role |_.Interface |_.To |_.Role |_.Interface |_.Asset |_.Protocol |_.Access Right |\n');
+
 
     open connCursor;
     conn_loop: loop
@@ -20406,7 +20407,7 @@ begin
     select name into envName from environment where id = envId;
     if envName is not null
     then
-      set buf = concat('h2. ',riskName,'\n\nh3. Intent\n\n',intentTxt,'\n\nh3. Motivation\n\n| Security Goal | Value | Description |\n'); 
+      set buf = concat('h2. ',riskName,'\n\nh3. Intent\n\n',intentTxt,'\n\nh3. Motivation\n\n|_.Security Goal |_.Value |_.Description |\n'); 
       open tpCursor;
       tp_loop: loop
         fetch tpCursor into tpName,tpValue,tpRationale;
@@ -20439,7 +20440,7 @@ begin
       set done = 0;
 
       set buf = concat(buf,'\nh3. Structure\n\n| Attack: ',thrName,' | Obstacle: ',thrObsName,' |\n| Exploit: ',vulName,' | Obstacle: ',vulObsName,' |\n\nh3. Participants\n\n');
-      set buf = concat(buf,'| Attacker | Motives | Capabilities (Value) |\n');
+      set buf = concat(buf,'|_.Attacker |_.Motives |_.Capabilities (Value) |\n');
       open attackerCursor;
       attacker_loop: loop
         fetch attackerCursor into attackerId,attackerName;
@@ -20535,13 +20536,11 @@ begin
       set isFirst = 1;
       set implDesc = '';
       select mn.narrative into implDesc from misusecase_risk mr, misusecase_narrative mn where mr.risk_id = riskId and mr.misusecase_id = mn.misusecase_id and mn.environment_id = envId;
-      set buf = concat(buf,' |\n\nh3. Implementation\n\n!',replace(riskName,' ','_'),'ObstacleModel.jpg!\n\n',implDesc,'\n\n');
-
-      insert into temp_attackpattern(name,environment_name,content_type,text) values(riskName,envName,'body',buf);
+      set buf = concat(buf,' |\n\nh3. Implementation\n\n!{width:1000px}',replace(riskName,' ','_'),'ObstacleModel.jpg!\n\n',implDesc,'\n\n');
 
       call riskObstacleTree(riskName,envName,1);
 
-      set buf = concat('h2. ',riskName,'\n\nh3. Obstacles\n\n| Obstacle | Category | Definition |\n');
+      set buf = concat(buf,'h3. Obstacles\n\n|_.Obstacle |_.Category |_.Definition |\n');
       open apObsCursor;
       apObs_loop: loop
         fetch apObsCursor into obsName,obsCat,obsDef;
@@ -20553,7 +20552,7 @@ begin
       end loop apObs_loop;
       close apObsCursor;
       set done = 0;
-      insert into temp_attackpattern(name,environment_name,content_type,text) values(riskName,envName,'appendix',buf);
+      insert into temp_attackpattern(name,environment_name,content_type,text) values(riskName,envName,'body',buf);
     end if;
   end loop ap_loop;
   close apCursor;
