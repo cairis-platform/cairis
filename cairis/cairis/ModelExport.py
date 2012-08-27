@@ -207,17 +207,15 @@ def exportArchitecture(outFile):
   b = Borg()
   rmArchitecture = b.dbProxy.redmineArchitecture()
 
-  buf = 'h1. Architectural patterns\n\n'
+  buf = ''
   noAPs = 0
   for aName,aType,sTxt in rmArchitecture:
     buf += sTxt + '\n'
     noAPs += 1
     if (aType == 'component'):
       caName = aName.replace(' ','_') + 'AssetModel.jpg'
-      cgName = aName.replace(' ','_') + 'GoalModel.jpg'
       buildComponentAssetModel(b.dbProxy,aName,caName)
-      buildComponentGoalModel(b.dbProxy,aName,cgName)
-    else:
+    elif (aType == 'architectural_pattern'):
       graphName = aName.replace(' ','_') + 'ComponentModel.jpg'
       buildComponentModel(b.dbProxy,aName,graphName)
   
@@ -230,7 +228,7 @@ def exportAttackPatterns(outFile):
   b = Borg()
   rmAttackPatterns = b.dbProxy.redmineAttackPatterns()
 
-  buf = 'h1. Attack Patterns\n\n'
+  buf = 'h1. Attack Patterns\n\nh2. Obstacle probability: colour codes\n\n!{width:200px}ObsColour.jpg!\n\n'
   apdxBuf = ''
   noAPs = 0
   for apName,envName,cType,apTxt in rmAttackPatterns:

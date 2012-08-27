@@ -20086,6 +20086,9 @@ begin
   declare connAsset varchar(50);
   declare caCount int;
   declare cgCount int;
+  declare metricName varchar(50);
+  declare metricDesc varchar(1000);
+  declare metricValue int;
   declare buf varchar(90000000) default '';
 
   declare done int default 0;
@@ -20098,6 +20101,10 @@ begin
   declare apCursor cursor for select id,name,synopsis from component_view;
   declare apcCursor cursor for select c.name from component_view_component cvc, component c where cvc.component_view_id = apId and cvc.component_id = c.id order by 1;
   declare connCursor cursor for select c.name,fc.name,c.from_role,fif.name,tc.name,c.to_role,tif.name,ta.name,pr.name,ar.name from connector c, component fc, component tc, interface fif, interface tif, template_asset ta, protocol pr, access_right ar where c.component_view_id = apId and c.from_component_id = fc.id and c.from_interface_id = fif.id and c.to_component_id = tc.id and c.to_interface_id = tif.id and c.template_asset_id = ta.id and c.protocol_id = pr.id and c.access_right_id = ar.id order by 1;
+  declare accessRightCursor cursor for select name, description, value from access_right order by 3,1;
+  declare protocolCursor cursor for select name, description, value from protocol order by 3,1;
+  declare privilegeCursor cursor for select name, description, value from privilege order by 3,1;
+  declare surfaceTypeCursor cursor for select name, description, value from surface_type order by 3,1;
 
   declare continue handler for not found set done = 1;
 
@@ -20106,6 +20113,7 @@ begin
 
   set done = 0;
 
+  set buf = concat('h1. Components\n\n');
   open cCursor;
   c_loop: loop
     fetch cCursor into cId,cName,cDesc;
@@ -20113,7 +20121,7 @@ begin
     then
       leave c_loop;
     end if;
-    set buf = concat('h2. ',cName,'\n\n','h3. Description\n\n',cDesc,'\n\nh3. Interfaces\n\n|_.Interface |_.Type |_.Access Right |_.Privilege |\n');
+    set buf = concat(buf,'h2. ',cName,'\n\n','h3. Description\n\n',cDesc,'\n\nh3. Interfaces\n\n|_.Interface |_.Type |_.Access Right |_.Privilege |\n');
     open cifCursor;
     cif_loop: loop
       fetch cifCursor into ifName,reqId,arName,prName;
@@ -20160,7 +20168,7 @@ begin
     then
       set buf = concat(buf,'None\n\n');
     else
-      set buf = concat(buf,'!{width:1000px}',replace(cName,' ','_'),'GoalModel.jpg!\n\n|_.Name |_.Definition |_.Concerns |_.Responsibility |\n');
+      set buf = concat(buf,'|_.Name |_.Definition |_.Concerns |_.Responsibility |\n'); 
       open cgCursor;
       cg_loop: loop
         fetch cgCursor into cgId, cgName, cgDesc;
@@ -20208,9 +20216,67 @@ begin
     end if;
 
     insert into temp_architecture (name,artifact_type,text) values(cName,'component',ifnull(buf,''));
+    set buf = '';
   end loop c_loop;
   close cCursor;
   set done = 0;
+
+  set buf = 'h1. Attack Surface metrics\n\nh2. Access Rights\n\nThese metrics define the access rights necessary for a subject to make use of a protocol, privilege level, or asset.\n\n|_.Name|_.Description|_.Value|\n';
+  open accessRightCursor;
+  accessRight_loop: loop
+    fetch accessRightCursor into metricName,metricDesc,metricValue;
+    if done = 1
+    then
+      leave accessRight_loop;
+    end if;
+    set buf = concat(buf,'| ',metricName,' | ',metricDesc,' | ',metricValue,' |\n');
+  end loop accessRight_loop;
+  close accessRightCursor;
+  set done = 0;
+
+  set buf = concat(buf,'\nh2. Protocols\n\nThese metrics define the protocol used in component connections.\n\n|_.Name|_.Description|_.Value|\n');
+  open protocolCursor;
+  protocol_loop: loop
+    fetch protocolCursor into metricName,metricDesc,metricValue;
+    if done = 1
+    then
+      leave protocol_loop;
+    end if;
+    set buf = concat(buf,'| ',metricName,' | ',metricDesc,' | ',metricValue,' |\n');
+  end loop protocol_loop;
+  close protocolCursor;
+  set done = 0;
+
+  set buf = concat(buf,'\nh2. Privileges\n\nThese metrics define the level of privilege that a component interface operates at.|_.Name|_.Description|_.Value|\n');
+  open privilegeCursor;
+  privilege_loop: loop
+    fetch privilegeCursor into metricName,metricDesc,metricValue;
+    if done = 1
+    then
+      leave privilege_loop;
+    end if;
+    set buf = concat(buf,'| ',metricName,' | ',metricDesc,' | ',metricValue,' |\n');
+  end loop privilege_loop;
+  close privilegeCursor;
+  set done = 0;
+
+  set buf = concat(buf,'\nh2. Surface Types\n\nThese metrics define the type of surface used by component assets.|_.Name|_.Description|_.Value|\n');
+  open surfaceTypeCursor;
+  surfaceType_loop: loop
+    fetch surfaceTypeCursor into metricName,metricDesc,metricValue;
+    if done = 1
+    then
+      leave surfaceType_loop;
+    end if;
+    set buf = concat(buf,'| ',metricName,' | ',metricDesc,' | ',metricValue,' |\n');
+  end loop surfaceType_loop;
+  close surfaceTypeCursor;
+
+  set buf = concat(buf,'\nh2. Damage potential for untrusted asset surface: Colour codes\n\n!{width:200px}DERColour.jpg!\n\n');
+  set done = 0;
+  insert into temp_architecture (name,artifact_type,text) values('metrics','metrics',ifnull(buf,''));
+
+  set buf = 'h1. Architectural Patterns\n\n';
 
   open apCursor;
   ap_loop: loop
@@ -20219,7 +20285,7 @@ begin
     then
       leave ap_loop;
     end if;
-    set buf = concat('h2. ',apName,'\n\n!{width:1000px}',replace(apName,' ','_'),'ComponentModel.jpg!\n\nh3. Synopsis\n\n',apDesc,'\n\nh3. Components\n\n');
+    set buf = concat(buf,'h2. ',apName,'\n\n!{width:1000px}',replace(apName,' ','_'),'ComponentModel.jpg!\n\nh3. Synopsis\n\n',apDesc,'\n\nh3. Components\n\n');
 
     open apcCursor;
     apc_loop: loop
@@ -20232,7 +20298,7 @@ begin
     end loop apc_loop;
     close apcCursor;
     set done = 0;
-    set buf = concat(buf,'\nh2. Connectors\n\n|_.Connector |_.From |_.Role |_.Interface |_.To |_.Role |_.Interface |_.Asset |_.Protocol |_.Access Right |\n');
+    set buf = concat(buf,'\nh3. Connectors\n\n|_.Connector |_.From |_.Role |_.Interface |_.To |_.Role |_.Interface |_.Asset |_.Protocol |_.Access Right |\n');
 
 
     open connCursor;
@@ -20248,6 +20314,7 @@ begin
     set done = 0;
     set buf = concat(buf,'\n');
     insert into temp_architecture (name,artifact_type,text) values(apName,'architectural_pattern',ifnull(buf,''));
+    set buf = '';
   end loop ap_loop;
   close apCursor;
 
@@ -20394,8 +20461,10 @@ begin
   declare tpValue varchar(50);
   declare tpRationale varchar(4000);
   declare thrName varchar(200);
+  declare thrRef varchar(100);
   declare thrObsName varchar(100);
   declare vulName varchar(200);
+  declare vulRef varchar(100);
   declare vulObsName varchar(100);
   declare attackerId int;
   declare attackerName varchar(50);
@@ -20456,7 +20525,9 @@ begin
       close tpCursor; 
       set done = 0;
       select name into thrName from threat where id = threatId;
+      select reference into thrRef from threat_directory where name = thrName limit 1;
       select name into vulName from vulnerability where id = vulId;
+      select reference into vulRef from vulnerability_directory where name = vulName limit 1;
 
       set thrObsName = null;
       set vulObsName = null;
@@ -20475,7 +20546,7 @@ begin
       end if;
       set done = 0;
 
-      set buf = concat(buf,'\nh3. Structure\n\n| Attack: ',thrName,' | Obstacle: ',thrObsName,' |\n| Exploit: ',vulName,' | Obstacle: ',vulObsName,' |\n\nh3. Participants\n\n');
+      set buf = concat(buf,'\nh3. Structure\n\n| Attack: ',thrName,' | Origin: ',thrRef,' | Obstacle: ',thrObsName,' |\n| Exploit: ',vulName,' | Origin: ',vulRef,' | Obstacle: ',vulObsName,' |\n\nh3. Participants\n\n');
       set buf = concat(buf,'|_.Attacker |_.Motives |_.Capabilities (Value) |\n');
       open attackerCursor;
       attacker_loop: loop
