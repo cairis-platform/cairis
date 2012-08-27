@@ -228,7 +228,7 @@ def exportAttackPatterns(outFile):
   b = Borg()
   rmAttackPatterns = b.dbProxy.redmineAttackPatterns()
 
-  buf = 'h1. Attack Patterns\n\nh2. Obstacle probability: colour codes\n\n!{width:200px}ObsColour.jpg!\n\n'
+  buf = 'h1. Contextualised Attack Patterns\n\nh2. Obstacle probability: colour codes\n\n!{width:200px}ObsColour.jpg!\n\n'
   apdxBuf = ''
   noAPs = 0
   for apName,envName,cType,apTxt in rmAttackPatterns:
