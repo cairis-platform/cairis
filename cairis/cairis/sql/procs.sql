@@ -3703,7 +3703,11 @@ begin
     union
     select 'requirement',concat(rm.short_code,'-',r.label) from requirementobstacle_goalassociation ro, requirement r, asset_requirement rmr, asset rm, environment_obstacle eo where ro.environment_id = environmentId and ro.goal_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = rmr.requirement_id and rmr.asset_id = rm.id and ro.subgoal_id = eo.obstacle_id and eo.environment_id = ro.environment_id
     union
-    select 'requirement',concat(rm.short_code,'-',r.label) from obstaclerequirement_goalassociation obr, requirement r, asset_requirement rmr, asset rm, environment_obstacle eo where obr.environment_id = environmentId and obr.subgoal_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = rmr.requirement_id and rmr.asset_id = rm.id and obr.goal_id = eo.obstacle_id  and eo.environment_id = obr.environment_id;
+    select 'requirement',concat(rm.short_code,'-',r.label) from obstaclerequirement_goalassociation obr, requirement r, asset_requirement rmr, asset rm, environment_obstacle eo where obr.environment_id = environmentId and obr.subgoal_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = rmr.requirement_id and rmr.asset_id = rm.id and obr.goal_id = eo.obstacle_id  and eo.environment_id = obr.environment_id
+    union
+    select 'obstacle',o.name from obstacle o, obstacledomainproperty_goalassociation od where od.environment_id = environmentId and od.goal_id = g.id
+    union
+    select 'domainproperty',dp.name from domainproperty dp, obstacledomainproperty_goalassociation od where od.environment_id = environmentId and od.subgoal_id = dp.id;
 /*    union
     select 'requirement',concat(a.short_code,'-',r.label) from requirement_role rr, requirement r,asset_requirement ar, asset a where rr.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = ar.requirement_id and ar.asset_id = a.id
     union
@@ -3789,7 +3793,11 @@ begin
     union
     select 'requirement',concat(a.short_code,'-',r.label) from requirement_role rr, requirement r,asset_requirement ar, asset a where rr.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = ar.requirement_id and ar.asset_id = a.id
     union
-    select 'requirement',concat(e.short_code,'-',r.label) from requirement_role rr, requirement r,environment_requirement er, environment e where rr.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = er.requirement_id and er.environment_id = e.id;
+    select 'requirement',concat(e.short_code,'-',r.label) from requirement_role rr, requirement r,environment_requirement er, environment e where rr.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = er.requirement_id and er.environment_id = e.id
+    union
+    select 'obstacle',o.name from obstacle o, obstacledomainproperty_goalassociation od where od.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and od.goal_id = g.id
+    union
+    select 'domainproperty',dp.name from domainproperty dp, obstacledomainproperty_goalassociation od where od.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and od.subgoal_id = dp.id;
   end if;
 end
 //
@@ -6189,6 +6197,11 @@ begin
     select id into goalId from obstacle where name = goalName;    
     select id into subGoalId from goal where name = subGoalName;    
     insert into obstaclegoal_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values(associationId,environmentId,goalId,aTypeId,subGoalId,alternativeId,rationaleName);
+  elseif goalDimName = 'obstacle' and subGoalDimName = 'domainproperty'
+  then
+    select id into goalId from obstacle where name = goalName;    
+    select id into subGoalId from domainproperty where name = subGoalName;    
+    insert into obstacledomainproperty_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values(associationId,environmentId,goalId,aTypeId,subGoalId,alternativeId,rationaleName);
   elseif goalDimName = 'obstacle' and subGoalDimName = 'requirement'
   then
     select id into goalId from obstacle where name = goalName;    
@@ -6313,6 +6326,11 @@ begin
     select id into goalId from obstacle where name = goalName;    
     select id into subGoalId from goal where name = subGoalName;    
     update obstaclegoal_goalassociation set environment_id = environmentId, goal_id = goalId, ref_type_id = aTypeId, subgoal_id = subGoalId,alternative_id = alternativeId, rationale = rationaleName where id = associationId;
+  elseif goalDimName = 'obstacle' and subGoalDimName = 'domainproperty'
+  then
+    select id into goalId from obstacle where name = goalName;    
+    select id into subGoalId from domainproperty where name = subGoalName;    
+    update obstacledomainproperty_goalassociation set environment_id = environmentId, goal_id = goalId, ref_type_id = aTypeId, subgoal_id = subGoalId,alternative_id = alternativeId, rationale = rationaleName where id = associationId;
   elseif goalDimName = 'obstacle' and subGoalDimName = 'requirement'
   then
     select id into goalId from obstacle where name = goalName;    
@@ -8037,6 +8055,7 @@ end
 create procedure delete_domainproperty(in dpId int)
 begin
   delete from goaldomainproperty_goalassociation where subgoal_id = dpId;
+  delete from obstacledomainproperty_goalassociation where subgoal_id = dpId;
   delete from domainproperty_asset where domainproperty_id = dpId;
   delete from domainproperty_reference where domainproperty_id = dpId;
   delete from domainproperty_tag where domainproperty_id = dpId;
@@ -8080,6 +8099,7 @@ begin
   delete from obstacle_concern where obstacle_id = obsId;
   delete from obstacleobstacle_goalassociation where goal_id = obsId;
   delete from obstaclegoal_goalassociation where goal_id = obsId;
+  delete from obstacledomainproperty_goalassociation where goal_id = obsId;
   delete from obstaclerequirement_goalassociation where goal_id = obsId;
   delete from goalobstacle_goalassociation where subgoal_id = obsId;
   delete from domainpropertyobstacle_goalassociation where subgoal_id = obsId;
@@ -8396,6 +8416,10 @@ begin
   then
     select 'goal',g.name from goal g, obstaclegoal_goalassociation og where og.environment_id = environmentId and og.subgoal_id = g.id
     union
+    select 'obstacle',o.name from obstacle o, obstacledomainproperty_goalassociation od where od.environment_id = environmentId and od.goal_id = o.id
+    union
+    select 'domainproperty',dp.name from domainproperty dp, obstacledomainproperty_goalassociation od where od.environment_id = environmentId and od.subgoal_id = dp.id
+    union
     select 'goal',g.name from goal g, response_goal rg, environment_goal eg, response re, risk ri, obstaclethreat_goalassociation ot where eg.environment_id = environmentId and eg.environment_id = ot.environment_id and eg.goal_id = g.id and g.id = rg.goal_id and rg.response_id = re.id and re.risk_id = ri.id and ri.threat_id = ot.subgoal_id
     union
     select 'goal',g.name from goal g, response_goal rg, environment_goal eg, response re, risk ri, obstaclevulnerability_goalassociation ov where eg.environment_id = environmentId and eg.goal_id = g.id and g.id = rg.goal_id and rg.response_id = re.id and re.risk_id = ri.id and ri.vulnerability_id = ov.subgoal_id and eg.environment_id = ov.environment_id
@@ -8468,6 +8492,8 @@ begin
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclegoal_goalassociation ga, environment e, obstacle hg, reference_type rt, goal tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId
     union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, domainproperty tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId
+    union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'task' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacletask_goalassociation ga, environment e, obstacle hg, reference_type rt, task tg where ga.environment_id = environmentId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'usecase' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacleusecase_goalassociation ga, environment e, obstacle hg, reference_type rt, usecase tg where ga.environment_id = environmentId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
@@ -8495,6 +8521,8 @@ begin
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'role' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclerole_goalassociation ga, environment e, obstacle hg, reference_type rt, role tg where ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclegoal_goalassociation ga, environment e, obstacle hg, reference_type rt, goal tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)
+    union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, domainproperty tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'task' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacletask_goalassociation ga, environment e, obstacle hg, reference_type rt, task tg where ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
@@ -11612,6 +11640,8 @@ begin
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'task' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacletask_goalassociation ga, environment e, obstacle hg, reference_type rt, task tg where ga.goal_id = obsId and ga.environment_id = environmentId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, goal tg where ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId
+    union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'usecase' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacleusecase_goalassociation ga, environment e, obstacle hg, reference_type rt, usecase tg where ga.goal_id = obsId and ga.environment_id = environmentId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
     select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclethreat_goalassociation ot, risk ri, response re, response_goal rg, environment_obstacle eo, environment_threat et, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ot.goal_id = obsId and et.environment_id = environmentId and et.environment_id = eo.environment_id and eo.environment_id = er.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and et.environment_id = e.id and et.threat_id = ot.subgoal_id and et.environment_id = ot.environment_id and ot.goal_id = hg.id and ot.subgoal_id = ri.threat_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
@@ -11634,6 +11664,8 @@ begin
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'role' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclerole_goalassociation ga, environment e, obstacle hg, reference_type rt, role tg where ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclegoal_goalassociation ga, environment e, obstacle hg, reference_type rt, goal tg where ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)
+    union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, goal tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'task' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacletask_goalassociation ga, environment e, obstacle hg, reference_type rt, task tg where ga.goal_id = obsId and ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
@@ -11696,6 +11728,8 @@ begin
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclegoal_goalassociation ga, environment e, obstacle hg, reference_type rt, goal tg where ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId
     union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, domainproperty tg where ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId
+    union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'task' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacletask_goalassociation ga, environment e, obstacle hg, reference_type rt, task tg where ga.goal_id = obsId and ga.environment_id = environmentId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'usecase' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacleusecase_goalassociation ga, environment e, obstacle hg, reference_type rt, usecase tg where ga.goal_id = obsId and ga.environment_id = environmentId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
@@ -11720,6 +11754,8 @@ begin
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'role' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclerole_goalassociation ga, environment e, obstacle hg, reference_type rt, role tg where ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclegoal_goalassociation ga, environment e, obstacle hg, reference_type rt, goal tg where ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)
+    union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, domainproperty tg where ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'task' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacletask_goalassociation ga, environment e, obstacle hg, reference_type rt, task tg where ga.goal_id = obsId and ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union

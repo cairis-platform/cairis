@@ -155,6 +155,7 @@ DROP TABLE IF EXISTS goalobstacle_goalassociation;
 DROP TABLE IF EXISTS domainpropertyobstacle_goalassociation;
 DROP TABLE IF EXISTS obstacleobstacle_goalassociation;
 DROP TABLE IF EXISTS obstaclegoal_goalassociation;
+DROP TABLE IF EXISTS obstacledomainproperty_goalassociation;
 DROP TABLE IF EXISTS obstaclerequirement_goalassociation;
 DROP TABLE IF EXISTS requirementobstacle_goalassociation;
 DROP TABLE IF EXISTS obstaclevulnerability_goalassociation;
@@ -1687,6 +1688,20 @@ CREATE TABLE obstaclegoal_goalassociation (
   FOREIGN KEY(goal_id) REFERENCES obstacle(id),
   FOREIGN KEY(ref_type_id) REFERENCES reference_type(id),
   FOREIGN KEY(subgoal_id) REFERENCES goal(id)
+) ENGINE=INNODB;
+CREATE TABLE obstacledomainproperty_goalassociation (
+  id INT NOT NULL,
+  environment_id INT NOT NULL,
+  goal_id INT NOT NULL,
+  ref_type_id INT NOT NULL,
+  subgoal_id INT NOT NULL,
+  alternative_id INT NOT NULL,
+  rationale VARCHAR(1000) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id),
+  FOREIGN KEY(goal_id) REFERENCES obstacle(id),
+  FOREIGN KEY(ref_type_id) REFERENCES reference_type(id),
+  FOREIGN KEY(subgoal_id) REFERENCES domainproperty(id)
 ) ENGINE=INNODB;
 CREATE TABLE obstaclerequirement_goalassociation (
   id INT NOT NULL,
