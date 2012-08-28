@@ -258,11 +258,7 @@ def exportAttackPatterns(outFile):
 
   fileName,filePostfix = outFile.split('.')
   summaryFile = fileName + '-summary.txt'
-  apSumm = b.dbProxy.redmineAttackPatternsSummary('Complete')
-  buf = ''
-  for aName,sTxt in apSumm:
-    buf += sTxt + '\n'
-
+  buf = b.dbProxy.redmineAttackPatternsSummary('Complete')
   aFile = open(summaryFile,'w')
   aFile.write(buf)
   aFile.close()
