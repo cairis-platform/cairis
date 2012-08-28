@@ -10801,10 +10801,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting definition for template goal id ' + str(tgId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def redmineArchitectureSummary(self):
+  def redmineArchitectureSummary(self,envName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call redmineArchitectureSummary()')
+      curs.execute('call redmineArchitectureSummary(%s)',(envName))
       if (curs.rowcount == -1):
         exceptionText = 'Error exporting architecture summary to Redmine'
         raise DatabaseProxyException(exceptionText) 
@@ -10819,4 +10819,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL exporting architecture summary to Redmine (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def redmineAttackPatternsSummary(self,envName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call redmineAttackPatternsSummary(%s)',(envName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error exporting attack patterns summary to Redmine'
+        raise DatabaseProxyException(exceptionText) 
+      aps = []
+      for row in curs.fetchall():
+        row = list(row)
+        aName = row[0]
+        aTxt = row[1]
+        aps.append((row[0],row[1]))
+      curs.close()
+      return aps
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL exporting attack patterns summary to Redmine (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

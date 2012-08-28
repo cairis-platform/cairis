@@ -226,7 +226,7 @@ def exportArchitecture(outFile):
   outFilePrefix,outFilePostfix = outFile.split('.')
   summaryFile = outFilePrefix + '-summary.' + outFilePostfix
 
-  archSumm = b.dbProxy.redmineArchitectureSummary()
+  archSumm = b.dbProxy.redmineArchitectureSummary('Complete')
   buf = ''
   for aName,sTxt in archSumm:
     buf += sTxt + '\n'
@@ -257,9 +257,14 @@ def exportAttackPatterns(outFile):
   aFile.close()
 
   fileName,filePostfix = outFile.split('.')
-  apdxFileName = fileName + '_appendix.txt'
-  apdxFile = open(apdxFileName,'w')
-  apdxFile.write(apdxBuf)
-  apdxFile.close()
+  summaryFile = fileName + '-summary.txt'
+  apSumm = b.dbProxy.redmineAttackPatternsSummary('Complete')
+  buf = ''
+  for aName,sTxt in apSumm:
+    buf += sTxt + '\n'
+
+  aFile = open(summaryFile,'w')
+  aFile.write(buf)
+  aFile.close()
 
   return 'Exported ' + str(noAPs) + ' attack patterns.'

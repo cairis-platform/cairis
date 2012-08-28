@@ -793,6 +793,8 @@ drop procedure if exists addPersonaCapability;
 drop procedure if exists riskObstacleTree;
 drop procedure if exists obstacleParents;
 drop procedure if exists redmineArchitectureSummary;
+drop procedure if exists redmineAttackPatternsSummary;
+drop procedure if exists walkObstacleBranch;
 
 delimiter //
 
@@ -20681,7 +20683,7 @@ begin
 end
 //
 
-create procedure redmineArchitectureSummary()
+create procedure redmineArchitectureSummary(in envName text)
 begin
   declare apId int;
   declare apName varchar(255);
@@ -20693,18 +20695,26 @@ begin
   declare der_m float default 0;
   declare der_c float default 0;
   declare der_i float default 0;
-
+  declare envId int;
+  declare tvName varchar(200);
   declare apSumBuf varchar(90000000);
   declare derBuf varchar(90000000);
+  declare waBuf varchar(90000000);
   declare apCursor cursor for select id,name,synopsis from component_view order by 2;
   declare componentCursor cursor for select c.name from component_view_component cvc, component c where cvc.component_view_id = apId and cvc.component_id = c.id order by 1;
+  declare apVulCursor cursor for select distinct v.name from component c, component_asset ca, asset a, template_asset ta, asset_vulnerability av, vulnerability v where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = apId) and ca.asset_id = ta.id and ta.name = a.name and a.id = av.asset_id and av.environment_id = envId and av.vulnerability_id = v.id order by 1;
+  declare apThrCursor cursor for select distinct t.name from component c, component_asset ca, asset a, template_asset ta, asset_threat at, threat t where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = apId) and ca.asset_id = ta.id and ta.name = a.name and a.id = at.asset_id and at.environment_id = envId and at.threat_id = t.id order by 1;
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_architecturesummary;
   create temporary table temp_architecturesummary (name varchar(200),text varchar(90000000));
 
+  select id into envId from environment where name = envName limit 1;
+
   set apSumBuf = '|_.Architectural pattern |_.Description |_.Components|_.No. of assets|\n';
   set derBuf = '|_.Architectural pattern |_.DER_m |_.DER_c|_.DER_i|\n';
+  set waBuf = '|_.Architectural pattern |_.Threats |_.Vulnerabilities|_.Mitigation Summary|\n';
+
   open apCursor;
   ap_loop: loop
     fetch apCursor into apId,apName,apSynopsis;
@@ -20714,6 +20724,7 @@ begin
     end if; 
 
     set apSumBuf = concat(apSumBuf,'| ',apName,' | ',apSynopsis,' | ');
+    set waBuf = concat(waBuf,'| ',apName,' | ');
 
     call derRatio_entryExitPoints(apId,der_m);
     call derRatio_channels(apId,der_c);
@@ -20747,19 +20758,226 @@ begin
     set apSumBuf = concat(apSumBuf,assetCount,' |\n');
     set done = 0;
     close componentCursor;
+
+    open apThrCursor;
+    apThr_loop: loop
+      fetch apThrCursor into tvName;
+      if done = 1
+      then
+        leave apThr_loop;
+      else
+        if isFirst = 1
+        then
+          set isFirst = 0;
+        else
+          set waBuf = concat(waBuf,', ');
+        end if;
+      end if;
+      set waBuf = concat(waBuf,tvName);
+    end loop apThr_loop;
+    close apThrCursor;
+    set done = 0;
+    set isFirst = 1;
+    set waBuf = concat(waBuf,' | ');
+
+    open apVulCursor;
+    apVul_loop: loop
+      fetch apVulCursor into tvName;
+      if done = 1
+      then
+        leave apVul_loop;
+      else
+        if isFirst = 1
+        then
+          set isFirst = 0;
+        else
+          set waBuf = concat(waBuf,', ');
+        end if;
+      end if;
+      set waBuf = concat(waBuf,tvName);
+    end loop apVul_loop;
+    close apVulCursor;
+    set done = 0;
+    set isFirst = 1;
+    set waBuf = concat(waBuf,' | Summarise mitigations here |\n');
+
   end loop ap_loop;
   close apCursor;
   insert into temp_architecturesummary(name,text) values('summary',apSumBuf);
   insert into temp_architecturesummary(name,text) values('DER',derBuf);
+  insert into temp_architecturesummary(name,text) values('weakness_analysis',waBuf);
 
   select name,text from temp_architecturesummary;
-
-
-
-
-
-
 end
 //
+
+create procedure redmineAttackPatternsSummary(in envName text)
+begin
+  declare envId int;
+  declare rootCount int;
+  declare branchCount int;
+  declare obsId int;
+  declare soId int;
+  declare boId int;
+  declare obsName varchar(200);
+  declare isFirst int default 1;
+  declare riskId int;
+  declare riskName varchar(200);
+  declare thrName varchar(200);
+  declare vulName varchar(200);
+  declare buf varchar(90000000);
+  declare done int default 0;
+  declare obsCursor cursor for select goal_id from obstacleobstacle_goalassociation where environment_id = envId and subgoal_id in 
+     (select ga.goal_id from obstaclethreat_goalassociation ga, risk r, environment_threat et where r.id = riskId and r.threat_id = et.threat_id and et.environment_id = envId and et.threat_id = ga.subgoal_id and et.environment_id = ga.environment_id
+      union
+      select ga.goal_id from obstaclevulnerability_goalassociation ga, risk r, environment_vulnerability ev where r.id = riskId and r.vulnerability_id = ev.vulnerability_id and ev.environment_id = envId and ev.vulnerability_id = ga.subgoal_id and ev.environment_id = ga.environment_id);
+  declare atkPCursor cursor for select r.id,r.name,t.name,v.name from risk r, threat t, vulnerability v where r.threat_id = t.id and r.vulnerability_id = v.id order by 2;
+  declare soCursor cursor for select subgoal_id from obstacleobstacle_goalassociation where goal_id = obsId and environment_id = envId;
+  declare rootCursor cursor for select obstacle_id from temp_rootobstacle;
+  declare branchCursor cursor for select subgoal_id from obstacleobstacle_goalassociation where goal_id = soId and environment_id = envId;
+  declare loCursor cursor for select distinct obstacle_name from temp_leafobstacle order by 1;
+  declare continue handler for not found set done = 1;
+ 
+  drop table if exists temp_rootobstacle;
+  create temporary table temp_rootobstacle (obstacle_id int,obstacle_name varchar(200));
+  drop table if exists temp_leafobstacle;
+  create temporary table temp_leafobstacle (obstacle_name varchar(200));
+
+  select id into envId from environment where name = envName;
+
+  set buf = '|_.Attack Pattern |_.Attack|_.Exploit|_.Leaf obstacles|\n';
+  open atkPCursor;
+  atkP_loop: loop
+    fetch atkPCursor into riskId,riskName,thrName,vulName;
+    if done = 1
+    then
+      leave atkP_loop;
+    end if;
+    set buf = concat(buf,'| ',riskName,' | ',thrName,' | ',vulName,' | ');
+
+    select count(goal_id) into rootCount from obstacleobstacle_goalassociation where environment_id = envId and subgoal_id in
+      (select ga.goal_id from obstaclevulnerability_goalassociation ga, risk r, environment_vulnerability ev where r.id = riskId and r.vulnerability_id = ev.vulnerability_id and ev.environment_id = envId and ev.vulnerability_id = ga.subgoal_id and ev.environment_id = ga.environment_id
+       union
+       select ga.goal_id from obstaclethreat_goalassociation ga, risk r, environment_threat et where r.id = riskId and r.threat_id = et.threat_id and et.environment_id = envId and et.threat_id = ga.subgoal_id and et.environment_id = ga.environment_id);
+    
+    if rootCount = 0
+    then
+      insert into temp_rootobstacle(obstacle_id,obstacle_name) select id,name from obstacle where id in 
+        (select ga.goal_id from obstaclevulnerability_goalassociation ga, risk r, environment_vulnerability ev where r.id = riskId and r.vulnerability_id = ev.vulnerability_id and ev.environment_id = envId and ev.vulnerability_id = ga.subgoal_id and ev.environment_id = ga.environment_id
+         union
+         select ga.goal_id from obstaclethreat_goalassociation ga, risk r, environment_threat et where r.id = riskId and r.threat_id = et.threat_id and et.environment_id = envId and et.threat_id = ga.subgoal_id and et.environment_id = ga.environment_id);
+    end if;
+
+    open obsCursor;
+    obs_loop: loop
+      fetch obsCursor into obsId;
+      if done = 1
+      then
+        leave obs_loop;
+      end if;
+      call obstacleParents(obsId,envId);
+      set done = 0;
+    end loop obs_loop;
+    close obsCursor;
+    set done = 0;
+
+    open rootCursor;
+    root_loop: loop
+      fetch rootCursor into obsId;
+      if done = 1
+      then
+        leave root_loop;
+      end if;
+      open soCursor;
+      so_loop: loop
+        fetch soCursor into soId;
+        if done = 1
+        then
+          leave so_loop;
+        end if;
+
+        select count(subgoal_id) into branchCount from obstacleobstacle_goalassociation where goal_id = soId and environment_id = envId;
+        if branchCount > 0
+        then
+          open branchCursor;
+          branch_loop: loop
+            fetch branchCursor into boId;
+            if done = 1
+            then
+              leave branch_loop;
+            end if;
+            call walkObstacleBranch(boId,envId);
+            set done = 0;
+          end loop branch_loop;
+          close branchCursor;
+        else
+          select name into obsName from obstacle where id = soId;
+          insert into temp_leafobstacle(obstacle_name) values (obsName);
+        end if;
+        set done = 0;
+      end loop so_loop;
+      close soCursor;
+      set done = 0;
+    end loop root_loop;
+    close rootCursor;
+    set done = 0;
+ 
+    open loCursor;
+    lo_loop: loop
+      fetch loCursor into obsName;
+      if done = 1
+      then
+        leave lo_loop;
+      else
+        if isFirst = 1
+        then
+          set isFirst = 0;
+        else
+          set buf = concat(buf,', ');
+        end if;
+      end if;
+      set buf = concat(buf,obsName);
+    end loop lo_loop;
+    close loCursor; 
+    delete from temp_leafobstacle;
+    delete from temp_rootobstacle;
+    set done = 0;
+    set buf = concat(buf,' |\n');
+    set isFirst = 1;
+  end loop atkP_loop;
+  close atkPCursor;
+  select buf;
+end
+//
+
+create procedure walkObstacleBranch(in soId int, in envId int)
+begin
+  declare branchCount int;
+  declare boId int;
+  declare done int default 0;
+  declare obsName varchar(200);
+  declare branchCursor cursor for select subgoal_id from obstacleobstacle_goalassociation where goal_id = soId and environment_id = envId;
+  declare continue handler for not found set done = 1;
+
+  select count(subgoal_id) into branchCount from obstacleobstacle_goalassociation where goal_id = soId and environment_id = envId;
+  if branchCount > 0
+  then
+    open branchCursor;
+    branch_loop: loop
+      fetch branchCursor into boId;
+      if done = 1
+      then
+        leave branch_loop;
+      end if;
+      call walkObstacleBranch(boId,envId);
+      set done = 0;
+    end loop branch_loop;
+    close branchCursor;
+  else
+    select name into obsName from obstacle where id = soId;
+    insert into temp_leafobstacle(obstacle_name) values (obsName);
+  end if;
+end
+// 
 
 delimiter ;
