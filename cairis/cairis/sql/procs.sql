@@ -20192,6 +20192,10 @@ begin
         end loop cgConcern_loop;
         close cgConcernCursor;
         set done = 0;
+        if cgConcerns = ''
+        then
+          set cgConcerns = 'None';
+        end if;
 
         set cgResponsibilities = '';
         open cgRespCursor;
@@ -20209,6 +20213,12 @@ begin
         end loop cgResp_loop;
         close cgRespCursor;
         set done = 0;
+        if cgResponsibilities = ''
+        then
+          set cgResponsibilities = 'None';
+        end if;
+
+
         set buf = concat(buf,'| ',cgName,' | ',cgDesc,' | ',cgConcerns,' | ',cgResponsibilities,' |\n');
       end loop cg_loop;
       close cgCursor;
