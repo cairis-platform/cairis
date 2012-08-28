@@ -792,6 +792,7 @@ drop procedure if exists addPersonaMotive;
 drop procedure if exists addPersonaCapability;
 drop procedure if exists riskObstacleTree;
 drop procedure if exists obstacleParents;
+drop procedure if exists redmineArchitectureSummary;
 
 delimiter //
 
@@ -20399,6 +20400,8 @@ begin
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclegoal_goalassociation ga, environment e, obstacle hg, reference_type rt, goal tg where ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = envId
     union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, domainproperty tg where ga.goal_id = obsId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = envId
+    union
     select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclethreat_goalassociation ot, risk ri, response re, response_goal rg, environment_obstacle eo, environment_threat et, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ot.goal_id = obsId and et.environment_id = envId and et.environment_id = eo.environment_id and eo.environment_id = er.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and et.environment_id = e.id and et.threat_id = ot.subgoal_id and et.environment_id = ot.environment_id and ot.goal_id = hg.id and ot.subgoal_id = ri.threat_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
     union
     select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclevulnerability_goalassociation ov, risk ri, response re, response_goal rg, environment_obstacle eo, environment_vulnerability ev, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ov.goal_id = obsId and ev.environment_id = envId and ev.environment_id = eo.environment_id and eo.environment_id = er.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and ev.environment_id = e.id and ev.vulnerability_id = ov.subgoal_id and ev.environment_id = ov.environment_id and ov.goal_id = hg.id and ov.subgoal_id = ri.vulnerability_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
@@ -20675,6 +20678,87 @@ begin
   close apCursor;
 
   select distinct name,environment_name,content_type,text from temp_attackpattern;
+end
+//
+
+create procedure redmineArchitectureSummary()
+begin
+  declare apId int;
+  declare apName varchar(255);
+  declare apSynopsis varchar(255);
+  declare done int default 0;
+  declare assetCount int default 0;
+  declare isFirst int default 1;
+  declare cName varchar(255);
+  declare der_m float default 0;
+  declare der_c float default 0;
+  declare der_i float default 0;
+
+  declare apSumBuf varchar(90000000);
+  declare derBuf varchar(90000000);
+  declare apCursor cursor for select id,name,synopsis from component_view order by 2;
+  declare componentCursor cursor for select c.name from component_view_component cvc, component c where cvc.component_view_id = apId and cvc.component_id = c.id order by 1;
+  declare continue handler for not found set done = 1;
+
+  drop table if exists temp_architecturesummary;
+  create temporary table temp_architecturesummary (name varchar(200),text varchar(90000000));
+
+  set apSumBuf = '|_.Architectural pattern |_.Description |_.Components|_.No. of assets|\n';
+  set derBuf = '|_.Architectural pattern |_.DER_m |_.DER_c|_.DER_i|\n';
+  open apCursor;
+  ap_loop: loop
+    fetch apCursor into apId,apName,apSynopsis;
+    if done = 1
+    then
+      leave ap_loop;
+    end if; 
+
+    set apSumBuf = concat(apSumBuf,'| ',apName,' | ',apSynopsis,' | ');
+
+    call derRatio_entryExitPoints(apId,der_m);
+    call derRatio_channels(apId,der_c);
+    call derRatio_untrustedSurface(apId,der_i);
+    set derBuf = concat(derBuf,'| ',apName,' | ',der_m,' | ',der_c,' | ',der_i,' |\n');
+    set der_m = 0;
+    set der_c = 0;
+    set der_i = 0;
+
+    open componentCursor;
+    component_loop: loop
+      fetch componentCursor into cName;
+      if done = 1
+      then
+        leave component_loop;
+      else
+        if isFirst = 1
+        then
+          set isFirst = 0;
+        else
+          set apSumBuf = concat(apSumBuf,', ');
+        end if;
+      end if;
+      set apSumBuf = concat(apSumBuf,cName);
+    end loop component_loop;
+    set done = 0;
+    set isFirst = 1;
+    set apSumBuf = concat(apSumBuf,' | ');
+
+    select count(distinct ca.asset_id) into assetCount from component_asset ca, component_view_component cvc where cvc.component_view_id = apId and cvc.component_id = ca.component_id;
+    set apSumBuf = concat(apSumBuf,assetCount,' |\n');
+    set done = 0;
+    close componentCursor;
+  end loop ap_loop;
+  close apCursor;
+  insert into temp_architecturesummary(name,text) values('summary',apSumBuf);
+  insert into temp_architecturesummary(name,text) values('DER',derBuf);
+
+  select name,text from temp_architecturesummary;
+
+
+
+
+
+
 end
 //
 

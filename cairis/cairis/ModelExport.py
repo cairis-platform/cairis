@@ -222,6 +222,19 @@ def exportArchitecture(outFile):
   aFile = open(outFile,'w')
   aFile.write(buf)
   aFile.close()
+
+  outFilePrefix,outFilePostfix = outFile.split('.')
+  summaryFile = outFilePrefix + '-summary.' + outFilePostfix
+
+  archSumm = b.dbProxy.redmineArchitectureSummary()
+  buf = ''
+  for aName,sTxt in archSumm:
+    buf += sTxt + '\n'
+
+  aFile = open(summaryFile,'w')
+  aFile.write(buf)
+  aFile.close()
+ 
   return 'Exported ' + str(noAPs) + ' architectural patterns.'
 
 def exportAttackPatterns(outFile):

@@ -10800,3 +10800,23 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting definition for template goal id ' + str(tgId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def redmineArchitectureSummary(self):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call redmineArchitectureSummary()')
+      if (curs.rowcount == -1):
+        exceptionText = 'Error exporting architecture summary to Redmine'
+        raise DatabaseProxyException(exceptionText) 
+      aps = []
+      for row in curs.fetchall():
+        row = list(row)
+        aName = row[0]
+        aTxt = row[1]
+        aps.append((row[0],row[1]))
+      curs.close()
+      return aps
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL exporting architecture summary to Redmine (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
