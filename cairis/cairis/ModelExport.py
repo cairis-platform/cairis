@@ -214,7 +214,9 @@ def exportArchitecture(outFile):
     noAPs += 1
     if (aType == 'component'):
       caName = aName.replace(' ','_') + 'AssetModel.jpg'
+      cgName = aName.replace(' ','_') + 'GoalModel.jpg'
       buildComponentAssetModel(b.dbProxy,aName,caName)
+      buildComponentGoalModel(b.dbProxy,aName,cgName)
     elif (aType == 'architectural_pattern'):
       graphName = aName.replace(' ','_') + 'ComponentModel.jpg'
       buildComponentModel(b.dbProxy,aName,graphName)

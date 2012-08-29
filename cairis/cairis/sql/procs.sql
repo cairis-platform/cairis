@@ -20171,6 +20171,10 @@ begin
     then
       set buf = concat(buf,'None\n\n');
     else
+      if cgCount > 1
+      then
+        set buf = concat(buf,'!{width:1000px}',replace(cName,' ','_'),'GoalModel.jpg!\n\n');
+      end if;
       set buf = concat(buf,'|_.Name |_.Definition |_.Concerns |_.Responsibility |\n'); 
       open cgCursor;
       cg_loop: loop
