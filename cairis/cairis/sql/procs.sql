@@ -20264,7 +20264,7 @@ begin
   close protocolCursor;
   set done = 0;
 
-  set buf = concat(buf,'\nh2. Privileges\n\nThese metrics define the level of privilege that a component interface operates at.|_.Name|_.Description|_.Value|\n');
+  set buf = concat(buf,'\nh2. Privileges\n\nThese metrics define the level of privilege that a component interface operates at.\n\n|_.Name|_.Description|_.Value|\n');
   open privilegeCursor;
   privilege_loop: loop
     fetch privilegeCursor into metricName,metricDesc,metricValue;
@@ -20277,7 +20277,7 @@ begin
   close privilegeCursor;
   set done = 0;
 
-  set buf = concat(buf,'\nh2. Surface Types\n\nThese metrics define the type of surface used by component assets.|_.Name|_.Description|_.Value|\n');
+  set buf = concat(buf,'\nh2. Surface Types\n\nThese metrics define the type of surface used by component assets.\n\n|_.Name|_.Description|_.Value|\n');
   open surfaceTypeCursor;
   surfaceType_loop: loop
     fetch surfaceTypeCursor into metricName,metricDesc,metricValue;
