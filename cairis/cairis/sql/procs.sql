@@ -3708,7 +3708,7 @@ begin
     union
     select 'requirement',concat(rm.short_code,'-',r.label) from obstaclerequirement_goalassociation obr, requirement r, asset_requirement rmr, asset rm, environment_obstacle eo where obr.environment_id = environmentId and obr.subgoal_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = rmr.requirement_id and rmr.asset_id = rm.id and obr.goal_id = eo.obstacle_id  and eo.environment_id = obr.environment_id
     union
-    select 'obstacle',o.name from obstacle o, obstacledomainproperty_goalassociation od where od.environment_id = environmentId and od.goal_id = g.id
+    select 'obstacle',o.name from obstacle o, obstacledomainproperty_goalassociation od where od.environment_id = environmentId and od.goal_id = o.id
     union
     select 'domainproperty',dp.name from domainproperty dp, obstacledomainproperty_goalassociation od where od.environment_id = environmentId and od.subgoal_id = dp.id;
 /*    union
