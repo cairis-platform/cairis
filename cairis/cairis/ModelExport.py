@@ -243,7 +243,7 @@ def exportAttackPatterns(outFile):
   b = Borg()
   rmAttackPatterns = b.dbProxy.redmineAttackPatterns()
 
-  buf = 'h1. Contextualised Attack Patterns\n\nh2. Obstacle probability: colour codes\n\n!{width:200px}ObsColour.jpg!\n\n'
+  buf = 'h1. Contextualised Attack Patterns\n\nThis section was automatically generated based on the contents of the webinos WP 2 git repository at http://dev.webinos.org/git/wp2.git.\n\nh2. Obstacle probability: colour codes\n\n!{width:200px}ObsColour.jpg!\n\n'
   apdxBuf = ''
   noAPs = 0
   for apName,envName,cType,apTxt in rmAttackPatterns:

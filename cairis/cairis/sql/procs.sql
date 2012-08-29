@@ -20116,7 +20116,7 @@ begin
 
   set done = 0;
 
-  set buf = concat('h1. Components\n\n');
+  set buf = concat('h1. Components\n\nThis section was automatically generated based on the contents of the webinos WP 2 git repository at http://dev.webinos.org/git/wp2.git.\n\n');
   open cCursor;
   c_loop: loop
     fetch cCursor into cId,cName,cDesc;
@@ -20293,7 +20293,7 @@ begin
   set done = 0;
   insert into temp_architecture (name,artifact_type,text) values('metrics','metrics',ifnull(buf,''));
 
-  set buf = 'h1. Architectural Patterns\n\n';
+  set buf = 'h1. Architectural Patterns\n\nThis section was automatically generated based on the contents of the webinos WP 2 git repository at http://dev.webinos.org/git/wp2.git.\n\n';
 
   open apCursor;
   ap_loop: loop
