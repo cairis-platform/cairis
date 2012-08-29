@@ -20315,7 +20315,7 @@ begin
     end loop apc_loop;
     close apcCursor;
     set done = 0;
-    set buf = concat(buf,'\nh3. Connectors\n\n|_.Connector |_.From |_.Role |_.Interface |_.To |_.Role |_.Interface |_.Asset |_.Protocol |_.Access Right |\n');
+    set buf = concat(buf,'\nh3. Connectors\n\n|_.From |_.Role (Interface) |_.To |_.Role (Interface) |_.Protocol |_.Access Right |\n');
 
 
     open connCursor;
@@ -20325,7 +20325,7 @@ begin
       then
         leave conn_loop;
       end if;
-      set buf = concat(buf,'| ',connName,' | ',fromName,' | ',fromRole,' | ',fromIf,' | ',toName,' | ',toRole,' | ',toIf,' | ',connAsset,' | ',prName,' | ',arName,' |\n');
+      set buf = concat(buf,'| ',fromName,' | ',fromRole,' (',fromIf,') | ',toName,' | ',toRole,' (',toIf,') | ',prName,' | ',arName,' |\n');
     end loop conn_loop;
     close connCursor;
     set done = 0;
