@@ -1,19 +1,18 @@
 = CAIRIS =
-http://www.cs.ox.ac.uk/cairis
 
 CAIRIS (Computer Aided Integration of Requirements and Information Security) is a Requirements Management tool for specifying secure and usable systems. CAIRIS was built from the ground-up to support the elements necessary for usability, requirements, and risk analysis. CAIRIS features include: 
 
 * Support for KAOS goal and obstacle modelling, and traceability between goal, requirements, security, and usability model elements. 
 * Support for entering and managing usability data, such as personas, tasks, and use cases 
-* Support for entering and managing risk analysis data. 
+* Support for entering and managing risk analysis data.
+* Support for specifying attack patterns to reason about potential attacks.
+* The ability to import architectural patterns to automatically derive attack surface metrics based on them.
 * Automatic visualisation of models, and quantitative/quantative scoring of security and usability data 
 * Automatic document generation of a VOLERE compliant requirements specification.
 
 == Getting Started ==
 
-The easiest way to get up and running is by download a copy of a VM with CAIRIS pre-installed from http://www.cs.ox.ac.uk/cairis.
-
-Other than that, CAIRIS should run on most recent flavours of Linux.  The dependencies that need to be pre-installed are described in the manual.
+CAIRIS should run on most recent flavours of Linux.  The dependencies that need to be pre-installed are described in the manual.
 Sadly, the manual itself is a little out-of-date but, from our experience, people who understand the concepts used by the tool can usally get up and running pretty quickly.
 
 
