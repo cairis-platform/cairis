@@ -42,6 +42,7 @@ class DomainValueContentHandler(ContentHandler,EntityResolver):
 
   def resetAttributes(self):
     self.inDescription = 0
+    self.theName = ''
     self.theTypeName = ''
     self.theDescription = ''
 
@@ -73,7 +74,11 @@ class DomainValueContentHandler(ContentHandler,EntityResolver):
       self.inDescription = 0
 
   def endElement(self,name):
-    if (name == 'threat_value') or (name == 'risk_value') or (name == 'countermeasure_value') or (name == 'severity_value') or (name == 'likelihood_value') or (name == 'capability') or (name == 'motivation'):
+    if (name == 'threat_value') or (name == 'risk_value') or (name == 'countermeasure_value') or (name == 'severity_value') or (name == 'likelihood_value') or (name == 'capability_value') or (name == 'motivation_value'):
+      if (name == 'motivation_value'):
+        self.theTypeName == 'motivation'
+      elif (name == 'capability_value'):
+        self.theTypeName == 'capability'
       p = ValueTypeParameters(self.theName,self.theDescription,self.theTypeName)
       self.theValuesMap[self.theTypeName].append(p)
       self.resetAttributes()

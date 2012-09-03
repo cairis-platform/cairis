@@ -7250,7 +7250,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     ucName = parameters.name()
     ucAuth = parameters.author()
     ucCode = parameters.code()
-    ucActors = parameters.actors()
+    ucActors = parameters.actors().encode('utf-8')
     ucDesc = parameters.description()
     tags = parameters.tags()
     try:
