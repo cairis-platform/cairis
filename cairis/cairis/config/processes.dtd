@@ -1,0 +1,43 @@
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<!-- DTD for CAIRIS processes -->
+
+<!ELEMENT processes (code*,code_network*,implied_process*)>
+
+<!ELEMENT code (description,inclusion_criteria,example)>
+<!ATTLIST code name CDATA #REQUIRED>
+<!ATTLIST code type (context | event)  #REQUIRED>
+
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT inclusion_criteria (#PCDATA)>
+<!ELEMENT example (#PCDATA)>
+
+<!ELEMENT code_network EMPTY>
+<!ATTLIST code_network persona CDATA #REQUIRED>
+<!ATTLIST code_network relationship_type (associated | implied | conflict | part-of) #REQUIRED>
+<!ATTLIST code_network from_code CDATA #REQUIRED>
+<!ATTLIST code_network to_code CDATA #REQUIRED>
+
+<!ELEMENT implied_process (summary,relationship+,description)>
+<!ATTLIST implied_process name CDATA #REQUIRED>
+<!ELEMENT relationship EMPTY>
+<!ATTLIST relationship from_code CDATA #REQUIRED>
+<!ATTLIST relationship to_code CDATA #REQUIRED>
+<!ELEMENT summary (#PCDATA)>
