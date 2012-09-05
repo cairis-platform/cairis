@@ -795,6 +795,7 @@ drop procedure if exists obstacleParents;
 drop procedure if exists redmineArchitectureSummary;
 drop procedure if exists redmineAttackPatternsSummary;
 drop procedure if exists walkObstacleBranch;
+drop procedure if exists processesToXml;
 
 delimiter //
 
@@ -20983,5 +20984,21 @@ begin
   end if;
 end
 // 
+
+create procedure processesToXml()
+begin
+  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE processes PUBLIC "-//CAIRIS//DTD PROCESSES 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/processes.dtd">\n\n<processes>\n';
+  declare done int default 0;
+  declare codeName varchar(200);
+  declare codeType varchar(200);
+  declare codeDesc varchar(200);
+  declare codeIncCr varchar(200);
+  declare codeEg varchar(200);
+  declare codeCursor cursor for select c.name, ct.name, c.description, c.inclusion_criteria, c.example from code c, code_type ct where c.code_type_id = ct.id order by 1; 
+  declare continue handler for not found set done = 1;
+
+
+end
+//
 
 delimiter ;
