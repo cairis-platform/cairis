@@ -65,7 +65,7 @@ class CodesDialog(DimensionBaseDialog):
 
   def onDelete(self,evt):
     try:
-      self.deleteObject('No code','Delete code',self.dbProxy.deletCode)
+      self.deleteObject('No code','Delete code',self.dbProxy.deleteCode)
     except ARM.ARMException,errorText:
       dlg = wx.MessageDialog(self,str(errorText),'Delete code',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
