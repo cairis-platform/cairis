@@ -5212,7 +5212,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error deleting project dictionary'
         raise DatabaseProxyException(exceptionText) 
       for entry in definitions:
-        curs.execute('call addDictionaryEntry(%s,%s)',(entry[0],entry[1]))
+        curs.execute('call addDictionaryEntry(%s,%s)',(entry[0],entry[1].encode('utf-8')))
         if (curs.rowcount == -1):
           exceptionText = 'Error adding entry (' + entry[0] + ',' + entry[1] + ')'
           raise DatabaseProxyException(exceptionText) 
