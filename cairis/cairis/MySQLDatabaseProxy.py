@@ -5203,7 +5203,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def updateSettings(self, projName, background, goals, scope, definitions, contributors,revisions,richPicture,fontSize = '7.5',fontName = 'Times New Roman'):
     try:
       curs = self.conn.cursor()
-      curs.execute('call updateProjectSettings(%s,%s,%s,%s,%s,%s,%s)',(projName,background,goals,scope,richPicture,fontSize,fontName))
+      curs.execute('call updateProjectSettings(%s,%s,%s,%s,%s,%s,%s)',(projName,background.encode('utf-8'),goals.encode('utf-8'),scope.encode('utf-8'),richPicture,fontSize,fontName))
       if (curs.rowcount == -1):
         exceptionText = 'Error updating project settings'
         raise DatabaseProxyException(exceptionText) 
