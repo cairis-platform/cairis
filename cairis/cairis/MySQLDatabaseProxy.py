@@ -10836,3 +10836,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL exporting attack patterns summary to Redmine (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def processesToXml(self,includeHeader=True):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call processesToXml(%s)',(includeHeader))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error exporting processes to XML'
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      xmlBuf = row[0] 
+      codeCount = row[1]
+      pcCount = row[1]
+      curs.close()
+      return (xmlBuf,codeCount,pcCount)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL exporting processes to XML (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

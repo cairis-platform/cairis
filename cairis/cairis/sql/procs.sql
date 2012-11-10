@@ -20985,7 +20985,7 @@ begin
 end
 // 
 
-create procedure processesToXml()
+create procedure processesToXml(in includeHeader int)
 begin
   declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE processes PUBLIC "-//CAIRIS//DTD PROCESSES 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/processes.dtd">\n\n<processes>\n';
   declare done int default 0;
@@ -20994,11 +20994,51 @@ begin
   declare codeDesc varchar(200);
   declare codeIncCr varchar(200);
   declare codeEg varchar(200);
+  declare codeCount int default 0;
+  declare pcCount int default 0;
+  declare personaName varchar(50);
+  declare sectionName varchar(50);
+  declare startIdx int;
+  declare endIdx int;
   declare codeCursor cursor for select c.name, ct.name, c.description, c.inclusion_criteria, c.example from code c, code_type ct where c.code_type_id = ct.id order by 1; 
+  declare personaCodeCursor cursor for select p.name,c.name,ars.name,pc.start_index,pc.end_index from persona_code pc, persona p, code c, artifact_section ars where pc.persona_id = p.id and pc.code_id = c.id and pc.section_id = ars.id order by 1;
   declare continue handler for not found set done = 1;
 
+  if includeHeader = 0
+  then
+    set buf = '<processes>\n';
+  end if;
 
+  open codeCursor;
+  code_loop: loop
+    fetch codeCursor into codeName,codeType,codeDesc,codeIncCr,codeEg;
+    if done = 1
+    then 
+      leave code_loop;
+    end if;
+    set buf = concat(buf,'<code name=\"',codeName,'\" type=\"',codeType,'\">\n  <description>',codeDesc,'</description>\n  <inclusion_criteria>',codeIncCr,'</inclusion_criteria>\n  <example>',codeEg,'</example>\n</code>\n');
+    set codeCount = codeCount + 1;
+  end loop code_loop;
+  close codeCursor;
+  set done = 0;
+
+  open personaCodeCursor;
+  pc_loop: loop
+    fetch personaCodeCursor into personaName,codeName,sectionName,startIdx,endIdx;
+    if done = 1
+    then 
+      leave pc_loop;
+    end if;
+    set buf = concat(buf,'<persona_quotation code=\"',codeName,'\" persona=\"',personaName,'\" section=\"',sectionName,'\" start_index=\"',startIdx,'\" to_index=\"',endIdx,'\" />\n');
+    set pcCount = pcCount + 1;
+  end loop pc_loop;
+  close personaCodeCursor;
+  set done = 0;
+
+  set buf = concat(buf,'</processes>');
+  select buf,codeCount,pcCount;
 end
 //
+
 
 delimiter ;

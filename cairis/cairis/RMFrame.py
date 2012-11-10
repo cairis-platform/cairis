@@ -178,6 +178,7 @@ class RMFrame(wx.Frame):
     exportMenu.Append(armid.RMFRAME_MENU_IRIS_EXPORTASSOCIATIONS,'Associations', 'Export association data ')
     exportMenu.Append(armid.RMFRAME_MENU_OPTIONS_EXPORTTVTYPES,'Threat and Vulnerability Types','Export Threat and Vulnerability Types')
     exportMenu.Append(armid.RMFRAME_MENU_OPTIONS_EXPORTDOMAINVALUES,'Domain Values','Export Domain Values')
+    exportMenu.Append(armid.RMFRAME_MENU_OPTIONS_EXPORTPROCESSES,'Processes','Export Processes')
     file.AppendMenu(armid.RMFRAME_MENU_EXPORT,'Export',exportMenu)
     
     importMenu = wx.Menu()
@@ -406,6 +407,8 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_EXPORTTVTYPES,self.OnExportTVTypes)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTDOMAINVALUES,self.OnImportDomainValues)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_EXPORTDOMAINVALUES,self.OnExportDomainValues)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTPROCESSES,self.OnImportProcesses)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_EXPORTPROCESSES,self.OnExportProcesses)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_SEVERITIES,self.OnSeverityOptions)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_LIKELIHOODS,self.OnLikelihoodOptions)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_TEMPLATEASSETS,self.OnTemplateAssets)
@@ -1761,6 +1764,27 @@ class RMFrame(wx.Frame):
       dlg.Destroy()
     except ARMException,errorText:
       dlg = wx.MessageDialog(self,str(errorText),'Export domain values',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+
+  def OnImportProcesses(self,event):
+    pass
+
+  def OnExportProcesses(self,event):
+    try:
+      defaultBackupDir = './sql'
+      dlg = wx.FileDialog(self,message='Export processes',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
+      if (dlg.ShowModal() == wx.ID_OK):
+        exportFile = dlg.GetPath() + ".xml"
+        xmlBuf,codeCount,pcCount = self.dbProxy.processesToXml()
+        f = open(exportFile,'w')
+        f.write(xmlBuf)
+        f.close()
+        confDlg = wx.MessageDialog(self,'Exported ' + str(codeCount) + ' codes, and ' + str(pcCount) + ' persona quotations.','Export processes',wx.OK | wx.ICON_INFORMATION)
+        confDlg.ShowModal()
+        confDlg.Destroy()
+      dlg.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Export processes',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
 
   def OnViewCMModel(self,event):
