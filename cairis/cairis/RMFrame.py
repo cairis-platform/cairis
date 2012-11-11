@@ -1767,7 +1767,22 @@ class RMFrame(wx.Frame):
       dlg.ShowModal()
 
   def OnImportProcesses(self,event):
-    pass
+    try:
+      defaultDir = './sql'
+      wildcard = "Types files (*.xml) | *.xml |"
+
+      tdlg = wx.FileDialog(None,'Processes',defaultDir,style=wx.OPEN)
+      if (tdlg.ShowModal() == wx.ID_OK):
+        tFileName = tdlg.GetPath() 
+        msgStr = importProcessesFile(tdlg.GetPath())
+        dlg = wx.MessageDialog(self,msgStr,'Import processes data',wx.OK | wx.ICON_INFORMATION )
+        dlg.ShowModal()
+        dlg.Destroy()
+      tdlg.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Import processes data',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
 
   def OnExportProcesses(self,event):
     try:

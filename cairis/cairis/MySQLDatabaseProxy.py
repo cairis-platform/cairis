@@ -10818,7 +10818,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       return aps
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL exporting architecture summary to Redmine (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error exporting architecture summary to Redmine (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def redmineAttackPatternsSummary(self,envName):
@@ -10834,7 +10834,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       return buf
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL exporting attack patterns summary to Redmine (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error exporting attack patterns summary to Redmine (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def processesToXml(self,includeHeader=True):
@@ -10854,5 +10854,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       return (xmlBuf,codeCount,qCount,pcnCount,ipnCount)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL exporting processes to XML (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error exporting processes to XML (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def addQuotation(self,quotation):
+    code = quotation[0]
+    artType = quotation[1]
+    artName = quotation[2]
+    envName = quotation[3]
+    sectName = quotation[4]
+    startIdx = quotation[5]
+    endIdx = quotation[6]
+
+    if envName == 'None':
+      self.addArtifactCode(artName,artType,sectName,code,startIdx,endIdx)
+    else:
+      self.addArtifactEnvironmentCode(artName,envName,artType,sectName,code,startIdx,endIdx)

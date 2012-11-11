@@ -31,7 +31,7 @@
 
 <!ELEMENT quotation EMPTY>
 <!ATTLIST code CDATA #REQUIRED>
-<!ATTLIST artifact_type CDATA #REQUIRED>
+<!ATTLIST artifact_type (persona | task) #REQUIRED>
 <!ATTLIST artifact_name CDATA #REQUIRED>
 <!ATTLIST environment CDATA #IMPLIED>
 <!ATTLIST section CDATA #REQUIRED>
@@ -44,9 +44,11 @@
 <!ATTLIST code_network from_code CDATA #REQUIRED>
 <!ATTLIST code_network to_code CDATA #REQUIRED>
 
-<!ELEMENT implied_process (summary,relationship+,description)>
+<!ELEMENT implied_process (description,relationship+,specification)>
 <!ATTLIST implied_process name CDATA #REQUIRED>
+<!ATTLIST implied_process persona CDATA #REQUIRED>
 <!ELEMENT relationship EMPTY>
 <!ATTLIST relationship from_code CDATA #REQUIRED>
 <!ATTLIST relationship to_code CDATA #REQUIRED>
 <!ELEMENT summary (#PCDATA)>
+<!ELEMENT specification (#PCDATA)>

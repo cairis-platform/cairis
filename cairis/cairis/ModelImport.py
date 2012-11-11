@@ -28,7 +28,7 @@ from AssociationsContentHandler import AssociationsContentHandler
 from CairisContentHandler import CairisContentHandler
 from ArchitecturalPatternContentHandler import ArchitecturalPatternContentHandler
 from SynopsesContentHandler import SynopsesContentHandler
-from TemplateAssetsContentHandler import TemplateAssetsContentHandler
+from ProcessContentHandler import ProcessContentHandler
 from Borg import Borg
 import xml.sax
 
@@ -553,6 +553,42 @@ def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,mo
   msgStr = 'Imported domain values'
   return msgStr
 
+def importProcessesFile(importFile):
+  parser = xml.sax.make_parser()
+  handler = ProcessesContentHandler()
+  parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
+  parser.parse(importFile)
+  codes = handler.codes()
+  quotations = handler.quotations()
+  codeNetworks = handler.codeNetworks()
+  processes = handler.processes()
+  return importProcesses(codes,quotations,codeNetworks,processes)
+
+def importProcesses(codes,quotations,codeNetworks,processes):
+  noOfCodes = len(codes)
+  noOfQuotations = len(quotations)
+  noOfCNs = len(codeNetworks)
+  noOfProcs = len(processes)
+
+  for cp in codes:
+    b.dbProxy.addCode(cp)
+
+  for q in quotations:
+    b.dbProxy.addQuotation(q)
+
+  for cn in codeNetworks:
+    personaName = cn[0]
+    rtName = cn[1]
+    fromCode = cn[2]
+    toCode = cn[3]
+    b.dbProxy.addCodeRelationship(personaName,fromCode,toCode,rtName)
+
+  for p in processes:
+    b.dbProxy.addImpliedProcess(p)
+
+  msgStr = 'Imported ' + str(noOfCodes) + ' codes, ' + str(noOfQuotations) + ' quotations, ' + str(noOfCNs) + ' code relationships, and ' + str(noOfProcs) + ' implied processes.'
+  return msgStr
 
 def importModelFile(importFile,isOverwrite = 1):
   b = Borg()
