@@ -1775,11 +1775,11 @@ class RMFrame(wx.Frame):
       dlg = wx.FileDialog(self,message='Export processes',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"
-        xmlBuf,codeCount,pcCount = self.dbProxy.processesToXml()
+        xmlBuf,codeCount,qCount,pcnCount,ipnCount = self.dbProxy.processesToXml()
         f = open(exportFile,'w')
         f.write(xmlBuf)
         f.close()
-        confDlg = wx.MessageDialog(self,'Exported ' + str(codeCount) + ' codes, and ' + str(pcCount) + ' persona quotations.','Export processes',wx.OK | wx.ICON_INFORMATION)
+        confDlg = wx.MessageDialog(self,'Exported ' + str(codeCount) + ' codes, ' + str(qCount) + ' quotations, ' + str(pcnCount) + ' code relationships, and ' + str(ipnCount) + ' implied processes.','Export processes',wx.OK | wx.ICON_INFORMATION)
         confDlg.ShowModal()
         confDlg.Destroy()
       dlg.Destroy()

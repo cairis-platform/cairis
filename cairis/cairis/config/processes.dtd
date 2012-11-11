@@ -19,7 +19,7 @@
 
 <!-- DTD for CAIRIS processes -->
 
-<!ELEMENT processes (code*,persona_quotation*,code_network*,implied_process*)>
+<!ELEMENT processes (code*,quotation*,code_network*,implied_process*)>
 
 <!ELEMENT code (description,inclusion_criteria,example)>
 <!ATTLIST code name CDATA #REQUIRED>
@@ -29,9 +29,11 @@
 <!ELEMENT inclusion_criteria (#PCDATA)>
 <!ELEMENT example (#PCDATA)>
 
-<!ELEMENT persona_quotation EMPTY>
+<!ELEMENT quotation EMPTY>
 <!ATTLIST code CDATA #REQUIRED>
-<!ATTLIST persona CDATA #REQUIRED>
+<!ATTLIST artifact_type CDATA #REQUIRED>
+<!ATTLIST artifact_name CDATA #REQUIRED>
+<!ATTLIST environment CDATA #IMPLIED>
 <!ATTLIST section CDATA #REQUIRED>
 <!ATTLIST start_index CDATA #REQUIRED>
 <!ATTLIST to_index CDATA #REQUIRED>

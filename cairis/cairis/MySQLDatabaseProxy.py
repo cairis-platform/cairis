@@ -10847,9 +10847,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       row = curs.fetchone()
       xmlBuf = row[0] 
       codeCount = row[1]
-      pcCount = row[1]
+      qCount = row[2]
+      pcnCount = row[3]
+      ipnCount = row[4]
       curs.close()
-      return (xmlBuf,codeCount,pcCount)
+      return (xmlBuf,codeCount,qCount,pcnCount,ipnCount)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL exporting processes to XML (id:' + str(id) + ',message:' + msg + ')'

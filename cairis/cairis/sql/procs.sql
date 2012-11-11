@@ -19095,6 +19095,7 @@ begin
     call newId2(codeId);
     call addCode(codeId,docCode,'None','None','None');
   end if;
+
   insert into internal_document_code(internal_document_id,code_id,start_index,end_index) values (docId,codeId,startIdx,endIdx);
 
 end
@@ -19176,7 +19177,7 @@ begin
   if codeId is null
   then
     call newId2(codeId);
-    call addCode(codeId,docCode,'None','None','None');
+    call addCode(codeId,docCode,'context','None','None','None');
   end if;
 
   set artIdSql = concat('select id into @artId from ',artType,' where name = "',artName,'" limit 1');
@@ -20990,18 +20991,41 @@ begin
   declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE processes PUBLIC "-//CAIRIS//DTD PROCESSES 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/processes.dtd">\n\n<processes>\n';
   declare done int default 0;
   declare codeName varchar(200);
+  declare fromCode varchar(200);
+  declare toCode varchar(200);
+  declare rtName varchar(200);
   declare codeType varchar(200);
   declare codeDesc varchar(200);
   declare codeIncCr varchar(200);
   declare codeEg varchar(200);
   declare codeCount int default 0;
-  declare pcCount int default 0;
-  declare personaName varchar(50);
+  declare qCount int default 0;
+  declare pcnCount int default 0;
+  declare ipnCount int default 0;
+  declare artType varchar(50);
+  declare artName varchar(50);
+  declare envName varchar(50);
   declare sectionName varchar(50);
+  declare ipId int;
+  declare ipName varchar(200);
+  declare ipDesc varchar(2000);
+  declare ipSpec varchar(2000);
   declare startIdx int;
   declare endIdx int;
   declare codeCursor cursor for select c.name, ct.name, c.description, c.inclusion_criteria, c.example from code c, code_type ct where c.code_type_id = ct.id order by 1; 
-  declare personaCodeCursor cursor for select p.name,c.name,ars.name,pc.start_index,pc.end_index from persona_code pc, persona p, code c, artifact_section ars where pc.persona_id = p.id and pc.code_id = c.id and pc.section_id = ars.id order by 1;
+  declare quotationCursor cursor for 
+    select 'persona',a.name,c.name,'None',ars.name,ac.start_index,ac.end_index from persona_code ac, persona a, code c, artifact_section ars where ac.persona_id = a.id and ac.code_id = c.id and ac.section_id = ars.id
+    union
+    select 'persona',a.name,c.name,e.name,ars.name,aec.start_index,aec.end_index from persona_environment_code aec, persona a, code c, artifact_section ars, environment e where aec.persona_id = a.id and aec.code_id = c.id and aec.section_id = ars.id and aec.environment_id = e.id
+    union
+    select 'task',a.name,c.name,'None',ars.name,ac.start_index,ac.end_index from task_code ac, task a, code c, artifact_section ars where ac.task_id = a.id and ac.code_id = c.id and ac.section_id = ars.id
+    union
+    select 'task',a.name,c.name,e.name,ars.name,aec.start_index,aec.end_index from task_environment_code aec, task a, code c, artifact_section ars, environment e where aec.task_id = a.id and aec.code_id = c.id and aec.section_id = ars.id and aec.environment_id = e.id
+    order by 1;
+  declare pcnCursor cursor for select p.name,fc.name,tc.name,rt.name from persona_code_network pcn, persona p, code fc, code tc, relationship_type rt where pcn.persona_id = p.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id;
+  declare ipCursor cursor for select pip.id,pip.name,p.name,pip.description,pip.specification from persona_implied_process pip, persona p where pip.persona_id = p.id order by 2;
+  declare ipnCursor cursor for select fc.name,tc.name from persona_implied_process_network pipn, persona_code_network pcn, code fc, code tc where pipn.persona_implied_process_id = ipId and pipn.persona_code_network_id = pcn.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id;
+
   declare continue handler for not found set done = 1;
 
   if includeHeader = 0
@@ -21022,21 +21046,65 @@ begin
   close codeCursor;
   set done = 0;
 
-  open personaCodeCursor;
-  pc_loop: loop
-    fetch personaCodeCursor into personaName,codeName,sectionName,startIdx,endIdx;
+  open quotationCursor;
+  q_loop: loop
+    fetch quotationCursor into artType,artName,codeName,envName,sectionName,startIdx,endIdx;
     if done = 1
     then 
-      leave pc_loop;
+      leave q_loop;
     end if;
-    set buf = concat(buf,'<persona_quotation code=\"',codeName,'\" persona=\"',personaName,'\" section=\"',sectionName,'\" start_index=\"',startIdx,'\" to_index=\"',endIdx,'\" />\n');
-    set pcCount = pcCount + 1;
-  end loop pc_loop;
-  close personaCodeCursor;
+    set buf = concat(buf,'<quotation code=\"',codeName,'\" artifact_type=\"',artType,'\" artifact_name=\"',artName,'\" ');
+    if envName != 'None'
+    then
+      set buf = concat(buf,' environment=\"',envName,'\" ');
+    end if; 
+    set buf = concat(buf,'section=\"',sectionName,'\" start_index=\"',startIdx,'\" to_index=\"',endIdx,'\" />\n');
+    set qCount = qCount + 1;
+  end loop q_loop;
+  close quotationCursor;
+  set done = 0;
+
+  open pcnCursor;
+  pcn_loop: loop
+    fetch pcnCursor into artName,fromCode,toCode,rtName;
+    if done = 1
+    then
+      leave pcn_loop;
+    end if;
+    set buf = concat(buf,'<code_network persona=\"',artName,'\" relationship_type=\"',rtName,'\" from_code=\"',fromCode,'\" to_code=\"',toCode,'\" />\n');
+    set pcnCount = pcnCount + 1;
+  end loop pcn_loop;
+  close pcnCursor;
+  set done = 0;
+
+  open ipCursor;
+  ip_loop: loop
+    fetch ipCursor into ipId,ipName,artName,ipDesc,ipSpec;
+    if done = 1
+    then
+      leave ip_loop;
+    end if;
+    set buf = concat(buf,'<implied_process name=\"',ipName,'\" persona=\"',artName,'\" >\n  <description>',ipDesc,'</description>\n'); 
+    set ipnCount = ipnCount + 1; 
+    
+    open ipnCursor;
+    ipn_loop: loop
+      fetch ipnCursor into fromCode,toCode;
+      if done = 1
+      then
+        leave ipn_loop;
+      end if;
+      set buf = concat(buf,'  <relationship from_code=\"',fromCode,'\" to_code=\"',toCode,'\" />\n');
+    end loop ipn_loop;
+    close ipnCursor; 
+    set done = 0; 
+    set buf = concat(buf,'  <specification>',ipSpec,'</specification>\n</implied_process>\n');
+  end loop ip_loop;
+  close ipCursor;
   set done = 0;
 
   set buf = concat(buf,'</processes>');
-  select buf,codeCount,pcCount;
+  select buf,codeCount,qCount,pcnCount,ipnCount;
 end
 //
 
