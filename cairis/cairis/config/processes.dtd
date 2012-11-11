@@ -30,17 +30,17 @@
 <!ELEMENT example (#PCDATA)>
 
 <!ELEMENT quotation EMPTY>
-<!ATTLIST code CDATA #REQUIRED>
-<!ATTLIST artifact_type (persona | task) #REQUIRED>
-<!ATTLIST artifact_name CDATA #REQUIRED>
-<!ATTLIST environment CDATA #IMPLIED>
-<!ATTLIST section CDATA #REQUIRED>
-<!ATTLIST start_index CDATA #REQUIRED>
-<!ATTLIST to_index CDATA #REQUIRED>
+<!ATTLIST quotation code CDATA #REQUIRED>
+<!ATTLIST quotation artifact_type (persona | task) #REQUIRED>
+<!ATTLIST quotation artifact_name CDATA #REQUIRED>
+<!ATTLIST quotation environment CDATA #IMPLIED>
+<!ATTLIST quotation section CDATA #REQUIRED>
+<!ATTLIST quotation start_index CDATA #REQUIRED>
+<!ATTLIST quotation to_index CDATA #REQUIRED>
 
 <!ELEMENT code_network EMPTY>
 <!ATTLIST code_network persona CDATA #REQUIRED>
-<!ATTLIST code_network relationship_type (associated | implied | conflict | part-of) #REQUIRED>
+<!ATTLIST code_network relationship_type (associated | implies | conflict | part-of) #REQUIRED>
 <!ATTLIST code_network from_code CDATA #REQUIRED>
 <!ATTLIST code_network to_code CDATA #REQUIRED>
 
@@ -50,5 +50,6 @@
 <!ELEMENT relationship EMPTY>
 <!ATTLIST relationship from_code CDATA #REQUIRED>
 <!ATTLIST relationship to_code CDATA #REQUIRED>
+<!ATTLIST relationship relationship_type (associated | implies | conflict | part-of) #REQUIRED>
 <!ELEMENT summary (#PCDATA)>
 <!ELEMENT specification (#PCDATA)>

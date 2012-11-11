@@ -110,7 +110,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name']
       self.thePersona = attrs['persona']
     elif name == 'relationship':
-      self.theProcessNetwork.append((attrs['from_code'],attrs['to_code']))
+      self.theProcessNetwork.append((attrs['from_code'],'',attrs['to_code'],'',attrs['relationship_type']))
     elif name == 'description':
       self.inDescription = 1
       self.theDescription = ''
@@ -136,7 +136,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'code':
-      p = CodeParameters(self.theName,self.theType,self.theDescription,self.theInclusionCriteria)
+      p = CodeParameters(self.theName,self.theType,self.theDescription,self.theInclusionCriteria,self.theExample)
       self.theCodes.append(p)
       self.resetCodeAttributes()
     elif name == 'implied_process':

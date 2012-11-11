@@ -130,6 +130,14 @@
        uri="synopses.dtd"/>
 
     <public 
+       publicId="-//CAIRIS//DTD PROCESSES  1.0//EN"  
+       uri="processes.dtd"/>
+
+    <system
+       systemId="http://www.cs.ox.ac.uk/cairis/dtd/processes.dtd"  
+       uri="processes.dtd"/>
+
+    <public 
        publicId="-//CAIRIS//DTD ASSETS  1.0//EN"  
        uri="template_assets.dtd"/>
 

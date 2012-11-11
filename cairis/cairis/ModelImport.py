@@ -28,7 +28,7 @@ from AssociationsContentHandler import AssociationsContentHandler
 from CairisContentHandler import CairisContentHandler
 from ArchitecturalPatternContentHandler import ArchitecturalPatternContentHandler
 from SynopsesContentHandler import SynopsesContentHandler
-from ProcessContentHandler import ProcessContentHandler
+from ProcessesContentHandler import ProcessesContentHandler
 from Borg import Borg
 import xml.sax
 
@@ -571,6 +571,7 @@ def importProcesses(codes,quotations,codeNetworks,processes):
   noOfCNs = len(codeNetworks)
   noOfProcs = len(processes)
 
+  b = Borg()
   for cp in codes:
     b.dbProxy.addCode(cp)
 
