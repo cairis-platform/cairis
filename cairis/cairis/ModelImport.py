@@ -28,6 +28,7 @@ from AssociationsContentHandler import AssociationsContentHandler
 from CairisContentHandler import CairisContentHandler
 from ArchitecturalPatternContentHandler import ArchitecturalPatternContentHandler
 from SynopsesContentHandler import SynopsesContentHandler
+from TemplateAssetsContentHandler import TemplateAssetsContentHandler
 from ProcessesContentHandler import ProcessesContentHandler
 from Borg import Borg
 import xml.sax
