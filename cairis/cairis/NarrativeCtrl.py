@@ -68,6 +68,7 @@ class NarrativeCtrl(CodingTextCtrl):
     self.theEnvironmentName = envName
 
   def OnRightDown(self,evt):
+    self.enableCodingCtrls()
     self.PopupMenu(self.theDimMenu)
 
   def onGoal(self,evt):
