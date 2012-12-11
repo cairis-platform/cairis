@@ -19093,7 +19093,7 @@ begin
   if codeId is null
   then
     call newId2(codeId);
-    call addCode(codeId,docCode,'None','None','None');
+    call addCode(codeId,docCode,'context','None','None','None');
   end if;
 
   insert into internal_document_code(internal_document_id,code_id,start_index,end_index) values (docId,codeId,startIdx,endIdx);
