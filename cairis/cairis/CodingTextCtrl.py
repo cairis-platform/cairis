@@ -24,6 +24,7 @@ from Borg import Borg
 from DimensionNameDialog import DimensionNameDialog
 from CodeDialog import CodeDialog
 from MemoDialog import MemoDialog
+from MemoParameters import MemoParameters
 from DialogClassParameters import DialogClassParameters
 
 class CodingTextCtrl(wx.richtext.RichTextCtrl):
@@ -134,10 +135,12 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
     refs = urlValue.split(',')
     isCode = True
     cmValue = None
+    fromIdx = int(refs[0])
+    toIdx = int(refs[1])
     try:
-      cmValue = self.theCodes[(int(refs[0]),int(refs[1]))]
+      cmValue = self.theCodes[(fromIdx,toIdx)]
     except KeyError:
-      cmValue = self.theMemos[(int(refs[0]),int(refs[1]))]
+      cmValue = self.theMemos[(fromIdx,toIdx)]
       isCode = False
     b = Borg() 
     dlg = None
@@ -149,7 +152,16 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
       cmObjt = b.dbProxy.dimensionObject(cmValue[0],'memo') 
       dlg = MemoDialog(self,DialogClassParameters(armid.MEMO_ID,'View Memo'))
     dlg.load(cmObjt)
-    dlg.ShowModal()
+    if (dlg.ShowModal() == armid.MEMO_BUTTONCOMMIT_ID):
+      memoName = dlg.name()
+      memoTxt = dlg.memo()
+      self.theMemos[(fromIdx,toIdx)] = (memoName,memoTxt)
+      b = Borg()
+      p = MemoParameters(memoName,memoTxt)
+      p.setId(cmObjt.id())
+      b.dbProxy.updateMemo(p)
+    dlg.Destroy()
+
 
   def setCodes(self,codes):
     self.theCodes = codes
