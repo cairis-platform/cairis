@@ -16,19 +16,12 @@
 #  under the License.
 
 
-from ObjectCreationParameters import ObjectCreationParameters
+class Memo:
+  def __init__(self,memoId,memoName,memoDesc):
+    self.theId = memoId
+    self.theName = memoName
+    self.theDescription = memoDesc
 
-class InternalDocumentParameters(ObjectCreationParameters):
-  def __init__(self,idName,idDesc,idContent,idCodes,idMemos):
-    ObjectCreationParameters.__init__(self)
-    self.theName = idName
-    self.theDescription = idDesc
-    self.theContent = idContent
-    self.theCodes = idCodes
-    self.theMemos = idMemos
-
+  def id(self): return self.theId
   def name(self): return self.theName
   def description(self): return self.theDescription
-  def content(self): return self.theContent
-  def codes(self): return self.theCodes
-  def memos(self): return self.theMemos

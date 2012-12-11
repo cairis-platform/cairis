@@ -86,6 +86,7 @@ DROP TABLE IF EXISTS component_vulnerability_target;
 DROP TABLE IF EXISTS component_threat_target;
 
 DROP TABLE IF EXISTS internal_document_code;
+DROP TABLE IF EXISTS internal_document_memo;
 DROP TABLE IF EXISTS internal_document;
 DROP TABLE IF EXISTS persona_environment_code;
 DROP TABLE IF EXISTS persona_code;
@@ -98,6 +99,7 @@ DROP TABLE IF EXISTS persona_code_network;
 DROP TABLE IF EXISTS channel_parameter;
 DROP TABLE IF EXISTS channel;
 DROP TABLE IF EXISTS parameter;
+DROP TABLE IF EXISTS memo;
 DROP TABLE IF EXISTS code;
 DROP TABLE IF EXISTS code_type;
 DROP TABLE IF EXISTS relationship_type;
@@ -2901,6 +2903,13 @@ CREATE TABLE code_type (
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE memo (
+  id INT NOT NULL,
+  name VARCHAR(200) NOT NULL,
+  description VARCHAR(2000) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
 CREATE TABLE code (
   id INT NOT NULL,
   code_type_id INT NOT NULL,
@@ -2984,6 +2993,16 @@ CREATE TABLE internal_document_code (
   PRIMARY KEY(internal_document_id,code_id,start_index,end_index),
   FOREIGN KEY(internal_document_id) REFERENCES internal_document(id),
   FOREIGN KEY(code_id) REFERENCES code(id)
+) ENGINE=INNODB;
+
+CREATE TABLE internal_document_memo (
+  internal_document_id INT NOT NULL,
+  memo_id INT NOT NULL,
+  start_index INT NOT NULL,
+  end_index INT NOT NULL,
+  PRIMARY KEY(internal_document_id,memo_id,start_index,end_index),
+  FOREIGN KEY(internal_document_id) REFERENCES internal_document(id),
+  FOREIGN KEY(memo_id) REFERENCES memo(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE artifact_section (

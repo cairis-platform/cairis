@@ -17,15 +17,17 @@
 
 
 class InternalDocument:
-  def __init__(self,idId,idName,idDesc,idContent,idCodes):
+  def __init__(self,idId,idName,idDesc,idContent,idCodes,idMemos):
     self.theId = idId
     self.theName = idName
     self.theDescription = idDesc
     self.theContent = idContent
     self.theCodes = idCodes
+    self.theMemos = idMemos
 
   def id(self): return self.theId
   def name(self): return self.theName
   def description(self): return self.theDescription
   def content(self): return self.theContent
   def codes(self): return self.theCodes
+  def memos(self): return self.theMemos

@@ -749,14 +749,21 @@ drop procedure if exists getInternalDocuments;
 drop procedure if exists deleteInternalDocumentComponents;
 drop procedure if exists delete_internal_document;
 drop procedure if exists addCode;
+drop procedure if exists addMemo;
 drop procedure if exists updateCode;
+drop procedure if exists updateMemo;
 drop procedure if exists getCodes;
+drop procedure if exists getMemos;
 drop procedure if exists delete_code;
+drop procedure if exists delete_memo;
 drop procedure if exists documentCodes;
+drop procedure if exists documentMemos;
 drop procedure if exists artifactCodes;
 drop procedure if exists artifactEnvironmentCodes;
 drop procedure if exists addDocumentCode;
+drop procedure if exists addDocumentMemo;
 drop procedure if exists codeNames;
+drop procedure if exists memoNames;
 drop procedure if exists addArtifactCode;
 drop procedure if exists addArtifactEnvironmentCode;
 drop procedure if exists addArtifactCodeNetwork;
@@ -19077,8 +19084,10 @@ begin
   if docId != -1
   then
     delete from internal_document_code where internal_document_id = docId;
+    delete from internal_document_memo where internal_document_id = docId;
   else
     delete from internal_document_code;
+    delete from internal_document_memo;
   end if;
 end
 //
@@ -19095,15 +19104,19 @@ begin
     call newId2(codeId);
     call addCode(codeId,docCode,'context','None','None','None');
   end if;
-
   insert into internal_document_code(internal_document_id,code_id,start_index,end_index) values (docId,codeId,startIdx,endIdx);
-
 end
 //
 
 create procedure codeNames(in environmentName text)
 begin
   select name from code order by 1;
+end
+//
+
+create procedure memoNames(in environmentName text)
+begin
+  select name from memo order by 1;
 end
 //
 
@@ -21108,5 +21121,69 @@ begin
 end
 //
 
+create procedure getMemos(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select id,name,ifnull(description,'') from memo;
+  else
+    select id,name,ifnull(description,'') from memo where id = constraintId;
+  end if;
+end
+//
+
+create procedure delete_memo(in memoId int)
+begin
+  if memoId != -1
+  then
+    delete from memo where id = memoId;
+  else
+    delete from memo;
+  end if;
+end
+//
+
+create procedure addMemo(in memoId int, in memoName text, in memoDesc text)
+begin
+  declare mId int;
+  
+  select id into mId from memo where name = memoName;
+  if mId is null
+  then 
+    insert into memo(id,name,description) values (memoId,memoName,memoDesc);
+  end if;
+end
+//
+
+create procedure updateMemo(in memoId int, in memoName text, in memoDesc text)
+begin
+  update memo set name = memoName, description = memoDesc where id = memoId;
+end
+//
+
+create procedure documentMemos(in docName text)
+begin
+  declare docId int; 
+
+  select id into docId from internal_document where name = docName;
+  select m.name,m.description,idm.start_index,idm.end_index from internal_document_memo idm, memo m where idm.internal_document_id = docId and idm.memo_id = m.id order by 1,2,3;
+end
+//
+
+create procedure addDocumentMemo(in docName text, in memoName text, in memoTxt text, in startIdx int, in endIdx int)
+begin
+  declare docId int;
+  declare memoId int;
+
+  select id into docId from internal_document where name = docName;
+  select id into memoId from memo where name = memoName;
+  if memoId is null
+  then
+    call newId2(memoId);
+    call addMemo(memoId,memoName,memoTxt);
+  end if;
+  insert into internal_document_memo(internal_document_id,memo_id,start_index,end_index) values (docId,memoId,startIdx,endIdx);
+end
+//
 
 delimiter ;

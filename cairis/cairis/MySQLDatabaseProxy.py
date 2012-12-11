@@ -82,6 +82,7 @@ from ValueTypeParameters import ValueTypeParameters
 from ExternalDocumentParameters import ExternalDocumentParameters
 from InternalDocumentParameters import InternalDocumentParameters
 from CodeParameters import CodeParameters
+from MemoParameters import MemoParameters
 from DocumentReferenceParameters import DocumentReferenceParameters
 from ConceptReferenceParameters import ConceptReferenceParameters
 from PersonaCharacteristicParameters import PersonaCharacteristicParameters
@@ -1274,6 +1275,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       objts = self.getInternalDocuments(constraintId)
     elif (dimensionTable == 'code'):
       objts = self.getCodes(constraintId)
+    elif (dimensionTable == 'memo'):
+      objts = self.getMemos(constraintId)
     elif (dimensionTable == 'reference_synopsis'):
       objts = self.getReferenceSynopsis(constraintId)
     elif (dimensionTable == 'reference_contribution'):
@@ -9913,7 +9916,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
       for docId,docName,docDesc,docContent in rows:
         docCodes = self.documentCodes(docName)
-        parameters = InternalDocumentParameters(docName,docDesc,docContent,docCodes)
+        docMemos = self.documentMemos(docName)
+        parameters = InternalDocumentParameters(docName,docDesc,docContent,docCodes,docMemos)
         idObjt = ObjectFactory.build(docId,parameters)
         idObjts[docName] = idObjt
       return idObjts
@@ -9932,6 +9936,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docDesc = parameters.description()
     docContent = parameters.content()
     docCodes = parameters.codes()
+    docMemos = parameters.memos()
     try:
       curs = self.conn.cursor()
       curs.execute('call addInternalDocument(%s,%s,%s,%s)',(docId,docName.encode('utf-8'),docDesc.encode('utf-8'),docContent.encode('utf-8')))
@@ -9939,6 +9944,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error adding internal document ' + docName
         raise DatabaseProxyException(exceptionText) 
       self.addDocumentCodes(docName,docCodes)
+      self.addDocumentMemos(docName,docMemos)
       self.conn.commit()
       curs.close()
       return docId
@@ -9954,6 +9960,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docDesc = parameters.description()
     docContent = parameters.content()
     docCodes = parameters.codes()
+    docMemos = parameters.memos()
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteInternalDocumentComponents(%s)',(docId))
@@ -9966,6 +9973,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error updating internal document ' + docName
         raise DatabaseProxyException(exceptionText) 
       self.addDocumentCodes(docName,docCodes)
+      self.addDocumentMemos(docName,docMemos)
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -10870,3 +10878,104 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addArtifactCode(artName,artType,sectName,code,startIdx,endIdx)
     else:
       self.addArtifactEnvironmentCode(artName,envName,artType,sectName,code,startIdx,endIdx)
+
+  def getMemos(self,constraintId = -1):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getMemos(%s)',(constraintId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining memos'
+        raise DatabaseProxyException(exceptionText) 
+      mObjts = {}
+      for row in curs.fetchall():
+        row = list(row)
+        memoId = row[0]
+        memoName = row[1]
+        memoDesc = row[2]
+        parameters = MemoParameters(memoName,memoDesc)
+        mObjt = ObjectFactory.build(memoId,parameters)
+        mObjts[memoName] = mObjt
+      return mObjts
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting memos (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteMemo(self,memoId = -1):
+    self.deleteObject(memoId,'memo')
+    self.conn.commit()
+
+  def addMemo(self,parameters):
+    memoId = self.newId()
+    memoName = parameters.name()
+    memoDesc = parameters.description()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addMemo(%s,%s,%s)',(memoId,memoName.encode('utf-8'),memoDesc.encode('utf-8')))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding memo ' + memoName
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+      return memoId
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding memo ' + memoName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def updateMemo(self,parameters):
+    memoId = parameters.id()
+    memoName = parameters.name()
+    memoDesc = parameters.description()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call updateMemo(%s,%s,%s)',(memoId,memoName.encode('utf-8'),memoDesc.encode('utf-8')))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating memo ' + memoName
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating memo ' + memoName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def documentMemos(self,docName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call documentMemos(%s)',(docName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting memos for ' + docName
+        raise DatabaseProxyException(exceptionText) 
+      memos = {}
+      for row in curs.fetchall():
+        row = list(row)
+        memoName = row[0]
+        memoTxt = row[1]
+        startIdx = int(row[2])
+        endIdx = int(row[3])
+        memos[(startIdx,endIdx)] = (memoName,memoTxt)
+      curs.close()
+      return memos
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting codes for ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addDocumentMemos(self,docName,docMemos):
+    for (startIdx,endIdx) in docMemos:
+      memoName,memoTxt = docMemos[(startIdx,endIdx)]
+      self.addDocumentMemo(docName,memoName,memoTxt,startIdx,endIdx)
+
+  def addDocumentMemo(self,docName,memoName,memoTxt,startIdx,endIdx):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addDocumentMemo(%s,%s,%s,%s,%s)',(docName,memoName,memoTxt,startIdx,endIdx))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding memo ' + memoName + ' to ' + docName
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding memo ' + memoName + ' to '  + docName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

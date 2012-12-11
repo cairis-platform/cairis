@@ -18,30 +18,30 @@
 
 import wx
 import armid
-from InternalDocumentPanel import InternalDocumentPanel
-from InternalDocumentParameters import InternalDocumentParameters
+from MemoPanel import MemoPanel
+from MemoParameters import MemoParameters
 import DialogClassParameters
 
-class InternalDocumentDialog(wx.Dialog):
+class MemoDialog(wx.Dialog):
   def __init__(self,parent,parameters):
     wx.Dialog.__init__(self,parent,parameters.id(),parameters.label(),style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,300))
     self.theName = ''
     self.theDescription = ''
-    self.theContent = ''
-    self.theCodes = {}
-    self.theMemos = {}
     self.theId = -1
     self.panel = 0
     self.buildControls(parameters)
     self.commitVerb = 'Add'
     
+  def name(self): return self.theName
+  def memo(self): return self.theDescription
+
   def buildControls(self,parameters):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-    self.panel = InternalDocumentPanel(self)
-    self.panel.buildControls(parameters.createFlag())
+    self.panel = MemoPanel(self)
+    self.panel.buildControls(parameters.createFlag(),parameters.label())
     mainSizer.Add(self.panel,1,wx.EXPAND)
     self.SetSizer(mainSizer)
-    wx.EVT_BUTTON(self,armid.INTERNALDOCUMENT_BUTTONCOMMIT_ID,self.onCommit)
+    wx.EVT_BUTTON(self,armid.MEMO_BUTTONCOMMIT_ID,self.onCommit)
 
   def load(self,objt):
     self.theId = objt.id()
@@ -49,16 +49,11 @@ class InternalDocumentDialog(wx.Dialog):
     self.commitVerb = 'Edit'
 
   def onCommit(self,evt):
-    commitLabel = self.commitVerb + ' internal document'
-    nameCtrl = self.FindWindowById(armid.INTERNALDOCUMENT_TEXTNAME_ID)
-    descCtrl = self.FindWindowById(armid.INTERNALDOCUMENT_TEXTDESCRIPTION_ID)
-    contCtrl = self.FindWindowById(armid.INTERNALDOCUMENT_TEXTCONTENT_ID)
-
+    commitLabel = self.commitVerb + ' memo'
+    nameCtrl = self.FindWindowById(armid.MEMO_TEXTNAME_ID)
+    descCtrl = self.FindWindowById(armid.MEMO_TEXTDESCRIPTION_ID)
     self.theName = nameCtrl.GetValue()
     self.theDescription = descCtrl.GetValue()
-    self.theContent = contCtrl.GetValue()
-    self.theCodes = contCtrl.codes()
-    self.theMemos = contCtrl.memos()
 
     if len(self.theName) == 0:
       dlg = wx.MessageDialog(self,'Name cannot be empty',commitLabel,wx.OK) 
@@ -70,15 +65,10 @@ class InternalDocumentDialog(wx.Dialog):
       dlg.ShowModal()
       dlg.Destroy()
       return
-    elif (len(self.theContent) == 0):
-      dlg = wx.MessageDialog(self,'Content cannot be empty',commitLabel,wx.OK) 
-      dlg.ShowModal()
-      dlg.Destroy()
-      return
     else:
-      self.EndModal(armid.INTERNALDOCUMENT_BUTTONCOMMIT_ID)
+      self.EndModal(armid.MEMO_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = InternalDocumentParameters(self.theName,self.theDescription,self.theContent,self.theCodes,self.theMemos)
+    parameters = MemoParameters(self.theName,self.theDescription)
     parameters.setId(self.theId)
     return parameters
