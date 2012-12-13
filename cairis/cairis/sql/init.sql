@@ -2981,7 +2981,7 @@ CREATE TABLE internal_document (
   id INT NOT NULL,
   name VARCHAR(2000) NOT NULL,
   description VARCHAR(2000) NOT NULL,
-  content VARCHAR(9000),
+  content VARCHAR(9000000),
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 

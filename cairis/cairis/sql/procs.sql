@@ -21003,6 +21003,9 @@ create procedure processesToXml(in includeHeader int)
 begin
   declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE processes PUBLIC "-//CAIRIS//DTD PROCESSES 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/processes.dtd">\n\n<processes>\n';
   declare done int default 0;
+  declare idName varchar(200);
+  declare idDesc varchar(2000);
+  declare idContent varchar(9000000);
   declare codeName varchar(200);
   declare fromCode varchar(200);
   declare toCode varchar(200);
@@ -21011,6 +21014,7 @@ begin
   declare codeDesc varchar(2000);
   declare codeIncCr varchar(200);
   declare codeEg varchar(200);
+  declare idCount int default 0;
   declare codeCount int default 0;
   declare memoCount int default 0;
   declare qCount int default 0;
@@ -21026,6 +21030,7 @@ begin
   declare ipSpec varchar(2000);
   declare startIdx int;
   declare endIdx int;
+  declare idCursor cursor for select name, description, content from internal_document order by 1; 
   declare codeCursor cursor for select c.name, ct.name, c.description, c.inclusion_criteria, c.example from code c, code_type ct where c.code_type_id = ct.id order by 1; 
   declare memoCursor cursor for select m.name, m.description from memo m order by 1; 
   declare quotationCursor cursor for 
@@ -21051,6 +21056,19 @@ begin
   then
     set buf = '<processes>\n';
   end if;
+
+  open idCursor;
+  id_loop: loop
+    fetch idCursor into idName,idDesc,idContent;
+    if done = 1
+    then 
+      leave id_loop;
+    end if;
+    set buf = concat(buf,'<internal_document name=\"',idName,'\">\n  <description>',idDesc,'</description>\n  <content>',idContent,'</content>\n</internal_document>\n');
+    set idCount = idCount + 1;
+  end loop id_loop;
+  close idCursor;
+  set done = 0;
 
   open codeCursor;
   code_loop: loop
@@ -21150,7 +21168,7 @@ begin
   set done = 0;
 
   set buf = concat(buf,'</processes>');
-  select buf,codeCount,memoCount,qCount,pcnCount,ipnCount;
+  select buf,idCount,codeCount,memoCount,qCount,pcnCount,ipnCount;
 end
 //
 

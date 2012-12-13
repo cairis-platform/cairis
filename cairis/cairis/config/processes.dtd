@@ -19,7 +19,12 @@
 
 <!-- DTD for CAIRIS processes -->
 
-<!ELEMENT processes (code*,memo*,quotation*,code_network*,implied_process*)>
+<!ELEMENT processes (internal_document*,code*,memo*,quotation*,code_network*,implied_process*)>
+
+<!ELEMENT internal_document (description,content)>
+<!ATTLIST internal_document name CDATA #REQUIRED>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT content (#PCDATA)>
 
 <!ELEMENT code (description,inclusion_criteria,example)>
 <!ATTLIST code name CDATA #REQUIRED>
@@ -28,7 +33,6 @@
 <!ELEMENT memo (description)>
 <!ATTLIST memo name CDATA #REQUIRED>
 
-<!ELEMENT description (#PCDATA)>
 <!ELEMENT inclusion_criteria (#PCDATA)>
 <!ELEMENT example (#PCDATA)>
 

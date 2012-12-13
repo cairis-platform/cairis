@@ -24,6 +24,7 @@ from Borg import Borg
 
 class ProcessesContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
+    self.theInternalDocuments = []
     self.theCodes = []
     self.theMemos = []
     self.theQuotations = []
@@ -40,6 +41,9 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
   def resolveEntity(self,publicId,systemId):
     return self.configDir + '/processes.dtd'
 
+  def internalDocuments(self):
+    return self.theInternalDocuments
+
   def codes(self):
     return self.theCodes
 
@@ -54,6 +58,13 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
 
   def processes(self):
     return self.theProcesses
+
+  def resetInternalDocuments(self):
+    self.inDescription = 0
+    self.inContent = 0
+    self.theName = ''
+    self.theDescription = ''
+    self.theContent = ''
 
   def resetCodeAttributes(self):
     self.inDescription = 0
@@ -97,10 +108,12 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
 
   def startElement(self,name,attrs):
     self.currentElementName = name
-    if name == 'code':
+    if name == 'internal_document':
+      self.theName = attrs['name']
+    elif name == 'code':
       self.theName = attrs['name']
       self.theType = attrs['type']
-    if name == 'memo':
+    elif name == 'memo':
       self.theName = attrs['name']
     elif name == 'quotation':
       self.theType = attrs['type']
@@ -148,9 +161,15 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.theExample += data
     elif self.inSpecification:
       self.theSpecification += data
+    elif self.inContent:
+      self.theContent += data
 
   def endElement(self,name):
-    if name == 'code':
+    if name == 'internal_document':
+      p = InternalDocumentParameters(self.theName,self.theDescription,self.theContent,[],[])
+      self.theInternalDocuments.append(p)
+      self.resetInternalDocuments()
+    elif name == 'code':
       p = CodeParameters(self.theName,self.theType,self.theDescription,self.theInclusionCriteria,self.theExample)
       self.theCodes.append(p)
       self.resetCodeAttributes()
@@ -170,3 +189,5 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.inExample = 0
     elif name == 'specification':
       self.inSpecification = 0
+    elif name == 'content':
+      self.inContent = 0
