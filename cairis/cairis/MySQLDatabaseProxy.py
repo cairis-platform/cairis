@@ -10855,29 +10855,37 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       row = curs.fetchone()
       xmlBuf = row[0] 
       codeCount = row[1]
-      qCount = row[2]
-      pcnCount = row[3]
-      ipnCount = row[4]
+      memoCount = row[2]
+      qCount = row[3]
+      pcnCount = row[4]
+      ipnCount = row[5]
       curs.close()
-      return (xmlBuf,codeCount,qCount,pcnCount,ipnCount)
+      return (xmlBuf,codeCount,memoCount,qCount,pcnCount,ipnCount)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error exporting processes to XML (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def addQuotation(self,quotation):
-    code = quotation[0]
-    artType = quotation[1]
-    artName = quotation[2]
-    envName = quotation[3]
-    sectName = quotation[4]
-    startIdx = quotation[5]
-    endIdx = quotation[6]
+    qType = quotation[0]
+    cmName = quotation[1]
+    artType = quotation[2]
+    artName = quotation[3]
+    envName = quotation[4]
+    sectName = quotation[5]
+    startIdx = quotation[6]
+    endIdx = quotation[7]
 
-    if envName == 'None':
-      self.addArtifactCode(artName,artType,sectName,code,startIdx,endIdx)
+    if artType == 'internal_document':
+      if qType == 'memo':
+        self.addDocumentMemo(artName,cmName,'',startIdx,endIdx)
+      else:
+        self.addDocumentCode(artName,cmName,startIdx,endIdx)
     else:
-      self.addArtifactEnvironmentCode(artName,envName,artType,sectName,code,startIdx,endIdx)
+      if envName == 'None':
+        self.addArtifactCode(artName,artType,sectName,cmName,startIdx,endIdx)
+      else:
+        self.addArtifactEnvironmentCode(artName,envName,artType,sectName,cmName,startIdx,endIdx)
 
   def getMemos(self,constraintId = -1):
     try:

@@ -18,18 +18,21 @@
 
 from xml.sax.handler import ContentHandler,EntityResolver
 from CodeParameters import CodeParameters
+from MemoParameters import MemoParameters
 from ImpliedProcessParameters import ImpliedProcessParameters
 from Borg import Borg
 
 class ProcessesContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theCodes = []
+    self.theMemos = []
     self.theQuotations = []
     self.theCodeNetworks = []
     self.theProcesses = []
     b = Borg()
     self.configDir = b.configDir
     self.resetCodeAttributes()
+    self.resetMemoAttributes()
     self.resetQuotationAttributes()
     self.resetCodeNetworkAttributes()
     self.resetProcessAttributes()
@@ -39,6 +42,9 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
 
   def codes(self):
     return self.theCodes
+
+  def memos(self):
+    return self.theMemos
 
   def quotations(self):
     return self.theQuotations
@@ -59,7 +65,13 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     self.theInclusionCriteria = ''
     self.theExample = ''
 
+  def resetMemoAttributes(self):
+    self.inDescription = 0
+    self.theName = ''
+    self.theDescription = ''
+
   def resetQuotationAttributes(self):
+    self.theType = 'code'
     self.theCode = ''
     self.theArtifactType = ''
     self.theArtifactName = ''
@@ -88,7 +100,10 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     if name == 'code':
       self.theName = attrs['name']
       self.theType = attrs['type']
+    if name == 'memo':
+      self.theName = attrs['name']
     elif name == 'quotation':
+      self.theType = attrs['type']
       self.theCode = attrs['code']
       self.theArtifactType = attrs['artifact_type']
       self.theArtifactName = attrs['artifact_name']
@@ -99,7 +114,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.theSection = attrs['section']
       self.theStartIndex = int(attrs['start_index'])
       self.theEndIndex = int(attrs['start_index'])
-      self.theQuotations.append((self.theCode,self.theArtifactType,self.theArtifactName,self.theEnvironment,self.theSection,self.theStartIndex,self.theEndIndex))
+      self.theQuotations.append((self.theType,self.theCode,self.theArtifactType,self.theArtifactName,self.theEnvironment,self.theSection,self.theStartIndex,self.theEndIndex))
     elif name == 'code_network':
       self.thePersona = attrs['persona']
       self.theRelationshipType = attrs['relationship_type']
@@ -139,6 +154,10 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       p = CodeParameters(self.theName,self.theType,self.theDescription,self.theInclusionCriteria,self.theExample)
       self.theCodes.append(p)
       self.resetCodeAttributes()
+    elif name == 'memo':
+      p = MemoParameters(self.theName,self.theDescription)
+      self.theMemos.append(p)
+      self.resetMemoAttributes()
     elif name == 'implied_process':
       p = ImpliedProcessParameters(self.theName,self.theDescription,self.thePersona,self.theProcessNetwork,self.theSpecification)
       self.theProcesses.append(p)

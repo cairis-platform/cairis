@@ -21008,10 +21008,11 @@ begin
   declare toCode varchar(200);
   declare rtName varchar(200);
   declare codeType varchar(200);
-  declare codeDesc varchar(200);
+  declare codeDesc varchar(2000);
   declare codeIncCr varchar(200);
   declare codeEg varchar(200);
   declare codeCount int default 0;
+  declare memoCount int default 0;
   declare qCount int default 0;
   declare pcnCount int default 0;
   declare ipnCount int default 0;
@@ -21026,7 +21027,12 @@ begin
   declare startIdx int;
   declare endIdx int;
   declare codeCursor cursor for select c.name, ct.name, c.description, c.inclusion_criteria, c.example from code c, code_type ct where c.code_type_id = ct.id order by 1; 
+  declare memoCursor cursor for select m.name, m.description from memo m order by 1; 
   declare quotationCursor cursor for 
+    select 'internal_document_memo',a.name,m.name,'None','none',am.start_index,am.end_index from internal_document_memo am, internal_document a, memo m where am.internal_document_id = a.id and am.memo_id = m.id
+    union
+    select 'internal_document_code',a.name,c.name,'None','none',ac.start_index,ac.end_index from internal_document_code ac, internal_document a, code c where ac.internal_document_id = a.id and ac.code_id = c.id
+    union
     select 'persona',a.name,c.name,'None',ars.name,ac.start_index,ac.end_index from persona_code ac, persona a, code c, artifact_section ars where ac.persona_id = a.id and ac.code_id = c.id and ac.section_id = ars.id
     union
     select 'persona',a.name,c.name,e.name,ars.name,aec.start_index,aec.end_index from persona_environment_code aec, persona a, code c, artifact_section ars, environment e where aec.persona_id = a.id and aec.code_id = c.id and aec.section_id = ars.id and aec.environment_id = e.id
@@ -21059,6 +21065,20 @@ begin
   close codeCursor;
   set done = 0;
 
+  open memoCursor;
+  memo_loop: loop
+    fetch memoCursor into codeName,codeDesc;
+    if done = 1
+    then 
+      leave memo_loop;
+    end if;
+    set buf = concat(buf,'<memo name=\"',codeName,'\">\n  <description>',codeDesc,'</description>\n</memo>\n');
+    set memoCount = memoCount + 1;
+  end loop memo_loop;
+  close memoCursor;
+  set done = 0;
+
+
   open quotationCursor;
   q_loop: loop
     fetch quotationCursor into artType,artName,codeName,envName,sectionName,startIdx,endIdx;
@@ -21066,7 +21086,20 @@ begin
     then 
       leave q_loop;
     end if;
-    set buf = concat(buf,'<quotation code=\"',codeName,'\" artifact_type=\"',artType,'\" artifact_name=\"',artName,'\" ');
+    set buf = concat(buf,'<quotation code=\"',codeName,'\" ');
+    if artType = 'internal_document_memo'
+    then
+      set buf = concat(buf,'type=\"memo\" ');
+      set artType = 'internal_document';
+    elseif artType = 'internal_document_code'
+    then
+      set buf = concat(buf,'type=\"code\" ');
+      set artType = 'internal_document';
+    else
+      set buf = concat(buf,'type=\"code\" ');
+    end if;
+ 
+    set buf = concat(buf,'artifact_type=\"',artType,'\" artifact_name=\"',artName,'\" ');
     if envName != 'None'
     then
       set buf = concat(buf,' environment=\"',envName,'\" ');
@@ -21117,7 +21150,7 @@ begin
   set done = 0;
 
   set buf = concat(buf,'</processes>');
-  select buf,codeCount,qCount,pcnCount,ipnCount;
+  select buf,codeCount,memoCount,qCount,pcnCount,ipnCount;
 end
 //
 

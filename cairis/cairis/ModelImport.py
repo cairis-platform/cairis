@@ -561,13 +561,15 @@ def importProcessesFile(importFile):
   parser.setEntityResolver(handler)
   parser.parse(importFile)
   codes = handler.codes()
+  memos = handler.memos()
   quotations = handler.quotations()
   codeNetworks = handler.codeNetworks()
   processes = handler.processes()
-  return importProcesses(codes,quotations,codeNetworks,processes)
+  return importProcesses(codes,memos,quotations,codeNetworks,processes)
 
-def importProcesses(codes,quotations,codeNetworks,processes):
+def importProcesses(codes,memos,quotations,codeNetworks,processes):
   noOfCodes = len(codes)
+  noOfMemos = len(memos)
   noOfQuotations = len(quotations)
   noOfCNs = len(codeNetworks)
   noOfProcs = len(processes)
@@ -576,8 +578,15 @@ def importProcesses(codes,quotations,codeNetworks,processes):
   for cp in codes:
     b.dbProxy.addCode(cp)
 
+  for mp in memos:
+    b.dbProxy.addMemo(mp)
+
   for q in quotations:
     b.dbProxy.addQuotation(q)
+
+  # Necessary because adding document memos currently overwrites the existing memo text
+  for mp in memos:
+    b.dbProxy.updateMemo(mp)
 
   for cn in codeNetworks:
     personaName = cn[0]

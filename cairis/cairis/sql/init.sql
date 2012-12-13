@@ -3698,6 +3698,7 @@ insert into link_contribution (id,name) values (1,'Help');
 insert into link_contribution (id,name) values (-1,'Hurt');
 insert into link_contribution (id,name) values (-2,'SomeNegative');
 insert into link_contribution (id,name) values (-3,'Break');
+insert into artifact_section (id,name) values (-1,'none');
 insert into artifact_section (id,name) values (0,'activities');
 insert into artifact_section (id,name) values (1,'attitudes');
 insert into artifact_section (id,name) values (2,'aptitudes');
