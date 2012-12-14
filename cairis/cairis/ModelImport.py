@@ -560,14 +560,16 @@ def importProcessesFile(importFile):
   parser.setContentHandler(handler)
   parser.setEntityResolver(handler)
   parser.parse(importFile)
+  docs = handler.internalDocuments()
   codes = handler.codes()
   memos = handler.memos()
   quotations = handler.quotations()
   codeNetworks = handler.codeNetworks()
   processes = handler.processes()
-  return importProcesses(codes,memos,quotations,codeNetworks,processes)
+  return importProcesses(docs,codes,memos,quotations,codeNetworks,processes)
 
-def importProcesses(codes,memos,quotations,codeNetworks,processes):
+def importProcesses(docs,codes,memos,quotations,codeNetworks,processes):
+  noOfDocs = len(docs)
   noOfCodes = len(codes)
   noOfMemos = len(memos)
   noOfQuotations = len(quotations)
@@ -575,6 +577,10 @@ def importProcesses(codes,memos,quotations,codeNetworks,processes):
   noOfProcs = len(processes)
 
   b = Borg()
+
+  for dp in docs:
+    b.dbProxy.addInternalDocument(dp)
+
   for cp in codes:
     b.dbProxy.addCode(cp)
 
@@ -598,7 +604,7 @@ def importProcesses(codes,memos,quotations,codeNetworks,processes):
   for p in processes:
     b.dbProxy.addImpliedProcess(p)
 
-  msgStr = 'Imported ' + str(noOfCodes) + ' codes, ' + str(noOfQuotations) + ' quotations, ' + str(noOfCNs) + ' code relationships, and ' + str(noOfProcs) + ' implied processes.'
+  msgStr = 'Imported ' + str(noOfDocs) + ' internal documents, ' + str(noOfCodes) + ' codes, ' + str(noOfQuotations) + ' quotations, ' + str(noOfCNs) + ' code relationships, and ' + str(noOfProcs) + ' implied processes.'
   return msgStr
 
 def importModelFile(importFile,isOverwrite = 1):

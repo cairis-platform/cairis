@@ -17,6 +17,7 @@
 
 
 from xml.sax.handler import ContentHandler,EntityResolver
+from InternalDocumentParameters import InternalDocumentParameters
 from CodeParameters import CodeParameters
 from MemoParameters import MemoParameters
 from ImpliedProcessParameters import ImpliedProcessParameters
@@ -32,6 +33,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     self.theProcesses = []
     b = Borg()
     self.configDir = b.configDir
+    self.resetInternalDocumentAttributes()
     self.resetCodeAttributes()
     self.resetMemoAttributes()
     self.resetQuotationAttributes()
@@ -59,7 +61,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
   def processes(self):
     return self.theProcesses
 
-  def resetInternalDocuments(self):
+  def resetInternalDocumentAttributes(self):
     self.inDescription = 0
     self.inContent = 0
     self.theName = ''
@@ -151,6 +153,9 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     elif name == 'specification':
       self.inSpecification = 1
       self.theSpecification = ''
+    elif name == 'content':
+      self.inContent = 1
+      self.theContent = ''
 
   def characters(self,data):
     if self.inDescription:
@@ -168,7 +173,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     if name == 'internal_document':
       p = InternalDocumentParameters(self.theName,self.theDescription,self.theContent,[],[])
       self.theInternalDocuments.append(p)
-      self.resetInternalDocuments()
+      self.resetInternalDocumentAttributes()
     elif name == 'code':
       p = CodeParameters(self.theName,self.theType,self.theDescription,self.theInclusionCriteria,self.theExample)
       self.theCodes.append(p)
