@@ -44,6 +44,9 @@ from TransferEnvironmentPanel import TransferEnvironmentPanel
 from MitigateEnvironmentPanel import MitigateEnvironmentPanel
 from CountermeasureDialog import CountermeasureDialog
 from ExternalDocumentDialog import ExternalDocumentDialog
+from CodeDialog import CodeDialog
+from MemoDialog import MemoDialog
+from InternalDocumentDialog import InternalDocumentDialog
 
 def build(dimLabel):
   dcp = None
@@ -179,4 +182,22 @@ def build(dimLabel):
     dlg = ExternalDocumentDialog
     dlgCode = armid.EXTERNALDOCUMENT_BUTTONCOMMIT_ID
     ufn = b.dbProxy.updateExternalDocument
+  elif (dimLabel == 'Code'):
+    dimName = 'code'
+    dcp = DialogClassParameters(armid.CODE_ID,'Edit Code')
+    dlg = CodeDialog
+    dlgCode = armid.CODE_BUTTONCOMMIT_ID
+    ufn = b.dbProxy.updateCode
+  elif (dimLabel == 'Memo'):
+    dimName = 'memo'
+    dcp = DialogClassParameters(armid.MEMO_ID,'Edit Memo')
+    dlg = MemoDialog
+    dlgCode = armid.MEMO_BUTTONCOMMIT_ID
+    ufn = b.dbProxy.updateMemo
+  elif (dimLabel == 'Internal Document'):
+    dimName = 'internal_document'
+    dcp = DialogClassParameters(armid.INTERNALDOCUMENT_ID,'Edit Internal Document')
+    dlg = InternalDocumentDialog
+    dlgCode = armid.INTERNALDOCUMENT_BUTTONCOMMIT_ID
+    ufn = b.dbProxy.updateInternalDocument
   return (dcp,dimName,dlg,dlgCode,ufn)

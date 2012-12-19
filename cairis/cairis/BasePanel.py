@@ -98,6 +98,12 @@ class BasePanel(wx.Panel):
     buttonSizer.Add(closeButton)
     return buttonSizer
 
+  def buildCloseButtonSizer(self,orientation=wx.VERTICAL):
+    buttonSizer = wx.BoxSizer(orientation)
+    closeButton = wx.Button(self,wx.ID_CLOSE,"Close")
+    buttonSizer.Add(closeButton)
+    return buttonSizer
+
   def buildTraceListCtrl(self,winId,columnNames,traces):
     listCtrl = wx.ListCtrl(self,winId,style=wx.LC_REPORT)
     for idx,columnName in enumerate(columnNames):

@@ -137,30 +137,38 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
     cmValue = None
     fromIdx = int(refs[0])
     toIdx = int(refs[1])
+    self.displayCode(fromIdx,toIdx)
+    self.displayMemo(fromIdx,toIdx)
+
+  def displayCode(self,fromIdx,toIdx):
     try:
       cmValue = self.theCodes[(fromIdx,toIdx)]
-    except KeyError:
-      cmValue = self.theMemos[(fromIdx,toIdx)]
-      isCode = False
-    b = Borg() 
-    dlg = None
-    cmObjt = None
-    if isCode == True:
+      b = Borg() 
       cmObjt = b.dbProxy.dimensionObject(cmValue,'code') 
       dlg = CodeDialog(self,DialogClassParameters(armid.CODE_ID,'View Code'))
-    else:
+      dlg.load(cmObjt)
+      dlg.ShowModal()
+    except KeyError:
+      return
+
+  def displayMemo(self,fromIdx,toIdx):
+    try:
+      cmValue = self.theMemos[(fromIdx,toIdx)]
+      b = Borg() 
       cmObjt = b.dbProxy.dimensionObject(cmValue[0],'memo') 
       dlg = MemoDialog(self,DialogClassParameters(armid.MEMO_ID,'View Memo'))
-    dlg.load(cmObjt)
-    if (dlg.ShowModal() == armid.MEMO_BUTTONCOMMIT_ID):
-      memoName = dlg.name()
-      memoTxt = dlg.memo()
-      self.theMemos[(fromIdx,toIdx)] = (memoName,memoTxt)
-      b = Borg()
-      p = MemoParameters(memoName,memoTxt)
-      p.setId(cmObjt.id())
-      b.dbProxy.updateMemo(p)
-    dlg.Destroy()
+      dlg.load(cmObjt)
+      if (dlg.ShowModal() == armid.MEMO_BUTTONCOMMIT_ID):
+        memoName = dlg.name()
+        memoTxt = dlg.memo()
+        self.theMemos[(fromIdx,toIdx)] = (memoName,memoTxt)
+        b = Borg()
+        p = MemoParameters(memoName,memoTxt)
+        p.setId(cmObjt.id())
+        b.dbProxy.updateMemo(p)
+      dlg.Destroy()
+    except KeyError:
+      return
 
 
   def setCodes(self,codes):

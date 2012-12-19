@@ -586,6 +586,9 @@ drop procedure if exists grepResponses;
 drop procedure if exists grepProjectSettings;
 drop procedure if exists grepCountermeasures;
 drop procedure if exists grepDirectories;
+drop procedure if exists grepCodes;
+drop procedure if exists grepMemos;
+drop procedure if exists grepInternalDocuments;
 drop procedure if exists grepRequirements;
 drop procedure if exists grepModel;
 drop procedure if exists dimensionNameByShortCode;
@@ -803,6 +806,7 @@ drop procedure if exists redmineArchitectureSummary;
 drop procedure if exists redmineAttackPatternsSummary;
 drop procedure if exists walkObstacleBranch;
 drop procedure if exists processesToXml;
+drop procedure if exists mergeCodes;
 
 delimiter //
 
@@ -14714,7 +14718,7 @@ begin
 end
 //
 
-create procedure grepModel(in inTxt text, in psFlag int, in envFlag int, in roleFlag int, in pcFlag int, in tcFlag int, in refFlag int, in pFlag int, in taskFlag int, in ucFlag int, in dpFlag int, in goalFlag int, in obsFlag int, in reqFlag int, in assetFlag int, in vulFlag int, in attackerFlag int, in thrFlag int, in riskFlag int, in respFlag int, in cmFlag int, in dirFlag int)
+create procedure grepModel(in inTxt text, in psFlag int, in envFlag int, in roleFlag int, in pcFlag int, in tcFlag int, in refFlag int, in pFlag int, in taskFlag int, in ucFlag int, in dpFlag int, in goalFlag int, in obsFlag int, in reqFlag int, in assetFlag int, in vulFlag int, in attackerFlag int, in thrFlag int, in riskFlag int, in respFlag int, in cmFlag int, in dirFlag int, in codeFlag int, in memoFlag int, in idFlag int)
 begin
 
   drop table if exists temp_searchresults;
@@ -14823,6 +14827,21 @@ begin
   if dirFlag = 1
   then
     call grepDirectories(inTxt);
+  end if;
+
+  if codeFlag = 1
+  then
+    call grepCodes(inTxt);
+  end if;
+
+  if memoFlag = 1
+  then
+    call grepMemos(inTxt);
+  end if;
+
+  if idFlag = 1
+  then
+    call grepInternalDocuments(inTxt);
   end if;
 
   select environment_name, dimension_name,object_name from temp_searchresults;
@@ -21234,6 +21253,68 @@ begin
     call addMemo(memoId,memoName,memoTxt);
   end if;
   insert into internal_document_memo(internal_document_id,memo_id,start_index,end_index) values (docId,memoId,startIdx,endIdx);
+end
+//
+
+create procedure mergeCodes(in fromCode text, in toCode text)
+begin
+  declare fromId int;
+  declare toId int;
+
+  select id into fromId from code where name = fromCode limit 1;
+  select id into toId from code where name = toCode limit 1;
+
+/* update channel parameters */
+update channel_parameter set code_id = toId where code_id = fromId;
+
+/* Update persona code network */
+update persona_code_network set from_code_id = toId where from_code_id = fromId;
+update persona_code_network set to_code_id = toId where to_code_id = fromId;
+
+/* update internal_document_code */
+update internal_document_code set code_id = toId where code_id = fromId;
+
+/* update persona code, persona environment code, task code, and task environment code */
+update persona_code set code_id = toId where code_id = fromId;
+update persona_environment_code set code_id = toId where code_id = fromId;
+update task_code set code_id = toId where code_id = fromId;
+update task_environment_code set code_id = toId where code_id = fromId;
+
+call delete_code(fromId);
+
+end
+//
+
+create procedure grepCodes(in inTxt text)
+begin
+  insert into temp_searchresults (environment_name,dimension_name,object_name)
+  select '','Code',c.name from code c where c.name like concat('%',inTxt,'%')
+  union
+  select '','Code',c.name from code c where c.description like concat('%',inTxt,'%')
+  union
+  select '','Code',c.name from code c where c.inclusion_criteria like concat('%',inTxt,'%')
+  union
+  select '','Code',c.name from code c where c.example like concat('%',inTxt,'%');
+end
+//
+
+create procedure grepMemos(in inTxt text)
+begin
+  insert into temp_searchresults (environment_name,dimension_name,object_name)
+  select '','Memo',m.name from memo m where m.name like concat('%',inTxt,'%')
+  union
+  select '','Memo',m.name from memo m where m.description like concat('%',inTxt,'%');
+end
+//
+
+create procedure grepInternalDocuments(in inTxt text)
+begin
+  insert into temp_searchresults (environment_name,dimension_name,object_name)
+  select '','Internal Document',id.name from internal_document id where id.name like concat('%',inTxt,'%')
+  union
+  select '','Internal Document',id.name from internal_document id where id.description like concat('%',inTxt,'%')
+  union
+  select '','Internal Document',id.name from internal_document id where id.content like concat('%',inTxt,'%');
 end
 //
 

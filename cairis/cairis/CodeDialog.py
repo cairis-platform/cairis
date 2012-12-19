@@ -42,6 +42,10 @@ class CodeDialog(wx.Dialog):
     mainSizer.Add(self.panel,1,wx.EXPAND)
     self.SetSizer(mainSizer)
     wx.EVT_BUTTON(self,armid.CODE_BUTTONCOMMIT_ID,self.onCommit)
+    wx.EVT_BUTTON(self,wx.ID_CLOSE,self.onClose)
+
+  def onClose(self,evt):
+    self.Destroy()
 
   def load(self,objt):
     self.theId = objt.id()

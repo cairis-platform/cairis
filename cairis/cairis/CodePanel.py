@@ -45,6 +45,8 @@ class CodePanel(BasePanel):
       descCtrl.Disable()
       incCritCtrl.Disable()
       codeEgCtrl.Disable()
+      closeCtrl = self.FindWindowById(wx.ID_CLOSE)
+      closeCtrl.Enable()
 
     self.SetSizer(mainSizer)
 

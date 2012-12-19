@@ -128,7 +128,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
         self.theEnvironment = 'None'
       self.theSection = attrs['section']
       self.theStartIndex = int(attrs['start_index'])
-      self.theEndIndex = int(attrs['start_index'])
+      self.theEndIndex = int(attrs['to_index'])
       self.theQuotations.append((self.theType,self.theCode,self.theArtifactType,self.theArtifactName,self.theEnvironment,self.theSection,self.theStartIndex,self.theEndIndex))
     elif name == 'code_network':
       self.thePersona = attrs['persona']

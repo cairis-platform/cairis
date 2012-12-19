@@ -39,6 +39,7 @@ class SummaryPage(BasePanel):
     topSizer.Add(self.buildTextSizer('Name',(87,30),armid.CODE_TEXTNAME_ID),0,wx.EXPAND)
     topSizer.Add(self.buildComboSizerList('Type',(87,30),armid.CODE_COMBOTYPE_ID,['event','context']),0,wx.EXPAND)
     topSizer.Add(self.buildMLTextSizer('Description',(87,30),armid.CODE_TEXTDESCRIPTION_ID),1,wx.EXPAND)
+    topSizer.Add(self.buildCloseButtonSizer(),0,wx.EXPAND)
     self.SetSizer(topSizer)
 
 class CodeNotebook(wx.Notebook):

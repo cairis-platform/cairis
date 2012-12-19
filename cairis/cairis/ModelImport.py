@@ -604,7 +604,7 @@ def importProcesses(docs,codes,memos,quotations,codeNetworks,processes):
   for p in processes:
     b.dbProxy.addImpliedProcess(p)
 
-  msgStr = 'Imported ' + str(noOfDocs) + ' internal documents, ' + str(noOfCodes) + ' codes, ' + str(noOfQuotations) + ' quotations, ' + str(noOfCNs) + ' code relationships, and ' + str(noOfProcs) + ' implied processes.'
+  msgStr = 'Imported ' + str(noOfDocs) + ' internal documents, ' + str(noOfCodes) + ' codes, ' + str(noOfMemos) + ' memos, ' + str(noOfQuotations) + ' quotations, ' + str(noOfCNs) + ' code relationships, and ' + str(noOfProcs) + ' implied processes.'
   return msgStr
 
 def importModelFile(importFile,isOverwrite = 1):
