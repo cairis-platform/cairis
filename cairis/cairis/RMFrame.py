@@ -179,6 +179,8 @@ class RMFrame(wx.Frame):
     exportMenu.Append(armid.RMFRAME_MENU_OPTIONS_EXPORTTVTYPES,'Threat and Vulnerability Types','Export Threat and Vulnerability Types')
     exportMenu.Append(armid.RMFRAME_MENU_OPTIONS_EXPORTDOMAINVALUES,'Domain Values','Export Domain Values')
     exportMenu.Append(armid.RMFRAME_MENU_OPTIONS_EXPORTPROCESSES,'Processes','Export Processes')
+    exportMenu.AppendSeparator()
+    exportMenu.Append(armid.RMFRAME_MENU_OPTIONS_EXPORTIMPLIEDSPEC,'Implied Specification','Export Implied Specification')
     file.AppendMenu(armid.RMFRAME_MENU_EXPORT,'Export',exportMenu)
     
     importMenu = wx.Menu()
@@ -409,6 +411,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_EXPORTDOMAINVALUES,self.OnExportDomainValues)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_IMPORTPROCESSES,self.OnImportProcesses)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_EXPORTPROCESSES,self.OnExportProcesses)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_EXPORTIMPLIEDSPEC,self.OnExportImpliedSpec)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_SEVERITIES,self.OnSeverityOptions)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_LIKELIHOODS,self.OnLikelihoodOptions)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_TEMPLATEASSETS,self.OnTemplateAssets)
@@ -1891,3 +1894,30 @@ class RMFrame(wx.Frame):
       dlg.ShowModal()
       dlg.Destroy()
       return
+
+  def OnExportImpliedSpec(self,event):
+    dialog = None
+    try:
+      proxy = self.b.dbProxy
+      environments = proxy.getDimensionNames('persona_implied_process',False)
+      cDlg = DimensionNameDialog(self,'persona_implied_process',environments,'Select')
+      ipName = None
+      if (cDlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
+        ipName = cDlg.dimensionName()
+      cDlg.Destroy() 
+      if ipName != None:
+        defaultBackupDir = './csp'
+        dlg = wx.FileDialog(self,message='Export implied process',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
+        if (dlg.ShowModal() == wx.ID_OK):
+          exportFile = dlg.GetPath() + ".csp"
+          cspBuf = self.dbProxy.impliedProcess(ipName)
+          f = open(exportFile,'w')
+          f.write(cspBuf)
+          f.close()
+          confDlg = wx.MessageDialog(self,'Exported ' + ipName + ' implied process','Export implied process',wx.OK | wx.ICON_INFORMATION)
+          confDlg.ShowModal()
+          confDlg.Destroy()
+        dlg.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Export implied process',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()

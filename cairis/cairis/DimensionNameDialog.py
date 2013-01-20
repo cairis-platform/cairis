@@ -29,11 +29,18 @@ class DimensionNameDialog(wx.Dialog):
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     if (dimensionName == 'usecase_contribution'):
       self.theDimensionName = 'usecase'
+    elif (dimensionName == 'persona_implied_process'):
+      self.theDimensionName = 'Implied Process'
     elif (dimensionName != 'reference'):
       self.theDimensionName = dimensionName
     else:
       self.theDimensionName = 'persona'
 
+    if (dimensionName == 'persona_implied_process'):
+      dimIconFile = 'code.png'
+  
+    else:
+      dimIconFile = self.theDimensionName + '.png'
 
     self.theSelectedDimensions = []
     self.theDimensions = dimensions
@@ -53,7 +60,6 @@ class DimensionNameDialog(wx.Dialog):
     wx.EVT_LIST_ITEM_DESELECTED(self.dimList,armid.DIMNAME_LISTDIM_ID,self.onItemDeselected)
     wx.EVT_BUTTON(self,armid.DIMNAME_BUTTONACTION_ID,self.onAdd)
 
-    dimIconFile = self.theDimensionName + '.png'
     b = Borg()
     dimIcon = wx.Icon(b.imageDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
     self.SetIcon(dimIcon)

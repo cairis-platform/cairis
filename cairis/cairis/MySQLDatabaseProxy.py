@@ -10991,3 +10991,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error adding memo ' + memoName + ' to '  + docName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def impliedProcess(self,procName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call impliedProcess(%s)',(procName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error exporting implied process ' + procName
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      cspBuf = row[0] 
+      curs.close()
+      return cspBuf
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error exporting implied process ' + procName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

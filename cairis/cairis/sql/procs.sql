@@ -807,6 +807,8 @@ drop procedure if exists redmineAttackPatternsSummary;
 drop procedure if exists walkObstacleBranch;
 drop procedure if exists processesToXml;
 drop procedure if exists mergeCodes;
+drop procedure if exists impliedProcess;
+drop procedure if exists persona_implied_processNames;
 
 delimiter //
 
@@ -21315,6 +21317,28 @@ begin
   select '','Internal Document',id.name from internal_document id where id.description like concat('%',inTxt,'%')
   union
   select '','Internal Document',id.name from internal_document id where id.content like concat('%',inTxt,'%');
+end
+//
+
+create procedure impliedProcess(in procName text)
+begin
+  declare buf varchar(90000000) default '';
+  declare ipSpec varchar(2000);
+
+  set buf = '/* Channel definitions BEGIN */\n\n';
+  set buf = concat(buf,'/* Channel definitions END */\n\n');
+  
+  select specification into ipSpec from persona_implied_process where name = procName limit 1;
+
+  set buf = concat(buf,ipSpec,'\n');
+
+  select buf;
+end
+//
+
+create procedure persona_implied_processNames(in envName text)
+begin
+  select name from persona_implied_process order by 1;
 end
 //
 

@@ -20,6 +20,7 @@ import wx
 import armid
 from Borg import Borg
 from BasePanel import BasePanel
+from ChannelListCtrl import ChannelListCtrl
 from CodeNetworkView import CodeNetworkView
 from CodeNetworkModel import CodeNetworkModel
 
@@ -43,6 +44,8 @@ class SpecificationPage(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,armid.IMPLIEDPROCESS_PAGESPECIFICATION_ID)
     topSizer = wx.BoxSizer(wx.VERTICAL)
+    self.channelList = ChannelListCtrl(self,armid.IMPLIEDPROCESS_LISTCHANNELS_ID)
+    topSizer.Add(self.channelList,1,wx.EXPAND)
     specBox = wx.StaticBox(self,-1)
     specBoxSizer = wx.StaticBoxSizer(specBox,wx.HORIZONTAL)
     topSizer.Add(specBoxSizer,1,wx.EXPAND)
