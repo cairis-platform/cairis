@@ -10281,7 +10281,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       ips = {}
       for ipId,ipName,ipDesc,pName,ipSpec in ipRows:
         ipNet = self.impliedProcessNetwork(ipName)
-        parameters = ImpliedProcessParameters(ipName,ipDesc,pName,ipNet,ipSpec)
+        chs = self.impliedProcessChannels(ipName)
+        parameters = ImpliedProcessParameters(ipName,ipDesc,pName,ipNet,ipSpec,chs)
         ip = ObjectFactory.build(ipId,parameters)
         ips[ipName] = ip
       return ips
@@ -11014,3 +11015,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addImpliedProcessChannels(self,ipId,channels):
     pass
+
+  def impliedProcessChannels(self,procName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call impliedProcessChannels(%s)',(procName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting channels for implied process ' + procName
+        raise DatabaseProxyException(exceptionText) 
+      chs = []
+      for row in curs.fetchall():
+        row = list(row)
+        chs.append((row[0],row[1]))
+      curs.close()
+      return chs
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting channels for implied process ' + procName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

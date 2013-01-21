@@ -199,6 +199,7 @@ class RMFrame(wx.Frame):
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTATTACKPATTERN,'Attack Pattern','Import Attack Pattern')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTSYNOPSES,'Synopses','Import Synopses and Contributions')
     importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTASSETS,'Assets','Import Template Assets')
+    importMenu.Append(armid.RMFRAME_MENU_OPTIONS_IMPORTPROCESSES,'Processes','Import Processes')
     file.AppendMenu(armid.RMFRAME_MENU_IMPORT,'Import',importMenu)
 
 

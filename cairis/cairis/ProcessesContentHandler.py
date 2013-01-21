@@ -107,6 +107,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     self.theDescription = ''
     self.theSpecification = ''
     self.theProcessNetwork = []
+    self.theChannels = []
 
   def startElement(self,name,attrs):
     self.currentElementName = name
@@ -139,6 +140,8 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     elif name == 'implied_process':
       self.theName = attrs['name']
       self.thePersona = attrs['persona']
+    elif name == 'channel':
+      self.theChannels.append((attrs['name'],attrs['data_type']))
     elif name == 'relationship':
       self.theProcessNetwork.append((attrs['from_code'],'',attrs['to_code'],'',attrs['relationship_type']))
     elif name == 'description':
@@ -183,7 +186,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.theMemos.append(p)
       self.resetMemoAttributes()
     elif name == 'implied_process':
-      p = ImpliedProcessParameters(self.theName,self.theDescription,self.thePersona,self.theProcessNetwork,self.theSpecification)
+      p = ImpliedProcessParameters(self.theName,self.theDescription,self.thePersona,self.theProcessNetwork,self.theSpecification,self.theChannels)
       self.theProcesses.append(p)
       self.resetProcessAttributes()
     elif name == 'description':

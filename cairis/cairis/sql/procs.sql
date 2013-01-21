@@ -21072,7 +21072,7 @@ begin
     order by 1;
   declare pcnCursor cursor for select p.name,fc.name,tc.name,rt.name from persona_code_network pcn, persona p, code fc, code tc, relationship_type rt where pcn.persona_id = p.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id;
   declare ipCursor cursor for select pip.id,pip.name,p.name,pip.description,pip.specification from persona_implied_process pip, persona p where pip.persona_id = p.id order by 2;
-  declare ipnCursor cursor for select fc.name,tc.name from persona_implied_process_network pipn, persona_code_network pcn, code fc, code tc where pipn.persona_implied_process_id = ipId and pipn.persona_code_network_id = pcn.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id;
+  declare ipnCursor cursor for select fc.name,tc.name,rt.name from persona_implied_process_network pipn, persona_code_network pcn, code fc, code tc, relationship_type rt where pipn.persona_implied_process_id = ipId and pipn.persona_code_network_id = pcn.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id;
 
   declare continue handler for not found set done = 1;
 
@@ -21177,12 +21177,12 @@ begin
     
     open ipnCursor;
     ipn_loop: loop
-      fetch ipnCursor into fromCode,toCode;
+      fetch ipnCursor into fromCode,toCode,rtName;
       if done = 1
       then
         leave ipn_loop;
       end if;
-      set buf = concat(buf,'  <relationship from_code=\"',fromCode,'\" to_code=\"',toCode,'\" />\n');
+      set buf = concat(buf,'  <relationship from_code=\"',fromCode,'\" to_code=\"',toCode,'\" relationship_type=\"',rtName,'\" />\n');
     end loop ipn_loop;
     close ipnCursor; 
     set done = 0; 
@@ -21351,8 +21351,10 @@ begin
 end
 //
 
-create procedure impliedProcessChannels(in ipId int)
+create procedure impliedProcessChannels(in ipName int)
 begin
+  declare ipId int;
+  select id into ipId from persona_implied_process where name = ipName limit 1;
   select channel_name,data_type_name from persona_implied_process_channel where persona_implied_process_id = ipId order by 1,2;
 end
 //

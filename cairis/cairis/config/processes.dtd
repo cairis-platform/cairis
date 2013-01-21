@@ -52,12 +52,15 @@
 <!ATTLIST code_network from_code CDATA #REQUIRED>
 <!ATTLIST code_network to_code CDATA #REQUIRED>
 
-<!ELEMENT implied_process (description,relationship+,specification)>
+<!ELEMENT implied_process (description,relationship+,channel+,specification)>
 <!ATTLIST implied_process name CDATA #REQUIRED>
 <!ATTLIST implied_process persona CDATA #REQUIRED>
 <!ELEMENT relationship EMPTY>
 <!ATTLIST relationship from_code CDATA #REQUIRED>
 <!ATTLIST relationship to_code CDATA #REQUIRED>
 <!ATTLIST relationship relationship_type (associated | implies | conflict | part-of) #REQUIRED>
+<!ELEMENT channel EMPTY>
+<!ATTLIST channel name CDATA #REQUIRED>
+<!ATTLIST channel data_type CDATA #REQUIRED>
 <!ELEMENT summary (#PCDATA)>
 <!ELEMENT specification (#PCDATA)>
