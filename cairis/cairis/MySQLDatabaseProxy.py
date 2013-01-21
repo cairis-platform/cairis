@@ -10321,6 +10321,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       pName = parameters.persona()
       cNet = parameters.network()
       ipSpec = parameters.specification()
+      chs = parameters.channels()
 
       curs = self.conn.cursor()
       curs.execute('call addImpliedProcess(%s,%s,%s,%s,%s)',(ipId,ipName,ipDesc.encode('utf-8'),pName,ipSpec.encode('utf-8')))
@@ -10328,6 +10329,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error adding implied process ' + ipName
         raise DatabaseProxyException(exceptionText) 
       self.addImpliedProcessNetwork(ipId,pName,cNet)
+      self.addImpliedProcessChannels(ipId,chs)
       self.conn.commit()
       curs.close()
       return ipId
@@ -10344,6 +10346,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       pName = parameters.persona()
       cNet = parameters.network()
       ipSpec = parameters.specification()
+      chs = parameters.channels()
 
       curs = self.conn.cursor()
       curs.execute('call deleteImpliedProcessComponents(%s)',(ipId))
@@ -10356,6 +10359,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error updating implied process ' + ipName
         raise DatabaseProxyException(exceptionText) 
       self.addImpliedProcessNetwork(ipId,pName,cNet)
+      self.addImpliedProcessChannels(ipId,chs)
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -11007,3 +11011,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error exporting implied process ' + procName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def addImpliedProcessChannels(self,ipId,channels):
+    pass

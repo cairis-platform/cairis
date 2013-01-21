@@ -19,16 +19,18 @@
 import ObjectCreationParameters
 
 class ImpliedProcessParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,ipName,ipDesc,pName,cNet,ipSpec):
+  def __init__(self,ipName,ipDesc,pName,cNet,ipSpec,chs):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = ipName
     self.theDescription = ipDesc
     self.thePersonaName = pName
     self.theCodeNetwork = cNet
     self.theSpecification = ipSpec
+    self.theChannels = chs
 
   def name(self): return self.theName
   def description(self): return self.theDescription
   def persona(self): return self.thePersonaName
   def network(self): return self.theCodeNetwork
   def specification(self): return self.theSpecification
+  def channels(self): return self.theChannels

@@ -34,6 +34,7 @@ class ImpliedProcessDialog(wx.Dialog):
     self.thePersonaName = ''
     self.theCodeNetwork = []
     self.theSpecification = ''
+    self.theChannels = []
     self.panel = 0
     self.buildControls(parameters)
     self.theCommitVerb = 'Create'
@@ -55,12 +56,14 @@ class ImpliedProcessDialog(wx.Dialog):
     descCtrl = self.FindWindowById(armid.IMPLIEDPROCESS_TEXTDESCRIPTION_ID)
     personaCtrl = self.FindWindowById(armid.IMPLIEDPROCESS_COMBOPERSONA_ID)
     specCtrl = self.FindWindowById(armid.IMPLIEDPROCESS_TEXTSPECIFICATION_ID)
+    channelCtrl = self.FindWindowById(armid.IMPLIEDPROCESS_LISTCHANNELS_ID)
      
     self.theName = nameCtrl.GetValue()
     self.theDescription = descCtrl.GetValue()
     self.thePersonaName = personaCtrl.GetValue()
     self.theCodeNetwork = self.panel.dimensions()
     self.theSpecification = specCtrl.GetValue()
+    self.theChannels = channelCtrl.channels()
 
     commitLabel = self.theCommitVerb + ' implied process'
 
@@ -89,10 +92,16 @@ class ImpliedProcessDialog(wx.Dialog):
       dlg.ShowModal()
       dlg.Destroy()
       return
+    elif len(self.theChannels) == 0:
+      dlg = wx.MessageDialog(self,'Channel list cannot be empty',commitLabel,wx.OK)
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+
     self.EndModal(armid.IMPLIEDPROCESS_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = ImpliedProcessParameters(self.theName,self.theDescription,self.thePersonaName,self.theCodeNetwork,self.theSpecification)
+    parameters = ImpliedProcessParameters(self.theName,self.theDescription,self.thePersonaName,self.theCodeNetwork,self.theSpecification,self.theChannels)
     parameters.setId(self.theImpliedProcessId)
     return parameters
 

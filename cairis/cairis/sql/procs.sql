@@ -809,6 +809,8 @@ drop procedure if exists processesToXml;
 drop procedure if exists mergeCodes;
 drop procedure if exists impliedProcess;
 drop procedure if exists persona_implied_processNames;
+drop procedure if exists addImpliedProcessChannel;
+drop procedure if exists impliedProcessChannels;
 
 delimiter //
 
@@ -19358,6 +19360,7 @@ end
 
 create procedure deleteImpliedProcessComponents(in ipId int)
 begin
+  delete from persona_implied_process_channel where persona_implied_process_id = ipId;
   delete from persona_implied_process_network where persona_implied_process_id = ipId;
 end
 //
@@ -21339,6 +21342,18 @@ end
 create procedure persona_implied_processNames(in envName text)
 begin
   select name from persona_implied_process order by 1;
+end
+//
+
+create procedure addImpliedProcessChannel(in ipId int, in channelName text, in dtName text)
+begin
+  insert into persona_implied_process_channel(persona_implied_process_id,channel_name,data_type_name) values (ipId,channelName,dtName);
+end
+//
+
+create procedure impliedProcessChannels(in ipId int)
+begin
+  select channel_name,data_type_name from persona_implied_process_channel where persona_implied_process_id = ipId order by 1,2;
 end
 //
 
