@@ -21351,7 +21351,7 @@ begin
 end
 //
 
-create procedure impliedProcessChannels(in ipName int)
+create procedure impliedProcessChannels(in ipName text)
 begin
   declare ipId int;
   select id into ipId from persona_implied_process where name = ipName limit 1;

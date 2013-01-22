@@ -11014,7 +11014,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addImpliedProcessChannels(self,ipId,channels):
-    pass
+    for channelName,dataType in channels:
+      self.addImpliedProcessChannel(ipId,channelName,dataType)
+
+  def addImpliedProcessChannel(self,ipId,channelName,dataType):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addImpliedProcessChannel(%s,%s,%s)',(ipId,channelName,dataType))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding implied process channel '
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding implied process channel ' + channelName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
 
   def impliedProcessChannels(self,procName):
     try:

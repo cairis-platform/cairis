@@ -184,6 +184,6 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'TaskCharacteristicParameters'):
     return TaskCharacteristic(objtId,p.task(),p.qualifier(),p.characteristic(),p.grounds(),p.warrant(),p.backing(),p.rebuttal())
   if (p.__class__.__name__ == 'ImpliedProcessParameters'):
-    return ImpliedProcess(objtId,p.name(),p.description(),p.persona(),p.network(),p.specification())
+    return ImpliedProcess(objtId,p.name(),p.description(),p.persona(),p.network(),p.specification(),p.channels())
   else:
     raise UnknownParameterClass(str(objtId))

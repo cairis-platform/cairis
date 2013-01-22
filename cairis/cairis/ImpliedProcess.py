@@ -17,19 +17,20 @@
 
 
 class ImpliedProcess:
-  def __init__(self,ipId,ipName,ipDesc,pName,cNet,ipSpec):
+  def __init__(self,ipId,ipName,ipDesc,pName,cNet,ipSpec,chs):
     self.theId = ipId
     self.theName = ipName
     self.theDescription = ipDesc
     self.thePersonaName = pName
     self.theCodeNetwork = cNet
     self.theSpecification = ipSpec
-
+    self.theChannels = chs
+  
   def id(self): return self.theId
   def name(self): return self.theName
   def description(self): return self.theDescription
   def persona(self): return self.thePersonaName
   def network(self): return self.theCodeNetwork
   def specification(self): return self.theSpecification
-
+  def channels(self): return self.theChannels
 

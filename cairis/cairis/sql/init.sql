@@ -2982,7 +2982,7 @@ CREATE TABLE persona_implied_process_channel (
   persona_implied_process_id INT NOT NULL,
   channel_name VARCHAR(200) NOT NULL,
   data_type_name VARCHAR(200) NOT NULL,
-  PRIMARY KEY(persona_implied_process_id),
+  PRIMARY KEY(persona_implied_process_id,channel_name),
   FOREIGN KEY(persona_implied_process_id) REFERENCES persona_implied_process(id)
 ) ENGINE=INNODB;
 
