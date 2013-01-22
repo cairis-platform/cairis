@@ -811,6 +811,8 @@ drop procedure if exists impliedProcess;
 drop procedure if exists persona_implied_processNames;
 drop procedure if exists addImpliedProcessChannel;
 drop procedure if exists impliedProcessChannels;
+drop function if exists internalDocumentQuotationString;
+drop function if exists personaQuotationString;
 
 delimiter //
 
@@ -21356,6 +21358,52 @@ begin
   declare ipId int;
   select id into ipId from persona_implied_process where name = ipName limit 1;
   select channel_name,data_type_name from persona_implied_process_channel where persona_implied_process_id = ipId order by 1,2;
+end
+//
+
+
+create function internalDocumentQuotationString(idName text, startIdx int, endIdx int) 
+returns varchar(4000)
+deterministic 
+begin
+  declare idId int;
+  declare quote varchar(4000);
+  select id into idId from internal_document where name = idName limit 1;
+  select substr(content,startIdx,endIdx - startIdx) into quote from internal_document where id = idId;
+  return quote;
+end
+//
+
+create function personaQuotationString(pName text, sectName text, envName text, startIdx int, endIdx int) 
+returns varchar(4000)
+deterministic 
+begin
+  declare pId int;
+  declare envId int;
+  declare quote varchar(4000);
+  select id into pId from persona where name = pName limit 1;
+
+  if sectName = 'activities'
+  then
+    select substr(activities,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'attitudes'
+  then
+    select substr(attitudes,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'aptitudes'
+  then
+    select substr(aptitudes,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'motivations'
+  then
+    select substr(motivations,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'skills'
+  then
+    select substr(skills,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  else
+    select id into envId from environment where name = envName limit 1;
+    select substr(narrative,startIdx,endIdx - startIdx) into quote from persona_narrative where persona_id = pId and environment_id = envId;
+  end if;
+
+  return quote;
 end
 //
 

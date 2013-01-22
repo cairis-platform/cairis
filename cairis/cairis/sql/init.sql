@@ -40,6 +40,7 @@ DROP VIEW IF EXISTS component_requirement;
 DROP VIEW IF EXISTS component_goal;
 DROP VIEW IF EXISTS misusability_case;
 DROP VIEW IF EXISTS usecase_step_synopsis_actor;
+DROP VIEW IF EXISTS quotation;
 
 DROP TABLE IF EXISTS usecase_step_synopsis;
 DROP TABLE IF EXISTS usecase_pc_contribution;
@@ -2999,6 +3000,8 @@ CREATE TABLE internal_document_code (
   code_id INT NOT NULL,
   start_index INT NOT NULL,
   end_index INT NOT NULL,
+  synopsis VARCHAR(1000),
+  label VARCHAR(200),
   PRIMARY KEY(internal_document_id,code_id,start_index,end_index),
   FOREIGN KEY(internal_document_id) REFERENCES internal_document(id),
   FOREIGN KEY(code_id) REFERENCES code(id)
@@ -3026,6 +3029,8 @@ CREATE TABLE persona_code (
   section_id INT NOT NULL,
   start_index INT NOT NULL,
   end_index INT NOT NULL,
+  synopsis VARCHAR(1000),
+  label VARCHAR(200),
   PRIMARY KEY(persona_id,code_id,section_id,start_index,end_index),
   FOREIGN KEY(persona_id) REFERENCES persona(id),
   FOREIGN KEY(code_id) REFERENCES code(id),
@@ -3052,6 +3057,8 @@ CREATE TABLE task_code (
   section_id INT NOT NULL,
   start_index INT NOT NULL,
   end_index INT NOT NULL,
+  synopsis VARCHAR(1000),
+  label VARCHAR(200),
   PRIMARY KEY(task_id,code_id,section_id,start_index,end_index),
   FOREIGN KEY(task_id) REFERENCES task(id),
   FOREIGN KEY(code_id) REFERENCES code(id),
@@ -3440,6 +3447,21 @@ CREATE VIEW securitypattern_requirement as
 
 CREATE VIEW misusability_case as
   select id,name from task where id in (select task_id from task_characteristic);
+
+CREATE VIEW quotation as
+   select c.name code,'internal_document',ind.name,'None',internalDocumentQuotationString(ind.name,idc.start_index,idc.end_index) from code c, internal_document ind, internal_document_code idc where c.id = idc.code_id and ind.id = idc.internal_document_id
+   union
+   select c.name code,'persona',p.name,'Activities',personaQuotationString(p.name,'activities',pc.start_index,pc.end_index) from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   union
+   select c.name code,'persona',p.name,'Attitudes',personaQuotationString(p.name,'attitudes',pc.start_index,pc.end_index) from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   union
+   select c.name code,'persona',p.name,'Aptitudes',personaQuotationString(p.name,'attitudes',pc.start_index,pc.end_index) from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   union
+   select c.name code,'persona',p.name,'Motivations',personaQuotationString(p.name,'motivations',pc.start_index,pc.end_index) from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   union
+   select c.name code,'persona',p.name,'Skills',personaQuotationString(p.name,'skills',pc.start_index,pc.end_index) from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id;
+
+
 
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');
