@@ -21328,14 +21328,41 @@ end
 create procedure impliedProcess(in procName text)
 begin
   declare buf varchar(90000000) default '';
+  declare ipId int;
+  declare augProcName varchar(200);
+  declare channelName varchar(200);
+  declare dtName varchar(200);
   declare ipSpec varchar(2000);
+  declare done int default 0;
+  declare channelCursor cursor for select channel_name, data_type_name from persona_implied_process_channel where persona_implied_process_id = ipId;  
+  declare continue handler for not found set done = 1;
 
-  set buf = '/* Channel definitions BEGIN */\n\n';
-  set buf = concat(buf,'/* Channel definitions END */\n\n');
+  select id into ipId from persona_implied_process where name = procName limit 1;
+
+  set buf = '--Channel definitions BEGIN\n\n';
+  open channelCursor;
+  channel_loop: loop
+    fetch channelCursor into channelName,dtName;
+    if done = 1
+    then
+      leave channel_loop;
+    end if;
+    set buf = concat(buf,'channel ',channelName);
+    if dtName != ''
+    then
+      set buf = concat(buf,' : ',dtName,' \n');
+    else
+      set buf = concat(buf,' \n');
+    end if;
+  end loop channel_loop;
+  close channelCursor;
+
+  set buf = concat(buf,'-- Channel definitions END\n\n');
   
-  select specification into ipSpec from persona_implied_process where name = procName limit 1;
+  select specification into ipSpec from persona_implied_process where id = ipId limit 1;
 
-  set buf = concat(buf,ipSpec,'\n');
+  set augProcName = replace(procName,' ','_');
+  set buf = concat(buf,augProcName,' = ',ipSpec,'\n');
 
   select buf;
 end

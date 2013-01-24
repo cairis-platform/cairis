@@ -141,7 +141,13 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name']
       self.thePersona = attrs['persona']
     elif name == 'channel':
-      self.theChannels.append((attrs['name'],attrs['data_type']))
+      channelName = attrs['name']
+      dataType = ''
+      try:
+        dataType = attrs['data_type']
+      except KeyError:
+        pass
+      self.theChannels.append((channelName,dataType))
     elif name == 'relationship':
       self.theProcessNetwork.append((attrs['from_code'],'',attrs['to_code'],'',attrs['relationship_type']))
     elif name == 'description':

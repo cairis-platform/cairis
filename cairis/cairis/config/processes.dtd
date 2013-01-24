@@ -61,6 +61,6 @@
 <!ATTLIST relationship relationship_type (associated | implies | conflict | part-of) #REQUIRED>
 <!ELEMENT channel EMPTY>
 <!ATTLIST channel name CDATA #REQUIRED>
-<!ATTLIST channel data_type CDATA #REQUIRED>
+<!ATTLIST channel data_type CDATA #IMPLIED>
 <!ELEMENT summary (#PCDATA)>
 <!ELEMENT specification (#PCDATA)>
