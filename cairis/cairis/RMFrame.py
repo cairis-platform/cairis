@@ -67,6 +67,7 @@ from ValueTypesDialog import ValueTypesDialog
 from ExternalDocumentsDialog import ExternalDocumentsDialog
 from InternalDocumentsDialog import InternalDocumentsDialog
 from CodesDialog import CodesDialog
+from QuotationsDialog import QuotationsDialog
 from DocumentReferencesDialog import DocumentReferencesDialog
 from ConceptReferencesDialog import ConceptReferencesDialog
 from PersonaCharacteristicsDialog import PersonaCharacteristicsDialog
@@ -239,13 +240,21 @@ class RMFrame(wx.Frame):
     iris.Append(armid.RMFRAME_MENU_IRIS_TASKS,'Tasks', 'Edit Tasks')
     iris.AppendSeparator()
     iris.Append(armid.RMFRAME_MENU_OPTIONS_EXTERNALDOCUMENTS,'External Documents','Edit External Documents')
-    iris.Append(armid.RMFRAME_MENU_OPTIONS_INTERNALDOCUMENTS,'Internal Documents','Edit Internal Documents')
-    iris.Append(armid.RMFRAME_MENU_OPTIONS_CODES,'Codes','Edit Codes')
     iris.Append(armid.RMFRAME_MENU_OPTIONS_DOCUMENTREFERENCES,'Document References','Edit Document References')
     iris.Append(armid.RMFRAME_MENU_OPTIONS_CONCEPTREFERENCES,'Concept References','Edit Concept References')
     iris.Append(armid.RMFRAME_MENU_OPTIONS_PERSONACHARACTERISTICS,'Persona Characteristics','Edit Persona Characteristics')
     iris.Append(armid.RMFRAME_MENU_OPTIONS_TASKCHARACTERISTICS,'Task Characteristics','Edit Task Characteristics')
     menubar.Append(iris,'&IRIS')
+
+    eustace = wx.Menu()
+    eustace.Append(armid.RMFRAME_MENU_EUSTACE_INTERNALDOCUMENTS,'Internal Documents','Edit Internal Documents')
+    eustace.Append(armid.RMFRAME_MENU_EUSTACE_CODES,'Codes','Edit Codes')
+    eustace.Append(armid.RMFRAME_MENU_EUSTACE_QUOTATIONS,'Quotations','Edit Quotations')
+    eustace.AppendSeparator()
+    eustace.Append(armid.RMFRAME_MENU_EUSTACE_CODENETWORK,'Code Network','View code network')
+    eustace.AppendSeparator()
+    eustace.Append(armid.RMFRAME_MENU_EUSTACE_IMPLIEDPROCESSES,'Implied Processes','View implied processes')
+    menubar.Append(eustace,'&EUSTACE')
 
     optionm = wx.Menu()
     optionm.Append(armid.RMFRAME_MENU_OPTIONS_ASSETS,'Asset values','Edit Asset values')
@@ -279,8 +288,6 @@ class RMFrame(wx.Frame):
     viewm.Append(armid.RMFRAME_MENU_VIEW_TASKMODEL,'Task Model','View task model')
     viewm.Append(armid.RMFRAME_MENU_VIEW_APMODEL,'Assumption Persona Model','View assumption persona model')
     viewm.Append(armid.RMFRAME_MENU_VIEW_ATMODEL,'Assumption Task Model','View assumption task model')
-    viewm.Append(armid.RMFRAME_MENU_VIEW_CODENETWORK,'Code Network','View code network')
-    viewm.Append(armid.RMFRAME_MENU_VIEW_IMPLIEDPROCESSES,'Implied Processes','View implied processes')
     viewm.Append(armid.RMFRAME_MENU_VIEW_TRACEABILITY,'Traceability','View Traceability relations')
     menubar.Append(viewm,'&View')
   
@@ -301,8 +308,8 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_TASKMODEL,self.OnViewTasks)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_APMODEL,self.OnViewAPModel)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_ATMODEL,self.OnViewATModel)
-    wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_CODENETWORK,self.OnViewCodeNetwork)
-    wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_IMPLIEDPROCESSES,self.OnImpliedProcesses)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_EUSTACE_CODENETWORK,self.OnViewCodeNetwork)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_EUSTACE_IMPLIEDPROCESSES,self.OnImpliedProcesses)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_VIEW_TRACEABILITY,self.OnViewTraceability)
 
     wx.EVT_MENU(self,armid.RMFRAME_MENU_GRID_REQUIREMENTS,self.OnGridRequirements)
@@ -419,8 +426,9 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_TEMPLATEREQUIREMENTS,self.OnTemplateRequirements)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_SECURITYPATTERNS,self.OnSecurityPatterns)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_EXTERNALDOCUMENTS,self.OnExternalDocuments)
-    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_INTERNALDOCUMENTS,self.OnInternalDocuments)
-    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_CODES,self.OnCodes)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_EUSTACE_INTERNALDOCUMENTS,self.OnInternalDocuments)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_EUSTACE_CODES,self.OnCodes)
+    wx.EVT_MENU(self,armid.RMFRAME_MENU_EUSTACE_QUOTATIONS,self.OnQuotations)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_DOCUMENTREFERENCES,self.OnDocumentReferences)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_CONCEPTREFERENCES,self.OnConceptReferences)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_OPTIONS_PERSONACHARACTERISTICS,self.OnPersonaCharacteristics)
@@ -1922,3 +1930,14 @@ class RMFrame(wx.Frame):
     except ARMException,errorText:
       dlg = wx.MessageDialog(self,str(errorText),'Export implied process',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
+
+  def OnQuotations(self,event):
+    try:
+      dialog = QuotationsDialog(self)
+      dialog.ShowModal()
+      dialog.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Edit Quotations',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
