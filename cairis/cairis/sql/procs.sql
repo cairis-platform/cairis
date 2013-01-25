@@ -813,6 +813,10 @@ drop procedure if exists addImpliedProcessChannel;
 drop procedure if exists impliedProcessChannels;
 drop function if exists internalDocumentQuotationString;
 drop function if exists personaQuotationString;
+drop procedure if exists getQuotations;
+drop procedure if exists updateDocumentCode;
+drop procedure if exists deleteDocumentCode;
+drop procedure if exists artifactText;
 
 delimiter //
 
@@ -21431,6 +21435,45 @@ begin
   end if;
 
   return quote;
+end
+//
+
+create procedure getQuotations()
+begin
+  select code,artifact_type,artifact_name,section,start_index,end_index,quote from quotation;
+end
+//
+
+create procedure updateDocumentCode(in docName text, in docCode text, in oldStartIdx int, in oldEndIdx int, in startIdx int, in endIdx int)
+begin
+  declare docId int;
+  declare codeId int;
+
+  select id into docId from internal_document where name = docName;
+  select id into codeId from code where name = docCode;
+  update internal_document_code set start_index = startIdx, end_index = endIdx where internal_document_id = docId and code_id = codeId and start_index = oldStartIdx and end_index = oldEndIdx;
+end
+//
+
+create procedure deleteDocumentCode(in docName text, in docCode text, in startIdx int, in endIdx int)
+begin
+  declare docId int;
+  declare codeId int;
+
+  select id into docId from internal_document where name = docName;
+  select id into codeId from code where name = docCode;
+  delete from internal_document_code where internal_document_id = docId and code_id = codeId and start_index = startIdx and end_index = endIdx;
+end
+//
+
+create procedure artifactText(in artType text, in artName text)
+begin
+
+  if artType = 'internal_document'
+  then
+    select content from internal_document where name = artName;
+  end if;
+
 end
 //
 

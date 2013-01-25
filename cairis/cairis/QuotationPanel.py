@@ -19,23 +19,12 @@
 import wx
 import armid
 from BasePanel import BasePanel
-from QuotationListCtrl import QuotationListCtrl
-from Borg import Borg
+from QuotationNotebook import QuotationNotebook
+import Memo
 
-class QuotationsPanel(BasePanel):
+class QuotationPanel(BasePanel):
   def __init__(self,parent):
-    BasePanel.__init__(self,parent,armid.QUOTATIONS_ID)
-    b = Borg()
-    self.dbProxy = b.dbProxy
-
+    BasePanel.__init__(self,parent,armid.QUOTATION_ID)
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-
-    self.qlCtrl = QuotationListCtrl(self,armid.QUOTATIONS_LISTQUOTATIONS_ID)
-    self.qlCtrl.load(self.dbProxy.getQuotations())
-    mainSizer.Add(self.qlCtrl,1,wx.EXPAND)
-
-    buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
-    okButton = wx.Button(self,wx.ID_OK,"Ok")
-    buttonSizer.Add(okButton)
-    mainSizer.Add(buttonSizer,0,wx.CENTER)
+    mainSizer.Add(QuotationNotebook(self),1,wx.EXPAND)
     self.SetSizer(mainSizer)

@@ -19,10 +19,13 @@
 import wx
 import armid
 import ARM
+from QuotationDialog import QuotationDialog
+from Borg import Borg
 
 class QuotationListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,boxSize=wx.DefaultSize):
     wx.ListCtrl.__init__(self,parent,winId,size=boxSize,style=wx.LC_REPORT)
+    self.theQuoteIndices = {}
     self.InsertColumn(0,'Code')
     self.SetColumnWidth(0,150)
     self.InsertColumn(1,'Artifact Type')
@@ -40,6 +43,7 @@ class QuotationListCtrl(wx.ListCtrl):
     self.Bind(wx.EVT_RIGHT_DOWN,self.OnRightDown)
     self.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnItemSelected)
     self.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.OnItemDeselected)
+    self.Bind(wx.EVT_LIST_ITEM_ACTIVATED,self.onItemActivated)
     wx.EVT_MENU(self.theDimMenu,armid.QUOTATIONLISTCTRL_MENUDELETE_ID,self.onDeleteQuotation)
 
   def OnItemSelected(self,evt):
@@ -59,14 +63,43 @@ class QuotationListCtrl(wx.ListCtrl):
       dlg.ShowModal()
       dlg.Destroy()
     else:
-      selectedValue = self.GetItemText(self.theSelectedIdx)
+      codeName = self.GetItemText(self.theSelectedIdx)
+      atItem = self.GetItem(self.theSelectedIdx,1)
+      atName = atItem.GetText()
+      aItem = self.GetItem(self.theSelectedIdx,2)
+      aName = aItem.GetText()
+      qTxtItem = self.GetItem(self.theSelectedIdx,4)
+      qTxt = qTxtItem.GetText()
+      startIdx,endIdx = self.theQuoteIndices[(codeName,atName,aName,qTxt)]
+ 
+      b = Borg()
+      b.dbProxy.deleteQuotation(codeName,atName,aName,startIdx,endIdx)
+      del self.theQuoteIndices[(codeName,atName,aName,qTxt)]
       self.DeleteItem(self.theSelectedIdx)
 
   def load(self,quotations):
-    for code,aType,aName,sectName,qTxt in quotations:
+    for code,aType,aName,sectName,qTxt,startIdx,endIdx in quotations:
       idx = self.GetItemCount()
       self.InsertStringItem(idx,code)
       self.SetStringItem(idx,1,aType)
       self.SetStringItem(idx,2,aName)
       self.SetStringItem(idx,3,sectName)
       self.SetStringItem(idx,4,qTxt)
+      self.theQuoteIndices[(code,aType,aName,qTxt)] = (startIdx,endIdx)
+
+  def onItemActivated(self,evt):
+    x = evt.GetIndex()
+    codeName = self.GetItemText(x)
+    atItem = self.GetItem(x,1)
+    atName = atItem.GetText()
+    aItem = self.GetItem(x,2)
+    aName = aItem.GetText()
+    qTxtItem = self.GetItem(x,4)
+    qTxt = qTxtItem.GetText()
+    startIdx,endIdx = self.theQuoteIndices[(codeName,atName,aName,qTxt)]
+    dlg = QuotationDialog(self)
+    dlg.load(codeName,atName,aName,startIdx,endIdx)
+    if (dlg.ShowModal() == armid.QUOTATION_BUTTONCOMMIT_ID):
+      # update list and quotation index entry here
+      pass
+    dlg.Destroy()

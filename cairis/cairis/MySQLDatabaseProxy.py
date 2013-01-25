@@ -11047,3 +11047,77 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting channels for implied process ' + procName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def getQuotations(self):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getQuotations()')
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting quotations'
+        raise DatabaseProxyException(exceptionText) 
+      qs = []
+      for row in curs.fetchall():
+        row = list(row)
+        code = row[0] 
+        aType = row[1]
+        aName = row[2]
+        sectName = row[3]
+        startIdx = row[4]
+        endIdx = row[5]
+        quote = row[6]
+        qs.append((code,aType,aName,sectName,quote,startIdx,endIdx))
+      curs.close()
+      return qs
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting quotations (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def updateQuotation(self,codeName,atName,aName,oldStartIdx,oldEndIdx,startIdx,endIdx):
+    try:
+      if atName == 'internal_document':
+        curs = self.conn.cursor()
+        curs.execute('call updateDocumentCode(%s,%s,%s,%s,%s,%s)',(aName,codeName,oldStartIdx,oldEndIdx,startIdx,endIdx))
+        if (curs.rowcount == -1):
+          exceptionText = 'Error associating code ' + codeName + ' with ' + aName
+          raise DatabaseProxyException(exceptionText) 
+        self.conn.commit()
+        curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error associating code ' + codeName + ' with '  + aName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteQuotation(self,codeName,atName,aName,startIdx,endIdx):
+    try:
+      if atName == 'internal_document':
+        curs = self.conn.cursor()
+        curs.execute('call deleteDocumentCode(%s,%s,%s,%s)',(aName,codeName,startIdx,endIdx))
+        if (curs.rowcount == -1):
+          exceptionText = 'Error associating code ' + codeName + ' with ' + aName
+          raise DatabaseProxyException(exceptionText) 
+        self.conn.commit()
+        curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error associating code ' + codeName + ' with '  + aName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def artifactText(self,artType,artName):
+    try:
+      if artType == 'internal_document':
+        curs = self.conn.cursor()
+        curs.execute('call artifactText(%s,%s)',(artType,artName))
+        if (curs.rowcount == -1):
+          exceptionText = 'Error getting content for ' + artType + ' ' + artName
+          raise DatabaseProxyException(exceptionText) 
+        row = curs.fetchone()
+        content = row[0]
+        curs.close()
+        return content 
+      else: 
+        return ''
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting context for ' + artType + ' ' + artName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
