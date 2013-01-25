@@ -27,4 +27,5 @@ class QuotationPanel(BasePanel):
     BasePanel.__init__(self,parent,armid.QUOTATION_ID)
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     mainSizer.Add(QuotationNotebook(self),1,wx.EXPAND)
+    mainSizer.Add(self.buildCommitButtonSizer(armid.QUOTATION_BUTTONCOMMIT_ID,False),0,wx.ALIGN_CENTER)
     self.SetSizer(mainSizer)
