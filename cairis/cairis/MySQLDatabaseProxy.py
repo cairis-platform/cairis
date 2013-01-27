@@ -11065,7 +11065,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         startIdx = row[4]
         endIdx = row[5]
         quote = row[6]
-        qs.append((code,aType,aName,sectName,quote,startIdx,endIdx))
+        synopsis = row[7]
+        label = row[8]
+        qs.append((code,aType,aName,sectName,quote,startIdx,endIdx,synopsis,label))
       curs.close()
       return qs
     except _mysql_exceptions.DatabaseError, e:
@@ -11073,11 +11075,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting quotations (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def updateQuotation(self,codeName,atName,aName,oldStartIdx,oldEndIdx,startIdx,endIdx):
+  def updateQuotation(self,codeName,atName,aName,oldStartIdx,oldEndIdx,startIdx,endIdx,synopsis,label):
     try:
       if atName == 'internal_document':
         curs = self.conn.cursor()
-        curs.execute('call updateDocumentCode(%s,%s,%s,%s,%s,%s)',(aName,codeName,oldStartIdx,oldEndIdx,startIdx,endIdx))
+        curs.execute('call updateDocumentCode(%s,%s,%s,%s,%s,%s,%s,%s)',(aName,codeName,oldStartIdx,oldEndIdx,startIdx,endIdx,synopsis,label))
         if (curs.rowcount == -1):
           exceptionText = 'Error associating code ' + codeName + ' with ' + aName
           raise DatabaseProxyException(exceptionText) 

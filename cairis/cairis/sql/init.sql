@@ -3449,17 +3449,17 @@ CREATE VIEW misusability_case as
   select id,name from task where id in (select task_id from task_characteristic);
 
 CREATE VIEW quotation as
-   select c.name code,'internal_document' artifact_type,ind.name artifact_name,'None' section,idc.start_index,idc.end_index,internalDocumentQuotationString(ind.name,idc.start_index,idc.end_index) quote from code c, internal_document ind, internal_document_code idc where c.id = idc.code_id and ind.id = idc.internal_document_id
+   select c.name code,'internal_document' artifact_type,ind.name artifact_name,'None' section,idc.start_index,idc.end_index,internalDocumentQuotationString(ind.name,idc.start_index,idc.end_index) quote,idc.synopsis,idc.label from code c, internal_document ind, internal_document_code idc where c.id = idc.code_id and ind.id = idc.internal_document_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Activities' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'activities',pc.start_index,pc.end_index) quote from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Activities' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'activities',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Attitudes' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'attitudes',pc.start_index,pc.end_index) quote from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Attitudes' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'attitudes',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Aptitudes' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'attitudes',pc.start_index,pc.end_index) quote from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Aptitudes' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'attitudes',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Motivations' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'motivations',pc.start_index,pc.end_index) quote from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Motivations' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'motivations',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Skills' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'skills',pc.start_index,pc.end_index) quote from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id;
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Skills' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'skills',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id;
 
 
 

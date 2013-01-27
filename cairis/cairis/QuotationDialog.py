@@ -35,13 +35,15 @@ class QuotationDialog(wx.Dialog):
     self.SetSizer(mainSizer)
     wx.EVT_BUTTON(self,armid.QUOTATION_BUTTONCOMMIT_ID,self.onCommit)
 
-  def load(self,codeName,atName,aName,startIdx,endIdx):
+  def load(self,codeName,atName,aName,startIdx,endIdx,synopsis,label):
     self.theOldStartIdx = startIdx
     self.theOldEndIdx = endIdx
     codeCtrl = self.FindWindowById(armid.QUOTATION_TEXTCODE_ID)
     atCtrl = self.FindWindowById(armid.QUOTATION_TEXTARTIFACTTYPE_ID)
     anCtrl = self.FindWindowById(armid.QUOTATION_TEXTARTIFACTNAME_ID)
     srcCtrl = self.FindWindowById(armid.QUOTATION_TEXTSOURCE_ID)
+    synCtrl = self.FindWindowById(armid.QUOTATION_TEXTSYNOPSIS_ID)
+    lblCtrl = self.FindWindowById(armid.QUOTATION_TEXTLABEL_ID)
 
     codeCtrl.SetValue(codeName)
     atCtrl.SetValue(atName)
@@ -49,6 +51,8 @@ class QuotationDialog(wx.Dialog):
     srcTxt = self.dbProxy.artifactText(atName,aName)
     srcCtrl.SetValue(srcTxt)
     srcCtrl.SetSelection(startIdx,endIdx)
+    synCtrl.SetValue(synopsis)
+    lblCtrl.SetValue(label)
 
   def onCommit(self,evt):
     commitLabel = 'Update quotation'
@@ -57,10 +61,14 @@ class QuotationDialog(wx.Dialog):
     atCtrl = self.FindWindowById(armid.QUOTATION_TEXTARTIFACTTYPE_ID)
     anCtrl = self.FindWindowById(armid.QUOTATION_TEXTARTIFACTNAME_ID)
     srcCtrl = self.FindWindowById(armid.QUOTATION_TEXTSOURCE_ID)
+    synCtrl = self.FindWindowById(armid.QUOTATION_TEXTSYNOPSIS_ID)
+    lblCtrl = self.FindWindowById(armid.QUOTATION_TEXTLABEL_ID)
 
     codeName = codeCtrl.GetValue()
     atName = atCtrl.GetValue()
     aName = anCtrl.GetValue()
+    synopsis = synCtrl.GetValue()
+    label = lblCtrl.GetValue()
     
     startIdx,endIdx = srcCtrl.GetSelection()
     if (startIdx == endIdx):
@@ -71,5 +79,5 @@ class QuotationDialog(wx.Dialog):
     elif startIdx == self.theOldStartIdx and endIdx == self.theOldEndIdx:
       self.EndModal(wx.ID_CLOSE)
     b = Borg()
-    b.dbProxy.updateQuotation(codeName,atName,aName,self.theOldStartIdx,self.theOldEndIdx,startIdx,endIdx)
+    b.dbProxy.updateQuotation(codeName,atName,aName,self.theOldStartIdx,self.theOldEndIdx,startIdx,endIdx,synopsis,label)
     self.EndModal(armid.QUOTATION_BUTTONCOMMIT_ID)

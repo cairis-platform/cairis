@@ -78,14 +78,14 @@ class QuotationListCtrl(wx.ListCtrl):
       self.DeleteItem(self.theSelectedIdx)
 
   def load(self,quotations):
-    for code,aType,aName,sectName,qTxt,startIdx,endIdx in quotations:
+    for code,aType,aName,sectName,qTxt,startIdx,endIdx,synopsis,label in quotations:
       idx = self.GetItemCount()
       self.InsertStringItem(idx,code)
       self.SetStringItem(idx,1,aType)
       self.SetStringItem(idx,2,aName)
       self.SetStringItem(idx,3,sectName)
       self.SetStringItem(idx,4,qTxt)
-      self.theQuoteIndices[(code,aType,aName,qTxt)] = (startIdx,endIdx)
+      self.theQuoteIndices[(code,aType,aName,qTxt)] = (startIdx,endIdx,synopsis,label)
 
   def onItemActivated(self,evt):
     x = evt.GetIndex()
@@ -96,9 +96,9 @@ class QuotationListCtrl(wx.ListCtrl):
     aName = aItem.GetText()
     qTxtItem = self.GetItem(x,4)
     qTxt = qTxtItem.GetText()
-    startIdx,endIdx = self.theQuoteIndices[(codeName,atName,aName,qTxt)]
+    startIdx,endIdx,synopsis,label = self.theQuoteIndices[(codeName,atName,aName,qTxt)]
     dlg = QuotationDialog(self)
-    dlg.load(codeName,atName,aName,startIdx,endIdx)
+    dlg.load(codeName,atName,aName,startIdx,endIdx,synopsis,label)
     if (dlg.ShowModal() == armid.QUOTATION_BUTTONCOMMIT_ID):
       # update list and quotation index entry here
       pass

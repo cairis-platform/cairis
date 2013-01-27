@@ -19133,7 +19133,7 @@ begin
     call newId2(codeId);
     call addCode(codeId,docCode,'context','None','None','None');
   end if;
-  insert into internal_document_code(internal_document_id,code_id,start_index,end_index) values (docId,codeId,startIdx,endIdx);
+  insert into internal_document_code(internal_document_id,code_id,start_index,end_index,synopsis,label) values (docId,codeId,startIdx,endIdx,'','');
 end
 //
 
@@ -21440,18 +21440,18 @@ end
 
 create procedure getQuotations()
 begin
-  select code,artifact_type,artifact_name,section,start_index,end_index,quote from quotation;
+  select code,artifact_type,artifact_name,section,start_index,end_index,quote,synopsis,label from quotation;
 end
 //
 
-create procedure updateDocumentCode(in docName text, in docCode text, in oldStartIdx int, in oldEndIdx int, in startIdx int, in endIdx int)
+create procedure updateDocumentCode(in docName text, in docCode text, in oldStartIdx int, in oldEndIdx int, in startIdx int, in endIdx int,in synTxt text, in lblTxt text)
 begin
   declare docId int;
   declare codeId int;
 
   select id into docId from internal_document where name = docName;
   select id into codeId from code where name = docCode;
-  update internal_document_code set start_index = startIdx, end_index = endIdx where internal_document_id = docId and code_id = codeId and start_index = oldStartIdx and end_index = oldEndIdx;
+  update internal_document_code set start_index = startIdx, end_index = endIdx,synopsis = synTxt,label=lblTxt where internal_document_id = docId and code_id = codeId and start_index = oldStartIdx and end_index = oldEndIdx;
 end
 //
 
