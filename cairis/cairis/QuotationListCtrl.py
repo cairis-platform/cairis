@@ -14,6 +14,7 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
+# coding: latin1
 
 
 import wx
@@ -70,7 +71,7 @@ class QuotationListCtrl(wx.ListCtrl):
       aName = aItem.GetText()
       qTxtItem = self.GetItem(self.theSelectedIdx,4)
       qTxt = qTxtItem.GetText()
-      startIdx,endIdx = self.theQuoteIndices[(codeName,atName,aName,qTxt)]
+      startIdx,endIdx,synopsis,label = self.theQuoteIndices[(codeName,atName,aName,qTxt)]
  
       b = Borg()
       b.dbProxy.deleteQuotation(codeName,atName,aName,startIdx,endIdx)
@@ -96,7 +97,7 @@ class QuotationListCtrl(wx.ListCtrl):
     aName = aItem.GetText()
     qTxtItem = self.GetItem(x,4)
     qTxt = qTxtItem.GetText()
-    startIdx,endIdx,synopsis,label = self.theQuoteIndices[(codeName,atName,aName,qTxt)]
+    startIdx,endIdx,synopsis,label = self.theQuoteIndices[(codeName,atName,aName,qTxt.encode('utf-8'))]
     dlg = QuotationDialog(self)
     dlg.load(codeName,atName,aName,startIdx,endIdx,synopsis,label)
     if (dlg.ShowModal() == armid.QUOTATION_BUTTONCOMMIT_ID):
