@@ -10081,10 +10081,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       docCode = docCodes[(startIdx,endIdx)]
       self.addDocumentCode(docName,docCode,startIdx,endIdx)
 
-  def addDocumentCode(self,docName,docCode,startIdx,endIdx):
+  def addDocumentCode(self,docName,docCode,startIdx,endIdx,codeLabel='',codeSynopsis=''):
     try:
       curs = self.conn.cursor()
-      curs.execute('call addDocumentCode(%s,%s,%s,%s)',(docName,docCode,startIdx,endIdx))
+      curs.execute('call addDocumentCode(%s,%s,%s,%s,%s,%s)',(docName,docCode,startIdx,endIdx,codeLabel,codeSynopsis))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding code ' + docCode + ' to ' + docName
         raise DatabaseProxyException(exceptionText) 
@@ -10884,12 +10884,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     sectName = quotation[5]
     startIdx = quotation[6]
     endIdx = quotation[7]
+    codeLabel = quotation[8]
+    codeSynopsis = quotation[9]
 
     if artType == 'internal_document':
       if qType == 'memo':
         self.addDocumentMemo(artName,cmName,'',startIdx,endIdx)
       else:
-        self.addDocumentCode(artName,cmName,startIdx,endIdx)
+        self.addDocumentCode(artName,cmName,startIdx,endIdx,codeLabel,codeSynopsis)
     else:
       if envName == 'None':
         self.addArtifactCode(artName,artType,sectName,cmName,startIdx,endIdx)

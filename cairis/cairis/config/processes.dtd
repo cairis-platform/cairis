@@ -36,7 +36,7 @@
 <!ELEMENT inclusion_criteria (#PCDATA)>
 <!ELEMENT example (#PCDATA)>
 
-<!ELEMENT quotation EMPTY>
+<!ELEMENT quotation (label,synopsis)>
 <!ATTLIST quotation type (code | memo) #REQUIRED>
 <!ATTLIST quotation name CDATA #REQUIRED>
 <!ATTLIST quotation artifact_type (persona | task | internal_document) #REQUIRED>
@@ -45,6 +45,8 @@
 <!ATTLIST quotation section (none | activities | attitudes | aptitudes | motivations | skills | narrative | benefits | consequences) #REQUIRED>
 <!ATTLIST quotation start_index CDATA #REQUIRED>
 <!ATTLIST quotation to_index CDATA #REQUIRED>
+<!ELEMENT label (#PCDATA)>
+<!ELEMENT synopsis (#PCDATA)>
 
 <!ELEMENT code_network EMPTY>
 <!ATTLIST code_network persona CDATA #REQUIRED>

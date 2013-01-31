@@ -19121,7 +19121,7 @@ begin
 end
 //
 
-create procedure addDocumentCode(in docName text, in docCode text, in startIdx int, in endIdx int)
+create procedure addDocumentCode(in docName text, in docCode text, in startIdx int, in endIdx int,in codeLabel text,in codeSynopsis text)
 begin
   declare docId int;
   declare codeId int;
@@ -19133,7 +19133,7 @@ begin
     call newId2(codeId);
     call addCode(codeId,docCode,'context','None','None','None');
   end if;
-  insert into internal_document_code(internal_document_id,code_id,start_index,end_index,synopsis,label) values (docId,codeId,startIdx,endIdx,'','');
+  insert into internal_document_code(internal_document_id,code_id,start_index,end_index,label,synopsis) values (docId,codeId,startIdx,endIdx,codeLabel,codeSynopsis);
 end
 //
 
@@ -21060,21 +21060,23 @@ begin
   declare ipSpec varchar(2000);
   declare startIdx int;
   declare endIdx int;
+  declare codeLabel varchar(200);
+  declare codeSynopsis varchar(1000);
   declare idCursor cursor for select name, description, content from internal_document order by 1; 
   declare codeCursor cursor for select c.name, ct.name, c.description, c.inclusion_criteria, c.example from code c, code_type ct where c.code_type_id = ct.id order by 1; 
   declare memoCursor cursor for select m.name, m.description from memo m order by 1; 
   declare quotationCursor cursor for 
-    select 'internal_document_memo',a.name,m.name,'None','none',am.start_index,am.end_index from internal_document_memo am, internal_document a, memo m where am.internal_document_id = a.id and am.memo_id = m.id
+    select 'internal_document_memo',a.name,m.name,'None','none',am.start_index,am.end_index,'','' from internal_document_memo am, internal_document a, memo m where am.internal_document_id = a.id and am.memo_id = m.id
     union
-    select 'internal_document_code',a.name,c.name,'None','none',ac.start_index,ac.end_index from internal_document_code ac, internal_document a, code c where ac.internal_document_id = a.id and ac.code_id = c.id
+    select 'internal_document_code',a.name,c.name,'None','none',ac.start_index,ac.end_index,ac.label,ac.synopsis from internal_document_code ac, internal_document a, code c where ac.internal_document_id = a.id and ac.code_id = c.id
     union
-    select 'persona',a.name,c.name,'None',ars.name,ac.start_index,ac.end_index from persona_code ac, persona a, code c, artifact_section ars where ac.persona_id = a.id and ac.code_id = c.id and ac.section_id = ars.id
+    select 'persona',a.name,c.name,'None',ars.name,ac.start_index,ac.end_index,'','' from persona_code ac, persona a, code c, artifact_section ars where ac.persona_id = a.id and ac.code_id = c.id and ac.section_id = ars.id
     union
-    select 'persona',a.name,c.name,e.name,ars.name,aec.start_index,aec.end_index from persona_environment_code aec, persona a, code c, artifact_section ars, environment e where aec.persona_id = a.id and aec.code_id = c.id and aec.section_id = ars.id and aec.environment_id = e.id
+    select 'persona',a.name,c.name,e.name,ars.name,aec.start_index,aec.end_index,'','' from persona_environment_code aec, persona a, code c, artifact_section ars, environment e where aec.persona_id = a.id and aec.code_id = c.id and aec.section_id = ars.id and aec.environment_id = e.id
     union
-    select 'task',a.name,c.name,'None',ars.name,ac.start_index,ac.end_index from task_code ac, task a, code c, artifact_section ars where ac.task_id = a.id and ac.code_id = c.id and ac.section_id = ars.id
+    select 'task',a.name,c.name,'None',ars.name,ac.start_index,ac.end_index,'','' from task_code ac, task a, code c, artifact_section ars where ac.task_id = a.id and ac.code_id = c.id and ac.section_id = ars.id
     union
-    select 'task',a.name,c.name,e.name,ars.name,aec.start_index,aec.end_index from task_environment_code aec, task a, code c, artifact_section ars, environment e where aec.task_id = a.id and aec.code_id = c.id and aec.section_id = ars.id and aec.environment_id = e.id
+    select 'task',a.name,c.name,e.name,ars.name,aec.start_index,aec.end_index,'','' from task_environment_code aec, task a, code c, artifact_section ars, environment e where aec.task_id = a.id and aec.code_id = c.id and aec.section_id = ars.id and aec.environment_id = e.id
     order by 1;
   declare pcnCursor cursor for select p.name,fc.name,tc.name,rt.name from persona_code_network pcn, persona p, code fc, code tc, relationship_type rt where pcn.persona_id = p.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id;
   declare ipCursor cursor for select pip.id,pip.name,p.name,pip.description,pip.specification from persona_implied_process pip, persona p where pip.persona_id = p.id order by 2;
@@ -21129,7 +21131,7 @@ begin
 
   open quotationCursor;
   q_loop: loop
-    fetch quotationCursor into artType,artName,codeName,envName,sectionName,startIdx,endIdx;
+    fetch quotationCursor into artType,artName,codeName,envName,sectionName,startIdx,endIdx,codeLabel,codeSynopsis;
     if done = 1
     then 
       leave q_loop;
@@ -21152,7 +21154,7 @@ begin
     then
       set buf = concat(buf,' environment=\"',envName,'\" ');
     end if; 
-    set buf = concat(buf,'section=\"',sectionName,'\" start_index=\"',startIdx,'\" to_index=\"',endIdx,'\" />\n');
+    set buf = concat(buf,'section=\"',sectionName,'\" start_index=\"',startIdx,'\" to_index=\"',endIdx,'\">\n  <label>',codeLabel,'</label>\n  <synopsis>',codeSynopsis,'</synopsis>\n</quotation>\n');
     set qCount = qCount + 1;
   end loop q_loop;
   close quotationCursor;

@@ -84,6 +84,8 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     self.theDescription = ''
 
   def resetQuotationAttributes(self):
+    self.inLabel = 0
+    self.inSynopsis = 0
     self.theType = 'code'
     self.theCode = ''
     self.theArtifactType = ''
@@ -92,6 +94,8 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     self.theSection = ''
     self.theStartIndex = ''
     self.theEndIndex = ''
+    self.theLabel = ''
+    self.theSynopsis = ''
 
   def resetCodeNetworkAttributes(self):
     self.thePersona = ''
@@ -130,7 +134,6 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.theSection = attrs['section']
       self.theStartIndex = int(attrs['start_index'])
       self.theEndIndex = int(attrs['to_index'])
-      self.theQuotations.append((self.theType,self.theCode,self.theArtifactType,self.theArtifactName,self.theEnvironment,self.theSection,self.theStartIndex,self.theEndIndex))
     elif name == 'code_network':
       self.thePersona = attrs['persona']
       self.theRelationshipType = attrs['relationship_type']
@@ -165,6 +168,12 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     elif name == 'content':
       self.inContent = 1
       self.theContent = ''
+    elif name == 'label':
+      self.inLabel = 1
+      self.theLabel = ''
+    elif name == 'synopsis':
+      self.inSynopsis = 1
+      self.theSynopsis = ''
 
   def characters(self,data):
     if self.inDescription:
@@ -177,6 +186,10 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.theSpecification += data
     elif self.inContent:
       self.theContent += data
+    elif self.inLabel:
+      self.theLabel += data
+    elif self.inSynopsis:
+      self.theSynopsis += data
 
   def endElement(self,name):
     if name == 'internal_document':
@@ -195,6 +208,9 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       p = ImpliedProcessParameters(self.theName,self.theDescription,self.thePersona,self.theProcessNetwork,self.theSpecification,self.theChannels)
       self.theProcesses.append(p)
       self.resetProcessAttributes()
+    elif name == 'quotation':
+      self.theQuotations.append((self.theType,self.theCode,self.theArtifactType,self.theArtifactName,self.theEnvironment,self.theSection,self.theStartIndex,self.theEndIndex,self.theLabel,self.theSynopsis))
+      self.resetQuotationAttributes()
     elif name == 'description':
       self.inDescription = 0
     elif name == 'inclusion_criteria':
@@ -205,3 +221,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.inSpecification = 0
     elif name == 'content':
       self.inContent = 0
+    elif name == 'label':
+      self.inLabel = 0
+    elif name == 'synopsis':
+      self.inSynopsis = 0
