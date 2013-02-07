@@ -40,7 +40,10 @@ class CodeRelationshipListCtrl(wx.ListCtrl):
     self.theLastRevision = 0
     self.theMenu = wx.Menu()
     self.theMenu.Append(armid.CODERELATIONSHIPLISTCTRL_MENUADD_ID,'Add')
-    self.theMenu.Append(armid.CODERELATIONSHIPLISTCTRL_MENUDELETE_ID,'Delete')
+    self.deleteMenu = self.theMenu.Append(armid.CODERELATIONSHIPLISTCTRL_MENUDELETE_ID,'Delete')
+    self.deleteMenu.Enable(False)
+    self.charMenu = self.theMenu.Append(armid.CODERELATIONSHIPLISTCTRL_MENUCHARACTERISTICS_ID,'Characteristics')
+    self.charMenu.Enable(False)
     self.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK,self.OnRightDown)
     self.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnItemSelected)
     self.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.OnItemDeselected)
@@ -48,6 +51,7 @@ class CodeRelationshipListCtrl(wx.ListCtrl):
 
     wx.EVT_MENU(self.theMenu,armid.CODERELATIONSHIPLISTCTRL_MENUADD_ID,self.onAddRelationship)
     wx.EVT_MENU(self.theMenu,armid.CODERELATIONSHIPLISTCTRL_MENUDELETE_ID,self.onDeleteRelationship)
+    wx.EVT_MENU(self.theMenu,armid.CODERELATIONSHIPLISTCTRL_MENUCHARACTERISTICS_ID,self.onEditCharacteristics)
 
     for fromName,fromType,toName,toType,rType in self.dbProxy.personaCodeNetwork(personaName):
       idx = self.GetItemCount()
@@ -57,9 +61,13 @@ class CodeRelationshipListCtrl(wx.ListCtrl):
 
   def OnItemSelected(self,evt):
     self.theSelectedIdx = evt.GetIndex()
+    self.charMenu.Enable(True)
+    self.deleteMenu.Enable(True)
 
   def OnItemDeselected(self,evt):
     self.theSelectedIdx = -1
+    self.charMenu.Enable(False)
+    self.deleteMenu.Enable(False)
 
   def OnRightDown(self,evt):
     self.PopupMenu(self.theMenu)
@@ -98,6 +106,9 @@ class CodeRelationshipListCtrl(wx.ListCtrl):
       dlg.Destroy()
     else:
       self.DeleteItem(self.theSelectedIdx)
+
+  def onEditCharacteristics(self,evt):
+    pass
 
   def dimensions(self):
     entries = []
