@@ -86,6 +86,8 @@ DROP TABLE IF EXISTS component_template_goal;
 DROP TABLE IF EXISTS component_vulnerability_target;
 DROP TABLE IF EXISTS component_threat_target;
 
+DROP TABLE IF EXISTS implied_characteristic_element;
+DROP TABLE IF EXISTS implied_characteristic;
 DROP TABLE IF EXISTS internal_document_code;
 DROP TABLE IF EXISTS internal_document_memo;
 DROP TABLE IF EXISTS internal_document;
@@ -2960,6 +2962,15 @@ CREATE TABLE persona_code_network (
   FOREIGN KEY(persona_id) REFERENCES persona(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE implied_characteristic (
+  id INT NOT NULL,
+  persona_code_network_id INT NOT NULL,
+  synopsis VARCHAR(2000) NOT NULL,
+  qualifier VARCHAR(1000) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(persona_code_network_id) REFERENCES persona_code_network(id)
+) ENGINE=INNODB;
+
 
 CREATE TABLE persona_implied_process (
   id INT NOT NULL,
@@ -3005,6 +3016,18 @@ CREATE TABLE internal_document_code (
   PRIMARY KEY(internal_document_id,code_id,start_index,end_index),
   FOREIGN KEY(internal_document_id) REFERENCES internal_document(id),
   FOREIGN KEY(code_id) REFERENCES code(id)
+) ENGINE=INNODB;
+
+CREATE TABLE implied_characteristic_element (
+  implied_characteristic_id INT NOT NULL,
+  internal_document_id INT NOT NULL,
+  code_id INT NOT NULL,
+  characteristic_reference_type_id INT NOT NULL,
+  PRIMARY KEY(implied_characteristic_id,internal_document_id,code_id,characteristic_reference_type_id),
+  FOREIGN KEY(implied_characteristic_id) REFERENCES implied_characteristic(id),
+  FOREIGN KEY(internal_document_id) REFERENCES internal_document_code(internal_document_id),
+  FOREIGN KEY(code_id) REFERENCES internal_document_code(code_id),
+  FOREIGN KEY(characteristic_reference_type_id) REFERENCES characteristic_reference_type(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE internal_document_memo (
