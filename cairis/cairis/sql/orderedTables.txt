@@ -58,6 +58,8 @@ persona_implied_process_network
 persona_implied_process_channel
 artifact_section
 internal_document_code
+implicit_characteristic
+implicit_characteristic_element
 persona_code
 task_code
 persona_environment_code

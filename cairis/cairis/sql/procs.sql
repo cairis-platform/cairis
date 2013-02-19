@@ -817,6 +817,8 @@ drop procedure if exists getQuotations;
 drop procedure if exists updateDocumentCode;
 drop procedure if exists deleteDocumentCode;
 drop procedure if exists artifactText;
+drop procedure if exists impliedCharacteristic;
+drop procedure if exists impliedCharacteristicElements;
 
 delimiter //
 
@@ -21476,6 +21478,51 @@ begin
     select content from internal_document where name = artName;
   end if;
 
+end
+//
+
+create procedure impliedCharacteristic(in pName text, in fromCode text, in toCode text, in rType text)
+begin
+  declare pId int;
+  declare fromId int;
+  declare toId int;
+  declare rtId int;
+  declare pcnId int;
+  declare icId int;
+
+  select id into pId from persona where name = pName limit 1;
+  select id into fromId from code where name = fromCode limit 1;
+  select id into toId from code where name = toCode limit 1;
+  select id into rtId from relationship_type where name = rType limit 1;
+
+  select id into pcnId from persona_code_network where persona_id = pId and from_code_id = fromId and to_code_id = toId and relationship_type_id = rtId limit 1;
+  select synopsis,qualifier from implied_characteristic where persona_code_network_id = pcnId limit 1;
+end
+//
+
+create procedure impliedCharacteristicElements(in pName text, in fromCode text, in toCode text, in rType text, in isLhs int)
+begin
+  declare pId int;
+  declare fromId int;
+  declare toId int;
+  declare rtId int;
+  declare pcnId int;
+  declare icId int;
+
+  select id into pId from persona where name = pName limit 1;
+  select id into fromId from code where name = fromCode limit 1;
+  select id into toId from code where name = toCode limit 1;
+  select id into rtId from relationship_type where name = rType limit 1;
+  
+  select id into pcnId from persona_code_network where persona_id = pId and from_code_id = fromId and to_code_id = toId and relationship_type_id = rtId limit 1;
+  select id into icId from implied_characteristic where persona_code_network_id = pcnId limit 1;
+  
+  if isLhs = 1
+  then
+    select idc.label,crt.name from implied_characteristic_element ice, internal_document_code idc, characteristic_reference_type crt where ice.implied_characteristic_id = icId and ice.code_id = fromId and ice.code_id = idc.code_id and ice.internal_document_id = idc.internal_document_id and ice.start_index = idc.start_index and ice.end_index = idc.end_index and ice.characteristic_reference_type_id = crt.id;
+  else
+    select idc.label,crt.name from implied_characteristic_element ice, internal_document_code idc, characteristic_reference_type crt where ice.implied_characteristic_id = icId and ice.code_id = toId and ice.code_id = idc.code_id and ice.internal_document_id = idc.internal_document_id and ice.start_index = idc.start_index and ice.end_index = idc.end_index and ice.characteristic_reference_type_id = crt.id;
+  end if;
 end
 //
 
