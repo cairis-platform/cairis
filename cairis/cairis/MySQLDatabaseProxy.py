@@ -11125,3 +11125,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting context for ' + artType + ' ' + artName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def impliedCharacteristicElements(self,pName,fromCode,toCode,rtName,isLhs):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call impliedCharacteristicElements(%s,%s,%s,%s,%s)',(pName,fromCode,toCode,rtName,isLhs))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting implied characteristic elements for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
+        raise DatabaseProxyException(exceptionText) 
+      els = []
+      for row in curs.fetchall():
+        row = list(row)
+        els.append((row[0],row[1]))
+      curs.close()
+      return els
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting implied characteristic elements for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

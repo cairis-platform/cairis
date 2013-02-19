@@ -22,13 +22,10 @@ from Borg import Borg
 from CharacteristicReferenceTypeDialog import CharacteristicReferenceTypeDialog
 
 class ImpliedCharacteristicElementsListCtrl(wx.ListCtrl):
-  def __init__(self,parent,elements):
+  def __init__(self,parent,winId,elements):
     wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT | wx.LC_SORT_ASCENDING)
     b = Borg()
     self.dbProxy = b.dbProxy
-
-    self.rtLookup = {'associated':'==','implies':'=>','conflict':'<>','part-of':'[]'}
-
 
     self.InsertColumn(0,'Element')
     self.SetColumnWidth(0,200)

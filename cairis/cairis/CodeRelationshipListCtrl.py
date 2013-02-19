@@ -19,6 +19,7 @@
 import wx
 import armid
 from CodeRelationshipDialog import CodeRelationshipDialog
+from ImpliedCharacteristicDialog import ImpliedCharacteristicDialog
 from Borg import Borg
 
 class CodeRelationshipListCtrl(wx.ListCtrl):
@@ -26,9 +27,8 @@ class CodeRelationshipListCtrl(wx.ListCtrl):
     wx.ListCtrl.__init__(self,parent,armid.CODERELATIONSHIP_LISTRELATIONSHIPS_ID,size=wx.DefaultSize,style=wx.LC_REPORT | wx.LC_SORT_ASCENDING)
     b = Borg()
     self.dbProxy = b.dbProxy
-
     self.rtLookup = {'associated':'==','implies':'=>','conflict':'<>','part-of':'[]'}
-
+    self.thePersonaName = personaName
 
     self.InsertColumn(0,'From')
     self.SetColumnWidth(0,150)
@@ -108,7 +108,11 @@ class CodeRelationshipListCtrl(wx.ListCtrl):
       self.DeleteItem(self.theSelectedIdx)
 
   def onEditCharacteristics(self,evt):
-    pass
+    fromName = self.GetItemText(self.theSelectedIdx)
+    rType = self.GetItem(self.theSelectedIdx,1)
+    toName = self.GetItem(self.theSelectedIdx,2)
+    dlg = ImpliedCharacteristicDialog(self,self.thePersonaName,fromName,toName.GetText(),rType.GetText())
+    dlg.ShowModal()
 
   def dimensions(self):
     entries = []

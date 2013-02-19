@@ -27,7 +27,7 @@ class CharacteristicReferenceTypeDialog(wx.Dialog):
     self.theValue = currentValue
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     mainSizer.Add(WidgetFactory.buildComboSizerList(self,'Characteristic Reference Type',(87,30),armid.CHARACTERISTICREFERENCETYPE_COMBOVALUE_ID,['grounds','warrant','rebuttal']),0,wx.EXPAND)
-    mainSizer.Add(WidgetFactory.buildCommitButtonSizer(self,armid.CHARACTERISTICREFERENCETYPE_COMBOVALUE_ID),0,wx.ALIGN_CENTER)
+    mainSizer.Add(WidgetFactory.buildCommitButtonSizer(self,armid.CHARACTERISTICREFERENCETYPE_BUTTONCOMMIT_ID,False),0,wx.ALIGN_CENTER)
     self.SetSizer(mainSizer)
     wx.EVT_BUTTON(self,armid.CHARACTERISTICREFERENCETYPE_BUTTONCOMMIT_ID,self.onCommit)
     self.valueCtrl = self.FindWindowById(armid.CHARACTERISTICREFERENCETYPE_COMBOVALUE_ID)
