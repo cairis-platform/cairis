@@ -10206,10 +10206,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error adding code ' + docCode + ' to '  + artType + ' ' + artName + ' in environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def personaCodeNetwork(self,personaName):
+  def personaCodeNetwork(self,personaName,fromCode='',toCode=''):
     try:
       curs = self.conn.cursor()
-      curs.execute('call artifactCodeNetwork(%s,%s)',(personaName,'persona'))
+      curs.execute('call artifactCodeNetwork(%s,%s,%s,%s)',(personaName,'persona',fromCode,toCode))
       if (curs.rowcount == -1):
         exceptionText = 'Error getting code network for persona ' + personaName
         raise DatabaseProxyException(exceptionText) 
@@ -11124,6 +11124,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting context for ' + artType + ' ' + artName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def impliedCharacteristic(self,pName,fromCode,toCode,rtName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call impliedCharacteristic(%s,%s,%s,%s)',(pName,fromCode,toCode,rtName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      charName = row[0]
+      qualName = row[1]
+      varName = row[2]
+      curs.close()
+      return (charName,qualName,varName)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def impliedCharacteristicElements(self,pName,fromCode,toCode,rtName,isLhs):

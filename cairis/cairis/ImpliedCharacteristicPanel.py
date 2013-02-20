@@ -21,6 +21,8 @@ import armid
 from BasePanel import BasePanel
 from Borg import Borg
 from ImpliedCharacteristicElementsListCtrl import ImpliedCharacteristicElementsListCtrl
+from CodeNetworkModel import CodeNetworkModel
+from CodeNetworkView import CodeNetworkView
 
 class ImpliedCharacteristicPanel(BasePanel):
   def __init__(self,parent,pName,fromCode,toCode,rtName):
@@ -29,8 +31,14 @@ class ImpliedCharacteristicPanel(BasePanel):
     self.dbProxy = b.dbProxy
     
     mainSizer = wx.BoxSizer(wx.VERTICAL)
-    mainSizer.Add(self.buildTextSizer('Characteristic',(87,30),armid.IMPLIEDCHARACTERISTIC_TEXTRELATIONSHIP_ID),0,wx.EXPAND)
+    self.codeNetView = CodeNetworkView(self,armid.IMPLIEDCHARACTERISTIC_IMAGENETWORK_ID)
+    mainSizer.Add(self.codeNetView,1,wx.EXPAND)
+    codeNet = CodeNetworkModel(self.dbProxy.personaCodeNetwork(pName,fromCode,toCode),pName)
+    codeNet.graph()
+    self.codeNetView.reloadImage()
+    mainSizer.Add(self.buildTextSizer('Characteristic',(87,30),armid.IMPLIEDCHARACTERISTIC_TEXTCHARACTERISTIC_ID),0,wx.EXPAND)
     mainSizer.Add(self.buildTextSizer('Qualifier',(87,30),armid.IMPLIEDCHARACTERISTIC_TEXTQUALIFIER_ID),0,wx.EXPAND)
+
 
     elSizer = wx.BoxSizer(wx.HORIZONTAL)
     mainSizer.Add(elSizer,1,wx.EXPAND)
@@ -47,6 +55,15 @@ class ImpliedCharacteristicPanel(BasePanel):
     elSizer.Add(rhsSizer,1,wx.EXPAND)
     rhsEls = self.dbProxy.impliedCharacteristicElements(pName,fromCode,toCode,rtName,0)
     rhsSizer.Add(ImpliedCharacteristicElementsListCtrl(self,armid.IMPLIEDCHARACTERISTIC_LISTRHS_ID,rhsEls),1,wx.EXPAND)
+    mainSizer.Add(self.buildComboSizerList('Characteristic Type',(87,30),armid.IMPLIEDCHARACTERISTIC_COMBOTYPE_ID,['Intrinsic','Contextual']),0,wx.EXPAND)
 
     mainSizer.Add(self.buildCommitButtonSizer(armid.IMPLIEDCHARACTERISTIC_BUTTONCOMMIT_ID,False),0,wx.CENTER)
     self.SetSizer(mainSizer)
+
+    charName,qualName,varName = self.dbProxy.impliedCharacteristic(pName,fromCode,toCode,rtName)
+    charCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_TEXTCHARACTERISTIC_ID)
+    charCtrl.SetValue(charName)
+    qualCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_TEXTQUALIFIER_ID)
+    qualCtrl.SetValue(qualName)
+    varCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_COMBOTYPE_ID)
+    varCtrl.SetValue(varName)

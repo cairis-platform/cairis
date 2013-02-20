@@ -24,7 +24,7 @@ from Borg import Borg
 
 class ImpliedCharacteristicDialog(wx.Dialog):
   def __init__(self,parent,pName,fromCode,toCode,rtName):
-    wx.Dialog.__init__(self,parent,-1,'Edit Implied Characteristic',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,500))
+    wx.Dialog.__init__(self,parent,-1,'Edit Trust Characteristic',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,500))
 
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     self.panel = ImpliedCharacteristicPanel(self,pName,fromCode,toCode,rtName)

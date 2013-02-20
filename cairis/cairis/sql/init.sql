@@ -2967,8 +2967,10 @@ CREATE TABLE implied_characteristic (
   persona_code_network_id INT NOT NULL,
   synopsis VARCHAR(2000) NOT NULL,
   qualifier VARCHAR(1000) NOT NULL,
+  variable_id INT NOT NULL,
   PRIMARY KEY(id),
-  FOREIGN KEY(persona_code_network_id) REFERENCES persona_code_network(id)
+  FOREIGN KEY(persona_code_network_id) REFERENCES persona_code_network(id),
+  FOREIGN KEY(variable_id) REFERENCES behavioural_variable(id)
 ) ENGINE=INNODB;
 
 
@@ -3290,7 +3292,11 @@ CREATE VIEW assumption_task_model as
 CREATE VIEW assumption_persona_model as
   select pc.description from_name, 'persona_characteristic' from_dim, p.name to_name, 'persona' to_dim, p.name persona_name, bv.name bv_name,pc.description characteristic_name from persona p, persona_characteristic pc, behavioural_variable bv where p.id = pc.persona_id and pc.variable_id = bv.id
   union
+  select ic.synopsis from_name,'trust_characteristic' from_dim, p.name to_name, 'persona' to_dim, p.name persona_name, bv.name bv_name,ic.synopsis characteristic_name from persona p, implied_characteristic ic, behavioural_variable bv, persona_code_network pcn where p.id = pcn.persona_id and pcn.id = ic.persona_code_network_id and ic.variable_id = bv.id
+  union
   select cr.name from_name, 'grounds' from_dim, concat('gwb_',pc.description) to_name, 'gwb' to_dim, p.name persona_name, bv.name bv_name,pc.description characteristic_name from persona_characteristic pc, persona_characteristic_document pcc, document_reference cr, behavioural_variable bv, persona p where pc.id = pcc.characteristic_id and pcc.characteristic_reference_type_id = 0 and pcc.reference_id = cr.id and pc.variable_id = bv.id and pc.persona_id = p.id
+  union
+  select idc.label from_name, 'grounds' from_dim, concat('gwb_',ic.synopsis) to_name, 'gwb' to_dim, p.name persona_name, bv.name bv_name,ic.synopsis characteristic_name from implied_characteristic ic, internal_document_code idc, implied_characteristic_element ice, behavioural_variable bv, persona p, persona_code_network pcn where p.id = pcn.persona_id and pcn.id = ic.persona_code_network_id and ic.variable_id = bv.id and ic.id = ice.implied_characteristic_id and ice.internal_document_id = idc.internal_document_id and ice.code_id = idc.code_id and ice.start_index = idc.start_index and ice.end_index = idc.end_index and ice.characteristic_reference_type_id = 0
   union
   select cr.name from_name, 'grounds' from_dim, concat('gwb_',pc.description) to_name, 'gwb' to_dim, p.name persona_name, bv.name bv_name,pc.description characteristic_name from persona_characteristic pc, persona_characteristic_asset pcc, asset_reference cr, behavioural_variable bv, persona p where pc.id = pcc.characteristic_id and pcc.characteristic_reference_type_id = 0 and pcc.reference_id = cr.id and pc.variable_id = bv.id and pc.persona_id = p.id
   union
@@ -3362,7 +3368,11 @@ CREATE VIEW assumption_persona_model as
   union
   select cr.name from_name, 'warrant' from_dim, concat('gwb_',pc.description) to_name, 'gwb' to_dim, p.name persona_name, bv.name bv_name,pc.description characteristic_name from persona_characteristic pc, persona_characteristic_vulnerability pcc, vulnerability_reference cr, behavioural_variable bv, persona p where pc.id = pcc.characteristic_id and pcc.characteristic_reference_type_id = 1 and pcc.reference_id = cr.id and pc.variable_id = bv.id and pc.persona_id = p.id
   union
+  select idc.label from_name, 'warrant' from_dim, concat('gwb_',ic.synopsis) to_name, 'gwb' to_dim, p.name persona_name, bv.name bv_name,ic.synopsis characteristic_name from implied_characteristic ic, internal_document_code idc, implied_characteristic_element ice, behavioural_variable bv, persona p, persona_code_network pcn where p.id = pcn.persona_id and pcn.id = ic.persona_code_network_id and ic.variable_id = bv.id and ic.id = ice.implied_characteristic_id and ice.internal_document_id = idc.internal_document_id and ice.code_id = idc.code_id and ice.start_index = idc.start_index and ice.end_index = idc.end_index and ice.characteristic_reference_type_id = 1
+  union
   select c.name from_name, 'backing' from_dim, cr.name to_name, 'warrant' to_dim, p.name persona_name, bv.name bv_name,pc.description characteristic_name from external_document c, document_reference cr, persona_characteristic_document pcc, persona_characteristic pc, behavioural_variable bv, persona p where pcc.reference_id = cr.id and cr.document_id = c.id and pcc.characteristic_reference_type_id = 1 and pcc.characteristic_id = pc.id and pc.variable_id = bv.id and pc.persona_id = p.id
+  union
+  select c.name from_name, 'backing' from_dim, idc.label to_name, 'warrant' to_dim, p.name persona_name, bv.name bv_name,ic.synopsis characteristic_name from internal_document c, internal_document_code idc, implied_characteristic_element ice, implied_characteristic ic, persona_code_network pcn, persona p, behavioural_variable bv where idc.internal_document_id = c.id and idc.internal_document_id = ice.internal_document_id and idc.code_id = ice.code_id and idc.start_index = ice.start_index and idc.end_index = ice.end_index and ice.implied_characteristic_id = ic.id and ic.persona_code_network_id = pcn.id and pcn.persona_id = p.id and ic.variable_id = bv.id
   union
   select c.name from_name, 'backing' from_dim, cr.name to_name, 'warrant' to_dim, p.name persona_name, bv.name bv_name,pc.description characteristic_name from asset c, asset_reference cr, persona_characteristic_asset pcc, persona_characteristic pc, behavioural_variable bv, persona p where pcc.reference_id = cr.id and cr.asset_id = c.id and pcc.characteristic_reference_type_id = 1 and pcc.characteristic_id = pc.id and pc.variable_id = bv.id and pc.persona_id = p.id
   union
@@ -3402,7 +3412,11 @@ CREATE VIEW assumption_persona_model as
   union
   select concat('gwb_',pc.description) from_name, 'gwb' from_dim, concat('qual_',pc.description) to_name, 'qual' to_dim, p.name persona_name, bv.name bv_name,pc.description characteristic_name from persona_characteristic pc, behavioural_variable bv, persona p where pc.variable_id = bv.id and pc.persona_id = p.id
   union
+  select concat('gwb_',ic.synopsis) from_name, 'gwb' from_dim, concat('qual_',ic.synopsis) to_name, 'qual' to_dim, p.name persona_name, bv.name bv_name,ic.synopsis characteristic_name from implied_characteristic ic, behavioural_variable bv, persona p,persona_code_network pcn where ic.variable_id = bv.id and ic.persona_code_network_id = pcn.id and pcn.persona_id = p.id
+  union
   select concat('qual_',pc.description) from_name, 'qual' from_dim, pc.description to_name, 'persona_characteristic' to_dim, p.name persona_name, bv.name bv_name,pc.description characteristic_name from persona_characteristic pc, behavioural_variable bv, persona p where pc.variable_id = bv.id and pc.persona_id = p.id
+  union
+  select concat('qual_',ic.synopsis) from_name, 'qual' from_dim, ic.synopsis to_name, 'trust_characteristic' to_dim, p.name persona_name, bv.name bv_name,ic.synopsis characteristic_name from implied_characteristic ic, behavioural_variable bv, persona p, persona_code_network pcn where ic.variable_id = bv.id and ic.persona_code_network_id = pcn.id and pcn.persona_id = p.id
   union
   select cr.name from_name, 'rebuttal' from_dim, pc.description to_name, 'persona_characteristic' to_dim, p.name persona_name, bv.name bv_name,pc.description characteristic_name from persona_characteristic pc, persona_characteristic_document pcc, document_reference cr, behavioural_variable bv, persona p where pc.id = pcc.characteristic_id and pcc.reference_id = cr.id and pcc.characteristic_reference_type_id = 2 and pc.variable_id = bv.id and pc.persona_id = p.id
   union
@@ -3438,9 +3452,13 @@ CREATE VIEW assumption_persona_model as
   union
   select cr.name from_name, 'rebuttal' from_dim, pc.description to_name, 'persona_characteristic' to_dim, p.name persona_name, bv.name bv_name,pc.description characteristic_name from persona_characteristic pc, persona_characteristic_threat pcc, threat_reference cr, behavioural_variable bv, persona p where pc.id = pcc.characteristic_id and pcc.reference_id = cr.id and pcc.characteristic_reference_type_id = 2 and pc.variable_id = bv.id and pc.persona_id = p.id
   union
+  select idc.label from_name, 'rebuttal' from_dim, ic.synopsis to_name, 'trust_characteristic' to_dim, p.name persona_name, bv.name bv_name,ic.synopsis characteristic_name from implied_characteristic ic, internal_document_code idc, implied_characteristic_element ice, behavioural_variable bv, persona p, persona_code_network pcn where p.id = pcn.persona_id and pcn.id = ic.persona_code_network_id and ic.variable_id = bv.id and ic.id = ice.implied_characteristic_id and ice.internal_document_id = idc.internal_document_id and ice.code_id = idc.code_id and ice.start_index = idc.start_index and ice.end_index = idc.end_index and ice.characteristic_reference_type_id = 2
+  union
   select cr.name from_name, 'rebuttal' from_dim, pc.description to_name, 'persona_characteristic' to_dim, p.name persona_name, bv.name bv_name,pc.description characteristic_name from persona_characteristic pc, persona_characteristic_vulnerability pcc, vulnerability_reference cr, behavioural_variable bv, persona p where pc.id = pcc.characteristic_id and pcc.reference_id = cr.id and pcc.characteristic_reference_type_id = 2 and pc.variable_id = bv.id and pc.persona_id = p.id
   union
-  select pc.qualifier from_name, 'qualifier' from_dim, concat('qual_',pc.description) to_name, 'qual' to_dim, p.name persona_name, bv.name bv_name, pc.description characteristic_name from persona_characteristic pc, behavioural_variable bv, persona p where pc.variable_id = bv.id and pc.persona_id = p.id;
+  select pc.qualifier from_name, 'qualifier' from_dim, concat('qual_',pc.description) to_name, 'qual' to_dim, p.name persona_name, bv.name bv_name, pc.description characteristic_name from persona_characteristic pc, behavioural_variable bv, persona p where pc.variable_id = bv.id and pc.persona_id = p.id
+  union
+  select ic.qualifier from_name, 'qualifier' from_dim, concat('qual_',ic.synopsis) to_name, 'qual' to_dim, p.name persona_name, bv.name bv_name, ic.synopsis characteristic_name from implied_characteristic ic, persona_code_network pcn, behavioural_variable bv, persona p where ic.variable_id = bv.id and ic.persona_code_network_id = pcn.id and pcn.persona_id = p.id;
 
 CREATE VIEW concept_map as
   select fr.name from_name, tr.name to_name, rr.label from requirement fr, requirement tr, requirement_requirement rr where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id); 
@@ -3740,6 +3758,8 @@ INSERT INTO behavioural_variable(id,name) values (2,'Aptitudes');
 INSERT INTO behavioural_variable(id,name) values (3,'Motivations');
 INSERT INTO behavioural_variable(id,name) values (4,'Skills');
 INSERT INTO behavioural_variable(id,name) values (5,'Environment Narrative');
+INSERT INTO behavioural_variable(id,name) values (6,'Intrinsic');
+INSERT INTO behavioural_variable(id,name) values (7,'Contextual');
 INSERT INTO characteristic_reference_type(id,name) values(0,'grounds');
 INSERT INTO characteristic_reference_type(id,name) values(1,'warrant');
 INSERT INTO characteristic_reference_type(id,name) values(2,'rebuttal');

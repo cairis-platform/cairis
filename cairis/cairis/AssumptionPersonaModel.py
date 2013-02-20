@@ -48,6 +48,8 @@ class AssumptionPersonaModel:
       self.theGraph.add_node(pydot.Node(objtName,shape='circle',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'persona_characteristic'):
       self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,style='filled',fillcolor='green',fontsize=self.fontSize,URL=objtUrl))
+    elif (dimName == 'trust_characteristic'):
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,style='filled',fillcolor='purple',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'rebuttal'):
       self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,style='filled',fillcolor='red',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'qualifier'):

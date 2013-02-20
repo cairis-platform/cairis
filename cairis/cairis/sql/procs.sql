@@ -19296,9 +19296,11 @@ begin
 end
 //
 
-create procedure artifactCodeNetwork(in artName text, in artType text)
+create procedure artifactCodeNetwork(in artName text, in artType text,in fromCode text, in toCode text)
 begin
   declare artId int; 
+  declare fromId int; 
+  declare toId int; 
   declare artIdSql varchar(4000);
   declare codeNetSql varchar(4000);
 
@@ -19309,7 +19311,14 @@ begin
   deallocate prepare stmt;
   set artId = @artId;
 
-  set codeNetSql = concat('select fc.name, fct.name, tc.name, tct.name, rt.name from code fc, code_type fct, code tc, code_type tct, relationship_type rt, ',artType,'_code_network acn where acn.',artType,'_id = ',artId,' and acn.from_code_id = fc.id and acn.to_code_id = tc.id and acn.relationship_type_id = rt.id and fc.code_type_id = fct.id and tc.code_type_id = tct.id');
+  if fromCode = '' and toCode = ''
+  then
+    set codeNetSql = concat('select fc.name, fct.name, tc.name, tct.name, rt.name from code fc, code_type fct, code tc, code_type tct, relationship_type rt, ',artType,'_code_network acn where acn.',artType,'_id = ',artId,' and acn.from_code_id = fc.id and acn.to_code_id = tc.id and acn.relationship_type_id = rt.id and fc.code_type_id = fct.id and tc.code_type_id = tct.id');
+  else
+    select id into fromId from code where name = fromCode limit 1;
+    select id into toId from code where name = toCode limit 1;
+    set codeNetSql = concat('select fc.name, fct.name, tc.name, tct.name, rt.name from code fc, code_type fct, code tc, code_type tct, relationship_type rt, ',artType,'_code_network acn where acn.',artType,'_id = ',artId,' and acn.from_code_id = fc.id and acn.to_code_id = tc.id and acn.relationship_type_id = rt.id and fc.code_type_id = fct.id and tc.code_type_id = tct.id and acn.from_code_id = ',fromId,' and acn.to_code_id = ',toId);
+  end if;
   set @sql = codeNetSql;
   prepare stmt from @sql;
   execute stmt;
@@ -21496,7 +21505,7 @@ begin
   select id into rtId from relationship_type where name = rType limit 1;
 
   select id into pcnId from persona_code_network where persona_id = pId and from_code_id = fromId and to_code_id = toId and relationship_type_id = rtId limit 1;
-  select synopsis,qualifier from implied_characteristic where persona_code_network_id = pcnId limit 1;
+  select ic.synopsis,ic.qualifier,bv.name from implied_characteristic ic, behavioural_variable bv where ic.persona_code_network_id = pcnId and ic.variable_id = bv.id limit 1;
 end
 //
 

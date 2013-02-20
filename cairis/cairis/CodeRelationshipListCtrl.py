@@ -42,7 +42,7 @@ class CodeRelationshipListCtrl(wx.ListCtrl):
     self.theMenu.Append(armid.CODERELATIONSHIPLISTCTRL_MENUADD_ID,'Add')
     self.deleteMenu = self.theMenu.Append(armid.CODERELATIONSHIPLISTCTRL_MENUDELETE_ID,'Delete')
     self.deleteMenu.Enable(False)
-    self.charMenu = self.theMenu.Append(armid.CODERELATIONSHIPLISTCTRL_MENUCHARACTERISTICS_ID,'Characteristics')
+    self.charMenu = self.theMenu.Append(armid.CODERELATIONSHIPLISTCTRL_MENUCHARACTERISTICS_ID,'Set Implied Characteristic')
     self.charMenu.Enable(False)
     self.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK,self.OnRightDown)
     self.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnItemSelected)
