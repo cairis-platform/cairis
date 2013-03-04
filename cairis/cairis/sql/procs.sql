@@ -817,9 +817,11 @@ drop procedure if exists getQuotations;
 drop procedure if exists updateDocumentCode;
 drop procedure if exists deleteDocumentCode;
 drop procedure if exists artifactText;
+drop function if exists personaCodeNetworkId;
 drop procedure if exists impliedCharacteristic;
 drop procedure if exists impliedCharacteristicElements;
 drop procedure if exists addImpliedCharacteristic;
+drop procedure if exists updateImpliedCharacteristic;
 
 delimiter //
 
@@ -21491,41 +21493,38 @@ begin
 end
 //
 
-create procedure impliedCharacteristic(in pName text, in fromCode text, in toCode text, in rType text)
+create function personaCodeNetworkId(pName text, fromCode text, toCode text, rType text)
+returns int
+deterministic
 begin
   declare pId int;
   declare fromId int;
   declare toId int;
   declare rtId int;
   declare pcnId int;
-  declare icId int;
 
   select id into pId from persona where name = pName limit 1;
   select id into fromId from code where name = fromCode limit 1;
   select id into toId from code where name = toCode limit 1;
   select id into rtId from relationship_type where name = rType limit 1;
-
   select id into pcnId from persona_code_network where persona_id = pId and from_code_id = fromId and to_code_id = toId and relationship_type_id = rtId limit 1;
-  select ic.synopsis,ic.qualifier,bv.name from implied_characteristic ic, behavioural_variable bv where ic.persona_code_network_id = pcnId and ic.variable_id = bv.id limit 1;
+  return pcnId;
+end
+//
+
+create procedure impliedCharacteristic(in pName text, in fromCode text, in toCode text, in rType text)
+begin
+  select ic.synopsis,ic.qualifier,bv.name from implied_characteristic ic, behavioural_variable bv where ic.persona_code_network_id = personaCodeNetworkId(pName,fromCode,toCode,rType) and ic.variable_id = bv.id limit 1;
 end
 //
 
 create procedure impliedCharacteristicElements(in pName text, in fromCode text, in toCode text, in rType text, in isLhs int)
 begin
-  declare pId int;
   declare fromId int;
   declare toId int;
-  declare rtId int;
-  declare pcnId int;
   declare icId int;
 
-  select id into pId from persona where name = pName limit 1;
-  select id into fromId from code where name = fromCode limit 1;
-  select id into toId from code where name = toCode limit 1;
-  select id into rtId from relationship_type where name = rType limit 1;
-  
-  select id into pcnId from persona_code_network where persona_id = pId and from_code_id = fromId and to_code_id = toId and relationship_type_id = rtId limit 1;
-  select id into icId from implied_characteristic where persona_code_network_id = pcnId limit 1;
+  select id into icId from implied_characteristic where persona_code_network_id = personaCodeNetworkId(pName,fromCode,toCode,rType) limit 1;
   
   if isLhs = 1
   then
@@ -21585,6 +21584,19 @@ begin
     insert into implied_characteristic_element(implied_characteristic_id,internal_document_id,code_id,start_index,end_index,characteristic_reference_type_id) values(icId,idId,toId,startIdx,endIdx,0);
   end loop rhs_loop;
   close rhsCursor;
+
+end
+//
+
+create procedure updateImpliedCharacteristic(in pName text, in fromCode text, in toCode text, in rType text, in charName text, in qualName text, in charType text)
+begin
+  declare icId int;
+  declare ctId int;
+
+  select id into ctId from characteristic_reference_type where name = charType limit 1;
+  select id into icId from implied_characteristic where persona_code_network_id = personaCodeNetworkId(pName,fromCode,toCode,rType) limit 1;
+
+  update implied_characteristic set synopsis = charName, qualifier = qualName, variable_id = ctId where id = icId and persona_code_network_id = personaCodeNetworkId(pName,fromCode,toCode,rType);
 
 end
 //
