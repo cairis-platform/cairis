@@ -61,3 +61,18 @@ class UnknownOperatingSystem(ARMException):
 class ConflictingType(ARMException):
   def __init__(self,value):
     ARMException.__init__(self,value)
+
+class NoImpliedCharacteristic(Exception):
+  def __init__(self,pName,fromCode,toCode,rtName):
+    self.thePersonaName = pName
+    self.theFromCode = fromCode
+    self.theToCode = toCode
+    self.theRTName = rtName
+
+  def persona(self): return self.thePersonaName
+  def fromCode(self): return self.theFromCode
+  def toCode(self): return self.theToCode
+  def rType(self): return self.theRTName
+
+  def __str__(self):
+    return repr(self.thePersonaName + '/' + self.theFromCode + '/' + self.theToCode + '/' + self.theRTName)

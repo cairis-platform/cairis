@@ -11134,6 +11134,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error getting implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
         raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
+      if row is None:
+        curs.close()
+        raise NoImpliedCharacteristic(pName,fromCode,toCode,rtName)
       charName = row[0]
       qualName = row[1]
       varName = row[2]
@@ -11160,4 +11163,18 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting implied characteristic elements for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addImpliedCharacteristic(self,pName,fromCode,toCode,rtName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addImpliedCharacteristic(%s,%s,%s,%s)',(pName,fromCode,toCode,rtName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

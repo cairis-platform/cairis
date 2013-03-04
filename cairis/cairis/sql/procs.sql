@@ -819,6 +819,7 @@ drop procedure if exists deleteDocumentCode;
 drop procedure if exists artifactText;
 drop procedure if exists impliedCharacteristic;
 drop procedure if exists impliedCharacteristicElements;
+drop procedure if exists addImpliedCharacteristic;
 
 delimiter //
 
@@ -21532,6 +21533,59 @@ begin
   else
     select idc.label,crt.name from implied_characteristic_element ice, internal_document_code idc, characteristic_reference_type crt where ice.implied_characteristic_id = icId and ice.code_id = toId and ice.code_id = idc.code_id and ice.internal_document_id = idc.internal_document_id and ice.start_index = idc.start_index and ice.end_index = idc.end_index and ice.characteristic_reference_type_id = crt.id;
   end if;
+end
+//
+
+create procedure addImpliedCharacteristic(in pName text, in fromCode text, in toCode text, in rType text)
+begin
+  declare pId int;
+  declare fromId int;
+  declare toId int;
+  declare rtId int;
+  declare pcnId int;
+  declare icId int;
+  declare idId int;
+  declare startIdx int;
+  declare endIdx int;
+  declare done int default 0;
+  declare lhsCursor cursor for select internal_document_id,start_index,end_index from internal_document_code where code_id = fromId;
+  declare rhsCursor cursor for select internal_document_id,start_index,end_index from internal_document_code where code_id = toId;
+  declare continue handler for not found set done = 1;
+
+  select id into pId from persona where name = pName limit 1;
+  select id into fromId from code where name = fromCode limit 1;
+  select id into toId from code where name = toCode limit 1;
+  select id into rtId from relationship_type where name = rType limit 1;
+  select id into pcnId from persona_code_network where persona_id = pId and from_code_id = fromId and to_code_id = toId and relationship_type_id = rtId limit 1;
+
+  call newId2(icId);
+
+  insert into implied_characteristic(id,persona_code_network_id,synopsis,qualifier,variable_id) values(icId,pcnId,'','Unknown',6) ;
+
+  open lhsCursor;
+  lhs_loop: loop
+    fetch lhsCursor into idId, startIdx,endIdx;
+    if done = 1
+    then
+      leave lhs_loop;
+    end if;
+    insert into implied_characteristic_element(implied_characteristic_id,internal_document_id,code_id,start_index,end_index,characteristic_reference_type_id) values(icId,idId,fromId,startIdx,endIdx,0);
+  end loop lhs_loop;
+  close lhsCursor;
+
+  set done = 0;
+
+  open rhsCursor;
+  rhs_loop: loop
+    fetch rhsCursor into idId, startIdx,endIdx;
+    if done = 1
+    then
+      leave rhs_loop;
+    end if;
+    insert into implied_characteristic_element(implied_characteristic_id,internal_document_id,code_id,start_index,end_index,characteristic_reference_type_id) values(icId,idId,toId,startIdx,endIdx,0);
+  end loop rhs_loop;
+  close rhsCursor;
+
 end
 //
 

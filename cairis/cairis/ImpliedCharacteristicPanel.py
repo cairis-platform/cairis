@@ -18,6 +18,7 @@
 
 import wx
 import armid
+from ARM import NoImpliedCharacteristic
 from BasePanel import BasePanel
 from Borg import Borg
 from ImpliedCharacteristicElementsListCtrl import ImpliedCharacteristicElementsListCtrl
@@ -30,6 +31,15 @@ class ImpliedCharacteristicPanel(BasePanel):
     b = Borg()
     self.dbProxy = b.dbProxy
     
+    charName = ''
+    qualName = 'Unknown'
+    varName = 'Intrinsic'
+
+    try:
+      charName,qualName,varName = self.dbProxy.impliedCharacteristic(pName,fromCode,toCode,rtName)
+    except NoImpliedCharacteristic, e:
+      self.dbProxy.addImpliedCharacteristic(pName,fromCode,toCode,rtName)
+
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     self.codeNetView = CodeNetworkView(self,armid.IMPLIEDCHARACTERISTIC_IMAGENETWORK_ID)
     mainSizer.Add(self.codeNetView,1,wx.EXPAND)
@@ -60,7 +70,6 @@ class ImpliedCharacteristicPanel(BasePanel):
     mainSizer.Add(self.buildCommitButtonSizer(armid.IMPLIEDCHARACTERISTIC_BUTTONCOMMIT_ID,False),0,wx.CENTER)
     self.SetSizer(mainSizer)
 
-    charName,qualName,varName = self.dbProxy.impliedCharacteristic(pName,fromCode,toCode,rtName)
     charCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_TEXTCHARACTERISTIC_ID)
     charCtrl.SetValue(charName)
     qualCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_TEXTQUALIFIER_ID)
