@@ -21514,7 +21514,10 @@ end
 
 create procedure impliedCharacteristic(in pName text, in fromCode text, in toCode text, in rType text)
 begin
-  select ic.synopsis,ic.qualifier,bv.name from implied_characteristic ic, behavioural_variable bv where ic.persona_code_network_id = personaCodeNetworkId(pName,fromCode,toCode,rType) and ic.variable_id = bv.id limit 1;
+  declare pcnId int;
+
+  select personaCodeNetworkId(pName,fromCode,toCode,rType) into pcnId;
+  select ic.synopsis,ic.qualifier,bv.name from implied_characteristic ic, behavioural_variable bv where ic.persona_code_network_id = pcnId and ic.variable_id = bv.id limit 1;
 end
 //
 
@@ -21523,13 +21526,17 @@ begin
   declare fromId int;
   declare toId int;
   declare icId int;
+  declare pcnId int;
 
-  select id into icId from implied_characteristic where persona_code_network_id = personaCodeNetworkId(pName,fromCode,toCode,rType) limit 1;
+  select personaCodeNetworkId(pName,fromCode,toCode,rType) into pcnId;
+  select id into icId from implied_characteristic where persona_code_network_id = pcnId limit 1;
   
   if isLhs = 1
   then
+    select id into fromId from code where name = fromCode limit 1;
     select idc.label,crt.name from implied_characteristic_element ice, internal_document_code idc, characteristic_reference_type crt where ice.implied_characteristic_id = icId and ice.code_id = fromId and ice.code_id = idc.code_id and ice.internal_document_id = idc.internal_document_id and ice.start_index = idc.start_index and ice.end_index = idc.end_index and ice.characteristic_reference_type_id = crt.id;
   else
+    select id into toId from code where name = toCode limit 1;
     select idc.label,crt.name from implied_characteristic_element ice, internal_document_code idc, characteristic_reference_type crt where ice.implied_characteristic_id = icId and ice.code_id = toId and ice.code_id = idc.code_id and ice.internal_document_id = idc.internal_document_id and ice.start_index = idc.start_index and ice.end_index = idc.end_index and ice.characteristic_reference_type_id = crt.id;
   end if;
 end
@@ -21592,11 +21599,13 @@ create procedure updateImpliedCharacteristic(in pName text, in fromCode text, in
 begin
   declare icId int;
   declare ctId int;
+  declare pcnId int;
 
   select id into ctId from characteristic_reference_type where name = charType limit 1;
-  select id into icId from implied_characteristic where persona_code_network_id = personaCodeNetworkId(pName,fromCode,toCode,rType) limit 1;
+  select personaCodeNetworkId(pName,fromCode,toCode,rType) into pcnId;
+  select id into icId from implied_characteristic where persona_code_network_id = pcnId limit 1;
 
-  update implied_characteristic set synopsis = charName, qualifier = qualName, variable_id = ctId where id = icId and persona_code_network_id = personaCodeNetworkId(pName,fromCode,toCode,rType);
+  update implied_characteristic set synopsis = charName, qualifier = qualName, variable_id = ctId where id = icId and persona_code_network_id = pcnId;
 
 end
 //
