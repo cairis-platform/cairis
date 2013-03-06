@@ -22,11 +22,12 @@ import WidgetFactory
 
 class CharacteristicReferenceTypeDialog(wx.Dialog):
   def __init__(self,parent,currentValue):
-    wx.Dialog.__init__(self,parent,armid.CHARACTERISTICREFERENCETYPE_ID,'Edit Characteristic Reference Type',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,300))
+    wx.Dialog.__init__(self,parent,armid.CHARACTERISTICREFERENCETYPE_ID,'Edit Characteristic Reference Type',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(300,150))
 
     self.theValue = currentValue
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     mainSizer.Add(WidgetFactory.buildComboSizerList(self,'Characteristic Reference Type',(87,30),armid.CHARACTERISTICREFERENCETYPE_COMBOVALUE_ID,['grounds','warrant','rebuttal']),0,wx.EXPAND)
+    mainSizer.Add(wx.StaticText(self,-1,''),1,wx.EXPAND)
     mainSizer.Add(WidgetFactory.buildCommitButtonSizer(self,armid.CHARACTERISTICREFERENCETYPE_BUTTONCOMMIT_ID,False),0,wx.ALIGN_CENTER)
     self.SetSizer(mainSizer)
     wx.EVT_BUTTON(self,armid.CHARACTERISTICREFERENCETYPE_BUTTONCOMMIT_ID,self.onCommit)

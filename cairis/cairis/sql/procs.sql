@@ -822,6 +822,7 @@ drop procedure if exists impliedCharacteristic;
 drop procedure if exists impliedCharacteristicElements;
 drop procedure if exists addImpliedCharacteristic;
 drop procedure if exists updateImpliedCharacteristic;
+drop procedure if exists updateImpliedCharacteristicElement;
 
 delimiter //
 
@@ -21606,7 +21607,27 @@ begin
   select id into icId from implied_characteristic where persona_code_network_id = pcnId limit 1;
 
   update implied_characteristic set synopsis = charName, qualifier = qualName, variable_id = ctId where id = icId and persona_code_network_id = pcnId;
+end
+//
 
+create procedure updateImpliedCharacteristicElement(in icName text, in labelName text, in rtName text)
+begin
+  declare icId int;
+  declare idId int;
+  declare codeId int;
+  declare startIdx int;
+  declare endIdx int;
+  declare rtId int;
+
+  select id into icId from implied_characteristic where synopsis = icName limit 1;
+  select id into rtId from characteristic_reference_type where name = rtName limit 1;
+
+  select internal_document_id into idId from internal_document_code where label = labelName limit 1;
+  select code_id into codeId from internal_document_code where label = labelName limit 1;
+  select start_index into startIdx from internal_document_code where label = labelName limit 1;
+  select end_index into startIdx from internal_document_code where label = labelName limit 1;
+
+  update implied_characteristic_element set characteristic_reference_type_id = rtId where implied_characteristic_id = icId and internal_document_id = idId and code_id = codeId and start_index = startIdx and end_index = endIdx;
 end
 //
 

@@ -49,16 +49,16 @@ class ImpliedCharacteristicElementsListCtrl(wx.ListCtrl):
 
   def onItemActivated(self,evt):
     elType = self.GetItem(self.theSelectedIdx,1)
-    dlg = CharacteristicReferenceTypeDialog(self,elType)
+    dlg = CharacteristicReferenceTypeDialog(self,elType.GetText())
     if (dlg.ShowModal() == armid.CHARACTERISTICREFERENCETYPE_BUTTONCOMMIT_ID):
-      elType = dlg.value()
-      self.SetStringItem(self.theSelectedIdx,1,elType)
+      modElType = dlg.value()
+      self.SetStringItem(self.theSelectedIdx,1,modElType)
 
 
   def dimensions(self):
     entries = []
     for x in range(self.GetItemCount()):
       elName = self.GetItemText(x)
-      elype = self.GetItem(x,1)
+      elType = self.GetItem(x,1)
       entries.append((elName,elType.GetText()))
     return entries

@@ -47,8 +47,11 @@ class ImpliedCharacteristicDialog(wx.Dialog):
     qualName = qualCtrl.GetValue()
     charType = varCtrl.GetValue()
 
-    lhsCodes = []
-    rhsCodes = []
+    lhsCodesCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_LISTLHS_ID)
+    rhsCodesCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_LISTRHS_ID)
+
+    lhsCodes = lhsCodesCtrl.dimensions()
+    rhsCodes = rhsCodesCtrl.dimensions()
     p = ImpliedCharacteristicParameters(self.thePersonaName,self.theFromCode,self.theToCode,self.theRelationshipType,charName,qualName,lhsCodes,rhsCodes,charType)
    
     b = Borg()
