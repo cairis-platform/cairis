@@ -48,11 +48,24 @@
 <!ELEMENT label (#PCDATA)>
 <!ELEMENT synopsis (#PCDATA)>
 
-<!ELEMENT code_network EMPTY>
+<!ELEMENT code_network (implied_characteristic)>
 <!ATTLIST code_network persona CDATA #REQUIRED>
 <!ATTLIST code_network relationship_type (associated | implies | conflict | part-of) #REQUIRED>
 <!ATTLIST code_network from_code CDATA #REQUIRED>
 <!ATTLIST code_network to_code CDATA #REQUIRED>
+
+<!ELEMENT implied_characteristic (from_label+,to_label+)>
+<!ATTLIST implied_characteristic name CDATA #REQUIRED>
+<!ATTLIST implied_characteristic qualifier CDATA #REQUIRED>
+<!ATTLIST implied_characteristic type (Intrinsic | Contextual) #REQUIRED>
+
+<!ELEMENT from_label EMPTY>
+<!ATTLIST from_label name CDATA #REQUIRED>
+<!ATTLIST from_label reference_type (grounds | warrant | rebuttal) #REQUIRED>
+
+<!ELEMENT to_label EMPTY>
+<!ATTLIST to_label name CDATA #REQUIRED>
+<!ATTLIST to_label reference_type (grounds | warrant | rebuttal) #REQUIRED>
 
 <!ELEMENT implied_process (description,relationship+,channel+,specification)>
 <!ATTLIST implied_process name CDATA #REQUIRED>

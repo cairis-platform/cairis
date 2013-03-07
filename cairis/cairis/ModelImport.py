@@ -566,15 +566,17 @@ def importProcessesFile(importFile):
   quotations = handler.quotations()
   codeNetworks = handler.codeNetworks()
   processes = handler.processes()
-  return importProcesses(docs,codes,memos,quotations,codeNetworks,processes)
+  ics = handler.impliedCharacteristics()
+  return importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics)
 
-def importProcesses(docs,codes,memos,quotations,codeNetworks,processes):
+def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics):
   noOfDocs = len(docs)
   noOfCodes = len(codes)
   noOfMemos = len(memos)
   noOfQuotations = len(quotations)
   noOfCNs = len(codeNetworks)
   noOfProcs = len(processes)
+  noOfICs = len(ics)
 
   b = Borg()
 
@@ -603,6 +605,9 @@ def importProcesses(docs,codes,memos,quotations,codeNetworks,processes):
 
   for p in processes:
     b.dbProxy.addImpliedProcess(p)
+
+  for ic in ics:
+    b.dbProxy.addImpliedCharacteristic(ic)
 
   msgStr = 'Imported ' + str(noOfDocs) + ' internal documents, ' + str(noOfCodes) + ' codes, ' + str(noOfMemos) + ' memos, ' + str(noOfQuotations) + ' quotations, ' + str(noOfCNs) + ' code relationships, and ' + str(noOfProcs) + ' implied processes.'
   return msgStr

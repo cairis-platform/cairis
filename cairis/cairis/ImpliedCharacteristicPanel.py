@@ -38,7 +38,7 @@ class ImpliedCharacteristicPanel(BasePanel):
     try:
       charName,qualName,varName = self.dbProxy.impliedCharacteristic(pName,fromCode,toCode,rtName)
     except NoImpliedCharacteristic, e:
-      self.dbProxy.addImpliedCharacteristic(pName,fromCode,toCode,rtName)
+      self.dbProxy.initialiseImpliedCharacteristic(pName,fromCode,toCode,rtName)
 
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     self.codeNetView = CodeNetworkView(self,armid.IMPLIEDCHARACTERISTIC_IMAGENETWORK_ID)

@@ -11165,10 +11165,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting implied characteristic elements for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addImpliedCharacteristic(self,pName,fromCode,toCode,rtName):
+  def initialiseImpliedCharacteristic(self,pName,fromCode,toCode,rtName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call addImpliedCharacteristic(%s,%s,%s,%s)',(pName,fromCode,toCode,rtName))
+      curs.execute('call initialiseImpliedCharacteristic(%s,%s,%s,%s)',(pName,fromCode,toCode,rtName))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
         raise DatabaseProxyException(exceptionText) 
@@ -11178,6 +11178,38 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error adding implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def addImpliedCharacteristic(self,parameters):
+    pName = parameters.persona()
+    fromCode = parameters.fromCode()
+    toCode = parameters.toCode()
+    rtName = parameters.relationshipType()
+    charName = parameters.characteristic()
+    qualName = parameters.qualifier()
+    lhsCodes = parameters.lhsCodes()
+    rhsCodes = parameters.rhsCodes()
+    charType = parameters.characteristicType()
+   
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addImpliedCharacteristic(%s,%s,%s,%s,%s,%s,%s)',(pName,fromCode,toCode,rtName,charName,qualName,charType))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
+        raise DatabaseProxyException(exceptionText) 
+
+      for lblName,rtName in lhsCodes:
+        self.addImpliedCharacteristicElement(charName,lblName,rtName)
+
+      for lblName,rtName in rhsCodes:
+        self.addImpliedCharacteristicElement(charName,lblName,rtName)
+
+      self.conn.commit()
+      curs.close() 
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding implied characteristic ' + charName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
 
   def updateImpliedCharacteristic(self,parameters):
     pName = parameters.persona()
@@ -11194,7 +11226,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       curs.execute('call updateImpliedCharacteristic(%s,%s,%s,%s,%s,%s,%s)',(pName,fromCode,toCode,rtName,charName,qualName,charType))
       if (curs.rowcount == -1):
-        exceptionText = 'Error adding implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
+        exceptionText = 'Error updating implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
         raise DatabaseProxyException(exceptionText) 
 
       for lblName,rtName in lhsCodes:
@@ -11210,12 +11242,25 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error updating implied characteristic ' + charName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def addImpliedCharacteristicElement(self,charName,lblName,rtName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addImpliedCharacteristicElement(%s,%s,%s)',(charName,lblName,rtName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding implied characteristic ' + charName + ' element ' + lblName + '/' + rtName
+        raise DatabaseProxyException(exceptionText) 
+      curs.close() 
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding implied characteristic ' + charName + ' element ' + lblName + '/' + rtName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
   def updateImpliedCharacteristicElement(self,charName,lblName,rtName):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateImpliedCharacteristicElement(%s,%s,%s)',(charName,lblName,rtName))
       if (curs.rowcount == -1):
-        exceptionText = 'Error adding implied characteristic ' + charName + ' element ' + lblName 
+        exceptionText = 'Error updating implied characteristic ' + charName + ' element ' + lblName 
         raise DatabaseProxyException(exceptionText) 
       curs.close() 
     except _mysql_exceptions.DatabaseError, e:

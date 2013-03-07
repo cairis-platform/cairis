@@ -21,6 +21,7 @@ from InternalDocumentParameters import InternalDocumentParameters
 from CodeParameters import CodeParameters
 from MemoParameters import MemoParameters
 from ImpliedProcessParameters import ImpliedProcessParameters
+from ImpliedCharacteristicParameters import ImpliedCharacteristicParameters
 from Borg import Borg
 
 class ProcessesContentHandler(ContentHandler,EntityResolver):
@@ -30,6 +31,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     self.theMemos = []
     self.theQuotations = []
     self.theCodeNetworks = []
+    self.theImpliedCharacteristics = []
     self.theProcesses = []
     b = Borg()
     self.configDir = b.configDir
@@ -38,6 +40,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     self.resetMemoAttributes()
     self.resetQuotationAttributes()
     self.resetCodeNetworkAttributes()
+    self.resetImpliedCharacteristicAttributes()
     self.resetProcessAttributes()
 
   def resolveEntity(self,publicId,systemId):
@@ -57,6 +60,9 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
 
   def codeNetworks(self):
     return self.theCodeNetworks
+
+  def impliedCharacteristics(self):
+    return self.theImpliedCharacteristics
 
   def processes(self):
     return self.theProcesses
@@ -113,6 +119,13 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     self.theProcessNetwork = []
     self.theChannels = []
 
+  def resetImpliedCharacteristicAttributes(self):
+    self.theImpliedCharacteristicName = ''
+    self.theImpliedCharacteristicQualifier = ''
+    self.theImpliedCharacteristicType = ''
+    self.theFromLabels = []
+    self.theToLabels = []
+
   def startElement(self,name,attrs):
     self.currentElementName = name
     if name == 'internal_document':
@@ -140,6 +153,18 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.theFromCode = attrs['from_code']
       self.theToCode = attrs['to_code']
       self.theCodeNetworks.append((self.thePersona,self.theRelationshipType,self.theFromCode,self.theToCode))
+    elif name == 'implied_characteristic':
+      self.theImpliedCharacteristicName = attrs['name']
+      self.theImpliedCharacteristicQualifier = attrs['qualifier']
+      self.theImpliedCharacteristicType = attrs['type']
+    elif name == 'from_label':
+      fromName = attrs['name']
+      fromRefType = attrs['reference_type']
+      self.theFromLabels.append((fromName,fromRefType))
+    elif name == 'to_label':
+      toName = attrs['name']
+      toRefType = attrs['reference_type']
+      self.theToLabels.append((toName,toRefType))
     elif name == 'implied_process':
       self.theName = attrs['name']
       self.thePersona = attrs['persona']
@@ -211,6 +236,10 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     elif name == 'quotation':
       self.theQuotations.append((self.theType,self.theCode,self.theArtifactType,self.theArtifactName,self.theEnvironment,self.theSection,self.theStartIndex,self.theEndIndex,self.theLabel,self.theSynopsis))
       self.resetQuotationAttributes()
+    elif name == 'implied_characteristic':
+      p = ImpliedCharacteristicParameters(self.thePersona,self.theFromCode,self.theToCode,self.theRelationshipType,self.theImpliedCharacteristicName,self.theImpliedCharacteristicQualifier,self.theFromLabels,self.theToLabels,self.theImpliedCharacteristicType) 
+      self.theImpliedCharacteristics.append(p)
+      self.resetImpliedCharacteristicAttributes()
     elif name == 'description':
       self.inDescription = 0
     elif name == 'inclusion_criteria':
@@ -225,3 +254,5 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.inLabel = 0
     elif name == 'synopsis':
       self.inSynopsis = 0
+    elif name == 'code_network':
+      self.resetCodeNetworkAttributes()
