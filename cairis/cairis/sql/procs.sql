@@ -21625,7 +21625,7 @@ begin
   select internal_document_id into idId from internal_document_code where label = labelName limit 1;
   select code_id into codeId from internal_document_code where label = labelName limit 1;
   select start_index into startIdx from internal_document_code where label = labelName limit 1;
-  select end_index into startIdx from internal_document_code where label = labelName limit 1;
+  select end_index into endIdx from internal_document_code where label = labelName limit 1;
 
   update implied_characteristic_element set characteristic_reference_type_id = rtId where implied_characteristic_id = icId and internal_document_id = idId and code_id = codeId and start_index = startIdx and end_index = endIdx;
 end
