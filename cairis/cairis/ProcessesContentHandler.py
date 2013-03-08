@@ -254,5 +254,3 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.inLabel = 0
     elif name == 'synopsis':
       self.inSynopsis = 0
-    elif name == 'code_network':
-      self.resetCodeNetworkAttributes()
