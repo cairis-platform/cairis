@@ -21053,9 +21053,12 @@ begin
   declare idName varchar(200);
   declare idDesc varchar(2000);
   declare idContent varchar(9000000);
+  declare pcnId int;
   declare codeName varchar(200);
   declare fromCode varchar(200);
+  declare fromId int;
   declare toCode varchar(200);
+  declare toId int;
   declare rtName varchar(200);
   declare codeType varchar(200);
   declare codeDesc varchar(2000);
@@ -21066,6 +21069,7 @@ begin
   declare memoCount int default 0;
   declare qCount int default 0;
   declare pcnCount int default 0;
+  declare icCount int default 0;
   declare ipnCount int default 0;
   declare artType varchar(50);
   declare artName varchar(50);
@@ -21079,6 +21083,9 @@ begin
   declare endIdx int;
   declare codeLabel varchar(200);
   declare codeSynopsis varchar(1000);
+  declare icSynopsis varchar(2000);
+  declare icQualifier varchar(2000);
+  declare icBehavVar varchar(50);
   declare idCursor cursor for select name, description, content from internal_document order by 1; 
   declare codeCursor cursor for select c.name, ct.name, c.description, c.inclusion_criteria, c.example from code c, code_type ct where c.code_type_id = ct.id order by 1; 
   declare memoCursor cursor for select m.name, m.description from memo m order by 1; 
@@ -21095,7 +21102,8 @@ begin
     union
     select 'task',a.name,c.name,e.name,ars.name,aec.start_index,aec.end_index,'','' from task_environment_code aec, task a, code c, artifact_section ars, environment e where aec.task_id = a.id and aec.code_id = c.id and aec.section_id = ars.id and aec.environment_id = e.id
     order by 1;
-  declare pcnCursor cursor for select p.name,fc.name,tc.name,rt.name from persona_code_network pcn, persona p, code fc, code tc, relationship_type rt where pcn.persona_id = p.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id;
+  declare pcnCursor cursor for select pcn.id,p.name,pcn.from_code_id,fc.name,pcn.to_code_id,tc.name,rt.name from persona_code_network pcn, persona p, code fc, code tc, relationship_type rt where pcn.persona_id = p.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id;
+  declare icCursor cursor for select ic.synopsis,ic.qualifier,bv.name from implied_characteristic ic, behavioural_variable bv where ic.persona_code_network_id = pcnId and ic.variable_id = bv.id order by 1;
   declare ipCursor cursor for select pip.id,pip.name,p.name,pip.description,pip.specification from persona_implied_process pip, persona p where pip.persona_id = p.id order by 2;
   declare ipnCursor cursor for select fc.name,tc.name,rt.name from persona_implied_process_network pipn, persona_code_network pcn, code fc, code tc, relationship_type rt where pipn.persona_implied_process_id = ipId and pipn.persona_code_network_id = pcn.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id;
 
@@ -21179,13 +21187,27 @@ begin
 
   open pcnCursor;
   pcn_loop: loop
-    fetch pcnCursor into artName,fromCode,toCode,rtName;
+    fetch pcnCursor into pcnId,artName,fromCode,fromId,toCode,toId,rtName;
     if done = 1
     then
       leave pcn_loop;
     end if;
     set buf = concat(buf,'<code_network persona=\"',artName,'\" relationship_type=\"',rtName,'\" from_code=\"',fromCode,'\" to_code=\"',toCode,'\" />\n');
     set pcnCount = pcnCount + 1;
+
+    open icCursor;
+    ic_loop: loop 
+      fetch icCursor into icSynopsis,icQualifier,icBehavVar;
+      if done = 1
+      then
+        leave ic_loop;
+      end if;
+      set buf = concat(buf,'  <implied_characteristic name=\"',icSynopsis,'\" qualifier=\"',icQualifier,'\" type=\"',icBehavVar,'\" />\n');
+      set icCount = icCount + 1;
+
+      set buf = concat(buf,'  </implied_characteristic>\n');
+    end loop ic_loop;
+    close icCursor;
   end loop pcn_loop;
   close pcnCursor;
   set done = 0;
@@ -21217,7 +21239,7 @@ begin
   set done = 0;
 
   set buf = concat(buf,'</processes>');
-  select buf,idCount,codeCount,memoCount,qCount,pcnCount,ipnCount;
+  select buf,idCount,codeCount,memoCount,qCount,pcnCount,icCount,ipnCount;
 end
 //
 
