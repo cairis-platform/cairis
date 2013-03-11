@@ -21075,6 +21075,9 @@ begin
   declare artName varchar(50);
   declare envName varchar(50);
   declare sectionName varchar(50);
+  declare icId int;
+  declare labelName varchar(200);
+  declare crtName varchar(50);
   declare ipId int;
   declare ipName varchar(200);
   declare ipDesc varchar(2000);
@@ -21103,7 +21106,9 @@ begin
     select 'task',a.name,c.name,e.name,ars.name,aec.start_index,aec.end_index,'','' from task_environment_code aec, task a, code c, artifact_section ars, environment e where aec.task_id = a.id and aec.code_id = c.id and aec.section_id = ars.id and aec.environment_id = e.id
     order by 1;
   declare pcnCursor cursor for select pcn.id,p.name,pcn.from_code_id,fc.name,pcn.to_code_id,tc.name,rt.name from persona_code_network pcn, persona p, code fc, code tc, relationship_type rt where pcn.persona_id = p.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id;
-  declare icCursor cursor for select ic.synopsis,ic.qualifier,bv.name from implied_characteristic ic, behavioural_variable bv where ic.persona_code_network_id = pcnId and ic.variable_id = bv.id order by 1;
+  declare icCursor cursor for select ic.id, ic.synopsis,ic.qualifier,bv.name from implied_characteristic ic, behavioural_variable bv where ic.persona_code_network_id = pcnId and ic.variable_id = bv.id order by 1;
+  declare fromLabelCursor cursor for select idc.label,crt.name from implied_characteristic ic, implied_characteristic_element ice, internal_document_code idc, characteristic_reference_type crt,persona_code_network pcn where ice.implied_characteristic_id = icId and ice.implied_characteristic_id = ic.id and ic.persona_code_network_id = pcn.id and pcn.from_code_id = ice.code_id and ice.internal_document_id = idc.internal_document_id and ice.code_id = idc.code_id and ice.start_index = idc.start_index and ice.end_index = idc.end_index and ice.characteristic_reference_type_id = crt.id order by 1;
+  declare toLabelCursor cursor for select idc.label,crt.name from implied_characteristic ic, implied_characteristic_element ice, internal_document_code idc, characteristic_reference_type crt,persona_code_network pcn where ice.implied_characteristic_id = icId and ice.implied_characteristic_id = ic.id and ic.persona_code_network_id = pcn.id and pcn.to_code_id = ice.code_id and ice.internal_document_id = idc.internal_document_id and ice.code_id = idc.code_id and ice.start_index = idc.start_index and ice.end_index = idc.end_index and ice.characteristic_reference_type_id = crt.id order by 1;
   declare ipCursor cursor for select pip.id,pip.name,p.name,pip.description,pip.specification from persona_implied_process pip, persona p where pip.persona_id = p.id order by 2;
   declare ipnCursor cursor for select fc.name,tc.name,rt.name from persona_implied_process_network pipn, persona_code_network pcn, code fc, code tc, relationship_type rt where pipn.persona_implied_process_id = ipId and pipn.persona_code_network_id = pcn.id and pcn.from_code_id = fc.id and pcn.to_code_id = tc.id and pcn.relationship_type_id = rt.id;
 
@@ -21187,27 +21192,54 @@ begin
 
   open pcnCursor;
   pcn_loop: loop
-    fetch pcnCursor into pcnId,artName,fromCode,fromId,toCode,toId,rtName;
+    fetch pcnCursor into pcnId,artName,fromId,fromCode,toId,toCode,rtName;
     if done = 1
     then
       leave pcn_loop;
     end if;
-    set buf = concat(buf,'<code_network persona=\"',artName,'\" relationship_type=\"',rtName,'\" from_code=\"',fromCode,'\" to_code=\"',toCode,'\" />\n');
+    set buf = concat(buf,'<code_network persona=\"',artName,'\" relationship_type=\"',rtName,'\" from_code=\"',fromCode,'\" to_code=\"',toCode,'\">\n');
     set pcnCount = pcnCount + 1;
 
     open icCursor;
     ic_loop: loop 
-      fetch icCursor into icSynopsis,icQualifier,icBehavVar;
+      fetch icCursor into icId,icSynopsis,icQualifier,icBehavVar;
       if done = 1
       then
         leave ic_loop;
       end if;
-      set buf = concat(buf,'  <implied_characteristic name=\"',icSynopsis,'\" qualifier=\"',icQualifier,'\" type=\"',icBehavVar,'\" />\n');
+      set buf = concat(buf,'  <implied_characteristic name=\"',icSynopsis,'\" qualifier=\"',icQualifier,'\" type=\"',icBehavVar,'\">\n');
       set icCount = icCount + 1;
+
+      open fromLabelCursor;
+      fromLabel_loop: loop
+        fetch fromLabelCursor into labelName,crtName;
+        if done = 1
+        then
+          leave fromLabel_loop;
+        end if;
+        set buf = concat(buf,'    <from_label name=\"',labelName,'\" reference_type=\"',crtName,'\" />\n');
+      end loop fromLabel_loop;
+      close fromLabelCursor;
+      set done = 0;
+
+      open toLabelCursor;
+      toLabel_loop: loop
+        fetch toLabelCursor into labelName,crtName;
+        if done = 1
+        then
+          leave toLabel_loop;
+        end if;
+        set buf = concat(buf,'    <to_label name=\"',labelName,'\" reference_type=\"',crtName,'\" />\n');
+      end loop toLabel_loop;
+      close toLabelCursor;
+      set done = 0;
 
       set buf = concat(buf,'  </implied_characteristic>\n');
     end loop ic_loop;
     close icCursor;
+    set done = 0;
+
+  set buf = concat(buf,'</code_network>\n');
   end loop pcn_loop;
   close pcnCursor;
   set done = 0;
