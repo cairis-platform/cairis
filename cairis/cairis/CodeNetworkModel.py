@@ -40,17 +40,23 @@ class CodeNetworkModel:
     typeColour = 'gray'
     if codeType == 'context':
       typeColour = 'cadetblue1'
-    self.theGraph.add_node(pydot.Node(objtName,color=typeColour))
+    objtLabel = objtName + ' (' + str(self.dbProxy.codeCount(objtName)) + ')'
+    self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,color=typeColour))
 
   def graph(self):
     self.nodeNameSet = set([])
     for fromName,fromType,toName,toType,rType in self.theCodeNetwork:
-      if (fromName not in self.nodeNameSet):
-        self.buildNode(fromName,fromType)
-        self.nodeNameSet.add(fromName)
-      if (toName not in self.nodeNameSet):
-        self.buildNode(toName,toType)
-        self.nodeNameSet.add(toName)
+      fromLabel = fromName
+      toLabel = toName
+#      fromLabel = fromName + ' (' + str(self.dbProxy.codeCount(fromName)) + ')'
+#      toLabel = fromName + ' (' + str(self.dbProxy.codeCount(toName)) + ')'
+
+      if (fromLabel not in self.nodeNameSet):
+        self.buildNode(fromLabel,fromType)
+        self.nodeNameSet.add(fromLabel)
+      if (toLabel not in self.nodeNameSet):
+        self.buildNode(toLabel,toType)
+        self.nodeNameSet.add(toLabel)
 
       rTypeLabel = ''
       if rType == 'associated':
@@ -58,13 +64,13 @@ class CodeNetworkModel:
       elif rType == 'implies':
         rTypeLabel = '=>'
       elif rType == 'conflict':
-        rTypeLabel = '<>'
+        rTypeLabel = 'X'
       elif rType == 'part-of':
-        rTypeLabel = '<>'
+        rTypeLabel = '[]'
 
       tailLabel = 'none'
-      if rTypeLabel == '==' or rTypeLabel == '<>':
+      if rTypeLabel == '==' or rTypeLabel == 'X':
         tailLabel = 'vee'
-      edge = pydot.Edge(fromName,toName,arrowtail=tailLabel,label=rTypeLabel)
+      edge = pydot.Edge(fromLabel,toLabel,arrowtail=tailLabel,label=rTypeLabel)
       self.theGraph.add_edge(edge)
     self.theGraph.write_png(self.theGraphImage,prog='dot')

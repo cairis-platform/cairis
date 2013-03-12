@@ -825,6 +825,8 @@ drop procedure if exists addImpliedCharacteristic;
 drop procedure if exists updateImpliedCharacteristic;
 drop procedure if exists updateImpliedCharacteristicElement;
 drop procedure if exists addImpliedCharacteristicElement;
+drop function if exists codeCount;
+drop function if exists internalDocumentCount;
 
 delimiter //
 
@@ -21676,7 +21678,7 @@ begin
   select id into icId from implied_characteristic where persona_code_network_id = pcnId limit 1;
   select id into bvId from behavioural_variable where name = charType limit 1;
 
-  update implied_characteristic set synopsis = charName, qualifier = qualName, variable_id = ctId where id = icId and persona_code_network_id = pcnId;
+  update implied_characteristic set synopsis = charName, qualifier = qualName, variable_id = bvId where id = icId and persona_code_network_id = pcnId;
 end
 //
 
@@ -21719,7 +21721,33 @@ begin
   select end_index into endIdx from internal_document_code where label = labelName limit 1;
 
   insert into implied_characteristic_element(implied_characteristic_id,internal_document_id,code_id,start_index,end_index,characteristic_reference_type_id) values (icId,idId,codeId,startIdx,endIdx,rtId);
+end
+//
 
+create function internalDocumentCount(codeId int)
+returns int
+deterministic
+begin
+  declare codeCount int;
+  select count(code_id) into codeCount from internal_document_code where code_id = codeId;
+  return codeCount;
+end
+//
+
+create function codeCount(codeName text)
+returns int
+deterministic 
+begin
+  declare codeId int;
+  declare idCount int default 0;
+  declare totalCount int default 0;
+
+  select id into codeId from code where name = codeName limit 1;
+
+  select internalDocumentCount(codeId) into idCount;
+  set totalCount = totalCount + idCount;
+
+  return totalCount;
 end
 //
 

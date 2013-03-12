@@ -3502,7 +3502,7 @@ CREATE VIEW quotation as
    union
    select c.name code,'persona' artifact_type,p.name artifact_name,'Motivations' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'motivations',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Skills' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'skills',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id;
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Skills' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'skills',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id order by 1;
 
 
 

@@ -11268,3 +11268,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error updating implied characteristic ' + charName + ' element ' + lblName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def codeCount(self,codeName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('select codeCount(%s)',(codeName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting code count for ' + codeName
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      cCount = row[0]
+      curs.close()
+      return cCount
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting code count for ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
