@@ -3079,19 +3079,19 @@ begin
 end
 //
 
-create procedure addPersona(in pId int,in pName text, in pAct text, in pAtt text, in pApt text, in pMot text, in pSki text, in pImage blob,in assumptionId int, in pType text)
+create procedure addPersona(in pId int,in pName text, in pAct text, in pAtt text, in pApt text, in pMot text, in pSki text, in pIntr text, in pCont text, in pImage blob,in assumptionId int, in pType text)
 begin
   declare pTypeId int;
   select id into pTypeId from persona_type where name = pType;
-  insert into persona(id,name,activities,attitudes,aptitudes,motivations,skills,image,assumption_id,persona_type_id) values (pId,pName,pAct,pAtt,pApt,pMot,pSki,pImage,assumptionId,pTypeId);
+  insert into persona(id,name,activities,attitudes,aptitudes,motivations,skills,intrinsic,contextual,image,assumption_id,persona_type_id) values (pId,pName,pAct,pAtt,pApt,pMot,pSki,pIntr,pCont,pImage,assumptionId,pTypeId);
 end
 //
 
-create procedure updatePersona(in pId int,in pName text, in pAct text, in pAtt text, in pApt text, in pMot text, in pSki text,in pImage blob,in assumptionId int, in pType text)
+create procedure updatePersona(in pId int,in pName text, in pAct text, in pAtt text, in pApt text, in pMot text, in pSki text, in pIntr text, in pCont text, in pImage blob,in assumptionId int, in pType text)
 begin
   declare pTypeId int;
   select id into pTypeId from persona_type where name = pType;
-  update persona set name = pName, activities = pAct, attitudes = pAtt, aptitudes = pApt, motivations = pMot, skills = pSki, image = pImage,assumption_id = assumptionId, persona_type_id = pTypeId where id = pId;
+  update persona set name = pName, activities = pAct, attitudes = pAtt, aptitudes = pApt, motivations = pMot, skills = pSki, intrinsic = pIntr, contextual = pCont, image = pImage,assumption_id = assumptionId, persona_type_id = pTypeId where id = pId;
 end
 //
 
@@ -7805,9 +7805,9 @@ create procedure getPersonas(in constraintId int)
 begin
   if constraintId = -1
   then
-    select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
+    select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
   else
-    select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.id = constraintId and p.persona_type_id = pt.id;
+    select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.id = constraintId and p.persona_type_id = pt.id;
   end if;
 end
 //
@@ -13032,6 +13032,8 @@ begin
   declare pAptitudes varchar(4000);
   declare pMotivations varchar(4000);
   declare pSkills varchar(4000);
+  declare pIntrinsic varchar(4000);
+  declare pContextual varchar(4000);
   declare pImage varchar(2000);
   declare isAssumption int;
   declare pType varchar(50);
@@ -13089,7 +13091,7 @@ begin
   declare ucCount int default 0;
   declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/usability.dtd">\n\n<usability>\n';
   declare done int default 0;
-  declare personaCursor cursor for select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
+  declare personaCursor cursor for select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
   declare personaEnvCursor cursor for select ep.environment_id,e.name from environment_persona ep, environment e where ep.persona_id = personaId and ep.environment_id = e.id;
   declare personaRolesCursor cursor for select r.name from persona_role sr, role r where sr.persona_id = personaId and sr.environment_id = envId and sr.role_id = r.id;
   declare edCursor cursor for select name,version,publication_date,authors,description from external_document;
@@ -13266,12 +13268,12 @@ begin
 
   open personaCursor;
   persona_loop: loop
-    fetch personaCursor into personaId,personaName,pActivities,pAttitudes,pAptitudes,pMotivations,pSkills,pImage,isAssumption,pType;
+    fetch personaCursor into personaId,personaName,pActivities,pAttitudes,pAptitudes,pMotivations,pSkills,pIntrinsic,pContextual,pImage,isAssumption,pType;
     if done = 1
     then
       leave persona_loop;
     end if;
-    set buf = concat(buf,'<persona name=\"',personaName,'\" type=\"',pType,'\" assumption_persona=\"',b2a(isAssumption),'\" image=\"',pImage,'\" >\n  <activities>',pActivities,'</activities>\n  <attitudes>',pAttitudes,'</attitudes>\n  <aptitudes>',pAptitudes,'</aptitudes>\n  <motivations>',pMotivations,'</motivations>\n  <skills>',pSkills,'</skills>\n');
+    set buf = concat(buf,'<persona name=\"',personaName,'\" type=\"',pType,'\" assumption_persona=\"',b2a(isAssumption),'\" image=\"',pImage,'\" >\n  <activities>',pActivities,'</activities>\n  <attitudes>',pAttitudes,'</attitudes>\n  <aptitudes>',pAptitudes,'</aptitudes>\n  <motivations>',pMotivations,'</motivations>\n  <skills>',pSkills,'</skills>\n  <intrinsic>',pIntrinsic,'</intrinsic>\n  <contextual>',pContextual,'</contextual>\n');
     set personaCount = personaCount + 1;
     open personaEnvCursor;
     personaEnv_loop: loop
@@ -14525,6 +14527,10 @@ begin
   union
   select e.name,'Persona',p.name from environment e, environment_persona ep, persona p where ep.environment_id = e.id and ep.persona_id = p.id and p.skills like concat('%',inTxt,'%')
   union
+  select e.name,'Persona',p.name from environment e, environment_persona ep, persona p where ep.environment_id = e.id and ep.persona_id = p.id and p.intrinsic like concat('%',inTxt,'%')
+  union
+  select e.name,'Persona',p.name from environment e, environment_persona ep, persona p where ep.environment_id = e.id and ep.persona_id = p.id and p.contextual like concat('%',inTxt,'%')
+  union
   select e.name,'Persona',p.name from environment e, environment_persona ep, persona p, persona_narrative pn where ep.environment_id = e.id and ep.persona_id = p.id and ep.environment_id = pn.environment_id and ep.persona_id = pn.persona_id and pn.narrative like concat('%',inTxt,'%');
 end
 //
@@ -15741,7 +15747,7 @@ end
 
 create procedure personaToXml(in personaName text)
 begin
-  declare envId int;
+  declare envId int; 
   declare envName varchar(50);
   declare personaId int;
   declare pActivities varchar(4000);
@@ -15749,6 +15755,8 @@ begin
   declare pAptitudes varchar(4000);
   declare pMotivations varchar(4000);
   declare pSkills varchar(4000);
+  declare pIntrinsic varchar(4000);
+  declare pContextual varchar(4000);
   declare pImage varchar(2000);
   declare isAssumption int;
   declare pType varchar(50);
@@ -15797,11 +15805,13 @@ begin
   select aptitudes into pAptitudes from persona where id = personaId;
   select motivations into pMotivations from persona where id = personaId;
   select skills into pSkills from persona where id = personaId;
+  select intrinsic into pIntrinsic from persona where id = personaId;
+  select contextual into pContextual from persona where id = personaId;
   select image into pImage from persona where id = personaId;
   select assumption_id into isAssumption from persona where id = personaId;
   select pt.name into pType from persona p, persona_type pt where p.id = personaId and p.persona_type_id = pt.id;
 
-  set buf = concat(buf,'<persona name=\"',personaName,'\" type=\"',pType,'\" assumption_persona=\"',b2a(isAssumption),'\" image=\"',pImage,'\" >\n  <activities>',pActivities,'</activities>\n  <attitudes>',pAttitudes,'</attitudes>\n  <aptitudes>',pAptitudes,'</aptitudes>\n  <motivations>',pMotivations,'</motivations>\n  <skills>',pSkills,'</skills>\n');
+  set buf = concat(buf,'<persona name=\"',personaName,'\" type=\"',pType,'\" assumption_persona=\"',b2a(isAssumption),'\" image=\"',pImage,'\" >\n  <activities>',pActivities,'</activities>\n  <attitudes>',pAttitudes,'</attitudes>\n  <aptitudes>',pAptitudes,'</aptitudes>\n  <motivations>',pMotivations,'</motivations>\n  <skills>',pSkills,'</skills>\n  <intrinsic>',pIntrinsic,'</intrinsic>\n  <contextual>',pContextual,'</contextual>\n');
 
   open personaEnvCursor;
   personaEnv_loop: loop
@@ -21504,6 +21514,12 @@ begin
   elseif sectName = 'skills'
   then
     select substr(skills,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'intrinsic'
+  then
+    select substr(intrinsic,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'contextual'
+  then
+    select substr(contextual,startIdx,endIdx - startIdx) into quote from persona where id = pId;
   else
     select id into envId from environment where name = envName limit 1;
     select substr(narrative,startIdx,endIdx - startIdx) into quote from persona_narrative where persona_id = pId and environment_id = envId;

@@ -803,6 +803,8 @@ Because obtaining data is an expensive business, Claire also tries to reuse data
 </aptitudes>
   <motivations>Besides her research, Claire's primary security concerns are centered around the datasets she maintains, and making sure her colleagues and collaborators can access the data they need. </motivations>
   <skills>Nothing stipulated</skills>
+  <intrinsic>None</intrinsic>
+  <contextual>None</contextual>
   <persona_environment name="Psychosis" is_direct="FALSE" >
     <persona_role name="Researcher" />
     <narrative>Nothing stipulated</narrative>
@@ -820,6 +822,8 @@ Tom is, however, aware that medical researchers sometimes have their rules about
 
 Tom also wants security to be practical.  Tom shares the infrastructure team's view on the importance of network security, and believes that, if left up to his users alone, that nothing will ever be agreed.  Consequently, Tom is happy to work with whatever security controls are mandated.</motivations>
   <skills>Nothing stipulated.</skills>
+  <intrinsic>None</intrinsic>
+  <contextual>None</contextual>
   <persona_environment name="Stroke" is_direct="FALSE" >
     <persona_role name="Developer" />
     <narrative>Nothing stipulated</narrative>
@@ -833,6 +837,8 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <aptitudes>TBC</aptitudes>
   <motivations>TBC</motivations>
   <skills>TBC</skills>
+  <intrinsic>None</intrinsic>
+  <contextual>None</contextual>
   <persona_environment name="Core Technology" is_direct="FALSE" >
     <persona_role name="Sysadmin" />
     <narrative>Nothing stipulated.</narrative>

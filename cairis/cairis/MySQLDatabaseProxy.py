@@ -206,9 +206,11 @@ PERSONAS_ATTITUDES_COL = 3
 PERSONAS_APTITUDES_COL = 4
 PERSONAS_MOTIVATIONS_COL = 5
 PERSONAS_SKILLS_COL = 6
-PERSONAS_IMAGE_COL = 7
-PERSONAS_ASSUMPTION_COL = 8
-PERSONAS_TYPE_COL = 9
+PERSONAS_INTRINSIC_COL = 7
+PERSONAS_CONTEXTUAL_COL = 8
+PERSONAS_IMAGE_COL = 9
+PERSONAS_ASSUMPTION_COL = 10
+PERSONAS_TYPE_COL = 11
 
 TASKS_ID_COL = 0
 TASKS_NAME_COL = 1
@@ -1740,14 +1742,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         aptitudes = row[PERSONAS_APTITUDES_COL]
         motivations = row[PERSONAS_MOTIVATIONS_COL]
         skills = row[PERSONAS_SKILLS_COL]
+        intrinsic = row[PERSONAS_INTRINSIC_COL]
+        contextual = row[PERSONAS_CONTEXTUAL_COL]
         image = row[PERSONAS_IMAGE_COL]
         isAssumption = row[PERSONAS_ASSUMPTION_COL]
         pType = row[PERSONAS_TYPE_COL]
-        personaRows.append((personaId,personaName,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType))
+        personaRows.append((personaId,personaName,activities,attitudes,aptitudes,motivations,skills,intrinsic,contextual,image,isAssumption,pType))
       curs.close()
 
       personas = {}
-      for personaId,personaName,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType in personaRows:
+      for personaId,personaName,activities,attitudes,aptitudes,motivations,skills,intrinsic,contextual,image,isAssumption,pType in personaRows:
         tags = self.getTags(personaName,'persona')
         environmentProperties = []
         for environmentId,environmentName in self.dimensionEnvironments(personaId,'persona'):
@@ -1758,7 +1762,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           properties = PersonaEnvironmentProperties(environmentName,directFlag,personaDesc,roles,envCodes)
           environmentProperties.append(properties)
         codes = self.personaCodes(personaName)
-        parameters = PersonaParameters(personaName,activities,attitudes,aptitudes,motivations,skills,image,isAssumption,pType,tags,environmentProperties,codes)
+        parameters = PersonaParameters(personaName,activities,attitudes,aptitudes,motivations,skills,intrinsic,contextual,image,isAssumption,pType,tags,environmentProperties,codes)
         persona = ObjectFactory.build(personaId,parameters)
         personas[personaName] = persona
       return personas
@@ -1837,6 +1841,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       aptitudes = parameters.aptitudes()
       motivations = parameters.motivations()
       skills = parameters.skills()
+      intrinsic = parameters.intrinsic()
+      contextual = parameters.contextual()
       image = parameters.image()
       isAssumption = parameters.assumption()
       pType = parameters.type()
@@ -1844,7 +1850,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       tags = parameters.tags()
 
       curs = self.conn.cursor()
-      curs.execute('call addPersona(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(personaId,personaName,activities.encode('utf-8'),attitudes.encode('utf-8'),aptitudes.encode('utf-8'),motivations.encode('utf-8'),skills.encode('utf-8'),image,isAssumption,pType))
+      curs.execute('call addPersona(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(personaId,personaName,activities.encode('utf-8'),attitudes.encode('utf-8'),aptitudes.encode('utf-8'),motivations.encode('utf-8'),skills.encode('utf-8'),intrinsic.encode('utf-8'),contextual.encode('utf-8'),image,isAssumption,pType))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new persona ' + personaName
         raise DatabaseProxyException(exceptionText) 
@@ -1888,6 +1894,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     aptitudes = parameters.aptitudes()
     motivations = parameters.motivations()
     skills = parameters.skills()
+    intrinsic = parameters.intrinsic()
+    contextual = parameters.contextual()
     image = parameters.image()
     isAssumption = parameters.assumption()
     pType = parameters.type()
@@ -1901,7 +1909,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error updating persona ' + personaName
         raise DatabaseProxyException(exceptionText) 
 
-      curs.execute('call updatePersona(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(personaId,personaName,activities.encode('utf-8'),attitudes.encode('utf-8'),aptitudes.encode('utf-8'),motivations.encode('utf-8'),skills.encode('utf-8'),image,isAssumption,pType))
+      curs.execute('call updatePersona(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(personaId,personaName,activities.encode('utf-8'),attitudes.encode('utf-8'),aptitudes.encode('utf-8'),motivations.encode('utf-8'),skills.encode('utf-8'),intrinsic.encode('utf-8'),contextual.encode('utf-8'),image,isAssumption,pType))
       if (curs.rowcount == -1):
         exceptionText = 'Error updating persona ' + personaName
         raise DatabaseProxyException(exceptionText) 
@@ -10151,7 +10159,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def personaCodes(self,pName):
     codeBook = {}
-    for sectName in ['activities','attitudes','aptitudes','motivations','skills']:
+    for sectName in ['activities','attitudes','aptitudes','motivations','skills','intrinsic','contextual']:
       codeBook[sectName] = self.artifactCodes(pName,'persona',sectName)
     return codeBook
 

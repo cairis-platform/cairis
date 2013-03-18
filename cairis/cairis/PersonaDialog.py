@@ -38,9 +38,11 @@ class PersonaDialog(wx.Dialog):
     self.theAptitudes = ''
     self.theMotivations = ''
     self.theSkills = ''
+    self.theIntrinsic = ''
+    self.theContextual = ''
     self.theImage = ''
     self.theType = ''
-    self.theCodes = {'activities':{}, 'attitudes':{}, 'motivations':{}, 'skills':{}}
+    self.theCodes = {'activities':{}, 'attitudes':{}, 'motivations':{}, 'skills':{}, 'intrinsic':{}, 'contextual':{}}
     self.theEnvironmentProperties = []
     self.panel = 0
     self.buildControls(parameters)
@@ -78,6 +80,8 @@ class PersonaDialog(wx.Dialog):
     aptitudesCtrl = self.FindWindowById(armid.PERSONA_TEXTAPTITUDES_ID)
     motivationsCtrl = self.FindWindowById(armid.PERSONA_TEXTMOTIVATIONS_ID)
     skillsCtrl = self.FindWindowById(armid.PERSONA_TEXTSKILLS_ID)
+    intrinsicCtrl = self.FindWindowById(armid.PERSONA_TEXTINTRINSIC_ID)
+    contextualCtrl = self.FindWindowById(armid.PERSONA_TEXTCONTEXTUAL_ID)
     imageCtrl = self.FindWindowById(armid.PERSONA_IMAGEPERSONAIMAGE_ID)
     environmentCtrl = self.FindWindowById(armid.PERSONA_PANELENVIRONMENT_ID)
 
@@ -105,6 +109,10 @@ class PersonaDialog(wx.Dialog):
     self.theCodes['motivations'] = motivationsCtrl.codes()
     self.theSkills = skillsCtrl.GetValue()
     self.theCodes['skills'] = skillsCtrl.codes()
+    self.theIntrinsic = intrinsicCtrl.GetValue()
+    self.theCodes['intrinsic'] = intrinsicCtrl.codes()
+    self.theContextual = contextualCtrl.GetValue()
+    self.theCodes['contextual'] = contextualCtrl.codes()
     self.theImage = imageCtrl.personaImage()
     
     self.theEnvironmentProperties = environmentCtrl.environmentProperties()
@@ -146,6 +154,16 @@ class PersonaDialog(wx.Dialog):
       dlg.ShowModal()
       dlg.Destroy()
       return
+    if len(self.theIntrinsic) == 0:
+      dlg = wx.MessageDialog(self,'Intrinsic cannot be empty',commitLabel,wx.OK) 
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+    if len(self.theContextual) == 0:
+      dlg = wx.MessageDialog(self,'Contextual cannot be empty',commitLabel,wx.OK) 
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
     elif (len(self.theEnvironmentProperties) == 0):
       dlg = wx.MessageDialog(self,'No environments have been associated with this persona',commitLabel,wx.OK) 
       dlg.ShowModal()
@@ -174,6 +192,6 @@ class PersonaDialog(wx.Dialog):
       self.EndModal(armid.PERSONA_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = PersonaParameters(self.thePersonaName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theImage,self.isAssumption,self.theType,self.theTags,self.theEnvironmentProperties,self.theCodes)
+    parameters = PersonaParameters(self.thePersonaName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theIntrinsic,self.theContextual,self.theImage,self.isAssumption,self.theType,self.theTags,self.theEnvironmentProperties,self.theCodes)
     parameters.setId(self.thePersonaId)
     return parameters

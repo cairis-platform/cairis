@@ -76,6 +76,28 @@ class SkillsPage(wx.Panel):
     sSizer.Add(sCtrl,1,wx.EXPAND)
     self.SetSizer(topSizer)
 
+class IntrinsicPage(wx.Panel):
+  def __init__(self,parent):
+    wx.Panel.__init__(self,parent)
+    topSizer = wx.BoxSizer(wx.VERTICAL)
+    sBox = wx.StaticBox(self,-1,'')
+    sSizer = wx.StaticBoxSizer(sBox,wx.HORIZONTAL)
+    topSizer.Add(sSizer,1,wx.EXPAND)
+    sCtrl = BVNarrativeTextCtrl(self,armid.PERSONA_TEXTINTRINSIC_ID)
+    sSizer.Add(sCtrl,1,wx.EXPAND)
+    self.SetSizer(topSizer)
+
+class ContextualPage(wx.Panel):
+  def __init__(self,parent):
+    wx.Panel.__init__(self,parent)
+    topSizer = wx.BoxSizer(wx.VERTICAL)
+    sBox = wx.StaticBox(self,-1,'')
+    sSizer = wx.StaticBoxSizer(sBox,wx.HORIZONTAL)
+    topSizer.Add(sSizer,1,wx.EXPAND)
+    sCtrl = BVNarrativeTextCtrl(self,armid.PERSONA_TEXTCONTEXTUAL_ID)
+    sSizer.Add(sCtrl,1,wx.EXPAND)
+    self.SetSizer(topSizer)
+
 class SummaryDetailsNotebook(wx.Notebook):
   def __init__(self,parent):
     wx.Notebook.__init__(self,parent,armid.PERSONA_NOTEBOOKSUMMARY_ID)
@@ -84,8 +106,12 @@ class SummaryDetailsNotebook(wx.Notebook):
     p3 = AptitudesPage(self)
     p4 = MotivationsPage(self)
     p5 = SkillsPage(self)
+    p6 = IntrinsicPage(self)
+    p7 = ContextualPage(self)
     self.AddPage(p1,'Activities')
     self.AddPage(p2,'Attitudes')
     self.AddPage(p3,'Aptitudes')
     self.AddPage(p4,'Motivations')
     self.AddPage(p5,'Skills')
+    self.AddPage(p6,'Intrinsic')
+    self.AddPage(p7,'Contextual')

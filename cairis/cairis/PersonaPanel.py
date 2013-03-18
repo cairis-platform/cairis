@@ -75,6 +75,8 @@ class PersonaPanel(BasePanel):
     aptitudesCtrl = self.nb.FindWindowById(armid.PERSONA_TEXTAPTITUDES_ID)
     motivationsCtrl = self.nb.FindWindowById(armid.PERSONA_TEXTMOTIVATIONS_ID)
     skillsCtrl = self.nb.FindWindowById(armid.PERSONA_TEXTSKILLS_ID)
+    intrinsicCtrl = self.nb.FindWindowById(armid.PERSONA_TEXTINTRINSIC_ID)
+    contextualCtrl = self.nb.FindWindowById(armid.PERSONA_TEXTCONTEXTUAL_ID)
     imageCtrl = self.FindWindowById(armid.PERSONA_IMAGEPERSONAIMAGE_ID)
     nameCtrl.SetValue(persona.name())
     typeCtrl.SetValue(persona.type())
@@ -84,6 +86,8 @@ class PersonaPanel(BasePanel):
     aptitudesCtrl.Set(persona.name(),'Aptitudes',persona.aptitudes())
     motivationsCtrl.Set(persona.name(),'Motivations',persona.motivations())
     skillsCtrl.Set(persona.name(),'Skills',persona.skills())
+    intrinsicCtrl.Set(persona.name(),'Intrinsic',persona.intrinsic())
+    contextualCtrl.Set(persona.name(),'Contextual',persona.contextual())
     imageCtrl.loadImage(persona.image())
 
     activitiesCtrl.setCodes(persona.codes('activities'))
@@ -91,6 +95,8 @@ class PersonaPanel(BasePanel):
     aptitudesCtrl.setCodes(persona.codes('aptitudes'))
     motivationsCtrl.setCodes(persona.codes('motivations'))
     skillsCtrl.setCodes(persona.codes('skills'))
+    intrinsicCtrl.setCodes(persona.codes('intrinsic'))
+    contextualCtrl.setCodes(persona.codes('contextual'))
 
     self.environmentPanel.loadControls(persona)
 

@@ -754,6 +754,8 @@ CREATE TABLE persona (
   aptitudes VARCHAR(4000) NOT NULL,
   motivations VARCHAR(4000) NOT NULL,
   skills VARCHAR(4000) NOT NULL,
+  intrinsic VARCHAR(4000) NOT NULL,
+  contextual VARCHAR(4000) NOT NULL,
   image VARCHAR(1000),
   assumption_id INT NOT NULL,
   persona_type_id INT NOT NULL,
@@ -3502,7 +3504,11 @@ CREATE VIEW quotation as
    union
    select c.name code,'persona' artifact_type,p.name artifact_name,'Motivations' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'motivations',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Skills' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'skills',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id order by 1;
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Skills' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'skills',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   union
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Intrinsic' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'intrinsic',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   union
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Contextual' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'contextual',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id order by 1;
 
 
 
@@ -3783,6 +3789,8 @@ insert into artifact_section (id,name) values (4,'skills');
 insert into artifact_section (id,name) values (5,'narrative');
 insert into artifact_section (id,name) values (6,'benefits');
 insert into artifact_section (id,name) values (7,'consequences');
+insert into artifact_section (id,name) values (8,'intrinsic');
+insert into artifact_section (id,name) values (9,'contextual');
 insert into relationship_type (id,name) values(0,'associated');
 insert into relationship_type (id,name) values(1,'implies');
 insert into relationship_type (id,name) values(2,'conflict');

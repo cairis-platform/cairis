@@ -17,7 +17,7 @@
 
 
 class Persona:
-  def __init__(self,personaId,personaName,pActivities,pAttitudes,pAptitudes,pMotivations,pSkills,image,isAssumption,pType,tags,environmentProperties,pCodes):
+  def __init__(self,personaId,personaName,pActivities,pAttitudes,pAptitudes,pMotivations,pSkills,pIntrinsic,pContextual,image,isAssumption,pType,tags,environmentProperties,pCodes):
     self.theId = personaId
     self.theName = personaName
     self.theTags = tags
@@ -26,6 +26,8 @@ class Persona:
     self.theAptitudes = pAptitudes
     self.theMotivations = pMotivations
     self.theSkills = pSkills
+    self.theIntrinsic = pIntrinsic
+    self.theContextual = pContextual
     self.theImage = image
     self.isAssumption = isAssumption
     self.thePersonaType = pType
@@ -44,6 +46,8 @@ class Persona:
   def aptitudes(self): return self.theAptitudes
   def motivations(self): return self.theMotivations
   def skills(self): return self.theSkills
+  def intrinsic(self): return self.theIntrinsic
+  def contextual(self): return self.theContextual
   def image(self): return self.theImage
   def assumption(self): return self.isAssumption
   def type(self): return self.thePersonaType

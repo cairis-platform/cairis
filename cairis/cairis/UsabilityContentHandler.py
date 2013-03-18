@@ -118,6 +118,8 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     self.inAptitudes = 0
     self.inMotivations = 0
     self.inSkills = 0
+    self.inIntrinsic = 0
+    self.inContextual = 0
     self.theName = ''
     self.theTags = []
     self.theType = ''
@@ -127,6 +129,8 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     self.theAptitudes = ''
     self.theMotivations = ''
     self.theSkills = ''
+    self.theIntrinsic = ''
+    self.theContextual = ''
     self.theEnvironmentProperties = []
     self.resetPersonaEnvironmentAttributes()
 
@@ -327,6 +331,12 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     elif name == 'skills':
       self.inSkills = 1
       self.theSkills = ''
+    elif name == 'intrinsic':
+      self.inIntrinsic = 1
+      self.theIntrinsic = ''
+    elif name == 'contextual':
+      self.inContextual = 1
+      self.theContextual = ''
     elif name == 'narrative':
       self.inNarrative = 1
       self.theNarrative = ''
@@ -371,8 +381,10 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.theMotivations += data
     elif self.inSkills:
       self.theSkills += data
-    elif self.inNarrative:
-      self.theNarrative += data
+    elif self.inIntrinsic:
+      self.theIntrinsic += data
+    elif self.inContextual:
+      self.theContextual += data
     elif self.inConsequences:
       self.theConsequences += data
     elif self.inBenefits:
@@ -394,7 +406,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'persona':
-      p = PersonaParameters(self.theName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theImage,self.isAssumptionPersona,self.theType,self.theTags,self.theEnvironmentProperties,{})
+      p = PersonaParameters(self.theName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theIntrinsic,self.theContextual,self.theImage,self.isAssumptionPersona,self.theType,self.theTags,self.theEnvironmentProperties,{})
       self.thePersonas.append(p)
       self.resetPersonaAttributes()
     elif name == 'persona_environment':
@@ -452,6 +464,10 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.inMotivations = 0
     elif name == 'skills':
       self.inSkills = 0
+    elif name == 'intrinsic':
+      self.inIntrinsic = 0
+    elif name == 'contextual':
+      self.inContextual = 0
     elif name == 'narrative':
       self.inNarrative = 0
     elif name == 'excerpt':

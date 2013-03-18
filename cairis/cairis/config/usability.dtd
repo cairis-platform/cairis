@@ -25,7 +25,7 @@
 <!ATTLIST tag name CDATA #REQUIRED>
 
 
-<!ELEMENT persona (tag*,activities,attitudes,aptitudes,motivations,skills,persona_environment+)>
+<!ELEMENT persona (tag*,activities,attitudes,aptitudes,motivations,skills,intrinsic,contextual,persona_environment+)>
 <!ATTLIST persona name CDATA #REQUIRED>
 <!ATTLIST persona type (Primary | Secondary | Supplemental | Customer | Served | Negative) #REQUIRED>
 <!ATTLIST persona image CDATA #REQUIRED>
@@ -35,6 +35,8 @@
 <!ELEMENT aptitudes (#PCDATA)>
 <!ELEMENT motivations (#PCDATA)>
 <!ELEMENT skills (#PCDATA)>
+<!ELEMENT intrinsic (#PCDATA)>
+<!ELEMENT contextual (#PCDATA)>
 <!ELEMENT persona_environment (persona_role+,narrative)>
 <!ATTLIST persona_environment name CDATA #REQUIRED>
 <!ATTLIST persona_environment is_direct (TRUE | FALSE) #REQUIRED>

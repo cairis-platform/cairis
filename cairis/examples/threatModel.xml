@@ -358,7 +358,8 @@
   <aptitudes>Ethan has cultivated some of the essential skills for his fraudulent network activities. His habitual tasks consist in looking for vulnerable networks, exploiting such vulnerabilities and then gathering data from those non security-savvy systems. Whenever possible and whenever he thinks it is not too risky, he enjoys accessing and taking control of vulnerable systems and harvesting data from vulnerable targets. When successful, this often includes usernames, passwords, and also details of credit cards that have been illicitly gained by other malicious intruders. This information can be profitably used for trading of credit card number (good offers for them in Black Market) and for circumvent monitoring system and anti-spam filters.</aptitudes>
   <motivations>He wants easy money, since in his opinion it is very rarely the most tiresome way that is the best one. During his student career, he has found it difficult to make much money in legal ways. Since he already has a botnet at his service, why not use it for some additional source of wealth? Being a botnet administrator has many other benefits. For example, he can attack politicians with whom he disagrees. After all, Ethan has some sense of civic responsibility in his own way.</motivations>
   <skills>Ethan most important skills lies in the administrator-level knowledge of a botnet, and on the knowledge of how exploit it for illicit spamming activities and other illicit activities using them. For these reasons, knowledge of using spamming tools is of benefit to his business.</skills>
-
+  <intrinsic>None</intrinsic>
+  <contextual>None</contextual>
   <persona_environment name="XACML Threat Environment" is_direct="TRUE" >
     <persona_role name="Developer of webinos Apps" />
     <persona_role name="User" />
@@ -373,6 +374,8 @@ Jimmy is a passionate and experienced professional software developer. His focus
   <aptitudes>Jimmy follows a pragmatic hands-on design and implementation approach. He is much more into trying out things rather than spending time on theory. As he is interested in new technologies and new market opportunities he always stays up-to-date in his field. Jimmy enjoys experimenting with new technology and he adapts quickly. He learns best by just trying out things. Apart from that, he knows how to make money from the applications he writes, as he sells some mobile applications on an application store.</aptitudes>
   <motivations>Jimmy is font of software-controlled gadgets which interact with other devices on his home network. He makes use of his professional knowledge to implement plug-ins and extensions for his home equipment. This allows him to let all the devices do what he needs.</motivations>
   <skills>Jimmy implements low-level functional details. Since he has deep knowledge on how things work, he can reverse-engineer software and take special features of target devices into account.</skills>
+  <intrinsic>None</intrinsic>
+  <contextual>None</contextual>
   <persona_environment name="XACML Threat Environment" is_direct="TRUE" >
     <persona_role name="Developer of webinos Apps" />
     <narrative>Jimmy is experienced in software security to some extent. He configures his home equipment to be accessible from the Internet, but it is protected by access control. On the other hand, he does not like to be limited by access control while using his computer and while implementing software.</narrative>
