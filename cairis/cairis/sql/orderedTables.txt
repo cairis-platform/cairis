@@ -183,6 +183,7 @@ task_persona
 usecase_role
 usecase_conditions
 usecase_step
+usecase_step_tag
 usecase_step_goal_exception
 usecase_step_requirement_exception
 task_narrative

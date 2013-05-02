@@ -258,6 +258,7 @@ DROP TABLE IF EXISTS requirement_requirement;
 DROP TABLE IF EXISTS usecase_task;
 DROP TABLE IF EXISTS component_usecase;
 DROP TABLE IF EXISTS usecase_conditions;
+DROP TABLE IF EXISTS usecase_step_tag;
 DROP TABLE IF EXISTS usecase_step;
 DROP TABLE IF EXISTS usecase_role;
 DROP TABLE IF EXISTS usecase;
@@ -957,6 +958,8 @@ CREATE TABLE usecase_step (
   FOREIGN KEY(usecase_id) REFERENCES usecase(id),
   FOREIGN KEY(environment_id) REFERENCES environment(id)
 ) ENGINE=INNODB;
+
+
 CREATE TABLE misusecase (
   id INT NOT NULL,
   name VARCHAR(200) NOT NULL,
@@ -2500,6 +2503,17 @@ CREATE TABLE usecase_tag (
   tag_id INT NOT NULL,
   PRIMARY KEY(usecase_id,tag_id),
   FOREIGN KEY(usecase_id) REFERENCES usecase(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE usecase_step_tag (
+  usecase_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  step_no INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(usecase_id,environment_id,step_no,tag_id),
+  FOREIGN KEY(usecase_id) REFERENCES usecase(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id),
   FOREIGN KEY(tag_id) REFERENCES tag(id)
 ) ENGINE=INNODB;
 

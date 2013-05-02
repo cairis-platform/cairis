@@ -117,7 +117,7 @@
 <!ATTLIST usecase_environment name CDATA #REQUIRED>
 <!ELEMENT preconditions (#PCDATA)>
 <!ELEMENT flow (step+)>
-<!ELEMENT step (exception*)>
+<!ELEMENT step (tag*,exception*)>
 <!ATTLIST step number CDATA #REQUIRED>
 <!ATTLIST step description CDATA #REQUIRED>
 <!ELEMENT exception (definition)>

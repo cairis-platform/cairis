@@ -7231,7 +7231,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         stepActorType = stepDetails[3]
         stepNo = pos + 1  
         excs = self.useCaseStepExceptions(ucId,envId,stepNo) 
-        step = Step(stepTxt,stepSyn,stepActor,stepActorType)
+        tags = self.useCaseStepTags(ucId,envId,stepNo) 
+        step = Step(stepTxt,stepSyn,stepActor,stepActorType,tags)
         for exc in excs:
           step.addException(exc)
         steps.append(step)
@@ -7256,6 +7257,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting step exceptions associated with use case id ' + str(ucId) +  ' (id:' + str(id) + ',message:' + msg + ')'
+
+
+  def useCaseStepTags(self,ucId,envId,stepNo):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call useCaseStepTags(%s,%s,%s)',(ucId,envId,stepNo))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting step tags associated with use case id ' + str(ucId)
+        raise DatabaseProxyException(exceptionText) 
+      tags = []
+      for row in curs.fetchall():
+        row = list(row)
+        tags.append(row[0])
+      curs.close()
+      return tags
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting step tags associated with use case id ' + str(ucId) +  ' (id:' + str(id) + ',message:' + msg + ')'
 
   def addUseCase(self,parameters):
     ucName = parameters.name()
@@ -7327,11 +7346,27 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error adding step: ' + step.text() + ' to use case id ' + str(ucId)
         raise DatabaseProxyException(exceptionText) 
       curs.close()
+      for tag in step.tags():
+        self.addUseCaseStepTag(ucId,envName,stepNo,tag)
+
       for idx,exc in (step.theExceptions).iteritems():
         self.addUseCaseStepException(ucId,envName,stepNo,exc[0],exc[1],exc[2],exc[3],exc[4])
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding step: ' + step.text() + ' to use case id ' + str(ucId) + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addUseCaseStepTag(self,ucId,envName,stepNo,tag):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addUseCaseStepTag(%s,%s,%s,%s)',(ucId,envName,stepNo,tag))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding tag ' + tag + ' to step ' + str(stepNo) + ' in use case id ' + str(ucId)
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding tag ' + tag + ' to use case id ' + str(ucId) + ' step ' + str(stepNo) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def addUseCaseStepException(self,ucId,envName,stepNo,exName,dimType,dimName,catName,exDesc):

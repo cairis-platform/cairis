@@ -176,8 +176,10 @@ drop procedure if exists useCaseRoles;
 drop procedure if exists useCaseConditions;
 drop procedure if exists useCaseSteps;
 drop procedure if exists useCaseStepExceptions;
+drop procedure if exists useCaseStepTags;
 drop procedure if exists addUseCaseStepException;
 drop procedure if exists addUseCaseStep;
+drop procedure if exists addUseCaseStepTag;
 drop procedure if exists taskAssets;
 drop procedure if exists addTaskPersona;
 drop procedure if exists addUseCaseRole;
@@ -3178,7 +3180,6 @@ begin
 end
 //
 
-
 create procedure useCaseStepExceptions(in ucId int, in envId int, in stepNo int)
 begin
   select usge.name, 'goal' dimension, g.name value, oct.name category, usge.description from usecase_step_goal_exception usge, goal g, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = g.id and usge.category_type_id = oct.id
@@ -3413,6 +3414,7 @@ begin
   delete from usecase_step_goal_exception where usecase_id = ucId;
   delete from usecase_step_requirement_exception where usecase_id = ucId;
   delete from usecase_step_synopsis where usecase_id = ucId;
+  delete from usecase_step_tag where usecase_id = ucId;
 end
 //
 
@@ -13089,6 +13091,7 @@ begin
   declare ucExcCategory varchar(50);
   declare ucExcDesc varchar(2000);
   declare ucCount int default 0;
+  declare tagName varchar(255);
   declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/usability.dtd">\n\n<usability>\n';
   declare done int default 0;
   declare personaCursor cursor for select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
@@ -13258,6 +13261,7 @@ begin
   
   declare ucEnvCursor cursor for select eu.environment_id,e.name from environment_usecase eu, environment e where eu.usecase_id = ucId and eu.environment_id = e.id;
   declare ucActorCursor cursor for select r.name from usecase_role ur, role r where ur.usecase_id = ucId and ur.role_id = r.id;
+  declare ucStepTagCursor cursor for select t.name from usecase_step_tag ust, tag t where ust.usecase_id = ucId and ust.environment_id = envId and ust.step_no = stepNo and ust.tag_id = t.id order by 1;
   declare continue handler for not found set done = 1;
 
 
@@ -13585,6 +13589,20 @@ begin
           leave ucStep_loop;
         end if; 
         set buf = concat(buf,'      <step number=\"',stepNo,'\" description=\"',stepDesc,'\" >\n');
+
+
+        open ucStepTagCursor;
+        ucStepTag_loop: loop
+          fetch ucStepTagCursor into tagName;
+          if done = 1
+          then
+            leave ucStepTag_loop;
+          end if;
+          set buf = concat(buf,'        <tag name=\"',tagName,'\" />\n'); 
+        end loop ucStepTag_loop;
+        close ucStepTagCursor;
+        set done = 0;
+
         open ucStepExceptionCursor;
         ucStepException_loop: loop
           fetch ucStepExceptionCursor into ucExcName,excDim,ucExcRelValue,ucExcCategory,ucExcDesc;
@@ -21767,5 +21785,28 @@ begin
 end
 //
 
+create procedure addUseCaseStepTag(in ucId int, in envName text, in stepNo int, in tagName text)
+begin
+  declare envId int;
+  declare tagId int;
+
+  select id into envId from environment where name = envName limit 1;
+  select id into tagId from tag where name = tagName limit 1;
+  if tagId is null
+  then
+    call newId2(tagId);
+    insert into tag (id,name) values (tagId,tagName);
+  end if;
+
+  insert into usecase_step_tag(usecase_id,environment_id,step_no,tag_id) values (ucId,envId,stepNo,tagId);
+
+end
+//
+
+create procedure useCaseStepTags(in ucId int, in envId int, in stepNo int)
+begin
+  select t.name from usecase_step_tag ust, tag t where ust.usecase_id = ucId and ust.environment_id = envId and ust.step_no = stepNo and ust.tag_id = t.id order by 1;
+end
+//
 
 delimiter ;

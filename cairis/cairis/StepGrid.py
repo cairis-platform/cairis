@@ -31,6 +31,7 @@ from SingleObstacleDialog import SingleObstacleDialog
 from SingleRequirementDialog import SingleRequirementDialog
 from StepSynopsisDialog import StepSynopsisDialog
 from GoalAssociationParameters import GoalAssociationParameters
+from TagDialog import TagDialog
 import RequirementFactory
 
 def increment(inStr):
@@ -190,6 +191,7 @@ class StepGrid(wx.grid.Grid):
     self.theMenu.Append(armid.STEPGRID_MENUOBSTACLE_ID,'Refining Obstacle')
     self.theMenu.Append(armid.STEPGRID_MENUREQUIREMENT_ID,'Refining Requirement')
     self.theMenu.Append(armid.STEPGRID_MENUSYNOPSIS_ID,'Synopsis')
+    self.theMenu.Append(armid.STEPGRID_MENUTAGS_ID,'Tags')
 
     self.thePanel = parent
     wx.lib.gridmovers.GridRowMover(self)
@@ -201,6 +203,7 @@ class StepGrid(wx.grid.Grid):
     wx.EVT_MENU(self,armid.STEPGRID_MENUOBSTACLE_ID,self.onObstacle)
     wx.EVT_MENU(self,armid.STEPGRID_MENUREQUIREMENT_ID,self.onRequirement)
     wx.EVT_MENU(self,armid.STEPGRID_MENUSYNOPSIS_ID,self.onSynopsis)
+    wx.EVT_MENU(self,armid.STEPGRID_MENUTAGS_ID,self.onTags)
     self.Bind(wx.grid.EVT_GRID_CELL_RIGHT_CLICK, self.onRightClick)
     self.goalItem = self.theMenu.FindItemById(armid.STEPGRID_MENUREQUIREMENT_ID)
     self.goalItem.Enable(False)
@@ -210,6 +213,8 @@ class StepGrid(wx.grid.Grid):
     self.obsItem.Enable(False)
     self.synItem = self.theMenu.FindItemById(armid.STEPGRID_MENUSYNOPSIS_ID)
     self.synItem.Enable(False)
+    self.tagsItem = self.theMenu.FindItemById(armid.STEPGRID_MENUTAGS_ID)
+    self.tagsItem.Enable(False)
 
   def steps(self):
     table = self.GetTable()
@@ -225,11 +230,13 @@ class StepGrid(wx.grid.Grid):
       self.reqItem.Enable()
       self.obsItem.Enable()
       self.synItem.Enable()
+      self.tagsItem.Enable()
     else:
       self.goalItem.Enable(False)
       self.reqItem.Enable(False)
       self.obsItem.Enable(False)
       self.synItem.Enable(False)
+      self.tagsItem.Enable(False)
 
 
   def onRightClick(self,evt):
@@ -390,4 +397,13 @@ class StepGrid(wx.grid.Grid):
       currentStep.setActor(dlg.actor())
       currentStep.setActorType(dlg.actorType())
       table.steps[pos] = currentStep
+    dlg.Destroy()
+
+  def onTags(self,evt):
+    table = self.GetTable()
+    pos = self.GetGridCursorRow()
+    currentStep = table.steps[pos]
+    dlg = TagDialog(self,currentStep.tags())
+    if (dlg.ShowModal() == wx.ID_OK):
+      currentStep.setTags(dlg.tags())
     dlg.Destroy()

@@ -17,12 +17,13 @@
 
 
 class Step:
-  def __init__(self,stepTxt = '',stepSyn = '',stepActor = '',stepActorType = ''):
+  def __init__(self,stepTxt = '',stepSyn = '',stepActor = '',stepActorType = '',stepTags = []):
     self.theExceptions = {}
     self.theStepText = stepTxt
     self.theSynopsis = stepSyn
     self.theActor = stepActor
     self.theActorType = stepActorType
+    self.theTags = stepTags
 
   def synopsis(self): return self.theSynopsis
 
@@ -30,11 +31,15 @@ class Step:
 
   def actorType(self): return self.theActorType
 
+  def tags(self): return self.theTags
+
   def setSynopsis(self,s): self.theSynopsis = s
 
   def setActor(self,a): self.theActor = a
 
   def setActorType(self,at): self.theActorType = at
+
+  def setTags(self,t): self.theTags = t
 
   def __str__(self):
     return self.theStepText

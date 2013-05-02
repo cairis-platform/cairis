@@ -444,6 +444,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     elif name == 'exception':
       self.theCurrentStep.addException((self.theExcName,self.theExcType,self.theExcValue,self.theExcCat,self.theDefinition))
     elif name == 'step':
+      self.theCurrentStep.setTags(self.theTags)
       self.theSteps.append(self.theCurrentStep)
       self.theCurrentStep = None
     elif name == 'usecase_environment':
