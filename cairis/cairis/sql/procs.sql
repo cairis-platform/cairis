@@ -829,6 +829,7 @@ drop procedure if exists updateImpliedCharacteristicElement;
 drop procedure if exists addImpliedCharacteristicElement;
 drop function if exists codeCount;
 drop function if exists internalDocumentCount;
+drop procedure if exists useCaseTags;
 
 delimiter //
 
@@ -21805,7 +21806,20 @@ end
 
 create procedure useCaseStepTags(in ucId int, in envId int, in stepNo int)
 begin
-  select t.name from usecase_step_tag ust, tag t where ust.usecase_id = ucId and ust.environment_id = envId and ust.step_no = stepNo and ust.tag_id = t.id order by 1;
+  select t.name from usecase_step_tag ust, tag t where ust.usecase_id = ucId and ust.environment_id = envId and ust.step_no = stepNo and ust.tag_id = t.id;
+end
+//
+
+create procedure useCaseTags(in ucName text, in envName text)
+begin
+  declare ucId int;
+  declare envId int;
+
+  select id into ucId from usecase where name = ucName limit 1;
+  select id into envId from environment where name = envName limit 1;
+
+  select t.name from usecase_step_tag ust, tag t where ust.usecase_id = ucId and ust.environment_id = envId and ust.tag_id = t.id order by ust.step_no;
+
 end
 //
 
