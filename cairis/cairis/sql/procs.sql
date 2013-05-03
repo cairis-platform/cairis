@@ -16061,7 +16061,7 @@ begin
 end
 //
 
-create procedure pcToGrl(in pName text,in tName text, in envName text)
+create procedure pcToGrl(in pNames text,in tNames text, in envName text)
 begin
   declare pId int;
   declare tId int default -1;
@@ -16080,25 +16080,25 @@ begin
   declare actorId int;
   declare actorName varchar(100);
   declare actorDefSql varchar(4000);
+  declare tIdSql varchar(4000);
+  declare pIdSql varchar(4000);
   declare done int default 0;
   declare refCursor cursor for
     select distinct pcs.characteristic_id,pcs.synopsis,td.name,pc.persona_id,'persona' from persona_characteristic_synopsis pcs, persona_characteristic pc, trace_dimension td where pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id in (select id from temp_pId)
     union
-    select distinct pcs.characteristic_id,pcs.synopsis,td.name,pcs.actor_id,'persona' from task_characteristic_synopsis pcs, task_characteristic pc, trace_dimension td where pcs.characteristic_id = pc.id and pc.task_id = tId and pcs.dimension_id = td.id and pcs.actor_type_id = 1 and pcs.actor_id in (select id from temp_pId)
+    select distinct pcs.characteristic_id,pcs.synopsis,td.name,pcs.actor_id,'persona' from task_characteristic_synopsis pcs, task_characteristic pc, trace_dimension td where pcs.characteristic_id = pc.id and pc.task_id in (select id from temp_tId) and pcs.dimension_id = td.id and pcs.actor_type_id = 1 and pcs.actor_id in (select id from temp_pId)
     union
-    select distinct pcs.characteristic_id,pcs.synopsis,td.name,pcs.actor_id,td2.name from task_characteristic_synopsis pcs, task_characteristic pc, trace_dimension td, trace_dimension td2 where pcs.characteristic_id = pc.id and pc.task_id = tId and pcs.dimension_id = td.id and pcs.actor_type_id = 3 and pcs.actor_type_id = td2.id
+    select distinct pcs.characteristic_id,pcs.synopsis,td.name,pcs.actor_id,td2.name from task_characteristic_synopsis pcs, task_characteristic pc, trace_dimension td, trace_dimension td2 where pcs.characteristic_id = pc.id and pc.task_id in (select id from temp_tId) and pcs.dimension_id = td.id and pcs.actor_type_id = 3 and pcs.actor_type_id = td2.id
     union
     select distinct drs.id,drs.synopsis,td.name,drs.actor_id,td2.name from document_reference_synopsis drs, persona_characteristic_document pcd, persona_characteristic pc, trace_dimension td, trace_dimension td2 where drs.reference_id = pcd.reference_id and pcd.characteristic_id = pc.id and drs.dimension_id = td.id and pc.persona_id in (select id from temp_pId) and drs.actor_type_id = td2.id
     union
-    select distinct drs.id,drs.synopsis,td.name,drs.actor_id,td2.name from requirement_reference_synopsis drs, task_characteristic_requirement pcd, task_characteristic pc, trace_dimension td, trace_dimension td2 where drs.reference_id = pcd.reference_id and pcd.characteristic_id = pc.id and drs.dimension_id = td.id and pc.task_id = tId and drs.actor_type_id = td2.id
+    select distinct drs.id,drs.synopsis,td.name,drs.actor_id,td2.name from requirement_reference_synopsis drs, task_characteristic_requirement pcd, task_characteristic pc, trace_dimension td, trace_dimension td2 where drs.reference_id = pcd.reference_id and pcd.characteristic_id = pc.id and drs.dimension_id = td.id and pc.task_id in (select id from temp_tId) and drs.actor_type_id = td2.id
     union
-    select distinct u.id,u.name,'goal',tp.persona_id,'persona' from usecase u, usecase_task ut, task_persona tp where u.id = ut.usecase_id and ut.task_id = tId and ut.task_id = tp.task_id and tp.environment_id = envId and tp.persona_id in (select id from temp_pId)
+    select distinct u.id,u.name,'goal',tp.persona_id,'persona' from usecase u, usecase_task ut, task_persona tp where u.id = ut.usecase_id and ut.task_id in (select id from temp_tId) and ut.task_id = tp.task_id and tp.environment_id = envId and tp.persona_id in (select id from temp_pId)
     union
-    select distinct uss.id,uss.synopsis,'task',uss.actor_id,td.name from usecase_step_synopsis uss, trace_dimension td, usecase_task ut, task_persona tp where uss.environment_id = envId and uss.usecase_id = ut.usecase_id and ut.task_id = tId and ut.task_id = tp.task_id and tp.persona_id in (select id from temp_pId) and uss.actor_type_id = td.id and uss.actor_type_id in (3,21)
+    select distinct uss.id,uss.synopsis,'task',uss.actor_id,td.name from usecase_step_synopsis uss, trace_dimension td, usecase_task ut, task_persona tp where uss.environment_id = envId and uss.usecase_id = ut.usecase_id and ut.task_id in (select id from temp_tId) and ut.task_id = tp.task_id and tp.persona_id in (select id from temp_pId) and uss.actor_type_id = td.id and uss.actor_type_id in (3,21)
     union
-    select distinct uss.id,synopsis,'task',tp.persona_id,'persona' from usecase_step_synopsis uss, usecase_task ut, task_persona tp, persona_role pr, usecase_role ur where uss.environment_id = envId and uss.usecase_id = ut.usecase_id and ut.task_id = tId and ut.task_id = tp.task_id  and tp.persona_id in (select id from temp_pId) and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and ut.usecase_id = ur.usecase_id and ur.role_id = uss.actor_id and uss.actor_type_id = 10 order by 1,2;
-
-
+    select distinct uss.id,synopsis,'task',tp.persona_id,'persona' from usecase_step_synopsis uss, usecase_task ut, task_persona tp, persona_role pr, usecase_role ur where uss.environment_id = envId and uss.usecase_id = ut.usecase_id and ut.task_id in (select id from temp_tId) and ut.task_id = tp.task_id  and tp.persona_id in (select id from temp_pId) and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and ut.usecase_id = ur.usecase_id and ur.role_id = uss.actor_id and uss.actor_type_id = 10 order by 1,2;
 
   declare conCursor cursor for
     select distinct drc.reference_id,drc.characteristic_id,drc.end_id,lc.name from document_reference_contribution drc, document_reference_synopsis drs, link_contribution lc, document_reference dr, persona_characteristic_document pcd, persona_characteristic pc where drc.reference_id = drs.id and drs.reference_id = dr.id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id in (select id from temp_pId) and drc.contribution_id = lc.id
@@ -16107,37 +16107,37 @@ begin
     union
     select distinct drc.reference_id,drc.characteristic_id,drc.end_id,lc.name from requirement_reference_contribution drc, requirement_reference_synopsis drs, link_contribution lc where drc.reference_id = drs.id and drs.actor_id in (select id from temp_pId) and drc.contribution_id = lc.id
     union
-    select distinct drc.reference_id,drc.characteristic_id,drc.end_id,lc.name from document_reference_contribution drc, document_reference_synopsis drs, link_contribution lc, document_reference dr, task_characteristic_document pcd, task_characteristic pc where drc.reference_id = drs.id and drs.reference_id = dr.id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.task_id = tId and drc.contribution_id = lc.id
+    select distinct drc.reference_id,drc.characteristic_id,drc.end_id,lc.name from document_reference_contribution drc, document_reference_synopsis drs, link_contribution lc, document_reference dr, task_characteristic_document pcd, task_characteristic pc where drc.reference_id = drs.id and drs.reference_id = dr.id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.task_id in (select id from temp_tId) and drc.contribution_id = lc.id
     union
-    select distinct drc.reference_id,drc.characteristic_id,drc.end_id,lc.name from requirement_reference_contribution drc, requirement_reference_synopsis drs, link_contribution lc, requirement_reference dr, task_characteristic_requirement pcd, task_characteristic pc where drc.reference_id = drs.id and drs.reference_id = dr.id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.task_id = tId and drc.contribution_id = lc.id
+    select distinct drc.reference_id,drc.characteristic_id,drc.end_id,lc.name from requirement_reference_contribution drc, requirement_reference_synopsis drs, link_contribution lc, requirement_reference dr, task_characteristic_requirement pcd, task_characteristic pc where drc.reference_id = drs.id and drs.reference_id = dr.id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.task_id in (select id from temp_tId) and drc.contribution_id = lc.id
     union
     select distinct upc.usecase_id, upc.characteristic_id,upc.end_id,lc.name from usecase_pc_contribution upc, persona_characteristic pc, link_contribution lc where upc.characteristic_id = pc.id and pc.persona_id in (select id from temp_pId) and upc.contribution_id = lc.id
     union
-    select distinct utc.usecase_id, utc.characteristic_id,utc.end_id,lc.name from usecase_tc_contribution utc, task_characteristic tc, link_contribution lc where utc.characteristic_id = tc.id and tc.task_id = tId and utc.contribution_id = lc.id
+    select distinct utc.usecase_id, utc.characteristic_id,utc.end_id,lc.name from usecase_tc_contribution utc, task_characteristic tc, link_contribution lc where utc.characteristic_id = tc.id and tc.task_id in (select id from temp_tId) and utc.contribution_id = lc.id
     union
     select distinct udc.usecase_id, drs.id,udc.end_id,lc.name from usecase_dr_contribution udc, document_reference_synopsis drs, persona_characteristic_document pcd, persona_characteristic pc, link_contribution lc where udc.reference_id = drs.id and drs.reference_id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id in (select id from temp_pId) and udc.contribution_id = lc.id order by 1,2;
 
   declare decomCursor cursor for
-    select distinct uss.id,uss.usecase_id from usecase_step_synopsis uss, usecase_role ur, persona_role pr, task_persona tp, usecase_task ut where uss.usecase_id = ur.usecase_id and ur.usecase_id = ut.usecase_id and uss.environment_id = tp.environment_id and tp.environment_id = pr.environment_id and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and uss.environment_id = envId and pr.persona_id in (select id from temp_pId) and tp.task_id = tId and tp.task_id = ut.task_id order by 2;
+    select distinct uss.id,uss.usecase_id from usecase_step_synopsis uss, usecase_role ur, persona_role pr, task_persona tp, usecase_task ut where uss.usecase_id = ur.usecase_id and ur.usecase_id = ut.usecase_id and uss.environment_id = tp.environment_id and tp.environment_id = pr.environment_id and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and uss.environment_id = envId and pr.persona_id in (select id from temp_pId) and tp.task_id in (select id from temp_tId) and tp.task_id = ut.task_id order by 2;
 
   declare actorDefCursor cursor for select distinct actor_id, actor_name from temp_actordef;
 
   declare aciCursor cursor for
     select distinct pc.persona_id, pcs.characteristic_id from persona_characteristic_synopsis pcs, persona_characteristic pc where pcs.characteristic_id = pc.id and pc.persona_id in (select id from temp_pId)
     union
-    select distinct tcs.actor_id, tcs.characteristic_id from task_characteristic_synopsis tcs, task_characteristic tc where tcs.characteristic_id = tc.id and tc.task_id = tId
+    select distinct tcs.actor_id, tcs.characteristic_id from task_characteristic_synopsis tcs, task_characteristic tc where tcs.characteristic_id = tc.id and tc.task_id in (select id from temp_tId)
     union
     select distinct drs.actor_id, drs.id from document_reference_synopsis drs, persona_characteristic_document pcd, persona_characteristic pc where drs.reference_id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id in (select id from temp_pId)
     union
     select distinct drs.actor_id, drs.id from requirement_reference_synopsis drs, persona_characteristic_requirement pcd, persona_characteristic pc where drs.reference_id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id in (select id from temp_pId)
     union
-    select distinct drs.actor_id, drs.id from document_reference_synopsis drs, task_characteristic_document tcd, task_characteristic tc where drs.reference_id = tcd.reference_id and tcd.characteristic_id = tc.id and tc.task_id = tId
+    select distinct drs.actor_id, drs.id from document_reference_synopsis drs, task_characteristic_document tcd, task_characteristic tc where drs.reference_id = tcd.reference_id and tcd.characteristic_id = tc.id and tc.task_id in (select id from temp_tId)
     union
-    select distinct drs.actor_id, drs.id from requirement_reference_synopsis drs, task_characteristic_requirement tcd, task_characteristic tc where drs.reference_id = tcd.reference_id and tcd.characteristic_id = tc.id and tc.task_id = tId
+    select distinct drs.actor_id, drs.id from requirement_reference_synopsis drs, task_characteristic_requirement tcd, task_characteristic tc where drs.reference_id = tcd.reference_id and tcd.characteristic_id = tc.id and tc.task_id in (select id from temp_tId)
     union
-    select distinct uss.actor_id,uss.id from usecase_step_synopsis uss, usecase_role ur, persona_role pr, task_persona tp, usecase_task ut where uss.usecase_id = ur.usecase_id and ur.usecase_id = ut.usecase_id and uss.environment_id = tp.environment_id and tp.environment_id = pr.environment_id and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and uss.environment_id = envId and pr.persona_id in (select id from temp_pId) and tp.task_id = tId and uss.actor_type_id in (3,21) and tp.task_id = ut.task_id
+    select distinct uss.actor_id,uss.id from usecase_step_synopsis uss, usecase_role ur, persona_role pr, task_persona tp, usecase_task ut where uss.usecase_id = ur.usecase_id and ur.usecase_id = ut.usecase_id and uss.environment_id = tp.environment_id and tp.environment_id = pr.environment_id and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and uss.environment_id = envId and pr.persona_id in (select id from temp_pId) and tp.task_id in (select id from temp_tId) and uss.actor_type_id in (3,21) and tp.task_id = ut.task_id
     union
-    select distinct pr.persona_id,uss.id from usecase_step_synopsis uss, usecase_role ur, persona_role pr, task_persona tp, usecase_task ut where uss.usecase_id = ur.usecase_id and ur.usecase_id = ut.usecase_id and uss.environment_id = tp.environment_id and tp.environment_id = pr.environment_id and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and uss.environment_id = envId and pr.persona_id in (select id from temp_pId) and tp.task_id = tId and uss.actor_type_id = 10 and tp.task_id = ut.task_id order by 1,2;
+    select distinct pr.persona_id,uss.id from usecase_step_synopsis uss, usecase_role ur, persona_role pr, task_persona tp, usecase_task ut where uss.usecase_id = ur.usecase_id and ur.usecase_id = ut.usecase_id and uss.environment_id = tp.environment_id and tp.environment_id = pr.environment_id and tp.persona_id = pr.persona_id and pr.role_id = ur.role_id and uss.environment_id = envId and pr.persona_id in (select id from temp_pId) and tp.task_id in (select id from temp_tId) and uss.actor_type_id = 10 and tp.task_id = ut.task_id order by 1,2;
 
   declare continue handler for not found set done = 1;
 
@@ -16146,17 +16146,28 @@ begin
 
   drop table if exists temp_pId;
   create table temp_pId (id int);
+
+  drop table if exists temp_tId;
+  create table temp_tId (id int);
   
-  select id into tId from task where name = tName;
   select id into envId from environment where name = envName;
 
-  if pName = 'ALL'
+  set tIdSql = concat('insert into temp_tId select id from task t where t.name in (',tNames,')');
+  set @sql = tIdSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+
+  if pNames = "'ALL'"
   then
     insert into temp_pId
-    select persona_id from task_persona where task_id = tId and environment_id = envId;
+    select persona_id from task_persona where task_id in (select id from temp_tId) and environment_id = envId;
   else
-    insert into temp_pId
-    select id from persona where name = pName;
+    set pIdSql = concat('insert into temp_pId select id from persona p where p.name in (',pNames,')');
+    set @sql = pIdSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
   end if;
 
   set done = 0;

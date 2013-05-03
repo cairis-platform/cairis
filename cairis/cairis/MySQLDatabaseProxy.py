@@ -8278,10 +8278,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
 
-  def pcToGrl(self,pName,tName,envName):
+  def pcToGrl(self,pNames,tNames,envName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call pcToGrl(%s,%s,%s)',(pName,tName,envName))
+      curs.execute('call pcToGrl("%s","%s",%s)',(pNames,tNames,envName))
       if (curs.rowcount == -1):
         exceptionText = 'Error exporting persona and task to GRL'
         raise DatabaseProxyException(exceptionText) 

@@ -163,13 +163,15 @@ def exportRedmineRequirements(outFileName):
   outputFile.close()
   return 'Exported requirements'
 
-def exportGRL(outFileName,personaName,taskName,envName):
+def exportGRL(outFileName,personaNames,taskNames,envName):
   b = Borg()
-  buf = b.dbProxy.pcToGrl(personaName,taskName,envName)
+  pStr = ', '.join(personaNames)
+  tStr = ', '.join(taskNames)
+  buf = b.dbProxy.pcToGrl(pStr,tStr,envName)
   rFile = open(outFileName,'w')
   rFile.write(buf)
   rFile.close()
-  return 'Exported GRL for ' + personaName + ' in ' + taskName + ' situated in environment ' + envName
+  return 'Exported GRL for ' + pStr + ' in tasks ' + tStr + ' situated in environment ' + envName
 
 def buildComponentModel(p,apName,graphName):
   interfaces,connectors = p.componentView(apName)
