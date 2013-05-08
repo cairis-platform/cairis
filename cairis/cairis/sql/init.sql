@@ -86,7 +86,9 @@ DROP TABLE IF EXISTS component_template_goal;
 DROP TABLE IF EXISTS component_vulnerability_target;
 DROP TABLE IF EXISTS component_threat_target;
 
+DROP TABLE IF EXISTS implied_characteristic_element_synopsis;
 DROP TABLE IF EXISTS implied_characteristic_element;
+DROP TABLE IF EXISTS implied_characteristic_synopsis;
 DROP TABLE IF EXISTS implied_characteristic;
 DROP TABLE IF EXISTS internal_document_code;
 DROP TABLE IF EXISTS internal_document_memo;
@@ -2989,6 +2991,14 @@ CREATE TABLE implied_characteristic (
   FOREIGN KEY(variable_id) REFERENCES behavioural_variable(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE implied_characteristic_synopsis (
+  characteristic_id INT NOT NULL,
+  synopsis VARCHAR(1000) NOT NULL,
+  dimension_id INT NOT NULL,
+  PRIMARY KEY(characteristic_id),
+  FOREIGN KEY(characteristic_id) REFERENCES implied_characteristic(id),
+  FOREIGN KEY(dimension_id) REFERENCES trace_dimension(id)
+) ENGINE=INNODB;
 
 CREATE TABLE persona_implied_process (
   id INT NOT NULL,
@@ -3048,6 +3058,27 @@ CREATE TABLE implied_characteristic_element (
   FOREIGN KEY(internal_document_id) REFERENCES internal_document_code(internal_document_id),
   FOREIGN KEY(code_id) REFERENCES internal_document_code(code_id),
   FOREIGN KEY(characteristic_reference_type_id) REFERENCES characteristic_reference_type(id)
+) ENGINE=INNODB;
+
+CREATE TABLE implied_characteristic_element_synopsis (
+  id INT NOT NULL,
+  implied_characteristic_id INT NOT NULL,
+  internal_document_id INT NOT NULL,
+  code_id INT NOT NULL,
+  start_index INT NOT NULL,
+  end_index INT NOT NULL,
+  characteristic_reference_type_id INT NOT NULL,
+  synopsis VARCHAR(1000) NOT NULL,
+  dimension_id INT NOT NULL,
+  actor_id INT NOT NULL,
+  actor_type_id INT NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(implied_characteristic_id) REFERENCES implied_characteristic(id),
+  FOREIGN KEY(internal_document_id) REFERENCES internal_document_code(internal_document_id),
+  FOREIGN KEY(code_id) REFERENCES internal_document_code(code_id),
+  FOREIGN KEY(characteristic_reference_type_id) REFERENCES characteristic_reference_type(id),
+  FOREIGN KEY(dimension_id) REFERENCES trace_dimension(id),
+  FOREIGN KEY(actor_type_id) REFERENCES trace_dimension(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE internal_document_memo (

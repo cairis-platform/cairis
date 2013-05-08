@@ -403,6 +403,8 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.thePreconditions += data
     elif self.inPostconditions:
       self.thePostconditions += data
+    elif self.inNarrative:
+      self.theNarrative += data
 
   def endElement(self,name):
     if name == 'persona':
