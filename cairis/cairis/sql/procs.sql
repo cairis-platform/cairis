@@ -19162,9 +19162,11 @@ create procedure deleteInternalDocumentComponents(in docId int)
 begin
   if docId != -1
   then
+    delete from implied_characteristic_element where internal_document_id = docId;
     delete from internal_document_code where internal_document_id = docId;
     delete from internal_document_memo where internal_document_id = docId;
   else
+    delete from implied_characteristic_element;
     delete from internal_document_code;
     delete from internal_document_memo;
   end if;

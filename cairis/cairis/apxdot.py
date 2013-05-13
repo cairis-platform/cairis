@@ -556,7 +556,8 @@ class APDotWindow(gtk.Window):
 
         self.set_xdotcode(self.canonicalModel.graph())
         self.widget.zoom_to_fit()
-        self.set_title('Assumption Persona Model')
+        titleTxt = personaName + ' argumentation model'
+        self.set_title(titleTxt)
       except ARM.ARMException, ex:
         dlg = gtk.MessageDialog(type=gtk.MESSAGE_ERROR,message_format=str(ex),buttons=gtk.BUTTONS_OK)
         dlg.set_title('Model Viewer')

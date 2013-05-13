@@ -3055,8 +3055,8 @@ CREATE TABLE implied_characteristic_element (
   characteristic_reference_type_id INT NOT NULL,
   PRIMARY KEY(implied_characteristic_id,internal_document_id,code_id,start_index,end_index,characteristic_reference_type_id),
   FOREIGN KEY(implied_characteristic_id) REFERENCES implied_characteristic(id),
-  FOREIGN KEY(internal_document_id) REFERENCES internal_document_code(internal_document_id),
-  FOREIGN KEY(code_id) REFERENCES internal_document_code(code_id),
+  FOREIGN KEY(internal_document_id) REFERENCES internal_document(id),
+  FOREIGN KEY(code_id) REFERENCES code(id),
   FOREIGN KEY(characteristic_reference_type_id) REFERENCES characteristic_reference_type(id)
 ) ENGINE=INNODB;
 
@@ -3074,8 +3074,8 @@ CREATE TABLE implied_characteristic_element_synopsis (
   actor_type_id INT NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(implied_characteristic_id) REFERENCES implied_characteristic(id),
-  FOREIGN KEY(internal_document_id) REFERENCES internal_document_code(internal_document_id),
-  FOREIGN KEY(code_id) REFERENCES internal_document_code(code_id),
+  FOREIGN KEY(internal_document_id) REFERENCES internal_document(id),
+  FOREIGN KEY(code_id) REFERENCES code(id),
   FOREIGN KEY(characteristic_reference_type_id) REFERENCES characteristic_reference_type(id),
   FOREIGN KEY(dimension_id) REFERENCES trace_dimension(id),
   FOREIGN KEY(actor_type_id) REFERENCES trace_dimension(id)
