@@ -46,6 +46,7 @@ DROP TABLE IF EXISTS usecase_step_synopsis;
 DROP TABLE IF EXISTS usecase_pc_contribution;
 DROP TABLE IF EXISTS usecase_tc_contribution;
 DROP TABLE IF EXISTS usecase_dr_contribution;
+DROP TABLE IF EXISTS ice_ic_contribution;
 DROP TABLE IF EXISTS document_reference_contribution;
 DROP TABLE IF EXISTS requirement_reference_contribution;
 DROP TABLE IF EXISTS document_reference_synopsis;
@@ -86,10 +87,12 @@ DROP TABLE IF EXISTS component_template_goal;
 DROP TABLE IF EXISTS component_vulnerability_target;
 DROP TABLE IF EXISTS component_threat_target;
 
-DROP TABLE IF EXISTS implied_characteristic_element_synopsis;
+DROP TABLE IF EXISTS ice_ic_contribution;
+DROP TABLE IF EXISTS implied_characteristic_element_intention;
 DROP TABLE IF EXISTS implied_characteristic_element;
 DROP TABLE IF EXISTS implied_characteristic_synopsis;
 DROP TABLE IF EXISTS implied_characteristic;
+DROP TABLE IF EXISTS internal_document_code_intention;
 DROP TABLE IF EXISTS internal_document_code;
 DROP TABLE IF EXISTS internal_document_memo;
 DROP TABLE IF EXISTS internal_document;
@@ -3046,6 +3049,22 @@ CREATE TABLE internal_document_code (
   FOREIGN KEY(code_id) REFERENCES code(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE internal_document_code_intention (
+  internal_document_id INT NOT NULL,
+  code_id INT NOT NULL,
+  start_index INT NOT NULL,
+  end_index INT NOT NULL,
+  intention VARCHAR(1000),
+  dimension_id INT NOT NULL,
+  actor_id INT NOT NULL,
+  actor_type_id INT NOT NULL,
+  PRIMARY KEY(internal_document_id,code_id,start_index,end_index),
+  FOREIGN KEY(internal_document_id) REFERENCES internal_document(id),
+  FOREIGN KEY(code_id) REFERENCES code(id),
+  FOREIGN KEY(dimension_id) REFERENCES trace_dimension(id),
+  FOREIGN KEY(actor_type_id) REFERENCES trace_dimension(id)
+) ENGINE=INNODB;
+
 CREATE TABLE implied_characteristic_element (
   implied_characteristic_id INT NOT NULL,
   internal_document_id INT NOT NULL,
@@ -3060,7 +3079,7 @@ CREATE TABLE implied_characteristic_element (
   FOREIGN KEY(characteristic_reference_type_id) REFERENCES characteristic_reference_type(id)
 ) ENGINE=INNODB;
 
-CREATE TABLE implied_characteristic_element_synopsis (
+CREATE TABLE implied_characteristic_element_intention (
   id INT NOT NULL,
   implied_characteristic_id INT NOT NULL,
   internal_document_id INT NOT NULL,
@@ -3079,6 +3098,18 @@ CREATE TABLE implied_characteristic_element_synopsis (
   FOREIGN KEY(characteristic_reference_type_id) REFERENCES characteristic_reference_type(id),
   FOREIGN KEY(dimension_id) REFERENCES trace_dimension(id),
   FOREIGN KEY(actor_type_id) REFERENCES trace_dimension(id)
+) ENGINE=INNODB;
+
+CREATE TABLE ice_ic_contribution (
+  implied_characteristic_element_intention_id INT NOT NULL,
+  implied_characteristic_id INT NOT NULL,
+  end_id INT NOT NULL,
+  contribution_id INT NOT NULL,
+  PRIMARY KEY(implied_characteristic_element_intention_id,implied_characteristic_id),
+  FOREIGN KEY(implied_characteristic_element_intention_id) REFERENCES implied_characteristic_element_intention(id),
+  FOREIGN KEY(implied_characteristic_id) REFERENCES implied_characteristic(id),
+  FOREIGN KEY(end_id) REFERENCES contribution_end(id),
+  FOREIGN KEY(contribution_id) REFERENCES link_contribution(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE internal_document_memo (
