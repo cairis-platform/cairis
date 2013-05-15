@@ -90,7 +90,7 @@ DROP TABLE IF EXISTS component_threat_target;
 DROP TABLE IF EXISTS ice_ic_contribution;
 DROP TABLE IF EXISTS implied_characteristic_element_intention;
 DROP TABLE IF EXISTS implied_characteristic_element;
-DROP TABLE IF EXISTS implied_characteristic_synopsis;
+DROP TABLE IF EXISTS implied_characteristic_intention;
 DROP TABLE IF EXISTS implied_characteristic;
 DROP TABLE IF EXISTS internal_document_code_intention;
 DROP TABLE IF EXISTS internal_document_code;
@@ -2994,7 +2994,7 @@ CREATE TABLE implied_characteristic (
   FOREIGN KEY(variable_id) REFERENCES behavioural_variable(id)
 ) ENGINE=INNODB;
 
-CREATE TABLE implied_characteristic_synopsis (
+CREATE TABLE implied_characteristic_intention (
   characteristic_id INT NOT NULL,
   synopsis VARCHAR(1000) NOT NULL,
   dimension_id INT NOT NULL,
@@ -3086,7 +3086,6 @@ CREATE TABLE implied_characteristic_element_intention (
   code_id INT NOT NULL,
   start_index INT NOT NULL,
   end_index INT NOT NULL,
-  characteristic_reference_type_id INT NOT NULL,
   synopsis VARCHAR(1000) NOT NULL,
   dimension_id INT NOT NULL,
   actor_id INT NOT NULL,
@@ -3095,7 +3094,6 @@ CREATE TABLE implied_characteristic_element_intention (
   FOREIGN KEY(implied_characteristic_id) REFERENCES implied_characteristic(id),
   FOREIGN KEY(internal_document_id) REFERENCES internal_document(id),
   FOREIGN KEY(code_id) REFERENCES code(id),
-  FOREIGN KEY(characteristic_reference_type_id) REFERENCES characteristic_reference_type(id),
   FOREIGN KEY(dimension_id) REFERENCES trace_dimension(id),
   FOREIGN KEY(actor_type_id) REFERENCES trace_dimension(id)
 ) ENGINE=INNODB;
