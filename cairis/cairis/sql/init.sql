@@ -3200,7 +3200,11 @@ CREATE VIEW synopsis as
   union 
   select id,synopsis,'requirement' synopsis_type from requirement_reference_synopsis
   union
-  select id,synopsis,'usecase' synopsis_type from usecase_step_synopsis;
+  select id,synopsis,'usecase' synopsis_type from usecase_step_synopsis
+  union
+  select characteristic_id,synopsis,'persona' synopsis_type from implied_characteristic_intention
+  union
+  select id,synopsis,'document' synopsis_type from implied_characteristic_element_intention;
 
 CREATE VIEW usecase_step_synopsis_actor as
   select uss.id,uss.usecase_id,uss.step_no,uss.environment_id,uss.synopsis,r.name actor,td.name actor_type from usecase_step_synopsis uss, role r, trace_dimension td where uss.actor_id = r.id and uss.actor_type_id = td.id

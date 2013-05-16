@@ -16086,11 +16086,15 @@ begin
   declare refCursor cursor for
     select distinct pcs.characteristic_id,pcs.synopsis,td.name,pc.persona_id,'persona' from persona_characteristic_synopsis pcs, persona_characteristic pc, trace_dimension td where pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id in (select id from temp_pId)
     union
+    select distinct ici.characteristic_id,ici.synopsis,td.name,pcn.persona_id,'persona' from implied_characteristic_intention ici, implied_characteristic ic, persona_code_network pcn, trace_dimension td where ici.characteristic_id = ic.id and ic.persona_code_network_id = pcn.id and ici.dimension_id = td.id and pcn.persona_id in (select id from temp_pId)
+    union
     select distinct pcs.characteristic_id,pcs.synopsis,td.name,pcs.actor_id,'persona' from task_characteristic_synopsis pcs, task_characteristic pc, trace_dimension td where pcs.characteristic_id = pc.id and pc.task_id in (select id from temp_tId) and pcs.dimension_id = td.id and pcs.actor_type_id = 1 and pcs.actor_id in (select id from temp_pId)
     union
     select distinct pcs.characteristic_id,pcs.synopsis,td.name,pcs.actor_id,td2.name from task_characteristic_synopsis pcs, task_characteristic pc, trace_dimension td, trace_dimension td2 where pcs.characteristic_id = pc.id and pc.task_id in (select id from temp_tId) and pcs.dimension_id = td.id and pcs.actor_type_id = 3 and pcs.actor_type_id = td2.id
     union
     select distinct drs.id,drs.synopsis,td.name,drs.actor_id,td2.name from document_reference_synopsis drs, persona_characteristic_document pcd, persona_characteristic pc, trace_dimension td, trace_dimension td2 where drs.reference_id = pcd.reference_id and pcd.characteristic_id = pc.id and drs.dimension_id = td.id and pc.persona_id in (select id from temp_pId) and drs.actor_type_id = td2.id
+    union
+    select distinct icei.id,icei.synopsis,td.name,icei.actor_id,td2.name from implied_characteristic_element_intention icei, implied_characteristic ic, persona_code_network pcn, trace_dimension td, trace_dimension td2 where icei.implied_characteristic_id = ic.id and ic.persona_code_network_id = pcn.id and pcn.persona_id in (select id from temp_pId) and icei.dimension_id = td.id and icei.actor_type_id = td2.id
     union
     select distinct drs.id,drs.synopsis,td.name,drs.actor_id,td2.name from requirement_reference_synopsis drs, task_characteristic_requirement pcd, task_characteristic pc, trace_dimension td, trace_dimension td2 where drs.reference_id = pcd.reference_id and pcd.characteristic_id = pc.id and drs.dimension_id = td.id and pc.task_id in (select id from temp_tId) and drs.actor_type_id = td2.id
     union
@@ -16102,6 +16106,8 @@ begin
 
   declare conCursor cursor for
     select distinct drc.reference_id,drc.characteristic_id,drc.end_id,lc.name from document_reference_contribution drc, document_reference_synopsis drs, link_contribution lc, document_reference dr, persona_characteristic_document pcd, persona_characteristic pc where drc.reference_id = drs.id and drs.reference_id = dr.id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id in (select id from temp_pId) and drc.contribution_id = lc.id
+    union
+    select distinct iic.implied_characteristic_element_intention_id reference_id,iic.implied_characteristic_id characteristic_id, iic.end_id, lc.name from ice_ic_contribution iic, implied_characteristic_element_intention icei, link_contribution lc, implied_characteristic ic, persona_code_network pcn where iic.implied_characteristic_element_intention_id = icei.id and icei.implied_characteristic_id = ic.id and ic.persona_code_network_id = pcn.id and pcn.persona_id in (select id from temp_pId) and iic.contribution_id = lc.id
     union
     select distinct drc.reference_id,drc.characteristic_id,drc.end_id,lc.name from requirement_reference_contribution drc, requirement_reference_synopsis drs, link_contribution lc, requirement_reference dr, persona_characteristic_requirement pcd, persona_characteristic pc where drc.reference_id = drs.id and drs.reference_id = dr.id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id in (select id from temp_pId) and drc.contribution_id = lc.id
     union
@@ -16125,9 +16131,13 @@ begin
   declare aciCursor cursor for
     select distinct pc.persona_id, pcs.characteristic_id from persona_characteristic_synopsis pcs, persona_characteristic pc where pcs.characteristic_id = pc.id and pc.persona_id in (select id from temp_pId)
     union
+    select distinct pcn.persona_id,ici.characteristic_id from implied_characteristic_intention ici, implied_characteristic ic, persona_code_network pcn where ici.characteristic_id = ic.id and ic.persona_code_network_id = pcn.id and pcn.persona_id in (select id from temp_pId)
+    union
     select distinct tcs.actor_id, tcs.characteristic_id from task_characteristic_synopsis tcs, task_characteristic tc where tcs.characteristic_id = tc.id and tc.task_id in (select id from temp_tId)
     union
     select distinct drs.actor_id, drs.id from document_reference_synopsis drs, persona_characteristic_document pcd, persona_characteristic pc where drs.reference_id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id in (select id from temp_pId)
+    union
+    select distinct icei.actor_id, icei.id from implied_characteristic_element_intention icei, implied_characteristic ic, persona_code_network pcn where icei.implied_characteristic_id = ic.id and ic.persona_code_network_id = pcn.id and pcn.persona_id in (select id from temp_pId)
     union
     select distinct drs.actor_id, drs.id from requirement_reference_synopsis drs, persona_characteristic_requirement pcd, persona_characteristic pc where drs.reference_id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id in (select id from temp_pId)
     union
