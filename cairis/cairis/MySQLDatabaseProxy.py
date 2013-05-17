@@ -11327,3 +11327,39 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting code count for ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def addIntention(self,intention):
+    refName = intention[0]
+    refType = intention[1]
+    intentionName = intention[2]
+    intentionType = intention[3]
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addIntention(%s,%s,%s,%s)',(refName,refType,intentionName,intentionType))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding intention ' + intentionName
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding intention ' + intentionName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addContribution(self,contribution):
+    srcName = contribution[0]
+    destName = contribution[1]
+    meansEnd = contribution[2]
+    valName = contribution[3]
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addContribution(%s,%s,%s,%s)',(srcName,destName,meansEnd,valName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding contribution ' + srcName + '/' + destName
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding contribution ' + srcName + '/' + destName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

@@ -33,6 +33,8 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     self.theCodeNetworks = []
     self.theImpliedCharacteristics = []
     self.theProcesses = []
+    self.theIntentions = [] 
+    self.theContributions = []
     b = Borg()
     self.configDir = b.configDir
     self.resetInternalDocumentAttributes()
@@ -66,6 +68,12 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
 
   def processes(self):
     return self.theProcesses
+
+  def intentions(self):
+    return self.theIntentions
+
+  def contributions(self):
+    return self.theContributions
 
   def resetInternalDocumentAttributes(self):
     self.inDescription = 0
@@ -125,6 +133,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     self.theImpliedCharacteristicType = ''
     self.theFromLabels = []
     self.theToLabels = []
+    self.theLabelName = ''
 
   def startElement(self,name,attrs):
     self.currentElementName = name
@@ -157,14 +166,30 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
       self.theImpliedCharacteristicName = attrs['name']
       self.theImpliedCharacteristicQualifier = attrs['qualifier']
       self.theImpliedCharacteristicType = attrs['type']
+    elif name == 'intention':
+      intentionName = attrs['name']
+      intentionType = attrs['type']
+      if (self.theImpliedCharacteristicName != ''):
+        refName = self.theImpliedCharacteristicName
+        refType = 'implied_characteristic'
+      else:
+        refName = self.theLabel
+        refType = 'implied_characteristic_element'
+      self.theIntentions.append((refName,refType,intentionName,intentionType))
+    elif name == 'contribution':
+      srcName = self.theLabelName
+      destName = self.theImpliedCharacteristicName
+      meansEnd = attrs['means_end']
+      valName = attrs['value']
+      self.theContributions.append((srcName,destName,meansEnd,valName))
     elif name == 'from_label':
-      fromName = attrs['name']
+      self.theLabelName = attrs['name']
       fromRefType = attrs['reference_type']
-      self.theFromLabels.append((fromName,fromRefType))
+      self.theFromLabels.append((self.theLabelName,fromRefType))
     elif name == 'to_label':
-      toName = attrs['name']
+      self.theLabelName = attrs['name']
       toRefType = attrs['reference_type']
-      self.theToLabels.append((toName,toRefType))
+      self.theToLabels.append((self.theLabelName,toRefType))
     elif name == 'implied_process':
       self.theName = attrs['name']
       self.thePersona = attrs['persona']

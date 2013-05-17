@@ -36,7 +36,7 @@
 <!ELEMENT inclusion_criteria (#PCDATA)>
 <!ELEMENT example (#PCDATA)>
 
-<!ELEMENT quotation (label,synopsis)>
+<!ELEMENT quotation (label,synopsis,intention?)>
 <!ATTLIST quotation type (code | memo) #REQUIRED>
 <!ATTLIST quotation name CDATA #REQUIRED>
 <!ATTLIST quotation artifact_type (persona | task | internal_document) #REQUIRED>
@@ -54,16 +54,24 @@
 <!ATTLIST code_network from_code CDATA #REQUIRED>
 <!ATTLIST code_network to_code CDATA #REQUIRED>
 
-<!ELEMENT implied_characteristic (from_label+,to_label+)>
+<!ELEMENT implied_characteristic (intention?,from_label+,to_label+)>
 <!ATTLIST implied_characteristic name CDATA #REQUIRED>
 <!ATTLIST implied_characteristic qualifier CDATA #REQUIRED>
 <!ATTLIST implied_characteristic type (Intrinsic | Contextual) #REQUIRED>
 
-<!ELEMENT from_label EMPTY>
+<!ELEMENT intention EMPTY>
+<!ATTLIST intention name CDATA #REQUIRED>
+<!ATTLIST intention type (goal | softgoal | task) #REQUIRED>
+
+<!ELEMENT contribution EMPTY>
+<!ATTLIST contribution means_end (means | end) #REQUIRED>
+<!ATTLIST contribution value (Make | SomePositive | Help | Hurt | SomeNegative | Break) #REQUIRED>
+
+<!ELEMENT from_label (contribution?)>
 <!ATTLIST from_label name CDATA #REQUIRED>
 <!ATTLIST from_label reference_type (grounds | warrant | rebuttal) #REQUIRED>
 
-<!ELEMENT to_label EMPTY>
+<!ELEMENT to_label (contribution?)>
 <!ATTLIST to_label name CDATA #REQUIRED>
 <!ATTLIST to_label reference_type (grounds | warrant | rebuttal) #REQUIRED>
 

@@ -830,6 +830,8 @@ drop procedure if exists addImpliedCharacteristicElement;
 drop function if exists codeCount;
 drop function if exists internalDocumentCount;
 drop procedure if exists useCaseTags;
+drop procedure if exists addIntention;
+drop procedure if exists addContribution;
 
 delimiter //
 
@@ -21842,6 +21844,55 @@ begin
   select id into envId from environment where name = envName limit 1;
 
   select t.name from usecase_step_tag ust, tag t where ust.usecase_id = ucId and ust.environment_id = envId and ust.tag_id = t.id order by ust.step_no;
+
+end
+//
+
+create procedure addIntention(in refName text, in refType text, in intentionName text, in intentionType text)
+begin
+  declare dimId int;
+  declare atId int;
+  declare refId int;
+  declare icId int;
+  declare idId int;
+  declare codeId int;
+  declare personaId int;
+  declare startIdx int;
+  declare endIdx int;
+
+  select id into dimId from trace_dimension where name = intentionType;
+  select id into atId from trace_dimension where name = 'persona';
+
+  if refType = 'implied_characteristic'
+  then
+    select id into refId from implied_characteristic where synopsis = refName limit 1;
+    insert into implied_characteristic_intention(characteristic_id,synopsis,dimension_id) values(refId,intentionName,dimId);
+  else
+    call newId2(refId);
+    select internal_document_id into idId from internal_document_code where label = refName;
+    select code_id into codeId from internal_document_code where label = refName;
+    select start_index into startIdx from internal_document_code where label = refName;
+    select end_index into endIdx from internal_document_code where label = refName;
+    select implied_characteristic_id into icId from implied_characteristic_element where internal_document_id = idId and code_id = codeId and start_index = startIdx and end_index = endIdx limit 1;
+    select pcn.persona_id into personaId from implied_characteristic ic, persona_code_network pcn where ic.id = icId and ic.persona_code_network_id = pcn.id limit 1;
+    insert into implied_characteristic_element_intention(id,implied_characteristic_id,internal_document_id,code_id,start_index,end_index,synopsis,dimension_id,actor_id,actor_type_id) values(refId,icId,idId,codeId,startIdx,endIdx,intentionName,dimId,personaId,atId);
+  end if;
+end
+//
+
+create procedure addContribution(in srcName text, in destName text, in meansEnd text, in valName text)
+begin
+  declare icId int;
+  declare iceId int;
+  declare endId int;
+  declare contId int;
+
+  select icei.id into iceId from implied_characteristic_element_intention icei, internal_document_code idc where icei.internal_document_id = idc.internal_document_id and icei.code_id = idc.code_id and icei.start_index = idc.start_index and icei.end_index = idc.end_index and idc.label = srcName limit 1;
+  select id into icId from implied_characteristic where synopsis = destName limit 1;
+  select id into endId from contribution_end where name = meansEnd limit 1;
+  select id into contId from link_contribution where name = valName limit 1;
+
+  insert into ice_ic_contribution(implied_characteristic_element_intention_id,implied_characteristic_id,end_id,contribution_id) values(iceId,icId,endId,contId);
 
 end
 //

@@ -567,9 +567,11 @@ def importProcessesFile(importFile):
   codeNetworks = handler.codeNetworks()
   processes = handler.processes()
   ics = handler.impliedCharacteristics()
-  return importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics)
+  intentions = handler.intentions()
+  contributions = handler.contributions()
+  return importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,intentions,contributions)
 
-def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics):
+def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,intentions,contributions):
   noOfDocs = len(docs)
   noOfCodes = len(codes)
   noOfMemos = len(memos)
@@ -577,6 +579,8 @@ def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics):
   noOfCNs = len(codeNetworks)
   noOfProcs = len(processes)
   noOfICs = len(ics)
+  noOfIntentions = len(intentions)
+  noOfContributions = len(contributions)
 
   b = Borg()
 
@@ -609,7 +613,13 @@ def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics):
   for ic in ics:
     b.dbProxy.addImpliedCharacteristic(ic)
 
-  msgStr = 'Imported ' + str(noOfDocs) + ' internal documents, ' + str(noOfCodes) + ' codes, ' + str(noOfMemos) + ' memos, ' + str(noOfQuotations) + ' quotations, ' + str(noOfCNs) + ' code relationships, and ' + str(noOfProcs) + ' implied processes.'
+  for intention in intentions:
+    b.dbProxy.addIntention(intention)
+
+  for contribution in contributions:
+    b.dbProxy.addContribution(contribution)
+
+  msgStr = 'Imported ' + str(noOfDocs) + ' internal documents, ' + str(noOfCodes) + ' codes, ' + str(noOfMemos) + ' memos, ' + str(noOfQuotations) + ' quotations, ' + str(noOfCNs) + ' code relationships, ' + str(noOfProcs) + ' implied processes, ' + str(noOfIntentions) + ' intentions, and ' + str(noOfContributions) + ' contributions.'
   return msgStr
 
 def importModelFile(importFile,isOverwrite = 1):
