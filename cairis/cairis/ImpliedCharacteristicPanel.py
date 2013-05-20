@@ -49,6 +49,12 @@ class ImpliedCharacteristicPanel(BasePanel):
     mainSizer.Add(self.buildTextSizer('Characteristic',(87,30),armid.IMPLIEDCHARACTERISTIC_TEXTCHARACTERISTIC_ID),0,wx.EXPAND)
     mainSizer.Add(self.buildTextSizer('Qualifier',(87,30),armid.IMPLIEDCHARACTERISTIC_TEXTQUALIFIER_ID),0,wx.EXPAND)
 
+    intentionSizer = wx.BoxSizer(wx.HORIZONTAL)
+    mainSizer.Add(intentionSizer,0,wx.EXPAND)
+
+    intentionSizer.Add(self.buildTextSizer('Intention',(87,30),armid.IMPLIEDCHARACTERISTIC_TEXTINTENTION_ID),1,wx.EXPAND)
+    intentionSizer.Add(self.buildComboSizerList('Type',(87,30),armid.IMPLIEDCHARACTERISTIC_COMBOINTENTIONTYPE_ID,['goal','softgoal']),1,wx.EXPAND)
+    
 
     elSizer = wx.BoxSizer(wx.HORIZONTAL)
     mainSizer.Add(elSizer,1,wx.EXPAND)
@@ -76,3 +82,10 @@ class ImpliedCharacteristicPanel(BasePanel):
     qualCtrl.SetValue(qualName)
     varCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_COMBOTYPE_ID)
     varCtrl.SetValue(varName)
+
+    itValues = self.dbProxy.impliedCharacteristicIntention(charName,pName,fromCode,toCode,rtName)
+    intCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_TEXTINTENTION_ID)
+    intCtrl.SetValue(itValues[0])
+    itCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_COMBOINTENTIONTYPE_ID)
+    itCtrl.SetValue(itValues[1])
+

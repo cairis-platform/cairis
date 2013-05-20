@@ -30,6 +30,11 @@ class ImpliedCharacteristicParameters(ObjectCreationParameters):
     self.theLhsCodes = lhsCodes
     self.theRhsCodes = rhsCodes
     self.theCharacteristicType = charType
+    self.theIntention = ''
+    self.theIntentionType = ''
+
+  def setIntention(self,v): self.theIntention = v
+  def setIntentionType(self,v): self.theIntentionType = v
 
   def persona(self): return self.thePersonaName
   def fromCode(self): return self.theFromCode
@@ -40,3 +45,5 @@ class ImpliedCharacteristicParameters(ObjectCreationParameters):
   def lhsCodes(self): return self.theLhsCodes
   def rhsCodes(self): return self.theRhsCodes
   def characteristicType(self): return self.theCharacteristicType
+  def intention(self): return self.theIntention
+  def intentionType(self): return self.theIntentionType

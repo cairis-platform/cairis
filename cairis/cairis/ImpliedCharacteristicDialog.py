@@ -42,10 +42,14 @@ class ImpliedCharacteristicDialog(wx.Dialog):
     charCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_TEXTCHARACTERISTIC_ID)
     qualCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_TEXTQUALIFIER_ID)
     varCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_COMBOTYPE_ID)
+    intCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_TEXTINTENTION_ID)
+    itCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_COMBOINTENTIONTYPE_ID)
 
     charName = charCtrl.GetValue()
     qualName = qualCtrl.GetValue()
     charType = varCtrl.GetValue()
+    intName = intCtrl.GetValue()
+    intType = itCtrl.GetValue()
 
     lhsCodesCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_LISTLHS_ID)
     rhsCodesCtrl = self.FindWindowById(armid.IMPLIEDCHARACTERISTIC_LISTRHS_ID)
@@ -53,6 +57,8 @@ class ImpliedCharacteristicDialog(wx.Dialog):
     lhsCodes = lhsCodesCtrl.dimensions()
     rhsCodes = rhsCodesCtrl.dimensions()
     p = ImpliedCharacteristicParameters(self.thePersonaName,self.theFromCode,self.theToCode,self.theRelationshipType,charName,qualName,lhsCodes,rhsCodes,charType)
+    p.setIntention(intName)
+    p.setIntentionType(intType)
    
     b = Borg()
     b.dbProxy.updateImpliedCharacteristic(p)

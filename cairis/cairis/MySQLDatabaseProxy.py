@@ -11265,6 +11265,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     lhsCodes = parameters.lhsCodes()
     rhsCodes = parameters.rhsCodes()
     charType = parameters.characteristicType()
+    intName = parameters.intention()
+    intType = parameters.intentionType()
    
     try:
       curs = self.conn.cursor()
@@ -11279,11 +11281,26 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for lblName,rtName in rhsCodes:
         self.updateImpliedCharacteristicElement(charName,lblName,rtName)
 
+      self.updateImpliedCharacteristicIntention(charName,intName,intType)
+
       self.conn.commit()
       curs.close() 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error updating implied characteristic ' + charName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def updateImpliedCharacteristicIntention(self,charName,intName,intType):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call updateImpliedCharacteristicIntention(%s,%s,%s)',(charName,intName,intType))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating intention for implied characteristic ' + charName 
+        raise DatabaseProxyException(exceptionText) 
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating intention for implied characteristic ' + charName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def addImpliedCharacteristicElement(self,charName,lblName,rtName):
@@ -11363,3 +11380,20 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error adding contribution ' + srcName + '/' + destName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def impliedCharacteristicIntention(self,synName,pName,fromCode,toCode,rtName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('select impliedCharacteristicIntention(%s,%s,%s,%s,%s)',(synName,pName,fromCode,toCode,rtName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting intention for implied characteristic ' + synName
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      itTuple = row[0]
+      curs.close()
+      return itTuple.split('#')
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting intention for implied characteristic ' + synName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+

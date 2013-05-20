@@ -832,6 +832,8 @@ drop function if exists internalDocumentCount;
 drop procedure if exists useCaseTags;
 drop procedure if exists addIntention;
 drop procedure if exists addContribution;
+drop function if exists impliedCharacteristicIntention;
+drop procedure if exists updateImpliedCharacteristicIntention;
 
 delimiter //
 
@@ -21893,6 +21895,53 @@ begin
   select id into contId from link_contribution where name = valName limit 1;
 
   insert into ice_ic_contribution(implied_characteristic_element_intention_id,implied_characteristic_id,end_id,contribution_id) values(iceId,icId,endId,contId);
+
+end
+//
+
+create function impliedCharacteristicIntention(icSyn text, personaName text,fromCode text, toCode text, rType text) 
+returns varchar(1051)
+deterministic 
+begin
+  declare intValue varchar(1000) default '';
+  declare intType varchar(50) default 'goal';
+  declare personaId int;
+  declare fromId int;
+  declare toId int;
+  declare rTypeId int;
+  declare pcnId int;
+  declare icId int;
+
+  select id into personaId from persona where name = personaName limit 1;
+  select id into fromId from code where name = fromCode limit 1;
+  select id into toId from code where name = toCode limit 1;
+  select id into rTypeId from relationship_type where name = rType limit 1;
+  select id into pcnId from persona_code_network where persona_id = personaId and from_code_id = fromId and to_code_id = toId and relationship_type_id = rTypeId limit 1;
+  select id into icId from implied_characteristic where persona_code_network_id = pcnId and synopsis = icSyn limit 1;
+
+  select ifnull(synopsis,'') into intValue from implied_characteristic_intention where characteristic_id = icId limit 1;
+  select ifnull(td.name,'goal') into intType from implied_characteristic_intention ici, trace_dimension td where ici.characteristic_id = icId and ici.dimension_id = td.id limit 1;
+  return concat(intValue,'#',intType);
+end
+//
+
+create procedure updateImpliedCharacteristicIntention(in charName text, in intName text, in intType text)
+begin
+  declare icId int;
+  declare rtId int;
+  declare iciCount int;
+
+  select id into icId from implied_characteristic where synopsis = charName limit 1;
+  select id into rtId from trace_dimension where name = intType limit 1;
+
+  select count(characteristic_id) into iciCount from implied_characteristic_intention where characteristic_id = icId;
+ 
+  if iciCount = 0
+  then
+    insert into implied_characteristic_intention(characteristic_id,synopsis,dimension_id) values (icId,intName,rtId);
+  else
+    update implied_characteristic_intention set synopsis = intName, dimension_id = rtId where characteristic_id = icId;
+  end if;
 
 end
 //
