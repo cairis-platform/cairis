@@ -21499,7 +21499,7 @@ begin
   select specification into ipSpec from persona_implied_process where id = ipId limit 1;
 
   set augProcName = replace(procName,' ','_');
-  set buf = concat(buf,augProcName,' = ',ipSpec,'\n');
+  set buf = concat(buf,'-- ',augProcName,'\n\n',ipSpec,'\n');
 
   select buf;
 end
@@ -22017,6 +22017,7 @@ begin
     insert into implied_characteristic_element_intention(id,implied_characteristic_id,internal_document_id,code_id,start_index,end_index,synopsis,dimension_id,actor_id,actor_type_id) values (iceiId,icId,idId,codeId,startIdx,endIdx,intName,dimId,actorId,actorTypeId);
     insert into ice_ic_contribution(implied_characteristic_element_intention_id,implied_characteristic_id,end_id,contribution_id) values (iceiId,icId,meId,contId);
   else
+    select id into iceiId from implied_characteristic_element_intention where implied_characteristic_id = icId and internal_document_id = idId and code_id = codeId and start_index = startIdx and end_index = endIdx and actor_id = actorId and actor_type_id = actorTypeId;
     update implied_characteristic_element_intention set synopsis = intName,dimension_id = dimId where implied_characteristic_id = icId and internal_document_id = idId and code_id = codeId and start_index = startIdx and end_index = endIdx and actor_id = actorId and actor_type_id = actorTypeId;
     update ice_ic_contribution set end_id = meId, contribution_id = contId where implied_characteristic_element_intention_id = iceiId and implied_characteristic_id = icId;
   end if;
