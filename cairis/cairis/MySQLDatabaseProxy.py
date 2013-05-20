@@ -11397,3 +11397,32 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting intention for implied characteristic ' + synName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def impliedCharacteristicElementIntention(self,ciName,elName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('select impliedCharacteristicElementIntention(%s,%s)',(ciName,elName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting intention for element ' + elName + ' for implied characteristic intention ' + ciName
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      iceiDetails = row[0]
+      curs.close()
+      return iceiDetails.split('#')
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting intention for element ' + elName + ' for implied characteristic intention ' + ciName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def updateImpliedCharacteristicElementIntention(self,ciName,elName,intName,intDim,meName,contName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call updateImpliedCharacteristicElementIntention(%s,%s,%s,%s,%s,%s)',(ciName,elName,intName,intDim,meName,contName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error updating intention for element ' + elName + ' for implied characteristic ' + ciName 
+        raise DatabaseProxyException(exceptionText) 
+      self.conn.commit()
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating intention for element ' + elName + ' for implied characteristic ' + ciName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
