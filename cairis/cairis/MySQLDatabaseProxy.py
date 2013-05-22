@@ -11426,3 +11426,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error updating intention for element ' + elName + ' for implied characteristic ' + ciName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def deniedGoals(self,codeName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call deniedGoals(%s)',(codeName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting denied goals for code ' + codeName
+        raise DatabaseProxyException(exceptionText) 
+      goals = []
+      for row in curs.fetchall():
+        row = list(row)
+        goals.append(row[0])
+      curs.close()
+      return goals
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting denied goals for code ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
