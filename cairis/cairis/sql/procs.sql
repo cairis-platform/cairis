@@ -836,6 +836,7 @@ drop function if exists impliedCharacteristicIntention;
 drop function if exists impliedCharacteristicElementIntention;
 drop procedure if exists updateImpliedCharacteristicIntention;
 drop procedure if exists updateImpliedCharacteristicElementIntention;
+drop procedure if exists deniedGoals;
 
 delimiter //
 
@@ -22022,6 +22023,15 @@ begin
     update ice_ic_contribution set end_id = meId, contribution_id = contId where implied_characteristic_element_intention_id = iceiId and implied_characteristic_id = icId;
   end if;
   
+end
+//
+
+create procedure deniedGoals(in codeName text)
+begin
+  declare codeId int;
+  
+  select id into codeId from code where name = codeName limit 1;
+  select synopsis from implied_characteristic_element_intention where code_id = codeId;
 end
 //
 
