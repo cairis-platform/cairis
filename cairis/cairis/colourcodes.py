@@ -65,3 +65,7 @@ def obstacleColourCode(valueId):
   elif (valueId <= 0.8): return '7'
   elif (valueId <= 0.9): return '8'
   else: return '9'
+
+def riskTextColourCode(valueId):
+  if (valueId >= 7): return 'white'
+  else: return 'black'

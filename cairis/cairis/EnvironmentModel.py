@@ -26,6 +26,7 @@ from Borg import Borg
 from colourcodes import threatColourCode
 from colourcodes import responseColourCode
 from colourcodes import usabilityColourCode
+from colourcodes import riskTextColourCode
 
 USECASE_TYPE = 0
 MISUSECASE_TYPE = 1
@@ -75,7 +76,7 @@ class EnvironmentModel:
         currentScore = riskScore[2]
         if (currentScore > highestScore):
           highestScore = currentScore
-      self.theGraph.add_node(pydot.Node(objtName,shape='diamond',style='filled',color=threatColourCode(highestScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='diamond',style='filled',color=threatColourCode(highestScore),fontcolor=riskTextColourCode(highestScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'response'):
       self.theGraph.add_node(pydot.Node(objtName,shape='note',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'countermeasure'):
