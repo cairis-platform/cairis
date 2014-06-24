@@ -1029,7 +1029,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     ifs = parameters.interfaces()
     try:
       curs = self.conn.cursor()
-      curs.execute('call addAsset(%s,%s,%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale))
+      curs.execute('call addAsset(%s,%s,%s,%s,%s,%s,%s,%s)',(assetId,assetName,shortCode,assetDesc.encode('utf-8'),assetSig.encode('utf-8'),assetType,assetCriticality,assetCriticalRationale))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new asset ' + assetName
         raise DatabaseProxyException(exceptionText) 
@@ -1490,7 +1490,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     tags = parameters.tags()
     try:
       curs = self.conn.cursor()
-      curs.execute("call addThreat(%s,%s,%s,%s)",(threatId,threatName,threatType,threatMethod))
+      curs.execute("call addThreat(%s,%s,%s,%s)",(threatId,threatName,threatType,threatMethod.encode('utf-8')))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new threat ' + threatName
         raise DatabaseProxyException(exceptionText) 
@@ -1537,7 +1537,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating threat ' + threatName
         raise DatabaseProxyException(exceptionText) 
-      curs.execute('call updateThreat(%s,%s,%s,%s)',(threatId,threatName,threatType,threatMethod))
+      curs.execute('call updateThreat(%s,%s,%s,%s)',(threatId,threatName,threatType,threatMethod.encode('utf-8')))
       if (curs.rowcount == -1):
         exceptionText = 'Error updating threat ' + threatName
         raise DatabaseProxyException(exceptionText) 
@@ -1616,7 +1616,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       vulId = self.newId()
       curs = self.conn.cursor()
-      curs.execute('call addVulnerability(%s,%s,%s,%s)',(vulId,vulName,vulDesc,vulType))
+      curs.execute('call addVulnerability(%s,%s,%s,%s)',(vulId,vulName,vulDesc.encode('utf-8'),vulType))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new vulnerability ' + vulName
         raise DatabaseProxyException(exceptionText) 
@@ -1656,7 +1656,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating vulnerability ' + vulName
         raise DatabaseProxyException(exceptionText)
-      curs.execute('call updateVulnerability(%s,%s,%s,%s)',(vulId,vulName,vulDesc,vulType))
+      curs.execute('call updateVulnerability(%s,%s,%s,%s)',(vulId,vulName,vulDesc.encode('utf-8'),vulType))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding updating vulnerability ' + vulName
         raise DatabaseProxyException(exceptionText) 
