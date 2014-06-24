@@ -8844,7 +8844,7 @@ begin
   then
     call updateValueType(existingId,vtName,vtDesc,vtType,'',vtScore,vtRat);
   else
-    if vtType = 'capability' or vtType = 'motivation' or vtType = 'asset_type' or vtType = 'threat_type' or vtType = 'vulnerability_type'
+    if vtType = 'capability' or vtType = 'motivation' or vtType = 'asset_type' or vtType = 'threat_type' or vtType = 'vulnerability_type' or vtType = 'risk_class'
     then
       set vtSql = concat('insert into ',vtType,'(id,name,description) values (',vtId,',\"',vtName,'\",\"',vtDesc,'\")');
       set @sql = vtSql;
@@ -8871,7 +8871,7 @@ begin
   then
     select id into envId from environment where name = envName;
     update asset_value set name=vtName, description=vtDesc where id = vtId and environment_id = envId;
-  elseif vtType = 'threat_value' or vtType = 'countermeasure_value' or vtType = 'capability' or vtType = 'motivation' or vtType = 'asset_type' or vtType = 'threat_type' or vtType = 'vulnerability_type'
+  elseif vtType = 'threat_value' or vtType = 'countermeasure_value' or vtType = 'capability' or vtType = 'motivation' or vtType = 'asset_type' or vtType = 'threat_type' or vtType = 'vulnerability_type' or vtType = 'risk_class'
   then
     set vtSql = concat('update ',vtType,' set name=\"',vtName,'\", description=\"',vtDesc,'\" where id = ',vtId);
     set @sql = vtSql;
