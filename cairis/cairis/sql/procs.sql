@@ -21969,7 +21969,7 @@ begin
   select code_id into codeId from internal_document_code where label = elName limit 1;
   select start_index into startIdx from internal_document_code where label = elName limit 1;
   select end_index into endIdx from internal_document_code where label = elName limit 1;
-
+  select implied_characteristic_id into icId from implied_characteristic_element_intention where internal_document_id = idId and code_id = codeId and start_index = startIdx and end_index = endIdx;
   select id into iceiId from implied_characteristic_element_intention where implied_characteristic_id = icId and internal_document_id = idId and code_id = codeId and start_index = startIdx and end_index = endIdx;
   if iceiId is not null
   then
