@@ -21957,6 +21957,7 @@ begin
   declare intDim varchar(50) default 'goal';
   declare meName varchar(100) default '';
   declare contName varchar(100) default '';
+  declare intId int;
   declare icId int;
   declare iceiId int;
   declare idId int;
@@ -21964,7 +21965,7 @@ begin
   declare startIdx int;
   declare endIdx int;
 
-  select characteristic_id into icId from implied_characteristic_intention where synopsis = ciName limit 1;
+  select characteristic_id into intId from implied_characteristic_intention where synopsis = ciName limit 1;
   select internal_document_id into idId from internal_document_code where label = elName limit 1;
   select code_id into codeId from internal_document_code where label = elName limit 1;
   select start_index into startIdx from internal_document_code where label = elName limit 1;
@@ -21975,8 +21976,8 @@ begin
   then
     select synopsis into intName from implied_characteristic_element_intention where id = iceiId limit 1;
     select td.name into intDim from implied_characteristic_element_intention icei, trace_dimension td where icei.id = iceiId and icei.dimension_id = td.id limit 1;
-    select ce.name into meName from ice_ic_contribution iic, contribution_end ce where iic.implied_characteristic_element_intention_id = iceiId and implied_characteristic_id = icId and iic.end_id = ce.id limit 1;
-    select lc.name into contName from ice_ic_contribution iic, link_contribution lc where iic.implied_characteristic_element_intention_id = iceiId and implied_characteristic_id = icId and iic.contribution_id = lc.id limit 1;
+    select ce.name into meName from ice_ic_contribution iic, contribution_end ce where iic.implied_characteristic_element_intention_id = iceiId and implied_characteristic_id = intId and iic.end_id = ce.id limit 1;
+    select lc.name into contName from ice_ic_contribution iic, link_contribution lc where iic.implied_characteristic_element_intention_id = iceiId and implied_characteristic_id = intId and iic.contribution_id = lc.id limit 1;
   end if;
   
   return concat(intName,'#',intDim,'#',meName,'#',contName);
