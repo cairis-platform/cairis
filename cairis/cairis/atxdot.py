@@ -356,7 +356,7 @@ class ATDotWindow(gtk.Window):
 
         window = self
 
-        window.set_title('Assumption Task model')
+        window.set_title('Misusability Case model')
         window.set_default_size(512, 512)
         vbox = gtk.VBox()
         window.add(vbox)
