@@ -105,8 +105,6 @@ class RMFrame(wx.Frame):
     self.SetIcon(dimIcon)
 
     pnewBmp = wx.ArtProvider.GetBitmap(wx.ART_NEW,wx.ART_TOOLBAR, (30,30))
-    psaveBmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE,wx.ART_TOOLBAR, (30,30))
-    popenBmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN,wx.ART_TOOLBAR, (30,30))
     findBmp = wx.ArtProvider.GetBitmap(wx.ART_FIND,wx.ART_TOOLBAR,(30,30))
     settingsBmp = wx.Image(self.directoryPrefix + 'projectSettings.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     environmentBmp = wx.Image(self.directoryPrefix + 'environment.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
@@ -131,8 +129,6 @@ class RMFrame(wx.Frame):
 
 
     self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_NEW,pnewBmp,'New project')
-    self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_SAVE,psaveBmp,'Save project')
-    self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_OPEN,popenBmp,'Open project')
     self.toolbar.AddSeparator()
     self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_SETTINGS,settingsBmp,'Edit Project Settings')
     self.toolbar.AddSimpleTool(armid.RMFRAME_TOOL_CON,environmentBmp,'Edit Environments')
@@ -165,8 +161,6 @@ class RMFrame(wx.Frame):
     menubar = wx.MenuBar()
     file = wx.Menu()
     file.Append(armid.RMFRAME_MENU_NEW,'New','New project')
-    file.Append(armid.RMFRAME_MENU_OPEN,'Open','Open project')
-    file.Append(armid.RMFRAME_MENU_SAVE,'Save','Save project')
 
     exportMenu = wx.Menu()
     exportMenu.Append(armid.RMFRAME_MENU_EXPORTMODEL,'Model','Export XML model')
@@ -325,8 +319,6 @@ class RMFrame(wx.Frame):
 
     self.SetMenuBar(menubar)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_NEW,self.OnNewProject)
-    wx.EVT_MENU(self,armid.RMFRAME_TOOL_SAVE,self.OnSaveProject)
-    wx.EVT_MENU(self,armid.RMFRAME_TOOL_OPEN,self.OnOpenProject)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_COMMITREQUIREMENTS,self.OnCommitEditorObjects)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_ADD,self.OnAddEditorObject)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_DELETE,self.OnDeleteEditorObject)
@@ -363,8 +355,6 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_USECASES,self.OnUseCases)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_DOCUMENTATION,self.OnDocumentation)
 
-    wx.EVT_MENU(self,armid.RMFRAME_MENU_SAVE,self.OnSaveProject)
-    wx.EVT_MENU(self,armid.RMFRAME_MENU_OPEN,self.OnOpenProject)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_EXPORTMODEL,self.OnExportModel)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_IMPORTMODEL,self.OnImportModel)
     wx.EVT_MENU(self,armid.RMFRAME_MENU_EXPORTPROJECT,self.OnExportProject)
@@ -867,41 +857,6 @@ class RMFrame(wx.Frame):
       dlg.ShowModal()
       dlg.Destroy()
       return
-
-  def OnSaveProject(self,evt):
-    defaultBackupDir = './sql'
-    dlg = wx.FileDialog(self,message='Save project data',defaultDir=defaultBackupDir,style=wx.SAVE|wx.OVERWRITE_PROMPT)
-    if (dlg.ShowModal() == wx.ID_OK):
-      backupFile = dlg.GetPath() + '.sql'
-      orderedTableFile = defaultBackupDir + '/orderedTables.txt'
-      fObjt = open(orderedTableFile)
-      tableList = fObjt.read().splitlines()
-      tables = ''
-      for tName in tableList:
-        tables += ' ' + tName
-      b = Borg()
-      cmd = '/usr/bin/mysqldump --add-drop-table -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' ' + b.dbName + ' ' + tables + ' > ' + backupFile
-      os.system(cmd)
-    dlg.Destroy()
-
-  def OnOpenProject(self,evt):
-    defaultBackupDir = './sql'
-    sqlDir = defaultBackupDir
-    wildcard = "Project files (*.sql) | *.sql |"
-    dlg = wx.FileDialog(None,'Open project data',defaultBackupDir,style=wx.OPEN)
-    b = Borg()
-    if (dlg.ShowModal() == wx.ID_OK):
-      reinitSql = sqlDir + '/init.sql'
-      reinitCmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + reinitSql
-      os.system(reinitCmd)
-      backupFile = dlg.GetPath() 
-      openCmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + backupFile
-      os.system(openCmd)
-    dlg.Destroy()
-    b.dbProxy.reconnect()
-    self.panel.updateObjectSelection()
-    self.panel.updateEnvironmentSelection()
-    self.panel.refresh()
 
   def OnNewProject(self,evt):
     try:
