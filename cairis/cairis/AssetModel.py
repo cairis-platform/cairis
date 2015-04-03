@@ -174,6 +174,8 @@ class AssetModel:
             self.theGraph.add_edge(edge2)
             edgeList.add((assocRationale,tailName))
 
+        edgeLabel, hLabel, tLabel = self.filterBlankStrings(edgeLabel, hLabel, tLabel)
+
         if (headDim == 'goalconcern' or headDim == 'obstacleconcern' or headDim == 'taskconcern'):
           objtUrl = headDim + '#' + headName
           edge = pydot.Edge(headObjt,tailObjt,label=edgeLabel,headlabel=hLabel,taillabel=tLabel,arrowhead=aHead,arrowtail=aTail,style=edgeStyle,dir='both',fontcolor=fontColour,color=edgeColour,fontsize=fontSize,URL=objtUrl)
@@ -183,3 +185,15 @@ class AssetModel:
         self.theGraph.add_edge(edge)
         edgeList.add((headName,tailName))
     return self.layout()
+
+  def filterBlankStrings(self, edgeLabel, hLabel, tLabel):
+    if edgeLabel == '':
+       edgeLabel = ' '
+
+    if hLabel == '':
+       hLabel = ' '
+
+    if tLabel == '':
+       tLabel = ' '
+
+    return edgeLabel, hLabel, tLabel
