@@ -238,7 +238,7 @@ class RequirementsTable(wx.grid.PyGridTableBase):
         lastGridLabel = self.om.reqs[pos].label()
         if (len(str(lastGridLabel).split('-')) > 1):
           errorText = 'Asset or Environment must be specified.'
-          if self.om.reqs[pos].attrs['asset'] != null:
+          if self.om.reqs[pos].attrs['asset'] != '':
             assetName = self.om.reqs[pos].attrs['asset']
             errorText = errorText.join({'\n\nRecommended asset: ', assetName})
 
