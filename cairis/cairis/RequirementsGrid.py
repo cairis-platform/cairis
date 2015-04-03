@@ -237,7 +237,12 @@ class RequirementsTable(wx.grid.PyGridTableBase):
       if (pos >= 0):
         lastGridLabel = self.om.reqs[pos].label()
         if (len(str(lastGridLabel).split('-')) > 1):
-          raise ARMException('Asset or Environment must be specified')  
+          errorText = 'Asset or Environment must be specified.'
+          if self.om.reqs[pos].attrs['asset'] != null:
+            assetName = self.om.reqs[pos].attrs['asset']
+            errorText = errorText.join({'\n\nRecommended asset: ', assetName})
+
+          raise ARMException(errorText)  
       self.om.commitChanges()
     except ARMException,errorText:
       dlg = wx.MessageDialog(self.GetView(),str(errorText),'Commit changes',wx.OK | wx.ICON_ERROR)
