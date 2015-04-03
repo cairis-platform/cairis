@@ -2345,7 +2345,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <description>100 50kb image thumbnails from Stroke meta-data shall be retrieved within 20 seconds of a query submission.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
-  <originator>Inteview data</originator>
+  <originator>Interview data</originator>
 </requirement>
 <requirement name="Guest workflow submission" reference="Guest Certificate" reference_type="asset" label="2" type="Functional" priority="1" >
   <description>Guest users shall not be able to submit NeuroGrid workflows.</description>
