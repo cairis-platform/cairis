@@ -150,7 +150,7 @@ class KaosModel:
       elif (associationType == 'depend'):
         if ((subGoalName,goalName) not in edgeSet):
           objtUrl = 'depend#' + goalEnv + '/' + goalName + '/' + subGoalName
-          self.theGraph.add_node(pydot.Node(objtUrl,shape='circle',label='',height='.2',width='.2',URL=objtUrl))
+          self.theGraph.add_node(pydot.Node(objtUrl,shape='circle',label=' ',height='.2',width='.2',URL=objtUrl))
           edge1 = pydot.Edge(goalName,objtUrl,dir='forward',arrowhead='vee',weight='1')
           self.theGraph.add_edge(edge1)
           edge2 = pydot.Edge(objtUrl,subGoalName,dir='forward',arrowhead='vee',weight='1')
@@ -168,16 +168,16 @@ class KaosModel:
           if (refNodeName not in refNodes):
             if (associationType == 'and'):
               objtUrl = 'linkand#' + goalEnv + '/' + goalName + '/' + subGoalName + '/' + goalDimName + '/' + subGoalDimName
-              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',label='',height='.2',width='.2',URL=objtUrl))
+              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',label=' ',height='.2',width='.2',URL=objtUrl))
             elif (associationType == 'or'):
               objtUrl = 'linkor#' + goalEnv + '/' + goalName + '/' + subGoalName + '/' + goalDimName + '/' + subGoalDimName
-              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',style='filled',color='black',label='',height='.2',width='.2',URL=objtUrl))
+              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',style='filled',color='black',label=' ',height='.2',width='.2',URL=objtUrl))
             elif (associationType == 'responsible'):
               objtUrl = 'linkresponsible#' + goalEnv + '/' + goalName + '/' + subGoalName + '/' + goalDimName + '/' + subGoalDimName
-              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',style='filled',color='red',label='',height='.2',width='.2',URL=objtUrl))
+              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',style='filled',color='red',label=' ',height='.2',width='.2',URL=objtUrl))
             elif (associationType == 'conflict'):
               objtUrl = 'linkconflict#' + goalEnv + '/' + goalName + '/' + subGoalName + '/' + goalDimName + '/' + subGoalDimName
-              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',color='red',label='',height='.2',width='.2',URL=objtUrl))
+              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',color='red',label=' ',height='.2',width='.2',URL=objtUrl))
               assocDirection = 'none'
               arrowHead = 'none'
             goalEdge = pydot.Edge(refNodeName,goalName,dir=assocDirection,arrowhead=arrowHead,weight='1')
@@ -255,6 +255,8 @@ class KaosModel:
 
       objtUrl = goalDimName + '#' + subGoalDimName + '#' + assocType
       if ((subGoalName,goalName,assocLabel) not in edgeSet):
+	if assocLabel == '':
+	    assocLabel = ' '
         self.theGraph.add_edge(pydot.Edge(subGoalName,goalName,style=edgeStyle,dir=assocDir,arrowhead=arrowHead,arrowtail=arrowTail,label=assocLabel,fontsize=fontSize,weight='1',fontcolor=fontColour,color=edgeColour,URL=objtUrl))
         edgeSet.add((subGoalName,goalName,assocLabel))
 
