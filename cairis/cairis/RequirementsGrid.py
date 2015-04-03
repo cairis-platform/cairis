@@ -241,8 +241,8 @@ class RequirementsTable(wx.grid.PyGridTableBase):
           if self.om.reqs[pos].attrs['asset'] != '':
             l_str_errorText.append('\n\nRecommended asset filter: ')
             l_str_errorText.append(self.om.reqs[pos].attrs['asset'])
-            errorText = ''.join(l_str_errorText)
-
+          
+          errorText = ''.join(l_str_errorText)
           raise ARMException(errorText)  
       self.om.commitChanges()
     except ARMException,errorText:
