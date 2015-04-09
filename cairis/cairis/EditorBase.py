@@ -88,6 +88,14 @@ class EditorBase(wx.Panel):
     envSizer.Add(self.envCombo,0,wx.EXPAND)
     filterSizer.Add(envSizer,0,wx.ALL | wx.ALIGN_LEFT,4)
     filterSizer.Add(self.visToolbar,0,wx.ALL | wx.ALIGN_LEFT,4)
+    
+    filteredReqMods = filter(None, reqMods)
+    filteredEnvMods = filter(None, envMods)
+    if len(filteredReqMods) > 0:
+      self.modCombo.SetStringSelection(filteredReqMods[0])
+    else:
+      if len(filteredEnvMods) > 0:
+        self.envCombo.SetStringSelection(filteredEnvMods[0])
 
   def reload(self):
     self.grid.reload()
