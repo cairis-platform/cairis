@@ -61,7 +61,7 @@ class AssumptionPersonaModel:
     elif (dimName == 'grounds'):
       self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     else: 
-      self.theGraph.add_node(pydot.Node(objtName,shape='point',fontname=self.fontName,label='',fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='point',fontname=self.fontName,label=' ',fontsize=self.fontSize,URL=objtUrl))
 
   def graph(self):
     self.nodeNameSet = set([])

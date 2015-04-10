@@ -17,21 +17,29 @@
 
 from Borg import Borg
 import os
+import logging
 import DatabaseProxyFactory
 from string import strip
 
 def initialise():
   b = Borg()
-  cairisRoot = '/home/irisuser/CAIRIS/cairis'
+  b.logger = logging.getLogger('CAIRIS')
+  
   homeDir = os.getenv("HOME")
   if homeDir is not None:
     cairisRoot = homeDir + "/CAIRIS/cairis"
+  else:
+    raise RuntimeError('The HOME environment variable is not defined.')
  
   cfgFileName = ''
   try:
     cfgFileName = os.environ['CAIRIS_CFG']
   except KeyError:
-    cfgFileName = cairisRoot + '/cairis/config/cairis.cnf'    
+    cfgFileName = cairisRoot + '/cairis/config/cairis.cnf'
+
+  if not os.path.exists(cfgFileName):
+    raise IOError('''Unable to locate configuration file at the following location:
+'''+cfgFileName) 
 
   cfgFile = open(cfgFileName)
   for cfgLine in cfgFile.readlines():
@@ -64,5 +72,12 @@ def initialise():
 
   b.imageDir = b.cairisRoot + '/cairis/images' 
   b.configDir = b.cairisRoot + '/cairis/config'
+  b.exampleDir = os.path.join(b.cairisRoot, 'examples')
+
+  b.docBookDir = 'http://www.docbook.org/sgml/4.5'
+  if os.path.exists('/usr/share/sgml/docbook/dtd/4.5/'):
+    b.docBookDir = '/usr/share/sgml/docbook/dtd/4.5/'
+  else:
+    b.logger.warning('Unable to find DocBook schemes. Check if DocBook is correctly installed.')
 
   b.mainFrame = None

@@ -900,7 +900,10 @@ class RMFrame(wx.Frame):
               return
           DocumentBuilder.build(docType,sectionFlags,typeFlags,fileName,docDir)
     except ARMException,errorText:
-      dlg = wx.MessageDialog(self,str(errorText),'Generate documentation',wx.OK | wx.ICON_ERROR)
+      if isinstance(errorText.value, DatabaseProxyException):
+        dlg = wx.MessageDialog(self, errorText.value.value, 'Generate documentation', wx.OK | wx.ICON_ERROR)
+      else:
+        dlg = wx.MessageDialog(self,str(errorText),'Generate documentation',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return
