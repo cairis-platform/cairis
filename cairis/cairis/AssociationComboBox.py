@@ -32,15 +32,15 @@ class AssociationComboBox(wx.combo.OwnerDrawnComboBox):
     if (item == 0):
       if not hasattr(b, 'imageDir'):
         raise RuntimeError('imageDir was not defined by settings')
-      png = wx.Image(os.path.join(b.imageDir, '/compositionAdornment.png'),wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+      png = wx.Image(os.path.join(b.imageDir, 'compositionAdornment.png'),wx.BITMAP_TYPE_PNG).ConvertToBitmap()
       dc.DrawBitmap(png,r.x,r.y)
     elif (item == 1):
       if not hasattr(b, 'imageDir'):
         raise RuntimeError('imageDir was not defined by settings')
-      png = wx.Image(os.path.join(b.imageDir, '/aggregationAdornment.png'),wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+      png = wx.Image(os.path.join(b.imageDir, 'aggregationAdornment.png'),wx.BITMAP_TYPE_PNG).ConvertToBitmap()
       dc.DrawBitmap(png,r.x,r.y)
     elif (item == 2):
       if not hasattr(b, 'imageDir'):
         raise RuntimeError('imageDir was not defined by settings')
-      png = wx.Image(os.path.join(b.imageDir, '/associationAdornment.png'),wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+      png = wx.Image(os.path.join(b.imageDir, 'associationAdornment.png'),wx.BITMAP_TYPE_PNG).ConvertToBitmap()
       dc.DrawBitmap(png,r.x,r.y)
