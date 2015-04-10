@@ -75,8 +75,8 @@ def initialise():
   b.exampleDir = os.path.join(b.cairisRoot, 'examples')
 
   b.docBookDir = 'http://www.docbook.org/sgml/4.5'
-  if os.path.exists('/usr/share/sgml/docbook/dtd/4.5/'):
-    b.docBookDir = '/usr/share/sgml/docbook/dtd/4.5/'
+  if os.path.exists('/usr/share/sgml/docbook/dtd/4.5'):
+    b.docBookDir = '/usr/share/sgml/docbook/dtd/4.5'
   else:
     b.logger.warning('Unable to find DocBook schemes. Check if DocBook is correctly installed.')
 
