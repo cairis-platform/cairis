@@ -247,16 +247,17 @@ def buildTable(tableId, tableTitle, colNames,colData,linkInd = 1):
 
 
 def bookHeader(specName,contributors,revisions):
-  logoFile = '/home/irisuser/CAIRIS/cairis/examples/logo.jpg'
+  b = Borg()
+  logoFile = os.path.join(b.exampleDir, 'logo.jpg')
   logoFormat = 'JPG'
-  headerText = """<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook 4.1//EN" "/usr/share/sgml/docbook/dtd/4.5/docbookx.dtd" >
+  headerText = '''<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook 4.1//EN" "'''+b.docBookDir+"""/docbookx.dtd" >
 <book>
   <bookinfo>
-    <title>""" + specName + "</title>"  + """
+    <title>""" + specName + "</title>"  + '''
     <mediaobject>
       <imageobject>
-        <imagedata align=\"center\" fileref=\"""" + logoFile + "\" format=\"" + logoFormat + "\" />" + """
+        <imagedata align=\"center\" fileref=\"''' + logoFile + "\" format=\"" + logoFormat + "\" />" + """
       </imageobject>
     </mediaobject>
   """
@@ -299,13 +300,15 @@ def bookFooter():
   return footerText
 
 def reqNotation():
-  chapterText = """ 
-  <xi:include href="/home/irisuser/CAIRIS/cairis/cairis/config/reqNotation.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/> """ 
+  b = Borg()
+  chapterText = ''' 
+  <xi:include href="'''+b.configDir+"""/reqNotation.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/> """ 
   return chapterText
 
 def perNotation():
-  chapterText = """ 
-  <xi:include href="/home/irisuser/CAIRIS/cairis/cairis/config/perNotation.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/> """ 
+  b = Borg()
+  chapterText = ''' 
+  <xi:include href="'''+b.configDir+"""/perNotation.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/> """ 
   return chapterText
 
 def projectPurpose(pSettings):

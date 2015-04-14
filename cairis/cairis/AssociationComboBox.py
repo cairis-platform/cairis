@@ -25,14 +25,22 @@ class AssociationComboBox(wx.combo.OwnerDrawnComboBox):
     if item == wx.NOT_FOUND:
       return
 
+    b = Borg()
+
     r = wx.Rect(*rect)
     r.Deflate(20,20)
     if (item == 0):
-      png = wx.Image('/home/irisuser/iris/compositionAdornment.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+      if not hasattr(b, 'imageDir'):
+        raise RuntimeError('imageDir was not defined by settings')
+      png = wx.Image(os.path.join(b.imageDir, 'compositionAdornment.png'),wx.BITMAP_TYPE_PNG).ConvertToBitmap()
       dc.DrawBitmap(png,r.x,r.y)
     elif (item == 1):
-      png = wx.Image('/home/irisuser/iris/aggregationAdornment.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+      if not hasattr(b, 'imageDir'):
+        raise RuntimeError('imageDir was not defined by settings')
+      png = wx.Image(os.path.join(b.imageDir, 'aggregationAdornment.png'),wx.BITMAP_TYPE_PNG).ConvertToBitmap()
       dc.DrawBitmap(png,r.x,r.y)
     elif (item == 2):
-      png = wx.Image('/home/irisuser/iris/associationAdornment.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+      if not hasattr(b, 'imageDir'):
+        raise RuntimeError('imageDir was not defined by settings')
+      png = wx.Image(os.path.join(b.imageDir, 'associationAdornment.png'),wx.BITMAP_TYPE_PNG).ConvertToBitmap()
       dc.DrawBitmap(png,r.x,r.y)
