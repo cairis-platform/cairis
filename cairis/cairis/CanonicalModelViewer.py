@@ -158,7 +158,11 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
       self.unblockHandlers()
       self.widget.zoom_to_fit()
     except ARMException,errorText:
-      print str(errorText)
+      if hasattr(errorText, 'value'):
+        if isinstance(errorText.value, DatabaseProxyException):
+          print(errorText.value.value)
+      else:
+          print str(errorText)
 #      dlg = wx.MessageDialog(self,str(errorText),'IRIS',wx.OK | wx.ICON_ERROR)
 #      dlg.ShowModal()
 #      dlg.Destroy()
