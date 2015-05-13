@@ -44,12 +44,14 @@ class DimensionListCtrl(wx.ListCtrl):
     self.PopupMenu(self.theDimMenu)
 
   def onAddDimension(self,evt):
+    currentDimensions = self.dimensions()
     if (self.theDimensionTable == 'environment'):
       dimensions = self.dbProxy.getEnvironmentNames()
     else:
       dimensions = self.dbProxy.getDimensionNames(self.theDimensionTable,self.theCurrentEnvironment)
+    remainingDimensions = [x for x in dimensions if x not in currentDimensions]
     from DimensionNameDialog import DimensionNameDialog
-    dlg = DimensionNameDialog(self,self.theDimensionTable,dimensions,'Add')
+    dlg = DimensionNameDialog(self,self.theDimensionTable,remainingDimensions,'Add')
     if (dlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
       for additionalDimension in dlg.dimensionNames():
         idx = self.GetItemCount()
