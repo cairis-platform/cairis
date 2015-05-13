@@ -837,6 +837,7 @@ drop function if exists impliedCharacteristicElementIntention;
 drop procedure if exists updateImpliedCharacteristicIntention;
 drop procedure if exists updateImpliedCharacteristicElementIntention;
 drop procedure if exists deniedGoals;
+drop function if exists requirementId;
 
 delimiter //
 
@@ -6173,7 +6174,8 @@ begin
   elseif goalDimName = 'goal' and subGoalDimName = 'requirement'
   then 
     select id into goalId from goal where name = goalName;    
-    select o.id into subGoalId from requirement o where o.name = subGoalName and o.version = (select max(i.version) from requirement i where i.id = o.id);
+    select requirementId(subGoalName) into subGoalId;
+/*    select o.id into subGoalId from requirement o where o.name = subGoalName and o.version = (select max(i.version) from requirement i where i.id = o.id); */
     insert into goalrequirement_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values(associationId,environmentId,goalId,aTypeId,subGoalId,alternativeId,rationaleName);
   elseif goalDimName = 'goal' and subGoalDimName = 'task'
   then
@@ -22033,6 +22035,29 @@ begin
   
   select id into codeId from code where name = codeName limit 1;
   select synopsis from implied_characteristic_element_intention where code_id = codeId;
+end
+//
+
+create function requirementId(reqCode text) 
+returns int
+deterministic 
+begin
+    declare reqLabel int;
+    declare shortCode varchar(50);
+    declare reqId int;
+
+    call requirementLabelComponents(reqCode,shortCode,reqLabel);
+    select o.id into reqId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
+    if reqId is null
+    then
+      select o.id into reqId from requirement o, environment_requirement ar, environment a where o.label = reqLabel and o.id = ar.requirement_id and ar.environment_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
+
+      if reqId is null
+      then
+        select o.id into reqId from requirement o where o.name = reqCode and o.version = (select max(i.version) from requirement i where i.id = o.id); 
+      end if;
+    end if;
+    return reqId;
 end
 //
 

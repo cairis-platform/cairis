@@ -4508,7 +4508,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     rationale = parameters.rationale()
     try:
       curs = self.conn.cursor()
-#      print 'call addGoalAssociation(',associationId,',',envName,',',goalName,',',goalDimName,',',aType,',',subGoalName,',',subGoalDimName,',',alternativeId,',',rationale,')'
       curs.execute('call addGoalAssociation(%s,%s,%s,%s,%s,%s,%s,%s,%s)',(associationId,envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale))
       if (curs.rowcount == -1):
         exceptionText = 'Error adding new goal association ' + envName + '/' + goalName + '/' + subGoalName
