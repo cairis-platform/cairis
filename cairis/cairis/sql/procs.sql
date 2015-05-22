@@ -212,7 +212,6 @@ drop procedure if exists riskEnvironmentNames;
 drop procedure if exists threatVulnerabilityEnvironmentNames;
 drop function if exists taskDependencies;
 drop procedure if exists addTaskDependencies;
-drop procedure if exists deleteRiskComponents;
 drop procedure if exists delete_risk;
 drop procedure if exists requirementNames;
 drop function if exists requirementLabelId;
@@ -1805,6 +1804,7 @@ create procedure delete_threat(in threatId int)
 begin
   call deleteThreatComponents(threatId);
   delete from component_threat_target where threat_id = threatId;
+  delete from countermeasure_threat_target where threat_id = threatId;
   delete from threat_tag where threat_id = threatId;
   delete from threat_reference where threat_id = threatId;
   delete from threat where id = threatId;
@@ -2392,7 +2392,8 @@ end
 create procedure delete_vulnerability(in vulId int)
 begin
   call deleteVulnerabilityComponents(vulId);
-  delete from component_vulnerability_target where threat_id = threatId;
+  delete from countermeasure_vulnerability_target where vulnerability_id = vulId;
+  delete from component_vulnerability_target where vulnerability_id = vulId;
   delete from requirement_vulnerability where vulnerability_id = vulId;
   delete from obstaclevulnerability_goalassociation where subgoal_id = vulId;
   delete from vulnerability_tag where vulnerability_id = vulId;
@@ -2618,8 +2619,6 @@ create procedure delete_response(in responseId int)
 begin
   call deleteResponseComponents(responseId);
   delete from response_goal where response_id = responseId;
-  delete from countermeasure_threat_response_target where response_id = responseId;
-  delete from countermeasure_vulnerability_response_target where response_id = responseId;
   delete from response_tag where response_id = responseId;
   delete from response where id = responseId;
 end
@@ -2775,8 +2774,6 @@ begin
   delete from countermeasure_property where countermeasure_id = cmId;
   delete from countermeasure_threat_target where countermeasure_id = cmId;
   delete from countermeasure_vulnerability_target where countermeasure_id = cmId;
-/*  delete from countermeasure_threat_response_target where countermeasure_id = cmId;
-  delete from countermeasure_vulnerability_response_target where countermeasure_id = cmId;  */
   delete from countermeasure_role where countermeasure_id = cmId;
   delete from countermeasure_task_persona where countermeasure_id = cmId;
 end
@@ -3552,13 +3549,6 @@ begin
   insert into task_dependencies(task_id,environment_id,dependencies) values (taskId,environmentId,depsText);
 end
 //
-
-create procedure deleteRiskComponents(in riskId int)
-begin
-  delete from environment_risk where risk_id = riskId;
-end
-//
-
 
 create procedure goalNames(in environmentName text)
 begin
@@ -8132,7 +8122,7 @@ create procedure delete_obstacle(in obsId int)
 begin
   call deleteObstacleComponents(obsId);
   delete from obstacle_reference where obstacle_id = obsId;
-  delete from obstalce_tag where obstacle_id = obsId;
+  delete from obstacle_tag where obstacle_id = obsId;
   delete from obstacle where id = obsId;
 end
 //
@@ -14941,7 +14931,6 @@ begin
   select misusecase_id into mcId from misusecase_risk where risk_id = riskId;
   select id into responseId from response where risk_id = riskId;
 
-  call deleteRiskComponents(riskId);
   call delete_misusecase(mcId);
   call delete_response(responseId);
 
