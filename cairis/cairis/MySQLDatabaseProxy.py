@@ -7958,7 +7958,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         vts[(rowIdx,6)] = (int(unlValue),unlRationale)
         unoTR = row[3]
         unoValue,unoRationale = unoTR.split('#')
-        vts[(rowIdx,7)] = (int(unlValue),unlRationale)
+        vts[(rowIdx,7)] = (int(unoValue),unoRationale)
         rowIdx += 1
       curs.close()
       return vts
