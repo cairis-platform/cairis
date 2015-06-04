@@ -36,6 +36,7 @@ class ResponsePanel(BasePanel):
     self.theTags = []
     self.theCommitVerb = 'Create'
     self.environmentPanel = panel(self,self.dbProxy)
+    self.environmentPanel.Disable()
     self.theEnvironmentProperties = []
     self.theResponseVerb = responseType
 
@@ -56,6 +57,8 @@ class ResponsePanel(BasePanel):
   def onRiskChange(self,evt):
     riskName = self.riskCtrl.GetValue()
     if (riskName != ''):
+      self.environmentPanel.Enable()
+      self.environmentPanel.setRisk(riskName)
       if (self.environmentPanel.__class__.__name__ != 'MitigateEnvironmentPanel'):
         nameLabel = self.theResponseVerb + ' ' + riskName
         self.nameCtrl.SetValue(nameLabel)
@@ -66,6 +69,7 @@ class ResponsePanel(BasePanel):
           nameLabel = 'Mitigate' + ' ' + riskName 
           self.nameCtrl.SetValue(nameLabel)
     else:
+      self.environmentPanel.Disable()
       self.nameCtrl.SetValue('')
 
 

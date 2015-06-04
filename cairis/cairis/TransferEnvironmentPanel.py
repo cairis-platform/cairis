@@ -19,7 +19,7 @@
 import wx
 import armid
 import ARM
-from EnvironmentListCtrl import EnvironmentListCtrl
+from RiskEnvironmentListCtrl import RiskEnvironmentListCtrl
 from RoleCostListCtrl import RoleCostListCtrl
 from TransferEnvironmentProperties import TransferEnvironmentProperties
 
@@ -35,7 +35,7 @@ class TransferEnvironmentPanel(wx.Panel):
     environmentBox = wx.StaticBox(self)
     environmentListSizer = wx.StaticBoxSizer(environmentBox,wx.HORIZONTAL)
     mainSizer.Add(environmentListSizer,0,wx.EXPAND)
-    self.environmentList = EnvironmentListCtrl(self,armid.TRANSFER_LISTENVIRONMENTS_ID,self.dbProxy)
+    self.environmentList = RiskEnvironmentListCtrl(self,armid.TRANSFER_LISTENVIRONMENTS_ID,self.dbProxy)
     environmentListSizer.Add(self.environmentList,1,wx.EXPAND)
     environmentDimSizer = wx.BoxSizer(wx.VERTICAL)
     mainSizer.Add(environmentDimSizer,1,wx.EXPAND)
@@ -138,3 +138,7 @@ class TransferEnvironmentPanel(wx.Panel):
         exceptionText = 'No roles selected for environment ' + p.name()
         raise ARM.EnvironmentValidationError(exceptionText)
     return self.theEnvironmentDictionary.values() 
+
+  def setRisk(self,riskName):
+    self.environmentList.setRisk(riskName)
+
