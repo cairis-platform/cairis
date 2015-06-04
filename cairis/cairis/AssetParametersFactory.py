@@ -22,10 +22,10 @@ from Response import Response
 from Borg import Borg
 
 def build(target):
-  if target.__class__.__name__ == 'countermeasure':
-    buildCMAsset(target)
+  if target.__class__.__name__ == 'Countermeasure':
+    return buildCMAsset(target)
 
-def buildCM(target):
+def buildCMAsset(target):
   assetName = target.name() + ' CM'
   assetDesc = target.description()
   assetType = target.type()
@@ -38,7 +38,7 @@ def buildCM(target):
   assetEnvironmentProperties = []
   for cProps in target.environmentProperties():
     assetEnvironmentProperties.append(AssetEnvironmentProperties(cProps.name(),cProps.properties(),cProps.rationale()))
-  return AssetParameters(assetName,shortCode,assetDesc,significanceText,assetType,False,'',assetEnvironmentProperties)
+  return AssetParameters(assetName,shortCode,assetDesc,significanceText,assetType,False,'',target.tags(),[],assetEnvironmentProperties)
 
 def buildFromTemplate(assetName,assetEnvs):
   b = Borg()

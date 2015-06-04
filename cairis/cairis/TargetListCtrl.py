@@ -86,8 +86,7 @@ class TargetListCtrl(wx.ListCtrl):
       return
     dlg = TargetDialog(self,reqList,self.setTargets[self.theCurrentEnvironment],self.theCurrentEnvironment)
     if (dlg.ShowModal() == armid.TARGET_BUTTONCOMMIT_ID):
-      targetResponses = dlg.target()
-      targetName = targetResponses[0]
+      targetName = dlg.target()
       effectivenessValue = dlg.effectiveness()
       eRat = dlg.rationale()
       idx = self.GetItemCount()
