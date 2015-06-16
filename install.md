@@ -7,7 +7,7 @@ Thanks go to [Robin Quetin](https://github.com/RobinQuetin) for putting these in
 
 1. Install the required applications and dependencies:
 
-        $ sudo apt-get install python-wxglade python-glade2 python-wxgtk2.8 python-dev build-essential mysql-server mysql-client graphviz docbook dblatex python- pip git libmysqlclient-dev --no-install-recommends texlive-latex-extra
+        $ sudo apt-get install python-wxglade python-glade2 python-wxgtk2.8 python-dev build-essential mysql-server mysql-client graphviz docbook dblatex python- pip git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils
 2. Install the Python extensions:
 
         $ sudo pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot
