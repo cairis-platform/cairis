@@ -4,7 +4,7 @@ markdown: redcarpet
 
 description: > # this means to ignore newlines until "baseurl:"
   Computer Aided Integration of Requirements and Information Security
-baseurl: "" # the subpath of your site, e.g. /blog/
+baseurl: "/CAIRIS" # the subpath of your site, e.g. /blog/
 url: "http://failys.github.io/CAIRIS" # the base hostname & protocol for your site
 twitter_username: ShamalFaily
 github_username:  failys
