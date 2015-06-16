@@ -1,0 +1,27 @@
+{% include head.html %}
+
+<main>
+  <div id="wrap">
+    <div id="body" class="container">
+      {% include header.html %}
+
+
+      <div id="content-wrapper">
+        <div class="inner clearfix">
+          <aside id="sidebar">
+            <nav id="nav" role="navigation">
+              {% include nav.html %}
+            </nav>
+          </aside>
+
+          <h1>{{ page.title }}</h1>
+          <section id="main-content">
+            {{ content }}
+          </section>
+
+        </div> 
+      </div>
+    </div>
+  </div>
+</main>
+{% include foot.html %}

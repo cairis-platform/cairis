@@ -1,0 +1,12 @@
+---
+layout: default 
+title: Why CAIRIS
+---
+
+You don't have to go far to hear about security problems in software.  Tales of lost data, viruses, and cyberwarfare are now fairly common in the media.  Similarly, we all have experiences of using software which are less than pleasurable, especially where security is concerned; we have to remember lots of different passwords and, in some cases, are bombarded with security controls which can get in the way of the tasks we need to carry out.
+
+
+Many of the reported problems arise because security is designed as an after-thought; security controls were added to an existing architecture derived from a requirements analysis which didn't take into account security concerns.  In principle, all we need to do to start building secure systems is analyse security concerns in concert with requirements engineering activities. In practice, this begs the question of how we actually analyse security concerns in concert with requirements engineering.  The more we look at this question, the more we find more questions than answers.  How do we reconcile functional goals with quality goals such as security and usability?  If we have some pre-conceived ideas about possible threats and vulnerabilities, how do we use this information to augment our analysis?  How do we manage and reason about all this information and build a specification that can be used as a basis of a secure architecture?
+
+If we devise a means of answering these questions, will the resulting requirements specify a system which is not just secure, but usable as well?  The answer might well be 'it depends': it depends on the contexts within which the system will be used, how reflective the needs of the contributing stakeholders are to the people that will actually use the system, and how much the security controls help or hinder the activities that people will use the system for.  Existing approaches for Security Requirements Engineering don't really think about these questions; they assume we will specify a system for a single environment and, by virtue of stakeholder contribution to the requirements process, these system will be usable for the 'user'.  In reality, the environments within which a system is situated are liable to change, as are the goals and motivations of the people using it.  The process of eliciting requirements for secure system also need to encompass techniques to ensure the system is 'user-centered'.
+

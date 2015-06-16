@@ -498,7 +498,7 @@ header h2 {
 }
 
 aside#sidebar {
-  float: right;
+  float: left;
   width: 200px;
   min-height: 504px;
   padding-left: 20px;
@@ -848,7 +848,7 @@ footer a:hover {
   }
   #main-content,
   aside#sidebar {
-    float: none;
+    float: left;
     width: 100% ! important;
   }
   aside#sidebar {
@@ -859,7 +859,8 @@ footer a:hover {
     border-top: solid 1px #ddd;
   }
   aside#sidebar a.button {
-    display: none;
+    display: block;
+    width: 60px;
   }
   #main-content h1:before,
   #main-content h2:before,
@@ -872,6 +873,7 @@ footer a:hover {
     content: none;
   }
 }
+
 
 /* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
 @media only screen and (min-width: 480px) and (max-width: 767px) { }
