@@ -7,7 +7,7 @@ CAIRIS (Computer Aided Integration of Requirements and Information Security) is 
 * Support for entering and managing risk analysis data.
 * Support for specifying attack patterns to reason about potential attacks.
 * The ability to import architectural patterns to automatically derive attack surface metrics based on them.
-* Automatic visualisation of models, and quantitative/quantative scoring of security and usability data 
+* Automatic visualisation of models, and quantitative/qualitative scoring of security and usability data 
 * Automatic document generation of a VOLERE compliant requirements specification.
 
 == Getting Started ==
