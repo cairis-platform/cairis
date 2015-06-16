@@ -12,10 +12,4 @@ CAIRIS (Computer Aided Integration of Requirements and Information Security) is 
 
 == Getting Started ==
 
-CAIRIS should run on most recent flavours of Linux.  The dependencies that need to be pre-installed are described in the manual.
-Sadly, the manual itself is a little out-of-date but, from our experience, people who understand the concepts used by the tool can usally get up and running pretty quickly.
-
-
-== Get in Touch ==
-
-If you get any problems running CAIRIS, or have any questions or feature requests then please do get in touch.
+CAIRIS should run on most recent flavours of Linux.  See the CAIRIS website for installation instructions.
