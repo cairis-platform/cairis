@@ -52,6 +52,3 @@ Thanks go to [Robin Quetin](https://github.com/RobinQuetin) for putting these in
         dbname = cairis
         tmp_dir = /tmp
         root = /opt/cairis/cairis
-10.  To start CAIRIS, you can open a terminal window and go to the directory containing the source code of CAIRIS.  This is usually `$CAIRIS_DIR/cairis`.
-
-        $ python cairis.py
