@@ -80,6 +80,7 @@ from ComponentModel import ComponentModel
 from CodeNetworkModel import CodeNetworkModel
 from CodeNetworkViewer import CodeNetworkViewer
 from ImpliedProcessesDialog import ImpliedProcessesDialog
+from ModelExport import exportModel
 import DocumentBuilder
 from itertools import izip
 import gtk
@@ -1587,17 +1588,7 @@ class RMFrame(wx.Frame):
       dlg = wx.FileDialog(self,message='Export model',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
       if (dlg.ShowModal() == wx.ID_OK):
         exportFile = dlg.GetPath() + ".xml"
-        xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/cairis_model.dtd">\n<cairis_model>\n\n\n'
-        xmlBuf+= self.dbProxy.tvTypesToXml(0)[0] + '\n\n'
-        xmlBuf+= self.dbProxy.domainValuesToXml(0)[0] + '\n\n'
-        xmlBuf+= self.dbProxy.projectToXml(0) + '\n\n'
-        xmlBuf+= self.dbProxy.riskAnalysisToXml(0)[0] + '\n\n'
-        xmlBuf+= self.dbProxy.usabilityToXml(0)[0] + '\n\n'
-        xmlBuf+= self.dbProxy.goalsToXml(0)[0] + '\n\n'
-        xmlBuf+= self.dbProxy.associationsToXml(0)[0] + '\n\n</cairis_model>'
-        f = open(exportFile,'w')
-        f.write(xmlBuf)
-        f.close()
+        exportModel(exportFile)
         confDlg = wx.MessageDialog(self,'Exported model','Export model',wx.OK | wx.ICON_INFORMATION)
         confDlg.ShowModal()
         confDlg.Destroy()

@@ -29,7 +29,7 @@ if __name__ == '__main__':
   try:
     parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Export to Redmine')
     parser.add_argument('outputFile',help='output file name')
-    parser.add_argument('--type',dest='modelFormat',help='model type to export.  One of requirements, scenarios, usecases, architecture, attackpatterns or GRL')
+    parser.add_argument('--type',dest='modelFormat',help='model type to export.  One of all, requirements, scenarios, usecases, architecture, attackpatterns or GRL')
 #    parser.add_argument('--persona',dest='personaName',help='Persona name (relevant for GRL export only)')
     parser.add_argument('--persona',nargs='+',help='Persona name (relevant for GRL export only)')
 #    parser.add_argument('--task',dest='taskName',help='Task name (relevant for GRL export only)')
@@ -39,7 +39,9 @@ if __name__ == '__main__':
     BorgFactory.initialise()
    
     msgStr = ''
-    if (args.modelFormat == 'scenarios'):
+    if (args.modelFormat == 'all'):
+      msgStr += exportModel(args.outputFile)
+    elif (args.modelFormat == 'scenarios'):
       msgStr += exportRedmineScenarios(args.outputFile)
     elif (args.modelFormat == 'requirements'):
       msgStr += exportRedmineRequirements(args.outputFile)

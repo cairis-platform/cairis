@@ -268,3 +268,18 @@ def exportAttackPatterns(outFile):
   aFile.close()
 
   return 'Exported ' + str(noAPs) + ' attack patterns.'
+
+def exportModel(outFile):
+  b = Borg()
+  xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">\n<cairis_model>\n\n\n'
+  xmlBuf+= b.dbProxy.tvTypesToXml(0)[0] + '\n\n'
+  xmlBuf+= b.dbProxy.domainValuesToXml(0)[0] + '\n\n'
+  xmlBuf+= b.dbProxy.projectToXml(0) + '\n\n'
+  xmlBuf+= b.dbProxy.riskAnalysisToXml(0)[0] + '\n\n'
+  xmlBuf+= b.dbProxy.usabilityToXml(0)[0] + '\n\n'
+  xmlBuf+= b.dbProxy.goalsToXml(0)[0] + '\n\n'
+  xmlBuf+= b.dbProxy.associationsToXml(0)[0] + '\n\n</cairis_model>'
+  f = open(outFile,'w')
+  f.write(xmlBuf)
+  f.close()
+  return 'Exported model'

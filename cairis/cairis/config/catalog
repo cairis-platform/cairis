@@ -30,7 +30,7 @@
        uri="associations.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/associations.dtd"  
+       systemId="http://cairis.org/dtd/associations.dtd"  
        uri="associations.dtd"/>
 
     <public 
@@ -38,7 +38,7 @@
        uri="cairis.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/cairis.dtd"  
+       systemId="http://cairis.org/dtd/cairis.dtd"  
        uri="cairis.dtd"/>
 
     <public 
@@ -46,7 +46,7 @@
        uri="cairis_model.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/cairis_model.dtd"  
+       systemId="http://cairis.org/dtd/cairis_model.dtd"  
        uri="cairis_model.dtd"/>
 
     <public 
@@ -54,7 +54,7 @@
        uri="directory.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/directory.dtd"  
+       systemId="http://cairis.org/dtd/directory.dtd"  
        uri="directory.dtd"/>
 
     <public 
@@ -62,7 +62,7 @@
        uri="domainvalues.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/domainvalues.dtd"  
+       systemId="http://cairis.org/dtd/domainvalues.dtd"  
        uri="domainvalues.dtd"/>
 
     <public 
@@ -70,7 +70,7 @@
        uri="goals.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/goals.dtd"  
+       systemId="http://cairis.org/dtd/goals.dtd"  
        uri="goals.dtd"/>
 
     <public 
@@ -78,7 +78,7 @@
        uri="riskanalysis.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/riskanalysis.dtd"  
+       systemId="http://cairis.org/dtd/riskanalysis.dtd"  
        uri="riskanalysis.dtd"/>
 
     <public 
@@ -86,7 +86,7 @@
        uri="securitypattern.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/securitypattern.dtd"  
+       systemId="http://cairis.org/dtd/securitypattern.dtd"  
        uri="securitypattern.dtd"/>
 
     <public 
@@ -102,7 +102,7 @@
        uri="tvtypes.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/tvtypes.dtd"  
+       systemId="http://cairis.org/dtd/tvtypes.dtd"  
        uri="tvtypes.dtd"/>
 
     <public 
@@ -110,7 +110,7 @@
        uri="usability.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/usability.dtd"  
+       systemId="http://cairis.org/dtd/usability.dtd"  
        uri="usability.dtd"/>
 
     <public 
@@ -118,7 +118,7 @@
        uri="component_view.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/component_view.dtd"  
+       systemId="http://cairis.org/dtd/component_view.dtd"  
        uri="component_view.dtd"/>
 
     <public 
@@ -126,7 +126,7 @@
        uri="synopses.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/synopses.dtd"  
+       systemId="http://cairis.org/dtd/synopses.dtd"  
        uri="synopses.dtd"/>
 
     <public 
@@ -134,7 +134,7 @@
        uri="processes.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/processes.dtd"  
+       systemId="http://cairis.org/dtd/processes.dtd"  
        uri="processes.dtd"/>
 
     <public 
@@ -142,7 +142,7 @@
        uri="template_assets.dtd"/>
 
     <system
-       systemId="http://www.cs.ox.ac.uk/cairis/dtd/template_assets.dtd"  
+       systemId="http://cairis.org/dtd/template_assets.dtd"  
        uri="template_assets.dtd"/>
 
   </group>
