@@ -25,9 +25,9 @@ Countermeasures are associated with roles, who may be responsible for developing
 
 * After ensuring the environment is selected in the environment window, select the countermeasure cost
 
-* Click on the Security tab to display the security page (figure [fig:CountermeasureDialogSecurity]).  Right click in the Requirements box, and select add from the speed menu to add the requirement (or requirements) this countermeasure refines.  Following this, right click on the Target list and select add to select the countermeasure's target/s, together with the countermeasure's effectiveness.  Finally, add the security properties fostered by this countermeasure via the security properties box at the bottom of the page.
+* Click on the Security tab to display the security page.  Right click in the Requirements box, and select add from the speed menu to add the requirement (or requirements) this countermeasure refines.  Following this, right click on the Target list and select add to select the countermeasure's target/s, together with the countermeasure's effectiveness.  Finally, add the security properties fostered by this countermeasure via the security properties box at the bottom of the page.
 
-* Click on the Usability tab to display the usability page (figure [fig:CountermeasureDialogUsability]).  Right click on the Roles box, and select add from the speed menu to add the roles associated with this countermeasure. Any tasks associated with these roles are automatically populated in the Task box at the bottom of the page, together with the person/s carrying out the task.  If the countermeasure helps or hinders a task, double click on the task and modify the task's attributes accordingly.
+* Click on the Usability tab to display the usability page.  Right click on the Roles box, and select add from the speed menu to add the roles associated with this countermeasure. Any tasks associated with these roles are automatically populated in the Task box at the bottom of the page, together with the person/s carrying out the task.  If the countermeasure helps or hinders a task, double click on the task and modify the task's attributes accordingly.
 
 * Click on the Create button to add the new countermeasure.
 
@@ -41,7 +41,7 @@ By right clicking on a countermeasure in the Countermeasures window, an associat
 
 Assets can be generated directly based on the countermeasure properties, or on the basis of a pre-existing template asset.  It is also possible to situate security patterns based on a countermeasure, rather than an asset.  To do this, select Situate Pattern from the speed menu, select the security patten, followed by the countermeasure environments to situate the pattern assets in.
 
-Security Patterns can be imported into the tool by using the Import/Import Security Patterns option, and selecting the XML based patterns catalogue to import.  An example catalogue file, schumacher.xml, which incorporates a number of patterns from the Security Patterns text book by Schumacher et al is included in the iris/sql directory.
+Security Patterns can be imported into the tool by using the Import/Import Security Patterns option, and selecting the XML based patterns catalogue to import.  An example catalogue file, schumacher.xml, which incorporates a number of patterns from the Security Patterns text book by Schumacher et al is included in the cairis/sql directory.
 
 ## Associating countermeasures with pre-existing patterns ##
 

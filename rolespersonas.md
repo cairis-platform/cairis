@@ -85,7 +85,7 @@ The system needs to be specified for Primary Personas, but Secondary Personas ca
 
 * From the Persona Characteristics dialog box, click on Add to add a new characteristic.
 
-* From the General folder, add a description of the charcteristic and a *Model Qualifier*; this word describes your confidence in the validity of the characteristic.  Possible qualifiers might include *always*, *usually*, or *perhaps*.
+* From the General folder, add a description of the characteristic and a *Model Qualifier*; this word describes your confidence in the validity of the characteristic.  Possible qualifiers might include *always*, *usually*, or *perhaps*.
 
 * Click on the Grounds tab to open the list of Grounds for this characteristic.  The grounds are evidence which support the validity of the characteristic.  Right click in the Reference box, and select Add to add a Document Reference.  Select the concept type for this evidence and the name of a pre-exising concept or document reference for this grounds.  If one doesn't already exist, then select any artifact and, from the Reference combo box, select [New artifact reference] (for a document reference) or [New concept reference] (for a reference to an existing model object.  In both cases, a dialogue box will appear allowing you to enter a short description of the grounds proposition, together with more detailed rationale.  Clicking on Ok will add the new document or concept reference, and add this to the grounds list.
 

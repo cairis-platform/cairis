@@ -31,7 +31,7 @@ Goals or requirements may be obstructed by obstacles, which are conditions repre
 
 ![fig:AddGoalRefinement]({{ site.baseurl }}/assets/AddGoalRefinement.png "Add Goal Refinement Dialog")
 
-* If this goal refines a parent goal, click on the Goals tab, right-click on Goal refinement list, and select Add to open the Add Goal Refinement Dialog (figure [fig:AddGoalRefinement]).  In this dialog, select the Goal from the Type combo box, and select the Sub-goal, refinement type, and an Alternate value. Possible refinement types are: and, or, conflict, responsible, obstruct, and resolve.  The alternative value (Yes or No) indicates whether or not this goal affords a goal-tree for an alternate possibility for satisfying the parent goal.  It is also possible to enter a rationale for this goal refinement in the refinement text book.  Clicking on Add will add the refinement association to memory, but this will not be committed to the database until the goal is added or updated.
+* If this goal refines a parent goal, click on the Goals tab, right-click on Goal refinement list, and select Add to open the Add Goal Refinement Dialog.  In this dialog, select the Goal from the Type combo box, and select the Sub-goal, refinement type, and an Alternate value. Possible refinement types are: and, or, conflict, responsible, obstruct, and resolve.  The alternative value (Yes or No) indicates whether or not this goal affords a goal-tree for an alternate possibility for satisfying the parent goal.  It is also possible to enter a rationale for this goal refinement in the refinement text book.  Clicking on Add will add the refinement association to memory, but this will not be committed to the database until the goal is added or updated.
 
 * If this goal refines to sub-goals already specified, Click on the Sub-Goals tab and add a goal refinement association as described in the previous step.  A goal may refine to artifacts other than goals, specifically tasks, requirements, obstacles, and domain properties.
 
@@ -86,7 +86,7 @@ Obstacle models can be viewed by clicking on the Obstacle Model toolbar button, 
 
 ![fig:ObstacleModel]({{ site.baseurl }}/assets/ObstacleModel.png "Obstacle Model")
 
-In many ways, the obstacle model is very similar to the goal model.  The main differencs are goal filtering is not possible, only the obstacle tree is displayed, and obstacles refine to obstacles, as opposed to goals.
+In many ways, the obstacle model is very similar to the goal model.  The main differences are goal filtering is not possible, only the obstacle tree is displayed, and obstacles refine to obstacles, as opposed to goals.
 
 ## Adding, updating, and deleting requirements ##
 

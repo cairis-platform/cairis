@@ -21,7 +21,7 @@ An environment might represent a system operating at a particular time of day, o
 
 ![fig:NewEnvironmentDialog]({{ site.baseurl }}/assets/NewEnvironmentDialog.png "New Environment Dialog")
 
-Most artifacts in CAIRIS are situated in one or more environments.  When creating or updating an artifact, it is usually possible to create a new environment on the fly by right-clicking on the environment list box in the artifact dialog and selecting the New button.  This opens the New Environment dialog box (figure [fig:NewEnvironmentDialog].  In this dialog, an environment name, short code and description can be entered.  When the create button is selected, a new environment is added to the CAIRIS database, and added to the environment list for the artifact.
+Most artifacts in CAIRIS are situated in one or more environments.  When creating or updating an artifact, it is usually possible to create a new environment on the fly by right-clicking on the environment list box in the artifact dialog and selecting the New button.  This opens the New Environment dialog box.  In this dialog, an environment name, short code and description can be entered.  When the create button is selected, a new environment is added to the CAIRIS database, and added to the environment list for the artifact.
 
 ## Environmental attribute inheritence ##
 

@@ -23,7 +23,7 @@ Tasks model the work carried out by one or more personas.  This work is describe
 
 ![fig:AddTaskPersona]({{ site.baseurl }}/assets/AddTaskPersona.png "Add Task Persona Dialog")
 
-* Right click on the persona list box and select Add from the speed menu to associate a persona with this task.  In the Add Task Persona dialog box (figure [fig:AddTaskPersona]) select the person, the task duration (seconds, minutes, hours or longer), frequency (hourly or more, daily-weekly, monthly or less),demands (none, low, medium, high), and goal conflict (none, low, medium, high). The values for low, medium, and high should be agreed with participants before hand.  
+* Right click on the persona list box and select Add from the speed menu to associate a persona with this task.  In the Add Task Persona dialog box, select the person, the task duration (seconds, minutes, hours or longer), frequency (hourly or more, daily-weekly, monthly or less),demands (none, low, medium, high), and goal conflict (none, low, medium, high). The values for low, medium, and high should be agreed with participants before hand.  
 
 * If any aspect of the task concerns one or more assets, then these can be added to the concern list.  Adding an asset concern causes a concern comment to be associated to the asset in the asset model.  If the task concerns an association between assets, the association can be added by clicking on the Concern Association tab and adding the source and target assets and association multiplicity to the concern association list.  In the asset model, this association is displayed and a concern comment is associated to each asset in the association.
 
@@ -39,7 +39,7 @@ Tasks model the work carried out by one or more personas.  This work is describe
 
 ![fig:TraceabilityEditor]({{ site.baseurl }}/assets/TraceabilityEditor.png "Traceability Editor")
 
-Tasks can be manually traced to certain artifacts via the Tasks dialog.  A task may contribute to an asset or a vulnerability, or be supported by requirement.  To add a traceability link, right click on the task name, and select Supported By or Contributes to.  This opens the Traceability Editor (figure [fig:TraceabilityEditor]).  From this editor, select the object on the right hand side of the editor to trace to and click the Add button to add this link.
+Tasks can be manually traced to certain artifacts via the Tasks dialog.  A task may contribute to an asset or a vulnerability, or be supported by requirement.  To add a traceability link, right click on the task name, and select Supported By or Contributes to.  This opens the Traceability Editor.  From this editor, select the object on the right hand side of the editor to trace to and click the Add button to add this link.
 
 Manual traceability links can be removed by selecting the View/Traceability menu option, to open the Traceability Relations dialog.  In this dialog box, manual traceability relations be removed from specific environments.
 

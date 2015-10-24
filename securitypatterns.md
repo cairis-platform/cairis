@@ -27,7 +27,7 @@ Before a security pattern can be situated in CAIRIS environments, the environmen
 
 ![fig:TemplateAssetDialog]({{ site.baseurl }}/assets/TemplateAssetDialog.png "Template Pattern Dialog")
 
-Template assets can be best described as context-free assets.  When they are created, template assets do not form part of analysis unless they are implicitly introduced.  This 'implicit introduction' occurs when a security pattern is situated (see section [situateasecuritypattern]).
+Template assets can be best described as context-free assets.  When they are created, template assets do not form part of analysis unless they are implicitly introduced.  This 'implicit introduction' occurs when a security pattern is situated.
 
 The Template Patterns dialog can be opened by selecting the Options/Template Assets menu option.
 
@@ -46,7 +46,7 @@ To situate an asset in an environment, right click on the template asset name in
 
 * Click on the Problem page, and type in a problem description motivating the security pattern.
 
-* Click on the solutionm page, and type in the intrinsics of how the security pattern solves the pre-defined problem.
+* Click on the solution page, and type in the intrinsics of how the security pattern solves the pre-defined problem.
 
 * Click on the Structure page, and right-click on the association list control to add associations between template assets; these associations form the collaborative structure for the pattern.  The procedure for entering associations is based on that used for associating assets.
 
@@ -62,9 +62,9 @@ To situate an asset in an environment, right click on the template asset name in
 
 ![fig:SituatePatternDialog]({{ site.baseurl }}/assets/SituatePatternDialog.png "Situate Pattern Dialog")
 
-* To introduce a security pattern into the working project, open the Security Patterns dialog box, right-click on the pattern, and select the Situate Pattern option from the speed menu.  This opens the Situate Pattern Dialog box, illustratedin figure [fig:SituatePatternDialog].
+* To introduce a security pattern into the working project, open the Security Patterns dialog box, right-click on the pattern, and select the Situate Pattern option from the speed menu.  This opens the Situate Pattern Dialog box.
 
-* For each collaborating asset, click on the check boxes that you wish to situate each asset in.  It may be that not all assets in the pattern are relevant for all contexts of use.  Therefore, all the pattern structure is retained in the project, the pattern structure displayed in each environment is based only on the assets situated.  For example, for the Packet Filter Pattern, an end-user context of use may only be concerned with the client workstation asset and the firewall.  A system administrator may be concerned about most of the pattern structur, but may be less concerned about interactions with external hosts.
+* For each collaborating asset, click on the check boxes that you wish to situate each asset in.  It may be that not all assets in the pattern are relevant for all contexts of use.  Therefore, all the pattern structure is retained in the project, the pattern structure displayed in each environment is based only on the assets situated.  For example, for the Packet Filter Pattern, an end-user context of use may only be concerned with the client workstation asset and the firewall.  A system administrator may be concerned about most of the pattern structure, but may be less concerned about interactions with external hosts.
 
 * Click on the Create button to situate the pattern.
 

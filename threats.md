@@ -37,4 +37,4 @@ A threat is also of a certain type.  CAIRIS is pre-loaded with a selection of th
 
 ![fig:ImportThreatDialog]({{ site.baseurl }}/assets/ImportThreatDialog.png "Import Threat")
 
-The CAIRIS database is pre-loaded with a database of template threats based on the Common Criteria.  To import one of these, select Import from the Threats dialog to open the Import Threat dialog (figure [fig:ImportThreat]). When a threat is selected, the Threat dialog is opened, and pre-populated with information from the template.
+The CAIRIS database is pre-loaded with a database of template threats based on the Common Criteria.  To import one of these, select Import from the Threats dialog to open the Import Threat dialog. When a threat is selected, the Threat dialog is opened, and pre-populated with information from the template.

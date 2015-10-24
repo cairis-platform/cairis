@@ -41,21 +41,21 @@ The CAIRIS asset model is based on UML class models.  Asset models can be viewed
 
 ### Adding an asset association ###
 
-* If creating or updating an asset, an association between that asset and another asset can be made by clicking on the Associations tab in the Asset Dialog and, from the right-click speed menu, selecting Add to open the Add Asset Dialog (figure [fig:AddAssetAssociation]).
+* If creating or updating an asset, an association between that asset and another asset can be made by clicking on the Associations tab in the Asset Dialog and, from the right-click speed menu, selecting Add to open the Add Asset Dialog.
 
 * From the Add Asset Dialog, set the adornments for the head and tail end of the association.  Possible adornment options are Inheritence, Association, Aggregation, and Composition; the semantics for these adornments are based on UML.
 
-* Set the multiplicity (nry) for the head and tail ends of the association.  Possible multiplicity options are 1, *, and 1..*.
+* Set the multiplicity (nry) for the head and tail ends of the association.  Possible multiplicity options are `1`, `*`, and `1..*`.
 
 * Optional role names can also be set at the head or tail end of the association.
 
 * Select the Create (or Edit if modifying an existing association) will add the association to the Asset Dialog.  The association will not be adde to the database until the asset itself is created or modified.
 
-* Asset associations can also be added by selecting the Asset Associations tool-bar button.  Clicking this button opens the Asset Associations dialog, where new associations can be created or existing associations can be modified or removed.  The dialog for modifying associations is identical to the Asset Association dialog in figure [fig:AddAssetAssocation], with the addition of a combo box for selecting the environment to situate the association in.
+* Asset associations can also be added by selecting the Asset Associations tool-bar button.  Clicking this button opens the Asset Associations dialog, where new associations can be created or existing associations can be modified or removed.  The dialog for modifying associations is identical to the Asset Association dialog, with the addition of a combo box for selecting the environment to situate the association in.
 
 ![fig:AssetInconsistency]({{ site.baseurl }}/assets/AssetInconsistency.png "Asset Inconsistency warning")
 
-* If an asset is associated with an asset with one or more security properties of a lower value, then an Asset Inconsistency dialog (figure [fig:AssetInconsistency]) displayed, warning about the details of the inconsistency.
+* If an asset is associated with an asset with one or more security properties of a lower value, then an Asset Inconsistency dialog is displayed, warning about the details of the inconsistency.
 
 
 ### Viewing Asset models ###
