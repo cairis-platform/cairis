@@ -17,5 +17,3 @@ All the information entered into CAIRIS is stored in a single MySQL database, bu
 Model files can also be imported from the command line by using the `cimport.py` script in the source code directory.  
 
         $ python cimport.py --type all --overwrite 1 ../examples/completeExample.xml
-
-Although a little out of date, the [user manual]({{site.baseurl}}/assets/manual.pdf) describes how CAIRIS can be used to model and analyse security, usability, and requirements elements.
