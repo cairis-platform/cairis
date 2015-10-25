@@ -176,7 +176,7 @@
         <fo:external-graphic>
           <xsl:attribute name="src">
             <xsl:call-template name="fo-external-image">
-              <xsl:with-param name="filename" select="concat(/home/irisuser/iris, '/iris/images/oxBrand.pdf')"/>
+              <xsl:with-param name="filename" select="concat(/home/cairisuser/CAIRIS, '/cairis/cairis/images/brand.pdf')"/>
             </xsl:call-template>
           </xsl:attribute>
         </fo:external-graphic>

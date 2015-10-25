@@ -3812,6 +3812,7 @@ INSERT INTO obstacle_category_type values(9,'Anonymity Threat');
 INSERT INTO obstacle_category_type values(10,'Pseudonymity Threat');
 INSERT INTO obstacle_category_type values(11,'Unlinkability Threat');
 INSERT INTO obstacle_category_type values(12,'Unobservability Threat');
+INSERT INTO obstacle_category_type values(13,'Threat');
 INSERT INTO project_setting values(0,'Project Name','New Project');
 INSERT INTO project_setting values(1,'Project Background','None');
 INSERT INTO project_setting values(2,'Project Goals','None');

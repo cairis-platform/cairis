@@ -27,7 +27,7 @@
 
 <!ELEMENT obstacle (definition,concern*,responsibility*,probability?)>
 <!ATTLIST obstacle name CDATA #REQUIRED>
-<!ATTLIST obstacle category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support) #REQUIRED>
+<!ATTLIST obstacle category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity Threat | Pseudonymity Threat | Unlinkability Threat | Unobservability Threat | Threat ) #REQUIRED>
 <!ELEMENT definition (#PCDATA)>
 <!ELEMENT concern EMPTY>
 <!ATTLIST concern name CDATA #REQUIRED>

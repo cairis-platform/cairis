@@ -22,7 +22,7 @@ from GenerateDocumentationPanel import GenerateDocumentationPanel
 
 class GenerateDocumentationDialog(wx.Dialog):
   def __init__(self,parent):
-    wx.Dialog.__init__(self,parent,armid.GENDOCDIALOG_ID,'Generate documentation',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX,size=(250,620))
+    wx.Dialog.__init__(self,parent,armid.GENDOCDIALOG_ID,'Generate documentation',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX,size=(250,700))
     self.theId = -1
     self.panel = 0
     self.theDocumentType = 'Requirements'
