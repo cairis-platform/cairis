@@ -1,11 +1,17 @@
 ---
 layout: default
-title: Home
+title: Posts
 ---
 
-{% for post in site.posts %}
-  <div class="post">
-    <h2>{{ post.date | date_to_string }}</span> &raquo;{{ post.title }}</h2>
-    {{ post.content }}
-  </div>
-{% endfor %}
+<ul class="post-list">
+  {% for post in site.posts %}
+    <li class="post-item">
+      <span class="post-meta"><i class="fa fa-calendar"></i> {{ post.date | date: "%b %-d, %Y" }}</span>
+
+      <h2>
+        <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+      </h2>
+      <p>{{ post.description }}</p>
+    </li>
+  {% endfor %}
+</ul>
