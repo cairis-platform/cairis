@@ -124,5 +124,5 @@
 <!ATTLIST exception name CDATA #REQUIRED>
 <!ATTLIST exception type (Goal | Requirement) #REQUIRED>
 <!ATTLIST exception value CDATA #REQUIRED>
-<!ATTLIST exception category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity Threat | Pseudonymity Threat | Unlinkability Threat | Unobservability Threat | Threat) #REQUIRED>
+<!ATTLIST exception category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat) #REQUIRED>
 <!ELEMENT postconditions (#PCDATA)>
