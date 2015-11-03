@@ -53,3 +53,4 @@ Thanks go to [Robin Quetin](https://github.com/RobinQuetin) for putting these in
         dbname = cairis
         tmp_dir = /tmp
         root = /opt/cairis/cairis
+        default_image_dir = .
