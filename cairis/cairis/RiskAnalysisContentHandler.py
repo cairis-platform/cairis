@@ -15,7 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
+import os
 from xml.sax.handler import ContentHandler,EntityResolver
 from RoleParameters import RoleParameters
 from AssetParameters import AssetParameters
@@ -264,6 +264,9 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
     elif name == 'attacker':
       self.theName = attrs['name']
       self.theImage = attrs['image']
+      if os.path.isfile(self.theImage) == False:
+        b = Borg()
+        self.theImage = b.imageDir + "/" + self.theImage
     elif name == 'attacker_environment':
       self.theEnvironmentName = attrs['name']
     elif name == 'attacker_role':

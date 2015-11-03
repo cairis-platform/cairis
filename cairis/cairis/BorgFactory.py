@@ -61,6 +61,8 @@ def initialise():
       b.tmpDir = cfgVal
     elif cfgKey == 'root': 
       b.cairisRoot = cfgVal
+    elif cfgKey == 'default_image_dir': 
+      b.imageDir = os.path.abspath(cfgVal)
   cfgFile.close()
 
   b.dbProxy = DatabaseProxyFactory.build()

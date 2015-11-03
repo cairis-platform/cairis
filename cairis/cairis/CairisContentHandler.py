@@ -15,7 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
+import os
 from xml.sax.handler import ContentHandler,EntityResolver
 from EnvironmentParameters import EnvironmentParameters
 from ValueTypeParameters import ValueTypeParameters
@@ -87,6 +87,9 @@ class CairisContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name']
     elif name == 'rich_picture':
       self.theRichPicture = attrs['image']
+      if os.path.isfile(self.theRichPicture) == False:
+        b = Borg()
+        self.theRichPicture = b.imageDir + "/" + self.theRichPicture
     elif name == 'entry':
       self.theCurrentNameEntry = attrs['name']
     elif name == 'contributor':

@@ -21,8 +21,10 @@
 
 import argparse
 import BorgFactory
+import os
 from ModelImport import *
 from ARM import *
+from Borg import Borg
 
 
 if __name__ == '__main__':
@@ -31,6 +33,7 @@ if __name__ == '__main__':
     parser.add_argument('modelFile',help='model file to import')
     parser.add_argument('--type',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, project, domainvalues, architecturalpattern, associations, synopses, processes, assets or all')
     parser.add_argument('--overwrite',dest='isOverwrite',help='Where appropriate, overwrite an existing CAIRIS model with this model')
+    parser.add_argument('--image_dir',dest='imageDir',help='Where appropriate, directory for model images (overwrites default_image_dir value in cairis.cnf)')
     args = parser.parse_args() 
     mFormat = args.modelFormat
     importFile = args.modelFile
@@ -39,6 +42,10 @@ if __name__ == '__main__':
       overwriteFlag = 1
 
     BorgFactory.initialise()
+    b = Borg()
+
+    if args.imageDir != None:
+      b.imageDir = os.path.abspath(args.imageDir)
    
     msgStr = ''
     if (mFormat == 'securitypattern'):
