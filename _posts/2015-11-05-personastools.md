@@ -61,7 +61,7 @@ As we saw [here](https://github.com/webinos/webinos-design-data/tree/master/pers
 
 In building personas into CAIRIS, we had three goals to get people thinking about tools for personas.
 
-First, we wanted to draw attention to the need for decent-tool support for personas.  We don't see how personas can be seriously integrated into all stages of a product's design and engineering activities without it
+First, we wanted to draw attention to the need for decent-tool support for personas.  We don't see how personas can be seriously integrated into all stages of a product's design and engineering activities without it.
 
 Second, we wanted to provide an actual example of a software tool that 'builds personas in'.  The need for supporting persona interchangeability and version control seems self evident now, but -- in incorporating personas in CAIRIS -- we have demonstrated how this looks in practice.
 
