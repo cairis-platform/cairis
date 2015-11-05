@@ -57,7 +57,7 @@ Building on the previous guideline, this can be implemented quickly by storing p
 
 As we saw [here](https://github.com/webinos/webinos-design-data/tree/master/personas), this solution is trivial to implement if you're using something like [github](https://github.com).  As our webinos-data-data repository also illustrates, we can even incorporate personas into [build scripts](https://github.com/webinos/webinos-design-data/tree/master/scripts), so we can see if and how, from a design perspective, personas might 'break the build'.
 
-## Food for though? ##
+## Food for thought? ##
 
 In building personas into CAIRIS, we had three goals to get people thinking about tools for personas.
 
