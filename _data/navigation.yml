@@ -2,16 +2,16 @@
 
 - title: Getting started
   url: /install.html
-  excerpt: "Getting started"
+  excerpt: "How to install and start CAIRIS"
 
 - title: Documentation
   url: /doc.html
-  excerpt: "Documentation"
+  excerpt: "CAIRIS user manual"
 
 - title: Papers about CAIRIS
   url: /papers.html
-  excerpt: "Papers about CAIRIS"
+  excerpt: "Literature about CAIRIS' design, and lessons learned using it"
 
 - title: Blog
   url: /blog.html
-  excerpt: "Posts about CAIRIS"
+  excerpt: "Posting about CAIRIS and related topics"
