@@ -4,6 +4,8 @@ title:  "Building personas into design tools: why CAIRIS does it, and how"
 date:   2015-11-05 07:00:00
 categories: CAIRIS
 description: Four guideline for integrating personas into software engineering tools
+image:
+  teaser: cvertduc_teaser.gif
 ---
 
 ## What are personas? ##
