@@ -9,7 +9,7 @@ image:
 
 <div class="tile">
   <h2 class="post-title">Manage your security, usability, and design artifacts</h2>
-  <p class="post-excerpt">Enter or import a wide range of security, usability, and requirements data, and find new insights ranging from interconnections between requirements and risks, or the justification behind persona characteristics.</p>
+  <p class="post-excerpt">Enter or import a wide range of security, usability, and requirements data, and find new insights ranging from interconnections between requirements and risks, to the justification behind persona characteristics.</p>
   <img src="{{ site.url }}/images/persona_arg_tile.gif" class="page-feature-image">
 </div><!-- /.tile -->
 
