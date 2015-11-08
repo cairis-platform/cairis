@@ -5,6 +5,8 @@ date:   2015-10-25 14:00:00
 categories: CAIRIS
 description: Attack trees are great for ideation, but how do you integrate them into a larger system's design with the minimum of effort?
 author: Shamal Faily
+image:
+  teaser: cvertduc_teaser.gif
 ---
 
 Although CAIRIS was designed as a security requirements management tool, it's a big tool which does much more than just manage requirements.  This is the first of a series of postings that describes just some of things you can do with CAIRIS.
