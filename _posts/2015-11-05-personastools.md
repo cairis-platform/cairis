@@ -26,7 +26,7 @@ We have found that people new to personas have problems trusting their fictional
 
 In CAIRIS, we use [argumentation models](http://www.shamalfaily.com/wp-content/papercite-data/pdf/fafl108.pdf) to provide this rationale.  Here is an example of the argument underpinning the characteristic 'Contextual variety encourages rather than discourages user-centeredness'.
 
-![fig:argModel]({{ site.baseurl }}/assets/cvertduc.pdf "Argumentation model example")
+![fig:argModel]({{ site.baseurl }}/images/cvertduc.pdf "Argumentation model example")
 
 These visualisations are linked to persona narratives in CAIRIS using context-specific menus, so you can quickly compare and contrast the visual rationale with the narrative text.
 
@@ -37,7 +37,7 @@ As useful as argumentation models are for providing assurance about personas, us
 
 A few years ago, we presented a framework for [persona cases](http://www.shamalfaily.com/wp-content/papercite-data/pdf/fafl111.pdf) at CHI, illustrating how qualitative data analysis approaches can be used to create persona characteristics that stand up to validation.  Because commercial [CAQDAS tools](http://www.surrey.ac.uk/sociology/research/researchcentres/caqdas/) like [atlas.ti](http://atlasti.com) or [NVivo](http://www.qsrinternational.com/product) are out of the reach of many designers, CAIRIS incorporates all the elements necessary to support qualitative analysis needed to build persona cases.  This includes the ability to qualitatively code source data, annotate text with memos, and model relationships between codes.  As the below figure shows, we also added support for showing the role that each code relationship and quotation plays in justifying a particular persona characteristic.
 
-![fig:editImplChar]({{ site.baseurl }}/assets/EditCharacteristic.pdf "Edit implied characteristic")
+![fig:editImplChar]({{ site.baseurl }}/images/EditCharacteristic.pdf "Edit implied characteristic")
 
 ### 3. CAIRIS facilitates persona interchange ###
 
@@ -45,7 +45,7 @@ Interoperability is important if we want designers using different tools to use 
 
 Rather than forcing designers to create CAIRIS models just for interchanging personas and persona related data, we modified the DTD for CAIRIS 'usability' element to make it easier to create individual XML files for a given persona and its underlying data; this is shown in the UML class diagram below.
 
-![fig:usabilityDTD]({{ site.baseurl }}/assets/UsabilityDTD.pdf "Class diagram of persona DTD structure")
+![fig:usabilityDTD]({{ site.baseurl }}/images/UsabilityDTD.pdf "Class diagram of persona DTD structure")
 
 You can find lots of examples of how these persona XML models look in practice by browsing the [personas in the webinos design data repository on github](https://github.com/webinos/webinos-design-data/tree/master/personas).
 

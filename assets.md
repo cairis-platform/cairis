@@ -12,7 +12,7 @@ Assets are situated in one or more environments.  Security properties are associ
 
 ## Adding, updating, and deleting an asset ##
 
-![fig:AssetDialog]({{ site.baseurl }}/assets/AssetDialog.png "Asset Dialog")
+![fig:AssetDialog]({{ site.baseurl }}/images/AssetDialog.png "Asset Dialog")
 
 * Click on the Asset toolbar button to open the Assets dialog box, and click on the Add button to open the Asset dialog box.
 
@@ -37,7 +37,7 @@ Understanding how assets can be associated with each other is a useful means of 
 
 The CAIRIS asset model is based on UML class models.  Asset models can be viewed for each defined environment.  As well as explicitly defined asset associations, asset models will also contain associations implicitly defined.  For example, if a task has been defined, and this task concerns within an environment contain one or more assets, then the participating persona will be displayed as an actor, and an association between this actor and the asset will be displayed.  Additionally, if concern associations have been defined between goals and assets and/or associations then zooming into the model will display these concerns; the concerns are displayed as blue comment elements.
 
-![fig:AddAssetAssociation]({{ site.baseurl }}/assets/AddAssetAssociation.png "Add Asset Association Dialog")
+![fig:AddAssetAssociation]({{ site.baseurl }}/images/AddAssetAssociation.png "Add Asset Association Dialog")
 
 ### Adding an asset association ###
 
@@ -53,7 +53,7 @@ The CAIRIS asset model is based on UML class models.  Asset models can be viewed
 
 * Asset associations can also be added by selecting the Asset Associations tool-bar button.  Clicking this button opens the Asset Associations dialog, where new associations can be created or existing associations can be modified or removed.  The dialog for modifying associations is identical to the Asset Association dialog, with the addition of a combo box for selecting the environment to situate the association in.
 
-![fig:AssetInconsistency]({{ site.baseurl }}/assets/AssetInconsistency.png "Asset Inconsistency warning")
+![fig:AssetInconsistency]({{ site.baseurl }}/images/AssetInconsistency.png "Asset Inconsistency warning")
 
 * If an asset is associated with an asset with one or more security properties of a lower value, then an Asset Inconsistency dialog is displayed, warning about the details of the inconsistency.
 
@@ -62,7 +62,7 @@ The CAIRIS asset model is based on UML class models.  Asset models can be viewed
 
 Asset models can be viewed by clicking on the Asset Model toolbar button, and selecting the environment to view the environment for.
 
-![fig:AssetModel]({{ site.baseurl }}/assets/AssetModel.png "Asset Model")
+![fig:AssetModel]({{ site.baseurl }}/images/AssetModel.png "Asset Model")
 
 By changing the environment name in the environment combo box, the asset model for a different environment can be viewed.  The layout of the model can also be replaced by selecting a layout option in the Layout combo box at the foot of the model viewer window.
 

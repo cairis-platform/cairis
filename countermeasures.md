@@ -13,9 +13,9 @@ Countermeasures are associated with roles, who may be responsible for developing
 
 ## Adding, updating, and deleting a countermeasure ##
 
-![fig:CountermeasureDialogSecurity]({{ site.baseurl }}/assets/CountermeasureDialogSecurity.png "Countermeasure Dialog: Security Page")
+![fig:CountermeasureDialogSecurity]({{ site.baseurl }}/images/CountermeasureDialogSecurity.png "Countermeasure Dialog: Security Page")
 
-![fig:CountermeasureDialogUsability]({{ site.baseurl }}/assets/CountermeasureDialogUsability.png "Countermeasure Dialog: Usability Page")
+![fig:CountermeasureDialogUsability]({{ site.baseurl }}/images/CountermeasureDialogUsability.png "Countermeasure Dialog: Usability Page")
 
 * Click on the Countermeasure toolbar button to open the Countermeasures dialog box, and click on the Add button to open the Countermeasure dialog box.
 

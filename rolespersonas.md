@@ -10,7 +10,7 @@ Roles represent the abstract classes representing human agents; these also encap
 
 ### Adding, updating, and deleting a role ###
 
-![fig:RoleDialog]({{ site.baseurl }}/assets/RoleDialog.png "Role Dialog")
+![fig:RoleDialog]({{ site.baseurl }}/images/RoleDialog.png "Role Dialog")
 
 * Click on the Role toolbar button to open the Roles dialog box, and click on the Add button to open the Role dialog box.
 
@@ -28,7 +28,7 @@ Roles represent the abstract classes representing human agents; these also encap
 
 Responsibility models can be viewed by clicking on the View Responsibility Model toolbar button, and selecting the environment to view the environment for.
 
-![fig:ResponsibilityModel]({{ site.baseurl }}/assets/ResponsibilityModel.png "Responsibility Model")
+![fig:ResponsibilityModel]({{ site.baseurl }}/images/ResponsibilityModel.png "Responsibility Model")
 
 By changing the environment name in the environment combo box, the responsibility model for a different environment can be viewed.  The layout of the model can also be replaced by selecting a layout option in the Layout combo box at the foot of the model viewer window.
 
@@ -41,7 +41,7 @@ The system needs to be specified for Primary Personas, but Secondary Personas ca
 
 ### Adding, updating, or deleting a persona ###
 
-![fig:PersonaDialog]({{ site.baseurl }}/assets/PersonaDialog.png "Persona Dialog")
+![fig:PersonaDialog]({{ site.baseurl }}/images/PersonaDialog.png "Persona Dialog")
 
 * Click on the Persona toolbar button to open the Personas dialog box, and click on the Add button to open the Persona dialog box.
 
@@ -77,7 +77,7 @@ The system needs to be specified for Primary Personas, but Secondary Personas ca
 
 ### Recording persona assumptions ###
 
-![fig:APModel]({{ site.baseurl }}/assets/APModel.png "Assumption Persona model")
+![fig:APModel]({{ site.baseurl }}/images/APModel.png "Assumption Persona model")
 
 * From the Options/External Document directory, click on the Add button and add information about the source of any assumptions external to CAIRIS.  An example of such an *External Document* might be an interview transcript.  Alternatively, if assumptions are purely based on your own thoughts and feelings then an External Document can be created to make this explicit.
 

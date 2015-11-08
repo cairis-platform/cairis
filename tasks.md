@@ -9,7 +9,7 @@ Tasks model the work carried out by one or more personas.  This work is describe
 
 ### Adding, updating, or deleting a task ###
 
-![fig:TaskDialog]({{ site.baseurl }}/assets/TaskDialog.png "Task Dialog")
+![fig:TaskDialog]({{ site.baseurl }}/images/TaskDialog.png "Task Dialog")
 
 * Click on the Task toolbar button to open the Tasks dialog box, and click on the Add button to open the Task dialog box.
 
@@ -21,7 +21,7 @@ Tasks model the work carried out by one or more personas.  This work is describe
 
 * After ensuring the environment is selected in the environment window, click on the Summary tab.  In the Summary page, enter any dependencies needing to hold before this task can take place.  
 
-![fig:AddTaskPersona]({{ site.baseurl }}/assets/AddTaskPersona.png "Add Task Persona Dialog")
+![fig:AddTaskPersona]({{ site.baseurl }}/images/AddTaskPersona.png "Add Task Persona Dialog")
 
 * Right click on the persona list box and select Add from the speed menu to associate a persona with this task.  In the Add Task Persona dialog box, select the person, the task duration (seconds, minutes, hours or longer), frequency (hourly or more, daily-weekly, monthly or less),demands (none, low, medium, high), and goal conflict (none, low, medium, high). The values for low, medium, and high should be agreed with participants before hand.  
 
@@ -37,7 +37,7 @@ Tasks model the work carried out by one or more personas.  This work is describe
 
 ### Task traceability ###
 
-![fig:TraceabilityEditor]({{ site.baseurl }}/assets/TraceabilityEditor.png "Traceability Editor")
+![fig:TraceabilityEditor]({{ site.baseurl }}/images/TraceabilityEditor.png "Traceability Editor")
 
 Tasks can be manually traced to certain artifacts via the Tasks dialog.  A task may contribute to an asset or a vulnerability, or be supported by requirement.  To add a traceability link, right click on the task name, and select Supported By or Contributes to.  This opens the Traceability Editor.  From this editor, select the object on the right hand side of the editor to trace to and click the Add button to add this link.
 
@@ -47,7 +47,7 @@ Manual traceability links can be removed by selecting the View/Traceability menu
 
 Task models can be viewed by clicking on the Task Model toolbar button, and selecting the environment to view the environment for.
 
-![fig:TaskModel]({{ site.baseurl }}/assets/TaskModel.png "Task Model")
+![fig:TaskModel]({{ site.baseurl }}/images/TaskModel.png "Task Model")
 
 By changing the environment name in the environment combo box, the task model for a different environment can be viewed.  The layout of the model can also be replaced by selecting a layout option in the Layout combo box at the foot of the model viewer window.
 

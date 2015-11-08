@@ -7,7 +7,7 @@ The first stage of the design process involves establishing the scope of subsequ
 
 ## Update project settings ##
 
-![fig:projectSettings]({{ site.baseurl }}/assets/projectSettings.png "Project Settings notebook")
+![fig:projectSettings]({{ site.baseurl }}/images/projectSettings.png "Project Settings notebook")
 
 * Click on the Project Settings button to open the Project Settings notebook.  By default, the notebook will open in the Background page.  Enter the project name and background in this page.
 

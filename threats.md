@@ -11,7 +11,7 @@ A threat is also of a certain type.  CAIRIS is pre-loaded with a selection of th
 
 ## Adding, updating, and deleting a threat ##
 
-![fig:ThreatDialog]({{ site.baseurl }}/assets/ThreatDialog.png "Threat Dialog")
+![fig:ThreatDialog]({{ site.baseurl }}/images/ThreatDialog.png "Threat Dialog")
 
 * Click on the Threat toolbar button to open the Threats dialog box, and click on the Add button to open the Threat dialog box.
 
@@ -35,6 +35,6 @@ A threat is also of a certain type.  CAIRIS is pre-loaded with a selection of th
 
 ## Importing threats ##
 
-![fig:ImportThreatDialog]({{ site.baseurl }}/assets/ImportThreatDialog.png "Import Threat")
+![fig:ImportThreatDialog]({{ site.baseurl }}/images/ImportThreatDialog.png "Import Threat")
 
 The CAIRIS database is pre-loaded with a database of template threats based on the Common Criteria.  To import one of these, select Import from the Threats dialog to open the Import Threat dialog. When a threat is selected, the Threat dialog is opened, and pre-populated with information from the template.

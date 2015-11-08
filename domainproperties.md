@@ -7,7 +7,7 @@ Domain Properties are descriptive properties about the statement world.  Domain 
 
 ## Adding, updating, and deleting a domain property ##
 
-![fig:DomainPropertyDialog]({{ site.baseurl }}/assets/DomainPropertyDialog.png "Domain Property Dialog")
+![fig:DomainPropertyDialog]({{ site.baseurl }}/images/DomainPropertyDialog.png "Domain Property Dialog")
 
 * Click on the Domain Properties toolbar button to open the Domain Properties dialog box, and click on the Add button to open the Domain Property dialog box.
 

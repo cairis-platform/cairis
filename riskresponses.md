@@ -13,7 +13,7 @@ By choosing to *Mitigate* a risk, we may either Prevent, Deter, Detect, or React
 
 ## Adding, updating, and deleting a response ##
 
-![fig:ResponseDialog]({{ site.baseurl }}/assets/ResponseDialog.png "Response Dialog")
+![fig:ResponseDialog]({{ site.baseurl }}/images/ResponseDialog.png "Response Dialog")
 
 * Click on the Response toolbar button to open the Responses dialog box, and click on the Add button.  Select the response to take from the available options presented.
 

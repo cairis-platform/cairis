@@ -12,7 +12,7 @@ Certain capabilities and motivations may be associated with attackers.  CAIRIS i
 
 ### Adding, updating, and deleting an attacker ###
 
-![fig:AttackerDialog]({{ site.baseurl }}/assets/AttackerDialog.png "Attacker Dialog")
+![fig:AttackerDialog]({{ site.baseurl }}/images/AttackerDialog.png "Attacker Dialog")
 
 * Click on the Attacker toolbar button to open the Attackers dialog box, and click on the Add button to open the Attacker dialog box.
 

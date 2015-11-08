@@ -12,7 +12,7 @@ The current status of Risk Analysis can be quickly ascertained by viewing the Ri
 
 ## Adding, updating, and deleting a risk ##
 
-![fig:RiskDialog]({{ site.baseurl }}/assets/RiskDialog.png "Risk Dialog")
+![fig:RiskDialog]({{ site.baseurl }}/images/RiskDialog.png "Risk Dialog")
 
 * Click on the Risk toolbar button to open the Risks dialog box, and click on the Add button to open the Risk dialog box.
 
@@ -22,7 +22,7 @@ The current status of Risk Analysis can be quickly ascertained by viewing the Ri
 
 * Before a risk can be created, an associated Misuse Case needs to be defined.  To do this, click on the Create Misuse Case button to open the Misuse Case Dialog.
 
-![fig:MisuseCaseDialog]({{ site.baseurl }}/assets/MisuseCaseDialog.png "Misuse Case Dialog")
+![fig:MisuseCaseDialog]({{ site.baseurl }}/images/MisuseCaseDialog.png "Misuse Case Dialog")
 
 * Most of the fields in the Misuse Case dialog have already been completed based on the risk analysis carried out up to this point.  Click on the Narrative tab and enter a scenario which describes how the attacker realises the associated risk, i.e. carries out the threat by exploiting the vulnerability.  The scenario written should be written in line with the attributes and values displayed in the Summary tab.
 
@@ -36,7 +36,7 @@ The current status of Risk Analysis can be quickly ascertained by viewing the Ri
 
 Risk Analysis models can be viewed by clicking on the Risk Analysis Model toolbar button, and selecting the environment to view the environment for.
 
-![fig:RiskAnalysisModel]({{ site.baseurl }}/assets/RiskAnalysisModel.png "Risk Analysis Model")
+![fig:RiskAnalysisModel]({{ site.baseurl }}/images/RiskAnalysisModel.png "Risk Analysis Model")
 
 By changing the environment name in the environment combo box, the risk analysis model for a different environment can be viewed.  The layout of the model can also be replaced by selecting a layout option in the Layout combo box at the foot of the model viewer window.
 

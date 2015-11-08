@@ -1,0 +1,17 @@
+# Site navigation links
+
+- title: Getting started
+  url: /install.html
+  excerpt: "Getting started"
+
+- title: Documentation
+  url: /doc.html
+  excerpt: "Documentation"
+
+- title: Papers about CAIRIS
+  url: /papers.html
+  excerpt: "Papers about CAIRIS"
+
+- title: Blog
+  url: /blog.html
+  excerpt: "Posts about CAIRIS"

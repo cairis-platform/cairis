@@ -25,7 +25,7 @@ Before a security pattern can be situated in CAIRIS environments, the environmen
 
 ## Create a template asset ##
 
-![fig:TemplateAssetDialog]({{ site.baseurl }}/assets/TemplateAssetDialog.png "Template Pattern Dialog")
+![fig:TemplateAssetDialog]({{ site.baseurl }}/images/TemplateAssetDialog.png "Template Pattern Dialog")
 
 Template assets can be best described as context-free assets.  When they are created, template assets do not form part of analysis unless they are implicitly introduced.  This 'implicit introduction' occurs when a security pattern is situated.
 
@@ -38,7 +38,7 @@ To situate an asset in an environment, right click on the template asset name in
 
 ## Create a security pattern ##
 
-![fig:SecurityPatternDialog]({{ site.baseurl }}/assets/SecurityPatternDialog.png "Security Pattern Dialog")
+![fig:SecurityPatternDialog]({{ site.baseurl }}/images/SecurityPatternDialog.png "Security Pattern Dialog")
 
 * Select the Options/Security Patterns menu option to open the Security Patterns dialog box, and click on the Add button to open the Security Pattern dialog box.
 
@@ -60,7 +60,7 @@ To situate an asset in an environment, right click on the template asset name in
 
 ## Situate a security pattern ##
 
-![fig:SituatePatternDialog]({{ site.baseurl }}/assets/SituatePatternDialog.png "Situate Pattern Dialog")
+![fig:SituatePatternDialog]({{ site.baseurl }}/images/SituatePatternDialog.png "Situate Pattern Dialog")
 
 * To introduce a security pattern into the working project, open the Security Patterns dialog box, right-click on the pattern, and select the Situate Pattern option from the speed menu.  This opens the Situate Pattern Dialog box.
 

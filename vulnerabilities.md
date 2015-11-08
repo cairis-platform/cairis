@@ -9,7 +9,7 @@ Vulnerabilities are weaknesses of a system, which are liable to exploitation.
 
 ### Create a vulnerability ###
 
-![fig:VulnerabilityDialog]({{ site.baseurl }}/assets/VulnerabilityDialog.png "Vulnerability Dialog")
+![fig:VulnerabilityDialog]({{ site.baseurl }}/images/VulnerabilityDialog.png "Vulnerability Dialog")
 
 * Click on the Vulnerability toolbar button to open the Vulnerabilities dialog box.
 
@@ -29,8 +29,8 @@ Vulnerabilities are weaknesses of a system, which are liable to exploitation.
 
 ### Importing a vulnerability ###
 
-![fig:ImportVulnerabilityDialog]({{ site.baseurl }}/assets/ImportVulnerabilityDialog.png "Import Vulnerability")
+![fig:ImportVulnerabilityDialog]({{ site.baseurl }}/images/ImportVulnerabilityDialog.png "Import Vulnerability")
 
 The CAIRIS database is pre-loaded with a database of template vulnerabilities based on the Common Criteria.  To import one of these, select Import from the Vulnerabilities dialog to open the Import Vulnerability dialog. When a vulnerability is selected, the Vulnerability dialog is opened, and pre-populated with information from the template.
 
-![fig:ImportedVulnerabilityDialog]({{ site.baseurl }}/assets/ImportedVulnerabilityDialog.png "Imported Vulnerability")
+![fig:ImportedVulnerabilityDialog]({{ site.baseurl }}/images/ImportedVulnerabilityDialog.png "Imported Vulnerability")

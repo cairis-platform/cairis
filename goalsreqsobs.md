@@ -13,11 +13,11 @@ Goals or requirements may be obstructed by obstacles, which are conditions repre
 
 ## Adding, updating, and deleting a goal ##
 
-![fig:GoalsDialog]({{ site.baseurl }}/assets/GoalsDialog.png "Goals Dialog")
+![fig:GoalsDialog]({{ site.baseurl }}/images/GoalsDialog.png "Goals Dialog")
 
 * Click on the Goal toolbar button to open the Goals dialog box. As [fig:GoalsDialog] illustrates, next to goal name is the current *status* for the goal.  If a goal is defined as OK, then this goal is refined by a requirement, or by one or more goals.  Goals with the status *to refine* have yet to be refined or operationalised.  Goals with the status *Check* have been refined by one or more obstacle, and these should be examined to find a root threat or vulnerability.
 
-![fig:GoalDialog]({{ site.baseurl }}/assets/GoalDialog.png "Goal Dialog")
+![fig:GoalDialog]({{ site.baseurl }}/images/GoalDialog.png "Goal Dialog")
 
 * Click on the Add button to open the Goal dialog box, and enter the name of the goal.
 
@@ -29,7 +29,7 @@ Goals or requirements may be obstructed by obstacles, which are conditions repre
 
 * Click on the Issue tab and enter any issues or comments relating to this goal.
 
-![fig:AddGoalRefinement]({{ site.baseurl }}/assets/AddGoalRefinement.png "Add Goal Refinement Dialog")
+![fig:AddGoalRefinement]({{ site.baseurl }}/images/AddGoalRefinement.png "Add Goal Refinement Dialog")
 
 * If this goal refines a parent goal, click on the Goals tab, right-click on Goal refinement list, and select Add to open the Add Goal Refinement Dialog.  In this dialog, select the Goal from the Type combo box, and select the Sub-goal, refinement type, and an Alternate value. Possible refinement types are: and, or, conflict, responsible, obstruct, and resolve.  The alternative value (Yes or No) indicates whether or not this goal affords a goal-tree for an alternate possibility for satisfying the parent goal.  It is also possible to enter a rationale for this goal refinement in the refinement text book.  Clicking on Add will add the refinement association to memory, but this will not be committed to the database until the goal is added or updated.
 
@@ -49,7 +49,7 @@ Goals or requirements may be obstructed by obstacles, which are conditions repre
 
 Goal models can be viewed by clicking on the Goal Model toolbar button, and selecting the environment to view the environment for.
 
-![fig:GoalModel]({{ site.baseurl }}/assets/GoalModel.png "Goal Model")
+![fig:GoalModel]({{ site.baseurl }}/images/GoalModel.png "Goal Model")
 
 By changing the environment name in the environment combo box, the goal model for a different environment can be viewed.  The layout of the model can also be replaced by selecting a layout option in the Layout combo box at the foot of the model viewer window.
 
@@ -62,7 +62,7 @@ Goals can also be refined from the goal model, albeit only for the environment b
 
 ## Adding, updating, and deleting an obstacle ##
 
-![fig:ObstacleDialog]({{ site.baseurl }}/assets/ObstacleDialog.png "Obstacle Dialog")
+![fig:ObstacleDialog]({{ site.baseurl }}/images/ObstacleDialog.png "Obstacle Dialog")
 
 * Click on the Obstacle toolbar button to open the Obstacles dialog box, and click on the Add button to open the Obstacle dialog box.
 
@@ -84,7 +84,7 @@ Goals can also be refined from the goal model, albeit only for the environment b
 
 Obstacle models can be viewed by clicking on the Obstacle Model toolbar button, and selecting the environment to view the environment for.
 
-![fig:ObstacleModel]({{ site.baseurl }}/assets/ObstacleModel.png "Obstacle Model")
+![fig:ObstacleModel]({{ site.baseurl }}/images/ObstacleModel.png "Obstacle Model")
 
 In many ways, the obstacle model is very similar to the goal model.  The main differences are goal filtering is not possible, only the obstacle tree is displayed, and obstacles refine to obstacles, as opposed to goals.
 

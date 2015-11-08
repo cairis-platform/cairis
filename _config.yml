@@ -1,11 +1,36 @@
-# Site settings
-title: CAIRIS
-markdown: redcarpet
+# Site wide configuration
 
-description: > # this means to ignore newlines until "baseurl:"
-  Computer Aided Integration of Requirements and Information Security
-baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://cairis.org" # the base hostname & protocol for your site
-twitter_username: ShamalFaily
-github_username:  failys
-# Build settings
+title: CAIRIS
+description: Computer Aided Integration of Requirements and Information Security
+logo: logo.gif # 120x120 px default image used for Twitter summary card
+teaser: teaser.gif # 400x250 px default teaser image used in image archive grid
+locale:
+url: http://localhost:4000
+
+# Jekyll configuration
+
+sass:
+    sass_dir: _sass
+    style: compressed
+permalink: /:categories/:title/
+kramdown:
+  toc_levels: 1..2
+highlighter: pygments
+gems:
+  - jekyll-sitemap
+
+
+# Site owner
+owner:
+  name: Shamal Faily
+  web: http://shamalfaily.com
+  twitter: CAIRISApp
+  google:
+    ad-client:
+    ad-slot:
+  bio:
+  avatar: bio-photo.jpg # 160x160 px image for author byline
+  disqus-shortname:
+
+
+exclude: ["lib", "config.rb", ".sass-cache", "Capfile", "config", "log", "Rakefile", "Rakefile.rb", "tmp", "*.sublime-project", "*.sublime-workspace", "Gemfile", "Gemfile.lock", "README.md", "LICENSE", "node_modules", "Gruntfile.js", "package.json"]
