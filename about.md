@@ -21,13 +21,21 @@ Several things.
 
 First, some tools focus on the specification of requirements.  Others focus on modelling requirements together with related concepts.  Still others are centered around managing UX data.  CAIRIS is the only tool that does all of this (and more).
 
-Second, CAIRIS is, to the best of our knowledge, the only security design tool that supports the notion of *environments*.  If you're building a medical data repository that will be used by different communities of users, you will be concerned about the nuances each community has.  For example, *clinical data* might have a high confidentiality value to one community, but low confidentiality value in other; this difference in properties may be due to the level of anonymisation that this asset might be subjected to in each community.  Similarly, each community might have threats, vulnerabilities, people that look similar but have subtle variations.  CAIRIS can capture these variations, thereby allowing the impact of design changes, or changes in people's characteristics and tasks to be examined for each 'context of use'.
+Second, CAIRIS is, to the best of our knowledge, the only security design tool that supports the notion of *environments*.  If you're building a medical data repository that will be used by different communities of users, you will be concerned about the nuances each community has.  For example, *clinical data* might have a high confidentiality value to one community, but low confidentiality value in other; this difference in properties may be due to the level of anonymisation this asset might be subjected to in each community.  Similarly, each community might have threats, vulnerabilities, people that look similar but have subtle variations.  CAIRIS can capture these variations, thereby allowing the impact of design changes, or changes in people's characteristics and tasks to be examined for each 'context of use'.
 
 Third, CAIRIS is scaleable.  In most other tools, analysts are required to build models by hand.  However, as models get bigger, this task gets increasingly harder.  CAIRIS addresses this by automatically generating models based on connections between concepts that analysts make.  CAIRIS deals with the messiness associated with visualising this data, so you don't have to.
 
 Fourth, CAIRIS doesn't attempt to be the 'one tool that rules them all'.  CAIRIS works best when used in combination with other 'best of breed' tools.  For example, CAIRIS has been used to import data from sources ranging from wiki pages and spreadsheets, to open source repositories about attack patterns.  Moreover, in addition to generating models and documentation, CAIRIS has been used to generate goal models that can be imported into other tools like [jUCMNav](http://jucmnav.softwareengineering.ca/ucm/bin/view/ProjetSEG/WebHome).  Because of how CAIRIS has been implemented, it's also fairly easy to develop extensions for importing and exporting data.
 
 Finally, although CAIRIS' origins are in specifying requirements, it has been recently extended to support the specification and analysis of software architectures as well.  To date, we believe CAIRIS to be the only tool that supports the specification and analysis of both security requirements and security architectures.
+
+## Are there any examples of CAIRIS in action? ##
+
+There is a sample model on [github](https://github.com/failys/CAIRIS/blob/master/cairis/examples/completeExample.xml), based on the specification of security requirements for [NeuroGrid](http://gtr.rcuk.ac.uk/project/C86DB105-5E52-4F37-BF3B-12A3500EB713).
+
+The [design data](https://github.com/webinos/webinos-design-data) for [webinos](http://webinos.org) is also based on CAIRIS.  
+
+We're currently working on a project to more models that will act as specification exemplars for critical infrastructure systems.  This is joint work by BU and AUEB.  Please [get in touch](mailto:sfaily@bournemouth.ac.uk) for more information if these models or this project is of interest.
 
 ## Is CAIRIS free? ##
 
