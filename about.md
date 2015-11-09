@@ -15,7 +15,7 @@ CAIRIS was developed as part of [Shamal Faily](http://shamalfaily.com)'s [doctor
 
 ## Why do I need CAIRIS? ##
 
-No-one disagrees that security should be considered as early as possible when designing software, but how do you do this productively, i.e. without getting in the way of the business of understanding the software's core functional goals?
+No-one disagrees that security should be considered as early as possible when designing software, but how do you do this productively, i.e. without security getting in the way of the business of understanding the software's core functional goals?
 
 CAIRIS helps by supporting the usability, security, and requirements engineering activities that one might use at the initial stages of a project.  If you're undertaking these activities then you're collecting data that needs to go somewhere.  By using CAIRIS as a repository for this data, you will benefit from CAIRIS' automatic analysis and visualisation capabilities.
 
@@ -25,19 +25,19 @@ Several things.
 
 First, some tools focus on the specification of requirements.  Others focus on modelling requirements together with related concepts.  Still others are centered around managing UX data.  CAIRIS is the only tool that does all of this (and more).
 
-Second, CAIRIS is, to the best of our knowledge, the only security design tool that supports the notion of *environments*.  If you're building a medical data repository that will be used by different communities of users, you will be concerned about the nuances each community has.  For example, *clinical data* might have a high confidentiality value to one community, but low confidentiality value in other; this difference in properties may be due to the level of anonymisation this asset might be subjected to in each community.  Similarly, each community might have threats, vulnerabilities, people that look similar but have subtle variations.  CAIRIS can capture these variations, thereby allowing the impact of design changes, or changes in people's characteristics and tasks to be examined for each 'context of use'.
+Second, CAIRIS is, to the best of our knowledge, the only security design tool that supports the notion of *environments*.  If you're building a medical data repository that will be used by different communities of users, you will be concerned about the nuances each community has about an asset's security properties.  For example, *clinical data* might have a high confidentiality value to one community, but low confidentiality value in other; this difference in properties may be due to the level of anonymisation this asset might be subjected to in each community.  Similarly, each community might have threats, vulnerabilities, people that look similar but have subtle variations.  CAIRIS can capture these variations, thereby allowing the impact of design changes, or changes in people's characteristics and tasks to be examined for each 'context of use'.
 
 Third, CAIRIS is scaleable.  In most other tools, analysts are required to build models by hand.  However, as models get bigger, this task gets increasingly harder.  CAIRIS addresses this by automatically generating models based on connections between concepts that analysts make.  CAIRIS deals with the messiness associated with visualising this data, so you don't have to.
 
-Fourth, CAIRIS doesn't attempt to be the 'one tool that rules them all'.  CAIRIS works best when used in combination with other 'best of breed' tools.  For example, CAIRIS has been used to import data from sources ranging from wiki pages and spreadsheets, to open source repositories about attack patterns.  Moreover, in addition to generating models and documentation, CAIRIS has been used to generate goal models that can be imported into other tools like [jUCMNav](http://jucmnav.softwareengineering.ca/ucm/bin/view/ProjetSEG/WebHome).  Because of how CAIRIS has been implemented, it's also fairly easy to develop extensions for importing and exporting data.
+Fourth, CAIRIS doesn't attempt to be the 'one tool that rules them all'.  CAIRIS works best when used in combination with other 'best of breed' tools.  For example, CAIRIS has been used to import data from sources ranging from wiki pages and spreadsheets, to open source repositories about attack patterns.  Moreover, in addition to generating models and documentation, CAIRIS can generate goal models that can be imported into other tools like [jUCMNav](http://jucmnav.softwareengineering.ca/ucm/bin/view/ProjetSEG/WebHome).  Because of how CAIRIS has been implemented, it's also fairly easy to develop extensions for importing and exporting data.
 
 Finally, although CAIRIS' origins are in specifying requirements, it has been recently extended to support the specification and analysis of software architectures as well.  To date, we believe CAIRIS to be the only tool that supports the specification and analysis of both security requirements and security architectures.
 
 ## Is CAIRIS used in the real world? ##  
 
-CAIRIS has been used in a number of real-world case studies.  You can read about some of these studies [here]({{site.baseurl }}/papers.html).
+CAIRIS has been used in a number of real-world case studies.  You can read about some of these studies [here]({{site.baseurl }}/papers.html).  We're currently working with a number of companies (both large and small) who are looking to adopt CAIRIS.  
 
-We're also working with a number of companies (both large and small) who are looking to adopt CAIRIS.  We're always interested in hearing from others interested in adopting the tool, so please [get in touch](mailto:sfaily@bournemouth.ac.uk) if you want to use CAIRIS and need help getting started.
+We're always interested in hearing from others interested in adopting the tool, so please [get in touch](mailto:sfaily@bournemouth.ac.uk) if you want to use CAIRIS and need help getting started.
 
 ## Are there any examples of CAIRIS in action? ##
 
@@ -78,6 +78,6 @@ We'd love to hear from companies interested in sponsoring the on-going design an
 * Providing people to help maintain and grow CAIRIS.  
 * Providing [modest] financial support we can use to employ interns to develop CAIRIS.
 * Buying consultancy to help you adopt CAIRIS.  Any income from CAIRIS consultancy, will go back into the development of CAIRIS.  
-* [KTPs](https://connect.innovateuk.org/web/ktp).  If you're a UK SME and see CAIRIS as an important tool in growing your business, then a KTP is a great way of getting government funding to support us and your project.
+* [Knowledge Transfer Partnerships (KTPs)](https://connect.innovateuk.org/web/ktp).  If you're a UK SME and see CAIRIS as an important tool in growing your business, then a KTP is a great way of getting government funding to support us and your project.
 
 Please [get in touch](mailto:sfaily@bournemouth.ac.uk) if any (or all!) of the above is of interest to you.
