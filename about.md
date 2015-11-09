@@ -60,7 +60,7 @@ CAIRIS will run on any platform that supports its open source dependencies.  Alt
 
 ## Is CAIRIS used in the real world? ##  
 
-CAIRIS has been used in a number of real-world case studies.  You can read about some of them [here]({{site.baseurl }}/papers.html).
+CAIRIS has been used in a number of real-world case studies.  You can read about some of these studies [here]({{site.baseurl }}/papers.html).
 
 We're also working with a number of companies (both large and small) who are looking to adopt CAIRIS.  We're always interested in hearing from others interested in adopting the tool, so please [get in touch](mailto:sfaily@bournemouth.ac.uk) if you want to use CAIRIS and need help getting started.
 
