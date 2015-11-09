@@ -15,3 +15,7 @@
 - title: Blog
   url: /blog.html
   excerpt: "Posting about CAIRIS and related topics"
+
+- title: About
+  url: /about.html
+  excerpt: "About CAIRIS"
