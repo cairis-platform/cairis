@@ -40,20 +40,20 @@ $ sudo chown -R $CAIRIS_USER:$CAIRIS_USER $CAIRIS_DIR
 $ sudo chmod -R 775 $CAIRIS_DIR
 {% endhighlight %}
 
-* Create a new database for CAIRIS with a MySQL user account which has full access to the database, for example:
+* Create a new database for CAIRIS with a MySQL user account which has full access to the database.  For this example, we assume our username is cairis, the password is cairis123, and database is called cairis:
 
 {% highlight sql %}
 > GRANT USAGE ON *.* TO 'cairis'@'localhost' IDENTIFIED BY 'cairis123' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
-> CREATE DATABASE IF NOT EXISTS ``cairis``;
-> GRANT ALL PRIVILEGES ON ``cairis``.* TO 'cairis'@'localhost';
+> CREATE DATABASE IF NOT EXISTS `cairis`;
+> GRANT ALL PRIVILEGES ON `cairis`.* TO 'cairis'@'localhost';
 {% endhighlight %}
 
-* Create the database tables and stored procedures required by CAIRIS.  For this example, we assume our username, password, and database are all set to cairis:
+* Create the database tables and stored procedures required by CAIRIS:
 
 {% highlight bash %}
 $ CAIRIS_SQL=$CAIRIS_DIR/cairis/cairis/sql
-$ mysql –-user=cairis –-password=cairis –-database=cairis < $CAIRIS_SQL/init.sql
-$ mysql –-user=cairis –-password=cairis –-database=cairis < $CAIRIS_SQL/procs.sql
+$ mysql --user=cairis –-password=cairis123 –-database=cairis < $CAIRIS_SQL/init.sql
+$ mysql --user=cairis –-password=cairis123 –-database=cairis < $CAIRIS_SQL/procs.sql
 {% endhighlight %}
 
 * To view certain models in CAIRIS, change the maximum recursion depth for stored procedures to 255 from the default of 0.
