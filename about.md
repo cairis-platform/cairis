@@ -59,6 +59,12 @@ CAIRIS will run on any platform that supports its open source dependencies.  Alt
 
 [Robin Quetin](https://github.com/RobinQuetin) developed a proof-of-concept [CAIRIS web app](https://github.com/RobinQuetin/CAIRIS-web).  This is no longer being actively developed, but we are looking at how to integrate aspects of this work back into the main [CAIRIS repository](https://github.com/failys/CAIRIS).
 
+## I'm not very Linux savvy.  Is there something like a package or install script I can run, or a pre-built VM image I can download? ##
+
+There is no 'officially supported' install script yet, but [Robin Quetin](https://github.com/RobinQuetin) did create an [install script](https://github.com/RobinQuetin/CAIRIS-web/blob/develop/cairis/scripts/install_debian.sh) for his [CAIRIS web app](https://github.com/RobinQuetin/CAIRIS-web) prototype.  Adapting this script is on our 'to do' list, but interested contributors are more than welcome to adapt this or develop an alternative script, and submit to the CAIRIS code base :-)
+
+We're currently looking at options for externally hosting a pre-built virtual appliance with CAIRIS.  However, if this something you would really like sooner rather than later then please [get in touch](mailto:sfaily@bournemouth.ac.uk), and we'll see if we can transfer an image to you via some other means.
+
 ## Do you still do research around CAIRIS? ##
 
 Very much so.  We have a number of undergraduate and postgraduate research assistants that are currently extending CAIRIS, and exploring some of the ideas that originally motivated its development.  We love to hear from prospective collaborators, so if working with us to improve the state of the art in security design tools is of interest then please [get in touch](mailto:sfaily@bournemouth.ac.uk).
