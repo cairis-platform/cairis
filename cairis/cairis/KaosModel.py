@@ -237,8 +237,9 @@ class KaosModel:
         fontColour = 'blue'
         edgeColour = 'blue'
         arrowTail = 'vee'
-      elif (assocType == 'rolepersona_association'):
+      elif (assocType == 'rolepersona_association' or assocType == 'roleattacker_association'):
         arrowHead = 'empty'
+        assocDir = 'forward'
 
       if (assocType in ('misusecasethreatasset_association','misusecasevulnerabilityasset_association','taskasset_association')):
         arrowHead = 'none'
