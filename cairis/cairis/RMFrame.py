@@ -1367,8 +1367,8 @@ class RMFrame(wx.Frame):
     info.SetName('CAIRIS')
     info.SetVersion(repVersion)
     info.SetDescription('CAIRIS is a tool for specifying usable and secure systems')
-    info.SetWebSite('http://www.cs.ox.ac.uk/cairis')
-    info.SetLicense('CAIRIS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;\nwithout even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\nPlease contact Shamal Faily at the University of Oxford for specific licensing queries.')
+    info.SetWebSite('http://cairis.org')
+    info.SetLicense('CAIRIS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;\nwithout even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\nPlease contact Shamal Faily for specific licensing queries.')
     info.AddDeveloper('Shamal Faily')
     wx.AboutBox(info)
 
