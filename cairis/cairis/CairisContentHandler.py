@@ -87,7 +87,7 @@ class CairisContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name']
     elif name == 'rich_picture':
       self.theRichPicture = attrs['image']
-      if os.path.isfile(self.theRichPicture) == False:
+      if self.theRichPicture != "" and os.path.isfile(self.theImage) == False:
         b = Borg()
         self.theRichPicture = b.imageDir + "/" + self.theRichPicture
     elif name == 'entry':
