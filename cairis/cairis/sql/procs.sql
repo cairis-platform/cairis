@@ -13062,6 +13062,7 @@ begin
   declare gwrConcept varchar(50);
   declare taskId int;
   declare taskName varchar(50);
+  declare taskCode varchar(100);
   declare taskAuthor varchar(255);
   declare taskObjective varchar(255);
   declare isTaskAssumption int;
@@ -13245,7 +13246,7 @@ begin
     select 'threat',cr.name,c.name from persona_characteristic_threat pc, threat_reference cr, threat c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.threat_id = c.id and pc.characteristic_reference_type_id = 2
     union
     select 'vulnerability',cr.name,c.name from persona_characteristic_vulnerability pc, vulnerability_reference cr, vulnerability c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.vulnerability_id = c.id and pc.characteristic_reference_type_id = 2;
-  declare taskCursor cursor for select id,name,author,objective,assumption_id from task;
+  declare taskCursor cursor for select id,name,short_code,author,objective,assumption_id from task;
   declare taskPersonaCursor cursor for select p.name,duv.name,fv.name,dev.name,gv.name from persona p, task_persona tp, security_property_value duv, security_property_value fv, security_property_value dev, security_property_value gv where tp.task_id = taskId and tp.environment_id = envId and tp.persona_id = p.id and tp.duration_id = duv.id and tp.frequency_id = fv.id and tp.demands_id = dev.id and tp.goalsupport_id = gv.id;
   declare taskConcernCursor cursor for select a.name from task_asset tc, asset a where tc.task_id = taskId and tc.environment_id = envId and tc.asset_id = a.id;
   declare taskConcernAssocCursor cursor for select sa.name,smt.name,ca.link,ta.name,tmt.name from task_concernassociation ca, asset sa, asset ta, multiplicity_type smt, multiplicity_type tmt where ca.task_id = taskId and ca.environment_id = envId and ca.source_id = sa.id and ca.source_multiplicity_id = smt.id and ca.target_id = ta.id and ca.target_multiplicity_id = tmt.id;
@@ -13482,12 +13483,12 @@ begin
   set done = 0;
   open taskCursor;
   task_loop : loop
-    fetch taskCursor into taskId,taskName,taskAuthor,taskObjective,isTaskAssumption;
+    fetch taskCursor into taskId,taskName,taskCode,taskAuthor,taskObjective,isTaskAssumption;
     if done = 1
     then
       leave task_loop;
     end if;
-    set buf = concat(buf,'<task name=\"',taskName,'\" author=\"',taskAuthor,'\" assumption_task=\"',b2a(isTaskAssumption),'\" >\n  <objective>',taskObjective,'</objective>\n');
+    set buf = concat(buf,'<task name=\"',taskName,'\" code=\"',taskCode,'\" author=\"',taskAuthor,'\" assumption_task=\"',b2a(isTaskAssumption),'\" >\n  <objective>',taskObjective,'</objective>\n');
     set taskCount = taskCount + 1; 
 
     open taskEnvCursor;
