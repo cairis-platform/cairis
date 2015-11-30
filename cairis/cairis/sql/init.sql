@@ -17,6 +17,9 @@
   under the License.
 */
 
+drop function if exists internalDocumentQuotationString;
+drop function if exists personaQuotationString;
+
 DROP VIEW IF EXISTS countermeasure_vulnerability_response_target;
 DROP VIEW IF EXISTS countermeasure_threat_response_target;
 DROP VIEW IF EXISTS redmine_requirement;
@@ -3181,6 +3184,59 @@ CREATE TABLE task_environment_code (
   FOREIGN KEY(code_id) REFERENCES code(id),
   FOREIGN KEY(section_id) REFERENCES artifact_section(id)
 ) ENGINE=INNODB;
+
+delimiter //
+
+create function internalDocumentQuotationString(idName text, startIdx int, endIdx int) 
+returns varchar(4000)
+deterministic 
+begin
+  declare idId int;
+  declare quote varchar(4000);
+  select id into idId from internal_document where name = idName limit 1;
+  select substr(content,startIdx,endIdx - startIdx) into quote from internal_document where id = idId;
+  return quote;
+end
+//
+
+create function personaQuotationString(pName text, sectName text, envName text, startIdx int, endIdx int) 
+returns varchar(4000)
+deterministic 
+begin
+  declare pId int;
+  declare envId int;
+  declare quote varchar(4000);
+  select id into pId from persona where name = pName limit 1;
+
+  if sectName = 'activities'
+  then
+    select substr(activities,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'attitudes'
+  then
+    select substr(attitudes,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'aptitudes'
+  then
+    select substr(aptitudes,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'motivations'
+  then
+    select substr(motivations,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'skills'
+  then
+    select substr(skills,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'intrinsic'
+  then
+    select substr(intrinsic,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  elseif sectName = 'contextual'
+  then
+    select substr(contextual,startIdx,endIdx - startIdx) into quote from persona where id = pId;
+  else
+    select id into envId from environment where name = envName limit 1;
+    select substr(narrative,startIdx,endIdx - startIdx) into quote from persona_narrative where persona_id = pId and environment_id = envId;
+  end if;
+
+  return quote;
+end
+//
 
 CREATE VIEW countermeasure_vulnerability_response_target as 
   select distinct cvt.countermeasure_id,re.id response_id,cvt.vulnerability_id,cvt.environment_id from countermeasure_vulnerability_target cvt, environment_vulnerability ev, risk ri,response re where cvt.vulnerability_id = ev.vulnerability_id and cvt.environment_id = ev.environment_id and ev.vulnerability_id = ri.vulnerability_id and ri.id = re.risk_id;
