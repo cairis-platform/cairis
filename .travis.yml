@@ -20,6 +20,14 @@ addons:
     - texlive-latex-extra 
     - docbook-utils
 
+services: 
+ - mysql
+
 install: "pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot"
+
+before_script:
+ - mysql -e 'GRANT USAGE ON *.* TO 'irisuser'@'localhost' IDENTIFIED BY '' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;'
+ - mysql -e 'CREATE DATABASE IF NOT EXISTS `arm`;'
+ - mysql -e 'GRANT ALL PRIVILEGES ON `irisuser`.* TO `arm`@`localhost`;'
 
 script: echo foo
