@@ -5,8 +5,6 @@ sudo: false
 addons:
   apt:
     packages:
-    - python-wxglade 
-    - python-glade2 
     - python-wxgtk2.8 
     - python-dev 
     - build-essential 
