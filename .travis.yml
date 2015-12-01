@@ -5,3 +5,5 @@ before_install:
 - sudo apt-get install python-wxglade python-glade2 python-wxgtk2.8 python-dev build-essential mysql-server mysql-client graphviz docbook dblatex python-pip python-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils
 
 install: "pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot"
+
+script: 
