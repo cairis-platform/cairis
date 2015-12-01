@@ -3238,6 +3238,8 @@ begin
 end
 //
 
+delimiter ; 
+
 CREATE VIEW countermeasure_vulnerability_response_target as 
   select distinct cvt.countermeasure_id,re.id response_id,cvt.vulnerability_id,cvt.environment_id from countermeasure_vulnerability_target cvt, environment_vulnerability ev, risk ri,response re where cvt.vulnerability_id = ev.vulnerability_id and cvt.environment_id = ev.environment_id and ev.vulnerability_id = ri.vulnerability_id and ri.id = re.risk_id;
 
