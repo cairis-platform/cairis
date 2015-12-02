@@ -21,8 +21,8 @@ services:
 install: "pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot"
 
 before_script:
- - mysql --user=root --password='' < $HOME/CAIRIS/cairis/cairis/test/createdb.sql
- - mysql --user=irisuser --password='' --database=arm < $HOME/CAIRIS/cairis/cairis/sql/init.sql
- - mysql --user=irisuser --password='' --database=arm < $HOME/CAIRIS/cairis/cairis/sql/procs.sql
+ - mysql --user=root --password='' < cairis/cairis/test/createdb.sql
+ - mysql --user=irisuser --password='' --database=arm < cairis/cairis/sql/init.sql
+ - mysql --user=irisuser --password='' --database=arm < cairis/cairis/sql/procs.sql
 
 script: echo foo
