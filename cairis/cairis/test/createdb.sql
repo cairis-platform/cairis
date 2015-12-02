@@ -21,5 +21,6 @@ grant usage on *.* to 'irisuser'@'localhost' identified by '' with max_queries_p
 create database if not exists `arm`;
 grant all privileges on `arm`.* to 'irisuser'@'localhost';
 set global max_sp_recursion_depth = 255;
+
 flush tables;
 flush privileges;

@@ -15,9 +15,6 @@ addons:
     - git 
     - libmysqlclient-dev
 
-services: 
- - mysql
-
 install: "pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot"
 
 before_script:
