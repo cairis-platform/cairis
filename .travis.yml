@@ -16,8 +16,9 @@ addons:
     - libmysqlclient-dev
 
 env:
-- HOME=/home/travis/build/failys
 - PYTHONPATH=cairis/cairis
+- CAIRIS_CFG=cairis/cairis/config/cairis.cnf
+
 install: "pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot"
 
 before_script:
