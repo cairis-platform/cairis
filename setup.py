@@ -7,5 +7,5 @@ setup(name = 'cairis',
       author_email = 'shamal.faily@googlemail.com',
       url = 'http://cairis.org',
       packages=['cairis'],
-      package_data={'cairis':['cairis']}
+      package_data={'cairis':['cairis/*']}
      )
