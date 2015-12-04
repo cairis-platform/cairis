@@ -16,7 +16,7 @@ addons:
     - libmysqlclient-dev
 
 env:
-- CAIRIS_SRC=/cairis/cairis PYTHONPATH=$CAIRIS_SRC CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf 
+- CAIRIS_SRC=cairis/cairis PYTHONPATH=$CAIRIS_SRC CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf 
 
 install: "pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot"
 
