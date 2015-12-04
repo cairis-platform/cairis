@@ -1,3 +1,5 @@
+#!/bin/bash
+ 
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
 #  distributed with this work for additional information
@@ -15,22 +17,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import unittest
-import BorgFactory
-import os
-from Borg import Borg
-
-class BorgFactoryTest(unittest.TestCase):
-
-  def setUp(self):
-    os.system("$CAIRIS_SRC/test/initdb.sh")
-    BorgFactory.initialise()
-
-  def testProjectSettings(self):
-    b = Borg()
-    self.assertEqual(b.fontName,'Times New Roman')
-    self.assertEqual(b.fontSize,'7.5')
-    self.assertEqual(b.apFontSize,'13')
-
-if __name__ == '__main__':
-  unittest.main()
+mysql --user=root --password='' < $CAIRIS_SRC/test/createdb.sql
+mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/init.sql
+mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/procs.sql

@@ -18,4 +18,6 @@
 */
 
 DROP USER 'irisuser'@'localhost';
-DROP DATABASE IF EXISTS `arm`;
+DROP DATABASE IF EXISTS arm;
+flush table;
+flush privileges;

@@ -16,21 +16,34 @@
 #  under the License.
 
 import unittest
-import BorgFactory
 import os
+import BorgFactory
 from Borg import Borg
+from EnvironmentParameters import EnvironmentParameters
 
-class BorgFactoryTest(unittest.TestCase):
+class EnvironmentTest(unittest.TestCase):
 
   def setUp(self):
     os.system("$CAIRIS_SRC/test/initdb.sh")
     BorgFactory.initialise()
 
-  def testProjectSettings(self):
+  def testStandardEnvironment(self):
+    envName = 'anEnvironment'
+    shortCode = 'ENV'
+    desc = 'An environment description'
+    iep = EnvironmentParameters(envName,shortCode,desc)
     b = Borg()
-    self.assertEqual(b.fontName,'Times New Roman')
-    self.assertEqual(b.fontSize,'7.5')
-    self.assertEqual(b.apFontSize,'13')
+    b.dbProxy.addEnvironment(iep)
+    envs = b.dbProxy.getEnvironments()
+    oep = envs[envName]
+    self.assertEqual(iep.name(),oep.name())
+    self.assertEqual(iep.shortCode(),oep.shortCode())
+    self.assertEqual(iep.description(),oep.description())
+
+  def tearDown(self):
+    b = Borg()
+    b.dbProxy.close()
+    os.system("$CAIRIS_SRC/test/dropdb.sh")
 
 if __name__ == '__main__':
   unittest.main()
