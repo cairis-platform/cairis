@@ -17,6 +17,7 @@
 
 import unittest
 import os
+import json
 import BorgFactory
 from Borg import Borg
 from EnvironmentParameters import EnvironmentParameters
@@ -28,17 +29,17 @@ class EnvironmentTest(unittest.TestCase):
     BorgFactory.initialise()
 
   def testStandardEnvironment(self):
-    envName = 'anEnvironment'
-    shortCode = 'ENV'
-    desc = 'An environment description'
-    iep = EnvironmentParameters(envName,shortCode,desc)
+    f = open(os.environ['CAIRIS_SRC'] + '/test/testStandardEnvironment.json')
+    d = json.load(f)
+    iep = EnvironmentParameters(d["theName"],d["theShortCode"],d["theDescription"])
     b = Borg()
     b.dbProxy.addEnvironment(iep)
     envs = b.dbProxy.getEnvironments()
-    oep = envs[envName]
+    oep = envs[d["theName"]]
     self.assertEqual(iep.name(),oep.name())
     self.assertEqual(iep.shortCode(),oep.shortCode())
     self.assertEqual(iep.description(),oep.description())
+    f.close()
 
   def tearDown(self):
     b = Borg()
