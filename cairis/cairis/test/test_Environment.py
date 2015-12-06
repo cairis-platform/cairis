@@ -60,6 +60,35 @@ class EnvironmentTest(unittest.TestCase):
     b.dbProxy.deleteEnvironment(oep2.id())
     b.dbProxy.deleteEnvironment(oep3.id())
   
+  def testCompositeEnvironment(self):
+    iep1 = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
+    iep2 = EnvironmentParameters(self.ienvs[1]["theName"],self.ienvs[1]["theShortCode"],self.ienvs[1]["theDescription"])
+    iep3 = EnvironmentParameters(self.ienvs[2]["theName"],self.ienvs[2]["theShortCode"],self.ienvs[2]["theDescription"])
+    b = Borg()
+    b.dbProxy.addEnvironment(iep1)
+    b.dbProxy.addEnvironment(iep2)
+    b.dbProxy.addEnvironment(iep3)
+  
+    iep4 = EnvironmentParameters(self.ienvs[3]["Composite_name"],'COMP','Composite test',[iep1.name(),iep2.name(),iep3.name()],self.ienvs[4]["Duplication"])
+    b.dbProxy.addEnvironment(iep4)
+
+    oenvs = b.dbProxy.getEnvironments()
+    oep4 = oenvs[self.ienvs[3]["Composite_name"]]
+    self.assertEqual(iep4.name(), oep4.name())
+    self.assertEqual(iep4.shortCode(),oep4.shortCode())
+    self.assertEqual(iep4.description(),oep4.description())
+    self.assertEqual(iep4.environments(),oep4.environments())
+    self.assertEqual(iep4.duplicateProperty(),oep4.duplicateProperty())
+
+    oep1 = oenvs[self.ienvs[0]["theName"]]
+    oep2 = oenvs[self.ienvs[1]["theName"]]
+    oep3 = oenvs[self.ienvs[2]["theName"]]
+
+    self.assertRaises(DatabaseProxyException,b.dbProxy.deleteEnvironment,oep1.id())
+    b.dbProxy.deleteEnvironment(oep4.id())
+    b.dbProxy.deleteEnvironment(oep1.id())
+    b.dbProxy.deleteEnvironment(oep2.id())
+    b.dbProxy.deleteEnvironment(oep3.id())
 
   def tearDown(self):
     b = Borg()
