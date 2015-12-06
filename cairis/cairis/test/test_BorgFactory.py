@@ -23,7 +23,6 @@ from Borg import Borg
 class BorgFactoryTest(unittest.TestCase):
 
   def setUp(self):
-    os.system("$CAIRIS_SRC/test/initdb.sh")
     BorgFactory.initialise()
 
   def testProjectSettings(self):
@@ -31,6 +30,10 @@ class BorgFactoryTest(unittest.TestCase):
     self.assertEqual(b.fontName,'Times New Roman')
     self.assertEqual(b.fontSize,'7.5')
     self.assertEqual(b.apFontSize,'13')
+
+  def tearDown(self):
+    b = Borg()
+    b.dbProxy.close()
 
 if __name__ == '__main__':
   unittest.main()

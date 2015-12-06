@@ -25,5 +25,6 @@ before_script:
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/init.sql
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/procs.sql
 
+
 script: 
  - python -m unittest discover -v $CAIRIS_SRC/test*

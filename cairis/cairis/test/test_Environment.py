@@ -26,7 +26,6 @@ from ARM import DatabaseProxyException
 class EnvironmentTest(unittest.TestCase):
 
   def setUp(self):
-    os.system("$CAIRIS_SRC/test/initdb.sh")
     BorgFactory.initialise()
     f = open(os.environ['CAIRIS_SRC'] + '/test/environments.json')
     d = json.load(f)
@@ -93,7 +92,6 @@ class EnvironmentTest(unittest.TestCase):
   def tearDown(self):
     b = Borg()
     b.dbProxy.close()
-    os.system("$CAIRIS_SRC/test/dropdb.sh")
 
 if __name__ == '__main__':
   unittest.main()

@@ -1,0 +1,39 @@
+{
+  "environments" : [
+      {"theName" : "Psychosis",
+      "theShortCode" : "PSY",
+      "theDescription" : "The exemplar aims to integrate large existing datasets of serial MRI scans and behaviour data coupled to the NeuroGrid image analysis service into a Grid-based database, test image normalisation techniques, and develop a general ontology for a psychosis databas, for use in multi-centre studies. The exemplar tests capabilities of NeuroGrid to deal with restrospective data, assimilate material into databases, and use of the toolkit for normalisation and analysis."},
+      {"theName" : "Stroke",
+       "theShortCode" : "STR",
+       "theDescription" : "This exemplar aims to improve infrastructure for handling imaging in large studies including: - efficient interpretation and storage of large image datasets from multicentre randomised controlled trials, - very large studies of observer reliability to improve image interpretation, - establishing large living archives of images linked to key metadata for diseases which require long term study to understand their true nature history and the effects of treatment, and - for knowledge transfer."},
+      {"theName" : "Core Technology",
+       "theShortCode" : "TECH",
+       "theDescription" : "NeuroGrid Infrastructure operations"},
+      {"Composite_name" : "Complete"},
+      {"Duplication" : "Maximise"}
+  ],
+  "assets" : [
+    {
+     "theName" : "Clinical Data",
+     "theShortCode" : "CD",
+     "theDescription" : "None",
+     "theSignificance" : "Unanonymised and in the wrong hands, this data can be very damaging.",
+     "theType" : "Information",
+     "theEnvironmentProperties" :
+      [
+        ["Psychosis",
+         [3,0,2,0,0,0,0,0], 
+         ["Researchers very worried about the disclosure of partially anonymised patient data.","None","Availability of NeuroGrid is quite important, but prepared to sacrifice this if doing so safeguards clinical data.","None","None","None","None","None"]
+        ],
+        ["Stroke",
+         [1,0,3,0,0,0,0,0], 
+         ["Clinical data is fully anonymised","None","NeuroGrid availability important for clinical trials","None","None","None","None","None"]
+        ],
+        ["Core Technology",
+         [0,0,0,3,0,0,0,0], 
+         ["None","None","None","Important for CA to know who is allowed to access what data items.","None","None","None","None"]
+        ]
+      ]
+    }
+  ]
+}
