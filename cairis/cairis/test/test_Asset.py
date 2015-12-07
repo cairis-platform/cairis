@@ -36,12 +36,10 @@ class AssetTest(unittest.TestCase):
     self.iep1 = EnvironmentParameters(ienvs[0]["theName"],ienvs[0]["theShortCode"],ienvs[0]["theDescription"])
     self.iep2 = EnvironmentParameters(ienvs[1]["theName"],ienvs[1]["theShortCode"],ienvs[1]["theDescription"])
     self.iep3 = EnvironmentParameters(ienvs[2]["theName"],ienvs[2]["theShortCode"],ienvs[2]["theDescription"])
-#    self.iep4 = EnvironmentParameters(ienvs[3]["Composite_name"],'COMP','Composite test',[self.iep1.name(),self.iep2.name(),self.iep3.name()],ienvs[4]["Duplication"])
     b = Borg()
     b.dbProxy.addEnvironment(self.iep1)
     b.dbProxy.addEnvironment(self.iep2)
     b.dbProxy.addEnvironment(self.iep3)
-#    b.dbProxy.addEnvironment(self.iep4)
     self.oenvs = b.dbProxy.getEnvironments()
     self.iassets = d['assets']
 
@@ -83,7 +81,6 @@ class AssetTest(unittest.TestCase):
   def tearDown(self):
     b = Borg()
 
-#    b.dbProxy.deleteEnvironment(self.oenvs[self.iep4.name()].id())
     b.dbProxy.deleteEnvironment(self.oenvs[self.iep1.name()].id())
     b.dbProxy.deleteEnvironment(self.oenvs[self.iep2.name()].id())
     b.dbProxy.deleteEnvironment(self.oenvs[self.iep3.name()].id())
