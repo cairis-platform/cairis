@@ -49,7 +49,7 @@ class PersonaTest(unittest.TestCase):
     
 
   def testPersona(self):
-    ipp = PersonaParameters(self.iPersonas[0]["theName"],self.iPersonas[0]["theActivities"],self.iPersonas[0]["theAttitudes"],self.iPersonas[0]["theAptitudes"],self.iPersonas[0]["theMotivations"],self.iPersonas[0]["theSkills"],self.iPersonas[0]["theIntrinsic"],self.iPersonas[0]["theContextual"],"","0",self.iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(self.iPersonas[0]["theEnvironmentProperties"][0]["theName"],self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"],self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
+    ipp = PersonaParameters(self.iPersonas[0]["theName"],self.iPersonas[0]["theActivities"],self.iPersonas[0]["theAttitudes"],self.iPersonas[0]["theAptitudes"],self.iPersonas[0]["theMotivations"],self.iPersonas[0]["theSkills"],self.iPersonas[0]["theIntrinsic"],self.iPersonas[0]["theContextual"],"","0",self.iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(self.iPersonas[0]["theEnvironmentProperties"][0]["theName"],(self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
     b = Borg()
     b.dbProxy.addPersona(ipp) 
 
@@ -63,7 +63,10 @@ class PersonaTest(unittest.TestCase):
     self.assertEqual(ipp.skills(),op.skills())
     self.assertEqual(ipp.intrinsic(),op.intrinsic())
     self.assertEqual(ipp.contextual(),op.contextual())
-
+    
+    self.assertEqual(self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"],op.environmentProperties()[0].directFlag())
+    self.assertEqual(self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],op.environmentProperties()[0].narrative())
+    self.assertEqual(self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"],op.environmentProperties()[0].roles())
 
     b.dbProxy.deletePersona(op.id())
 

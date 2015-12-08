@@ -22,7 +22,7 @@
      "thePersonaType" : "Primary",
      "theEnvironmentProperties" : [
        {"theName" : "Psychosis",
-        "theDirectFlag" : 0,
+        "theDirectFlag" : "False",
         "theRole" : ["Researcher"],
         "theNarrative" : "Nothing stipulated"
       }
