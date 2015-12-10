@@ -24,6 +24,9 @@ from RoleParameters import RoleParameters
 from EnvironmentParameters import EnvironmentParameters
 from PersonaParameters import PersonaParameters
 from PersonaEnvironmentProperties import PersonaEnvironmentProperties
+from ExternalDocumentParameters import ExternalDocumentParameters
+from DocumentReferenceParameters import DocumentReferenceParameters
+from PersonaCharacteristicParameters import PersonaCharacteristicParameters
 
 class PersonaTest(unittest.TestCase):
 
@@ -68,6 +71,73 @@ class PersonaTest(unittest.TestCase):
     self.assertEqual(self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],op.environmentProperties()[0].narrative())
     self.assertEqual(self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"],op.environmentProperties()[0].roles())
 
+    iec1 = ExternalDocumentParameters(self.iExternalDocuments[0]["theName"],self.iExternalDocuments[0]["theVersion"],self.iExternalDocuments[0]["thePublicationDate"],self.iExternalDocuments[0]["theAuthors"],self.iExternalDocuments[0]["theDescription"])
+    iec2 = ExternalDocumentParameters(self.iExternalDocuments[1]["theName"],self.iExternalDocuments[1]["theVersion"],self.iExternalDocuments[1]["thePublicationDate"],self.iExternalDocuments[1]["theAuthors"],self.iExternalDocuments[1]["theDescription"])
+    b.dbProxy.addExternalDocument(iec1)
+    b.dbProxy.addExternalDocument(iec2)
+    oecs = b.dbProxy.getExternalDocuments()
+    oec1 = oecs[self.iExternalDocuments[0]["theName"]]
+    oec2 = oecs[self.iExternalDocuments[1]["theName"]]
+
+    self.assertEqual(self.iExternalDocuments[0]["theName"],oec1.name())
+    self.assertEqual(self.iExternalDocuments[0]["theVersion"],oec1.version())
+    self.assertEqual(self.iExternalDocuments[0]["thePublicationDate"],oec1.date())
+    self.assertEqual(self.iExternalDocuments[0]["theAuthors"],oec1.authors())
+    self.assertEqual(self.iExternalDocuments[0]["theDescription"],oec1.description())
+    self.assertEqual(self.iExternalDocuments[1]["theName"],oec2.name())
+    self.assertEqual(self.iExternalDocuments[1]["theVersion"],oec2.version())
+    self.assertEqual(self.iExternalDocuments[1]["thePublicationDate"],oec2.date())
+    self.assertEqual(self.iExternalDocuments[1]["theAuthors"],oec2.authors())
+    self.assertEqual(self.iExternalDocuments[1]["theDescription"],oec2.description())
+
+    idr1 = DocumentReferenceParameters(self.iDocumentReferences[0]["theName"],self.iDocumentReferences[0]["theDocName"],self.iDocumentReferences[0]["theContributor"],self.iDocumentReferences[0]["theExcerpt"])
+    idr2 = DocumentReferenceParameters(self.iDocumentReferences[1]["theName"],self.iDocumentReferences[1]["theDocName"],self.iDocumentReferences[1]["theContributor"],self.iDocumentReferences[1]["theExcerpt"])
+    idr3 = DocumentReferenceParameters(self.iDocumentReferences[2]["theName"],self.iDocumentReferences[2]["theDocName"],self.iDocumentReferences[2]["theContributor"],self.iDocumentReferences[2]["theExcerpt"])
+    
+    b.dbProxy.addDocumentReference(idr1)
+    b.dbProxy.addDocumentReference(idr2)
+    b.dbProxy.addDocumentReference(idr3)
+
+    odrs = b.dbProxy.getDocumentReferences()
+    odr1 = odrs[self.iDocumentReferences[0]["theName"]]
+    odr2 = odrs[self.iDocumentReferences[1]["theName"]]
+    odr3 = odrs[self.iDocumentReferences[2]["theName"]]
+
+    self.assertEqual(self.iDocumentReferences[0]["theName"],odr1.name())
+    self.assertEqual(self.iDocumentReferences[0]["theDocName"],odr1.document())
+    self.assertEqual(self.iDocumentReferences[0]["theContributor"],odr1.contributor())
+    self.assertEqual(self.iDocumentReferences[0]["theExcerpt"],odr1.excerpt())
+    self.assertEqual(self.iDocumentReferences[1]["theName"],odr2.name())
+    self.assertEqual(self.iDocumentReferences[1]["theDocName"],odr2.document())
+    self.assertEqual(self.iDocumentReferences[1]["theContributor"],odr2.contributor())
+    self.assertEqual(self.iDocumentReferences[1]["theExcerpt"],odr2.excerpt())
+    self.assertEqual(self.iDocumentReferences[2]["theName"],odr3.name())
+    self.assertEqual(self.iDocumentReferences[2]["theDocName"],odr3.document())
+    self.assertEqual(self.iDocumentReferences[2]["theContributor"],odr3.contributor())
+    self.assertEqual(self.iDocumentReferences[2]["theExcerpt"],odr3.excerpt())
+
+    ipc1 = PersonaCharacteristicParameters(self.iPersonaCharacteristics[0]["thePersonaName"],self.iPersonaCharacteristics[0]["theModQual"],self.iPersonaCharacteristics[0]["theVariable"],self.iPersonaCharacteristics[0]["theCharacteristic"],[(self.iPersonaCharacteristics[0]["ground"],'','document')],[(self.iPersonaCharacteristics[0]["warrant"],'','document')],[],[(self.iPersonaCharacteristics[0]["rebuttal"],'','document')])
+
+    b.dbProxy.addPersonaCharacteristic(ipc1)
+    opcs = b.dbProxy.getPersonaCharacteristics()
+    opc1 = opcs[self.iPersonaCharacteristics[0]["thePersonaName"] + '/' + self.iPersonaCharacteristics[0]["theVariable"] + '/' + self.iPersonaCharacteristics[0]["theCharacteristic"]]
+
+    self.assertEqual(self.iPersonaCharacteristics[0]["thePersonaName"],opc1.persona())
+    self.assertEqual(self.iPersonaCharacteristics[0]["theModQual"],opc1.qualifier())
+    self.assertEqual(self.iPersonaCharacteristics[0]["theVariable"],opc1.behaviouralVariable())
+    self.assertEqual(self.iPersonaCharacteristics[0]["theCharacteristic"],opc1.characteristic())
+    self.assertEqual(self.iPersonaCharacteristics[0]["ground"],opc1.grounds()[0][0])
+    self.assertEqual(self.iPersonaCharacteristics[0]["warrant"],opc1.warrant()[0][0])
+    self.assertEqual(self.iPersonaCharacteristics[0]["rebuttal"],opc1.rebuttal()[0][0])
+
+    b.dbProxy.deletePersonaCharacteristic(opc1.id())
+
+    b.dbProxy.deleteDocumentReference(odr1.id())
+    b.dbProxy.deleteDocumentReference(odr2.id())
+    b.dbProxy.deleteDocumentReference(odr3.id())
+
+    b.dbProxy.deleteExternalDocument(oec1.id())
+    b.dbProxy.deleteExternalDocument(oec2.id())
     b.dbProxy.deletePersona(op.id())
 
   def tearDown(self):
