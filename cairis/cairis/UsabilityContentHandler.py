@@ -252,12 +252,12 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     elif name == 'persona_role':
       self.theRoles.append(attrs['name'])
     elif name == 'external_document':
-      self.theName = attrs['name']
+      self.theName = attrs['name'].encode('utf-8')
       self.theVersion = attrs['version']
       self.theDate = attrs['date']
       self.theAuthors = attrs['authors']
     elif name == 'document_reference':
-      self.theName = attrs['name']
+      self.theName = attrs['name'].encode('utf-8')
       self.theContributor = attrs['contributor']
       self.theDocument = attrs['document']
     elif name == 'concept_reference':

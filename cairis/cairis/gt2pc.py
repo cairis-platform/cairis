@@ -19,6 +19,8 @@ if __name__ == '__main__':
 
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Grounded Theory to Persona Case converter')
   parser.add_argument('modelFile',help='model file to create')
+  parser.add_argument('--context',dest='contextName',help='model context')
+  parser.add_argument('--originator',dest='originatorName',help='model originator')
   parser.add_argument('--concepts',dest='conceptsFile',help='grounded theory model concepts')
   parser.add_argument('--propositions',dest='propositionsFile',help='Propositions associated with grounded theory model quotations')
   parser.add_argument('--characteristics',dest='characteristicsFile',help='Persona characteristics associated with grounded theory model associations')
@@ -26,7 +28,10 @@ if __name__ == '__main__':
 
   args = parser.parse_args()
 
-  xmlHdr = '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">\n\n<usability>\n\n'
+
+  xmlHdr = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">\n\n<cairis_model>\n\n'
+
+  xmlHdr += '<cairis>\n  <project_settings name="' + args.contextName + '">\n    <contributors>\n      <contributor first_name="None" surname="None" affiliation="' + args.originatorName + '" role="Scribe" />\n    </contributors>\n  </project_settings>\n  <environment name="' + args.contextName + '" short_code="' + args.contextName + '">\n    <definition>' + args.contextName + '</definition>\n    <asset_values>\n      <none>TBC</none>\n      <low>TBC</low>\n      <medium>TBC</medium>\n      <high>TBC</high>\n    </asset_values>\n  </environment>\n</cairis>\n\n<riskanalysis>\n  <role name="Undefined" type="Stakeholder" short_code="UNDEF">\n    <description>Undefined</description>\n  </role>\n</riskanalysis>\n\n<usability>\n'
   xmlBuf = ''
 
   conceptDict = {}
@@ -120,9 +125,9 @@ if __name__ == '__main__':
 
   pHdr = ''
   for personaName in personaNames:
-    pHdr += '<persona name=\"' + personaName + '\" type=\"Primary\" assumption_persona=\"FALSE\" image=\"\" >\n <activities>' + pnDict[(personaName,'ACT')] + '</activities>\n  <attitudes>' + pnDict[(personaName,'ATT')] + '</attitudes>\n  <aptitudes>' + pnDict[(personaName,'APT')] + '</aptitudes>\n  <motivations>' + pnDict[(personaName,'MOT')] + '</motivations>\n  <skills>' + pnDict[(personaName,'SKI')] + '</skills>\n  <intrinsic>' + pnDict[(personaName,'INT')] + '</intrinsic>\n  <contextual>' + pnDict[(personaName,'CON')] + '</contextual>\n</persona>\n\n'     
+    pHdr += '<persona name=\"' + personaName + '\" type=\"Primary\" assumption_persona=\"FALSE\" image=\"\" >\n <activities>' + pnDict[(personaName,'ACT')] + '</activities>\n  <attitudes>' + pnDict[(personaName,'ATT')] + '</attitudes>\n  <aptitudes>' + pnDict[(personaName,'APT')] + '</aptitudes>\n  <motivations>' + pnDict[(personaName,'MOT')] + '</motivations>\n  <skills>' + pnDict[(personaName,'SKI')] + '</skills>\n  <intrinsic>' + pnDict[(personaName,'INT')] + '</intrinsic>\n  <contextual>' + pnDict[(personaName,'CON')] + '</contextual>\n<persona_environment name=\"' + args.contextName + '\" is_direct="TRUE">\n  <persona_role name="Undefined" />\n  <narrative>Nothing stipulated</narrative>\n</persona_environment>\n</persona>\n\n'
   
-  xmlBuf = xmlHdr + '\n' + pHdr + '\n' + xmlBuf + '\n</usability>'
+  xmlBuf = xmlHdr + '\n' + pHdr + '\n' + xmlBuf + '\n</usability>\n</cairis_model>'
   xmlOut = open(args.modelFile,"w")
   xmlOut.write(xmlBuf)
   xmlOut.close()
