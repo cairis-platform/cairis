@@ -205,6 +205,8 @@
 <!ELEMENT aptitudes (#PCDATA)>
 <!ELEMENT motivations (#PCDATA)>
 <!ELEMENT skills (#PCDATA)>
+<!ELEMENT intrinsic (#PCDATA)>
+<!ELEMENT contextual (#PCDATA)>
 <!ELEMENT persona_environment (persona_role+,narrative)>
 <!ATTLIST persona_environment name CDATA #REQUIRED>
 <!ATTLIST persona_environment is_direct (TRUE | FALSE) #REQUIRED>
