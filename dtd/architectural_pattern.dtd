@@ -27,6 +27,7 @@
 <!ELEMENT access_right (description,rationale)>
 <!ATTLIST access_right name CDATA #REQUIRED>
 <!ATTLIST access_right value CDATA #REQUIRED>
+<!ELEMENT description (#PCDATA)>
 
 <!ELEMENT protocol (description,rationale)>
 <!ATTLIST protocol name CDATA #REQUIRED>
