@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE component_view PUBLIC "-//CAIRIS//DTD COMPONENT 1.0//EN" "http://www.cs.ox.ac.uk/cairis/dtd/component_view.dtd">
+<!DOCTYPE architectural_pattern PUBLIC "-//CAIRIS//DTD COMPONENT 1.0//EN" "http://cairis.org/dtd/architectural_pattern.dtd">
 
 <!-- 
   Licensed to the Apache Software Foundation (ASF) under one
@@ -21,7 +21,7 @@
 -->
 
 
-<component_view name="Policy architecture">
+<architectural_pattern name="Policy architecture">
 <synopsis>Model illustrating policy architecture</synopsis>
 
 <access_right name="trusted" value="10">
