@@ -10538,7 +10538,7 @@ create procedure getPersonaExternalDocuments(in pName text)
 begin
   declare pId int;
   select id into pId from persona where name = pName;
-  select distinct ed.name,ed.version,ed.authors,ed.publication_date,ed.description from external_document ed, document_reference dr, persona_characteristic_document pcd, persona_characteristic pc where ed.id = dr.document_id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id = pId;
+  select distinct ed.name,ed.version,ed.authors,ed.publication_date,ed.description from external_document ed, document_reference dr, persona_characteristic_document pcd, persona_characteristic pc where ed.id = dr.document_id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id = pId order by 1;
 end
 //
 
@@ -10572,7 +10572,7 @@ begin
   declare pId int;
 
   select id into pId from persona where name = pName;
-  select distinct dr.name,ed.name,dr.excerpt from document_reference dr, external_document ed, persona_characteristic_document pcd, persona_characteristic pc where dr.document_id = ed.id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id = pId;
+  select distinct dr.name,ed.name,dr.excerpt from document_reference dr, external_document ed, persona_characteristic_document pcd, persona_characteristic pc where dr.document_id = ed.id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id = pId order by 1;
 end
 //
 
