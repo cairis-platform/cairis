@@ -1,0 +1,1275 @@
+<?xml version="1.0"?>
+<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">
+
+<cairis_model>
+
+<cairis>
+  <project_settings name="Default">
+    <contributors>
+      <contributor first_name="None" surname="None" affiliation="Shamal Faily" role="Scribe" />
+    </contributors>
+  </project_settings>
+  <environment name="Default" short_code="Default">
+    <definition>Default</definition>
+    <asset_values>
+      <none>TBC</none>
+      <low>TBC</low>
+      <medium>TBC</medium>
+      <high>TBC</high>
+    </asset_values>
+  </environment>
+</cairis>
+
+<riskanalysis>
+  <role name="Undefined" type="Stakeholder" short_code="UNDEF">
+    <description>Undefined</description>
+  </role>
+</riskanalysis>
+
+<usability>
+
+<persona name="Matt" type="Primary" assumption_persona="FALSE" image="Matt_portrait.jpg" >
+ <!-- Image source: https://www.flickr.com/photos/46861222@N03/4636847620 -->
+ <activities>Matt is a director of assurance at TeamRed LLP.  He started his career in IT around 12 years ago and, after some time working for one of the bigger consultancies, moved into penetration testing.  He has been CHECK and CREST accredited but, in recent years, has taken more responsibility for managing the penetration testing arm of his company.
+
+Matt believes that penetration testing can be a great way of educating clients about security.  He strongly believes that fixing and limiting the scope of any engagement is a professional obligation, and he has a moral responsibility to report high impact vulnerabilities as quickly as possible.  Matt hopes that, by demonstrating this level of professionalism and recommending solid improvements as a result of any engagement, clients will develop their understanding of penetration testing as a service.</activities>
+  <attitudes>Matt believes that his company’s CREST accreditations are a badge of trust, and wearing the badge means strictly adhering to the prescribed code of ethics, upholding high technical and professional standards.  Not maintaining these standards not only undermines client confidence but the entire pen testing industry.
+
+To start building client confidence, scoping meetings are planned with a great deal of attention to detail - particularly given the risk of going out of scope and breaching the CMA.  Experience has allowed Matt to get a gut feeling of possible risks that might be present in a system at an early stage, so these meetings are used to confirm his understanding, explain potential threats, and communicate the strategy to be taken when undertaking the engagement.
+
+When delimiting scope for legal and ethical issues, Matt finds that site visits are particularly important for red team testers.  Red team testing is highly prized because — within reason — testers are given free reign to do whatever they have to do to exploit a target.  As such, such visits help testers understand policies that might be in place, understand the limits of what is and isn’t within scope, and raise any obvious security issues they find now.  Such visits also provide cues for asking the right questions about any possible ambiguity.
+
+Once an engagement has been concluded then Matt believes responsible clients should apply any recommendations made as soon as possible.  While Matt acknowledges their recommendations constitute advice not orders, he also believes that clients fully understand the implications of not following such as advice.  On more than one occasion, Matt has seen clients compromised because they didn’t act on recommendations given fast enough.</attitudes>
+  <aptitudes>As important as processes and tools are, Matt believes that experience is essential when it comes to identifying caveats to testing.  Such caveats may need to be added because information is not made available to the team, the vulnerability data available is incomplete, or there is no obvious consensus about what should be within the scope of engagement.
+
+Matt also feels that the ability to appropriate information is key to a penetration test’s success.  In large projects, testers need to share information and findings across engagement phases, and any new vulnerabilities that are found should be shared with everyone that needs to know about them.</aptitudes>
+  <motivations>Managing client expectations is a key motivational driver to Matt, so much so that testers should be given coaching in this area.  Client relationships should be unbreakable, and clients should feel confident that any data or vulnerabilities collected are safeguarded, and no testing goes ahead until both testers and clients share the same understanding of what the test’s scope is.  If, for some reason, these expectations are not managed then a test’s scope can easily start to creep, as evidenced by ‘change requests’ related to scope.  Fortunately, as testing progresses, Matt finds that managing these expectations becomes easier.  As these expectations stabilise, scope creep becomes less likely, and clients gain a better understanding of what content to expect in the final report, and how to make the engagement work best for them.</motivations>
+  <skills>Matt takes the view that ethics should be ‘designed out’ of any penetration testing practices, such that there should no legal or ethical dilemmas to face.  To this end, assurance is key in the processes and techniques used by testers.  A prescriptive testing methodology is enforced, and deliverables are quality controlled, such that any collected data is sanitised and all recommendations made are defensible.  To support this, Matt feels that testing interactions with 3rd parties should be signed off before any engagement begins.</skills>
+  <intrinsic>None</intrinsic>
+  <contextual>None</contextual>
+<persona_environment name="Default" is_direct="TRUE">
+  <persona_role name="Undefined" />
+  <narrative>Nothing stipulated</narrative>
+</persona_environment>
+</persona>
+
+<persona name="Ben" type="Primary" assumption_persona="FALSE" image="Ben_portrait.jpg" >
+ <!-- Image source:  https://www.flickr.com/photos/ashleymackinnon/7524751112 -->
+ <activities>Ben is a CREST Registered Penetration Tester at TeamRed LLP; he has been in his current post since finishing his undergraduate degree in computing 4 years ago.  He is currently working in a team of three to carry out an infrastructure test for a regional supermarket chain; this also entails evaluating one of their mobile web apps.
+
+Ben spends several times a week speaking with an IT team contact to explain on-going progress.  Some of this time is spent clarifying whether certain systems are within scope, and ascertaining whether certain findings of interest are a cause for concern or not.  Ben’s clients know their systems better than him, and will [justifiably] challenge concerns he raises if they don’t think assets are that important.  On the other hand, Ben also knows that uneducated clients downplay risk, and blasé clients are often slow or reluctant to make any required changes.
+
+As the project draws, to a close, Ben will consider how best to explain fixes for any problems that are found, but IT teams don’t always like being told what they should do.  His experience is that teams distrust his unstructured approach to getting at testing targets and, as a result, is sometimes treated with suspicion and occasional passive aggressiveness - particularly if any systems fall over during testing, irrespective of whether this has anything to do with testing.</activities>
+  <attitudes>Ben feels that ethics is an important soft skill.  Ben thinks that TeamRed’s code of conduct is largely common sense, but he also knows that unethical behaviour can damage his career should he lose his CREST credentials as a result of an audit by CREST or CESG.  Ben realises that any social engineering activities he undertakes can lead to ethical risks given that he is expected to do whatever he has to do to compromise a target; this can include impersonating other people.
+
+Ben finds that working on a testing team can be difficult when the client has commissioned the test because they have to as box-ticking exercise, rather than because they want to.  Such tests are particularly difficult when systems are new and the level of accreditation isn’t clear, or the clients are focused on safeguarding proprietary information above all else.  Such clients can also complain because they don’t understand what a penetration test entails, and what everyone’s responsibilities are before, during, and after a penetration test.  This can be frustrating to Ben, particularly when his client contact is someone who is not security-savvy, or lacks the required authority to action any recommendations made.
+
+While open hostility is rare, Ben often finds his team’s relationship with client IT ‘blue’ team can be frosty at times.  During engagements, Ben is proactive in making sure that misunderstandings do not occur due to communication problems.  For example, Ben speaks regularly to the IT teams to confirm any expected behaviour during their engagement.  While the client’s IT team may not be happy about his team’s presence, he does expect clients to remain professional during testing; this includes ensuring as few people as possible know about any ‘red team’ tests that might be underway, and ensuring that any systems being tested are not modified or made more secure during the testing process.</attitudes>
+  <aptitudes>Ben takes his professional obligations seriously.  He is sometimes asked to help with some specific management research or collaborate on white papers.  As a result, he has some experience researching attacks from the literature, or incident reports raised by colleagues.  He keeps track of various news feeds that report new vulnerabilities or threats, and attends internal seminars given by his colleagues on different topics of interest.  Together, this research and general awareness of attacks and incidents in the wider community helps Ben understand the perspectives taken by attackers.  Where the opportunity avails itself, he shares this perspective when keeping his clients appraised of anything new that might impact a current engagement.</aptitudes>
+  <motivations>Ben enjoys looking at problems from the perspective of the black hat. He realises that successful attacks are the product of multiple contributing factors, and is intrigued about the different vectors taken to compromise a target system.  As Ben’s experience as grown, the more his security senses have become honed.
+
+Because there is no ‘pen testers guide to ethics’, Ben is motivated by the need to stay within the law.  The ease within which laws can be broken is an ever present factor, as are the consequences of a criminal record to his career.  For this reason, Ben avoids undertaking any testing which is clearly out of scope or in breach of the Computer Misuse Act, and will double check any technical information provided by clients, such as IP address ranges.
+
+Ben spent time shadowing more senior penetration testers during his initial engagements, and watching how they deal with clients during meetings and conference calls.  Now his confidence has now grown, Ben has recently became a mentor for a more junior colleague shadowing him on his current project.</motivations>
+  <skills>By learning from incidents and open source reports about attacks and techniques used, Ben attempts to keep up-to-speed with the tools and technologies of black hats.  Ben is not, however, a black hat himself and is conscious of the damage to the pen testing community that might arise if people thought he was.  As a result, while Ben is free to choose the testing tools he wants, he generally relies on a toolkit of tried and tested tools, and will evaluate the output of any potential new tool before  using it on an actual engagement.  He makes notes on the usefulness and applicability of any tools he uses and/or customises.</skills>
+  <intrinsic>None</intrinsic>
+  <contextual>None</contextual>
+<persona_environment name="Default" is_direct="TRUE">
+  <persona_role name="Undefined" />
+  <narrative>Nothing stipulated</narrative>
+</persona_environment>
+</persona>
+
+
+<external_document name="3rd party responsibility GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>3rd party responsibility GT concept</description>
+</external_document>
+<external_document name="career sensitivity GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>career sensitivity GT concept</description>
+</external_document>
+<external_document name="client indifference GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>client indifference GT concept</description>
+</external_document>
+<external_document name="client instincts GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>client instincts GT concept</description>
+</external_document>
+<external_document name="communications protocol GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>communications protocol GT concept</description>
+</external_document>
+<external_document name="engagement design GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>engagement design GT concept</description>
+</external_document>
+<external_document name="engagement structure GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>engagement structure GT concept</description>
+</external_document>
+<external_document name="escalation protocols GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>escalation protocols GT concept</description>
+</external_document>
+<external_document name="ethics training GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>ethics training GT concept</description>
+</external_document>
+<external_document name="expectation management GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>expectation management GT concept</description>
+</external_document>
+<external_document name="fieldwork GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>fieldwork GT concept</description>
+</external_document>
+<external_document name="hacker mindset GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>hacker mindset GT concept</description>
+</external_document>
+<external_document name="hidden risk instincts GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>hidden risk instincts GT concept</description>
+</external_document>
+<external_document name="information management GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>information management GT concept</description>
+</external_document>
+<external_document name="informational protocols GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>informational protocols GT concept</description>
+</external_document>
+<external_document name="issue context GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>issue context GT concept</description>
+</external_document>
+<external_document name="legal instincts GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>legal instincts GT concept</description>
+</external_document>
+<external_document name="professional credentials GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>professional credentials GT concept</description>
+</external_document>
+<external_document name="red team / blue team conflict GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>red team / blue team conflict GT concept</description>
+</external_document>
+<external_document name="red teaming GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>red teaming GT concept</description>
+</external_document>
+<external_document name="remediation responsibility GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>remediation responsibility GT concept</description>
+</external_document>
+<external_document name="responsibility to practice GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>responsibility to practice GT concept</description>
+</external_document>
+<external_document name="risk articulation GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>risk articulation GT concept</description>
+</external_document>
+<external_document name="scope caveats GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>scope caveats GT concept</description>
+</external_document>
+<external_document name="scope creep GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>scope creep GT concept</description>
+</external_document>
+<external_document name="scoping GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>scoping GT concept</description>
+</external_document>
+<external_document name="service comprehension GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>service comprehension GT concept</description>
+</external_document>
+<external_document name="shadowing GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>shadowing GT concept</description>
+</external_document>
+<external_document name="social engineering GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>social engineering GT concept</description>
+</external_document>
+<external_document name="state of the art GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>state of the art GT concept</description>
+</external_document>
+<external_document name="team protocols GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>team protocols GT concept</description>
+</external_document>
+<external_document name="technical training GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>technical training GT concept</description>
+</external_document>
+<external_document name="test authority GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>test authority GT concept</description>
+</external_document>
+<external_document name="tool selection GT concept" version="1" date="March 2015" authors="Shamal Faily, Claudia Iacob">
+  <description>tool selection GT concept</description>
+</external_document>
+
+<document_reference name="Scope extension info" contributor="Shamal Faily, Claudia Iacob" document="3rd party responsibility GT concept">
+  <excerpt>Clients informed when scope exceeded.</excerpt>
+</document_reference>
+<document_reference name="3rd party sign-off requirement" contributor="Shamal Faily, Claudia Iacob" document="3rd party responsibility GT concept">
+  <excerpt>Clients deal with 3rd parties as long there is sign-off from the 3rd parties.</excerpt>
+</document_reference>
+<document_reference name="Client-3rd party interaction" contributor="Shamal Faily, Claudia Iacob" document="3rd party responsibility GT concept">
+  <excerpt>Clients interact with 3rd parties on pen testers behalf </excerpt>
+</document_reference>
+<document_reference name="Explicit permission" contributor="Shamal Faily, Claudia Iacob" document="3rd party responsibility GT concept">
+  <excerpt>Explicit permission sought before any 3rd party test interaction.</excerpt>
+</document_reference>
+<document_reference name="3rd party forms" contributor="Shamal Faily, Claudia Iacob" document="3rd party responsibility GT concept">
+  <excerpt>Clients completes a form stating 3rd parties have been notified.</excerpt>
+</document_reference>
+<document_reference name="Job induced caution" contributor="Shamal Faily, Claudia Iacob" document="career sensitivity GT concept">
+  <excerpt>Pen testers are cautious because they don’t want to lose their jobs.</excerpt>
+</document_reference>
+<document_reference name="Potential for reputation ruin" contributor="Shamal Faily, Claudia Iacob" document="career sensitivity GT concept">
+  <excerpt>Competent enough bad pen testers can ruin reputations</excerpt>
+</document_reference>
+<document_reference name="Fear of credentials loss" contributor="Shamal Faily, Claudia Iacob" document="career sensitivity GT concept">
+  <excerpt>Being stripped of CREST credentials is a massive hit</excerpt>
+</document_reference>
+<document_reference name="Ethics due to exams" contributor="Shamal Faily, Claudia Iacob" document="career sensitivity GT concept">
+  <excerpt>Including code of ethics in exams makes pen testers more ethical</excerpt>
+</document_reference>
+<document_reference name="Blackballing" contributor="Shamal Faily, Claudia Iacob" document="career sensitivity GT concept">
+  <excerpt>If you lose your credentials then the rest of the community find out soon.</excerpt>
+</document_reference>
+<document_reference name="Head in sand" contributor="Shamal Faily, Claudia Iacob" document="client indifference GT concept">
+  <excerpt>Differences of opinion occur when client has their head in the sand</excerpt>
+</document_reference>
+<document_reference name="Uneducated downplay risk" contributor="Shamal Faily, Claudia Iacob" document="client indifference GT concept">
+  <excerpt>Uneducated clients downplay risks</excerpt>
+</document_reference>
+<document_reference name="Doing things because they should" contributor="Shamal Faily, Claudia Iacob" document="client indifference GT concept">
+  <excerpt>Some organisations do things because they feel they should rather than because they see value from them.</excerpt>
+</document_reference>
+<document_reference name="Vulnerability blaseness" contributor="Shamal Faily, Claudia Iacob" document="client indifference GT concept">
+  <excerpt>Customers blasé when they don’t see vulnerabilities are as significant as pen testers.</excerpt>
+</document_reference>
+<document_reference name="Regulatory box-ticking" contributor="Shamal Faily, Claudia Iacob" document="client indifference GT concept">
+  <excerpt>Some customers see pen testing as a regulatory box-ticking exercise.</excerpt>
+</document_reference>
+<document_reference name="Report unread" contributor="Shamal Faily, Claudia Iacob" document="client indifference GT concept">
+  <excerpt>Some companies don’t even read the final report.</excerpt>
+</document_reference>
+<document_reference name="Blase slowness" contributor="Shamal Faily, Claudia Iacob" document="client indifference GT concept">
+  <excerpt>Blase clients slow to make changes.</excerpt>
+</document_reference>
+<document_reference name="Indifference due to being a 3rd party" contributor="Shamal Faily, Claudia Iacob" document="client indifference GT concept">
+  <excerpt>Client indifference if their client is paying for the test.</excerpt>
+</document_reference>
+<document_reference name="Client primary responsibility" contributor="Shamal Faily, Claudia Iacob" document="client instincts GT concept">
+  <excerpt>Primary responsibility is to client contracted to.</excerpt>
+</document_reference>
+<document_reference name="Customer data assurances" contributor="Shamal Faily, Claudia Iacob" document="client instincts GT concept">
+  <excerpt>Provide assurances about collected customer data.</excerpt>
+</document_reference>
+<document_reference name="Limit exploits on customer" contributor="Shamal Faily, Claudia Iacob" document="client instincts GT concept">
+  <excerpt>Limit exploits carried out on customer vulnerabilities.</excerpt>
+</document_reference>
+<document_reference name="For team's eyes only" contributor="Shamal Faily, Claudia Iacob" document="client instincts GT concept">
+  <excerpt>What is seen is for the pen tester team’s eyes only.</excerpt>
+</document_reference>
+<document_reference name="Personal use drive" contributor="Shamal Faily, Claudia Iacob" document="client instincts GT concept">
+  <excerpt>Driven by fact that app tested could used by them or their mother.</excerpt>
+</document_reference>
+<document_reference name="Client happiness driven" contributor="Shamal Faily, Claudia Iacob" document="client instincts GT concept">
+  <excerpt>If the client is happy then you’re on the right lines.</excerpt>
+</document_reference>
+<document_reference name="Client relationship unbreakable" contributor="Shamal Faily, Claudia Iacob" document="client instincts GT concept">
+  <excerpt>Client relationship is unbreakable.</excerpt>
+</document_reference>
+<document_reference name="Law over money and respect" contributor="Shamal Faily, Claudia Iacob" document="client instincts GT concept">
+  <excerpt>Driven by law not financial gain or peer respect</excerpt>
+</document_reference>
+<document_reference name="Up-front protocol agreement" contributor="Shamal Faily, Claudia Iacob" document="communications protocol GT concept">
+  <excerpt>Processes for communicating finding should be agreed up front</excerpt>
+</document_reference>
+<document_reference name="Inclusive scoping" contributor="Shamal Faily, Claudia Iacob" document="engagement design GT concept">
+  <excerpt>Everyone involved should be part of the scoping process.</excerpt>
+</document_reference>
+<document_reference name="Ethics designed out" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>Engagements structured to remove ethical concerns.</excerpt>
+</document_reference>
+<document_reference name="Scope openness creativity" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>The more open the scope, the more creative the engagement structure.</excerpt>
+</document_reference>
+<document_reference name="Assurance measures" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>Team expertise and time spent are measures of assurance.</excerpt>
+</document_reference>
+<document_reference name="Prescriptive methodology" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>Methodology steps are quite prescriptive.</excerpt>
+</document_reference>
+<document_reference name="Report QA" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>QA process collate inputs into final report.</excerpt>
+</document_reference>
+<document_reference name="Report legal caveats" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>Legal caveats included in reports.</excerpt>
+</document_reference>
+<document_reference name="Technical QA" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>Technical QA checks details and quality of analysis</excerpt>
+</document_reference>
+<document_reference name="Redteam goals" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>Goals set for redteams to reach conclusion</excerpt>
+</document_reference>
+<document_reference name="No legal dilemmas" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>Because of processes in place, legal dilemmas have never been faced.</excerpt>
+</document_reference>
+<document_reference name="Work sub-division" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>Team leads sub-divide work to make sure no-one given too wide a task.</excerpt>
+</document_reference>
+<document_reference name="Forward preparation of tools" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>Keeping policies, procedures, tools up to speed helps think ahead.</excerpt>
+</document_reference>
+<document_reference name="Report QAd upwards" contributor="Shamal Faily, Claudia Iacob" document="engagement structure GT concept">
+  <excerpt>Reports QAd at different levels before consolidation for release</excerpt>
+</document_reference>
+<document_reference name="Wide security remit" contributor="Shamal Faily, Claudia Iacob" document="escalation protocols GT concept">
+  <excerpt>Within remit to raise any security issues found.</excerpt>
+</document_reference>
+<document_reference name="Serious issue importance" contributor="Shamal Faily, Claudia Iacob" document="escalation protocols GT concept">
+  <excerpt>Serious issues raised to as high a level as possible.</excerpt>
+</document_reference>
+<document_reference name="Moral issue obligations" contributor="Shamal Faily, Claudia Iacob" document="escalation protocols GT concept">
+  <excerpt>Obliged to report morally controversial issues.</excerpt>
+</document_reference>
+<document_reference name="Illegal issue discussions" contributor="Shamal Faily, Claudia Iacob" document="escalation protocols GT concept">
+  <excerpt>Illegal issues raised with client before law enforcement engaged.</excerpt>
+</document_reference>
+<document_reference name="Illegal activities reported upwards" contributor="Shamal Faily, Claudia Iacob" document="escalation protocols GT concept">
+  <excerpt>Discovery of illegal activities is reported upwards.</excerpt>
+</document_reference>
+<document_reference name="Duty to report" contributor="Shamal Faily, Claudia Iacob" document="escalation protocols GT concept">
+  <excerpt>Duty to report illegal activities.</excerpt>
+</document_reference>
+<document_reference name="Scenario-based training" contributor="Shamal Faily, Claudia Iacob" document="ethics training GT concept">
+  <excerpt>Receive scenario-based training on non-real world scenarios</excerpt>
+</document_reference>
+<document_reference name="Posters" contributor="Shamal Faily, Claudia Iacob" document="ethics training GT concept">
+  <excerpt>Posters are used to reinforce legal issues.</excerpt>
+</document_reference>
+<document_reference name="Legal scenarios" contributor="Shamal Faily, Claudia Iacob" document="ethics training GT concept">
+  <excerpt>Training focuses on legal aspects of situations.</excerpt>
+</document_reference>
+<document_reference name="Legal/ethical job questions" contributor="Shamal Faily, Claudia Iacob" document="ethics training GT concept">
+  <excerpt>Competency-based job interviews cover legal and ethical issues.</excerpt>
+</document_reference>
+<document_reference name="No ethical guides" contributor="Shamal Faily, Claudia Iacob" document="ethics training GT concept">
+  <excerpt>No guides or literature on tackling ethical issues</excerpt>
+</document_reference>
+<document_reference name="Information handling training" contributor="Shamal Faily, Claudia Iacob" document="ethics training GT concept">
+  <excerpt>Training given on information handling</excerpt>
+</document_reference>
+<document_reference name="Ethics passed-on knowledge" contributor="Shamal Faily, Claudia Iacob" document="ethics training GT concept">
+  <excerpt>Ethics know-how is passed-on knowledge</excerpt>
+</document_reference>
+<document_reference name="Ethics is a soft-skill" contributor="Shamal Faily, Claudia Iacob" document="ethics training GT concept">
+  <excerpt>Ethics training is a consultancy soft-skill</excerpt>
+</document_reference>
+<document_reference name="Ethics in diversity training" contributor="Shamal Faily, Claudia Iacob" document="ethics training GT concept">
+  <excerpt>Ethics considered part of general diversity training</excerpt>
+</document_reference>
+<document_reference name="Non-empty report" contributor="Shamal Faily, Claudia Iacob" document="expectation management GT concept">
+  <excerpt>Expected to return a report to clients with something in it.</excerpt>
+</document_reference>
+<document_reference name="Expected client content" contributor="Shamal Faily, Claudia Iacob" document="expectation management GT concept">
+  <excerpt>Clients have some expectation of what will be in the report.</excerpt>
+</document_reference>
+<document_reference name="Expectations kill scope creep" contributor="Shamal Faily, Claudia Iacob" document="expectation management GT concept">
+  <excerpt>Setting client expectations eliminates scope creep.</excerpt>
+</document_reference>
+<document_reference name="Quick legal resolutions" contributor="Shamal Faily, Claudia Iacob" document="expectation management GT concept">
+  <excerpt>Legal issues addressed by a quick chat about expectations.</excerpt>
+</document_reference>
+<document_reference name="Lawyers focus on the proprietary" contributor="Shamal Faily, Claudia Iacob" document="expectation management GT concept">
+  <excerpt>Lawyers more concerned about proprietary information than tests.</excerpt>
+</document_reference>
+<document_reference name="Hard to gauge new system accreditation" contributor="Shamal Faily, Claudia Iacob" document="expectation management GT concept">
+  <excerpt>Different to gauge level of accreditation expectation on new systems</excerpt>
+</document_reference>
+<document_reference name="Know right questions" contributor="Shamal Faily, Claudia Iacob" document="fieldwork GT concept">
+  <excerpt>Good pen testers know the right questions to ask to dig beneath the skins</excerpt>
+</document_reference>
+<document_reference name="Site security problems raised" contributor="Shamal Faily, Claudia Iacob" document="fieldwork GT concept">
+  <excerpt>General security problems found during site visits are raised.</excerpt>
+</document_reference>
+<document_reference name="Prove vulnerability concept" contributor="Shamal Faily, Claudia Iacob" document="fieldwork GT concept">
+  <excerpt>Sometimes asked to prove concept of vulnerability rather than exploit it</excerpt>
+</document_reference>
+<document_reference name="Policies considered not exploited" contributor="Shamal Faily, Claudia Iacob" document="fieldwork GT concept">
+  <excerpt>Policies are considered, but not actively exploited.</excerpt>
+</document_reference>
+<document_reference name="Crash-derived vulnerabilities" contributor="Shamal Faily, Claudia Iacob" document="fieldwork GT concept">
+  <excerpt>Find vulnerabilities from research that builds on system crashes.</excerpt>
+</document_reference>
+<document_reference name="Constant need to innovate" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>Need to think on feed and try different techniques and modify tools</excerpt>
+</document_reference>
+<document_reference name="Zero knowledge perspective" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>Sometimes take a zero knowledge perspective to see how far system can be exploited.</excerpt>
+</document_reference>
+<document_reference name="Attacker perspective" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>Acting like an attacker when testing a site.</excerpt>
+</document_reference>
+<document_reference name="No rogues" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>Selection process emphasised that no rogue hiring.</excerpt>
+</document_reference>
+<document_reference name="Biggest effect mindset" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>Hacker mindset focuses on what causes biggest effect.</excerpt>
+</document_reference>
+<document_reference name="Evades detection" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>When spotted, tries to evade detection.</excerpt>
+</document_reference>
+<document_reference name="Red teams think ahead" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>Red team testers need experience to think ahead.</excerpt>
+</document_reference>
+<document_reference name="Incident-based plans" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>Once client breached, figure out how and base red-teaming off results</excerpt>
+</document_reference>
+<document_reference name="Reporting and fixing weaknesses" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>Assessment focuses on finding and reporting weaknesses, and identifying fixes.</excerpt>
+</document_reference>
+<document_reference name="Wide breadth of attacks" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>Will assume attackers can throw wide breadth of attacks.</excerpt>
+</document_reference>
+<document_reference name="Multiple vulnerability proof" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>Will look to prove vulnerabilities in different ways.</excerpt>
+</document_reference>
+<document_reference name="360 approach to security" contributor="Shamal Faily, Claudia Iacob" document="hacker mindset GT concept">
+  <excerpt>Need to take both a user and attacker view of a system.</excerpt>
+</document_reference>
+<document_reference name="Always something" contributor="Shamal Faily, Claudia Iacob" document="hidden risk instincts GT concept">
+  <excerpt>Seen so many systems that there is always something to report.</excerpt>
+</document_reference>
+<document_reference name="Risk sense" contributor="Shamal Faily, Claudia Iacob" document="hidden risk instincts GT concept">
+  <excerpt>Sense of risk develops are experience grows</excerpt>
+</document_reference>
+<document_reference name="Accident impact" contributor="Shamal Faily, Claudia Iacob" document="hidden risk instincts GT concept">
+  <excerpt>Accidents cause issues as bad as anything malicious attackers can do,</excerpt>
+</document_reference>
+<document_reference name="3rd parties readily comprisable" contributor="Shamal Faily, Claudia Iacob" document="hidden risk instincts GT concept">
+  <excerpt>3rd party systems often out of scope but readily compromisable.</excerpt>
+</document_reference>
+<document_reference name="Clients speak to 3rd parties" contributor="Shamal Faily, Claudia Iacob" document="hidden risk instincts GT concept">
+  <excerpt>Clients asked to speak to 3rd parties that need to be added to scope.</excerpt>
+</document_reference>
+<document_reference name="Privileged access" contributor="Shamal Faily, Claudia Iacob" document="hidden risk instincts GT concept">
+  <excerpt>Privileged access to client information.</excerpt>
+</document_reference>
+<document_reference name="Privacy conscious" contributor="Shamal Faily, Claudia Iacob" document="hidden risk instincts GT concept">
+  <excerpt>Knowning how easy breaches are makes you privacy conscious.</excerpt>
+</document_reference>
+<document_reference name="Contributing breach factors" contributor="Shamal Faily, Claudia Iacob" document="hidden risk instincts GT concept">
+  <excerpt>Usually multiple contributing factors to a breach.</excerpt>
+</document_reference>
+<document_reference name="Literature backs up gut feeling" contributor="Shamal Faily, Claudia Iacob" document="hidden risk instincts GT concept">
+  <excerpt>Gut feeling for breaking into a system backed up with open source literature.</excerpt>
+</document_reference>
+<document_reference name="Factual information defended" contributor="Shamal Faily, Claudia Iacob" document="information management GT concept">
+  <excerpt>Factual information is always defended.</excerpt>
+</document_reference>
+<document_reference name="Last resort logs" contributor="Shamal Faily, Claudia Iacob" document="information management GT concept">
+  <excerpt>Logs and raw data are provided for inspection as a last resort.</excerpt>
+</document_reference>
+<document_reference name="Sanitised evidence" contributor="Shamal Faily, Claudia Iacob" document="information management GT concept">
+  <excerpt>Evidence from different sources is sanitised before use.</excerpt>
+</document_reference>
+<document_reference name="Risk rating QA" contributor="Shamal Faily, Claudia Iacob" document="information management GT concept">
+  <excerpt>Findings go through a QA process to ensure ratings consisting.</excerpt>
+</document_reference>
+<document_reference name="Note collation" contributor="Shamal Faily, Claudia Iacob" document="information management GT concept">
+  <excerpt>Reports written by collating testers’ notes.</excerpt>
+</document_reference>
+<document_reference name="New vulnerabilities shared" contributor="Shamal Faily, Claudia Iacob" document="information management GT concept">
+  <excerpt>New vulnerabilities applicable to other clients shared with the team.</excerpt>
+</document_reference>
+<document_reference name="Need to know sharing" contributor="Shamal Faily, Claudia Iacob" document="information management GT concept">
+  <excerpt>Vulnerabilities shared on a need to know basis.</excerpt>
+</document_reference>
+<document_reference name="Expected behaviour calls" contributor="Shamal Faily, Claudia Iacob" document="informational protocols GT concept">
+  <excerpt>Clients occasionally called to confirm expected behaviour.</excerpt>
+</document_reference>
+<document_reference name="Conference call frequency" contributor="Shamal Faily, Claudia Iacob" document="informational protocols GT concept">
+  <excerpt>Conference calls take place every few days.</excerpt>
+</document_reference>
+<document_reference name="Red team communication expectations" contributor="Shamal Faily, Claudia Iacob" document="informational protocols GT concept">
+  <excerpt>Clients told to tell as few people are possible about red teams.</excerpt>
+</document_reference>
+<document_reference name="Posture change warning" contributor="Shamal Faily, Claudia Iacob" document="informational protocols GT concept">
+  <excerpt>Clients warned if security posture changes during test.</excerpt>
+</document_reference>
+<document_reference name="Changing sensitivity" contributor="Shamal Faily, Claudia Iacob" document="issue context GT concept">
+  <excerpt>Opinions might be changed on the sensitivity of problems based on client discussion.</excerpt>
+</document_reference>
+<document_reference name="Discussions add context" contributor="Shamal Faily, Claudia Iacob" document="issue context GT concept">
+  <excerpt>Client discussions add context to issues found.</excerpt>
+</document_reference>
+<document_reference name="Customer might be right" contributor="Shamal Faily, Claudia Iacob" document="issue context GT concept">
+  <excerpt>Sometimes customer is right about issues that might never be realised.</excerpt>
+</document_reference>
+<document_reference name="Risky environment factor" contributor="Shamal Faily, Claudia Iacob" document="issue context GT concept">
+  <excerpt>Ratings sometimes changes based on how risky the environment is.</excerpt>
+</document_reference>
+<document_reference name="Client challenge issue" contributor="Shamal Faily, Claudia Iacob" document="issue context GT concept">
+  <excerpt>Clients challenge issues if they don’t think its serious.</excerpt>
+</document_reference>
+<document_reference name="Client environment knowledge" contributor="Shamal Faily, Claudia Iacob" document="issue context GT concept">
+  <excerpt>Clients know environment better, and sometimes provide mitigating information.</excerpt>
+</document_reference>
+<document_reference name="Knowledge based rating" contributor="Shamal Faily, Claudia Iacob" document="issue context GT concept">
+  <excerpt>Vulnerability based on how much knowledge is required to exploit it.</excerpt>
+</document_reference>
+<document_reference name="Impact of vulnerability sought" contributor="Shamal Faily, Claudia Iacob" document="issue context GT concept">
+  <excerpt>Clients asked for impact of vulnerability exploitation</excerpt>
+</document_reference>
+<document_reference name="Illegal targets" contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>It’s illegal to target people that don’t work for the client.</excerpt>
+</document_reference>
+<document_reference name="Cognisant of law" contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>Team members cognisant of the law even if they don’t know it to the letter.</excerpt>
+</document_reference>
+<document_reference name="Crime ends career" contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>Getting a criminal record ends your career.</excerpt>
+</document_reference>
+<document_reference name="Legal and moral duty" contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>Legal and moral duty to report report illegal content internally, and flag it up outside</excerpt>
+</document_reference>
+<document_reference name="No out-of-scope work" contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>Won’t do any work outside the scope of the engagement letter.</excerpt>
+</document_reference>
+<document_reference name="Client over vulnerability" contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>Won't test anything the client doesn’t want to test even if confident there is a vulnerability.</excerpt>
+</document_reference>
+<document_reference name="Tester prosecuted" contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>Testers are prosecuted if they break the law.</excerpt>
+</document_reference>
+<document_reference name="Privacy breach contact" contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>Clients phoned when personal information dumped.</excerpt>
+</document_reference>
+<document_reference name="Illegal activity unusual" contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>Illegal activity unusual and difficult to respond to.</excerpt>
+</document_reference>
+<document_reference name="Privacy import of redteaming" contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>Privacy implications of red teaming needs to be considered.</excerpt>
+</document_reference>
+<document_reference name="Highly illegal activities" contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>Highly illegal activity mandate immediate law enforcement response.</excerpt>
+</document_reference>
+<document_reference name="System owner legality." contributor="Shamal Faily, Claudia Iacob" document="legal instincts GT concept">
+  <excerpt>System owner permission makes activities legal.</excerpt>
+</document_reference>
+<document_reference name="Published thinking" contributor="Shamal Faily, Claudia Iacob" document="professional credentials GT concept">
+  <excerpt>Judged by published research and security thinking.</excerpt>
+</document_reference>
+<document_reference name="CREST credentials" contributor="Shamal Faily, Claudia Iacob" document="professional credentials GT concept">
+  <excerpt>CREST qualifications act as credentials.</excerpt>
+</document_reference>
+<document_reference name="Stringent CREST requirements" contributor="Shamal Faily, Claudia Iacob" document="professional credentials GT concept">
+  <excerpt>Stringent CREST requirements make it harder to rogue firms to operate.</excerpt>
+</document_reference>
+<document_reference name="Hold high standards" contributor="Shamal Faily, Claudia Iacob" document="professional credentials GT concept">
+  <excerpt>CREST accreditations mean pen testing firms hold selves to a high standard.</excerpt>
+</document_reference>
+<document_reference name="Strict adherence to ethics codes" contributor="Shamal Faily, Claudia Iacob" document="professional credentials GT concept">
+  <excerpt>Strictly adhere to CREST code of ethics.</excerpt>
+</document_reference>
+<document_reference name="Motivation by fear" contributor="Shamal Faily, Claudia Iacob" document="professional credentials GT concept">
+  <excerpt>Clients motivated by telling them the impact of failing accreditation.</excerpt>
+</document_reference>
+<document_reference name="CREST expectations" contributor="Shamal Faily, Claudia Iacob" document="professional credentials GT concept">
+  <excerpt>Engaging CREST company sets expectations of high levels of professionalism.</excerpt>
+</document_reference>
+<document_reference name="Qualified to be on team" contributor="Shamal Faily, Claudia Iacob" document="professional credentials GT concept">
+  <excerpt>Wouldn’t be put on a team if not qualified to be there.</excerpt>
+</document_reference>
+<document_reference name="Organisation validation" contributor="Shamal Faily, Claudia Iacob" document="professional credentials GT concept">
+  <excerpt>Organisations validated before they are CREST accredited.</excerpt>
+</document_reference>
+<document_reference name="Assurance by track record" contributor="Shamal Faily, Claudia Iacob" document="professional credentials GT concept">
+  <excerpt>Experience and track record provides assurance.</excerpt>
+</document_reference>
+<document_reference name="Trust in government" contributor="Shamal Faily, Claudia Iacob" document="professional credentials GT concept">
+  <excerpt>Clients trust that governments won’t do anything bad to them.</excerpt>
+</document_reference>
+<document_reference name="Told what to do" contributor="Shamal Faily, Claudia Iacob" document="red team / blue team conflict GT concept">
+  <excerpt>IT people don’t take kindly to being told what to do.</excerpt>
+</document_reference>
+<document_reference name="Business knowledge avoids IT conflict" contributor="Shamal Faily, Claudia Iacob" document="red team / blue team conflict GT concept">
+  <excerpt>Need to understand client’s business to avoid conflict with IT.</excerpt>
+</document_reference>
+<document_reference name="Project delay perception" contributor="Shamal Faily, Claudia Iacob" document="red team / blue team conflict GT concept">
+  <excerpt>Perception that security is trying to delay projects.</excerpt>
+</document_reference>
+<document_reference name="Minimal disruption" contributor="Shamal Faily, Claudia Iacob" document="red team / blue team conflict GT concept">
+  <excerpt>Want to cause minimal disruption</excerpt>
+</document_reference>
+<document_reference name="Red/blue team game" contributor="Shamal Faily, Claudia Iacob" document="red team / blue team conflict GT concept">
+  <excerpt>Try to avoid red team test turning into a red team - blue team game.</excerpt>
+</document_reference>
+<document_reference name="Blame" contributor="Shamal Faily, Claudia Iacob" document="red team / blue team conflict GT concept">
+  <excerpt>Always blamed if what being evaluated goes down.</excerpt>
+</document_reference>
+<document_reference name="Developer hostility" contributor="Shamal Faily, Claudia Iacob" document="red team / blue team conflict GT concept">
+  <excerpt>Developers get hostile when their code ‘baby’ is reviewed.</excerpt>
+</document_reference>
+<document_reference name="Unresponsive" contributor="Shamal Faily, Claudia Iacob" document="red team / blue team conflict GT concept">
+  <excerpt>Blue teams tend to be unresponsive rather than hostile.</excerpt>
+</document_reference>
+<document_reference name="Defensive when compromised" contributor="Shamal Faily, Claudia Iacob" document="red team / blue team conflict GT concept">
+  <excerpt>Clients defensive when compromised due to a reported vulnerability.</excerpt>
+</document_reference>
+<document_reference name="Little control over client patches" contributor="Shamal Faily, Claudia Iacob" document="red team / blue team conflict GT concept">
+  <excerpt>Little that can be done when system patched during test</excerpt>
+</document_reference>
+<document_reference name="Opening up sysadmins" contributor="Shamal Faily, Claudia Iacob" document="red team / blue team conflict GT concept">
+  <excerpt>Getting sysadmins to open up is key.</excerpt>
+</document_reference>
+<document_reference name="Red teaming popularity" contributor="Shamal Faily, Claudia Iacob" document="red teaming GT concept">
+  <excerpt>Red teaming is becoming more popular.</excerpt>
+</document_reference>
+<document_reference name="Red team legal limits" contributor="Shamal Faily, Claudia Iacob" document="red teaming GT concept">
+  <excerpt>Red teams limited only by the bounds of law.</excerpt>
+</document_reference>
+<document_reference name="Prize matching malicious " contributor="Shamal Faily, Claudia Iacob" document="red teaming GT concept">
+  <excerpt>Red team jobs are highly prized because they match real hacking.</excerpt>
+</document_reference>
+<document_reference name="Chain vulnerabilities" contributor="Shamal Faily, Claudia Iacob" document="red teaming GT concept">
+  <excerpt>Red teams chain vulnerabilities together, rather than just finding them all.</excerpt>
+</document_reference>
+<document_reference name="Broader scope prized" contributor="Shamal Faily, Claudia Iacob" document="red teaming GT concept">
+  <excerpt>Red teams are prized because of their broader scope.</excerpt>
+</document_reference>
+<document_reference name="Do whatever needed" contributor="Shamal Faily, Claudia Iacob" document="red teaming GT concept">
+  <excerpt>Will do whatever needs to be done to get at the target.</excerpt>
+</document_reference>
+<document_reference name="Wide scope of activities" contributor="Shamal Faily, Claudia Iacob" document="red teaming GT concept">
+  <excerpt>Wide scope of activities fall under the red team banner.</excerpt>
+</document_reference>
+<document_reference name="Client free to respond" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>Client are free to respond to professional advice provided as they wish.</excerpt>
+</document_reference>
+<document_reference name="Annoyance" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>Can be annoyed by client’s response</excerpt>
+</document_reference>
+<document_reference name="Additional service alert" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>Alert clients if thought they might need other services, not just pen testing.</excerpt>
+</document_reference>
+<document_reference name="Provide advice not orders" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>Provide advice to customers, rather than orders.</excerpt>
+</document_reference>
+<document_reference name="Client-owned vulnerabilities" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>Once vulnerabilities reported, dealing with them is left to client.</excerpt>
+</document_reference>
+<document_reference name="No come back once reported" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>Not worried about come back once vulnerabilities reported.</excerpt>
+</document_reference>
+<document_reference name="Client responsibility for 3rd parties" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>Clients responsible for 3rd party problems.</excerpt>
+</document_reference>
+<document_reference name="CESG/CHECK professionalism assessment" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>CESG and CHECK are better placed to assess professionalism than CREST</excerpt>
+</document_reference>
+<document_reference name="Client not fast enough" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>Clients compromised by reported vulnerability because they didn’t act fast enough.</excerpt>
+</document_reference>
+<document_reference name="Prepared to counter-argue" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>Prepared to counter-argue clients who say vulnerabilities aren’t serious.</excerpt>
+</document_reference>
+<document_reference name="Desire due to payment" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>Hope paying for pen test gives clients desire to fix</excerpt>
+</document_reference>
+<document_reference name="Fear of client customers." contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>Client customers might be unhappy if nothing happens once report issues.</excerpt>
+</document_reference>
+<document_reference name="CEO responsibility" contributor="Shamal Faily, Claudia Iacob" document="remediation responsibility GT concept">
+  <excerpt>The CEO is responsible for the legal implications of all his software.</excerpt>
+</document_reference>
+<document_reference name="Takes every opportunity" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Takes every opportunity to find and report issues.</excerpt>
+</document_reference>
+<document_reference name="Expected behaviour coded" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Company’s code of conduct sets out expected behaviour.</excerpt>
+</document_reference>
+<document_reference name="Care about security" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Cares about security.</excerpt>
+</document_reference>
+<document_reference name="Job over exploration" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Engaged to do a job, not to explore the client’s infrastructure or email.</excerpt>
+</document_reference>
+<document_reference name="Faith sustains industry" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Pen testing industry dies if people lose faith in what we do.</excerpt>
+</document_reference>
+<document_reference name="Immediacy is ethical" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Ethical to report vulnerabilities immediately.</excerpt>
+</document_reference>
+<document_reference name="Test data management standards" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Irresponsible to put test data on unencrypted drives.</excerpt>
+</document_reference>
+<document_reference name="Client red team awareness" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Clients made aware of what a red team entails.</excerpt>
+</document_reference>
+<document_reference name="Qualified leaders" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Only qualified people lead engagements.</excerpt>
+</document_reference>
+<document_reference name="Tools validated" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>New tools validated before use.</excerpt>
+</document_reference>
+<document_reference name="Common sense codes" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Codes are common sense rather than useful.</excerpt>
+</document_reference>
+<document_reference name="Methodology audit" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Methodologies reviewed by CESG and CREST.</excerpt>
+</document_reference>
+<document_reference name="Scope ethicity" contributor="Shamal Faily, Claudia Iacob" document="responsibility to practice GT concept">
+  <excerpt>Strict scope removes ethical issues.</excerpt>
+</document_reference>
+<document_reference name="Articulation responsibility" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Responsible for articulating and explaining risks to client.</excerpt>
+</document_reference>
+<document_reference name="Experience counters pushback" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Draw on experience to articulate risks, otherwise stakeholders push criticism back.</excerpt>
+</document_reference>
+<document_reference name="Risk and impact levels" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Risk and impact levels accompany every reported vulnerability.</excerpt>
+</document_reference>
+<document_reference name="People person" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Have to be able to talk to people and articulate risk.</excerpt>
+</document_reference>
+<document_reference name="Bridge business-technical gap." contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Bridge business impact - technical gap.</excerpt>
+</document_reference>
+<document_reference name="Anonymised vulnerabilities" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Personal details behind reported vulnerabilities are anonymised.</excerpt>
+</document_reference>
+<document_reference name="Articulation as education" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Articulating impact of compromise is effectively educating client.</excerpt>
+</document_reference>
+<document_reference name="Vulnerability as impact" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Vulnerabilities expressed as business impact.</excerpt>
+</document_reference>
+<document_reference name="Support material" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Supporting material for issues provided, to help clients recreate them.</excerpt>
+</document_reference>
+<document_reference name="HR involvement" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>HR should be involved when dealing with vulnerabilities arising from human behaviour.</excerpt>
+</document_reference>
+<document_reference name="No singling out" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Targeted individuals shouldn’t be singled out.</excerpt>
+</document_reference>
+<document_reference name="Failed exploit reasoning" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>If demonstrated exploits fail, will explain reasons why.</excerpt>
+</document_reference>
+<document_reference name="Ramifications of vulnerabilities" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Ramifications of vulnerabilities found explained in report.</excerpt>
+</document_reference>
+<document_reference name="Methodology explained" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Methodology followed always explained.</excerpt>
+</document_reference>
+<document_reference name="Work with clients to fix" contributor="Shamal Faily, Claudia Iacob" document="risk articulation GT concept">
+  <excerpt>Will work with clients to help fix any problems found.</excerpt>
+</document_reference>
+<document_reference name="Information caveat" contributor="Shamal Faily, Claudia Iacob" document="scope caveats GT concept">
+  <excerpt>People with information you don’t have might find other issues.</excerpt>
+</document_reference>
+<document_reference name="Presence awareness reported" contributor="Shamal Faily, Claudia Iacob" document="scope caveats GT concept">
+  <excerpt>Report if IT security team made aware of presence.</excerpt>
+</document_reference>
+<document_reference name="No DoS caveat" contributor="Shamal Faily, Claudia Iacob" document="scope caveats GT concept">
+  <excerpt>Caveats might include no DoS testing.</excerpt>
+</document_reference>
+<document_reference name="Limited time caveat" contributor="Shamal Faily, Claudia Iacob" document="scope caveats GT concept">
+  <excerpt>Caveat that most vulnerabilities found in limited time available.</excerpt>
+</document_reference>
+<document_reference name="Report caveat" contributor="Shamal Faily, Claudia Iacob" document="scope caveats GT concept">
+  <excerpt>Reports caveated with things client wanted taken out of scope.</excerpt>
+</document_reference>
+<document_reference name="Exhaustive caveat" contributor="Shamal Faily, Claudia Iacob" document="scope caveats GT concept">
+  <excerpt>Report vulnerabilities not exhaustive.</excerpt>
+</document_reference>
+<document_reference name="Found issues scope caveat" contributor="Shamal Faily, Claudia Iacob" document="scope caveats GT concept">
+  <excerpt>Often add scope caveat that other security issues may also be investigated.</excerpt>
+</document_reference>
+<document_reference name="Exceeding contractual bounds" contributor="Shamal Faily, Claudia Iacob" document="scope creep GT concept">
+  <excerpt>Exceeding scope exceeds contractual bounds.</excerpt>
+</document_reference>
+<document_reference name="Constant battle" contributor="Shamal Faily, Claudia Iacob" document="scope creep GT concept">
+  <excerpt>Scope creep constantly battled.</excerpt>
+</document_reference>
+<document_reference name="Client scope change request" contributor="Shamal Faily, Claudia Iacob" document="scope creep GT concept">
+  <excerpt>Clients sometimes want to change scope.</excerpt>
+</document_reference>
+<document_reference name="Scope extended if time" contributor="Shamal Faily, Claudia Iacob" document="scope creep GT concept">
+  <excerpt>Happy to agree client scope change if there is time.</excerpt>
+</document_reference>
+<document_reference name="Scope easily spreads" contributor="Shamal Faily, Claudia Iacob" document="scope creep GT concept">
+  <excerpt>Tests in one area can easily spread to out of scope areas.</excerpt>
+</document_reference>
+<document_reference name="Environment not understood" contributor="Shamal Faily, Claudia Iacob" document="scope creep GT concept">
+  <excerpt>Scopes change because environment not well understood at the start.</excerpt>
+</document_reference>
+<document_reference name="Scope creep happens." contributor="Shamal Faily, Claudia Iacob" document="scope creep GT concept">
+  <excerpt>Scope creep happens.</excerpt>
+</document_reference>
+<document_reference name="Scope as communication strategy" contributor="Shamal Faily, Claudia Iacob" document="scoping GT concept">
+  <excerpt>Scoping communicates pen testing strategy to client and team.</excerpt>
+</document_reference>
+<document_reference name="Open tests" contributor="Shamal Faily, Claudia Iacob" document="scoping GT concept">
+  <excerpt>Pen tests carried out in an open away.</excerpt>
+</document_reference>
+<document_reference name="Penetration once scope established" contributor="Shamal Faily, Claudia Iacob" document="scoping GT concept">
+  <excerpt>Once network scope established, you can attempt to penetration it.</excerpt>
+</document_reference>
+<document_reference name="Separate engagement for 3rd parties" contributor="Shamal Faily, Claudia Iacob" document="scoping GT concept">
+  <excerpt>3rd party system testing entails a separate engagement.</excerpt>
+</document_reference>
+<document_reference name="Easy to breach CMA" contributor="Shamal Faily, Claudia Iacob" document="scoping GT concept">
+  <excerpt>Scoping is important as breaching the CMA is easy.</excerpt>
+</document_reference>
+<document_reference name="Double check provided info" contributor="Shamal Faily, Claudia Iacob" document="scoping GT concept">
+  <excerpt>Double check ownership of information like IP addresses before test.</excerpt>
+</document_reference>
+<document_reference name="Guided test route" contributor="Shamal Faily, Claudia Iacob" document="scoping GT concept">
+  <excerpt>Instructed to guide test down a particular route.</excerpt>
+</document_reference>
+<document_reference name="Pen test scope limited to tech" contributor="Shamal Faily, Claudia Iacob" document="scoping GT concept">
+  <excerpt>Pen test scope narrow and technical, unlike red teams which assess security of organisation.</excerpt>
+</document_reference>
+<document_reference name="Involvement / authority trade-off" contributor="Shamal Faily, Claudia Iacob" document="scoping GT concept">
+  <excerpt>Trade-off between limited involved participants and obtaining full authority for engagement.</excerpt>
+</document_reference>
+<document_reference name="Client and tester scope model" contributor="Shamal Faily, Claudia Iacob" document="scoping GT concept">
+  <excerpt>Clients and pen testers have own ideas about what should be within scope.</excerpt>
+</document_reference>
+<document_reference name="Scoping meetings" contributor="Shamal Faily, Claudia Iacob" document="scoping GT concept">
+  <excerpt>Scoping meetings discuss system and likely attack vectors.</excerpt>
+</document_reference>
+<document_reference name="Sophisticated customer behaviour" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Informed customers understand purpose of test, and ask sophisticated questions about what they will get out of test.</excerpt>
+</document_reference>
+<document_reference name="Tests shift mentality" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Pen tests shift client mentality and improve level of pen test understanding.</excerpt>
+</document_reference>
+<document_reference name="Clients say what to look for" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Knowledgeable clients tell pen testers what problems to look out for.</excerpt>
+</document_reference>
+<document_reference name="Emergent engagement reshaping" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Engagements are sometime reshaped as clients become more knowledgeable.</excerpt>
+</document_reference>
+<document_reference name="Service implication understanding" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Clients should understand implications of the service they are buying.</excerpt>
+</document_reference>
+<document_reference name="Attack-driven perspective change" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Seeing how attackers operate causes client rethinking.</excerpt>
+</document_reference>
+<document_reference name="Proposed unethical activities" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Some clients propose social engineering activities that are unethical.</excerpt>
+</document_reference>
+<document_reference name="Vulnerability explanation responsibility" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Responsibility to demonstrate how severe vulnerabilities are.</excerpt>
+</document_reference>
+<document_reference name="Customer training" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Customers need training if they haven’t been involved in a pent test before.</excerpt>
+</document_reference>
+<document_reference name="Layman terms" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Tries to explain problems in layman terms.</excerpt>
+</document_reference>
+<document_reference name="Understanding based on asking" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Customers who ask for a pen test have a good understanding of what they want.</excerpt>
+</document_reference>
+<document_reference name="Wild variation of understanding" contributor="Shamal Faily, Claudia Iacob" document="service comprehension GT concept">
+  <excerpt>Customer understanding can vary wildly.</excerpt>
+</document_reference>
+<document_reference name="Juniors with seniors" contributor="Shamal Faily, Claudia Iacob" document="shadowing GT concept">
+  <excerpt>Junior tests always work with seniors.</excerpt>
+</document_reference>
+<document_reference name="Juniors become seniors" contributor="Shamal Faily, Claudia Iacob" document="shadowing GT concept">
+  <excerpt>Juniors become seniors after a few engagements.</excerpt>
+</document_reference>
+<document_reference name="Intuition development" contributor="Shamal Faily, Claudia Iacob" document="shadowing GT concept">
+  <excerpt>Juniors develop an intuition for vulnerabilities the more engagements they do.</excerpt>
+</document_reference>
+<document_reference name="Walkaround tutalege" contributor="Shamal Faily, Claudia Iacob" document="shadowing GT concept">
+  <excerpt>Seniors use client walkarounds to tutor juniors on vulnerabilities.</excerpt>
+</document_reference>
+<document_reference name="Seniors watch over juniors" contributor="Shamal Faily, Claudia Iacob" document="shadowing GT concept">
+  <excerpt>Seniors explain what they do and keep juniors in check.</excerpt>
+</document_reference>
+<document_reference name="About to sit CREST exams" contributor="Shamal Faily, Claudia Iacob" document="shadowing GT concept">
+  <excerpt>Juniors often about to sit CREST exams.</excerpt>
+</document_reference>
+<document_reference name="Replicate seniors" contributor="Shamal Faily, Claudia Iacob" document="shadowing GT concept">
+  <excerpt>Juniors watch, keep notes, and try to replicate seniors.</excerpt>
+</document_reference>
+<document_reference name="Juniors learn client management" contributor="Shamal Faily, Claudia Iacob" document="shadowing GT concept">
+  <excerpt>Juniors learn how seniors deal with clients during meeting and conference calls.</excerpt>
+</document_reference>
+<document_reference name="Juniors not left alone" contributor="Shamal Faily, Claudia Iacob" document="shadowing GT concept">
+  <excerpt>Juniors not expected to run pentests on site without a CHECK team leader or CREST certified tester.</excerpt>
+</document_reference>
+<document_reference name="Professional independents" contributor="Shamal Faily, Claudia Iacob" document="shadowing GT concept">
+  <excerpt>Junior testers not taken our externally until they are considered professional enough.</excerpt>
+</document_reference>
+<document_reference name="No privacy expectations on work machines" contributor="Shamal Faily, Claudia Iacob" document="social engineering GT concept">
+  <excerpt>If policies are in place, people in companies should have no expectation of privacy on work machines.</excerpt>
+</document_reference>
+<document_reference name="Avoid legal ambiguity" contributor="Shamal Faily, Claudia Iacob" document="social engineering GT concept">
+  <excerpt>Avoid work which is legally ambiguous.</excerpt>
+</document_reference>
+<document_reference name="Red team impersonations" contributor="Shamal Faily, Claudia Iacob" document="social engineering GT concept">
+  <excerpt>Impersonates other people to get to red team target.</excerpt>
+</document_reference>
+<document_reference name="Manage victimisation risk" contributor="Shamal Faily, Claudia Iacob" document="social engineering GT concept">
+  <excerpt>Socially engineered staff feel victimised to risk needs to be managed.</excerpt>
+</document_reference>
+<document_reference name="Questions about rules" contributor="Shamal Faily, Claudia Iacob" document="social engineering GT concept">
+  <excerpt>Staff asked questions to determine if rules followed.</excerpt>
+</document_reference>
+<document_reference name="Career affecting to staff" contributor="Shamal Faily, Claudia Iacob" document="social engineering GT concept">
+  <excerpt>Socially engineering staff might affect their career.</excerpt>
+</document_reference>
+<document_reference name="Literature / blue team research" contributor="Shamal Faily, Claudia Iacob" document="state of the art GT concept">
+  <excerpt>Carries out background research on attacks from literature, or associated blue teams.</excerpt>
+</document_reference>
+<document_reference name="Management research and white papers" contributor="Shamal Faily, Claudia Iacob" document="state of the art GT concept">
+  <excerpt>Asked to conduct management research or write whitepapers.</excerpt>
+</document_reference>
+<document_reference name="Perspective from incidents and forensics" contributor="Shamal Faily, Claudia Iacob" document="state of the art GT concept">
+  <excerpt>Adversory perspective gleaned from response to past incidents, and network forensics.</excerpt>
+</document_reference>
+<document_reference name="Open source based perspective" contributor="Shamal Faily, Claudia Iacob" document="state of the art GT concept">
+  <excerpt>Adversory perspective from open source reports of attacks and techniques/tools used.</excerpt>
+</document_reference>
+<document_reference name="Forum based capability elicitation" contributor="Shamal Faily, Claudia Iacob" document="state of the art GT concept">
+  <excerpt>Forums investigated to learn about attacker capabilities.</excerpt>
+</document_reference>
+<document_reference name="Sharing insights" contributor="Shamal Faily, Claudia Iacob" document="team protocols GT concept">
+  <excerpt>Share insights and problems with peers.</excerpt>
+</document_reference>
+<document_reference name="Consensus-based solutions" contributor="Shamal Faily, Claudia Iacob" document="team protocols GT concept">
+  <excerpt>Consensus reaching within team on dealing with problems.</excerpt>
+</document_reference>
+<document_reference name="Designated report QA" contributor="Shamal Faily, Claudia Iacob" document="team protocols GT concept">
+  <excerpt>Reports checked by designated QA person.</excerpt>
+</document_reference>
+<document_reference name="Distributed team" contributor="Shamal Faily, Claudia Iacob" document="team protocols GT concept">
+  <excerpt>Some engagements spread across multiple locations nationally.</excerpt>
+</document_reference>
+<document_reference name="Client-sales team confusion" contributor="Shamal Faily, Claudia Iacob" document="team protocols GT concept">
+  <excerpt>Lack of knowledge sometimes causes confusion between client and sales team.</excerpt>
+</document_reference>
+<document_reference name="Two consultants onsite" contributor="Shamal Faily, Claudia Iacob" document="team protocols GT concept">
+  <excerpt>Usually at least two consultants on site at any time.</excerpt>
+</document_reference>
+<document_reference name="Sharing across phases" contributor="Shamal Faily, Claudia Iacob" document="team protocols GT concept">
+  <excerpt>Information shared across consultants working on different engagement phases.</excerpt>
+</document_reference>
+<document_reference name="Social engagement driven sharing" contributor="Shamal Faily, Claudia Iacob" document="team protocols GT concept">
+  <excerpt>Social engagements important for informal information sharing.</excerpt>
+</document_reference>
+<document_reference name="Engagement not watching" contributor="Shamal Faily, Claudia Iacob" document="team protocols GT concept">
+  <excerpt>Engaging with teams is more than just sitting back and watching.</excerpt>
+</document_reference>
+<document_reference name="Site security group" contributor="Shamal Faily, Claudia Iacob" document="team protocols GT concept">
+  <excerpt>If site has a security group, reports are presented to them.</excerpt>
+</document_reference>
+<document_reference name="Colleague peer review" contributor="Shamal Faily, Claudia Iacob" document="team protocols GT concept">
+  <excerpt>Vulnerabilities and findings always peer reviewed by colleague.</excerpt>
+</document_reference>
+<document_reference name="Training via conference and research" contributor="Shamal Faily, Claudia Iacob" document="technical training GT concept">
+  <excerpt>Technical training conference from conferences and internal research.</excerpt>
+</document_reference>
+<document_reference name="News feeds" contributor="Shamal Faily, Claudia Iacob" document="technical training GT concept">
+  <excerpt>Maintains feed from different sources for latest news.</excerpt>
+</document_reference>
+<document_reference name="Non-ethical technical training" contributor="Shamal Faily, Claudia Iacob" document="technical training GT concept">
+  <excerpt>Technical events don’t focus on ethical issues.</excerpt>
+</document_reference>
+<document_reference name="Crash course" contributor="Shamal Faily, Claudia Iacob" document="technical training GT concept">
+  <excerpt>New pen testers given a pen test crash course before first engagement.</excerpt>
+</document_reference>
+<document_reference name="Scenarios in labs" contributor="Shamal Faily, Claudia Iacob" document="technical training GT concept">
+  <excerpt>Internal labs are used for running representative training scenarios.</excerpt>
+</document_reference>
+<document_reference name="No white/black hat training differentiation" contributor="Shamal Faily, Claudia Iacob" document="technical training GT concept">
+  <excerpt>No differentiation between white hat and black hat training material.</excerpt>
+</document_reference>
+<document_reference name="Developing expertise in labs" contributor="Shamal Faily, Claudia Iacob" document="technical training GT concept">
+  <excerpt>Encourage to play on in-house labs to develop expertise.</excerpt>
+</document_reference>
+<document_reference name="Lack of management skills" contributor="Shamal Faily, Claudia Iacob" document="test authority GT concept">
+  <excerpt>Some managers not skills enough to work across organisational boundaries.</excerpt>
+</document_reference>
+<document_reference name="Lack of management authority/buy-in" contributor="Shamal Faily, Claudia Iacob" document="test authority GT concept">
+  <excerpt>Some managers may lack buy-in or authority to make changes.</excerpt>
+</document_reference>
+<document_reference name="Question client seniority" contributor="Shamal Faily, Claudia Iacob" document="test authority GT concept">
+  <excerpt>Need to find out if client senior enough to grant necessary testing authority.</excerpt>
+</document_reference>
+<document_reference name="Complaints due to misapprehension" contributor="Shamal Faily, Claudia Iacob" document="test authority GT concept">
+  <excerpt>Complaints arise due to misapprehension on what tests entail.</excerpt>
+</document_reference>
+<document_reference name="Black hat techniques inappropriate" contributor="Shamal Faily, Claudia Iacob" document="tool selection GT concept">
+  <excerpt>Black hat techniques not always the right tools when doing assessments.</excerpt>
+</document_reference>
+<document_reference name="Public domain tool evaluation" contributor="Shamal Faily, Claudia Iacob" document="tool selection GT concept">
+  <excerpt>Public domain tools and techniques evaluated before use.</excerpt>
+</document_reference>
+<document_reference name="Report writing tools" contributor="Shamal Faily, Claudia Iacob" document="tool selection GT concept">
+  <excerpt>Use tools to help report writing.</excerpt>
+</document_reference>
+<document_reference name="Generated report template" contributor="Shamal Faily, Claudia Iacob" document="tool selection GT concept">
+  <excerpt>Report template generated by tool based on input findings, which is customised.</excerpt>
+</document_reference>
+<document_reference name="Trusted toolkit" contributor="Shamal Faily, Claudia Iacob" document="tool selection GT concept">
+  <excerpt>Rely on an extensive toolkit of trusted tools.</excerpt>
+</document_reference>
+<document_reference name="Tester-friendly note taking tools" contributor="Shamal Faily, Claudia Iacob" document="tool selection GT concept">
+  <excerpt>Notes are taken on whatever tools testers are most comfortable with.</excerpt>
+</document_reference>
+<document_reference name="Customised implants" contributor="Shamal Faily, Claudia Iacob" document="tool selection GT concept">
+  <excerpt>Implants customised to minimise risks associated with its use.</excerpt>
+</document_reference>
+<document_reference name="Implant kill switch" contributor="Shamal Faily, Claudia Iacob" document="tool selection GT concept">
+  <excerpt>Implants contain kill switches to remove self if running on an unauthorised machine.</excerpt>
+</document_reference>
+<document_reference name="Disk encryption singular mandate" contributor="Shamal Faily, Claudia Iacob" document="tool selection GT concept">
+  <excerpt>Disk encryption is the only mandated testing technology.</excerpt>
+</document_reference>
+<document_reference name="Testing platform freedom" contributor="Shamal Faily, Claudia Iacob" document="tool selection GT concept">
+  <excerpt>Free to chose own testing platform.</excerpt>
+</document_reference>
+<document_reference name="Tool logs" contributor="Shamal Faily, Claudia Iacob" document="tool selection GT concept">
+  <excerpt>Rely on tools producing logs if there is any comeback on testing carried out.</excerpt>
+</document_reference>
+
+
+<persona_characteristic persona="Ben" behavioural_variable="Aptitudes" modal_qualifier="Usually" >
+  <definition>Keeps self and clients appraised of attacker and tool capabilities</definition>
+  <grounds type="document" reference="Literature / blue team research" />
+  <grounds type="document" reference="Perspective from incidents and forensics" />
+  <grounds type="document" reference="Training via conference and research" />
+  <warrant type="document" reference="Management research and white papers" />
+  <warrant type="document" reference="News feeds" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Skills" modal_qualifier="Possibly" >
+  <definition>Incidents and open-source intelligence identify potential tools to consider evaluating for toolkit</definition>
+  <grounds type="document" reference="Perspective from incidents and forensics" />
+  <grounds type="document" reference="Open source based perspective" />
+  <grounds type="document" reference="Public domain tool evaluation" />
+  <grounds type="document" reference="Trusted toolkit" />
+  <warrant type="document" reference="Black hat techniques inappropriate" />
+  <warrant type="document" reference="Testing platform freedom" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Attitudes" modal_qualifier="Usually" >
+  <definition>CREST accredition worthless if high technical and professional standards are not maintained.</definition>
+  <grounds type="document" reference="CREST credentials" />
+  <grounds type="document" reference="Hold high standards" />
+  <grounds type="document" reference="Strict adherence to ethics codes" />
+  <grounds type="document" reference="Methodology audit" />
+  <warrant type="document" reference="Faith sustains industry" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Skills" modal_qualifier="Possibly" >
+  <definition>Required to curate collection of trusted software tools.</definition>
+  <grounds type="document" reference="Public domain tool evaluation" />
+  <grounds type="document" reference="Trusted toolkit" />
+  <grounds type="document" reference="Testing platform freedom" />
+  <grounds type="document" reference="Tool logs" />
+  <warrant type="document" reference="Care about security" />
+  <warrant type="document" reference="Faith sustains industry" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Usually" >
+  <definition>Ethics is a passed on soft-skill that testers are obliged to pick up.</definition>
+  <grounds type="document" reference="Ethics passed-on knowledge" />
+  <grounds type="document" reference="Ethics is a soft-skill" />
+  <grounds type="document" reference="Expected behaviour coded" />
+  <grounds type="document" reference="Care about security" />
+  <warrant type="document" reference="No ethical guides" />
+  <warrant type="document" reference="Faith sustains industry" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Activities" modal_qualifier="Always" >
+  <definition>Morally obliged to report high impact vulnerabilities as quickly as possible.</definition>
+  <grounds type="document" reference="Takes every opportunity" />
+  <grounds type="document" reference="Care about security" />
+  <grounds type="document" reference="Illegal activities reported upwards" />
+  <grounds type="document" reference="Duty to report" />
+  <warrant type="document" reference="Immediacy is ethical" />
+  <warrant type="document" reference="Moral issue obligations" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Possibly" >
+  <definition>Expectation of high standards means falling below them could endanger career.</definition>
+  <grounds type="document" reference="Common sense codes" />
+  <grounds type="document" reference="Job induced caution" />
+  <grounds type="document" reference="Potential for reputation ruin" />
+  <warrant type="document" reference="Fear of credentials loss" />
+  <warrant type="document" reference="Methodology audit" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Activities" modal_qualifier="Usually" >
+  <definition>Professionally and ethically obliged to fix and limit scope as much as possible. </definition>
+  <grounds type="document" reference="Job over exploration" />
+  <grounds type="document" reference="Methodology audit" />
+  <grounds type="document" reference="Pen test scope limited to tech" />
+  <warrant type="document" reference="Scope ethicity" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Motivations" modal_qualifier="Always" >
+  <definition>Ethics imparted by juniors shadowing and being apprenticed by more senior testers.</definition>
+  <grounds type="document" reference="Ethics passed-on knowledge" />
+  <grounds type="document" reference="Juniors with seniors" />
+  <grounds type="document" reference="Seniors watch over juniors" />
+  <grounds type="document" reference="Juniors learn client management" />
+  <warrant type="document" reference="No ethical guides" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Motivations" modal_qualifier="Often" >
+  <definition>Shadowing gives juniors the hidden sense of spotting where things might go wrong.</definition>
+  <grounds type="document" reference="Replicate seniors" />
+  <grounds type="document" reference="Intuition development" />
+  <grounds type="document" reference="Risk sense" />
+  <warrant type="document" reference="Juniors become seniors" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Motivations" modal_qualifier="Usually" >
+  <definition>Developing a black hat perspective sheds light of issues that might otherwise remain hidden. </definition>
+  <grounds type="document" reference="Attacker perspective" />
+  <grounds type="document" reference="No rogues" />
+  <grounds type="document" reference="Risk sense" />
+  <grounds type="document" reference="Contributing breach factors" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Attitudes" modal_qualifier="Possibly" >
+  <definition>Pen testers need to be put into context before hidden risks can be found.</definition>
+  <grounds type="document" reference="Always something" />
+  <grounds type="document" reference="Literature backs up gut feeling" />
+  <grounds type="document" reference="Scope as communication strategy" />
+  <grounds type="document" reference="Easy to breach CMA" />
+  <grounds type="document" reference="Scoping meetings" />
+  <warrant type="document" reference="Risk sense" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Motivations" modal_qualifier="Usually" >
+  <definition>Client relationships are so important that testers should be coached on how to manage client expectations</definition>
+  <grounds type="document" reference="Customer data assurances" />
+  <grounds type="document" reference="Client happiness driven" />
+  <grounds type="document" reference="Client relationship unbreakable" />
+  <grounds type="document" reference="Client and tester scope model" />
+  <warrant type="document" reference="Client primary responsibility" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Motivations" modal_qualifier="Usually" >
+  <definition>The ease within what laws can be broken sensitises tests to legal issues affecting tests.</definition>
+  <grounds type="document" reference="Cognisant of law" />
+  <grounds type="document" reference="No out-of-scope work" />
+  <grounds type="document" reference="Easy to breach CMA" />
+  <grounds type="document" reference="Double check provided info" />
+  <warrant type="document" reference="Crime ends career" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Aptitudes" modal_qualifier="Possibly" >
+  <definition>Experienced testers know what caveats to consider.</definition>
+  <grounds type="document" reference="Information caveat" />
+  <grounds type="document" reference="Exhaustive caveat" />
+  <grounds type="document" reference="Scope as communication strategy" />
+  <grounds type="document" reference="Client and tester scope model" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Always" >
+  <definition>Impersonating and socially engineering people is part and parcel of a red team.</definition>
+  <grounds type="document" reference="Wide scope of activities" />
+  <grounds type="document" reference="Red team impersonations" />
+  <warrant type="document" reference="Do whatever needed" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Attitudes" modal_qualifier="Possibly" >
+  <definition>Site access provides context to help ethically delimit scope.</definition>
+  <grounds type="document" reference="Know right questions" />
+  <grounds type="document" reference="Site security problems raised" />
+  <grounds type="document" reference="Policies considered not exploited" />
+  <grounds type="document" reference="Red team legal limits" />
+  <grounds type="document" reference="Do whatever needed" />
+  <grounds type="document" reference="Prize matching malicious " />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Skills" modal_qualifier="Possibly" >
+  <definition>Information management processes are defensible</definition>
+  <grounds type="document" reference="Prescriptive methodology" />
+  <grounds type="document" reference="Report QA" />
+  <grounds type="document" reference="Factual information defended" />
+  <grounds type="document" reference="Last resort logs" />
+  <grounds type="document" reference="Sanitised evidence" />
+  <warrant type="document" reference="Ethics designed out" />
+  <warrant type="document" reference="No legal dilemmas" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Aptitudes" modal_qualifier="Usually" >
+  <definition>Information is shared as needed.</definition>
+  <grounds type="document" reference="New vulnerabilities shared" />
+  <grounds type="document" reference="Sharing insights" />
+  <grounds type="document" reference="Sharing across phases" />
+  <warrant type="document" reference="Need to know sharing" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Activities" modal_qualifier="Possibly" >
+  <definition>A black-hat mindset is treated with hostility by IT client teams</definition>
+  <grounds type="document" reference="Do whatever needed" />
+  <grounds type="document" reference="Wide scope of activities" />
+  <grounds type="document" reference="Blame" />
+  <grounds type="document" reference="Unresponsive" />
+  <warrant type="document" reference="Told what to do" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Activities" modal_qualifier="Possibly" >
+  <definition>Works with IT teams to explain and help fix problems found.</definition>
+  <grounds type="document" reference="No singling out" />
+  <grounds type="document" reference="Methodology explained" />
+  <grounds type="document" reference="Work with clients to fix" />
+  <grounds type="document" reference="Blame" />
+  <warrant type="document" reference="Red/blue team game" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Activities" modal_qualifier="Possibly" >
+  <definition>Recommending fixes helps clients understand pen testing.</definition>
+  <grounds type="document" reference="Ramifications of vulnerabilities" />
+  <grounds type="document" reference="Methodology explained" />
+  <grounds type="document" reference="Sophisticated customer behaviour" />
+  <grounds type="document" reference="Tests shift mentality" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Attitudes" modal_qualifier="Maybe" >
+  <definition>Clients should step up and take responsibility for fixes quickly once reported.</definition>
+  <grounds type="document" reference="Provide advice not orders" />
+  <grounds type="document" reference="Client-owned vulnerabilities" />
+  <grounds type="document" reference="Client not fast enough" />
+  <grounds type="document" reference="Understanding based on asking" />
+  <warrant type="document" reference="Service implication understanding" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Skills" modal_qualifier="Possibly" >
+  <definition>Clients consent to 3rd party testing</definition>
+  <grounds type="document" reference="3rd party sign-off requirement" />
+  <grounds type="document" reference="Client responsibility for 3rd parties" />
+  <warrant type="document" reference="CEO responsibility" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Motivations" modal_qualifier="Usually" >
+  <definition>Client expectations stabilise as testing progresses</definition>
+  <grounds type="document" reference="Expected client content" />
+  <grounds type="document" reference="Expectations kill scope creep" />
+  <grounds type="document" reference="Emergent engagement reshaping" />
+  <warrant type="document" reference="Wild variation of understanding" />
+</persona_characteristic>
+<persona_characteristic persona="Matt" behavioural_variable="Motivations" modal_qualifier="Usually" >
+  <definition>Scope spreads if client expectations not managed</definition>
+  <grounds type="document" reference="Expectations kill scope creep" />
+  <grounds type="document" reference="Client scope change request" />
+  <grounds type="document" reference="Scope creep happens." />
+  <warrant type="document" reference="Scope easily spreads" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Possibly" >
+  <definition>Clients pen test new systems because they must not because they should.</definition>
+  <grounds type="document" reference="Doing things because they should" />
+  <grounds type="document" reference="Regulatory box-ticking" />
+  <grounds type="document" reference="Report unread" />
+  <grounds type="document" reference="Lawyers focus on the proprietary" />
+  <grounds type="document" reference="Hard to gauge new system accreditation" />
+  <warrant type="document" reference="Head in sand" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Possibly" >
+  <definition>Test contact inexperience makes service design difficult</definition>
+  <grounds type="document" reference="Emergent engagement reshaping" />
+  <grounds type="document" reference="Complaints due to misapprehension" />
+  <warrant type="document" reference="Service implication understanding" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Perhaps" >
+  <definition>Inexperienced test contacts assigned when clients don't care</definition>
+  <grounds type="document" reference="Doing things because they should" />
+  <grounds type="document" reference="Report unread" />
+  <grounds type="document" reference="Lack of management authority/buy-in" />
+  <warrant type="document" reference="Head in sand" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Activities" modal_qualifier="Possibly" >
+  <definition>Client concerns about context which may or may not be genuine</definition>
+  <grounds type="document" reference="Uneducated downplay risk" />
+  <grounds type="document" reference="Blase slowness" />
+  <grounds type="document" reference="Customer might be right" />
+  <grounds type="document" reference="Client challenge issue" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Maybe" >
+  <definition>Misunderstanding client understanding can cause communication problems</definition>
+  <grounds type="document" reference="Expected behaviour calls" />
+  <grounds type="document" reference="Red team communication expectations" />
+  <grounds type="document" reference="Lack of management skills" />
+  <warrant type="document" reference="Complaints due to misapprehension" />
+</persona_characteristic>
+<persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Possibly" >
+  <definition>Miscommunication increases hostility during pen tests.</definition>
+  <grounds type="document" reference="Expected behaviour calls" />
+  <grounds type="document" reference="Posture change warning" />
+  <grounds type="document" reference="Developer hostility" />
+  <warrant type="document" reference="Told what to do" />
+</persona_characteristic>
+
+</usability>
+</cairis_model>

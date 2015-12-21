@@ -1,0 +1,726 @@
+<?xml version="1.0"?>
+<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">
+
+<cairis_model>
+
+<cairis>
+  <project_settings name="Default">
+    <contributors>
+      <contributor first_name="None" surname="None" affiliation="Shamal Faily" role="Scribe" />
+    </contributors>
+  </project_settings>
+  <environment name="Default" short_code="Default">
+    <definition>Default</definition>
+    <asset_values>
+      <none>TBC</none>
+      <low>TBC</low>
+      <medium>TBC</medium>
+      <high>TBC</high>
+    </asset_values>
+  </environment>
+</cairis>
+
+<riskanalysis>
+  <role name="Undefined" type="Stakeholder" short_code="UNDEF">
+    <description>Undefined</description>
+  </role>
+</riskanalysis>
+
+<usability>
+
+<persona name="Rick" type="Primary" assumption_persona="FALSE" image="Rick_portrait.jpg" >
+ <!-- Image source: https://www.flickr.com/photos/savidgefamily/6962111611 -->
+ <activities>Rick is a clean-water plant operator, responsible for ensuring that water processed through the plant is in line with specified set-points.  Rick's area of responsibility extend outside of the confines of the plant to include checking on pumping stations, which feed water into the plant's nearby reservoir.
+
+During his working shifts (he works a 5 + 1 continental shift), Rick frequently checks readings on his SCADA workstation, takes water samples at various locations around the plant, and responds to alarms raised by the SCADA system; if necessary this involves investigating problems, and -- if no remedial tasks are possible -- calling someone out to investigate further.
+
+At the start of every shift, Rick checks AJS to see what work he is scheduled to carry out.  He usually updates AJS based on the work he carried out before the end of his shift.  Rick also maintains a paper work diary, which is updated after carrying out specific work or responding to problems.  This, together with the status white board, is also useful for explaining any on-going issues when handing over to the next shift.  </activities>
+  <attitudes>Rick isn't particularly concerned about people trying to hack into the SCADA system he uses.  "The only way the SCADA will get infected", Rick says, "is by an instrument tech plugging a virus infected laptop into it".
+
+Rick is aware of Information Security communiques on InfoPortal, but doesn't see how this is relevant to him.  "We don't have laptops", says Rick, "and we don't leave site, so we don't leave anything in cars".  Rick is, however, aware of Information Security controls.  Rick knows that logout policies keep intruders from getting access to his workstation (although he thinks the logout period is too short given his environment), and he knows he can only access certain pumping sites via the telemetry system.
+
+Although Rick can call an instrument tech for many problems, experience has taught him not to expect much from the ACME ICT support during a night shift.  "What's the point of calling up to say you can't login at night if all you get is a reference number", Rick complains, "that won't help me start my pumps now!"  Although Rick knows he can call out an instrument tech to help, he is also conscious that they are out most evenings, and might not appreciate a call-out for a corporate ICT problem.</attitudes>
+  <aptitudes>Rick has been a plant operator for over 10 years.  Although the exact procedures need to run his plant are documented in a works manual, he doesn't need to refer to it.  "I haven't read the works manual in years", Rick says.
+
+This experience does not stay in Rick's head. When problems have occurred, he raises these during team meetings, and any lessons learned sometimes find their way into the SCADA system as new functionality.  Rick is aware of the new EnterpriseSCADA developments and possible improvements to the HMI and start-up procedure.  Although not fully in the loop about what is going on, he hopes that, like the current system, there will be productivity improvements without an adverse impact.
+
+Rick uses the SCADA's trend monitoring facilities as a indication of possible problems.  "If the trends freeze or flat-line", Rick says, "I need to go out and take a look at what's wrong".  Because problems occur daily, and he is often on his own, Rick can still control the plant using panel PCs at remote locations around the plant.</aptitudes>
+  <motivations>Because the water quality can change over a matter of minutes, Rick's ethos is that you need to be ready for anything.  Because of this, checking certain parameters and pieces of kit is an important discipline, as is logging important events in the works diary and on the status board; these aid communication to other shift members, and the eventual piecing together of the elements of an event.
+
+Although information security doesn't phase Rick too much, personal security does.  Potentially facing off a scrap metal thief is a big worry for Rick. "The police don't respond to intruder alarms at a nearby pumping station any more due to false alarms", says Rick.  "Because of this, we've been told not to go out to these places on our own.   We have a lone-worker system when people call us when we get to a particular station, but what happens if we get problems on the way?"</motivations>
+  <skills>Rick has a basic operating knowledge of Windows; enough to carry out his day-to-day routines, check his email, and navigate the main sections of InfoPortal.
+
+Rick isn't a power-user; he acknowledges that younger "whizz kids" are much more adept at using PCs than he is.  Consequently, he only uses a sub-set of the desktop icons currently on his desktop.  "I don't know what these other applications do", Rick says,"I've tried clicking on one and it just gives me a Data Protection Warning.  I guess this means I'm not authorised to use it."</skills>
+  <intrinsic>None</intrinsic>
+  <contextual>None</contextual>
+<persona_environment name="Default" is_direct="TRUE">
+  <persona_role name="Undefined" />
+  <narrative>Nothing stipulated</narrative>
+</persona_environment>
+</persona>
+
+
+<external_document name="big security worry GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>big security worry GT concept</description>
+</external_document>
+<external_document name="Alarm handling GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Alarm handling GT concept</description>
+</external_document>
+<external_document name="Authorisation restriction GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Authorisation restriction GT concept</description>
+</external_document>
+<external_document name="Business compliance GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Business compliance GT concept</description>
+</external_document>
+<external_document name="Corporate interface GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Corporate interface GT concept</description>
+</external_document>
+<external_document name="Equipment GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Equipment GT concept</description>
+</external_document>
+<external_document name="External agencies GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>External agencies GT concept</description>
+</external_document>
+<external_document name="Hardware checks GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Hardware checks GT concept</description>
+</external_document>
+<external_document name="Hazards GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Hazards GT concept</description>
+</external_document>
+<external_document name="ICT non-support GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>ICT non-support GT concept</description>
+</external_document>
+<external_document name="InfoSec communication GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>InfoSec communication GT concept</description>
+</external_document>
+<external_document name="InfoSec indifference GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>InfoSec indifference GT concept</description>
+</external_document>
+<external_document name="Insider knowledge GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Insider knowledge GT concept</description>
+</external_document>
+<external_document name="Interim Systems GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Interim Systems GT concept</description>
+</external_document>
+<external_document name="Island mindset GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Island mindset GT concept</description>
+</external_document>
+<external_document name="Limited support knowledge GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Limited support knowledge GT concept</description>
+</external_document>
+<external_document name="Local standards GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Local standards GT concept</description>
+</external_document>
+<external_document name="Logout policy GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Logout policy GT concept</description>
+</external_document>
+<external_document name="One-man site GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>One-man site GT concept</description>
+</external_document>
+<external_document name="Operational contexts GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Operational contexts GT concept</description>
+</external_document>
+<external_document name="Personal Security GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Personal Security GT concept</description>
+</external_document>
+<external_document name="Process impact GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Process impact GT concept</description>
+</external_document>
+<external_document name="Process Innovation GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Process Innovation GT concept</description>
+</external_document>
+<external_document name="Sample collection GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Sample collection GT concept</description>
+</external_document>
+<external_document name="Scope of responsibility GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Scope of responsibility GT concept</description>
+</external_document>
+<external_document name="Site knowledge GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Site knowledge GT concept</description>
+</external_document>
+<external_document name="Site threats GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Site threats GT concept</description>
+</external_document>
+<external_document name="Trend monitoring GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Trend monitoring GT concept</description>
+</external_document>
+<external_document name="Unexplained feature GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Unexplained feature GT concept</description>
+</external_document>
+<external_document name="Unlikely threats GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Unlikely threats GT concept</description>
+</external_document>
+<external_document name="Water GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Water GT concept</description>
+</external_document>
+<external_document name="Work routine GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Work routine GT concept</description>
+</external_document>
+<external_document name="Work shifts GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Work shifts GT concept</description>
+</external_document>
+<external_document name="Works diary GT concept" version="1" date="August 2010" authors="Shamal Faily">
+  <description>Works diary GT concept</description>
+</external_document>
+
+<document_reference name="Callouts occur for anything other than a basic trip." contributor="Shamal Faily" document="Alarm handling GT concept">
+  <excerpt>Basic trips can be manually reset but anything more complicated warrants a call-out.</excerpt>
+</document_reference>
+<document_reference name="Alarms can be overriden with permission" contributor="Shamal Faily" document="Alarm handling GT concept">
+  <excerpt>Alarms can be overriden but only with permission from Process.</excerpt>
+</document_reference>
+<document_reference name="Some event alarms are annoying rather than informative" contributor="Shamal Faily" document="Alarm handling GT concept">
+  <excerpt>Alarms come through for certain events rather than problems which are annoying.</excerpt>
+</document_reference>
+<document_reference name="Role restrictions" contributor="Shamal Faily" document="Authorisation restriction GT concept">
+  <excerpt>Depending on what you are authorised to do - certain buttons for things like starting and stopping pumps will be greyed out.</excerpt>
+</document_reference>
+<document_reference name="Line manager site authorisation" contributor="Shamal Faily" document="Authorisation restriction GT concept">
+  <excerpt>Can only access sites they have been authorised to; permission for authorisation changes need to be sought from the line manager.</excerpt>
+</document_reference>
+<document_reference name="Work reports are filed" contributor="Shamal Faily" document="Business compliance GT concept">
+  <excerpt>Work reports are filed and sent to ACME monthly.</excerpt>
+</document_reference>
+<document_reference name="Everything is logged" contributor="Shamal Faily" document="Business compliance GT concept">
+  <excerpt>Everything that happens is logged.</excerpt>
+</document_reference>
+<document_reference name="Corporate windows logout policy" contributor="Shamal Faily" document="Business compliance GT concept">
+  <excerpt>Policy for locking Windows down is corporate.</excerpt>
+</document_reference>
+<document_reference name="Logs are part of MS" contributor="Shamal Faily" document="Business compliance GT concept">
+  <excerpt>Logs are recorded in the Management System</excerpt>
+</document_reference>
+<document_reference name="MS activities during start of day shift." contributor="Shamal Faily" document="Business compliance GT concept">
+  <excerpt>Management System activities are carried out during the first hours of a day shift.</excerpt>
+</document_reference>
+<document_reference name="Everything has a MS procedure" contributor="Shamal Faily" document="Business compliance GT concept">
+  <excerpt>Everything has a procedure in the Management System.</excerpt>
+</document_reference>
+<document_reference name="The works diary is a controlled document." contributor="Shamal Faily" document="Business compliance GT concept">
+  <excerpt>The works diary is a controlled document.</excerpt>
+</document_reference>
+<document_reference name="Jobs inputted at the end of a shift" contributor="Shamal Faily" document="Business compliance GT concept">
+  <excerpt>Jobs tend to be input at the end of a shift.</excerpt>
+</document_reference>
+<document_reference name="MS workaround for intruder alarms." contributor="Shamal Faily" document="Business compliance GT concept">
+  <excerpt>Lack of police response to intruder alarms led to two-man requirement for alarm response.</excerpt>
+</document_reference>
+<document_reference name="Periodic national security alerts" contributor="Shamal Faily" document="big security worry GT concept">
+  <excerpt>Regular emails are received about things like the Iraqi Wars and terrorism; it then goes quite for a while until the next event.</excerpt>
+</document_reference>
+<document_reference name="Annual police meetings" contributor="Shamal Faily" document="big security worry GT concept">
+  <excerpt>Annual security meetings at Stepford when the police come down because it is a key site.</excerpt>
+</document_reference>
+<document_reference name="Tasks entered into AJS are captured by WMS" contributor="Shamal Faily" document="Corporate interface GT concept">
+  <excerpt>Tasks are entered into Asset Job System are captured by Work Management System.</excerpt>
+</document_reference>
+<document_reference name="Users identified by WMS numbers" contributor="Shamal Faily" document="Corporate interface GT concept">
+  <excerpt>Users are identified by unique WMS numbers.</excerpt>
+</document_reference>
+<document_reference name="AJS shows current jobs" contributor="Shamal Faily" document="Corporate interface GT concept">
+  <excerpt>AJS indicates how many jobs you have.</excerpt>
+</document_reference>
+<document_reference name="Contact details on Outlook" contributor="Shamal Faily" document="Equipment GT concept">
+  <excerpt>You can get all the contact details you need from outlook.</excerpt>
+</document_reference>
+<document_reference name="Communal PC for checking email" contributor="Shamal Faily" document="Equipment GT concept">
+  <excerpt>A communal PC is used for checking mail.</excerpt>
+</document_reference>
+<document_reference name="Panel PCs around plant can run plant" contributor="Shamal Faily" document="Equipment GT concept">
+  <excerpt>Panel PCs are used to check things while checking on a delivery.</excerpt>
+</document_reference>
+<document_reference name="HMI passwords" contributor="Shamal Faily" document="Equipment GT concept">
+  <excerpt>HMIs have passwords associated with them.</excerpt>
+</document_reference>
+<document_reference name="Clients rather than HMIs" contributor="Shamal Faily" document="Equipment GT concept">
+  <excerpt>The new system moves towards clients rather than HMIs.</excerpt>
+</document_reference>
+<document_reference name="SCADA PCs are site-specific industrial PCs." contributor="Shamal Faily" document="Equipment GT concept">
+  <excerpt>SCADA PCs are site-specific industrial PCs.</excerpt>
+</document_reference>
+<document_reference name="SCADA authentication via non ACME credentials" contributor="Shamal Faily" document="Equipment GT concept">
+  <excerpt>Uses non ACME passwords to log onto the SCADA and pumping station.</excerpt>
+</document_reference>
+<document_reference name="Environmental Agency carry out river monitoring" contributor="Shamal Faily" document="External agencies GT concept">
+  <excerpt>The Environmental Agency carry out their own river monitoring.</excerpt>
+</document_reference>
+<document_reference name="Out-of-spec alarms precipitate TIS call-outs" contributor="Shamal Faily" document="External agencies GT concept">
+  <excerpt>Out of spec alarms are picked up Telemetry Information System; these lead to a technician call out; independent sampling; log checking.</excerpt>
+</document_reference>
+<document_reference name="Flooding worse case" contributor="Shamal Faily" document="Hazards GT concept">
+  <excerpt>Worse case scenario on a sewage site is a flood.</excerpt>
+</document_reference>
+<document_reference name="Massive and uncontrollable water input" contributor="Shamal Faily" document="Hazards GT concept">
+  <excerpt>It is not like a factory: it is a massive system with tonnes of debris that hits you all in one go.</excerpt>
+</document_reference>
+<document_reference name="Pumping decisions rain based" contributor="Shamal Faily" document="Hazards GT concept">
+  <excerpt>Decisions to pump are based on the rain forecast.</excerpt>
+</document_reference>
+<document_reference name="Bad weather can lead to power dips." contributor="Shamal Faily" document="Hazards GT concept">
+  <excerpt>Bad weather can lead to power dips.</excerpt>
+</document_reference>
+<document_reference name="Large water tanks conduct electricity" contributor="Shamal Faily" document="Hazards GT concept">
+  <excerpt>Large water tanks conduct electricity</excerpt>
+</document_reference>
+<document_reference name="Failures often occur when seasons change." contributor="Shamal Faily" document="Hazards GT concept">
+  <excerpt>Failures often occur when seasons change. </excerpt>
+</document_reference>
+<document_reference name="Readings are taken from SCADA screens." contributor="Shamal Faily" document="Hardware checks GT concept">
+  <excerpt>SCADA screens are checked to take readings about chemical dosing; iron levels; pH etc.</excerpt>
+</document_reference>
+<document_reference name="Hardware is checked daily" contributor="Shamal Faily" document="Hardware checks GT concept">
+  <excerpt>Hardware equipment is checked daily</excerpt>
+</document_reference>
+<document_reference name="Hacker aware" contributor="Shamal Faily" document="InfoSec communication GT concept">
+  <excerpt>Has read warning about people trying to hack machine on InfoPortal.</excerpt>
+</document_reference>
+<document_reference name="Physical and login security" contributor="Shamal Faily" document="InfoSec indifference GT concept">
+  <excerpt>Once you are through the gate then security is the operator login.</excerpt>
+</document_reference>
+<document_reference name="PC and SCADA security" contributor="Shamal Faily" document="InfoSec indifference GT concept">
+  <excerpt>The are 2 forms of security: PC and SCADA</excerpt>
+</document_reference>
+<document_reference name="Corporate wifi insecurity" contributor="Shamal Faily" document="InfoSec indifference GT concept">
+  <excerpt>The corporate wifi is not perceived to be secure as the access code is written down on a wall.</excerpt>
+</document_reference>
+<document_reference name="InfoSec communiques irrelevant" contributor="Shamal Faily" document="InfoSec indifference GT concept">
+  <excerpt>Messages about leaving things and laptops in a car are not a problem; [we] do not go off site.</excerpt>
+</document_reference>
+<document_reference name="Hacking indifference" contributor="Shamal Faily" document="InfoSec indifference GT concept">
+  <excerpt>Not worried about people trying to hack the SCADA systems.</excerpt>
+</document_reference>
+<document_reference name="Fluorescent passport" contributor="Shamal Faily" document="Insider knowledge GT concept">
+  <excerpt>Wearing a fluorescent vest gets you anywhere.</excerpt>
+</document_reference>
+<document_reference name="Thief knowledge comes from insiders" contributor="Shamal Faily" document="Insider knowledge GT concept">
+  <excerpt>Thieves are not known but the source of their information is thought to be internal.</excerpt>
+</document_reference>
+<document_reference name="Incompatible networks" contributor="Shamal Faily" document="Island mindset GT concept">
+  <excerpt>The old and new SCADA networks are incompatible.</excerpt>
+</document_reference>
+<document_reference name="Site sufficiency" contributor="Shamal Faily" document="Island mindset GT concept">
+  <excerpt>Apart from periodic access to a document or contact details - everything an operator needs is on site.</excerpt>
+</document_reference>
+<document_reference name="Infection only from engineers" contributor="Shamal Faily" document="Island mindset GT concept">
+  <excerpt>A system only gets infected if an engineer connects their own infected laptop into it.</excerpt>
+</document_reference>
+<document_reference name="Stand-alone SCADA" contributor="Shamal Faily" document="Island mindset GT concept">
+  <excerpt>Systems are stand-alone because they are not connected a network.</excerpt>
+</document_reference>
+<document_reference name="Untimely logout annoyance" contributor="Shamal Faily" document="ICT non-support GT concept">
+  <excerpt>It is annoying to nip downstairs and have to log back in when you come back.</excerpt>
+</document_reference>
+<document_reference name="Lack of night ICT support" contributor="Shamal Faily" document="ICT non-support GT concept">
+  <excerpt>Why have night support if all you get is a logged reference number; you cannot hand the problem over to someone else.</excerpt>
+</document_reference>
+<document_reference name="No out-of-office facility " contributor="Shamal Faily" document="ICT non-support GT concept">
+  <excerpt>Managers can set out-of-office messages; plant operators cannot.</excerpt>
+</document_reference>
+<document_reference name="Account lockout callout" contributor="Shamal Faily" document="ICT non-support GT concept">
+  <excerpt>An account lock-out at night necessitates calling someone out to log them back in to carry out operations.</excerpt>
+</document_reference>
+<document_reference name="Construction security" contributor="Shamal Faily" document="Interim Systems GT concept">
+  <excerpt>Security guards are in place while construction takes place.</excerpt>
+</document_reference>
+<document_reference name="Migration pending resources" contributor="Shamal Faily" document="Interim Systems GT concept">
+  <excerpt>Old PC applications will be migrated to SCADA when time and money is available.</excerpt>
+</document_reference>
+<document_reference name="Shift based logouts" contributor="Shamal Faily" document="Logout policy GT concept">
+  <excerpt>People want a shift based auto-logout feature.</excerpt>
+</document_reference>
+<document_reference name="No SCADA logouts" contributor="Shamal Faily" document="Logout policy GT concept">
+  <excerpt>No-one logs out of the current SCADA environment.</excerpt>
+</document_reference>
+<document_reference name="Short auto logout" contributor="Shamal Faily" document="Logout policy GT concept">
+  <excerpt>Automatic logout occurs after a minute or two of inactivity.</excerpt>
+</document_reference>
+<document_reference name="Current login indicator" contributor="Shamal Faily" document="Logout policy GT concept">
+  <excerpt>Corner of SCADA panel indicates who is currently logged.</excerpt>
+</document_reference>
+<document_reference name="Inactivity based logout" contributor="Shamal Faily" document="Logout policy GT concept">
+  <excerpt>Automatic logout occurs if you are not doing work for any length of time.</excerpt>
+</document_reference>
+<document_reference name="Reboot locking workaround" contributor="Shamal Faily" document="Logout policy GT concept">
+  <excerpt>System can be rebooted if someone has logged in; you cannot log them out.</excerpt>
+</document_reference>
+<document_reference name="Standards evolved over years" contributor="Shamal Faily" document="Local standards GT concept">
+  <excerpt>Standards have been setup over the years.</excerpt>
+</document_reference>
+<document_reference name="Uncertainty about EnterpriseSCADA ability to support general operations." contributor="Shamal Faily" document="Limited support knowledge GT concept">
+  <excerpt>Uncertainty about EnterpriseSCADA capabilities towards supporting general operations.</excerpt>
+</document_reference>
+<document_reference name="Concern about lack of training on EnterpriseSCADA." contributor="Shamal Faily" document="Limited support knowledge GT concept">
+  <excerpt>Lack of training on new systems past warranty period a concern.</excerpt>
+</document_reference>
+<document_reference name="Little knowledge about long-term EnterpriseSCADA impact" contributor="Shamal Faily" document="Limited support knowledge GT concept">
+  <excerpt>Not enough information on longer-term impact has been filtered down.</excerpt>
+</document_reference>
+<document_reference name="Bespoke systems harder to understand and support." contributor="Shamal Faily" document="Limited support knowledge GT concept">
+  <excerpt>Bespoke systems have problems that it takes a while to understand how it has been programmed.</excerpt>
+</document_reference>
+<document_reference name="Only some sites are manned" contributor="Shamal Faily" document="Operational contexts GT concept">
+  <excerpt>Some sites are manned; others are unmanned.</excerpt>
+</document_reference>
+<document_reference name="Specs for clean and waste water are different" contributor="Shamal Faily" document="Operational contexts GT concept">
+  <excerpt>Sewage plants have different specs to cleanwater plants.</excerpt>
+</document_reference>
+<document_reference name="More time is spent in the control room at night" contributor="Shamal Faily" document="Operational contexts GT concept">
+  <excerpt>More time is spent in the control room during the twilight hours.</excerpt>
+</document_reference>
+<document_reference name="Some plant operations are cheaper at night." contributor="Shamal Faily" document="Operational contexts GT concept">
+  <excerpt>Pumps are run from some districts at night because the electricity is cheaper.</excerpt>
+</document_reference>
+<document_reference name="Fixes problems identified by SCADA" contributor="Shamal Faily" document="One-man site GT concept">
+  <excerpt>Goes out to fix something he sees is wrong on the SCADA.</excerpt>
+</document_reference>
+<document_reference name="Manual intervention hard with one person." contributor="Shamal Faily" document="One-man site GT concept">
+  <excerpt>If the system freezes - can work directly off the pumps but difficult with just one person.</excerpt>
+</document_reference>
+<document_reference name="Plant can be operated away from the control room if necessary." contributor="Shamal Faily" document="One-man site GT concept">
+  <excerpt>Can run things from the other side of the plant; this is necessary when you are on your own.</excerpt>
+</document_reference>
+<document_reference name="Security is concern when working on your own." contributor="Shamal Faily" document="One-man site GT concept">
+  <excerpt>Working on a one-man site is a security concern.</excerpt>
+</document_reference>
+<document_reference name="Few SCADA to EnterpriseSCADA process changes" contributor="Shamal Faily" document="Process impact GT concept">
+  <excerpt>Few process changes expected when old SCADA systems replaced with EnterpriseSCADA.</excerpt>
+</document_reference>
+<document_reference name="Process problems occur daily." contributor="Shamal Faily" document="Process impact GT concept">
+  <excerpt>Process problems occur daily.</excerpt>
+</document_reference>
+<document_reference name="Anything could happen" contributor="Shamal Faily" document="Process impact GT concept">
+  <excerpt>Anything could happen: pumps could fail; water quality can change within 10 minutes</excerpt>
+</document_reference>
+<document_reference name="Theft causes pumping station failure" contributor="Shamal Faily" document="Process impact GT concept">
+  <excerpt>Stealing parts and cutting cables can cause pumping station failures.</excerpt>
+</document_reference>
+<document_reference name="Customisable logout periods" contributor="Shamal Faily" document="Process Innovation GT concept">
+  <excerpt>Logout periods can be setup as part of EnterpriseSCADA</excerpt>
+</document_reference>
+<document_reference name="HMI usability improvements" contributor="Shamal Faily" document="Process Innovation GT concept">
+  <excerpt>The new SCADA system is an improvement because there are only slight differences to the MMI.</excerpt>
+</document_reference>
+<document_reference name="Quick and automatic startup" contributor="Shamal Faily" document="Process Innovation GT concept">
+  <excerpt>The workstation has been setup so as soon as Windows starts then so does EnterpriseSCADA (as a service); no user interaction is needed.</excerpt>
+</document_reference>
+<document_reference name="Alarm pager " contributor="Shamal Faily" document="Process Innovation GT concept">
+  <excerpt>In the past: a Chlorine alarm was setup by configuring the LPT to a pager.</excerpt>
+</document_reference>
+<document_reference name="Efficient functionality development" contributor="Shamal Faily" document="Process Innovation GT concept">
+  <excerpt>Have become slicker at developing more functionality to perform more operations.</excerpt>
+</document_reference>
+<document_reference name="Room for improvement" contributor="Shamal Faily" document="Process Innovation GT concept">
+  <excerpt>There is always scope to improve and automate as we go along.</excerpt>
+</document_reference>
+<document_reference name="Personal threats" contributor="Shamal Faily" document="Personal Security GT concept">
+  <excerpt>Personal experience of being threatened when called out late at night and challenging intruders.</excerpt>
+</document_reference>
+<document_reference name="Lone worker vulnerability" contributor="Shamal Faily" document="Personal Security GT concept">
+  <excerpt>Lone Working system is based on calling up someone when they get to a station; it does not help if you get problems on the way.</excerpt>
+</document_reference>
+<document_reference name="No alone out-of-hours visits" contributor="Shamal Faily" document="Personal Security GT concept">
+  <excerpt>Never go alone when visiting a nearby site out-of-hours</excerpt>
+</document_reference>
+<document_reference name="Water is sampled throughout the works" contributor="Shamal Faily" document="Sample collection GT concept">
+  <excerpt>All aspects of the water down in the works is sampled.</excerpt>
+</document_reference>
+<document_reference name="Manual checks determine who to call out." contributor="Shamal Faily" document="Site knowledge GT concept">
+  <excerpt>Looks at drive problems to determine who to call out.</excerpt>
+</document_reference>
+<document_reference name="Alarms designed around past experience" contributor="Shamal Faily" document="Site knowledge GT concept">
+  <excerpt>Software people asked to set up alarms based on past problems forgetting about alarms.</excerpt>
+</document_reference>
+<document_reference name="Records piece things together" contributor="Shamal Faily" document="Site knowledge GT concept">
+  <excerpt>Records are kept to help piece things together when things go wrong.</excerpt>
+</document_reference>
+<document_reference name="Experience contributes to asset management decisions." contributor="Shamal Faily" document="Site knowledge GT concept">
+  <excerpt>Experience about what goes wrong contributes to asset purchase decisions via AJS.</excerpt>
+</document_reference>
+<document_reference name="Familiarity with colour scheme standards." contributor="Shamal Faily" document="Site knowledge GT concept">
+  <excerpt>People coming in from different plant are familiar with colour schemes.</excerpt>
+</document_reference>
+<document_reference name="Trouble-shooting driven by known task problems." contributor="Shamal Faily" document="Site knowledge GT concept">
+  <excerpt>Knowledge about coagulant problems leads to particular tasks being carried out e.g. flushing lines; to get everything back to normal.</excerpt>
+</document_reference>
+<document_reference name="Checking certain things is a discipline" contributor="Shamal Faily" document="Site knowledge GT concept">
+  <excerpt>Checking certain things e.g. coagulant levels is a discipline.</excerpt>
+</document_reference>
+<document_reference name="Works manual is internalised" contributor="Shamal Faily" document="Site knowledge GT concept">
+  <excerpt>Works manual has been internalised.</excerpt>
+</document_reference>
+<document_reference name="Plant knowledge gained by frequent call-outs." contributor="Shamal Faily" document="Site knowledge GT concept">
+  <excerpt>People who get called out often know their way around the plant.</excerpt>
+</document_reference>
+<document_reference name="Status board communicates problems" contributor="Shamal Faily" document="Site knowledge GT concept">
+  <excerpt>Status board is used to communicate problems with bits of kit.</excerpt>
+</document_reference>
+<document_reference name="Processes checked against spec" contributor="Shamal Faily" document="Scope of responsibility GT concept">
+  <excerpt>Check the process and quality of final effluent meets critical parameters with EA specs.</excerpt>
+</document_reference>
+<document_reference name="Site kept running at optimum efficiency" contributor="Shamal Faily" document="Scope of responsibility GT concept">
+  <excerpt>Keep site running at optimum efficiency</excerpt>
+</document_reference>
+<document_reference name="Water entering plant checked against spec" contributor="Shamal Faily" document="Scope of responsibility GT concept">
+  <excerpt>Make sure water is in-spec coming into the plant.</excerpt>
+</document_reference>
+<document_reference name="Tasks are circadian." contributor="Shamal Faily" document="Scope of responsibility GT concept">
+  <excerpt>Mainly monitoring.  By day; taking and ordering deliveries; noticing; checking and reacting to alarms.</excerpt>
+</document_reference>
+<document_reference name="Only relevant sites are monitored" contributor="Shamal Faily" document="Scope of responsibility GT concept">
+  <excerpt>Only pump stations relevant to the plant are monitored.</excerpt>
+</document_reference>
+<document_reference name="Vandalism assessed and mitigated" contributor="Shamal Faily" document="Site threats GT concept">
+  <excerpt>Vandalism has already been assessed and mitigated.</excerpt>
+</document_reference>
+<document_reference name="Copper theft" contributor="Shamal Faily" document="Site threats GT concept">
+  <excerpt>Sites have been broken into to steal earth connections and put through mains to get at copper.</excerpt>
+</document_reference>
+<document_reference name="Thieves steal anything" contributor="Shamal Faily" document="Site threats GT concept">
+  <excerpt>Thieves will steal anything.</excerpt>
+</document_reference>
+<document_reference name="Land-rover theft" contributor="Shamal Faily" document="Site threats GT concept">
+  <excerpt>A few land-rovers have been stolen at Waterdeep.</excerpt>
+</document_reference>
+<document_reference name="Trends identify plant problems" contributor="Shamal Faily" document="Trend monitoring GT concept">
+  <excerpt>Trends are used to identify plant problems.</excerpt>
+</document_reference>
+<document_reference name="Instruments manually checked if trends flatline" contributor="Shamal Faily" document="Trend monitoring GT concept">
+  <excerpt>Instruments are manually checked if the trends flatline.</excerpt>
+</document_reference>
+<document_reference name="Checks take place at certain times of the day" contributor="Shamal Faily" document="Trend monitoring GT concept">
+  <excerpt>Checks are monitored throughout the works at certain times during the day.</excerpt>
+</document_reference>
+<document_reference name="Drifting trends indicate problems" contributor="Shamal Faily" document="Trend monitoring GT concept">
+  <excerpt>Trends drifting off are an indication that something has gone out of sync.</excerpt>
+</document_reference>
+<document_reference name="Capturing who change what and why is useful" contributor="Shamal Faily" document="Unexplained feature GT concept">
+  <excerpt>Useful to capture who has made what changes and why.</excerpt>
+</document_reference>
+<document_reference name="Not certain where some computers have come from" contributor="Shamal Faily" document="Unexplained feature GT concept">
+  <excerpt>Not certain where some computers have come from but these are used for checking email and documents.</excerpt>
+</document_reference>
+<document_reference name="Many desktop short-cuts do not get used." contributor="Shamal Faily" document="Unexplained feature GT concept">
+  <excerpt>Most short-cuts and applications on the desktop have been around a while and do not get used.</excerpt>
+</document_reference>
+<document_reference name="Non-authorised applications cannot be run" contributor="Shamal Faily" document="Unexplained feature GT concept">
+  <excerpt>Not being able to run applications means not authorised to use it.</excerpt>
+</document_reference>
+<document_reference name="Extreme scenarios" contributor="Shamal Faily" document="Unlikely threats GT concept">
+  <excerpt>Scenarios of corrupt or missing files taking out a workstation are a bit extreme.</excerpt>
+</document_reference>
+<document_reference name="Different processes and teams for incoming water flow" contributor="Shamal Faily" document="Water GT concept">
+  <excerpt>Water flows in and is separated into different processes; dealt with by different teams</excerpt>
+</document_reference>
+<document_reference name="Water scheme is geographically big" contributor="Shamal Faily" document="Water GT concept">
+  <excerpt>The scheme covers where water is sourced 40 miles away; it has a long way to get to the works.</excerpt>
+</document_reference>
+<document_reference name="Levels are logged" contributor="Shamal Faily" document="Works diary GT concept">
+  <excerpt>Levels are recorded in a log.</excerpt>
+</document_reference>
+<document_reference name="Logs are a paper trail" contributor="Shamal Faily" document="Works diary GT concept">
+  <excerpt>Logs are a paper trail.</excerpt>
+</document_reference>
+<document_reference name="Notes are easier to read and hand-over" contributor="Shamal Faily" document="Works diary GT concept">
+  <excerpt>Easier to write things on notes.  Also easier for person handed over to to just read the logs.</excerpt>
+</document_reference>
+<document_reference name="Only general work and failures are logged" contributor="Shamal Faily" document="Works diary GT concept">
+  <excerpt>Supposed to write down everything but not enough pages; any general work carried out is logged - together with failures.</excerpt>
+</document_reference>
+<document_reference name="Carries out tasks and records set-point readings" contributor="Shamal Faily" document="Work routine GT concept">
+  <excerpt>Looks at tasks needed to be achieved in a day and set-points to be collected and recorded.</excerpt>
+</document_reference>
+<document_reference name="Specific jobs are day shift related" contributor="Shamal Faily" document="Work routine GT concept">
+  <excerpt>Specific jobs are assigned to the day shift e.g. ordering chemicals</excerpt>
+</document_reference>
+<document_reference name="Night shift tasks differ slightly from day." contributor="Shamal Faily" document="Work routine GT concept">
+  <excerpt>Night shift tasks may be similar but slight different due to SAS sampling</excerpt>
+</document_reference>
+<document_reference name="Operators know what they need to do." contributor="Shamal Faily" document="Work routine GT concept">
+  <excerpt>Operators come in and know what work they need to do.</excerpt>
+</document_reference>
+<document_reference name="People move around between shifts" contributor="Shamal Faily" document="Work shifts GT concept">
+  <excerpt>People are moved around sites between shifts.</excerpt>
+</document_reference>
+
+
+<persona_characteristic persona="Rick" behavioural_variable="Attitudes" modal_qualifier="Often" >
+  <definition>Personal safety is an infosec hygiene factor</definition>
+  <grounds type="document" reference="Personal threats" />
+  <grounds type="document" reference="Lone worker vulnerability" />
+  <warrant type="document" reference="InfoSec communiques irrelevant" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Attitudes" modal_qualifier="Usually" >
+  <definition>Personal safety is more than just compliance</definition>
+  <grounds type="document" reference="No alone out-of-hours visits" />
+  <warrant type="document" reference="MS workaround for intruder alarms." />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Aptitudes" modal_qualifier="Always" >
+  <definition>Following MS is part of the daily work routine.</definition>
+  <grounds type="document" reference="MS activities during start of day shift." />
+  <warrant type="document" reference="The works diary is a controlled document." />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Motivations" modal_qualifier="Usually" >
+  <definition>Feel unsafe challenging intruders</definition>
+  <grounds type="document" reference="Copper theft" />
+  <grounds type="document" reference="Thieves steal anything" />
+  <warrant type="document" reference="Personal threats" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Attitudes" modal_qualifier="Often" >
+  <definition>Thieves do not care about their impact</definition>
+  <grounds type="document" reference="Vandalism assessed and mitigated" />
+  <grounds type="document" reference="Copper theft" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Motivations" modal_qualifier="Always" >
+  <definition>Need to communicate and log to be ready for anyway.</definition>
+  <grounds type="document" reference="Records piece things together" />
+  <grounds type="document" reference="Status board communicates problems" />
+  <warrant type="document" reference="Anything could happen" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Activities" modal_qualifier="Always" >
+  <definition>Managers need to authorise what they can and cannot do</definition>
+  <grounds type="document" reference="Role restrictions" />
+  <warrant type="document" reference="Line manager site authorisation" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Attitudes" modal_qualifier="Occasionally" >
+  <definition>Cannot see how big security problems relate to infosec communications.</definition>
+  <grounds type="document" reference="Physical and login security" />
+  <grounds type="document" reference="Corporate wifi insecurity" />
+  <warrant type="document" reference="Periodic national security alerts" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Attitudes" modal_qualifier="Probably" >
+  <definition>SCADA isolation makes hacking unlikely</definition>
+  <grounds type="document" reference="Hacking indifference" />
+  <grounds type="document" reference="Infection only from engineers" />
+  <warrant type="document" reference="Stand-alone SCADA" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Attitudes" modal_qualifier="Always" >
+  <definition>Logout policies should be built around security needs.</definition>
+  <grounds type="document" reference="Shift based logouts" />
+  <grounds type="document" reference="Short auto logout" />
+  <warrant type="document" reference="Physical and login security" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Attitudes" modal_qualifier="Probably" >
+  <definition>Standard migration subject to resources</definition>
+  <grounds type="document" reference="Migration pending resources" />
+  <warrant type="document" reference="Hacking indifference" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Attitudes" modal_qualifier="Generally" >
+  <definition>Accidents happen but hacking scenarios are extreme.</definition>
+  <grounds type="document" reference="Extreme scenarios" />
+  <warrant type="document" reference="Hacking indifference" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Attitudes" modal_qualifier="Generally" >
+  <definition>Aware of hacking warnings but scenarios are extreme</definition>
+  <grounds type="document" reference="Extreme scenarios" />
+  <grounds type="document" reference="Hacker aware" />
+  <warrant type="document" reference="Hacking indifference" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Aptitudes" modal_qualifier="Often" >
+  <definition>Design decisions built around past experience</definition>
+  <grounds type="document" reference="Alarms designed around past experience" />
+  <grounds type="document" reference="Familiarity with colour scheme standards." />
+  <warrant type="document" reference="Room for improvement" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Aptitudes" modal_qualifier="Hopefully" >
+  <definition>Hoping for productivity improvements without adverse impact</definition>
+  <grounds type="document" reference="HMI usability improvements" />
+  <grounds type="document" reference="Quick and automatic startup" />
+  <warrant type="document" reference="Few SCADA to EnterpriseSCADA process changes" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Attitudes" modal_qualifier="Often" >
+  <definition>ICT support not contextual</definition>
+  <grounds type="document" reference="Untimely logout annoyance" />
+  <grounds type="document" reference="Lack of night ICT support" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Activities" modal_qualifier="Occasionally" >
+  <definition>Liases with TIS technicians and the Environmental Agency</definition>
+  <grounds type="document" reference="Environmental Agency carry out river monitoring" />
+  <grounds type="document" reference="Out-of-spec alarms precipitate TIS call-outs" />
+  <warrant type="document" reference="Anything could happen" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Activities" modal_qualifier="Occasionally" >
+  <definition>Process decisions may be weather based.</definition>
+  <grounds type="document" reference="Pumping decisions rain based" />
+  <grounds type="document" reference="Failures often occur when seasons change." />
+  <warrant type="document" reference="Massive and uncontrollable water input" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Activities" modal_qualifier="Generally" >
+  <definition>Area of responsibility is large and unpredictable</definition>
+  <grounds type="document" reference="Water scheme is geographically big" />
+  <grounds type="document" reference="Process problems occur daily." />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Aptitudes" modal_qualifier="Always" >
+  <definition>Frequently control plan outside the control room</definition>
+  <grounds type="document" reference="Plant can be operated away from the control room if necessary." />
+  <warrant type="document" reference="Process problems occur daily." />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Attitudes" modal_qualifier="Generally" >
+  <definition>Concern about EnterpriseSCADA uncertainty</definition>
+  <grounds type="document" reference="Uncertainty about EnterpriseSCADA ability to support general operations." />
+  <grounds type="document" reference="Bespoke systems harder to understand and support." />
+  <warrant type="document" reference="Process problems occur daily." />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Aptitudes" modal_qualifier="Generally" >
+  <definition>Standards have been internalised</definition>
+  <grounds type="document" reference="Standards evolved over years" />
+  <warrant type="document" reference="Works manual is internalised" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Aptitudes" modal_qualifier="Often" >
+  <definition>Unknown applications are not authorised</definition>
+  <grounds type="document" reference="Many desktop short-cuts do not get used." />
+  <grounds type="document" reference="Non-authorised applications cannot be run" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Motivations" modal_qualifier="" >
+  <definition>Event logging helps efficiency</definition>
+  <grounds type="document" reference="Experience contributes to asset management decisions." />
+  <grounds type="document" reference="Trouble-shooting driven by known task problems." />
+  <warrant type="document" reference="Site kept running at optimum efficiency" />
+  <warrant type="document" reference="Checking certain things is a discipline" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Activities" modal_qualifier="Always" >
+  <definition>Processes regularly checked against spec</definition>
+  <grounds type="document" reference="Processes checked against spec" />
+  <grounds type="document" reference="Water entering plant checked against spec" />
+  <warrant type="document" reference="Operators know what they need to do." />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Activities" modal_qualifier="Generally" >
+  <definition>Routine varies by time of day</definition>
+  <grounds type="document" reference="Specific jobs are day shift related" />
+  <grounds type="document" reference="Night shift tasks differ slightly from day." />
+  <warrant type="document" reference="Some plant operations are cheaper at night." />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Activities" modal_qualifier="Always" >
+  <definition>Readings periodically taken from SCADA</definition>
+  <grounds type="document" reference="Readings are taken from SCADA screens." />
+  <grounds type="document" reference="Carries out tasks and records set-point readings" />
+  <warrant type="document" reference="Operators know what they need to do." />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Activities" modal_qualifier="Always" >
+  <definition>React to alarms raised by SCADA</definition>
+  <grounds type="document" reference="Callouts occur for anything other than a basic trip." />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Activities" modal_qualifier="Always" >
+  <definition>General work and events written to Work Diary</definition>
+  <grounds type="document" reference="Notes are easier to read and hand-over" />
+  <grounds type="document" reference="Only general work and failures are logged" />
+  <warrant type="document" reference="Everything is logged" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Activities" modal_qualifier="Always" >
+  <definition>Samples are taken throughout the work and recorded</definition>
+  <grounds type="document" reference="Water is sampled throughout the works" />
+  <warrant type="document" reference="Carries out tasks and records set-point readings" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Aptitudes" modal_qualifier="Usually" >
+  <definition>Trends regularly checked to spot problems</definition>
+  <grounds type="document" reference="Checks take place at certain times of the day" />
+  <grounds type="document" reference="Drifting trends indicate problems" />
+  <warrant type="document" reference="Trends identify plant problems" />
+</persona_characteristic>
+<persona_characteristic persona="Rick" behavioural_variable="Activities" modal_qualifier="Always" >
+  <definition>Scheduled tasks issued by AJS</definition>
+  <grounds type="document" reference="Tasks entered into AJS are captured by WMS" />
+  <warrant type="document" reference="Carries out tasks and records set-point readings" />
+</persona_characteristic>
+
+</usability>
+</cairis_model>
