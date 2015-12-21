@@ -183,6 +183,6 @@
   <structure head_asset="Access Request" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="JSON-RPC Object" />
 </component>
 
-<connector name="Discovery AuthN" from_component="Discovery Client" from_interface="authenticate" to_component="Discovery Module" to_interface="authenticate" protocol="JSON-RPC" access_right="trusted" asset_name="JSON-RPC Object" />
-<connector name="Policy connection" from_component="Discovery Module" from_interface="enforceRequest" to_component="Policy Manager" to_interface="enforceRequest" protocol="TLS" access_right="trusted" asset_name="JSON Object" />
-</component_view>
+<connector name="Discovery AuthN" from_component="Discovery Client" from_interface="authenticate" from_role="request-authenticate" to_component="Discovery Module" to_interface="authenticate" to_role="provide-authenticate" protocol="JSON-RPC" access_right="trusted" asset_name="JSON-RPC Object" />
+<connector name="Policy connection" from_component="Discovery Module" from_interface="enforceRequest" from_role="request-enforceRequest" to_component="Policy Manager" to_interface="enforceRequest" to_role="provide-enforceRequest" protocol="TLS" access_right="trusted" asset_name="JSON Object" />
+</architectural_pattern>
