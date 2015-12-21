@@ -195,7 +195,7 @@
 
 <!ELEMENT usability (persona*,external_document*,document_reference*,concept_reference*,persona_characteristic*,task_characteristic*,task*,usecase*)>
 
-<!ELEMENT persona (tag*,activities,attitudes,aptitudes,motivations,skills,persona_environment+)>
+<!ELEMENT persona (tag*,activities,attitudes,aptitudes,motivations,skills,intrinsic,contextual,persona_environment+)>
 <!ATTLIST persona name CDATA #REQUIRED>
 <!ATTLIST persona type (Primary | Secondary | Supplemental | Customer | Served | Negative) #REQUIRED>
 <!ATTLIST persona image CDATA #REQUIRED>
