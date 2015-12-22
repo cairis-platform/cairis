@@ -494,7 +494,7 @@ As security is a topical subject in the media, Carol has been able to secure som
   </attacker_environment>
 </attacker>
 <attacker name="Mallory" image="Mallory.jpg">
-  <description>Mallory is a freelance Bot maintainer.  He is constantly on the look out for new, powerful machines to add to the bespoke Botnets he builds for his clients.</description>
+  <description>Mallory is a bot maintainer.  He is constantly on the look out for new, powerful machines to add to the bespoke Botnets he builds for his clients.</description>
   <attacker_environment name="Psychosis">
     <attacker_role name="Hacker" />
     <motivation name="System resource theft" />
