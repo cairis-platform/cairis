@@ -8,7 +8,7 @@ image:
   teaser: examples_teaser.gif
 ---
 
-![fig:ExamplesPage]({{ site.baseurl }}/images/examplesPage.png "Examples Page")
+![fig:ExamplesPage]({{ site.baseurl }}/images/examplesPage.jpg "Examples Page")
 
 
 We have re-vamped the [examples]({{ site.baseurl }}/examples.html) that come with CAIRIS, based on how CAIRIS is often used.
