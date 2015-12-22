@@ -20,9 +20,9 @@ These are non-trivial personas created using the [Persona Case technique](http:/
 
 ### [Exemplars]({{ site.baseurl }}/exemplars.html)
 
-These exemplify complete systems.  The exemplars provided are based on [a data grid for neuroscience research]({{ site.baseurl }}/NeuroGrid.html) where different stakeholders have different ideas about security requirements, and [a fictitious water company]({{ site.baseurl }}/ACME_Water.html).
+These exemplify complete systems.  The exemplars provided included [a data grid for neuroscience research]({{ site.baseurl }}/NeuroGrid.html) where different stakeholders have different ideas about security requirements.  They also include [a fictitious water company]({{ site.baseurl }}/ACME_Water.html) that needs to face up to new cybersecurity threats.
 
-At the footer of each example page is a link to a complete CAIRIS model file.
+Each example page includes a link to a complete CAIRIS model file.
 
 These examples are not contrived.  The [NeuroGrid exemplar]({{ site.baseurl }}/NeuroGrid.html) was created based on data collected from people working on the actual [NeuroGrid project](http://gtr.rcuk.ac.uk/project/C86DB105-5E52-4F37-BF3B-12A3500EB713).  The [ACME Water]({{ site.baseurl }}/ACME_Water.html) exemplar was based on interview, observations, and a security analysis carried out on a real (albeit anonymised) water company.  You can read more about this analysis [here](http://www.shamalfaily.com/wp-content/papercite-data/pdf/fafl113.pdf)
 
