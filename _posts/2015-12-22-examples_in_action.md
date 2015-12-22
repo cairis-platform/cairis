@@ -21,7 +21,7 @@ These are non-trivial personas created using the [Persona Case technique](http:/
 
 ### [Exemplars]({{ site.baseurl }}/exemplars.html)
 
-These exemplify complete systems.  The exemplars provided are based on [a data grid for neuroscience research]({{ site.baseurl }}g/NeuroGrid.html) where different stakeholders have different ideas about security requirements, and [a fictitious water company]({{ site.baseurl }}/ACME_Water.html).
+These exemplify complete systems.  The exemplars provided are based on [a data grid for neuroscience research]({{ site.baseurl }}/NeuroGrid.html) where different stakeholders have different ideas about security requirements, and [a fictitious water company]({{ site.baseurl }}/ACME_Water.html).
 
 At the footer of each example page is a link to a complete CAIRIS model file.
 
