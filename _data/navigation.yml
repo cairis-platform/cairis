@@ -4,6 +4,11 @@
   url: /install.html
   excerpt: "How to install and start CAIRIS"
 
+- title: Examples
+  url: /examples.html
+  excerpt: "Sample models"
+
+
 - title: Documentation
   url: /doc.html
   excerpt: "CAIRIS user manual"
