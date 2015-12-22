@@ -3,7 +3,7 @@ layout: post
 title:  "CAIRIS examples"
 date:   2015-12-22 13:10:00
 categories: CAIRIS
-description: Examples of CAIRIS in action
+description: Specification Exemplars for Security using CAIRIS
 image:
   teaser: examples_teaser.gif
 ---
