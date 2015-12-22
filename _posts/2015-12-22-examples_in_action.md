@@ -12,7 +12,7 @@ image:
 
 We have re-vamped the [examples]({{ site.baseurl }}/examples.html) that come with CAIRIS, based on how CAIRIS is often used.
 
-Rather than simply providing a sample model file, we now provide model files based on two classes of examples:
+Rather than simply providing a sample model file, we have provided model files that constitute specification exemplars for security design.  We have provided two types of models.
 
 ### [Personas]({{ site.baseurl }}/personas.html)
 
