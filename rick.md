@@ -4,7 +4,7 @@ title: Rick
 description: An instrument technician at ACME water
 categories: persona
 image:
-  teaser: rick_teaser.gif
+  teaser: Rick_teaser.gif
 ---
 
 {% include toc.html %}

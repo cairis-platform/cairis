@@ -4,7 +4,7 @@ title: Ben and Matt
 description: Penetration testers at TeamRed LLP
 categories: persona
 image:
-  teaser: ben_teaser.gif
+  teaser: Ben_teaser.gif
 ---
 
 {% include toc.html %}
