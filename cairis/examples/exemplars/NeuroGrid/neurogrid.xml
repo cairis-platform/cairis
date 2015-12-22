@@ -527,7 +527,7 @@ As security is a topical subject in the media, Carol has been able to secure som
   </attacker_environment>
 </attacker>
 <attacker name="Trudy" image="Trudy.jpg">
-  <description>Trudy is a 1st year undergraduate Computer Science student at Pembroke College, Oxford.  Although she doesn't have any formal computer security education, she likes to visit black hat web-sites and play with known exploits at attack script repositories.  Her interest is not so much personal gain as it is understanding how these scripts work.</description>
+  <description>Trudy is a 17 year old student studying ICT at a local FE college.  Although she has little formal computer security education, she likes to visit black hat web-sites and play with known exploits at attack script repositories.  Her interest is not so much personal gain as it is understanding how these scripts work.</description>
   <attacker_environment name="Stroke">
     <attacker_role name="Hacker" />
     <motivation name="Indifference" />
