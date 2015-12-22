@@ -463,3 +463,7 @@ should be signed off before any engagement begins.
 |  scope creep GT concept                |  1     |    Shamal Faily, Claudia Iacob |  March 2015|
 |  scoping GT concept                     | 1    |     Shamal Faily, Claudia Iacob |  March 2015|
 |  team protocols GT concept              | 1     |    Shamal Faily, Claudia Iacob |  March 2015|
+
+## Further details
+
+[CAIRIS model](https://github.com/failys/CAIRIS/tree/master/cairis/examples/personas/Ben_Matt)

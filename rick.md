@@ -253,3 +253,7 @@ not authorised to use it."
 |  Water GT concept                 |      1    |     Shamal Faily |  August 2010|
 |  Work routine GT concept          |      1    |     Shamal Faily |  August 2010|
 |  Works diary GT concept           |      1    |     Shamal Faily |  August 2010|
+
+## Further details
+
+[CAIRIS model](https://github.com/failys/CAIRIS/tree/master/cairis/examples/personas/Rick)
