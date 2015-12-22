@@ -595,7 +595,7 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
 
 Martin has practical experience with several open source penetration testing frameworks, such as Metasploit.  Based on his experience, and the experiences of his colleagues, Martin also uses a number of very effective in-house network exploitation tools.
 
-As a CPNI penetration tester, Martin carries out limited engagements involving the  testing security of PCs and network infrastructure at critical infrastructure sites.</description>
+As an industrial control systems penetration tester, Martin carries out limited engagements involving the  testing security of PCs and network infrastructure at critical infrastructure sites.</description>
   <attacker_environment name="Day">
     <attacker_role name="Cracker" />
     <motivation name="Data theft" />
