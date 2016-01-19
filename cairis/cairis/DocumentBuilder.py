@@ -616,6 +616,12 @@ def personas(p,docDir):
         <section><title>Skills</title>
           """ + paraText(persona.skills()) + """
         </section>
+        <section><title>Intrinsic</title>
+          """ + paraText(persona.intrinsic()) + """
+        </section>
+        <section><title>Contextual</title>
+          """ + paraText(persona.contextual()) + """
+        </section>
     """
 
     for eProps in persona.environmentProperties():

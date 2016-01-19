@@ -1,4 +1,6 @@
-= CAIRIS =
+# CAIRIS 
+
+[![Build Status](https://secure.travis-ci.org/failys/CAIRIS.png?branch=master)](http://travis-ci.org/failys/CAIRIS)
 
 CAIRIS (Computer Aided Integration of Requirements and Information Security) is a Requirements Management tool for specifying secure and usable systems. CAIRIS was built from the ground-up to support the elements necessary for usability, requirements, and risk analysis. CAIRIS features include: 
 
@@ -10,6 +12,6 @@ CAIRIS (Computer Aided Integration of Requirements and Information Security) is 
 * Automatic visualisation of models, and quantitative/qualitative scoring of security and usability data 
 * Automatic document generation of a VOLERE compliant requirements specification.
 
-== Getting Started ==
+## Getting Started
 
 CAIRIS should run on most recent flavours of Linux.  See the CAIRIS website for installation instructions.

@@ -1,0 +1,30 @@
+language: python
+python: 2.7
+sudo: false
+
+addons:
+  apt:
+    packages:
+    - python-dev 
+    - build-essential 
+    - mysql-server 
+    - mysql-client 
+    - graphviz 
+    - python-pip 
+    - python-numpy 
+    - git 
+    - libmysqlclient-dev
+
+env:
+- CAIRIS_SRC=cairis/cairis PYTHONPATH=$CAIRIS_SRC CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf 
+
+install: "pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot"
+
+before_script:
+ - mysql --user=root --password='' < $CAIRIS_SRC/test/createdb.sql
+ - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/init.sql
+ - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/procs.sql
+
+
+script: 
+ - python -m unittest discover -v $CAIRIS_SRC/test*

@@ -758,13 +758,13 @@ CREATE TABLE persona_type (
 CREATE TABLE persona (
   id INT NOT NULL,
   name VARCHAR(50) NOT NULL,
-  activities VARCHAR(4000) NOT NULL,
-  attitudes VARCHAR(4000) NOT NULL,
-  aptitudes VARCHAR(4000) NOT NULL,
-  motivations VARCHAR(4000) NOT NULL,
-  skills VARCHAR(4000) NOT NULL,
-  intrinsic VARCHAR(4000) NOT NULL,
-  contextual VARCHAR(4000) NOT NULL,
+  activities text NOT NULL,
+  attitudes text NOT NULL,
+  aptitudes text NOT NULL,
+  motivations text NOT NULL,
+  skills text NOT NULL,
+  intrinsic text NOT NULL,
+  contextual text NOT NULL,
   image VARCHAR(1000),
   assumption_id INT NOT NULL,
   persona_type_id INT NOT NULL,
@@ -3237,6 +3237,8 @@ begin
   return quote;
 end
 //
+
+delimiter ; 
 
 CREATE VIEW countermeasure_vulnerability_response_target as 
   select distinct cvt.countermeasure_id,re.id response_id,cvt.vulnerability_id,cvt.environment_id from countermeasure_vulnerability_target cvt, environment_vulnerability ev, risk ri,response re where cvt.vulnerability_id = ev.vulnerability_id and cvt.environment_id = ev.environment_id and ev.vulnerability_id = ri.vulnerability_id and ri.id = re.risk_id;

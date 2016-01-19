@@ -1,35 +1,66 @@
 #!/usr/bin/python
+
 import string
+import argparse
+import csv
+
+def remspace(my_str):
+  if len(my_str) < 2: # returns ' ' unchanged
+    return my_str
+  if my_str[-1] == '\n':
+    if my_str[-2] == ' ':
+      return my_str[:-2] + '\n'
+  if my_str[-1] == ' ':
+    return my_str[:-1]
+  return my_str
+
 
 if __name__ == '__main__':
-  xmlHdr = '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">\n\n<usability>\n\n'
+
+  parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Grounded Theory to Persona Case converter')
+  parser.add_argument('modelFile',help='model file to create')
+  parser.add_argument('--context',dest='contextName',help='model context')
+  parser.add_argument('--originator',dest='originatorName',help='model originator')
+  parser.add_argument('--concepts',dest='conceptsFile',help='grounded theory model concepts')
+  parser.add_argument('--propositions',dest='propositionsFile',help='Propositions associated with grounded theory model quotations')
+  parser.add_argument('--characteristics',dest='characteristicsFile',help='Persona characteristics associated with grounded theory model associations')
+  parser.add_argument('--narratives',dest='narrativesFile',help='Persona narratives')
+
+  args = parser.parse_args()
+
+
+  xmlHdr = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">\n\n<cairis_model>\n\n'
+
+  xmlHdr += '<cairis>\n  <project_settings name="' + args.contextName + '">\n    <contributors>\n      <contributor first_name="None" surname="None" affiliation="' + args.originatorName + '" role="Scribe" />\n    </contributors>\n  </project_settings>\n  <environment name="' + args.contextName + '" short_code="' + args.contextName + '">\n    <definition>' + args.contextName + '</definition>\n    <asset_values>\n      <none>TBC</none>\n      <low>TBC</low>\n      <medium>TBC</medium>\n      <high>TBC</high>\n    </asset_values>\n  </environment>\n</cairis>\n\n<riskanalysis>\n  <role name="Undefined" type="Stakeholder" short_code="UNDEF">\n    <description>Undefined</description>\n  </role>\n</riskanalysis>\n\n<usability>\n'
   xmlBuf = ''
 
-  cf = open('Concepts.csv',"r")
   conceptDict = {}
-  for l in cf.readlines():
-    l = string.strip(l)
-    ce = l.split(',')
-    edCode = ce[0]
-    edName = ce[1] + ' GT concept'
-    conceptDict[edCode] = edName
-    xmlBuf += '<external_document name=\"' + edName + '\" version=\"1.0\" date=\"April 2015\" authors=\"Shamal Faily\">\n  <description>' + edName + '</description>\n</external_document>\n'
-  cf.close()
+  with open(args.conceptsFile,'r') as cFile:
+    cReader = csv.reader(cFile, delimiter = ',', quotechar='"')
+    for row in cReader:
+      edCode = row[0]
+      edName = row[1] + ' GT concept'
+      conceptDict[edCode] = edName
+      edVersion = row[2]
+      edDate = row[3]
+      edAuthors = row[4]
+      xmlBuf += '<external_document name=\"' + edName + '\" version=\"' + edVersion + '\" date=\"' + edDate + '\" authors=\"' + edAuthors + '\">\n  <description>' + edName + '</description>\n</external_document>\n'
   xmlBuf += '\n'
-  pf = open('Propositions.csv',"r")
-  propDict = {}
-  for l in pf.readlines():
-    l = string.strip(l)
-    pe = l.split(',')
-    pId = pe[0]
-    edCode,pNo = pId.split('-')
-    docName = conceptDict[edCode]
-    pName = pe[1]
-    pDesc = pe[2]
-    propDict[pId] = (pName,pDesc)
-    xmlBuf += '<document_reference name=\"' + pName + '\" contributor=\"Shamal Faily\" document=\"' + docName + '\">\n  <excerpt>' + pDesc + '</excerpt>\n</document_reference>\n'
 
-  pf.close()
+  propDict = {}
+  with open(args.propositionsFile,'r') as pFile:
+    pReader = csv.reader(pFile, delimiter = ',', quotechar='"')
+    for row in pReader:
+      pId = row[0]
+      edCode,pNo = pId.split('-')
+      docName = conceptDict[edCode]
+      pName = row[1]
+      pDesc = row[2]
+      pContrib = row[3]
+      propDict[pId] = (pName,pDesc)
+      xmlBuf += '<document_reference name=\"' + pName + '\" contributor=\"' + pContrib + '\" document=\"' + docName + '\">\n  <excerpt>' + pDesc + '</excerpt>\n</document_reference>\n'
+  xmlBuf += '\n'
+
   xmlBuf += '\n'
   bvDict = {}
   bvDict['ACT'] = 'Activities'
@@ -42,7 +73,7 @@ if __name__ == '__main__':
 
   personaNames = set([])
   
-  pcf = open('Characteristics.csv',"r")
+  pcf = open(args.characteristicsFile,"r")
   for l in pcf.readlines():
     l = string.strip(l)
     pce = l.split(',')
@@ -86,11 +117,17 @@ if __name__ == '__main__':
     xmlBuf += '</persona_characteristic>\n'          
   pcf.close()
 
+  pnDict = {}
+  with open(args.narrativesFile,'r') as nFile:
+    nReader = csv.reader(nFile, delimiter = ',', quotechar='"')
+    for row in nReader:
+      pnDict[(row[0],row[1])] = row[2]
+
   pHdr = ''
   for personaName in personaNames:
-    pHdr += '<persona name=\"' + personaName + '\" type=\"Primary\" assumption_persona=\"FALSE\" image=\"\" >\n <activities>None</activities>\n  <attitudes>None</attitudes>\n  <aptitudes>None</aptitudes>\n  <motivations>None</motivations>\n  <skills>None</skills>\n  <intrinsic>None</intrinsic>\n  <contextual>None</contextual>\n</persona>\n\n'     
+    pHdr += '<persona name=\"' + personaName + '\" type=\"Primary\" assumption_persona=\"FALSE\" image=\"\" >\n <activities>' + pnDict[(personaName,'ACT')] + '</activities>\n  <attitudes>' + pnDict[(personaName,'ATT')] + '</attitudes>\n  <aptitudes>' + pnDict[(personaName,'APT')] + '</aptitudes>\n  <motivations>' + pnDict[(personaName,'MOT')] + '</motivations>\n  <skills>' + pnDict[(personaName,'SKI')] + '</skills>\n  <intrinsic>' + pnDict[(personaName,'INT')] + '</intrinsic>\n  <contextual>' + pnDict[(personaName,'CON')] + '</contextual>\n<persona_environment name=\"' + args.contextName + '\" is_direct="TRUE">\n  <persona_role name="Undefined" />\n  <narrative>Nothing stipulated</narrative>\n</persona_environment>\n</persona>\n\n'
   
-  xmlBuf = xmlHdr + '\n' + pHdr + '\n' + xmlBuf + '\n</usability>'
-  xmlOut = open('delme.xml',"w")
+  xmlBuf = xmlHdr + '\n' + pHdr + '\n' + xmlBuf + '\n</usability>\n</cairis_model>'
+  xmlOut = open(args.modelFile,"w")
   xmlOut.write(xmlBuf)
   xmlOut.close()

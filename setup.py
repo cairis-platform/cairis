@@ -1,11 +1,11 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(name = 'cairis',
       version = '1.0',
       description='Computer Aided Integration of Requirements and Information Security',
       author = 'Shamal Faily',
       author_email = 'shamal.faily@googlemail.com',
-      url = 'http://www.cs.ox.ac.uk/cairis',
+      url = 'http://cairis.org',
       packages=['cairis'],
-      package_data={'cairis':['sql/*.sql','config/*.dtd','config/*.xml','config/*.pdf','config/*.png','config/*.xml','config/cairis.cnf','images/*.png']}
+      package_data={'cairis':['cairis/*']}
      )

@@ -1,0 +1,72 @@
+{ "roles" : [
+   {"theName" : "Researcher",
+    "theType" : "Stakeholder",
+    "theShortCode" : "RCHR",
+    "theDescription" : "Uses and supplies data to NeuroGrid"
+    }
+  ],
+  "environments" : [
+   {"theName" : "Psychosis",
+    "theShortCode" : "PSY",
+    "theDescription" : "The exemplar aims to integrate large existing datasets of serial MRI scans and behaviour data coupled to the NeuroGrid image analysis service into a Grid-based database, test image normalisation techniques, and develop a general ontology for a psychosis databas, for use in multi-centre studies. The exemplar tests capabilities of NeuroGrid to deal with restrospective data, assimilate material into databases, and use of the toolkit for normalisation and analysis."}
+  ],
+  "personas" : [
+    {"theName" : "Claire",
+     "theActivities" : "Claire is a clinical researcher within the Psychosis exemplar.  She is responsible for a group which is developing and testing processing pipelines for harmonising MRI images from different centres. Claire authorises requests that other members of her group make for accessing NeuroGrid, and is officially responsible for making sure her colleagues aren't misusing their access.  In practice, however, she delegates much of her responsibility to one of her more security-knowledgeable colleagues.",
+     "theAttitudes" : "Claire feels that NeuroGrid has a lot to offer her research but, right now, its hard to see the benefits for the usability problems she faces. Although Claire appreciates the importance of security and the confidentialty of her research subjects, authorising colleague requests for data access and liasing with the infrastructure team is a time consuming process which isn't helping her get any research done. Claire is also perplexed at why security could cause simple workflows take such a long time to run, but she also remembers how long it used to take to get data before NeuroGrid so she can live with the performance issues.",
+     "theAptitudes" : "Claire and her colleagues follow a set of processes and guidelines when working with data uploaded to NeuroGrid. Because obtaining data is an expensive business, Claire also tries to reuse data and analysis as much as possible, and as far as her ethics clearance allows.",
+     "theMotivations" : "Besides her research, Claire's primary security concerns are centered around the datasets she maintains, and making sure her colleagues and collaborators can access the data they need.",
+     "theSkills" : "Nothing stipulated",
+     "theIntrinsic" : "None",
+     "theContextual" : "None",
+     "thePersonaType" : "Primary",
+     "theEnvironmentProperties" : [
+       {"theName" : "Psychosis",
+        "theDirectFlag" : "False",
+        "theRole" : ["Researcher"],
+        "theNarrative" : "Nothing stipulated"
+      }
+     ]
+   }
+  ],
+  "external_documents" : [
+      {"theName" : "Institutional responsibility GT concept",
+       "theVersion" : "1",
+       "thePublicationDate" : "August 2010",
+       "theAuthors" : "Shamal Faily",
+       "theDescription" : "None"},
+      {"theName" : "Moral responsibility GT concept",
+       "theVersion" : "1",
+       "thePublicationDate" : "August 2010",
+       "theAuthors" : "Shamal Faily",
+       "theDescription" : "None"}
+  ],
+  "document_references" : [
+    {"theName" : "Managers do not deal with security",
+     "theDocName" : "Institutional responsibility GT concept",
+     "theContributor" : "SF",
+     "theExcerpt" : "To be honest, I don't think they deal with the security aspect.  \\nFor example, my supervisor here is very keen to test the portal and he has a certificate install and is using a master password, so there is no concern if someone else is using his computer or laptop as they will have their password anyway. "
+   },
+   {"theName" : "Principles and ethics committee responsible for approval.",
+    "theDocName" : "Moral responsibility GT concept",
+    "theContributor" : "SF",
+    "theExcerpt" : "A lot of it is down to ethics committees.  \\nThere are the Caldicott Guardian principles as well."
+   },
+   {"theName" : "Everyone responsible for security",
+    "theDocName" : "Moral responsibility GT concept",
+    "theContributor" : "SF",
+    "theExcerpt" : "SF:  When it comes to NeuroGrid, who would you say is responsible for security?\\nI7:  Everybody really."
+   }
+ ],
+  "persona_characteristics" : [
+    {
+      "thePersonaName" : "Claire",
+      "theModQual" : "Sometimes",
+      "theVariable" : "Activities",
+      "theCharacteristic" : "Managers delegate security decisions",
+      "ground" : "Managers do not deal with security",
+      "warrant" : "Principles and ethics committee responsible for approval.",
+      "rebuttal" : "Everyone responsible for security"
+    }
+  ]
+}
