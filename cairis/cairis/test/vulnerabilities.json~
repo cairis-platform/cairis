@@ -1,0 +1,13 @@
+{
+  "vulnerabilities" : [
+      {"theName" : "Insecure Transport",
+       "theType" : "Authorisation Vulnerability",
+       "theDescription" : "Authorisation data sent over an insecure channel"},
+      {"theName" : "TOCTOU",
+       "theType" : "Authorisation Vulnerability",
+       "theDescription" : "File Access Race Condition: The time between checking a file property and a file operation is long enough to be exploitable."},
+      {"theName" : "Missing XML Validation",
+       "theType" : "Input Validation Vulnerability",
+       "theDescription" : "Failure to enable validation when parsing XML gives an attacker the opportunity to supply malicious input."},
+  ]
+}
