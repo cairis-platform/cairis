@@ -21,6 +21,7 @@ import json
 import BorgFactory
 from Borg import Borg
 from VulnerabiltyParameters import VulnerabilityParameters
+from ARM import DatabaseProxyException
 
 class VulnerabilityTest(unittest.TestCase):
 
