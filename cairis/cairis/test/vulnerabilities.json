@@ -2,36 +2,30 @@
   "vulnerabilities" : [
       {"theName" : "Insecure Transport",
        "theType" : "Authorisation Vulnerability",
-       "theDescription" : "Authorisation data sent over an insecure channel"},
+       "theDescription" : "Authorisation data sent over an insecure channel",
+	"theEnvironmentProperties" : [
+       {"theName" : "XACML Threat Environment",
+        "theSeverity" : "Catastrophic"
+       }
+     ]
+},
       {"theName" : "TOCTOU",
        "theType" : "Authorisation Vulnerability",
-       "theDescription" : "File Access Race Condition: The time between checking a file property and a file operation is long enough to be exploitable."},
+       "theDescription" : "File Access Race Condition: The time between checking a file property and a file operation is long enough to be exploitable.",
+	"theEnvironmentProperties" : [
+       {"theName" : "XACML Threat Environment",
+        "theSeverity" : "Catastrophic"
+       }
+     ]
+},
       {"theName" : "Missing XML Validation",
        "theType" : "Input Validation Vulnerability",
-       "theDescription" : "Failure to enable validation when parsing XML gives an attacker the opportunity to supply malicious input."},
-  ],
-    "assets" : [
-    {
-     "theName" : "Clinical Data",
-     "theShortCode" : "CD",
-     "theDescription" : "None",
-     "theSignificance" : "Unanonymised and in the wrong hands, this data can be very damaging.",
-     "theType" : "Information",
-     "theEnvironmentProperties" :
-      [
-        ["Psychosis",
-         [3,0,2,0,0,0,0,0], 
-         ["Researchers very worried about the disclosure of partially anonymised patient data.","None","Availability of NeuroGrid is quite important, but prepared to sacrifice this if doing so safeguards clinical data.","None","None","None","None","None"]
-        ],
-        ["Stroke",
-         [1,0,3,0,0,0,0,0], 
-         ["Clinical data is fully anonymised","None","NeuroGrid availability important for clinical trials","None","None","None","None","None"]
-        ],
-        ["Core Technology",
-         [0,0,0,3,0,0,0,0], 
-         ["None","None","None","Important for CA to know who is allowed to access what data items.","None","None","None","None"]
-        ]
-      ]
-    }
+       "theDescription" : "Failure to enable validation when parsing XML gives an attacker the opportunity to supply malicious input.",
+	"theEnvironmentProperties" : [
+       {"theName" : "XACML Threat Environment",
+        "theSeverity" : "Critical"
+       }
+     ]
+   }
   ]
 }
