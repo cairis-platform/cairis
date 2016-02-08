@@ -1,23 +1,23 @@
-"1", "API Abuse", "An API is a contract between a caller and a callee. The most common forms of API abuse are caused by the caller failing to honor its end of this contract. For example, if a program fails to call chdir() after calling chroot(), it violates the contract that specifies how to change the active root directory in a secure fashion. Another good example of library abuse is expecting the callee to return trustworthy DNS information to the caller. In this case, the caller abuses the callee API by making certain assumptions about its behavior (that the return value can be used for authentication purposes). One can also violate the caller-callee contract from the other side. For example, if a coder subclasses SecureRandom and returns a non-random value, the contract is violated."
-"2", "Authentication Vulnerability", "Authentication Vulnerability"
-"3", "Authorisation Vulnerability", "Authorisation Vulnerability"
-"4", "Availability Vulnerability", "Availability Vulnerability"
-"5", "Code Permission Vulnerability", "Vulnerabilities related to code permissions."
-"6", "Code Quality Vulnerability", "Poor code quality leads to unpredictable behavior. From a user's perspective that often manifests itself as poor usability. For an attacker it provides an opportunity to stress the system in unexpected ways."
-"7", "Concurrency Vulnerability", "Concurrency Vulnerability"
-"8", "Configuration Vulnerability", "Configuration Vulnerability"
-"9", "Cryptographic vulnerabilities", "Vulnerabilities related to cryptographic modules."
-"10", "Encoding Vulnerabilities", "Encoding Vulnerabilities"
-"11", "Environmental Vulnerability", "This category includes everything that is outside of the source code but is still critical to the security of the product that is being created. Because the issues covered by this kingdom are not directly related to source code, we separated it from the rest of the kingdoms."
-"12", "Error Handling Vulnerability", "Error Handling Vulnerability"
-"13", "General Logic Error Vulnerability", "General Logic Error Vulnerability"
-"14", "Input Validation Vulnerability", "Vulnerabilities related to input validation"
-"15", "Logging and Auditing Vulnerability", "Logging and Auditing Vulnerability"
-"16", "Password Management Vulnerability", "Password Management Vulnerability"
-"17", "Path Vulnerability", "Path issues that allow attackers to access files that are not intended to be accessed. Generally, this is due to dynamically construction of a file path using unvalidated user input."
-"18", "Protocol Error", "Protocol Error"
-"19", "Range and Type Error Vulnerability", "Range and Type Error Vulnerability"
-"20", "Sensitive Data Protection Vulnerability", "This category is for tagging vulnerabilities that lead to insecure protection of sensitive data. The protection referred here includes confidentiality and integrity of data during its whole lifecycles, including storage and transmission.\n\nPlease note that this category is intended to be different from access control problems, although they both fail to protect data appropriately. Normally, the goal of access control is to grant data access to some users but not others. In this category, we are instead concerned about protection for sensitive data that are not intended to be revealed to or modified by any application users. Examples of this kind of sensitive data can be cryptographic keys, passwords, security tokens or any information that an application relies on for critical decisions.\n\nExamples of this vulnerability can be:\n\n    * Information leakage results from insufficient memory clean-up\n    * Inappropriate protection of cryptographic keys (This should also be labeled with Category:Cryptography)\n    * Clear-text Passwords in configration files (This should also labeled with Category:Authentication if the passwords are used for authentication.)\n    * Lack of integrity protection for stored user data"
-"21", "Session Management Vulnerability", "Vulnerabilities related to session management"
-"22", "Synchronisation and Timing Vulnerability", "Synchronisation and Timing Vulnerability"
-"23", "Use of Dangerous API", "Use of Dangerous API"
+"1", "API Abuse", "An API is a contract between a caller and a callee. The most common forms of API abuse are caused by the caller failing to honor its end of this contract. For example, if a program fails to call chdir() after calling chroot(), it violates the contract that specifies how to change the active root directory in a secure fashion. Another good example of library abuse is expecting the callee to return trustworthy DNS information to the caller. In this case, the caller abuses the callee API by making certain assumptions about its behavior (that the return value can be used for authentication purposes). One can also violate the caller-callee contract from the other side. For example, if a coder subclasses SecureRandom and returns a non-random value, the contract is violated."@
+"2", "Authentication Vulnerability", "Authentication Vulnerability"@
+"3", "Authorisation Vulnerability", "Authorisation Vulnerability"@
+"4", "Availability Vulnerability", "Availability Vulnerability"@
+"5", "Code Permission Vulnerability", "Vulnerabilities related to code permissions."@
+"6", "Code Quality Vulnerability", "Poor code quality leads to unpredictable behavior. From a user's perspective that often manifests itself as poor usability. For an attacker it provides an opportunity to stress the system in unexpected ways."@
+"7", "Concurrency Vulnerability", "Concurrency Vulnerability"@
+"8", "Configuration Vulnerability", "Configuration Vulnerability"@
+"9", "Cryptographic vulnerabilities", "Vulnerabilities related to cryptographic modules."@
+"10", "Encoding Vulnerabilities", "Encoding Vulnerabilities"@
+"11", "Environmental Vulnerability", "This category includes everything that is outside of the source code but is still critical to the security of the product that is being created. Because the issues covered by this kingdom are not directly related to source code, we separated it from the rest of the kingdoms."@
+"12", "Error Handling Vulnerability", "Error Handling Vulnerability"@
+"13", "General Logic Error Vulnerability", "General Logic Error Vulnerability"@
+"14", "Input Validation Vulnerability", "Vulnerabilities related to input validation"@
+"15", "Logging and Auditing Vulnerability", "Logging and Auditing Vulnerability"@
+"16", "Password Management Vulnerability", "Password Management Vulnerability"@
+"17", "Path Vulnerability", "Path issues that allow attackers to access files that are not intended to be accessed. Generally, this is due to dynamically construction of a file path using unvalidated user input."@
+"18", "Protocol Error", "Protocol Error"@
+"19", "Range and Type Error Vulnerability", "Range and Type Error Vulnerability"@
+"20", "Sensitive Data Protection Vulnerability", "This category is for tagging vulnerabilities that lead to insecure protection of sensitive data. The protection referred here includes confidentiality and integrity of data during its whole lifecycles, including storage and transmission.\n\nPlease note that this category is intended to be different from access control problems, although they both fail to protect data appropriately. Normally, the goal of access control is to grant data access to some users but not others. In this category, we are instead concerned about protection for sensitive data that are not intended to be revealed to or modified by any application users. Examples of this kind of sensitive data can be cryptographic keys, passwords, security tokens or any information that an application relies on for critical decisions.\n\nExamples of this vulnerability can be:\n\n    * Information leakage results from insufficient memory clean-up\n    * Inappropriate protection of cryptographic keys (This should also be labeled with Category:Cryptography)\n    * Clear-text Passwords in configration files (This should also labeled with Category:Authentication if the passwords are used for authentication.)\n    * Lack of integrity protection for stored user data"@
+"21", "Session Management Vulnerability", "Vulnerabilities related to session management"@
+"22", "Synchronisation and Timing Vulnerability", "Synchronisation and Timing Vulnerability"@
+"23", "Use of Dangerous API", "Use of Dangerous API"@
