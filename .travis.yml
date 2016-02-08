@@ -24,8 +24,7 @@ before_script:
  - mysql --user=root --password='' < $CAIRIS_SRC/test/createdb.sql
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/init.sql
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/procs.sql
- - mysql -e "use arm; insert into vulnerability_type
-    VALUES 
+ - mysql -e "use arm; insert into vulnerability_type VALUES 
       ('1', 'API Abuse', 'An API is a contract between a caller and a callee. The most common forms of API abuse are caused by the caller failing to honor its end of this contract. For example, if a program fails to call chdir() after calling chroot(), it violates the contract that specifies how to change the active root directory in a secure fashion. Another good example of library abuse is expecting the callee to return trustworthy DNS information to the caller. In this case, the caller abuses the callee API by making certain assumptions about its behavior (that the return value can be used for authentication purposes). One can also violate the caller-callee contract from the other side. For example, if a coder subclasses SecureRandom and returns a non-random value, the contract is violated.'),
       ('2', 'Authentication Vulnerability', 'Authentication Vulnerability'),
       ('3', 'Authorisation Vulnerability', 'Authorisation Vulnerability'),
