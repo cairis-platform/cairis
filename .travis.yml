@@ -24,7 +24,7 @@ before_script:
  - mysql --user=root --password='' < $CAIRIS_SRC/test/createdb.sql
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/init.sql
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/procs.sql
-
+ - mysql arm -e "LOAD DATA INFILE '$CAIRIS_SRC/test/vuln_types' INTO TABLE vulnerability_type FIELDS TERMINATED BY ','"
 
 script: 
  - python -m unittest discover -v $CAIRIS_SRC/test*
