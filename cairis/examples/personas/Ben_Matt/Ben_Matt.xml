@@ -1041,7 +1041,7 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Testing platform freedom" />
 </persona_characteristic>
 <persona_characteristic persona="Matt" behavioural_variable="Attitudes" modal_qualifier="Usually" >
-  <definition>CREST accredition worthless if high technical and professional standards are not maintained.</definition>
+  <definition>CREST accredition worthless if high technical and professional standards are not maintained</definition>
   <grounds type="document" reference="CREST credentials" />
   <grounds type="document" reference="Hold high standards" />
   <grounds type="document" reference="Strict adherence to ethics codes" />
@@ -1049,7 +1049,7 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Faith sustains industry" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Skills" modal_qualifier="Possibly" >
-  <definition>Required to curate collection of trusted software tools.</definition>
+  <definition>Required to curate collection of trusted software tools</definition>
   <grounds type="document" reference="Public domain tool evaluation" />
   <grounds type="document" reference="Trusted toolkit" />
   <grounds type="document" reference="Testing platform freedom" />
@@ -1058,7 +1058,7 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Faith sustains industry" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Usually" >
-  <definition>Ethics is a passed on soft-skill that testers are obliged to pick up.</definition>
+  <definition>Ethics is a passed on soft-skill that testers are obliged to pick up</definition>
   <grounds type="document" reference="Ethics passed-on knowledge" />
   <grounds type="document" reference="Ethics is a soft-skill" />
   <grounds type="document" reference="Expected behaviour coded" />
@@ -1067,7 +1067,7 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Faith sustains industry" />
 </persona_characteristic>
 <persona_characteristic persona="Matt" behavioural_variable="Activities" modal_qualifier="Always" >
-  <definition>Morally obliged to report high impact vulnerabilities as quickly as possible.</definition>
+  <definition>Morally obliged to report high impact vulnerabilities as quickly as possible</definition>
   <grounds type="document" reference="Takes every opportunity" />
   <grounds type="document" reference="Care about security" />
   <grounds type="document" reference="Illegal activities reported upwards" />
@@ -1076,7 +1076,7 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Moral issue obligations" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Possibly" >
-  <definition>Expectation of high standards means falling below them could endanger career.</definition>
+  <definition>Expectation of high standards means falling below them could endanger career</definition>
   <grounds type="document" reference="Common sense codes" />
   <grounds type="document" reference="Job induced caution" />
   <grounds type="document" reference="Potential for reputation ruin" />
@@ -1084,14 +1084,14 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Methodology audit" />
 </persona_characteristic>
 <persona_characteristic persona="Matt" behavioural_variable="Activities" modal_qualifier="Usually" >
-  <definition>Professionally and ethically obliged to fix and limit scope as much as possible. </definition>
+  <definition>Professionally and ethically obliged to fix and limit scope as much as possible</definition>
   <grounds type="document" reference="Job over exploration" />
   <grounds type="document" reference="Methodology audit" />
   <grounds type="document" reference="Pen test scope limited to tech" />
   <warrant type="document" reference="Scope ethicity" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Motivations" modal_qualifier="Always" >
-  <definition>Ethics imparted by juniors shadowing and being apprenticed by more senior testers.</definition>
+  <definition>Ethics imparted by juniors shadowing and being apprenticed by more senior testers</definition>
   <grounds type="document" reference="Ethics passed-on knowledge" />
   <grounds type="document" reference="Juniors with seniors" />
   <grounds type="document" reference="Seniors watch over juniors" />
@@ -1099,21 +1099,21 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="No ethical guides" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Motivations" modal_qualifier="Often" >
-  <definition>Shadowing gives juniors the hidden sense of spotting where things might go wrong.</definition>
+  <definition>Shadowing gives juniors the hidden sense of spotting where things might go wrong</definition>
   <grounds type="document" reference="Replicate seniors" />
   <grounds type="document" reference="Intuition development" />
   <grounds type="document" reference="Risk sense" />
   <warrant type="document" reference="Juniors become seniors" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Motivations" modal_qualifier="Usually" >
-  <definition>Developing a black hat perspective sheds light of issues that might otherwise remain hidden. </definition>
+  <definition>Developing a black hat perspective sheds light of issues that might otherwise remain hidden</definition>
   <grounds type="document" reference="Attacker perspective" />
   <grounds type="document" reference="No rogues" />
   <grounds type="document" reference="Risk sense" />
   <grounds type="document" reference="Contributing breach factors" />
 </persona_characteristic>
 <persona_characteristic persona="Matt" behavioural_variable="Attitudes" modal_qualifier="Possibly" >
-  <definition>Pen testers need to be put into context before hidden risks can be found.</definition>
+  <definition>Pen testers need to be put into context before hidden risks can be found</definition>
   <grounds type="document" reference="Always something" />
   <grounds type="document" reference="Literature backs up gut feeling" />
   <grounds type="document" reference="Scope as communication strategy" />
@@ -1130,7 +1130,7 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Client primary responsibility" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Motivations" modal_qualifier="Usually" >
-  <definition>The ease within what laws can be broken sensitises tests to legal issues affecting tests.</definition>
+  <definition>The ease within what laws can be broken sensitises testers to legal issues affecting tests</definition>
   <grounds type="document" reference="Cognisant of law" />
   <grounds type="document" reference="No out-of-scope work" />
   <grounds type="document" reference="Easy to breach CMA" />
@@ -1138,20 +1138,20 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Crime ends career" />
 </persona_characteristic>
 <persona_characteristic persona="Matt" behavioural_variable="Aptitudes" modal_qualifier="Possibly" >
-  <definition>Experienced testers know what caveats to consider.</definition>
+  <definition>Experienced testers know what caveats to consider</definition>
   <grounds type="document" reference="Information caveat" />
   <grounds type="document" reference="Exhaustive caveat" />
   <grounds type="document" reference="Scope as communication strategy" />
   <grounds type="document" reference="Client and tester scope model" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Always" >
-  <definition>Impersonating and socially engineering people is part and parcel of a red team.</definition>
+  <definition>Impersonating and socially engineering people is part and parcel of a red team</definition>
   <grounds type="document" reference="Wide scope of activities" />
   <grounds type="document" reference="Red team impersonations" />
   <warrant type="document" reference="Do whatever needed" />
 </persona_characteristic>
 <persona_characteristic persona="Matt" behavioural_variable="Attitudes" modal_qualifier="Possibly" >
-  <definition>Site access provides context to help ethically delimit scope.</definition>
+  <definition>Site access provides context to help ethically delimit scope</definition>
   <grounds type="document" reference="Know right questions" />
   <grounds type="document" reference="Site security problems raised" />
   <grounds type="document" reference="Policies considered not exploited" />
@@ -1170,7 +1170,7 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="No legal dilemmas" />
 </persona_characteristic>
 <persona_characteristic persona="Matt" behavioural_variable="Aptitudes" modal_qualifier="Usually" >
-  <definition>Information is shared as needed.</definition>
+  <definition>Information is shared as needed</definition>
   <grounds type="document" reference="New vulnerabilities shared" />
   <grounds type="document" reference="Sharing insights" />
   <grounds type="document" reference="Sharing across phases" />
@@ -1185,7 +1185,7 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Told what to do" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Activities" modal_qualifier="Possibly" >
-  <definition>Works with IT teams to explain and help fix problems found.</definition>
+  <definition>Works with IT teams to explain and help fix problems found</definition>
   <grounds type="document" reference="No singling out" />
   <grounds type="document" reference="Methodology explained" />
   <grounds type="document" reference="Work with clients to fix" />
@@ -1193,14 +1193,14 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Red/blue team game" />
 </persona_characteristic>
 <persona_characteristic persona="Matt" behavioural_variable="Activities" modal_qualifier="Possibly" >
-  <definition>Recommending fixes helps clients understand pen testing.</definition>
+  <definition>Recommending fixes helps clients understand pen testing</definition>
   <grounds type="document" reference="Ramifications of vulnerabilities" />
   <grounds type="document" reference="Methodology explained" />
   <grounds type="document" reference="Sophisticated customer behaviour" />
   <grounds type="document" reference="Tests shift mentality" />
 </persona_characteristic>
 <persona_characteristic persona="Matt" behavioural_variable="Attitudes" modal_qualifier="Maybe" >
-  <definition>Clients should step up and take responsibility for fixes quickly once reported.</definition>
+  <definition>Clients should step up and take responsibility for fixes quickly once reported</definition>
   <grounds type="document" reference="Provide advice not orders" />
   <grounds type="document" reference="Client-owned vulnerabilities" />
   <grounds type="document" reference="Client not fast enough" />
@@ -1228,7 +1228,7 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Scope easily spreads" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Possibly" >
-  <definition>Clients pen test new systems because they must not because they should.</definition>
+  <definition>Clients pen test new systems because they must not because they should</definition>
   <grounds type="document" reference="Doing things because they should" />
   <grounds type="document" reference="Regulatory box-ticking" />
   <grounds type="document" reference="Report unread" />
@@ -1264,7 +1264,7 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Complaints due to misapprehension" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Attitudes" modal_qualifier="Possibly" >
-  <definition>Miscommunication increases hostility during pen tests.</definition>
+  <definition>Miscommunication increases hostility during pen tests</definition>
   <grounds type="document" reference="Expected behaviour calls" />
   <grounds type="document" reference="Posture change warning" />
   <grounds type="document" reference="Developer hostility" />
