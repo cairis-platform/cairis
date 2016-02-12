@@ -1130,7 +1130,7 @@ Ben spent time shadowing more senior penetration testers during his initial enga
   <warrant type="document" reference="Client primary responsibility" />
 </persona_characteristic>
 <persona_characteristic persona="Ben" behavioural_variable="Motivations" modal_qualifier="Usually" >
-  <definition>The ease within what laws can be broken sensitises testers to legal issues affecting tests</definition>
+  <definition>The ease within which laws can be broken sensitises testers to legal issues affecting tests</definition>
   <grounds type="document" reference="Cognisant of law" />
   <grounds type="document" reference="No out-of-scope work" />
   <grounds type="document" reference="Easy to breach CMA" />
