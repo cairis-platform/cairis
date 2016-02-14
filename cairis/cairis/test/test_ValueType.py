@@ -29,7 +29,7 @@ class ValueTypeTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/valuetypes.json')
     d = json.load(f)
     f.close()
-    self.iVtypes = d['valuetypes']
+    self.iVtypes = d['types']
     
 
   def testValueType(self):
