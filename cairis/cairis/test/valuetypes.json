@@ -1,0 +1,13 @@
+{
+  "valuetypes" : [
+      {"theName" : "Authentication Vulnerability",
+      "theDescription" : "Authentication Vulnerability",
+      "theType" : "vulnerability"},
+      {"theName" : "Code Permission Vulnerability",
+       "theDescription" : "Vulnerabilities related to code permissions.",
+       "theType" : "vulnerability"},
+      {"theName" : "Path Traversal Attack",
+       "theDescription" : "Path Traversal Attack",
+       "theType" : "threat"}
+  ]
+}
