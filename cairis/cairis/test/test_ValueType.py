@@ -33,8 +33,8 @@ class ValueTypeTest(unittest.TestCase):
     self.iVtypes = d['types']
     
   def testValueType(self):
-    ivt1 = ValueTypeParameters(self.iVtypes[0]["theName"], self.iVtypes[0]["theDescription"], self.iVtypes[0]["theType"], [], "0", [])
-    ivt2 = ValueTypeParameters(self.iVtypes[1]["theName"], self.iVtypes[1]["theDescription"], self.iVtypes[1]["theType"], [], "0", [])
+    ivt1 = ValueTypeParameters(self.iVtypes[0]["theName"], self.iVtypes[0]["theDescription"], self.iVtypes[0]["theType"], "", "0", "")
+    ivt2 = ValueTypeParameters(self.iVtypes[1]["theName"], self.iVtypes[1]["theDescription"], self.iVtypes[1]["theType"], "", "0", "")
     b = Borg()
     b.dbProxy.addValueType(ivt1)
     b.dbProxy.addValueType(ivt2)
