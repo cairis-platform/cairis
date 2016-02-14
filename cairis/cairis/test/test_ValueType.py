@@ -21,7 +21,6 @@ import json
 import BorgFactory
 from Borg import Borg
 from ValueTypeParameters import ValueTypeParameters
-from ARM import DatabaseProxyException
 
 class ValueTypeTest(unittest.TestCase):
 
@@ -30,11 +29,11 @@ class ValueTypeTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/valuetypes.json')
     d = json.load(f)
     f.close()
-    self.iVtypes = d['types']
+    self.iVtypes = d['valuetypes']
     
   def testValueType(self):
-    ivt1 = ValueTypeParameters(self.iVtypes[0]["theName"], self.iVtypes[0]["theDescription"], self.iVtypes[0]["theType"], "", "0", "")
-    ivt2 = ValueTypeParameters(self.iVtypes[1]["theName"], self.iVtypes[1]["theDescription"], self.iVtypes[1]["theType"], "", "0", "")
+    ivt1 = ValueTypeParameters(self.iVtypes[0]["theName"], self.iVtypes[0]["theDescription"], self.iVtypes[0]["theType"])
+    ivt2 = ValueTypeParameters(self.iVtypes[1]["theName"], self.iVtypes[1]["theDescription"], self.iVtypes[1]["theType"])
     b = Borg()
     b.dbProxy.addValueType(ivt1)
     b.dbProxy.addValueType(ivt2)
