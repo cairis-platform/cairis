@@ -1,5 +1,5 @@
 {
-  "types" : [
+  "valuetypes" : [
       {"theName" : "Authentication Vulnerability",
       "theDescription" : "Authentication Vulnerability",
       "theType" : "vulnerability"},
