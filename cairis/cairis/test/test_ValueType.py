@@ -38,14 +38,12 @@ class ValueTypeTest(unittest.TestCase):
     b.dbProxy.addValueType(ivt1)
     b.dbProxy.addValueType(ivt2)
     oVVtypes = b.dbProxy.getValueTypes('vulnerability_type')
-    Vname = self.iVtypes[0]["theName"]
-    ovt1 = oVVtypes[Vname]
+    ovt1 = oVVtypes[self.iVtypes[0]["theName"]]
     self.assertEqual(ivt1.name(), ovt1.name())
     self.assertEqual(ivt1.description(),ovt1.description())
     self.assertEqual(ivt1.type(),ovt1.type())
     oVTtypes = b.dbProxy.getValueTypes('threat_type')
-    Tname = self.iVtypes[1]["theName"]
-    ovt2 = oVTtypes[Tname]
+    ovt2 = oVTtypes[self.iVtypes[0]["theName"]]
     self.assertEqual(ivt2.name(), ovt2.name())
     self.assertEqual(ivt2.description(),ovt2.description())
     self.assertEqual(ivt2.type(),ovt2.type())
