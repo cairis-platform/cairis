@@ -37,12 +37,12 @@ class ValueTypeTest(unittest.TestCase):
     b = Borg()
     b.dbProxy.addValueType(ivt1)
     b.dbProxy.addValueType(ivt2)
-    oVvtypes = b.dbProxy.getValueTypes(self.iVtypes[0]["theType"])
+    oVvtypes = b.dbProxy.getValueTypes('vulnerability_type')
     ovt1 = oVvtypes[self.iVtypes[0]["theName"]]
     self.assertEqual(ivt1.name(), ovt1.name())
     self.assertEqual(ivt1.description(),ovt1.description())
     self.assertEqual(ivt1.type(),ovt1.type())
-    oVttypes = b.dbProxy.getValueTypes(self.iVtypes[1]["theType"])
+    oVttypes = b.dbProxy.getValueTypes('threat_type')
     ovt2 = oVttypes[self.iVtypes[1]["theName"]]
     self.assertEqual(ivt2.name(), ovt2.name())
     self.assertEqual(ivt2.description(),ovt2.description())
