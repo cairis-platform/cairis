@@ -45,12 +45,15 @@
    }
   ],
     "valuetypes" : [
-      {"theName" : "Authentication Vulnerability",
-      "theDescription" : "Authentication Vulnerability",
+      {"theName" : "Authorisation Vulnerability",
+      "theDescription" : "Authorisation Vulnerability",
       "theType" : "vulnerability_type"},
-      {"theName" : "Path Traversal Attack",
-       "theDescription" : "Path Traversal Attack",
-       "theType" : "threat_type"}
+      {"theName" : "Authorisation Vulnerability",
+       "theDescription" : "Authorisation Vulnerability",
+       "theType" : "vulnerability_type"},
+      {"theName" : "Input Validation Vulnerability",
+       "theDescription" : "Vulnerabilities related to input validation",
+       "theType" : "vulnerability_type"}
   ],
   "assets" : [
     {
