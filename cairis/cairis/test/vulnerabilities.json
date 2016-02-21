@@ -47,13 +47,13 @@
     "valuetypes" : [
       {"theName" : "Authorisation Vulnerability",
       "theDescription" : "Authorisation Vulnerability",
-      "theType" : "vulnerability_type"},
+      "theValueType" : "vulnerability_type"},
       {"theName" : "Authorisation Vulnerability",
        "theDescription" : "Authorisation Vulnerability",
-       "theType" : "vulnerability_type"},
+       "theValueType" : "vulnerability_type"},
       {"theName" : "Input Validation Vulnerability",
        "theDescription" : "Vulnerabilities related to input validation",
-       "theType" : "vulnerability_type"}
+       "theValueType" : "vulnerability_type"}
   ],
   "assets" : [
     {
