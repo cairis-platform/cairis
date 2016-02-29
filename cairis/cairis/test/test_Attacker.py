@@ -33,6 +33,7 @@ class AttackerTest(unittest.TestCase):
     f.close()
     ienvs = d['environments']
     self.iep = EnvironmentParameters(ienvs[0]["theName"],ienvs[0]["theShortCode"],ienvs[0]["theDescription"])
+    b = Borg()
     b.dbProxy.addEnvironment(self.iep)
     self.oenvs = b.dbProxy.getEnvironments()
     self.iAttackers = d['attackers']
