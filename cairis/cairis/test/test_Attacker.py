@@ -39,7 +39,7 @@ class AttackerTest(unittest.TestCase):
     self.iAttackers = d['attackers']
     
   def testAttacker(self):
-    iatkeps = AttackerEnvironmentProperties(self.iAttackers[0]["theEnvironmentProperties"][0]["theName"],self.iAttackers[0]["theEnvironmentProperties"][0]["theRole"],self.iAttackers[0]["theEnvironmentProperties"][0]["theMotives"],self.iAttackers[0]["theEnvironmentProperties"][0]["theCapabilities"])
+    iatkeps = AttackerEnvironmentProperties(self.iAttackers[0]["theEnvironmentProperties"][0]["theName"],self.iAttackers[0]["theEnvironmentProperties"][0]["theRoles"],self.iAttackers[0]["theEnvironmentProperties"][0]["theMotives"],self.iAttackers[0]["theEnvironmentProperties"][0]["theCapabilities"])
     iatk = AttackerParameters(self.iAttackers[0]["theName"], self.iAttackers[0]["theDescription"], self.iAttackers[0]["theImage"],[],iatkeps)
     b = Borg()
     b.dbProxy.addAttacker(iatk)
@@ -47,11 +47,11 @@ class AttackerTest(unittest.TestCase):
     o = oAttackers[0]
     self.assertEqual(iatk.name(), o.name())
     self.assertEqual(iatk.description(),o.description())
-    self.assertEqual(iatk.type(),o.image())
+    self.assertEqual(iatk.image(),o.image())
     oatkeps = o.environmentProperties()
     self.assertEqual(iatkeps[0].name(), oatkeps[0].name())
-    self.assertEqual(iatkeps[0].roles(), oatkeps[0].roles())
-    self.assertEqual(str(iatkeps[0].motives()[1]), str(oatkeps[0].motives()[0]))
+    self.assertEqual(str(iatkeps[0].roles()[0]), str(oatkeps[0].roles()[0]))
+    self.assertEqual(str(iatkeps[0].motives()[0]), str(oatkeps[0].motives()[0]))
     self.assertEqual(str(iatkeps[0].capabilities()[0]), str(oatkeps[0].capabilities()[0]))
     self.assertEqual(str(iatkeps[0].capabilities()[1]), str(oatkeps[0].capabilities()[1]))
 
