@@ -1,0 +1,20 @@
+{
+  "environments" : [
+      {"theName" : "Day",
+       "theShortCode" : "DAY",
+       "theDescription" : "Day-time plant operations"}
+  ],
+  "attackers" : [
+      {"theName" : "Victor",
+       "theDescription" : "Victor is a contractor and expert in the SCADA systems used by ACME, having helped develop them over 15 years ago. Due to the recent economic downtime, Victor has been forced to take a recent pay-cut.",
+       "theImage" : "Victor.jpg",
+       "theEnvironmentProperties" : [
+         {"theName" : "Day",
+          "theRole" : "Vendor",
+          "theMotives" : ["Revenge"],
+	  "theCapabilities" : ["Technology","Software"]
+         }
+       ]
+    }
+  ]
+}
