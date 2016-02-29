@@ -40,7 +40,7 @@ class AttackerTest(unittest.TestCase):
     
   def testAttacker(self):
     iatkeps = AttackerEnvironmentProperties(self.iAttackers[0]["theEnvironmentProperties"][0]["theName"],self.iAttackers[0]["theEnvironmentProperties"][0]["theRole"],self.iAttackers[0]["theEnvironmentProperties"][0]["theMotives"],self.iAttackers[0]["theEnvironmentProperties"][0]["theCapabilities"])
-    iatk = AttackerParameters(self.iAttackers[0]["theName"], self.iAttackers[0]["theDescription"], self.iAttackers[0]["theImage"],[],ieatk)
+    iatk = AttackerParameters(self.iAttackers[0]["theName"], self.iAttackers[0]["theDescription"], self.iAttackers[0]["theImage"],[],iatkeps)
     b = Borg()
     b.dbProxy.addAttacker(iatk)
     oAttackers = b.dbProxy.getAttacker()
