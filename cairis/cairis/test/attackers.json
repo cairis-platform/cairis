@@ -14,8 +14,8 @@
           "theMotives" : ["Revenge"],
 	  "theCapabilities" : [
 	   {
-           "Technology" : "Medium",
-	   "Software" : "Low"
+           "theName" : ["Technology","Software"],
+	   "theValue" : ["Medium","Low"]
 	   }
 	   ]
          }
