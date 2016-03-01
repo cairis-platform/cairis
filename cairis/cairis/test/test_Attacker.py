@@ -21,6 +21,7 @@ import json
 import BorgFactory
 from Borg import Borg
 from EnvironmentParameters import EnvironmentParameters
+from RoleParameters import RoleParameters
 from AttackerParameters import AttackerParameters
 from AttackerEnvironmentProperties import AttackerEnvironmentProperties
 
@@ -36,6 +37,10 @@ class AttackerTest(unittest.TestCase):
     b = Borg()
     b.dbProxy.addEnvironment(self.iep)
     self.oenvs = b.dbProxy.getEnvironments()
+    iRoles = d['roles']
+    self.irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
+    b.dbProxy.addRole(self.irp)
+    self.oRoles = b.dbProxy.getRoles()
     self.iAttackers = d['attackers']
     
   def testAttacker(self):
@@ -60,6 +65,7 @@ class AttackerTest(unittest.TestCase):
   def tearDown(self):
     b = Borg()
     b.dbProxy.deleteEnvironment(self.oenvs[self.iep.name()].id())
+    b.dbProxy.deleteRole(self.oRoles[self.irp.name()].id())
     b.dbProxy.close()
 
 if __name__ == '__main__':
