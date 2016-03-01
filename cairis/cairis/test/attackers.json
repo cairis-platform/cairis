@@ -10,9 +10,17 @@
        "theImage" : "Victor.jpg",
        "theEnvironmentProperties" : [
          {"theName" : "Day",
-          "theRoles" : ["Vendor"],
+          "theRole" : "Vendor",
           "theMotives" : ["Revenge"],
-	  "theCapabilities" : ["Technology","Software"]
+	  "theCapabilities" : 
+	    [
+		["Technology",
+		  ["Medium"],
+		],
+		["Software",
+		  ["Low"],
+		]
+	    ]
          }
        ]
     }
