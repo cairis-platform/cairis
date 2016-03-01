@@ -591,6 +591,7 @@ drop procedure if exists grepCodes;
 drop procedure if exists grepMemos;
 drop procedure if exists grepInternalDocuments;
 drop procedure if exists grepRequirements;
+drop procedure if exists grepTags;
 drop procedure if exists grepModel;
 drop procedure if exists dimensionNameByShortCode;
 drop procedure if exists misuseCaseRiskComponents;
@@ -14773,7 +14774,38 @@ begin
 end
 //
 
-create procedure grepModel(in inTxt text, in psFlag int, in envFlag int, in roleFlag int, in pcFlag int, in tcFlag int, in refFlag int, in pFlag int, in taskFlag int, in ucFlag int, in dpFlag int, in goalFlag int, in obsFlag int, in reqFlag int, in assetFlag int, in vulFlag int, in attackerFlag int, in thrFlag int, in riskFlag int, in respFlag int, in cmFlag int, in dirFlag int, in codeFlag int, in memoFlag int, in idFlag int)
+create procedure grepTags(in inTxt text)
+begin
+  insert into temp_searchresults (environment_name, dimension_name, object_name)
+  select e.name,'Attacker',a.name from environment e, environment_attacker ea, attacker a, attacker_tag at, tag t where ea.environment_id = e.id and ea.attacker_id = a.id and at.tag_id = t.id and t.name like concat('%',inTxt,'%')
+  union
+  select e.name,'Asset',a.name from environment e, environment_asset ea, asset a, asset_tag at, tag t where ea.environment_id = e.id and ea.asset_id = a.id and at.tag_id = t.id and t.name like concat('%',inTxt,'%')
+  union
+  select e.name,'Countermeasure',c.name from environment e, environment_countermeasure ec, countermeasure c, countermeasure_tag ct, tag t where ec.environment_id = e.id and ec.countermeasure_id = c.id and ct.tag_id = t.id and t.name like concat('%',inTxt,'%')
+  union
+  select '','Domain Property',dp.name from domainproperty dp, domainproperty_tag dt, tag t where dt.tag_id = t.id and t.name like concat('%',inTxt,'%')
+  union
+  select e.name,'Goal',g.name from environment e, environment_goal eg, goal g, goal_tag gt, tag t where eg.environment_id = e.id and eg.goal_id = g.id and gt.tag_id = t.id and t.name like concat('%',inTxt,'%')
+  union
+  select e.name,'Obstacle',o.name from environment e, environment_obstacle eo, obstacle o, obstacle_definition od, obstacle_tag ot, tag t where eo.environment_id = e.id and eo.obstacle_id = o.id and eo.obstacle_id = od.obstacle_id and eo.environment_id = od.environment_id and ot.tag_id = t.id and t.name like concat('%',inTxt,'%')
+  union
+  select e.name,'Persona',p.name from environment e, environment_persona ep, persona p, persona_tag pt, tag t where ep.environment_id = e.id and ep.persona_id = p.id and pt.tag_id = t.id and t.name like concat('%',inTxt,'%')
+  union
+  select e.name,gct.name,r.name from environment e, environment_response er, response r, goal_category_type gct, response_tag rt, tag t where er.environment_id = e.id and er.response_id = r.id and r.goal_category_type_id = gct.id and rt.tag_id = t.id and t.name like concat('%',inTxt,'%')
+  union
+  select e.name,'Risk',r.name from environment e, environment_risk er, risk r, risk_tag rt, tag t where er.environment_id = e.id and er.id = r.id and rt.tag_id = t.id and t.name like concat('%',inTxt,'%')
+  union
+  select e.name,'Task',t.name from environment e, environment_task et, task t, task_tag tt, tag t2 where et.environment_id = e.id and et.task_id = t.id and tt.tag_id = t2.id and t2.name like concat('%',inTxt,'%')
+  union
+  select e.name,'Threat',t.name from environment e, environment_threat et, threat t, threat_tag tt, tag t2 where et.environment_id = e.id and et.threat_id = t.id and tt.tag_id = t2.id and t2.name like concat('%',inTxt,'%')
+  union
+  select e.name,'Use Case',u.name from environment e, usecase u, environment_usecase eu, usecase_step us, usecase_step_tag ust, usecase_tag ut, tag t where e.id = eu.environment_id and eu.usecase_id = u.id and eu.environment_id = us.environment_id and eu.usecase_id = us.usecase_id and ust.tag_id = t.id and ut.tag_id = t.id and t.name like concat('%',inTxt,'%')
+  union
+  select e.name,'Vulnerability',v.name from environment e, environment_vulnerability ev, vulnerability v, vulnerability_tag vt, tag t where ev.environment_id = e.id and ev.vulnerability_id = v.id and vt.tag_id = t.id and t.name like concat('%',inTxt,'%');
+end
+//
+
+create procedure grepModel(in inTxt text, in psFlag int, in envFlag int, in roleFlag int, in pcFlag int, in tcFlag int, in refFlag int, in pFlag int, in taskFlag int, in ucFlag int, in dpFlag int, in goalFlag int, in obsFlag int, in reqFlag int, in assetFlag int, in vulFlag int, in attackerFlag int, in thrFlag int, in riskFlag int, in respFlag int, in cmFlag int, in dirFlag int, in codeFlag int, in memoFlag int, in idFlag int, in tagFlag int)
 begin
 
   drop table if exists temp_searchresults;
@@ -14898,7 +14930,10 @@ begin
   then
     call grepInternalDocuments(inTxt);
   end if;
-
+  if tagFlag = 1
+  then
+    call grepTags(inTxt);
+  end if;
   select environment_name, dimension_name,object_name from temp_searchresults;
 end
 //
