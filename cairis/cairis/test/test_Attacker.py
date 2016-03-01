@@ -37,7 +37,7 @@ class AttackerTest(unittest.TestCase):
     b = Borg()
     b.dbProxy.addEnvironment(self.iep)
     self.oenvs = b.dbProxy.getEnvironments()
-    iRoles = d['roles']
+    self.iRoles = d['roles']
     self.irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
     b.dbProxy.addRole(self.irp)
     self.oRoles = b.dbProxy.getRoles()
