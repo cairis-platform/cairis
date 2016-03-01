@@ -37,6 +37,9 @@ class SearchPanel(wx.Panel):
     findBoxSizer.Add(ssCtrl,1,wx.EXPAND)
     findCtrl = wx.Button(self,armid.SEARCHMODEL_BUTTONFIND_ID,'Find')
     findBoxSizer.Add(findCtrl,0)
+    findClose = wx.Button(self,armid.SEARCHMODEL_BUTTONFINDCLOSE_ID,'Close')
+    findBoxSizer.Add(findClose,0)
+    findClose.Bind(wx.EVT_BUTTON,self.onClose)
 
     self.spNotebook = wx.Notebook(self,-1)
     
@@ -121,3 +124,7 @@ class SearchPanel(wx.Panel):
         if (dlg.ShowModal() == dlgCode):
           dimFn(dlg.parameters()) 
         dlg.Destroy()
+
+  def onClose(self, event):
+    self.Destroy()
+    self.EndModal

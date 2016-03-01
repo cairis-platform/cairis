@@ -76,6 +76,8 @@ class SearchOptionsPanel(wx.Panel):
     self.codeCheck.SetValue(True)
     self.memoCheck = wx.CheckBox(self,armid.SEARCHPANEL_CHECKMEMO_ID,'Memos')
     self.memoCheck.SetValue(True)
+    self.tagCheck = wx.CheckBox(self,armid.SEARCHPANEL_CHECKTAGS_IG,'Tags')
+    self.tagCheck.SetValue(True)
     self.internalDocumentCheck = wx.CheckBox(self,armid.SEARCHPANEL_CHECKINTERNALDOCUMENT_ID,'Internal Documents')
     self.internalDocumentCheck.SetValue(True)
 
@@ -102,6 +104,7 @@ class SearchOptionsPanel(wx.Panel):
     optSizer.Add(self.dirCheck)
     optSizer.Add(self.codeCheck)
     optSizer.Add(self.memoCheck)
+    optSizer.Add(self.tagCheck)
     optSizer.Add(self.internalDocumentCheck)
 
     self.SetSizer(mainSizer)
@@ -132,6 +135,7 @@ class SearchOptionsPanel(wx.Panel):
       self.dirCheck.SetValue(True)
       self.codeCheck.SetValue(True)
       self.memoCheck.SetValue(True)
+      self.tagCheck.SetValue(True)
       self.internalDocumentCheck.SetValue(True)
     else:
       self.psCheck.SetValue(False)
@@ -157,6 +161,7 @@ class SearchOptionsPanel(wx.Panel):
       self.dirCheck.SetValue(False)
       self.codeCheck.SetValue(False)
       self.memoCheck.SetValue(False)
+      self.tagCheck.SetValue(True)
       self.internalDocumentCheck.SetValue(False)
 
 
@@ -185,6 +190,7 @@ class SearchOptionsPanel(wx.Panel):
       self.dirCheck.GetValue(),
       self.codeCheck.GetValue(),
       self.memoCheck.GetValue(),
+      self.tagCheck.GetValue(),
       self.internalDocumentCheck.GetValue()]
     return flags
 

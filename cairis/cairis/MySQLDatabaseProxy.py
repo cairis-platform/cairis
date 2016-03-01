@@ -7835,8 +7835,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       codeFlag = opts[21]
       memoFlag = opts[22]
       idFlag = opts[23]
+      tagFlag = opts[24]
 
-      curs.execute('call grepModel(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(inTxt,psFlag,envFlag,roleFlag,pcFlag,tcFlag,refFlag,pFlag,taskFlag,ucFlag,dpFlag,goalFlag,obsFlag,reqFlag,assetFlag,vulFlag,attackerFlag,thrFlag,riskFlag,respFlag,cmFlag,dirFlag,codeFlag,memoFlag,idFlag))
+      curs.execute('call grepModel(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(inTxt,psFlag,envFlag,roleFlag,pcFlag,tcFlag,refFlag,pFlag,taskFlag,ucFlag,dpFlag,goalFlag,obsFlag,reqFlag,assetFlag,vulFlag,attackerFlag,thrFlag,riskFlag,respFlag,cmFlag,dirFlag,codeFlag,memoFlag,idFlag,tagFlag))
       if (curs.rowcount == -1):
         exceptionText = 'Error searching model'
         raise DatabaseProxyException(exceptionText) 
