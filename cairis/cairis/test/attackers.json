@@ -4,6 +4,12 @@
        "theShortCode" : "DAY",
        "theDescription" : "Day-time plant operations"}
   ],
+  "roles" : [
+      {"theName" : "Vendor",
+       "theType" : "Stakeholder",
+       "theShortCode" : "VENDOR",
+       "theDescription" : "Vendor of SCADA, Telemetry, and Control System software"}
+  ],
   "attackers" : [
       {"theName" : "Victor",
        "theDescription" : "Victor is a contractor and expert in the SCADA systems used by ACME, having helped develop them over 15 years ago. Due to the recent economic downtime, Victor has been forced to take a recent pay-cut.",
