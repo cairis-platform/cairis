@@ -45,6 +45,12 @@ DROP VIEW IF EXISTS misusability_case;
 DROP VIEW IF EXISTS usecase_step_synopsis_actor;
 DROP VIEW IF EXISTS quotation;
 
+DROP TABLE IF EXISTS persona_instance;
+DROP TABLE IF EXISTS asset_instance;
+DROP TABLE IF EXISTS location_link;
+DROP TABLE IF EXISTS location;
+DROP TABLE IF EXISTS locations;
+
 DROP TABLE IF EXISTS usecase_step_synopsis;
 DROP TABLE IF EXISTS usecase_pc_contribution;
 DROP TABLE IF EXISTS usecase_tc_contribution;
@@ -3183,6 +3189,54 @@ CREATE TABLE task_environment_code (
   FOREIGN KEY(environment_id) REFERENCES environment(id),
   FOREIGN KEY(code_id) REFERENCES code(id),
   FOREIGN KEY(section_id) REFERENCES artifact_section(id)
+) ENGINE=INNODB;
+
+
+DROP TABLE IF EXISTS locations;
+
+CREATE TABLE locations (
+  id INT NOT NULL,
+  name VARCHAR(1000),
+  diagram VARCHAR(1000),
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE location (
+  id INT NOT NULL,
+  locations_id INT NOT NULL,
+  name VARCHAR(1000),
+  PRIMARY KEY(id),
+  FOREIGN KEY(locations_id) REFERENCES locations(id)
+) ENGINE=INNODB;
+
+CREATE TABLE location_link (
+  locations_id INT NOT NULL,
+  head_location_id INT NOT NULL,
+  tail_location_id INT NOT NULL,
+  PRIMARY KEY(locations_id,head_location_id,tail_location_id),
+  FOREIGN KEY(locations_id) REFERENCES locations(id),
+  FOREIGN KEY(head_location_id) REFERENCES location(id),
+  FOREIGN KEY(tail_location_id) REFERENCES location(id)
+) ENGINE=INNODB;
+
+CREATE TABLE asset_instance (
+  id INT NOT NULL,
+  name VARCHAR(1000),
+  location_id INT NOT NULL,
+  asset_id INT NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(asset_id) REFERENCES asset(id),
+  FOREIGN KEY(location_id) REFERENCES location(id)
+) ENGINE=INNODB;
+
+CREATE TABLE persona_instance (
+  id INT NOT NULL,
+  name VARCHAR(1000),
+  location_id INT NOT NULL,
+  persona_id INT NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(persona_id) REFERENCES persona(id),
+  FOREIGN KEY(location_id) REFERENCES location(id)
 ) ENGINE=INNODB;
 
 delimiter //

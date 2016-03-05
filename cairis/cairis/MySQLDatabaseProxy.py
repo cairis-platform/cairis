@@ -11443,3 +11443,211 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting denied goals for code ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def addLocations(self,locsName,locDiagram,locations,links):
+    locsId = self.newId()
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addLocations(%s,%s,%s)',(locsId,locsName,locDiagram))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding locations ' + locsName
+        raise DatabaseProxyException(exceptionText) 
+   
+      for location in locations:
+        self.addLocation(locsId,location)
+      for link in links:
+        self.addLocationLink(locsId,link)
+      self.conn.commit()
+      curs.close()
+      return locsId
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding locations ' + locsName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+ 
+  def addLocation(self,locsId,location):
+    locId = self.newId()
+    locName = location[0]
+    assetInstances = location[1]
+    personaInstances = location[2]
+
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addLocation(%s,%s,%s)',(locsId,locId,locName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding location ' + locName
+        raise DatabaseProxyException(exceptionText) 
+
+      for assetInstance in assetInstances:
+        self.addAssetInstance(locId,assetInstance)
+      for personaInstance in personaInstances:
+        self.addPersonaInstance(locId,personaInstance)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding location ' + locName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addAssetInstance(self,locId,assetInstance):
+    instanceId = self.newId()
+    instanceName = assetInstance[0]
+    assetName = assetInstance[1]
+
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addAssetInstance(%s,%s,%s,%s)',(locId,instanceId,instanceName,assetName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding asset instance ' + instanceName
+        raise DatabaseProxyException(exceptionText) 
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding asset instance ' + instanceName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+
+  def addPersonaInstance(self,locId,personaInstance):
+    instanceId = self.newId()
+    instanceName = personaInstance[0]
+    personaName = personaInstance[1]
+
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addPersonaInstance(%s,%s,%s,%s)',(locId,instanceId,instanceName,personaName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding persona instance ' + instanceName
+        raise DatabaseProxyException(exceptionText) 
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding persona instance ' + instanceName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+
+  def addLocationLink(self,locsId,link):
+    tailLoc = link[0]
+    headLoc = link[1]
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call addLocationLink(%s,%s,%s)',(locsId,tailLoc,headLoc))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error adding link between locations ' + tailLoc + ' and ' + headLoc
+        raise DatabaseProxyException(exceptionText) 
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding link between locations ' + tailLoc + ' and ' + headLoc + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getLocations(self,constraintId = -1):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getLocations(%s)',(constraintId))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining locations'
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      locsId = row[0]
+      locsDia = row[1] 
+      curs.close()
+
+      locNames = self.getLocationNames(constraintId)
+      linkDict = self.getLocationLinks(constraintId)
+      locations = []
+      for locName in locNames:
+        assetInstances = self.getAssetInstances(locName)
+        personaInstances = self.getPersonaInstances(locName)
+        locLinks = linkDict[locName]
+        locations.append((locName,assetInstances,personaInstances,locLinks))
+      return (locsId,locsDia,locations)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error obtaining locations (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getLocationNames(self,locsName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getLocationNames(%s)',(locsName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining locations'
+        raise DatabaseProxyException(exceptionText) 
+      locationRows = []
+      for row in curs.fetchall():
+        row = list(row)
+        locName = row[0]
+        locationRows.append(locName)
+      curs.close()
+      return locationRows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting location names (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getLocationLinks(self,locsName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getLocationLinks(%s)',(locsName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining location links'
+        raise DatabaseProxyException(exceptionText) 
+      linkDict = {}
+      for row in curs.fetchall():
+        row = list(row)
+        tailLoc = row[0]
+        headLoc = row[1]
+        if tailLoc in linkDict:
+          linkDict[tailLoc].append(headLoc)
+        else:
+          linkDict[tailLoc] = [headLoc]
+
+        if headLoc in linkDict:
+          linkDict[headLoc].append(tailLoc)
+        else:
+          linkDict[headLoc] = [tailLoc]
+      curs.close()
+      return linkDict
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting location links (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exception)
+
+  def getAssetInstances(self,locName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getAssetInstances(%s)',(locName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining asset instances for location ' + locName
+        raise DatabaseProxyException(exceptionText) 
+      instanceRows = []
+      for row in curs.fetchall():
+        row = list(row)
+        instanceName = row[0]
+        assetName = row[1]
+        instanceRows.append((instanceName,assetName))
+      curs.close()
+      return instanceRows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting asset instances for location ' + locName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exception)
+
+  def getPersonaInstances(self,locName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call getPersonaInstances(%s)',(locName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error obtaining persona instances for location ' + locName
+        raise DatabaseProxyException(exceptionText) 
+      instanceRows = []
+      for row in curs.fetchall():
+        row = list(row)
+        instanceName = row[0]
+        personaName = row[1]
+        instanceRows.append((instanceName,personaName))
+      curs.close()
+      return instanceRows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting persona instances for location ' + locName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exception)
+
+  def deleteLocations(self,locsId):
+    self.deleteObject(locsId,'locations')
+    self.conn.commit()

@@ -835,6 +835,18 @@ drop procedure if exists updateImpliedCharacteristicIntention;
 drop procedure if exists updateImpliedCharacteristicElementIntention;
 drop procedure if exists deniedGoals;
 drop function if exists requirementId;
+drop procedure if exists addLocations;
+drop procedure if exists addLocation;
+drop procedure if exists addAssetInstance;
+drop procedure if exists addPersonaInstance;
+drop procedure if exists addLocationLink;
+drop procedure if exists getLocations;
+drop procedure if exists getLocationNames;
+drop procedure if exists getLocationLinks;
+drop procedure if exists getAssetInstances;
+drop procedure if exists getPersonaInstances;
+drop procedure if exists delete_locations;
+
 
 delimiter //
 
@@ -2355,6 +2367,7 @@ end
 create procedure delete_asset(in assetId int)
 begin
   call deleteAssetComponents(assetId);
+  delete from asset_instance where asset_id = assetId;
   delete from component_threat_target where asset_id = assetId;
   delete from component_vulnerability_target where asset_id = assetId;
   delete from asset_threat where asset_id = assetId;
@@ -3132,7 +3145,7 @@ begin
   end loop pc_loop;
   close pcCursor;
 
-  
+  delete from persona_instance where persona_id = pId; 
   delete from task_persona where persona_id = pId;
   delete from persona_reference where persona_id = pId;
   delete from persona_tag where persona_id = pId;
@@ -4580,6 +4593,7 @@ begin
   declare threatAssets int;
   declare vulnerabilityAssets int;
   declare taskAssets int;
+  declare assetInstances int;
   declare done int default 0;
   declare reqCursor cursor for select distinct ar.requirement_id,r.name from asset_requirement ar, requirement r where ar.asset_id = assetId and ar.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id);  
   declare threatCursor cursor for select distinct at.threat_id,t.name from asset_threat at, threat t where at.asset_id = assetId and at.threat_id = t.id;  
@@ -22006,6 +22020,86 @@ begin
       end if;
     end if;
     return reqId;
+end
+//
+
+create procedure addLocations(in locsId int,in locsName text,in locsDiagram text)
+begin
+  insert into locations(id,name,diagram) values (locsId,locsName,locsDiagram);
+end
+//
+
+create procedure addLocation(in locsId int, in locId int, in locName text)
+begin
+  insert into location(id,locations_id,name) values (locId,locsId,locName);
+end
+//
+
+create procedure addAssetInstance(in locId int, in instanceId int, in instanceName text, in assetName text)
+begin
+  declare assetId int;
+  select id into assetId from asset where name = assetName limit 1;
+  insert into asset_instance(id,name,location_id,asset_id) values (instanceId,instanceName,locId,assetId);
+end
+//
+
+create procedure addPersonaInstance(in locId int, in instanceId int, in instanceName text, in personaName text)
+begin
+  declare personaId int;
+  select id into personaId from persona where name = personaName limit 1;
+  insert into persona_instance(id,name,location_id,persona_id) values (instanceId,instanceName,locId,personaId);
+end
+//
+
+create procedure addLocationLink(in locsId int, in tailLoc text, in headLoc text)
+begin
+  declare tailId int;
+  declare headId int;
+
+  select id into tailId from location where name = tailLoc limit 1;
+  select id into headId from location where name = headLoc limit 1;
+
+  insert into location_link(locations_id,head_location_id,tail_location_id) values (locsId,headId,tailId);
+end
+//
+
+create procedure getLocations(in locsName text)
+begin
+  select id,diagram from locations where name = locsName;
+end
+//
+
+create procedure getLocationNames(in locsName text)
+begin
+  select l.name from location l, locations ls where l.locations_id = ls.id and ls.name = locsName;
+end
+//
+
+create procedure getLocationLinks(in locsName text)
+begin
+  select tl.name, hl.name from location tl, location hl, location_link ll, locations ls where ll.head_location_id = hl.id and ll.tail_location_id = tl.id and ll.locations_id = ls.id and ls.name = locsName;
+end
+//
+
+create procedure getAssetInstances(in locName text)
+begin
+  select ai.name, a.name from asset_instance ai, asset a, location l where ai.asset_id = a.id and ai.location_id = l.id and l.name = locName;
+end
+//
+
+create procedure getPersonaInstances(in locName text)
+begin
+  select pi.name, p.name from persona_instance pi, persona p, location l where pi.persona_id = p.id and pi.location_id = l.id and l.name = locName;
+end
+//
+
+create procedure delete_locations(in locsId int)
+begin
+  delete from asset_instance where location_id in (select id from location where locations_id = locsId);
+  delete from persona_instance where location_id in (select id from location where locations_id = locsId);
+  delete from location_link where locations_id = locsId;
+  delete from location where locations_id = locsId;
+  delete from locations where id = locsId;
 end
 //
 

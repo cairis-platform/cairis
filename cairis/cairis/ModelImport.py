@@ -30,6 +30,7 @@ from ArchitecturalPatternContentHandler import ArchitecturalPatternContentHandle
 from SynopsesContentHandler import SynopsesContentHandler
 from TemplateAssetsContentHandler import TemplateAssetsContentHandler
 from ProcessesContentHandler import ProcessesContentHandler
+from LocationsContentHandler import LocationsContentHandler
 from Borg import Borg
 import xml.sax
 
@@ -620,6 +621,24 @@ def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,inten
     b.dbProxy.addContribution(contribution)
 
   msgStr = 'Imported ' + str(noOfDocs) + ' internal documents, ' + str(noOfCodes) + ' codes, ' + str(noOfMemos) + ' memos, ' + str(noOfQuotations) + ' quotations, ' + str(noOfCNs) + ' code relationships, ' + str(noOfProcs) + ' implied processes, ' + str(noOfIntentions) + ' intentions, and ' + str(noOfContributions) + ' contributions.'
+  return msgStr
+
+def importLocationsFile(importFile):
+  parser = xml.sax.make_parser()
+  handler = LocationsContentHandler()
+  parser.setContentHandler(handler)
+  parser.setEntityResolver(handler)
+  parser.parse(importFile)
+  locName = handler.name()
+  locDiagram = handler.diagram()
+  locations = handler.locations()
+  links = handler.links()
+  return importLocations(locName,locDiagram,locations,links)
+  
+def importLocations(locName,locDiagram,locations,links):
+  b = Borg()
+  b.dbProxy.addLocations(locName,locDiagram,locations,links)
+  msgStr = 'Imported ' + str(len(locations)) + ' locations, and ' + str(len(links)) + ' links.'
   return msgStr
 
 def importModelFile(importFile,isOverwrite = 1):

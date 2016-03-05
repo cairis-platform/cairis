@@ -31,7 +31,7 @@ if __name__ == '__main__':
   try:
     parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Import')
     parser.add_argument('modelFile',help='model file to import')
-    parser.add_argument('--type',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, project, domainvalues, architecturalpattern, associations, synopses, processes, assets or all')
+    parser.add_argument('--type',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, project, domainvalues, architecturalpattern, associations, synopses, processes, assets, locations or all')
     parser.add_argument('--overwrite',dest='isOverwrite',help='Where appropriate, overwrite an existing CAIRIS model with this model')
     parser.add_argument('--image_dir',dest='imageDir',help='Where appropriate, directory for model images (overwrites default_image_dir value in cairis.cnf)')
     args = parser.parse_args() 
@@ -76,6 +76,8 @@ if __name__ == '__main__':
       msgStr += importProcessesFile(importFile)
     elif (mFormat == 'assets'):
       msgStr += importAssetsFile(importFile)
+    elif (mFormat == 'locations'):
+      msgStr += importLocationsFile(importFile)
     elif (mFormat == 'all'):
       msgStr += importModelFile(importFile,int(overwriteFlag))
     else:
