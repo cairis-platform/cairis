@@ -145,5 +145,13 @@
        systemId="http://cairis.org/dtd/template_assets.dtd"  
        uri="template_assets.dtd"/>
 
+    <public 
+       publicId="-//CAIRIS//DTD LOCATIONS  1.0//EN"  
+       uri="locations.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/locations.dtd"  
+       uri="locations.dtd"/>
+
   </group>
 </catalog>
