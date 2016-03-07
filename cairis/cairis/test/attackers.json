@@ -18,11 +18,10 @@
          {"theName" : "Day",
           "theRoles" : "Vendor",
           "theMotives" : ["Revenge"],
-	  "theCapabilities" : [
-	   {
-           "Technology" : "Medium",
-	   "Software" : "Low"
-	   }
+	  "theCapabilities" : 
+	   [
+            ["Technology","Medium"],
+	    ["Software","Low"]
 	   ]
          }
        ]
