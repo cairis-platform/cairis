@@ -73,7 +73,7 @@ class AttackerTest(unittest.TestCase):
     iatk = AttackerParameters(self.iAttackers[0]["theName"], self.iAttackers[0]["theDescription"], self.iAttackers[0]["theImage"],[],iatkeps)
     b = Borg()
     b.dbProxy.addAttacker(iatk)
-    oAttackers = b.dbProxy.getAttacker()
+    oAttackers = b.dbProxy.getAttackers()
     o = oAttackers[0]
     self.assertEqual(iatk.name(), o.name())
     self.assertEqual(iatk.description(),o.description())
