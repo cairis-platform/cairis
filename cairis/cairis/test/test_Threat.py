@@ -88,7 +88,7 @@ class ThreatTest(unittest.TestCase):
     self.iThreats = d['threats']
 
   def testThreat(self):
-    iteps = [ThreatEnvironmentProperties(self.iThreats[0]["theEnvironmentProperties"][0]["theName"],self.iThreats[0]["theEnvironmentProperties"][0]["theLikelihood"],self.iThreats[0]["theEnvironmentProperties"][0]["theAssets"],self.iThreats[0]["theEnvironmentProperties"][0]["theAttacker"],self.iThreats[0]["theEnvironmentProperties"][0]["thePropertes"],[])]
+    iteps = [ThreatEnvironmentProperties(self.iThreats[0]["theEnvironmentProperties"][0]["theName"],self.iThreats[0]["theEnvironmentProperties"][0]["theLikelihood"],self.iThreats[0]["theEnvironmentProperties"][0]["theAssets"],self.iThreats[0]["theEnvironmentProperties"][0]["theAttacker"],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"],[])]
     itps = ThreatParameters(self.iThreats[0]["theName"],self.iThreats[0]["theType"],self.iThreats[0]["theMethod"],[],iteps)
     b = Borg()
     b.dbProxy.addThreat(itps)
