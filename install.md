@@ -13,7 +13,7 @@ If you want to get up-and-running quickly, you can simply download an Ubuntu [pr
 
 The user name and password for this virtual machine is *cairis*; this is also the root password.  The root password for mysql is blank.  If you wish to use this virtual appliance in production, please ensure you change these default passwords first!
 
-##i Installing from source
+## Installing from source
 
 In theory, CAIRIS can be installed on any platform that its open-source dependencies are available for.  In practice, CAIRIS is developed using Linux, and is most stable when running on [Ubuntu](http://www.ubuntu.com) or [Debian](https://www.debian.org) Linux.
 
