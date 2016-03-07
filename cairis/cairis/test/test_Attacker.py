@@ -92,8 +92,8 @@ class AttackerTest(unittest.TestCase):
     
     b.dbProxy.deleteDocumentReference(self.odrs[self.idr1.name()].id())
     b.dbProxy.deleteDocumentReference(self.odrs[self.idr2.name()].id())
-    b.dbProxy.deleteExternalDocument(self.oec[self.iec1.name()].id())
-    b.dbProxy.deleteExternalDocument(self.oec[self.iec2.name()].id())
+    b.dbProxy.deleteExternalDocument(self.oecs[self.iec1.name()].id())
+    b.dbProxy.deleteExternalDocument(self.oecs[self.iec2.name()].id())
     b.dbProxy.deletePersona(self.opp[self.ipp.name()].id())
     b.dbProxy.deleteRole(self.oRoles[self.irp.name()].id())
     b.dbProxy.deleteEnvironment(self.oenvs[self.iep.name()].id())
