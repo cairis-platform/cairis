@@ -1,26 +1,26 @@
 # Site navigation links
 
 - title: Getting started
-  url: /install.html
+  url: /install
   excerpt: "How to install and start CAIRIS"
 
 - title: Examples
-  url: /examples.html
+  url: /examples
   excerpt: "Sample models"
 
 
 - title: Documentation
-  url: /doc.html
+  url: /doc
   excerpt: "CAIRIS user manual"
 
 - title: Papers
-  url: /papers.html
+  url: /papers
   excerpt: "Literature about CAIRIS' design, and lessons learned using it"
 
 - title: Blog
-  url: /blog.html
+  url: /blog
   excerpt: "Posting about CAIRIS and related topics"
 
 - title: About
-  url: /about.html
+  url: /about
   excerpt: "About CAIRIS"
