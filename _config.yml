@@ -14,9 +14,11 @@ sass:
 permalink: /:categories/:title/
 kramdown:
   toc_levels: 1..2
-highlighter: Rouge
+  syntax_highlighter: rouge
 gems:
   - jekyll-sitemap
+  - jekyll-paginate
+  - jekyll-gist
 
 
 # Site owner
