@@ -41,11 +41,11 @@ We're always interested in hearing from others interested in adopting the tool, 
 
 ## Are there any examples of CAIRIS in action? 
 
-There is a sample model on [github](https://github.com/failys/CAIRIS/blob/master/cairis/examples/completeExample.xml), based on the specification of security requirements for [NeuroGrid](http://gtr.rcuk.ac.uk/project/C86DB105-5E52-4F37-BF3B-12A3500EB713).
+Yes, see the [Examples](http://cairis.org/examples) page.
 
 The [design data](https://github.com/webinos/webinos-design-data) for [webinos](http://webinos.org) is also based on CAIRIS.  
 
-We're currently working on a project to more models that will act as specification exemplars for critical infrastructure systems.  This is joint work by BU and AUEB.  Please [get in touch](mailto:sfaily@bournemouth.ac.uk) for more information if these models or this project is of interest.
+We are currently working on [a project to build specification exemplars for critical infrastructure systems](https://cybersecurity.bournemouth.ac.uk/?page_id=55); these models will be based on CAIRIS.  [ACME Water](http://cairis.org/ACME_Water) is the first of these exemplars.  We are currently building a second exemplar based on a rail company.  Please [get in touch](mailto:sfaily@bournemouth.ac.uk) for more information if these models or this project is of interest.
 
 ## Is CAIRIS free? 
 
