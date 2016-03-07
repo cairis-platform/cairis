@@ -22,6 +22,8 @@ import BorgFactory
 from Borg import Borg
 from EnvironmentParameters import EnvironmentParameters
 from RoleParameters import RoleParameters
+from PersonaParameters import PersonaParameters
+from PersonaEnvironmentProperties import PersonaEnvironmentProperties
 from AttackerParameters import AttackerParameters
 from AttackerEnvironmentProperties import AttackerEnvironmentProperties
 
@@ -32,8 +34,8 @@ class AttackerTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/attackers.json')
     d = json.load(f)
     f.close()
-    ienvs = d['environments']
-    self.iep = EnvironmentParameters(ienvs[0]["theName"],ienvs[0]["theShortCode"],ienvs[0]["theDescription"])
+    self.ienvs = d['environments']
+    self.iep = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
     b = Borg()
     b.dbProxy.addEnvironment(self.iep)
     self.oenvs = b.dbProxy.getEnvironments()
@@ -41,6 +43,10 @@ class AttackerTest(unittest.TestCase):
     self.irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
     b.dbProxy.addRole(self.irp)
     self.oRoles = b.dbProxy.getRoles()
+    self.iPersonas = d['personas']
+    self.ipp = PersonaParameters(self.iPersonas[0]["theName"],self.iPersonas[0]["theActivities"],self.iPersonas[0]["theAttitudes"],self.iPersonas[0]["theAptitudes"],self.iPersonas[0]["theMotivations"],self.iPersonas[0]["theSkills"],self.iPersonas[0]["theIntrinsic"],self.iPersonas[0]["theContextual"],"","0",self.iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(self.iPersonas[0]["theEnvironmentProperties"][0]["theName"],(self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
+    b.dbProxy.addPersona(self.ipp)
+    b.dbProxy.getPersonas()
     self.iAttackers = d['attackers']
     
   def testAttacker(self):
