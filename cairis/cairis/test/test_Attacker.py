@@ -24,6 +24,9 @@ from EnvironmentParameters import EnvironmentParameters
 from RoleParameters import RoleParameters
 from PersonaParameters import PersonaParameters
 from PersonaEnvironmentProperties import PersonaEnvironmentProperties
+from ExternalDocumentParameters import ExternalDocumentParameters
+from DocumentReferenceParameters import DocumentReferenceParameters
+from PersonaCharacteristicParameters import PersonaCharacteristicParameters
 from AttackerParameters import AttackerParameters
 from AttackerEnvironmentProperties import AttackerEnvironmentProperties
 
@@ -45,8 +48,24 @@ class AttackerTest(unittest.TestCase):
     self.oRoles = b.dbProxy.getRoles()
     self.iPersonas = d['personas']
     self.ipp = PersonaParameters(self.iPersonas[0]["theName"],self.iPersonas[0]["theActivities"],self.iPersonas[0]["theAttitudes"],self.iPersonas[0]["theAptitudes"],self.iPersonas[0]["theMotivations"],self.iPersonas[0]["theSkills"],self.iPersonas[0]["theIntrinsic"],self.iPersonas[0]["theContextual"],"","0",self.iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(self.iPersonas[0]["theEnvironmentProperties"][0]["theName"],(self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
-    b.dbProxy.addPersona(self.ipp)
+    self.opp = b.dbProxy.addPersona(self.ipp)
     b.dbProxy.getPersonas()
+    self.iExternalDocuments = d['external_documents']
+    self.iec1 = ExternalDocumentParameters(self.iExternalDocuments[0]["theName"],self.iExternalDocuments[0]["theVersion"],self.iExternalDocuments[0]["thePublicationDate"],self.iExternalDocuments[0]["theAuthors"],self.iExternalDocuments[0]["theDescription"])
+    self.iec2 = ExternalDocumentParameters(self.iExternalDocuments[1]["theName"],self.iExternalDocuments[1]["theVersion"],self.iExternalDocuments[1]["thePublicationDate"],self.iExternalDocuments[1]["theAuthors"],self.iExternalDocuments[1]["theDescription"])
+    b.dbProxy.addExternalDocument(self.iec1)
+    b.dbProxy.addExternalDocument(self.iec2)
+    self.oecs = b.dbProxy.getExternalDocuments()
+    self.iDocumentReferences = d['document_references']
+    self.idr1 = DocumentReferenceParameters(self.iDocumentReferences[0]["theName"],self.iDocumentReferences[0]["theDocName"],self.iDocumentReferences[0]["theContributor"],self.iDocumentReferences[0]["theExcerpt"])
+    self.idr2 = DocumentReferenceParameters(self.iDocumentReferences[1]["theName"],self.iDocumentReferences[1]["theDocName"],self.iDocumentReferences[1]["theContributor"],self.iDocumentReferences[1]["theExcerpt"])
+    b.dbProxy.addDocumentReference(self.idr1)
+    b.dbProxy.addDocumentReference(self.idr2)
+    self.odrs = b.dbProxy.getDocumentReferences()
+    self.iPersonaCharacteristics = d['persona_characteristics']
+    self.ipc1 = PersonaCharacteristicParameters(self.iPersonaCharacteristics[0]["thePersonaName"],self.iPersonaCharacteristics[0]["theModQual"],self.iPersonaCharacteristics[0]["theVariable"],self.iPersonaCharacteristics[0]["theCharacteristic"],[(self.iPersonaCharacteristics[0]["ground"],'','document')],[(self.iPersonaCharacteristics[0]["warrant"],'','document')],[],[])
+    b.dbProxy.addPersonaCharacteristic(self.ipc1)
+    self.opcs = b.dbProxy.getPersonaCharacteristics()
     self.iAttackers = d['attackers']
     
   def testAttacker(self):
