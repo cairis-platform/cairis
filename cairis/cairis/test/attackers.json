@@ -29,6 +29,40 @@
      ]
    }
   ],
+  "external_documents" : [
+      {"theName" : "Personal Security GT concept",
+       "theVersion" : "1",
+       "thePublicationDate" : "August 2010",
+       "theAuthors" : "Shamal Faily",
+       "theDescription" : "None"},
+      {"theName" : "InfoSec indifference GT concept",
+       "theVersion" : "1",
+       "thePublicationDate" : "August 2010",
+       "theAuthors" : "Shamal Faily",
+       "theDescription" : "None"}
+  ],
+  "document_references" : [
+    {"theName" : "Personal threats",
+     "theDocName" : "Personal Security GT concept",
+     "theContributor" : "SF",
+     "theExcerpt" : "Personal experience of being threatened when called out late at night and challenging intruders."
+   },
+   {"theName" : "InfoSec communiques irrelevant",
+    "theDocName" : "InfoSec indifference GT concept",
+    "theContributor" : "SF",
+    "theExcerpt" : "Messages about leaving things and laptops in a car are not a problem; [we] do not go off site."
+   }
+ ],
+  "persona_characteristics" : [
+    {
+      "thePersonaName" : "Victor",
+      "theModQual" : "Often",
+      "theVariable" : "Attitudes",
+      "theCharacteristic" : "Personal safety is an infosec hygiene factor",
+      "ground" : "Personal threats",
+      "warrant" : "InfoSec communiques irrelevant"
+    }
+  ],
   "attackers" : [
       {"theName" : "Victor",
        "theDescription" : "Victor is a contractor and expert in the SCADA systems used by ACME, having helped develop them over 15 years ago. Due to the recent economic downtime, Victor has been forced to take a recent pay-cut.",
