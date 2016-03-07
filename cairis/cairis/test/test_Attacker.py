@@ -90,7 +90,7 @@ class AttackerTest(unittest.TestCase):
   def tearDown(self):
     b = Borg()
     
-    b.dbProxy.deletePersonaCharacteristic(self.opcs[self.ipc1.pName()].id())
+    b.dbProxy.deletePersonaCharacteristic(self.opcs[self.ipc1["thePersonaName"]].id())
     b.dbProxy.deleteDocumentReference(self.odrs[self.idr1.name()].id())
     b.dbProxy.deleteDocumentReference(self.odrs[self.idr2.name()].id())
     b.dbProxy.deleteExternalDocument(self.oec[self.iec1.name()].id())
