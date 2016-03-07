@@ -48,8 +48,8 @@ class AttackerTest(unittest.TestCase):
     self.oRoles = b.dbProxy.getRoles()
     self.iPersonas = d['personas']
     self.ipp = PersonaParameters(self.iPersonas[0]["theName"],self.iPersonas[0]["theActivities"],self.iPersonas[0]["theAttitudes"],self.iPersonas[0]["theAptitudes"],self.iPersonas[0]["theMotivations"],self.iPersonas[0]["theSkills"],self.iPersonas[0]["theIntrinsic"],self.iPersonas[0]["theContextual"],"","0",self.iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(self.iPersonas[0]["theEnvironmentProperties"][0]["theName"],(self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
-    self.opp = b.dbProxy.addPersona(self.ipp)
-    b.dbProxy.getPersonas()
+    b.dbProxy.addPersona(self.ipp)
+    self.opp = b.dbProxy.getPersonas()
     self.iExternalDocuments = d['external_documents']
     self.iec1 = ExternalDocumentParameters(self.iExternalDocuments[0]["theName"],self.iExternalDocuments[0]["theVersion"],self.iExternalDocuments[0]["thePublicationDate"],self.iExternalDocuments[0]["theAuthors"],self.iExternalDocuments[0]["theDescription"])
     self.iec2 = ExternalDocumentParameters(self.iExternalDocuments[1]["theName"],self.iExternalDocuments[1]["theVersion"],self.iExternalDocuments[1]["thePublicationDate"],self.iExternalDocuments[1]["theAuthors"],self.iExternalDocuments[1]["theDescription"])
@@ -82,15 +82,22 @@ class AttackerTest(unittest.TestCase):
     self.assertEqual(iatkeps[0].name(), oatkeps[0].name())
     self.assertEqual(str(iatkeps[0].roles()[0]), str(oatkeps[0].roles()[0]))
     self.assertEqual(str(iatkeps[0].motives()[0]), str(oatkeps[0].motives()[0]))
-    self.assertEqual(str(iatkeps[0].capabilities()[0]), str(oatkeps[0].capabilities()[0]))
-    self.assertEqual(str(iatkeps[0].capabilities()[1]), str(oatkeps[0].capabilities()[1]))
+    self.assertEqual(str(iatkeps[0].capabilities()[0][0]), str(oatkeps[0].capabilities()[0][0]))
+    self.assertEqual(str(iatkeps[0].capabilities()[0][1]), str(oatkeps[0].capabilities()[0][1]))
 
     b.dbProxy.deleteAttacker(o.id())
   
   def tearDown(self):
     b = Borg()
-    b.dbProxy.deleteEnvironment(self.oenvs[self.iep.name()].id())
+    
+    b.dbProxy.deletePersonaCharacteristic(self.opcs[self.ipc1.name()].id())
+    b.dbProxy.deleteDocumentReference(self.odrs[self.idr1.name()].id())
+    b.dbProxy.deleteDocumentReference(self.odrs[self.idr2.name()].id())
+    b.dbProxy.deleteExternalDocument(self.oec[self.iec1.name()].id())
+    b.dbProxy.deleteExternalDocument(self.oec[self.iec2.name()].id())
+    b.dbProxy.deletePersona(self.opp[self.ipp.name()].id())
     b.dbProxy.deleteRole(self.oRoles[self.irp.name()].id())
+    b.dbProxy.deleteEnvironment(self.oenvs[self.iep.name()].id())
     b.dbProxy.close()
 
 if __name__ == '__main__':
