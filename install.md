@@ -7,13 +7,13 @@ title: Getting started
 
 # Setting up CAIRIS 
 
-##Obtaining a virtual appliance
+## Obtaining a virtual appliance
 
 If you want to get up-and-running quickly, you can simply download an Ubuntu [pre-configured virtual machine disk file](https://drive.google.com/open?id=0Bx5c5XNaOMoTM1RsclRjYTVSSGs).  With this file, you can create a [custom virtual machine using VMWare](http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=2010196), or create [a new VM in VirtualBox using the file as an existing hard disk](https://www.virtualbox.org/manual/ch01.html#gui-createvm).  When you login into the VM, you should find the CAIRIS icon available from the launcher.  Just click on the icon in the launcher, and you should be good to go.
 
 The user name and password for this virtual machine is *cairis*; this is also the root password.  The root password for mysql is blank.  If you wish to use this virtual appliance in production, please ensure you change these default passwords first!
 
-##Installing from source
+##i Installing from source
 
 In theory, CAIRIS can be installed on any platform that its open-source dependencies are available for.  In practice, CAIRIS is developed using Linux, and is most stable when running on [Ubuntu](http://www.ubuntu.com) or [Debian](https://www.debian.org) Linux.
 

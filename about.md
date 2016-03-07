@@ -13,7 +13,7 @@ CAIRIS stands for *Computer Aided Integration of Requirements and Information Se
 
 CAIRIS was developed as part of [Shamal Faily](http://shamalfaily.com)'s [doctoral research](http://ora.ox.ac.uk/objects/uuid:520b939f-b1d9-4a53-9a47-21f0ffcfd68d).  CAIRIS was designed and developed to better understand the form that software tools for secure and usable software design might take.
 
-## Why do I need CAIRIS? ##
+## Why do I need CAIRIS? 
 
 No-one disagrees that security should be considered as early as possible when designing software, but how do you do this productively, i.e. without security getting in the way of the business of understanding the software's core functional goals?
 
