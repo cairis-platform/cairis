@@ -99,7 +99,11 @@
             ["integrity","Medium"],
 	    ["availability","High"]
 	   ],
-	  "theRationale" : ""
+	  "theRationale" : 
+	   [
+	    [],
+	    []
+	   ]
         }
      ]
    }
