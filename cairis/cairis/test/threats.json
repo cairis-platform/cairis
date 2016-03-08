@@ -96,10 +96,14 @@
 	  "theAttacker" : "Victor",
 	  "theProperties" : 
 	   [
-            ["integrity","Medium"],
-	    ["availability","High"]
+            ["integrity",
+             [0,2,0,0,0,0,0,0]
+            ],
+	    ["availability",
+	     [0,0,3,0,0,0,0,0]
+            ]
 	   ]
-       }
+        }
      ]
    }
   ],
