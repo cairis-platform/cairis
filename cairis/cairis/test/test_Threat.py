@@ -3,7 +3,7 @@
 #  distributed with this work for additional information
 #  regarding copyright ownership.  The ASF licenses this file
 #  to you under the Apache License, Version 2.0 (the
-#  "License") you may not use this file except in compliance
+#  "License"); you may not use this file except in compliance
 #  with the License.  You may obtain a copy of the License at
 #
 #  http://www.apache.org/licenses/LICENSE-2.0
@@ -34,7 +34,7 @@ from AssetParameters import AssetParameters
 from AssetEnvironmentProperties import AssetEnvironmentProperties
 from ThreatParameters import ThreatParameters
 from ThreatEnvironmentProperties import ThreatEnvironmentProperties
-from ARM import DatabaseProxyException
+
 
 class ThreatTest(unittest.TestCase):
 
@@ -89,7 +89,7 @@ class ThreatTest(unittest.TestCase):
     self.iThreats = d['threats']
 
   def testThreat(self):
-    iteps = [ThreatEnvironmentProperties(self.iThreats[0]["theEnvironmentProperties"][0]["theName"],self.iThreats[0]["theEnvironmentProperties"][0]["theLikelihood"],self.iThreats[0]["theEnvironmentProperties"][0]["theAssets"],self.iThreats[0]["theEnvironmentProperties"][0]["theAttacker"],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"][0][0],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"][0][1])]
+    iteps = [ThreatEnvironmentProperties(self.iThreats[0]["theEnvironmentProperties"][0]["theName"],self.iThreats[0]["theEnvironmentProperties"][0]["theLikelihood"],self.iThreats[0]["theEnvironmentProperties"][0]["theAssets"],self.iThreats[0]["theEnvironmentProperties"][0]["theAttacker"],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"],[])]
     itps = ThreatParameters(self.iThreats[0]["theName"],self.iThreats[0]["theType"],self.iThreats[0]["theMethod"],[],iteps)
     b = Borg()
     b.dbProxy.addThreat(itps)
