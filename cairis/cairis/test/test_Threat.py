@@ -27,13 +27,14 @@ from PersonaEnvironmentProperties import PersonaEnvironmentProperties
 from ExternalDocumentParameters import ExternalDocumentParameters
 from DocumentReferenceParameters import DocumentReferenceParameters
 from PersonaCharacteristicParameters import PersonaCharacteristicParameters
+from AttackerParameters import AttackerParameters
+from AttackerEnvironmentProperties import AttackerEnvironmentProperties
 from ValueTypeParameters import ValueTypeParameters
 from AssetParameters import AssetParameters
 from AssetEnvironmentProperties import AssetEnvironmentProperties
-from AttackerParameters import AttackerParameters
-from AttackerEnvironmentProperties import AttackerEnvironmentProperties
 from ThreatParameters import ThreatParameters
 from ThreatEnvironmentProperties import ThreatEnvironmentProperties
+from ARM import DatabaseProxyException
 
 class ThreatTest(unittest.TestCase):
 
@@ -88,7 +89,7 @@ class ThreatTest(unittest.TestCase):
     self.iThreats = d['threats']
 
   def testThreat(self):
-    iteps = [ThreatEnvironmentProperties(self.iThreats[0]["theEnvironmentProperties"][0]["theName"],self.iThreats[0]["theEnvironmentProperties"][0]["theLikelihood"],self.iThreats[0]["theEnvironmentProperties"][0]["theAssets"],self.iThreats[0]["theEnvironmentProperties"][0]["theAttacker"],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"],[])]
+    iteps = [ThreatEnvironmentProperties(self.iThreats[0]["theEnvironmentProperties"][0]["theName"],self.iThreats[0]["theEnvironmentProperties"][0]["theLikelihood"],self.iThreats[0]["theEnvironmentProperties"][0]["theAssets"],self.iThreats[0]["theEnvironmentProperties"][0]["theAttacker"],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"],self.iThreats[0]["theEnvironmentProperties"][0]["theRationale"])]
     itps = ThreatParameters(self.iThreats[0]["theName"],self.iThreats[0]["theType"],self.iThreats[0]["theMethod"],[],iteps)
     b = Borg()
     b.dbProxy.addThreat(itps)
@@ -110,6 +111,7 @@ class ThreatTest(unittest.TestCase):
   def tearDown(self):
     b = Borg()
     
+#   b.dbProxy.deletePersonaCharacteristic(self.opcs[self.ipc1.name()].id())
     b.dbProxy.deleteAsset(self.oap[self.iap.name()].id())
     b.dbProxy.deleteThreatType(self.ovt[self.ivt.name()].id())
     b.dbProxy.deleteAttacker(self.oAttackers[self.iatk.name()].id())
