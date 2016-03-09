@@ -16,11 +16,11 @@ We have re-vamped the [examples]({{ site.baseurl }}/examples.html) that come wit
 
 Rather than simply providing a sample model file, we have provided model files that constitute specification exemplars for security design.  We have provided two types of models.
 
-<h3>[Personas]({{ site.baseurl }}/personas.html)</h3>
+### [Personas]({{ site.baseurl }}/personas.html) ###
 
 These are non-trivial personas created using the [Persona Case technique](http://www.shamalfaily.com/wp-content/papercite-data/pdf/fafl111.pdf).  Examples include personas of [penetration testers]({{ site.baseurl }}/ben_matt.html), and a [plant operator in a water treatment plant]({{ site.baseurl }}/rick.html).
 
-<h3>[Exemplars]({{ site.baseurl }}/exemplars.html)</h3>
+### [Exemplars]({{ site.baseurl }}/exemplars.html) ###
 
 These exemplify complete systems.  The exemplars provided included [a data grid for neuroscience research]({{ site.baseurl }}/NeuroGrid.html) where different stakeholders have different ideas about security requirements.  They also include [a fictitious water company]({{ site.baseurl }}/ACME_Water.html) that needs to face up to new cybersecurity threats.
 
