@@ -139,7 +139,7 @@ Security concerns:
 
 </background>
   <strategic_goals>None</strategic_goals>
-  <rich_picture image="" />
+  <rich_picture image="/home/cairisuser/CAIRIS/cairis/examples/exemplars/Balkan_Rail/scopeDiagram.jpg" />
   <scope>Head office
 A subsidiary office
 A train station
@@ -180,11 +180,11 @@ Departments:
 <role name="IT administrator" type="Stakeholder" short_code="ADMIN" >
   <description>IT staff</description>
 </role>
-<role name="Ex-employee" type="Attacker" short_code="EXE" >
-  <description>Ex-employee</description>
-</role>
 <role name="Purchasing" type="Stakeholder" short_code="PURCH" >
   <description>Member of Purchasing and Supply department</description>
+</role>
+<role name="Ex-employee" type="Attacker" short_code="EXE" >
+  <description>Ex-employee</description>
 </role>
 <asset name="Manifest" short_code="MANIFEST" type="Information" is_critical="0">
   <description>Train manifest</description>
@@ -296,6 +296,22 @@ Departments:
     <rationale>Inaccurate data may be due to negligence.</rationale>
   </security_property>
 </asset>
+<asset name="Access Control Framework" short_code="ACF" type="Systems" is_critical="0">
+  <description>Access Control Framework.  Combination of policy and technical control.</description>
+  <significance>Enforces need to know principle</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Model" property="accountability" value="Medium">
+    <rationale>TBC</rationale>
+  </security_property>
+</asset>
+<asset name="Custom Application" short_code="CAPP" type="Software" is_critical="0">
+  <description>Bespoke software application</description>
+  <significance>Uncontrolled installation of applications may reduce IT's control of infrastructure.</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Model" property="accountability" value="Medium">
+    <rationale>IT should account for custom applications.</rationale>
+  </security_property>
+</asset>
 <asset name="Accounting Data Form" short_code="ACDATAF" type="Hardware" is_critical="0">
   <description>Accounting data form</description>
   <significance>Liable to fraud.</significance>
@@ -308,22 +324,6 @@ Departments:
   </security_property>
   <security_property environment="Model" property="accountability" value="Medium">
     <rationale>Inaccurate data may be due to negligence.</rationale>
-  </security_property>
-</asset>
-<asset name="Custom Application" short_code="CAPP" type="Software" is_critical="0">
-  <description>Bespoke software application</description>
-  <significance>Uncontrolled installation of applications may reduce IT's control of infrastructure.</significance>
-  <critical_rationale></critical_rationale>
-  <security_property environment="Model" property="accountability" value="Medium">
-    <rationale>IT should account for custom applications.</rationale>
-  </security_property>
-</asset>
-<asset name="Access Control Framework" short_code="ACF" type="Systems" is_critical="0">
-  <description>Access Control Framework.  Combination of policy and technical control.</description>
-  <significance>Enforces need to know principle</significance>
-  <critical_rationale></critical_rationale>
-  <security_property environment="Model" property="accountability" value="Medium">
-    <rationale>TBC</rationale>
   </security_property>
 </asset>
 <vulnerability name="Weak access control" type="Implementation">
