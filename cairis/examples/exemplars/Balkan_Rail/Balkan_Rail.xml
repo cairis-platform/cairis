@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">
+<cairis_model>
+
+
+<tvtypes>
+</tvtypes>
+
+<domainvalues>
+<threat_value name="None" >
+  <description>To be defined</description>
+</threat_value>
+<threat_value name="Low" >
+  <description>To be defined</description>
+</threat_value>
+<threat_value name="Medium" >
+  <description>To be defined</description>
+</threat_value>
+<threat_value name="High" >
+  <description>To be defined</description>
+</threat_value>
+<risk_value name="Negligible" >
+  <description></description>
+</risk_value>
+<risk_value name="Tolerable" >
+  <description></description>
+</risk_value>
+<risk_value name="Undesirable" >
+  <description></description>
+</risk_value>
+<risk_value name="Intolerable" >
+  <description></description>
+</risk_value>
+<countermeasure_value name="None" >
+  <description>To be defined</description>
+</countermeasure_value>
+<countermeasure_value name="Low" >
+  <description>To be defined</description>
+</countermeasure_value>
+<countermeasure_value name="Medium" >
+  <description>To be defined</description>
+</countermeasure_value>
+<countermeasure_value name="High" >
+  <description>To be defined</description>
+</countermeasure_value>
+<severity_value name="Negligible" >
+  <description></description>
+</severity_value>
+<severity_value name="Marginal" >
+  <description></description>
+</severity_value>
+<severity_value name="Critical" >
+  <description></description>
+</severity_value>
+<severity_value name="Catastrophic" >
+  <description></description>
+</severity_value>
+<likelihood_value name="Incredible" >
+  <description></description>
+</likelihood_value>
+<likelihood_value name="Improbable" >
+  <description></description>
+</likelihood_value>
+<likelihood_value name="Remote" >
+  <description></description>
+</likelihood_value>
+<likelihood_value name="Occasional" >
+  <description></description>
+</likelihood_value>
+<likelihood_value name="Probable" >
+  <description></description>
+</likelihood_value>
+<likelihood_value name="Frequent" >
+  <description></description>
+</likelihood_value>
+</domainvalues>
+
+<cairis>
+<project_settings name="Balkan Railway" >
+  <background>
+Security concerns:
+- Fraud
+- Date leakage because data in one place.
+- Old hardware
+- No access control.
+- Lack of adequate staffing in IT.
+- Data centre on ground level.  
+- Estate theft and damage
+
+</background>
+  <strategic_goals>None</strategic_goals>
+  <rich_picture image="" />
+  <scope>Head office
+A subsidiary office
+A train station
+
+Departments:
+- IT
+- Financial Services
+- Purchasing and Supply
+- Circulation Management</scope>
+</project_settings>
+<environment name="Model" short_code="MOD" >
+  <definition>Default</definition>
+  <asset_values>
+    <none>< 10000 euros.</none>
+    <low>Between 10,000 - 30,000 euros.</low>
+    <medium>Between 30,000 - 1 million euros.</medium>
+    <high>> 1 million euros.</high>
+  </asset_values>
+</environment>
+<environment name="Migrancy" short_code="MIG" >
+  <definition>Migrancy</definition>
+  <asset_values>
+    <none>To be defined</none>
+    <low>To be defined</low>
+    <medium>To be defined</medium>
+    <high>To be defined</high>
+  </asset_values>
+</environment>
+</cairis>
+
+<riskanalysis>
+<role name="Employee" type="Stakeholder" short_code="EMP" >
+  <description>Employee</description>
+</role>
+<role name="Ex-employee" type="Attacker" short_code="EXE" >
+  <description>Ex-employee</description>
+</role>
+<asset name="Manifest" short_code="MANIFEST" type="Information" is_critical="0">
+  <description>Train manifest</description>
+  <significance>TBC</significance>
+  <critical_rationale></critical_rationale>
+</asset>
+<asset name="Email messages" short_code="EMAIL" type="Information" is_critical="0">
+  <description>Email messages</description>
+  <significance>Concern about downstream business operations</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Model" property="integrity" value="Medium">
+    <rationale>Some concern about impact to operations if email tampered.</rationale>
+  </security_property>
+</asset>
+<asset name="Web content" short_code="WEB" type="Information" is_critical="0">
+  <description>Non-operational web content.  Content on the public internet.</description>
+  <significance>Reputational damage</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Model" property="integrity" value="Low">
+    <rationale>More concerned reputational damage than anything else.</rationale>
+  </security_property>
+</asset>
+<asset name="System Log" short_code="LOG" type="Information" is_critical="0">
+  <description>Files that log normal operations.</description>
+  <significance>Hiding malicious activity</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Model" property="integrity" value="Medium">
+    <rationale>Conceals malicious activity, or hides presence of mistake.</rationale>
+  </security_property>
+</asset>
+<asset name="Financial Transaction" short_code="FTX" type="Information" is_critical="0">
+  <description>Details of financial transactions</description>
+  <significance>Financial fraud</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Model" property="integrity" value="Medium">
+    <rationale>Changing financial amounts</rationale>
+  </security_property>
+</asset>
+
+</riskanalysis>
+
+<usability>
+</usability>
+
+<goals>
+</goals>
+
+<associations>
+</associations>
+
+</cairis_model>
