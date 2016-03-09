@@ -9,9 +9,9 @@ image:
 
 {% include toc.html %}
 
-# NeuroGrid
+<h1>NeuroGrid</h1>
 
-<h2>Background<h2>
+<h2>Background</h2>
 
 NeuroGrid is a project funded by the UK Medical Research Council.  The project's aim is to develop a Grid-based collaborative research environment, in order to enhance collaboration both within and between clinical researchers.
 
