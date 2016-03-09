@@ -4,6 +4,42 @@
 
 
 <tvtypes>
+<vulnerability_type name="Configuration" >
+  <description>A vulnerability resulting from an error in the configuration and administration of a system or component.</description>
+</vulnerability_type>
+<vulnerability_type name="Design" >
+  <description>A vulnerability inherent in the design or specification of hardware or software whereby even a perfect implementation will result in a vulnerability.</description>
+</vulnerability_type>
+<vulnerability_type name="Implementation" >
+  <description>A vulnerability resulting from an error made in implementing software or hardware of a satisfactory design.</description>
+</vulnerability_type>
+<threat_type name="Electronic/DoS and DDoS" >
+  <description>A Denial-of-Service (DoS) attack involves a malicious attempt to disrupt the operation of a computer system or network that is connected to the Internet.  A Distributed Denial-of-Service (DDoS) attack is a more dangerous evolution of a DoS attack because it utilises a network of compromised zombie computers to mount the attack, so there is no identifiable single source.</description>
+</threat_type>
+<threat_type name="Electronic/Hacking" >
+  <description>Hackers want to get into your computer system and use them for their own purposes.  There are many hacking tools available on the internet as well as online communities actively discussing hacking techniques enabling even unskilled hackers to break into unprotected systems.  Hackers have a range of motives; from showing off their technical prowess, to theft of money, credentials or information, to cause damage.</description>
+</threat_type>
+<threat_type name="Electronic/Keystroke logging" >
+  <description>Keystroke loggers work by recording the sequence of key-strokes that a user types in.  The more sophisticated versions use filtering mechanisms to only record highly prized information such as email addresses, passwords and credit card number sequences.</description>
+</threat_type>
+<threat_type name="Electronic/Malware" >
+  <description>Malware is any program or file that is harmful to a computer, the term covers viruses, worms, Trojan horses, and spyware.  Malware is becoming increasingly sophisticated and can be used to compromise computers to install DOS zombie programs or other malicious programs.</description>
+</threat_type>
+<threat_type name="Electronic/Phishing and Spoofing" >
+  <description>Phishing describes a social engineering process designed to trick an organisation's customers into imparting confidential information such as passwords, personal data or banking and financial details.  Most commonly these are criminal attacks but the same techniques could be used by others to get sensitive information.</description>
+</threat_type>
+<threat_type name="Insider/Manipulation" >
+  <description>Sometimes deliberate attempts are made to acquire information or access by manipulating staff by using a range of influencing techniques.  This is sometimes described as social engineering, creating situations in which someone will willingly provide access to information, sites or systems to someone unauthorised to receive it.  Customer facing personnel who have been trained to be helpful and informative can be particularly vulnerable to such attacks.</description>
+</threat_type>
+<threat_type name="Insider/Sabotage" >
+  <description>Saborage is often committed by a former employee seeking revenge on their employer because of a personal grudge caused by a negative work related event such as dismissal.  Although it is sometimes planned well in advance, it can also be the result of an opportunistic moment.</description>
+</threat_type>
+<threat_type name="Natural" >
+  <description>Environment / Acts of Nature</description>
+</threat_type>
+<threat_type name="Physical" >
+  <description>Physical Security</description>
+</threat_type>
 </tvtypes>
 
 <domainvalues>
@@ -135,8 +171,8 @@ Departments:
 </cairis>
 
 <riskanalysis>
-<role name="Employee" type="Stakeholder" short_code="EMP" >
-  <description>Employee</description>
+<role name="Accounting" type="Stakeholder" short_code="ACC" >
+  <description>Member of Financial Services department</description>
 </role>
 <role name="Human Resources" type="Stakeholder" short_code="HR" >
   <description>Human Resources</description>
@@ -146,6 +182,9 @@ Departments:
 </role>
 <role name="Ex-employee" type="Attacker" short_code="EXE" >
   <description>Ex-employee</description>
+</role>
+<role name="Purchasing" type="Stakeholder" short_code="PURCH" >
+  <description>Member of Purchasing and Supply department</description>
 </role>
 <asset name="Manifest" short_code="MANIFEST" type="Information" is_critical="0">
   <description>Train manifest</description>
@@ -187,7 +226,7 @@ Departments:
     <rationale>Changing financial amounts</rationale>
   </security_property>
 </asset>
-<asset name="Employment Contract" short_code="ECON" type="Information" is_critical="0">
+<asset name="HR Data" short_code="ECON" type="Information" is_critical="0">
   <description>Employment contract</description>
   <significance>Need to know when people start or leave company.</significance>
   <critical_rationale></critical_rationale>
@@ -201,7 +240,7 @@ Departments:
     <rationale>Inaccurate data may be due to negligence.</rationale>
   </security_property>
 </asset>
-<asset name="Employment Contract Form" short_code="ECONF" type="Information" is_critical="0">
+<asset name="HR Data Form" short_code="ECONF" type="Information" is_critical="0">
   <description>Employment contract - hard copy</description>
   <significance>Need to know when people start or leave company.</significance>
   <critical_rationale></critical_rationale>
@@ -242,7 +281,6 @@ Departments:
   <security_property environment="Model" property="accountability" value="Low">
     <rationale>Inaccurate data may be due to negligence.</rationale>
   </security_property>
-
 </asset>
 <asset name="Purchasing Data Form" short_code="PURCH" type="Information" is_critical="0">
   <description>Purchasing data hard copy form</description>
@@ -258,7 +296,6 @@ Departments:
     <rationale>Inaccurate data may be due to negligence.</rationale>
   </security_property>
 </asset>
-
 <asset name="Accounting Data Form" short_code="ACDATAF" type="Hardware" is_critical="0">
   <description>Accounting data form</description>
   <significance>Liable to fraud.</significance>
@@ -272,11 +309,63 @@ Departments:
   <security_property environment="Model" property="accountability" value="Medium">
     <rationale>Inaccurate data may be due to negligence.</rationale>
   </security_property>
-
 </asset>
-<asset_association environment="Model"  head_name="Employment Contract" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Employment Contract Form" />
+<asset name="Custom Application" short_code="CAPP" type="Software" is_critical="0">
+  <description>Bespoke software application</description>
+  <significance>Uncontrolled installation of applications may reduce IT's control of infrastructure.</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Model" property="accountability" value="Medium">
+    <rationale>IT should account for custom applications.</rationale>
+  </security_property>
+</asset>
+<asset name="Access Control Framework" short_code="ACF" type="Systems" is_critical="0">
+  <description>Access Control Framework.  Combination of policy and technical control.</description>
+  <significance>Enforces need to know principle</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Model" property="accountability" value="Medium">
+    <rationale>TBC</rationale>
+  </security_property>
+</asset>
+<vulnerability name="Weak access control" type="Implementation">
+  <description>Need to know principle is being violated.</description>
+  <vulnerability_environment name="Model" severity="Critical">
+    <vulnerable_asset name="Access Control Framework" />
+  </vulnerability_environment>
+</vulnerability>
+<attacker name="Thomas" image="">
+  <description>Malicious IT administrator</description>
+  <attacker_environment name="Model">
+    <attacker_role name="IT administrator" />
+    <motivation name="Data modification" />
+    <motivation name="Improved organisational position" />
+    <capability name="Resources/Personnel and Time" value="Medium" />
+    <capability name="Knowledge/Education and Training" value="High" />
+  </attacker_environment>
+</attacker>
+<threat name="IT data manipulation" type="Insider/Manipulation">
+  <method>Unauthorised manipulation of any data within the control of the IT department.</method>
+  <threat_environment name="Model" likelihood="Probable" >
+    <threat_attacker name="Thomas" />
+    <threatened_asset name="Email messages" />
+    <threatened_asset name="Web content" />
+    <threatened_asset name="System Log" />
+    <threatened_asset name="Financial Transaction" />
+    <threatened_asset name="HR Data" />
+    <threatened_asset name="Accounting Data" />
+    <threatened_asset name="Purchasing Data" />
+    <threatened_property name="integrity" value="High">
+      <rationale>Any data can be manipulated.</rationale>
+    </threatened_property>
+  </threat_environment>
+</threat>
+<risk name="Unauthorised change request" vulnerability="Weak access control" threat="IT data manipulation">
+  <misusecase environment="Model">
+    <narrative>Thomas asked by friend in another department to change some purchase because of ordering mistakes that can't be easily modified in their own system.  Thomas discovers that the access control framework allows him to make these changes, so he goes ahead and does this as a favour.</narrative>
+  </misusecase>
+</risk>
 <asset_association environment="Model"  head_name="Purchasing Data" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Purchasing Data Form" />
 <asset_association environment="Model"  head_name="Accounting Data" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Accounting Data Form" />
+<asset_association environment="Model"  head_name="HR Data" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="HR Data Form" />
 
 </riskanalysis>
 
@@ -287,7 +376,7 @@ Departments:
 </goals>
 
 <associations>
-<dependency depender="IT administrator" dependee="Human Resources" dependency_type="asset" dependency="Employment Contract" environment="Model" >
+<dependency depender="IT administrator" dependee="Human Resources" dependency_type="asset" dependency="HR Data" environment="Model" >
   <rationale>IT need to know when someone leaves the company.</rationale>
 </dependency>
 </associations>
