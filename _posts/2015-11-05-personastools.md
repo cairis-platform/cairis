@@ -41,7 +41,7 @@ A few years ago, we presented a framework for [persona cases](http://www.shamalf
 
 ![fig:editImplChar]({{ site.baseurl }}/images/EditCharacteristic.pdf "Edit implied characteristic")
 
-### 3. CAIRIS facilitates persona interchange ###
+<h3>3. CAIRIS facilitates persona interchange</h3>
 
 Interoperability is important if we want designers using different tools to use personas.  CAIRIS already supports model interchange using XML, so this seemed a reasonable basis upon which personas might be exchanged.
 
@@ -59,7 +59,7 @@ Building on the previous guideline, this can be implemented quickly by storing p
 
 As we saw [here](https://github.com/webinos/webinos-design-data/tree/master/personas), this solution is trivial to implement if you're using something like [github](https://github.com).  As our webinos-data-data repository also illustrates, we can even incorporate personas into [build scripts](https://github.com/webinos/webinos-design-data/tree/master/scripts), so we can see if and how, from a design perspective, personas might 'break the build'.
 
-## Food for thought? ##
+<h2>Food for thought?</h2>
 
 In building personas into CAIRIS, we had three goals to get people thinking about tools for personas.
 
