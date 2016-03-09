@@ -11,7 +11,7 @@ image:
 
 # ACME Water
 
-## Background
+<h2>Background</h2>
 
 The security of the environment around Control Systems, operational personnel, sites, assets, activities, information, technological resources, and services has taken on increased importance at ACME Water for the following reasons:
 
@@ -20,24 +20,24 @@ The security of the environment around Control Systems, operational personnel, s
 * Law requires companies to institute reasonable, effective and consistent controls designed to prevent the disclosure and falsification of information, the safety of personnel, sites, and the protection of technological resources.
 * Rapid changes face ACME in the use and dependence of computers and network technologies.  It is necessary and reasonable to expect everyone to apply the proper methods of handling and safeguarding information, and managing computer and network resources.
 
-## Goal
+<h2>Goal</h2>
 
 To provide a secure operating environment for SCADA, Telemetry and Control Systems associated with assets owned and operated by ACME.
 
-## Scope
+<h2>Scope</h2>
 
 All ICT infrastructure in support of Enterprise SCADA, Telemetry and Control Systems indicated in the rich picture.
 
 ![fig:ACMEContext]({{ site.baseurl }}/images/acmeContext.jpg "Context diagram")
 
-## Environments
+<h2>Environments</h2>
 
 | Name | Description |
 | ---- | ----------- |
 | Day  | Day-time plant operations |
 | Night | Night-time plant operations |
 
-## Assets
+<h2>Assets</h2>
 
 * Corporate Network
 * Enterprise SCADA Network
@@ -58,7 +58,7 @@ All ICT infrastructure in support of Enterprise SCADA, Telemetry and Control Sys
 * Telemetry Network
 * Works Network
 
-## Roles fulfilled by users or attackers
+<h2>Roles fulfilled by users or attackers</h2>
 
 * Cracker
 * Facilities Management
@@ -71,7 +71,7 @@ All ICT infrastructure in support of Enterprise SCADA, Telemetry and Control Sys
 * Service Desk
 * Vendor
 
-## People
+<h2>People</h2>
 
 | Name | Type | Role | Synopsis |
 | Barry | Persona | Instrument Technician | A roving instrument technician |
@@ -81,7 +81,7 @@ All ICT infrastructure in support of Enterprise SCADA, Telemetry and Control Sys
 | Unintentional Rick | Attacker | Plant Operator | A cleanwater plant operator |
 | Victor | Attacker | Vendor | A disgruntled expert in ACME's SCADA software |
 
-## Designed Tasks
+<h2>Designed Tasks</h2>
 
 * Broken instrument alarm
 * Modify SCADA HMI software
@@ -89,7 +89,7 @@ All ICT infrastructure in support of Enterprise SCADA, Telemetry and Control Sys
 * Resolve reservoir alarm
 * Take chemicals delivery
 
-## Vulnerabilities
+<h2>Vulnerabilities</h2>
 
 * Exposed cabinets
 * Incomplete firewall rules
@@ -100,7 +100,7 @@ All ICT infrastructure in support of Enterprise SCADA, Telemetry and Control Sys
 * Unchanged vendor passwords
 * Unknown applications
 
-## Threats
+<h2>Threats</h2>
 
 * Enumeration
 * False sensor readings
@@ -112,6 +112,6 @@ All ICT infrastructure in support of Enterprise SCADA, Telemetry and Control Sys
 * Unauthorised USB usage
 * War-dialing
 
-## Further details
+<h2>Further details</h2>
 
 [CAIRIS model](https://github.com/failys/CAIRIS/tree/master/cairis/examples/exemplars/ACME_Water)
