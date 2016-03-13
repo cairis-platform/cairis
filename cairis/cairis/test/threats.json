@@ -93,7 +93,7 @@
          {"theName" : "Day",
           "theLikelihood" : "Improbable",
           "theAssets" : ["STCS Application"],
-	  "theAttacker" : "Victor",
+	  "theAttackers" : ["Victor"],
 	  "theProperties" : 
 	   [
             ["integrity",
