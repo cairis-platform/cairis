@@ -95,14 +95,14 @@ class ThreatTest(unittest.TestCase):
     b.dbProxy.addThreat(itps)
     oThreats = b.dbProxy.getThreats()
     o = oThreats[self.iThreats[0]["theName"]]
-    self.assertEqual(iatk.name(), o.name())
-    self.assertEqual(iatk.type(),o.type())
-    self.assertEqual(iatk.method(),o.method())
+    self.assertEqual(itps.name(), o.name())
+    self.assertEqual(itps.type(),o.type())
+    self.assertEqual(itps.method(),o.method())
     oteps = o.environmentProperties()
     self.assertEqual(iteps[0].name(), oteps[0].name())
     self.assertEqual(iteps[0].likelihood()[0], oteps[0].likelihood()[0])
     self.assertEqual(str(iteps[0].assets()[0]), str(oteps[0].assets()[0]))
-    self.assertEqual(iteps[0].attackers()[0], oteps[0].attackers()[0])
+    self.assertEqual(str(iteps[0].attackers()[0]), str(oteps[0].attackers()[0]))
     self.assertEqual(str(iteps[0].properties()[0][0]), str(oteps[0].properties()[0][0]))
     self.assertEqual(str(iteps[0].properties()[0][1]), str(oteps[0].properties()[0][1]))
 
