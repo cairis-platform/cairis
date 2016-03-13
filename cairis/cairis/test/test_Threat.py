@@ -103,7 +103,7 @@ class ThreatTest(unittest.TestCase):
     self.assertEqual(iteps[0].likelihood()[0], oteps[0].likelihood()[0])
     self.assertEqual(str(iteps[0].assets()[0]), str(oteps[0].assets()[0]))
     self.assertEqual(str(iteps[0].attackers()[0]), str(oteps[0].attackers()[0]))
-    self.assertEqual(str(iteps[0].properties()[1]), str(oteps[0].properties()[1]))
+    self.assertEqual(str(iteps[0].properties()[0]), str(oteps[0].properties()[0][0]))
     self.assertEqual(str(iteps[0].properties()[2]), str(oteps[0].properties()[2]))
 
     b.dbProxy.deleteThreat(o.id())
