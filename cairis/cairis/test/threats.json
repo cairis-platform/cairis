@@ -1,134 +1,128 @@
-{
-  "environments" : [
-      {"theName" : "Day",
-       "theShortCode" : "DAY",
-       "theDescription" : "Day-time plant operations"}
-  ],
-  "roles" : [
-      {"theName" : "Vendor",
-       "theType" : "Stakeholder",
-       "theShortCode" : "VENDOR",
-       "theDescription" : "Vendor of SCADA, Telemetry, and Control System software"}
-  ],
-  "personas" : [
-    {"theName" : "Victor",
-     "theActivities" : "Victor is a clean-water plant operator, responsible for ensuring that water processed through the plant is in line with specified set-points.  Victor's area of responsibility extend outside of the confines of the plant to include checking on pumping stations, which feed water into the plant's nearby reservoir. During his working shifts (he works a 5 + 1 continental shift), Victor frequently checks readings on his SCADA workstation, takes water samples at various locations around the plant, and responds to alarms raised by the SCADA system; if necessary this involves investigating problems, and -- if no remedial tasks are possible -- calling someone out to investigate further. At the start of every shift, Victor checks AJS to see what work he is scheduled to carry out.  He usually updates AJS based on the work he carried out before the end of his shift.  Victor also maintains a paper work diary, which is updated after carrying out specific work or responding to problems.  This, together with the status white board, is also useful for explaining any on-going issues when handing over to the next shift.",
-     "theAttitudes" : "Victor isn't particularly concerned about people trying to hack into the SCADA system he uses.  'The only way the SCADA will get infected', Victor says, 'is by an instrument tech plugging a virus infected laptop into it'. Victor is aware of Information Security communiques on InfoPortal, but doesn't see how this is relevant to him. 'We don't have laptops', says Victor, 'and we don't leave site, so we don't leave anything in cars'. Victor is, however, aware of Information Security controls.  Victor knows that logout policies keep intruders from getting access to his workstation (although he thinks the logout period is too short given his environment), and he knows he can only access certain pumping sites via the telemetry system. Although Victor can call an instrument tech for many problems, experience has taught him not to expect much from the ACME ICT support during a night shift.  'What's the point of calling up to say you can't login at night if all you get is a reference number', Victor complains, 'that won't help me start my pumps now!'  Although Victor knows he can call out an instrument tech to help, he is also conscious that they are out most evenings, and might not appreciate a call-out for a corporate ICT problem.",
-     "theAptitudes" : "Victor has been a plant operator for over 10 years.  Although the exact procedures need to run his plant are documented in a works manual, he doesn't need to refer to it. 'I haven't read the works manual in years', Victor says. This experience does not stay in Victor's head. When problems have occurred, he raises these during team meetings, and any lessons learned sometimes find their way into the SCADA system as new functionality.  Victor is aware of the new EnterpriseSCADA developments and possible improvements to the HMI and start-up procedure.  Although not fully in the loop about what is going on, he hopes that, like the current system, there will be productivity improvements without an adverse impact. Victor uses the SCADA's trend monitoring facilities as a indication of possible problems.  'If the trends freeze or flat-line', Victor says, 'I need to go out and take a look at what's wrong'.  Because problems occur daily, and he is often on his own, Victor can still control the plant using panel PCs at remote locations around the plant.",
-     "theMotivations" : "Because the water quality can change over a matter of minutes, Victor's ethos is that you need to be ready for anything.  Because of this, checking certain parameters and pieces of kit is an important discipline, as is logging important events in the works diary and on the status board; these aid communication to other shift members, and the eventual piecing together of the elements of an event. Although information security doesn't phase Victor too much, personal security does.  Potentially facing off a scrap metal thief is a big worry for Victor. 'The police don't respond to intruder alarms at a nearby pumping station any more due to false alarms', says Victor.  'Because of this, we've been told not to go out to these places on our own.   We have a lone-worker system when people call us when we get to a particular station, but what happens if we get problems on the way?'",
-     "theSkills" : "Victor has a basic operating knowledge of Windows; enough to carry out his day-to-day routines, check his email, and navigate the main sections of InfoPortal. Victor isn't a power-user; he acknowledges that younger 'whizz kids' are much more adept at using PCs than he is. Consequently, he only uses a sub-set of the desktop icons currently on his desktop.  'I don't know what these other applications do', Victor says,'I've tried clicking on one and it just gives me a Data Protection Warning.  I guess this means I'm not authorised to use it.'",
-     "theIntrinsic" : "None",
-     "theContextual" : "None",
-     "thePersonaType" : "Primary",
-     "theEnvironmentProperties" : [
-       {"theName" : "Day",
-        "theDirectFlag" : "TRUE",
-        "theRole" : ["Vendor"],
-        "theNarrative" : "Victor carries out certain jobs during the day. These include ordering, and taking delivery of chemicals"
-      }
-     ]
-   }
-  ],
-  "external_documents" : [
-      {"theName" : "Personal Security GT concept",
-       "theVersion" : "1",
-       "thePublicationDate" : "August 2010",
-       "theAuthors" : "Shamal Faily",
-       "theDescription" : "None"},
-      {"theName" : "InfoSec indifference GT concept",
-       "theVersion" : "1",
-       "thePublicationDate" : "August 2010",
-       "theAuthors" : "Shamal Faily",
-       "theDescription" : "None"}
-  ],
-  "document_references" : [
-    {"theName" : "Personal threats",
-     "theDocName" : "Personal Security GT concept",
-     "theContributor" : "SF",
-     "theExcerpt" : "Personal experience of being threatened when called out late at night and challenging intruders."
-   },
-   {"theName" : "InfoSec communiques irrelevant",
-    "theDocName" : "InfoSec indifference GT concept",
-    "theContributor" : "SF",
-    "theExcerpt" : "Messages about leaving things and laptops in a car are not a problem; [we] do not go off site."
-   }
- ],
-  "persona_characteristics" : [
-    {
-      "thePersonaName" : "Victor",
-      "theModQual" : "Often",
-      "theVariable" : "Attitudes",
-      "theCharacteristic" : "Personal safety is an infosec hygiene factor",
-      "ground" : "Personal threats",
-      "warrant" : "InfoSec communiques irrelevant"
-    }
-  ],
-  "attackers" : [
-      {"theName" : "Victor",
-       "theDescription" : "Victor is a contractor and expert in the SCADA systems used by ACME, having helped develop them over 15 years ago. Due to the recent economic downtime, Victor has been forced to take a recent pay-cut.",
-       "theImage" : "Victor.jpg",
-       "theEnvironmentProperties" : [
-         {"theName" : "Day",
-          "theRoles" : ["Vendor"],
-          "theMotives" : ["Revenge"],
-	  "theCapabilities" : 
-	   [
-            ["Technology","Medium"],
-	    ["Software","Low"]
-	   ]
-         }
-       ]
-    }
-  ],
-    "valuetypes" : [
-      {"theName" : "Insider/Sabotage",
-      "theDescription" : "Saborage is often committed by a former employee seeking revenge on their employer because of a personal grudge caused by a negative work related event such as dismissal. Although it is sometimes planned well in advance, it can also be the result of an opportunistic moment.",
-      "theType" : "threat_type"}
-  ],
-  "threats" : [
-      {"theName" : "Logic bomb",
-       "theType" : "Insider/Sabotage",
-       "theMethod" : "A logic bomb incorporated into PLC software, which causes one or more device failures upon set conditions.",
-       "theEnvironmentProperties" : [
-         {"theName" : "Day",
-          "theLikelihood" : "Improbable",
-          "theAssets" : ["STCS Application"],
-	  "theAttackers" : ["Victor"],
-	  "theProperties" : 
-	   [
-            ["integrity",
-	     [0,2,0,0,0,0,0,0]
-	    ],
-	    ["availability",
-	     [0,0,3,0,0,0,0,0]
-	    ]
-	   ]
-        }
-     ]
-   }
-  ],
-  "assets" : [
-    {
-     "theName" : "STCS Application",
-     "theShortCode" : "STCS",
-     "theDescription" : "SCADA, Telemetry, Control System application",
-     "theSignificance" : "Water Treatment process could be compromised by corrupted or non-available software.",
-     "theType" : "Software",
-     "theEnvironmentProperties" :
-      [
-        ["Day",
-         [0,3,0,0,0,0,0,0], 
-         ["None","","None","None","None","None","None","None"]
-        ],
-        ["Day",
-         [0,0,2,0,0,0,0,0], 
-         ["None","None","","None","None","None","None","None"]
-        ],
-        ["Day",
-         [0,0,0,1,0,0,0,0], 
-         ["None","None","None","","None","None","None","None"]
-        ]
-      ]
-    }
-  ]
-}
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+
+import unittest
+import os
+import json
+import BorgFactory
+from Borg import Borg
+from EnvironmentParameters import EnvironmentParameters
+from RoleParameters import RoleParameters
+from PersonaParameters import PersonaParameters
+from PersonaEnvironmentProperties import PersonaEnvironmentProperties
+from ExternalDocumentParameters import ExternalDocumentParameters
+from DocumentReferenceParameters import DocumentReferenceParameters
+from PersonaCharacteristicParameters import PersonaCharacteristicParameters
+from AttackerParameters import AttackerParameters
+from AttackerEnvironmentProperties import AttackerEnvironmentProperties
+from ValueTypeParameters import ValueTypeParameters
+from AssetParameters import AssetParameters
+from AssetEnvironmentProperties import AssetEnvironmentProperties
+from ThreatParameters import ThreatParameters
+from ThreatEnvironmentProperties import ThreatEnvironmentProperties
+from ARM import DatabaseProxyException
+
+class ThreatTest(unittest.TestCase):
+
+  def setUp(self):
+    BorgFactory.initialise()
+    f = open(os.environ['CAIRIS_SRC'] + '/test/threats.json')
+    d = json.load(f)
+    f.close()
+    self.ienvs = d['environments']
+    self.iep = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
+    b = Borg()
+    b.dbProxy.addEnvironment(self.iep)
+    self.oenvs = b.dbProxy.getEnvironments()
+    self.iRoles = d['roles']
+    self.irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
+    b.dbProxy.addRole(self.irp)
+    self.oRoles = b.dbProxy.getRoles()
+    self.iPersonas = d['personas']
+    self.ipp = PersonaParameters(self.iPersonas[0]["theName"],self.iPersonas[0]["theActivities"],self.iPersonas[0]["theAttitudes"],self.iPersonas[0]["theAptitudes"],self.iPersonas[0]["theMotivations"],self.iPersonas[0]["theSkills"],self.iPersonas[0]["theIntrinsic"],self.iPersonas[0]["theContextual"],"","0",self.iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(self.iPersonas[0]["theEnvironmentProperties"][0]["theName"],(self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
+    b.dbProxy.addPersona(self.ipp)
+    self.opp = b.dbProxy.getPersonas()
+    self.iExternalDocuments = d['external_documents']
+    self.iec1 = ExternalDocumentParameters(self.iExternalDocuments[0]["theName"],self.iExternalDocuments[0]["theVersion"],self.iExternalDocuments[0]["thePublicationDate"],self.iExternalDocuments[0]["theAuthors"],self.iExternalDocuments[0]["theDescription"])
+    self.iec2 = ExternalDocumentParameters(self.iExternalDocuments[1]["theName"],self.iExternalDocuments[1]["theVersion"],self.iExternalDocuments[1]["thePublicationDate"],self.iExternalDocuments[1]["theAuthors"],self.iExternalDocuments[1]["theDescription"])
+    b.dbProxy.addExternalDocument(self.iec1)
+    b.dbProxy.addExternalDocument(self.iec2)
+    self.oecs = b.dbProxy.getExternalDocuments()
+    self.iDocumentReferences = d['document_references']
+    self.idr1 = DocumentReferenceParameters(self.iDocumentReferences[0]["theName"],self.iDocumentReferences[0]["theDocName"],self.iDocumentReferences[0]["theContributor"],self.iDocumentReferences[0]["theExcerpt"])
+    self.idr2 = DocumentReferenceParameters(self.iDocumentReferences[1]["theName"],self.iDocumentReferences[1]["theDocName"],self.iDocumentReferences[1]["theContributor"],self.iDocumentReferences[1]["theExcerpt"])
+    b.dbProxy.addDocumentReference(self.idr1)
+    b.dbProxy.addDocumentReference(self.idr2)
+    self.odrs = b.dbProxy.getDocumentReferences()
+    self.iPersonaCharacteristics = d['persona_characteristics']
+    self.ipc1 = PersonaCharacteristicParameters(self.iPersonaCharacteristics[0]["thePersonaName"],self.iPersonaCharacteristics[0]["theModQual"],self.iPersonaCharacteristics[0]["theVariable"],self.iPersonaCharacteristics[0]["theCharacteristic"],[(self.iPersonaCharacteristics[0]["ground"],'','document')],[(self.iPersonaCharacteristics[0]["warrant"],'','document')],[],[])
+    b.dbProxy.addPersonaCharacteristic(self.ipc1)
+    self.opcs = b.dbProxy.getPersonaCharacteristics()
+    self.iAttackers = d['attackers']
+    self.iatkeps = [AttackerEnvironmentProperties(self.iAttackers[0]["theEnvironmentProperties"][0]["theName"],self.iAttackers[0]["theEnvironmentProperties"][0]["theRoles"],self.iAttackers[0]["theEnvironmentProperties"][0]["theMotives"],self.iAttackers[0]["theEnvironmentProperties"][0]["theCapabilities"])]
+    self.iatk = AttackerParameters(self.iAttackers[0]["theName"], self.iAttackers[0]["theDescription"], self.iAttackers[0]["theImage"],[],self.iatkeps)
+    b.dbProxy.addAttacker(self.iatk)
+    self.oAttackers = b.dbProxy.getAttackers()
+    self.iVtypes = d['valuetypes']
+    self.ivt = ValueTypeParameters(self.iVtypes[0]["theName"], self.iVtypes[0]["theDescription"], self.iVtypes[0]["theType"])
+    b.dbProxy.addValueType(self.ivt)
+    self.ovt = b.dbProxy.getValueTypes('threat_type')
+    self.iassets = d['assets']
+    self.iaeps = [AssetEnvironmentProperties(self.iassets[0]["theEnvironmentProperties"][0][0],self.iassets[0]["theEnvironmentProperties"][0][1],self.iassets[0]["theEnvironmentProperties"][0][2])]
+    self.iap = AssetParameters(self.iassets[0]["theName"],self.iassets[0]["theShortCode"],self.iassets[0]["theDescription"],self.iassets[0]["theSignificance"],self.iassets[0]["theType"],"0","N/A",[],[],self.iaeps)
+    b.dbProxy.addAsset(self.iap)
+    self.oap = b.dbProxy.getAssets()
+    self.iThreats = d['threats']
+
+  def testThreat(self):
+    iteps = [ThreatEnvironmentProperties(self.iThreats[0]["theEnvironmentProperties"][0]["theName"],self.iThreats[0]["theEnvironmentProperties"][0]["theLikelihood"],self.iThreats[0]["theEnvironmentProperties"][0]["theAssets"],self.iThreats[0]["theEnvironmentProperties"][0]["theAttackers"],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"][0][0],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"][0][1])]
+    itps = ThreatParameters(self.iThreats[0]["theName"],self.iThreats[0]["theType"],self.iThreats[0]["theMethod"],[],iteps)
+    b = Borg()
+    b.dbProxy.addThreat(itps)
+    oThreats = b.dbProxy.getThreats()
+    o = oThreats[self.iThreats[0]["theName"]]
+    self.assertEqual(itps.name(), o.name())
+    self.assertEqual(itps.type(),o.type())
+    self.assertEqual(itps.method(),o.method())
+    oteps = o.environmentProperties()
+    self.assertEqual(iteps[0].name(), oteps[0].name())
+    self.assertEqual(iteps[0].likelihood()[0], oteps[0].likelihood()[0])
+    self.assertEqual(str(iteps[0].assets()[0]), str(oteps[0].assets()[0]))
+    self.assertEqual(str(iteps[0].attackers()[0]), str(oteps[0].attackers()[0]))
+    self.assertEqual(str(iteps[0].properties()[0][0]), str(oteps[0].properties()[0][0]))
+    self.assertEqual(str(iteps[0].properties()[0][1]), str(oteps[0].properties()[0][1]))
+
+    b.dbProxy.deleteThreat(o.id())
+  
+  def tearDown(self):
+    b = Borg()
+    
+#   b.dbProxy.deletePersonaCharacteristic(self.opcs[self.ipc1.name()].id())
+    b.dbProxy.deleteAsset(self.oap[self.iap.name()].id())
+    b.dbProxy.deleteThreatType(self.ovt[self.ivt.name()].id())
+    b.dbProxy.deleteAttacker(self.oAttackers[self.iatk.name()].id())
+    b.dbProxy.deleteDocumentReference(self.odrs[self.idr1.name()].id())
+    b.dbProxy.deleteDocumentReference(self.odrs[self.idr2.name()].id())
+    b.dbProxy.deleteExternalDocument(self.oec[self.iec1.name()].id())
+    b.dbProxy.deleteExternalDocument(self.oec[self.iec2.name()].id())
+    b.dbProxy.deletePersona(self.opp[self.ipp.name()].id())
+    b.dbProxy.deleteRole(self.oRoles[self.irp.name()].id())
+    b.dbProxy.deleteEnvironment(self.oenvs[self.iep.name()].id())
+    b.dbProxy.close()
+
+if __name__ == '__main__':
+  unittest.main()
