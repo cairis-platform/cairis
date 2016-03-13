@@ -96,8 +96,12 @@
 	  "theAttacker" : "Victor",
 	  "theProperties" : 
 	   [
-	    [0,2,0,0,0,0,0,0],
-	    [0,0,3,0,0,0,0,0]
+            ["integrity",
+	     [0,2,0,0,0,0,0,0]
+	    ],
+	    ["availability",
+	     [0,0,3,0,0,0,0,0]
+	    ]
 	   ]
         }
      ]
