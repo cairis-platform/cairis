@@ -846,6 +846,8 @@ drop procedure if exists getLocationLinks;
 drop procedure if exists getAssetInstances;
 drop procedure if exists getPersonaInstances;
 drop procedure if exists delete_locations;
+drop procedure if exists locationsNames;
+drop procedure if exists locationsRiskModel;
 
 
 delimiter //
@@ -22100,6 +22102,32 @@ begin
   delete from location_link where locations_id = locsId;
   delete from location where locations_id = locsId;
   delete from locations where id = locsId;
+end
+//
+
+create procedure locationsNames()
+begin
+  select name from locations order by 1;
+end
+//
+
+create procedure locationsRiskModel(in locationsName text, in environmentName text)
+begin
+  declare environmentId int;
+  declare compositeCount int;
+  declare locsId int;
+  select id into locsId from locations where name = locationsName limit 1;
+  select id into environmentId from environment where name = environmentName limit 1;
+  select count(*) into compositeCount from composite_environment where composite_environment_id = environmentId;
+
+  if compositeCount <= 0
+  then
+    select 'risk' from_object, r.name from_name, 'location' to_object, l.name to_name from risk r, threat t, environment_risk er, environment_threat et, asset_threat at, environment_asset ea, asset_instance ai, location l where r.threat_id = et.threat_id and r.id = er.id and er.environment_id = environmentId and et.environment_id = er.environment_id and et.threat_id = at.threat_id and et.environment_id = at.environment_id and at.environment_id = ea.environment_id and at.asset_id = ea.asset_id and ea.asset_id = ai.asset_id and ai.location_id = l.id and l.locations_id = locsId
+    union
+    select 'risk' from_object, r.name from_name, 'location' to_object, l.name to_name from risk r, vulnerability v, environment_risk er, environment_vulnerability ev, asset_vulnerability av, environment_asset ea, asset_instance ai, location l where r.vulnerability_id = ev.vulnerability_id and r.id = er.id and er.environment_id = environmentId and er.environment_id = ev.environment_id and ev.vulnerability_id = av.vulnerability_id and ev.environment_id = av.environment_id and av.environment_id = ea.environment_id and av.asset_id = ea.asset_id and ea.asset_id = ai.asset_id and ai.location_id = l.id and l.locations_id = locsId;
+  else
+    select 0;
+  end if;
 end
 //
 

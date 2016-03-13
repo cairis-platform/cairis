@@ -116,7 +116,7 @@ class ComponentListCtrl(TraceableList):
       modelAssocs = b.dbProxy.componentAssetModel(cName)
       if (len(modelAssocs) > 0):
         associations = AssetModel(modelAssocs.values(),'')
-        dialog = CanonicalModelViewer('','class',b.dbProxy)
+        dialog = CanonicalModelViewer('','class')
         dialog.ShowModal(associations)
       else:
         errorTxt = 'No asset associations defined'
@@ -138,7 +138,7 @@ class ComponentListCtrl(TraceableList):
       modelAssocs = b.dbProxy.componentGoalModel(cName)
       if (len(modelAssocs) > 0):
         associations = KaosModel(modelAssocs.values(),'','template_goal')
-        dialog = CanonicalModelViewer('','template_goal',b.dbProxy)
+        dialog = CanonicalModelViewer('','template_goal')
         dialog.ShowModal(associations)
       else:
         errorTxt = 'No goal associations defined'

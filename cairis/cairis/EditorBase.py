@@ -42,6 +42,7 @@ class EditorBase(wx.Panel):
     goalAssociationsBmp = wx.Image(directoryPrefix + 'goalassociation.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     cmModelBmp = wx.Image(directoryPrefix + 'conceptMapModel.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     componentModelBmp = wx.Image(directoryPrefix + 'component_view.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+    locationViewBmp = wx.Image(directoryPrefix + 'location_view.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
 
     self.visToolbar = wx.ToolBar(self,style=wx.TB_HORIZONTAL | wx.TB_DOCKABLE)
     self.visToolbar.AddSimpleTool(armid.RMFRAME_TOOL_DEPENDENCIES,dependenciesBmp,'Edit Dependencies')
@@ -58,6 +59,7 @@ class EditorBase(wx.Panel):
     self.visToolbar.AddSimpleTool(armid.RMFRAME_TOOL_ATMODEL,atModelBmp,'View Assumption Task Model')
     self.visToolbar.AddSimpleTool(armid.RMFRAME_TOOL_CMMODEL,cmModelBmp,'View Concept Map Model')
     self.visToolbar.AddSimpleTool(armid.RMFRAME_TOOL_COMPONENTMODEL,componentModelBmp,'View Component Model')
+    self.visToolbar.AddSimpleTool(armid.RMFRAME_TOOL_LOCATIONMODEL,locationViewBmp,'View Location Model')
 
     self.visToolbar.Realize()
 

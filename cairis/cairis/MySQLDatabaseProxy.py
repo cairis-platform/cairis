@@ -1438,7 +1438,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       dimensions = []
       curs = self.conn.cursor()
-      if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement' and dimensionTable != 'template_goal'):
+      if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement' and dimensionTable != 'template_goal' and dimensionTable != 'locations'):
         sqlText = 'call ' + dimensionTable + 'Names(%s)' 
         curs.execute(sqlText,(currentEnvironment))
       elif (dimensionTable == 'template_asset'):
@@ -1447,6 +1447,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         curs.execute('call template_requirementNames()')
       elif (dimensionTable == 'template_goal'):
         curs.execute('call template_goalNames()')
+      elif (dimensionTable == 'locations'):
+        curs.execute('call locationsNames()')
       if (curs.rowcount == -1):
         exceptionText = 'Error obtaining ' + dimensionTable + 's'
         raise DatabaseProxyException(exceptionText) 
@@ -11651,3 +11653,26 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def deleteLocations(self,locsId):
     self.deleteObject(locsId,'locations')
     self.conn.commit()
+
+  def locationsRiskModel(self,locationsName,environmentName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call locationsRiskModel(%s,%s)',(locationsName,environmentName))
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting locations risk model'
+        raise DatabaseProxyException(exceptionText) 
+      traces = []
+      for traceRow in curs.fetchall():
+        traceRow = list(traceRow)
+        fromObjt = traceRow[FROM_OBJT_COL]
+        fromName = traceRow[FROM_ID_COL]
+        toObjt = traceRow[TO_OBJT_COL]
+        toName = traceRow[TO_ID_COL]
+        parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
+        traces.append(ObjectFactory.build(-1,parameters))
+      curs.close() 
+      return traces
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting location risk model (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

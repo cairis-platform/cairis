@@ -21,17 +21,22 @@ import DotTrace
 import pydot
 import os
 import gtk
+from colourcodes import threatColourCode
+from colourcodes import riskTextColourCode
 
 class LocationModel:
-  def __init__(self,locsName):
+  def __init__(self,locsName,envName,riskOverlay):
     b = Borg()
     self.theLocs = b.dbProxy.getLocations(locsName)
+    self.theEnvironmentName = envName
     self.theGraph = pydot.Dot()
     self.fontName = b.fontName
     self.fontSize = b.fontSize
+    self.theGraph.set_graph_defaults(rankdir='LR')
     self.theGraph.set_node_defaults(shape='rectangle',fontname=self.fontName,fontsize=self.fontSize)
     self.nodeList= set([])
     self.theGraphName = b.tmpDir + '/location.dot'
+    self.theOverlayTraces = riskOverlay
 
   def size(self):
     return len(self.theAssociations)
@@ -54,19 +59,42 @@ class LocationModel:
         if ((linkLoc,locName) not in edgeList) and ((locName,linkLoc) not in edgeList):
           edgeList.add((linkLoc,locName))
       
-      locCluster = pydot.Cluster(locName,label=locName)
-      locCluster.add_node(pydot.Node('point_' + locName,shape="none",fontcolor="white"))
+      locCluster = pydot.Cluster(locName,label=locName,URL='location#' + locName)
+      locCluster.add_node(pydot.Node('point_' + locName,label='',shape="none",fontcolor="white",URL='location#' + locName))
       for inst in assetInstances:
         instName = inst[0]
         assetName = inst[1] 
-        locCluster.add_node(pydot.Node(instName,URL=assetName + '#' + instName))
+        locCluster.add_node(pydot.Node(instName,URL='asset#' + assetName))
 
-      for personaName in personaInstances:
-        instName = inst[0]
-        personaName = inst[1] 
-        locCluster.add_node(pydot.Node(instName,shape='circle',URL=personaName + '#' + instName))
+      for persona in personaInstances:
+        instName = persona[0]
+        personaName = persona[1] 
+        locCluster.add_node(pydot.Node(instName,shape='circle',URL='persona#' + personaName))
       self.theGraph.add_subgraph(locCluster)
 
     for edges in edgeList:
       self.theGraph.add_edge(pydot.Edge('point_' + edges[0],'point_' + edges[1],arrowhead='none',arrowtail='none',dir='both'))
+
+    edgeList.clear()
+    b = Borg()
+    risks = set([])
+    for trace in self.theOverlayTraces:
+      riskName = trace.fromName()
+      locName = trace.toName()
+      if (riskName,locName) not in edgeList:
+        edgeList.add((riskName,locName))
+
+      if riskName not in risks:
+        risks.add(riskName)
+        riskObjt = b.dbProxy.dimensionObject(riskName,'risk')
+        riskScores = b.dbProxy.riskScore(riskObjt.threat(),riskObjt.vulnerability(),self.theEnvironmentName,riskName)
+        highestScore = 0
+        for riskScore in riskScores:
+          currentScore = riskScore[2]
+          if (currentScore > highestScore):
+            highestScore = currentScore
+        self.theGraph.add_node(pydot.Node(riskName,shape='diamond',style='filled',color=threatColourCode(highestScore),fontcolor=riskTextColourCode(highestScore),fontname=self.fontName,fontsize=self.fontSize,URL='risk#'+riskName))
+
+    for edges in edgeList:
+      self.theGraph.add_edge(pydot.Edge(edges[0],'point_' + edges[1]))
     return self.layout()

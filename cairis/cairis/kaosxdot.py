@@ -27,6 +27,7 @@ import armid
 from KaosModel import KaosModel
 from AssetModel import AssetModel
 from ConceptMapModel import ConceptMapModel
+from LocationModel import LocationModel
 from RequirementShape import RequirementShape
 
 class KaosTextShape(xdot.TextShape):
@@ -523,12 +524,13 @@ class KaosDotWindow(gtk.Window):
     </ui>
     '''
 
-    def __init__(self,windowTitle,modelType,dp):
+    def __init__(self,windowTitle,modelType,locsName = ''):
         gtk.Window.__init__(self)
-        self.dbProxy = dp
+        b = Borg()
+        self.dbProxy = b.dbProxy
         self.theModelType = modelType
         self.graph = xdot.Graph()
-
+        self.theLocationsName = locsName
         window = self
 
         window.set_title(windowTitle)
@@ -815,8 +817,6 @@ class KaosDotWindow(gtk.Window):
             self.goalCombo.set_text_column(0)
             caseFilter = True
         
-
- 
       try:
         b = Borg()
         proxy = b.dbProxy
@@ -841,7 +841,9 @@ class KaosDotWindow(gtk.Window):
           associationDictionary = proxy.conceptMapModel(environmentName,goalName)
           self.canonicalModel = ConceptMapModel(associationDictionary.values(),environmentName,self.theModelType,cfSet)
           self.widget.cfSet = cfSet
-#          self.reloadFilters(environmentName)
+        elif (self.theModelType == 'location'):
+          riskOverlay = proxy.locationsRiskModel(self.theLocationsName,environmentName)
+          self.canonicalModel = LocationModel(self.theLocationsName,environmentName,riskOverlay)
         else:
           associationDictionary = proxy.taskModel(environmentName,goalName,caseFilter)
           self.canonicalModel = KaosModel(associationDictionary.values(),environmentName,self.theModelType,goalName)

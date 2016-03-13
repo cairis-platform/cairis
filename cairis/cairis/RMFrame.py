@@ -81,6 +81,7 @@ from CodeNetworkModel import CodeNetworkModel
 from CodeNetworkViewer import CodeNetworkViewer
 from ImpliedProcessesDialog import ImpliedProcessesDialog
 from ModelExport import exportModel
+from LocationModel import LocationModel
 import DocumentBuilder
 from itertools import izip
 import gtk
@@ -338,6 +339,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_ATMODEL,self.OnViewATModel)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_CMMODEL,self.OnViewCMModel)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_COMPONENTMODEL,self.OnViewComponentModel)
+    wx.EVT_MENU(self,armid.RMFRAME_TOOL_LOCATIONMODEL,self.OnViewLocationModel)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_FIND,self.OnSearchModel)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_DOMAINPROPERTIES,self.OnDomainProperties)
     wx.EVT_MENU(self,armid.RMFRAME_TOOL_GOALS,self.OnGoals)
@@ -738,7 +740,7 @@ class RMFrame(wx.Frame):
         associations = AssetModel(associationDictionary.values(),environmentName)
         cDlg.Destroy() 
         if (associations.size() > 0):
-          dialog = CanonicalModelViewer(environmentName,'class',proxy)
+          dialog = CanonicalModelViewer(environmentName,'class')
           dialog.ShowModal(associations)
         else:
           dlg = wx.MessageDialog(self,'No asset associations defined','View Assets',wx.OK | wx.ICON_EXCLAMATION)
@@ -777,7 +779,7 @@ class RMFrame(wx.Frame):
         associationRelations = associationDictionary.values()
         if (len(associationRelations) > 0):
           associations = KaosModel(associationRelations,environmentName,modelType)
-          dialog = CanonicalModelViewer(environmentName,modelType,proxy)
+          dialog = CanonicalModelViewer(environmentName,modelType)
           dialog.ShowModal(associations)
         else:
           errorTxt = 'No ' + modelType + ' associations defined'
@@ -1777,7 +1779,7 @@ class RMFrame(wx.Frame):
         associations = ConceptMapModel(associationDictionary.values(),environmentName)
         cDlg.Destroy() 
         if (associations.size() > 0):
-          dialog = CanonicalModelViewer(environmentName,'conceptmap',proxy)
+          dialog = CanonicalModelViewer(environmentName,'conceptmap')
           dialog.ShowModal(associations)
         else:
           dlg = wx.MessageDialog(self,'No concept map associations defined','View Concept Map',wx.OK | wx.ICON_EXCLAMATION)
@@ -1889,6 +1891,36 @@ class RMFrame(wx.Frame):
       dialog.Destroy()
     except ARMException,errorText:
       dlg = wx.MessageDialog(self,str(errorText),'Edit Quotations',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy()
+      return
+
+  def OnViewLocationModel(self,event):
+    dialog = None
+    try: 
+      proxy = self.b.dbProxy
+      locs = proxy.getDimensionNames('locations',False)
+      cDlg = DimensionNameDialog(self,'locations',locs,'Select')
+      locsName = ''
+      envName = ''
+      if (cDlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
+        locsName = cDlg.dimensionName()
+
+      environments = proxy.getDimensionNames('environment',False)
+      cDlg = DimensionNameDialog(self,'environment',environments,'Select')
+      if (cDlg.ShowModal() == armid.DIMNAME_BUTTONACTION_ID):
+        envName = cDlg.dimensionName()
+
+      riskOverlay = proxy.locationsRiskModel(locsName,envName)
+      lModel = LocationModel(locsName,envName,riskOverlay)
+
+      dialog = CanonicalModelViewer(envName,'location',locsName)
+      dialog.ShowModal(lModel)
+      dialog.destroy()
+    except ARMException,errorText:
+      if (dialog != None):
+        dialog.destroy()
+      dlg = wx.MessageDialog(self,str(errorText),'View Location Model',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy()
       return

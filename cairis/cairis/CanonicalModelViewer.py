@@ -26,10 +26,10 @@ from ARM import *
 from Borg import *
 
 class CanonicalModelViewer(kaosxdot.KaosDotWindow):
-  def __init__(self,environmentName,modelType,dp):
-    kaosxdot.KaosDotWindow.__init__(self,environmentName,modelType,dp)
+  def __init__(self,environmentName,modelType,locsName = ''):
+    kaosxdot.KaosDotWindow.__init__(self,environmentName,modelType,locsName)
     b = Borg()
-    self.dbProxy = dp
+    self.dbProxy = b.dbProxy
     if environmentName != '':
       self.environment = self.dbProxy.dimensionObject(environmentName,'environment')
     else:
@@ -50,6 +50,8 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
       self.set_icon_from_file(directoryPrefix + 'responsibilityModel.png')
     elif (modelType == 'conceptmap'):
       self.set_icon_from_file(directoryPrefix + 'conceptMapModel.png')
+    elif (modelType == 'location'):
+      self.set_icon_from_file(directoryPrefix + 'location_view.png')
 
 # Build some factory here based on the possible nodes we might have to click on
     if (modelType == 'goal' or modelType == 'obstacle'):
