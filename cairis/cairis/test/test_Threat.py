@@ -89,7 +89,7 @@ class ThreatTest(unittest.TestCase):
     self.iThreats = d['threats']
 
   def testThreat(self):
-    iteps = [ThreatEnvironmentProperties(self.iThreats[0]["theEnvironmentProperties"][0]["theName"],self.iThreats[0]["theEnvironmentProperties"][0]["theLikelihood"],self.iThreats[0]["theEnvironmentProperties"][0]["theAssets"],self.iThreats[0]["theEnvironmentProperties"][0]["theAttackers"],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"][0][1],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"][0][1])]
+    iteps = [ThreatEnvironmentProperties(self.iThreats[0]["theEnvironmentProperties"][0]["theName"],self.iThreats[0]["theEnvironmentProperties"][0]["theLikelihood"],self.iThreats[0]["theEnvironmentProperties"][0]["theAssets"],self.iThreats[0]["theEnvironmentProperties"][0]["theAttackers"],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"][0][1],[])]
     itps = ThreatParameters(self.iThreats[0]["theName"],self.iThreats[0]["theType"],self.iThreats[0]["theMethod"],[],iteps)
     b = Borg()
     b.dbProxy.addThreat(itps)
@@ -103,7 +103,7 @@ class ThreatTest(unittest.TestCase):
     self.assertEqual(iteps[0].likelihood()[0], oteps[0].likelihood()[0])
     self.assertEqual(str(iteps[0].assets()[0]), str(oteps[0].assets()[0]))
     self.assertEqual(str(iteps[0].attackers()[0]), str(oteps[0].attackers()[0]))
-#   self.assertEqual(str(iteps[0].properties()[0]), str(oteps[0].properties()))
+    self.assertEqual(str(iteps[0].properties()[0]), str(oteps[0].properties()[0]))
     self.assertEqual(str(iteps[0].rationale()[0]), str(oteps[0].rationale()[0]))
 
     b.dbProxy.deleteThreat(o.id())
