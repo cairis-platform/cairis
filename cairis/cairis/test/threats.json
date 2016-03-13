@@ -96,10 +96,10 @@
 	  "theAttackers" : ["Victor"],
 	  "theProperties" : 
 	   [
-            ["i",
+            ["integrity",
 	     [0,2,0,0,0,0,0,0]
 	    ],
-	    ["a",
+	    ["availability",
 	     [0,0,3,0,0,0,0,0]
 	    ]
 	   ]
