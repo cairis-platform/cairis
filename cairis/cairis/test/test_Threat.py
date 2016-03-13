@@ -113,7 +113,7 @@ class ThreatTest(unittest.TestCase):
     
 #   b.dbProxy.deletePersonaCharacteristic(self.opcs[self.ipc1.name()].id())
     b.dbProxy.deleteAsset(self.oap[self.iap.name()].id())
-    b.dbProxy.deleteThreatType(self.ovt[self.ivt.name()].id())
+    b.dbProxy.deleteThreatType(0)
     b.dbProxy.deleteAttacker(self.oAttackers[self.iatk.name()].id())
     b.dbProxy.deleteDocumentReference(self.odrs[self.idr1.name()].id())
     b.dbProxy.deleteDocumentReference(self.odrs[self.idr2.name()].id())
