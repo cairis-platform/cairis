@@ -89,7 +89,7 @@
       "theType" : "threat_type"},
       {"theName" : "Configuration",
       "theDescription" : "A vulnerability resulting from an error in the configuration and administration of a system or component.",
-      "theType" : "vulnerability_type"},
+      "theType" : "vulnerability_type"}
   ],
   "threats" : [
       {"theName" : "Footprinting",
