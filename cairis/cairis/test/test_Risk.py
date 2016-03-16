@@ -48,12 +48,9 @@ class RiskTest(unittest.TestCase):
     f.close()
     self.ienvs = d['environments']
     self.iep1 = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
-    self.iep2 = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
     b = Borg()
     b.dbProxy.addEnvironment(self.iep1)
-    b.dbProxy.addEnvironment(self.iep2)
-    self.oenvs1 = b.dbProxy.getEnvironments(self.ienvs[0]["theName"])
-    self.oenvs2 = b.dbProxy.getEnvironments(self.ienvs[1]["theName"])
+    self.oenvs = b.dbProxy.getEnvironments()
     self.iRoles = d['roles']
     self.irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
     b.dbProxy.addRole(self.irp)
@@ -144,8 +141,7 @@ class RiskTest(unittest.TestCase):
     b.dbProxy.deleteExternalDocument(self.oecs[self.iec2.name()].id())
     b.dbProxy.deletePersona(self.opp[self.ipp.name()].id())
     b.dbProxy.deleteRole(self.oRoles[self.irp.name()].id())
-    b.dbProxy.deleteEnvironment(self.oenvs2[self.iep2.name()].id())
-    b.dbProxy.deleteEnvironment(self.oenvs1[self.iep1.name()].id())
+    b.dbProxy.deleteEnvironment(self.oenvs[self.iep1.name()].id())
     b.dbProxy.close()
 
 if __name__ == '__main__':
