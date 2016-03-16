@@ -186,13 +186,17 @@
       ]
     },
     {
-     "theName" : "EnterpriseSCADA Server",
-     "theShortCode" : "EnterpriseSCADA",
-     "theDescription" : "EnterpriseSCADA works server. Connects to PLCs and routers",
-     "theSignificance" : "Compromising the EnterpriseSCADA server also compromising any connected clients and PLCs",
+     "theName" : "Enterprise SCADA Network",
+     "theShortCode" : "ESN",
+     "theDescription" : "Enterprise Control Network, connecting PLCs, EnterpriseSCADA servers, and EnterpriseSCADA clients",
+     "theSignificance" : "Compromising this network potentially compromises any assets connected to it.",
      "theType" : "Systems",
      "theEnvironmentProperties" :
       [
+        ["Day",
+         [2,0,0,0,0,0,0,0], 
+         ["","None","None","None","None","None","None","None"]
+        ],
         ["Day",
          [0,3,0,0,0,0,0,0], 
          ["None","","None","None","None","None","None","None"]
