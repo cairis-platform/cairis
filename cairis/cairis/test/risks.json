@@ -2,10 +2,7 @@
   "environments" : [
       {"theName" : "Day",
        "theShortCode" : "DAY",
-       "theDescription" : "Day-time plant operations"},
-      {"theName" : "Night",
-       "theShortCode" : "NIGHT",
-       "theDescription" : "Night-time plant operations"}
+       "theDescription" : "Day-time plant operations"}
   ],
   "roles" : [
       {"theName" : "Vendor",
@@ -121,10 +118,6 @@
          {"theName" : "Day",
           "theSeverity" : "Marginal",
           "theAssets" : ["Firewall"]
-       },
-	 {"theName" : "Night",
-	  "theSeverity" : "Marginal",
-	  "theAssets" : ["Firewall"]
        }
      ]
    }
