@@ -47,9 +47,11 @@ class RiskTest(unittest.TestCase):
     d = json.load(f)
     f.close()
     self.ienvs = d['environments']
-    self.iep = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
+    self.iep1 = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
+    self.iep2 = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
     b = Borg()
-    b.dbProxy.addEnvironment(self.iep)
+    b.dbProxy.addEnvironment(self.iep1)
+    b.dbProxy.addEnvironment(self.iep2)
     self.oenvs = b.dbProxy.getEnvironments()
     self.iRoles = d['roles']
     self.irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
@@ -111,7 +113,7 @@ class RiskTest(unittest.TestCase):
     self.iRisks = d['risks']
 
   def testRisk(self):
-    irp = RiskParameters(self.iRisks[0]["theName"],self.iRisks[0]["threatName"],self.iRisks[0]["vulName"],self.iRisks[0]["misuseCase"],[],self.iRisks[0]["theIntent"],self.iRisks[0]["theEnvironmentName"])
+    irp = RiskParameters(self.iRisks[0]["theName"],self.iRisks[0]["threatName"],self.iRisks[0]["vulName"],self.iRisks[0]["misuseCase"][0],[])
     b = Borg()
     b.dbProxy.addRisk(irp)
     oRisks = b.dbProxy.getRisks()
@@ -120,8 +122,6 @@ class RiskTest(unittest.TestCase):
     self.assertEqual(itps.threat(),o.threat())
     self.assertEqual(itps.vulnerability(),o.vulnerability())
     self.assertEqual(itps.misuseCase(),o.misuseCase())
-    self.assertEqual(itps.intent(),o.intent())
-    self.assertEqual(itps.environment(),o.environment())
 
     b.dbProxy.deleteRisk(o.id())
   
@@ -143,7 +143,8 @@ class RiskTest(unittest.TestCase):
     b.dbProxy.deleteExternalDocument(self.oecs[self.iec2.name()].id())
     b.dbProxy.deletePersona(self.opp[self.ipp.name()].id())
     b.dbProxy.deleteRole(self.oRoles[self.irp.name()].id())
-    b.dbProxy.deleteEnvironment(self.oenvs[self.iep.name()].id())
+    b.dbProxy.deleteEnvironment(self.oenvs[self.iep2.name()].id())
+    b.dbProxy.deleteEnvironment(self.oenvs[self.iep1.name()].id())
     b.dbProxy.close()
 
 if __name__ == '__main__':
