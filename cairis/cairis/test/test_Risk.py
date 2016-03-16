@@ -36,8 +36,6 @@ from ThreatParameters import ThreatParameters
 from ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from VulnerabilityParameters import VulnerabilityParameters
 from VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
-from MisuseCaseParameters import MisuseCaseParameters
-from MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from RiskParameters import RiskParameters
 from ARM import DatabaseProxyException
 
@@ -110,11 +108,6 @@ class RiskTest(unittest.TestCase):
     self.ivp = VulnerabilityParameters(self.iVuln[0]["theName"],self.iVuln[0]["theDescription"],self.iVuln[0]["theType"], [], self.iveps)
     b.dbProxy.addVulnerability(self.ivp)
     self.ovp = b.dbProxy.getVulnerabilities()
-    self.imc = d['misusecase']
-    self.imcep = [MisuseCaseEnvironmentProperties(self.imc[0]["theEnvironmentProperties"][0]["theDescription"])]
-    self.imcp = MisuseCaseParameters(self.imc[0]["theName"],self.imc[0]["theRisk"],self.imcep)
-    b.dbProxy.addMisuseCase(self.imcp)
-    self.omc = b.dbProxy.getMisuseCases()
     self.iRisks = d['risks']
 
   def testRisk(self):
@@ -133,7 +126,6 @@ class RiskTest(unittest.TestCase):
   def tearDown(self):
     b = Borg()
     
-    b.dbProxy.deleteMisuseCase(self.omc[self.imcp.name()].id())
     b.dbProxy.deleteVulnerability(self.ovp[self.ivp.name()].id())
     b.dbProxy.deleteThreat(self.otps[self.itps.name()].id())
 #   b.dbProxy.deletePersonaCharacteristic(self.opcs[self.ipc1.name()].id())
