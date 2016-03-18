@@ -245,9 +245,9 @@ CREATE DATABASE IF NOT EXISTS \`$dbname\`;
 GRANT ALL PRIVILEGES ON \`$dbname\`.* TO '$dbuser'@'$dbhost';
 EOF
 	if [ "$?" != "0" ]; then echo -e "\nProblem creating the database.\nExiting..."; return; fi
-	mysql -u "$dbuser" --password="$dbpass" -h "$dbhost" --database="$dbname" < $CAIRIS_DIR/cairis/cairis/sql/procs.sql
+	mysql -u "$dbuser" --password="$dbpass" -h "$dbhost" --database="$dbname" < $CAIRIS_DIR/cairis/sql/procs.sql
 	if [ "$?" != "0" ]; then echo -e "\nProblem installing stored procedures.\nExiting..."; return; fi
-	mysql -u "$dbuser" --password="$dbpass" -h "$dbhost" --database="$dbname" < $CAIRIS_DIR/cairis/cairis/sql/init.sql
+	mysql -u "$dbuser" --password="$dbpass" -h "$dbhost" --database="$dbname" < $CAIRIS_DIR/cairis/sql/init.sql
 	if [ "$?" != "0" ]; then echo -e "\nProblem installing base tables and view.\nExiting..."; return; fi
 
 	if [ "$DDBHOST" == "" ]; then db_opt="Y/n"; else db_opt="y/N"; fi
@@ -333,9 +333,9 @@ EOM
 		co=${co,,}
 		if [ "$co" != "y" -a "$co" != "n" ]; then echo -e "Invalid input\n"; fi
 	done
-	config_dir="$HOME/CAIRIS/cairis/cairis/config"
+	config_dir="$HOME/CAIRIS/cairis/config"
 	mkdir -p -m 700 "$config_dir"
-	cp "$CAIRIS_DIR/cairis/cairis/config/cairis.cnf" "$config_dir/"
+	cp "$CAIRIS_DIR/cairis/config/cairis.cnf" "$config_dir/"
 	chmod 600 "$config_dir/cairis.cnf"
 	if [ "$co" == "y" ]; then
 		mysql -u "$DDBUSER" --password="$DDBPASS" -h "$DDBHOST" --database="$DDBNAME" -e "SHOW TABLES" > /dev/null 2>&1
@@ -444,11 +444,11 @@ CAIRIS was successfully installed.
 
 To run CAIRIS in web mode, you can use the following command:
 
-	python $CAIRIS_DIR/cairis/cairis/cairisd.py
+	python $CAIRIS_DIR/cairis/cairisd.py
 
 To run it in desktop mode, use the following command:
 
-	python $CAIRIS_DIR/cairis/cairis/cairis.py
+	python $CAIRIS_DIR/cairis/cairis.py
 
 You might first need to re-login in order for the 
 group assignment to be applied to your session.
