@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 13.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="140.301px"
+   height="129.383px"
+   viewBox="0 0 140.301 129.383"
+   style="enable-background:new 0 0 140.301 129.383;"
+   xml:space="preserve"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="risk.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="/home/irisuser/iris/risk.png"
+   inkscape:export-xdpi="19.382072"
+   inkscape:export-ydpi="19.382072"><metadata
+   id="metadata34"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs32"><inkscape:perspective
+     sodipodi:type="inkscape:persp3d"
+     inkscape:vp_x="0 : 64.691498 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_z="140.30099 : 64.691498 : 1"
+     inkscape:persp3d-origin="70.150497 : 43.127665 : 1"
+     id="perspective36" /></defs><sodipodi:namedview
+   inkscape:window-height="726"
+   inkscape:window-width="680"
+   inkscape:pageshadow="2"
+   inkscape:pageopacity="0.0"
+   guidetolerance="10.0"
+   gridtolerance="10.0"
+   objecttolerance="10.0"
+   borderopacity="1.0"
+   bordercolor="#666666"
+   pagecolor="#ffffff"
+   id="base"
+   showgrid="false"
+   inkscape:zoom="3.8181215"
+   inkscape:cx="74.291134"
+   inkscape:cy="64.691498"
+   inkscape:window-x="237"
+   inkscape:window-y="25"
+   inkscape:current-layer="g3" />
+<g
+   id="g3">
+	<polygon
+   style="fill:#ff6666;stroke:#000000;stroke-width:4.37500000000000000;stroke-miterlimit:7;fill-opacity:0.81465518"
+   points="76.435,10.906 60.356,48.289    44.052,30.703 44.239,56.352 9.122,43.383 34.458,67.625 18.771,76.062 37.552,82.461 10.606,98.633 44.231,96.242 45.177,121    59.88,98.805 71.356,111.414 75.896,100.906 94.771,114.234 92.083,99.344 127.083,116.406 102.09,91.312 125.551,77.836    100.442,73.93 123.771,52.727 89.176,58.445 98.286,32.141 78.997,46.953  "
+   id="polygon5"
+   inkscape:export-filename="/home/irisuser/iris/risk.png"
+   inkscape:export-xdpi="22.070364"
+   inkscape:export-ydpi="22.070364" />
+	<polygon
+   points="79.474,0 77.504,5.422 79.192,45.531 83.114,42.922  "
+   id="polygon7" />
+	<polygon
+   points="131.215,50.367 127.715,50.609 101.786,73.914 106.301,75.297  "
+   id="polygon9" />
+	<polygon
+   points="132.278,77.602 129.286,76.93 103.583,91.883 107.708,94.188  "
+   id="polygon11" />
+	<polygon
+   points="133.293,120.695 140.301,124.32 107.388,89.016 105.926,93.492  "
+   id="polygon13" />
+	<polygon
+   points="140.301,124.32 124.911,116.422 93.731,100.828 94.099,105.531  "
+   id="polygon15" />
+	<polygon
+   points="96.528,116.844 98.918,120.508 97.981,103.234 92.06,99.867  "
+   id="polygon17" />
+	<polygon
+   points="43.786,121.781 44.325,129.383 63.497,105.688 58.45,102.258  "
+   id="polygon19" />
+	<polygon
+   points="7.224,99.125 0.997,102.5 44.083,101.195 44.06,96.789  "
+   id="polygon21" />
+	<polygon
+   points="71.942,113.914 73.426,117.312 79.192,103.398 76.411,101.539  "
+   id="polygon23" />
+	<polygon
+   points="73.426,117.312 70.692,111.992 59.95,100.75 57.13,102.922  "
+   id="polygon25" />
+	<polygon
+   points="98.918,120.508 97.138,116.211 77.106,102.969 74.051,105.531  "
+   id="polygon27" />
+	<polygon
+   points="103.388,26.477 100.872,28.445 90.458,58.812 95.083,57.891  "
+   id="polygon29" />
+</g>
+</svg>

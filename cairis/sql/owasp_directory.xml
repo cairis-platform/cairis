@@ -1,0 +1,496 @@
+<?xml version="1.0"?>
+<!DOCTYPE directory PUBLIC "-//CAIRIS/DTD DIRECTORY 1.0//EN" "http://cairis.org/dtd/directory.dtd">
+
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+
+<directory>
+<vulnerability label="Dangerous Function" name="Dangerous Function" type="API Abuse" reference="OWASP">
+  <description>Functions that cannot be used safely should never be used</description>
+</vulnerability>
+<vulnerability label="Directory Restriction Error" name="Directory Restriction Error" type="API Abuse" reference="OWASP">
+  <description>Improper use of chroot() system call may allow attackers to escape chroot jail.  The applicatiob fails to enforce the intended restricted directory access policy.  By using relative paths or other path traversal attack mechanisms, an attacker can access unauthorised files outside the restricted directory.</description>
+</vulnerability>
+<vulnerability label="Heap Inspection" name="Heap Inspection" type="API Abuse" reference="OWASP">
+  <description>Do not use realloc() to resize buffers that store sensitive information</description>
+</vulnerability>
+<vulnerability label="Ignored Function Return Value" name="Ignored Function Return Value" type="API Abuse" reference="OWASP">
+  <description>If a function return value is not checked, it could have failed without any warning.  The data produced as a result of a function should be in a bad state.</description>
+</vulnerability>
+<vulnerability label="Often Misused: Authentication" name="Often Misused: Authentication" type="API Abuse" reference="OWASP">
+  <description>Attackers can spoot DNS entries.  Do not rely on DNS names for security</description>
+</vulnerability>
+<vulnerability label="Often Misused: Exception Handling" name="Often Misused: Exception Handling" type="API Abuse" reference="OWASP">
+  <description>The _alloca() function can throw a stack overflow exception, potentially causing the program to crash.</description>
+</vulnerability>
+<vulnerability label="Often Misused: File System" name="Often Misused: File System" type="API Abuse" reference="OWASP">
+  <description>Passing an inadequately-sized output buffer to a path manipulation function can result in a buffer overflow.</description>
+</vulnerability>
+<vulnerability label="Often Misused: Privilege Management" name="Often Misused: Privilege Management" type="API Abuse" reference="OWASP">
+  <description>Failure to adhere to the principle of least privilege amplifies the risk posed by other vulnerabilities.</description>
+</vulnerability>
+<vulnerability label="Often Misused: String Management" name="Often Misused: String Management" type="API Abuse" reference="OWASP">
+  <description>Functions that convert between Multibyte and Unicode strings encourage buffer overflows.</description>
+</vulnerability>
+<vulnerability label="Allowing password aging" name="Allowing password aging" type="Authentication Vulnerability" reference="OWASP">
+  <description>Allow password ageing to occur unchecked can result in the possibility of diminished password security.</description>
+</vulnerability>
+<vulnerability label="Authentication Bypass" name="Authentication Bypass via Assumed-Immutable Data" type="Authentication Vulnerability" reference="OWASP">
+  <description>Assumed-immutable authentication data can be modified by attackers to bypass the authentication.  Most of the time, this vulnerability results from inappropriate session management,i.e. important data that is used for authentication decisions is sent to the client side and subject to user modification.  This kind of data should be stored in the server-side session as much as possible.</description>
+</vulnerability>
+<vulnerability label="Empty String Password" name="Empty String Password" type="Authentication Vulnerability" reference="OWASP">
+  <description>An empty string password makes authentication as weak as the user names, which are normally public or guessable.</description>
+</vulnerability>
+<vulnerability label="Failure to drop privileges" name="Failure to drop privileges when reasonable" type="Authentication Vulnerability" reference="OWASP">
+  <description>Failing to drop privileges when it is reasonable to do so results in a lengthened time during which exploitation may result in unnecessarily negative consequences.</description>
+</vulnerability>
+<vulnerability label="Hard-Coded Password" name="Hard-Coded Password" type="Authentication Vulnerability" reference="OWASP">
+  <description>A hard-coded password vulnerability occurs when usernames and passwords are included in HTML comments.  Because these are not displayed, it was often the mentality that normal users would not see them.</description>
+</vulnerability>
+<vulnerability label="Not allowing password ageing" name="Not allowing password ageing" type="Authentication Vulnerability" reference="OWASP">
+  <description>If no mechanism is in place for managing password ageing, users will have no incentive to update passwords in a timely manner.</description>
+</vulnerability>
+<vulnerability label="Reflection attack" name="Reflection attack in an auth protocol" type="Authentication Vulnerability" reference="OWASP">
+  <description>Simple authentication protocols are subject to reflection attacks if a malicious user can use the target machine to impersonate a trusted user.</description>
+</vulnerability>
+<vulnerability label="Using password systems" name="Using password systems" type="Authentication Vulnerability" reference="OWASP">
+  <description>The use of password systems as the primary means of authentication may be subject to several flaws or shortcomings, each reducing the effectiveness of the mechanism.</description>
+</vulnerability>
+<vulnerability label="Using referer field" name="Using referer field for AuthN or AuthZ" type="Authentication Vulnerability" reference="OWASP">
+  <description>The referrer field in HTTP requests can be easily modified and, as such, is not a valid means of message integrity checking.</description>
+</vulnerability>
+<vulnerability label="Single-factor authentication" name="Using single-factor authentication" type="Authentication Vulnerability" reference="OWASP">
+  <description>The use of a single-factor authentication can lead to unnecessary risk of compromise when compared to the benefits of a dual-factor authentication scheme.</description>
+</vulnerability>
+<vulnerability label="Presentation layer access control" name="Access control enforced by presentation layer" type="Authorisation Vulnerability" reference="OWASP">
+  <description>Enforcing access control in the presentation layer means that the developer does not show buttons and links for functions and assets that are not authorised for the user.  An attacker, however, is not constrained by the buttons and links presented, and can forge requests for those functions and assets.  Forced browsing is one attack targetting this type of vulnerability.</description>
+</vulnerability>
+<vulnerability label="TOCTOU" name="File Access Race Condition" type="Authorisation Vulnerability" reference="OWASP">
+  <description>The window of time between when a file property is checked and when the file is used can be exploited to launch a privilege escalation attack.</description>
+</vulnerability>
+<vulnerability label="Least Privilege Violation" name="Least Privilege Violation" type="Authorisation Vulnerability" reference="OWASP">
+  <description>Elevated privilege level required to perform operations such as chroot() should be dropped immediately after the operation is performed.</description>
+</vulnerability>
+<vulnerability label="Information Leakage" name="Information Leakage" type="Logging and Auditing Vulnerability" reference="OWASP">
+  <description>Revealing system data or debugging information helps an adversary learn about the system and form a plan of attack.  An information leak occurs when system data or debugging information leaves the program through an output stream or logging function.</description>
+</vulnerability>
+<vulnerability label="System data trust" name="Trust of system event data" type="Environmental Vulnerability" reference="OWASP">
+  <description>Security based on event locations are insecure and can be spoofed.
+
+Consequences: Authorization: If one trusts the system-event information and executes commands based on it, one could potentially take actions based on a spoofed identity.
+
+Exposure period: Design through Implementation: Trusting unauthenticated information for authentication is a design flaw.
+
+Platform/Languages/OS platforms: Any
+
+Severity: High
+
+Likelihood of exploit: High
+
+Events are a messaging system which may provide control data to programs listening for events. Events often do not have any type of authentication framework to allow them to be verified from a trusted source.
+Any application, in Windows, on a given desktop can send a message to any window on the same desktop. There is no authentication framework for these messages. Therefore, any message can be used to manipulate any process on the desktop if the process does not check the validity and safeness of those messages.</description>
+</vulnerability>
+<vulnerability label="Session Fixation" name="Session Fixation" type="Session Management Vulnerability" reference="OWASP">
+  <description>Authenticating a user without invalidating any existing session identifier gives an attacker the opportunity to steal authenticated sessions.
+Session fixation vulnerabilities occur when:
+A web application authenticates a user without first invalidating the existing session ID, thereby continuing to use the session ID already associated with the user.
+An attacker is able to force a known session ID on a user so that, once the user authenticates, the attacker has access to the authenticated session.
+In the generic exploit of session fixation vulnerabilities, an attacker creates a new session on a web application and records the associated session identifier. The attacker then causes the victim to authenticate against the server using the same session identifier, giving the attacker access to the user\'s account through the active session.</description>
+</vulnerability>
+<vulnerability label="Insufficient Id Length" name="Insufficient Session-Id Length" type="Session Management Vulnerability" reference="OWASP">
+  <description>Session identifiers should be at least 128 bits long to prevent brute-force session guessing attacks.
+The WebLogic deployment descriptor should specify a session identifier length of at least 128 bits. A shorter session identifier leaves the application open to brute-force session guessing attacks. If an attacker can guess an authenticated user\'s session identifier, he can take over the user\'s session. The remainder of this explanation will detail a back-of-the-envelope justification for a 128 bit session identifier.</description>
+</vulnerability>
+<vulnerability label="Capture-replay" name="Capture-replay" type="Synchronisation and Timing Vulnerability" reference="OWASP">
+  <description>A capture-relay protocol flaw exists when it\'s possible for a malicious user to sniff network traffic and replay it to the server in question to the same effect as the original message (or with minor changes).</description>
+</vulnerability>
+<vulnerability label="Missing XML Validation" name="Missing XML Validation" type="Input Validation Vulnerability" reference="OASIS">
+  <description>Failure to enable validation when parsing XML gives an attacker the opportunity to supply malicious input.</description>
+</vulnerability>
+<threat label="Account Lockout" name="Account Lockout Attack" type="Abuse of Functionality" reference="OWASP">
+  <description>In an account lockout attack, the attacker attempts to lock out all user accounts, typically by failing login more times than the threshold defined by the authentication system. For example, if users are locked out of their accounts after three failed login attempts, an attacker can lock out their account for them simply by failing login three times. This attack can result in a large scale denial of service attack if all user accounts are locked out, especially if the amount of work required to reset the accounts is signficant.</description>
+</threat>
+<threat label="Cache Poisoning" name="Cache Poisoning" type="Abuse of Functionality" reference="OWASP">
+  <description>The impact of a maliciously constructed response can be magnified if it is cached either by a web cache used by multiple users or even the browser cache of a single user. If a response is cached in a shared web cache, such as those commonly found in proxy servers, then all users of that cache will continue to receive the malicious content until the cache entry is purged. Similarly, if the response is cached in the browser of an individual user, then that user will continue to receive the malicious content until the cache entry is purged, although only the user of the local browser instance will be affected.
+
+To successfully carry out such an attack, an attacker:
+
+    * Finds the vulnerable service code, which allows them to fill the HTTP header field with many headers.
+    * Forces the cache server to flush its actual cache content, which we want to be cached by the servers.
+    * Sends a specially crafted request, which will be stored in cache.
+    * Sends the next request. The previously injected content stored in cache will be the response to this request. 
+
+This attack is rather difficult to carry out in a real environment. The list of conditions is long and hard to accomplish by the attacker. However it is easier to use this technique than Cross-User Defacement.
+
+A Cache Poisoning attack is possible because of HTTP Response Splitting and flaws in the web application. It is crucial from the attacker point of view that the application allows for filling the header field with more than one header using CR (Carrige Return) and LF (Line Feed) characters.</description>
+</threat>
+<threat label="Cross-User Defacement" name="Cross-User Defacement" type="Abuse of Functionality" reference="OWASP">
+  <description>An attacker can make a single request to a vulnerable server that will cause the sever to create two responses, the second of which may be misinterpreted as a response to a different request, possibly one made by another user sharing the same TCP connection with the sever. This can be accomplished by convincing the user to submit the malicious request themselves, or remotely in situations where the attacker and the user share a common TCP connection to the server, such as a shared proxy server. In the best case, an attacker can leverage this ability to convince users that the application has been hacked, causing users to lose confidence in the security of the application. In the worst case, an attacker may provide specially crafted content designed to mimic the behavior of the application but redirect private information, such as account numbers and passwords, back to the attacker.
+
+This attack is rather difficult to carry out in the real environment. The list of conditions is long and hard to accomplish by the attacker.
+
+Cross-User Defacement attack is possible because of HTTP Response Splitting and flaws in the web application. It is crucial from the attacker point of view that the application allows for filling the header field with more than one header using CR (Carrige Return) and LF (Line Feed) characters.</description>
+</threat>
+<threat label="Mobile code: invoking untrusted mobile code" name="Mobile code: invoking untrusted mobile code" type="Abuse of Functionality" reference="OWASP">
+  <description>This attack consists of a manipulation of a mobile code in order to execute malicious operations at the client side. By intercepting client traffic using the man-in-the-middle technique, a malicious user could modify the original mobile code with arbitrary operations that will be executed on the clients machine under his credentials. In another scenario, the malicious mobile code could be hosted in an untrustworthy web site or it could be permanently injected on a vulnerable web site through an injection attack. This attack can be performed over Java or C++ applications and affects any operating system.</description>
+</threat>
+<threat label="Mobile code: non-final public field" name="Mobile code: non-final public field" type="Abuse of Functionality" reference="OWASP">
+  <description>This attack aims to manipulate non-final public variables used in mobile code, by injecting malicious values on it, mostly in Java and C++ applications.
+
+When a public member variable or class used in mobile code isn’t declared as final, its values can be maliciously manipulated by any function that has access to it in order to extend the application code or acquire critical information about the application.</description>
+</threat>
+<threat label="Mobile code: object hijack" name="Mobile code: object hijack" type="Abuse of Functionality" reference="OWASP">
+  <description>This attack consists of a technique to create objects without constructor methods by taking advantage of the clone() method of Java-based applications.
+
+If a certain class implements cloneable() method declared as public, but doesn’t has a public constructor method nor is declared as final, it is possible to extend it into a new class and create objects using the clone() method.
+
+The clonable() method certifies that the clone() method functions correctly. A cloned object has the same attributes (variables values) of the original object, but the objects are independent.</description>
+</threat>
+<threat label="Path Traversal" name="Path Traversal" type="Abuse of Functionality" reference="OWASP">
+  <description>A Path Traversal attack aims to access files and directories that are stored outside the web root folder. By browsing the application, the attacker looks for absolute links to files stored on the web server. By manipulating variables that reference files with dot-dot-slash sequences and its variations, it may be possible to access arbitrary files and directories stored on file system, including application source code, configuration and critical system files, limited by system operational access control. The attacker uses relative path sequences to move up to root directory, thus permitting navigation through the file system.
+
+This attack can be executed with an external malicious code injected on the path, like the Resource Injection attack. To perform this attack it’s not necessary to use a specific tool; attackers typically use a spider/crawler to detect all URLs available.
+
+This attack is also known as “dot-dot-slash”, “directory traversal”, “directory climbing” and “backtracking”.</description>
+</threat>
+<threat label="Buffer Overflow (Environment Variables)" name="Buffer Overflow via Environment Variables" type="Data Structure Attack" reference="OWASP">
+  <description>This attack pattern involves causing a buffer overflow through manipulation of environment variables. Once the attacker finds that they can modify an environment variable, they may try to overflow associated buffers. This attack leverages implicit trust often placed in environment variables.
+
+The following conditions must be met to conduct successful attack:
+
+    * The application uses environment variables.
+    * The environment variable exposed to the user is vulnerable to a buffer overflow.
+    * The vulnerable environment variable uses untrusted data.
+    * Tainted data used in the environment variables is not properly validated. For instance boundary checking is not done before copying 
+
+the input data to a buffer.
+
+The attacker performs the following steps:
+
+    * The attacker tries to find an environment variable which can be overwritten, by gathering information about the target 
+
+host (error pages, software version number, hostname, etc.).
+
+    * The attacker manipulates the environment variable to contain excessive-length content to cause a buffer overflow.
+    * The attacker leverages the buffer overflow to inject maliciously crafted code in an attempt to execute privileged command on the target environment.</description>
+</threat>
+<threat label="Buffer Overflow" name="Buffer Overflow Attacker" type="Data Structure Attack" reference="OWASP">
+  <description>Buffer overflow errors are characterized by the overwriting of memory fragments of the process, which should have never been modified intentionally or unintentionally. Overwriting values of the IP (Instruction Pointer), BP (Base Pointer) and other registers causes exceptions, segmentation faults, and other errors to occur. Usually these errors end execution of the application in an unexpected way. Buffer overflow errors occur when we operate on buffers of char type.
+
+BO errors (common name for this kind of errors) are simply Stack overflow or Heap overflow errors. We do not distinguish between these two in this article to avoid reader confusion.
+
+Below examples are written in C language under GNU/Linux system on x86 architecture.</description>
+</threat>
+<threat label="Overflow Binary Resource File" name="Overflow Binary Resource File" type="Data Structure Attack" reference="OWASP">
+  <description>The source of a buffer overflow may be input data. When it comes from the Overflow Binary Resource File, the attacker has to modify/prepare the binary file in such a way that the application, after reading this file, has become prone to a classic Buffer overflow attack. The only difference between this attack and the classic one is the source of the input data. Common examples are specially crafted MP3, JPEG or ANI files, which cause buffer overflows.</description>
+</threat>
+<threat label="CSRF" name="Cross-Site Request Forgery" type="Embedded Malicious Code" reference = "OWASP">
+  <description>Cross-Site Request Forgery (CSRF) is an attack that tricks the victim into loading a page that contains a malicious request. It is malicious in the sense that it inherits the identity and privileges of the victim to perform an undesired function on the belief of the victim, like change the victim e-mail address, home address, or password, or purchase something. CSRF attacks generally target functions that cause a state change on the server but can also be used to access sensitive data.
+
+For most sites, browsers will automatically include with such requests any credentials associated with the site, such as the user session cookie, basic auth credentials, IP address, Windows domain credentials, etc. Therefore, if the user is currently authenticated to the site, the site will have no way to distinguish this from a legitimate user request.
+
+In this way, the attacker can make the victim perform actions that they did not intend to, such as logout, purchase item, change account information, retrieve account information, or any other function provided by the vulnerable website.
+
+Sometimes, it is possible to store the CSRF attack on the vulnerable site itself. Such vulnerabilities are called Stored CSRF flaws. This can be accomplished by simply storing an IMG or IFRAME tag in a field that accepts HTML, or by a more complex cross-site scripting attack. If the attack can store a CSRF attack in the site, the severity of the attack is amplified. In particular, the likelihood is increased because the victim is more likely to view the page containing the attack than some random page on the Internet. The likelihood is also increased because the victim is sure to be authenticated to the site already.
+
+Synonyms: CSRF attacks are also known by a number of other names, including XSRF, "Sea Surf", Session Riding, Cross-Site Reference Forgery, Hostile Linking. Microsoft refers to this type of attack as a One-Click attack in their threat modeling process and many places in their online documentation.</description>
+</threat>
+<threat label="Logic bomb" name="Logic/time bomb" type="Embedded Malicious Code" reference="Wikipedia">
+  <description>A logic bomb is a piece of code  intentionally inserted into a software system that will set off a malicious function when specified conditions are met. For example, a programmer may hide a piece of code that starts deleting files  (such as a salary  database trigger), should they ever be terminated from the company.
+
+Software that is inherently malicious, such as viruses and worms, often contain logic bombs that execute a certain payload at a pre-defined time or when some other condition is met. This technique can be used by a virus or worm to gain momentum and spread before being noticed. Many viruses attack their host systems on specific dates, such as Friday the 13th or April Fool\'s Day. Trojans that activate on certain dates are often called "time bombs".
+
+To be considered a logic bomb, the payload should be unwanted and unknown to the user of the software. As an example, trial programs with code that disables certain functionality after a set time are not normally regarded as logic bombs.</description>
+</threat>
+<threat label="Replicating Virus" name="Replicating Virus" type="Embedded Malicious Code" reference="OWASP">
+  <description>Replicating Virus</description>
+</threat>
+<threat label="Trojan Horse" name="Trojan Horse" type="Embedded Malicious Code" reference="OWASP">
+ <description>A Trojan Horse is a program that uses malicious code masqueraded as a trusted application. The malicious code can be injected on benign applications, masqueraded in e-mail links, or sometimes hidden in JavaScript pages to make furtive attacks against vulnerable internet Browsers.
+
+Other details can be found in Man-in-the-browser attack.
+The 7 Main Types of Trojan Horse
+
+   1. Remote Access Trojan (RAT): Designed to provide the attacker full control of the infected machine. Trojan horse usually masqueraded as a utility.
+   2. Data Sending Trojan: Trojan horse that uses keylogger technology to capture sensitive data like passwords, credit card and banking information, and IM messages, and sends them back to the attacker.
+   3. Destructive Trojan: Trojan horse designed to destroy data stored on the victim’s computer.
+   4. Proxy Trojan: Trojan horse that uses the victim computer as a proxy server, providing the attacker an opportunity to execute illicit acts from the infected computer, like banking fraud, and even malicious attacks over the internet.
+   5. FTP Trojan: This type of Trojan horse uses the port 21 to enable the attackers to connect to the victim computer using File Transfer Protocol.
+   6. Security software disabler Trojan: This Trojan horse is designed to disable security software like firewall and antivirus, enabling the attacker to use many invasion techniques to invade the victim computer, and even to infect more than the computer.
+   7. Denial-of-Service attack Trojan: Trojan horse designed to give the attacker opportunity to realize Denial-of-Service attacks from victim computer.</description>
+</threat>
+<threat label="Argument Injection" name="Argument Injection" type="Injection" reference="OWASP">
+  <description>Argument Injection or Modification is a type of Injection attack. Modifying or injecting data as an argument may lead to very similar, often the same, results as in other injection attacks. It makes no difference if the attacker wants to inject the system command into arguments or into any other part of the code.</description>
+</threat>
+<threat label="Blind SQL Injection" name="Blind SQL Injection" type="Injection" reference="OWASP">
+  <description>When an attacker executes SQL Injection attacks, sometimes the server responds with error messages from the database server complaining that the SQL Query syntax is incorrect. Blind SQL injection is identical to normal SQL Injection except that when an attacker attempts to exploit an application, rather then getting a useful error message, they get a generic page specified by the developer instead. This makes exploiting a potential SQL Injection attack more difficult but not impossible. An attacker can still steal data by asking a series of True and False questions through SQL statements.</description>
+</threat>
+
+<threat label="Blind XPath Injection" name="Blind XPath Injection" type="Injection" reference="OWASP">
+  <description>XPath is a type of query language that describes how to locate specific elements (including attributes, processing instructions, etc.) in an XML document. Since it is a query language, XPath is somewhat similar to Structured Query Language (SQL). However, XPath can be used to reference almost any part of any XML document without access control restrictions, whereas with SQL, a "user" (which is a term undefined in the XPath/XML context) may be restricted to certain tables, columns or queries.
+
+More information may be found in the article dedicated to XPATH Injection. Using an XPATH Injection attack the attacker is able to log in to the system without entering valid login and password. If he wants to know information about other users he must take one step further. When conducting a Blind XPath Injection attack, the attacker has no knowledge about the structure of the XML document. However his situation is better compared to Blind SQL Injection, because there are functions which allow for performing tests (XML Crawling) and in the end getting to know the document structure.</description>
+</threat>
+
+<threat label="Code Injection" name="Code Injection" type="Injection" reference="OWASP">
+  <description>Code Injection is the general name for a lot of types of attacks which depend on inserting code, which is interprated by the application. Such an attack may be be performed by adding strings of characters into a cookie or argument values in the URI. This attack makes use of lack of accurate input/output data validation, for example:
+
+    * class of allowed characters (standard regular expressions classes or custom)
+    * data format
+    * amount of expected data
+    * for numerical input, its values 
+
+Code Injection and Command Injection are measures used to achive simmilar goals. The concept of Code Injection is to add malicious code into an application, which then will be executed. Added code is a part of the application itself. It is not external code which is executed, like it would be in Command Injection.</description>
+</threat>
+<threat label="Command Injection" name="Command Injection" type="Injection" reference="OWASP">
+  <description>The purpose of the command injection attack is to inject and execute commands specified by the attacker in the vulnerable application. In situation like this, the application, which executes unwanted system commands, is like a pseudo system shell, and the attacker may use it as any authorized system user. However, commands are executed with the same privileges and environment as the application has. Command injection attacks are possible in most cases because of lack of correct input data validation, which can be manipulated by the attacker (forms, cookies, HTTP headers etc.).
+
+There is a variant of the Code Injection attack. The difference with code injection is that the attacker adds his own code to the existing code. In this way, the attacker extends the default functionality of the application without the necessity of executing system commands. Injected code is executed with the same privileges and environment as the application has.
+
+An OS command injection attack occurs when an attacker attempts to execute system level commands through a vulnerable application. Applications are considered vulnerable to the OS command injection attack if they utilize user input in a system level command.</description>
+</threat>
+<threat label="Direct Static Code Injection" name="Direct Static Code Injection" type="Injection" reference="OWASP">
+  <description>A Direct Static Code Injection attack consists of injecting code directly onto the resource used by application while processing a user request. This is normally performed by tampering libraries and template files which are created based on user input without proper data sanitization. Upon a user request to the modified resource, the actions defined in it will be executed at server side in the context of web server process.
+
+Server Side Includes is considered a type of direct static code injection. It should not be confused with other types of code injection, like XSS (“Cross-site scripting” or “HTML injection”) where the code is executed on the client side.</description>
+</threat>
+<threat label="Format string attack" name="Format string attack" type="Injection" reference="OWASP">
+  <description>The Format String exploit occurs when the submitted data of an input string is evaluated as a command by the application. In this way, the attacker could execute code, read the stack, or cause a segmentation fault in the running application, causing new behaviors that could compromise the security or the stability of the system.
+
+To understand the attack, it’s necessary to understand the components that constitute it.
+
+•The Format Function is an ANSI C conversion function, like printf, fprintf, which converts a primitive variable of the programming language into a human-readable string representation.
+
+•The Format String is the argument of the Format Function and is an ASCII Z string which contains text and format parameters, like: printf ("The magic number is: %d\n", 1911);
+
+•The Format String Parameter, like %x %s defines the type of conversion of the format function.
+
+The attack could be executed when the application doesn’t properly validate the submitted input. In this case, if a Format String parameter, like %x, is inserted into the posted data, the string is parsed by the Format Function, and the conversion specified in the parameters is executed. However, the Format Function is expecting more arguments as input, and if these arguments are not supplied, the function could read or write the stack.
+
+In this way, it is possible to define a well-crafted input that could change the behavior of the format function, permitting the attacker to cause denial of service or to execute arbitrary commands.
+
+If the application uses Format Functions in the source-code, which is able to interpret formatting characters, the attacker could explore the vulnerability by inserting formatting characters in a form of the website.</description>
+</threat>
+
+<threat label="Full Path Disclosure" name="Full Path Disclosure" type="Injection" reference="OWASP">
+  <description>Full Path Disclosure (FPD) vulnerabilities enable the attacker to see the path to the webroot/file. e.g.: /home/omg/htdocs/file/. Certain vulnerabilities, such as using the load_file() (within a SQL Injection) query to view the page source, require the attacker to have the full path to the file they wish to view.</description>
+</threat>
+
+<threat label="LDAP Injection" name="LDAP Injection" type="Injection" reference="OWASP">
+  <description>LDAP Injection is an attack used to exploit web based applications that construct LDAP statements based on user input. When an application fails to properly sanitize user input, it is possible to modify LDAP statements using a local proxy. This could result in the execution of arbitrary commands such as granting permissions to unauthorized queries, and content modification inside the LDAP tree. The same advanced exploitation techniques available in SQL Injection can be similarly applied in LDAP Injection.</description>
+</threat>
+
+<threat label="Parameter Delimiter" name="Parameter Delimiter" type="Injection" reference="OWASP">
+  <description>This attack is based on the manipulation of parameter delimiters used by web application input vectors in order to cause unexpected behaviors like access control and authorization bypass and information disclosure, among others.</description>
+</threat>
+
+<threat label="ReDoS" name="Regular Expression Denial of Service" type="Injection" reference="OWASP">
+  <description>The Regular expression Denial of Service (ReDoS) is a Denial of Service attack, that exploits the fact that most Regular Expression implementations may reach extreme situations that cause them to work very slowly (exponentially related to input size). An attacker can then cause a program using a Regular Expression to enter these extreme situations and then hang for a very long time.</description>
+</threat>
+
+<threat label="SSI Injection" name="Server Side Includes Injection" type="Injection" reference="OWASP">
+  <description>SSIs are directives present on Web applications used to feed an HTML page with dynamic contents. They are similar to CGIs, except that SSIs are used to execute some actions before the current page is loaded or while the page is being visualized. In order to do so, the web server analyzes SSI before supplying the page to the user.
+
+The Server-Side Includes attack allows the exploitation of a web application by injecting scripts in HTML pages or executing arbitrary codes remotely. It can be exploited through manipulation of SSI in use in the application or force its use through user input fields.
+
+It is possible to check if the application is properly validating input fields data by inserting characters that are used in SSI directives.
+
+Another way to discover if the application is vulnerable is to verify the presence of pages with extension .stm, .shtm and .shtml. However, the lack of these type of pages does not mean that the application is protected against SSI attacks.
+
+In any case, the attack will be successful only if the web server permits SSI execution without proper validation. This can lead to access and manipulation of file system and process under the permission of the web server process owner.
+
+The attacker can access sensitive information, such as password files, and execute shell commands. The SSI directives are injected in input fields and they are sent to the web server. The web server parses and executes the directives before supplying the page. Then, the attack result will be viewable the next time that the page is loaded for the user browser.</description>
+</threat>
+
+<threat label="Special Element Injection" name="Special Element Injection" type="Injection" reference="OWASP">
+  <description>Special Element Injection is a type of injection attack that exploits a weakness related to reserved words and special characters.
+
+Every programming language and operating system has special characters considered as reserved words for it. However, when an application receives such data as user input, it is possible to observe unexpected behavior in the application when parsing this information. This can lead to information disclosure, access control and authorization bypass, code injection, and many other variants.
+
+According to the characters used, the Special Element Injection attack can be performed using macro symbols, parameter delimiter and null characters/null bytes, among others. #Injection.</description>
+</threat>
+
+<threat label="Web Parameter Tampering" name="Web Parameter Tampering" type="Injection" reference="OWASP">
+  <description>The Web Parameter Tampering attack is based on the manipulation of parameters exchanged between client and server in order to modify application data, such as user credentials and permissions, price and quantity of products, etc. Usually, this information is stored in cookies, hidden form fields, or URL Query Strings, and is used to increase application functionality and control.
+
+This attack can be performed by a malicious user who wants to exploit the application for their own benefit, or an attacker who wishes to attack a third-person using a Man-in-the-middle attack. In both cases, tools likes Webscarab and Paros proxy are mostly used.
+
+The attack success depends on integrity and logic validation mechanism errors, and its exploitation can result in other consequences including XSS, SQL Injection, file inclusion, and path disclosure attacks.</description>
+</threat>
+
+<threat label="XPATH Injection" name="XPATH Injection" type="Injection" reference="OWASP">
+  <description>Similar to SQL Injection, XPath Injection attacks occur when a web site uses user-supplied information to construct an XPath query for XML data. By sending intentionally malformed information into the web site, an attacker can find out how the XML data is structured, or access data that he may not normally have access to. He may even be able to elevate his privileges on the web site if the XML data is being used for authentication (such as an XML based user file).
+
+Querying XML is done with XPath, a type of simple descriptive statement that allows the XML query to locate a piece of information. Like SQL, you can specify certain attributes to find, and patterns to match. When using XML for a web site it is common to accept some form of input on the query string to identify the content to locate and display on the page. This input must be sanitized to verify that it does not mess up the XPath query and return the wrong data.
+
+XPath is a standard language; its notation/syntax is always implementation independent, which means the attack may be automated. There are no different dialects as it takes place in requests to the SQL databeses.
+
+Because there is no level access control it is possible to get the entire document. We would not encounter any limitations as we may know from SQL injection attacks.</description>
+</threat>
+
+<threat label="Brute Force" name="Brute Force Attack" type="Probabilistic Techniques" reference="OWASP">
+  <description>During this type of attack, the attacker is trying to bypass security mechanisms while having minimal knowledge about them. Using one or more accessible methods: dictionary attack (with or without mutations), brute-force attack (with given classes of characters e.g.: alphanumerical, special, case (in)sensitive) the attacker is trying to achieve his/her goal. Considering a given method, number of tries, efficiency of the system, which conducts the attack and estimated efficiency of the system which is attacked, the attacker is able to calculate how long the attack will have to last. Non brute-force attacks, on the other hand, which includes all classes of characters, give no certainty of success.</description>
+</threat>
+
+<threat label="Cryptanalysis" name="Cryptanalysis" type="Probabilistic Techniques" reference="OWASP">
+  <description>Cryptanalysis is a process of finding weaknesses in cryptographic algorithms and using these weaknesses to decipher the ciphertext without knowing the secret key (instance deduction). Sometimes the weakness is not in the cryptographic algorithm itself, but rather in how it is applied that makes cryptanalysis successful. An attacker may have other goals as well, such as:
+
+    * Total Break - Finding the secret key.
+    * Gobal Deduction - Finding a functionally equivalent algorithm for encryption and decryption that does not require knowledge of the secret key.
+    * Information Deduction - Gaining some information about plaintexts or ciphertexts that was not previously known.
+    * Distinguishing Algorithm - The attacker has the ability to distinguish the output of the encryption (ciphertext) from a random permutation of bits. 
+
+The goal of the attacker performing cryptanalysis will depend on the specific needs of the attacker in a given attack context. In most cases, if cryptanalysis is successful at all, an attacker will not be able to go past being able to deduce some information about the plaintext (goal 3). However, that may be sufficient for an attacker, depending on the context.</description>
+</threat>
+
+<threat label="Denial of Service" name="Denial of Service" type="Probabilistic Techniques" reference="OWASP">
+  <description>The Denial of Service (DoS) attack is focused on making unavailable a resource (site, application, server) for the purpose it was designed. There are many ways to make a service unavailable for legitimate users by manipulating network packets, programming, logical, or resources handling vulnerabilities, among others. If a service receives a very large number of requests, it may stop providing service to legitimate users. In the same way, a service may stop if a programming vulnerability is exploited, or the way the service handles resources used by it.
+
+Sometimes the attacker can inject and execute arbitrary code while performing a DoS attack in order to access critical information or execute commands on the server. Denial-of-service attacks significantly degrade service quality experienced by legitimate users. It introduces large response delays, excessive losses, and service interruptions, resulting in direct impact on availability.</description>
+</threat>
+
+<threat label="HTTP Request Smuggling" name="HTTP Request Smuggling" type="Protocol Manipulation" reference="OWASP">
+  <description>The HTTP Request Smuggling attack explores an incomplete parsing of the submitted data done by an intermediary HTTP system working as a proxy. HTTP Request Smuggling consists of sending a specially formatted HTTP request that will be parsed in a different way by the proxy system and by the final system, so the attacker could smuggle a request to one system without the other being aware of it. This attack makes it possible to exploit other attacks, like Cache Poisoning, Session Hijacking, Cross-site Scripting (XSS) and most importantly, the ability to bypass web application firewall protection.
+
+To exploit the HTTP Request Smuggling, some specific conditions must exist, such as the presence of specific proxy system and version such as SunOne Proxy 3.6 (SP4) or FW-1/FP4-R55W beta or an XSS vulnerability in the web server.
+
+Basically the attack consists of submitting an HTTP request that encapsulates a second HTTP request in the same header.</description>
+</threat>
+<threat label="HTTP Response Smuggling" name="HTTP Response Smuggling" type="Protocol Manipulation" reference="OWASP">
+  <description>HTTP response splitting occurs when:
+
+    * Data enters a web application through an untrusted source, most frequently an HTTP request.
+    * The data is included in an HTTP response header sent to a web user without being validated for malicious characters. 
+
+HTTP response splitting is a means to an end, not an end in itself. At its root, the attack is straightforward: an attacker passes malicious data to a vulnerable application, and the application includes the data in an HTTP response header.
+
+To mount a successful exploit, the application must allow input that contains CR (carriage return, also given by %0d or \r) and LF (line feed, also given by %0a or \n)characters into the header. These characters not only give attackers control of the remaining headers and body of the response the application intends to send, but also allow them to create additional responses entirely under their control.</description>
+</threat>
+
+<threat label="Traffic Flood" name="Traffic Flood" type="Protocol Manipulation" reference="OWASP">
+  <description>Traffic Flood is a type of DoS attack targeting web servers. The attack explores the way that the TCP connection is managed. The attack consists of the generation of a lot of well-crafted TCP requisitions, with the objective to stop the Web Server or cause a performance decrease.
+
+The attack explores a characteristic of the HTTP protocol, opening many connections at the same time to attend a single requisition. This special feature of the http protocol, which consists of opening a TCP connection for every html object and closing it, could be used to make two different kinds of exploitations. The Connect attack is done during the establishment of the connection, and the Closing attack is done during the connection closing.</description>
+</threat>
+<threat label="Amplification" name="Assymetric Resource Consumption (Amplification)" type="Resource Depletion" reference="OWASP">
+  <description>An attacker can force a victim to consume more resources than should be allowed for the attacker level of access. The program can potentially fail to release or incorrectly release a system resource. A resource is not properly cleared and made available for re-use.</description>
+</threat>
+<threat label="Comment Injection" name="Comment Injection Attack" type="Resource Manipulation" reference="OWASP">
+  <description>Comments injected into an application through input can be used to compromise a system. As data is parsed, an injected/malformed comment may cause the process to take unexpected actions that result in an attack.</description>
+</threat>
+<threat label="Custom Special Character Injection" name="Custom Special Character Injection" type="Resource Manipulation" reference="OWASP">
+  <description>The software does not properly filter or quote special characters or reserved words that are used in a custom or proprietary language or representation that is used by the product. That allows attackers to modify the syntax, content, or commands before they are processed by the end system.</description>
+</threat>
+<threat label="Double Encoding" name="Double Encoding" type="Resource Manipulation" reference="OWASP">
+  <description>This attack technique consists of encoding user request parameters twice in hexadecimal format in order to bypass security controls or cause unexpected behavior from the application. It is possible because the webserver accepts and processes client requests in many encoded forms.
+
+By using double encoding it’s possible to bypass security filters that only decode user input once. The second decoding process is executed by the backend platform or modules that properly handle encoded data, but do not have the corresponding security checks in place.
+
+Attackers can inject double encoding in pathnames or query strings to bypass the authentication schema and security filters in use by the web application.
+
+There are some common characters sets that are used in Web applications attacks. For example, Path Traversal attacks use “..\/” (dot-dot-slash) , while XSS attacks use “&lt;” and “&gt;” characters. These characters give a hexadecimal representation that differs from normal data.
+
+For example, “..\/” (dot-dot-slash) characters represent %2E%2E%2f in hexadecimal representation. When the % symbol is encoded again, its representation in hexadecimal code is %25. The result from the double encoding process ”..\/”(dot-dot-slash) would be %252E%252E%252F:
+
+    * The hexadecimal encoding of “..\/” represents "%2E%2E%2f" 
+
+    * Then encoding the “%” represents "%25" 
+
+    * Double encoding of “..\/” represents "%252E%252E%252F"</description>
+</threat>
+<threat label="Forced Browsing" name="Forced Browsing" type="Resource Manipulation" reference="OWASP">
+  <description>Forced browsing is an attack where the aim is to enumerate and access resources that are not referenced by the application, but are still accessible.
+
+An attacker can use Brute Force techniques to search for unlinked contents in the domain directory, such as temporary directories and files, and old backup and configuration files. These resources may store sensitive information about web applications and operational systems, such as source code, credentials, internal network addressing, and so on, thus being considered a valuable resource for intruders.
+
+This attack is performed manually when the application index directories and pages are based on number generation or predictable values, or using automated tools for common files and directory names.
+
+This attack is also known as Predictable Resource Location, File Enumeration, Directory Enumeration, and Resource Enumeration.</description>
+</threat>
+<threat label="Relative Path Traversal" name="Relative Path Traversal" type="Resource Manipulation" reference="OWASP">
+  <description>This attack is a variant of Path Traversal and can be exploited when the application accepts the use of relative traversal sequences such as "../".</description>
+</threat>
+<threat label="Repudiation Attack" name="Repudiation Attack" type="Resource Manipulation" reference="OWASP">
+  <description>A repudiation attack happens when an application or system does not adopt controls to properly track and log user actions, thus permitting malicious manipulation or forging the identification of new actions. This attack can be used to change the authoring information of actions executed by a malicious user in order to log wrong data to log files. Its usage can be extended to general data manipulation in the name of others, in a similar manner as spoofing mail messages. If this attack takes place, the data stored on log files can be considered invalid or misleading.</description>
+</threat>
+<threat label="Setting Manipulation" name="Setting Manipulation" type="Resource Manipulation" reference="OWASP">
+  <description>This attack aims to modify application settings in order to cause misleading data or advantages on the attacker behalf. He may manipulate values in the system and manage specific user resources of the application or affect its functionalities.
+
+An attacker can exploit several functionalities of the application using this attack technique, but it would not possible to describe all the ways of exploration, due to innumerable options that attacker may use to control the system values.
+
+Using this attack technique, it is possible to manipulate settings by changing the application functions, such as calls to the database, blocking access to external libraries, and/or modification log files.</description>
+</threat>
+<threat label="Spyware" name="Spyware" type="Resource Manipulation" reference="OWASP">
+  <description>Spyware is a program that captures statistical information from a user computer and sends it over internet without user acceptance. This information is usually obtained from cookies and the web browser history. Spyware can also install other software, display advertisements, or redirect the web browser activity. Spyware differs from a virus, worm, and adware in various ways. Spyware does not self-replicate and distribute itself like viruses and worms, and does not necessarily display advertisements like adware. The common characteristics between spyware and viruses, worms, and adware are:
+
+   1. exploitation of the infected computer for commercial purposes
+   2. the display, in some cases, of advertisements </description>
+</threat>
+<threat label="Unicode Encoding" name="Unicode Encoding" type="Resource Manipulation" reference="OWASP">
+  <description>The attack aims to explore flaws in the decoding mechanism implemented on applications when decoding Unicode data format. An attacker can use this technique to encode certain characters in the URL to bypass application filters, thus accessing restricted resources on the Web server or to force browsing to protected pages.</description>
+</threat>
+<threat label="Network Eavesdropping" name="Network Eavesdropping" type="Sniffing Attacks" reference="OWASP">
+  <description>Network Eavesdropping or network sniffing is a network layer attack consisting of capturing packets from the network transmitted by others computers and reading the data content in search of sensitive information like passwords, session tokens, or any kind of confidential information.
+
+The attack could be done using tools called network sniffers. These tools collect packets on the network and, depending on the quality of the tool, analyze the collected data like protocol decoders or stream reassembling.
+
+Depending on the network context, for the sniffing to be the effective, some conditions must be met:
+
+• LAN environment with HUBs
+
+This is the ideal case because the hub is a network repeater that duplicates every network frame received to all ports, so the attack is very simple to implement because no other condition must be met.
+
+• LAN environment with switches
+
+To be effective for eavesdropping, a preliminary condition must be met. Because a switch by default only transmits a frame to the port, a mechanism that will duplicate or will redirect the network packets to an evil system is necessary. For example, to duplicate traffic from one port to another port, a special configuration on the switch is necessary. To redirect the traffic from one port to another, there must be a preliminary exploitation like the arp spoof attack. In this attack, the evil system acts like a router between the victim’s communication, making it possible to sniff the exchanged packets.
+
+• WAN environment
+
+In this case, to make a network sniff it is necessary that the evil system becomes a router between the client server communications. One way to implement this exploit is with a DNS spoof attack to the client system.
+
+Network Eavesdropping is a passive attack which is very difficult to discover. It could be identified by the effect of the preliminary condition or, in some cases, by inducing the evil system to respond a fake request directed to the evil system IP but with the MAC address of a different system.</description>
+</threat>
+<threat label="MITM" name="Man-in-the-middle attack" type="Spoofing" reference="OWASP">
+  <description>The man-in-the middle attack intercepts a communication between two systems. For example, in an http transaction the target is the TCP connection between client and server. Using different techniques, the attacker splits the original TCP connection into 2 new connections, one between the client and the attacker and the other between the attacker and the server. Once the TCP connection is intercepted, the attacker acts as a proxy, being able to read, insert and modify the data in the intercepted communication. 
+
+The MITM attack is very effective because of the nature of the http protocol and data transfer which are all ASCII based. In this way, it’s possible to view and interview within the http protocol and also in the data transferred. So, for example, it’s possible to capture a session cookie reading the http header, but it’s also possible to change an amount of money transaction inside the application context.
+
+The MITM attack could also be done over an https connection by using the same technique; the only difference consists in the establishment of two independent SSL sessions, one over each TCP connection. The browser sets a SSL connection with the attacker, and the attacker establishes another SSL connection with the web server. In general the browser warns the user that the digital certificate used is not valid, but the user may ignore the warning because he doesn’t understand the threat. In some specific contexts it’s possible that the warning doesn’t appear, as for example, when the Server certificate is compromised by the attacker or when the attacker certificate is signed by a trusted CA and the CN is the same of the original web site.
+
+MITM is not only an attack technique, but is also usually used during the development step of a web application or is still used for Web Vulnerability assessments.</description>
+</threat> 
+<threat label="XSS" name="Cross-Site Scripting (XSS)" type="Injection" reference="OWASP">
+  <description>Cross-Site Scripting attacks are a type of injection problem, in which malicious scripts are injected into the otherwise benign and trusted web sites. Cross-site scripting (XSS) attacks occur when an attacker uses a web application to send malicious code, generally in the form of a browser side script, to a different end user. Flaws that allow these attacks to succeed are quite widespread and occur anywhere a web application uses input from a user in the output it generates without validating or encoding it.
+An attacker can use XSS to send a malicious script to an unsuspecting user. The end user’s browser has no way to know that the script should not be trusted, and will execute the script. Because it thinks the script came from a trusted source, the malicious script can access any cookies, session tokens, or other sensitive information retained by your browser and used with that site. These scripts can even rewrite the content of the HTML page.</description>
+</threat>
+<threat label="Man-in-the-browser" name="Man-in-the-browser attack" type="Spoofing" reference="OWASP">
+  <description>The Man-in-the-Browser attack is the same approach as Man-in-the-middle attack, but in this case a Trojan Horse is used to intercept and manipulate calls between the main application executable (ex: the browser) and its security mechanisms or libraries on-the-fly.
+The most common objective of this attack is to cause financial fraud by manipulating transactions of Internet Banking systems, even when other authentication factors are in use.
+A previously installed Trojan horse is used to act between the browser and the browser’s security mechanism, sniffing or modifying transactions as they are formed on the browser, but still displaying back the user intended transaction.
+Normally, the victim must be smart in order to notice a signal of such attack while he is accessing a web application like an internet banking account, even in presence of SSL channels, because all expected controls and security mechanisms are displayed and work normally.
+Points of effect:
+
+* Browser Helper Objects – dynamically-loaded libraries loaded by Internet Explorer upon startup
+* Extensions – the equivalent to Browser Helper Objects for Firefox Browser
+* API-Hooking – this is the technique used by Man-in-the-Browser to perform its Man-in-the-Middle between the executable application (EXE) and its libraries (DLL).
+* Javascript – By using a malicious Ajax worm, as described on Ajax Sniffer - Proof of Concept</description>
+</threat>
+
+</directory>

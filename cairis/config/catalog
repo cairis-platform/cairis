@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<!DOCTYPE catalog
+   PUBLIC "-//OASIS/DTD Entity Resolution XML Catalog V1.0//EN"
+   "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd"> 
+
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<catalog  xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">  
+  <group  prefer="system" >  
+
+    <public 
+       publicId="-//CAIRIS//DTD ASSOCIATIONS 1.0//EN"  
+       uri="associations.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/associations.dtd"  
+       uri="associations.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD PROJECT 1.0//EN"  
+       uri="cairis.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/cairis.dtd"  
+       uri="cairis.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD MODEL 1.0//EN"  
+       uri="cairis_model.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/cairis_model.dtd"  
+       uri="cairis_model.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD DIRECTORY 1.0//EN"  
+       uri="directory.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/directory.dtd"  
+       uri="directory.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD DOMAINVALUES 1.0//EN"  
+       uri="domainvalues.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/domainvalues.dtd"  
+       uri="domainvalues.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD REQUIREMENTS 1.0//EN"  
+       uri="goals.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/goals.dtd"  
+       uri="goals.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD RISKANALYSIS 1.0//EN"  
+       uri="riskanalysis.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/riskanalysis.dtd"  
+       uri="riskanalysis.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD SECURITYPATTERN 1.0//EN"  
+       uri="securitypattern.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/securitypattern.dtd"  
+       uri="securitypattern.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD ATTACKPATTERN 1.0//EN"  
+       uri="attack_pattern.dtd"/>
+
+    <system
+       systemId="http://failys.github.io/CAIRIS/dtd/attack_pattern.dtd"  
+       uri="attack_pattern.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD TVTYPES 1.0//EN"  
+       uri="tvtypes.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/tvtypes.dtd"  
+       uri="tvtypes.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD USABILITY 1.0//EN"  
+       uri="usability.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/usability.dtd"  
+       uri="usability.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD COMPONENT 1.0//EN"  
+       uri="component_view.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/component_view.dtd"  
+       uri="component_view.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD SYNOPSES  1.0//EN"  
+       uri="synopses.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/synopses.dtd"  
+       uri="synopses.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD PROCESSES  1.0//EN"  
+       uri="processes.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/processes.dtd"  
+       uri="processes.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD ASSETS  1.0//EN"  
+       uri="template_assets.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/template_assets.dtd"  
+       uri="template_assets.dtd"/>
+
+    <public 
+       publicId="-//CAIRIS//DTD LOCATIONS  1.0//EN"  
+       uri="locations.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/locations.dtd"  
+       uri="locations.dtd"/>
+
+  </group>
+</catalog>

@@ -1,0 +1,46 @@
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<!-- DTD for CAIRIS risk analysis export file -->
+
+<!ELEMENT associations (manual_association*,goal_association*,dependency*)>
+
+<!ELEMENT manual_association EMPTY>
+<!ATTLIST manual_association from_name CDATA #REQUIRED>
+<!ATTLIST manual_association from_dim (requirement | task | asset | domainproperty | usecase | response | countermeasure | component) #REQUIRED>
+<!ATTLIST manual_association to_name CDATA #REQUIRED>
+<!ATTLIST manual_association to_dim (requirement | task | asset | vulnerability | role | usecase | goal | countermeasure) #REQUIRED>
+<!ATTLIST manual_association label CDATA #IMPLIED>
+
+<!ELEMENT goal_association (rationale)>
+<!ELEMENT rationale (#PCDATA)>
+<!ATTLIST goal_association environment CDATA #REQUIRED>
+<!ATTLIST goal_association goal_name CDATA #REQUIRED>
+<!ATTLIST goal_association goal_dim (goal | task | usecase | requirement | obstacle | domainproperty | threat | vulnerability | role | response) #REQUIRED>
+<!ATTLIST goal_association ref_type (and | or | conflict | responsible | obstruct | resolve) #REQUIRED>
+<!ATTLIST goal_association subgoal_name CDATA #REQUIRED>
+<!ATTLIST goal_association subgoal_dim (goal | task | usecase | requirement | obstacle | domainproperty | threat | vulnerability | role) #REQUIRED>
+<!ATTLIST goal_association alternative_id (0 | 1) #REQUIRED>
+
+<!ELEMENT dependency (rationale)>
+<!ATTLIST dependency depender CDATA #REQUIRED>
+<!ATTLIST dependency dependee CDATA #REQUIRED>
+<!ATTLIST dependency dependency_type (goal | task | asset) #REQUIRED>
+<!ATTLIST dependency dependency CDATA #REQUIRED>
+<!ATTLIST dependency environment CDATA #REQUIRED>

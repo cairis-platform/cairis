@@ -1,0 +1,128 @@
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<!-- DTD for CAIRIS risk analysis export file -->
+
+<!ELEMENT usability (persona*,external_document*,document_reference*,concept_reference*,persona_characteristic*,task_characteristic*,task*,usecase*)>
+
+<!ELEMENT tag EMPTY>
+<!ATTLIST tag name CDATA #REQUIRED>
+
+
+<!ELEMENT persona (tag*,activities,attitudes,aptitudes,motivations,skills,intrinsic,contextual,persona_environment+)>
+<!ATTLIST persona name CDATA #REQUIRED>
+<!ATTLIST persona type (Primary | Secondary | Supplemental | Customer | Served | Negative) #REQUIRED>
+<!ATTLIST persona image CDATA #REQUIRED>
+<!ATTLIST persona assumption_persona (TRUE | FALSE) #REQUIRED>
+<!ELEMENT activities (#PCDATA)>
+<!ELEMENT attitudes (#PCDATA)>
+<!ELEMENT aptitudes (#PCDATA)>
+<!ELEMENT motivations (#PCDATA)>
+<!ELEMENT skills (#PCDATA)>
+<!ELEMENT intrinsic (#PCDATA)>
+<!ELEMENT contextual (#PCDATA)>
+<!ELEMENT persona_environment (persona_role+,narrative)>
+<!ATTLIST persona_environment name CDATA #REQUIRED>
+<!ATTLIST persona_environment is_direct (TRUE | FALSE) #REQUIRED>
+<!ELEMENT persona_role EMPTY>
+<!ATTLIST persona_role name CDATA #REQUIRED>
+<!ELEMENT narrative (#PCDATA)>
+
+<!ELEMENT external_document (description*)>
+<!ATTLIST external_document name CDATA #REQUIRED>
+<!ATTLIST external_document version CDATA #REQUIRED>
+<!ATTLIST external_document date CDATA #REQUIRED>
+<!ATTLIST external_document authors CDATA #REQUIRED>
+
+<!ELEMENT document_reference (excerpt)>
+<!ATTLIST document_reference name CDATA #REQUIRED>
+<!ATTLIST document_reference document CDATA #REQUIRED>
+<!ATTLIST document_reference contributor CDATA #REQUIRED>
+<!ELEMENT excerpt (#PCDATA)>
+
+<!ELEMENT concept_reference (description)>
+<!ATTLIST concept_reference name CDATA #REQUIRED>
+<!ATTLIST concept_reference concept (asset | attacker | countermeasure | domainproperty | environment | goal | misusecase | obstacle | persona | requirement | response | risk | role | task | threat | vulnerability) #REQUIRED>
+<!ATTLIST concept_reference object CDATA #REQUIRED>
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT persona_characteristic (definition,grounds*,warrant*,rebuttal*)>
+<!ATTLIST persona_characteristic persona CDATA #REQUIRED>
+<!ATTLIST persona_characteristic behavioural_variable (Activities | Attitudes | Aptitudes | Motivations | Skills | Environment_Narrative) #REQUIRED>
+<!ATTLIST persona_characteristic modal_qualifier CDATA #REQUIRED>
+<!ELEMENT definition (#PCDATA)>
+<!ELEMENT grounds EMPTY>
+<!ATTLIST grounds type (document | asset | attacker | countermeasure | domainproperty | environment | goal | misusecase | obstacle | persona | requirement | response | risk | role | task | threat | vulnerability) #REQUIRED>
+<!ATTLIST grounds reference CDATA #REQUIRED>
+<!ELEMENT warrant EMPTY>
+<!ATTLIST warrant type (document | asset | attacker | countermeasure | domainproperty | environment | goal | misusecase | obstacle | persona | requirement | response | risk | role | task | threat | vulnerability) #REQUIRED>
+<!ATTLIST warrant reference CDATA #REQUIRED>
+<!ELEMENT rebuttal EMPTY>
+<!ATTLIST rebuttal type (document | asset | attacker | countermeasure | domainproperty | environment | goal | misusecase | obstacle | persona | requirement | response | risk | role | task | threat | vulnerability) #REQUIRED>
+<!ATTLIST rebuttal reference CDATA #REQUIRED>
+
+<!ELEMENT task_characteristic (definition,grounds+,warrant*,rebuttal*)>
+<!ATTLIST task_characteristic task CDATA #REQUIRED>
+<!ATTLIST task_characteristic modal_qualifier CDATA #REQUIRED>
+
+<!ELEMENT task (tag*,objective,task_environment+)>
+<!ATTLIST task name CDATA #REQUIRED>
+<!ATTLIST task code CDATA #REQUIRED>
+<!ATTLIST task author CDATA #REQUIRED>
+<!ATTLIST task assumption_task (TRUE | FALSE) #REQUIRED>
+<!ELEMENT objective (#PCDATA)>
+<!ELEMENT task_environment (dependencies,task_persona+,task_concern*,narrative,consequences,benefits,task_concern_association*)>
+<!ATTLIST task_environment name CDATA #REQUIRED>
+<!ELEMENT dependencies (#PCDATA)>
+<!ELEMENT consequences (#PCDATA)>
+<!ELEMENT benefits (#PCDATA)>
+<!ELEMENT task_persona EMPTY>
+<!ATTLIST task_persona persona CDATA #REQUIRED>
+<!ATTLIST task_persona duration (Seconds | Minutes | Hours_or_longer) #REQUIRED>
+<!ATTLIST task_persona frequency (Hourly_or_more | Daily_-_Weekly | Monthly_or_less) #REQUIRED>
+<!ATTLIST task_persona demands (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST task_persona goal_conflict (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT task_concern EMPTY>
+<!ATTLIST task_concern asset CDATA #REQUIRED>
+<!ELEMENT task_concern_association EMPTY>
+<!ATTLIST task_concern_association source_name CDATA #REQUIRED>
+<!ATTLIST task_concern_association source_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST task_concern_association link_name CDATA #REQUIRED>
+<!ATTLIST task_concern_association target_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST task_concern_association target_name CDATA #REQUIRED>
+
+<!ELEMENT usecase (tag*,description,actor+,usecase_environment+)>
+<!ATTLIST usecase name CDATA #REQUIRED>
+<!ATTLIST usecase author CDATA #REQUIRED>
+<!ATTLIST usecase code CDATA #REQUIRED>
+<!ELEMENT actor EMPTY>
+<!ATTLIST actor name CDATA #REQUIRED>
+<!ELEMENT usecase_environment (preconditions,flow,postconditions)>
+<!ATTLIST usecase_environment name CDATA #REQUIRED>
+<!ELEMENT preconditions (#PCDATA)>
+<!ELEMENT flow (step+)>
+<!ELEMENT step (tag*,exception*)>
+<!ATTLIST step number CDATA #REQUIRED>
+<!ATTLIST step description CDATA #REQUIRED>
+<!ELEMENT exception (definition)>
+<!ATTLIST exception name CDATA #REQUIRED>
+<!ATTLIST exception type (Goal | Requirement) #REQUIRED>
+<!ATTLIST exception value CDATA #REQUIRED>
+<!ATTLIST exception category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat) #REQUIRED>
+<!ELEMENT postconditions (#PCDATA)>
