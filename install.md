@@ -114,7 +114,7 @@ All the information entered into CAIRIS is stored in a single MySQL database, bu
 Model files can also be imported from the command line by using the `cimport.py` script in the source code directory.     
 
 {% highlight bash %}
-$ python cimport.py --type all --overwrite 1 --image_dir ../examples/exemplars/NeuroGrid ../examples/exemplars/NeuroGrid/NeuroGrid.xml
+$ python cimport.py --type all --overwrite 1 --image_dir examples/exemplars/NeuroGrid examples/exemplars/NeuroGrid/NeuroGrid.xml
 {% endhighlight %}
 
 The type `all` refers to a complete model file.  Individual parts of models can also be imported.  These might include models of individual personas, goal models, or risk analysis data.  Use the --help option to get a detailed list of importable model types.  
