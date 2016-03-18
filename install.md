@@ -5,7 +5,7 @@ title: Getting started
 
 {% include toc.html %}
 
-# Setting up CAIRIS 
+# Setting up CAIRIS
 
 ## Obtaining a virtual appliance
 
@@ -60,7 +60,7 @@ $ sudo chmod -R 775 $CAIRIS_DIR
 * Create the database tables and stored procedures required by CAIRIS:
 
 {% highlight bash %}
-$ CAIRIS_SQL=$CAIRIS_DIR/cairis/cairis/sql
+$ CAIRIS_SQL=$CAIRIS_DIR/cairis/sql
 $ mysql --user=cairis –-password=cairis123 –-database=cairis < $CAIRIS_SQL/init.sql
 $ mysql --user=cairis –-password=cairis123 –-database=cairis < $CAIRIS_SQL/procs.sql
 {% endhighlight %}
@@ -77,8 +77,8 @@ flush privileges;
 * Create a configuration file for CAIRIS.  By default, CAIRIS looks for a configuration file in the home directory of the user.  You can use the template configuration file provided with CAIRIS as your base configuration.
 
 {% highlight bash %}
-$ mkdir -p ~/CAIRIS/cairis/cairis/config/
-$ cp $CAIRIS_DIR/cairis/cairis/config/cairis.cnf ~/CAIRIS/cairis/cairis/config/
+$ mkdir -p ~/CAIRIS/cairis/config/
+$ cp $CAIRIS_DIR/cairis/config/cairis.cnf ~/CAIRIS/cairis/config/
 $ sudo chown -R $USER:$USER ~/CAIRIS
 {% endhighlight %}
 
@@ -91,7 +91,7 @@ dbuser = cairis
 dbpasswd = cairis123
 dbname = cairis
 tmp_dir = /tmp
-root = /opt/cairis/cairis
+root = /opt/cairis
 default_image_dir = .
 {% endhighlight %}
 
@@ -109,12 +109,12 @@ This main CAIRIS window is split in 2 halves.  The bottom half is the taken up t
 ![fig:initStartup]({{ site.baseurl }}/images/CAIRIS_new.jpg)
 *An empty CAIRIS project*
 
-All the information entered into CAIRIS is stored in a single MySQL database, but all or part of a complete CAIRIS model can be imported and exported in XML.  CAIRIS comes with a sample model (`completeExample.xml`) which can be found in `$CAIRIS_DIR/examples`.  This can be imported by clicking on the File/Import/Model menu, and selecting the model file to be imported.
+All the information entered into CAIRIS is stored in a single MySQL database, but all or part of a complete CAIRIS model can be imported and exported in XML.  CAIRIS comes with a several sample models; these can be found in `$CAIRIS_DIR/examples`.  This can be imported by clicking on the File/Import/Model menu, and selecting the model file to be imported.
 
 Model files can also be imported from the command line by using the `cimport.py` script in the source code directory.     
 
 {% highlight bash %}
-$ python cimport.py --type all --overwrite 1 --image_dir ../examples ../examples/completeExample.xml
+$ python cimport.py --type all --overwrite 1 --image_dir ../examples/exemplars/NeuroGrid ../examples/exemplars/NeuroGrid/NeuroGrid.xml
 {% endhighlight %}
 
 The type `all` refers to a complete model file.  Individual parts of models can also be imported.  These might include models of individual personas, goal models, or risk analysis data.  Use the --help option to get a detailed list of importable model types.  
