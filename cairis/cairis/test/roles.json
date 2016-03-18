@@ -1,8 +1,0 @@
-{
-  "roles" : [
-      {"theName" : "Data Consumer",
-       "theType" : "Stakeholder",
-       "theShortCode" : "DCON",
-       "theDescription" : "Uses NeuroGrid data"}
-  ]
-}
