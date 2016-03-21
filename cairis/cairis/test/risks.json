@@ -134,7 +134,7 @@
     {
      "theName" : "Network footprinting",
      "threatName" : "Footprinting",
-     "vulName" : "Incomplete firewall rules",
+     "vulName" : "Incomplete firewall rules"
     }
   ],
   "assets" : [
