@@ -111,7 +111,7 @@ class RiskTest(unittest.TestCase):
     b.dbProxy.addVulnerability(self.ivp)
     self.ovp = b.dbProxy.getVulnerabilities()
     self.imc = d['misuseCase']
-    imcep = [MisuseCaseEnvironmentProperties(self.imc[0]["theEnvironmentProperties"][0]["theDescription"])]
+    self.imcep = [MisuseCaseEnvironmentProperties(self.imc[0]["theEnvironmentProperties"][0]["theDescription"])]
     self.imcp = MisuseCaseParameters(self.imc[0]["theName"],self.imc[0]["theRisk"], self.imcep)
     b.dbProxy.addMisuseCase(self.imcp)
     self.omcp = b.dbProxy.getMisuseCases()
