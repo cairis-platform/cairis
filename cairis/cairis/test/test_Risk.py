@@ -124,7 +124,6 @@ class RiskTest(unittest.TestCase):
     self.assertEqual(irp.name(), o.name())
     self.assertEqual(irp.threat(),o.threat())
     self.assertEqual(irp.vulnerability(),o.vulnerability())
-    self.assertEqual(imcp.misuseCase(),o.misuseCase())
 
     b.dbProxy.deleteRisk(o.id())
   
