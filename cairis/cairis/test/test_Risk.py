@@ -130,7 +130,7 @@ class RiskTest(unittest.TestCase):
   def tearDown(self):
     b = Borg()
     
-    b.dbProxy.deleteVulnerability(0)
+    b.dbProxy.deleteVulnerability(self.ovp[self.ivp.name()].id())
     b.dbProxy.deleteThreat(self.otps[self.itps.name()].id())
     b.dbProxy.deleteAsset(self.oap[self.iap3.name()].id())
     b.dbProxy.deleteAsset(self.oap[self.iap2.name()].id())
