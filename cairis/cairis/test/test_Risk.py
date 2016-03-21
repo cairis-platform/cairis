@@ -122,9 +122,9 @@ class RiskTest(unittest.TestCase):
     oRisks = b.dbProxy.getRisks()
     o = oRisks[self.iRisks[0]["theName"]]
     self.assertEqual(irp.name(), o.name())
-    self.assertEqual(itps.threat(),o.threat())
-    self.assertEqual(itps.vulnerability(),o.vulnerability())
-    self.assertEqual(itps.misuseCase(),o.misuseCase())
+    self.assertEqual(irp.threat(),o.threat())
+    self.assertEqual(irp.vulnerability(),o.vulnerability())
+    self.assertEqual(irp.misuseCase(),o.misuseCase())
 
     b.dbProxy.deleteRisk(o.id())
   
