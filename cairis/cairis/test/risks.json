@@ -123,10 +123,11 @@
    }
 ],
   "misuseCase" : [
-       {"theName" : "Day",
+       {"theName" : "DAY",
         "theRisk" : "Network footprinting",
         "theEnvironmentProperties" : [
-        {"theDescription" : "One of Victor's colleagues is spidering web pages to find information about ACME partners, access points to portals, and various other tid-bits of open source intelligence.  Periodically, he compiles a list of interesting sites and addresses, which he passes onto Victor. Victor carries out Whois and DNS enumeration to find interesting IP addresses and, based on this, interrogates ACME DNS servers to find interesting systems.  He also runs a script which trace-routes IP addresses and outputs the data to a file, which he visualises using GraphViz. After a while, Victor has developed an access path diagram diagram of the ACME network."} 
+        {"theName" : "Day",
+         "theDescription" : "One of Victor's colleagues is spidering web pages to find information about ACME partners, access points to portals, and various other tid-bits of open source intelligence.  Periodically, he compiles a list of interesting sites and addresses, which he passes onto Victor. Victor carries out Whois and DNS enumeration to find interesting IP addresses and, based on this, interrogates ACME DNS servers to find interesting systems.  He also runs a script which trace-routes IP addresses and outputs the data to a file, which he visualises using GraphViz. After a while, Victor has developed an access path diagram diagram of the ACME network."} 
      ]
    }
 ],
