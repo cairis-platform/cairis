@@ -131,7 +131,7 @@ class RiskTest(unittest.TestCase):
     b = Borg()
     
     b.dbProxy.deleteVulnerability(0)
-    b.dbProxy.deleteThreat(0)
+    b.dbProxy.deleteThreat(self.otps[self.itps.name()].id())
     b.dbProxy.deleteAsset(self.oap[self.iap3.name()].id())
     b.dbProxy.deleteAsset(self.oap[self.iap2.name()].id())
     b.dbProxy.deleteAsset(self.oap[self.iap1.name()].id())
