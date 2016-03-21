@@ -36,6 +36,8 @@ from ThreatParameters import ThreatParameters
 from ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from VulnerabilityParameters import VulnerabilityParameters
 from VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
+from MisuseCaseParameters import MisuseCaseParameters
+from MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from RiskParameters import RiskParameters
 from ARM import DatabaseProxyException
 
@@ -108,10 +110,13 @@ class RiskTest(unittest.TestCase):
     self.ivp = VulnerabilityParameters(self.iVuln[0]["theName"],self.iVuln[0]["theDescription"],self.iVuln[0]["theType"], [], self.iveps)
     b.dbProxy.addVulnerability(self.ivp)
     self.ovp = b.dbProxy.getVulnerabilities()
+    self.imc = d['misuseCase']
     self.iRisks = d['risks']
 
   def testRisk(self):
-    irp = RiskParameters(self.iRisks[0]["theName"],self.iRisks[0]["threatName"],self.iRisks[0]["vulName"],self.iRisks[0]["misuseCase"],[])
+    imcep = [MisuseCaseEnvironmentProperties(self.imc[0]["theEnvironmentProperties"][0]["theDescription"])]
+    imcp = MisuseCaseParameters(self.imc[0]["theName"],self.imc[0]["theRisk"], imcep)
+    irp = RiskParameters(self.iRisks[0]["theName"],self.iRisks[0]["threatName"],self.iRisks[0]["vulName"], imcp,[])
     b = Borg()
     b.dbProxy.addRisk(irp)
     oRisks = b.dbProxy.getRisks()
