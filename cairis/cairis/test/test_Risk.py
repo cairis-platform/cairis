@@ -111,12 +111,14 @@ class RiskTest(unittest.TestCase):
     b.dbProxy.addVulnerability(self.ivp)
     self.ovp = b.dbProxy.getVulnerabilities()
     self.imc = d['misuseCase']
+    imcep = [MisuseCaseEnvironmentProperties(self.imc[0]["theEnvironmentProperties"][0]["theDescription"])]
+    self.imcp = MisuseCaseParameters(self.imc[0]["theName"],self.imc[0]["theRisk"], self.imcep)
+    b.dbProxy.addMisuseCase(self.imcp)
+    self.omcp = b.dbProxy.getMisuseCases()
     self.iRisks = d['risks']
 
   def testRisk(self):
-    imcep = [MisuseCaseEnvironmentProperties(self.imc[0]["theEnvironmentProperties"][0]["theDescription"])]
-    imcp = MisuseCaseParameters(self.imc[0]["theName"],self.imc[0]["theRisk"], imcep)
-    irp = RiskParameters(self.iRisks[0]["theName"],self.iRisks[0]["threatName"],self.iRisks[0]["vulName"], imcp,[])
+    irp = RiskParameters(self.iRisks[0]["theName"],self.iRisks[0]["threatName"],self.iRisks[0]["vulName"], self.omcp,[])
     b = Borg()
     b.dbProxy.addRisk(irp)
     oRisks = b.dbProxy.getRisks()
