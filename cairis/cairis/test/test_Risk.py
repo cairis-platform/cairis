@@ -115,7 +115,7 @@ class RiskTest(unittest.TestCase):
 
   def testRisk(self):
     imcep = [MisuseCaseEnvironmentProperties(self.imc[0]["theEnvironmentProperties"][0]["theName"],self.imc[0]["theEnvironmentProperties"][0]["theDescription"])]
-    imcp = MisuseCase(int(0), self.imc[0]["theName"], imcep, self.imc[0]["theRisk"])
+    imcp = MisuseCase(int(0), self.imc[0]["theName"], imcep,self.imc[0]["theRisk"])
     irp = RiskParameters(self.iRisks[0]["theName"],self.iRisks[0]["threatName"],self.iRisks[0]["vulName"], imcp,[])
     b = Borg()
     b.dbProxy.addRisk(irp)
@@ -124,7 +124,7 @@ class RiskTest(unittest.TestCase):
     self.assertEqual(irp.name(), o.name())
     self.assertEqual(irp.threat(),o.threat())
     self.assertEqual(irp.vulnerability(),o.vulnerability())
-    self.assertEqual(irp.misuseCase(),o.misuseCase())
+    self.assertEqual(imcp.misuseCase(),o.misuseCase())
 
     b.dbProxy.deleteRisk(o.id())
   
