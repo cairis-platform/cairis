@@ -88,7 +88,10 @@ class KaosModel:
           if (currentScore > highestScore):
             highestScore = currentScore
         ellipseColour = threatColourCode(highestScore)
-      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',style='filled',color=ellipseColour,fontcolor='white',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+        ellipseFontColour = 'white'
+        if highestScore < 2:
+          ellipseFontColour = 'black'
+      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',style='filled',color=ellipseColour,fontcolor=ellipseFontColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'persona'):
       objt = self.dbProxy.dimensionObject(objtName,'persona')
       if (objt.assumption() == True):
