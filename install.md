@@ -60,7 +60,7 @@ $ sudo chmod -R 775 $CAIRIS_DIR
 * Create the database tables and stored procedures required by CAIRIS:
 
 {% highlight bash %}
-$ CAIRIS_SQL=$CAIRIS_DIR/cairis/sql
+$ CAIRIS_SQL=$CAIRIS_DIR/sql
 $ mysql --user=cairis –-password=cairis123 –-database=cairis < $CAIRIS_SQL/init.sql
 $ mysql --user=cairis –-password=cairis123 –-database=cairis < $CAIRIS_SQL/procs.sql
 {% endhighlight %}
@@ -77,8 +77,8 @@ flush privileges;
 * Create a configuration file for CAIRIS.  By default, CAIRIS looks for a configuration file in the home directory of the user.  You can use the template configuration file provided with CAIRIS as your base configuration.
 
 {% highlight bash %}
-$ mkdir -p ~/CAIRIS/cairis/config/
-$ cp $CAIRIS_DIR/cairis/config/cairis.cnf ~/CAIRIS/cairis/config/
+$ mkdir -p ~/CAIRIS/config/
+$ cp $CAIRIS_DIR/config/cairis.cnf ~/CAIRIS/config/
 $ sudo chown -R $USER:$USER ~/CAIRIS
 {% endhighlight %}
 
@@ -98,7 +98,7 @@ default_image_dir = .
 
 # Starting CAIRIS
 
-To start CAIRIS, you can open a terminal window and go to the directory containing the source code of CAIRIS.  This is usually `$CAIRIS_DIR/cairis`.
+To start CAIRIS, you can open a terminal window and go to the directory containing the source code of CAIRIS.  This is usually `$CAIRIS_DIR`.
 
 {% highlight bash %}
 $ python cairis.py
