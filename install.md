@@ -35,7 +35,7 @@ $ sudo pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot
 
 {% highlight bash %}
 $ CAIRIS_DIR=/opt/cairis
-$ sudo git clone https://github.com/failys/CAIRIS.git $CAIRIS_DIR
+$ sudo git clone https://github.com/failys/cairis.git $CAIRIS_DIR
 {% endhighlight %}
 
 * Create a new user group, and change permissions
@@ -77,9 +77,9 @@ flush privileges;
 * Create a configuration file for CAIRIS.  By default, CAIRIS looks for a configuration file in the home directory of the user.  You can use the template configuration file provided with CAIRIS as your base configuration.
 
 {% highlight bash %}
-$ mkdir -p ~/CAIRIS/config/
-$ cp $CAIRIS_DIR/config/cairis.cnf ~/CAIRIS/config/
-$ sudo chown -R $USER:$USER ~/CAIRIS
+$ mkdir -p ~/cairis/config/
+$ cp $CAIRIS_DIR/config/cairis.cnf ~/cairis/config/
+$ sudo chown -R $USER:$USER ~/cairis
 {% endhighlight %}
 
 * Change the values of the configuration file according to your installation.  Note that the 'root' is the directory of the CAIRIS application, which in our our case is `$CAIRIS_DIR/cairis`.
