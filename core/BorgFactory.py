@@ -27,7 +27,7 @@ def initialise():
   
   homeDir = os.getenv("HOME")
   if homeDir is not None:
-    cairisRoot = homeDir + "/CAIRIS/cairis"
+    cairisRoot = homeDir + "/CAIRIS"
   else:
     raise RuntimeError('The HOME environment variable is not defined.')
  
