@@ -23,11 +23,11 @@ from string import strip
 
 def initialise():
   b = Borg()
-  b.logger = logging.getLogger('CAIRIS')
+  b.logger = logging.getLogger('cairis')
   
   homeDir = os.getenv("HOME")
   if homeDir is not None:
-    cairisRoot = homeDir + "/CAIRIS"
+    cairisRoot = homeDir + "/cairis"
   else:
     raise RuntimeError('The HOME environment variable is not defined.')
  
