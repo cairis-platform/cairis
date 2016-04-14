@@ -16,14 +16,14 @@ addons:
     - libmysqlclient-dev
 
 env:
-- PYTHONPATH=core:mio CAIRIS_CFG=config/cairis.cnf 
+- CAIRIS_SRC=. PYTHONPATH=$CAIRIS_SRC/core:$CAIRIS_SRC/mio CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf 
 
 install: "pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot"
 
 before_script:
- - mysql --user=root --password='' < test/createdb.sql
- - mysql --user=irisuser --password='' --database=arm < sql/init.sql
- - mysql --user=irisuser --password='' --database=arm < sql/procs.sql
+ - mysql --user=root --password='' < $CAIRIS_SRC/test/createdb.sql
+ - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/init.sql
+ - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/procs.sql
 
 script: 
  - python -m unittest discover -v test*
