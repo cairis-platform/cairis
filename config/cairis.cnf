@@ -4,5 +4,5 @@ dbuser = irisuser
 dbpasswd = 
 dbname = arm
 tmp_dir = /tmp
-root = /home/cairisuser/CAIRIS/cairis
+root = /home/cairisuser/CAIRIS
 default_image_dir = .
