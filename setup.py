@@ -36,5 +36,7 @@ setup(name='cairis',
        "Topic :: Security",
        ],
        install_requires = ['setuptools'],
+       setup_requires = ['pytest-runner'],
+       test_requires = ['pytest']
       )
 

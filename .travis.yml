@@ -29,7 +29,8 @@ before_script:
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/procs.sql
 
 script: 
-  coverage run --source=cairis py.test
+ - py.test
+ - coverage run --source=cairis py.test
 
 after_success:
   coveralls
