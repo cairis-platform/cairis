@@ -1,6 +1,7 @@
 # CAIRIS 
 
 [![Build Status](https://secure.travis-ci.org/failys/cairis.png?branch=master)](http://travis-ci.org/failys/cairis)
+[![Coverage Status](https://coveralls.io/repos/github/failys/cairis/badge.svg?branch=master)](https://coveralls.io/github/failys/cairis?branch=master)
 
 CAIRIS (Computer Aided Integration of Requirements and Information Security) is a Requirements Management tool for specifying secure and usable systems. CAIRIS was built from the ground-up to support the elements necessary for usability, requirements, and risk analysis. CAIRIS features include: 
 
