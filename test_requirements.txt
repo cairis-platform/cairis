@@ -1,0 +1,5 @@
+pytest
+pytest-pep8
+pytest-cov
+#httpretty
+git+https://github.com/melor/HTTPretty.git@py33
