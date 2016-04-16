@@ -18,7 +18,7 @@ addons:
 env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf 
 
-install: "pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot python-coveralls"
+install: "pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot pytest python-coveralls"
 
 before_script:
  - mysql --user=root --password='' < $CAIRIS_SRC/test/createdb.sql
