@@ -3,7 +3,7 @@
 import os
 from setuptools import find_packages,setup
 
-EXCLUDE_FROM_PACKAGES = ['examples','scripts','test']
+EXCLUDE_FROM_PACKAGES = ['test']
 
 setup(name='cairis',
       version='1.0',
@@ -14,9 +14,9 @@ setup(name='cairis',
       url='http://cairis.org',
       packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
       include_package_data=True,
-      scripts=['cairis/bin/cairis.py','cairis/bin/cimport.py','cairis/bin/cexport.py'],
+      scripts=['cairis/bin/cairis_gui.py','cairis/bin/cimport.py','cairis/bin/cexport.py'],
       entry_points={'console_scripts': [
-                       'cairis = cairis.bin.cairis:main']},
+                       'cairis_gui = cairis.bin.cairis_gui:main']},
       classifiers=[
        "Development Status :: 4 - Beta",
        "Environment :: Console",

@@ -18,17 +18,18 @@ addons:
 env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf 
 
-install: "pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot pytest python-coveralls"
+install:
+ - pip install mysql-python=-1.2.3 pyparsing==1.5.7 pydot
+ - pip install -r test_requirements.txt
+ - pip install coveralls
 
 before_script:
- - pip install -r test_requirements.txt --use-mirrors 
  - mysql --user=root --password='' < $CAIRIS_SRC/test/createdb.sql
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/init.sql
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/procs.sql
- - py.test --cov=cairis
 
 script: 
- - py.test --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing
+  coverage run --source=cairis py.test
 
 after_success:
   coveralls
