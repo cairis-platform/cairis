@@ -25,6 +25,7 @@ before_script:
  - mysql --user=root --password='' < $CAIRIS_SRC/test/createdb.sql
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/init.sql
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/procs.sql
+ - py.test --cov=cairis
 
 script: 
  - py.test --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing
