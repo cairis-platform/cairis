@@ -16,38 +16,23 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$
-
 import argparse
 import sys
+import cairis.core.BorgFactory
+from cairis.mio.ModelExport import *
+from cairis.core.ARM import *
 
-if __name__ == '__main__':
-
-  rootDir = ''
-  try:
-    rootDir = os.environ['CAIRIS_DIR']
-  except KeyError:
-    rootDir = os.environ['PWD']
-  sys.path.append(rootDir + '/core')
-  sys.path.append(rootDir + '/gui')
-  sys.path.append(rootDir + '/mio')
-
-  import BorgFactory
-  from ModelExport import *
-  from ARM import *
+def main(args=None):
 
   try:
     parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Export to Redmine')
     parser.add_argument('outputFile',help='output file name')
     parser.add_argument('--type',dest='modelFormat',help='model type to export.  One of all, requirements, scenarios, usecases, architecture, attackpatterns or GRL')
-#    parser.add_argument('--persona',dest='personaName',help='Persona name (relevant for GRL export only)')
     parser.add_argument('--persona',nargs='+',help='Persona name (relevant for GRL export only)')
-#    parser.add_argument('--task',dest='taskName',help='Task name (relevant for GRL export only)')
     parser.add_argument('--task',nargs='+',help='Task name (relevant for GRL export only)')
     parser.add_argument('--environment',dest='envName',help='Environment name (relevant for GRL export only)')
     args = parser.parse_args() 
-    BorgFactory.initialise()
+    cairis.core.BorgFactory.initialise()
    
     msgStr = ''
     if (args.modelFormat == 'all'):
@@ -82,3 +67,6 @@ if __name__ == '__main__':
   except ARMException, e:
     print 'cexport error: ',e
     exit(-1) 
+
+if __name__ == '__main__':
+  main()

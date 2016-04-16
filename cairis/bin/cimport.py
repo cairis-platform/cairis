@@ -16,9 +16,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$
-
 import argparse
 import os
 import sys
@@ -42,7 +39,7 @@ def main(args=None):
     if overwriteFlag == None:
       overwriteFlag = 1
 
-    BorgFactory.initialise()
+    cairis.core.BorgFactory.initialise()
     b = Borg()
 
     if args.imageDir != None:
