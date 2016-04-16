@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 import os
-from setuptools import setup
+from setuptools import find_packages,setup
 
-from distutils.core import setup
+EXCLUDE_FROM_PACKAGES = ['examples','scripts','test']
+
 setup(name='cairis',
       version='1.0',
       author='Shamal Faily',
@@ -11,10 +12,11 @@ setup(name='cairis',
       description = 'A security design tool',
       license = 'Apache Software License',
       url='http://cairis.org',
-      packages=['core','gui','mio'],
-      scripts=['cairis.py','cimport.py','cexport.py'],
-      data_files=[('config',['config/*.dtd','config/cairis.cnf']),
-                  ('images',['images/*.png'])],
+      packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
+      include_package_data=True,
+      scripts=['cairis/bin/cairis.py','cairis/bin/cimport.py','cairis/bin/cexport.py'],
+      entry_points={'console_scripts': [
+                       'cairis = cairis.bin.cairis:main']},
       classifiers=[
        "Development Status :: 4 - Beta",
        "Environment :: Console",
@@ -33,5 +35,6 @@ setup(name='cairis',
        "Topic :: Office/Business",
        "Topic :: Security",
        ],
+       install_requires = ['setuptools'],
       )
 
