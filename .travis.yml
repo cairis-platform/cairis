@@ -29,7 +29,7 @@ before_script:
  - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/procs.sql
 
 script: 
-  - py.test --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing
+  - py.test --doctest-modules -v --cov coveralls --cov-report term-missing
 
 after_success:
   coveralls
