@@ -23,11 +23,6 @@ install:
  - pip install -r test_requirements.txt
  - pip install coveralls
 
-before_script:
- - mysql --user=root --password='' < $CAIRIS_SRC/test/createdb.sql
- - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/init.sql
- - mysql --user=irisuser --password='' --database=arm < $CAIRIS_SRC/sql/procs.sql
-
 script: 
   - py.test cairis/test --doctest-modules -v --cov cairis/core --cov-report term-missing
 

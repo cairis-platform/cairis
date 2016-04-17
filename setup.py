@@ -38,8 +38,13 @@ setup(name='cairis',
        "Topic :: Office/Business",
        "Topic :: Security",
        ],
-       install_requires = ['setuptools'],
-       setup_requires = ['pytest-runner'],
-       test_requires = ['pytest']
-      )
+      install_requires = [
+       "setuptools",
+       "mysql-python",
+       "pyparsing",
+       "pydot"
+      ],
+      setup_requires = ['pytest-runner'],
+      test_requires = ['pytest']
+     )
 

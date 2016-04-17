@@ -18,6 +18,7 @@
 import unittest
 import os
 import json
+from subprocess import call
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 from cairis.core.RoleParameters import RoleParameters
@@ -31,6 +32,7 @@ from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicPar
 class PersonaTest(unittest.TestCase):
 
   def setUp(self):
+    call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
     cairis.core.BorgFactory.initialise()
     f = open(os.environ['CAIRIS_SRC'] + '/test/personas.json')
     d = json.load(f)
@@ -145,6 +147,7 @@ class PersonaTest(unittest.TestCase):
     b.dbProxy.deleteRole(self.theRoles[self.iRoles[0]["theName"]].id())
     b.dbProxy.deleteEnvironment(self.theEnvironments[self.iEnvironments[0]["theName"]].id())
     b.dbProxy.close()
+    call([os.environ['CAIRIS_SRC'] + "/test/dropdb.sh"])
 
 if __name__ == '__main__':
   unittest.main()

@@ -18,6 +18,7 @@
 import unittest
 import os
 import json
+from subprocess import call
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 from cairis.core.EnvironmentParameters import EnvironmentParameters
@@ -33,6 +34,7 @@ from cairis.core.AttackerEnvironmentProperties import AttackerEnvironmentPropert
 class AttackerTest(unittest.TestCase):
 
   def setUp(self):
+    call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
     cairis.core.BorgFactory.initialise()
     f = open(os.environ['CAIRIS_SRC'] + '/test/attackers.json')
     d = json.load(f)
@@ -98,6 +100,7 @@ class AttackerTest(unittest.TestCase):
     b.dbProxy.deleteRole(self.oRoles[self.irp.name()].id())
     b.dbProxy.deleteEnvironment(self.oenvs[self.iep.name()].id())
     b.dbProxy.close()
+    call([os.environ['CAIRIS_SRC'] + "/test/dropdb.sh"])
 
 if __name__ == '__main__':
   unittest.main()

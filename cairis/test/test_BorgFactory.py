@@ -18,11 +18,13 @@
 import unittest
 import cairis.core.BorgFactory
 import os
+from subprocess import call
 from cairis.core.Borg import Borg
 
 class BorgFactoryTest(unittest.TestCase):
 
   def setUp(self):
+    call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
     cairis.core.BorgFactory.initialise()
 
   def testProjectSettings(self):
@@ -34,6 +36,7 @@ class BorgFactoryTest(unittest.TestCase):
   def tearDown(self):
     b = Borg()
     b.dbProxy.close()
+    call([os.environ['CAIRIS_SRC'] + "/test/dropdb.sh"])
 
 if __name__ == '__main__':
   unittest.main()

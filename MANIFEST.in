@@ -1,9 +1,9 @@
 include MANIFEST.in
 include README.md
 include LICENSE
-include *.dtd
-include init.sql
-include procs.sql
+include cairis/config/*.dtd
+include cairis/sql/init.sql
+include cairis/sql/procs.sql
 graft cairis
 global-exclude *.svg
 global-exclude *.py[co]
