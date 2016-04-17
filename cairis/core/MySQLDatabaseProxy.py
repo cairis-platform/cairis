@@ -1002,7 +1002,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       curs = self.conn.cursor()
       sqlTxt = 'call delete_' + tableName + '(%s)'
-      curs.execute(sqlTxt,(objtId))
+      curs.execute(sqlTxt,[objtId])
       if (curs.rowcount == -1):
         exceptionText = 'Error deleting ' + tableName + ' id ' + str(objtId)
         raise DatabaseProxyException(exceptionText) 
