@@ -293,7 +293,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.resetObstacleAttributes()
     elif name == 'requirement':
       reqId = self.dbProxy.newId()
-      r = RequirementFactory.build(reqId,self.theLabel,self.theName,self.theDescription,self.thePriority,self.theRationale,self.theFitCriterion,self.theOriginator,self.theType,self.theReference)
+      r = cairis.core.RequirementFactory.build(reqId,self.theLabel,self.theName,self.theDescription,self.thePriority,self.theRationale,self.theFitCriterion,self.theOriginator,self.theType,self.theReference)
       self.theRequirements.append((r,self.theReference,self.theReferenceType))
       self.resetRequirementAttributes()
     elif name == 'countermeasure':

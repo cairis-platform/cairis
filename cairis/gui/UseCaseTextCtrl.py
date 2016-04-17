@@ -86,7 +86,7 @@ class UseCaseTextCtrl(wx.TextCtrl):
         reqId = self.dbProxy.newId()
         reqLabel = int(reqLabel)
         reqLabel += 1
-        r = RequirementFactory.build(reqId,reqLabel,dlg.description(),dlg.priority(),dlg.rationale(),dlg.fitCriterion(),dlg.originator(),dlg.type(),refName)
+        r = cairis.core.RequirementFactory.build(reqId,reqLabel,dlg.description(),dlg.priority(),dlg.rationale(),dlg.fitCriterion(),dlg.originator(),dlg.type(),refName)
         isAsset = True
         if (dlg.referrerType() == 'environment'):
           isAsset = False
