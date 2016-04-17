@@ -17,36 +17,16 @@ The user name and password for this virtual machine is *cairis*; this is also th
 
 In theory, CAIRIS can be installed on any platform that its open-source dependencies are available for.  In practice, CAIRIS is developed using Linux, and is most stable when running on [Ubuntu](http://www.ubuntu.com) or [Debian](https://www.debian.org) Linux.
 
-Thanks go to [Robin Quetin](https://github.com/RobinQuetin) for putting these instructions together.
-
 * Install the required applications and dependencies:
 
 {% highlight bash %}
 $ sudo apt-get install python-wxglade python-glade2 python-wxgtk2.8 python-dev build-essential mysql-server mysql-client graphviz docbook dblatex python-pip python-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils
 {% endhighlight %}
 
-* Install the Python extensions:
+* Install CAIRIS:
 
 {% highlight bash %}
-$ sudo pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot
-{% endhighlight %}
-
-* Clone the CAIRIS repository into a directory, for example /opt/:
-
-{% highlight bash %}
-$ CAIRIS_DIR=/opt/cairis
-$ sudo git clone https://github.com/failys/cairis.git $CAIRIS_DIR
-{% endhighlight %}
-
-* Create a new user group, and change permissions
-
-{% highlight bash %}
-$ CAIRIS_DIR=/opt/cairis
-$ CAIRIS_USER=cairis
-$ sudo useradd --no-create-home --system $CAIRIS_USER
-$ sudo usermod -a -G $CAIRIS_USER $USER
-$ sudo chown -R $CAIRIS_USER:$CAIRIS_USER $CAIRIS_DIR
-$ sudo chmod -R 775 $CAIRIS_DIR
+$ sudo pip install cairis
 {% endhighlight %}
 
 * Create a new database for CAIRIS with a MySQL user account which has full access to the database.  For this example, we assume our username is cairis, the password is cairis123, and database is called cairis:
@@ -74,15 +54,9 @@ flush privileges;
 !
 {% endhighlight %}
 
-* Create a configuration file for CAIRIS.  By default, CAIRIS looks for a configuration file in the home directory of the user.  You can use the template configuration file provided with CAIRIS as your base configuration.
+* Update the CAIRIS_CFG environment variable to point to your cairis.cnf file.  You can find a template file you can use wherever your system has installed CAIRIS, e.g. `/usr/local/lib/python2.7/dist-packages/cairis/config`
 
-{% highlight bash %}
-$ mkdir -p ~/cairis/cairis/config/
-$ cp $CAIRIS_DIR/cairis/config/cairis.cnf ~/cairis/cairis/config/
-$ sudo chown -R $USER:$USER ~/cairis
-{% endhighlight %}
-
-* Change the values of the configuration file according to your installation.  Note that the 'root' is the directory of the CAIRIS application, which in our our case is `$CAIRIS_DIR/cairis`.
+* Change the values of cairis.cnf according to your installation.  Note that the 'root' is the directory of the CAIRIS application, which in our our case is `$CAIRIS_DIR/cairis`.
 
 {% highlight bash %}
 dbhost = 127.0.0.1
@@ -91,17 +65,17 @@ dbuser = cairis
 dbpasswd = cairis123
 dbname = cairis
 tmp_dir = /tmp
-root = /opt/cairis
+root = /usr/local/lib/python2.7/dist-packages/cairis
 default_image_dir = .
 {% endhighlight %}
 
 
 # Starting CAIRIS
 
-To start CAIRIS, you can open a terminal window and go to `$CAIRIS_DIR/bin`.
+To start CAIRIS, you can open a terminal window and run to `cairis_gui.py`.
 
 {% highlight bash %}
-$ python cairis_gui.py
+cairis_gui.py
 {% endhighlight %}
 
 This main CAIRIS window is split in 2 halves.  The bottom half is the taken up the requirements editor.  The top half of the screen is taken up by the menu and tool-bar buttons.
@@ -109,12 +83,12 @@ This main CAIRIS window is split in 2 halves.  The bottom half is the taken up t
 ![fig:initStartup]({{ site.baseurl }}/images/CAIRIS_new.jpg)
 *An empty CAIRIS project*
 
-All the information entered into CAIRIS is stored in a single MySQL database, but all or part of a complete CAIRIS model can be imported and exported in XML.  CAIRIS comes with a several sample models; these can be found in `$CAIRIS_DIR/examples`.  This can be imported by clicking on the File/Import/Model menu, and selecting the model file to be imported.
+All the information entered into CAIRIS is stored in a single MySQL database, but all or part of a complete CAIRIS model can be imported and exported in XML.  CAIRIS comes with a several sample models; these can be found on github in the `cairis/examples` folder.  This can be imported by clicking on the File/Import/Model menu, and selecting the model file to be imported.
 
-Model files can also be imported from the command line by using the `cimport.py` script in `$CAIRIS_DIR/bin`.     
+Model files can also be imported from the command line by using `cimport.py`.     
 
 {% highlight bash %}
-$ python cimport.py --type all --overwrite 1 --image_dir ../../examples/exemplars/NeuroGrid examples/exemplars/NeuroGrid/NeuroGrid.xml
+$ cimport.py --type all --overwrite 1 --image_dir . NeuroGrid.xml
 {% endhighlight %}
 
 The type `all` refers to a complete model file.  Individual parts of models can also be imported.  These might include models of individual personas, goal models, or risk analysis data.  Use the --help option to get a detailed list of importable model types.  
