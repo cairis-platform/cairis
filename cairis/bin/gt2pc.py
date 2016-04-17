@@ -15,8 +15,8 @@ def remspace(my_str):
   return my_str
 
 
-if __name__ == '__main__':
 
+def main(args=None):
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Grounded Theory to Persona Case converter')
   parser.add_argument('modelFile',help='model file to create')
   parser.add_argument('--context',dest='contextName',help='model context')
@@ -131,3 +131,6 @@ if __name__ == '__main__':
   xmlOut = open(args.modelFile,"w")
   xmlOut.write(xmlBuf)
   xmlOut.close()
+
+if __name__ == '__main__':
+  main()

@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 
 import os
-from setuptools import find_packages,setup
-
-EXCLUDE_FROM_PACKAGES = ['test']
+from setuptools import setup
 
 setup(name='cairis',
       version='0.1',
@@ -13,13 +11,15 @@ setup(name='cairis',
       license = 'Apache Software License',
       url='https://github.com/failys/cairis',
       download_url='https://github.com/failys/cairis/tarball/0.1',
-      packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
+      packages=['cairis'],
       include_package_data=True,
-      scripts=['cairis/bin/cairis_gui.py','cairis/bin/cimport.py','cairis/bin/cexport.py'],
+      scripts=['cairis/bin/cairis_gui.py','cairis/bin/cimport.py','cairis/bin/cexport.py','cairis/bin/at2om.py','cairis/bin/gt2pc.py'],
       entry_points={'console_scripts': [
                        'cairis_gui = cairis.bin.cairis_gui:main',
                        'cimport = cairis.bin.cimport:main',
-                       'cexport = cairis.bin.cexport:main']},
+                       'cexport = cairis.bin.cexport:main',
+                       'at2om = cairis.bin.at2om:main',
+                       'gt2pc = cairis.bin.gt2pc:main']},
       classifiers=[
        "Development Status :: 4 - Beta",
        "Environment :: Console",

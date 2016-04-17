@@ -21,8 +21,7 @@ import argparse
 import pydot
 import os
 
-if __name__ == '__main__':
-
+def main(args=None):
     parser = argparse.ArgumentParser(description='Attack Tree to CAIRIS Model converter')
     parser.add_argument('dotFile',help='attack tree model to import (Dot format)')
     parser.add_argument('--context',dest='contextName',help='attack context')
@@ -92,3 +91,6 @@ if __name__ == '__main__':
     f.write(xmlBuf)
     f.close()
     print args.outFile + ' created'
+
+if __name__ == '__main__':
+  main()
