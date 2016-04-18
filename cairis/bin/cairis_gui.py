@@ -15,7 +15,6 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-
 import os
 import sys
 from cairis.gui.IRISApp import IRISApp
@@ -23,6 +22,8 @@ from cairis.gui.IRISApp import IRISApp
 def main(args=None):
   if args is None:
     args = sys.argv[1:]
+    import gtk
+    gtk.remove_log_handlers()
     cairisApp = IRISApp()
     cairisApp.MainLoop()
 

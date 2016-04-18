@@ -46,11 +46,6 @@ from RisksDialog import RisksDialog
 from ResponsesDialog import ResponsesDialog
 from CountermeasuresDialog import CountermeasuresDialog
 from TracesDialog import TracesDialog
-from EnvironmentModelViewer import EnvironmentModelViewer
-from CanonicalModelViewer import CanonicalModelViewer
-from ComponentModelViewer import ComponentModelViewer
-from APModelViewer import APModelViewer
-from ATModelViewer import ATModelViewer
 from EnvironmentModel import EnvironmentModel
 from AssumptionPersonaModel import AssumptionPersonaModel
 from AssumptionTaskModel import AssumptionTaskModel
@@ -84,6 +79,11 @@ from cairis.mio.ModelExport import exportModel
 from LocationModel import LocationModel
 import DocumentBuilder
 from itertools import izip
+from EnvironmentModelViewer import EnvironmentModelViewer
+from CanonicalModelViewer import CanonicalModelViewer
+from ComponentModelViewer import ComponentModelViewer
+from APModelViewer import APModelViewer
+from ATModelViewer import ATModelViewer
 import gtk
 import gtk.gdk
 import xml.sax
