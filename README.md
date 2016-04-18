@@ -3,7 +3,6 @@
 [![Build Status](https://secure.travis-ci.org/failys/cairis.png?branch=master)](http://travis-ci.org/failys/cairis)
 [![Coverage Status](https://coveralls.io/repos/github/failys/cairis/badge.svg?branch=master)](https://coveralls.io/github/failys/cairis?branch=master)
 [![PyPI version](https://badge.fury.io/py/cairis.svg)](https://badge.fury.io/py/cairis)
-[![PyPi downloads](https://pypip.in/d/$REPO/badge.png)](https://crate.io/packages/$REPO/)
 
 
 
