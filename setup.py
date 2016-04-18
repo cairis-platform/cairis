@@ -1,18 +1,23 @@
 #!/usr/bin/env python
 
 import os
+import fnmatch
 from setuptools import setup
 
+exampleFiles = [os.path.join('examples', f)
+  for dirpath,dirnames,files in os.walk('examples')
+  for f in fnmatch.filter(files,'*.xml')]
+
 setup(name='cairis',
-      version='0.5',
+      version='0.53',
       author='Shamal Faily',
       author_email='shamal.faily@gmail.com',
       description = 'A security design tool',
       license = 'Apache Software License',
       url='https://github.com/failys/cairis',
-      download_url='https://github.com/failys/cairis/tarball/0.5',
+      download_url='https://github.com/failys/cairis/tarball/0.53',
       packages=['cairis'],
-      data_files = [ ('share/examples', ['examples']) ],
+      data_files = [ ('cairis/examples', exampleFiles)],
       include_package_data=True,
       scripts=['cairis/bin/cairis_gui.py','cairis/bin/cimport.py','cairis/bin/cexport.py','cairis/bin/at2om.py','cairis/bin/gt2pc.py'],
       entry_points={'console_scripts': [
