@@ -4,13 +4,13 @@ import os
 from setuptools import setup
 
 setup(name='cairis',
-      version='0.4',
+      version='0.5',
       author='Shamal Faily',
       author_email='shamal.faily@gmail.com',
       description = 'A security design tool',
       license = 'Apache Software License',
       url='https://github.com/failys/cairis',
-      download_url='https://github.com/failys/cairis/tarball/0.4',
+      download_url='https://github.com/failys/cairis/tarball/0.5',
       packages=['cairis'],
       data_files = [ ('share/examples', ['examples']) ],
       include_package_data=True,
