@@ -12,14 +12,15 @@ for root, dirnames, fileNames in os.walk('examples'):
 print egFiles
 
 setup(name='cairis',
-      version='0.6',
+      version='0.601',
       author='Shamal Faily',
       author_email='shamal.faily@gmail.com',
       description = 'A security design tool',
       license = 'Apache Software License',
       url='https://github.com/failys/cairis',
-      download_url='https://github.com/failys/cairis/tarball/0.6',
+      download_url='https://github.com/failys/cairis/tarball/0.601',
       packages=['cairis'],
+      include_package_data=True,
       data_files = [('cairis/examples', egFiles)],
       scripts=['cairis/bin/cairis_gui.py','cairis/bin/cimport.py','cairis/bin/cexport.py','cairis/bin/at2om.py','cairis/bin/gt2pc.py'],
       entry_points={'console_scripts': [
