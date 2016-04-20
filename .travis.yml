@@ -25,7 +25,7 @@ env:
 
 install:
 # - pip install mysql-python==1.2.3 pyparsing==1.5.7 pydot
- - pip install mysqlclient pyparsing pydot
+ - pip install mysqlclient pyparsing pydot3
  - pip install -r test_requirements.txt
  - pip install coveralls
 
