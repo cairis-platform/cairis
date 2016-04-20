@@ -9,7 +9,9 @@ for root, dirnames, fileNames in os.walk('examples'):
   for fileName in fnmatch.filter(fileNames,'*'):
     egFiles.append(os.path.join(root,fileName))
 
-print egFiles
+def load_requirements():
+    with open("requirements.txt") as requirements:
+        return requirements.read().splitlines()
 
 setup(name='cairis',
       version='1.0.0',
@@ -47,12 +49,7 @@ setup(name='cairis',
        "Topic :: Office/Business",
        "Topic :: Security",
        ],
-      install_requires = [
-       "setuptools",
-       "mysql-python",
-       "pyparsing",
-       "pydot"
-      ],
+      install_requires = load_requirements(),
       setup_requires = ['pytest-runner'],
       test_requires = ['pytest']
      )
