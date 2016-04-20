@@ -8,6 +8,7 @@
 [![GitHub watchers](https://img.shields.io/github/watchers/failys/cairis.svg?style=flat-square)](https://github.com/failys/cairis/watchers)
 [![GitHub stars](https://img.shields.io/github/stars/failys/cairis.svg?style=flat-square)](https://github.com/failys/cairis/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/failys/cairis.svg?style=flat-square)](https://github.com/failys/cairis/network)
+[![Requirements Status](https://requires.io/github/failys/cairis/requirements.svg?branch=master)](https://requires.io/github/failys/cairis/requirements/?branch=master)
 [![License](https://img.shields.io/github/license/failys/cairis.svg)](https://github.com/failys/cairis/blob/master/LICENSE)
 
 
