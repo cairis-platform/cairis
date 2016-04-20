@@ -17,16 +17,13 @@ addons:
     - python-numpy 
     - git 
     - libmysqlclient-dev
-    - texlive-latex-extra 
-    - docbook-utils
 
 env:
-- PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf 
-- TOX_ENV=py27-1.6.X
-- TOX_ENV=py27-1.5.X
-- TOX_ENV=py27-1.4.X
-- TOX_ENV=py26-1.5.X
-- TOX_ENV=py26-1.4.X
+- TOX_ENV=py27-1.6.X PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
+- TOX_ENV=py27-1.5.X PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
+- TOX_ENV=py27-1.4.X PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
+- TOX_ENV=py26-1.5.X PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
+- TOX_ENV=py26-1.4.X PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
 
 install:
 - pip install tox
