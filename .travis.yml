@@ -8,6 +8,9 @@ sudo: false
 addons:
   apt:
     packages:
+    - python-wxglade 
+    - python-glade2 p
+    - python-wxgtk3.0
     - python-dev 
     - build-essential 
     - mysql-server 
@@ -17,6 +20,8 @@ addons:
     - python-numpy 
     - git 
     - libmysqlclient-dev
+    - texlive-latex-extra 
+    - docbook-utils
 
 env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf 
