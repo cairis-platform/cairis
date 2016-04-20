@@ -18,18 +18,15 @@ addons:
     - libmysqlclient-dev
 
 env:
-- TOX_ENV=py27 PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
+- PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
 
 install:
-- pip install virtualenv
-- pip install tox
 - pip install -r requirements.txt
 - pip install -r test_requirements.txt
 - pip install coveralls
 
 script: 
 - py.test cairis/test --doctest-modules -v --cov cairis/core --cov-report term-missing
-- tox -e $TOX_ENV
 
 after_success:
   coveralls
