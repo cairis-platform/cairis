@@ -175,13 +175,13 @@ class MitigateEnvironmentPanel(wx.Panel):
       mitType = p.type()
       if (len(mitType) == 0):
         exceptionText = 'No mitigation type selected for environment ' + p.name()
-        raise ARM.EnvironmentValidationError(exceptionText)
+        raise EnvironmentValidationError(exceptionText)
       if (mitType == 'Detect') and (len(p.detectionPoint()) == 0):
         exceptionText = 'No detection point selected for environment ' + p.name()
-        raise ARM.EnvironmentValidationError(exceptionText)
+        raise EnvironmentValidationError(exceptionText)
       if (mitType == 'React') and (len(p.detectionMechanisms()) == 0):
         exceptionText = 'No detection mechanisms selected for environment ' + p.name()
-        raise ARM.EnvironmentValidationError(exceptionText)
+        raise EnvironmentValidationError(exceptionText)
     return self.theEnvironmentDictionary.values() 
 
   def setRisk(self,riskName):

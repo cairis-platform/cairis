@@ -84,7 +84,7 @@ class CountermeasurePanel(BasePanel):
     self.theCountermeasureDescription = descriptionCtrl.GetValue()
     try:
       self.theEnvironmentProperties = self.environmentPanel.environmentProperties()
-    except ARM.EnvironmentValidationError, errorText:
+    except EnvironmentValidationError, errorText:
       dlg = wx.MessageDialog(self,str(errorText),commitLabel,wx.OK)
       dlg.ShowModal()
       dlg.Destroy()

@@ -128,10 +128,10 @@ class AcceptEnvironmentPanel(wx.Panel):
       p = self.theEnvironmentDictionary[cName]
       if (len(p.cost()) == 0):
         exceptionText = 'No cost selected for environment ' + p.name()
-        raise ARM.EnvironmentValidationError(exceptionText)
+        raise EnvironmentValidationError(exceptionText)
       if (len(p.description()) == 0):
         exceptionText = 'No rationale entered for environment ' + p.name()
-        raise ARM.EnvironmentValidationError(exceptionText)
+        raise EnvironmentValidationError(exceptionText)
     return self.theEnvironmentDictionary.values() 
 
   def setRisk(self,riskName):

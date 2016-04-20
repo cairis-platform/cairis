@@ -100,7 +100,7 @@ class ResponsePanel(BasePanel):
     self.theTags = tagsCtrl.tags()
     try:
       self.theEnvironmentProperties = self.environmentPanel.environmentProperties()
-    except ARM.EnvironmentValidationError, errorText:
+    except EnvironmentValidationError, errorText:
       dlg = wx.MessageDialog(self,str(errorText),commitLabel,wx.OK)
       dlg.ShowModal()
       dlg.Destroy()

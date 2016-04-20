@@ -204,14 +204,14 @@ class CountermeasureEnvironmentPanel(wx.Panel):
       p = self.theEnvironmentDictionary[cname]
       if (len(p.requirements()) == 0):
         exceptionText = 'No requirements selected for environment ' + p.name()
-        raise ARM.EnvironmentValidationError(exceptionText)
+        raise EnvironmentValidationError(exceptionText)
       if (len(p.targets()) == 0):
         exceptionText = 'No targets selected for environment ' + p.name()
-        raise ARM.EnvironmentValidationError(exceptionText)
+        raise EnvironmentValidationError(exceptionText)
       if (len(p.cost()) == 0):
         exceptionText = 'No cost selected for environment ' + p.name()
-        raise ARM.EnvironmentValidationError(exceptionText)
+        raise EnvironmentValidationError(exceptionText)
       if (len(p.roles()) == 0):
         exceptionText = 'No roles selected for environment ' + p.name()
-        raise ARM.EnvironmentValidationError(exceptionText)
+        raise EnvironmentValidationError(exceptionText)
     return self.theEnvironmentDictionary.values() 
