@@ -23,7 +23,7 @@ env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf 
 
 install:
- - pip install mysqlclient pyparsing pydot
+ - pip install mysqlclient pyparsing pydot numpy
  - pip install -r test_requirements.txt
  - pip install coveralls
 
