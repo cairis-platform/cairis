@@ -27,14 +27,14 @@ env:
 - TOX_ENV=py26-1.4.X
 
 install:
-   pip install tox
- - pip install -r requirements
- - pip install -r test_requirements.txt
- - pip install coveralls
+- pip install tox
+- pip install -r requirements
+- pip install -r test_requirements.txt
+- pip install coveralls
 
 script: 
-  - py.test cairis/test --doctest-modules -v --cov cairis/core --cov-report term-missing
-  - tox -e $TOX_ENV
+- py.test cairis/test --doctest-modules -v --cov cairis/core --cov-report term-missing
+- tox -e $TOX_ENV
 
 after_success:
   coveralls
