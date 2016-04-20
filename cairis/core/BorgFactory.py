@@ -25,17 +25,11 @@ def initialise():
   b = Borg()
   b.logger = logging.getLogger('cairis')
   
-  homeDir = os.getenv("HOME")
-  if homeDir is not None:
-    cairisRoot = homeDir + "/cairis"
-  else:
-    raise RuntimeError('The HOME environment variable is not defined.')
- 
   cfgFileName = ''
   try:
     cfgFileName = os.environ['CAIRIS_CFG']
   except KeyError:
-    cfgFileName = cairisRoot + '/config/cairis.cnf'
+    cfgFileName = 'cairis.cnf'
 
   if not os.path.exists(cfgFileName):
     raise IOError('''Unable to locate configuration file at the following location:
