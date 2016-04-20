@@ -20,7 +20,7 @@ In theory, CAIRIS can be installed on any platform that its open-source dependen
 * Install the required applications and dependencies:
 
 {% highlight bash %}
-$ sudo apt-get install python-wxglade python-glade2 python-wxgtk2.8 python-dev build-essential mysql-server mysql-client graphviz docbook dblatex python-pip python-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils
+$ sudo apt-get install python-wxglade python-glade2 python-wxgtk3.0 python-dev build-essential mysql-server mysql-client graphviz docbook dblatex python-pip python-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils
 {% endhighlight %}
 
 * Install CAIRIS:
