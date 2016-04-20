@@ -21,6 +21,7 @@ env:
 - TOX_ENV=py27 PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
 
 install:
+- pip install virtualenv
 - pip install tox
 - pip install -r requirements.txt
 - pip install -r test_requirements.txt
