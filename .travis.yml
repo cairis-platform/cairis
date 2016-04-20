@@ -19,11 +19,8 @@ addons:
     - libmysqlclient-dev
 
 env:
-- TOX_ENV=py27-1.6.X PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
-- TOX_ENV=py27-1.5.X PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
-- TOX_ENV=py27-1.4.X PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
-- TOX_ENV=py26-1.5.X PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
-- TOX_ENV=py26-1.4.X PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
+- TOX_ENV=py26 PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
+- TOX_ENV=py27 PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
 
 install:
 - pip install tox
