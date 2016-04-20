@@ -76,5 +76,5 @@ class ContextModel:
           edgeList.add((objtUrl,tailName))
           self.theGraph.add_edge(edge3)
       return self.layout()
-    except ARM.DatabaseProxyException, errTxt:
+    except DatabaseProxyException, errTxt:
       raise ARMException(errTxt)

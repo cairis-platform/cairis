@@ -287,6 +287,6 @@ class KaosModel:
         self.buildTaskModel()
 
       return self.layout()
-    except ARM.DatabaseProxyException, errTxt:
+    except DatabaseProxyException, errTxt:
       raise ARMException(errTxt)
 
