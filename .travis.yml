@@ -20,14 +20,21 @@ addons:
 
 env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf 
+- TOX_ENV=py27-1.6.X
+- TOX_ENV=py27-1.5.X
+- TOX_ENV=py27-1.4.X
+- TOX_ENV=py26-1.5.X
+- TOX_ENV=py26-1.4.X
 
 install:
- - pip install mysqlclient pyparsing pydot numpy
+   pip install tox
+ - pip install -r requirements
  - pip install -r test_requirements.txt
  - pip install coveralls
 
 script: 
   - py.test cairis/test --doctest-modules -v --cov cairis/core --cov-report term-missing
+  - tox -e $TOX_ENV
 
 after_success:
   coveralls
