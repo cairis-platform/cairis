@@ -44,7 +44,7 @@ from cairis.core.ResponseParameters import ResponseParameters
 from cairis.core.AcceptEnvironmentProperties import AcceptEnvironmentProperties
 from cairis.core.ARM import DatabaseProxyException
 
-class RiskTest(unittest.TestCase):
+class ResponseTest(unittest.TestCase):
 
   def setUp(self):
     call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
