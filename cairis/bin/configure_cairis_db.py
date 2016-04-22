@@ -19,6 +19,7 @@
 
 import npyscreen as np
 import os
+import sys
 import MySQLdb
 import _mysql_exceptions
 from subprocess import Popen
@@ -117,6 +118,11 @@ class CAIRISConfigurationApp(np.NPSAppManaged):
   def onStart(self):
     self.addForm("MAIN",CAIRISConfigurationForm)
 
+def main(args=None):
+  if args is None:
+    args = sys.argv[1:]
+    App = CAIRISConfigurationApp()
+    App.run() 
+
 if __name__ == '__main__':
-  App = CAIRISConfigurationApp()
-  App.run() 
+  main()
