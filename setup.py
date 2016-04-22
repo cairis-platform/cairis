@@ -14,7 +14,7 @@ with open('requirements.txt') as f:
     required = f.read().splitlines()
 
 setup(name='cairis',
-      version='1.0.1.4',
+      version='1.0.1',
       author='Shamal Faily',
       author_email='shamal.faily@gmail.com',
       description = 'A security design tool',
