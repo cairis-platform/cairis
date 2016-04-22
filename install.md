@@ -29,46 +29,21 @@ $ sudo apt-get install python-wxglade python-glade2 python-wxgtk3.0 python-dev b
 $ sudo pip install cairis
 {% endhighlight %}
 
-* Create a new database for CAIRIS with a MySQL user account which has full access to the database.  For this example, we assume our username is cairis, the password is cairis123, and database is called cairis:
-
-{% highlight sql %}
-> GRANT USAGE ON *.* TO 'cairis'@'localhost' IDENTIFIED BY 'cairis123' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
-> CREATE DATABASE IF NOT EXISTS `cairis`;
-> GRANT ALL PRIVILEGES ON `cairis`.* TO 'cairis'@'localhost';
-{% endhighlight %}
-
-* Create the database tables and stored procedures required by CAIRIS:
+* Run `configure_cairis_db.py`.
 
 {% highlight bash %}
-$ CAIRIS_SQL=$CAIRIS_DIR/cairis/sql
-$ mysql --user=cairis –-password=cairis123 –-database=cairis < $CAIRIS_SQL/init.sql
-$ mysql --user=cairis –-password=cairis123 –-database=cairis < $CAIRIS_SQL/procs.sql
+$ configure_cairis_db.py
 {% endhighlight %}
 
-* To view certain models in CAIRIS, change the maximum recursion depth for stored procedures to 255 from the default of 0.
+When you run the script, you should get the below form.
 
-{% highlight bash %}
-$ mysql -h localhost -u root -p << !
-set global max_sp_recursion_depth = 255; flush tables;
-flush privileges;
-!
-{% endhighlight %}
+![fig:configure_cairis_db]({{ site.baseurl }}/images/configure_cairis_db.jpg)
+*Configurating the CAIRIS database*
 
-* Update the CAIRIS_CFG environment variable to point to your cairis.cnf file.  You can find a template file you can use wherever your system has installed CAIRIS, e.g. `/usr/local/lib/python2.7/dist-packages/cairis/config`
+Assuming you didn't customise the installation location of CAIRIS when running `pip`, you can usually accept these defaults.  When you select `Ok`, the script will create a new CAIRIS database, and a CAIRIS configuration file (`cairis.cnf`); this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool.
 
-* Change the values of cairis.cnf according to your installation.  Note that the 'root' is the directory of the CAIRIS application, which in our our case is `$CAIRIS_DIR/cairis`.
 
-{% highlight bash %}
-dbhost = 127.0.0.1
-dbport = 3306
-dbuser = cairis
-dbpasswd = cairis123
-dbname = cairis
-tmp_dir = /tmp
-root = /usr/local/lib/python2.7/dist-packages/cairis
-default_image_dir = .
-{% endhighlight %}
-
+* Update the CAIRIS_CFG environment variable to point to your `cairis.cnf` file.
 
 # Starting CAIRIS
 
