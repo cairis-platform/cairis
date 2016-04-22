@@ -29,13 +29,13 @@ $ sudo apt-get install python-wxglade python-glade2 python-wxgtk3.0 python-dev b
 $ sudo pip install cairis
 {% endhighlight %}
 
-* Run `configure_cairis_db.py`.
+* Run the CAIRIS database initialisation script.
 
 {% highlight bash %}
 $ configure_cairis_db.py
 {% endhighlight %}
 
-When you run the script, you should get the below form.
+When you run this script, you should get the below form.
 
 ![fig:configure_cairis_db]({{ site.baseurl }}/images/configure_cairis_db.jpg)
 
