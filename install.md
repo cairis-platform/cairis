@@ -38,12 +38,11 @@ $ configure_cairis_db.py
 When you run the script, you should get the below form.
 
 ![fig:configure_cairis_db]({{ site.baseurl }}/images/configure_cairis_db.jpg)
-*Configurating the CAIRIS database*
 
-Assuming you didn't customise the installation location of CAIRIS when running `pip`, you can usually accept these defaults.  When you select `Ok`, the script will create a new CAIRIS database, and a CAIRIS configuration file (`cairis.cnf`); this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool.
+Assuming you didn't customise the installation location of CAIRIS when running `pip`, you can usually accept all of these defaults, except for the name and location of the CAIRIS configuration file.  When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool.
 
 
-* Update the CAIRIS_CFG environment variable to point to your `cairis.cnf` file.
+* Update the CAIRIS_CFG environment variable to point to your CAIRIS configuration file.
 
 # Starting CAIRIS
 
@@ -56,7 +55,6 @@ cairis_gui.py
 This main CAIRIS window is split in 2 halves.  The bottom half is the taken up the requirements editor.  The top half of the screen is taken up by the menu and tool-bar buttons.
 
 ![fig:initStartup]({{ site.baseurl }}/images/CAIRIS_new.jpg)
-*An empty CAIRIS project*
 
 All the information entered into CAIRIS is stored in a single MySQL database, but all or part of a complete CAIRIS model can be imported and exported in XML.  CAIRIS comes with a several sample models; these can be found on github in the `cairis/examples` folder.  This can be imported by clicking on the File/Import/Model menu, and selecting the model file to be imported.
 
