@@ -114,4 +114,4 @@ All ICT infrastructure in support of Enterprise SCADA, Telemetry and Control Sys
 
 <h2>Further details</h2>
 
-[CAIRIS model](https://github.com/failys/CAIRIS/tree/master/cairis/examples/exemplars/ACME_Water)
+[CAIRIS model](https://github.com/failys/cairis/blob/master/examples/exemplars/ACME_Water/ACME_Water.xml)

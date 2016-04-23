@@ -101,4 +101,4 @@ The scope of this study is restricted to the upload and download of data to and 
 
 <h2>Further details</h2>
 
-[Github](https://github.com/failys/CAIRIS/tree/master/cairis/examples/exemplars/NeuroGrid)
+[Github](https://github.com/failys/cairis/blob/master/examples/exemplars/NeuroGrid/NeuroGrid.xml)

@@ -256,4 +256,4 @@ not authorised to use it."
 
 ## Further details
 
-[CAIRIS model](https://github.com/failys/CAIRIS/tree/master/cairis/examples/personas/Rick)
+[CAIRIS model](https://github.com/failys/cairis/blob/master/examples/personas/Rick/Rick.xml)

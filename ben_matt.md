@@ -466,4 +466,4 @@ should be signed off before any engagement begins.
 
 ## Further details
 
-[CAIRIS model](https://github.com/failys/CAIRIS/tree/master/cairis/examples/personas/Ben_Matt)
+[CAIRIS model](https://github.com/failys/cairis/blob/master/examples/personas/Ben_Matt/Ben_Matt.xml)
