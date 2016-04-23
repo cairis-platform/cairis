@@ -23,19 +23,21 @@ $ sudo apt-get install python-wxglade python-glade2 python-wxgtk3.0 python-dev b
 $ sudo pip install cairis
 {% endhighlight %}
 
-* Run the CAIRIS database initialisation script.
+* Run the CAIRIS database initialisation script.  When you run this script, you should get the below form.
 
 {% highlight bash %}
 $ configure_cairis_db.py
 {% endhighlight %}
 
-When you run this script, you should get the below form.
-
 ![fig:configure_cairis_db]({{ site.baseurl }}/images/configure_cairis_db.jpg)
 
 Assuming you didn't customise the installation location of CAIRIS when running `pip`, you can usually accept all of these defaults, except for the name and location of the CAIRIS configuration file.  When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool.
 
-* Update the CAIRIS_CFG environment variable to point to your CAIRIS configuration file.
+* Ensure the CAIRIS_CFG environment variable to points to your CAIRIS configuration file and is persistent, i.e.
+
+{% highlight bash %}
+echo CAIRIS_CFG=/home/cairisuser/cairis.cnf >> .bashrc
+{% endhighlight %}
 
 ## Obtaining a virtual appliance
 
