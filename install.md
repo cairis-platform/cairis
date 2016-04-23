@@ -36,7 +36,7 @@ Assuming you didn't customise the installation location of CAIRIS when running `
 * Ensure the CAIRIS_CFG environment variable to points to your CAIRIS configuration file, and is persistent, i.e.
 
 {% highlight bash %}
-echo CAIRIS_CFG=/home/cairisuser/cairis.cnf >> .bashrc
+echo export CAIRIS_CFG=/home/cairisuser/cairis.cnf >> .bashrc
 {% endhighlight %}
 
 ## Obtaining a virtual appliance
