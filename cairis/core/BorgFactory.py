@@ -19,6 +19,7 @@ from Borg import Borg
 import os
 import logging
 import DatabaseProxyFactory
+from ARM import ARMException
 from string import strip
 
 def initialise():
@@ -29,11 +30,10 @@ def initialise():
   try:
     cfgFileName = os.environ['CAIRIS_CFG']
   except KeyError:
-    cfgFileName = 'cairis.cnf'
+    raise ARMException('CAIRIS_CFG environment variable has not been set.  Please set this to the correct location of your CAIRIS configuration file, e.g. export CAIRIS_CFG=/home/cairisuser/cairis.cnf') 
 
   if not os.path.exists(cfgFileName):
-    raise IOError('''Unable to locate configuration file at the following location:
-'''+cfgFileName) 
+    raise ARMException('Unable to locate configuration file at the following location:' + cfgFileName)
 
   cfgFile = open(cfgFileName)
   for cfgLine in cfgFile.readlines():

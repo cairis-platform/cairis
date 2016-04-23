@@ -18,55 +18,58 @@
 
 import argparse
 import sys
-import cairis.core.BorgFactory
-from cairis.mio.ModelExport import *
-from cairis.core.ARM import *
 
 def main(args=None):
 
-  try:
-    parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Export to Redmine')
-    parser.add_argument('outputFile',help='output file name')
-    parser.add_argument('--type',dest='modelFormat',help='model type to export.  One of all, requirements, scenarios, usecases, architecture, attackpatterns or GRL')
-    parser.add_argument('--persona',nargs='+',help='Persona name (relevant for GRL export only)')
-    parser.add_argument('--task',nargs='+',help='Task name (relevant for GRL export only)')
-    parser.add_argument('--environment',dest='envName',help='Environment name (relevant for GRL export only)')
-    args = parser.parse_args() 
-    cairis.core.BorgFactory.initialise()
+  parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Export to Redmine')
+  parser.add_argument('outputFile',help='output file name')
+  parser.add_argument('--type',dest='modelFormat',help='model type to export.  One of all, requirements, scenarios, usecases, architecture, attackpatterns or GRL')
+  parser.add_argument('--persona',nargs='+',help='Persona name (relevant for GRL export only)')
+  parser.add_argument('--task',nargs='+',help='Task name (relevant for GRL export only)')
+  parser.add_argument('--environment',dest='envName',help='Environment name (relevant for GRL export only)')
+  args = parser.parse_args() 
+  cairis.core.BorgFactory.initialise()
    
-    msgStr = ''
-    if (args.modelFormat == 'all'):
-      msgStr += exportModel(args.outputFile)
-    elif (args.modelFormat == 'scenarios'):
-      msgStr += exportRedmineScenarios(args.outputFile)
-    elif (args.modelFormat == 'requirements'):
-      msgStr += exportRedmineRequirements(args.outputFile)
-    elif (args.modelFormat == 'usecases'):
-      msgStr += exportRedmineUseCases(args.outputFile)
-    elif (args.modelFormat == 'architecture'):
-      msgStr += exportArchitecture(args.outputFile)
-    elif (args.modelFormat == 'attackpatterns'):
-      msgStr += exportAttackPatterns(args.outputFile)
-    elif (args.modelFormat == 'GRL'):
-      personaNames = []
-      personaNames.extend(args.persona)
-      taskNames = []
-      taskNames.extend(args.task)
+  msgStr = ''
+  if (args.modelFormat == 'all'):
+    msgStr += exportModel(args.outputFile)
+  elif (args.modelFormat == 'scenarios'):
+    msgStr += exportRedmineScenarios(args.outputFile)
+  elif (args.modelFormat == 'requirements'):
+    msgStr += exportRedmineRequirements(args.outputFile)
+  elif (args.modelFormat == 'usecases'):
+    msgStr += exportRedmineUseCases(args.outputFile)
+  elif (args.modelFormat == 'architecture'):
+    msgStr += exportArchitecture(args.outputFile)
+  elif (args.modelFormat == 'attackpatterns'):
+    msgStr += exportAttackPatterns(args.outputFile)
+  elif (args.modelFormat == 'GRL'):
+    personaNames = []
+    personaNames.extend(args.persona)
+    taskNames = []
+    taskNames.extend(args.task)
 
-      if len(personaNames) == 0:
-        raise ARMException('Persona name not specified for GRL export')
-      elif len(taskNames) == 0:
-        raise ARMException('Task name not specified for GRL export')
-      elif args.envName == None:
-        raise ARMException('Environment name not specified for GRL export')
-      else:
-        msgStr += exportGRL(args.outputFile,personaNames,taskNames,args.envName)
+    if len(personaNames) == 0:
+      raise ARMException('Persona name not specified for GRL export')
+    elif len(taskNames) == 0:
+      raise ARMException('Task name not specified for GRL export')
+    elif args.envName == None:
+      raise ARMException('Environment name not specified for GRL export')
     else:
-      raise ARMException('Export model type ' + args.modelFormat + ' not recognised')
-    print msgStr
-  except ARMException, e:
-    print 'cexport error: ',e
-    exit(-1) 
+      msgStr += exportGRL(args.outputFile,personaNames,taskNames,args.envName)
+  else:
+    raise ARMException('Export model type ' + args.modelFormat + ' not recognised')
 
 if __name__ == '__main__':
-  main()
+
+  try:
+    import cairis.core.BorgFactory
+    from cairis.mio.ModelExport import *
+    from cairis.core.ARM import *
+    main()
+  except ImportError:
+    print "Fatal CAIRIS error: Could not import the Python dependencies needed by CAIRIS.  Either your Python installation is incomplete, or - if you have downloaded CAIRIS directly from github - PYTHONPATH needs to be set to the root directly of your source installation; this is the same directory that setup.py can be found in."
+    sys.exit(-1)
+  except ARMException, e:
+    print 'Fatal cexport error: ' + str(e)
+    sys.exit(-1)

@@ -15,17 +15,26 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
+
 import os
 import sys
-from cairis.gui.IRISApp import IRISApp
 
 def main(args=None):
   if args is None:
     args = sys.argv[1:]
-    import gtk
-    gtk.remove_log_handlers()
     cairisApp = IRISApp()
     cairisApp.MainLoop()
 
 if __name__ == '__main__':
-  main()
+  try:
+    import gtk
+    gtk.remove_log_handlers()
+    from cairis.gui.IRISApp import IRISApp
+    from cairis.core.ARM import ARMException
+    main()
+  except ImportError:
+    print "Fatal CAIRIS error: Could not import the Python dependencies needed by CAIRIS.  Either your Python installation is incomplete, or - if you have downloaded CAIRIS directly from github - PYTHONPATH needs to be set to the root directly of your source installation; this is the same directory that setup.py can be found in."
+    sys.exit(-1)
+  except ARMException, e:
+    print "Fatal CAIRIS error: " + str(e) 
+    sys.exit(-1)
