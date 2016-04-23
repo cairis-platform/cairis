@@ -8,6 +8,8 @@ image:
   teaser: easingadoption_teaser.gif
 ---
 
+## Easing the process of adopting CAIRIS ##
+
 Although the blog has been quiet in recent months, a lot has been happening with CAIRIS.  As a result of this work, it's now easier than ever for both users and developers to adopt the tool.  Here is a quick summary of these changes.
 
 * The CAIRIS source code on github has been reorganised.  Everything is now properly structured into modules, making it easier for new developers to figure out where everything is, and how different components work together.
