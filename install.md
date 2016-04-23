@@ -33,7 +33,7 @@ $ configure_cairis_db.py
 
 Assuming you didn't customise the installation location of CAIRIS when running `pip`, you can usually accept all of these defaults, except for the name and location of the CAIRIS configuration file.  When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool.
 
-* Ensure the CAIRIS_CFG environment variable to points to your CAIRIS configuration file and is persistent, i.e.
+* Ensure the CAIRIS_CFG environment variable to points to your CAIRIS configuration file, and is persistent, i.e.
 
 {% highlight bash %}
 echo CAIRIS_CFG=/home/cairisuser/cairis.cnf >> .bashrc
