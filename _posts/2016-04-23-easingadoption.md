@@ -18,6 +18,6 @@ Although the blog has been quiet in recent months, a lot has been happening with
 
 * CAIRIS is now available as a package on [PyPI](https://pypi.python.org/pypi/cairis).  As you will see on the [installation page](http://cairis.org/install/), this vastly simplifies the installation process; this now entails little more than installing dependent packages, installing CAIRIS using `pip install`, and running a script to configure the CAIRIS database.  Moreover, we're currently working on a Debian package for CAIRIS so, very soon, it will be possible to install and configure CAIRIS using just a single command.
 
-* We've started the process of integrating CAIRIS-web into the master CAIRIS repository.  In the first instance, we will be developing web services for frequently used CAIRIS functionality.  However, in time, we plan to re-start work on a CAIRIS web app.
+* We've started the process of integrating [CAIRIS-web](https://github.com/RobinQuetin/CAIRIS-web) into the master CAIRIS repository.  In the first instance, we will be developing web services for frequently used CAIRIS functionality.  However, in time, we plan to re-start work on a CAIRIS web app.
 
 Watch this space for further updates on some of the above initiatives!
