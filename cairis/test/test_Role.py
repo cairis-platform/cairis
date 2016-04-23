@@ -44,6 +44,13 @@ class RoleTest(unittest.TestCase):
     self.assertEqual(irp.shortCode(),o.shortCode())
     self.assertEqual(irp.description(),o.description())
 
+    o.theShortCode = 'TESTROLE'
+    b.dbProxy.updateRole(o)
+
+    oRoles2 = b.dbProxy.getRoles(o.id())
+    o2 = oRoles[self.iRoles[0]["theName"]]
+    self.assertEqual(o2.shortCode(),"TESTROLE")
+
     b.dbProxy.deleteRole(o.id())
   
   def tearDown(self):

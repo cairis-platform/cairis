@@ -77,6 +77,13 @@ class AssetTest(unittest.TestCase):
     self.assertEqual(iaeps[0].rationale()[6], oaeps[0].rationale()[6])
     self.assertEqual(iaeps[0].rationale()[7], oaeps[0].rationale()[7])
 
+    oap.theShortCode = 'TESTCODE'
+    b.dbProxy.updateAsset(oap)
+
+    oaps2 = b.dbProxy.getAssets(oap.id())
+    oap2 = oaps[self.iassets[0]["theName"]]
+    self.assertEqual(oap2.shortCode(),'TESTCODE')
+
     oaps = b.dbProxy.deleteAsset(oap.id())
 
 
