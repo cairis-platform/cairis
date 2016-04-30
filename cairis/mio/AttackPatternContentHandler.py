@@ -265,7 +265,7 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     elif name == 'attack_pattern':
       assetList = self.theTargets + self.theExploits
       for assetName in assetList:
-        self.theAssetParameters.append(AssetParametersFactory.buildFromTemplate(assetName,[self.theEnvironment]))
+        self.theAssetParameters.append(cairis.core.AssetParametersFactory.buildFromTemplate(assetName,[self.theEnvironment]))
 
       attackerNames = []
       for attackerName,attackerMotives,attackerCapabilities in self.theParticipants:
