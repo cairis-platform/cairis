@@ -159,15 +159,6 @@ Departments:
     <high>> 1 million euros.</high>
   </asset_values>
 </environment>
-<environment name="Migrancy" short_code="MIG" >
-  <definition>Migrancy</definition>
-  <asset_values>
-    <none>To be defined</none>
-    <low>To be defined</low>
-    <medium>To be defined</medium>
-    <high>To be defined</high>
-  </asset_values>
-</environment>
 </cairis>
 
 <riskanalysis>
@@ -373,9 +364,206 @@ Departments:
 </usability>
 
 <goals>
+<goal name="Ensure business continuity" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>To ensure the business continuity of Balkan Rail, the risk of damage by preventing security incidents and reducing their potential effects on Balkan Rail shall be minimised.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Protect information assets" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>Balkan Rail information assets shall be protected against all internal, external, intentional or unintentional threats.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Protect from unauthorised access" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>Balkan Rail information shall be protected from unauthorized access.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Protect Balkan Rail information confidentiality" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>The confidentiality of Balkan Rail information shall be protected.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Protect Balkan Rail customer information confidentiality" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>The confidentiality of Balkan Rail customer information shall be protected.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Protect Balkan Rail information integrity" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>The information integrity of Balkan Rail shall be protected.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Protect Balkan Rail customer information integrity" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>The information integrity of Balkan Rail customers shall be protected.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Protect operational procedures availability" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>The availability of information of operational procedures in Balkan Rail shall be protected.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Monitoring ISMS" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>Balkan Rail Management shall ensure continuous monitoring of the implementation of Information Security Management System.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Legal and Standards Compliance" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>Balkan Rail Management shall ensure continuous compliance with the law and the requirements of ISO standard 27001: 2013.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Staff Compliance" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>Compliance with the Information Security Policy is mandatory for everyone working or cooperating with Balkan Rail.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Compliance Responsibility" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>The Information Security Officer shall be responsible for compliance with the policy.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Policy Support" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>The Information Security Officer shall provide support and advice when applying the policy.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Implementation Responsibility" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>All holders of positions of responsibility shall be directly responsible for implementing the Policy.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Compliance Supervision Responsibility" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>All holders of positions of responsibility shall ensuring staff supervising compliance.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="BCP Maintenance" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>The Business Continuity Plan shall be maintained and checked for effectiveness.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Continuous ISMS Training" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>Continuous training in the Information Security Management System shall be available to all Balkan Rail employees.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Security Breaches Investigated" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>Confirmed or presumed information security breaches reported to the Information Security Officer shall be thoroughly investigated and dealt with promptly and effectively.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Violators Disciplined" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>Violations of Security Policy shall be subject to disciplinary action.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Violation Penalties" originator="Georgia Lykou">
+  <goal_environment name="Model" category="Maintain" priority="High">
+    <definition>Penalties for security policy violation shall depend on the nature of the offence, and the impact of the infringement on Balkan Rail, IT, goods, and facilities.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
 </goals>
 
+
 <associations>
+<goal_association environment="Model"  goal_name="Ensure business continuity" goal_dim="goal" ref_type="and" subgoal_name="Protect information assets" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Protect information assets" goal_dim="goal" ref_type="and" subgoal_name="Protect from unauthorised access" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Protect information assets" goal_dim="goal" ref_type="and" subgoal_name="Protect Balkan Rail information confidentiality" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Protect information assets" goal_dim="goal" ref_type="and" subgoal_name="Protect Balkan Rail customer information confidentiality" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Protect information assets" goal_dim="goal" ref_type="and" subgoal_name="Protect Balkan Rail information integrity" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Protect information assets" goal_dim="goal" ref_type="and" subgoal_name="Protect Balkan Rail customer information integrity" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Protect information assets" goal_dim="goal" ref_type="and" subgoal_name="Protect operational procedures availability" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Ensure business continuity" goal_dim="goal" ref_type="and" subgoal_name="Monitoring ISMS" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Monitoring ISMS" goal_dim="goal" ref_type="and" subgoal_name="Legal and Standards Compliance" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Monitoring ISMS" goal_dim="goal" ref_type="and" subgoal_name="BCP Maintenance" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Monitoring ISMS" goal_dim="goal" ref_type="and" subgoal_name="Continuous ISMS Training" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Monitoring ISMS" goal_dim="goal" ref_type="and" subgoal_name="Staff Compliance" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Staff Compliance" goal_dim="goal" ref_type="and" subgoal_name="Compliance Responsibility" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Staff Compliance" goal_dim="goal" ref_type="and" subgoal_name="Policy Support" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Staff Compliance" goal_dim="goal" ref_type="and" subgoal_name="Implementation Responsibility" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Staff Compliance" goal_dim="goal" ref_type="and" subgoal_name="Compliance Supervision Responsibility" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Ensure business continuity" goal_dim="goal" ref_type="and" subgoal_name="Security Breaches Investigated" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
+<goal_association environment="Model"  goal_name="Security Breaches Investigated" goal_dim="goal" ref_type="and" subgoal_name="Violators Disciplined" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association><goal_association environment="Model"  goal_name="Violators Disciplined" goal_dim="goal" ref_type="and" subgoal_name="Violation Penalties" subgoal_dim="goal" alternative_id="0" >
+  <rationale></rationale>
+</goal_association>
 <dependency depender="IT administrator" dependee="Human Resources" dependency_type="asset" dependency="HR Data" environment="Model" >
   <rationale>IT need to know when someone leaves the company.</rationale>
 </dependency>
