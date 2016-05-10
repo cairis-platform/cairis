@@ -32,7 +32,7 @@ class SearchDialog(wx.Dialog):
     mainSizer.Add(self.panel,1,wx.EXPAND)
     self.SetSizer(mainSizer)
     wx.EVT_BUTTON(self,SEARCHMODEL_BUTTONFIND_ID,self.onFind)
-    wx.EVT_BUTTON(self,armid.SEARCHMODEL_BUTTONCLOSE_ID, self.onClose)
+    wx.EVT_BUTTON(self,SEARCHMODEL_BUTTONCLOSE_ID, self.onClose)
 
   def onFind(self,evt):
     ssCtrl = self.FindWindowById(SEARCHMODEL_TEXTSEARCHSTRING_ID)
@@ -62,4 +62,4 @@ class SearchDialog(wx.Dialog):
       return
 
   def onClose(self, event):
-    self.EndModal(armid.SEARCHMODEL_BUTTONCLOSE_ID)
+    self.EndModal(SEARCHMODEL_BUTTONCLOSE_ID)
