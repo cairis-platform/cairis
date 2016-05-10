@@ -78,7 +78,7 @@ class SearchOptionsPanel(wx.Panel):
     self.memoCheck.SetValue(True)
     self.internalDocumentCheck = wx.CheckBox(self,SEARCHPANEL_CHECKINTERNALDOCUMENT_ID,'Internal Documents')
     self.internalDocumentCheck.SetValue(True)
-    self.tagCheck = wx.CheckBox(self, armid.SEARCHPANEL_CHECKTAGS_ID,'Tags')
+    self.tagCheck = wx.CheckBox(self, SEARCHPANEL_CHECKTAGS_ID,'Tags')
     self.tagCheck.SetValue(True)
 
     optSizer.Add(self.psCheck)
