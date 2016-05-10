@@ -78,6 +78,8 @@ class SearchOptionsPanel(wx.Panel):
     self.memoCheck.SetValue(True)
     self.internalDocumentCheck = wx.CheckBox(self,SEARCHPANEL_CHECKINTERNALDOCUMENT_ID,'Internal Documents')
     self.internalDocumentCheck.SetValue(True)
+    self.tagCheck = wx.CheckBox(self, armdid.SEARCHPANEL_CHECKTAGS_ID,'Tags')
+    self.tagCheck.SetValue(True)
 
     optSizer.Add(self.psCheck)
     optSizer.Add(self.envCheck)
@@ -103,6 +105,7 @@ class SearchOptionsPanel(wx.Panel):
     optSizer.Add(self.codeCheck)
     optSizer.Add(self.memoCheck)
     optSizer.Add(self.internalDocumentCheck)
+    optSizer.Add(self.tagCheck)
 
     self.SetSizer(mainSizer)
     self.toggleCheck.Bind(wx.EVT_CHECKBOX,self.toggleFlags)
@@ -133,6 +136,7 @@ class SearchOptionsPanel(wx.Panel):
       self.codeCheck.SetValue(True)
       self.memoCheck.SetValue(True)
       self.internalDocumentCheck.SetValue(True)
+      self.tagCheck.SetValue(True)
     else:
       self.psCheck.SetValue(False)
       self.envCheck.SetValue(False)
@@ -158,7 +162,7 @@ class SearchOptionsPanel(wx.Panel):
       self.codeCheck.SetValue(False)
       self.memoCheck.SetValue(False)
       self.internalDocumentCheck.SetValue(False)
-
+      self.tagCheck.SetValue(False)
 
   def optionFlags(self):
     flags = [
@@ -185,6 +189,7 @@ class SearchOptionsPanel(wx.Panel):
       self.dirCheck.GetValue(),
       self.codeCheck.GetValue(),
       self.memoCheck.GetValue(),
-      self.internalDocumentCheck.GetValue()]
+      self.internalDocumentCheck.GetValue(),
+      self.tagCheck.GetValue()]
     return flags
 

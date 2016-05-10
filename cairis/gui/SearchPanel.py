@@ -67,6 +67,9 @@ class SearchPanel(wx.Panel):
     self.listCtrl.SetColumnWidth(2,500)
     self.listCtrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED,self.onItemActivated)
     self.SetSizer(mainSizer)
+    
+    findClose = wx.Button(self,armid.SEARCHMODEL_BUTTONFINDCLOSE_ID,'Close')
+    mainSizer.Add(findClose,0)
 
   def onItemActivated(self,evt):
     idx = evt.GetIndex()
