@@ -20,6 +20,7 @@ import os
 import json
 from subprocess import call
 import cairis.core.BorgFactory
+import cairis.core.GoalFactory
 from cairis.core.Borg import Borg
 from cairis.core.EnvironmentParameters import EnvironmentParameters
 from cairis.core.RoleParameters import RoleParameters
@@ -42,6 +43,7 @@ from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentPro
 from cairis.core.RiskParameters import RiskParameters
 from cairis.core.ResponseParameters import ResponseParameters
 from cairis.core.AcceptEnvironmentProperties import AcceptEnvironmentProperties
+from cairis.core.MitigateEnvironmentProperties import MitigateEnvironmentProperties
 from cairis.core.ARM import DatabaseProxyException
 
 class ResponseTest(unittest.TestCase):
@@ -126,19 +128,61 @@ class ResponseTest(unittest.TestCase):
     self.iResponses = d['responses']
 
   def testResponse(self):
-    iarName = self.iResponses[0]["theType"] + " " + self.iResponses[0]["theRisk"] 
-    iaep = AcceptEnvironmentProperties(self.iResponses[0]["theEnvironmentProperties"][0],self.iResponses[0]["theEnvironmentProperties"][1],self.iResponses[0]["theEnvironmentProperties"][2])
-    iar = ResponseParameters(iarName,self.iResponses[0]["theRisk"],[],[iaep], self.iResponses[0]["theType"])
+    iar1Name = self.iResponses[0]["theType"] + " " + self.iResponses[0]["theRisk"] 
+    iaep1 = AcceptEnvironmentProperties(self.iResponses[0]["theEnvironmentProperties"][0],self.iResponses[0]["theEnvironmentProperties"][1],self.iResponses[0]["theEnvironmentProperties"][2])
+    iar1 = ResponseParameters(iar1Name,self.iResponses[0]["theRisk"],[],[iaep1], self.iResponses[0]["theType"])
+
+    iar2Name = self.iResponses[1]["theType"] + " " + self.iResponses[1]["theRisk"] 
+    iaep2 = MitigateEnvironmentProperties(self.iResponses[1]["theEnvironmentProperties"],self.iResponses[1]["theType"])
+    iar2 = ResponseParameters(iar2Name,self.iResponses[1]["theRisk"],[],[iaep2], self.iResponses[1]["theType"])
+
     b = Borg()
-    b.dbProxy.addResponse(iar)
+    b.dbProxy.addResponse(iar1)
+    b.dbProxy.addResponse(iar2)
 
     self.ors = b.dbProxy.getResponses()
-    self.oar = self.ors[iarName]
+    self.oar1 = self.ors[iar1Name]
+    self.oar2 = self.ors[iar2Name]
 
-    self.assertEqual(iar.name(),self.oar.name())
-    self.assertEqual(iar.risk(),self.oar.risk())
-    self.assertEqual(iar.responseType(),self.oar.responseType())
-    b.dbProxy.deleteResponse(self.oar.id())
+    self.assertEqual(iar1.name(),self.oar1.name())
+    self.assertEqual(iar1.risk(),self.oar1.risk())
+    self.assertEqual(iar1.responseType(),self.oar1.responseType())
+
+    self.assertEqual(iar2.name(),self.oar2.name())
+    self.assertEqual(iar2.risk(),self.oar2.risk())
+    self.assertEqual(iar2.responseType(),self.oar2.responseType())
+
+    rgp = cairis.core.GoalFactory.build(self.oar2)
+    riskParameters = rgp[0]
+    riskGoalId = b.dbProxy.addGoal(riskParameters)
+    b.dbProxy.addTrace('response_goal',self.oar2.id(),riskGoalId)
+    if (rgp > 1):
+      threatParameters = rgp[1]
+      vulnerabilityParameters = rgp[2]
+      b.dbProxy.addGoal(vulnerabilityParameters)
+      b.dbProxy.addGoal(threatParameters)
+    b.dbProxy.relabelGoals(iaep2.name())
+
+    oGoals = b.dbProxy.getGoals()
+    print oGoals
+    rg = oGoals['Deter' + self.oar2.risk()]
+    vg = oGoals[vulnerabilityParameters.name()]
+    tg = oGoals[threatParameters.name()]
+
+    ogops = b.dbProxy.getGoalAssociations()
+    ogop1 = ogops[iaep2.name() + '/' + riskParameters.name() + '/' + threatParameters.name() + '/or']
+    ogop2 = ogops[iaep2.name() + '/' + riskParameters.name() + '/' + vulnerabilityParameters.name() + '/or']
+
+    b.dbProxy.deleteGoalAssociation(ogop1.id(),ogop1.goal(),ogop1.subGoal())
+    b.dbProxy.deleteGoalAssociation(ogop2.id(),ogop2.goal(),ogop2.subGoal())
+    b.dbProxy.deleteTrace('response',self.oar2.name(),'goal',rg.name())
+
+    b.dbProxy.deleteGoal(tg.id())
+    b.dbProxy.deleteGoal(vg.id())
+    b.dbProxy.deleteGoal(rg.id())
+
+    b.dbProxy.deleteResponse(self.oar2.id())
+    b.dbProxy.deleteResponse(self.oar1.id())
   
   def tearDown(self):
     b = Borg()
