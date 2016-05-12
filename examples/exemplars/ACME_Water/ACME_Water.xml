@@ -589,6 +589,19 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
     <vulnerable_asset name="Intrusion Detection System" />
   </vulnerability_environment>
 </vulnerability>
+<vulnerability name="Wide Scope" type="Design">
+  <description>Red team testers exercise discretion over such a wide scope that activities may be carried out which are legally ambiguous.</description>
+  <vulnerability_environment name="Day" severity="Critical">
+    <vulnerable_asset name="Corporate Network" />
+    <vulnerable_asset name="Enterprise SCADA Network" />
+    <vulnerable_asset name="ICT Application" />
+    <vulnerable_asset name="ICT PC" />
+    <vulnerable_asset name="STCS Application" />
+  </vulnerability_environment>
+</vulnerability>
+
+
+
 <attacker name="Ben" image="Ben.jpg">
   <!-- Image source: https://www.flickr.com/photos/ashleymackinnon/7524751112 -->
   <description>Ben is a security engineer for RedTeam LLC.  He is working with a junior tester (Alex) to conduct a red team test on ACME Water; they are evaluating ACME's security posture to ensure their security policies on te use of IT are being followed.
@@ -846,13 +859,21 @@ Meanwhile, back in the control room, Rick notices an alarm from the pump in buil
     <narrative>Using his credentials, Victor connects to an EnterpriseSCADA server at a remote site.  Victor customises the alarms so that certain critical warnings are ignored.  Victor then proceeds to make several malicious modifications to the PLCs at that site.</narrative>
   </misusecase>
 </risk>
-<risk name="Account lockout" vulnerability="Ubiquitous identity and knowledge" threat="Password enumeration">
+<risk name="Manual account lockout" vulnerability="Ubiquitous identity and knowledge" threat="Password enumeration">
   <misusecase environment="Day">
     <narrative>Ben has obtained a list of possible pay numbers, and is enumerating possible passwords.  Unfortunately, he didn't realise that an account lockout policy exists and, consequently, manages to lock several arbitrary accounts out.
 
 In the meantime, back at the plant, Rick is unable to login to the ICT PC to use the telemetry service software because his account is locked out.</narrative>
   </misusecase>
 </risk>
+<risk name="Automated account lockout" vulnerability="Wide Scope" threat="Password enumeration">
+  <misusecase environment="Day">
+    <narrative>Ben is supervising Alex in the running of RedTeam's ICS network auditing to identify potential vulnerabilities on ACME's corporate IT network.  The tool has crawled the corporate network to identify information that identifies members of staff.  Unfortunately, neither Ben nor Alex realised that an account lockout policy exists and, consequently, manages to lock several arbitrary accounts out.
+ 
+In the meantime, back at the plant, Rick is unable to login to the ICT PC to use the telemetry service software because his account is locked out.</narrative>
+  </misusecase>
+</risk>
+
 <risk name="System enumeration" vulnerability="Incomplete Intrusion Detection rules" threat="Enumeration">
   <misusecase environment="Day">
     <narrative>Using the information obtained from his network footprinting exercise, Ben proceeds to obtain more information about the systems on the ACME network.
@@ -1652,7 +1673,7 @@ Barry hopes to use the new software repository to ensure his backup has the late
   <grounds type="document" reference="Tasks entered into AJS are captured by WMS" />
   <warrant type="document" reference="Carries out tasks and records set-point readings" />
 </persona_characteristic>
-<task name="Take chemicals delivery" author="Anon" assumption_task="FALSE" >
+<task name="Take chemicals delivery" code="DELIV_CHEMS" author="Anon" assumption_task="FALSE" >
   <objective>Take delivery of a scheduled order of chemicals</objective>
   <task_environment name="Day" >
     <dependencies>A chemicals order has been made.  Rick is currently logged into the SCADA and ICT PCs in the control room.  Rick is the only person available to take the delivery.</dependencies>
@@ -1664,7 +1685,7 @@ Rick leaves the control room and heads down to the loading area.  Once there, he
     <benefits></benefits>
   </task_environment>
 </task>
-<task name="Resolve reservoir alarm" author="Anon" assumption_task="FALSE" >
+<task name="Resolve reservoir alarm" code="RES_ALARM" author="Anon" assumption_task="FALSE" >
   <objective>Resolve operational alarm due to high reservoir water level.</objective>
   <task_environment name="Day" >
     <dependencies>Rick is currently in the control room, and hears an alarm.</dependencies>
@@ -1691,7 +1712,7 @@ In this situation, Rick knows exactly what to do.  After stopping the alarm, Ric
     <benefits></benefits>
   </task_environment>
 </task>
-<task name="Broken instrument alarm" author="Anon" assumption_task="FALSE" >
+<task name="Broken instrument alarm" code="BIA" author="Anon" assumption_task="FALSE" >
   <objective>Fix flatlined trend</objective>
   <task_environment name="Day" >
     <dependencies>Rick hears an audible alarm and notices that the trends have flatlined.</dependencies>
@@ -1716,7 +1737,7 @@ Fifteen minutes later, Barry arrives back at the control room and explains there
     <benefits></benefits>
   </task_environment>
 </task>
-<task name="Modify SCADA HMI software" author="Anon" assumption_task="FALSE" >
+<task name="Modify SCADA HMI software" code="MOD_SCADA" author="Anon" assumption_task="FALSE" >
   <objective>Following a hardware failure, re-install the latest SCADA HMI software in order to get the system and, as a result, the plant, up and running.</objective>
   <task_environment name="Day" >
     <dependencies>Barry checks the job details on his workaround.  Barry has discussed  the changes with Rick, as the job details he has are not sufficient to carry out the change.</dependencies>
@@ -1743,7 +1764,7 @@ Once the SCADA is up and running, Barry re-generates his own job and inputs info
     <benefits></benefits>
   </task_environment>
 </task>
-<task name="Modify PLC software" author="Anon" assumption_task="FALSE" >
+<task name="Modify PLC software" code="MOD_PLC" author="Anon" assumption_task="FALSE" >
   <objective>Modify the PLC software in order to maintain plant operations.</objective>
   <task_environment name="Day" >
     <dependencies>Barry has looked at the code before hand, so is aware of what amendments need to be made.  Barry knows the PLC he needs to modify.  A job has been raised on SAP and picked up.</dependencies>
