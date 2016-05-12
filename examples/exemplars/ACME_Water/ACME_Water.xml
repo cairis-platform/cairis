@@ -590,10 +590,12 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
   </vulnerability_environment>
 </vulnerability>
 <attacker name="Ben" image="Ben.jpg">
-  <!-- Image source: https://www.flickr.com/photos/chriszerbes/5975222989 -->
-  <description>Ben has a first degree in Computer Science, and Masters degree in Information Security.  Ben is also holds CHECK and ethical hacker accreditations.
+  <!-- Image source: https://www.flickr.com/photos/ashleymackinnon/7524751112 -->
+  <description>Ben is a security engineer for RedTeam LLC.  He is working with a junior tester (Alex) to conduct a red team test on ACME Water; they are evaluating ACME's security posture to ensure their security policies on te use of IT are being followed.
 
-Ben has practical experience with several open source penetration testing frameworks, such as Metasploit.  Based on his experience, and the experiences of his colleagues, Ben also uses a number of very effective in-house network exploitation tools.
+Ben has a first degree in Computer Science, and Masters degree in Information Security.  Ben is also holds CREST accreditations.
+
+Ben has practical experience with several open source penetration testing frameworks, such as Metasploit.  Based on his experience, and the experiences of his colleagues, Ben also uses a number of effective in-house network exploitation tools.
 
 As an industrial control systems penetration tester, Ben carries out limited engagements involving the testing security of PCs and network infrastructure at critical infrastructure sites.</description>
   <attacker_environment name="Day">
