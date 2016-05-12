@@ -589,13 +589,13 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
     <vulnerable_asset name="Intrusion Detection System" />
   </vulnerability_environment>
 </vulnerability>
-<attacker name="Martin" image="Martin.jpg">
+<attacker name="Ben" image="Ben.jpg">
   <!-- Image source: https://www.flickr.com/photos/chriszerbes/5975222989 -->
-  <description>Martin has a first degree in Computer Science, and Masters degree in Information Security.  Martin is also holds CHECK and ethical hacker accreditations.
+  <description>Ben has a first degree in Computer Science, and Masters degree in Information Security.  Ben is also holds CHECK and ethical hacker accreditations.
 
-Martin has practical experience with several open source penetration testing frameworks, such as Metasploit.  Based on his experience, and the experiences of his colleagues, Martin also uses a number of very effective in-house network exploitation tools.
+Ben has practical experience with several open source penetration testing frameworks, such as Metasploit.  Based on his experience, and the experiences of his colleagues, Ben also uses a number of very effective in-house network exploitation tools.
 
-As an industrial control systems penetration tester, Martin carries out limited engagements involving the  testing security of PCs and network infrastructure at critical infrastructure sites.</description>
+As an industrial control systems penetration tester, Ben carries out limited engagements involving the testing security of PCs and network infrastructure at critical infrastructure sites.</description>
   <attacker_environment name="Day">
     <attacker_role name="Cracker" />
     <motivation name="Data theft" />
@@ -736,7 +736,7 @@ Rick isn't a power-user; he acknowledges that younger "whizz kids" are much more
 <threat name="Footprinting" type="Electronic/Hacking">
   <method>Various activities to determine information about the network and systems on it.</method>
   <threat_environment name="Day" likelihood="Probable" >
-    <threat_attacker name="Martin" />
+    <threat_attacker name="Ben" />
     <threatened_asset name="Firewall" />
     <threatened_asset name="Corporate Network" />
     <threatened_asset name="Enterprise SCADA Network" />
@@ -751,7 +751,7 @@ Rick isn't a power-user; he acknowledges that younger "whizz kids" are much more
 <threat name="Password enumeration" type="Electronic/DoS and DDoS">
   <method>Unsuccessful enumeration of password combinations</method>
   <threat_environment name="Day" likelihood="Improbable" >
-    <threat_attacker name="Martin" />
+    <threat_attacker name="Ben" />
     <threatened_asset name="SCADA Workstation" />
     <threatened_asset name="ICT PC" />
     <threatened_property name="integrity" value="Medium">
@@ -765,7 +765,7 @@ Rick isn't a power-user; he acknowledges that younger "whizz kids" are much more
 <threat name="Sniffing Kerberos Authorisation" type="Electronic/Hacking">
   <method>Ticket Granting Server identified and KerbSniff used to pull in domain authentication information, and KerbCrack brute forces the output file</method>
   <threat_environment name="Day" likelihood="Remote" >
-    <threat_attacker name="Martin" />
+    <threat_attacker name="Ben" />
     <threatened_asset name="ICT credentials" />
     <threatened_asset name="STCS credentials" />
     <threatened_property name="integrity" value="Medium">
@@ -779,7 +779,7 @@ Rick isn't a power-user; he acknowledges that younger "whizz kids" are much more
 <threat name="Enumeration" type="Electronic/Hacking">
   <method>Various activities to determine information about systems and applications on the network</method>
   <threat_environment name="Day" likelihood="Probable" >
-    <threat_attacker name="Martin" />
+    <threat_attacker name="Ben" />
     <threatened_asset name="SCADA Workstation" />
     <threatened_asset name="ICT Application" />
     <threatened_asset name="STCS Application" />
@@ -795,7 +795,7 @@ Rick isn't a power-user; he acknowledges that younger "whizz kids" are much more
 <threat name="War-dialing" type="Electronic/Hacking">
   <method>Using a modem to scan telephone numbers to other modems to dial into.</method>
   <threat_environment name="Night" likelihood="Occasional" >
-    <threat_attacker name="Martin" />
+    <threat_attacker name="Ben" />
     <threatened_asset name="SCADA Workstation" />
     <threatened_asset name="ICT PC" />
     <threatened_asset name="Modem" />
@@ -816,11 +816,11 @@ Rick sits down in front of the backup ICT PC, plugs in the USB stick, and copies
 </risk>
 <risk name="Network footprinting" vulnerability="Incomplete firewall rules" threat="Footprinting">
   <misusecase environment="Day">
-    <narrative>One of Martin's colleagues is spidering web pages to find information about ACME partners, access points to portals, and various other tid-bits of open source intelligence.  Periodically, he compiles a list of interesting sites and addresses, which he passes onto Martin.
+    <narrative>One of Ben's colleagues is spidering web pages to find information about ACME partners, access points to portals, and various other tid-bits of open source intelligence.  Periodically, he compiles a list of interesting sites and addresses, which he passes onto Ben.
 
-Martin carries out Whois and DNS enumeration to find interesting IP addresses and, based on this, interrogates ACME DNS servers to find interesting systems.  He also runs a script which trace-routes IP addresses and outputs the data to a file, which he visualises using GraphViz.
+Ben carries out Whois and DNS enumeration to find interesting IP addresses and, based on this, interrogates ACME DNS servers to find interesting systems.  He also runs a script which trace-routes IP addresses and outputs the data to a file, which he visualises using GraphViz.
 
-After a while, Martin has developed an access path diagram diagram of the ACME network.</narrative>
+After a while, Ben has developed an access path diagram diagram of the ACME network.</narrative>
   </misusecase>
 </risk>
 <risk name="Site break-in" vulnerability="Ubiquitous identity and knowledge" threat="Kit theft">
@@ -846,28 +846,28 @@ Meanwhile, back in the control room, Rick notices an alarm from the pump in buil
 </risk>
 <risk name="Account lockout" vulnerability="Ubiquitous identity and knowledge" threat="Password enumeration">
   <misusecase environment="Day">
-    <narrative>Martin has obtained a list of possible pay numbers, and is enumerating possible passwords.  Unfortunately, he didn't realise that an account lockout policy exists and, consequently, manages to lock several arbitrary accounts out.
+    <narrative>Ben has obtained a list of possible pay numbers, and is enumerating possible passwords.  Unfortunately, he didn't realise that an account lockout policy exists and, consequently, manages to lock several arbitrary accounts out.
 
 In the meantime, back at the plant, Rick is unable to login to the ICT PC to use the telemetry service software because his account is locked out.</narrative>
   </misusecase>
 </risk>
 <risk name="System enumeration" vulnerability="Incomplete Intrusion Detection rules" threat="Enumeration">
   <misusecase environment="Day">
-    <narrative>Using the information obtained from his network footprinting exercise, Martin proceeds to obtain more information about the systems on the ACME network.
+    <narrative>Using the information obtained from his network footprinting exercise, Ben proceeds to obtain more information about the systems on the ACME network.
 This includes banner grabbing to obtain data about OS and application versions, and enumerating HTTP to find possible vulnerabilities.
 
-Because Martin knows legacy SCADA applications are being used, he also enumerates posssible RPC and NetBios name servers and sessions.
+Because Ben knows legacy SCADA applications are being used, he also enumerates posssible RPC and NetBios name servers and sessions.
 
 Having heard stories about the Stuxnet virus, he decides to enumerate possible SQL Server instances as well.  </narrative>
   </misusecase>
 </risk>
 <risk name="War-dialing attack" vulnerability="Unknown applications" threat="War-dialing">
   <misusecase environment="Night">
-    <narrative>Martin has obtained main extension numbers for water-treatment works, together with possible ranges.  As soon as 6pm has passed, Martin uses his war-dialing tools (PhoneSweep, a number a custom DOS scripts, and some information about default credentials that is maintained at www.phenoelit-us.org/dpl/dpl.html) to identify and penetrate candidate modem.
+    <narrative>Ben has obtained main extension numbers for water-treatment works, together with possible ranges.  As soon as 6pm has passed, Ben uses his war-dialing tools (PhoneSweep, a number a custom DOS scripts, and some information about default credentials that is maintained at www.phenoelit-us.org/dpl/dpl.html) to identify and penetrate candidate modem.
 
-After about an hour, Martin finds the number for a modem and, using his tool manages to both deduce information about both the modem and the connected operating system.  He also manages to connect into the PC, which appears to be an engineering workstation used for updating PLC software and has been left logged in.
+After about an hour, Ben finds the number for a modem and, using his tool manages to both deduce information about both the modem and the connected operating system.  He also manages to connect into the PC, which appears to be an engineering workstation used for updating PLC software and has been left logged in.
 
-Martin promptly installs a keylogger onto this PC before logging out.</narrative>
+Ben promptly installs a keylogger onto this PC before logging out.</narrative>
   </misusecase>
 </risk>
 <response risk="Spoof telemetry" type="Accept" >
