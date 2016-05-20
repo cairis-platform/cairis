@@ -4,12 +4,12 @@
   <section><title>Risk Analysis Model</title>
     <mediaobject>
       <imageobject>
-        <imagedata align="left" fileref="/home/cairisuser/CAIRIS/cairis/src/config/raModelKey.pdf" format="PDF" />"
+        <imagedata align="left" fileref="/home/cairisuser/cairis/cairis/config/raModelKey.pdf" format="PDF" />"
       </imageobject>
     </mediaobject>
     <mediaobject>
       <imageobject>
-        <imagedata align="left" fileref="/home/cairisuser/CAIRIS/cairis/src/config/icons.png" format="PDF" />"
+        <imagedata align="left" fileref="/home/cairisuser/cairis/cairis/config/icons.png" format="PDF" />"
       </imageobject>
       <caption><para>Risk Analyis Model notation</para></caption>
     </mediaobject>
@@ -18,7 +18,7 @@
   <section><title>Goal, Obstacle, and Responsibility Model</title>
     <mediaobject>
       <imageobject>
-        <imagedata align="left" fileref="/home/cairisuser/CAIRIS/cairis/src/config/goalModelKey.pdf" format="PDF" />"
+        <imagedata align="left" fileref="/home/cairisuser/cairis/cairis/config/goalModelKey.pdf" format="PDF" />"
       </imageobject>
       <caption><para>Goal Model notation</para></caption>
     </mediaobject>
@@ -27,7 +27,7 @@
   <section><title>Task Model</title>
     <mediaobject>
       <imageobject>
-        <imagedata align="left" fileref="/home/cairisuser/CAIRIS/cairis/src/config/taskModelKey.pdf" format="PDF" />"
+        <imagedata align="left" fileref="/home/cairisuser/cairis/cairis/config/taskModelKey.pdf" format="PDF" />"
       </imageobject>
       <caption><para>Task Model notation</para></caption>
     </mediaobject>
@@ -36,7 +36,7 @@
   <section><title>Assumption Persona Argumentation Model</title>
     <mediaobject>
       <imageobject>
-        <imagedata align="left" fileref="/home/cairisuser/CAIRIS/cairis/src/config/APKey.pdf" format="PDF" />"
+        <imagedata align="left" fileref="/home/cairisuser/cairis/cairis/config/APKey.pdf" format="PDF" />"
       </imageobject>
       <caption><para>Argumentation Model notation</para></caption>
     </mediaobject>
