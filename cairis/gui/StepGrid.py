@@ -205,7 +205,7 @@ class StepGrid(wx.grid.Grid):
     wx.EVT_MENU(self,STEPGRID_MENUSYNOPSIS_ID,self.onSynopsis)
     wx.EVT_MENU(self,STEPGRID_MENUTAGS_ID,self.onTags)
     self.Bind(wx.grid.EVT_GRID_CELL_RIGHT_CLICK, self.onRightClick)
-    self.goalItem = self.theMenu.FindItemById(STEPGRID_MENUREQUIREMENT_ID)
+    self.goalItem = self.theMenu.FindItemById(STEPGRID_MENUGOAL_ID)
     self.goalItem.Enable(False)
     self.reqItem = self.theMenu.FindItemById(STEPGRID_MENUREQUIREMENT_ID)
     self.reqItem.Enable(False)
