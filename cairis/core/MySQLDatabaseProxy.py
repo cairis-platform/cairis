@@ -414,7 +414,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       return reqDict
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL error loading requirements (id:' + str(id) + ',message:' + msg
+      exceptionText = 'MySQL error getting requirement ' + reqId + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
 
   def getDomains(self,constraintId = -1):
