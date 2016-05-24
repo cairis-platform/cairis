@@ -2263,7 +2263,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   </obstacle_environment>
 </obstacle>
 <requirement name="Anonymisation guidelines" reference="Clinical data" reference_type="asset" label="1" type="Functional" priority="1" >
-  <description>Anonymisation guidelines shall comply with the MRC guidelines for secure data handlnig and anonymisation.</description>
+  <description>Anonymisation guidelines shall comply with the MRC guidelines for secure data handlinig and anonymisation.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
