@@ -1,0 +1,14 @@
+Package: cairis-xenial
+Source: cairis
+Version: 1.0
+Architecture: all
+Maintainer: cairis cairis@cairis
+Installed-Size: 26
+Depends: wxglade, python-glade2, python-wxgtk3.0, python-dev, build-essential, mysql-server, mysql-client, graphviz, docbook, dblatex, python-pip, python-numpy, git, libmysqlclient-dev, texlive-latex-extra, docbook-utils
+Section: misc
+Priority: optional
+Homepage: http://www.cairis.org
+Description: <short description; defaults to some wise words>
+ long description and info
+ .
+ second paragraph
