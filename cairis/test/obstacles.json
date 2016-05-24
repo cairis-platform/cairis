@@ -1,0 +1,61 @@
+{
+	"environments": [{
+		"theName": "Day",
+		"theShortCode": "DAY",
+		"theDescription": "Day-time plant operations"
+	}],
+	"assets": [{
+		"theName": "Corporate Network",
+		"theShortCode": "CN",
+		"theDescription": "ACME Corporate network.",
+		"theSignificance": "Compromising the network may compromise the data passing through it.",
+		"theType": "Systems",
+		"theEnvironmentProperties": [
+			["Day", [2, 0, 0, 0, 0, 0, 0, 0],
+				["", "None", "None", "None", "None", "None", "None", "None"]
+			],
+			["Day", [0, 2, 0, 0, 0, 0, 0, 0],
+				["None", "", "None", "None", "None", "None", "None", "None"]
+			],
+			["Day", [0, 0, 2, 0, 0, 0, 0, 0],
+				["None", "None", "", "None", "None", "None", "None", "None"]
+			],
+			["Day", [0, 0, 0, 2, 0, 0, 0, 0],
+				["None", "None", "None", "", "None", "None", "None", "None"]
+			]
+		]
+	}],
+	
+
+	"obstacles": [{
+			"theName": "Desktop installation",
+			"theOriginator": "Anon",
+			"theEnvironmentProperties": [
+				"Day",
+				"DAY-1",
+				"Desktop malware directly installed on ICT PC or SCADA, Telemetry, and Control System workstation via removable media",
+				"Confidentiality Threat"
+			]
+		}, {
+			"theName": "Vendor passwords unchanged",
+			"theOriginator": "Anon",
+			"theEnvironmentProperties": [
+				"Day",
+				"DAY-2",
+				"Vendor passwords for operating systems resources unchanged before installation",
+				"Integrity Threat"
+			]
+		},
+
+		{
+			"theName": "Software incompatibility",
+			"theOriginator": "Anon",
+			"theEnvironmentProperties": [
+				"Day",
+				"DAY-3",
+				"Security software incompatibility with SCADA, Telemetry, or Control System software",
+				"Vulnerability"
+			]
+		}
+	]
+}
