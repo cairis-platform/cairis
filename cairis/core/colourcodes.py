@@ -69,3 +69,7 @@ def obstacleColourCode(valueId):
 def riskTextColourCode(valueId):
   if (valueId >= 7): return 'white'
   else: return 'black'
+
+def usabilityTextColourCode(valueId):
+  if (valueId >= 7): return 'white'
+  else: return 'black'

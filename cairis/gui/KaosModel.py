@@ -24,6 +24,7 @@ import os
 from cairis.core.ARM import *
 import gtk
 from cairis.core.colourcodes import usabilityColourCode
+from cairis.core.colourcodes import usabilityTextColourCode
 from cairis.core.colourcodes import threatColourCode
 from cairis.core.colourcodes import obstacleColourCode
 
@@ -75,7 +76,7 @@ class KaosModel:
       else:
         objtLabel = objtName
       taskScore = self.dbProxy.taskUsabilityScore(objtName,self.theEnvironmentName)
-      self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='ellipse',style='filled',color=usabilityColourCode(taskScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='ellipse',style='filled',color=usabilityColourCode(taskScore),fontcolor=usabilityTextColourCode(taskScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'misusecase'):
       ellipseColour = 'black'
       if (self.theKaosModel == 'task'):

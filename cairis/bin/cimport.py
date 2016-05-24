@@ -33,6 +33,9 @@ def main(args=None):
   if overwriteFlag == None:
     overwriteFlag = 1
 
+  if (os.access(importFile, os.R_OK)) == False:
+    raise ARMException("Cannot access " + importFile)
+
   cairis.core.BorgFactory.initialise()
   b = Borg()
 

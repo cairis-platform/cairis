@@ -18,6 +18,7 @@
 
 import os
 import sys
+from cairis.core.ARM import *
 
 def main(args=None):
   if args is None:

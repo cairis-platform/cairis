@@ -26,6 +26,7 @@ from cairis.core.Borg import Borg
 from cairis.core.colourcodes import threatColourCode
 from cairis.core.colourcodes import responseColourCode
 from cairis.core.colourcodes import usabilityColourCode
+from cairis.core.colourcodes import usabilityTextColourCode
 from cairis.core.colourcodes import riskTextColourCode
 
 USECASE_TYPE = 0
@@ -101,7 +102,7 @@ class EnvironmentModel:
       self.theGraph.add_node(pydot.Node(objtName,shape='polygon',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task'):
       taskScore = self.dbProxy.taskUsabilityScore(objtName,self.theEnvironmentName)
-      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',style='filled',color=usabilityColourCode(taskScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',style='filled',color=usabilityColourCode(taskScore),fontcolor=usabilityTextColourCode(taskScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
 
     elif (dimName == 'misusecase'):
       self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',fontname=self.fontName,fontsize=self.fontSize,style='filled',color='black',fontcolor='white',URL=objtUrl))

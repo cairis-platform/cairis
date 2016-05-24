@@ -2234,7 +2234,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL error associating personas with environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error associating personas used in task ' + str(taskId) + ' with environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def addTaskAssets(self,taskId,assets,environmentName):
@@ -2247,7 +2247,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL error associating assets with environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error associating assets used in task ' + str(taskId) + ' with environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def addMisuseCaseRisk(self,mcId,riskName):

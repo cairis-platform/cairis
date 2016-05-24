@@ -33,66 +33,74 @@ from ProcessesContentHandler import ProcessesContentHandler
 from LocationsContentHandler import LocationsContentHandler
 from cairis.core.Borg import Borg
 import xml.sax
+from cairis.core.ARM import *
 
 def importSecurityPatterns(importFile):
-  parser = xml.sax.make_parser()
-  handler = SecurityPatternContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  taps = handler.assets()
-  spps = handler.patterns()
-  noOfTaps = len(taps)
-  noOfSpps = len(spps)
+  try:
+    parser = xml.sax.make_parser()
+    handler = SecurityPatternContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    taps = handler.assets()
+    spps = handler.patterns()
+    noOfTaps = len(taps)
+    noOfSpps = len(spps)
 
-  b = Borg()
+    b = Borg()
 
-  msgStr = 'No patterns imported'
-  if (noOfTaps > 0):
-    tapId = 0;
-    b.dbProxy.deleteSecurityPattern(-1)
-    b.dbProxy.deleteTemplateAsset(-1)
-    for tap in taps:
-      tap.setId(tapId)
-      b.dbProxy.addTemplateAsset(tap)
-      tapId += 1
-
-    if (noOfSpps > 0):
-      spId = 0;
+    msgStr = 'No patterns imported'
+    if (noOfTaps > 0):
+      tapId = 0;
       b.dbProxy.deleteSecurityPattern(-1)
-      for sp in spps:
-        sp.setId(spId)
-        b.dbProxy.addSecurityPattern(sp)
-        spId += 1
-      msgStr =  'Imported ' + str(noOfTaps) + ' template assets and ' + str(noOfSpps) + ' security patterns'
-  return msgStr
+      b.dbProxy.deleteTemplateAsset(-1)
+      for tap in taps:
+        tap.setId(tapId)
+        b.dbProxy.addTemplateAsset(tap)
+        tapId += 1
+
+      if (noOfSpps > 0):
+        spId = 0;
+        b.dbProxy.deleteSecurityPattern(-1)
+        for sp in spps:
+          sp.setId(spId)
+          b.dbProxy.addSecurityPattern(sp)
+          spId += 1
+        msgStr =  'Imported ' + str(noOfTaps) + ' template assets and ' + str(noOfSpps) + ' security patterns'
+    return msgStr
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importAttackPattern(importFile):
-  parser = xml.sax.make_parser()
-  handler = AttackPatternContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-
-  assets = handler.assets()
-  attackers = handler.attackers()
-  vulnerability = handler.vulnerability()
-  threat = handler.threat()
-  risk = handler.risk()
-
-  raTxt = importRiskAnalysis([],assets,[vulnerability],attackers,[threat],[risk],[],[])
-  obsTxt = importRequirements([],[],handler.obstacles(),[],[])
-  assocTxt = importAssociations([],handler.obstacleAssociations(),[])
-  return obsTxt + assocTxt + raTxt
+  try:
+    parser = xml.sax.make_parser()
+    handler = AttackPatternContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    assets = handler.assets()
+    attackers = handler.attackers()
+    vulnerability = handler.vulnerability()
+    threat = handler.threat()
+    risk = handler.risk()
+    raTxt = importRiskAnalysis([],assets,[vulnerability],attackers,[threat],[risk],[],[])
+    obsTxt = importRequirements([],[],handler.obstacles(),[],[])
+    assocTxt = importAssociations([],handler.obstacleAssociations(),[])
+    return obsTxt + assocTxt + raTxt
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importTVTypeFile(importFile,isOverwrite=1):
-  parser = xml.sax.make_parser()
-  handler = TVTypeContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  vulTypes,threatTypes = handler.types()
-  return importTVTypes(vulTypes,threatTypes,isOverwrite)
+  try:
+    parser = xml.sax.make_parser()
+    handler = TVTypeContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    vulTypes,threatTypes = handler.types()
+    return importTVTypes(vulTypes,threatTypes,isOverwrite)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
  
 def importTVTypes(vulTypes,threatTypes,isOverwrite):
   b = Borg()
@@ -112,30 +120,36 @@ def importTVTypes(vulTypes,threatTypes,isOverwrite):
   return msgStr
 
 def importDirectoryFile(importFile,isOverwrite=1):
-  parser = xml.sax.make_parser()
-  handler = DirectoryContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  vulDir,threatDir = handler.directories()
-  vdSize = len(vulDir)
-  tdSize = len(threatDir)
-  b = Borg()
-  if (vdSize > 0):
-    b.dbProxy.addVulnerabilityDirectory(vulDir,isOverwrite)
-  if (tdSize > 0):
-    b.dbProxy.addThreatDirectory(threatDir,isOverwrite)
-  msgStr = 'Imported ' + str(vdSize) + ' template vulnerabilities and ' + str(tdSize) + ' template threats.'
-  return msgStr
+  try:
+    parser = xml.sax.make_parser()
+    handler = DirectoryContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    vulDir,threatDir = handler.directories()
+    vdSize = len(vulDir)
+    tdSize = len(threatDir)
+    b = Borg()
+    if (vdSize > 0):
+      b.dbProxy.addVulnerabilityDirectory(vulDir,isOverwrite)
+    if (tdSize > 0):
+      b.dbProxy.addThreatDirectory(threatDir,isOverwrite)
+    msgStr = 'Imported ' + str(vdSize) + ' template vulnerabilities and ' + str(tdSize) + ' template threats.'
+    return msgStr
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 
 def importRequirementsFile(importFile):
-  parser = xml.sax.make_parser()
-  handler = GoalsContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.countermeasures())
+  try:
+    parser = xml.sax.make_parser()
+    handler = GoalsContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.countermeasures())
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParameterSet,cmParameterSet):
   b = Borg()
@@ -194,12 +208,15 @@ def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParame
   return msgStr
 
 def importRiskAnalysisFile(importFile):
-  parser = xml.sax.make_parser()
-  handler = RiskAnalysisContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  return importRiskAnalysis(handler.roles(),handler.assets(),handler.vulnerabilities(),handler.attackers(),handler.threats(),handler.risks(),handler.responses(),handler.associations())
+  try:
+    parser = xml.sax.make_parser()
+    handler = RiskAnalysisContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    return importRiskAnalysis(handler.roles(),handler.assets(),handler.vulnerabilities(),handler.attackers(),handler.threats(),handler.risks(),handler.responses(),handler.associations())
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importRiskAnalysis(roleParameterSet,assetParameterSet,vulParameterSet,attackerParameterSet,threatParameterSet,riskParameterSet,responseParameterSet,assocParameterSet):
 
@@ -283,12 +300,15 @@ def importRiskAnalysis(roleParameterSet,assetParameterSet,vulParameterSet,attack
   return msgStr
 
 def importUsabilityFile(importFile):
-  parser = xml.sax.make_parser()
-  handler = UsabilityContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  return importUsability(handler.personas(),handler.externalDocuments(),handler.documentReferences(),handler.conceptReferences(),handler.personaCharacteristics(),handler.taskCharacteristics(),handler.tasks(),handler.usecases())
+  try:
+    parser = xml.sax.make_parser()
+    handler = UsabilityContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    return importUsability(handler.personas(),handler.externalDocuments(),handler.documentReferences(),handler.conceptReferences(),handler.personaCharacteristics(),handler.taskCharacteristics(),handler.tasks(),handler.usecases())
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 
 def importUsability(personaParameterSet,edParameterSet,drParameterSet,crParameterSet,pcParameterSet,tcParameterSet,taskParameterSet,ucParameterSet):
@@ -372,12 +392,15 @@ def importUsability(personaParameterSet,edParameterSet,drParameterSet,crParamete
   return msgStr
 
 def importAssociationsFile(importFile):
-  parser = xml.sax.make_parser()
-  handler = AssociationsContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations())
+  try:
+    parser = xml.sax.make_parser()
+    handler = AssociationsContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations())
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
   
 def importAssociations(maParameterSet,gaParameterSet,depParameterSet):
   b = Borg()
@@ -397,14 +420,17 @@ def importAssociations(maParameterSet,gaParameterSet,depParameterSet):
   return msgStr
 
 def importProjectFile(importFile):
-  parser = xml.sax.make_parser()
-  handler = CairisContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  pSettings = handler.settings()
-  envParameterSet = handler.environments()
-  return importProjectData(pSettings,envParameterSet)
+  try:
+    parser = xml.sax.make_parser()
+    handler = CairisContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    pSettings = handler.settings()
+    envParameterSet = handler.environments()
+    return importProjectData(pSettings,envParameterSet)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importProjectData(pSettings,envParameterSet):
   b = Borg()
@@ -426,21 +452,27 @@ def importProjectData(pSettings,envParameterSet):
   return msgText
 
 def importComponentViewFile(importFile):
-  parser = xml.sax.make_parser()
-  handler = ArchitecturalPatternContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  view = handler.view()
-  return importComponentViewData(view)
+  try:
+    parser = xml.sax.make_parser()
+    handler = ArchitecturalPatternContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    view = handler.view()
+    return importComponentViewData(view)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importAssetsFile(importFile):
-  parser = xml.sax.make_parser()
-  handler = TemplateAssetsContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  return importAssets(handler.valueTypes(),handler.assets())
+  try:
+    parser = xml.sax.make_parser()
+    handler = TemplateAssetsContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    return importAssets(handler.valueTypes(),handler.assets())
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importAssets(valueTypes,assets):
   b = Borg()
@@ -466,17 +498,20 @@ def importComponentViewData(view):
   return msgStr
 
 def importSynopsesFile(importFile):
-  parser = xml.sax.make_parser()
-  handler = SynopsesContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  charSyns = handler.characteristicSynopses()
-  refSyns = handler.referenceSynopses()
-  stepSyns = handler.stepSynopses()
-  refConts = handler.referenceContributions()
-  ucConts = handler.useCaseContributions()
-  return importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts)
+  try:
+    parser = xml.sax.make_parser()
+    handler = SynopsesContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    charSyns = handler.characteristicSynopses()
+    refSyns = handler.referenceSynopses()
+    stepSyns = handler.stepSynopses()
+    refConts = handler.referenceContributions()
+    ucConts = handler.useCaseContributions()
+    return importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts):
   b = Borg()
@@ -496,13 +531,16 @@ def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts):
   return msgStr
 
 def importDomainValuesFile(importFile):
-  parser = xml.sax.make_parser()
-  handler = DomainValueContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues = handler.values()
-  return importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues)
+  try:
+    parser = xml.sax.make_parser()
+    handler = DomainValueContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues = handler.values()
+    return importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues):
   noOfTvs = len(tvValues)
@@ -556,21 +594,24 @@ def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,mo
   return msgStr
 
 def importProcessesFile(importFile):
-  parser = xml.sax.make_parser()
-  handler = ProcessesContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  docs = handler.internalDocuments()
-  codes = handler.codes()
-  memos = handler.memos()
-  quotations = handler.quotations()
-  codeNetworks = handler.codeNetworks()
-  processes = handler.processes()
-  ics = handler.impliedCharacteristics()
-  intentions = handler.intentions()
-  contributions = handler.contributions()
-  return importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,intentions,contributions)
+  try:
+    parser = xml.sax.make_parser()
+    handler = ProcessesContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    docs = handler.internalDocuments()
+    codes = handler.codes()
+    memos = handler.memos()
+    quotations = handler.quotations()
+    codeNetworks = handler.codeNetworks()
+    processes = handler.processes()
+    ics = handler.impliedCharacteristics()
+    intentions = handler.intentions()
+    contributions = handler.contributions()
+    return importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,intentions,contributions)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,intentions,contributions):
   noOfDocs = len(docs)
@@ -624,16 +665,19 @@ def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,inten
   return msgStr
 
 def importLocationsFile(importFile):
-  parser = xml.sax.make_parser()
-  handler = LocationsContentHandler()
-  parser.setContentHandler(handler)
-  parser.setEntityResolver(handler)
-  parser.parse(importFile)
-  locName = handler.name()
-  locDiagram = handler.diagram()
-  locations = handler.locations()
-  links = handler.links()
-  return importLocations(locName,locDiagram,locations,links)
+  try: 
+    parser = xml.sax.make_parser()
+    handler = LocationsContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    locName = handler.name()
+    locDiagram = handler.diagram()
+    locations = handler.locations()
+    links = handler.links()
+    return importLocations(locName,locDiagram,locations,links)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
   
 def importLocations(locName,locDiagram,locations,links):
   b = Borg()
@@ -642,16 +686,19 @@ def importLocations(locName,locDiagram,locations,links):
   return msgStr
 
 def importModelFile(importFile,isOverwrite = 1):
-  b = Borg()
-  modelTxt = ''
-  if isOverwrite == 1:
-    b.dbProxy.clearDatabase()
-    modelTxt += importTVTypeFile(importFile) + '  '
-  modelTxt += importDomainValuesFile(importFile) + ' '
-  modelTxt += importProjectFile(importFile) + ' '
-  modelTxt += importRiskAnalysisFile(importFile) + ' '
-  modelTxt += importUsabilityFile(importFile) + ' '
-  modelTxt += importRequirementsFile(importFile) + ' '
-  modelTxt += importAssociationsFile(importFile) + ' '
-  modelTxt += importSynopsesFile(importFile)
-  return modelTxt
+  try:
+    b = Borg()
+    modelTxt = ''
+    if isOverwrite == 1:
+      b.dbProxy.clearDatabase()
+      modelTxt += importTVTypeFile(importFile) + '  '
+    modelTxt += importDomainValuesFile(importFile) + ' '
+    modelTxt += importProjectFile(importFile) + ' '
+    modelTxt += importRiskAnalysisFile(importFile) + ' '
+    modelTxt += importUsabilityFile(importFile) + ' '
+    modelTxt += importRequirementsFile(importFile) + ' '
+    modelTxt += importAssociationsFile(importFile) + ' '
+    modelTxt += importSynopsesFile(importFile)
+    return modelTxt
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
