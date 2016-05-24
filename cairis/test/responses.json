@@ -219,7 +219,11 @@
       "theRisk" : "Network footprinting",
       "theType" : "Accept",
       "theEnvironmentProperties" : ["Day","Low","Some rationale"]
+    },
+    {
+      "theRisk" : "Network footprinting",
+      "theType" : "Prevent",
+      "theEnvironmentProperties" : "Day"
     }
-
   ]
 }

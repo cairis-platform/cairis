@@ -38,7 +38,7 @@
        "theOriginator" : "Anon",
        "theEnvironmentProperties" : [
          "Day",
-         "Active Directory",
+         "DAY-1",
          "Network services shall be controlled using Active Directory",
          "Maintain",
          "High",
@@ -46,7 +46,36 @@
          "Standard 7.2(q)",
          "Corporate Network"
        ]
+     },
+     {
+       "theName" : "sg1",
+       "theOriginator" : "Anon",
+       "theEnvironmentProperties" : [
+         "Day",
+         "DAY-2",
+         "sg1desc",
+         "Maintain",
+         "High",
+         "sg1fit",
+         "sg1issue",
+         "Corporate Network"
+       ]
+     },
+     {
+       "theName" : "sg2",
+       "theOriginator" : "Anon",
+       "theEnvironmentProperties" : [
+         "Day",
+         "DAY-3",
+         "sg2desc",
+         "Maintain",
+         "High",
+         "sg2fit",
+         "sg2issue",
+         "Corporate Network"
+       ]
      }
+
 
 
   ]

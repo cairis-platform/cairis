@@ -21,15 +21,15 @@
 
 <!ELEMENT domainvalues (threat_value*,risk_value*,countermeasure_value*,severity_value*,likelihood_value*,motivation_value*,capability_value*)>
 <!ELEMENT threat_value (description)>
-<!ATTLIST threat_value value (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST threat_value name (None | Low | Medium | High) #REQUIRED>
 <!ELEMENT risk_value (description)>
-<!ATTLIST risk_value value (Negligible | Tolerable | Undesirable | Intolerable) #REQUIRED>
+<!ATTLIST risk_value name (Negligible | Tolerable | Undesirable | Intolerable) #REQUIRED>
 <!ELEMENT countermeasure_value (description)>
-<!ATTLIST countermeasure_value value (None | Low | Medium | High) #REQUIRED>
+<!ATTLIST countermeasure_value name (None | Low | Medium | High) #REQUIRED>
 <!ELEMENT severity_value (description)>
-<!ATTLIST severity_value value (Negligible | Marginal | Critical | Catastrophic) #REQUIRED>
+<!ATTLIST severity_value name (Negligible | Marginal | Critical | Catastrophic) #REQUIRED>
 <!ELEMENT likelihood_value (description)>
-<!ATTLIST likelihood_value value (Incredible | Improbable | Remote | Occasional | Probable | Frequent) #REQUIRED>
+<!ATTLIST likelihood_value name (Incredible | Improbable | Remote | Occasional | Probable | Frequent) #REQUIRED>
 <!ELEMENT motivation_value (description)>
 <!ATTLIST motivation_value name CDATA #REQUIRED>
 <!ELEMENT capability_value (description)>

@@ -41,7 +41,6 @@ MARGINAL_COLOUR = (0.9922,0.7333,0.5176)
 CRITICAL_COLOUR = (0.8902,0.2902,0.2000)
 CATASTROPHIC_COLOUR = (0.7020,0,0)
 
-
 class EnvironmentTextShape(xdot.TextShape):
 
     def __init__(self, pen, x, y, j, w, t,dim):
@@ -237,20 +236,6 @@ class GoalShape(xdot.Shape):
             cr.stroke()
 
 
-#class RequirementShape(xdot.Shape,ChernoffFace):
-#    def __init__(self, pen, x0, y0, w, h,objtName,dp,filled=False):
-#        xdot.Shape.__init__(self)
-#        ChernoffFace.__init__(self,objtName,dp)
-#        self.pen = pen.copy()
-#        self.x0 = x0
-#        self.y0 = y0
-#        self.w = w
-#        self.h = h
-#        self.filled = filled
-
-#    def draw(self, cr, highlight=False,zoom_ratio=-1):
-#      ChernoffFace.draw(self,cr,self.x0,self.y0,self.w,self.h,highlight,zoom_ratio)
-
 class EnvironmentPolygonShape(xdot.PolygonShape):
 
     def __init__(self, pen, points, dim, objt,environment=None,dp=None,filled=False):
@@ -326,39 +311,69 @@ class EnvironmentPolygonShape(xdot.PolygonShape):
       xs = self.points[0][0]
       ys = self.points[1][1]
       xe = self.points[3][0]
-      cr.move_to(xs + 30,ye + 7.5)
-      cr.line_to(xs + 30,self.points[0][1])
-      cr.stroke()
+
+      unitLength = int((xe - xs)/3)
 
       asset = self.dbProxy.dimensionObject(self.objt,self.dim)
       syProps = asset.securityProperties(self.environment.name(),self.environment.duplicateProperty(),self.environment.overridingEnvironment())
       cx = xs
       cy = ys + 10 
+
+
       cr.set_line_width(0.1)
       cr.set_source_rgb(0,0,0)
-      cr.rectangle(cx,cy,syProps[0] * 10,3)
+      cr.rectangle(cx,cy,syProps[0] * unitLength,3)
       cr.fill()
 
       ix = xs
-      iy = cy + 6 
+      iy = cy + 3 
       cr.set_line_width(0.1)
       cr.set_source_rgb(1,0,0)
-      cr.rectangle(ix,iy,syProps[1] * 10,3)
-      cr.fill()
-
-      ax = xs
-      ay = iy + 6 
-      cr.set_line_width(0.1)
-      cr.set_source_rgb(0,1,0)
-      cr.rectangle(ax,ay,syProps[2] * 10,3)
+      cr.rectangle(ix,iy,syProps[1] * unitLength,3)
       cr.fill()
 
       avx = xs
-      avy = ay + 6 
+      avy = iy + 3 
+      cr.set_line_width(0.1)
+      cr.set_source_rgb(0,1,0)
+      cr.rectangle(avx,avy,syProps[2] * unitLength,3)
+      cr.fill()
+
+      acx = xs
+      acy = avy + 3 
       cr.set_line_width(0.1)
       cr.set_source_rgb(0,0,1)
-      cr.rectangle(avx,avy,syProps[3] * 10,3)
+      cr.rectangle(acx,acy,syProps[3] * 15,3)
       cr.fill()
+
+      anox = xs
+      anoy = acy + 3 
+      cr.set_line_width(0.1)
+      cr.set_source_rgb(1,1,0)
+      cr.rectangle(anox,anoy,syProps[4] * 15,3)
+      cr.fill()
+
+      panox = xs
+      panoy = anoy + 3 
+      cr.set_line_width(0.1)
+      cr.set_source_rgb(0,1,1)
+      cr.rectangle(panox,panoy,syProps[5] * 15,3)
+      cr.fill()
+
+      unlx = xs
+      unly = panoy + 3 
+      cr.set_line_width(0.1)
+      cr.set_source_rgb(1,0,1)
+      cr.rectangle(unlx,unly,syProps[6] * 15,3)
+      cr.fill()
+
+      unox = xs
+      unoy = unly + 3 
+      cr.set_line_width(0.1)
+      cr.set_source_rgb(0.5,0.5,0.5)
+      cr.rectangle(unox,unoy,syProps[7] * 20,3)
+      cr.fill()
+
  
     def decorateThreatNode(self,cr,zoom_ratio):
      if (zoom_ratio > LOW_ZOOM_RATIO) and (zoom_ratio < HIGH_ZOOM_RATIO):
@@ -388,6 +403,8 @@ class EnvironmentPolygonShape(xdot.PolygonShape):
       xs = self.points[0][0]
       ys = self.points[1][1]
       xe = self.points[3][0]
+      unitLength = int((xe - xs)/3)
+
       cr.move_to(xe - 30,ye + 7.5)
       cr.line_to(xe - 30,self.points[0][1])
       cr.stroke()
@@ -397,8 +414,9 @@ class EnvironmentPolygonShape(xdot.PolygonShape):
 
       lx = xs
       ly = ye + 7.5
-      w = xe - xs - 30
+      w = xe - xs
       h = self.points[0][1] - (ye + 7.5)
+
       lhoodScore = (0,0,0)
       likelihood = threat.likelihood(self.environment.name(),self.environment.duplicateProperty(),self.environment.overridingEnvironment())
       if (likelihood == 'Incredible'):
@@ -416,36 +434,69 @@ class EnvironmentPolygonShape(xdot.PolygonShape):
       cr.rectangle(lx,ly,w,h)
       cr.fill()
 
-      cLength = syProps[0] * 10
+      cLength = syProps[0] * unitLength
       cx = xe - cLength
       cy = ys + 10 
       cr.set_line_width(0.1)
       cr.set_source_rgb(0,0,0)
       cr.rectangle(cx,cy,cLength,3)
       cr.fill()
-      iLength = syProps[1] * 10
+
+      iLength = syProps[1] * unitLength
       ix = xe - iLength
-      iy = cy + 6 
+      iy = cy + 3 
       cr.set_line_width(0.1)
       cr.set_source_rgb(1,0,0)
       cr.rectangle(ix,iy,iLength,3)
       cr.fill()
-      avLength = syProps[2] * 10
+
+      avLength = syProps[2] * unitLength
       avx = xe - avLength
-      avy = iy + 6 
+      avy = iy + 3 
       cr.set_line_width(0.1)
       cr.set_source_rgb(0,1,0)
       cr.rectangle(avx,avy,avLength,3)
       cr.fill()
-      acLength = syProps[3] * 10
+
+      acLength = syProps[3] * unitLength
       acx = xe - acLength
-      acy = avy + 6 
+      acy = avy + 3 
       cr.set_line_width(0.1)
       cr.set_source_rgb(0,0,1)
       cr.rectangle(acx,acy,acLength,3)
       cr.fill()
 
+      anoLength = syProps[4] * unitLength
+      anox = xe - anoLength
+      anoy = acy + 3 
+      cr.set_line_width(0.1)
+      cr.set_source_rgb(1,1,0)
+      cr.rectangle(anox,anoy,anoLength,3)
+      cr.fill()
 
+      panoLength = syProps[5] * unitLength
+      panox = xe - panoLength
+      panoy = anoy + 3 
+      cr.set_line_width(0.1)
+      cr.set_source_rgb(0,1,1)
+      cr.rectangle(panox,panoy,panoLength,3)
+      cr.fill()
+
+      unlLength = syProps[6] * unitLength
+      unlx = xe - unlLength
+      unly = panoy + 3 
+      cr.set_line_width(0.1)
+      cr.set_source_rgb(1,0,1)
+      cr.rectangle(unlx,unly,unlLength,3)
+      cr.fill()
+
+      unoLength = syProps[7] * unitLength
+      unox = xe - unoLength
+      unoy = unly + 3 
+      cr.set_line_width(0.1)
+      cr.set_source_rgb(0.5,0.5,0.5)
+      cr.rectangle(unox,unoy,unoLength,3)
+      cr.fill()
 
     def decorateVulnerabilityNode(self,cr,zoom_ratio):
      if (zoom_ratio > LOW_ZOOM_RATIO) and (zoom_ratio < HIGH_ZOOM_RATIO):

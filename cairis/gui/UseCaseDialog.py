@@ -57,6 +57,8 @@ class UseCaseDialog(wx.Dialog):
   def load(self,uc):
     self.theUseCaseId = uc.id()
     self.theCommitVerb = 'Edit'
+    buttonCtrl = self.FindWindowById(USECASE_BUTTONCOMMIT_ID)
+    buttonCtrl.SetLabel('Update')
     self.panel.loadControls(uc)
 
   def onCommit(self,evt):

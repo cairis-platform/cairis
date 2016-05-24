@@ -139,7 +139,7 @@ Security concerns:
 
 </background>
   <strategic_goals>None</strategic_goals>
-  <rich_picture image="/home/cairisuser/CAIRIS/cairis/examples/exemplars/Balkan_Rail/scopeDiagram.jpg" />
+  <rich_picture image="/opt/cairis/cairis/cairis/images//home/cairisuser/CAIRIS/cairis/examples/exemplars/Balkan_Rail/scopeDiagram.jpg" />
   <scope>Head office
 A subsidiary office
 A train station
@@ -159,6 +159,24 @@ Departments:
     <high>> 1 million euros.</high>
   </asset_values>
 </environment>
+<environment name="Balkan Rail Corprate HQ" short_code="Head Offic" >
+  <definition>The head office for Balkan Rail, hosuing all supporting and management groups of the company.</definition>
+  <asset_values>
+    <none>To be defined</none>
+    <low>To be defined</low>
+    <medium>To be defined</medium>
+    <high>To be defined</high>
+  </asset_values>
+</environment>
+<environment name="Central Station" short_code="Central St" >
+  <definition>The central station on the Balkan Rail network, located within the capital of the operating country.</definition>
+  <asset_values>
+    <none>To be defined</none>
+    <low>To be defined</low>
+    <medium>To be defined</medium>
+    <high>To be defined</high>
+  </asset_values>
+</environment>
 </cairis>
 
 <riskanalysis>
@@ -176,6 +194,9 @@ Departments:
 </role>
 <role name="Ex-employee" type="Attacker" short_code="EXE" >
   <description>Ex-employee</description>
+</role>
+<role name="Criminal" type="Attacker" short_code="Criminal" >
+  <description>An indervidual who commits a specific crime.</description>
 </role>
 <asset name="Manifest" short_code="MANIFEST" type="Information" is_critical="0">
   <description>Train manifest</description>
@@ -287,12 +308,33 @@ Departments:
     <rationale>Inaccurate data may be due to negligence.</rationale>
   </security_property>
 </asset>
+<asset name="Medical Certificate" short_code="Sick Note" type="Information" is_critical="0">
+  <description>A signed letter from a docotor detailing an employees health conditon, justifying sick leave.</description>
+  <significance>Asset has significance to employee and comapny both from a legal complience and confidentially point of view</significance>
+  <critical_rationale></critical_rationale>
+</asset>
 <asset name="Access Control Framework" short_code="ACF" type="Systems" is_critical="0">
   <description>Access Control Framework.  Combination of policy and technical control.</description>
   <significance>Enforces need to know principle</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Model" property="accountability" value="Medium">
     <rationale>TBC</rationale>
+  </security_property>
+</asset>
+<asset name="RFID Access Control System" short_code="RFID Card" type="Systems" is_critical="0">
+  <description>The RFID access control system used by the company to lock doors and restrict access to certian areas bassed on  employee roles.</description>
+  <significance>Significant for the protection of both physical and soft assets.</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Balkan Rail Corprate HQ" property="accountability" value="Medium">
+    <rationale>Logs when an indervidual gains physical access to a specifc resource. </rationale>
+  </security_property>
+</asset>
+<asset name="CCTV Management System" short_code="CCTV Contr" type="Systems" is_critical="0">
+  <description>The system which allows station staff to view, control and record CCTV cameras</description>
+  <significance>Asset is of signifnace to passengers who become </significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Central Station" property="accountability" value="Medium">
+    <rationale>Provides recordings for crime prevention and identification purposes.</rationale>
   </security_property>
 </asset>
 <asset name="Custom Application" short_code="CAPP" type="Software" is_critical="0">
@@ -317,10 +359,43 @@ Departments:
     <rationale>Inaccurate data may be due to negligence.</rationale>
   </security_property>
 </asset>
+<asset name="CCVTV Cameras" short_code="Camera" type="Hardware" is_critical="0">
+  <description>Cameras placed at points in central station </description>
+  <significance>High Significance to CCTV system</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Central Station" property="accountability" value="Medium">
+    <rationale>Provides accountablity through survallance </rationale>
+  </security_property>
+</asset>
+<asset name="CCTV Recordings" short_code="Recordings" type="Hardware" is_critical="0">
+  <description>recordings of CCTV survallance cameras</description>
+  <significance>Signficant to the CCTV system and potential victim of crime </significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Central Station" property="accountability" value="Medium">
+    <rationale>Provides accountablity for incerdents crime, through recordings of crime carried out on the station.</rationale>
+  </security_property>
+</asset>
+<asset name="Passenger's Bag" short_code="Luggage" type="People" is_critical="0">
+  <description>The luggae of a rail passenger travelling through Cental Station</description>
+  <significance>Luggage is of high significace to the indervidual passenger.</significance>
+  <critical_rationale></critical_rationale>
+</asset>
+<vulnerability name="Reduced survallance and security capacity" type="Design">
+  <description>The reduced survallance capablites at Central Station make capturing incerdents of crime for resoultion and prevention purposes problematic. </description>
+  <vulnerability_environment name="Central Station" severity="Negligible">
+    <vulnerable_asset name="Passenger's Bag" />
+  </vulnerability_environment>
+</vulnerability>
 <vulnerability name="Weak access control" type="Implementation">
   <description>Need to know principle is being violated.</description>
   <vulnerability_environment name="Model" severity="Critical">
     <vulnerable_asset name="Access Control Framework" />
+  </vulnerability_environment>
+</vulnerability>
+<vulnerability name="Disclosure of confidential health records" type="Implementation">
+  <description>A secretary is able to read the sick note of an employee and discuss it with their colleagues.</description>
+  <vulnerability_environment name="Balkan Rail Corprate HQ" severity="Critical">
+    <vulnerable_asset name="Medical Certificate" />
   </vulnerability_environment>
 </vulnerability>
 <attacker name="Thomas" image="">
@@ -331,6 +406,22 @@ Departments:
     <motivation name="Improved organisational position" />
     <capability name="Resources/Personnel and Time" value="Medium" />
     <capability name="Knowledge/Education and Training" value="High" />
+  </attacker_environment>
+</attacker>
+<attacker name="Maria" image="">
+  <description>Malicious department secretary</description>
+  <attacker_environment name="Balkan Rail Corprate HQ">
+    <attacker_role name="Human Resources" />
+    <motivation name="Improved esteem" />
+    <capability name="Resources/Personnel and Time" value="Medium" />
+  </attacker_environment>
+</attacker>
+<attacker name="Jack" image="">
+  <description>Jack is an oppertinst criminal, motivated to steal from passengers to sell on his findings for profit. He pickpockets passengers at the station and steals unattended luggage.</description>
+  <attacker_environment name="Central Station">
+    <attacker_role name="Criminal" />
+    <motivation name="Money" />
+    <capability name="Knowledge/Methods" value="Medium" />
   </attacker_environment>
 </attacker>
 <threat name="IT data manipulation" type="Insider/Manipulation">
@@ -346,6 +437,26 @@ Departments:
     <threatened_asset name="Purchasing Data" />
     <threatened_property name="integrity" value="High">
       <rationale>Any data can be manipulated.</rationale>
+    </threatened_property>
+  </threat_environment>
+</threat>
+<threat name="Lack of defined business process" type="Insider/Manipulation">
+  <method>The submission and processing of employee sick notes has been ill defined, resulting in confidential information exchanging hands with muiltple department secretaries before reaching the recipient in the Human Resources department</method>
+  <threat_environment name="Balkan Rail Corprate HQ" likelihood="Probable" >
+    <threat_attacker name="Maria" />
+    <threatened_asset name="Medical Certificate" />
+    <threatened_property name="confidentiality" value="Medium">
+      <rationale>Confidentiality is threatend</rationale>
+    </threatened_property>
+  </threat_environment>
+</threat>
+<threat name="Increased risk of theft" type="Physical">
+  <method>Due to PESTLE factors in the operating country of Balkin Rail, there has been an increased rate of theft related crimes. </method>
+  <threat_environment name="Central Station" likelihood="Frequent" >
+    <threat_attacker name="Jack" />
+    <threatened_asset name="Passenger's Bag" />
+    <threatened_property name="unlinkability" value="Low">
+      <rationale>TBC</rationale>
     </threatened_property>
   </threat_environment>
 </threat>
@@ -365,147 +476,194 @@ Departments:
 
 <goals>
 <goal name="Ensure business continuity" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>To ensure the business continuity of Balkan Rail, the risk of damage by preventing security incidents and reducing their potential effects on Balkan Rail shall be minimised.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Protect information assets" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>Balkan Rail information assets shall be protected against all internal, external, intentional or unintentional threats.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Protect from unauthorised access" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>Balkan Rail information shall be protected from unauthorized access.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Protect Balkan Rail information confidentiality" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>The confidentiality of Balkan Rail information shall be protected.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Protect Balkan Rail customer information confidentiality" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>The confidentiality of Balkan Rail customer information shall be protected.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Protect Balkan Rail information integrity" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>The information integrity of Balkan Rail shall be protected.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Protect Balkan Rail customer information integrity" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>The information integrity of Balkan Rail customers shall be protected.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Protect operational procedures availability" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>The availability of information of operational procedures in Balkan Rail shall be protected.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Monitoring ISMS" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>Balkan Rail Management shall ensure continuous monitoring of the implementation of Information Security Management System.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Legal and Standards Compliance" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>Balkan Rail Management shall ensure continuous compliance with the law and the requirements of ISO standard 27001: 2013.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Staff Compliance" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>Compliance with the Information Security Policy is mandatory for everyone working or cooperating with Balkan Rail.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Compliance Responsibility" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>The Information Security Officer shall be responsible for compliance with the policy.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Policy Support" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>The Information Security Officer shall provide support and advice when applying the policy.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Implementation Responsibility" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>All holders of positions of responsibility shall be directly responsible for implementing the Policy.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Compliance Supervision Responsibility" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>All holders of positions of responsibility shall ensuring staff supervising compliance.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="BCP Maintenance" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>The Business Continuity Plan shall be maintained and checked for effectiveness.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Continuous ISMS Training" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>Continuous training in the Information Security Management System shall be available to all Balkan Rail employees.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Security Breaches Investigated" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>Confirmed or presumed information security breaches reported to the Information Security Officer shall be thoroughly investigated and dealt with promptly and effectively.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Violators Disciplined" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>Violations of Security Policy shall be subject to disciplinary action.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Violation Penalties" originator="Georgia Lykou">
-  <goal_environment name="Model" category="Maintain" priority="High">
+  <goal_environment name="Model" category="Maintain" priority="High" >
     <definition>Penalties for security policy violation shall depend on the nature of the offence, and the impact of the infringement on Balkan Rail, IT, goods, and facilities.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
 </goal>
+<requirement name="Data handling policy" reference="Medical Certificate" reference_type="asset" label="2" type="Security" priority="1" >
+  <description>A Data handling policy is to be implemented when dealing with confidential and commercially sensitive documentation</description>
+  <rationale>To provide documented procedures which are to be followed when transmitting confidential data internally within the company.</rationale>
+  <fit_criterion>The policy will detail specify the standard operating procedures for handling confidential data, depending on the classification it has been given. It will be signed off by IT, HR and executive management and detail the penalties of non compliance</fit_criterion>
+  <originator>Anton</originator>
+</requirement>
+<requirement name="Data classification policy" reference="Medical Certificate" reference_type="asset" label="1" type="Security" priority="1" >
+  <description>A data classification level will be applied to all confidential documentation that enters the company</description>
+  <rationale>Reduce the probability of mishandling of data</rationale>
+  <fit_criterion>Data classification levels will be documented and expressed in the form of a policy. The policy will contain criteria which must be met for the data classification level to be applied, and reference will be made  to the correct handling procedures as per </fit_criterion>
+  <originator>Anton</originator>
+</requirement>
+<requirement name="RFID Management Policy" reference="RFID Access Control System" reference_type="asset" label="1" type="Operational" priority="1" >
+  <description>A policy detailing the procedure for replacing and stopping lost or stolen RFID cards will be implemented. </description>
+  <rationale>To ensure documented operating procedures for the use and management of ID Cards is provided and adhered to</rationale>
+  <fit_criterion>The policy will specify the points of contact for any card related issues and maintenance, as well as acceptable use by employees and instructions on how to handle lost or stolen ID cards.</fit_criterion>
+  <originator>Anton</originator>
+</requirement>
+<requirement name="RFID Cease requirement" reference="RFID Access Control System" reference_type="asset" label="2" type="Security" priority="1" >
+  <description>Lost or Stolen RFID cards will have a cease lead time of 1 day (policy mandated) and employees will be required to report the lost or stolen card within 24 hours to the person defined in the RFID management policy</description>
+  <rationale>Reduce the risk of unauthorised access to Balkan Rail facilities through fraudulent use of RFID cards</rationale>
+  <fit_criterion>When a card is reported stolen, it will be ceased from operation by access control administrators within 1 day of report by the initial employee</fit_criterion>
+  <originator>Anton</originator>
+</requirement>
+<requirement name="RFID replacement card business process" reference="RFID Access Control System" reference_type="asset" label="3" type="Operational" priority="1" >
+  <description>An interim RFID card issue process will be implemented, allowing users access to resources while they wait for a new badge (a temporary badge will be issued)</description>
+  <rationale>Improve accountability and audit tracking of access to physical resources.</rationale>
+  <fit_criterion>The implemented policy will detail the process for replacing a lost card with a temporary assigned card, as well as reporting procedures for the incident in question</fit_criterion>
+  <originator>Anton</originator>
+</requirement>
+<requirement name="Data retention requirement" reference="CCTV Recordings" reference_type="asset" label="1" type="Legal" priority="1" >
+  <description>Recordings from the CCTV system will be stored for a predetermined and mutually agreed time duration</description>
+  <rationale>To provide evidence for following up of incidents of crime. </rationale>
+  <fit_criterion>Original copies of the recordings from cameras on the station will be stored with other CCTV recordings of the Balkan Rail main office in a bank safety deposit box.</fit_criterion>
+  <originator></originator>
+</requirement>
+<requirement name="CCTV Installation" reference="CCVTV Cameras" reference_type="asset" label="1" type="Functional" priority="1" >
+  <description>The strategic placement of CCTV recording cameras</description>
+  <rationale>Ensure adequate surveillance capability is implemented covering critical areas of the station</rationale>
+  <fit_criterion>A site survey  and consultation with the station manager will be carried out prior to installation of the CCTV cameras </fit_criterion>
+  <originator></originator>
+</requirement>
+<requirement name="CCTV installation" reference="Central Station" reference_type="environment" label="1" type="Functional" priority="1" >
+  <description>A full closed circut television system will be installed on the Central Station premises</description>
+  <rationale>Provide a deterrent from crime and cecords of security and saftey incerdents</rationale>
+  <fit_criterion>Provide a deterrent from crime and cecords of security and safety incidents</fit_criterion>
+  <originator></originator>
+</requirement>
 </goals>
-
 
 <associations>
 <goal_association environment="Model"  goal_name="Ensure business continuity" goal_dim="goal" ref_type="and" subgoal_name="Protect information assets" subgoal_dim="goal" alternative_id="0" >
@@ -517,7 +675,7 @@ Departments:
 <goal_association environment="Model"  goal_name="Protect information assets" goal_dim="goal" ref_type="and" subgoal_name="Protect Balkan Rail information confidentiality" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Model"  goal_name="Protect information assets" goal_dim="goal" ref_type="and" subgoal_name="Protect Balkan Rail customer information confidentiality" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Model"  goal_name="Protect information assets" goal_dim="goal" ref_type="and" subgoal_name="Protect Balkan Rail customer information confident" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Model"  goal_name="Protect information assets" goal_dim="goal" ref_type="and" subgoal_name="Protect Balkan Rail information integrity" subgoal_dim="goal" alternative_id="0" >
@@ -561,7 +719,8 @@ Departments:
 </goal_association>
 <goal_association environment="Model"  goal_name="Security Breaches Investigated" goal_dim="goal" ref_type="and" subgoal_name="Violators Disciplined" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
-</goal_association><goal_association environment="Model"  goal_name="Violators Disciplined" goal_dim="goal" ref_type="and" subgoal_name="Violation Penalties" subgoal_dim="goal" alternative_id="0" >
+</goal_association>
+<goal_association environment="Model"  goal_name="Violators Disciplined" goal_dim="goal" ref_type="and" subgoal_name="Violation Penalties" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <dependency depender="IT administrator" dependee="Human Resources" dependency_type="asset" dependency="HR Data" environment="Model" >
