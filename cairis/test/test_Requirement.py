@@ -74,6 +74,25 @@ class RequirementTest(unittest.TestCase):
     self.assertEqual(str(ireq.type()),str(oreq.type()))
     self.assertEqual(str(ireq.asset()),str(oreq.asset()))
 
+    uireq = oreq
+    uireq.update('description','revised description')
+    uireq.update('name','revised name')
+    uireq.incrementVersion()
+
+    b.dbProxy.updateRequirement(uireq)
+    uoreqs = b.dbProxy.getRequirements()
+    uoreq = uoreqs['revised description']
+
+    self.assertEqual(str(uireq.name()),str(uoreq.name()))
+    self.assertEqual(str(uireq.description()),str(uoreq.description()))
+    self.assertEqual(str(uireq.rationale()),str(uoreq.rationale()))
+    self.assertEqual(str(uireq.fitCriterion()),str(uoreq.fitCriterion()))
+    self.assertEqual(str(oreq.version()),'2')
+    self.assertEqual(str(uireq.originator()),str(uoreq.originator()))
+    self.assertEqual(str(uireq.type()),str(uoreq.type()))
+    self.assertEqual(str(uireq.asset()),str(uoreq.asset()))
+
+
     b.dbProxy.deleteRequirement(ireq.id())
 
   def tearDown(self):

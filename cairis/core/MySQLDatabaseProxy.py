@@ -554,7 +554,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL adding updating requirement ' + str(r.id()) + '(id:' + str(id) + ',message:' + msg
+      exceptionText = 'MySQL updating requirement ' + str(r.id()) + '(id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
 
   def addValueTensions(self,envId,tensions):
