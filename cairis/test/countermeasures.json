@@ -1,0 +1,260 @@
+{
+  "environments" : [
+      {"theName" : "Day",
+       "theShortCode" : "DAY",
+       "theDescription" : "Day-time plant operations"}
+  ],
+  "roles" : [
+      {"theName" : "Vendor",
+       "theType" : "Stakeholder",
+       "theShortCode" : "VENDOR",
+       "theDescription" : "Vendor of SCADA, Telemetry, and Control System software"}
+  ],
+  "personas" : [
+    {"theName" : "Victor",
+     "theActivities" : "Victor is a clean-water plant operator, responsible for ensuring that water processed through the plant is in line with specified set-points.  Victor's area of responsibility extend outside of the confines of the plant to include checking on pumping stations, which feed water into the plant's nearby reservoir. During his working shifts (he works a 5 + 1 continental shift), Victor frequently checks readings on his SCADA workstation, takes water samples at various locations around the plant, and responds to alarms raised by the SCADA system; if necessary this involves investigating problems, and -- if no remedial tasks are possible -- calling someone out to investigate further. At the start of every shift, Victor checks AJS to see what work he is scheduled to carry out.  He usually updates AJS based on the work he carried out before the end of his shift.  Victor also maintains a paper work diary, which is updated after carrying out specific work or responding to problems.  This, together with the status white board, is also useful for explaining any on-going issues when handing over to the next shift.",
+     "theAttitudes" : "Victor isn't particularly concerned about people trying to hack into the SCADA system he uses.  'The only way the SCADA will get infected', Victor says, 'is by an instrument tech plugging a virus infected laptop into it'. Victor is aware of Information Security communiques on InfoPortal, but doesn't see how this is relevant to him. 'We don't have laptops', says Victor, 'and we don't leave site, so we don't leave anything in cars'. Victor is, however, aware of Information Security controls.  Victor knows that logout policies keep intruders from getting access to his workstation (although he thinks the logout period is too short given his environment), and he knows he can only access certain pumping sites via the telemetry system. Although Victor can call an instrument tech for many problems, experience has taught him not to expect much from the ACME ICT support during a night shift.  'What's the point of calling up to say you can't login at night if all you get is a reference number', Victor complains, 'that won't help me start my pumps now!'  Although Victor knows he can call out an instrument tech to help, he is also conscious that they are out most evenings, and might not appreciate a call-out for a corporate ICT problem.",
+     "theAptitudes" : "Victor has been a plant operator for over 10 years.  Although the exact procedures need to run his plant are documented in a works manual, he doesn't need to refer to it. 'I haven't read the works manual in years', Victor says. This experience does not stay in Victor's head. When problems have occurred, he raises these during team meetings, and any lessons learned sometimes find their way into the SCADA system as new functionality.  Victor is aware of the new EnterpriseSCADA developments and possible improvements to the HMI and start-up procedure.  Although not fully in the loop about what is going on, he hopes that, like the current system, there will be productivity improvements without an adverse impact. Victor uses the SCADA's trend monitoring facilities as a indication of possible problems.  'If the trends freeze or flat-line', Victor says, 'I need to go out and take a look at what's wrong'.  Because problems occur daily, and he is often on his own, Victor can still control the plant using panel PCs at remote locations around the plant.",
+     "theMotivations" : "Because the water quality can change over a matter of minutes, Victor's ethos is that you need to be ready for anything.  Because of this, checking certain parameters and pieces of kit is an important discipline, as is logging important events in the works diary and on the status board; these aid communication to other shift members, and the eventual piecing together of the elements of an event. Although information security doesn't phase Victor too much, personal security does.  Potentially facing off a scrap metal thief is a big worry for Victor. 'The police don't respond to intruder alarms at a nearby pumping station any more due to false alarms', says Victor.  'Because of this, we've been told not to go out to these places on our own.   We have a lone-worker system when people call us when we get to a particular station, but what happens if we get problems on the way?'",
+     "theSkills" : "Victor has a basic operating knowledge of Windows; enough to carry out his day-to-day routines, check his email, and navigate the main sections of InfoPortal. Victor isn't a power-user; he acknowledges that younger 'whizz kids' are much more adept at using PCs than he is. Consequently, he only uses a sub-set of the desktop icons currently on his desktop.  'I don't know what these other applications do', Victor says,'I've tried clicking on one and it just gives me a Data Protection Warning.  I guess this means I'm not authorised to use it.'",
+     "theIntrinsic" : "None",
+     "theContextual" : "None",
+     "thePersonaType" : "Primary",
+     "theEnvironmentProperties" : [
+       {"theName" : "Day",
+        "theDirectFlag" : "TRUE",
+        "theRole" : ["Vendor"],
+        "theNarrative" : "Victor carries out certain jobs during the day. These include ordering, and taking delivery of chemicals"
+      }
+     ]
+   }
+  ],
+  "external_documents" : [
+      {"theName" : "Personal Security GT concept",
+       "theVersion" : "1",
+       "thePublicationDate" : "August 2010",
+       "theAuthors" : "Shamal Faily",
+       "theDescription" : "None"},
+      {"theName" : "InfoSec indifference GT concept",
+       "theVersion" : "1",
+       "thePublicationDate" : "August 2010",
+       "theAuthors" : "Shamal Faily",
+       "theDescription" : "None"}
+  ],
+  "document_references" : [
+    {"theName" : "Personal threats",
+     "theDocName" : "Personal Security GT concept",
+     "theContributor" : "SF",
+     "theExcerpt" : "Personal experience of being threatened when called out late at night and challenging intruders."
+   },
+   {"theName" : "InfoSec communiques irrelevant",
+    "theDocName" : "InfoSec indifference GT concept",
+    "theContributor" : "SF",
+    "theExcerpt" : "Messages about leaving things and laptops in a car are not a problem; [we] do not go off site."
+   }
+ ],
+  "persona_characteristics" : [
+    {
+      "thePersonaName" : "Victor",
+      "theModQual" : "Often",
+      "theVariable" : "Attitudes",
+      "theCharacteristic" : "Personal safety is an infosec hygiene factor",
+      "ground" : "Personal threats",
+      "warrant" : "InfoSec communiques irrelevant"
+    }
+  ],
+  "attackers" : [
+      {"theName" : "Victor",
+       "theDescription" : "Victor is a contractor and expert in the SCADA systems used by ACME, having helped develop them over 15 years ago. Due to the recent economic downtime, Victor has been forced to take a recent pay-cut.",
+       "theImage" : "Victor.jpg",
+       "theEnvironmentProperties" : [
+         {"theName" : "Day",
+          "theRoles" : ["Vendor"],
+          "theMotives" : ["Revenge"],
+	  "theCapabilities" : 
+	   [
+            ["Technology","Medium"],
+	    ["Software","Low"]
+	   ]
+         }
+       ]
+    }
+  ],
+    "valuetypes" : [
+      {"theName" : "Electronic/Hacking",
+      "theDescription" : "Hackers want to get into your computer system and use them for their own purposes. There are many hacking tools available on the internet as well as online communities actively discussing hacking techniques enabling even unskilled hackers to break into unprotected systems. Hackers have a range of motives; from showing off their technical prowess, to theft of money, credentials or information, to cause damage.",
+      "theType" : "threat_type"},
+      {"theName" : "Configuration",
+      "theDescription" : "A vulnerability resulting from an error in the configuration and administration of a system or component.",
+      "theType" : "vulnerability_type"}
+  ],
+  "threats" : [
+      {"theName" : "Footprinting",
+       "theType" : "Electronic/Hacking",
+       "theMethod" : "Various activities to determine information about the network and systems on it.",
+       "theEnvironmentProperties" : [
+         {"theName" : "Day",
+          "theLikelihood" : "Probable",
+          "theAssets" : ["Firewall","Corporate Network","Enterprise SCADA Network"],
+	  "theAttackers" : ["Victor"],
+	  "theProperties" : 
+	   [
+            ["integrity",
+	     [0,2,0,0,0,0,0,0]
+	    ],
+	    ["availability",
+	     [0,0,3,0,0,0,0,0]
+	    ]
+	   ]
+        }
+     ]
+   }
+  ],
+  "vulnerabilities" : [
+      {"theName" : "Incomplete firewall rules",
+       "theDescription" : "Firewall rule set fails to identify an intentional attack.",
+       "theType" : "Configuration",
+       "theEnvironmentProperties" : [
+         {"theName" : "Day",
+          "theSeverity" : "Marginal",
+          "theAssets" : ["Firewall"]
+       }
+     ]
+   }
+],
+  "misuseCase" : [
+       {"theName" : "DAY",
+        "theRisk" : "Network footprinting",
+        "theEnvironmentProperties" : [
+        {"theName" : "Day",
+         "theDescription" : "One of Victor's colleagues is spidering web pages to find information about ACME partners, access points to portals, and various other tid-bits of open source intelligence.  Periodically, he compiles a list of interesting sites and addresses, which he passes onto Victor. Victor carries out Whois and DNS enumeration to find interesting IP addresses and, based on this, interrogates ACME DNS servers to find interesting systems.  He also runs a script which trace-routes IP addresses and outputs the data to a file, which he visualises using GraphViz. After a while, Victor has developed an access path diagram diagram of the ACME network."} 
+     ]
+   }
+],
+  "risks" : [
+    {
+     "theName" : "Network footprinting",
+     "threatName" : "Footprinting",
+     "vulName" : "Incomplete firewall rules"
+    }
+  ],
+  "assets" : [
+    {
+     "theName" : "Firewall",
+     "theShortCode" : "F",
+     "theDescription" : "Firewalls connecting the local works network with the corporate network and the enterprise SCADA network.",
+     "theSignificance" : "Compromising the firewalls compromises systems both within the works, and any external systems reliant on works data.",
+     "theType" : "Systems",
+     "theEnvironmentProperties" :
+      [
+        ["Day",
+         [0,2,0,0,0,0,0,0], 
+         ["None","","None","None","None","None","None","None"]
+        ],
+        ["Day",
+         [0,0,3,0,0,0,0,0], 
+         ["None","None","","None","None","None","None","None"]
+        ],
+        ["Day",
+         [0,0,0,2,0,0,0,0], 
+         ["None","None","None","","None","None","None","None"]
+        ]
+      ]
+    },
+    {
+     "theName" : "Corporate Network",
+     "theShortCode" : "CN",
+     "theDescription" : "ACME Corporate network.",
+     "theSignificance" : "Compromising the network may compromise the data passing through it.",
+     "theType" : "Systems",
+     "theEnvironmentProperties" :
+      [
+        ["Day",
+         [2,0,0,0,0,0,0,0], 
+         ["","None","None","None","None","None","None","None"]
+        ],
+        ["Day",
+         [0,2,0,0,0,0,0,0], 
+         ["None","","None","None","None","None","None","None"]
+        ],
+        ["Day",
+         [0,0,2,0,0,0,0,0], 
+         ["None","None","","None","None","None","None","None"]
+        ],
+        ["Day",
+         [0,0,0,2,0,0,0,0], 
+         ["None","None","None","","None","None","None","None"]
+        ]
+      ]
+    },
+    {
+     "theName" : "Enterprise SCADA Network",
+     "theShortCode" : "ESN",
+     "theDescription" : "Enterprise Control Network, connecting PLCs, EnterpriseSCADA servers, and EnterpriseSCADA clients",
+     "theSignificance" : "Compromising this network potentially compromises any assets connected to it.",
+     "theType" : "Systems",
+     "theEnvironmentProperties" :
+      [
+        ["Day",
+         [2,0,0,0,0,0,0,0], 
+         ["","None","None","None","None","None","None","None"]
+        ],
+        ["Day",
+         [0,3,0,0,0,0,0,0], 
+         ["None","","None","None","None","None","None","None"]
+        ],
+        ["Day",
+         [0,0,2,0,0,0,0,0], 
+         ["None","None","","None","None","None","None","None"]
+        ],
+        ["Day",
+         [0,0,0,3,0,0,0,0], 
+         ["None","None","None","","None","None","None","None"]
+        ]
+      ]
+    }
+  ],
+  "responses" : [
+    {
+      "theRisk" : "Network footprinting",
+      "theType" : "Accept",
+      "theEnvironmentProperties" : ["Day","Low","Some rationale"]
+    },
+    {
+      "theRisk" : "Network footprinting",
+      "theType" : "Prevent",
+      "theEnvironmentProperties" : "Day"
+    }
+  ],
+  "requirements" : [
+    {
+      "theName" : "Complete Firewall Rules",
+      "theReference" : "Firewall",
+      "theReferenceType" : "asset",
+      "theLabel" : "1",
+      "theType" : "Functional",
+      "thePriority" : "1",
+      "theDescription" : "Complete Firewall Rules",
+      "theRationale" : "None",
+      "theFitCriterion" : "None",
+      "theOriginator" : "Interview data"
+    }
+  ],
+  "countermeasures" : [
+    {
+      "theName" : "Rules Library",
+      "theType" : "Information",
+      "theDescription" : "Complete firewall rules library",
+      "theEnvironmentProperties" : [
+        [
+          "Day",
+          "Medium",
+          "Complete Firewall Rules",
+          "Incomplete firewall rules",
+          "High",
+          "Vendor"
+        ]
+      ]
+    }
+  ]
+}
