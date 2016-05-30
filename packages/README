@@ -1,6 +1,6 @@
 To build a package for a new version of CAIRIS, you need to do the following:
 
-1.  Change directory to either trusty or xenial
+1.  Change directory to the debian directory in either trusty or xenial
 2.  Increment the version of CAIRIS in the changelog
 3.  Run `sudo dpkg-buildpackage`
 

@@ -4,4 +4,4 @@ sudo pip install cairis
 configure_cairis_db.py
 export name_var=$USER
 echo $name_var
-export CAIRIS_CFG=/home/$name_var/cairis.cnf >> .bashrc
+echo export CAIRIS_CFG=/home/$name_var/cairis.cnf >> .bashrc
