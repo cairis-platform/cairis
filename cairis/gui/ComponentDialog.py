@@ -83,6 +83,6 @@ class ComponentDialog(wx.Dialog):
       self.EndModal(COMPONENT_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theRequirements,self.theGoals)
+    parameters = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theRequirements,self.theGoals,[])
     parameters.setId(self.theComponentId)
     return parameters

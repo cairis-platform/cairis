@@ -27,7 +27,7 @@ class InterfaceListPanel(BasePanel):
     b = Borg()
     mainSizer = wx.BoxSizer(wx.VERTICAL)
     ifList = b.dbProxy.getDimensionNames('interface')
-    mainSizer.Add(self.buildComboSizerList('Name',(87,30),INTERFACELISTDIALOG_COMBONAME_ID,ifList),0,wx.EXPAND)
+    mainSizer.Add(self.buildEditableComboSizerList('Name',(87,30),INTERFACELISTDIALOG_COMBONAME_ID,ifList),0,wx.EXPAND)
     mainSizer.Add(self.buildComboSizerList('Type',(87,30),INTERFACELISTDIALOG_COMBOTYPE_ID,['provided','required']),0,wx.EXPAND)
     metricsSizer = wx.BoxSizer(wx.HORIZONTAL)
     mainSizer.Add(metricsSizer,0,wx.EXPAND)

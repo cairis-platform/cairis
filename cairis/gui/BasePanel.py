@@ -68,10 +68,27 @@ class BasePanel(wx.Panel):
     comboSizer.Add(objtComboCtrl,1,wx.EXPAND)
     return comboSizer
 
+  def buildEditableComboSizer(self,labelTxt,widgetSize,winId,objtDictionary):
+    csBox = wx.StaticBox(self,-1,labelTxt)
+    comboSizer = wx.StaticBoxSizer(csBox,wx.HORIZONTAL)
+    objtList = []
+    for key,objt in objtDictionary.iteritems():
+      objtList.append(key)
+    objtComboCtrl = wx.ComboBox(self,winId,"",choices=objtList,size=widgetSize)
+    comboSizer.Add(objtComboCtrl,1,wx.EXPAND)
+    return comboSizer
+
   def buildComboSizerList(self,labelTxt,widgetSize,winId,objtList):
     cslBox = wx.StaticBox(self,-1,labelTxt)
     comboSizer = wx.StaticBoxSizer(cslBox,wx.HORIZONTAL)
     objtComboCtrl = wx.ComboBox(self,winId,"",choices=objtList,size=widgetSize,style=wx.CB_READONLY)
+    comboSizer.Add(objtComboCtrl,1,wx.EXPAND)
+    return comboSizer
+
+  def buildEditableComboSizerList(self,labelTxt,widgetSize,winId,objtList):
+    cslBox = wx.StaticBox(self,-1,labelTxt)
+    comboSizer = wx.StaticBoxSizer(cslBox,wx.HORIZONTAL)
+    objtComboCtrl = wx.ComboBox(self,winId,"",choices=objtList,size=widgetSize)
     comboSizer.Add(objtComboCtrl,1,wx.EXPAND)
     return comboSizer
 
