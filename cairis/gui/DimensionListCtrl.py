@@ -26,7 +26,7 @@ class DimensionListCtrl(wx.ListCtrl):
     self.theDimensionTable = dimensionTable
     self.theCurrentEnvironment = ''
     self.InsertColumn(0,columnLabel)
-    self.SetColumnWidth(0,150)
+    self.SetColumnWidth(0,300)
     self.theDimMenu = wx.Menu()
     self.theDimMenu.Append(DIMLIST_MENUADD_ID,'Add')
     self.theDimMenu.Append(DIMLIST_MENUDELETE_ID,'Delete')
