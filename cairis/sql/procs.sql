@@ -18158,14 +18158,14 @@ begin
   declare pId int;
   declare arId int;
   
-  select id into cvId from component_view where name = cvName;
-  select id into fromId from component where name = fromName;
-  select id into fromIfId from interface where name = fromIf;
-  select id into toId from component where name = toName;
-  select id into toIfId from interface where name = toIf;
-  select id into taId from template_asset where name = taName;
-  select id into pId from protocol where name = pName;
-  select id into arId from access_right where name = arName;
+  select id into cvId from component_view where name = cvName limit 1;
+  select id into fromId from component where name = fromName limit 1;
+  select id into fromIfId from interface where name = fromIf limit 1;
+  select id into toId from component where name = toName limit 1;
+  select id into toIfId from interface where name = toIf limit 1;
+  select id into taId from template_asset where name = taName limit 1;
+  select id into pId from protocol where name = pName limit 1;
+  select id into arId from access_right where name = arName limit 1;
 
   insert into connector(id,name,component_view_id,from_component_id,from_role,from_interface_id,to_component_id,to_interface_id,to_role,template_asset_id,protocol_id,access_right_id) values (connId,cName,cvId,fromId,fromRole,fromIfId,toId,toIfId,toRole,taId,pId,arId);
 end
@@ -18404,7 +18404,7 @@ begin
   else
     delete from component_threat_target where component_id = componentId;
     delete from component_vulnerability_target where component_id = componentId;
-    delete from component_view_component where id = componentId;
+    delete from component_view_component where component_id = componentId;
     delete from component_usecase where component_id = componentId;
     delete from component where id = componentId;
   end if;
@@ -18484,14 +18484,17 @@ end
 
 create procedure delete_component_view(in cvId int)
 begin
+
   call deleteSituatedComponentView(cvId);
   call deleteComponentViewComponents(cvId);
   if cvId = -1
   then
     delete from component_view_component;
+    delete from component;
     delete from connector;
     delete from component_view;
   else
+
     delete from component_view_component where component_view_id = cvId;
     delete from connector where component_view_id = cvId;
     delete from component_view where id = cvId;
@@ -18506,7 +18509,7 @@ begin
 
   if cvName != 'ALL'
   then
-    select id into cvId from component_view where name = cvName;
+    select id into cvId from component_view where name = cvName limit 1;
     select c.name component,i.name interface,ci.required_id from component c, interface i, component_interface ci, component_view_component cvc where cvc.component_view_id = cvId and cvc.component_id = ci.component_id  and ci.component_id = c.id and ci.interface_id = i.id;
   else
     select c.name component,i.name interface,ci.required_id from component c, interface i, component_interface ci, component_view_component cvc where cvc.component_id = ci.component_id  and ci.component_id = c.id and ci.interface_id = i.id;
@@ -18520,7 +18523,7 @@ begin
 
   if cvName != 'ALL'
   then
-    select id into cvId from component_view where name = cvName;
+    select id into cvId from component_view where name = cvName limit 1;
     select ca.name connector, fc.name from_name, ca.from_role, fi.name from_interface, tc.name to_name, ti.name to_interface, ca.to_role, ta.name,p.name,ar.name from connector ca, component fc, component tc, interface fi, interface ti, template_asset ta, protocol p, access_right ar where ca.component_view_id = cvId and ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id and ca.template_asset_id = ta.id and ca.protocol_id = p.id and ca.access_right_id = ar.id;
   else
     select ca.name connector, fc.name from_name, ca.from_role, fi.name from_interface, tc.name to_name, ti.name to_interface, ca.to_role, ta.name,p.name,ar.name from connector ca, component fc, component tc, interface fi, interface ti, template_asset ta, protocol p, access_right ar where ca.from_component_id = fc.id and ca.from_interface_id = fi.id and ca.to_component_id = tc.id and ca.to_interface_id = ti.id and ca.template_asset_id = ta.id and ca.protocol_id = p.id and ca.access_right_id = ar.id;
@@ -18536,6 +18539,23 @@ end
 
 create procedure deleteComponentViewComponents(in cvId int)
 begin
+  declare done int default 0;
+  declare cId int;
+  declare componentCursor cursor for select component_id from component_view_component where component_view_id = cvId;
+  declare continue handler for not found set done = 1;
+
+  open componentCursor;
+  component_loop: loop
+    fetch componentCursor into cId;
+
+    if done = 1
+    then
+      leave component_loop;
+    end if;
+    call delete_component(cId);  
+  end loop component_loop;
+  close componentCursor;
+
   delete from component_view_component where component_view_id = cvId;
   delete from connector where component_view_id = cvId;
 end
@@ -19907,7 +19927,7 @@ begin
   declare derCursor cursor for select st.value,ar.value from surface_type st, access_right ar, component_asset ca, template_asset ta where ca.component_id = cId and ca.asset_id = ta.id and ta.surface_type_id = st.id and ta.access_right_id = ar.id;
   declare continue handler for not found set done = 1;
 
-  select id into cId from component where name = cName;
+  select id into cId from component where name = cName limit 1;
 
   set done = 0;
   open derCursor;

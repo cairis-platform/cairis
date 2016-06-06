@@ -9081,7 +9081,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error updating component ' + componentName
         raise DatabaseProxyException(exceptionText) 
-      curs.execute('call updateComponent(%s,%s,%s)',[componentId,componentName,componentDesc])
+      if (componentId != -1):
+        curs.execute('call updateComponent(%s,%s,%s)',[componentId,componentName,componentDesc])
+      else:
+        componentId = self.newId()
+        curs.execute('call addComponent(%s,%s,%s)',[componentId,componentName,componentDesc])
+         
       if (curs.rowcount == -1):
         exceptionText = 'Error updating component ' + componentName
         raise DatabaseProxyException(exceptionText) 
@@ -9431,7 +9436,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for trParameters in cvAssets:
         self.updateTemplateRequirement(trParameters)
       for comParameters in cvComs:
-        self.updateComponent(comParameters,cvId)
+        self.addComponent(comParameters,cvId)
       for conParameters in cvCons:
         self.addConnector(conParameters)
       self.conn.commit()

@@ -85,7 +85,7 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,propertyName)
       self.SetStringItem(idx,1,propertyValue)
-      self.SetStringItem(x,2,pRationale)
+      self.SetStringItem(idx,2,pRationale)
       self.theSelectedValue = propertyName
       self.setProperties.add(propertyName)
 
