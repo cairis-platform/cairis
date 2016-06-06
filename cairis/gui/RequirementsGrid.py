@@ -319,6 +319,7 @@ class RequirementsGrid(wx.grid.Grid,Traceable):
       self.SetCellRenderer(x,ORIGINATOR_POS,wx.grid.GridCellAutoWrapStringRenderer())
       self.SetCellEditor(x,TYPE_POS,wx.grid.GridCellChoiceEditor(typeChoices))
     self.lastRow = 0
+    self.AutoSizeRows()
 
   def OnRowMove(self,evt):
     frm = evt.GetMoveRow()
