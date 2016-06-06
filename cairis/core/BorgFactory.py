@@ -38,25 +38,27 @@ def initialise():
   cfgFile = open(cfgFileName)
   for cfgLine in cfgFile.readlines():
     cfgTuple = cfgLine.split('=')
-    cfgKey = strip(cfgTuple[0])
-    cfgVal = strip(cfgTuple[1])
- 
-    if cfgKey == 'dbhost':
-      b.dbHost = cfgVal
-    elif cfgKey == 'dbport':
-      b.dbPort = int(cfgVal)
-    elif cfgKey == 'dbuser':
-      b.dbUser = cfgVal
-    elif cfgKey == 'dbpasswd':
-      b.dbPasswd = cfgVal
-    elif cfgKey == 'dbname':
-      b.dbName = cfgVal
-    elif cfgKey == 'tmp_dir': 
-      b.tmpDir = cfgVal
-    elif cfgKey == 'root': 
-      b.cairisRoot = cfgVal
-    elif cfgKey == 'default_image_dir': 
-      b.imageDir = os.path.abspath(cfgVal)
+    if len(cfgTuple) != 2:
+      pass
+    else:
+      cfgKey = strip(cfgTuple[0])
+      cfgVal = strip(cfgTuple[1])
+      if cfgKey == 'dbhost':
+        b.dbHost = cfgVal
+      elif cfgKey == 'dbport':
+        b.dbPort = int(cfgVal)
+      elif cfgKey == 'dbuser':
+        b.dbUser = cfgVal
+      elif cfgKey == 'dbpasswd':
+        b.dbPasswd = cfgVal
+      elif cfgKey == 'dbname':
+        b.dbName = cfgVal
+      elif cfgKey == 'tmp_dir': 
+        b.tmpDir = cfgVal
+      elif cfgKey == 'root': 
+        b.cairisRoot = cfgVal
+      elif cfgKey == 'default_image_dir': 
+        b.imageDir = os.path.abspath(cfgVal)
   cfgFile.close()
 
   b.dbProxy = DatabaseProxyFactory.build()
