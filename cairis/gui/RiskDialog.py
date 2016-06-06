@@ -30,7 +30,7 @@ from MisuseCaseDialog import MisuseCaseDialog
 
 class RiskDialog(wx.Dialog):
   def __init__(self,parent,parameters):
-    wx.Dialog.__init__(self,parent,parameters.id(),parameters.label(),style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,450))
+    wx.Dialog.__init__(self,parent,parameters.id(),parameters.label(),style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,550))
 
     self.theRiskId = -1
     self.theMisuseCase = None
