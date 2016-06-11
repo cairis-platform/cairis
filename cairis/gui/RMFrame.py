@@ -180,6 +180,7 @@ class RMFrame(wx.Frame):
     exportMenu.Append(RMFRAME_MENU_OPTIONS_EXPORTPROCESSES,'Processes','Export Processes')
     exportMenu.AppendSeparator()
     exportMenu.Append(RMFRAME_MENU_OPTIONS_EXPORTIMPLIEDSPEC,'Implied Specification','Export Implied Specification')
+    exportMenu.Append(RMFRAME_MENU_OPTIONS_EXPORTARCHITECTURALPATTERN,'Architectural Pattern','Export Architectural Pattern')
     file.AppendMenu(RMFRAME_MENU_EXPORT,'Export',exportMenu)
     
     importMenu = wx.Menu()
@@ -415,6 +416,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,RMFRAME_MENU_OPTIONS_IMPORTPROCESSES,self.OnImportProcesses)
     wx.EVT_MENU(self,RMFRAME_MENU_OPTIONS_EXPORTPROCESSES,self.OnExportProcesses)
     wx.EVT_MENU(self,RMFRAME_MENU_OPTIONS_EXPORTIMPLIEDSPEC,self.OnExportImpliedSpec)
+    wx.EVT_MENU(self,RMFRAME_MENU_OPTIONS_EXPORTARCHITECTURALPATTERN,self.OnExportArchitecturalPattern)
     wx.EVT_MENU(self,RMFRAME_MENU_OPTIONS_SEVERITIES,self.OnSeverityOptions)
     wx.EVT_MENU(self,RMFRAME_MENU_OPTIONS_LIKELIHOODS,self.OnLikelihoodOptions)
     wx.EVT_MENU(self,RMFRAME_MENU_OPTIONS_TEMPLATEASSETS,self.OnTemplateAssets)
@@ -1924,3 +1926,30 @@ class RMFrame(wx.Frame):
       dlg.ShowModal()
       dlg.Destroy()
       return
+
+  def OnExportArchitecturalPattern(self,event):
+    dialog = None
+    try:
+      proxy = self.b.dbProxy
+      cvs = proxy.getDimensionNames('component_view',False)
+      cDlg = DimensionNameDialog(self,'component_view',cvs,'Select')
+      cvName = None
+      if (cDlg.ShowModal() == DIMNAME_BUTTONACTION_ID):
+        cvName = cDlg.dimensionName()
+      cDlg.Destroy() 
+      if cvName != None:
+        defaultBackupDir = './xml'
+        dlg = wx.FileDialog(self,message='Export architectural pattern',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
+        if (dlg.ShowModal() == wx.ID_OK):
+          exportFile = dlg.GetPath() + ".xml"
+          apBuf = self.dbProxy.architecturalPatternToXml(cvName)
+          f = open(exportFile,'w')
+          f.write(apBuf)
+          f.close()
+          confDlg = wx.MessageDialog(self,'Exported ' + cvName + ' architectural pattern','Export architectural pattern',wx.OK | wx.ICON_INFORMATION)
+          confDlg.ShowModal()
+          confDlg.Destroy()
+        dlg.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Export architectural pattern',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()

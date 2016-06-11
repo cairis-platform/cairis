@@ -849,6 +849,7 @@ drop procedure if exists getPersonaInstances;
 drop procedure if exists delete_locations;
 drop procedure if exists locationsNames;
 drop procedure if exists locationsRiskModel;
+drop procedure if exists architecturalPatternToXml;
 
 
 delimiter //
@@ -22185,6 +22186,311 @@ begin
   else
     select 0;
   end if;
+end
+//
+
+create procedure architecturalPatternToXml(in cvName text)
+begin
+  declare cvSyn varchar(255);
+  declare arName varchar(50);
+  declare arDesc varchar(1000);
+  declare arValue int;
+  declare arRat varchar(1000);
+  declare proName varchar(50);
+  declare proDesc varchar(1000);
+  declare proValue int;
+  declare proRat varchar(1000);
+  declare priName varchar(50);
+  declare priDesc varchar(1000);
+  declare priValue int;
+  declare priRat varchar(1000);
+  declare stName varchar(50);
+  declare stDesc varchar(1000);
+  declare stValue int;
+  declare stRat varchar(1000);
+  declare roleName varchar(255);
+  declare roleType varchar(50);
+  declare roleShortCode varchar(100);
+  declare roleDesc varchar(1000);
+  declare taName varchar(50);
+  declare taShortCode varchar(20);
+  declare taAssetType varchar(50);
+  declare taSurfaceType varchar(50);
+  declare taAccessRight varchar(50);
+  declare taDesc varchar(1000);
+  declare taSig varchar(1000);
+  declare tgId int;
+  declare tgName varchar(255);
+  declare tgDef varchar(1000);
+  declare tgRat varchar(255);
+  declare tgcName varchar(50);
+  declare tgrName varchar(255);
+  declare compId int;
+  declare compName varchar(255);
+  declare compDesc varchar(255);
+  declare iName varchar(255);
+  declare iReq int;
+  declare iType varchar(10);
+  declare iAccessRight varchar(50);
+  declare iPrivilege varchar(50);
+  declare hAsset varchar(50);
+  declare hAdorn varchar(50);
+  declare hNav int;
+  declare hNry varchar(50);
+  declare hRole varchar(50);
+  declare tRole varchar(50);
+  declare tNry varchar(50);
+  declare tNav int;
+  declare tAdorn varchar(50);
+  declare tAsset varchar(50);
+  declare cgName varchar(255);
+  declare gName varchar(255);
+  declare refType varchar(50);
+  declare sgName varchar(255);
+  declare connName varchar(255);
+  declare fromComp varchar(255);
+  declare fromRole varchar(255);
+  declare fromInt varchar(255);
+  declare toComp varchar(255);
+  declare toRole varchar(255);
+  declare toInt varchar(255);
+  declare connPro varchar(50);
+  declare connAr varchar(50);
+  declare connAsset varchar(50);
+  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE architectural_pattern PUBLIC "-//CAIRIS//DTD ARCHITECTURAL PATTERN 1.0//EN" "http://cairis.org/dtd/architectural_pattern.dtd">\n\n';
+  declare done int default 0;
+  declare cvId int;
+  declare accessRightCursor cursor for select name, description, value, rationale from access_right;
+  declare protocolCursor cursor for select name, description, value, rationale from protocol;
+  declare privilegeCursor cursor for select name, description, value, rationale from privilege;
+  declare stCursor cursor for select name, description, value, rationale from surface_type;
+  declare roleCursor cursor for select r.name, rt.name, r.short_code,r.description from role r, role_type rt where r.role_type_id = rt.id;
+  declare taCursor cursor for select ta.name, ta.short_code, at.name, st.name, ar.name, ta.description, ta.significance from template_asset ta, asset_type at, surface_type st, access_right ar where ta.asset_type_id = at.id and ta.surface_type_id = st.id and ta.access_right_id = ar.id;
+  declare tgCursor cursor for select id, name, definition, rationale from template_goal;
+  declare tgcCursor cursor for select ta.name from template_goal_concern tgc, template_asset ta where tgc.template_goal_id = tgId and tgc.template_asset_id = ta.id;
+  declare tgrCursor cursor for select r.name from template_goal_responsibility tgr, role r where tgr.template_goal_id = tgId and tgr.role_id = r.id;
+  declare compCursor cursor for select c.id, c.name, c.description from component_view_component cvc, component c where cvc.component_view_id = cvId and cvc.component_id = c.id;
+  declare ciCursor cursor for select i.name,ci.required_id,ar.name,p.name from component_interface ci, interface i, access_right ar, privilege p where ci.component_id = compId and ci.interface_id = i.id and ci.access_right_id = ar.id and ci.privilege_id = p.id;
+  declare csCursor cursor for select ha.name,hat.name,cc.head_navigation,hm.name,cc.head_role_name,cc.tail_role_name,tm.name,cc.tail_navigation,tat.name,ta.name from component_classassociation cc, template_asset ha, template_asset ta, association_type hat, association_type tat, multiplicity_type hm, multiplicity_type tm where cc.head_id = ha.id and cc.head_association_type_id = hat.id and cc.head_multiplicity_id = hm.id and cc.tail_multiplicity_id = tm.id and cc.tail_association_type_id = tat.id and cc.tail_id = ta.id and cc.component_id = compId;
+  declare cgCursor cursor for select name from component_goal where component_id = compId;
+  declare cgaCursor cursor for select hg.name,rt.name,tg.name from component_goalgoal_goalassociation cgg, template_goal hg, template_goal tg, reference_type rt where cgg.goal_id = hg.id and cgg.ref_type_id = rt.id and cgg.subgoal_id = tg.id and cgg.component_id = compId;
+  declare connCursor cursor for select c.name,fc.name,c.from_role,fif.name,tc.name,c.to_role,tif.name,ta.name,pr.name,ar.name from connector c, component fc, component tc, interface fif, interface tif, template_asset ta, protocol pr, access_right ar where c.component_view_id = cvId and c.from_component_id = fc.id and c.from_interface_id = fif.id and c.to_component_id = tc.id and c.to_interface_id = tif.id and c.template_asset_id = ta.id and c.protocol_id = pr.id and c.access_right_id = ar.id order by 1;
+
+
+  declare continue handler for not found set done = 1;
+
+  select id into cvId from component_view where name = cvName limit 1;
+  select synopsis into cvSyn from component_view where id = cvId limit 1;
+
+  set buf = concat(buf,'<architectural_pattern name=\"',cvName,'\" >\n  <synopsis>',cvSyn,'</synopsis>\n');
+
+  open accessRightCursor;
+  ar_loop: loop
+    fetch accessRightCursor into arName, arDesc, arValue,arRat;
+    if done = 1
+    then
+      leave ar_loop;
+    end if;
+    set buf = concat(buf,'<access_right name=\"',arName,'\" value=\"',arValue,'\" >\n  <description>',arDesc,'</description>\n  <rationale>',arRat,'</rationale>\n</access_right>\n');
+  end loop ar_loop;
+  close accessRightCursor;
+  set done = 0;
+
+  open protocolCursor;
+  pro_loop: loop
+    fetch protocolCursor into proName, proDesc, proValue,proRat;
+    if done = 1
+    then
+      leave pro_loop;
+    end if;
+    set buf = concat(buf,'<protocol name=\"',proName,'\" value=\"',proValue,'\" >\n  <description>',proDesc,'</description>\n  <rationale>',proRat,'</rationale>\n</protocol>\n');
+  end loop pro_loop;
+  close protocolCursor;
+  set done = 0;
+  
+  open privilegeCursor;
+  pri_loop: loop
+    fetch privilegeCursor into priName, priDesc, priValue,priRat;
+    if done = 1
+    then
+      leave pri_loop;
+    end if;
+    set buf = concat(buf,'<privilege name=\"',priName,'\" value=\"',priValue,'\" >\n  <description>',priDesc,'</description>\n  <rationale>',priRat,'</rationale>\n</privilege>\n');
+  end loop pri_loop;
+  close privilegeCursor;
+  set done = 0;
+
+  open stCursor;
+  st_loop: loop
+    fetch stCursor into stName, stDesc, stValue,stRat;
+    if done = 1
+    then
+      leave st_loop;
+    end if;
+    set buf = concat(buf,'<surface_type name=\"',stName,'\" value=\"',stValue,'\" >\n  <description>',stDesc,'</description>\n  <rationale>',stRat,'</rationale>\n</surface_type>\n');
+  end loop st_loop;
+  close stCursor;
+  set done = 0;
+
+  open roleCursor;
+  role_loop: loop
+    fetch roleCursor into roleName, roleType, roleShortCode, roleDesc;
+    if done = 1
+    then
+      leave role_loop;
+    end if;
+    set buf = concat(buf,'<role name=\"',roleName,'\" type=\"',roleType,'\" short_code=\"',roleShortCode,'\" >\n  <description>',roleDesc,'</description>\n</role>\n');
+  end loop role_loop;
+  close roleCursor;
+  set done = 0;
+
+  open taCursor;
+  ta_loop: loop
+    fetch taCursor into taName, taShortCode, taAssetType, taSurfaceType, taAccessRight, taDesc,taSig;
+    if done = 1
+    then
+      leave ta_loop;
+    end if;
+    set buf = concat(buf,'<asset name=\"',taName,'\" short_code=\"',taShortCode,'\" type=\"',taAssetType,'\" surface_type=\"',taSurfaceType,'\" access_right=\"',taAccessRight,'\" >\n  <description>',taDesc,'</description>\n  <significance>',taSig,'</significance>\n</asset>\n');
+  end loop ta_loop;
+  close taCursor;
+  set done = 0;
+
+  open tgCursor;
+  tg_loop: loop
+    fetch tgCursor into tgId, tgName, tgDef, tgRat;
+    if done = 1
+    then
+      leave tg_loop;
+    end if;
+    set buf = concat(buf,'<goal name=\"',tgName,'\" >\n  <definition>',tgDef,'</definition>\n  <rationale>',tgRat,'</rationale>\n');
+
+    open tgcCursor;
+    tgc_loop: loop
+      fetch tgcCursor into tgcName;
+       if done = 1
+       then
+         leave tgc_loop;
+       end if;
+       set buf = concat(buf,'  <concern name=\"',tgcName,'\" />\n');
+    end loop tgc_loop;
+    close tgcCursor;
+    set done = 0;
+
+    open tgrCursor;
+    tgr_loop: loop
+      fetch tgrCursor into tgrName;
+       if done = 1
+       then
+         leave tgr_loop;
+       end if;
+       set buf = concat(buf,'  <responsibility name=\"',tgrName,'\" />\n');
+    end loop tgr_loop;
+    close tgrCursor;
+    set done = 0;
+    set buf = concat(buf,'</goal>\n');
+  end loop tg_loop;
+  close tgCursor;
+  set done = 0;
+
+  open compCursor;
+  c_loop: loop
+    fetch compCursor into compId, compName, compDesc;
+    if done = 1
+    then
+      leave c_loop;
+    end if;
+    set buf = concat(buf,'<component name=\"',compName,'\" >\n  <description>',compDesc,'</description>\n');
+
+    open ciCursor;
+    ci_loop: loop
+      fetch ciCursor into iName,iReq,iAccessRight,iPrivilege;
+       if done = 1
+       then
+         leave ci_loop;
+       end if;
+       if iReq = 1
+       then
+         set iType = 'required';
+       else
+         set iType = 'provided';
+       end if;
+       set buf = concat(buf,'  <interface name=\"',iName,'\" type=\"',iType,'\" access_right=\"',iAccessRight,'\" privilege=\"',iPrivilege,'\" />\n');
+    end loop ci_loop;
+    close ciCursor;
+    set done = 0;
+
+    open csCursor;
+    cs_loop: loop
+      fetch csCursor into hAsset,hAdorn,hNav,hNry,hRole,tRole,tNry,tNav,tAdorn,tAsset;
+       if done = 1
+       then
+         leave cs_loop;
+       end if;
+
+       if hNry = '*'
+       then
+         set hNry = 'a';
+       end if;
+       if hNry = '1..*'
+       then
+         set hNry = '1..a';
+       end if;
+
+       if tNry = '*'
+       then
+         set tNry = 'a';
+       end if;
+       if tNry = '1..*'
+       then
+         set tNry = '1..a';
+       end if;
+
+       set buf = concat(buf,'  <structure head_asset=\"',hAsset,'\" head_adornment=\"',hAdorn,'\" head_nav=\"',hNav,'\" head_nry=\"',hNry,'\" head_role=\"',hRole,'\" tail_role=\"',tRole,'\" tail_nry=\"',tNry,'\" tail_nav=\"',tNav,'\" tail_adornment=\"',tAdorn,'\" tail_asset=\"',tAsset,'\" />\n');
+    end loop cs_loop;
+    close csCursor;
+    set done = 0;
+
+    open cgCursor;
+    cg_loop: loop
+      fetch cgCursor into cgName;
+      if done = 1
+      then
+         leave cg_loop;
+      end if;
+      set buf = concat(buf,'  <component_goal name=\"',cgName,'\" />\n');
+    end loop cg_loop;
+    close cgCursor;
+    set done = 0;
+
+    open cgaCursor;
+    cga_loop: loop
+      fetch cgaCursor into gName,refType,sgName;
+      if done = 1
+      then
+         leave cga_loop;
+      end if;
+      set buf = concat(buf,'  <component_goal_association goal_name=\"',gName,'\" ref_type=\"',refType,'\" subgoal_name=\"',sgName,'\" />\n');
+    end loop cga_loop;
+    close cgaCursor;
+    set done = 0;
+    set buf = concat(buf,'</component>\n\n');
+  end loop c_loop;
+  close compCursor;
+  set done = 0;
+
+  open connCursor;
+  conn_loop: loop
+    fetch connCursor into connName,fromComp,fromRole,fromInt,toComp,toRole,toInt,connAsset,connPro,connAr;
+    if done = 1
+    then
+       leave conn_loop;
+    end if;
+    set buf = concat(buf,'<connector name=\"',connName,'\" from_component=\"',fromComp,'\" from_role=\"',fromRole,'\" from_interface=\"',fromInt,'\" to_component=\"',toComp,'\" to_role=\"',toRole,'\" to_interface=\"',toInt,'\" protocol=\"',connPro,'\" access_right=\"',connAr,'\" asset_name=\"',connAsset,'\" />\n');
+  end loop conn_loop;
+  close connCursor;
+  set buf = concat(buf,'\n</architectural_pattern>');
+  select buf;
 end
 //
 

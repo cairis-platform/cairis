@@ -7633,6 +7633,22 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error exporting model to XML (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def architecturalPatternToXml(self,apName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call architecturalPatternToXml(%s)',[apName])
+      if (curs.rowcount == -1):
+        exceptionText = 'Error exporting architectural pattern ' + apName + ' to XML'
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      xmlBuf = row[0] 
+      curs.close()
+      return xmlBuf
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error exporting architectural pattern ' + apName + ' to XML (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
   def getTaskCharacteristics(self,constraintId = -1):
     try:
       curs = self.conn.cursor()
