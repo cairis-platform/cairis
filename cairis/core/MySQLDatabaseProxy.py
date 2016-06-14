@@ -9450,7 +9450,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
       for taParameters in cvAssets:
         self.updateTemplateAsset(taParameters)
-      for trParameters in cvAssets:
+      for trParameters in cvReqs:
         self.updateTemplateRequirement(trParameters)
       for comParameters in cvComs:
         self.addComponent(comParameters,cvId)
