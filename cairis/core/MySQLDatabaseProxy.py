@@ -39,6 +39,7 @@ from GoalParameters import GoalParameters
 from ObstacleParameters import ObstacleParameters
 from AssetParameters import AssetParameters
 from TemplateAssetParameters import TemplateAssetParameters
+from TemplateGoalParameters import TemplateGoalParameters
 from TemplateRequirementParameters import TemplateRequirementParameters
 from SecurityPatternParameters import SecurityPatternParameters
 from ThreatParameters import ThreatParameters
@@ -10491,7 +10492,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error obtaining template requirements'
         raise DatabaseProxyException(exceptionText) 
-      templateGoal = {}
+      templateGoals = {}
       tgRows = []
       for row in curs.fetchall():
         row = list(row)
@@ -10503,12 +10504,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
       for tgId,tgName,tgDef,tgRat in tgRows:
         tgConcerns = self.templateGoalConcerns(tgId)
-        tgResps = self.templateGoalResponsibilitis(tgId)
+        tgResps = self.templateGoalResponsibilities(tgId)
         parameters = TemplateGoalParameters(tgName,tgDef,tgRat,tgConcerns,tgResps)
         templateGoal = ObjectFactory.build(tgId,parameters)
         templateGoals[tgName] = templateGoal
       curs.close()
-      return templateGoal
+      return templateGoals
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting template goals (id:' + str(id) + ',message:' + msg + ')'

@@ -1,0 +1,35 @@
+{
+  "access_rights" : [
+      {"theName" : "trusted",
+       "theValue" : "10",
+       "theDescription" : "Subject needs to be trusted to access resource.",
+       "theRationale" : "Subject needs to be trusted to access resource."}
+  ],
+  "surface_type" : [
+      {"theName" : "JSON",
+       "theValue" : "10",
+       "theDescription" : "JavaScript Object Notation (JSON) representing data structures and algorithms.",
+       "theRationale" : "JavaScript Object Notation (JSON) representing data structures and algorithms."}
+  ],
+  "template_assets" : [
+    {"theName" : "Access Request",
+     "theShortCode" : "AC_REQ",
+     "theType" : "Information",
+     "theSurfaceType" : "JSON",
+     "theAccessRight" : "trusted",
+     "theDescription" : "Request for a resource",
+     "theSignificance" : "Request for a resource"}
+  ],
+  "template_goals" : [
+      {"theName" : "Qualified data use",
+       "theDefinition" : "The platform shall protect user privacy: access requestors shall be able to qualify how they will use the data they are requesting, and users shall be able to express constraints about data disclosure.",
+       "theRationale" : "None",
+       "theConcerns" : ["Access Request"],
+       "theResponsibilities" : []},
+      {"theName" : "Usage Request",
+       "theDefinition" : "Access requestors shall specify how they will use the data they are requesting.",
+       "theRationale" : "Application data",
+       "theConcerns" : [],
+       "theResponsibilities" : []}
+  ]
+}

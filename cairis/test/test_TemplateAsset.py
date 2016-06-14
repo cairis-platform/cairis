@@ -41,10 +41,7 @@ class TemplateAsset(unittest.TestCase):
     b.dbProxy.addValueType(ist1)
     self.iTemplateAssets = d['template_assets']
 
-
-    
-
-  def testRole(self):
+  def testTemplateAsset(self):
     spValues = [(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None')]
     iTap = TemplateAssetParameters(self.iTemplateAssets[0]["theName"], self.iTemplateAssets[0]["theShortCode"], self.iTemplateAssets[0]["theDescription"], self.iTemplateAssets[0]["theSignificance"],self.iTemplateAssets[0]["theType"],self.iTemplateAssets[0]["theSurfaceType"],self.iTemplateAssets[0]["theAccessRight"],spValues,[],[])
     b = Borg()

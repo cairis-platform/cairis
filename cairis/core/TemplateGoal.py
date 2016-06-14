@@ -26,7 +26,7 @@ class TemplateGoal:
 
   def id(self): return self.theId
   def name(self): return self.theName
-  def description(self): return self.theDefinition
+  def definition(self): return self.theDefinition
   def rationale(self): return self.theRationale
   def concerns(self): return self.theConcerns
   def responsibilities(self): return self.theResponsibilities

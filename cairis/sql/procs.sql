@@ -19826,14 +19826,14 @@ end
 
 create procedure templateGoalConcerns(in tgId int)
 begin
-  select ta.name from template_goal_concern tgc, template_asset ta where tgc.goal_id = tgId and tgc.template_asset_id = ta.id;
+  select ta.name from template_goal_concern tgc, template_asset ta where tgc.template_goal_id = tgId and tgc.template_asset_id = ta.id;
 end
 //
 
 create procedure deleteTemplateGoalComponents(in goalId int)
 begin
-  delete from template_goal_concern where goal_id = goalId;
-  delete from template_goal_responsibility where goal_id = goalId;
+  delete from template_goal_concern where template_goal_id = goalId;
+  delete from template_goal_responsibility where template_goal_id = goalId;
 end
 //
 
@@ -19970,7 +19970,7 @@ end
 
 create procedure templateGoalResponsibilities(in tgId int)
 begin
-  select r.name from template_goal_responsibility tgr, role where tgr.goal_id = tgId and tgr.role_id = r.id;
+  select r.name from template_goal_responsibility tgr, role r where tgr.template_goal_id = tgId and tgr.role_id = r.id;
 end
 //
 
