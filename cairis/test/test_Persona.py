@@ -132,6 +132,16 @@ class PersonaTest(unittest.TestCase):
     self.assertEqual(self.iPersonaCharacteristics[0]["warrant"],opc1.warrant()[0][0])
     self.assertEqual(self.iPersonaCharacteristics[0]["rebuttal"],opc1.rebuttal()[0][0])
 
+    ipp2 = PersonaParameters('Changed name',self.iPersonas[0]["theActivities"],self.iPersonas[0]["theAttitudes"],self.iPersonas[0]["theAptitudes"],self.iPersonas[0]["theMotivations"],self.iPersonas[0]["theSkills"],self.iPersonas[0]["theIntrinsic"],self.iPersonas[0]["theContextual"],"","0",self.iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(self.iPersonas[0]["theEnvironmentProperties"][0]["theName"],(self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
+
+    ipp2.setId(op.id())
+    b.dbProxy.updatePersona(ipp2) 
+    theUpdatedPersonas = b.dbProxy.getPersonas()
+    op2 = theUpdatedPersonas['Changed name']
+    self.assertEqual(ipp2.name(),op2.name())
+
+
+
     b.dbProxy.deletePersonaCharacteristic(opc1.id())
 
     b.dbProxy.deleteDocumentReference(odr1.id())
