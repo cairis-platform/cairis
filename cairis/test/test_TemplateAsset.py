@@ -24,7 +24,7 @@ from cairis.core.Borg import Borg
 from cairis.core.TemplateAssetParameters import TemplateAssetParameters
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 
-class TemplateAsset(unittest.TestCase):
+class TemplateAssetTest(unittest.TestCase):
 
   def setUp(self):
     call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
