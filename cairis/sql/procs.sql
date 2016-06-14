@@ -18492,8 +18492,8 @@ begin
   if cvId = -1
   then
     delete from component_view_component;
-    delete from component;
     delete from connector;
+    delete from component;
     delete from component_view;
   else
 
@@ -18546,6 +18546,9 @@ begin
   declare componentCursor cursor for select component_id from component_view_component where component_view_id = cvId;
   declare continue handler for not found set done = 1;
 
+  delete from connector where component_view_id = cvId;
+  delete from component_view_component where component_view_id = cvId;
+
   open componentCursor;
   component_loop: loop
     fetch componentCursor into cId;
@@ -18558,8 +18561,6 @@ begin
   end loop component_loop;
   close componentCursor;
 
-  delete from component_view_component where component_view_id = cvId;
-  delete from connector where component_view_id = cvId;
 end
 //
 
