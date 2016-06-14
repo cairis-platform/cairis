@@ -10036,6 +10036,7 @@ begin
     delete from template_asset_tag;
     delete from template_asset;
   else
+    call delete_template_asset_properties(assetId);
     delete from template_asset_interface where template_asset_id = assetId;
     delete from securitypattern_asset_template_asset where template_asset_id = assetId;
     delete from component_asset_template_asset where template_asset_id = assetId;
@@ -18289,7 +18290,7 @@ end
 
 create procedure delete_template_asset_properties(in assetId int)
 begin
-  delete from template_asset_property where asset_id = assetId;
+  delete from template_asset_property where template_asset_id = assetId;
 end
 //
 

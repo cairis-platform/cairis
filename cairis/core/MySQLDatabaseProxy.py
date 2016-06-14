@@ -1009,7 +1009,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
     except _mysql_exceptions.IntegrityError, e:
       id,msg = e
-      exceptionText = 'Cannot remove ' + tableName + ' due to dependent data.  Check the environment model for further information  (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'Cannot remove ' + tableName + ' due to dependent data (id:' + str(id) + ',message:' + msg + ').'
       raise IntegrityException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
