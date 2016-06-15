@@ -107,6 +107,14 @@ class ThreatTest(unittest.TestCase):
     self.assertEqual(str(iteps[0].attackers()[0]), str(oteps[0].attackers()[0]))
     self.assertEqual(str(iteps[0].rationale()[0]), str(oteps[0].rationale()[0]))
 
+    itps.theName = 'Updated threat'
+    itps.setId(o.id())
+    b.dbProxy.updateThreat(itps)
+    oThreats = b.dbProxy.getThreats()
+    o = oThreats['Updated threat']
+    self.assertEqual(o.name(),'Updated threat')
+
+
     b.dbProxy.deleteThreat(o.id())
   
   def tearDown(self):

@@ -87,6 +87,14 @@ class AttackerTest(unittest.TestCase):
     self.assertEqual(str(iatkeps[0].capabilities()[0][0]), str(oatkeps[0].capabilities()[0][0]))
     self.assertEqual(str(iatkeps[0].capabilities()[0][1]), str(oatkeps[0].capabilities()[0][1]))
 
+    iatk.theName = 'Updated name'
+    iatk.setId(o.id())
+    b.dbProxy.updateAttacker(iatk)
+    oAttackers = b.dbProxy.getAttackers()
+    o = oAttackers["Updated name"]
+    self.assertEqual(o.name(),'Updated name')
+
+
     b.dbProxy.deleteAttacker(o.id())
   
   def tearDown(self):
