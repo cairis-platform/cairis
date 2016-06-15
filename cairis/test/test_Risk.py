@@ -127,6 +127,19 @@ class RiskTest(unittest.TestCase):
     self.assertEqual(irp.threat(),o.threat())
     self.assertEqual(irp.vulnerability(),o.vulnerability())
 
+    imcp.theName = 'Updated risk'
+    imcp.theId = o.misuseCase().id()
+    irp.theRiskName = 'Updated risk'
+    irp.theMisuseCase = imcp
+
+    irp.setId(o.id())
+    b.dbProxy.updateRisk(irp)
+    oRisks = b.dbProxy.getRisks()
+    o = oRisks['Updated risk']
+    self.assertEqual(o.name(),'Updated risk')
+    self.assertEqual(irp.threat(),o.threat())
+    self.assertEqual(irp.vulnerability(),o.vulnerability())
+    
     b.dbProxy.deleteRisk(o.id())
   
   def tearDown(self):
