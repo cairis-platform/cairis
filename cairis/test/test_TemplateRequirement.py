@@ -64,6 +64,14 @@ class TemplateRequirementTest(unittest.TestCase):
     self.assertEqual(iTar.rationale(), oTar.rationale())
     self.assertEqual(iTar.fitCriterion(), oTar.fitCriterion())
 
+    iTar.theName = 'Updated name'
+    iTar.setId(oTar.id())
+    b.dbProxy.updateTemplateRequirement(iTar)
+    oTars = b.dbProxy.getTemplateRequirements()
+    oTar = oTars['Updated name']
+    self.assertEqual(oTar.name(),'Updated name')
+
+
     b.dbProxy.deleteTemplateRequirement(oTar.id())
   
   def tearDown(self):
