@@ -1,0 +1,73 @@
+{ "roles" : [
+   {"theName" : "Researcher",
+    "theType" : "Stakeholder",
+    "theShortCode" : "RCHR",
+    "theDescription" : "Uses and supplies data to NeuroGrid"
+    }
+  ],
+  "environments" : [
+   {"theName" : "Psychosis",
+    "theShortCode" : "PSY",
+    "theDescription" : "The exemplar aims to integrate large existing datasets of serial MRI scans and behaviour data coupled to the NeuroGrid image analysis service into a Grid-based database, test image normalisation techniques, and develop a general ontology for a psychosis databas, for use in multi-centre studies. The exemplar tests capabilities of NeuroGrid to deal with restrospective data, assimilate material into databases, and use of the toolkit for normalisation and analysis."}
+  ],
+  "personas" : [
+    {"theName" : "Claire",
+     "theActivities" : "Claire is a clinical researcher within the Psychosis exemplar.  She is responsible for a group which is developing and testing processing pipelines for harmonising MRI images from different centres. Claire authorises requests that other members of her group make for accessing NeuroGrid, and is officially responsible for making sure her colleagues aren't misusing their access.  In practice, however, she delegates much of her responsibility to one of her more security-knowledgeable colleagues.",
+     "theAttitudes" : "Claire feels that NeuroGrid has a lot to offer her research but, right now, its hard to see the benefits for the usability problems she faces. Although Claire appreciates the importance of security and the confidentialty of her research subjects, authorising colleague requests for data access and liasing with the infrastructure team is a time consuming process which isn't helping her get any research done. Claire is also perplexed at why security could cause simple workflows take such a long time to run, but she also remembers how long it used to take to get data before NeuroGrid so she can live with the performance issues.",
+     "theAptitudes" : "Claire and her colleagues follow a set of processes and guidelines when working with data uploaded to NeuroGrid. Because obtaining data is an expensive business, Claire also tries to reuse data and analysis as much as possible, and as far as her ethics clearance allows.",
+     "theMotivations" : "Besides her research, Claire's primary security concerns are centered around the datasets she maintains, and making sure her colleagues and collaborators can access the data they need.",
+     "theSkills" : "Nothing stipulated",
+     "theIntrinsic" : "None",
+     "theContextual" : "None",
+     "thePersonaType" : "Primary",
+     "theEnvironmentProperties" : [
+       {"theName" : "Psychosis",
+        "theDirectFlag" : "False",
+        "theRole" : ["Researcher"],
+        "theNarrative" : "Nothing stipulated"
+      }
+     ]
+   }
+  ],
+  "assets" : [
+    {
+     "theName" : "Clinical Data",
+     "theShortCode" : "CD",
+     "theDescription" : "None",
+     "theSignificance" : "Unanonymised and in the wrong hands, this data can be very damaging.",
+     "theType" : "Information",
+     "theEnvironmentProperties" :
+      [
+        ["Psychosis",
+         [3,0,2,0,0,0,0,0],
+         ["Researchers very worried about the disclosure of partially anonymised patient data.","None","Availability of NeuroGrid is quite important, but prepared to sacrifice this if doing so safeguards clinical data.","None","None","None","None","None"]
+        ]
+      ]
+    }
+  ],
+  "tasks" : [ 
+     {"theName" : "Upload data",
+      "theShortCode" : "UD", 
+      "theObjective" : "Upload data",
+      "theAuthor" : "Shamal Faily",
+      "isAssumption" : "0",
+      "theTaskTags" : ["tagone","tagtwo"],
+       "theEnvironments" : [
+         {"theName" : "Psychosis",
+          "theDependencies" : "Claire's workstation is properly set-up to access the NeuroGrid portal.  Claire has permission to upload data",
+          "theTaskPersonas" : [
+            {"thePersona" : "Claire",
+             "theDuration" : "Medium",
+             "theFrequency" : "Medium",
+             "theDemands" : "Low",
+             "theGoalConflict" : "Medium"}
+          ],
+          "theTaskAssets" : ["Clinical Data"],
+          "theNarrative" : "Claire wants to analyse a data set, in relation to other data sets on NeuroGrid.  She anonymises her data to the extent that as much personalised data is removed as possible, but not to the extent that her analysis software will fail.  She then uploads this data, tagging this as available only to members of her exemplar.",
+          "theConsequences" : "None",
+          "theBenefits" : "None"
+         }]
+        }
+      
+  ]
+}
