@@ -1,0 +1,9 @@
+{
+  "domain_properties" : [
+    {"theName" : "Secure data analysis",
+     "theType" : "Hypothesis",
+     "theOriginator" : "Shamal Faily",
+     "theDefinition" : "We assume that the process of analysing data once it has been uploaded to NeuroGrid is secure."
+    }
+  ]
+}
