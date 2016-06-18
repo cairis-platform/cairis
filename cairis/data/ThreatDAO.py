@@ -64,7 +64,7 @@ class ThreatDAO(CairisDAO):
     def get_threats(self, constraint_id=-1, simplify=True):
         try:
             threats = self.db_proxy.getThreats(constraint_id)
-        except ARM.DatabaseProxyException as ex:
+        except DatabaseProxyException as ex:
             self.close()
             raise ARMHTTPError(ex)
 
@@ -78,7 +78,7 @@ class ThreatDAO(CairisDAO):
         found_threat = None
         try:
             threats = self.db_proxy.getThreats()
-        except ARM.DatabaseProxyException as ex:
+        except DatabaseProxyException as ex:
             self.close()
             raise ARMHTTPError(ex)
 
@@ -101,7 +101,7 @@ class ThreatDAO(CairisDAO):
         found_threat = None
         try:
             threats = self.db_proxy.getThreats()
-        except ARM.DatabaseProxyException as ex:
+        except DatabaseProxyException as ex:
             self.close()
             raise ARMHTTPError(ex)
 
@@ -132,10 +132,10 @@ class ThreatDAO(CairisDAO):
                 return new_id
             else:
                 raise OverwriteNotAllowedHTTPError(obj_name=threat.theThreatName)
-        except ARM.DatabaseProxyException as ex:
+        except DatabaseProxyException as ex:
             self.close()
             raise ARMHTTPError(ex)
-        except ARM.ARMException as ex:
+        except ARMException as ex:
             self.close()
             raise ARMHTTPError(ex)
 
@@ -160,10 +160,10 @@ class ThreatDAO(CairisDAO):
         try:
             if self.check_existing_threat(name):
                 self.db_proxy.updateThreat(threat_params)
-        except ARM.DatabaseProxyException as ex:
+        except DatabaseProxyException as ex:
             self.close()
             raise ARMHTTPError(ex)
-        except ARM.ARMException as ex:
+        except ARMException as ex:
             self.close()
             raise ARMHTTPError(ex)
 
@@ -180,10 +180,10 @@ class ThreatDAO(CairisDAO):
 
         try:
             self.db_proxy.deleteThreat(threat_id)
-        except ARM.DatabaseProxyException as ex:
+        except DatabaseProxyException as ex:
             self.close()
             raise ARMHTTPError(ex)
-        except ARM.ARMException as ex:
+        except ARMException as ex:
             self.close()
             raise ARMHTTPError(ex)
 
@@ -191,10 +191,10 @@ class ThreatDAO(CairisDAO):
         try:
             threat_types = self.db_proxy.getValueTypes('threat_type', environment_name)
             return threat_types
-        except ARM.DatabaseProxyException as ex:
+        except DatabaseProxyException as ex:
             self.close()
             raise ARMHTTPError(ex)
-        except ARM.ARMException as ex:
+        except ARMException as ex:
             self.close()
             raise ARMHTTPError(ex)
 
@@ -237,10 +237,10 @@ class ThreatDAO(CairisDAO):
 
         try:
             return self.db_proxy.addValueType(params)
-        except ARM.DatabaseProxyException as ex:
+        except DatabaseProxyException as ex:
             self.close()
             raise ARMHTTPError(ex)
-        except ARM.ARMException as ex:
+        except ARMException as ex:
             self.close()
             raise ARMHTTPError(ex)
 
@@ -261,10 +261,10 @@ class ThreatDAO(CairisDAO):
 
         try:
             self.db_proxy.updateValueType(params)
-        except ARM.DatabaseProxyException as ex:
+        except DatabaseProxyException as ex:
             self.close()
             raise ARMHTTPError(ex)
-        except ARM.ARMException as ex:
+        except ARMException as ex:
             self.close()
             raise ARMHTTPError(ex)
 
@@ -273,10 +273,10 @@ class ThreatDAO(CairisDAO):
 
         try:
             self.db_proxy.deleteThreatType(found_type.theId)
-        except ARM.DatabaseProxyException as ex:
+        except DatabaseProxyException as ex:
             self.close()
             raise ARMHTTPError(ex)
-        except ARM.ARMException as ex:
+        except ARMException as ex:
             self.close()
             raise ARMHTTPError(ex)
 
@@ -284,7 +284,7 @@ class ThreatDAO(CairisDAO):
         try:
             self.db_proxy.nameCheck(name, 'threat')
             return False
-        except ARM.ARMException as ex:
+        except ARMException as ex:
             if str(ex.value).find('already exists') > -1:
                 return True
             self.close()
