@@ -22,7 +22,16 @@ import DatabaseProxyFactory
 from ARM import ARMException
 from string import strip
 
-def parseConfigFile(cfgFileName):
+def parseConfigFile():
+  b = Borg()
+  cfgFileName = ''
+  try:
+    cfgFileName = os.environ['CAIRIS_CFG']
+  except KeyError:
+    raise ARMException('CAIRIS_CFG environment variable has not been set.  Please set this to the correct location of your CAIRIS configuration file, e.g. export CAIRIS_CFG=/home/cairisuser/cairis.cnf') 
+
+  if not os.path.exists(cfgFileName):
+    raise ARMException('Unable to locate configuration file at the following location:' + cfgFileName)
   cfgDict = {}
   cfgFile = open(cfgFileName)
   for cfgLine in cfgFile.readlines():
@@ -34,19 +43,8 @@ def parseConfigFile(cfgFileName):
   cfgFile.close()
   return cfgDict
 
-def initialiseCairisDb():
+def initialiseCairisDb(cfgDict):
   b = Borg()
-  b.logger = logging.getLogger('cairis')
-  cfgFileName = ''
-  try:
-    cfgFileName = os.environ['CAIRIS_CFG']
-  except KeyError:
-    raise ARMException('CAIRIS_CFG environment variable has not been set.  Please set this to the correct location of your CAIRIS configuration file, e.g. export CAIRIS_CFG=/home/cairisuser/cairis.cnf') 
-
-  if not os.path.exists(cfgFileName):
-    raise ARMException('Unable to locate configuration file at the following location:' + cfgFileName)
-
-  cfgDict = parseConfigFile(cfgFileName)
   b.dbHost = cfgDict['dbhost']
   b.dbPort = int(cfgDict['dbport'])
   b.dbUser = cfgDict['dbuser']
@@ -68,6 +66,7 @@ def setupDocBookConfig():
 
 def initialiseDesktopSettings():
   b = Borg()
+  b.logger = logging.getLogger('cairis_gui')
   pSettings = b.dbProxy.getProjectSettings()
   b.fontSize = pSettings['Font Size']
   b.apFontSize = pSettings['AP Font Size']
@@ -75,7 +74,8 @@ def initialiseDesktopSettings():
   b.mainFrame = None
 
 def initialise():
-  initialiseCairisDb()
+  cfgDict = parseConfigFile()
+  initialiseCairisDb(cfgDict)
   initialiseDesktopSettings()
 
   b = Borg()
