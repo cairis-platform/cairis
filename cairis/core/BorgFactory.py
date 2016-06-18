@@ -22,10 +22,21 @@ import DatabaseProxyFactory
 from ARM import ARMException
 from string import strip
 
-def initialise():
+def parseConfigFile(cfgFileName):
+  cfgDict = {}
+  cfgFile = open(cfgFileName)
+  for cfgLine in cfgFile.readlines():
+    cfgTuple = cfgLine.split('=')
+    if len(cfgTuple) != 2:
+      pass
+    else:
+      cfgDict[strip(cfgTuple[0])] = strip(cfgTuple[1])
+  cfgFile.close()
+  return cfgDict
+
+def initialiseCairisDb():
   b = Borg()
   b.logger = logging.getLogger('cairis')
-  
   cfgFileName = ''
   try:
     cfgFileName = os.environ['CAIRIS_CFG']
@@ -35,47 +46,41 @@ def initialise():
   if not os.path.exists(cfgFileName):
     raise ARMException('Unable to locate configuration file at the following location:' + cfgFileName)
 
-  cfgFile = open(cfgFileName)
-  for cfgLine in cfgFile.readlines():
-    cfgTuple = cfgLine.split('=')
-    if len(cfgTuple) != 2:
-      pass
-    else:
-      cfgKey = strip(cfgTuple[0])
-      cfgVal = strip(cfgTuple[1])
-      if cfgKey == 'dbhost':
-        b.dbHost = cfgVal
-      elif cfgKey == 'dbport':
-        b.dbPort = int(cfgVal)
-      elif cfgKey == 'dbuser':
-        b.dbUser = cfgVal
-      elif cfgKey == 'dbpasswd':
-        b.dbPasswd = cfgVal
-      elif cfgKey == 'dbname':
-        b.dbName = cfgVal
-      elif cfgKey == 'tmp_dir': 
-        b.tmpDir = cfgVal
-      elif cfgKey == 'root': 
-        b.cairisRoot = cfgVal
-      elif cfgKey == 'default_image_dir': 
-        b.imageDir = os.path.abspath(cfgVal)
-  cfgFile.close()
-
+  cfgDict = parseConfigFile(cfgFileName)
+  b.dbHost = cfgDict['dbhost']
+  b.dbPort = int(cfgDict['dbport'])
+  b.dbUser = cfgDict['dbuser']
+  b.dbPasswd = cfgDict['dbpasswd']
+  b.dbName = cfgDict['dbname']
+  b.tmpDir = cfgDict['tmp_dir']
+  b.cairisRoot = cfgDict['root']
+  b.imageDir = os.path.abspath(cfgDict['default_image_dir'])
   b.dbProxy = DatabaseProxyFactory.build()
 
-  pSettings = b.dbProxy.getProjectSettings()
-  b.fontSize = pSettings['Font Size']
-  b.apFontSize = pSettings['AP Font Size']
-  b.fontName = pSettings['Font Name']
 
-  b.imageDir = b.cairisRoot + '/images' 
-  b.configDir = b.cairisRoot + '/config'
-  b.exampleDir = os.path.join(b.cairisRoot, 'examples')
-
+def setupDocBookConfig():
+  b = Borg()
   b.docBookDir = 'http://www.docbook.org/sgml/4.5'
   if os.path.exists('/usr/share/sgml/docbook/dtd/4.5'):
     b.docBookDir = '/usr/share/sgml/docbook/dtd/4.5'
   else:
     b.logger.warning('Unable to find DocBook schemes. Check if DocBook is correctly installed.')
 
+def initialiseDesktopSettings():
+  b = Borg()
+  pSettings = b.dbProxy.getProjectSettings()
+  b.fontSize = pSettings['Font Size']
+  b.apFontSize = pSettings['AP Font Size']
+  b.fontName = pSettings['Font Name']
   b.mainFrame = None
+
+def initialise():
+  initialiseCairisDb()
+  initialiseDesktopSettings()
+
+  b = Borg()
+  b.imageDir = b.cairisRoot + '/images' 
+  b.configDir = b.cairisRoot + '/config'
+
+  setupDocBookConfig()
+

@@ -246,10 +246,8 @@ def buildTable(tableId, tableTitle, colNames,colData,linkInd = 1):
   return txt
 
 
-def bookHeader(specName,contributors,revisions):
+def bookHeader(specName,contributors,revisions,logoFile = 'logo.jpg',logoFormat = 'JPG'):
   b = Borg()
-  logoFile = os.path.join(b.exampleDir, 'logo.jpg')
-  logoFormat = 'JPG'
   headerText = '''<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook 4.1//EN" "'''+b.docBookDir+"""/docbookx.dtd" >
 <book>
