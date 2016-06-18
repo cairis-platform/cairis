@@ -65,7 +65,6 @@ def setupDocBookConfig():
 
 def initialiseDesktopSettings():
   b = Borg()
-  b.logger = logging.getLogger('cairis_gui')
   pSettings = b.dbProxy.getProjectSettings()
   b.fontSize = pSettings['Font Size']
   b.apFontSize = pSettings['AP Font Size']
@@ -77,6 +76,7 @@ def initialise():
   initialiseCairisDbSettings(cfgDict)
 
   b = Borg()
+  b.logger = logging.getLogger('cairis_gui')
   b.imageDir = b.cairisRoot + '/images' 
   b.configDir = b.cairisRoot + '/config'
   setupDocBookConfig()
