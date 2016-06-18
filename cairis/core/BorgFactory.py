@@ -43,7 +43,7 @@ def parseConfigFile():
   cfgFile.close()
   return cfgDict
 
-def initialiseCairisDb(cfgDict):
+def initialiseCairisDbSettings(cfgDict):
   b = Borg()
   b.dbHost = cfgDict['dbhost']
   b.dbPort = int(cfgDict['dbport'])
@@ -53,7 +53,6 @@ def initialiseCairisDb(cfgDict):
   b.tmpDir = cfgDict['tmp_dir']
   b.cairisRoot = cfgDict['root']
   b.imageDir = os.path.abspath(cfgDict['default_image_dir'])
-  b.dbProxy = DatabaseProxyFactory.build()
 
 
 def setupDocBookConfig():
@@ -75,12 +74,12 @@ def initialiseDesktopSettings():
 
 def initialise():
   cfgDict = parseConfigFile()
-  initialiseCairisDb(cfgDict)
-  initialiseDesktopSettings()
+  initialiseCairisDbSettings(cfgDict)
 
   b = Borg()
   b.imageDir = b.cairisRoot + '/images' 
   b.configDir = b.cairisRoot + '/config'
-
   setupDocBookConfig()
 
+  b.dbProxy = DatabaseProxyFactory.build()
+  initialiseDesktopSettings()
