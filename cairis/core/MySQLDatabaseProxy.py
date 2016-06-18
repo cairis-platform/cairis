@@ -8789,17 +8789,35 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL selecting interim redmine goals (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def clearDatabase(self):
+  def clearDatabase(self,session_id = None):
     b = Borg()
-    b.dbProxy.close()
+    if b.runmode == 'desktop':
+      db_proxy = b.dbProxy
+      host = b.dbHost
+      port = b.dbPort
+      user = b.dbUser
+      passwd = b.dbPasswd
+      db = b.dbName
+    elif b.runmode == 'web':
+      ses_settings = b.get_settings(session_id)
+      db_proxy = ses_settings['dbProxy']
+      host = ses_settings['dbHost']
+      port = ses_settings['dbPort']
+      user = ses_settings['dbUser']
+      passwd = ses_settings['dbPasswd']
+      db = ses_settings['dbName']
+    else:
+      raise RuntimeError('Run mode not recognized')
+    db_proxy.close()
     srcDir = b.cairisRoot + '/sql'
     initSql = srcDir + '/init.sql'
     procsSql = srcDir + '/procs.sql'
-    cmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + initSql
+    cmd = '/usr/bin/mysql -h ' + host + ' --port=' + str(port) + ' -u ' + user + ' --password=\'' + passwd + '\'' + ' --database ' + db + ' < ' + initSql
     os.system(cmd)
-    cmd = '/usr/bin/mysql -h ' + b.dbHost + ' -u ' + b.dbUser + ' --password=\'' + b.dbPasswd + '\'' + ' --database ' + b.dbName + ' < ' + procsSql
+    cmd = '/usr/bin/mysql -h ' + host + ' --port=' + str(port) + ' -u ' + user + ' --password=\'' + passwd + '\'' + ' --database ' + db + ' < ' + procsSql
     os.system(cmd)
-    b.dbProxy.reconnect(False)
+    db_proxy.reconnect(False, session_id)
+
 
   def conceptMapModel(self,envName,reqName = ''):
     try:

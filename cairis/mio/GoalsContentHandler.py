@@ -56,9 +56,9 @@ def u2s(aStr):
   return outStr
   
 class GoalsContentHandler(ContentHandler,EntityResolver):
-  def __init__(self):
+  def __init__(self,session_id = None):
     b = Borg()
-    self.dbProxy = b.dbProxy
+    self.dbProxy = b.get_dbproxy(session_id)
     self.configDir = b.configDir
     self.theDomainProperties = []
     self.theGoals = []

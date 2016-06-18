@@ -30,10 +30,10 @@ from cairis.data.CairisDAO import CairisDAO
 from cairis.data.EnvironmentDAO import EnvironmentDAO
 from cairis.data.VulnerabilityDAO import VulnerabilityDAO
 from cairis.data.ThreatDAO import ThreatDAO
-
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import AssetEnvironmentPropertiesModel, SecurityAttribute, AssetModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
+from cairis.misc.AssetModel import AssetModel as GraphicalAssetModel
 
 __author__ = 'Robin Quetin'
 
@@ -319,7 +319,7 @@ class AssetDAO(CairisDAO):
         fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
         try:
             associationDictionary = self.db_proxy.classModel(environment_name, hideConcerns=(with_concerns is False))
-            associations = AssetModel(associationDictionary.values(), environment_name, db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize)
+            associations = GraphicalAssetModel(associationDictionary.values(), environment_name, db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize)
             dot_code = associations.graph()
             return dot_code
         except DatabaseProxyException as ex:

@@ -19,7 +19,6 @@
 import argparse
 import os
 import sys
-import cairis.core.ARM
 
 def main(args=None):
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Import')
@@ -42,54 +41,54 @@ def main(args=None):
 def file_import(importFile,mFormat,overwriteFlag,session_id = None):
   if overwriteFlag == None:
     overwriteFlag = 1
-  from cairis.core.ARM import *
 
   if (os.access(importFile, os.R_OK)) == False:
     raise ARMException("Cannot access " + importFile)
 
-  from cairis.mio.ModelImport import *
-   
+  from cairis.mio.ModelImport import importSecurityPatterns, importAttackPattern,importTVTypeFile,importDirectoryFile,importRequirementsFile, importRiskAnalysisFile, importUsabilityFile, importAssociationsFile, importProjectFile, importDomainValuesFile, importComponentViewFile, importSynopsesFile,importProcessesFile,importAssetsFile,importLocationsFile,importModelFile 
+
   msgStr = ''
   if (mFormat == 'securitypattern' or mFormat == 'Security Pattern'):
-    msgStr += importSecurityPatterns(importFile)
+    msgStr += importSecurityPatterns(importFile,session_id = session_id)
   if (mFormat == 'attackpattern' or mFormat == 'Attack Pattern'):
-    msgStr += importAttackPattern(importFile)
+    msgStr += importAttackPattern(importFile,session_id)
   elif (mFormat == 'tvtypes' or mFormat == 'Threat and Vulnerability Types'):
-    msgStr += importTVTypeFile(importFile,int(overwriteFlag))
+    msgStr += importTVTypeFile(importFile,int(overwriteFlag),session_id)
   elif (mFormat == 'directory' or mFormat == 'Threat and Vulnerability Directory'):
-    msgStr += importDirectoryFile(importFile,int(overwriteFlag))
+    msgStr += importDirectoryFile(importFile,int(overwriteFlag),session_id)
   elif (mFormat == 'requirements' or mFormat == 'Requirements'):
-    msgStr += importRequirementsFile(importFile)
+    msgStr += importRequirementsFile(importFile,session_id)
   elif (mFormat == 'riskanalysis' or mFormat == 'Risk Analysis'):
-    msgStr += importRiskAnalysisFile(importFile)
+    msgStr += importRiskAnalysisFile(importFile,session_id)
   elif (mFormat == 'usability' or mFormat == 'Usability'):
-    msgStr += importUsabilityFile(importFile)
+    msgStr += importUsabilityFile(importFile,session_id)
   elif (mFormat == 'associations' or mFormat == 'Associations'):
-    msgStr += importAssociationsFile(importFile)
+    msgStr += importAssociationsFile(importFile,session_id)
   elif (mFormat == 'project' or mFormat == 'Project data'):
-    msgStr += importProjectFile(importFile)
+    msgStr += importProjectFile(importFile,session_id)
   elif (mFormat == 'domainvalues' or mFormat == 'Domain Values'):
-    msgStr += importDomainValuesFile(importFile)
+    msgStr += importDomainValuesFile(importFile,session_id)
   elif (mFormat == 'architecturalpattern' or mFormat == 'Architectural Pattern'):
-    msgStr += importComponentViewFile(importFile)
+    msgStr += importComponentViewFile(importFile,session_id)
   elif (mFormat == 'synopses' or mFormat == 'Synopses'):
-    msgStr += importSynopsesFile(importFile)
+    msgStr += importSynopsesFile(importFile,session_id)
   elif (mFormat == 'processes' or mFormat == 'Processes'):
-    msgStr += importProcessesFile(importFile)
+    msgStr += importProcessesFile(importFile,session_id)
   elif (mFormat == 'assets' or mFormat == 'Assets'):
-    msgStr += importAssetsFile(importFile)
+    msgStr += importAssetsFile(importFile,session_id)
   elif (mFormat == 'locations' or mFormat == 'Locations'):
-    msgStr += importLocationsFile(importFile)
+    msgStr += importLocationsFile(importFile,session_id)
   elif (mFormat == 'all' or mFormat == 'Model'):
-    msgStr += importModelFile(importFile,int(overwriteFlag))
+    msgStr += importModelFile(importFile,int(overwriteFlag),session_id)
   else:
     raise ARMException('Input model type ' + mFormat + ' not recognised')
 
 if __name__ == '__main__':
   try:
+    from cairis.core.ARM import ARMException
     main()
-  except ImportError:
-    print "Fatal CAIRIS error: Could not import the Python dependencies needed by CAIRIS.  Either your Python installation is incomplete, or - if you have downloaded CAIRIS directly from github - PYTHONPATH needs to be set to the root directly of your source installation; this is the same directory that setup.py can be found in."
+  except ImportError, e:
+    print "Fatal CAIRIS error: " + str(e)
     sys.exit(-1)
   except ARMException, e:
     print 'Fatal cimport error: ' + str(e)

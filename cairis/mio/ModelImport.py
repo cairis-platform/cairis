@@ -35,7 +35,7 @@ from cairis.core.Borg import Borg
 import xml.sax
 from cairis.core.ARM import *
 
-def importSecurityPatterns(importFile):
+def importSecurityPatterns(importFile,session_id=None):
   try:
     parser = xml.sax.make_parser()
     handler = SecurityPatternContentHandler()
@@ -48,33 +48,34 @@ def importSecurityPatterns(importFile):
     noOfSpps = len(spps)
 
     b = Borg()
+    db_proxy = b.get_dbproxy(session_id)
 
     msgStr = 'No patterns imported'
     if (noOfTaps > 0):
       tapId = 0;
-      b.dbProxy.deleteSecurityPattern(-1)
-      b.dbProxy.deleteTemplateAsset(-1)
+      db_proxy.deleteSecurityPattern(-1)
+      db_proxy.deleteTemplateAsset(-1)
       for tap in taps:
         tap.setId(tapId)
-        b.dbProxy.addTemplateAsset(tap)
+        db_proxy.addTemplateAsset(tap)
         tapId += 1
 
       if (noOfSpps > 0):
         spId = 0;
-        b.dbProxy.deleteSecurityPattern(-1)
+        db_proxy.deleteSecurityPattern(-1)
         for sp in spps:
           sp.setId(spId)
-          b.dbProxy.addSecurityPattern(sp)
+          db_proxy.addSecurityPattern(sp)
           spId += 1
         msgStr =  'Imported ' + str(noOfTaps) + ' template assets and ' + str(noOfSpps) + ' security patterns'
     return msgStr
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importAttackPattern(importFile):
+def importAttackPattern(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
-    handler = AttackPatternContentHandler()
+    handler = AttackPatternContentHandler(session_id = session_id)
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
@@ -90,7 +91,7 @@ def importAttackPattern(importFile):
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importTVTypeFile(importFile,isOverwrite=1):
+def importTVTypeFile(importFile,isOverwrite=1,session_id = None):
   try:
     parser = xml.sax.make_parser()
     handler = TVTypeContentHandler()
@@ -98,28 +99,29 @@ def importTVTypeFile(importFile,isOverwrite=1):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     vulTypes,threatTypes = handler.types()
-    return importTVTypes(vulTypes,threatTypes,isOverwrite)
+    return importTVTypes(vulTypes,threatTypes,isOverwrite,session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
  
-def importTVTypes(vulTypes,threatTypes,isOverwrite):
+def importTVTypes(vulTypes,threatTypes,isOverwrite,session_id = None):
   b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
   noOfVts = len(vulTypes)
   noOfTts = len(threatTypes)
   if (noOfVts > 0):
     if (isOverwrite):
-      b.dbProxy.deleteVulnerabilityType(-1)
+      db_proxy.deleteVulnerabilityType(-1)
     for vt in vulTypes:
-      b.dbProxy.addValueType(vt)
+      db_proxy.addValueType(vt)
   if (noOfTts > 0):
     if (isOverwrite):
-      b.dbProxy.deleteThreatType(-1)
+      db_proxy.deleteThreatType(-1)
     for tt in threatTypes:
-      b.dbProxy.addValueType(tt)
+      db_proxy.addValueType(tt)
   msgStr = 'Imported ' + str(noOfVts) + ' vulnerability types and ' + str(noOfTts) + ' threat types.'
   return msgStr
 
-def importDirectoryFile(importFile,isOverwrite=1):
+def importDirectoryFile(importFile,isOverwrite=1,session_id = None):
   try:
     parser = xml.sax.make_parser()
     handler = DirectoryContentHandler()
@@ -130,296 +132,300 @@ def importDirectoryFile(importFile,isOverwrite=1):
     vdSize = len(vulDir)
     tdSize = len(threatDir)
     b = Borg()
+    db_proxy = b.get_proxy(session_id)
     if (vdSize > 0):
-      b.dbProxy.addVulnerabilityDirectory(vulDir,isOverwrite)
+      db_proxy.addVulnerabilityDirectory(vulDir,isOverwrite)
     if (tdSize > 0):
-      b.dbProxy.addThreatDirectory(threatDir,isOverwrite)
+      db_proxy.addThreatDirectory(threatDir,isOverwrite)
     msgStr = 'Imported ' + str(vdSize) + ' template vulnerabilities and ' + str(tdSize) + ' template threats.'
     return msgStr
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 
-def importRequirementsFile(importFile):
+def importRequirementsFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
-    handler = GoalsContentHandler()
+    handler = GoalsContentHandler(session_id = session_id)
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
-    return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.countermeasures())
+    return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.countermeasures(),session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParameterSet,cmParameterSet):
+def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParameterSet,cmParameterSet,session_id):
   b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
   dpCount = 0
   for dpParameters in dpParameterSet:
-    objtId = b.dbProxy.existingObject(dpParameters.name(),'domainproperty')
+    objtId = db_proxy.existingObject(dpParameters.name(),'domainproperty')
     if objtId == -1:
-      b.dbProxy.addDomainProperty(dpParameters)
+      db_proxy.addDomainProperty(dpParameters)
     else:
       dpParameters.setId(objtId)
-      b.dbProxy.updateDomainProperty(dpParameters)
+      db_proxy.updateDomainProperty(dpParameters)
     dpCount += 1
 
   goalCount = 0
   for goalParameters in goalParameterSet:
-    objtId = b.dbProxy.existingObject(goalParameters.name(),'goal')
+    objtId = db_proxy.existingObject(goalParameters.name(),'goal')
     if objtId == -1:
-      b.dbProxy.addGoal(goalParameters)
+      db_proxy.addGoal(goalParameters)
     else:
       goalParameters.setId(objtId)
-      b.dbProxy.updateGoal(goalParameters)
+      db_proxy.updateGoal(goalParameters)
     goalCount += 1
 
   obsCount = 0
   for obsParameters in obsParameterSet:
-    objtId = b.dbProxy.existingObject(obsParameters.name(),'obstacle')
+    objtId = db_proxy.existingObject(obsParameters.name(),'obstacle')
     if objtId == -1:
-      b.dbProxy.addObstacle(obsParameters)
+      db_proxy.addObstacle(obsParameters)
     else:
       obsParameters.setId(objtId)
-      b.dbProxy.updateObstacle(obsParameters)
+      db_proxy.updateObstacle(obsParameters)
     obsCount += 1
 
   reqCount = 0
   for req,refName,refType in reqParameterSet:
-    objtId = b.dbProxy.existingObject(req.name(),'requirement')
+    objtId = db_proxy.existingObject(req.name(),'requirement')
     if objtId == -1:
       isAsset = True
       if (refType == 'environment'):
         isAsset = False
-      b.dbProxy.addRequirement(req,refName,isAsset)
+      db_proxy.addRequirement(req,refName,isAsset)
     else:
-      b.dbProxy.updateRequirement(req)
+      db_proxy.updateRequirement(req)
     reqCount += 1
 
   cmCount = 0
   for cmParameters in cmParameterSet:
-    objtId = b.dbProxy.existingObject(cmParameters.name(),'countermeasure')
+    objtId = db_proxy.existingObject(cmParameters.name(),'countermeasure')
     if objtId == -1:
-      b.dbProxy.addCountermeasure(cmParameters)
+      db_proxy.addCountermeasure(cmParameters)
     else:
       cmParameters.setId(objtId)
-      b.dbProxy.updateCountermeasure(cmParameters)
+      db_proxy.updateCountermeasure(cmParameters)
     cmCount += 1
   msgStr = 'Imported ' + str(dpCount) + ' domain properties, ' + str(goalCount) + ' goals, ' + str(obsCount) + ' obstacles, ' + str(reqCount) + ' requirements, and ' + str(cmCount) + ' countermeasures.'
   return msgStr
 
-def importRiskAnalysisFile(importFile):
+def importRiskAnalysisFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
     handler = RiskAnalysisContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
-    return importRiskAnalysis(handler.roles(),handler.assets(),handler.vulnerabilities(),handler.attackers(),handler.threats(),handler.risks(),handler.responses(),handler.associations())
+    return importRiskAnalysis(handler.roles(),handler.assets(),handler.vulnerabilities(),handler.attackers(),handler.threats(),handler.risks(),handler.responses(),handler.associations(),session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importRiskAnalysis(roleParameterSet,assetParameterSet,vulParameterSet,attackerParameterSet,threatParameterSet,riskParameterSet,responseParameterSet,assocParameterSet):
+def importRiskAnalysis(roleParameterSet,assetParameterSet,vulParameterSet,attackerParameterSet,threatParameterSet,riskParameterSet,responseParameterSet,assocParameterSet,session_id):
 
   b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
   roleCount = 0
   for roleParameters in roleParameterSet:
-    objtId = b.dbProxy.existingObject(roleParameters.name(),'role')
+    objtId = db_proxy.existingObject(roleParameters.name(),'role')
     if objtId == -1:
-      b.dbProxy.addRole(roleParameters)
+      db_proxy.addRole(roleParameters)
     else:
       roleParameters.setId(objtId)
-      b.dbProxy.updateRole(roleParameters)
+      db_proxy.updateRole(roleParameters)
     roleCount += 1
 
   assetCount = 0
   for assetParameters in assetParameterSet:
-    objtId = b.dbProxy.existingObject(assetParameters.name(),'asset')
+    objtId = db_proxy.existingObject(assetParameters.name(),'asset')
     if objtId == -1:
-      b.dbProxy.addAsset(assetParameters)
+      db_proxy.addAsset(assetParameters)
     else:
       assetParameters.setId(objtId)
-      b.dbProxy.updateAsset(assetParameters)
+      db_proxy.updateAsset(assetParameters)
     assetCount += 1
 
   vulCount = 0
   for vulParameters in vulParameterSet:
-    objtId = b.dbProxy.existingObject(vulParameters.name(),'vulnerability')
+    objtId = db_proxy.existingObject(vulParameters.name(),'vulnerability')
     if objtId == -1:
-      b.dbProxy.addVulnerability(vulParameters)
+      db_proxy.addVulnerability(vulParameters)
     else:
       vulParameters.setId(objtId)
-      b.dbProxy.updateVulnerability(vulParameters)
+      db_proxy.updateVulnerability(vulParameters)
     vulCount += 1
 
   attackerCount = 0
   for attackerParameters in attackerParameterSet:
-    objtId = b.dbProxy.existingObject(attackerParameters.name(),'attacker')
+    objtId = db_proxy.existingObject(attackerParameters.name(),'attacker')
     if objtId == -1:
-      b.dbProxy.addAttacker(attackerParameters)
+      db_proxy.addAttacker(attackerParameters)
     else:
       attackerParameters.setId(objtId)
-      b.dbProxy.updateAttacker(attackerParameters)
+      db_proxy.updateAttacker(attackerParameters)
     attackerCount += 1
 
   threatCount = 0
   for threatParameters in threatParameterSet:
-    objtId = b.dbProxy.existingObject(threatParameters.name(),'threat')
+    objtId = db_proxy.existingObject(threatParameters.name(),'threat')
     if objtId == -1:
-      b.dbProxy.addThreat(threatParameters)
+      db_proxy.addThreat(threatParameters)
     else:
       threatParameters.setId(objtId)
-      b.dbProxy.updateThreat(threatParameters)
+      db_proxy.updateThreat(threatParameters)
     threatCount += 1
 
   riskCount = 0
   for riskParameters in riskParameterSet:
-    objtId = b.dbProxy.existingObject(riskParameters.name(),'risk')
+    objtId = db_proxy.existingObject(riskParameters.name(),'risk')
     if objtId == -1:
-      b.dbProxy.addRisk(riskParameters)
+      db_proxy.addRisk(riskParameters)
     else:
       riskParameters.setId(objtId)
-      b.dbProxy.updateRisk(riskParameters)
+      db_proxy.updateRisk(riskParameters)
     riskCount += 1
 
   responseCount = 0
   for responseParameters in responseParameterSet:
-    objtId = b.dbProxy.existingObject(responseParameters.name(),'response')
+    objtId = db_proxy.existingObject(responseParameters.name(),'response')
     if objtId == -1:
-      b.dbProxy.addResponse(responseParameters)
+      db_proxy.addResponse(responseParameters)
     else:
       responseParameters.setId(objtId)
-      b.dbProxy.updateResponse(responseParameters)
+      db_proxy.updateResponse(responseParameters)
     responseCount += 1
 
   rshipCount = 0
   for assocParameters in assocParameterSet:
-    b.dbProxy.addClassAssociation(assocParameters)
+    db_proxy.addClassAssociation(assocParameters)
     rshipCount += 1
 
   msgStr = 'Imported ' + str(roleCount) + ' roles, ' + str(assetCount) + ' assets, ' + str(vulCount) + ' vulnerabilities, ' + str(attackerCount) + ' attackers, ' + str(threatCount) + ' threats, ' + str(riskCount) + ' risks, ' + str(responseCount) + ' responses, and ' + str(rshipCount) + ' asset associations.'
   return msgStr
 
-def importUsabilityFile(importFile):
+def importUsabilityFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
     handler = UsabilityContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
-    return importUsability(handler.personas(),handler.externalDocuments(),handler.documentReferences(),handler.conceptReferences(),handler.personaCharacteristics(),handler.taskCharacteristics(),handler.tasks(),handler.usecases())
+    return importUsability(handler.personas(),handler.externalDocuments(),handler.documentReferences(),handler.conceptReferences(),handler.personaCharacteristics(),handler.taskCharacteristics(),handler.tasks(),handler.usecases(),session_id=session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 
-def importUsability(personaParameterSet,edParameterSet,drParameterSet,crParameterSet,pcParameterSet,tcParameterSet,taskParameterSet,ucParameterSet):
+def importUsability(personaParameterSet,edParameterSet,drParameterSet,crParameterSet,pcParameterSet,tcParameterSet,taskParameterSet,ucParameterSet,session_id):
   b = Borg()
-
+  db_proxy = b.get_dbproxy(session_id)
   personaCount = 0
   for personaParameters in personaParameterSet:
-    objtId = b.dbProxy.existingObject(personaParameters.name(),'persona')
+    objtId = db_proxy.existingObject(personaParameters.name(),'persona')
     if objtId == -1:
-      b.dbProxy.addPersona(personaParameters)
+      db_proxy.addPersona(personaParameters)
     else:
       personaParameters.setId(objtId)
-      b.dbProxy.updatePersona(personaParameters)
+      db_proxy.updatePersona(personaParameters)
     personaCount += 1
 
   edCount = 0
   for edParameters in edParameterSet:
-    objtId = b.dbProxy.existingObject(edParameters.name(),'external_document')
+    objtId = db_proxy.existingObject(edParameters.name(),'external_document')
     if objtId == -1:
-      b.dbProxy.addExternalDocument(edParameters)
+      db_proxy.addExternalDocument(edParameters)
     else:
       edParameters.setId(objtId)
-      b.dbProxy.updateExternalDocument(edParameters)
+      db_proxy.updateExternalDocument(edParameters)
     edCount += 1
 
   drCount = 0
   for drParameters in drParameterSet:
-    objtId = b.dbProxy.existingObject(drParameters.name(),'document_reference')
+    objtId = db_proxy.existingObject(drParameters.name(),'document_reference')
     if objtId == -1:
-      b.dbProxy.addDocumentReference(drParameters)
+      db_proxy.addDocumentReference(drParameters)
     else:
       drParameters.setId(objtId)
-      b.dbProxy.updateDocumentReference(drParameters)
+      db_proxy.updateDocumentReference(drParameters)
     drCount += 1
 
   taskCount = 0
   for taskParameters in taskParameterSet:
-    objtId = b.dbProxy.existingObject(taskParameters.name(),'task')
+    objtId = db_proxy.existingObject(taskParameters.name(),'task')
     if objtId == -1:
-      b.dbProxy.addTask(taskParameters)
+      db_proxy.addTask(taskParameters)
     else:
       taskParameters.setId(objtId)
-      b.dbProxy.updateTask(taskParameters)
+      db_proxy.updateTask(taskParameters)
     taskCount += 1
 
   ucCount = 0
   for ucParameters in ucParameterSet:
-    objtId = b.dbProxy.existingObject(ucParameters.name(),'usecase')
+    objtId = db_proxy.existingObject(ucParameters.name(),'usecase')
     if objtId == -1:
-      b.dbProxy.addUseCase(ucParameters)
+      db_proxy.addUseCase(ucParameters)
     else:
       ucParameters.setId(objtId)
-      b.dbProxy.updateUseCase(ucParameters)
+      db_proxy.updateUseCase(ucParameters)
     ucCount += 1
 
   crCount = 0
   for crParameters in crParameterSet:
-    objtId = b.dbProxy.existingObject(crParameters.name(),'concept_reference')
+    objtId = db_proxy.existingObject(crParameters.name(),'concept_reference')
     if objtId == -1:
-      b.dbProxy.addConceptReference(crParameters)
+      db_proxy.addConceptReference(crParameters)
     else:
       crParameters.setId(objtId)
-      b.dbProxy.updateConceptReference(crParameters)
+      db_proxy.updateConceptReference(crParameters)
     crCount += 1
 
   pcCount = 0
   for pcParameters in pcParameterSet:
-    b.dbProxy.addPersonaCharacteristic(pcParameters)
+    db_proxy.addPersonaCharacteristic(pcParameters)
     pcCount += 1
 
   tcCount = 0
   for tcParameters in tcParameterSet:
-    objtId = b.dbProxy.existingObject(tcParameters.task(),'task_characteristic')
+    objtId = db_proxy.existingObject(tcParameters.task(),'task_characteristic')
     if objtId == -1:
-      b.dbProxy.addTaskCharacteristic(tcParameters)
+      db_proxy.addTaskCharacteristic(tcParameters)
     else:
       tcParameters.setId(objtId)
-      b.dbProxy.updateTaskCharacterisric(tcParameters)
+      db_proxy.updateTaskCharacterisric(tcParameters)
     tcCount += 1
   msgStr = 'Imported ' + str(personaCount) + ' personas, ' + str(edCount) + ' external documents, ' + str(drCount) + ' document references, ' + str(crCount) + ' concept references, ' + str(pcCount) + ' persona characteristics, ' + str(tcCount) + ' task characteristics, ' + str(taskCount) + ' tasks, and ' + str(ucCount) + ' use cases.'
   return msgStr
 
-def importAssociationsFile(importFile):
+def importAssociationsFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
-    handler = AssociationsContentHandler()
+    handler = AssociationsContentHandler(session_id = session_id)
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
-    return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations())
+    return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations(),session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
   
-def importAssociations(maParameterSet,gaParameterSet,depParameterSet):
+def importAssociations(maParameterSet,gaParameterSet,depParameterSet,session_id):
   b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
   maCount = 0
   for tTable,fromId,toId,refType in maParameterSet:
-    b.dbProxy.addTrace(tTable,fromId,toId,refType)
+    db_proxy.addTrace(tTable,fromId,toId,refType)
     maCount += 1
   gaCount = 0
   for gaParameters in gaParameterSet:
-    b.dbProxy.addGoalAssociation(gaParameters)
+    db_proxy.addGoalAssociation(gaParameters)
     gaCount += 1
   depCount = 0
   for depParameters in depParameterSet:
-    b.dbProxy.addDependency(depParameters)
+    db_proxy.addDependency(depParameters)
     depCount += 1
   msgStr = 'Imported ' + str(maCount) + ' manual associations, ' + str(gaCount) + ' goal associations, and ' + str(depCount) + ' dependency associations.'
   return msgStr
 
-def importProjectFile(importFile):
+def importProjectFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
     handler = CairisContentHandler()
@@ -428,22 +434,23 @@ def importProjectFile(importFile):
     parser.parse(importFile)
     pSettings = handler.settings()
     envParameterSet = handler.environments()
-    return importProjectData(pSettings,envParameterSet)
+    return importProjectData(pSettings,envParameterSet,session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importProjectData(pSettings,envParameterSet):
+def importProjectData(pSettings,envParameterSet,session_id):
   b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
   if (pSettings != None):
-    b.dbProxy.updateSettings(pSettings[0],pSettings[1],pSettings[2],pSettings[3],pSettings[4],pSettings[5],pSettings[6],pSettings[7])
+    db_proxy.updateSettings(pSettings[0],pSettings[1],pSettings[2],pSettings[3],pSettings[4],pSettings[5],pSettings[6],pSettings[7])
   envCount = 0
   for envParameters in envParameterSet:
-    objtId = b.dbProxy.existingObject(envParameters.name(),'environment')
+    objtId = db_proxy.existingObject(envParameters.name(),'environment')
     if objtId == -1:
-      b.dbProxy.addEnvironment(envParameters)
+      db_proxy.addEnvironment(envParameters)
     else:
       envParameters.setId(objtId)
-      b.dbProxy.updateEnvironment(envParameters)
+      db_proxy.updateEnvironment(envParameters)
     envCount += 1
   msgText = 'Imported ' + str(envCount) + ' environments'
   if (pSettings != None):
@@ -451,7 +458,7 @@ def importProjectData(pSettings,envParameterSet):
     msgText += '.'
   return msgText
 
-def importComponentViewFile(importFile):
+def importComponentViewFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
     handler = ArchitecturalPatternContentHandler()
@@ -459,48 +466,50 @@ def importComponentViewFile(importFile):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     view = handler.view()
-    return importComponentViewData(view)
+    return importComponentViewData(view,session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importAssetsFile(importFile):
+def importAssetsFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
     handler = TemplateAssetsContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
-    return importAssets(handler.valueTypes(),handler.assets())
+    return importAssets(handler.valueTypes(),handler.assets(),session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importAssets(valueTypes,assets):
+def importAssets(valueTypes,assets,session_id):
   b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
   vtCount = 0
   taCount = 0
 
   for vtParameters in valueTypes:
-    vtId = b.dbProxy.existingObject(vtParameters.name(),vtParameters.type())
+    vtId = db_proxy.existingObject(vtParameters.name(),vtParameters.type())
     if vtId == -1:
-      b.dbProxy.addValueType(vtParameters)
+      db_proxy.addValueType(vtParameters)
       vtCount += 1
   for taParameters in assets:
-    taId = b.dbProxy.existingObject(taParameters.name(),'template_asset')
+    taId = db_proxy.existingObject(taParameters.name(),'template_asset')
     if taId == -1:
-      b.dbProxy.addTemplateAsset(taParameters)
+      db_proxy.addTemplateAsset(taParameters)
       taCount += 1
   return 'Imported ' + str(vtCount) + ' value types, and ' + str(taCount) + ' template assets.'
 
-def importComponentViewData(view):
+def importComponentViewData(view,session_id = None):
   b = Borg()
-  b.dbProxy.addComponentView(view)
+  db_proxy = b.get_dbproxy(session_id)
+  db_proxy.addComponentView(view)
   msgStr = 'Imported architectural pattern'
   return msgStr
 
-def importSynopsesFile(importFile):
+def importSynopsesFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
-    handler = SynopsesContentHandler()
+    handler = SynopsesContentHandler(session_id = session_id)
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
@@ -509,28 +518,29 @@ def importSynopsesFile(importFile):
     stepSyns = handler.stepSynopses()
     refConts = handler.referenceContributions()
     ucConts = handler.useCaseContributions()
-    return importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts)
+    return importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts):
+def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,session_id):
   b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
   for cs in charSyns:
-    b.dbProxy.addCharacteristicSynopsis(cs)
+    db_proxy.addCharacteristicSynopsis(cs)
   for rs in refSyns:
-    b.dbProxy.addReferenceSynopsis(rs)
+    db_proxy.addReferenceSynopsis(rs)
   for ucName,envName,stepNo,synName,aType,aName in stepSyns:
-    b.dbProxy.addStepSynopsis(ucName,envName,stepNo,synName,aType,aName)
-  b.dbProxy.conn.commit()
+    db_proxy.addStepSynopsis(ucName,envName,stepNo,synName,aType,aName)
+  db_proxy.conn.commit()
   for rc in refConts:
-    b.dbProxy.addReferenceContribution(rc)
+    db_proxy.addReferenceContribution(rc)
   for uc in ucConts:
-    b.dbProxy.addUseCaseContribution(uc)
+    db_proxy.addUseCaseContribution(uc)
 
   msgStr = 'Imported ' + str(len(charSyns)) + ' characteristic synopses, ' + str(len(refSyns)) + ' reference synopses, ' + str(len(stepSyns)) + ' step synopses, ' + str(len(refConts)) + ' reference contributions, and ' + str(len(ucConts)) + ' use case contributions.'
   return msgStr
 
-def importDomainValuesFile(importFile):
+def importDomainValuesFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
     handler = DomainValueContentHandler()
@@ -538,11 +548,11 @@ def importDomainValuesFile(importFile):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues = handler.values()
-    return importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues)
+    return importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues,session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues):
+def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues,session_id):
   noOfTvs = len(tvValues)
   noOfRvs = len(rvValues)
   noOfCvs = len(cvValues)
@@ -552,48 +562,49 @@ def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,mo
   noOfMotVs = len(motValues)
  
   b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
 
   tId = 0
   if (noOfTvs > 0):
     for tvp in tvValues:
       tvp.setId(tId)
-      b.dbProxy.updateValueType(tvp)
+      db_proxy.updateValueType(tvp)
       tId += 1
   tId =1
   if (noOfRvs > 0):
     for rvp in rvValues:
       rvp.setId(tId)
-      b.dbProxy.updateValueType(rvp)
+      db_proxy.updateValueType(rvp)
       tId += 1
   tId = 0
   if (noOfCvs > 0):
     for cvp in cvValues:
       cvp.setId(tId)
-      b.dbProxy.updateValueType(cvp)
+      db_proxy.updateValueType(cvp)
       tId += 1
   tId = 0
   if (noOfSvs > 0):
     for svp in svValues:
       svp.setId(tId)
-      b.dbProxy.updateValueType(svp)
+      db_proxy.updateValueType(svp)
       tId += 1
   tId = 0
   if (noOfLvs > 0):
     for lvp in lvValues:
       lvp.setId(tId)
-      b.dbProxy.updateValueType(lvp)
+      db_proxy.updateValueType(lvp)
       tId += 1
   if (noOfCapVs > 0):
     for capvp in capValues:
-      b.dbProxy.addValueType(capvp)
+      db_proxy.addValueType(capvp)
   if (noOfMotVs > 0):
     for motvp in motValues:
-      b.dbProxy.addValueType(motvp)
+      db_proxy.addValueType(motvp)
 
   msgStr = 'Imported domain values'
   return msgStr
 
-def importProcessesFile(importFile):
+def importProcessesFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
     handler = ProcessesContentHandler()
@@ -609,11 +620,11 @@ def importProcessesFile(importFile):
     ics = handler.impliedCharacteristics()
     intentions = handler.intentions()
     contributions = handler.contributions()
-    return importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,intentions,contributions)
+    return importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,intentions,contributions,session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,intentions,contributions):
+def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,intentions,contributions,session_id):
   noOfDocs = len(docs)
   noOfCodes = len(codes)
   noOfMemos = len(memos)
@@ -625,46 +636,47 @@ def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,inten
   noOfContributions = len(contributions)
 
   b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
 
   for dp in docs:
-    b.dbProxy.addInternalDocument(dp)
+    db_proxy.addInternalDocument(dp)
 
   for cp in codes:
-    b.dbProxy.addCode(cp)
+    db_proxy.addCode(cp)
 
   for mp in memos:
-    b.dbProxy.addMemo(mp)
+    db_proxy.addMemo(mp)
 
   for q in quotations:
-    b.dbProxy.addQuotation(q)
+    db_proxy.addQuotation(q)
 
   # Necessary because adding document memos currently overwrites the existing memo text
   for mp in memos:
-    b.dbProxy.updateMemo(mp)
+    db_proxy.updateMemo(mp)
 
   for cn in codeNetworks:
     personaName = cn[0]
     rtName = cn[1]
     fromCode = cn[2]
     toCode = cn[3]
-    b.dbProxy.addCodeRelationship(personaName,fromCode,toCode,rtName)
+    db_proxy.addCodeRelationship(personaName,fromCode,toCode,rtName)
 
   for p in processes:
-    b.dbProxy.addImpliedProcess(p)
+    db_proxy.addImpliedProcess(p)
 
   for ic in ics:
-    b.dbProxy.addImpliedCharacteristic(ic)
+    db_proxy.addImpliedCharacteristic(ic)
 
   for intention in intentions:
-    b.dbProxy.addIntention(intention)
+    db_proxy.addIntention(intention)
 
   for contribution in contributions:
-    b.dbProxy.addContribution(contribution)
+    db_proxy.addContribution(contribution)
 
   msgStr = 'Imported ' + str(noOfDocs) + ' internal documents, ' + str(noOfCodes) + ' codes, ' + str(noOfMemos) + ' memos, ' + str(noOfQuotations) + ' quotations, ' + str(noOfCNs) + ' code relationships, ' + str(noOfProcs) + ' implied processes, ' + str(noOfIntentions) + ' intentions, and ' + str(noOfContributions) + ' contributions.'
   return msgStr
 
-def importLocationsFile(importFile):
+def importLocationsFile(importFile,session_id = None):
   try: 
     parser = xml.sax.make_parser()
     handler = LocationsContentHandler()
@@ -675,30 +687,32 @@ def importLocationsFile(importFile):
     locDiagram = handler.diagram()
     locations = handler.locations()
     links = handler.links()
-    return importLocations(locName,locDiagram,locations,links)
+    return importLocations(locName,locDiagram,locations,links,session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
   
-def importLocations(locName,locDiagram,locations,links):
+def importLocations(locName,locDiagram,locations,links,session_id):
   b = Borg()
-  b.dbProxy.addLocations(locName,locDiagram,locations,links)
+  db_proxy = b.get_dbproxy(session_id)
+  db_proxy.addLocations(locName,locDiagram,locations,links)
   msgStr = 'Imported ' + str(len(locations)) + ' locations, and ' + str(len(links)) + ' links.'
   return msgStr
 
-def importModelFile(importFile,isOverwrite = 1):
+def importModelFile(importFile,isOverwrite = 1,session_id = None):
   try:
     b = Borg()
+    db_proxy = b.get_dbproxy(session_id)
     modelTxt = ''
     if isOverwrite == 1:
-      b.dbProxy.clearDatabase()
-      modelTxt += importTVTypeFile(importFile) + '  '
-    modelTxt += importDomainValuesFile(importFile) + ' '
-    modelTxt += importProjectFile(importFile) + ' '
-    modelTxt += importRiskAnalysisFile(importFile) + ' '
-    modelTxt += importUsabilityFile(importFile) + ' '
-    modelTxt += importRequirementsFile(importFile) + ' '
-    modelTxt += importAssociationsFile(importFile) + ' '
-    modelTxt += importSynopsesFile(importFile)
+      db_proxy.clearDatabase(session_id)
+      modelTxt += importTVTypeFile(importFile,session_id) + '  '
+    modelTxt += importDomainValuesFile(importFile,session_id) + ' '
+    modelTxt += importProjectFile(importFile,session_id) + ' '
+    modelTxt += importRiskAnalysisFile(importFile,session_id) + ' '
+    modelTxt += importUsabilityFile(importFile,session_id) + ' '
+    modelTxt += importRequirementsFile(importFile,session_id) + ' '
+    modelTxt += importAssociationsFile(importFile,session_id) + ' '
+    modelTxt += importSynopsesFile(importFile,session_id)
     return modelTxt
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())

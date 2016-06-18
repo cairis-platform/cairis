@@ -51,7 +51,7 @@ def it2Id(itLabel):
     return 0
 
 class AttackPatternContentHandler(ContentHandler,EntityResolver):
-  def __init__(self):
+  def __init__(self,session_id = None):
     self.thePatternName = ''
     self.theLikelihood = ''
     self.theSeverity = ''
@@ -78,7 +78,7 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     self.theRelatedPatterns = ''
     b = Borg()
     self.configDir = b.configDir
-    self.dbProxy = b.dbProxy
+    self.dbProxy = b.get_dbproxy(session_id)
 
     self.theObstacleParameters = []
     self.theObstacleAssociationParameters = []
