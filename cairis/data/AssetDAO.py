@@ -27,6 +27,7 @@ from cairis.core.ValueType import ValueType
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 import cairis.core.armid
 from cairis.data.CairisDAO import CairisDAO
+from cairis.data.EnvironmentDAO import EnvironmentDAO
 from cairis.data.VulnerabilityDAO import VulnerabilityDAO
 from cairis.data.ThreatDAO import ThreatDAO
 

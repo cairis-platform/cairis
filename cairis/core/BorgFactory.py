@@ -180,3 +180,4 @@ def dInitialise():
     db_proxy.close()
 
   b.settings['test']['dbProxy'] = db_proxy
+  b.dbProxy = db_proxy

@@ -379,7 +379,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error building dimension lookup tables (id:' + str(id) + ',message:' + msg
     
   def close(self):
-    self.conn.close()
+    if self.conn.open:
+      self.conn.close()
 
   def getRequirements(self,constraintId = '',isAsset = 1):
     try:
