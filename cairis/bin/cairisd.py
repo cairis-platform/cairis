@@ -18,6 +18,7 @@
 import sys
 import cairis.daemon.IRISDaemon 
 import cairis.daemon.WebConfig 
+from cairis.daemon.CairisHTTPError import CairisHTTPError
 
 def start(args):
     options = {
@@ -38,4 +39,8 @@ def start(args):
         return client
 
 if __name__ == '__main__':
-  start(sys.argv)
+  try:
+    start(sys.argv)
+  except CairisHTTPError, e:
+    print "Fatal CAIRIS error: " + str(e)
+    sys.exit(-1)

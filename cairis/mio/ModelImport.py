@@ -99,11 +99,11 @@ def importTVTypeFile(importFile,isOverwrite=1,session_id = None):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     vulTypes,threatTypes = handler.types()
-    return importTVTypes(vulTypes,threatTypes,isOverwrite,session_id = session_id)
+    return importTVTypes(vulTypes,threatTypes,isOverwrite,session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
  
-def importTVTypes(vulTypes,threatTypes,isOverwrite,session_id = None):
+def importTVTypes(vulTypes,threatTypes,isOverwrite,session_id):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
   noOfVts = len(vulTypes)
@@ -705,7 +705,7 @@ def importModelFile(importFile,isOverwrite = 1,session_id = None):
     modelTxt = ''
     if isOverwrite == 1:
       db_proxy.clearDatabase(session_id)
-      modelTxt += importTVTypeFile(importFile,session_id) + '  '
+      modelTxt += importTVTypeFile(importFile,session_id = session_id) + '  '
     modelTxt += importDomainValuesFile(importFile,session_id) + ' '
     modelTxt += importProjectFile(importFile,session_id) + ' '
     modelTxt += importRiskAnalysisFile(importFile,session_id) + ' '
