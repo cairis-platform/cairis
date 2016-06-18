@@ -1,0 +1,155 @@
+<form id="editAssetsOptionsform" xmlns="http://www.w3.org/1999/html" >
+
+    <p>
+        <label  >Name</label>
+        <input class="optionsInput assetUpdate" type="text" name="theName" id="theName">
+    </p>
+    <p>
+        <label>Tags</label>
+        <input class="optionsInput assetUpdate" type="text" value="" id="theTags" name="theTags">
+    </p>
+    <p>
+        <label>Shortcode</label>
+        <input class="optionsInput assetUpdate" type="text" value="" id="theShortCode" name="theShortCode">
+    </p>
+    <p>
+        <label for="theType">Type</label>
+        <select name="TheType" class="assetUpdate" id="theType">
+
+        </select>
+    <div class="tabs">
+        <ul>
+            <li><a href="#Description">Description</a></li>
+            <li><a href="#Significance">Significance</a></li>
+            <li><a href="#Criticality">Criticality</a></li>
+            <li><a href="#Interfaces">Interfaces</a></li>
+
+        </ul>
+        <div id="Description">
+           <textarea class="assetUpdate" name="theDescription" id="theDescription"></textarea>
+        </div>
+        <div id="Significance">
+            <textarea class="assetUpdate" name="theSignificance" id="theSignificance"> </textarea>
+        </div>
+        <div id="Criticality">
+            <input  class="assetUpdate" type="checkbox" id="isCritical">Critical Asset <br>
+            <textarea class="assetUpdate" id="theCriticalRationale" name="theCriticalRationale" > </textarea>
+        </div>
+        <div id="Interfaces">
+            <table id="editgoalsGoalsTable">
+                <thead>
+                <tr> <th>Interface</th><th>Type</th><th>Access Right</th><th>Privilege</th></tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="inblock">
+        <table class="left clickable-table" id="theEnvironmentDictionary">
+            <thead>
+            <tr><th> <i class="fa fa-plus addEnvironmentPlus"></i></th><th>Environment</th></tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div class="tabs right" id="assetstabsID">
+            <ul>
+                <li><a href="#Properties">Definition</a></li>
+                <li><a href="#AssociationsAssetsOptions">Associations</a></li>
+            </ul>
+            <div id="Properties" class="gearOptions clickable-table scrollableTable">
+                <table id="definitionTable" class="assetUpdate ">
+                    <thead>
+                    <tr><th><div class="fillparent" id="addNewProperty"><i class="fa fa-plus"></i></div></th><th>Property</th><th>Value</th><th>Rationale</th></tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div id="AssociationsAssetsOptions">
+                <table class="assetUpdate">
+                    <thead>
+                    <tr><th>Nav</th><th>Type</th><th>Nry</th><th>Role</th><th>Tail Role</th><th>Tail Nry</th><th>Tail Type</th><th>Tail Nav</th><th>Tail Asset</th></tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <button id="UpdateAssetinGear">Update</button>
+
+</form>
+
+<div id="editpropertiesWindow" style="display: none;">
+    <p>
+    <label>
+        Property
+        <select class="optionsInput" name="property" id="property">
+            <option value="Accountability">
+                Accountability
+            </option>
+            <option value="Confidentiality">
+                Confidentiality
+            </option>
+            <option value="Integrity">
+                Integrity
+            </option>
+            <option value="Availability">
+                Availability
+            </option>
+            <option value="Anonymity">
+                Anonymity
+            </option>
+            <option value="Pseudonymity">
+                Pseudonymity
+            </option>
+            <option value="Unlinkability">
+                Unlinkability
+            </option>
+            <option value="Unobservability">
+                Unobservability
+            </option>
+        </select>
+    </label>
+    </p>
+    <p>
+    <label>
+        Value
+        <select class="optionsInput" name="value" id="value">
+            <option>
+                None
+            </option>
+            <option>
+                Low
+            </option>
+            <option>
+                Medium
+            </option>
+            <option>
+                High
+            </option>
+        </select>
+    </label>
+        </p>
+    <p>
+    <label>
+        Rationale
+        <textarea class="optionsInput" name="rationale" id="rationale"> </textarea>
+    </label>
+    </p>
+    <textarea id="id" name="id" style="display: none;"></textarea>
+    <p>
+        <button id="cancelButtonAsset">
+            Cancel
+        </button>
+        <button id="updateButtonAsset">
+            Update
+        </button>
+    </p>
+</div>

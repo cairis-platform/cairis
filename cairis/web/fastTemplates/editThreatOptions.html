@@ -1,0 +1,95 @@
+<form id="editThreatOptionsform" xmlns="http://www.w3.org/1999/html" >
+
+    <p>
+        <label>Name</label>
+        <input class="optionsInput" type="text" name="theThreatName" id="theThreatName">
+    </p>
+    <p>
+        <label>Tags</label>
+        <input class="optionsInput" type="text" value="" id="theTags" name="theTags" style="
+    float: right;">
+    </p>
+    <p>
+        <label for='theType'>Type</label>
+        <select name='theType' id="theType" style="float: right">
+
+        </select>
+    </p>
+
+        <div id="Description">
+    <label for="theMethod">The method</label>
+           <textarea class="right" name="theMethod" id="theMethod" style="width: 275px; margin-bottom: 15px;"></textarea>
+        </div>
+    <br/>
+
+    <div class="inblock">
+        <table class="left clickable-table" id="theThreatEnvironments">
+            <thead>
+            <tr><th id="addThreatEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div class="tabs right infoWidth" >
+            <div id="Properties" class="gearOptions clickable-table scrollableTable" >
+                <label> Likelihood</label>
+                <select id="theLikelihood">
+                    <option>Improbable</option>
+                    <option>Incredible</option>
+                    <option>Remote</option>
+                    <option>Occasional</option>
+                    <option>Probable</option>
+                    <option>Frequent</option>
+                </select>
+                <div class="inblock">
+                <table id="threatAttackers" class="left" style="width: 50%">
+                    <thead><tr><th id="addAttackertoThreat" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Attacker</th></tr></thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <table id="threatAssets" class="right" style="width: 50%">
+                    <thead><tr><th id="addAssettoThreat" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Asset</th></tr></thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                </div>
+                <table id="threatProperties">
+                    <thead><tr><th id="addPropertytoThreat" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Property</th><th>Value</th><th>Rationale</th></tr></thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <button id="UpdateThreat">Update</button>
+</form>
+<div id="addPropertyDiv">
+    <p>
+        <label>Property</label>
+        <select name='thePropName' id="thePropName" style="float: right">
+            <option value="Confidentiality">Confidentiality</option>
+            <option value="Integrity">Integrity</option>
+            <option value="Availability">Availability</option>
+            <optison value="Accountability">Accountability</optison>
+            <option value="Anonymity">Anonymity</option>
+            <option value="Pseudonymity">Pseudonymity</option>
+            <option value="Unlinkability">Unlinkability</option>
+            <option value="Unobservability">Unobservability</option>
+        </select>
+    </p>
+    <p>
+        <label>Value</label>
+        <select name='thePropValue' id="thePropValue" style="float: right">
+            <option value="None">None</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
+    </p>
+    <p>
+        <label for='thePropRationale'>Rationale</label>
+        <textarea name="thePropRationale" id="thePropRationale" style="float: right;"> </textarea>
+    </p>
+    <button id="UpdateThreatProperty">Update</button>
+</div>

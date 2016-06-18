@@ -15,8 +15,49 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+from random import choice
+import string
+from time import sleep
+
 
 class Borg:
   __shared_state = {}
   def __init__(self):
     self.__dict__ = self.__shared_state
+
+  def get_dbproxy(self, id=None):
+    if self.runmode == 'desktop':
+      if self.dbProxy is not None:
+        return self.dbProxy
+    elif self.runmode == 'web':
+      if id is None:
+        raise RuntimeError('No ID provided while run mode is "web"')
+      else:
+        settings = self.get_settings(id)
+        if settings is not None:
+          return settings.get('dbProxy', None)
+        else:
+          return None
+    else:
+      return None
+
+  def init_settings(self):
+    """
+    Creates a new settings dictionary in the Borg instance and returns the identifier for the settings dictionary
+    :rtype : str
+    """
+    random_id = ''.join(choice(string.ascii_letters+string.digits) for i in range(32))
+    while random_id in self.settings:
+      sleep(40)
+      ''.join(choice(string.ascii_letters+string.digits) for i in range(32))
+
+    self.settings[random_id] = {'session_id': random_id}
+    return random_id
+
+  def get_settings(self, session_id):
+    if session_id in self.settings:
+      return self.settings[session_id]
+    else:
+      return None
+
+

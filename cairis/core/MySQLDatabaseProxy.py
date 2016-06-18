@@ -310,11 +310,18 @@ REFERENCE_DIM_COL = 3
 collectedIds = set([])
 
 class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
-  def __init__(self):
+  def __init__(self, host=None, port=None, user=None, passwd=None, db=None):
     DatabaseProxy.DatabaseProxy.__init__(self)
     self.theGrid = 0
+    b = Borg()
+    if (host is None or port is None or user is None or passwd is None or db is None):
+      host = b.dbHost
+      port = b.dbPort
+      user = b.dbUser
+      passwd = b.dbPasswd
+      db = b.dbName
+
     try:
-      b = Borg()
       self.conn = MySQLdb.connect(host=b.dbHost,port=b.dbPort,user=b.dbUser,passwd=b.dbPasswd,db=b.dbName)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -322,15 +329,30 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
     self.theDimIdLookup, self.theDimNameLookup = self.buildDimensionLookup()
 
-  def reconnect(self,closeConn = True):
+  def reconnect(self,closeConn = True,session_id = None):
+    b = Borg()
     try:
-      if (closeConn):
+      if (closeConn) and self.conn.open:
         self.conn.close()
-      b = Borg()
+      if b.runmode == 'desktop':
+        host = b.dbHost
+        port = b.dbPort
+        user = b.dbUser
+        passwd = b.dbPasswd
+        db = b.dbName
+      elif b.runmode == 'web':
+        ses_settings = b.get_settings(session_id)
+        host = ses_settings['dbHost']
+        port = ses_settings['dbPort']
+        user = ses_settings['dbUser']
+        passwd = ses_settings['dbPasswd']
+        db = ses_settings['dbName']
+      else:
+        raise RuntimeError('Run mode not recognized')
+
       self.conn = MySQLdb.connect(host=b.dbHost,port=b.dbPort,user=b.dbUser,passwd=b.dbPasswd,db=b.dbName)
     except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error connecting to the IRIS database on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + msg
+      exceptionText = 'MySQL error connecting to the IRIS database on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
       raise DatabaseProxyException(exceptionText) 
     self.theDimIdLookup, self.theDimNameLookup = self.buildDimensionLookup()
 
@@ -11697,3 +11719,42 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting location risk model (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def prepareDatabase(self):
+    try:
+      import logging
+      logger = logging.getLogger(__name__)
+      self.conn.query('select @@max_sp_recursion_depth;')
+      result = self.conn.store_result()
+      real_result = result.fetch_row()
+      if (len(real_result) < 1):
+          exceptionText = 'Error getting max_sp_recursion_depth from database'
+          raise DatabaseProxyException(exceptionText)
+
+      try:
+          rec_value = real_result[0][0]
+      except LookupError:
+          rec_value = -1
+
+      if rec_value == -1:
+          logger.warning('Unable to get max_sp_recursion_depth. Be sure max_sp_recursion_depth is set to 255 or more.')
+      elif rec_value < 255:
+          self.conn.query('set max_sp_recursion_depth = 255')
+          self.conn.store_result()
+
+          self.conn.query('select @@max_sp_recursion_depth;')
+          result = self.conn.use_result()
+          real_result = result.fetch_row()
+
+          try:
+              rec_value = real_result[0][0]
+              logger.debug('max_sp_recursion_depth is %d.' % rec_value)
+              if rec_value < 255:
+                logger.warning('WARNING: some features may not work because the maximum recursion depth for stored procedures is too low')
+          except LookupError:
+              logger.warning('Unable to get max_sp_recursion_depth. Be sure max_sp_recursion_depth is set to 255 or more.')
+
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting while preparing database'
+      raise DatabaseProxyException(exceptionText)

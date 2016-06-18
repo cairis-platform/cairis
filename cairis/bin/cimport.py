@@ -30,6 +30,11 @@ def main(args=None):
   mFormat = args.modelFormat
   importFile = args.modelFile
   overwriteFlag = args.isOverwrite
+  if args.imageDir != None:
+    b.imageDir = os.path.abspath(args.imageDir)
+  file_import(importFile,mFormat,overwriteFlag)
+
+def file_import(importFile,mFormat,overwriteFlag,session_id = None):
   if overwriteFlag == None:
     overwriteFlag = 1
 
@@ -39,8 +44,6 @@ def main(args=None):
   cairis.core.BorgFactory.initialise()
   b = Borg()
 
-  if args.imageDir != None:
-    b.imageDir = os.path.abspath(args.imageDir)
    
   msgStr = ''
   if (mFormat == 'securitypattern'):

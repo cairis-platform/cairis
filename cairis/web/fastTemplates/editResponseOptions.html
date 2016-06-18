@@ -1,0 +1,91 @@
+<form id="editVulnerabilityOptionsform" xmlns="http://www.w3.org/1999/html">
+
+    <p>
+        <label>Name</label>
+        <input class="optionsInput" type="text" name="theResponseName" id="theResponseName">
+    </p>
+
+    <p>
+        <label>Tags</label>
+        <input class="optionsInput" type="text" value="" id="theTags" name="theTags" style="
+    float: right;">
+    </p>
+
+    <p>
+        <label>Risk</label>
+        <select id="chooseRisk" class="right">
+
+        </select>
+    </p>
+
+    <div class="inblock">
+        <table class="left clickable-table" id="theRespEnvironments">
+            <thead>
+            <tr>
+                <th id="addRespEnv" style="width: 15px;"><i class="fa fa-plus"></i></th>
+                <th>Environment</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div class="tabs right infoWidth">
+            <div id="Properties" class="gearOptions clickable-table scrollableTable">
+                <div id="mitigateWindow">
+                    <label>Type</label>
+                    <select id="respMitigateType">
+                        <option value="Deter">Deter</option>
+                        <option value="Prevent">Prevent</option>
+                        <option value="Detect">Detect</option>
+                        <option value="React">React</option>
+                    </select>
+                    <br/>
+                    <label>Detection Point</label>
+                    <select id="theDetectionPoint" disabled>
+                        <option value="Before">Before</option>
+                        <option value="At">At</option>
+                        <option value="After">After</option>
+                    </select>
+
+                    <table id="respDetectionMech">
+                        <thead>
+                        <tr>
+                            <th>Detection Mechanism</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="acceptWindow">
+                    <label>Cost</label>
+                    <select id="theCost">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                    <br/>
+                    <label>Rationale</label>
+                    <textarea id="acceptRationale"></textarea>
+                </div>
+                <div id="transferWindow">
+                    <table id="transferRolesTable">
+                        <thead>
+                        <tr>
+                            <th id="addRespTransferRole" style="width: 15px;"><i class="fa fa-plus"></i></th>
+                            <th>Role</th>
+                            <th>Cost</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <br/>
+                    <label for="theRespTransferRationale">Rationale</label>
+                    <textarea id="theRespTransferRationale"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="UpdateResponse">Update</button>
+</form>
