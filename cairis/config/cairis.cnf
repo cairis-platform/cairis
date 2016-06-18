@@ -6,3 +6,7 @@ dbname = arm
 tmp_dir = /tmp
 root = /home/cairisuser/cairis/cairis
 default_image_dir = .
+web_port = 7071
+log_level = warning
+web_static_dir = /home/cairisuser/cairis/cairis/web
+upload_dir = /home/cairisuser/uploads
