@@ -11,7 +11,6 @@ from cairis.tools.MessageDefinitions import AssetMessage, AssetEnvironmentProper
 from cairis.tools.ModelDefinitions import AssetModel as SwaggerAssetModel, AssetEnvironmentPropertiesModel, ValueTypeModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
-
 class AssetsAPI(Resource):
     # region Swagger Doc
     @swagger.operation(
