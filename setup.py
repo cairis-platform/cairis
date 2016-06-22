@@ -14,17 +14,17 @@ with open('requirements.txt') as f:
     required = f.read().splitlines()
 
 setup(name='cairis',
-      version='1.0.7',
+      version='1.1.0',
       author='Shamal Faily',
       author_email='shamal.faily@gmail.com',
       description = 'A security design tool',
       license = 'Apache Software License',
       url='https://github.com/failys/cairis',
-      download_url='https://github.com/failys/cairis/tarball/1.0.7',
+      download_url='https://github.com/failys/cairis/tarball/1.1.0',
       packages=['cairis'],
       include_package_data=True,
       data_files = [('cairis/examples', egFiles)],
-      scripts=['cairis/bin/cairis_gui.py','cairis/bin/configure_cairis_db.py','cairis/bin/cimport.py','cairis/bin/cexport.py','cairis/bin/at2om.py','cairis/bin/gt2pc.py'],
+      scripts=['cairis/bin/cairis_gui.py','cairis/bin/cairisd.py','cairis/bin/configure_cairis_db.py','cairis/bin/cimport.py','cairis/bin/cexport.py','cairis/bin/at2om.py','cairis/bin/gt2pc.py'],
       entry_points={'console_scripts': [
                        'cairis_gui = cairis.bin.cairis_gui:main',
                        'configure_cairis_db = cairis.bin.configure_cairis_db:main',

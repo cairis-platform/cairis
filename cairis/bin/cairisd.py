@@ -20,7 +20,7 @@ import cairis.daemon.IRISDaemon
 import cairis.daemon.WebConfig 
 from cairis.daemon.CairisHTTPError import CairisHTTPError
 
-def start(args):
+def main(args):
     options = {
         'port': 0,
         'unitTesting': False
@@ -40,7 +40,7 @@ def start(args):
 
 if __name__ == '__main__':
   try:
-    start(sys.argv)
+    main(sys.argv)
   except CairisHTTPError, e:
     print "Fatal CAIRIS error: " + str(e)
     sys.exit(-1)
