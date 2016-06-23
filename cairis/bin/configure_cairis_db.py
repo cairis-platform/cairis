@@ -27,7 +27,7 @@ from subprocess import Popen
 class CAIRISConfigurationForm(np.ActionForm):
 
   def create(self):
-    self.name = "Configure CAIRIS database"
+    self.name = "Configure CAIRIS"
     self.theHost = self.add(np.TitleText, name = "Host:", value = "localhost")
     self.thePort = self.add(np.TitleText, name = "Port:", value = "3306")
     self.theUser = self.add(np.TitleText, name = "User:", value = "cairisuser")
@@ -38,6 +38,10 @@ class CAIRISConfigurationForm(np.ActionForm):
     self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = "/usr/local/lib/python2.7/dist-packages/cairis")
     self.theImageDir = self.add(np.TitleText, name = "Default image directory:", value = ".")
     self.theFileName = self.add(np.TitleText, name = "CAIRIS configuration file name:", value = os.environ.get("HOME") + "/cairis.cnf")
+    self.theWebPort = self.add(np.TitleText,name = "Web port:", value = "7071")
+    self.theLogLevel = self.add(np.TitleText,name = "Log level:", value = "warning");
+    self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = "/usr/local/lib/python2.7/dist-packages/cairis/web")
+    self.theUploadDir = self.add(np.TitleText,name = "Upload directory:", value = "/tmp")
 
   def on_ok(self):
     self.createDatabase()
@@ -109,6 +113,11 @@ class CAIRISConfigurationForm(np.ActionForm):
     f.write("tmp_dir = " + self.theTmpDir.value + "\n")
     f.write("root = " + self.theRootDir.value + "\n")
     f.write("default_image_dir = " + self.theImageDir.value + "\n")
+    f.write("web_port = " + self.theWebPort.value + "\n")
+    f.write("log_level = " + self.theLogLevel.value + "\n")
+    f.write("web_static_dir = " + self.theStaticDir.value + "\n")
+    f.write("upload_dir = " + self.theUploadDir.value + "\n")
+
     f.close()
     self.parentApp.setNextForm(None)
 
