@@ -23,5 +23,5 @@ __author__ = 'Robin Quetin'
 
 
 class CairisTests(unittest.TestCase):
-    app = cairis.bin.cairisd.start(['-d', '--unit-test'])
+    app = cairis.bin.cairisd.main(['-d', '--unit-test'])
     sleep(1)
