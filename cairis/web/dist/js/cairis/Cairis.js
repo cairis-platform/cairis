@@ -12,6 +12,101 @@ function debugLogger(info){
         console.log(info);
     }
 }
+
+
+
+//This is for the login credentials
+$(document).ready(function() {
+    // bind the form submit event to our function
+    $("#loginForm").bind('submit', function(e) {
+        // prevent page refresh
+        e.preventDefault();
+        // post the data
+        var ajax=$.ajax({
+            type: "POST",
+            data: $("#loginForm").serialize(),
+            url: "http://localhost:7071/"
+        }).done(function(data){
+            console.log('done!')
+        });
+        ajax.fail(function(data){
+            console.log('error!');
+        });
+    });
+});
+
+
+//This is taken from connections.js
+/*
+
+request.form.get('username')
+request.form.get('password')
+
+
+var loginDialog = $( "#loginDialog" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var index = $("#connectionSelection").val();
+            var cookie = $.cookie("connections");
+            var arr = JSON.parse(cookie);
+           var obj = arr[index];
+            $.session.set("usedConnectionIndex", index);
+            var cookieText = obj.IP+obj.DB;
+
+            cookie = $.cookie(cookieText);
+            if(cookie !== undefined){
+                var json = JSON.parse(cookie);
+                $("#username").val(json.username);
+                $("#password").val(json.password);
+            }
+            $.session.set("cookieText",cookieText)
+            $( this ).dialog( "close" );
+            dialogwindow.dialog( "open" );
+        },
+        Cancel: function() {
+            $( this ).dialog( "close" );
+            $( "#errorDialog" ).dialog();
+        }
+    }
+});
+
+*/
+
+
+
+var loginDialog = $( "#loginDialog" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var index = $("#credentialsSelection").val();
+            var cookie = $.cookie("connections");
+            var arr = JSON.parse(cookie);
+           var obj = arr[index];
+            $.session.set("usedConnectionIndex", index);
+            var cookieText = obj.IP+obj.DB;
+
+            cookie = $.cookie(cookieText);
+            if(cookie !== undefined){
+                var json = JSON.parse(cookie);
+                $("#username").val(json.port);
+                $("#password").val(json.user);
+            }
+            $.session.set("cookieText",cookieText)
+            $( this ).dialog( "close" );
+            dialogwindow.dialog( "open" );
+        },
+        Cancel: function() {
+            $( this ).dialog( "close" );
+            $( "#errorDialog" ).dialog();
+        }
+    }
+});
+
+
+
 //The config window at start
 var dialogwindow = $( "#dialogContent" ).dialog({
     autoOpen: false,
