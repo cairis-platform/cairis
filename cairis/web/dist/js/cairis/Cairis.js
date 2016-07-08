@@ -47,7 +47,7 @@ $(document).ready(function() {
             console.log('done!')
         });
         ajax.fail(function(data){
-            console.log('error!');
+            console.log('Authentication Failed!');
         });
     });
 });
@@ -321,8 +321,8 @@ function getAssetview(environment){
         crossDomain: true,
         url: serverIP + "/api/assets/model/environment/" + environment.replace(" ","%20"),
         success: function(data){
-          // console.log("in getAssetView " + data.innerHTML);
-           // console.log(this.url);
+          console.log("in getAssetView " + data.innerHTML);
+           console.log(this.url);
            fillSvgViewer(data);
 
         },
@@ -1219,7 +1219,7 @@ function setTableHeader(){
             break;
     }
     $("#reqTable").find("thead").empty();
-   // $("#reqTable").empty();
+    $("#reqTable").empty();
     $("#reqTable").find("thead").append(thead);
     $("#reqTable").find("tbody").empty();
 

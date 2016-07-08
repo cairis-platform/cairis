@@ -590,15 +590,15 @@
     </footer>
     <!-- The login window-->
 </div>
-<div id="dialogContent" title="Configuration">
+<div id="dialogContent" title="Login Window">
     <p>Please Log In</p>
     <form  enctype='application/json' id="configForm">
        <div class="panel-body">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
+                            <label for="inputUsername" class="col-sm-3 control-label">Username</label>
                             <div class="col-sm-12">
-                                <input class="form-control" id="inputEmail3" placeholder="Email" required="" type="email">
+                                <input class="form-control" id="inputUsername" placeholder="Username" required="" type="text">
                             </div>
                         </div>
                         <div class="form-group">
@@ -615,12 +615,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group last">
+                       <!-- <div class="form-group last">
                             <div class="col-sm-offset-3 col-sm-9">
                                 <button type="submit" class="btn btn-success btn-sm">Sign in</button>
                                 <button type="reset" class="btn btn-default btn-sm">Reset</button>
                             </div>
-                        </div>
+                        </div>-->
                     </form>
 </div>
 <div class="comboboxD" id="comboboxDialog" title="Dialog">
@@ -629,11 +629,11 @@
     </select>
 </div>
 <div id="errorDialog" title="ERROR">
-    <p style="color: black">You can't use CAIRIS without any settings</p>
+    <p style="color: black">You must login to use CAIRIS</p>
 </div>
 <div class="popupMessage" style="display:none;" >
-    <div class="Succes"><i class="fa fa-check fa-2x"></i><div class="infoText">Success</div></div>
-    <div class="Fail"><i class="fa fa-exclamation fa-2x"></i><div class="infoText">Something went wrong...<p class="faultInfo"></p></div></div>
+    <div class="Succes"><i class="fa fa-check fa-2x"></i><div class="infoText">Login Successful</div></div>
+    <div class="Fail"><i class="fa fa-exclamation fa-2x"></i><div class="infoText">Authentication Failed<p class="faultInfo"></p></div></div>
 </div>
 <div id="ChooseAssetDialog" title="Choose an Asset" style="display: none">
     <select>

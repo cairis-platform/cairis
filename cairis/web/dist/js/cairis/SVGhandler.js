@@ -38,7 +38,7 @@ $( document ).ajaxComplete(function() {
                      Then, because the reading of this html goes Async (as with every jQuery method), I give my data and the ID's so I can fill it after
                      the read of the template is done.
                      */
-                    //forceOpenOptions();
+                    forceOpenOptions();
                     var dataArr = [];
                     dataArr["#theName"] = String(data.theName);
                     dataArr["#theDescription"] = String(data.theDescription);
