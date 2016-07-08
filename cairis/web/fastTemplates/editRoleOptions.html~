@@ -1,0 +1,62 @@
+<form id="editRoleOptionsform" xmlns="http://www.w3.org/1999/html" >
+
+    <p>
+        <label>Name</label>
+        <input class="optionsInput" type="text" name="theName" id="theName">
+    </p>
+    <p>
+        <label>Shortcode</label>
+        <input class="optionsInput" type="text" value="" id="theShortCode" name="theShotCode">
+    </p>
+    <p>
+        <label for="theType">Type</label>
+        <select name="TheType" id="theType">
+            <option selected>
+                Attacker
+            </option>
+            <option>
+                Stakeholder
+            </option>
+
+        </select>
+
+        <div id="Description">
+    <label for="theDescription">Description</label>
+           <textarea class="right" name="theDescription" id="theDescription"></textarea>
+        </div>
+
+    <div class="inblock">
+        <table class="left clickable-table" id="theEnvironments" >
+            <thead>
+            <tr><th>Environment</th></tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div class="tabs right infoWidth" >
+            <div id="Properties" class="gearOptions clickable-table scrollableTable">
+                <table id="theResponses">
+                    <thead>
+                    <tr><th>Response</th><th>Cost</th></tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div id="AssociationsAssetsOptions">
+                <table id="theCounterMeasures">
+                    <thead>
+                    <tr><th>Countermeasure</th></tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <button id="UpdateRole">Update</button>
+</form>

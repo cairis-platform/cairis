@@ -1,0 +1,115 @@
+<form id="editRisksForm">
+    <p>
+        <label>Name</label>
+        <input class="optionsInput" type="text" name="theName" id="theName">
+    </p>
+    <p>
+        <label>Tags</label>
+        <input class="optionsInput" type="text" name="theTags" id="theTags">
+    </p>
+    <p>
+        <label>Threat</label>
+        <select class="right riskDetailsChanger" id="theThreatNames">
+
+        </select>
+        </p>
+    <p>
+        <label>Vulnerability</label>
+        <select class="right riskDetailsChanger" id="theVulnerabilityNames">
+
+        </select>
+    </p>
+    <p>
+        <table class="clickable-table" id="theRiskEnvironments" style="width: 100%;">
+            <thead>
+            <tr><th>Environment</th></tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </p>
+    <p>
+        <label>Rating</label>
+        <input class="optionsInput" type="text" name="rating" id="rating" readonly>
+    </p>
+    <p>
+    <table class="clickable-table" id="theResponses" style="width: 100%;">
+        <thead>
+        <tr><th>Response</th><th>Unmit. Score</th><th>Mit. Score</th></tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    </p>
+
+
+    <button id="5">Update</button>
+    <button id="editMisusedCase">Edit Misuse Case</button>
+</form>
+<div id="editMisusedCaseDiv" style="display: none">
+        <p>
+            <label>Name</label>
+            <input class="optionsInput" type="text" id="theMisuseName" name="theMisuseName" readonly>
+        </p>
+        <p>
+            <label>Risk</label>
+            <input class="optionsInput" type="text" id="theMisuseRisk " name="theMisuseRisk" readonly>
+        </p>
+        <div class="inblock">
+            <table class="left clickable-table" id="theMisuseEnvironments" style="width: auto;">
+                <thead>
+                <th>Environment</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <div class="tabs  right infoWidth">
+                <ul>
+                    <li><a href="#Summary">Summary</a></li>
+                    <li><a href="Narrative">Narrative</a></li>
+                </ul>
+                <div id="Summary">
+                    <p><label>Objective</label> <textarea id="theLabel" type="text" name="theLabel" readonly> </textarea></p>
+                    <div style="display: inline-block; width: 100%">
+                        <table style="float: left;">
+                    <thead><tr><th>Attacker</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+
+                        <table style="float: right;">
+                        <thead><tr><th>Asset</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                    </div>
+                    <p>
+                        <label for="misuseThreat">Threat</label>
+                        <input type="text" id="misuseThreat" readonly>
+                    </p>
+                    <p>
+                        <label for="misuseLikelihood">Likelihood</label>
+                        <input type="text" id="misuseLikelihood" readonly>
+                    </p>
+                    <p>
+                        <label for="misuseVulnerability">Vulnerability</label>
+                        <input type="text" id="misuseVulnerability" readonly>
+                    </p>
+                    <p>
+                        <label for="misuseSeverity">Severity</label>
+                        <input type="text" id="misuseSeverity" readonly>
+                    </p>
+                    <p>
+                        <label for="misuseRiskRating">Vulnerability</label>
+                        <input type="text" id="misuseRiskRating" readonly>
+                    </p>
+                </div>
+                <div id="Narrative">
+                    <label>Narrative</label>
+                    <textarea id="theFitCriterion" class="goalAutoUpdater" name="theFitCriterion"> </textarea>
+                </div>
+            </div>
+        </div>
+        <button id="updateGoalButton">Update</button>
+</div>

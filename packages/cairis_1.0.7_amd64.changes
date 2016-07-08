@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Thu, 19 May 2016 02:07:32 -0700
+Source: cairis
+Binary: cairis-trusty
+Architecture: source all
+Version: 1.0.7
+Distribution: unstable
+Urgency: medium
+Maintainer: cairis cairis@cairis
+Changed-By: cairis <cairis@ubuntu>
+Description: 
+ cairis-trusty - <short description; defaults to some wise words>
+Changes: 
+ cairis (1.0.7) unstable; urgency=medium
+ .
+   * Initial release.
+Checksums-Sha1: 
+ 47b75820f32cb91b14842382a74656fc02c7c828 481 cairis_1.0.7.dsc
+ d6740a5c311cf6ffe67814935f138394bcf8a481 1287 cairis_1.0.7.tar.gz
+ 3c226f1e9184def65cd43aa52b7e6abf8a136072 1776 cairis-trusty_1.0.7_all.deb
+Checksums-Sha256: 
+ 06d5f8fcc99e44b1c4e81e3a3e58161fb67d1841ccd76a58e0499ca1c3212ee3 481 cairis_1.0.7.dsc
+ 3f031827e303a9035ba3aa2fab4974e32df86aa1185ae382bf52590b14bb8d13 1287 cairis_1.0.7.tar.gz
+ ff5d766823712bae1c01d4c6d3bcc2cb764cb1da4fc2b3cd2369c371bedb692e 1776 cairis-trusty_1.0.7_all.deb
+Files: 
+ 964ea81156ecc86ec86b233ba1e3da2e 481 misc optional cairis_1.0.7.dsc
+ 6291c2084429af363375e7b1045ecde8 1287 misc optional cairis_1.0.7.tar.gz
+ af295ec3b5afcc3067e9af20c70bf331 1776 misc optional cairis-trusty_1.0.7_all.deb

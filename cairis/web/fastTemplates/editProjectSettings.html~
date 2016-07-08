@@ -1,0 +1,109 @@
+<form id="ProjectsProperties">
+    <div class="tabs right" style="margin: 5px;">
+        <ul>
+            <li><a href="#Background">Background</a></li>
+            <li><a href="#ProjectGoalsDiv">Goals</a></li>
+            <li><a href="#Scope">Scope</a></li>
+            <li><a href="#Rich-Picture">Rich Picture</a></li>
+            <li><a href="#Naming-Conventions">Naming Conventions</a></li>
+            <li><a href="#Contributors">Contributors</a></li>
+            <li><a href="#Revisions">Revisions</a></li>
+        </ul>
+        <div id="Background">
+            <p><label>Project Name</label> <input id="projectName" type="text" name="projectName"></p>
+            <label>Project Background</label><textarea id="projectBackground" name="projectBackground"></textarea>
+            <br>
+            &nbsp;
+            &nbsp;
+        </div>
+        <div id="ProjectGoalsDiv">
+            <textarea id="projectGoals" name="projectGoals"> </textarea>
+        </div>
+        <div id="Scope">
+            <textarea id="projectScope"  class="goalAutoUpdater" name="projectScope"> </textarea>
+        </div>
+        <div id="Rich-Picture">
+            <div style="position: relative;">
+                <img id="theImages" src="" height="350" width="350" onError="this.src='images/default-avatar.png';" style="margin-bottom: 5px;display: block;margin-left: auto; margin-right: auto;">
+                <div class="progress" style="display: none" >
+                    <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" >
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+            <input type="file" id="projectSettingsUpload" style="display: none">
+        </div>
+        <div id="Naming-Conventions">
+            <table id="editNamingConventionsTable" class="clickable-table" style="width: 100%">
+                <thead>
+                <tr><th id="addNamingConvention" style="width: 15px;"> <i class="fa fa-plus"></i></th> <th>Name</th><th>Definitions</th> </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div id="Contributors">
+            <table id="editContributorTable" class="clickable-table" style="width: 100%">
+                <thead>
+                <tr><th id="addContributor" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Firstname</th><th>Surname</th><th>Affiliation</th><th>Role</th></tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div id="Revisions">
+            <table id="editProjectRevisions" class="clickable-table" style="width: 100%">
+                <thead>
+                <tr><th id="addProjectRevision" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>No</th><th>Date</th><th>Remarks</th> </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <button id="updateProjectButton" style="margin: 5px;">Update</button>
+</form>
+<div id="editContributorWindow" style="display: none; margin:10px;">
+    <p>
+        <label>Firstname</label>
+        <input class="optionsInput" type="text" name="firstName" id="firstName">
+    </p>
+    <p>
+        <label>Surname</label>
+        <input class="optionsInput" type="text" value="" id="surname" name="surname">
+    </p>
+    <p>
+        <label>Affliation</label>
+        <input class="optionsInput" type="text" value="" id="affliation" name="affliation">
+    </p>
+    <p>
+        <label>Role</label>
+        <select  class="optionsInput" id="role" name="role">
+            <option value="Participant">Participant</option>
+            <option value="Facilitator">Facilitator</option>
+            <option value="Scribe">Scribe</option>
+        </select>
+    </p>
+    <button class="projectSettingsCancel">Cancel</button>
+    <button id="updateContributor">Update</button>
+</div>
+<div id="addRevision" style="display: none; margin:10px;">
+    <p>
+    <label> Add a Revision</label>
+    <textarea id="revisionTextArea" style="margin: 0px; width: 477px; height: 86px;"></textarea>
+    </p>
+    <button id="addRevisionButton">Add revision</button>
+</div>
+<div id="editNamingConvention" style="display: none; margin:10px;">
+    <p>
+        <label>Name</label>
+        <input class="optionsInput" type="text" name="conventionName" id="conventionName">
+    </p>
+    <p>
+        <label>Definition</label>
+        <textarea id="conventionDefinition" style="margin: 0px; width: 477px; height: 86px;"></textarea>
+    </p>
+
+    <button class="projectSettingsCancel">Cancel</button>
+    <button id="updateNamingConventions">Update</button>
+</div>

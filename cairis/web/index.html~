@@ -1,0 +1,732 @@
+<!--
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+-->
+
+
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>CAIRIS Web App</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <!-- Bootstrap 3.3.2 -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome Icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Ionicons -->
+    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <!-- Theme style -->
+    <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+          page. However, you can choose any other skin. Make sure you
+          apply the skin class to the body tag so the changes take effect.
+    -->
+    <!-- jQuery 2.1.3 -->
+    <script src="plugins/jQuery/jQuery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="plugins/mCustomScrollbar/jquery.mCustomScrollbar.css" />
+    <script src="plugins/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+    <!-- Script for dialog window -->
+    <script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+    <link href="plugins/jQueryUI/jquery-ui.2.css" rel="stylesheet" type="text/css" />
+
+    <link href="dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" />
+    <link href="dist/css/CAIRIS.css" rel="stylesheet" type="text/css" />
+
+    <link href="plugins/contextMenu/contextMenu.css" rel="stylesheet" type="text/css"/>
+
+    <!--Editable Table scripts, The editableRAF has some custom changes, including ajax calls for automatic posting -->
+    <script src="plugins/editableTable/editableRAF.js"></script>
+    <!-- Session plugin -->
+    <script src="dist/js/jquery.session.js"></script>
+    <!-- svg pan and zoom script -->
+    <script src="plugins/svg-pan-zoom/svg-pan-zoom.js"></script>
+    <script src="plugins/lazyLoad/lazyload.js"></script>
+
+    <script src="plugins/JsonPopulate/jquery.loadJSON.js"></script>
+
+    <script src="plugins/jQueryUI/jquery-ui-contextmenu.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="skin-blue">
+<div class="wrapper">
+    <!-- Main Header -->
+    <header class="main-header">
+
+	 <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" id="toggler" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+
+        <!-- Logo -->
+       <a id="cairislogo" href="#" class="logo">CAIRIS</a>
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top fixed" role="navigation">
+           
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+
+            <!--    <li class="dropdown messages-menu" id="startNewProject">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                           <img class="menu-image" src="images/new_file2.png" alt="New Project">
+                                <p class="imgPopup">New Project</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu" id="saveProject">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                            <img class="menu-image" src="images/Save-icon.png" alt="Save Project">
+                                <p class="imgPopup">Save Project</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu" id="openProject">
+                    <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown">
+                        <img class="menu-image" src="images/open-file.png" alt="Open Project">
+                        <p class="imgPopup">Open Project</p>
+                    </a>
+                    </li>
+			-->
+
+                    <li class="dropdown messages-menu" id="editProjectsClick">
+                    <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Project Settings">
+                        <img class="menu-image" src="images/projectSettings.png" alt="Project Settings">
+                        <p class="imgPopup">Project Settings</p>
+                    </a>
+                    </li>
+                    <li class="dropdown messages-menu" id="editEnvironmentsButton">
+                    <a href="#"  class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Environment Settings">
+                        <img class="menu-image" src="images/environment.png" alt="Environment Settings">
+                        <p class="imgPopup">Environment Settings</p>
+                    </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Edit Architectural Patterns">
+                            <img class="menu-image" src="images/securitypattern.png" alt="Edit Architectural Patterns">
+                            <p class="imgPopup">Edit Architectural Patterns</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu" id="addRow">
+                        <a href="#"  class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Add new requirement">
+                            <img class="menu-image"  src="images/addEO.png" alt="Add new requirement">
+                            <p class="imgPopup">Add new requirement</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu" id="removeReq">
+                        <a href="#"  class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Delete requirement">
+                            <img class="menu-image" src="images/deleteEO.png" alt="Delete requirement">
+                            <p class="imgPopup">Delete requirement</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                    <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Commit latest requirement changes">
+                        <img class="menu-image" src="images/commitEO.png" alt="Commit latest requirement changes">
+                        <p class="imgPopup">Commit latest requirement changes</p>
+                    </a>
+                </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Find object">
+                            <img class="menu-image" src="images/transparent-magnifying-glass-hi.png" alt="Find object">
+                            <p class="imgPopup">Find object</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Domain Properties">
+                            <img class="menu-image" src="images/domainproperty.png" alt="Domain Properties">
+                            <p class="imgPopup">Domain Properties</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu" id="EditGoals">
+                    <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Goals">
+                        <img class="menu-image" src="images/goal.png" alt="Edit Goals">
+                        <p class="imgPopup">Edit Goals</p>
+                    </a>
+                </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Obstacles">
+                            <img class="menu-image" src="images/obstacle.png" alt="Edit Obstacles">
+                            <p class="imgPopup">Edit Obstacles</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu" id="showRolesButton" title="Edit Roles">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                            <img class="menu-image" src="images/role.png" alt="Edit Roles">
+                            <p class="imgPopup">Edit Roles</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Personas">
+                            <img class="menu-image" src="images/persona.png" alt="Edit Personas">
+                            <p class="imgPopup">Edit Personas</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Tasks">
+                            <img class="menu-image" src="images/task.png" alt="Edit Tasks">
+                            <p class="imgPopup">Edit Tasks</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Edit Use Cases">
+                            <img class="menu-image" src="images/usecase.png" alt="Edit use cases">
+                            <p class="imgPopup">Edit Use Cases</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu"  id="editAssetsClick">
+                    <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Assets">
+                        <img class="menu-image" src="images/template_asset.png" alt="Edit Assets">
+                        <p class="imgPopup">Edit Assets</p>
+                    </a>
+                </li>
+                    <li class="dropdown messages-menu" id="vulnerabilitiesClick">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Vulnerabilities">
+                            <img class="menu-image" src="images/vulnerability.png" alt="Edit Vulnerabilities">
+                            <p class="imgPopup">Edit Vulnerabilities</p>
+                        </a>
+                    </li>
+                    </li>
+                    <li class="dropdown messages-menu" id="attackerClick">
+                        <a href="#" class="dropdown-toggle imgwrapper"  data-toggle="dropdown" title="Edit Attackers">
+                            <img class="menu-image" src="images/attacker.png" alt="Edit Attackers">
+                            <p class="imgPopup">Edit Attackers</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu" id="threatsClick">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Threats">
+                            <img class="menu-image" src="images/threat.png" alt="Edit Threats">
+                            <p class="imgPopup">Edit Threats</p>
+                        </a>
+                    </li>
+                 <li class="dropdown messages-menu" id="risksClick" >
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Risks">
+                            <img class="menu-image" src="images/risk.png" alt="Edit Risks">
+                            <p class="imgPopup">Edit Risks</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu" id="responsesTable">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Response">
+                            <img class="menu-image" src="images/response.png" alt="Edit Response">
+                            <p class="imgPopup">Edit Response</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Edit Countermeasures">
+                            <img class="menu-image" src="images/countermeasure.png" alt="Edit Countermeasures">
+                            <p class="imgPopup">Edit Countermeasures</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Dependencies">
+                            <img class="menu-image" src="images/dependencyassociation.png" alt="Edit Dependencies">
+                            <p class="imgPopup">Edit Dependencies</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Goal Associations">
+                            <img class="menu-image" src="images/goalassociation.png" alt="Edit Goal Associations">
+                            <p class="imgPopup">Edit Goal Associations</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Edit Class Associations">
+                            <img class="menu-image" src="images/classassociation.png" alt="Edit Class Associations">
+                            <p class="imgPopup">Edit Class Associations</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="View Risk Analisys Model">
+                            <img class="menu-image" src="images/environmentModel.png" alt="View Risk Analisys Model">
+                            <p class="imgPopup">View Risk Analisys Model</p>
+                        </a>
+                    </li>
+			<!--
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                            <img class="menu-image" src="images/goalModel.png" alt="View Goal Model">
+                            <p class="imgPopup">View Goal Model</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                    <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <img class="menu-image" src="images/obstacleModel.png" alt="View Obstacle Model">
+                        <p class="imgPopup">View Obstacle Model</p>
+                    </a>
+                </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                            <img class="menu-image" src="images/responsibilityModel.png" alt="View Responsibility Model">
+                            <p class="imgPopup">View Responsibility Model</p>
+                        </a>
+                    </li>
+			-->
+                    <li  id="assetView">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="View Asset Model">
+                            <img class="menu-image"  src="images/classModel.png" alt="View Asset Model">
+                            <p class="imgPopup">View Asset Model</p>
+                        </a>
+                    </li>
+			<!--
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                            <img class="menu-image" src="images/taskModel.png" alt="View Task Model">
+                            <p class="imgPopup">View Task Model</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                            <img class="menu-image" src="images/apModel.png" alt="View Assumption Persona Model">
+                            <p class="imgPopup">View Assumption Persona Model</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                            <img class="menu-image" src="images/atModel.png" alt="View Assumption Task Model">
+                            <p class="imgPopup">View Assumption Task Model</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                            <img class="menu-image" src="images/conceptMapModel.png" alt="View Concept Map Model">
+                            <p class="imgPopup">View Concept Map Model</p>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                            <img class="menu-image" src="images/component_view.png" alt="View Component Model">
+                            <p class="imgPopup">View Component Model</p>
+                        </a>
+                    </li> -->
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <!-- sidebar - sidebar.less -->
+        <section class="sidebar">
+            <div id="sidebar-scrolling">
+                <ul class="sidebar-menu">
+                    <li class="header">MENU</li>
+                    <!-- Optionally, you can add icons to the links -->
+                    <li class="treeview">
+                        <a href="#">
+                            <i class='fa fa-file-o'></i>
+                            <span>File</span><i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                       <ul class="treeview-menu">
+                            <li><a href="#">File
+                            </a></li>
+                            <li><a href="#" id="openProject">Open
+                            </a></li>
+                            <li><a href="#">Save
+                            </a></li>
+                            <li><a id="importClick" href="#">Import
+                            </a></li>
+                            <input type="file" id="importFile" style="display:none;"/>
+                            <li><a href="#">Export
+                            </a></li>
+                            <li><a href="#">Documentation
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class='fa fa-adjust'></i>
+                            <span>Requirement Management</span><i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="#">Commit
+                            </a></li>
+                            <li><a href="#" id="addRow">Add
+                            </a></li>
+                            <li><a href="#"id="removeReq">Delete
+                            </a></li>
+                            <li><a href="#">Domain Properties
+                            </a></li>
+                            <li><a href="#">Goals
+                            </a></li>
+                            <li><a href="#">Obstacles
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class='fa fa-exclamation'></i>
+                            <span>Risk Management</span><i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="#" id="showRolesButton">Roles
+                            </a></li>
+                            <li><a href="#" id="editAssetsClick">Assets
+                            </a></li>
+                            <li><a href="#">Class Associations
+                            </a></li>
+                            <li><a href="#" id="attackerClick">Attackers
+                            </a></li>
+                            <li><a href="#"id="threatsClick">Threats
+                            </a></li>
+                            <li><a href="#"id="vulnerabilitiesClick">Vulnerabilities
+                            </a></li>
+                            <li><a href="#"id="risksClick">Risks
+                            </a></li>
+                            <li><a href="#"id="responsesTable">Responses
+                            </a></li>
+                            <li><a href="#">Countermeasures
+                            </a></li>
+                            <li><a href="#">Security Patters
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class='fa fa-eye'></i>
+                            <span>IRIS</span><i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="#">Find
+                            </a></li>
+                            <li><a href="#">Environments
+                            </a></li>
+                            <li><a href="#">Personas
+                            </a></li>
+                            <li><a href="#">Tasks
+                            </a></li>
+                            <li><a href="#">External Documents
+                            </a></li>
+                            <li><a href="#">Document References
+                            </a></li>
+                            <li><a href="#">Concept References
+                            </a></li>
+                            <li><a href="#">Persona Characteristics
+                            </a></li>
+                            <li><a href="#">Task Characteristics
+                            </a></li>
+                        </ul>
+                    </li>
+                  <!-- Commented out menu item as not required
+			   <li class="treeview">
+                        <a href="#">
+                            <i class='fa fa-codepen'></i>
+                            <span>EUSTACE</span><i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="#">Internal Documents
+                            </a></li>
+                            <li><a href="#">Codes
+                            </a></li>
+                            <li><a href="#">Quotations
+                            </a></li>
+                            <li><a href="#">Code Network
+                            </a></li>
+                            <li><a href="#">Implied Processes
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class='fa fa-wrench'></i>
+                            <span>Options</span><i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="#">Asset Values
+                            </a></li>
+                            <li><a href="#">Asset Types
+                            </a></li>
+                            <li><a href="#">Access rights
+                            </a></li>
+                            <li><a href="#">Protocols
+                            </a></li>
+                            <li><a href="#">Privileges
+                            </a></li>
+                            <li><a href="#">Surface Types
+                            </a></li>
+                            <li><a href="#">Vulnerability Types
+                            </a></li>
+                            <li><a href="#">Vulnerability Severities
+                            </a></li>
+                            <li><a href="#">Capabilities
+                            </a></li>
+                            <li><a href="#">Motivations
+                            </a></li>
+                            <li><a href="#">Threat Types
+                            </a></li>
+                            <li><a href="#">Threat Likelihoods
+                            </a></li>
+                            <li><a href="#">Threat values
+                            </a></li>
+                            <li><a href="#">Risk values
+                            </a></li>
+                            <li><a href="#">Template Assets
+                            </a></li>
+                            <li><a href="#">Template Requirements
+                            </a></li>
+                            <li><a href="#">Countermeasure values
+                            </a></li>
+                        </ul>
+                    </li>
+
+			-->
+                    <li class="treeview">
+                        <a href="#">
+                            <i class='fa fa-square-o'></i>
+                            <span>View</span><i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="#">Risk Analysis
+                            </a></li>
+                            <li><a href="#" id="assetView" >Asset Model
+                            </a></li>
+                            <li><a href="#">Goal Model
+                            </a></li>
+                            <li><a href="#">Obstacle Model
+                            </a></li>
+                            <li><a href="#">Responsibility Model
+                            </a></li>
+                            <li><a href="#">Task Model
+                            </a></li>
+                            <li><a href="#">Assumption Model
+                            </a></li>
+                            <li><a href="#">Assumption Task Model
+                            </a></li>
+                            <li><a href="#">Traceability
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class='fa fa-th'></i>
+                            <span>Grid</span><i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                       <ul class="treeview-menu">
+                            <li><a href="#" id="gridReq">Requirements
+                            </a></li>
+                            <li><a href="#" id="gridGoals">Goals
+                            </a></li>
+                            <li><a href="#" id="gridObstacles">Obstacles
+                            </a></li>
+                            <li><a href="#">Relabel Objects
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class='fa fa-question'></i>
+                            <span>Help</span><i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                           <li><a href="http://cairis.org/doc/">Manual
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </aside>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+           <div id="filtercontent" class="extraContent">
+               <label  class="topCombobox" for="assetsbox">Assets</label>
+                <select class="topCombobox" id="assetsbox" ></select>
+               <label  class="topCombobox" for="environmentsbox">Environments</label>
+               <select class="topCombobox" id="environmentsbox">
+
+               </select>
+           </div>
+        </section>
+        <!-- Main content -->
+        <section id="maincontent" class="content">
+            <!-- Your Page Content Here -->
+            <table id="reqTable"class="theTable table table-striped sortable">
+                <thead></thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <div id="svgViewer"></div>
+
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+    <!-- rightnav -->
+    <div id="rightnavGear" class="no-print"
+         style="position: fixed; top: 100px; right: 0px; border-radius: 5px 0px 0px 5px; padding: 10px 15px; font-size: 16px; z-index: 100; cursor: pointer; color: rgb(60, 141, 188); box-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 3px; background: rgb(255, 255, 255);">
+        <i class="fa fa-gear"></i></div>
+    <div id="rightnavMenu" class="no-print"
+         style="padding: 10px; position: fixed; top: 100px; right: -500px; border: 0px solid rgb(221, 221, 221); width: 500px; z-index: 100; box-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 3px; background: rgb(255, 255, 255);">
+        <h4 id="optionsHeaderGear" class="text-light-blue" style="margin: 0 0 5px 0; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
+            Options</h4>
+        <div id="optionsContent"></div>
+
+    </div>
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+
+            <strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.
+        </div>
+        <!-- Default to the left -->
+        <div id="inform"></div>
+    </footer>
+    <!-- The login window-->
+</div>
+<div id="dialogContent" title="Login Window">
+    <p>Please Log In</p>
+    <form  enctype='application/json' id="configForm">
+       <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="inputUsername" class="col-sm-3 control-label">Username</label>
+                            <div class="col-sm-12">
+                                <input class="form-control" id="inputUsername" placeholder="Username" required="" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">Password</label>
+                            <div class="col-sm-12">
+                                <input class="form-control" id="inputPassword3" placeholder="Password" required="" type="password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <div class="checkbox">
+                                    <label class="">
+                                        <input class="" type="checkbox">Remember me</label>
+                                </div>
+                            </div>
+                        </div>
+                       <!-- <div class="form-group last">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <button type="submit" class="btn btn-success btn-sm">Sign in</button>
+                                <button type="reset" class="btn btn-default btn-sm">Reset</button>
+                            </div>
+                        </div>-->
+                    </form>
+</div>
+<div class="comboboxD" id="comboboxDialog" title="Dialog">
+    <label> Choose the environment</label>
+    <select class="comboboxD" id="comboboxDialogSelect">
+    </select>
+</div>
+<div id="errorDialog" title="ERROR">
+    <p style="color: black">You can't use CAIRIS without any settings</p>
+</div>
+<div class="popupMessage" style="display:none;" >
+    <div class="Succes"><i class="fa fa-check fa-2x"></i><div class="infoText">Success</div></div>
+    <div class="Fail"><i class="fa fa-exclamation fa-2x"></i><div class="infoText">Something went wrong...<p class="faultInfo"></p></div></div>
+</div>
+<div id="ChooseAssetDialog" title="Choose an Asset" style="display: none">
+    <select>
+
+    </select>
+</div>
+<div id="ChooseRoleDialog" title="Choose a role" style="display: none">
+    <select>
+
+    </select>
+</div>
+<div id="ChooseMotivationsDialog" title="Choose a motivation" style="display: none">
+    <select>
+
+    </select>
+</div>
+<div id="ChooseEnvAssetsDialog" title="Choose a motivation" style="display: none">
+    <select>
+
+    </select>
+</div>
+<div id="ChooseRoleForResponse" title="Add a role cost" style="display: none">
+    <label>Role</label>
+    <select id="theNewRole">
+    </select>
+    <br/>
+    <label>Cost</label>
+    <select id="theRoleCost">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+    </select>
+</div>
+<div id="typeOfFile" title="Which type?" style="display: none">
+    <select>
+        <option>Model</option>
+        <option>Project data</option>
+        <option>Requirements</option>
+        <option>Risk Analysis</option>
+        <option>Usability</option>
+        <option>Associations</option>
+        <option>Threat and Vulnerability Types</option>
+        <option>Domain Values</option>
+        <option>Threat and Vulnerability Directory</option>
+        <option>Security Pattern</option>
+        <option>Architectural Pattern</option>
+        <option>Attack Pattern</option>
+        <option>Synopses</option>
+        <option>Assets</option>
+        <option>Processes</option>
+    </select>
+</div>
+<div class="loadingWrapper">
+    <div class="divLoading">
+    </div>
+</div>
+<script>
+   var reqTabl =  $('#reqTable').editableTableWidget({editor: $('<textarea>')});
+    /*
+     if the table is been scrolled, it needs to be out of focus
+     */
+    $('#maincontent').scroll(function(){
+        $('#reqTable').find('td:first').focus();
+        $('#reqTable').find('td:last').focus();
+        //console.log("Scrolling");
+    });
+    $("#comboboxDialog").hide();
+    $("#debugID").click(function () {
+        putThreat("{}", "NoName");
+    })
+
+</script>
+
+<!-- REQUIRED JS SCRIPTS -->
+<!-- AdminLTE App -->
+<script src="dist/js/app.js" type="text/javascript"></script>
+<!-- Slimscroll App  -->
+<script src="plugins/slimScroll/jquery.slimscroll.js" type="text/javascript"></script>
+<script>
+    LazyLoad.js(["dist/js/cairis/Cairis-UI.js","dist/js/cairis/buttonclicks.js", "dist/js/cairis/Cairis.js", "dist/js/cairis/readFile.js",
+        "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/assets.js", "dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js",
+        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/responses.js",
+        "dist/js/cairis/SVGhandler.js","dist/js/cairis/PutAndPost.js", "plugins/contextMenu/contextMenu.js", "dist/js/objects/jsonDefaultObjects.js"], function () {
+
+       console.log("All Cairis JS loaded");
+
+    });
+
+</script>
+<!-- For the basic page, keeping it separate from the Cairis jQuery
+<script src="dist/js/Cairis-UI.js" type="text/javascript"></script>
+<!-- The jQuery for the pages
+<script src="dist/js/Cairis.js" type="text/javascript"></script>-->
+
+</body>
+</html>
