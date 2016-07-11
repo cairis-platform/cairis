@@ -629,11 +629,11 @@
     </select>
 </div>
 <div id="errorDialog" title="ERROR">
-    <p style="color: black">You can't use CAIRIS without any settings</p>
+    <p style="color: black">You must login to use CAIRIS</p>
 </div>
 <div class="popupMessage" style="display:none;" >
-    <div class="Succes"><i class="fa fa-check fa-2x"></i><div class="infoText">Success</div></div>
-    <div class="Fail"><i class="fa fa-exclamation fa-2x"></i><div class="infoText">Something went wrong...<p class="faultInfo"></p></div></div>
+    <div class="Succes"><i class="fa fa-check fa-2x"></i><div class="infoText">Login Successful</div></div>
+    <div class="Fail"><i class="fa fa-exclamation fa-2x"></i><div class="infoText">Authentication Failed<p class="faultInfo"></p></div></div>
 </div>
 <div id="ChooseAssetDialog" title="Choose an Asset" style="display: none">
     <select>
