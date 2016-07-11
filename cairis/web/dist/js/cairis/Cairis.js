@@ -1155,7 +1155,6 @@ function activeElement(elementid){
        //If it is the table, we need to see which table it is
         setActiveOptions();
     }
-    //////ADDED
     setActiveOptions();
 
     elementid = "#" + elementid;

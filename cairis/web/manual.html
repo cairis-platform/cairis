@@ -526,12 +526,12 @@
                     		<img class="displayed" src="images/goal_options.png" alt="Goal Options">  
 							<br>                      
                      
-                      <br>
-							<br>
-                    		<img class="displayed" src="images/add_goal.png" alt="Add Goal Dialog" style="width:700px;height:300px">  
-							<br> 
 							<li>Click on the green add symbol within the environment window to bring up the environment speed menu. Select an environment to situate the goal in. 
 							This will add the new environment to the environment list.</li>
+							<br>
+							<br>
+                    		<img class="displayed" src="images/add_goal_icon.PNG" alt="Add Goal Icon">  
+							<br> 
 							<li>In the Definition tab, enter the goal definition, and select the goal category and priority. </li>
 							<p> Possible goal categories are: Achieve, Maintain, Avoid, Improve, Increase, Maximise, and Minimise.</p>
 							<p> Possible priority values are Low, Medium, and High.</p>                
@@ -539,7 +539,7 @@
                  		<li>Click on the Issue tab and enter any issues or comments relating to this goal.</li> 
                  		 <br>
 							<br>
-                    		<img class="displayed" src="images/goal_refinement.png" alt="Goal refinement Dialog" style="width:600px;height:250px">  
+                    		<img class="displayed" src="images/goal_refinement.png" alt="Goal refinement Dialog">  
 							<br> 
                  		<li>If this goal refines a parent goal, click on the Goals tab, double click on the Goal refinement list, and select Add to open the Add Goal Refinement Dialog. </li>
                  		<p> In this dialog, select the Goal from the Type combo box, and select the Sub-goal, refinement type, and an Alternate value. Possible refinement types are: and, or, conflict, responsible, obstruct, and resolve. The alternative value (Yes or No) indicates whether or not this goal affords a goal-tree for an alternate possibility for satisfying the parent goal. It is also possible to enter a rationale for this 
@@ -568,7 +568,7 @@
                         Existing goals can be modified by double clicking on the goal in the Goals dialog box, making the necessary changes, and clicking on the Update button.
                      <br>
 							<br>
-                    		<img class="displayed" src="images/edit_goal.png" alt="Edit Goal" style="width:750px;height:325px">  
+                    		<img class="displayed" src="images/delete_goal.PNG" alt="Delete Goal" style="width:1000px;height:127px">  
 							<br>
 							<p>To delete a goal, select the goal to delete in the Goals dialog box, and select the Delete button. If any artifacts are dependent on this goal then a dialog box stating these dependencies are displayed. 
 							The user has the option of selecting Yes to remove the goal dependencies and the goal itself, or No to cancel the deletion.</p>
@@ -578,17 +578,144 @@
                   <div class="panel panel-default">
                     <div class="panel-heading">
                       <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion6" href="#collapseInnerFive">
-                        Visualising Tasks
+                        Goal Modelling
                       </a></h4>
                     </div>
                     <div id="collapseInnerFive" class="panel-collapse collapse">
                       <div class="panel-body">
-                        Anim pariatur cliche...
+                        Goal models can be viewed by clicking on the Goal Model toolbar button <img src="images/goalModel.png" alt="Goal Model">, and selecting the environment to view the environment for.
+                      <ol>
+                      <li>By changing the environment name in the environment combo box, the goal model for a different environment can be viewed. 
+                      The layout of the model can also be replaced by selecting a layout option in the Layout combo box at the foot of the model viewer window.</li>
+                      <li>By clicking on a model element, information about that artifact can be viewed.</li>
+                      <li>Goal models can also be filtered by goal. Applying a filter causes the selected goal to be displayed as the root goal. Consequently, goals are only displayed if they are direct or indirect
+                      leafs of the filtered goal.</li>
+                      <li>Goals can also be refined from the goal model, albeit only for the environment being modified. To refine a goal, right-click on the goal in the model viewer, and select And-Goal, or Or-Goal based on the refinement desired. An simplified version of the Add Goal dialog box is displayed and, when all the necessary information has been added, a new goal will be added to the database, complete with the desired refinement. Please note, the model view needs to be
+                      refreshed to view the goal. Goals may only be refined to other goals in the model viewer; for anything more elaborate, the usual goal refinement association procedure
+                      needs to be followed.</li>
+                      </ol>
+                   </div>
+                    </div>
+                  </div>
+                   </div>
+    </div>
+  </div>
+                  </div>
+                  
+                  	<div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse13">Obstacles</a>
+      </h4>
+    </div>
+    <div id="collapse13" class="panel-collapse collapse">
+      <div class="panel-body">In CAIRIS, a requirements specification is analogous to a safety case. In a safety case, a system is only considered safe if its safety goals have been satisfied
+      . 
+      <p> In a similar manner, requirements are leaf nodes in a goal tree and satisfying stakeholder needs is only possible if the high-level goals – stipulated by stakeholders – 
+      can be satisfied.</p>
+      
+      <p>We define goals as prescriptive statements of system intent that are achievable by one or more agents. Goals can be refined to requirements, which are achievable by only agent. Goals and requirements may also be operationalised 
+      as tasks. Alternatively, we may decide to specify tasks and ask what goals or requirements need to hold in order that a given task can be completed successfully.</p>
+		<p>To satisfy a goal, one or more sub-goals may need to be satisfied; satisfaction may require satisfying a conjunction of sub-goals, i.e. several AND goals, or a disjunction of sub-goals, i.e. several OR goals.</p>      					
+      <p>Goals or requirements may be obstructed by obstacles, which are conditions representing undesired behaviour; these prevent an associated goal from being achieved. By progressively refining obstacles, we can obtain the origin of some undesired behaviour; this may be reflected as a vulnerability or 
+      a threat, and contribute to risk analysis.</p>				
+      				
+                    	 <div class="panel-group" id="accordion3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion4" href="#collapseInnerThree">
+                        Adding a Goal
+                      </a></h4>
+                      </div>
+                    
+                    <div id="collapseInnerThree" class="panel-collapse collapse in">
+                      <div class="panel-body">
+                        <ol>
+                      
+                      <li>Click on the Goal toolbar button to open the Goals dialog box <img src="images/goal.png" alt="Class Model">
+                      As [fig:GoalsDialog] illustrates, next to goal name is the current status for the goal. If a goal is defined as OK, then this goal is refined by a requirement, or by one or more goals. Goals with the status to refine have yet to be refined or operationalised. 
+                      Goals with the status Check have been refined by one or more obstacle, and these should be examined to find a root threat or vulnerability.</li>
+							<li>Click on the Add button to open the Goal dialog box, and enter the name of the goal.</li>
+							 <br>
+							<br>
+                    		<img class="displayed" src="images/goal_options.png" alt="Goal Options">  
+							<br>                      
+                     
+							<li>Click on the green add symbol within the environment window to bring up the environment speed menu. Select an environment to situate the goal in. 
+							This will add the new environment to the environment list.</li>
+							<br>
+							<br>
+                    		<img class="displayed" src="images/add_goal_icon.PNG" alt="Add Goal Icon">  
+							<br> 
+							<li>In the Definition tab, enter the goal definition, and select the goal category and priority. </li>
+							<p> Possible goal categories are: Achieve, Maintain, Avoid, Improve, Increase, Maximise, and Minimise.</p>
+							<p> Possible priority values are Low, Medium, and High.</p>                
+							<li>Click on the Fit Criterion tab, and enter the criteria which must hold for the goal to be satisfied.</li>                      
+                 		<li>Click on the Issue tab and enter any issues or comments relating to this goal.</li> 
+                 		 <br>
+							<br>
+                    		<img class="displayed" src="images/goal_refinement.png" alt="Goal refinement Dialog">  
+							<br> 
+                 		<li>If this goal refines a parent goal, click on the Goals tab, double click on the Goal refinement list, and select Add to open the Add Goal Refinement Dialog. </li>
+                 		<p> In this dialog, select the Goal from the Type combo box, and select the Sub-goal, refinement type, and an Alternate value. Possible refinement types are: and, or, conflict, responsible, obstruct, and resolve. The alternative value (Yes or No) indicates whether or not this goal affords a goal-tree for an alternate possibility for satisfying the parent goal. It is also possible to enter a rationale for this 
+                 		goal refinement in the refinement text book.
+                 		Clicking on Add will add the refinement association to memory, but this will not be committed to the database until the goal is added or updated.
+                     <li>If this goal refines to sub-goals already specified, Click on the Sub-Goals tab and add a goal refinement association as described in the previous step. A goal may refine to artifacts other than goals, specifically tasks, requirements, obstacles, and domain properties.</li>
+                     <li>Goal refinements can also be specified independently of goal creation or modification via the Goal Associations tool-bar button.</li>
+							<li>If any aspect of the goal concerns one or more assets, then these can be added by clicking on the Concerns add and adding the asset/s to the concern list. 
+							Adding an asset concern causes a concern comment to be associated to the asset in the asset model. If the goal concerns an association between assets, the association 
+							can be added by clicking on the Concern Association tab and adding the source and target assets and association multiplicity to the concern association list. In the asset
+							model, this association is displayed and a concern comment is associated to each asset in the association.</li>
+							<li>Click on the Create button to add the new goal.</li>
+                    
+                      </ol>
                       </div>
                     </div>
                   </div>
+    						<div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion5" href="#collapseInnerFour">
+                        Updating & Deleting a Goal
+                      </a></h4>
+                    </div>
+                    <div id="collapseInnerFour" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        Existing goals can be modified by double clicking on the goal in the Goals dialog box, making the necessary changes, and clicking on the Update button.
+                     <br>
+							<br>
+                    		<img class="displayed" src="images/delete_goal.PNG" alt="Delete Goal" style="width:1000px;height:127px">  
+							<br>
+							<p>To delete a goal, select the goal to delete in the Goals dialog box, and select the Delete button. If any artifacts are dependent on this goal then a dialog box stating these dependencies are displayed. 
+							The user has the option of selecting Yes to remove the goal dependencies and the goal itself, or No to cancel the deletion.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion6" href="#collapseInnerFive">
+                        Goal Modelling
+                      </a></h4>
+                    </div>
+                    <div id="collapseInnerFive" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        Goal models can be viewed by clicking on the Goal Model toolbar button <img src="images/goalModel.png" alt="Goal Model">, and selecting the environment to view the environment for.
+                      <ol>
+                      <li>By changing the environment name in the environment combo box, the goal model for a different environment can be viewed. 
+                      The layout of the model can also be replaced by selecting a layout option in the Layout combo box at the foot of the model viewer window.</li>
+                      <li>By clicking on a model element, information about that artifact can be viewed.</li>
+                      <li>Goal models can also be filtered by goal. Applying a filter causes the selected goal to be displayed as the root goal. Consequently, goals are only displayed if they are direct or indirect
+                      leafs of the filtered goal.</li>
+                      <li>Goals can also be refined from the goal model, albeit only for the environment being modified. To refine a goal, right-click on the goal in the model viewer, and select And-Goal, or Or-Goal based on the refinement desired. An simplified version of the Add Goal dialog box is displayed and, when all the necessary information has been added, a new goal will be added to the database, complete with the desired refinement. Please note, the model view needs to be
+                      refreshed to view the goal. Goals may only be refined to other goals in the model viewer; for anything more elaborate, the usual goal refinement association procedure
+                      needs to be followed.</li>
+                      </ol>
+                   </div>
+                    </div>
+                  </div>
                         </div>
-          
+
+      
+    
       
       </div>
     </div>

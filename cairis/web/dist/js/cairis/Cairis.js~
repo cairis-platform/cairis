@@ -321,8 +321,8 @@ function getAssetview(environment){
         crossDomain: true,
         url: serverIP + "/api/assets/model/environment/" + environment.replace(" ","%20"),
         success: function(data){
-          // console.log("in getAssetView " + data.innerHTML);
-           // console.log(this.url);
+          console.log("in getAssetView " + data.innerHTML);
+           console.log(this.url);
            fillSvgViewer(data);
 
         },
