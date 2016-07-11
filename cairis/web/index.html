@@ -1,3 +1,24 @@
+<!--
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+-->
+
+
+
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -52,188 +73,194 @@
 <div class="wrapper">
     <!-- Main Header -->
     <header class="main-header">
-        <!-- Logo -->
-        <a href="#" class="logo">CAIRIS</a>
-        <!-- Header Navbar -->
-        <nav class="navbar navbar-static-top fixed" role="navigation">
-            <!-- Sidebar toggle button-->
+
+	 <!-- Sidebar toggle button-->
             <a href="#" class="sidebar-toggle" id="toggler" data-toggle="offcanvas" role="button">
                 <span class="sr-only">Toggle navigation</span>
             </a>
+
+
+        <!-- Logo -->
+       <a id="cairislogo" href="#" class="logo">CAIRIS</a>
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top fixed" role="navigation">
+           
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
 
-                    <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper" id="startNewProject" data-toggle="dropdown">
+            <!--    <li class="dropdown messages-menu" id="startNewProject">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
                            <img class="menu-image" src="images/new_file2.png" alt="New Project">
                                 <p class="imgPopup">New Project</p>
                         </a>
                     </li>
-                    <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper" id="debugID" data-toggle="dropdown">
+                    <li class="dropdown messages-menu" id="saveProject">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
                             <img class="menu-image" src="images/Save-icon.png" alt="Save Project">
                                 <p class="imgPopup">Save Project</p>
                         </a>
                     </li>
-                    <li class="dropdown messages-menu">
-
+                    <li class="dropdown messages-menu" id="openProject">
                     <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown">
                         <img class="menu-image" src="images/open-file.png" alt="Open Project">
                         <p class="imgPopup">Open Project</p>
                     </a>
                     </li>
+			-->
+
                     <li class="dropdown messages-menu" id="editProjectsClick">
-                    <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Project Settings">
                         <img class="menu-image" src="images/projectSettings.png" alt="Project Settings">
                         <p class="imgPopup">Project Settings</p>
                     </a>
                     </li>
-                    <li class="dropdown messages-menu">
-                    <a href="#" id="editEnvironmentsButton" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                    <li class="dropdown messages-menu" id="editEnvironmentsButton">
+                    <a href="#"  class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Environment Settings">
                         <img class="menu-image" src="images/environment.png" alt="Environment Settings">
                         <p class="imgPopup">Environment Settings</p>
                     </a>
                     </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Edit Architectural Patterns">
                             <img class="menu-image" src="images/securitypattern.png" alt="Edit Architectural Patterns">
                             <p class="imgPopup">Edit Architectural Patterns</p>
                         </a>
                     </li>
-                    <li class="dropdown messages-menu">
-                        <a href="#" id="addRow" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                    <li class="dropdown messages-menu" id="addRow">
+                        <a href="#"  class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Add new requirement">
                             <img class="menu-image"  src="images/addEO.png" alt="Add new requirement">
                             <p class="imgPopup">Add new requirement</p>
                         </a>
                     </li>
-                    <li class="dropdown messages-menu">
-                        <a href="#" id="removeReq" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                    <li class="dropdown messages-menu" id="removeReq">
+                        <a href="#"  class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Delete requirement">
                             <img class="menu-image" src="images/deleteEO.png" alt="Delete requirement">
                             <p class="imgPopup">Delete requirement</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
-                    <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Commit latest requirement changes">
                         <img class="menu-image" src="images/commitEO.png" alt="Commit latest requirement changes">
                         <p class="imgPopup">Commit latest requirement changes</p>
                     </a>
                 </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Find object">
                             <img class="menu-image" src="images/transparent-magnifying-glass-hi.png" alt="Find object">
                             <p class="imgPopup">Find object</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Domain Properties">
                             <img class="menu-image" src="images/domainproperty.png" alt="Domain Properties">
                             <p class="imgPopup">Domain Properties</p>
                         </a>
                     </li>
-                    <li class="dropdown messages-menu">
-                    <a href="#" class="dropdown-toggle imgwrapper" id="EditGoals" data-toggle="dropdown">
+                    <li class="dropdown messages-menu" id="EditGoals">
+                    <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Goals">
                         <img class="menu-image" src="images/goal.png" alt="Edit Goals">
                         <p class="imgPopup">Edit Goals</p>
                     </a>
                 </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Obstacles">
                             <img class="menu-image" src="images/obstacle.png" alt="Edit Obstacles">
                             <p class="imgPopup">Edit Obstacles</p>
                         </a>
                     </li>
-                    <li class="dropdown messages-menu" id="showRolesButton">
+                    <li class="dropdown messages-menu" id="showRolesButton" title="Edit Roles">
                         <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
                             <img class="menu-image" src="images/role.png" alt="Edit Roles">
                             <p class="imgPopup">Edit Roles</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Personas">
                             <img class="menu-image" src="images/persona.png" alt="Edit Personas">
                             <p class="imgPopup">Edit Personas</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Tasks">
                             <img class="menu-image" src="images/task.png" alt="Edit Tasks">
                             <p class="imgPopup">Edit Tasks</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Edit Use Cases">
                             <img class="menu-image" src="images/usecase.png" alt="Edit use cases">
                             <p class="imgPopup">Edit Use Cases</p>
                         </a>
                     </li>
-                    <li class="dropdown messages-menu">
-                    <a href="#" class="dropdown-toggle imgwrapper" id="editAssetsClick" data-toggle="dropdown">
+                    <li class="dropdown messages-menu"  id="editAssetsClick">
+                    <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Assets">
                         <img class="menu-image" src="images/template_asset.png" alt="Edit Assets">
                         <p class="imgPopup">Edit Assets</p>
                     </a>
                 </li>
                     <li class="dropdown messages-menu" id="vulnerabilitiesClick">
-                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Vulnerabilities">
                             <img class="menu-image" src="images/vulnerability.png" alt="Edit Vulnerabilities">
                             <p class="imgPopup">Edit Vulnerabilities</p>
                         </a>
                     </li>
                     </li>
-                    <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper" id="attackerClick" data-toggle="dropdown">
+                    <li class="dropdown messages-menu" id="attackerClick">
+                        <a href="#" class="dropdown-toggle imgwrapper"  data-toggle="dropdown" title="Edit Attackers">
                             <img class="menu-image" src="images/attacker.png" alt="Edit Attackers">
                             <p class="imgPopup">Edit Attackers</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu" id="threatsClick">
-                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Threats">
                             <img class="menu-image" src="images/threat.png" alt="Edit Threats">
                             <p class="imgPopup">Edit Threats</p>
                         </a>
                     </li>
-                 <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper" id="risksClick" data-toggle="dropdown">
+                 <li class="dropdown messages-menu" id="risksClick" >
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Risks">
                             <img class="menu-image" src="images/risk.png" alt="Edit Risks">
                             <p class="imgPopup">Edit Risks</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu" id="responsesTable">
-                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Response">
                             <img class="menu-image" src="images/response.png" alt="Edit Response">
                             <p class="imgPopup">Edit Response</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Edit Countermeasures">
                             <img class="menu-image" src="images/countermeasure.png" alt="Edit Countermeasures">
                             <p class="imgPopup">Edit Countermeasures</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Dependencies">
                             <img class="menu-image" src="images/dependencyassociation.png" alt="Edit Dependencies">
                             <p class="imgPopup">Edit Dependencies</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="Edit Goal Associations">
                             <img class="menu-image" src="images/goalassociation.png" alt="Edit Goal Associations">
                             <p class="imgPopup">Edit Goal Associations</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper isEnd" data-toggle="dropdown" title="Edit Class Associations">
                             <img class="menu-image" src="images/classassociation.png" alt="Edit Class Associations">
                             <p class="imgPopup">Edit Class Associations</p>
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="View Risk Analisys Model">
                             <img class="menu-image" src="images/environmentModel.png" alt="View Risk Analisys Model">
                             <p class="imgPopup">View Risk Analisys Model</p>
                         </a>
                     </li>
+			<!--
                     <li class="dropdown messages-menu">
                         <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
                             <img class="menu-image" src="images/goalModel.png" alt="View Goal Model">
@@ -252,12 +279,14 @@
                             <p class="imgPopup">View Responsibility Model</p>
                         </a>
                     </li>
+			-->
                     <li  id="assetView">
-                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown" title="View Asset Model">
                             <img class="menu-image"  src="images/classModel.png" alt="View Asset Model">
                             <p class="imgPopup">View Asset Model</p>
                         </a>
                     </li>
+			<!--
                     <li class="dropdown messages-menu">
                         <a href="#" class="dropdown-toggle imgwrapper" data-toggle="dropdown">
                             <img class="menu-image" src="images/taskModel.png" alt="View Task Model">
@@ -287,7 +316,7 @@
                             <img class="menu-image" src="images/component_view.png" alt="View Component Model">
                             <p class="imgPopup">View Component Model</p>
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </nav>
@@ -304,10 +333,10 @@
                             <i class='fa fa-file-o'></i>
                             <span>File</span><i class="fa fa-angle-left pull-right"></i>
                         </a>
-                        <ul class="treeview-menu">
+                       <ul class="treeview-menu">
                             <li><a href="#">File
                             </a></li>
-                            <li><a href="#">Open
+                            <li><a href="#" id="openProject">Open
                             </a></li>
                             <li><a href="#">Save
                             </a></li>
@@ -328,9 +357,9 @@
                         <ul class="treeview-menu">
                             <li><a href="#">Commit
                             </a></li>
-                            <li><a href="#">Add
+                            <li><a href="#" id="addRow">Add
                             </a></li>
-                            <li><a href="#">Delete
+                            <li><a href="#"id="removeReq">Delete
                             </a></li>
                             <li><a href="#">Domain Properties
                             </a></li>
@@ -346,21 +375,21 @@
                             <span>Risk Management</span><i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="#">Roles
+                            <li><a href="#" id="showRolesButton">Roles
                             </a></li>
-                            <li><a href="#">Assets
+                            <li><a href="#" id="editAssetsClick">Assets
                             </a></li>
                             <li><a href="#">Class Associations
                             </a></li>
-                            <li><a href="#">Attackers
+                            <li><a href="#" id="attackerClick">Attackers
                             </a></li>
-                            <li><a href="#">Threats
+                            <li><a href="#"id="threatsClick">Threats
                             </a></li>
-                            <li><a href="#">Vulnerabilities
+                            <li><a href="#"id="vulnerabilitiesClick">Vulnerabilities
                             </a></li>
-                            <li><a href="#">Risks
+                            <li><a href="#"id="risksClick">Risks
                             </a></li>
-                            <li><a href="#">Responses
+                            <li><a href="#"id="responsesTable">Responses
                             </a></li>
                             <li><a href="#">Countermeasures
                             </a></li>
@@ -394,7 +423,8 @@
                             </a></li>
                         </ul>
                     </li>
-                    <li class="treeview">
+                  <!-- Commented out menu item as not required
+			   <li class="treeview">
                         <a href="#">
                             <i class='fa fa-codepen'></i>
                             <span>EUSTACE</span><i class="fa fa-angle-left pull-right"></i>
@@ -454,6 +484,8 @@
                             </a></li>
                         </ul>
                     </li>
+
+			-->
                     <li class="treeview">
                         <a href="#">
                             <i class='fa fa-square-o'></i>
@@ -462,7 +494,7 @@
                         <ul class="treeview-menu">
                             <li><a href="#">Risk Analysis
                             </a></li>
-                            <li><a href="#">Asset Model
+                            <li><a href="#" id="assetView" >Asset Model
                             </a></li>
                             <li><a href="#">Goal Model
                             </a></li>
@@ -485,7 +517,7 @@
                             <i class='fa fa-th'></i>
                             <span>Grid</span><i class="fa fa-angle-left pull-right"></i>
                         </a>
-                        <ul class="treeview-menu">
+                       <ul class="treeview-menu">
                             <li><a href="#" id="gridReq">Requirements
                             </a></li>
                             <li><a href="#" id="gridGoals">Goals
@@ -502,7 +534,7 @@
                             <span>Help</span><i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="#">About
+                           <li><a href="manual.html">Manual
                             </a></li>
                         </ul>
                     </li>
@@ -556,32 +588,40 @@
         <!-- Default to the left -->
         <div id="inform"></div>
     </footer>
-    <!-- The configuration dialog window-->
+    <!-- The login window-->
 </div>
-<div id="dialogContent" title="Configuration">
-    <p>Define your database settings</p>
+<div id="dialogContent" title="Login Window">
+    <p>Please Log In</p>
     <form  enctype='application/json' id="configForm">
-        <p>
-            <label for="host">Host </label>
-            <input type="text" id="host" name="host" value="127.0.0.1" />
-        </p>
-        <p>
-            <label for="port">Port </label>
-            <input type='number' id="port" name="port" value="3306" />
-        <p/>
-        <p>
-            <label for="user">User </label>
-            <input type="text" id="user" name="user" value="cairis" />
-        <p/>
-        <p>
-            <label for="passwd">Password </label>
-            <input type="password" id="passwd" name="passwd" value="cairis123" />
-        <p/>
-        <p>
-            <label for="db">User </label>
-            <input type="text" id="db" name="db" value="cairis" />
-        </p>
-    </form>
+       <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="inputUsername" class="col-sm-3 control-label">Username</label>
+                            <div class="col-sm-12">
+                                <input class="form-control" id="inputUsername" placeholder="Username" required="" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">Password</label>
+                            <div class="col-sm-12">
+                                <input class="form-control" id="inputPassword3" placeholder="Password" required="" type="password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <div class="checkbox">
+                                    <label class="">
+                                        <input class="" type="checkbox">Remember me</label>
+                                </div>
+                            </div>
+                        </div>
+                       <!-- <div class="form-group last">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <button type="submit" class="btn btn-success btn-sm">Sign in</button>
+                                <button type="reset" class="btn btn-default btn-sm">Reset</button>
+                            </div>
+                        </div>-->
+                    </form>
 </div>
 <div class="comboboxD" id="comboboxDialog" title="Dialog">
     <label> Choose the environment</label>
@@ -589,11 +629,11 @@
     </select>
 </div>
 <div id="errorDialog" title="ERROR">
-    <p style="color: black">You can't use CAIRIS without any settings</p>
+    <p style="color: black">You must login to use CAIRIS</p>
 </div>
 <div class="popupMessage" style="display:none;" >
-    <div class="Succes"><i class="fa fa-check fa-2x"></i><div class="infoText">Success</div></div>
-    <div class="Fail"><i class="fa fa-exclamation fa-2x"></i><div class="infoText">Something went wrong...<p class="faultInfo"></p></div></div>
+    <div class="Succes"><i class="fa fa-check fa-2x"></i><div class="infoText">Login Successful</div></div>
+    <div class="Fail"><i class="fa fa-exclamation fa-2x"></i><div class="infoText">Authentication Failed<p class="faultInfo"></p></div></div>
 </div>
 <div id="ChooseAssetDialog" title="Choose an Asset" style="display: none">
     <select>

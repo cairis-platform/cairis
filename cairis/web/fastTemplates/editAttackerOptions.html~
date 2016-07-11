@@ -1,0 +1,85 @@
+<form id="editAttackerOptionsForm" xmlns="http://www.w3.org/1999/html" >
+
+    <div class="left">
+    <p>
+        <label>Name</label>
+        <input class="optionsInput" type="text" name="theName" id="theName">
+    </p>
+    <p>
+        <label>Tags</label>
+        <input class="optionsInput" type="text" value="" id="theTags" name="theTags" style="
+    float: right;">
+    </p>
+        <div id="Description">
+    <label for="theDescription">Description</label>
+           <textarea class="right" name="theDescription" id="theDescription" style="width: 150px; margin-bottom: 15px;"></textarea>
+        </div>
+        </div>
+    <div class="right">
+        <div style="position: relative;">
+                <img id="theImages" src="" height="200" width="200" onError="this.src='images/default-avatar.png';"  style="margin-bottom: 5px">
+            <div class="progress" style="display: none" >
+                <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" >
+                    <span class="sr-only">70% Complete</span>
+                </div>
+            </div>
+        </div>
+        <p>
+            <input type="file" id="fileupload" style="display: none">
+         <!--   <div id="progress" style="background-color : #fff">
+                <div class="bar" style="width: 0%;"></div>
+            </div>-->
+        </p>
+        </div>
+    <br/>
+
+    <div class="inblock">
+        <table class="left clickable-table" id="theAttackerEnvironments">
+            <thead>
+            <tr><th id="addAttackerEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div class="tabs right infoWidth" >
+            <div id="Properties" class="gearOptions clickable-table scrollableTable" >
+                <div class="inblock">
+                <table id="attackerRole" class="left" style="width: 50%">
+                    <thead><tr><th id="addRoletoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Role</th></tr></thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <table id="attackerMotive" class="right" style="width: 50%">
+                    <thead><tr><th id="addMotivetoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Motivations</th></tr></thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                </div>
+                <table id="attackerCapability">
+                    <thead><tr><th id="addCapabilitytoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Capability</th><th>Value</th></tr></thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <button id="UpdateAttacker">Update</button>
+</form>
+<div id="addAttackerPropertyDiv" >
+    <p>
+        <label>Property</label>
+        <select name='theCap' id="theCap" style="float: right">
+
+        </select>
+    </p>
+    <p>
+        <label>Value</label>
+        <select name='thePropValue' id="thePropValue" style="float: right">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
+    </p>
+    <button id="UpdateAttackerCapability">Update</button>
+</div>

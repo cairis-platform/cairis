@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="cairis" >
+
+    <title>CAIRIS Web App Manual</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="dist/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+     <link href="dist/css/ui.totop.css" rel="stylesheet">
+
+     
+    <!-- Theme CSS -->
+    <link href="dist/css/clean-blog.min.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="dist/css/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+	 <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('images/homeBanner.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <h1>Instruction Manual</h1>
+                        <hr class="small">
+                        <span class="subheading">CAIRIS Web App</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+<div class="container">
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Start a New Project</a>
+      </h4>
+    </div>
+    <div id="collapse1" class="panel-collapse collapse in">
+      <div class="panel-body">The first stage of the design process involves establishing the scope of subsequent analysis. 
+      CAIRIS supports this exercise by using the Project Settings notebook.
+       				
+                    <p>  Click on the Project Settings button to open the Project Settings options <img src="images/projectSettings.png" alt="Project Settings Button"></p>
+                    <p> By default, the Background tab will open first. Enter the project name and background in these tabs.</p>
+                    	<br>
+                    	<img class="displayed" src="images/project_settings.PNG" alt="Project Settings">  
+							<br>
+                    	<ol>
+								<li>Click on the Goals tab</li> 
+                    <p>- enter the high-level goals of that the system being specified needs to satisfy.</p>
+                    		<li>Click on the Scope tab</li>
+                    <p>- enter the scope of the system being specified.</p> 
+                    		<li>If a rich picture or context diagram has been agreed, click on the Rich Picture tab </li>
+                  <br>
+                    <img class="displayed" src="images/rich_picture_tab.PNG" alt="Rich Picture Tab" style="width:250px;height:250px" >
+                 	<br>
+                 		<p>- double click inside the tab in order to bring up the Load Image option from the speed menu, select a rich picture to import. Please note that the image itself is NOT imported into the database, only the file path to the picture.</p> 
+            		  		<li>Names or terms that the readership of the specification may be unfamiliar with can be added to the project on an on-going basis.</li>
+            		   <p>- To add a term, click on the Naming Conventions tab, right click on the name page, and select Add from the speed menu. This opens a window which allows a name and a definition to be added to the naming convention list. To modify an existing entry, double click on the try and make the required modifications. Entries can also be deleted from the right-click speed menu.</p>        
+                    		<li>Clicking on the Contributors tab opens the Contributors window.</li>
+                     <p> To add a contributor, click on the green plus symbol and complete the required fields. Contributors can be either a participant, facilitator, or scribe; these reflect the roles that people take in participatory workshops.</p>
+                    
+                    </ol>
+                 
+     </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Add an Environment</a>
+      </h4>
+    </div>
+    <div id="collapse2" class="panel-collapse collapse">
+      <div class="panel-body">An environment might represent a system operating at a particular time of day, or in a particular physical location. Environments encapsulate visible phenomena 
+      such as assets, tasks, personas, and attackers, as well as invisible phenomena, such as goals, vulnerabilities, and threats. Environments may be identified at any time, although these 
+      may not become apparent until carrying out contextual inquiry and observing how potential users reason about their context of use.
+      					
+      					<br>
+                    	<img class="displayed" src="images/environment.PNG" alt="Environment Settings" style="width:700px;height:300px">  
+							<br>
+      					<p>Click on the Environment toolbar button to open the Environments dialog box <img src="images/environment.png" alt="Environment Button" style="width:50px;height:50px">, and click on the Add button to populate a row. Select Edit to then open the Environment options box.</p>
+                    	<br>
+                    	<img class="displayed" src="images/environment_options.PNG" alt="Environment Options">  
+							<br>
+                    	<ol>
+								<li>Enter the name of the environment, a short code, and a description. </li> 
+                    <p>- The short-code is used to prefix requirement ids associated with an environment.</p>
+                    		<li>Click on the Composite Tab</li>
+                    <p>-  If this environment is to be a composite environment, i.e. encompass artifacts of other environments, then click on the plus sign under environment list, and select the environment/s to add.</p> 
+                    		<li>Duplication Section </li>
+                 		<p>- It is possible artifact may appear in multiple environments within a composite environment. It is, therefore, necessary to set duplication properties for composite environments. If the maximise radio button is selected, then the maximal values associated with that artifact will be adopted. This may be the highest likelihood value for a threat, or the highest security property values for an asset.
+                 		 If the override radio button is selected, then CAIRIS will ensure that the artifact properties are used for the overriding environment. </p> 
+            		  		
+            		  		<li>Most artifacts in CAIRIS are situated in one or more environments</li>
+            		   <p>- When creating or updating an artifact, it is usually possible to create a new environment on the fly by right-clicking on the environment list box in the artifact dialog and selecting the New button. This opens the New Environment dialog box. In this dialog, an environment name, short code and description can be entered. When the create button is selected, a new environment is added to the CAIRIS database, and added to the environment list for the artifact.</p>        
+                    		     </ol>
+      
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Assets</a>
+      </h4>
+    </div>
+    <div id="collapse3" class="panel-collapse collapse">
+      <div class="panel-body">
+      
+      <p>Assets are tangible objects of value to stakeholders. By defining an asset in CAIRIS, we implicitly state that this needs to be secured in light of risks which subsequently get defined.</p>
+
+		<p>Assets are situated in one or more environments. Security properties are associated with each asset for every environment it can be found in. These security properties are 
+		Confidentiality, Integrity, Availability, and Accountability. Each of these properties is associated with the value of None, Low, Medium, or High. The meaning of each of these 
+		values can be defined in CAIRIS from the Asset Values dialog; this is available via the Options/Asset values menu.</p>
+      
+      			<ol>
+								<li>Adding an Asset </li> 
+                    <p>- Click on the Asset toolbar button to open the Assets options box <img src="images/template_asset.png" alt="Asset Button" style="width:75px;height:30px">, and click on the Add button to open the Asset dialog box.</p>
+                    		<li>Complete the Options Tabs</li>
+                    <p>-  Enter the name of the environment, a short code, description, and significance. The short-code is used to prefix requirement ids associated with an environment.</p> 
+                    	<br>
+                    	<img class="displayed" src="images/asset_options.PNG" alt="Asset Options">  
+							<br>
+							<li>If this asset is deemed critical</li>
+            		  		 <ul style="list-style-type:disc">
+  										<li>click on the Criticality tab, and click on the Critical Asset check-box.</li>
+ 										<li>A rationale for declaring this asset critical should also be added.</li>
+  										<li>By declaring an asset critical, any risk which either threatens or exploits this asset will be maximised until the mitigations render the likelihood 
+                 					of the threat or the severity of the vulnerability inert.</li>
+								</ul> 
+            		  		<li>Add an Environment</li>
+            		  		<ul style="list-style-type:disc">
+  										<li>Right click on the environment window to bring up the environment speed menu. </li>
+ 										<li>Select the add option and, from the Add environment window, select an environment 
+            		   			to situate the asset in.</li>
+  										<li>This will add the new environment to the environment list.</li>   
+  								</ul>
+  								<li>Add Security Properties</li>
+                    		<p>- After ensuring the environment is selected in the environment window, add the security properties to this asset for this environment. </p>
+                    		<ul style="list-style-type:disc">
+                    			<li>Security properties are added by selecting the Properties tab, click on the add sign to add new properties to the list. </li> 	
+                    			<li>From this window, a security property and its value can be added.</li> 
+                    			<li>Click on the Create button to add the new asset.</li>
+								</ul>
+							<li>Modifying an Asset</li>       
+							<p>- Existing assets can be modified by double clicking on the asset in the Assets dialog box, making the necessary changes, and clicking on the Update button.</p>             	
+                    	<li>Deleting an Asset</li>
+                    	<p>select the asset to delete in the Assets dialog box, and select the Delete button. 
+                    		<ul style="list-style-type:disc">
+  										<li>If any artifacts are dependent on this asset then a dialog box stating these dependencies are displayed.</li>
+  										<li>The user has the option of selecting Yes to remove the asset dependencies and the asset itself, or No to cancel the deletion.</li> 
+								</ul>               
+               	</ol>
+      </div>
+    </div>
+  </div>
+  							<div class="panel panel-default">
+    				<div class="panel-heading">
+      				<h4 class="panel-title">
+        		<a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Asset Models</a>
+     					 </h4>
+   				</div>
+    <div id="collapse4" class="panel-collapse collapse">
+      <div class="panel-body">Understanding how assets can be associated with each other is a useful means of identifying where the weak links in a prospective architecture might be. 
+      CAIRIS supports the association of assets, inconsistency checking between associated assets, and visualisation of asset models.
+      					<p>The CAIRIS asset model is based on UML class models. Asset models can be viewed for each defined environment. As well as explicitly defined asset associations, 
+      					asset models will also contain associations implicitly defined. For example, if a task has been defined, and this task concerns within an environment contain one or 
+      					more assets, then the participating persona will be displayed as an actor, and an association between this actor and the asset will be displayed. Additionally, 
+      					if concern associations have been defined between goals and assets and/or associations then zooming into the model will display these concerns; the concerns are 
+      					displayed as blue comment elements.</p>
+      					<br>
+                    	<img class="displayed" src="images/associations.PNG" alt="Associations Options">  
+							<br>
+     
+      </div>
+    </div>
+    </div>
+    
+    
+      <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Add an Asset Association</a>
+      </h4>
+    </div>
+    <div id="collapse5" class="panel-collapse collapse">
+      <div class="panel-body">An environment might represent a system operating at a particular time of day, or in a particular physical location. Environments encapsulate visible phenomena 
+      such as assets, tasks, personas, and attackers, as well as invisible phenomena, such as goals, vulnerabilities, and threats. Environments may be identified at any time, although these 
+      may not become apparent until carrying out contextual inquiry and observing how potential users reason about their context of use.
+      					
+                    	<ol>
+								<li>If creating or updating an asset, an association between that asset and another asset can be made by clicking on the Associations tab in the Asset Dialog.</li> 
+                    <p>- From the right-click speed menu, select Add to open the Add Asset Dialog</p>
+                    		<li>Set the adornments for the head and tail end of the association.</li>
+                    <p>- From the Add Asset Dialog,  Possible adornment options are Inheritence, Association, Aggregation, and Composition; the semantics for these adornments are based on UML.</p> 
+                    		<li> Set the multiplicity (nry) for the head and tail ends of the association. </li>
+                    		<p>Possible multiplicity options are <img src="images/asset_association.PNG" alt="Asset Button"> </p>
+            		  		<li>Optional role names can also be set at the head or tail end of the association.</li>
+            		 <li>Select the Create (or Edit if modifying an existing association) will add the association to the Asset Dialog. The association will not be added to the database until the asset itself is created 
+            		 or modified.</li>    
+            		 <li>Asset associations can also be added by selecting the Asset Associations tool-bar button. </li>
+            		 <p>- Clicking this button opens the Asset Associations dialog, where new associations can be created or existing associations can be modified or removed. 
+            		 <p>- The dialog for modifying associations is identical to the Asset Association dialog, with the addition of a combo box for selecting the environment to situate the 
+            		 association in.</p>  
+            		 <li>If an asset is associated with an asset with one or more security properties of a lower value, then an Asset Inconsistency dialog is displayed, warning about the details of the inconsistency.</li>
+							<br>
+                    		<img class="displayed" src="images/asset_inconsistency.PNG" alt="Inconsistency Error">  
+							<br>                    
+                     </ol>
+      
+      </div>
+    </div>
+  </div>
+    
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse6">View Asset Models</a>
+      </h4>
+    </div>
+    <div id="collapse6" class="panel-collapse collapse">
+      <div class="panel-body">Asset models can be viewed by clicking on the Asset Model toolbar button <img src="images/classModel.png" alt="Class Model"> 
+      					<br>
+							<br>
+                    		<img class="displayed" src="images/asset_model.PNG" alt="Asset Model View" style="width:700px;height:300px">  
+							<br> 
+                    			<ol>
+                    				<li> Select the environment to view the model for.</li>
+                    	<br>
+                    		<img class="displayed" src="images/asset_model_enviro.PNG" alt="Choose Environment">  
+							<br> 
+										<li>By changing the environment name in the environment combo box, the asset model for a different environment can be viewed. </li> 
+                    					<p>- The layout of the model can also be replaced by selecting 
+										a layout option in the Layout combo box at the foot of the model viewer window.</p>
+                    				<li>By clicking on a model element, information about that artifact can be viewed.</li>
+                    					 
+                    			</ol>
+      
+      </div>
+    </div>
+  </div>
+    
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse7">Roles & Personas</a>
+      </h4>
+    </div>
+    <div id="collapse7" class="panel-collapse collapse">
+      <div class="panel-body">Asset models can be viewed by clicking on the Asset Model toolbar button <img src="images/classModel.png" alt="Class Model"> 
+      					<br>
+							<br>
+                    		<img class="displayed" src="images/asset_model.PNG" alt="Asset Model View" style="width:700px;height:300px">  
+							<br> 
+                    			<ol>
+                    				<li> Select the environment to view the model for.</li>
+                    	<br>
+                    		<img class="displayed" src="images/asset_model_enviro.PNG" alt="Choose Environment">  
+							<br> 
+										<li>By changing the environment name in the environment combo box, the asset model for a different environment can be viewed. </li> 
+                    					<p>- The layout of the model can also be replaced by selecting 
+										a layout option in the Layout combo box at the foot of the model viewer window.</p>
+                    				<li>By clicking on a model element, information about that artifact can be viewed.</li>
+                    					 
+                    			</ol>
+      
+      </div>
+    </div>
+  </div>
+		
+	<div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse8">Responsibility Modelling</a>
+      </h4>
+    </div>
+    <div id="collapse" class="panel-collapse collapse">
+      <div class="panel-body">Asset models can be viewed by clicking on the Asset Model toolbar button <img src="images/classModel.png" alt="Class Model"> 
+      					<br>
+							<br>
+                    		<img class="displayed" src="images/asset_model.PNG" alt="Asset Model View" style="width:700px;height:300px">  
+							<br> 
+                    			<ol>
+                    				<li> Select the environment to view the model for.</li>
+                    	<br>
+                    		<img class="displayed" src="images/asset_model_enviro.PNG" alt="Choose Environment">  
+							<br> 
+										<li>By changing the environment name in the environment combo box, the asset model for a different environment can be viewed. </li> 
+                    					<p>- The layout of the model can also be replaced by selecting 
+										a layout option in the Layout combo box at the foot of the model viewer window.</p>
+                    				<li>By clicking on a model element, information about that artifact can be viewed.</li>
+                    					 
+                    			</ol>
+      
+      </div>
+    </div>
+  </div>
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse9">Personas</a>
+      </h4>
+    </div>
+    <div id="collapse9" class="panel-collapse collapse">
+      <div class="panel-body">Asset models can be viewed by clicking on the Asset Model toolbar button <img src="images/classModel.png" alt="Class Model"> 
+      					<br>
+							<br>
+                    		<img class="displayed" src="images/asset_model.PNG" alt="Asset Model View" style="width:700px;height:300px">  
+							<br> 
+                    			<ol>
+                    				<li> Select the environment to view the model for.</li>
+                    	<br>
+                    		<img class="displayed" src="images/asset_model_enviro.PNG" alt="Choose Environment">  
+							<br> 
+										<li>By changing the environment name in the environment combo box, the asset model for a different environment can be viewed. </li> 
+                    					<p>- The layout of the model can also be replaced by selecting 
+										a layout option in the Layout combo box at the foot of the model viewer window.</p>
+                    				<li>By clicking on a model element, information about that artifact can be viewed.</li>
+                    					 
+                    			</ol>
+      
+      </div>
+    </div>
+  </div>
+	<div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse10">Recording Persona Assumptions</a>
+      </h4>
+    </div>
+    <div id="collapse10" class="panel-collapse collapse">
+      <div class="panel-body">Asset models can be viewed by clicking on the Asset Model toolbar button <img src="images/classModel.png" alt="Class Model"> 
+      					<br>
+							<br>
+                    		<img class="displayed" src="images/asset_model.PNG" alt="Asset Model View" style="width:700px;height:300px">  
+							<br> 
+                    			<ol>
+                    				<li> Select the environment to view the model for.</li>
+                    	<br>
+                    		<img class="displayed" src="images/asset_model_enviro.PNG" alt="Choose Environment">  
+							<br> 
+										<li>By changing the environment name in the environment combo box, the asset model for a different environment can be viewed. </li> 
+                    					<p>- The layout of the model can also be replaced by selecting 
+										a layout option in the Layout combo box at the foot of the model viewer window.</p>
+                    				<li>By clicking on a model element, information about that artifact can be viewed.</li>
+                    					 
+                    			</ol>
+      
+      </div>
+    </div>
+  </div>
+
+			<div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse11">Tasks</a>
+      </h4>
+    </div>
+    <div id="collapse11" class="panel-collapse collapse">
+      <div class="panel-body">Tasks model the work carried out by one or more personas. This work is described in environment-specific narrative scenarios, which illustrate how the system is used to augment the work activity. 
+      <br>
+      <br>
+      <div class="panel-group" id="accordion2">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion1" href="#collapseInnerOne">
+                        Adding, Updating & Deleting Tasks
+                      </a></h4>
+                      </div>
+                    
+                    <div id="collapseInnerOne" class="panel-collapse collapse in">
+                      <div class="panel-body">
+                        <ol>
+                      
+                      <li>Click on the Task toolbar button to open the Tasks dialog box, and click on the Add button to open the Task dialog box.</li>
+							<li>Enter a task name, and the objective of carrying out the task.</li>                      
+                     <li>If the task is not derived from empirical data, then select the Asssumption Task check-box. Ticking this box has the effect of pre-fixing the task name with an << assumption >> stereotype in any models where the task is present.</li> 
+                     <li>Right click on the environment window to bring up the environment speed menu. Select the add option and, from the Add environment window, select an environment to situate the persona in. This will add the new environment to the environment list.</li>
+                     <li>After ensuring the environment is selected in the environment window, click on the Summary tab. In the Summary page, enter any dependencies needing to hold before this task can take place.</li>
+                     <li>Right click on the persona list box and select Add from the speed menu to associate a persona with this task. In the Add Task Persona dialog box, select the person, 
+                      the task duration (seconds, minutes, hours or longer), frequency (hourly or more, daily-weekly, monthly or less),demands (none, low, medium, high), and goal conflict 
+                      (none, low, medium, high). The values for low, medium, and high should be agreed with participants before hand.</li>
+                      <li>If any aspect of the task concerns one or more assets, then these can be added to the concern list. Adding an asset concern causes a concern comment to be associated 
+                      to the asset in the asset model. If the task concerns an association between assets, the association can be added by clicking on the Concern Association tab and adding 
+                      the source and target assets and association multiplicity to the concern association list. In the asset model, this association is displayed and a concern comment is 
+                      associated to each asset in the association.</li>
+                      <li>Right click on the Narrative tab and enter the task scenario in the text box. This narrative should describe how the persona (or personas) carry out the task to achieve the pre-defined objective.</li>
+							<li>Click on the Create button to add the new task.</li>                      
+                     <li>Existing tasks can be modified by double clicking on the task in the Tasks dialog box, making the necessary changes, and clicking on the Update button.</li>
+                     <li>To delete a task, select the task to delete in the Tasks dialog box, and select the Delete button. If any artifacts are dependent on this task then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the task dependencies and the task itself, or 
+                     No to cancel the deletion.</li>
+                      
+                      </ol>
+                      </div>
+                    </div>
+                  </div>
+    						<div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2" href="#collapseInnerTwo">
+                        Task Traceability
+                      </a></h4>
+                    </div>
+                    <div id="collapseInnerTwo" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        Anim pariatur cliche...
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion3" href="#collapseInnerTwo">
+                        Visualising Tasks
+                      </a></h4>
+                    </div>
+                    <div id="collapseInnerTwo" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        Anim pariatur cliche...
+                      </div>
+                    </div>
+                  </div>
+                        </div>
+          
+      </div>
+    </div>
+  </div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse12">Domain Properties</a>
+      </h4>
+    </div>
+    <div id="collapse12" class="panel-collapse collapse">
+      <div class="panel-body">Asset models can be viewed by clicking on the Asset Model toolbar button <img src="images/classModel.png" alt="Class Model"> 
+      					<br>
+							<br>
+                    		<img class="displayed" src="images/asset_model.PNG" alt="Asset Model View" style="width:700px;height:300px">  
+							<br> 
+                    			<ol>
+                    				<li> Select the environment to view the model for.</li>
+                    	<br>
+                    		<img class="displayed" src="images/asset_model_enviro.PNG" alt="Choose Environment">  
+							<br> 
+										<li>By changing the environment name in the environment combo box, the asset model for a different environment can be viewed. </li> 
+                    					<p>- The layout of the model can also be replaced by selecting 
+										a layout option in the Layout combo box at the foot of the model viewer window.</p>
+                    				<li>By clicking on a model element, information about that artifact can be viewed.</li>
+                    					 
+                    			</ol>
+      
+      </div>
+    </div>
+  </div>
+
+		<div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse13">Goals, Requirements and Obstacles</a>
+      </h4>
+    </div>
+    <div id="collapse13" class="panel-collapse collapse">
+      <div class="panel-body">In CAIRIS, a requirements specification is analogous to a safety case. In a safety case, a system is only considered safe if its safety goals have been satisfied
+      . 
+      <p> In a similar manner, requirements are leaf nodes in a goal tree and satisfying stakeholder needs is only possible if the high-level goals – stipulated by stakeholders – 
+      can be satisfied.</p>
+      
+      <p>We define goals as prescriptive statements of system intent that are achievable by one or more agents. Goals can be refined to requirements, which are achievable by only agent. Goals and requirements may also be operationalised 
+      as tasks. Alternatively, we may decide to specify tasks and ask what goals or requirements need to hold in order that a given task can be completed successfully.</p>
+		<p>To satisfy a goal, one or more sub-goals may need to be satisfied; satisfaction may require satisfying a conjunction of sub-goals, i.e. several AND goals, or a disjunction of sub-goals, i.e. several OR goals.</p>      					
+      <p>Goals or requirements may be obstructed by obstacles, which are conditions representing undesired behaviour; these prevent an associated goal from being achieved. By progressively refining obstacles, we can obtain the origin of some undesired behaviour; this may be reflected as a vulnerability or 
+      a threat, and contribute to risk analysis.</p>				
+      				
+                    	 <div class="panel-group" id="accordion3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion4" href="#collapseInnerThree">
+                        Adding a Goal
+                      </a></h4>
+                      </div>
+                    
+                    <div id="collapseInnerThree" class="panel-collapse collapse in">
+                      <div class="panel-body">
+                        <ol>
+                      
+                      <li>Click on the Goal toolbar button to open the Goals dialog box <img src="images/goal.png" alt="Class Model">
+                      As [fig:GoalsDialog] illustrates, next to goal name is the current status for the goal. If a goal is defined as OK, then this goal is refined by a requirement, or by one or more goals. Goals with the status to refine have yet to be refined or operationalised. 
+                      Goals with the status Check have been refined by one or more obstacle, and these should be examined to find a root threat or vulnerability.</li>
+							<li>Click on the Add button to open the Goal dialog box, and enter the name of the goal.</li>
+							 <br>
+							<br>
+                    		<img class="displayed" src="images/goal_options.png" alt="Goal Options">  
+							<br>                      
+                     
+							<li>Click on the green add symbol within the environment window to bring up the environment speed menu. Select an environment to situate the goal in. 
+							This will add the new environment to the environment list.</li>
+							<br>
+							<br>
+                    		<img class="displayed" src="images/add_goal_icon.PNG" alt="Add Goal Icon">  
+							<br> 
+							<li>In the Definition tab, enter the goal definition, and select the goal category and priority. </li>
+							<p> Possible goal categories are: Achieve, Maintain, Avoid, Improve, Increase, Maximise, and Minimise.</p>
+							<p> Possible priority values are Low, Medium, and High.</p>                
+							<li>Click on the Fit Criterion tab, and enter the criteria which must hold for the goal to be satisfied.</li>                      
+                 		<li>Click on the Issue tab and enter any issues or comments relating to this goal.</li> 
+                 		 <br>
+							<br>
+                    		<img class="displayed" src="images/goal_refinement.png" alt="Goal refinement Dialog">  
+							<br> 
+                 		<li>If this goal refines a parent goal, click on the Goals tab, double click on the Goal refinement list, and select Add to open the Add Goal Refinement Dialog. </li>
+                 		<p> In this dialog, select the Goal from the Type combo box, and select the Sub-goal, refinement type, and an Alternate value. Possible refinement types are: and, or, conflict, responsible, obstruct, and resolve. The alternative value (Yes or No) indicates whether or not this goal affords a goal-tree for an alternate possibility for satisfying the parent goal. It is also possible to enter a rationale for this 
+                 		goal refinement in the refinement text book.
+                 		Clicking on Add will add the refinement association to memory, but this will not be committed to the database until the goal is added or updated.
+                     <li>If this goal refines to sub-goals already specified, Click on the Sub-Goals tab and add a goal refinement association as described in the previous step. A goal may refine to artifacts other than goals, specifically tasks, requirements, obstacles, and domain properties.</li>
+                     <li>Goal refinements can also be specified independently of goal creation or modification via the Goal Associations tool-bar button.</li>
+							<li>If any aspect of the goal concerns one or more assets, then these can be added by clicking on the Concerns add and adding the asset/s to the concern list. 
+							Adding an asset concern causes a concern comment to be associated to the asset in the asset model. If the goal concerns an association between assets, the association 
+							can be added by clicking on the Concern Association tab and adding the source and target assets and association multiplicity to the concern association list. In the asset
+							model, this association is displayed and a concern comment is associated to each asset in the association.</li>
+							<li>Click on the Create button to add the new goal.</li>
+                    
+                      </ol>
+                      </div>
+                    </div>
+                  </div>
+    						<div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion5" href="#collapseInnerFour">
+                        Updating & Deleting a Goal
+                      </a></h4>
+                    </div>
+                    <div id="collapseInnerFour" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        Existing goals can be modified by double clicking on the goal in the Goals dialog box, making the necessary changes, and clicking on the Update button.
+                     <br>
+							<br>
+                    		<img class="displayed" src="images/delete_goal.PNG" alt="Delete Goal" style="width:1000px;height:127px">  
+							<br>
+							<p>To delete a goal, select the goal to delete in the Goals dialog box, and select the Delete button. If any artifacts are dependent on this goal then a dialog box stating these dependencies are displayed. 
+							The user has the option of selecting Yes to remove the goal dependencies and the goal itself, or No to cancel the deletion.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion6" href="#collapseInnerFive">
+                        Goal Modelling
+                      </a></h4>
+                    </div>
+                    <div id="collapseInnerFive" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        Goal models can be viewed by clicking on the Goal Model toolbar button <img src="images/goalModel.png" alt="Goal Model">, and selecting the environment to view the environment for.
+                      <ol>
+                      <li>By changing the environment name in the environment combo box, the goal model for a different environment can be viewed. 
+                      The layout of the model can also be replaced by selecting a layout option in the Layout combo box at the foot of the model viewer window.</li>
+                      <li>By clicking on a model element, information about that artifact can be viewed.</li>
+                      <li>Goal models can also be filtered by goal. Applying a filter causes the selected goal to be displayed as the root goal. Consequently, goals are only displayed if they are direct or indirect
+                      leafs of the filtered goal.</li>
+                      <li>Goals can also be refined from the goal model, albeit only for the environment being modified. To refine a goal, right-click on the goal in the model viewer, and select And-Goal, or Or-Goal based on the refinement desired. An simplified version of the Add Goal dialog box is displayed and, when all the necessary information has been added, a new goal will be added to the database, complete with the desired refinement. Please note, the model view needs to be
+                      refreshed to view the goal. Goals may only be refined to other goals in the model viewer; for anything more elaborate, the usual goal refinement association procedure
+                      needs to be followed.</li>
+                      </ol>
+                   </div>
+                    </div>
+                  </div>
+                   </div>
+    </div>
+  </div>
+                  </div>
+                  
+                  	<div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse13">Obstacles</a>
+      </h4>
+    </div>
+    <div id="collapse13" class="panel-collapse collapse">
+      <div class="panel-body">In CAIRIS, a requirements specification is analogous to a safety case. In a safety case, a system is only considered safe if its safety goals have been satisfied
+      . 
+      <p> In a similar manner, requirements are leaf nodes in a goal tree and satisfying stakeholder needs is only possible if the high-level goals – stipulated by stakeholders – 
+      can be satisfied.</p>
+      
+      <p>We define goals as prescriptive statements of system intent that are achievable by one or more agents. Goals can be refined to requirements, which are achievable by only agent. Goals and requirements may also be operationalised 
+      as tasks. Alternatively, we may decide to specify tasks and ask what goals or requirements need to hold in order that a given task can be completed successfully.</p>
+		<p>To satisfy a goal, one or more sub-goals may need to be satisfied; satisfaction may require satisfying a conjunction of sub-goals, i.e. several AND goals, or a disjunction of sub-goals, i.e. several OR goals.</p>      					
+      <p>Goals or requirements may be obstructed by obstacles, which are conditions representing undesired behaviour; these prevent an associated goal from being achieved. By progressively refining obstacles, we can obtain the origin of some undesired behaviour; this may be reflected as a vulnerability or 
+      a threat, and contribute to risk analysis.</p>				
+      				
+                    	 <div class="panel-group" id="accordion3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion4" href="#collapseInnerThree">
+                        Adding a Goal
+                      </a></h4>
+                      </div>
+                    
+                    <div id="collapseInnerThree" class="panel-collapse collapse in">
+                      <div class="panel-body">
+                        <ol>
+                      
+                      <li>Click on the Goal toolbar button to open the Goals dialog box <img src="images/goal.png" alt="Class Model">
+                      As [fig:GoalsDialog] illustrates, next to goal name is the current status for the goal. If a goal is defined as OK, then this goal is refined by a requirement, or by one or more goals. Goals with the status to refine have yet to be refined or operationalised. 
+                      Goals with the status Check have been refined by one or more obstacle, and these should be examined to find a root threat or vulnerability.</li>
+							<li>Click on the Add button to open the Goal dialog box, and enter the name of the goal.</li>
+							 <br>
+							<br>
+                    		<img class="displayed" src="images/goal_options.png" alt="Goal Options">  
+							<br>                      
+                     
+							<li>Click on the green add symbol within the environment window to bring up the environment speed menu. Select an environment to situate the goal in. 
+							This will add the new environment to the environment list.</li>
+							<br>
+							<br>
+                    		<img class="displayed" src="images/add_goal_icon.PNG" alt="Add Goal Icon">  
+							<br> 
+							<li>In the Definition tab, enter the goal definition, and select the goal category and priority. </li>
+							<p> Possible goal categories are: Achieve, Maintain, Avoid, Improve, Increase, Maximise, and Minimise.</p>
+							<p> Possible priority values are Low, Medium, and High.</p>                
+							<li>Click on the Fit Criterion tab, and enter the criteria which must hold for the goal to be satisfied.</li>                      
+                 		<li>Click on the Issue tab and enter any issues or comments relating to this goal.</li> 
+                 		 <br>
+							<br>
+                    		<img class="displayed" src="images/goal_refinement.png" alt="Goal refinement Dialog">  
+							<br> 
+                 		<li>If this goal refines a parent goal, click on the Goals tab, double click on the Goal refinement list, and select Add to open the Add Goal Refinement Dialog. </li>
+                 		<p> In this dialog, select the Goal from the Type combo box, and select the Sub-goal, refinement type, and an Alternate value. Possible refinement types are: and, or, conflict, responsible, obstruct, and resolve. The alternative value (Yes or No) indicates whether or not this goal affords a goal-tree for an alternate possibility for satisfying the parent goal. It is also possible to enter a rationale for this 
+                 		goal refinement in the refinement text book.
+                 		Clicking on Add will add the refinement association to memory, but this will not be committed to the database until the goal is added or updated.
+                     <li>If this goal refines to sub-goals already specified, Click on the Sub-Goals tab and add a goal refinement association as described in the previous step. A goal may refine to artifacts other than goals, specifically tasks, requirements, obstacles, and domain properties.</li>
+                     <li>Goal refinements can also be specified independently of goal creation or modification via the Goal Associations tool-bar button.</li>
+							<li>If any aspect of the goal concerns one or more assets, then these can be added by clicking on the Concerns add and adding the asset/s to the concern list. 
+							Adding an asset concern causes a concern comment to be associated to the asset in the asset model. If the goal concerns an association between assets, the association 
+							can be added by clicking on the Concern Association tab and adding the source and target assets and association multiplicity to the concern association list. In the asset
+							model, this association is displayed and a concern comment is associated to each asset in the association.</li>
+							<li>Click on the Create button to add the new goal.</li>
+                    
+                      </ol>
+                      </div>
+                    </div>
+                  </div>
+    						<div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion5" href="#collapseInnerFour">
+                        Updating & Deleting a Goal
+                      </a></h4>
+                    </div>
+                    <div id="collapseInnerFour" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        Existing goals can be modified by double clicking on the goal in the Goals dialog box, making the necessary changes, and clicking on the Update button.
+                     <br>
+							<br>
+                    		<img class="displayed" src="images/delete_goal.PNG" alt="Delete Goal" style="width:1000px;height:127px">  
+							<br>
+							<p>To delete a goal, select the goal to delete in the Goals dialog box, and select the Delete button. If any artifacts are dependent on this goal then a dialog box stating these dependencies are displayed. 
+							The user has the option of selecting Yes to remove the goal dependencies and the goal itself, or No to cancel the deletion.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion6" href="#collapseInnerFive">
+                        Goal Modelling
+                      </a></h4>
+                    </div>
+                    <div id="collapseInnerFive" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        Goal models can be viewed by clicking on the Goal Model toolbar button <img src="images/goalModel.png" alt="Goal Model">, and selecting the environment to view the environment for.
+                      <ol>
+                      <li>By changing the environment name in the environment combo box, the goal model for a different environment can be viewed. 
+                      The layout of the model can also be replaced by selecting a layout option in the Layout combo box at the foot of the model viewer window.</li>
+                      <li>By clicking on a model element, information about that artifact can be viewed.</li>
+                      <li>Goal models can also be filtered by goal. Applying a filter causes the selected goal to be displayed as the root goal. Consequently, goals are only displayed if they are direct or indirect
+                      leafs of the filtered goal.</li>
+                      <li>Goals can also be refined from the goal model, albeit only for the environment being modified. To refine a goal, right-click on the goal in the model viewer, and select And-Goal, or Or-Goal based on the refinement desired. An simplified version of the Add Goal dialog box is displayed and, when all the necessary information has been added, a new goal will be added to the database, complete with the desired refinement. Please note, the model view needs to be
+                      refreshed to view the goal. Goals may only be refined to other goals in the model viewer; for anything more elaborate, the usual goal refinement association procedure
+                      needs to be followed.</li>
+                      </ol>
+                   </div>
+                    </div>
+                  </div>
+                        </div>
+
+      
+    
+      
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  </div>
+</div> 
+ </div>
+ 
+  <!-- Footer -->
+    <footer>
+    
+         <p class="copyright text-muted">Copyright &copy; Cairis 2016</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+ 
+ 
+ 
+ 
+      
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    
+     
+    <script src="dist/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="dist/js/bootstrap.min.js"></script>
+	<script src="dist/js/scroll.js"></script>
+
+</body>
+
+</html>

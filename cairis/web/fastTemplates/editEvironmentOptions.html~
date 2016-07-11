@@ -1,0 +1,205 @@
+<form id="editEnvironmentOptionsform" xmlns="http://www.w3.org/1999/html">
+
+    <p>
+        <label>Name</label>
+        <input class="optionsInput" type="text" name="theName" id="theName">
+    </p>
+
+    <p>
+
+    <div class="tabs">
+        <ul>
+            <li><a href="#Summary">Summary</a></li>
+            <li><a href="#Composite">Composite</a></li>
+            <li><a href="#Tensions">Tensions</a></li>
+
+        </ul>
+        <div id="Summary">
+
+            <p>
+                <label>Short code</label>
+                <input class="optionsInput" type="text" name="theShortCode" id="theShortCode">
+            </p>
+
+            <p>
+                <label>Description</label>
+                <textarea name="theDescription" id="theDescription"></textarea>
+            </p>
+        </div>
+        <div id="Composite">
+            <table id="envToEnvTable" style="width: 100%;">
+                <thead>
+                <tr>
+                   <th id="addEnvtoEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <br/>
+
+            <form>
+                <fieldset class="reset-this duplicateProps">
+                    <legend class="reset-this">Duplication properties</legend>
+                    <input id="OverrideID" type="radio" name="duplication" value="Override">Override
+                    <br/>
+                    <select class="tensionCombobox" id="overrideCombobox" disabled>
+                    </select>
+                    <br>
+                    <input id="MaximiseID" type="radio" name="duplication" value="Maximise">Maximise
+                </fieldset>
+            </form>
+
+        </div>
+        <div id="Tensions" style="overflow-x: scroll">
+            <table id="tensionsTable">
+                <thead>
+                <tr>
+                <th></th>
+                <th>Anonymity</th>
+                <th>Pseudonymity</th>
+                <th>Unlinkability</th>
+                <th>Unobservability</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="noPad">
+                    <td>Confidentiality</td>
+                    <td >
+                        <select class="tensionCombobox" id="4-0">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="5-0">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="6-0">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="7-0">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="noPad">
+                    <td>Integrity</td>
+                    <td >
+                        <select class="tensionCombobox" id="4-1">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="5-1">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="6-1">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="7-1">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="noPad">
+                    <td>Availability</td>
+                    <td >
+                        <select class="tensionCombobox" id="4-2">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="5-2">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="6-2">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="7-2">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="noPad">
+                    <td>Accountability</td>
+                    <td >
+                        <select class="tensionCombobox" id="4-3">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="5-3">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="6-3">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="tensionCombobox" id="7-3">
+                            <option value="0"></option>
+                            <option value="1">+</option>
+                            <option value="-1">-</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <label>Rationale</label>
+            <textarea id="rationale"></textarea>
+        </div>
+    </div>
+
+
+    <p>
+        <button id="updateButtonEnvironment">
+            Update
+        </button>
+    </p>
+    </div>
+</form>

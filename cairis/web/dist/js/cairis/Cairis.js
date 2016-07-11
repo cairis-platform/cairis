@@ -1,6 +1,23 @@
 /**
- * Created by Raf on 24/04/2015.
+ * #  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
  */
+
+
 window.serverIP = "http://"+ window.location.host;
 
 window.activeTable ="Requirements";
@@ -12,6 +29,101 @@ function debugLogger(info){
         console.log(info);
     }
 }
+
+
+
+//This is for the login credentials
+$(document).ready(function() {
+    // bind the form submit event to our function
+    $("#loginForm").bind('submit', function(e) {
+        // prevent page refresh
+        e.preventDefault();
+        // post the data
+        var ajax=$.ajax({
+            type: "POST",
+            data: $("#loginForm").serialize(),
+            url: "http://localhost:7071/"
+        }).done(function(data){
+            console.log('done!')
+        });
+        ajax.fail(function(data){
+            console.log('Authentication Failed!');
+        });
+    });
+});
+
+
+//This is taken from connections.js
+/*
+
+request.form.get('username')
+request.form.get('password')
+
+
+var loginDialog = $( "#loginDialog" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var index = $("#connectionSelection").val();
+            var cookie = $.cookie("connections");
+            var arr = JSON.parse(cookie);
+           var obj = arr[index];
+            $.session.set("usedConnectionIndex", index);
+            var cookieText = obj.IP+obj.DB;
+
+            cookie = $.cookie(cookieText);
+            if(cookie !== undefined){
+                var json = JSON.parse(cookie);
+                $("#username").val(json.username);
+                $("#password").val(json.password);
+            }
+            $.session.set("cookieText",cookieText)
+            $( this ).dialog( "close" );
+            dialogwindow.dialog( "open" );
+        },
+        Cancel: function() {
+            $( this ).dialog( "close" );
+            $( "#errorDialog" ).dialog();
+        }
+    }
+});
+
+*/
+
+
+
+var loginDialog = $( "#loginDialog" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var index = $("#credentialsSelection").val();
+            var cookie = $.cookie("connections");
+            var arr = JSON.parse(cookie);
+           var obj = arr[index];
+            $.session.set("usedConnectionIndex", index);
+            var cookieText = obj.IP+obj.DB;
+
+            cookie = $.cookie(cookieText);
+            if(cookie !== undefined){
+                var json = JSON.parse(cookie);
+                $("#username").val(json.port);
+                $("#password").val(json.user);
+            }
+            $.session.set("cookieText",cookieText)
+            $( this ).dialog( "close" );
+            dialogwindow.dialog( "open" );
+        },
+        Cancel: function() {
+            $( this ).dialog( "close" );
+            $( "#errorDialog" ).dialog();
+        }
+    }
+});
+
+
+
 //The config window at start
 var dialogwindow = $( "#dialogContent" ).dialog({
     autoOpen: false,
@@ -209,8 +321,8 @@ function getAssetview(environment){
         crossDomain: true,
         url: serverIP + "/api/assets/model/environment/" + environment.replace(" ","%20"),
         success: function(data){
-          // console.log("in getAssetView " + data.innerHTML);
-           // console.log(this.url);
+          console.log("in getAssetView " + data.innerHTML);
+           console.log(this.url);
            fillSvgViewer(data);
 
         },
@@ -1043,7 +1155,6 @@ function activeElement(elementid){
        //If it is the table, we need to see which table it is
         setActiveOptions();
     }
-    //////ADDED
     setActiveOptions();
 
     elementid = "#" + elementid;
@@ -1107,7 +1218,7 @@ function setTableHeader(){
             break;
     }
     $("#reqTable").find("thead").empty();
-   // $("#reqTable").empty();
+    $("#reqTable").empty();
     $("#reqTable").find("thead").append(thead);
     $("#reqTable").find("tbody").empty();
 

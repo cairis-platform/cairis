@@ -1,6 +1,19 @@
+.tooltip{
+    display:inline;
+    position:relative;  
+}
+.tooltip:hover:after{
+    background: #333;
+    background: rgba(0,0,0,.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;}
+
+
 .menu-image{
-    max-height:20px;
-    position: relative;
+   	max-height:20px;
+    	position: relative;
+	margin-right: 1em;
 }
 
 
@@ -19,13 +32,25 @@ p.imgPopup {
     -webkit-transition: visibility-opacity 1s;
 }
 .navbar-custom-menu .mCustomScrollBox .navbar-nav>li:last-child> a > p {
-    left: -50px;
+    left: -10px;
 }
 .isEnd > img{
     border: 1px rgba(85, 85, 85, 0.50);
     border-right-style: solid;
     padding-right: 5px;
 }
+
+/* To override AdminLTE for Logo Font*/
+#cairislogo{
+	font-family: Courier;
+	font-weight: bold;
+	font-variant: small-caps;
+	font-size: 200%;
+	text-shadow: 2px 2px #092589;
+	letter-spacing: 2px;
+}
+
+
 /*Overrride from AdminLTE for bigger icons in top nav menu*/
 .navbar-custom-menu .mCustomScrollBox .navbar-nav>li>a.imgwrapper{
     padding: 15px 6px 3px 6px;
@@ -55,7 +80,7 @@ a.dropdown-toggle.imgwrapper{
     padding-right: 5px;
 }
 div#mCSB_1 {
-    float: right;
+    float: left;
 }
 .navbar-custom-menu.mCustomScrollbar._mCS_1.mCS_no_scrollbar{
     height:50px;
