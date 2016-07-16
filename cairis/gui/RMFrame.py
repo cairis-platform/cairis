@@ -1907,18 +1907,24 @@ class RMFrame(wx.Frame):
       envName = ''
       if (cDlg.ShowModal() == DIMNAME_BUTTONACTION_ID):
         locsName = cDlg.dimensionName()
-
-      environments = proxy.getDimensionNames('environment',False)
-      cDlg = DimensionNameDialog(self,'environment',environments,'Select')
-      if (cDlg.ShowModal() == DIMNAME_BUTTONACTION_ID):
-        envName = cDlg.dimensionName()
-
-      riskOverlay = proxy.locationsRiskModel(locsName,envName)
-      lModel = LocationModel(locsName,envName,riskOverlay)
-
-      dialog = CanonicalModelViewer(envName,'location',locsName)
-      dialog.ShowModal(lModel)
-      dialog.destroy()
+        environments = proxy.getDimensionNames('environment',False)
+        cDlg = DimensionNameDialog(self,'environment',environments,'Select')
+        if (cDlg.ShowModal() == DIMNAME_BUTTONACTION_ID):
+          envName = cDlg.dimensionName()
+          cDlg.Destroy()
+          riskOverlay = proxy.locationsRiskModel(locsName,envName)
+          if (len(riskOverlay) > 0):
+            lModel = LocationModel(locsName,envName,riskOverlay)
+            dialog = CanonicalModelViewer(envName,'location',locsName)
+            dialog.ShowModal(lModel)
+            dialog.destroy()
+          else:
+            errorTxt = 'No location models defined'
+            dlg = wx.MessageDialog(self,errorTxt,'View Location Model',wx.OK | wx.ICON_EXCLAMATION)
+            dlg.ShowModal()
+            dlg.Destroy()
+      else:
+        cDlg.Destroy()
     except ARMException,errorText:
       if (dialog != None):
         dialog.destroy()

@@ -51,6 +51,8 @@ class DimensionNameDialog(wx.Dialog):
     buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
     mainSizer.Add(buttonSizer,0,wx.CENTER)
     actionButton = wx.Button(self,DIMNAME_BUTTONACTION_ID,actionVerb)
+    if len(self.theDimensions) == 0:
+      actionButton.Disable()
     buttonSizer.Add(actionButton)
     cancelButton = wx.Button(self,wx.ID_CANCEL,"Cancel")
     buttonSizer.Add(cancelButton)
