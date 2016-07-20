@@ -21,6 +21,7 @@ import jsonpickle
 from cairis.core.Environment import Environment
 from cairis.web_tests.CairisTests import CairisTests
 from cairis.tools.PseudoClasses import EnvironmentTensionModel
+from cairis.mio.ModelImport import importModelFile
 
 __author__ = 'Robin Quetin'
 
@@ -32,6 +33,9 @@ class EnvironmentTests(CairisTests):
     existing_environment_name = 'Stroke'
     environment_class = Environment.__module__+'.'+Environment.__name__
     # endregion
+
+    def setUp(self):
+        importModelFile('../../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
     
     def test_get_all(self):
         method = 'test_get_all'
