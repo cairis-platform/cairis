@@ -23,15 +23,13 @@ import jsonpickle
 from cairis.core.Asset import Asset
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 from cairis.core.ValueType import ValueType
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.ModelDefinitions import AssetEnvironmentPropertiesModel, SecurityAttribute
 from cairis.tools.SessionValidator import check_required_keys
+from cairis.mio.ModelImport import importModelFile
 
-__author__ = 'Robin Quetin'
-
-
-class AssetTests(CairisTests):
+class AssetAPITests(CairisDaemonTestCase):
     # region Class fields
     logger = logging.getLogger(__name__)
     existing_asset_name = 'Data node'
@@ -72,9 +70,10 @@ class AssetTests(CairisTests):
         'session_id': 'test',
         'object': new_asset
     }
-    new_asset_body = jsonpickle.encode(new_asset_dict)
     # endregion
-    logger.info('JSON data: %s', new_asset_body)
+
+#    def setUp(self):
+#        importModelFile('../../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
 
     def test_get_all(self):
         method = 'test_get_all'
@@ -89,7 +88,7 @@ class AssetTests(CairisTests):
 
     def test_post(self):
         method = 'test_post_new'
-        rv = self.app.post('/api/assets', content_type='application/json', data=self.new_asset_body)
+        rv = self.app.post('/api/assets', content_type='application/json', data=jsonpickle.encode(self.new_asset_dict))
         self.logger.debug('[%s] Response data: %s', method, rv.data)
         json_resp = json_deserialize(rv.data)
         self.assertIsNotNone(json_resp, 'No results after deserialization')
@@ -137,7 +136,8 @@ class AssetTests(CairisTests):
 
         rv = self.app.get('/api/assets/name/Test2?session_id=test')
         asset = json_deserialize(rv.data)
-        self.logger.info('[%s] Asset: %s [%d]\n', method, asset.theName, asset.theId)
+        print str(asset)
+        self.logger.info('[%s] Asset: %s [%d]\n', method, asset.name(), asset.id())
 
     def test_delete_name(self):
         method = 'test_delete_name'
@@ -188,6 +188,7 @@ class AssetTests(CairisTests):
         rv = self.app.get('/api/assets/name/Test2/properties?session_id=test')
         self.logger.debug('[%s] Response data: %s', method, rv.data)
         asset_props = jsonpickle.decode(rv.data)
+        print 'asset_props:' + str(asset_props)
         self.logger.info('[%s] Asset property environment: %s\n', method, asset_props[0]['theEnvironmentName'])
 
     def test_types_get(self):

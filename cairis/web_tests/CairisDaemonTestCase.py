@@ -22,6 +22,6 @@ import cairis.bin.cairisd
 __author__ = 'Robin Quetin'
 
 
-class CairisTests(unittest.TestCase):
+class CairisDaemonTestCase(unittest.TestCase):
     app = cairis.bin.cairisd.main(['-d', '--unit-test'])
     sleep(1)

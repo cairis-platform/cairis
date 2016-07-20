@@ -18,13 +18,11 @@
 import logging
 import jsonpickle
 from cairis.core.Dependency import Dependency
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.ModelDefinitions import DependencyModel
 
-__author__ = 'Robin Quetin'
 
-
-class DependencyTests(CairisTests):
+class DependencyTests(CairisDaemonTestCase):
     logger = logging.getLogger(__name__)
     working_name_1 = ('Stroke', 'all', 'all', 'all')
     working_name_2 = ('Stroke', 'Data%20Consumer', 'Certificate%20Authority', 'Personal%20certificate')

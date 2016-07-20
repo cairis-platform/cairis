@@ -21,16 +21,13 @@ import jsonpickle
 from cairis.core.Threat import Threat
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from cairis.core.ValueType import ValueType
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import SecurityAttribute
 
-__author__ = 'Robin Quetin'
 
-
-class ThreatTests(CairisTests):
+class ThreatTests(CairisDaemonTestCase):
     # region Class fields
     logger = logging.getLogger(__name__)
-    existing_threat_id = 154
     existing_threat_name = 'Replay attack'
     existing_threat_type = 'Electronic/Hacking'
     existing_environment_name_1 = 'Stroke'

@@ -20,15 +20,12 @@ import logging
 from urllib import quote
 from StringIO import StringIO
 import jsonpickle
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision
 
-__author__ = 'Robin Quetin'
-
-
-class ProjectTests(CairisTests):
+class ProjectTests(CairisDaemonTestCase):
     logger = logging.getLogger(__name__)
-    xmlfile = '/home/cairisuser/cairis/examples/exemplars/NeuroGrid/NeuroGrid.xml'
+    xmlfile = '../../examples/exemplars/NeuroGrid/NeuroGrid.xml'
 
     def test_settings_get(self):
         url = '/api/settings?session_id=test'

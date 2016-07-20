@@ -19,17 +19,13 @@ import logging
 from urllib import quote
 import jsonpickle
 from cairis.core.Environment import Environment
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import EnvironmentTensionModel
 from cairis.mio.ModelImport import importModelFile
 
-__author__ = 'Robin Quetin'
-
-
-class EnvironmentTests(CairisTests):
+class EnvironmentTests(CairisDaemonTestCase):
     # region Class fields
     logger = logging.getLogger(__name__)
-    existing_environment_id = 117
     existing_environment_name = 'Stroke'
     environment_class = Environment.__module__+'.'+Environment.__name__
     # endregion

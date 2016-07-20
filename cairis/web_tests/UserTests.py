@@ -17,13 +17,10 @@
 
 import logging
 import jsonpickle
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.JsonConverter import json_serialize
 
-__author__ = 'Robin Quetin'
-
-
-class UserTests(CairisTests):
+class UserTests(CairisDaemonTestCase):
     logger = logging.getLogger('UserTests')
     data = {
         'host': '127.0.0.1',

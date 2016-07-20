@@ -23,13 +23,11 @@ from cairis.core.AcceptEnvironmentProperties import AcceptEnvironmentProperties
 from cairis.core.MitigateEnvironmentProperties import MitigateEnvironmentProperties
 from cairis.core.TransferEnvironmentProperties import TransferEnvironmentProperties
 from cairis.core.Response import Response
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import ValuedRole
+from cairis.mio.ModelImport import importModelFile
 
-__author__ = 'Robin Quetin'
-
-
-class ResponseTests(CairisTests):
+class ResponseTests(CairisDaemonTestCase):
     # region Class fields
     logger = logging.getLogger(__name__)
     existing_response_name = 'Prevent Unauthorised Certificate Access'
@@ -38,6 +36,9 @@ class ResponseTests(CairisTests):
     existing_role_name = 'Developer'
     response_class = Response.__module__+'.'+Response.__name__
     # endregion
+
+    def setUp(self):
+        importModelFile('../../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
 
     def test_get_all(self):
         method = 'test_get_all'

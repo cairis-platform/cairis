@@ -19,12 +19,12 @@ import logging
 from urllib import quote
 import jsonpickle
 from cairis.core.Requirement import Requirement
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 
 __author__ = 'Robin Quetin'
 
 
-class RequirementTests(CairisTests):
+class RequirementTests(CairisDaemonTestCase):
     # region Class fields
     logger = logging.getLogger(__name__)
     existing_requirement_id = 490

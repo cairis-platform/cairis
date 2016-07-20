@@ -20,12 +20,9 @@ import os
 import urllib
 from StringIO import StringIO
 import jsonpickle
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 
-__author__ = 'Robin Quetin'
-
-
-class UploadTests(CairisTests):
+class UploadTests(CairisDaemonTestCase):
     logger = logging.getLogger(__name__)
 
     def test_image_upload(self):

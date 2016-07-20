@@ -22,154 +22,175 @@ import jsonpickle
 from cairis.core.RoleEnvironmentProperties import RoleEnvironmentProperties
 from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.JsonConverter import json_deserialize
+from cairis.mio.ModelImport import importModelFile
 
 class RoleAPITests(CairisDaemonTestCase):
-    # region Class fields
-    logger = logging.getLogger(__name__)
-    existing_role_id = 122
-    existing_role_name = 'Certificate Authority'
-    role_class = Role.__module__+'.'+Role.__name__
-    new_role = Role(
-        roleId=-1,
-        roleName='Student',
-        rType='Stakeholder',
-        sCode='STU',
-        roleDesc='This is a test role',
-        cProps=[]
+
+  def setUp(self):
+    importModelFile('../../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+    self.logger = logging.getLogger(__name__)
+    self.existing_role_id = 122
+    self.existing_role_name = 'Certificate Authority'
+    self.role_class = Role.__module__+'.'+Role.__name__
+    self.new_role = Role(
+      roleId=-1,
+      roleName='Student',
+      rType='Stakeholder',
+      sCode='STU',
+      roleDesc='This is a test role',
+      cProps=[]
     )
-    new_role_props = [
-        RoleEnvironmentProperties(
-            environmentName='Core Technology',
-            responses=[('Prevent Unauthorised Certificate Access', 'High')],
-            countermeasures=['Location-based X.509 extension']
-        )
+    self.new_role_props = [
+      RoleEnvironmentProperties(
+        environmentName='Core Technology',
+        responses=[('Prevent Unauthorised Certificate Access', 'High')],
+        countermeasures=['Location-based X.509 extension']
+      )
     ]
-    new_role_dict = {
-        'session_id': 'test',
-        'object': new_role,
-        'property_0': new_role_props
+    self.new_role_dict = {
+      'session_id': 'test',
+      'object': self.new_role,
+      'property_0': self.new_role_props
     }
-    new_role_body = jsonpickle.encode(new_role_dict)
-    # endregion
-    logger.info('JSON data: %s', new_role_body)
+    self.new_role_body = jsonpickle.encode(self.new_role_dict)
+    self.logger.info('JSON data: %s', self.new_role_body)
 
-    def test_get_all(self):
-        method = 'test_get_all'
-        rv = self.app.get('/api/roles?session_id=test')
-        roles = json_deserialize(rv.data)
-        self.assertIsNotNone(roles, 'No results after deserialization')
-        self.assertIsInstance(roles, dict, 'The result is not a dictionary as expected')
-        self.assertGreater(len(roles), 0, 'No roles in the dictionary')
-        self.assertIsInstance(roles.values()[0], Role)
-        self.logger.info('[%s] Roles found: %d', method, len(roles))
-        self.logger.info('[%s] First role: %s [%d]\n', method, roles.values()[0].theName, roles.values()[0].theId)
+  def test_get_all(self):
+    method = 'test_get_all'
+    rv = self.app.get('/api/roles?session_id=test')
+    roles = json_deserialize(rv.data)
+    self.assertIsNotNone(roles, 'No results after deserialization')
+    self.assertIsInstance(roles, dict, 'The result is not a dictionary as expected')
+    self.assertGreater(len(roles), 0, 'No roles in the dictionary')
+    self.assertIsInstance(roles.values()[0], Role)
+    self.logger.info('[%s] Roles found: %d', method, len(roles))
+    self.logger.info('[%s] First role: %s [%d]\n', method, roles.values()[0].theName, roles.values()[0].theId)
 
-    def test_post(self):
-        method = 'test_post_new'
-        rv = self.app.post('/api/roles', content_type='application/json', data=self.new_role_body)
-        self.logger.debug('[%s] Response data: %s', method, rv.data)
-        json_resp = json_deserialize(rv.data)
-        self.assertIsNotNone(json_resp, 'No results after deserialization')
-        role_id = json_resp.get('role_id', None)
-        self.assertIsNotNone(role_id, 'No role ID returned')
-        self.logger.info('[%s] Role ID: %d', method, role_id)
+  def test_post(self):
+    method = 'test_post_new'
+    rv = self.app.post('/api/roles', content_type='application/json', data=self.new_role_body)
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = json_deserialize(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    role_id = json_resp.get('role_id', None)
+    self.assertIsNotNone(role_id, 'No role ID returned')
+    self.logger.info('[%s] Role ID: %d', method, role_id)
 
-        rv = self.app.get('/api/roles/id/%d?session_id=test' % role_id)
-        role = jsonpickle.decode(rv.data)
-        self.logger.info('[%s] Role: %s [%d]\n', method, role['theName'], role['theId'])
+    rv = self.app.get('/api/roles/id/%d?session_id=test' % role_id)
+    role = jsonpickle.decode(rv.data)
+    self.logger.info('[%s] Role: %s [%d]\n', method, role['theName'], role['theId'])
 
-    def test_get_id(self):
-        method = 'test_get_id'
-        url = '/api/roles/id/%d?session_id=test' % self.existing_role_id
-        self.logger.info('[%s] URL: %s', method, url)
-        rv = self.app.get(url)
-        self.assertIsNotNone(rv.data, 'No response')
-        self.logger.debug('[%s] Response data: %s', method, rv.data)
-        role = jsonpickle.decode(rv.data)
-        self.assertIsNotNone(role, 'No results after deserialization')
-        self.assertEqual(role['__python_obj__'], self.role_class, 'The result is not an role as expected')
-        self.logger.info('[%s] Role: %s [%d]\n', method, role['theName'], role['theId'])
+  def test_get_id(self):
+    method = 'test_get_id'
+    url = '/api/roles/id/%d?session_id=test' % self.existing_role_id
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    role = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(role, 'No results after deserialization')
+    self.assertEqual(role['__python_obj__'], self.role_class, 'The result is not an role as expected')
+    self.logger.info('[%s] Role: %s [%d]\n', method, role['theName'], role['theId'])
 
-    def test_get_name(self):
-        method = 'test_get_name'
-        url = '/api/roles/name/%s?session_id=test' % quote(self.existing_role_name)
-        rv = self.app.get(url)
-        role = json_deserialize(rv.data)
-        self.assertIsNotNone(role, 'No results after deserialization')
-        self.assertIsInstance(role, Role, 'The result is not an role as expected')
-        self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
+  def test_get_name(self):
+    method = 'test_get_name'
+    url = '/api/roles/name/%s?session_id=test' % quote(self.existing_role_name)
+    rv = self.app.get(url)
+    role = json_deserialize(rv.data)
+    self.assertIsNotNone(role, 'No results after deserialization')
+    self.assertIsInstance(role, Role, 'The result is not an role as expected')
+    self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
 
-    def test_put_name(self):
-        method = 'test_put_name'
-        url = '/api/roles/name/%s' % quote(self.new_role.theName)
+  def test_put_name(self):
+    method = 'test_put_name'
+    rv = self.app.post('/api/roles', content_type='application/json', data=self.new_role_body)
 
-        upd_role = self.new_role
-        upd_role.theName = 'Test3'
-        upd_role_dict = self.new_role_dict
-        upd_role_dict['object'] = upd_role
-        upd_role_body = jsonpickle.encode(upd_role_dict)
-        self.logger.info('[%s] JSON data: %s', method, upd_role_body)
+    url = '/api/roles/name/%s' % quote(self.new_role.theName)
 
-        rv = self.app.put(url, content_type='application/json', data=upd_role_body)
-        self.logger.debug('[%s] Response data: %s', method, rv.data)
-        json_resp = json_deserialize(rv.data)
-        self.assertIsNotNone(json_resp, 'No results after deserialization')
-        message = json_resp.get('message', None)
-        self.assertIsNotNone(message, 'No message returned')
+    upd_role = self.new_role
+    upd_role.theName = 'Test3'
+    upd_role_dict = self.new_role_dict
+    upd_role_dict['object'] = upd_role
+    upd_role_body = jsonpickle.encode(upd_role_dict)
+    self.logger.info('[%s] JSON data: %s', method, upd_role_body)
 
-        rv = self.app.get('/api/roles/name/Test3?session_id=test')
-        role = json_deserialize(rv.data)
-        self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
+    rv = self.app.put(url, content_type='application/json', data=upd_role_body)
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = json_deserialize(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message returned')
 
-    def test_put_id(self):
-        method = 'test_put_id'
-        rv = self.app.get('/api/roles?session_id=test')
-        roles = json_deserialize(rv.data)
-        role = roles.get(self.new_role.theName)
-        url = '/api/roles/id/%d' % role.theId
+    rv = self.app.get('/api/roles/name/Test3?session_id=test')
+    role = json_deserialize(rv.data)
+    self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
 
-        upd_role = self.new_role
-        upd_role.theName = 'Test2'
-        upd_role_dict = self.new_role_dict
-        upd_role_dict['object'] = upd_role
-        upd_role_body = jsonpickle.encode(upd_role_dict)
-        self.logger.info('[%s] JSON data: %s', method, upd_role_body)
+  def test_put_id(self):
+    method = 'test_put_id'
 
-        rv = self.app.put(url, content_type='application/json', data=upd_role_body)
-        self.logger.debug('[%s] Response data: %s', method, rv.data)
-        json_resp = json_deserialize(rv.data)
-        self.assertIsNotNone(json_resp, 'No results after deserialization')
-        message = json_resp.get('message', None)
-        self.assertIsNotNone(message, 'No message returned')
+    rv = self.app.post('/api/roles', content_type='application/json', data=self.new_role_body)
 
-        rv = self.app.get('/api/roles/name/Test2?session_id=test')
-        role = json_deserialize(rv.data)
-        self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
+    rv = self.app.get('/api/roles?session_id=test')
+    roles = json_deserialize(rv.data)
+    role = roles.get(self.new_role.theName)
+    url = '/api/roles/id/%d' % role.theId
 
-    def test_x_delete_name(self):
-        method = 'test_delete_name'
-        url = '/api/roles/name/{}?session_id=test'.format(quote(self.new_role.theName))
-        rv = self.app.delete(url)
-        self.logger.debug('[%s] Response data: %s', method, rv.data)
-        json_resp = json_deserialize(rv.data)
-        self.assertIsNotNone(json_resp, 'No results after deserialization')
-        message = json_resp.get('message', None)
-        self.assertIsNotNone(message, 'No message returned')
-        self.logger.info('[%s] Message: %s\n', method, message)
-        url = '/api/roles/name/Test2?session_id=test'.format(quote(self.new_role.theName))
-        rv = self.app.delete(url)
-        url = '/api/roles/name/Test3?session_id=test'.format(quote(self.new_role.theName))
-        rv = self.app.delete(url)
+    upd_role = self.new_role
+    upd_role.theName = 'Test2'
+    upd_role_dict = self.new_role_dict
+    upd_role_dict['object'] = upd_role
+    upd_role_body = jsonpickle.encode(upd_role_dict)
+    self.logger.info('[%s] JSON data: %s', method, upd_role_body)
 
-    def test_get_props_name_get(self):
-        method = 'test_get_props_name_get'
-        url = '/api/roles/name/%s/properties?session_id=test' % quote(self.existing_role_name)
-        cls_role_prop = RoleEnvironmentProperties.__module__+'.'+RoleEnvironmentProperties.__name__
+    rv = self.app.put(url, content_type='application/json', data=upd_role_body)
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = json_deserialize(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message returned')
 
-        rv = self.app.get(url)
-        role_props = jsonpickle.decode(rv.data)
-        self.assertIsNotNone(role_props, 'No results after deserialization')
-        self.assertGreater(len(role_props), 0, 'List does not contain any elements')
-        role_prop = role_props[0]
-        self.assertEqual(cls_role_prop, role_prop['__python_obj__'], 'The result is not an role as expected')
-        self.logger.info('[%s] Role property: %s\n', method, role_props[0]['theEnvironmentName'])
+    rv = self.app.get('/api/roles/name/Test2?session_id=test')
+    role = json_deserialize(rv.data)
+    self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
+
+  def test_x_delete_name(self):
+    method = 'test_delete_name'
+
+    rv = self.app.post('/api/roles', content_type='application/json', data=self.new_role_body)
+
+    url = '/api/roles/name/{}?session_id=test'.format(quote(self.new_role.theName))
+    rv = self.app.delete(url)
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = json_deserialize(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message returned')
+    self.logger.info('[%s] Message: %s\n', method, message)
+
+    rv = self.app.post('/api/roles', content_type='application/json', data=self.new_role_body)
+    rv = self.app.get('/api/roles?session_id=test')
+    roles = json_deserialize(rv.data)
+    role = roles.get(self.new_role.theName)
+    url = '/api/roles/id/%d' % role.theId
+
+    upd_role = self.new_role
+    upd_role.theName = 'Test2'
+    upd_role_dict = self.new_role_dict
+    upd_role_dict['object'] = upd_role
+    upd_role_body = jsonpickle.encode(upd_role_dict)
+    rv = self.app.put(url, content_type='application/json', data=upd_role_body)
+    url = '/api/roles/name/Test2?session_id=test'.format(quote(self.new_role.theName))
+    rv = self.app.delete(url)
+
+  def test_get_props_name_get(self):
+    method = 'test_get_props_name_get'
+    url = '/api/roles/name/%s/properties?session_id=test' % quote(self.existing_role_name)
+    cls_role_prop = RoleEnvironmentProperties.__module__+'.'+RoleEnvironmentProperties.__name__
+
+    rv = self.app.get(url)
+    role_props = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(role_props, 'No results after deserialization')
+    self.assertGreater(len(role_props), 0, 'List does not contain any elements')
+    role_prop = role_props[0]
+    self.assertEqual(cls_role_prop, role_prop['__python_obj__'], 'The result is not an role as expected')
+    self.logger.info('[%s] Role property: %s\n', method, role_props[0]['theEnvironmentName'])

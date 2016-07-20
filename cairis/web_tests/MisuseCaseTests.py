@@ -20,12 +20,10 @@ from urllib import quote
 
 import jsonpickle
 from cairis.core.MisuseCase import MisuseCase
-from cairis.web_tests.CairisTests import CairisTests
-
-__author__ = 'Robin Quetin'
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 
 
-class MisuseCaseTests(CairisTests):
+class MisuseCaseTests(CairisDaemonTestCase):
     # region Class fields
     logger = logging.getLogger(__name__)
     existing_risk_name = 'Unauthorised Certificate Access'

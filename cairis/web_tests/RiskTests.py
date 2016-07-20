@@ -23,14 +23,11 @@ from cairis.core.MisuseCaseParameters import MisuseCaseParameters
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 
 from cairis.core.RiskParameters import RiskParameters
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import RiskScore
 from cairis.mio.ModelImport import importModelFile
 
-__author__ = 'Robin Quetin'
-
-
-class RiskTests(CairisTests):
+class RiskTests(CairisDaemonTestCase):
     # region Class fields
     logger = logging.getLogger(__name__)
     existing_risk_name = 'Unauthorised Certificate Access'

@@ -22,12 +22,9 @@ from StringIO import StringIO
 
 import jsonpickle
 
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 
-__author__ = 'Robin Quetin'
-
-
-class CImportTests(CairisTests):
+class CImportTests(CairisDaemonTestCase):
     xmlfile = '../../examples/exemplars/NeuroGrid/NeuroGrid.xml'
     logger = logging.getLogger(__name__)
 

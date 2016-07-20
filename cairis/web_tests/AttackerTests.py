@@ -21,12 +21,10 @@ from urllib import quote
 import jsonpickle
 from cairis.core.Attacker import Attacker
 from cairis.core.AttackerEnvironmentProperties import AttackerEnvironmentProperties
-from cairis.web_tests.CairisTests import CairisTests
-
-__author__ = 'Robin Quetin'
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 
 
-class AttackerTests(CairisTests):
+class AttackerTests(CairisDaemonTestCase):
     # region Class fields
     logger = logging.getLogger(__name__)
     existing_attacker_id = 150

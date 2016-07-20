@@ -21,15 +21,11 @@ from urllib import quote
 import jsonpickle
 from cairis.core.Goal import Goal
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
-from cairis.web_tests.CairisTests import CairisTests
+from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 
-__author__ = 'Robin Quetin'
-
-
-class GoalTests(CairisTests):
+class GoalTests(CairisDaemonTestCase):
     # region Class fields
     logger = logging.getLogger(__name__)
-    existing_goal_id = 532
     existing_goal_name = 'Multi-Factor Authentication'
     existing_category = 'Maintain'
     existing_environment_name_1 = 'Stroke'
