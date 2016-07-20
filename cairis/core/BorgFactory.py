@@ -132,7 +132,7 @@ def dInitialise():
     if not os.path.exists(path):
       err_msg = 'The {0} directory of CAIRIS is inaccessible or not existing.{1}Path: {2}'.format(key, os.linesep, path)
       b.logger.error(err_msg)
-#      exit(6)
+      exit(6)
 
   image_upload_dir = os.path.join(b.uploadDir, 'images')
   if os.path.exists(image_upload_dir):

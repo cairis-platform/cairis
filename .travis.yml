@@ -18,7 +18,7 @@ addons:
     - libmysqlclient-dev
 
 env:
-- PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=$CAIRIS_SRC/config/cairis.cnf
+- PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf
 
 install:
 - pip install -r requirements.txt

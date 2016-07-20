@@ -1,0 +1,12 @@
+dbhost = 127.0.0.1
+dbport = 3306
+dbuser = irisuser
+dbpasswd = 
+dbname = arm
+tmp_dir = /tmp
+root = cairis
+default_image_dir = .
+web_port = 7071
+log_level = warning
+web_static_dir = cairis/cairis/web
+upload_dir = /tmp
