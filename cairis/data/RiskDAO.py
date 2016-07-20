@@ -18,6 +18,7 @@
 from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import ARMHTTPError, ObjectNotFoundHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, \
     OverwriteNotAllowedHTTPError, SilentHTTPError
+from cairis.core.MisuseCaseParameters import MisuseCaseParameters
 from cairis.core.MisuseCase import MisuseCase
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from cairis.core.RiskParameters import RiskParameters
@@ -111,16 +112,16 @@ class RiskDAO(CairisDAO):
             raise ARMHTTPError(ex)
 
     def add_risk(self, risk):
-        if self.check_existing_risk(risk.theName):
+        if self.check_existing_risk(risk.name()):
             self.close()
             raise OverwriteNotAllowedHTTPError('The provided risk name')
 
         params = RiskParameters(
-            riskName=risk.theName,
-            threatName=risk.theThreatName,
-            vulName=risk.theVulnerabilityName,
-            mc=risk.theMisuseCase,
-            rTags=risk.theTags
+            riskName=risk.name(),
+            threatName=risk.threat(),
+            vulName=risk.vulnerability(),
+            mc=risk.misuseCase(),
+            rTags=risk.tags()
         )
 
         try:
@@ -161,7 +162,7 @@ class RiskDAO(CairisDAO):
             self.get_risk_by_name(risk_name)
             return True
         except ObjectNotFoundHTTPError:
-            self.db_proxy.reconnect(self.session_id)
+            self.db_proxy.reconnect(session_id=self.session_id)
             return False
 
     # region Misuse cases
@@ -181,9 +182,14 @@ class RiskDAO(CairisDAO):
             raise ARMHTTPError(ex)
 
         for key in misuse_cases:
-            misuse_cases[key].theObjective = self.get_misuse_case_obj_and_assets(misuse_cases)
-            if simplify:
-                misuse_cases[key] = self.simplify(misuse_cases[key])
+            threat_name, vuln_name = self.db_proxy.misuseCaseRiskComponents(key)
+            misuse_cases[key].theThreatName = threat_name
+            misuse_cases[key].theVulnerabilityName = vuln_name
+            for mcep in misuse_cases[key].environmentProperties():
+              envName = mcep.name()
+              misuse_cases[key].theObjective = self.get_misuse_case_obj_and_assets(threat_name,vuln_name,envName)
+              if simplify:
+                  misuse_cases[key] = self.simplify(misuse_cases[key])
 
         return misuse_cases
 
@@ -407,12 +413,12 @@ class RiskDAO(CairisDAO):
 
         json_dict = json['object']
         check_required_keys(json_dict, RiskModel.required)
-        json_dict['__python_obj__'] = Risk.__module__+'.'+Risk.__name__
-
+        json_dict['__python_obj__'] = RiskParameters.__module__+'.'+RiskParameters.__name__
+       
         if json_dict['theMisuseCase']:
             mc_dict = json_dict['theMisuseCase']
             check_required_keys(mc_dict, MisuseCaseModel.required)
-            mc_dict['__python_obj__'] = MisuseCase.__module__+'.'+MisuseCase.__name__
+            mc_dict['__python_obj__'] = MisuseCaseParameters.__module__+'.'+MisuseCaseParameters.__name__
             for idx in range(0, len(mc_dict['theEnvironmentProperties'])):
                 mcep_dict = mc_dict['theEnvironmentProperties'][idx]
                 check_required_keys(mcep_dict, MisuseCaseEnvironmentPropertiesModel.required)
@@ -422,7 +428,7 @@ class RiskDAO(CairisDAO):
 
         risk = json_deserialize(json_dict)
 
-        if isinstance(risk, Risk):
+        if isinstance(risk, RiskParameters):
             return risk
         else:
             raise MalformedJSONHTTPError()

@@ -295,11 +295,8 @@ class MisuseCaseEnvironmentPropertiesModel(object):
 class MisuseCaseModel(object):
     resource_fields = {
         obj_id_field: fields.String,
-        "theId": fields.Integer,
         "theName": fields.String,
-        "theThreatName": fields.String,
-        "theRiskName": fields.String,
-        "theVulnerabilityName": fields.String,
+        "theRisk": fields.String,
         "theEnvironmentDictionary": fields.List(fields.Nested(MisuseCaseEnvironmentPropertiesModel.resource_fields)),
         "theEnvironmentProperties": fields.List(fields.Nested(MisuseCaseEnvironmentPropertiesModel.resource_fields))
     }
@@ -428,11 +425,10 @@ class RiskModel(object):
     resource_fields = {
         obj_id_field: fields.String,
         "theVulnerabilityName": fields.String,
-        "theId": fields.Integer,
         "theMisuseCase": fields.Nested(MisuseCaseModel.resource_fields),
         "theTags": fields.List(fields.Nested(fields.String)),
         "theThreatName": fields.String,
-        "theName": fields.String
+        "theRiskName": fields.String
     }
     required = resource_fields.keys()
     required.remove(obj_id_field)

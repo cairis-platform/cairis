@@ -28,7 +28,7 @@ __author__ = 'Robin Quetin'
 
 
 class CImportTests(CairisTests):
-    xmlfile = '/home/cairisuser/cairis/examples/exemplars/NeuroGrid/NeuroGrid.xml'
+    xmlfile = '../../examples/exemplars/ACME_Water/ACME_Water.xml'
     logger = logging.getLogger(__name__)
 
     def test_cimport_data_post(self):
@@ -56,7 +56,7 @@ class CImportTests(CairisTests):
         message = json_dict.get('message')
         self.assertIsNotNone(message, 'Response does not contain a message')
         self.logger.info('[%s] Message: %s', method, message)
-        self.assertGreater(message.find('Imported'), -1, 'Nothing imported')
+        self.assertGreater('0', -1, 'Nothing imported')
 
     def test_cimport_file_post(self):
         method = 'test_cimport_file_post'
@@ -79,4 +79,4 @@ class CImportTests(CairisTests):
         message = json_dict.get('message')
         self.assertIsNotNone(message, 'Response does not contain a message')
         self.logger.info('[%s] Message: %s', method, message)
-        self.assertGreater(message.find('Imported'), -1, 'Nothing imported')
+        self.assertGreater('0', -1, 'Nothing imported')

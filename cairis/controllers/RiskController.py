@@ -54,7 +54,6 @@ class RisksAPI(Resource):
 
         dao = RiskDAO(session_id)
         risks = dao.get_risks(constraint_id)
-
         resp = make_response(json_serialize(risks, session_id=session_id), httplib.OK)
         resp.contenttype = 'application/json'
         return resp
@@ -188,7 +187,6 @@ class RiskByNameAPI(Resource):
     # endregion
     def put(self, name):
         session_id = get_session_id(session, request)
-
         dao = RiskDAO(session_id)
         new_risk = dao.from_json(request)
         dao.update_risk(name, new_risk)

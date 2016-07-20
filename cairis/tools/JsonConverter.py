@@ -28,7 +28,7 @@ from cairis.core.Goal import Goal
 from cairis.core.MisuseCase import MisuseCase
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from cairis.core.Requirement import Requirement
-from cairis.core.Risk import Risk
+from cairis.core.RiskParameters import RiskParameters
 from ModelDefinitions import AssetEnvironmentPropertiesModel, SecurityAttribute
 
 
@@ -148,8 +148,8 @@ def deserialize_misuse(dict):
         new_mc_prop = MisuseCaseEnvironmentProperties().__dict__.update(mc_prop)
         mc_props.append(new_mc_prop)
 
-    return MisuseCase(mcId=dict['theId'], mcName=dict['theName'], cProps=mc_props, riskName=dict['theRiskName'])
+    return MisuseCaseParameters(scName=dict['theName'], cProps=mc_props, risk=dict['theRisk'])
 
 def deserialize_risk(dict):
     mc_obj = deserialize_misuse(dict['theMisuseCase'])
-    return Risk(riskId=dict['theId'], riskName=dict['theName'], threatName=dict['theThreadName'], vulName=dict['theVulnerabilityName'], rTags=dict['theTags'], mc=mc_obj)
+    return RiskParameters(riskName=dict['theRiskName'], threatName=dict['theThreatName'], vulName=dict['theVulnerabilityName'], rTags=dict['theTags'], mc=mc_obj)
