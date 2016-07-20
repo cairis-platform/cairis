@@ -20,7 +20,7 @@ from urllib import quote
 from cairis.core.Role import Role
 import jsonpickle
 from cairis.core.RoleEnvironmentProperties import RoleEnvironmentProperties
-from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
+from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.mio.ModelImport import importModelFile
 
