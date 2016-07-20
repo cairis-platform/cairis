@@ -82,6 +82,7 @@ def file_import(importFile,mFormat,overwriteFlag,session_id = None):
     msgStr += importModelFile(importFile,int(overwriteFlag),session_id)
   else:
     raise ARMException('Input model type ' + mFormat + ' not recognised')
+  return 0
 
 if __name__ == '__main__':
   try:

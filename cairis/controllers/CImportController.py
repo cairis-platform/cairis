@@ -93,7 +93,7 @@ class CImportTextAPI(Resource):
 
             remove_file(abs_path)
 
-            resp_dict = {'message': result}
+            resp_dict = {'message': str(result)}
             resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
             resp.headers['Content-Type'] = 'application/json'
             return resp
@@ -197,7 +197,7 @@ class CImportFileAPI(Resource):
 
         remove_file(abs_path)
 
-        resp_dict = { 'message': result }
+        resp_dict = { 'message': str(result) }
         resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
         resp.headers['Content-Type'] = 'application/json'
         return resp
