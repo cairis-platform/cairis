@@ -28,7 +28,7 @@ __author__ = 'Robin Quetin'
 
 
 class CImportTests(CairisTests):
-    xmlfile = '../../examples/exemplars/ACME_Water/ACME_Water.xml'
+    xmlfile = '../../examples/exemplars/NeuroGrid/NeuroGrid.xml'
     logger = logging.getLogger(__name__)
 
     def test_cimport_data_post(self):
