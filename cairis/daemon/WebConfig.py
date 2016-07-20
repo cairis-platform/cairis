@@ -74,7 +74,7 @@ def setPort(port):
 
 def logParams():
     b = Borg()
-    logger.info('Config: %s/cairis.cnf', b.configDir)
+    logger.info('Config: %s', os.environ['CAIRIS_CFG'])
     if b.logLevel == logging.INFO:
         logger.info('Log level: INFO')
     elif b.logLevel == logging.DEBUG:
