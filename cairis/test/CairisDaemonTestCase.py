@@ -17,11 +17,14 @@
 
 from time import sleep
 import unittest
+import os
+from subprocess import call
 import cairis.bin.cairisd
 
 __author__ = 'Robin Quetin'
 
 
 class CairisDaemonTestCase(unittest.TestCase):
+    call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
     app = cairis.bin.cairisd.main(['-d', '--unit-test'])
     sleep(1)

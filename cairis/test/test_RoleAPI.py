@@ -19,8 +19,6 @@ import logging
 from urllib import quote
 from cairis.core.Role import Role
 import jsonpickle
-import os
-from subprocess import call
 from cairis.core.RoleEnvironmentProperties import RoleEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.JsonConverter import json_deserialize
@@ -29,7 +27,6 @@ from cairis.mio.ModelImport import importModelFile
 class RoleAPITests(CairisDaemonTestCase):
 
   def setUp(self):
-    call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
     importModelFile('../../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
     self.logger = logging.getLogger(__name__)
     self.existing_role_id = 122
