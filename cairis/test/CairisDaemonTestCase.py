@@ -24,7 +24,16 @@ __author__ = 'Robin Quetin'
 
 
 class CairisDaemonTestCase(unittest.TestCase):
-  cmd = os.environ['CAIRIS_SRC'] + "/test/initdb.sh"
+  srcRoot = os.environ['CAIRIS_SRC']
+  createDbSql = srcRoot + '/test/createdb.sql'
+  sqlDir = srcRoot + '/sql'
+  initSql = sqlDir + '/init.sql'
+  procsSql = sqlDir + '/procs.sql'
+  cmd = "/usr/bin/mysql --user=root --password='' < " + createDbSql
+  os.system(cmd)
+  cmd = "/usr/bin/mysql --user=irisuser --password='' --database=arm < " + initSql
+  os.system(cmd)
+  cmd = "/usr/bin/mysql --user=irisuser --password='' --database=arm < " + procsSql
   os.system(cmd)
   app = cairis.bin.cairisd.main(['-d', '--unit-test'])
   sleep(1)
