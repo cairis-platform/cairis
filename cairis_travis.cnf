@@ -1,7 +1,7 @@
 dbhost = localhost
 dbport = 3306
 dbuser = irisuser
-dbpasswd = 
+dbpasswd = ''
 dbname = arm
 tmp_dir = /tmp
 root = cairis
