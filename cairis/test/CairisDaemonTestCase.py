@@ -31,9 +31,9 @@ class CairisDaemonTestCase(unittest.TestCase):
   procsSql = sqlDir + '/procs.sql'
   cmd = "/usr/bin/mysql --user=root --password='' < " + createDbSql
   os.system(cmd)
-  cmd = "/usr/bin/mysql --user=irisuser --password='' --database=arm < " + initSql
-  os.system(cmd)
-  cmd = "/usr/bin/mysql --user=irisuser --password='' --database=arm < " + procsSql
-  os.system(cmd)
+#  cmd = "/usr/bin/mysql --user=irisuser --password='' --database=arm < " + initSql
+#  os.system(cmd)
+#  cmd = "/usr/bin/mysql --user=irisuser --password='' --database=arm < " + procsSql
+#  os.system(cmd)
   app = cairis.bin.cairisd.main(['-d', '--unit-test'])
   sleep(1)
