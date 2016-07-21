@@ -18,8 +18,10 @@
 */
 
 grant usage on *.* to 'irisuser'@'localhost' identified by '' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0;
+grant usage on *.* to 'irisuser'@'127.0.0.1' identified by '' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0;
 create database if not exists `arm`;
 grant all privileges on `arm`.* to 'irisuser'@'localhost';
+grant all privileges on `arm`.* to 'irisuser'@'127.0.0.1';
 set global max_sp_recursion_depth = 255;
 
 flush tables;

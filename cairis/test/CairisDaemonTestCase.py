@@ -35,6 +35,5 @@ class CairisDaemonTestCase(unittest.TestCase):
   os.system(cmd)
   cmd = "/usr/bin/mysql --user=irisuser --password='' --database=arm < " + procsSql
   os.system(cmd)
-  os.system(cmd)
   app = cairis.bin.cairisd.main(['-d', '--unit-test'])
   sleep(1)

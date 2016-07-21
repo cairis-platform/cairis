@@ -349,8 +349,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         db = ses_settings['dbName']
       else:
         raise RuntimeError('Run mode not recognized')
-
       self.conn = MySQLdb.connect(host=b.dbHost,port=b.dbPort,user=b.dbUser,passwd=b.dbPasswd,db=b.dbName)
+
     except _mysql_exceptions.DatabaseError, e:
       exceptionText = 'MySQL error connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
       raise DatabaseProxyException(exceptionText) 
