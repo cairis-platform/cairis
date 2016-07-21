@@ -1,4 +1,4 @@
-dbhost = 127.0.0.1
+dbhost = localhost
 dbport = 3306
 dbuser = irisuser
 dbpasswd = 
