@@ -25,6 +25,7 @@ __author__ = 'Robin Quetin'
 
 
 class CairisDaemonTestCase(unittest.TestCase):
+  def __init__(self):
     call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
     app = cairis.bin.cairisd.main(['-d', '--unit-test'])
     sleep(1)

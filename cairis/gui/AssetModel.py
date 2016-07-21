@@ -28,6 +28,10 @@ class AssetModel:
   def __init__(self,associations,envName,assetName = '',hideConcerns = False):
     self.theAssociations = associations
     self.theEnvironmentName = envName
+    if (self.theEnvironmentName == ''):
+      self.isComponentAssetModel = True
+    else:
+      self.isComponentAssetModel = False
     self.theAssetName = assetName
     b = Borg()
     self.dbProxy = b.dbProxy
