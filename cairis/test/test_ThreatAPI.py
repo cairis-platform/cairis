@@ -21,11 +21,13 @@ import jsonpickle
 from cairis.core.Threat import Threat
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from cairis.core.ValueType import ValueType
-from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
+from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import SecurityAttribute
+import os
+from cairis.mio.modelImport import importModelFile
 
 
-class ThreatTests(CairisDaemonTestCase):
+class ThreatAPITests(CairisDaemonTestCase):
     # region Class fields
     logger = logging.getLogger(__name__)
     existing_threat_name = 'Replay attack'
@@ -36,6 +38,10 @@ class ThreatTests(CairisDaemonTestCase):
     existing_attackers_names = ['Trudy', 'Yves']
     threat_class = Threat.__module__+'.'+Threat.__name__
     # endregion
+
+    def setUp(self):
+        importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+
     
     def test_get_all(self):
         method = 'test_get_all'

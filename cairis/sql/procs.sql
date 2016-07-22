@@ -7418,7 +7418,7 @@ begin
   declare responseId int default -1;
   declare preScore int;
   declare postScore int;
-  declare detailsBuf varchar(1000);
+  declare detailsBuf text;
   declare responseCursor cursor for select distinct id,name from response where risk_id = riskId;
   declare continue handler for not found set done = 1;
 
@@ -7467,7 +7467,7 @@ end
 //
 
 
-create procedure calculateRiskScore(in threatId int, in vulId int, in threatLikelihood int, in vulSeverity int, in envId int, in responseId int, out preScore int, out postScore int, out detailsBuf varchar(1000))
+create procedure calculateRiskScore(in threatId int, in vulId int, in threatLikelihood int, in vulSeverity int, in envId int, in responseId int, out preScore int, out postScore int, out detailsBuf text)
 begin
   declare likelihood int default 0;
   declare severity int default 0;
@@ -7529,8 +7529,8 @@ begin
   declare riskPanValue int default 0;
   declare riskUnlValue int default 0;
   declare riskUnoValue int default 0;
-  declare msComments varchar(1000) default '';
-  declare mlComments varchar(1000) default '';
+  declare msComments text default '';
+  declare mlComments text default '';
   if responseId != -1
   then
     call mitigatingValues(responseId,envId);
