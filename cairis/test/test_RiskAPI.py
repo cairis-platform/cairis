@@ -19,6 +19,7 @@ import logging
 from urllib import quote
 
 import jsonpickle
+import os
 from cairis.core.MisuseCaseParameters import MisuseCaseParameters
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 
@@ -38,7 +39,7 @@ class RiskTests(CairisDaemonTestCase):
     # endregion
 
     def setUp(self):
-        importModelFile('../../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+        importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
 
     def test_get_all(self):
         method = 'test_get_all'
