@@ -19,11 +19,9 @@
 import logging
 from urllib import quote
 from StringIO import StringIO
-
 import os
 import jsonpickle
-
-from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
+from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 
 class CImportTests(CairisDaemonTestCase):
     xmlfile = os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml'
