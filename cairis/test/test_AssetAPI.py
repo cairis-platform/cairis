@@ -23,11 +23,12 @@ import jsonpickle
 from cairis.core.Asset import Asset
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 from cairis.core.ValueType import ValueType
-from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
+from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.ModelDefinitions import AssetEnvironmentPropertiesModel, SecurityAttribute
 from cairis.tools.SessionValidator import check_required_keys
 from cairis.mio.ModelImport import importModelFile
+import os
 
 class AssetAPITests(CairisDaemonTestCase):
     # region Class fields
@@ -72,8 +73,8 @@ class AssetAPITests(CairisDaemonTestCase):
     }
     # endregion
 
-#    def setUp(self):
-#        importModelFile('../../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+    def setUp(self):
+        importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
 
     def test_get_all(self):
         method = 'test_get_all'
