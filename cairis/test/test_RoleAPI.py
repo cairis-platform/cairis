@@ -28,7 +28,7 @@ from cairis.mio.ModelImport import importModelFile
 class RoleAPITests(CairisDaemonTestCase):
 
   def setUp(self):
-    importModelFile('examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
     self.logger = logging.getLogger(__name__)
     self.existing_role_id = 122
     self.existing_role_name = 'Certificate Authority'

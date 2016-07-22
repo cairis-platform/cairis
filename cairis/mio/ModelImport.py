@@ -705,7 +705,7 @@ def importModelFile(importFile,isOverwrite = 1,session_id = None):
     modelTxt = ''
     if isOverwrite == 1:
       db_proxy.clearDatabase(session_id)
-      modelTxt += importTVTypeFile(importFile,session_id = session_id) + '  '
+      modelTxt += importTVTypeFile(importFile,isOverwrite,session_id = session_id) + '  '
     modelTxt += importDomainValuesFile(importFile,session_id) + ' '
     modelTxt += importProjectFile(importFile,session_id) + ' '
     modelTxt += importRiskAnalysisFile(importFile,session_id) + ' '
