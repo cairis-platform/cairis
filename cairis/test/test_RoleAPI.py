@@ -195,6 +195,3 @@ class RoleAPITests(CairisDaemonTestCase):
     role_prop = role_props[0]
     self.assertEqual(cls_role_prop, role_prop['__python_obj__'], 'The result is not an role as expected')
     self.logger.info('[%s] Role property: %s\n', method, role_props[0]['theEnvironmentName'])
-
-  def tearDown(self):
-    sys.exit()
