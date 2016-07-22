@@ -24,7 +24,7 @@ from cairis.core.ValueType import ValueType
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import SecurityAttribute
 import os
-from cairis.mio.modelImport import importModelFile
+from cairis.mio.ModelImport import importModelFile
 
 
 class ThreatAPITests(CairisDaemonTestCase):
