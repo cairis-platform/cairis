@@ -22,6 +22,7 @@ from subprocess import call
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 from cairis.core.RoleParameters import RoleParameters
+import sys
 
 class RoleTest(unittest.TestCase):
 
