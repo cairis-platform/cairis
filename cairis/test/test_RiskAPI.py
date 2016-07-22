@@ -24,7 +24,7 @@ from cairis.core.MisuseCaseParameters import MisuseCaseParameters
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 
 from cairis.core.RiskParameters import RiskParameters
-from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
+from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import RiskScore
 from cairis.mio.ModelImport import importModelFile
 
