@@ -7436,7 +7436,7 @@ begin
   select id into threatLikelihood from likelihood where name = likelihoodName;
   select id into vulSeverity from severity where name = severityName;
   drop table if exists temp_riskscore;
-  create temporary table temp_riskscore (response_name varchar(50),preScore int, postScore int, details varchar(1000));
+  create temporary table temp_riskscore (response_name varchar(50),preScore int, postScore int, details text);
 
   if riskName != ''
   then
