@@ -29,7 +29,7 @@ class DirectoryContentHandler(ContentHandler,EntityResolver):
     self.resetAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/directory.dtd'
+    return systemId
 
   def directories(self):
     return (self.theVulnerabilityDirectory,self.theThreatDirectory)

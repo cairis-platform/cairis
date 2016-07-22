@@ -33,7 +33,7 @@ class SynopsesContentHandler(ContentHandler,EntityResolver):
     self.theUseCaseContributions = []
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/synopses.dtd'
+    return systemId
 
   def characteristicSynopses(self):
     return self.theCharacteristicSynopses

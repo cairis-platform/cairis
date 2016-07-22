@@ -46,7 +46,7 @@ class ProcessesContentHandler(ContentHandler,EntityResolver):
     self.resetProcessAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/processes.dtd'
+    return systemId
 
   def internalDocuments(self):
     return self.theInternalDocuments

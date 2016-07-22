@@ -33,7 +33,7 @@ class CairisContentHandler(ContentHandler,EntityResolver):
     self.resetAssetValues()
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/cairis.dtd'
+    return systemId
 
   def settings(self):
     return self.theProjectSettings

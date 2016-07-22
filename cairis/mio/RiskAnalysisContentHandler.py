@@ -75,7 +75,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
     self.resetAssociationAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/riskanalysis.dtd'
+    return systemId
 
 
   def associations(self):

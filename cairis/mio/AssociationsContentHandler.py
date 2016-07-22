@@ -53,7 +53,7 @@ class AssociationsContentHandler(ContentHandler,EntityResolver):
     self.resetDependencyAssociationAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/associations.dtd'
+    return systemId
 
   def manualAssociations(self):
     return self.theManualAssociations

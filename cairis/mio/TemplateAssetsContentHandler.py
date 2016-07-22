@@ -52,7 +52,7 @@ class TemplateAssetsContentHandler(ContentHandler,EntityResolver):
     return self.theValueTypes
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/template_assets.dtd'
+    return systemId
 
   def resetValueTypeAttributes(self):
     self.inDescription = 0

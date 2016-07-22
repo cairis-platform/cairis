@@ -33,7 +33,7 @@ class LocationsContentHandler(ContentHandler,EntityResolver):
     self.resetLocationAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/locations.dtd'
+    return systemId
 
   def name(self): return self.theLocationsName
   def diagram(self): return self.theDiagram

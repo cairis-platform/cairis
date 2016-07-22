@@ -74,7 +74,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.resetCountermeasureAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/goals.dtd'
+    return systemId
 
   def roles(self):
     return self.theRoles

@@ -49,7 +49,7 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
     self.resetPatternAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/securitypattern.dtd'
+    return systemId
 
   def patterns(self):
     return self.theSecurityPatterns

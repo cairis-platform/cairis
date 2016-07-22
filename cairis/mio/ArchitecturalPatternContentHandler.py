@@ -68,7 +68,7 @@ class ArchitecturalPatternContentHandler(ContentHandler,EntityResolver):
     self.configDir = b.configDir
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/architectural_pattern.dtd'
+    return systemId
 
   def view(self):
     return self.theViewParameters

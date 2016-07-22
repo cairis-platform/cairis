@@ -134,7 +134,7 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     self.theResponsibilities = []
      
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/attack_pattern.dtd'
+    return systemId
 
   def startElement(self,name,attrs):
     if (name == 'attack_pattern'):

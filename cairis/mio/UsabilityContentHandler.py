@@ -86,7 +86,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     self.resetUseCaseAttributes()
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/usability.dtd'
+    return systemId
 
   def personas(self):
     return self.thePersonas
