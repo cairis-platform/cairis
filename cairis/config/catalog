@@ -94,7 +94,7 @@
        uri="attack_pattern.dtd"/>
 
     <system
-       systemId="http://failys.github.io/CAIRIS/dtd/attack_pattern.dtd"  
+       systemId="http://cairis.org/CAIRIS/dtd/attack_pattern.dtd"  
        uri="attack_pattern.dtd"/>
 
     <public 
