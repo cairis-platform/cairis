@@ -20,12 +20,13 @@ import logging
 from urllib import quote
 from StringIO import StringIO
 
+import os
 import jsonpickle
 
 from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 
 class CImportTests(CairisDaemonTestCase):
-    xmlfile = '../../examples/exemplars/NeuroGrid/NeuroGrid.xml'
+    xmlfile = os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml'
     logger = logging.getLogger(__name__)
 
     def test_cimport_data_post(self):
