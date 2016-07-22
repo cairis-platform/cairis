@@ -850,6 +850,7 @@ drop procedure if exists delete_locations;
 drop procedure if exists locationsNames;
 drop procedure if exists locationsRiskModel;
 drop procedure if exists architecturalPatternToXml;
+drop procedure if exists templateAssetMetrics;
 
 
 delimiter //
@@ -22493,6 +22494,15 @@ begin
   close connCursor;
   set buf = concat(buf,'\n</architectural_pattern>');
   select buf;
+end
+//
+
+create procedure templateAssetMetrics(in taName text)
+begin
+  declare taId int;
+
+  select id into taId from template_asset where name = taName limit 1;
+  select st.value,ar.value from template_asset ta, surface_type st, access_right ar where ta.id = taId and ta.surface_type_id = st.id and ta.access_right_id = ar.id limit 1;
 end
 //
 

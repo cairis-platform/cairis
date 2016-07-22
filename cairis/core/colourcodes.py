@@ -73,3 +73,19 @@ def riskTextColourCode(valueId):
 def usabilityTextColourCode(valueId):
   if (valueId >= 7): return 'white'
   else: return 'black'
+
+def surfaceTypeColourCode(valueId):
+  if (valueId == 9): return '359 1 .5'
+  elif (valueId > 9): return '359 1 .5'
+  elif (valueId == 8): return '359 1 .7'
+  elif (valueId == 7): return '6 .86 .44'
+  elif (valueId == 6): return '10 .7 .94'
+  elif (valueId == 5): return '19 .65 .99'
+  elif (valueId == 4): return '27 .48 .99'
+  elif (valueId == 3): return '34 .38 .99'
+  elif (valueId == 2): return '36 .21 1'
+  elif (valueId == 1): return '37 .07 1'
+
+def surfaceTypeTextColourCode(valueId):
+  if (valueId >= 7): return 'white'
+  else: return 'black'

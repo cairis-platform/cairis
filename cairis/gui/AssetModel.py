@@ -22,6 +22,7 @@ import pydot
 import wx
 import os
 from cairis.core.ARM import *
+from cairis.core.colourcodes import surfaceTypeColourCode,surfaceTypeTextColourCode
 import gtk
 
 class AssetModel:
@@ -63,7 +64,11 @@ class AssetModel:
       borderColour = 'black'
       if (dimName == 'asset' and assetObjt.critical()):
         borderColour = 'red'
-      assetNode = pydot.Node(objtName,shape='record',color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
+      if (dimName == 'template_asset' and self.isComponentAssetModel):
+        stScore = self.dbProxy.templateAssetMetrics(objtName)
+        assetNode = pydot.Node(objtName,shape='record',style='filled',fillcolor=surfaceTypeColourCode(stScore),fontcolor=surfaceTypeTextColourCode(stScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
+      else:
+        assetNode = pydot.Node(objtName,shape='record',color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
       self.theGraph.add_node(assetNode)
     self.nodeList.add(objtName)
 

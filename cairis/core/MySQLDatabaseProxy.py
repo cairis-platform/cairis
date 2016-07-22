@@ -11777,3 +11777,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting while preparing database'
       raise DatabaseProxyException(exceptionText)
+
+  def templateAssetMetrics(self,taName):
+    try: 
+      curs = self.conn.cursor()
+      curs.execute('call templateAssetMetrics(%s)',[taName])
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting metrics for template asset ' + taName
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      stScore = row[0]
+      curs.close()
+      return stScore
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting metrics for template asset ' + taName + ' (id:' + str(id) + ',message:' + msg
+      raise DatabaseProxyException(exceptionText) 
