@@ -29,7 +29,7 @@ class TVTypeContentHandler(ContentHandler,EntityResolver):
     self.configDir = b.configDir
 
   def resolveEntity(self,publicId,systemId):
-    return self.configDir + '/tvtypes.dtd'
+    return self.configDir + '/tvtypes.dtdx'
 
   def types(self):
     return (self.theVulnerabilityTypes,self.theThreatTypes)
