@@ -28,7 +28,7 @@ from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import RiskScore
 from cairis.mio.ModelImport import importModelFile
 
-class RiskTests(CairisDaemonTestCase):
+class RiskAPITests(CairisDaemonTestCase):
     # region Class fields
     logger = logging.getLogger(__name__)
     existing_risk_name = 'Unauthorised Certificate Access'
