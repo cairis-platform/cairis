@@ -20,9 +20,6 @@ import unittest
 import os
 import cairis.bin.cairisd
 
-__author__ = 'Robin Quetin'
-
-
 class CairisDaemonTestCase(unittest.TestCase):
   srcRoot = os.environ['CAIRIS_SRC']
   createDbSql = srcRoot + '/test/createdb.sql'
