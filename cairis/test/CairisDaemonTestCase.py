@@ -18,19 +18,10 @@
 from time import sleep
 import unittest
 import os
+from subprocess import call
 import cairis.bin.cairisd
 
 class CairisDaemonTestCase(unittest.TestCase):
-  srcRoot = os.environ['CAIRIS_SRC']
-  createDbSql = srcRoot + '/test/createdb.sql'
-  sqlDir = srcRoot + '/sql'
-  initSql = sqlDir + '/init.sql'
-  procsSql = sqlDir + '/procs.sql'
-  cmd = "/usr/bin/mysql --user=root --password='' < " + createDbSql
-  os.system(cmd)
-  cmd = "/usr/bin/mysql --user=irisuser --password='' --database=arm < " + initSql
-  os.system(cmd)
-  cmd = "/usr/bin/mysql --user=irisuser --password='' --database=arm < " + procsSql
-  os.system(cmd)
+  call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
   app = cairis.bin.cairisd.main(['-d', '--unit-test'])
   sleep(1)
