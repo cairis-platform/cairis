@@ -26,35 +26,37 @@ from cairis.core.Response import Response
 from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import ValuedRole
 from cairis.mio.ModelImport import importModelFile
+import os
 
 class ResponseTests(CairisDaemonTestCase):
+
+  def setUp(self):
+    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
     # region Class fields
-    logger = logging.getLogger(__name__)
-    existing_response_name = 'Prevent Unauthorised Certificate Access'
-    existing_environment_name = 'Stroke'
-    existing_risk_name = 'Unauthorised Certificate Access'
-    existing_role_name = 'Developer'
-    response_class = Response.__module__+'.'+Response.__name__
+    self.logger = logging.getLogger(__name__)
+    self.existing_response_name = 'Prevent Unauthorised Certificate Access'
+    self.existing_environment_name = 'Stroke'
+    self.existing_risk_name = 'Unauthorised Certificate Access'
+    self.existing_role_name = 'Developer'
+    self.response_class = Response.__module__+'.'+Response.__name__
     # endregion
 
-    def setUp(self):
-        importModelFile('../../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
 
-    def test_get_all(self):
-        method = 'test_get_all'
-        rv = self.app.get('/api/responses?session_id=test')
-        responses = jsonpickle.decode(rv.data)
-        self.assertIsNotNone(responses, 'No results after deserialization')
-        self.assertIsInstance(responses, dict, 'The result is not a dictionary as expected')
-        self.assertGreater(len(responses), 0, 'No responses in the dictionary')
-        self.logger.info('[%s] Responses found: %d', method, len(responses))
-        response = responses.values()[0]
-        self.logger.info('[%s] First response: %s [%d]\n', method, response['theName'], response['theId'])
+  def test_get_all(self):
+    method = 'test_get_all'
+    rv = self.app.get('/api/responses?session_id=test')
+    responses = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(responses, 'No results after deserialization')
+    self.assertIsInstance(responses, dict, 'The result is not a dictionary as expected')
+    self.assertGreater(len(responses), 0, 'No responses in the dictionary')
+    self.logger.info('[%s] Responses found: %d', method, len(responses))
+    response = responses.values()[0]
+    self.logger.info('[%s] First response: %s [%d]\n', method, response['theName'], response['theId'])
 
-    def test_get_by_name(self):
-        method = 'test_get_by_name'
-        url = '/api/responses/name/%s?session_id=test' % quote(self.existing_response_name)
-        rv = self.app.get(url)
+  def test_get_by_name(self):
+    method = 'test_get_by_name'
+    url = '/api/responses/name/%s?session_id=test' % quote(self.existing_response_name)
+    rv = self.app.get(url)
         self.assertIsNotNone(rv.data, 'No response')
         self.logger.debug('[%s] Response data: %s', method, rv.data)
         response = jsonpickle.decode(rv.data)
