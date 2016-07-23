@@ -24,27 +24,27 @@ from cairis.tools.PseudoClasses import EnvironmentTensionModel
 from cairis.mio.ModelImport import importModelFile
 
 class EnvironmentAPITests(CairisDaemonTestCase):
+
+  def setUp(self):
+    importModelFile('/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
     # region Class fields
-    logger = logging.getLogger(__name__)
-    existing_environment_name = 'Stroke'
-    environment_class = Environment.__module__+'.'+Environment.__name__
+    self.logger = logging.getLogger(__name__)
+    self.existing_environment_name = 'Stroke'
+    self.environment_class = Environment.__module__+'.'+Environment.__name__
     # endregion
-
-    def setUp(self):
-        importModelFile('../../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
     
-    def test_get_all(self):
-        method = 'test_get_all'
-        rv = self.app.get('/api/environments?session_id=test')
-        environments = jsonpickle.decode(rv.data)
-        self.assertIsNotNone(environments, 'No results after deserialization')
-        self.assertIsInstance(environments, dict, 'The result is not a dictionary as expected')
-        self.assertGreater(len(environments), 0, 'No environments in the dictionary')
-        self.logger.info('[%s] Environments found: %d', method, len(environments))
-        environment = environments.values()[0]
-        self.logger.info('[%s] First environment: %s [%d]\n', method, environment['theName'], environment['theId'])
+  def test_get_all(self):
+    method = 'test_get_all'
+    rv = self.app.get('/api/environments?session_id=test')
+    environments = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(environments, 'No results after deserialization')
+    self.assertIsInstance(environments, dict, 'The result is not a dictionary as expected')
+    self.assertGreater(len(environments), 0, 'No environments in the dictionary')
+    self.logger.info('[%s] Environments found: %d', method, len(environments))
+    environment = environments.values()[0]
+    self.logger.info('[%s] First environment: %s [%d]\n', method, environment['theName'], environment['theId'])
 
-    def test_get_all_names(self):
+  def test_get_all_names(self):
         method = 'test_get_all_names'
         rv = self.app.get('/api/environments/all/names?session_id=test')
         environments = jsonpickle.decode(rv.data)
