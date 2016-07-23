@@ -201,10 +201,11 @@ class ResponseDAO(CairisDAO):
             new_props = { response_type: new_props_list }
         elif fake_props:
             new_props = []
-            if not (response_type in ResponseEnvironmentPropertiesModel.field_names and fake_props.has_key(response_type)):
+            if not (response_type in ResponseEnvironmentPropertiesModel.field_names):
+#            if not (response_type in ResponseEnvironmentPropertiesModel.field_names and fake_props.has_key(response_type)):
                 raise MalformedJSONHTTPError()
 
-            fake_props = fake_props[response_type]
+#            fake_props = fake_props[response_type]
             if response_type == 'accept':
                 model_class = AcceptEnvironmentPropertiesModel
                 target_class = AcceptEnvironmentProperties

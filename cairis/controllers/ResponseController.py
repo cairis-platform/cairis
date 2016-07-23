@@ -98,7 +98,6 @@ class ResponsesAPI(Resource):
     #endregion
     def post(self):
         session_id = get_session_id(session, request)
-
         dao = ResponseDAO(session_id)
         response = dao.from_json(request)
         response_id = dao.add_response(response)
