@@ -20,7 +20,7 @@ import logging
 from urllib import quote
 from StringIO import StringIO
 import jsonpickle
-from cairis.web_tests.CairisDaemonTestCase import CairisDaemonTestCase
+from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision
 
 class ProjectTests(CairisDaemonTestCase):
