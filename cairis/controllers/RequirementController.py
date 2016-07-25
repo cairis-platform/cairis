@@ -11,7 +11,6 @@ from cairis.tools.ModelDefinitions import RequirementModel
 from cairis.tools.SessionValidator import get_session_id
 from cairis.tools.JsonConverter import json_serialize
 
-
 __author__ = 'Robin Quetin'
 
 
