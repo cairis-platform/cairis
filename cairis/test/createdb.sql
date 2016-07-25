@@ -21,6 +21,7 @@ grant usage on *.* to 'irisuser'@'%' identified by '' with max_queries_per_hour 
 create database if not exists `arm`;
 grant all privileges on `arm`.* to 'irisuser'@'%';
 set global max_sp_recursion_depth = 255;
+set internal_tmp_disk_storage_engine = MYISAM;
 
 flush tables;
 flush privileges;
