@@ -2932,7 +2932,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.execute('call riskScore(%s,%s,%s,%s)',[threatName,vulName,environmentName,riskName])
       if (curs.rowcount == -1):
         riskName = threatName + '/' + vulName
-        exceptionText = 'MySQL calculating score for risk ' + riskName
+        exceptionText = 'MySQL error calculating score for risk ' + riskName
         raise DatabaseProxyException(exceptionText) 
       else:
         scoreDetails = []
