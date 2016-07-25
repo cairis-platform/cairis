@@ -1,1 +1,0 @@
-../test/CairisDaemonTestCase.py
