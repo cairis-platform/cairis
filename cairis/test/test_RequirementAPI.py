@@ -79,10 +79,9 @@ class RequirementAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(req_id, 'No requirement ID returned')
     self.logger.info('[%s] Requirement ID: %d', method, req_id)
 
-# Uncomment and update once requirement API updated to get requirement by label
-#    rv = self.app.get('/api/requirements/id/%d?session_id=test' % req_id)
-#    requirement = jsonpickle.decode(rv.data)
-#    self.logger.info('[%s] Requirement: %s [%d]\n', method, requirement['theName'], requirement['theId'])
+    rv = self.app.get('/api/requirements/shortcode/%d?session_id=test' % req_id, self.new_requirement.label())
+    requirement = jsonpickle.decode(rv.data)
+    self.logger.info('[%s] Requirement: %s [%d]\n', method, self.new_requirement.name(), self.new_requirement.label())
 
   def test_get_asset_name(self):
     method = 'test_asset_get_name'
