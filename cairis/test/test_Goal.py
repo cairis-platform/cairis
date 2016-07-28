@@ -29,6 +29,9 @@ from cairis.core.GoalAssociationParameters import GoalAssociationParameters
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
 from cairis.core.ARM import DatabaseProxyException
 
+__author__ = 'Shamal Faily'
+
+
 class GoalTest(unittest.TestCase):
 
   def setUp(self):

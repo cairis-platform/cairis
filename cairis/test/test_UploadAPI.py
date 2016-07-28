@@ -22,6 +22,9 @@ from StringIO import StringIO
 import jsonpickle
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 
+__author__ = 'Robin Quetin, Shamal Faily'
+
+
 class UploadAPITests(CairisDaemonTestCase):
 
   logger = logging.getLogger(__name__)

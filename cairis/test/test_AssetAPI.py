@@ -17,9 +17,7 @@
 
 import logging
 from urllib import quote
-
 import jsonpickle
-
 from cairis.core.Asset import Asset
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 from cairis.core.ValueType import ValueType
@@ -29,6 +27,9 @@ from cairis.tools.ModelDefinitions import AssetEnvironmentPropertiesModel, Secur
 from cairis.tools.SessionValidator import check_required_keys
 from cairis.mio.ModelImport import importModelFile
 import os
+
+__author__ = 'Robin Quetin, Shamal Faily'
+
 
 class AssetAPITests(CairisDaemonTestCase):
 

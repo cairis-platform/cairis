@@ -42,6 +42,9 @@ from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentPro
 from cairis.core.RiskParameters import RiskParameters
 from cairis.core.ARM import DatabaseProxyException
 
+__author__ = 'Shamal Faily'
+
+
 class RiskTest(unittest.TestCase):
 
   def setUp(self):

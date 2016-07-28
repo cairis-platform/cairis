@@ -51,6 +51,9 @@ from cairis.core.Target import Target
 import cairis.core.RequirementFactory
 from cairis.core.ARM import DatabaseProxyException
 
+__author__ = 'Shamal Faily'
+
+
 class CountermeasureTest(unittest.TestCase):
 
   def setUp(self):

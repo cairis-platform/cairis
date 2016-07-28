@@ -24,6 +24,9 @@ from cairis.core.Borg import Borg
 from cairis.core.TemplateAssetParameters import TemplateAssetParameters
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 
+__author__ = 'Shamal Faily'
+
+
 class TemplateAssetTest(unittest.TestCase):
 
   def setUp(self):

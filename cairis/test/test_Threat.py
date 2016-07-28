@@ -37,6 +37,9 @@ from cairis.core.ThreatParameters import ThreatParameters
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from cairis.core.ARM import DatabaseProxyException
 
+__author__ = 'Shamal Faily'
+
+
 class ThreatTest(unittest.TestCase):
 
   def setUp(self):

@@ -24,6 +24,9 @@ from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision
 import os
 
+__author__ = 'Robin Quetin, Shamal Faily'
+
+
 class ProjectAPITests(CairisDaemonTestCase):
   logger = logging.getLogger(__name__)
   xmlfile = os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml'

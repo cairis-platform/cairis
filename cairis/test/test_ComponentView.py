@@ -29,6 +29,9 @@ from cairis.core.ComponentParameters import ComponentParameters
 from cairis.core.ConnectorParameters import ConnectorParameters
 from cairis.core.ComponentViewParameters import ComponentViewParameters
 
+__author__ = 'Shamal Faily'
+
+
 class ComponentViewTest(unittest.TestCase):
 
   def setUp(self):

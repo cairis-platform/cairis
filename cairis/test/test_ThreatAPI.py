@@ -26,6 +26,9 @@ from cairis.tools.PseudoClasses import SecurityAttribute
 import os
 from cairis.mio.ModelImport import importModelFile
 
+__author__ = 'Robin Quetin, Shamal Faily'
+
+
 
 class ThreatAPITests(CairisDaemonTestCase):
     # region Class fields

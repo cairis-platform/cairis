@@ -23,6 +23,9 @@ import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 from cairis.core.DomainPropertyParameters import DomainPropertyParameters
 
+__author__ = 'Shamal Faily'
+
+
 class DomainPropertyTest(unittest.TestCase):
 
   def setUp(self):

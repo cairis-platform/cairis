@@ -28,6 +28,9 @@ from cairis.core.Steps import Steps
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
 from cairis.core.UseCaseParameters import UseCaseParameters
 
+__author__ = 'Shamal Faily'
+
+
 class UseCaseTest(unittest.TestCase):
 
   def setUp(self):

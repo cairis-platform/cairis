@@ -15,13 +15,15 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import logging
 from urllib import quote
 from StringIO import StringIO
 import os
 import jsonpickle
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
+
+__author__ = 'Robin Quetin, Shamal Faily'
+
 
 class CImportTests(CairisDaemonTestCase):
     xmlfile = os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml'

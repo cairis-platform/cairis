@@ -25,6 +25,9 @@ from cairis.core.TemplateAssetParameters import TemplateAssetParameters
 from cairis.core.TemplateGoalParameters import TemplateGoalParameters
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 
+__author__ = 'Shamal Faily'
+
+
 class TemplateGoalTest(unittest.TestCase):
 
   def setUp(self):

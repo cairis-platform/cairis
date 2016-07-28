@@ -27,6 +27,9 @@ from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 import cairis.core.RequirementFactory
 from cairis.core.ARM import DatabaseProxyException
 
+__author__ = 'Shamal Faily'
+
+
 class RequirementTest(unittest.TestCase):
 
   def setUp(self):

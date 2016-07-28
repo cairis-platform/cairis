@@ -23,6 +23,9 @@ from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
 from cairis.mio.ModelImport import importModelFile
 
+__author__ = 'Robin Quetin, Shamal Faily'
+
+
 
 class RequirementAPITests(CairisDaemonTestCase):
 

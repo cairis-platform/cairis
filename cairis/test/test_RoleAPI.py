@@ -25,6 +25,9 @@ from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.mio.ModelImport import importModelFile
 
+__author__ = 'Robin Quetin, Shamal Faily'
+
+
 class RoleAPITests(CairisDaemonTestCase):
 
   def setUp(self):

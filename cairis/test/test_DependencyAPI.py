@@ -23,6 +23,8 @@ from cairis.tools.ModelDefinitions import DependencyModel
 import os
 from cairis.mio.ModelImport import importModelFile
 
+__author__ = 'Robin Quetin, Shamal Faily'
+
 
 class DependencyAPITests(CairisDaemonTestCase):
   

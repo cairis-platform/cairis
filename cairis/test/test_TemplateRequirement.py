@@ -25,6 +25,9 @@ from cairis.core.TemplateAssetParameters import TemplateAssetParameters
 from cairis.core.TemplateRequirementParameters import TemplateRequirementParameters
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 
+__author__ = 'Shamal Faily'
+
+
 class TemplateRequirementTest(unittest.TestCase):
 
   def setUp(self):

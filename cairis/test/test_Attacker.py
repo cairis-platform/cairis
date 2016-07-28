@@ -31,6 +31,9 @@ from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicPar
 from cairis.core.AttackerParameters import AttackerParameters
 from cairis.core.AttackerEnvironmentProperties import AttackerEnvironmentProperties
 
+__author__ = 'Shamal Faily'
+
+
 class AttackerTest(unittest.TestCase):
 
   def setUp(self):

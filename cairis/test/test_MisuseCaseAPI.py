@@ -17,12 +17,14 @@
 
 import logging
 from urllib import quote
-
 import jsonpickle
 from cairis.core.MisuseCase import MisuseCase
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
 from cairis.mio.ModelImport import importModelFile
+
+__author__ = 'Robin Quetin, Shamal Faily'
+
 
 class MisuseCaseAPITests(CairisDaemonTestCase):
   # region Class fields

@@ -21,6 +21,8 @@ import os
 from subprocess import call
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class BorgFactoryTest(unittest.TestCase):
 
   def setUp(self):

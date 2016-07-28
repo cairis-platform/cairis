@@ -22,11 +22,13 @@ import jsonpickle
 import os
 from cairis.core.MisuseCaseParameters import MisuseCaseParameters
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
-
 from cairis.core.RiskParameters import RiskParameters
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import RiskScore
 from cairis.mio.ModelImport import importModelFile
+
+__author__ = 'Robin Quetin, Shamal Faily'
+
 
 class RiskAPITests(CairisDaemonTestCase):
     # region Class fields

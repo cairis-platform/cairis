@@ -29,6 +29,9 @@ from cairis.core.ExternalDocumentParameters import ExternalDocumentParameters
 from cairis.core.DocumentReferenceParameters import DocumentReferenceParameters
 from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicParameters
 
+__author__ = 'Shamal Faily'
+
+
 class PersonaTest(unittest.TestCase):
 
   def setUp(self):

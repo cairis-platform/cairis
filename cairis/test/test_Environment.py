@@ -24,6 +24,8 @@ from cairis.core.Borg import Borg
 from cairis.core.EnvironmentParameters import EnvironmentParameters
 from cairis.core.ARM import DatabaseProxyException
 
+__author__ = 'Shamal Faily'
+
 class EnvironmentTest(unittest.TestCase):
 
   def setUp(self):

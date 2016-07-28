@@ -23,6 +23,9 @@ import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 
+__author__ = 'Ashley Ritchie, Shamal Faily'
+
+
 class ValueTypeTest(unittest.TestCase):
 
   def setUp(self):

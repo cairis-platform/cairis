@@ -26,6 +26,9 @@ from cairis.core.AssetParameters import AssetParameters
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 from cairis.core.ARM import DatabaseProxyException
 
+__author__ = 'Shamal Faily'
+
+
 class AssetTest(unittest.TestCase):
 
   def setUp(self):

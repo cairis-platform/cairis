@@ -31,6 +31,8 @@ from cairis.core.ObstacleParameters import ObstacleParameters
 from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
 from cairis.core.ARM import DatabaseProxyException
 
+__author__ = 'Rachel Larcombe, Shamal Faily'
+
 class ObstacleTest(unittest.TestCase):
 
   def setUp(self):
@@ -63,24 +65,18 @@ class ObstacleTest(unittest.TestCase):
     self.assertEqual(igp1.name(), og1.name())
     self.assertEqual(igp1.originator(), og1.originator())
     ogep1 = og1.environmentProperty(igep1.name())
-   
-
     
     self.assertEqual(igep1.definition(), ogep1.definition())
     self.assertEqual(igep1.category(), ogep1.category())
-   
- 
 
     b.dbProxy.deleteObstacle(og1.id())
  
   def tearDown(self):
     b = Borg()
     
-   
     b.dbProxy.deleteEnvironment(self.oenvs[self.iep1.name()].id())
     b.dbProxy.close()
     call([os.environ['CAIRIS_SRC'] + "/test/dropdb.sh"])
-
 
 if __name__ == '__main__':
   unittest.main()

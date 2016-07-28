@@ -17,7 +17,6 @@
 
 import logging
 from urllib import quote
-
 import jsonpickle
 from cairis.core.AcceptEnvironmentProperties import AcceptEnvironmentProperties
 from cairis.core.MitigateEnvironmentProperties import MitigateEnvironmentProperties
@@ -29,7 +28,10 @@ from cairis.mio.ModelImport import importModelFile
 import os
 import pytest
 
-class ResponseTests(CairisDaemonTestCase):
+__author__ = 'Robin Quetin, Shamal Faily'
+
+
+class ResponseAPITests(CairisDaemonTestCase):
 
   def setUp(self):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')

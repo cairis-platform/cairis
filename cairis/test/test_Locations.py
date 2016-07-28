@@ -28,6 +28,8 @@ from cairis.core.PersonaEnvironmentProperties import PersonaEnvironmentPropertie
 from cairis.core.AssetParameters import AssetParameters
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 
+__author__ = 'Shamal Faily'
+
 class LocationsTest(unittest.TestCase):
 
   def setUp(self):

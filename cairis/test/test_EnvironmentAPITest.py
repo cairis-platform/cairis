@@ -24,6 +24,9 @@ from cairis.tools.PseudoClasses import EnvironmentTensionModel
 from cairis.mio.ModelImport import importModelFile
 import os
 
+__author__ = 'Robin Quetin, Shamal Faily'
+
+
 class EnvironmentAPITests(CairisDaemonTestCase):
 
   def setUp(self):
