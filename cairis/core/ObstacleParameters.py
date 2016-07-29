@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class ObstacleParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,obsName,obsOrig,tags,properties):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

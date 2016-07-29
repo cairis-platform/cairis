@@ -16,7 +16,8 @@
 #  under the License.
 
 
-#$URL$ $Id: UseCase.py 530 2011-11-16 19:29:16Z shaf $
+__author__ = 'Shamal Faily'
+
 
 class UseCase:
   def __init__(self,ucId,ucName,ucAuth,ucCode,ucActors,ucDesc,tags,cProps):

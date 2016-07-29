@@ -18,6 +18,8 @@
 
 import Trace
 
+__author__ = 'Shamal Faily'
+
 class DotTrace(Trace.Trace):
   def __init__(self,fObjt,fName,tObjt,tName):
     Trace.Trace.__init__(self,fObjt,fName,tObjt,tName)

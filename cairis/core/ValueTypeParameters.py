@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class ValueTypeParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,vtName,vtDesc,vType,envName = '',vtScore = -1,vtRat = ''):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

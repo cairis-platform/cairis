@@ -18,6 +18,8 @@
 
 from GoalEnvironmentProperties import GoalEnvironmentProperties
 
+__author__ = 'Shamal Faily'
+
 class Goal:
   def __init__(self,goalId,goalName,goalOrig,tags,environmentProperties):
     self.theId = goalId

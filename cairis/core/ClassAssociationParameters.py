@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class ClassAssociationParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,envName,headName,headDim,headNav,headType,headMultiplicity,headRole,tailRole,tailMultiplicity,tailType,tailNav,tailDim,tailName,rationale = ''):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

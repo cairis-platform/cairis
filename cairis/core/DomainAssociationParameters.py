@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class DomainAssociationParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,headName,tailName,desc='',cDom=''):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

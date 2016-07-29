@@ -15,6 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
+
 
 class WeaknessTarget:
   def __init__(self,targetName):

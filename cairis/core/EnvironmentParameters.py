@@ -18,6 +18,8 @@
 
 from ObjectCreationParameters import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class EnvironmentParameters(ObjectCreationParameters):
   def __init__(self,conName,conSc,conDesc,environments = [],duplProperty = 'None',overridingEnvironment = '', envTensions = None):
     ObjectCreationParameters.__init__(self)

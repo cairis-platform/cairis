@@ -18,6 +18,8 @@
 
 from ObjectCreationParameters import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class MemoParameters(ObjectCreationParameters):
   def __init__(self,memoName,memoDesc):
     ObjectCreationParameters.__init__(self)

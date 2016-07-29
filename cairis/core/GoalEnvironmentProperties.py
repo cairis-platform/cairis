@@ -18,6 +18,8 @@
 
 from EnvironmentProperties import EnvironmentProperties
 
+__author__ = 'Shamal Faily'
+
 class GoalEnvironmentProperties(EnvironmentProperties):
   def __init__(self,environmentName,lbl='',definition='',category='',priority='',fitCriterion='',issue='',goalRefinements=[],subGoalRefinements=[],concs=[],cas=[]):
     EnvironmentProperties.__init__(self,environmentName)

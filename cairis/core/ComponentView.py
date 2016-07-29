@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class ComponentView:
   def __init__(self,cvId,cvName,cvSyn,cvComs,cvCons,asm = [0,0,0]):

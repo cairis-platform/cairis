@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class Persona:
   def __init__(self,personaId,personaName,pActivities,pAttitudes,pAptitudes,pMotivations,pSkills,pIntrinsic,pContextual,image,isAssumption,pType,tags,environmentProperties,pCodes):

@@ -22,6 +22,7 @@ from GoalEnvironmentProperties import GoalEnvironmentProperties
 from Goal import Goal
 from GoalParameters import GoalParameters
 
+__author__ = 'Shamal Faily'
 
 class GoalManager:  
 

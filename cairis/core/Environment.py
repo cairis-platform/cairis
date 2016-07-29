@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class Environment:
   def __init__(self,id,name,sc,description,environments,duplProperty,overridingEnvironment,envTensions):

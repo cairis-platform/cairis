@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class ReferenceSynopsis:
   def __init__(self,rsId,refName,synName,dimName,aType,aName):

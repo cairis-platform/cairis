@@ -22,6 +22,8 @@ from GoalEnvironmentProperties import GoalEnvironmentProperties
 from GoalParameters import GoalParameters
 from Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 def preventDeterText(response):
   genGoalDef = 'Under normal operating conditions, the system shall '
   if (response.type('','None','') == 'Prevent'):

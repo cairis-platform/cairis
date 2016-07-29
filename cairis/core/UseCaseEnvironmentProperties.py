@@ -16,7 +16,8 @@
 #  under the License.
 
 
-#$URL$ $Id: UseCaseEnvironmentProperties.py 334 2010-11-07 19:44:00Z shaf $
+__author__ = 'Shamal Faily'
+
 
 from EnvironmentProperties import EnvironmentProperties
 from Steps import Steps

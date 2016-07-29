@@ -19,6 +19,8 @@
 from AssetParameters import AssetParameters
 from numpy import *
 
+__author__ = 'Shamal Faily'
+
 class Response:
   def __init__(self,mitId,mitName,mitType,mitDesc,mitCost,mitProperties,detPoint,detMech,mitRisks,mitTargets):
     self.theId = mitId

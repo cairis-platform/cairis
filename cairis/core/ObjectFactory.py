@@ -102,6 +102,8 @@ from UseCaseParameters import UseCaseParameters
 from ImpliedProcess import ImpliedProcess
 from ImpliedProcessParameters import ImpliedProcessParameters
 
+__author__ = 'Shamal Faily'
+
 def build(objtId,p):
   if (p.__class__.__name__ == 'AttackerParameters'):
     return Attacker(objtId,p.name(),p.description(),p.image(),p.tags(),p.environmentProperties())

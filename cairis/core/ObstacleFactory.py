@@ -15,11 +15,10 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$ $Id: ObstacleFactory.py 509 2011-10-30 14:27:19Z shaf $
-
 from ObstacleParameters import ObstacleParameters
 from ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
+
+__author__ = 'Shamal Faily'
 
 def build(envName,excDetails):
 

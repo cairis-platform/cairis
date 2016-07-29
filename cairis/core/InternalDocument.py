@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class InternalDocument:
   def __init__(self,idId,idName,idDesc,idContent,idCodes,idMemos):

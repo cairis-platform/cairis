@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class ResponseParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,respName,respRisk,tags,cProps,rType):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

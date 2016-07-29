@@ -15,6 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
+
 class TemplateGoal:
   def __init__(self,goalId,goalName,goalDef,goalRat,goalConcerns,goalResp):
     self.theId = goalId

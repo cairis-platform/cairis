@@ -18,6 +18,8 @@
 
 from ObjectCreationParameters import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class DocumentReferenceParameters(ObjectCreationParameters):
   def __init__(self,refName,docName,cName,docExc):
     ObjectCreationParameters.__init__(self)

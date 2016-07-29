@@ -16,8 +16,9 @@
 #  under the License.
 
 
-#$URL$ $Id$
 import ObjectCreationParameters
+
+__author__ = 'Shamal Faily'
 
 class ConceptMapAssociationParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,fromName,toName,lbl,fromEnv,toEnv):

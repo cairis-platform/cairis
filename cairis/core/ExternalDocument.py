@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class ExternalDocument:
   def __init__(self,edId,edName,edVersion,edDate,edAuths,edDesc):

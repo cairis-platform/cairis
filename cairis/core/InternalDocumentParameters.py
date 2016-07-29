@@ -18,6 +18,8 @@
 
 from ObjectCreationParameters import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class InternalDocumentParameters(ObjectCreationParameters):
   def __init__(self,idName,idDesc,idContent,idCodes,idMemos):
     ObjectCreationParameters.__init__(self)

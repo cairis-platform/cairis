@@ -18,6 +18,8 @@
 
 from Requirement import Requirement
 
+__author__ = 'Shamal Faily'
+
 def build(id,label,name,description,priority,rationale,fitCriterion,originator,type,asset,version=-1):
   return Requirement(id,label,name,description,priority,rationale,fitCriterion,originator,type,asset,version)
 

@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class CountermeasureParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,cmName,cmDesc,cmType,tags,cProps):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

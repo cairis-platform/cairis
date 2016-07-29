@@ -20,7 +20,7 @@ from mako.template import Template
 from Borg import Borg
 from cairis.templates.NavObject import NavObject
 
-__author__ = 'Raf'
+__author__ = 'Raf Vandelaer'
 ''' Tested using Mako 1.0.1 '''
 
 

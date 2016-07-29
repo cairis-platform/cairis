@@ -18,6 +18,8 @@
 
 from ARM import *
 
+__author__ = 'Shamal Faily'
+
 def dimensionName(className):
   if (className == 'AttackersDialog'):  return 'attacker'
   if (className == 'AssetsDialog'): return 'asset'

@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class DocumentReference:
   def __init__(self,refId,refName,docName,cName,docExc):

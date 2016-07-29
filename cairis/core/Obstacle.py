@@ -18,6 +18,8 @@
 
 from ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
 
+__author__ = 'Shamal Faily'
+
 class Obstacle:
   def __init__(self,obsId,obsName,obsOrig,tags,environmentProperties):
     self.theId = obsId

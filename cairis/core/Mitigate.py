@@ -22,6 +22,8 @@ from AssetParameters import AssetParameters
 from PropertyHolder import PropertyHolder
 import armid
 
+__author__ = 'Shamal Faily'
+
 class Mitigate(Response,PropertyHolder):
   def __init__(self,respId,respName,respType,mitDesc,mitCost,mitRoles,mitProps,detPt,detMech,mitRisks,mitTargets):
     Response.__init__(self,respId,respName,mitRisks,mitCost,mitRoles)

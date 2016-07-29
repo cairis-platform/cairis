@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class GoalAssociation:
   def __init__(self,associationId,envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale):

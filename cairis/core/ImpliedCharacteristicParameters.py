@@ -18,6 +18,8 @@
 
 from ObjectCreationParameters import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class ImpliedCharacteristicParameters(ObjectCreationParameters):
   def __init__(self,pName,fromCode,toCode,rtName,charName,qualName,lhsCodes,rhsCodes,charType):
     ObjectCreationParameters.__init__(self)

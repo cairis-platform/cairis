@@ -15,6 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
+
 class TemplateAsset:
   def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,sType,aRight,spValues,tags,ifs):
     self.theId = assetId

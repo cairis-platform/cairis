@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class PersonaParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,name,activities,attitudes,aptitudes,motivations,skills,intrinsic,contextual,image,isAssumption,pType,tags,properties,pCodes):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

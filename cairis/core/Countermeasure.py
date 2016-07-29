@@ -19,6 +19,8 @@
 from PropertyHolder import PropertyHolder;
 from numpy import *
 
+__author__ = 'Shamal Faily'
+
 class Countermeasure:
   def __init__(self,cmId,cmName,cmDesc,cmType,tags,cProps):
     self.theId = cmId

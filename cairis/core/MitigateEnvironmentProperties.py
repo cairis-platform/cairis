@@ -18,6 +18,8 @@
 
 from EnvironmentProperties import EnvironmentProperties
 
+__author__ = 'Shamal Faily'
+
 class MitigateEnvironmentProperties(EnvironmentProperties):
   def __init__(self,environmentName,type='',detPoint='',detMechs=[]):
     EnvironmentProperties.__init__(self,environmentName)

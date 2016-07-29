@@ -22,6 +22,7 @@ from ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
 from Obstacle import Obstacle
 from ObstacleParameters import ObstacleParameters
 
+__author__ = 'Shamal Faily'
 
 class ObstacleManager:  
 

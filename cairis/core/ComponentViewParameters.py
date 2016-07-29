@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class ComponentViewParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,cName,cSyn,cmt,cRoles,cAssets,cReqs,cGoals,cCom,cCon,asm = [0,0,0]):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

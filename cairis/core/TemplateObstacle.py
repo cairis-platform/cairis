@@ -15,6 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
+
 class TemplateObstacle:
   def __init__(self,obsId,obsName,obsCat,obsDef):
     self.theId = obsId

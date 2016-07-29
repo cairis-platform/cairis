@@ -18,6 +18,8 @@
 
 from MySQLDatabaseProxy import MySQLDatabaseProxy
 
+__author__ = 'Shamal Faily'
+
 activeProxy = MySQLDatabaseProxy
 
 def build():

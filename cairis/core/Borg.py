@@ -15,6 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily, Robin Quetin'
+
 from random import choice
 import string
 from time import sleep

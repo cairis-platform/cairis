@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class RiskParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,riskName,threatName,vulName,mc,rTags,inTxt = '',envName = ''):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

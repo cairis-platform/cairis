@@ -15,6 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
+
 class TemplateRequirement:
   def __init__(self,reqId,reqName,assetName,reqType,reqDesc,reqRat,reqFC):
     self.theId = reqId

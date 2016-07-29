@@ -15,6 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily, Robin Quetin'
+
 from Borg import Borg
 import os
 import logging

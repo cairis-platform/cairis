@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class ConnectorParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,cName,cvName,fName,fRole,fInf,tName,tInf,tRole,caName,pName,arName):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

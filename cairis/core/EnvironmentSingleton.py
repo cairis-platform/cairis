@@ -18,6 +18,8 @@
 
 from Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class EnvironmentSingleton(Borg):
   environmentId = None
   def __init__(self,cId = None):

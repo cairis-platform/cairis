@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class Component:
   def __init__(self,cId,cName,cDesc,cIfs,cStruct,cReqs,cGoals,cAssocs):

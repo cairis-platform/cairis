@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class Response:
   def __init__(self,respId,respName,respRisk,tags,cProps,respType):

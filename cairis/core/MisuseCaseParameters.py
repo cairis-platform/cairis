@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class MisuseCaseParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,scName,cProps,risk):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

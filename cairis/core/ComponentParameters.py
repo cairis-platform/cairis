@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class ComponentParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,cName,cDesc,cInterfaces,cStruct,cReq,cGoals,cAssocs):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

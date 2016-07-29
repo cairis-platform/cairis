@@ -18,6 +18,8 @@
 
 from EnvironmentProperties import EnvironmentProperties
 
+__author__ = 'Shamal Faily'
+
 class PersonaEnvironmentProperties(EnvironmentProperties):
   def __init__(self,environmentName,direct=False,description='',roles=[],pCodes={'narrative':{}}):
     EnvironmentProperties.__init__(self,environmentName)

@@ -18,6 +18,8 @@
 
 from ObjectCreationParameters import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class ExternalDocumentParameters(ObjectCreationParameters):
   def __init__(self,edName,edVersion,edDate,edAuths,edDesc):
     ObjectCreationParameters.__init__(self)

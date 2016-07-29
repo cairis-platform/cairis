@@ -19,6 +19,8 @@
 from GoalAssociationParameters import GoalAssociationParameters
 from Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 def build(objt,domainName,mainFrame):
   reqGrid = mainFrame.requirementGrid()
   priority = objt.priority('','')

@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class TaskCharacteristic:
   def __init__(self,pcId,pName,modQual,cDesc,pcGrounds,pcWarrant,pcBacking,pcRebuttal):

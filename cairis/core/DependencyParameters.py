@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class DependencyParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,envName,depender,dependee,dependencyType,dependency,rationale):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

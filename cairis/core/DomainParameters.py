@@ -15,9 +15,9 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL $Id: DomainParameters.py 249 2010-05-30 17:07:31Z shaf $
 import ObjectCreationParameters
+
+__author__ = 'Shamal Faily'
 
 class DomainParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,modName,shortCode,modDesc,domType,giveInd,domains):

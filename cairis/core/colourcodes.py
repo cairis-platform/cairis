@@ -16,7 +16,7 @@
 #  under the License.
 
 
-
+__author__ = 'Shamal Faily'
 
 def threatColourCode(valueId):
   if (valueId == 9): return '359 1 .5'

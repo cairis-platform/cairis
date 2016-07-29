@@ -20,6 +20,8 @@ from ARM import *
 import RequirementFactory
 from Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class RequirementManager:  
 
   def __init__(self,modCombo,isAsset=True):
@@ -29,8 +31,6 @@ class RequirementManager:
     self.isAsset = isAsset
     modName = self.modCombo.GetValue()
     self.reqs = self.dbProxy.getOrderedRequirements(modName,isAsset)
-#    if (len(self.reqs) == 0):
-#      self.add('1')
 
   def __getitem__(self,reqId):
     return self.reqs[reqId]

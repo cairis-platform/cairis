@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class Task:
   def __init__(self,tId,tName,tShortCode,tObjt,isAssumption,tAuth,tags,cProps):

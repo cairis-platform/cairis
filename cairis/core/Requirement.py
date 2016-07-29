@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class Requirement:
   def __init__(self,id,label,name='',description='',priority='1',rationale='',fitCriterion='',originator='',type='Functional',asset='',version=-1):

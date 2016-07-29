@@ -15,8 +15,9 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
-#$URL$ $Id: UseCaseParameters.py 540 2011-11-24 22:08:27Z shaf $
+
 from ObjectCreationParameters import ObjectCreationParameters
 
 class UseCaseParameters(ObjectCreationParameters):

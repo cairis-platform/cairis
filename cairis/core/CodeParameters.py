@@ -18,6 +18,8 @@
 
 from ObjectCreationParameters import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class CodeParameters(ObjectCreationParameters):
   def __init__(self,codeName,cType,codeDesc,incCriteria,codeEg):
     ObjectCreationParameters.__init__(self)

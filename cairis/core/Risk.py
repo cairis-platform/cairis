@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class Risk:
   def __init__(self,riskId,riskName,threatName,vulName,rTags,mc=None):

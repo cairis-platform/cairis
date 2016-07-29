@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class GoalParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,goalName,goalOrig,tags,properties):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

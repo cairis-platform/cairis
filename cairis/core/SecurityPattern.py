@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class SecurityPattern:
   def __init__(self,spId,spName,spContext,spProb,spSol,spReqs,spAssocs):

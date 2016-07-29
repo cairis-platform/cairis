@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class Step:
   def __init__(self,stepTxt = '',stepSyn = '',stepActor = '',stepActorType = '',stepTags = []):

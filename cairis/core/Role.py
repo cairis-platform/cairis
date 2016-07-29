@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class Role:
   def __init__(self,roleId,roleName,rType,sCode,roleDesc,cProps):

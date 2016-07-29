@@ -18,6 +18,8 @@
 
 from EnvironmentProperties import EnvironmentProperties
 
+__author__ = 'Shamal Faily'
+
 class MisuseCaseEnvironmentProperties(EnvironmentProperties):
   def __init__(self,environmentName,narrative = ''):
     EnvironmentProperties.__init__(self,environmentName)

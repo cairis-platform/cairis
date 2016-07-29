@@ -18,6 +18,8 @@
 
 from EnvironmentProperties import EnvironmentProperties
 
+__author__ = 'Shamal Faily'
+
 class ObstacleEnvironmentProperties(EnvironmentProperties):
   def __init__(self,environmentName,lbl='',definition='',category='',gRefs=[], sgRefs=[], concs=[]):
     EnvironmentProperties.__init__(self,environmentName)

@@ -15,8 +15,9 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 from EnvironmentProperties import EnvironmentProperties
+
+__author__ = 'Shamal Faily'
 
 class RoleEnvironmentProperties(EnvironmentProperties):
   def __init__(self,environmentName,responses,countermeasures):

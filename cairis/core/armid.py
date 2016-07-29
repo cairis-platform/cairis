@@ -15,6 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
+
 RMFRAME_MENU_EXPORT = 88
 RMFRAME_MENU_IMPORT = 89
 RMFRAME_MENU_EXPORTMODEL = 90

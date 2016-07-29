@@ -16,7 +16,7 @@
 #  under the License.
 
 
-#$URL $Id: Domain.py 249 2010-05-30 17:07:31Z shaf $
+__author__ = 'Shamal Faily'
 
 class Domain:
   def __init__(self,rmId,modName,shortCode,modDesc,domType,giveInd,domains):

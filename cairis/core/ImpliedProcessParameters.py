@@ -18,6 +18,8 @@
 
 import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class ImpliedProcessParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,ipName,ipDesc,pName,cNet,ipSpec,chs):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)

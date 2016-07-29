@@ -18,6 +18,8 @@
 
 from ObjectCreationParameters import ObjectCreationParameters
 
+__author__ = 'Shamal Faily'
+
 class ConceptReferenceParameters(ObjectCreationParameters):
   def __init__(self,refName,dimName,objtName,cDesc):
     ObjectCreationParameters.__init__(self)

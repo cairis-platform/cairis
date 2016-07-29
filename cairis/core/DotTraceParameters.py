@@ -18,6 +18,8 @@
 
 import TraceParameters
 
+__author__ = 'Shamal Faily'
+
 class DotTraceParameters(TraceParameters.TraceParameters):
   def __init__(self,fromObjt,fromName,toObjt,toName):
     TraceParameters.TraceParameters.__init__(self,fromObjt,fromName,toObjt,toName)
