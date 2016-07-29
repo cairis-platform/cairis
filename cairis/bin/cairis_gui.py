@@ -20,6 +20,8 @@ import os
 import sys
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 def main(args=None):
   if args is None:
     args = sys.argv[1:]

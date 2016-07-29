@@ -20,6 +20,8 @@ import argparse
 import os
 import sys
 
+__author__ = 'Shamal Faily'
+
 def main(args=None):
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Import')
   parser.add_argument('modelFile',help='model file to import')

@@ -24,6 +24,8 @@ import MySQLdb
 import _mysql_exceptions
 from subprocess import Popen
 
+__author__ = 'Shamal Faily'
+
 class CAIRISConfigurationForm(np.ActionForm):
 
   def create(self):

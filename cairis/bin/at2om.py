@@ -21,6 +21,8 @@ import argparse
 import pydot
 import os
 
+__author__ = 'Shamal Faily'
+
 def main(args=None):
     parser = argparse.ArgumentParser(description='Attack Tree to CAIRIS Model converter')
     parser.add_argument('dotFile',help='attack tree model to import (Dot format)')

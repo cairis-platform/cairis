@@ -20,6 +20,8 @@ import cairis.daemon.IRISDaemon
 import cairis.daemon.WebConfig 
 from cairis.daemon.CairisHTTPError import CairisHTTPError
 
+__author__ = 'Robin Quetin'
+
 def main(args):
     options = {
         'port': 0,
