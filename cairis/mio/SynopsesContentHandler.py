@@ -21,6 +21,8 @@ from cairis.core.ReferenceSynopsis import ReferenceSynopsis
 from cairis.core.ReferenceContribution import ReferenceContribution
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class SynopsesContentHandler(ContentHandler,EntityResolver):
   def __init__(self,session_id = None):
     b = Borg()

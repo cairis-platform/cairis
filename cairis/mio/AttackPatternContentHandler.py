@@ -34,6 +34,8 @@ from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentPropert
 from cairis.core.GoalAssociationParameters import GoalAssociationParameters
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 def a2i(spLabel):
   if spLabel == 'Low':
     return 1

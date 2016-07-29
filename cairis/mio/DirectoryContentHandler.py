@@ -20,6 +20,8 @@ from xml.sax.handler import ContentHandler,EntityResolver
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class DirectoryContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theVulnerabilityDirectory = []

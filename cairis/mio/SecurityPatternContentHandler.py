@@ -21,6 +21,7 @@ from cairis.core.TemplateAssetParameters import TemplateAssetParameters
 from cairis.core.SecurityPatternParameters import SecurityPatternParameters
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
 
 def a2i(spLabel):
   if spLabel == 'Low':

@@ -28,6 +28,8 @@ from cairis.gui.KaosModel import KaosModel
 import os
 import re
 
+__author__ = 'Shamal Faily'
+
 def listToString(l):
   s = ''
   listSize = len(l)

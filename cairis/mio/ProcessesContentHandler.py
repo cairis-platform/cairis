@@ -24,6 +24,8 @@ from cairis.core.ImpliedProcessParameters import ImpliedProcessParameters
 from cairis.core.ImpliedCharacteristicParameters import ImpliedCharacteristicParameters
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class ProcessesContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theInternalDocuments = []

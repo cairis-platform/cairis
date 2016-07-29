@@ -35,6 +35,8 @@ from cairis.core.Borg import Borg
 import xml.sax
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 def importSecurityPatterns(importFile,session_id=None):
   try:
     parser = xml.sax.make_parser()

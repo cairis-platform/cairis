@@ -32,6 +32,8 @@ from cairis.core.Steps import Steps
 from cairis.core.Step import Step
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 def a2s(aStr):
   if aStr == 'a':
     return '*'

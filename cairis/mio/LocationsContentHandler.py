@@ -21,6 +21,8 @@ from cairis.core.EnvironmentParameters import EnvironmentParameters
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class LocationsContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     b = Borg()
