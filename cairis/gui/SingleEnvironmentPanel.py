@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class SingleEnvironmentPanel(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,ENVIRONMENT_ID)

@@ -22,6 +22,8 @@ import WidgetFactory
 from cairis.core.Borg import Borg
 from cairis.core.GoalAssociationParameters import GoalAssociationParameters
 
+__author__ = 'Shamal Faily'
+
 class GoalAssociationDialog(wx.Dialog):
   def __init__(self,parent,parameters):
     wx.Dialog.__init__(self,parent,GOALASSOCIATION_ID,'Goal association',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(600,400))

@@ -18,6 +18,8 @@
 
 import DialogClassParameters
 
+__author__ = 'Shamal Faily'
+
 class TraceDialogParameters(DialogClassParameters.DialogClassParameters):
   def __init__(self,winId,winLabel,dClass,createId,setterFn,creationFlag,fromObjt,fromId,toObjt,toId):
     DialogClassParameters.DialogClassParameters.__init__(self,winId,winLabel,dClass,createId,setterFn,creationFlag)

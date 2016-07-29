@@ -18,6 +18,8 @@
 
 import wx
 
+__author__ = 'Shamal Faily'
+
 class ObjectListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId):
     wx.ListCtrl.__init__(self,parent,winId,style=wx.LC_REPORT)

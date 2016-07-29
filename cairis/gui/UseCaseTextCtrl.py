@@ -25,6 +25,7 @@ from cairis.core.GoalAssociationParameters import GoalAssociationParameters
 from SingleRequirementDialog import SingleRequirementDialog
 import cairis.core.RequirementFactory
 
+__author__ = 'Shamal Faily'
 
 class UseCaseTextCtrl(wx.TextCtrl):
   def __init__(self,parent,winId):

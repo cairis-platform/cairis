@@ -21,6 +21,7 @@ import gtk
 import gobject
 from NDImplementationDecorator import NDImplementationDecorator
 
+__author__ = 'Shamal Faily'
 
 class ConceptReferenceNodeDialog:
   def __init__(self,refName,dimName,objtName,refDesc,builder):

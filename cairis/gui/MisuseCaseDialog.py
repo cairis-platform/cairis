@@ -24,6 +24,8 @@ from MisuseCasePanel import MisuseCasePanel
 from cairis.core.MisuseCaseParameters import MisuseCaseParameters
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class MisuseCaseDialog(wx.Dialog):
   def __init__(self,parent,isCreate = False):
     wx.Dialog.__init__(self,parent,MISUSECASE_ID,'Create Misuse Case',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(700,800))

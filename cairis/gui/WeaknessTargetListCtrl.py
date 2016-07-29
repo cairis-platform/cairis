@@ -22,6 +22,8 @@ from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from WeaknessTreatmentDialog import WeaknessTreatmentDialog
 
+__author__ = 'Shamal Faily'
+
 class WeaknessTargetListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,cvName):
     wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT)

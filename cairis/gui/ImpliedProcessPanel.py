@@ -24,6 +24,8 @@ from ChannelListCtrl import ChannelListCtrl
 from CodeNetworkView import CodeNetworkView
 from CodeNetworkModel import CodeNetworkModel
 
+__author__ = 'Shamal Faily'
+
 class SummaryPage(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,IMPLIEDPROCESS_PAGESUMMARY_ID)

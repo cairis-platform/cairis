@@ -15,11 +15,11 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import sys
 import gtk
 from NDImplementationDecorator import NDImplementationDecorator
 
+__author__ = 'Shamal Faily'
 
 class ThreatNodeDialog:
   def __init__(self,objt,environmentName,dupProperty,overridingEnvironment,builder):

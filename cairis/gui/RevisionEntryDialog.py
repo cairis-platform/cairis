@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 import WidgetFactory
 
+__author__ = 'Shamal Faily'
+
 class RevisionEntryDialog(wx.Dialog):
   def __init__(self,parent):
     wx.Dialog.__init__(self,parent,REVISIONENTRY_ID,'Add Revision',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(300,300))

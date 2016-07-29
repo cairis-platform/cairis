@@ -24,6 +24,8 @@ from cairis.core.Requirement import Requirement
 from cairis.core.GoalAssociationParameters import GoalAssociationParameters
 from NDImplementationDecorator import NDImplementationDecorator
 
+__author__ = 'Shamal Faily'
+
 class NewRequirementNodeDialog:
   def __init__(self,objt,environmentName,builder):
     self.window = builder.get_object("NewRequirementNodeDialog")

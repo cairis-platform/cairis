@@ -25,6 +25,8 @@ from TraceExplorer import TraceExplorer
 from cairis.core.GoalAssociationParameters import GoalAssociationParameters
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class EnvironmentGrid(Traceable):
   def __init__(self):
     Traceable.__init__(self)

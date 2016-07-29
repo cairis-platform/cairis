@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from BasePanel import BasePanel
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class WeaknessTreatmentPanel(BasePanel):
   def __init__(self,parent,cvName):
     BasePanel.__init__(self,parent,WEAKNESSTREATMENT_ID)

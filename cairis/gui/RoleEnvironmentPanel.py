@@ -22,6 +22,7 @@ from DimensionListCtrl import DimensionListCtrl
 from cairis.core.RoleEnvironmentProperties import RoleEnvironmentProperties
 from DimensionCostListCtrl import DimensionCostListCtrl
 
+__author__ = 'Shamal Faily'
 
 class RoleEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):

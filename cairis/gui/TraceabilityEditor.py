@@ -15,12 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.armid import *
 from TraceabilityPanel import TraceabilityPanel
 from cairis.core.Borg import Borg
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
+
+__author__ = 'Shamal Faily'
 
 class TraceabilityEditor(wx.Dialog):
   def __init__(self,parent):

@@ -28,6 +28,7 @@ from CountermeasureRoleListCtrl import CountermeasureRoleListCtrl
 from CountermeasureTaskPersonaListCtrl import CountermeasureTaskPersonaListCtrl
 from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
 
+__author__ = 'Shamal Faily'
 
 class CountermeasureEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):

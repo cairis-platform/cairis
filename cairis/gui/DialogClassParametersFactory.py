@@ -15,8 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$Id: DialogClassParametersFactory.py 415 2011-01-21 14:59:08Z shaf $
 import wx
 from cairis.core.armid import *
 from ResponseDialogParameters import ResponseDialogParameters
@@ -47,6 +45,8 @@ from ExternalDocumentDialog import ExternalDocumentDialog
 from CodeDialog import CodeDialog
 from MemoDialog import MemoDialog
 from InternalDocumentDialog import InternalDocumentDialog
+
+__author__ = 'Shamal Faily'
 
 def build(dimLabel):
   dcp = None

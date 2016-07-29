@@ -22,6 +22,8 @@ from cairis.core.ARM import *
 from WeaknessAnalysisPanel import WeaknessAnalysisPanel
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class WeaknessAnalysisDialog(wx.Dialog):
   def __init__(self,parent,cvName,envName):
     wx.Dialog.__init__(self,parent,-1,'Weakness analysis for ' + cvName,style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(600,350))

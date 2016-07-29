@@ -22,6 +22,8 @@ from cairis.core.PersonaEnvironmentProperties import PersonaEnvironmentPropertie
 from PersonaEnvironmentNotebook import PersonaEnvironmentNotebook
 from EnvironmentListCtrl import EnvironmentListCtrl
 
+__author__ = 'Shamal Faily'
+
 class PersonaEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):
     wx.Panel.__init__(self,parent,PERSONA_PANELENVIRONMENT_ID)

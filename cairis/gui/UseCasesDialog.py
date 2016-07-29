@@ -15,14 +15,14 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$ $Id: UseCasesDialog.py 469 2011-05-14 22:36:20Z shaf $
 import wx
 from cairis.core.armid import *
 from UseCaseDialog import UseCaseDialog
 from cairis.core.ARM import *
 from DimensionBaseDialog import DimensionBaseDialog
 from DialogClassParameters import DialogClassParameters
+
+__author__ = 'Shamal Faily'
 
 class UseCasesDialog(DimensionBaseDialog):
   def __init__(self,parent):

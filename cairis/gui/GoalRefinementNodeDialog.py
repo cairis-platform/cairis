@@ -22,6 +22,8 @@ from cairis.core.Borg import Borg
 from cairis.core.GoalAssociationParameters import GoalAssociationParameters
 from NDImplementationDecorator import NDImplementationDecorator
 
+__author__ = 'Shamal Faily'
+
 class GoalRefinementNodeDialog:
   def __init__(self,objt,environmentName,builder,goalIndicator,gName,reqIndicator = False):
     self.window = builder.get_object("GoalRefinementNodeDialog")

@@ -27,6 +27,8 @@ from MemoDialog import MemoDialog
 from cairis.core.MemoParameters import MemoParameters
 from DialogClassParameters import DialogClassParameters
 
+__author__ = 'Shamal Faily'
+
 class CodingTextCtrl(wx.richtext.RichTextCtrl):
   def __init__(self, parent, winId):
     wx.richtext.RichTextCtrl.__init__(self,parent,winId,style=wx.TE_MULTILINE)

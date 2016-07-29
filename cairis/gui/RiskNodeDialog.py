@@ -21,6 +21,8 @@ import gtk
 from NDImplementationDecorator import NDImplementationDecorator
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class RiskNodeDialog:
   def __init__(self,objt,rating,environmentName,builder):
     self.builder = builder

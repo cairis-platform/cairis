@@ -20,6 +20,8 @@ import wx.lib.imagebrowser
 import os
 from cairis.core.armid import *
 
+__author__ = 'Shamal Faily'
+
 class CodeNetworkView(wx.lib.imagebrowser.ImageView):
   def __init__(self,parent,winId,fileName = 'codenetwork'):
     wx.lib.imagebrowser.ImageView.__init__(self,parent,winId)

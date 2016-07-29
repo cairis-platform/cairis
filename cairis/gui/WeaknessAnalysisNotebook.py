@@ -23,6 +23,8 @@ from WeaknessTargetListCtrl import WeaknessTargetListCtrl
 from PersonaImpactListCtrl import PersonaImpactListCtrl
 from GoalObstacleListCtrl import GoalObstacleListCtrl
 
+__author__ = 'Shamal Faily'
+
 class WeaknessTargetPage(wx.Panel):
   def __init__(self,parent,winId,cvName,targets):
     wx.Panel.__init__(self,parent)

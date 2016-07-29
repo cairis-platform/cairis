@@ -22,6 +22,8 @@ from BasePanel import BasePanel
 import cairis.core.DomainProperty
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class DomainPropertyPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,DOMAINPROPERTY_ID)

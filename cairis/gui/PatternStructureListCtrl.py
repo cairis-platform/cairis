@@ -22,6 +22,8 @@ from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from PatternStructureDialog import PatternStructureDialog
 
+__author__ = 'Shamal Faily'
+
 class PatternStructureListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId = SECURITYPATTERN_LISTPATTERNSTRUCTURE_ID):
     wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT)

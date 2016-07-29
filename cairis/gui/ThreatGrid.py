@@ -15,10 +15,11 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 import wx.grid
 from cairis.core.armid import *
+
+__author__ = 'Shamal Faily'
 
 class ThreatTable(wx.grid.PyGridTableBase):
   def __init__(self,threats):

@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.Borg import Borg
 from BaseDialog import BaseDialog
 
+__author__ = 'Shamal Faily'
+
 class ConnectorDialog(BaseDialog):
   def __init__(self,parent,conName = '',fromComponent = '',fromRole='',fromInterface = '',toComponent = '',toInterface ='',toRole='',assetName='',pName = '',arName = ''):
     BaseDialog.__init__(self,parent,PATTERNSTRUCTURE_ID,'Add Structure',(400,350))

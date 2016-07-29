@@ -23,6 +23,7 @@ from DimensionListCtrl import DimensionListCtrl
 from CapabilitiesListCtrl import CapabilitiesListCtrl
 from cairis.core.AttackerEnvironmentProperties import AttackerEnvironmentProperties
 
+__author__ = 'Shamal Faily'
 
 class AttackerEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):

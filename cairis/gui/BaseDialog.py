@@ -28,6 +28,7 @@ from UseCaseListCtrl import UseCaseListCtrl
 from ObjectListCtrl import ObjectListCtrl
 from ComponentViewListCtrl import ComponentViewListCtrl
 
+__author__ = 'Shamal Faily'
 
 class BaseDialog(wx.Dialog):
   def __init__(self,parent,winId,winLabel,initSize):

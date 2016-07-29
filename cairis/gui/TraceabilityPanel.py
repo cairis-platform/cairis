@@ -15,11 +15,12 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from BasePanel import BasePanel
 from cairis.core.Borg import Borg
 from cairis.core.armid import *
+
+__author__ = 'Shamal Faily'
 
 class TraceabilityPanel(BasePanel):
   def __init__(self,parent):

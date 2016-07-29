@@ -20,6 +20,8 @@ import sys
 import gtk
 from NDImplementationDecorator import NDImplementationDecorator
 
+__author__ = 'Shamal Faily'
+
 class DomainNodeDialog:
   def __init__(self,objt,builder):
     self.window = builder.get_object("DomainNodeDialog")

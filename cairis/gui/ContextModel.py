@@ -24,6 +24,8 @@ import os
 from cairis.core.ARM import *
 import gtk
 
+__author__ = 'Shamal Faily'
+
 class ContextModel:
   def __init__(self,associations,envName = ''):
     self.theAssociations = associations

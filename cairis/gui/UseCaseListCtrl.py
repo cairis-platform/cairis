@@ -15,7 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.armid import *
 from cairis.core.Borg import Borg
@@ -24,6 +23,8 @@ from TraceableList import TraceableList
 from UseCaseContributionDialog import UseCaseContributionDialog
 from DimensionNameDialog import DimensionNameDialog
 from cairis.core.ReferenceContribution import ReferenceContribution
+
+__author__ = 'Shamal Faily'
 
 class UseCaseListCtrl(TraceableList):
 

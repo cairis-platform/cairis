@@ -25,6 +25,8 @@ from DirectoryDialog import DirectoryDialog
 import DimensionBaseDialog
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 class VulnerabilitiesDialog(DimensionBaseDialog.DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.DimensionBaseDialog.__init__(self,parent,VULNERABILITIES_ID,'Vulnerabilities',(800,300),'vulnerability.png')

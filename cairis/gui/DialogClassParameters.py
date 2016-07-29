@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+__author__ = 'Shamal Faily'
 
 class DialogClassParameters:
   def __init__(self,winId,winLabel,dClass = None,createId = -1,setterFn = None,creationFlag = False):

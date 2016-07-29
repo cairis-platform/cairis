@@ -22,6 +22,8 @@ from PersonaCharacteristicNotebook import PersonaCharacteristicNotebook
 from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicParameters
 from BaseDialog import BaseDialog 
 
+__author__ = 'Shamal Faily'
+
 class PersonaCharacteristicDialog(BaseDialog):
   def __init__(self,parent,parameters):
     BaseDialog.__init__(self,parent,parameters.id(),parameters.label(),(700,300))

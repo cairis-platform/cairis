@@ -25,6 +25,8 @@ from DialogClassParameters import DialogClassParameters
 from cairis.core.EnvironmentParameters import EnvironmentParameters
 from DimensionBaseDialog import DimensionBaseDialog
 
+__author__ = 'Shamal Faily'
+
 class EnvironmentsDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,ENVIRONMENTS_ID,'Environments',(930,300),'environment.png')

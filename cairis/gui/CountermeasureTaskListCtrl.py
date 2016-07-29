@@ -19,6 +19,8 @@
 import wx
 from cairis.core.armid import *
 
+__author__ = 'Shamal Faily'
+
 class CountermeasureTaskListCtrl(wx.ListCtrl):
   def __init__(self,parent,dp):
     wx.ListCtrl.__init__(self,parent,COUNTERMEASURE_LISTTASKS_ID,size=wx.DefaultSize,style=wx.LC_REPORT | wx.LC_SINGLE_SEL)

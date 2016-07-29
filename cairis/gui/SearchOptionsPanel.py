@@ -19,6 +19,8 @@
 import wx
 from cairis.core.armid import *
 
+__author__ = 'Shamal Faily'
+
 class SearchOptionsPanel(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,SEARCHOPTIONSPANEL_ID)

@@ -22,6 +22,8 @@ from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
 from GoalEnvironmentNotebook import GoalEnvironmentNotebook
 from EnvironmentListCtrl import EnvironmentListCtrl
 
+__author__ = 'Shamal Faily'
+
 class GoalEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):
     wx.Panel.__init__(self,parent,GOAL_PANELENVIRONMENT_ID)

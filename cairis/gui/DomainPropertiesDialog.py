@@ -24,6 +24,8 @@ from DialogClassParameters import DialogClassParameters
 from cairis.core.ARM import *
 from DimensionBaseDialog import DimensionBaseDialog
 
+__author__ = 'Shamal Faily'
+
 class DomainPropertiesDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,DOMAINPROPERTIES_ID,'Domain Properties',(930,300),'domainproperty.png')

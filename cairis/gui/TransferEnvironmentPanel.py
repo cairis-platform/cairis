@@ -15,7 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.armid import *
 from cairis.core.ARM import *
@@ -23,6 +22,7 @@ from RiskEnvironmentListCtrl import RiskEnvironmentListCtrl
 from RoleCostListCtrl import RoleCostListCtrl
 from cairis.core.TransferEnvironmentProperties import TransferEnvironmentProperties
 
+__author__ = 'Shamal Faily'
 
 class TransferEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):

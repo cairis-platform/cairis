@@ -24,6 +24,8 @@ from DialogClassParameters import DialogClassParameters
 from DimensionBaseDialog import DimensionBaseDialog
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 class RisksDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,RISKS_ID,'Risks',(800,300),'risk.png')

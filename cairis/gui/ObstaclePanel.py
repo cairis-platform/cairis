@@ -24,6 +24,8 @@ from cairis.core.Borg import Borg
 from BasePanel import BasePanel
 from ObstacleEnvironmentPanel import ObstacleEnvironmentPanel
 
+__author__ = 'Shamal Faily'
+
 class ObstaclePanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,OBSTACLE_ID)

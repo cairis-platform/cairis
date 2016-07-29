@@ -15,11 +15,12 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.armid import *
 import WidgetFactory
 from cairis.core.Borg import Borg
+
+__author__ = 'Shamal Faily'
 
 class TracePanel(wx.Panel):
   def __init__(self,parent):

@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.ARM import *
 from DimensionListBox import DimensionListBox
 
+__author__ = 'Shamal Faily'
+
 class ResponsibilityListBox(DimensionListBox):
   def __init__(self,parent,winId,boxSize,dp):
     DimensionListBox.__init__(self,parent,winId,boxSize,'responsibility',dp)

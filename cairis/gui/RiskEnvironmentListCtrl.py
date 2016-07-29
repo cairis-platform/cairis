@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from EnvironmentListCtrl import EnvironmentListCtrl
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class RiskEnvironmentListCtrl(EnvironmentListCtrl):
   def __init__(self,parent,winId,dp):
     EnvironmentListCtrl.__init__(self,parent,winId,dp)

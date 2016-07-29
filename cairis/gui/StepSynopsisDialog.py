@@ -23,6 +23,8 @@ from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from StepSynopsisPanel import StepSynopsisPanel
 
+__author__ = 'Shamal Faily'
+
 class StepSynopsisDialog(wx.Dialog):
   def __init__(self,parent,stepSyn,stepActor,stepActorType):
     wx.Dialog.__init__(self,parent,-1,'Edit Step Synopsis',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX,size=(475,150))

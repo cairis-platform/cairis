@@ -24,6 +24,8 @@ import os
 from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class APModelViewer(apxdot.APDotWindow):
   def __init__(self,pName = '',bvName = ''):
     apxdot.APDotWindow.__init__(self)

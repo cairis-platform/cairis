@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from GoalPage import GoalPage
 
+__author__ = 'Shamal Faily'
+
 class ReqToGoalNotebook(wx.Notebook):
   def __init__(self,parent,dp):
     wx.Notebook.__init__(self,parent,GOAL_NOTEBOOKENVIRONMENT_ID)

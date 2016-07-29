@@ -23,6 +23,8 @@ from SingleGoalPanel import SingleGoalPanel
 from cairis.core.GoalParameters import GoalParameters
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
 
+__author__ = 'Shamal Faily'
+
 class SingleGoalDialog(wx.Dialog):
   def __init__(self,parent,envName):
     wx.Dialog.__init__(self,parent,GOAL_ID,'New Goal',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(500,400))

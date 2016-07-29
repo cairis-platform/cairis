@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.ARM import *
 from WeaknessTreatmentPanel import WeaknessTreatmentPanel
 
+__author__ = 'Shamal Faily'
+
 class WeaknessTreatmentDialog(wx.Dialog):
   def __init__(self,parent,targetName,cvName,reqName = '',assetName = '',effValue = '',tRat = ''):
     wx.Dialog.__init__(self,parent,-1,'Edit ' + targetName + ' treatment',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,300))

@@ -30,6 +30,8 @@ from CharacteristicListCtrl import CharacteristicListCtrl
 import os
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 LIST_POS = 0
 ADD_POS = 1
 DELETE_POS = 2

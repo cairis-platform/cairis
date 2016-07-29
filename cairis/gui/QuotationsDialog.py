@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from QuotationsPanel import QuotationsPanel
 
+__author__ = 'Shamal Faily'
+
 class QuotationsDialog(wx.Dialog):
   def __init__(self,parent):
     wx.Dialog.__init__(self,parent,QUOTATIONS_ID,'Quotations',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(600,400))

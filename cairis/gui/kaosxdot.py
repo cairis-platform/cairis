@@ -30,6 +30,8 @@ from ConceptMapModel import ConceptMapModel
 from LocationModel import LocationModel
 from RequirementShape import RequirementShape
 
+__author__ = 'Shamal Faily'
+
 class KaosTextShape(xdot.TextShape):
 
     def __init__(self, pen, x, y, j, w, t,modelType,dim,toDim,cSet = False):

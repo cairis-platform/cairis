@@ -16,12 +16,13 @@
 #  under the License.
 
 
-#$URL$ $Id: StepGrid.py 391 2011-01-04 17:00:43Z shaf $
 import wx
 import wx.grid
 from cairis.core.ARM import *
 from cairis.core.armid import *
 from cairis.core.Borg import Borg
+
+__author__ = 'Shamal Faily'
 
 AN_POS = 0
 PAN_POS = 1

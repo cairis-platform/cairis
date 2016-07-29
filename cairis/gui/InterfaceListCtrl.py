@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.ARM import *
 from InterfaceListDialog import InterfaceListDialog
 
+__author__ = 'Shamal Faily'
+
 class InterfaceListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId):
     wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT)

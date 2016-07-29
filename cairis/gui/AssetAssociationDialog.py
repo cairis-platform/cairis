@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 import cairis.core.MySQLDatabaseProxy
 
+__author__ = 'Shamal Faily'
+
 class AssetAssociationDialog(wx.Dialog):
   def __init__(self,parent,dp,envName,assetProperties,headNav = 0,headAdornment = '',headNry = '',headRole='',tailRole='',tailNry='',tailAdornment='',tailNav = 0,tailName = ''):
     wx.Dialog.__init__(self,parent,ASSETASSOCIATION_ID,'Add Asset Association',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,500))

@@ -22,13 +22,14 @@ import random
 import wx
 from cairis.core.armid import *
 from cairis.core.Borg import Borg
-
 import matplotlib
 matplotlib.use('WXAgg')
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import \
   FigureCanvasWxAgg as FigCanvas, \
   NavigationToolbar2WxAgg as NavigationToolbar
+
+__author__ = 'Shamal Faily'
 
 def riskColourCode(riskScore):
   if (riskScore <= 1):

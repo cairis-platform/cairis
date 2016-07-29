@@ -22,6 +22,8 @@ from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentPropert
 from ObstacleEnvironmentNotebook import ObstacleEnvironmentNotebook
 from EnvironmentListCtrl import EnvironmentListCtrl
 
+__author__ = 'Shamal Faily'
+
 class ObstacleEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):
     wx.Panel.__init__(self,parent,OBSTACLE_PANELENVIRONMENT_ID)

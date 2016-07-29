@@ -25,6 +25,8 @@ from cairis.core.ValueDictionary import ValueDictionary
 from AssetSummaryNotebook import AssetSummaryNotebook
 from SingleEnvironmentPropertiesListCtrl import SingleEnvironmentPropertiesListCtrl
 
+__author__ = 'Shamal Faily'
+
 class TemplateAssetPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,TEMPLATEASSET_ID)

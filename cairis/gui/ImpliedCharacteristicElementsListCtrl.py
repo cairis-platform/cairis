@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.Borg import Borg
 from CharacteristicReferenceTypeDialog import CharacteristicReferenceTypeDialog
 
+__author__ = 'Shamal Faily'
+
 class ImpliedCharacteristicElementsListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,elements):
     wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT | wx.LC_SORT_ASCENDING)

@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from ProjectSettingsPanel import ProjectSettingsPanel
 
+__author__ = 'Shamal Faily'
+
 class ProjectSettingsDialog(wx.Dialog):
   def __init__(self,parent,settingsDictionary,dictionary,contributors,revisions):
     wx.Dialog.__init__(self,parent,PROJECTSETTINGS_ID,'Project Settings',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME,size=(600,500))

@@ -15,15 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$
-
 import wx
 from cairis.core.armid import *
-
 from ObjectListCtrl import ObjectListCtrl
 from ReferenceSynopsisDialog import ReferenceSynopsisDialog
 from cairis.core.Borg import Borg
+
+__author__ = 'Shamal Faily'
 
 class CharacteristicListCtrl(ObjectListCtrl):
   def __init__(self,parent,winId,pName = ''):

@@ -20,7 +20,6 @@ import wx
 import wx.lib.imagebrowser
 import wx.combo
 from cairis.core.armid import *
-
 from GoalListCtrl import GoalListCtrl
 from DimensionListBox import DimensionListBox
 from ThreatListBox import ThreatListBox
@@ -29,6 +28,8 @@ from ResponsibilityListBox import ResponsibilityListBox
 from AssociationComboBox import AssociationComboBox
 from cairis.core.Borg import Borg
 import cairis.core.Trace
+
+__author__ = 'Shamal Faily'
 
 def buildComboSizer(parent,labelTxt,widgetSize,winId,objtDictionary):
   csBox = wx.StaticBox(parent,-1,labelTxt)

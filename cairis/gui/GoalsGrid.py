@@ -28,6 +28,8 @@ from EnvironmentGrid import EnvironmentGrid
 from DimensionNameDialog import DimensionNameDialog
 from datetime import datetime
 
+__author__ = 'Shamal Faily'
+
 priorityChoices = ['Low','Medium','High']
 catChoices = ['Maintain','Achieve','Avoid','Improve','Increase','Maximise','Minimise','Accept','Transfer','Mitigate','Deter','Prevent','Detect','React']
 NAME_POS = 0

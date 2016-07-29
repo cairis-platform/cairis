@@ -19,6 +19,8 @@
 import wx
 from InterfaceListCtrl import InterfaceListCtrl
 
+__author__ = 'Shamal Faily'
+
 class InterfacePage(wx.Panel):
   def __init__(self,parent,winId):
     wx.Panel.__init__(self,parent)

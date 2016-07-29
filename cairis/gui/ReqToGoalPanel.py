@@ -23,6 +23,8 @@ import cairis.core.Goal
 from cairis.core.Borg import Borg
 from ReqToGoalEnvironmentPanel import ReqToGoalEnvironmentPanel
 
+__author__ = 'Shamal Faily'
+
 class ReqToGoalPanel(BasePanel):
   def __init__(self,parent,goalName,goalDef,goalCat,goalPri,goalFc,goalIssue,goalOrig,goalAssets,envName):
     BasePanel.__init__(self,parent,GOAL_ID)

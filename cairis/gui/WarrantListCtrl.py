@@ -23,6 +23,8 @@ from cairis.core.Borg import Borg
 from ReferenceListCtrl import ReferenceListCtrl
 from ReferenceDialog import ReferenceDialog
 
+__author__ = 'Shamal Faily'
+
 class WarrantListCtrl(ReferenceListCtrl):
   def __init__(self,parent,backingList,isTask = False,pName = ''):
     ReferenceListCtrl.__init__(self,parent,PERSONACHARACTERISTIC_LISTWARRANT_ID,'warrant')

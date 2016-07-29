@@ -18,6 +18,8 @@
 
 import DialogClassParameters
 
+__author__ = 'Shamal Faily'
+
 class TaskCharacteristicDialogParameters(DialogClassParameters.DialogClassParameters):
   def __init__(self,winId,winLabel,dClass,createId,setterFn,creationFlag,tName,showTaskCombo = True):
     DialogClassParameters.DialogClassParameters.__init__(self,winId,winLabel,dClass,createId,setterFn,creationFlag)

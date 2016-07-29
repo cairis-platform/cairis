@@ -23,6 +23,8 @@ from cairis.core.ARM import *
 from DimensionNameDialog import DimensionNameDialog
 from cairis.core.Borg import *
 
+__author__ = 'Shamal Faily'
+
 class DimensionUpdateDialog(wx.Dialog):
   def __init__(self,parent,dp,currentDims,dimensionName):
     wx.Dialog.__init__(self,parent,DIMUPDATE_ID,'Edit ' + dimensionName,style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(300,200))

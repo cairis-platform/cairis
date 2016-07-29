@@ -23,6 +23,8 @@ from EditorBase import EditorBase
 from GoalsGrid import GoalsGrid
 from datetime import datetime
 
+__author__ = 'Shamal Faily'
+
 NAME_POS = 0
 DEFINITION_POS = 1
 CATEGORY_POS = 2

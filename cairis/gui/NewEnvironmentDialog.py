@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 import cairis.gui.WidgetFactory
 
+__author__ = 'Shamal Faily'
+
 class NewEnvironmentDialog(wx.Dialog):
   def __init__(self,parent):
     wx.Dialog.__init__(self,parent,NEWENVIRONMENT_ID,'New Environment',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(300,200))

@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.ARM import *
 from ChannelDialog import ChannelDialog
 
+__author__ = 'Shamal Faily'
+
 class ChannelListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,boxSize=wx.DefaultSize):
     wx.ListCtrl.__init__(self,parent,winId,size=boxSize,style=wx.LC_REPORT)

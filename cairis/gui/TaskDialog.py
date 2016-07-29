@@ -24,6 +24,8 @@ from BaseDialog import BaseDialog
 from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class TaskDialog(BaseDialog):
   def __init__(self,parent,parameters):
     BaseDialog.__init__(self,parent,parameters.id(),parameters.label(),(700,800))

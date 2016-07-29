@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from BasePanel import BasePanel
 from CodingTextCtrl import CodingTextCtrl
 
+__author__ = 'Shamal Faily'
+
 class ContentPage(wx.Panel):
   def __init__(self,parent,winId):
     wx.Panel.__init__(self,parent)

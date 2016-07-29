@@ -87,10 +87,11 @@ from ATModelViewer import ATModelViewer
 import gtk
 import gtk.gdk
 import xml.sax
-
 from RMPanel import RMPanel
 from GMPanel import GMPanel
 from OMPanel import OMPanel
+
+__author__ = 'Shamal Faily'
 
 class RMFrame(wx.Frame):
   def __init__(self, parent, id, title):

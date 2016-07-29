@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 import cairis.core.MySQLDatabaseProxy
 
+__author__ = 'Shamal Faily'
+
 class ConcernAssociationDialog(wx.Dialog):
   def __init__(self,parent,dp,envName,source='',sourceMultiplicity='',link='',target='',targetMultiplicity=''):
     wx.Dialog.__init__(self,parent,CONCERNASSOCIATION_ID,'Add Concern Association',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,400))

@@ -22,6 +22,8 @@ import WidgetFactory
 from SingleEnvironmentPanel import SingleEnvironmentPanel
 from cairis.core.EnvironmentParameters import EnvironmentParameters
 
+__author__ = 'Shamal Faily'
+
 class SingleEnvironmentDialog(wx.Dialog):
   def __init__(self,parent,preText = 'New'):
     wx.Dialog.__init__(self,parent,SINGLEENVIRONMENT_ID,preText + ' Environment',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(500,400))

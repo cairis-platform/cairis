@@ -22,6 +22,8 @@ from cairis.core.armid import *
 from EditorBase import EditorBase
 from RequirementsGrid import RequirementsGrid
 
+__author__ = 'Shamal Faily'
+
 NAME_POS = 0
 DESCRIPTION_POS = 1
 PRIORITY_POS = 2

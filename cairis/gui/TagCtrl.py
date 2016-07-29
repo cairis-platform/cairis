@@ -18,6 +18,8 @@
 import wx
 from TagDialog import TagDialog
 
+__author__ = 'Shamal Faily'
+
 class TagCtrl(wx.TextCtrl):
   def __init__(self,parent,winId):
     wx.TextCtrl.__init__(self,parent,winId,'',style=wx.TE_READONLY)

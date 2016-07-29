@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.ResponseParameters import ResponseParameters
 from ResponsePanel import ResponsePanel
 
+__author__ = 'Shamal Faily'
+
 class ResponseDialog(wx.Dialog):
   def __init__(self,parent,parameters):
     wx.Dialog.__init__(self,parent,parameters.id(),parameters.label(),style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,600))

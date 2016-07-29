@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from BasePanel import BasePanel
 import cairis.core.Memo
 
+__author__ = 'Shamal Faily'
+
 class MemoPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,MEMO_ID)

@@ -26,6 +26,8 @@ import pangocairo
 from cairis.core.armid import *
 from ComponentModel import ComponentModel
 
+__author__ = 'Shamal Faily'
+
 class ComponentTextShape(xdot.TextShape):
   def __init__(self, pen, x, y, j, w, t,dim):
     xdot.TextShape.__init__(self,pen,x,y,j,w,t)

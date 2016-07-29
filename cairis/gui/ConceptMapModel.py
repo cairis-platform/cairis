@@ -15,8 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$ $Id$
 from cairis.core.Borg import Borg
 import cairis.core.DotTrace
 import pydot
@@ -24,6 +22,8 @@ import wx
 import os
 from cairis.core.ARM import *
 import gtk
+
+__author__ = 'Shamal Faily'
 
 class ConceptMapModel:
   def __init__(self,associations,envName,conceptName = '',cfSet = False):

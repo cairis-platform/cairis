@@ -23,6 +23,8 @@ import ContextNodeDialogFactory
 import os
 from cairis.core.Borg import *
 
+__author__ = 'Shamal Faily'
+
 class ContextModelViewer(contextxdot.ContextDotWindow):
   def __init__(self,environmentName,dp):
     contextxdot.ContextDotWindow.__init__(self,environmentName,dp)

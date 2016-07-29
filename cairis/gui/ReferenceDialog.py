@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from ReferencePanel import ReferencePanel
 import DialogClassParameters
 
+__author__ = 'Shamal Faily'
+
 class ReferenceDialog(wx.Dialog):
   def __init__(self,parent,crTypeName,refName = '',desc = '',dimName = ''):
     wx.Dialog.__init__(self,parent,CHARACTERISTICREFERENCE_ID,'Add Characteristic Reference',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,300))

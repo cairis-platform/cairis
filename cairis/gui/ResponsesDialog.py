@@ -28,6 +28,8 @@ from MitigateEnvironmentPanel import MitigateEnvironmentPanel
 from DimensionBaseDialog import DimensionBaseDialog
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 class ResponsesDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,RESPONSES_ID,'Responses',(800,300),'response.png')

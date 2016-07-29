@@ -24,6 +24,8 @@ from DialogClassParameters import DialogClassParameters
 from cairis.core.ARM import *
 from DimensionBaseDialog import DimensionBaseDialog
 
+__author__ = 'Shamal Faily'
+
 class TemplateAssetsDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,TEMPLATEASSETS_ID,'Template Assets',(930,300),'asset.png')

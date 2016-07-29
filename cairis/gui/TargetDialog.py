@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class TargetDialog(wx.Dialog):
   def __init__(self,parent,reqList,setTargets,envName):
     wx.Dialog.__init__(self,parent,PROPERTY_ID,'Add Target',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,250))

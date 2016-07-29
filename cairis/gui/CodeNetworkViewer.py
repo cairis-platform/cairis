@@ -23,6 +23,8 @@ from cairis.core.Borg import Borg
 from cairis.core.ARM import *
 from CodeNetworkPanel import CodeNetworkPanel
 
+__author__ = 'Shamal Faily'
+
 class CodeNetworkViewer(wx.Dialog):
   def __init__(self,parent,personaName,codeNet):
     wx.Dialog.__init__(self,parent,-1,'Code network',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(500,800))

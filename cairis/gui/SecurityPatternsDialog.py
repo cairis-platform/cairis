@@ -24,6 +24,8 @@ from DialogClassParameters import DialogClassParameters
 from cairis.core.ARM import *
 from DimensionBaseDialog import DimensionBaseDialog
 
+__author__ = 'Shamal Faily'
+
 class SecurityPatternsDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,SECURITYPATTERNS_ID,'Security Patterns',(930,300),'countermeasure.png')

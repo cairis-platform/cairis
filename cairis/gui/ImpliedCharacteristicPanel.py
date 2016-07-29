@@ -25,6 +25,8 @@ from ImpliedCharacteristicElementsListCtrl import ImpliedCharacteristicElementsL
 from CodeNetworkModel import CodeNetworkModel
 from CodeNetworkView import CodeNetworkView
 
+__author__ = 'Shamal Faily'
+
 class ImpliedCharacteristicPanel(BasePanel):
   def __init__(self,parent,pName,fromCode,toCode,rtName):
     BasePanel.__init__(self,parent,IMPLIEDCHARACTERISTIC_ID)

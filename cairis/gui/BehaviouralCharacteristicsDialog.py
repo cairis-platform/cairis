@@ -27,6 +27,8 @@ from cairis.core.ARM import *
 from DimensionBaseDialog import DimensionBaseDialog
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class BehaviouralCharacteristicsDialog(DimensionBaseDialog):
   def __init__(self,parent,aName,bvName = ''):
     b = Borg()

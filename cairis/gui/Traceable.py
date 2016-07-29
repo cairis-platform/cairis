@@ -22,6 +22,8 @@ import wx
 from cairis.core.Borg import Borg
 from TraceExplorer import TraceExplorer
 
+__author__ = 'Shamal Faily'
+
 class Traceable:
   def __init__(self):
     b = Borg()

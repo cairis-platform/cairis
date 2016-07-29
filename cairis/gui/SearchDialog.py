@@ -22,6 +22,8 @@ from cairis.core.ARM import *
 from SearchPanel import SearchPanel
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class SearchDialog(wx.Dialog):
   def __init__(self,parent):
     wx.Dialog.__init__(self,parent,SEARCHMODEL_ID,'Search model',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(700,500))

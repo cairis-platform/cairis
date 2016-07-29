@@ -23,6 +23,8 @@ from cairis.core.Borg import Borg
 from AttackerEnvironmentPanel import AttackerEnvironmentPanel
 from PersonalImageView import PersonalImageView
 
+__author__ = 'Shamal Faily'
+
 class AttackerPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,ATTACKER_ID)

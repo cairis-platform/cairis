@@ -15,15 +15,14 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$
-
 import wx
 from cairis.core.armid import *
 from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from cairis.core.ReferenceContribution import ReferenceContribution
 from UseCaseContributionPanel import UseCaseContributionPanel
+
+__author__ = 'Shamal Faily'
 
 class UseCaseContributionDialog(wx.Dialog):
   def __init__(self,parent,objt,rType):

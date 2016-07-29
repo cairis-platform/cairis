@@ -24,6 +24,8 @@ from RevisionListCtrl import RevisionListCtrl
 from DomainListCtrl import DomainListCtrl
 from PersonalImageView import PersonalImageView
 
+__author__ = 'Shamal Faily'
+
 class MLTextPage(wx.Panel):
   def __init__(self,parent,winId):
     wx.Panel.__init__(self,parent)

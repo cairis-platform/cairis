@@ -26,6 +26,8 @@ import pangocairo
 from cairis.core.armid import *
 from AssumptionTaskModel import AssumptionTaskModel
 
+__author__ = 'Shamal Faily'
+
 class APTextShape(xdot.TextShape):
 
     def __init__(self, pen, x, y, j, w, t,dim,toDim):

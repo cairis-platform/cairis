@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from datetime import datetime
 from RevisionEntryDialog import RevisionEntryDialog
 
+__author__ = 'Shamal Faily'
+
 class RevisionListCtrl(wx.ListCtrl):
   def __init__(self,parent):
     wx.ListCtrl.__init__(self,parent,PROJECTSETTINGS_LISTREVISIONS_ID,size=wx.DefaultSize,style=wx.LC_REPORT | wx.LC_SORT_ASCENDING)

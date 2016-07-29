@@ -19,6 +19,8 @@
 import wx
 from cairis.core.armid import *
 
+__author__ = 'Shamal Faily'
+
 class DependentsDialog(wx.Dialog):
   def __init__(self,parent,dependents,dimName):
     wx.Dialog.__init__(self,parent,DEPENDENTS_ID,'Delete ' + dimName,style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,300))

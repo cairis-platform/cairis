@@ -23,6 +23,8 @@ import cairis.core.Goal
 from cairis.core.Borg import Borg
 from GoalEnvironmentNotebook import GoalEnvironmentNotebook
 
+__author__ = 'Shamal Faily'
+
 class SingleGoalPanel(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,GOAL_ID)

@@ -26,6 +26,8 @@ from AcceptEnvironmentPanel import AcceptEnvironmentPanel
 from TransferEnvironmentPanel import TransferEnvironmentPanel
 from MitigateEnvironmentPanel import MitigateEnvironmentPanel
 
+__author__ = 'Shamal Faily'
+
 class ResponsePanel(BasePanel):
   def __init__(self,parent,responseType,panel):
     BasePanel.__init__(self,parent,RESPONSE_ID)

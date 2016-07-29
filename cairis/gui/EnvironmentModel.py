@@ -29,6 +29,8 @@ from cairis.core.colourcodes import usabilityColourCode
 from cairis.core.colourcodes import usabilityTextColourCode
 from cairis.core.colourcodes import riskTextColourCode
 
+__author__ = 'Shamal Faily'
+
 USECASE_TYPE = 0
 MISUSECASE_TYPE = 1
 

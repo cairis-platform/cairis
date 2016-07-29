@@ -22,6 +22,8 @@ from cairis.core.ValueDictionary import ValueDictionary
 from PropertiesListCtrl import PropertiesListCtrl
 from AssetAssociationListCtrl import AssetAssociationListCtrl
 
+__author__ = 'Shamal Faily'
+
 class PropertiesPage(wx.Panel):
   def __init__(self,parent,dp):
     wx.Panel.__init__(self,parent)

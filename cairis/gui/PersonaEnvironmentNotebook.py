@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from DimensionListCtrl import DimensionListCtrl
 from BVNarrativeTextCtrl import BVNarrativeTextCtrl
 
+__author__ = 'Shamal Faily'
+
 class SummaryPage(wx.Panel):
   def __init__(self,parent,dp):
     wx.Panel.__init__(self,parent)

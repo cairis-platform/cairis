@@ -23,8 +23,9 @@ from cairis.core.Borg import Borg
 from DimensionNameDialog import DimensionNameDialog
 from DependentsDialog import DependentsDialog
 from SecurityPatternEnvironmentDialog import SecurityPatternEnvironmentDialog
-
 from cairis.core.ARM import *
+
+__author__ = 'Shamal Faily'
 
 class CountermeasureListCtrl(wx.ListCtrl):
 

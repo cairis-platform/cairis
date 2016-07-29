@@ -25,6 +25,8 @@ from DialogClassParameters import DialogClassParameters
 from cairis.core.ComponentViewParameters import ComponentViewParameters
 from DimensionBaseDialog import DimensionBaseDialog
 
+__author__ = 'Shamal Faily'
+
 class ArchitecturalPatternsDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,COMPONENTVIEWS_ID,'Architectural Patternss',(930,300),'component_view.png')

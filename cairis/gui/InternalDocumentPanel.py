@@ -22,6 +22,8 @@ from BasePanel import BasePanel
 import cairis.core.InternalDocument
 from InternalDocumentNotebook import InternalDocumentNotebook
 
+__author__ = 'Shamal Faily'
+
 class InternalDocumentPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,EXTERNALDOCUMENT_ID)

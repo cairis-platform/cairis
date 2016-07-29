@@ -25,6 +25,8 @@ from cairis.core.GoalAssociationParameters import GoalAssociationParameters
 import cairis.core.AssetParametersFactory
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 class ComponentViewListCtrl(wx.ListCtrl):
 
   def __init__(self,parent,winId):

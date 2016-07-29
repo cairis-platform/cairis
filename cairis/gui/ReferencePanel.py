@@ -24,6 +24,8 @@ from DocumentReferenceDialog import DocumentReferenceDialog
 from ConceptReferenceDialog import ConceptReferenceDialog
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class ReferencePanel(BasePanel):
   def __init__(self,parent,refName,descName,dimName):
     BasePanel.__init__(self,parent,CHARACTERISTICREFERENCEPANEL_ID)

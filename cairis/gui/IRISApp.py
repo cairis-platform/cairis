@@ -21,6 +21,8 @@ import cairis.core.BorgFactory
 from cairis.core.ARM import *
 from cairis.gui.RMFrame import RMFrame
 
+__author__ = 'Shamal Faily'
+
 RMFRAME_ID = 50
 
 class IRISApp(wx.App):

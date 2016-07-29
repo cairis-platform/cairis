@@ -23,6 +23,8 @@ import cairis.core.SecurityPattern
 from cairis.core.Borg import Borg
 from SecurityPatternNotebook import SecurityPatternNotebook
 
+__author__ = 'Shamal Faily'
+
 class SecurityPatternPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,SECURITYPATTERN_ID)

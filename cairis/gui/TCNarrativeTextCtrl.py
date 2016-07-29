@@ -24,6 +24,8 @@ from cairis.core.Borg import Borg
 from AssumptionTaskModel import AssumptionTaskModel
 from ATModelViewer import ATModelViewer
 
+__author__ = 'Shamal Faily'
+
 class TCNarrativeTextCtrl(wx.TextCtrl):
   def __init__(self, parent, winId):
     wx.TextCtrl.__init__(self,parent,winId,size=(150,100),style=wx.TE_MULTILINE)

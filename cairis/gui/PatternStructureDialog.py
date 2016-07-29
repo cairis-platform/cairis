@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class PatternStructureDialog(wx.Dialog):
   def __init__(self,parent,headName = '',headAdornment = '',headNav = '',headNry = '',headRole='',tailRole='',tailNry='',tailNav = '',tailAdornment='',tailName = ''):
     wx.Dialog.__init__(self,parent,PATTERNSTRUCTURE_ID,'Add Structure',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,575))

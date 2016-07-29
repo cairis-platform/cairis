@@ -27,6 +27,8 @@ from ComponentDialog import ComponentDialog
 from cairis.core.ComponentParameters import ComponentParameters
 from CanonicalModelViewer import CanonicalModelViewer
 
+__author__ = 'Shamal Faily'
+
 class ComponentListCtrl(TraceableList):
   def __init__(self,parent,winId = COMPONENTVIEW_LISTCOMPONENTS_ID):
     TraceableList.__init__(self,parent,winId,'component')

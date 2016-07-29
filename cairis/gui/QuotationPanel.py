@@ -22,6 +22,8 @@ from BasePanel import BasePanel
 from QuotationNotebook import QuotationNotebook
 import cairis.core.Memo
 
+__author__ = 'Shamal Faily'
+
 class QuotationPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,QUOTATION_ID)

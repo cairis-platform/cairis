@@ -23,6 +23,8 @@ from cairis.core.ARM import *
 from DimensionBaseDialog import DimensionBaseDialog
 from TaskDialogParameters import TaskDialogParameters
 
+__author__ = 'Shamal Faily'
+
 class TasksDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,TASKS_ID,'Tasks',(400,350),'task.png')

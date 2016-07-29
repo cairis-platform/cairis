@@ -24,6 +24,8 @@ from NarrativeCtrl import NarrativeCtrl
 from DimensionListCtrl import DimensionListCtrl
 from CodingTextCtrl import CodingTextCtrl
 
+__author__ = 'Shamal Faily'
+
 class SummaryPage(wx.Panel):
   def __init__(self,parent,dp):
     wx.Panel.__init__(self,parent)

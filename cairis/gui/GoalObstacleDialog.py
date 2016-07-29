@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.ARM import *
 from GoalObstaclePanel import GoalObstaclePanel
 
+__author__ = 'Shamal Faily'
+
 class GoalObstacleDialog(wx.Dialog):
   def __init__(self,parent,goalName,obsName,envName):
     wx.Dialog.__init__(self,parent,-1, goalName + ' / ' + obsName + ' in ' + envName,style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,300))

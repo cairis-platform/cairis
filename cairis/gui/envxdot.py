@@ -24,10 +24,10 @@ import math
 import cairo
 import pangocairo
 from cairis.core.armid import *
-
 from EnvironmentModel import EnvironmentModel
 from RequirementShape import RequirementShape
-#from ChernoffFace import ChernoffFace
+
+__author__ = 'Shamal Faily'
 
 INCREDIBLE_COLOUR = (0.9961,0.9412,0.8510) 
 IMPROBABLE_COLOUR = (0.9922,0.8314,0.6196)

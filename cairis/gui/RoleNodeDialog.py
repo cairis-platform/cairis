@@ -21,6 +21,7 @@ import gtk
 import gobject
 from NDImplementationDecorator import NDImplementationDecorator
 
+__author__ = 'Shamal Faily'
 
 class RoleNodeDialog:
   def __init__(self,objt,environmentName,dupProperty,overridingEnvironment,builder):

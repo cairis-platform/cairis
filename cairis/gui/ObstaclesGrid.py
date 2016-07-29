@@ -27,6 +27,8 @@ from EnvironmentGrid import EnvironmentGrid
 from DimensionNameDialog import DimensionNameDialog
 from datetime import datetime
 
+__author__ = 'Shamal Faily'
+
 catChoices = ['Confidentiality Threat','Integrity Threat','Availability Threat','Accountability Threat','Vulnerability','Duration','Frequency','Demands','Goal Support','Anonymity Threat','Pseudonymity Threat','Unlinkability Threat','Unobservability Threat']
 NAME_POS = 0
 DEFINITION_POS = 1

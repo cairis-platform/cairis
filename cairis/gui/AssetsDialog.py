@@ -26,6 +26,8 @@ import os
 import xml.sax
 from DimensionBaseDialog import DimensionBaseDialog
 
+__author__ = 'Shamal Faily'
+
 class AssetsDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,ASSETS_ID,'Assets',(930,300),'asset.png')

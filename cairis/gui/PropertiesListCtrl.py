@@ -22,6 +22,8 @@ from cairis.core.ARM import *
 from PropertyDialog import PropertyDialog
 from cairis.core.ValueDictionary import ValueDictionary
 
+__author__ = 'Shamal Faily'
+
 class PropertiesListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,values,boxSize=wx.DefaultSize):
     wx.ListCtrl.__init__(self,parent,winId,size=boxSize,style=wx.LC_REPORT)

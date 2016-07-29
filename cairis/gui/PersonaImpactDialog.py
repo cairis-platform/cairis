@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.ARM import *
 from PersonaImpactPanel import PersonaImpactPanel
 
+__author__ = 'Shamal Faily'
+
 class PersonaImpactDialog(wx.Dialog):
   def __init__(self,parent,cvName,personaName,envName):
     wx.Dialog.__init__(self,parent,-1,'Impact to ' + personaName + ' of ' + cvName + ' in ' + envName,style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,300))

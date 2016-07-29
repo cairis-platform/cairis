@@ -22,6 +22,8 @@ from BasePanel import BasePanel
 import cairis.core.Asset
 from WeaknessAnalysisNotebook import WeaknessAnalysisNotebook
 
+__author__ = 'Shamal Faily'
+
 class WeaknessAnalysisPanel(BasePanel):
   def __init__(self,parent,cvName,envName):
     BasePanel.__init__(self,parent,WEAKNESSANALYSIS_ID)

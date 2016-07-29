@@ -15,11 +15,12 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import sys
 import gtk
 from cairis.core.Borg import Borg
 from NDImplementationDecorator import NDImplementationDecorator
+
+__author__ = 'Shamal Faily'
 
 class UseCaseNodeDialog:
   def __init__(self,objt,environmentName,dupProperty,overridingEnvironment,builder):

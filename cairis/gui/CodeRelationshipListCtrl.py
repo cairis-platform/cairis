@@ -22,6 +22,8 @@ from CodeRelationshipDialog import CodeRelationshipDialog
 from ImpliedCharacteristicDialog import ImpliedCharacteristicDialog
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class CodeRelationshipListCtrl(wx.ListCtrl):
   def __init__(self,parent,personaName):
     wx.ListCtrl.__init__(self,parent,CODERELATIONSHIP_LISTRELATIONSHIPS_ID,size=wx.DefaultSize,style=wx.LC_REPORT | wx.LC_SORT_ASCENDING)

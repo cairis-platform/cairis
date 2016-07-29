@@ -15,8 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$ $Id: StepGrid.py 469 2011-05-14 22:36:20Z shaf $
 import wx
 import wx.grid
 import wx.lib.gridmovers as gridmovers
@@ -33,6 +31,8 @@ from StepSynopsisDialog import StepSynopsisDialog
 from cairis.core.GoalAssociationParameters import GoalAssociationParameters
 from TagDialog import TagDialog
 import cairis.core.RequirementFactory
+
+__author__ = 'Shamal Faily'
 
 def increment(inStr):
   stringInput = str(inStr)

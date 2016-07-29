@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 class DimensionListBox(wx.ListBox):
   def __init__(self,parent,winId,boxSize,dimensionTable,dp):
     wx.ListBox.__init__(self,parent,winId,size=boxSize)

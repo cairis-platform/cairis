@@ -17,6 +17,8 @@
 
 import wx
 
+__author__ = 'Shamal Faily'
+
 class TagDialog(wx.Dialog):
   def __init__(self,parent,tags):
     wx.Dialog.__init__(self,parent,-1,'Edit tags',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=wx.DefaultSize)

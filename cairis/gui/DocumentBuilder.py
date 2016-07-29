@@ -35,6 +35,8 @@ import cairo
 import pangocairo
 from cairis.core.armid import *
 
+__author__ = 'Shamal Faily'
+
 def dictToRows(dict):
   keys = dict.keys()
   keys.sort()

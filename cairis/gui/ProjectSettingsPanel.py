@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from ProjectSettingsNotebook import ProjectSettingsNotebook
 
+__author__ = 'Shamal Faily'
+
 class ProjectSettingsPanel(wx.Panel):
   def __init__(self,parent,projName,background,goals,scope,definitions,contributors,revisions,richPicture):
     wx.Panel.__init__(self,parent,PROJECTSETTINGS_PANELSETTINGS_ID)

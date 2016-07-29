@@ -21,6 +21,8 @@ import gtk
 from cairis.core.Borg import Borg
 from NDImplementationDecorator import NDImplementationDecorator
 
+__author__ = 'Shamal Faily'
+
 class TaskNodeDialog:
   def __init__(self,objt,environmentName,dupProperty,overridingEnvironment,builder):
     self.window = builder.get_object("TaskNodeDialog")

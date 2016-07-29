@@ -15,12 +15,12 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$
 import wx
 from cairis.core.armid import *
 from cairis.core.Borg import Borg
 from BasePanel import BasePanel
+
+__author__ = 'Shamal Faily'
 
 class UseCaseContributionPanel(BasePanel):
   def __init__(self,parent):

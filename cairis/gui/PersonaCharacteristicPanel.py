@@ -25,6 +25,8 @@ from DocumentReferenceDialog import DocumentReferenceDialog
 from ConceptReferenceDialog import ConceptReferenceDialog
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class PersonaCharacteristicPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,PERSONACHARACTERISTIC_ID)

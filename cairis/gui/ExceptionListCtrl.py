@@ -15,14 +15,14 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$ $Id: ExceptionListCtrl.py 337 2010-11-07 23:58:53Z shaf $
 import wx
 from cairis.core.armid import *
 from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from ExceptionDialog import ExceptionDialog
 import cairis.core.ObstacleFactory
+
+__author__ = 'Shamal Faily'
 
 class ExceptionListCtrl(wx.ListCtrl):
   def __init__(self,parent,envName,stepGrid):

@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class ExposedCountermeasurePanel(wx.Panel):
   def __init__(self,parent,exposedCMs):
     wx.Panel.__init__(self,parent,-1)

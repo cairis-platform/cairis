@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from BasePanel import BasePanel
 
+__author__ = 'Shamal Faily'
+
 class CodePage(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,-1)

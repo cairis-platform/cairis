@@ -22,6 +22,8 @@ from BasePanel import BasePanel
 from TaskEnvironmentPanel import TaskEnvironmentPanel
 from TCNarrativeTextCtrl import TCNarrativeTextCtrl
 
+__author__ = 'Shamal Faily'
+
 class TaskPanel(BasePanel):
   def __init__(self,parent,dp):
     BasePanel.__init__(self,parent,TASK_ID)

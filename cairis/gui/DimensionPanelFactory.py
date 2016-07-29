@@ -37,6 +37,8 @@ import MisuseCasePanel
 import RequirementPanel
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 def build(objt,parent):
   panel = 0
   if (objt.__class__.__name__ == 'Asset'):

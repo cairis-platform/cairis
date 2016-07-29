@@ -18,6 +18,8 @@
 
 import ScenarioDialogParameters
 
+__author__ = 'Shamal Faily'
+
 class ScenarioDialogParameters(ScenarioDialogParameters.ScenarioDialogParameters):
   def __init__(self,winId,winLabel,dClass,createId,setterFn,creationFlag,dp):
     ScenarioDialogParameters.ScenarioDialogParameters.__init__(self,winId,winLabel,dClass,createId,setterFn,creationFlag,dp)

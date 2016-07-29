@@ -23,6 +23,8 @@ from cairis.core.Borg import Borg
 from cairis.core.DomainParameters import DomainParameters
 from DomainNotebook import DomainNotebook
 
+__author__ = 'Shamal Faily'
+
 class DomainDialog(wx.Dialog):
   def __init__(self,parent,parameters):
     wx.Dialog.__init__(self,parent,DOMAIN_ID,'Domain',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(350,400))

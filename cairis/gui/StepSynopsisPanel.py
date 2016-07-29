@@ -16,11 +16,12 @@
 #  under the License.
 
 
-#$URL$
 import wx
 from cairis.core.armid import *
 import WidgetFactory
 from cairis.core.Borg import Borg
+
+__author__ = 'Shamal Faily'
 
 class StepSynopsisPanel(wx.Panel):
   def __init__(self,parent):

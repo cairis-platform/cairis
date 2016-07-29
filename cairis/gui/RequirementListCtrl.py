@@ -22,6 +22,8 @@ from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from RequirementDialog import RequirementDialog
 
+__author__ = 'Shamal Faily'
+
 class RequirementListCtrl(wx.ListCtrl):
   def __init__(self,parent,structCtrl,winId = SECURITYPATTERN_LISTREQUIREMENTS_ID):
     wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT)

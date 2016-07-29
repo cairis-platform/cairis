@@ -15,9 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$
-
 import wx
 from cairis.core.armid import *
 from BaseDialog import BaseDialog
@@ -25,6 +22,8 @@ from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from cairis.core.ReferenceContribution import ReferenceContribution
 from ReferenceContributionPanel import ReferenceContributionPanel
+
+__author__ = 'Shamal Faily'
 
 class ReferenceContributionDialog(BaseDialog):
   def __init__(self,parent,objt):

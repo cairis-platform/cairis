@@ -24,6 +24,8 @@ import os
 from cairis.core.ARM import *
 import gtk
 
+__author__ = 'Shamal Faily'
+
 LOW_VALUE = 5
 MED_VALUE =  10
 HIGH_VALUE = 15

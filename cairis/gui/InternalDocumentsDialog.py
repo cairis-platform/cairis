@@ -24,6 +24,8 @@ from DialogClassParameters import DialogClassParameters
 from cairis.core.ARM import *
 from DimensionBaseDialog import DimensionBaseDialog
 
+__author__ = 'Shamal Faily'
+
 class InternalDocumentsDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,INTERNALDOCUMENTS_ID,'Internal Documents',(930,300),'persona.png')

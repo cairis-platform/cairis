@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class DomainEntryDialog(wx.Dialog):
   def __init__(self,parent):
     wx.Dialog.__init__(self,parent,DOMAINENTRY_ID,'Add domain interface',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(300,300))

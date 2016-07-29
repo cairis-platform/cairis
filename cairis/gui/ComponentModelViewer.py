@@ -25,6 +25,8 @@ import os
 from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class ComponentModelViewer(componentxdot.ComponentDotWindow):
   def __init__(self,cvName):
     componentxdot.ComponentDotWindow.__init__(self,'',cvName)

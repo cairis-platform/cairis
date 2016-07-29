@@ -25,6 +25,8 @@ import cairo
 import pangocairo
 from ContextModel import ContextModel
 
+__author__ = 'Shamal Faily'
+
 class MachineShape(xdot.PolygonShape):
   def __init__(self, pen, points, filled=False):
     xdot.PolygonShape.__init__(self,pen,points,filled)

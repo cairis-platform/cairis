@@ -22,6 +22,8 @@ from cairis.core.ARM import *
 from QuotationPanel import QuotationPanel
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class QuotationDialog(wx.Dialog):
   def __init__(self,parent):
     wx.Dialog.__init__(self,parent,-1,'Edit Quotation',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,500))

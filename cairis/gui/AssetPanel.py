@@ -24,6 +24,8 @@ from cairis.core.Borg import Borg
 from AssetSummaryNotebook import AssetSummaryNotebook
 from AssetEnvironmentPanel import AssetEnvironmentPanel
 
+__author__ = 'Shamal Faily'
+
 class AssetPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,ASSET_ID)

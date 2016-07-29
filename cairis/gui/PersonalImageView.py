@@ -19,6 +19,8 @@
 import wx.lib.imagebrowser
 from cairis.core.armid import *
 
+__author__ = 'Shamal Faily'
+
 class PersonalImageView(wx.lib.imagebrowser.ImageView):
   def __init__(self,parent,winId):
     wx.lib.imagebrowser.ImageView.__init__(self,parent,winId)

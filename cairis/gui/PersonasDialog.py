@@ -23,6 +23,8 @@ from DialogClassParameters import DialogClassParameters
 from cairis.core.ARM import *
 from DimensionBaseDialog import DimensionBaseDialog
 
+__author__ = 'Shamal Faily'
+
 class PersonasDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,PERSONAS_ID,'Personas',(800,300),'persona.png')

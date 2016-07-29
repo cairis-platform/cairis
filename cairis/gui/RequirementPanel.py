@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 import WidgetFactory
 
+__author__ = 'Shamal Faily'
+
 class RequirementPanel(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,REQUIREMENT_ID)

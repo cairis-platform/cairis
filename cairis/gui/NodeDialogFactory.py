@@ -43,9 +43,9 @@ from CountermeasureNodeDialog import CountermeasureNodeDialog
 from DomainPropertyNodeDialog import DomainPropertyNodeDialog
 from AssignResponsibilityNodeDialog import AssignResponsibilityNodeDialog
 from ComponentNodeDialog import ComponentNodeDialog
-
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
 
 def buildComponentModelNode(url):
   dim,objtName = url.split('#')

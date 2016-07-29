@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from BasePanel import BasePanel
 from TemplateRequirementNotebook import TemplateRequirementNotebook
 
+__author__ = 'Shamal Faily'
+
 class TemplateRequirementPanel(BasePanel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,TEMPLATEREQUIREMENT_ID)

@@ -15,13 +15,12 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 from cairis.core.armid import *
 import wx
 from cairis.core.Borg import Borg
 from cairis.core.VulnerabilityParameters import VulnerabilityParameters
 
-#import DimensionPanelFactory
+__author__ = 'Shamal Faily'
 
 class TraceExplorer(wx.Dialog):
   def __init__(self,parent,traceDimension,isFrom,envName=''):

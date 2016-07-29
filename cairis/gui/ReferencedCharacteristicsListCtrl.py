@@ -19,8 +19,9 @@
 import wx
 from cairis.core.armid import *
 from cairis.core.Borg import Borg
-
 from cairis.core.ARM import *
+
+__author__ = 'Shamal Faily'
 
 class ReferencedCharacteristicsListCtrl(wx.ListCtrl):
 

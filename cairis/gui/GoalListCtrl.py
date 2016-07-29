@@ -23,6 +23,8 @@ from cairis.core.Borg import Borg
 from DimensionNameDialog import DimensionNameDialog
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 class GoalListCtrl(wx.ListCtrl):
 
   def __init__(self,parent,winId):

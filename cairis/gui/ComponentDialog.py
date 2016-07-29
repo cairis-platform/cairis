@@ -22,6 +22,8 @@ from ComponentPanel import ComponentPanel
 from cairis.core.ComponentParameters import ComponentParameters
 import DialogClassParameters
 
+__author__ = 'Shamal Faily'
+
 class ComponentDialog(wx.Dialog):
   def __init__(self,parent):
     wx.Dialog.__init__(self,parent,COMPONENT_ID,'Edit Component',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,500))

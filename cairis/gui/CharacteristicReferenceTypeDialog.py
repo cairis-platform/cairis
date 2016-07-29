@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class CharacteristicReferenceTypeDialog(wx.Dialog):
   def __init__(self,parent,ciName,elName,currentValue):
     wx.Dialog.__init__(self,parent,CHARACTERISTICREFERENCETYPE_ID,'Edit Characteristic Reference Type',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(300,400))

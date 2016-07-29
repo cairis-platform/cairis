@@ -22,6 +22,8 @@ from cairis.core.armid import *
 import cairis.core.RiskParameters
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class RiskPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,RISK_ID)

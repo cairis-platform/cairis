@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.ARM import *
 from ResponseCostDialog import ResponseCostDialog
 
+__author__ = 'Shamal Faily'
+
 class DimensionCostListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,dimName,boxSize=wx.DefaultSize):
     wx.ListCtrl.__init__(self,parent,winId,size=boxSize,style=wx.LC_REPORT)

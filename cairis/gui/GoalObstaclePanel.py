@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from BasePanel import BasePanel
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class GoalObstaclePanel(BasePanel):
   def __init__(self,parent,goalName,obsName,envName):
     BasePanel.__init__(self,parent,GOALOBSTACLE_ID)

@@ -25,6 +25,8 @@ from PropertiesListCtrl import PropertiesListCtrl
 from CountermeasureTaskPersonaListCtrl import CountermeasureTaskPersonaListCtrl
 from CountermeasureRoleListCtrl import CountermeasureRoleListCtrl
 
+__author__ = 'Shamal Faily'
+
 class SecurityPage(wx.Panel):
   def __init__(self,parent,dp):
     wx.Panel.__init__(self,parent)

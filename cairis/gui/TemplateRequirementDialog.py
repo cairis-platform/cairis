@@ -22,6 +22,8 @@ from TemplateRequirementPanel import TemplateRequirementPanel
 from cairis.core.TemplateRequirementParameters import TemplateRequirementParameters
 import DialogClassParameters
 
+__author__ = 'Shamal Faily'
+
 class TemplateRequirementDialog(wx.Dialog):
   def __init__(self,parent,parameters):
     wx.Dialog.__init__(self,parent,parameters.id(),parameters.label(),style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,500))

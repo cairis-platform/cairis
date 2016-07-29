@@ -29,6 +29,8 @@ from DimensionNameDialog import DimensionNameDialog
 from ReqToGoalDialog import ReqToGoalDialog
 from RequirementHistoryDialog import RequirementHistoryDialog
 
+__author__ = 'Shamal Faily'
+
 priorityChoices = ['1','2','3']
 typeChoices = ['Functional','Data','Look and Feel','Usability','Performance','Operational','Maintainability','Portability','Security','Cultural and Political','Legal','Privacy']
 NAME_POS = 0

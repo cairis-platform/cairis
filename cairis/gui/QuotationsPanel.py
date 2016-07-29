@@ -22,6 +22,8 @@ from BasePanel import BasePanel
 from QuotationListCtrl import QuotationListCtrl
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class QuotationsPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,QUOTATIONS_ID)

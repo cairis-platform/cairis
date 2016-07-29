@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 from RequirementNotebook import RequirementNotebook
 
+__author__ = 'Shamal Faily'
+
 class RequirementDialog(wx.Dialog):
   def __init__(self,parent,assets,reqName= '',reqDesc = '',reqType = '',reqRationale = '',reqFC ='',reqAsset =''):
     wx.Dialog.__init__(self,parent,PATTERNREQUIREMENT_ID,'Add Pattern Requirement',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,475))

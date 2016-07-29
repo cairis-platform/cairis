@@ -18,6 +18,8 @@
 
 import gtk
 
+__author__ = 'Shamal Faily'
+
 def build(modelType):
   if (modelType == 'goal'):
     return ['And Goal','Or Goal','Goal','Sub Goal','And Requirement','Sub Requirement','Assign Responsibility']

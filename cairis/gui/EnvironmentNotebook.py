@@ -22,6 +22,8 @@ import WidgetFactory
 from EnvironmentPropertiesPanel import EnvironmentPropertiesPanel
 from ValueTensionsGrid import ValueTensionsGrid
 
+__author__ = 'Shamal Faily'
+
 class SummaryPage(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,GOAL_PANELSUMMARY_ID)

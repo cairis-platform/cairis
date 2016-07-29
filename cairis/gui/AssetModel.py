@@ -25,6 +25,8 @@ from cairis.core.ARM import *
 from cairis.core.colourcodes import surfaceTypeColourCode,surfaceTypeTextColourCode
 import gtk
 
+__author__ = 'Shamal Faily'
+
 class AssetModel:
   def __init__(self,associations,envName,assetName = '',hideConcerns = False):
     self.theAssociations = associations

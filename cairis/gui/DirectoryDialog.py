@@ -26,6 +26,8 @@ from cairis.core.ThreatParameters import ThreatParameters
 from DirectoryEntryDialog import DirectoryEntryDialog
 from cairis.core.ObjectFactory import *
 
+__author__ = 'Shamal Faily'
+
 class DirectoryDialog(wx.Dialog):
   def __init__(self,parent,dimensionName):
     wx.Dialog.__init__(self,parent,DIRECTORYDIALOG_ID,'Import ' + dimensionName,style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(600,400))

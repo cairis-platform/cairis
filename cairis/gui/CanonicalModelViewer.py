@@ -25,6 +25,8 @@ import os
 from cairis.core.ARM import *
 from cairis.core.Borg import *
 
+__author__ = 'Shamal Faily'
+
 class CanonicalModelViewer(kaosxdot.KaosDotWindow):
   def __init__(self,environmentName,modelType,locsName = ''):
     kaosxdot.KaosDotWindow.__init__(self,environmentName,modelType,locsName)

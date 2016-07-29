@@ -22,6 +22,8 @@ import cairis.core.GoalFactory
 from cairis.core.Borg import Borg
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 class ResponseListCtrl(wx.ListCtrl):
 
   def __init__(self,parent,winId):

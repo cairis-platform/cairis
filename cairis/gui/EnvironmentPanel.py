@@ -22,6 +22,8 @@ from BasePanel import BasePanel
 from cairis.core.Borg import Borg
 from EnvironmentNotebook import EnvironmentNotebook
 
+__author__ = 'Shamal Faily'
+
 class EnvironmentPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,ENVIRONMENT_ID)

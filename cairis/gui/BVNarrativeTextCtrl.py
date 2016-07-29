@@ -25,6 +25,8 @@ from cairis.core.Borg import Borg
 from AssumptionPersonaModel import AssumptionPersonaModel
 from APModelViewer import APModelViewer
 
+__author__ = 'Shamal Faily'
+
 class BVNarrativeTextCtrl(CodingTextCtrl):
   def __init__(self, parent, winId):
     CodingTextCtrl.__init__(self,parent,winId)

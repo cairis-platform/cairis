@@ -22,6 +22,8 @@ import WidgetFactory
 from cairis.core.Borg import Borg
 from RoleEnvironmentPanel import RoleEnvironmentPanel
 
+__author__ = 'Shamal Faily'
+
 class RolePanel(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,ROLE_ID)

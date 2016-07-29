@@ -24,6 +24,8 @@ from ReferenceDialog import ReferenceDialog
 from ReferenceSynopsisDialog import ReferenceSynopsisDialog
 from ReferenceContributionDialog import ReferenceContributionDialog
 
+__author__ = 'Shamal Faily'
+
 class ReferenceListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,crTypeName,pName = '',boxSize=wx.DefaultSize):
     wx.ListCtrl.__init__(self,parent,winId,size=boxSize,style=wx.LC_REPORT)

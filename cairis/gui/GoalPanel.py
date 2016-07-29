@@ -23,6 +23,8 @@ from cairis.core.Borg import Borg
 from BasePanel import BasePanel
 from GoalEnvironmentPanel import GoalEnvironmentPanel
 
+__author__ = 'Shamal Faily'
+
 class GoalPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,GOAL_ID)

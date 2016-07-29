@@ -15,7 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.armid import *
 import WidgetFactory
@@ -23,6 +22,8 @@ from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from cairis.core.ThreatParameters import ThreatParameters
 from ThreatPanel import ThreatPanel
+
+__author__ = 'Shamal Faily'
 
 class ThreatDialog(wx.Dialog):
   def __init__(self,parent,parameters):

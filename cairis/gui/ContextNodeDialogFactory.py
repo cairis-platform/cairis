@@ -21,8 +21,9 @@ import gtk
 import gtk.glade
 import os
 from DomainNodeDialog import DomainNodeDialog
-
 from cairis.core.Borg import Borg
+
+__author__ = 'Shamal Faily'
 
 def build(url):
   dim,objtName = url.split('#')

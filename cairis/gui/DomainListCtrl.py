@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from DomainEntryDialog import DomainEntryDialog
 
+__author__ = 'Shamal Faily'
+
 class DomainListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId):
     wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT | wx.LC_SORT_ASCENDING)

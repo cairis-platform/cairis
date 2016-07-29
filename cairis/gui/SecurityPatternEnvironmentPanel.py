@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class SecurityPatternEnvironmentPanel(wx.Panel):
   def __init__(self,parent,patternId,cmEnvs = []):
     wx.Panel.__init__(self,parent,-1)

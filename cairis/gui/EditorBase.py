@@ -21,6 +21,8 @@ import os
 from cairis.core.armid import *
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class EditorBase(wx.Panel):
   def __init__(self,parent,id):
     wx.Panel.__init__(self,parent,id,size=(1150,400))

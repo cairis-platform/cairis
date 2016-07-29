@@ -23,6 +23,8 @@ from cairis.core.Borg import Borg
 from cairis.core.armid import *
 import wx
 
+__author__ = 'Shamal Faily'
+
 class GeneralPage(wx.Panel):
   def __init__(self,parent,isTask,taskComboShown):
     wx.Panel.__init__(self,parent)

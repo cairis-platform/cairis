@@ -23,6 +23,8 @@ from SingleObstaclePanel import SingleObstaclePanel
 from cairis.core.ObstacleParameters import ObstacleParameters
 from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
 
+__author__ = 'Shamal Faily'
+
 class SingleObstacleDialog(wx.Dialog):
   def __init__(self,parent,envName):
     wx.Dialog.__init__(self,parent,OBSTACLE_ID,'New Obstacle',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(500,400))

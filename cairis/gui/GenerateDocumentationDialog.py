@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from GenerateDocumentationPanel import GenerateDocumentationPanel
 
+__author__ = 'Shamal Faily'
+
 class GenerateDocumentationDialog(wx.Dialog):
   def __init__(self,parent):
     wx.Dialog.__init__(self,parent,GENDOCDIALOG_ID,'Generate documentation',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX,size=(250,700))

@@ -24,6 +24,8 @@ from SummaryDetailsNotebook import SummaryDetailsNotebook
 from PersonaEnvironmentPanel import PersonaEnvironmentPanel
 from PersonalImageView import PersonalImageView
 
+__author__ = 'Shamal Faily'
+
 class PersonaPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,PERSONA_ID)

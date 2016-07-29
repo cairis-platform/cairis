@@ -22,6 +22,8 @@ from EnvironmentListCtrl import EnvironmentListCtrl
 from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
 from TaskEnvironmentNotebook import TaskEnvironmentNotebook
 
+__author__ = 'Shamal Faily'
+
 class TaskEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):
     wx.Panel.__init__(self,parent,TASK_PANELENVIRONMENT_ID)

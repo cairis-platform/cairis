@@ -19,6 +19,7 @@
 import xdot
 from ChernoffFace import ChernoffFace
 
+__author__ = 'Shamal Faily'
 
 class RequirementShape(xdot.Shape,ChernoffFace):
   def __init__(self, pen, x0, y0, w, h,objtName,dp,filled=False):

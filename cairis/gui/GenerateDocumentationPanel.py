@@ -21,6 +21,8 @@ from RequirementsDocumentationPanel import RequirementsDocumentationPanel
 from PersonasDocumentationPanel import PersonasDocumentationPanel
 from cairis.core.armid import *
 
+__author__ = 'Shamal Faily'
+
 class GenerateDocumentationPanel(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,GENDOCPANEL_ID)

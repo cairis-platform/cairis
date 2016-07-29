@@ -24,6 +24,8 @@ from cairis.core.Borg import Borg
 from cairis.core.CountermeasureParameters import CountermeasureParameters
 from CountermeasureEnvironmentPanel import CountermeasureEnvironmentPanel
 
+__author__ = 'Shamal Faily'
+
 class CountermeasurePanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,COUNTERMEASURE_ID)

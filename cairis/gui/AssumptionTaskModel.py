@@ -24,6 +24,8 @@ from cairis.core.ARM import *
 import gtk
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class AssumptionTaskModel:
   def __init__(self,tlinks):
     self.theTraceLinks = tlinks

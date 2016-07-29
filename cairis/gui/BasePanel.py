@@ -19,6 +19,8 @@
 import wx
 from TagCtrl import TagCtrl
 
+__author__ = 'Shamal Faily'
+
 class BasePanel(wx.Panel):
   def init(self,parent,winId):
     wx.Panel.__init__(self,parent,winId)

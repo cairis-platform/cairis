@@ -15,12 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.armid import *
 from BasePanel import BasePanel
 from cairis.core.Borg import Borg
 from ThreatEnvironmentPanel import ThreatEnvironmentPanel
+
+__author__ = 'Shamal Faily'
 
 class ThreatPanel(BasePanel):
   def __init__(self,parent):

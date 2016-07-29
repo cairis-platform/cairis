@@ -22,6 +22,7 @@ from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
 from cairis.core.Requirement import Requirement
 import cairis.core.RequirementScoreFactory
 
+__author__ = 'Shamal Faily'
 
 class ChernoffFace:
   def __init__(self,objtName,dp):

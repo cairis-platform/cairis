@@ -19,6 +19,8 @@
 import wx.combo
 import os
 
+__author__ = 'Shamal Faily'
+
 class AssociationComboBox(wx.combo.OwnerDrawnComboBox):
 
   def OnDrawItem(self,dc,rect,item,flags):

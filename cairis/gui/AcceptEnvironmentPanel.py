@@ -22,6 +22,7 @@ from cairis.core.ARM import *
 from RiskEnvironmentListCtrl import RiskEnvironmentListCtrl
 from cairis.core.AcceptEnvironmentProperties import AcceptEnvironmentProperties
 
+__author__ = 'Shamal Faily'
 
 class AcceptEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):

@@ -15,13 +15,14 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.armid import *
 import WidgetFactory
 import cairis.core.TraceParameters
 import cairis.core.UpdateTraceParameters
 import TracePanel
+
+__author__ = 'Shamal Faily'
 
 class TraceDialog(wx.Dialog):
   def __init__(self,parent,parameters):

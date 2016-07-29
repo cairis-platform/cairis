@@ -25,6 +25,8 @@ from CodeNetworkModel import CodeNetworkModel
 from CodeRelationshipDialog import CodeRelationshipDialog
 from CodeRelationshipEditor import CodeRelationshipEditor
 
+__author__ = 'Shamal Faily'
+
 class CodeNetworkPanel(BasePanel):
   def __init__(self,parent,personaName,codeNet):
     BasePanel.__init__(self,parent,CODENETWORK_ID)

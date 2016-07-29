@@ -22,6 +22,8 @@ import WidgetFactory
 from cairis.core.Borg import Borg
 from cairis.core.DependencyParameters import DependencyParameters
 
+__author__ = 'Shamal Faily'
+
 class DependencyDialog(wx.Dialog):
   def __init__(self,parent,parameters):
     wx.Dialog.__init__(self,parent,DEPENDENCY_ID,'Dependency',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(900,400))

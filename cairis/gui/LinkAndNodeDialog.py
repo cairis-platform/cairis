@@ -20,6 +20,8 @@ import sys
 import gtk
 from NDImplementationDecorator import NDImplementationDecorator
 
+__author__ = 'Shamal Faily'
+
 class LinkAndNodeDialog:
   def __init__(self,objt,environmentName,dupProperty,overridingEnvironment,builder):
     self.window = builder.get_object("LinkAndNodeDialog")

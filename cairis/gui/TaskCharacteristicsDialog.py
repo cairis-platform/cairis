@@ -25,6 +25,8 @@ from TaskCharacteristicDialogParameters import TaskCharacteristicDialogParameter
 from cairis.core.ARM import *
 from DimensionBaseDialog import DimensionBaseDialog
 
+__author__ = 'Shamal Faily'
+
 class TaskCharacteristicsDialog(DimensionBaseDialog):
   def __init__(self,parent):
     DimensionBaseDialog.__init__(self,parent,TASKCHARACTERISTICS_ID,'Task Characteristics',(930,300),'task.png')

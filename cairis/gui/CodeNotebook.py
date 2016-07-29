@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from BasePanel import BasePanel
 
+__author__ = 'Shamal Faily'
+
 class MLTextPage(wx.Panel):
   def __init__(self,parent,winId):
     wx.Panel.__init__(self,parent)

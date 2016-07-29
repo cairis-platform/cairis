@@ -22,6 +22,8 @@ from StepGrid import StepGrid
 from ExceptionDialog import ExceptionDialog
 from ExceptionListCtrl import ExceptionListCtrl
 
+__author__ = 'Shamal Faily'
+
 class StepPanel(wx.Panel):
   def __init__(self,parent,envName):
     wx.Panel.__init__(self,parent,USECASE_PANELFLOW_ID)

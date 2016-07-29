@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from InterfaceListPanel import InterfaceListPanel
 
+__author__ = 'Shamal Faily'
+
 class InterfaceListDialog(wx.Dialog):
   def __init__(self,parent,ifName = '',ifType = '',arName = '',pName = ''):
     wx.Dialog.__init__(self,parent,INTERFACELISTDIALOG_ID,'Add Interface',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(300,200))

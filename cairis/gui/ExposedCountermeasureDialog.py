@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from ExposedCountermeasurePanel import ExposedCountermeasurePanel
 
+__author__ = 'Shamal Faily'
+
 class ExposedCountermeasureDialog(wx.Dialog):
   def __init__(self,parent,vulCms = []):
     wx.Dialog.__init__(self,parent,EXPOSEDCOUNTERMEASURE_ID,'Exposed countermeasures',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,500))

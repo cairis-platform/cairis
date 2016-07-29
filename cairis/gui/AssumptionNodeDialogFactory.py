@@ -22,8 +22,9 @@ import gtk.glade
 import os
 from DocumentReferenceNodeDialog import DocumentReferenceNodeDialog
 from ConceptReferenceNodeDialog import ConceptReferenceNodeDialog
-
 from cairis.core.Borg import Borg
+
+__author__ = 'Shamal Faily'
 
 def build(url,isApModel = True):
   dim,objtName = url.split('#')

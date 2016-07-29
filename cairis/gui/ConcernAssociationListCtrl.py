@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.ARM import *
 from ConcernAssociationDialog import ConcernAssociationDialog
 
+__author__ = 'Shamal Faily'
+
 class ConcernAssociationListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,dp,boxSize=wx.DefaultSize):
     wx.ListCtrl.__init__(self,parent,winId,size=boxSize,style=wx.LC_REPORT)

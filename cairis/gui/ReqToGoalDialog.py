@@ -23,6 +23,8 @@ from cairis.core.Borg import Borg
 from ReqToGoalPanel import ReqToGoalPanel
 from cairis.core.GoalParameters import GoalParameters
 
+__author__ = 'Shamal Faily'
+
 class ReqToGoalDialog(wx.Dialog):
   def __init__(self,parent,goalName,goalDef,goalCat,goalPri,goalFc,goalIssue,goalOrig,goalAssets,envName):
     wx.Dialog.__init__(self,parent,GOAL_ID,'Convert Requirement to Goal',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(600,400))

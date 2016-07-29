@@ -24,6 +24,8 @@ from DirectoryEntryDialog import DirectoryEntryDialog
 from SearchOptionsPanel import SearchOptionsPanel
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class SearchPanel(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,SEARCHMODEL_PANEL_ID)

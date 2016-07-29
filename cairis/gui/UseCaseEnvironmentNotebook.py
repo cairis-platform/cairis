@@ -15,12 +15,12 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.armid import *
 from StepPanel import StepPanel
 from UseCaseTextCtrl import UseCaseTextCtrl
 
+__author__ = 'Shamal Faily'
 
 class TextPage(wx.Panel):
   def __init__(self,parent,winId):

@@ -23,6 +23,7 @@ from RiskEnvironmentListCtrl import RiskEnvironmentListCtrl
 from DimensionListCtrl import DimensionListCtrl
 from cairis.core.MitigateEnvironmentProperties import MitigateEnvironmentProperties
 
+__author__ = 'Shamal Faily'
 
 class MitigateEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):

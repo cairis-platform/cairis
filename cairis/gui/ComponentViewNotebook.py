@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from ComponentListCtrl import ComponentListCtrl
 from ConnectorListCtrl import ConnectorListCtrl
 
+__author__ = 'Shamal Faily'
+
 class MLTextPage(wx.Panel):
   def __init__(self,parent,winId):
     wx.Panel.__init__(self,parent)

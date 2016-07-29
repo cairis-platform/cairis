@@ -22,6 +22,8 @@ from BasePanel import BasePanel
 import cairis.core.Code
 from CodeNotebook import CodeNotebook
 
+__author__ = 'Shamal Faily'
+
 class CodePanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,CODE_ID)

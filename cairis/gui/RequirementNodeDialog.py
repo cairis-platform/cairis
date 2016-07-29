@@ -19,6 +19,8 @@
 import sys
 import gtk
 
+__author__ = 'Shamal Faily'
+
 class RequirementNodeDialog:
   def __init__(self,objt,builder):
     self.window = builder.get_object("RequirementNodeDialog")

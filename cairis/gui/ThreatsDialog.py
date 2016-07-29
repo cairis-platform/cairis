@@ -15,7 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.armid import *
 from ThreatDialog import ThreatDialog
@@ -23,6 +22,8 @@ from DialogClassParameters import DialogClassParameters
 from DirectoryDialog import DirectoryDialog
 import DimensionBaseDialog
 from cairis.core.ARM import *
+
+__author__ = 'Shamal Faily'
 
 class ThreatsDialog(DimensionBaseDialog.DimensionBaseDialog):
   def __init__(self,parent):

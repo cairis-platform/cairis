@@ -16,13 +16,14 @@
 #  under the License.
 
 
-#$URL$ $Id: ExceptionDialog.py 334 2010-11-07 19:44:00Z shaf $
 import wx
 from cairis.core.armid import *
 from cairis.core.ARM import *
 import WidgetFactory
 from ExceptionPanel import ExceptionPanel
 from cairis.core.Borg import Borg
+
+__author__ = 'Shamal Faily'
 
 class ExceptionDialog(wx.Dialog):
   def __init__(self,parent,envName,eName = '', eDimType = 'goal', eDimName = '', eCat = '', eDef = ''):

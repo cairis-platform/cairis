@@ -22,6 +22,8 @@ from DimensionListCtrl import DimensionListCtrl
 from SingleEnvironmentDialog import SingleEnvironmentDialog
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class EnvironmentListCtrl(DimensionListCtrl):
   def __init__(self,parent,winId,dp):
     DimensionListCtrl.__init__(self,parent,winId,wx.DefaultSize,'Environment','environment',dp,'Context of use',wx.LC_REPORT | wx.LC_SINGLE_SEL)

@@ -19,6 +19,8 @@
 import wx
 import wx.combo
 
+__author__ = 'Shamal Faily'
+
 class ListCtrlComboPopup(wx.ListCtrl, wx.combo.ComboPopup):
   def __init__(self):
     self.PostCreate(wx.PreListCtrl())

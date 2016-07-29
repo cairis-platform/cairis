@@ -22,6 +22,8 @@ from envxdot import EnvironmentDotWindow
 from cairis.core.ARM import *
 import NodeDialogFactory
 
+__author__ = 'Shamal Faily'
+
 class EnvironmentModelViewer(EnvironmentDotWindow):
   def __init__(self,environmentName,dp):
     EnvironmentDotWindow.__init__(self,environmentName,dp)

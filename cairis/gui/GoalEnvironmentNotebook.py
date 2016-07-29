@@ -22,6 +22,8 @@ from DimensionListCtrl import DimensionListCtrl
 from GoalPage import GoalPage
 from ConcernAssociationListCtrl import ConcernAssociationListCtrl
 
+__author__ = 'Shamal Faily'
+
 class SummaryPage(wx.Panel):
   def __init__(self,parent,refiningGoal):
     wx.Panel.__init__(self,parent,GOAL_PANELSUMMARY_ID)

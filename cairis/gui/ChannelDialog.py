@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 import WidgetFactory
 
+__author__ = 'Shamal Faily'
+
 class ChannelDialog(wx.Dialog):
   def __init__(self,parent):
     wx.Dialog.__init__(self,parent,CHANNEL_ID,'Add Channel',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,150))

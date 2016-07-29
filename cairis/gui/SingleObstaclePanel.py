@@ -23,6 +23,8 @@ import cairis.core.Obstacle
 from cairis.core.Borg import Borg
 from ObstacleEnvironmentNotebook import ObstacleEnvironmentNotebook
 
+__author__ = 'Shamal Faily'
+
 class SingleObstaclePanel(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,OBSTACLE_ID)

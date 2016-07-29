@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 import cairis.core.ExternalDocument
 
+__author__ = 'Shamal Faily'
+
 class ExternalDocumentPanel(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent,EXTERNALDOCUMENT_ID)

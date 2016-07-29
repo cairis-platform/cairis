@@ -27,6 +27,7 @@ from SingleRequirementDialog import SingleRequirementDialog
 from cairis.core.GoalAssociationParameters import GoalAssociationParameters
 import cairis.core.RequirementFactory
 
+__author__ = 'Shamal Faily'
 
 class NarrativeCtrl(CodingTextCtrl):
   def __init__(self,parent,winId):

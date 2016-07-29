@@ -15,13 +15,12 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$ $Id: ExceptionPanel.py 424 2011-02-25 21:29:47Z shaf $
-
 import wx
 from cairis.core.armid import *
 import WidgetFactory
 from cairis.core.Borg import Borg
+
+__author__ = 'Shamal Faily'
 
 class ExceptionPanel(wx.Panel):
   def __init__(self,parent,envName):

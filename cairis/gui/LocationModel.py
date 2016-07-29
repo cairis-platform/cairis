@@ -24,6 +24,8 @@ import gtk
 from cairis.core.colourcodes import threatColourCode
 from cairis.core.colourcodes import riskTextColourCode
 
+__author__ = 'Shamal Faily'
+
 class LocationModel:
   def __init__(self,locsName,envName,riskOverlay):
     b = Borg()

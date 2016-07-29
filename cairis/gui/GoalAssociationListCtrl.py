@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from cairis.core.ARM import *
 from GoalRefinementDialog import GoalRefinementDialog
 
+__author__ = 'Shamal Faily'
+
 class GoalAssociationListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,dp,goalList=False,boxSize=wx.DefaultSize):
     wx.ListCtrl.__init__(self,parent,winId,size=boxSize,style=wx.LC_REPORT)

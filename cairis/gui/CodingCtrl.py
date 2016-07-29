@@ -10,6 +10,8 @@ from cairis.core.armid import *
 from CodingTextCtrl import CodingTextCtrl
 from CodeMarginCtrl import CodeMarginCtrl
 
+__author__ = 'Shamal Faily'
+
 class CodingCtrl(wx.SplitterWindow):
   def __init__(self,parent, winId):
     wx.SplitterWindow.__init__(self,parent,winId)

@@ -22,6 +22,8 @@ from cairis.core.Borg import Borg
 from cairis.core.ClassAssociationParameters import ClassAssociationParameters
 from NDImplementationDecorator import NDImplementationDecorator
 
+__author__ = 'Shamal Faily'
+
 class AssetAssociationNodeDialog:
   def __init__(self,objt,environmentName,builder):
     self.window = builder.get_object("AssetAssociationNodeDialog")

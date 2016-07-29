@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from DimensionListCtrl import DimensionListCtrl
 from cairis.core.Environment import Environment
 
+__author__ = 'Shamal Faily'
+
 class EnvironmentPropertiesPanel(wx.Panel):
   def __init__(self,parent,dp):
     wx.Panel.__init__(self,parent,ENVIRONMENT_PANELENVIRONMENTPROPERTIES_ID)

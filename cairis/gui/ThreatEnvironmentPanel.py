@@ -15,7 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.armid import *
 from DimensionListCtrl import DimensionListCtrl
@@ -24,6 +23,7 @@ from PropertiesListCtrl import PropertiesListCtrl
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from cairis.core.ValueDictionary import ValueDictionary
 
+__author__ = 'Shamal Faily'
 
 class ThreatEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):

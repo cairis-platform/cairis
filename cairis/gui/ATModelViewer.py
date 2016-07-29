@@ -24,6 +24,8 @@ import os
 from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class ATModelViewer(atxdot.ATDotWindow):
   def __init__(self,tName = ''):
     atxdot.ATDotWindow.__init__(self)

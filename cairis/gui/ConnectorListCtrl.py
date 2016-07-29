@@ -23,6 +23,8 @@ from cairis.core.Borg import Borg
 from ConnectorDialog import ConnectorDialog
 from cairis.core.ConnectorParameters import ConnectorParameters
 
+__author__ = 'Shamal Faily'
+
 class ConnectorListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId = COMPONENTVIEW_LISTCONNECTORS_ID):
     wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT)

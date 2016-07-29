@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from SecurityPatternEnvironmentPanel import SecurityPatternEnvironmentPanel
 
+__author__ = 'Shamal Faily'
+
 class SecurityPatternEnvironmentDialog(wx.Dialog):
   def __init__(self,parent,patternId,cmEnvs = []):
     wx.Dialog.__init__(self,parent,SPENVIRONMENT_ID,'Situate pattern',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,500))

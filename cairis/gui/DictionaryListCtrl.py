@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from DictionaryEntryDialog import DictionaryEntryDialog
 
+__author__ = 'Shamal Faily'
+
 class DictionaryListCtrl(wx.ListCtrl):
   def __init__(self,parent):
     wx.ListCtrl.__init__(self,parent,PROJECTSETTINGS_LISTDICTIONARY_ID,size=wx.DefaultSize,style=wx.LC_REPORT | wx.LC_SORT_ASCENDING)

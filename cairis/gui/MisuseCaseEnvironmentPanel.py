@@ -22,6 +22,7 @@ from EnvironmentListCtrl import EnvironmentListCtrl
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from MisuseCaseNotebook import MisuseCaseNotebook
 
+__author__ = 'Shamal Faily'
 
 class MisuseCaseEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):

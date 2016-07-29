@@ -19,6 +19,8 @@
 import wx
 from cairis.core.armid import *
 
+__author__ = 'Shamal Faily'
+
 class RequirementHistoryDialog(wx.Dialog):
   def __init__(self,parent,history):
     wx.Dialog.__init__(self,parent,REQUIREMENTHISTORY_ID,'Requirement History',style=wx.DEFAULT_DIALOG_STYLE|wx.THICK_FRAME|wx.RESIZE_BORDER|wx.MAXIMIZE_BOX,size=(1000,300))

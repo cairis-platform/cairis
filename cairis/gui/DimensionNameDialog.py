@@ -22,6 +22,8 @@ import os
 from cairis.core.ARM import *
 from cairis.core.Borg import *
 
+__author__ = 'Shamal Faily'
+
 class DimensionNameDialog(wx.Dialog):
   def __init__(self,parent,dimensionName,dimensions,actionVerb,dialogSize=wx.DefaultSize):
     wx.Dialog.__init__(self,parent,DIMNAME_ID,actionVerb + ' ' + dimensionName,style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=dialogSize)

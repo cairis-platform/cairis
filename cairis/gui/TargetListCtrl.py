@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from TargetDialog import TargetDialog
 from cairis.core.Target import Target
 
+__author__ = 'Shamal Faily'
+
 class TargetListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,boxSize=wx.DefaultSize):
     wx.ListCtrl.__init__(self,parent,winId,size=boxSize,style=wx.LC_REPORT)

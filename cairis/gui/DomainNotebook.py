@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 from DomainListCtrl import DomainListCtrl
 
+__author__ = 'Shamal Faily'
+
 class DetailsPage(wx.Panel):
   def __init__(self,parent):
     wx.Panel.__init__(self,parent)

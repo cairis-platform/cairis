@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 import cairis.core.MySQLDatabaseProxy
 
+__author__ = 'Shamal Faily'
+
 class GoalRefinementDialog(wx.Dialog):
   def __init__(self,parent,dp,envName,subGoal='',subGoalDim='',refinement='',alternate='',rationale='',isGoal=False):
     wx.Dialog.__init__(self,parent,GOALREFINEMENT_ID,'Add Goal Refinement',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,400))

@@ -23,6 +23,8 @@ import cairis.core.Component
 from cairis.core.Borg import Borg
 from ComponentNotebook import ComponentNotebook
 
+__author__ = 'Shamal Faily'
+
 class ComponentPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,COMPONENT_ID)

@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 import WidgetFactory
 
+__author__ = 'Shamal Faily'
+
 class TaskPersonaDialog(wx.Dialog):
   def __init__(self,parent,setPersonas,currentEnvironmentName,dp,pName='',pDur='',pFreq='',pDem='',pGsup=''):
     wx.Dialog.__init__(self,parent,TASKPERSONA_ID,'Add Task Persona',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,300))

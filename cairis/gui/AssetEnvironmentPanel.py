@@ -23,6 +23,8 @@ from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 from EnvironmentListCtrl import EnvironmentListCtrl
 from AssetEnvironmentNotebook import AssetEnvironmentNotebook
 
+__author__ = 'Shamal Faily'
+
 class AssetEnvironmentPanel(wx.Panel):
   def __init__(self,parent,dp):
     wx.Panel.__init__(self,parent,ASSET_PANELENVIRONMENT_ID)

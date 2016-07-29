@@ -15,9 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$ $Id: UseCasePanel.py 531 2011-11-17 00:11:24Z shaf $
-
 import wx
 from cairis.core.armid import *
 from cairis.core.Borg import Borg
@@ -25,6 +22,8 @@ from BasePanel import BasePanel
 from cairis.core.UseCase import UseCase
 from DimensionListCtrl import DimensionListCtrl
 from UseCaseEnvironmentPanel import UseCaseEnvironmentPanel
+
+__author__ = 'Shamal Faily'
 
 class UseCasePanel(BasePanel):
   def __init__(self,parent):

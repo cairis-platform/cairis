@@ -19,6 +19,8 @@
 import wx
 from cairis.core.armid import *
 
+__author__ = 'Shamal Faily'
+
 class DimensionListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,boxSize,columnLabel,dimensionTable,dp,toolTipTxt='',listStyle=wx.LC_REPORT):
     wx.ListCtrl.__init__(self,parent,winId,size=boxSize,style=listStyle)

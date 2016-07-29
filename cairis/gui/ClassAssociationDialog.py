@@ -22,6 +22,8 @@ import WidgetFactory
 from cairis.core.Borg import Borg
 from cairis.core.ClassAssociationParameters import ClassAssociationParameters
 
+__author__ = 'Shamal Faily'
+
 class ClassAssociationDialog(wx.Dialog):
   def __init__(self,parent,parameters):
     wx.Dialog.__init__(self,parent,CLASSASSOCIATION_ID,'Asset association',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(400,600))

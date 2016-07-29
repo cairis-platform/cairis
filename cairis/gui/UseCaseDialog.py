@@ -15,8 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$ $Id: UseCaseDialog.py 530 2011-11-16 19:29:16Z shaf $
 import wx
 from cairis.core.armid import *
 from cairis.core.UseCaseParameters import UseCaseParameters
@@ -24,6 +22,8 @@ import WidgetFactory
 from UseCasePanel import UseCasePanel
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
 from cairis.core.Borg import Borg
+
+__author__ = 'Shamal Faily'
 
 class UseCaseDialog(wx.Dialog):
   def __init__(self,parent,parameters):

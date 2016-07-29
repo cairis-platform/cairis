@@ -15,15 +15,14 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
-#$URL$ $Id: UseCaseEnvironmentPanel.py 449 2011-03-22 12:40:04Z shaf $
-
 import wx
 from cairis.core.armid import *
 from cairis.core.Borg import Borg
 from EnvironmentListCtrl import EnvironmentListCtrl
 from UseCaseEnvironmentNotebook import UseCaseEnvironmentNotebook
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
+
+__author__ = 'Shamal Faily'
 
 class UseCaseEnvironmentPanel(wx.Panel):
   def __init__(self,parent):

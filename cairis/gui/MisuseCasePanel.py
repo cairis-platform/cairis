@@ -21,6 +21,8 @@ from cairis.core.armid import *
 import WidgetFactory
 from MisuseCaseEnvironmentPanel import MisuseCaseEnvironmentPanel
 
+__author__ = 'Shamal Faily'
+
 class MisuseCasePanel(wx.Panel):
   def __init__(self,parent,dp):
     wx.Panel.__init__(self,parent,MISUSECASE_ID)

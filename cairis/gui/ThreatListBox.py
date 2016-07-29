@@ -15,9 +15,10 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 import DimensionListBox
+
+__author__ = 'Shamal Faily'
 
 class ThreatListBox(DimensionListBox.DimensionListBox):
   def __init__(self,parent,winId,boxSize,dimensionTable,dp):

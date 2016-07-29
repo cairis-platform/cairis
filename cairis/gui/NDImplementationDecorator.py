@@ -19,6 +19,8 @@
 import gtk
 import os
 
+__author__ = 'Shamal Faily'
+
 class NDImplementationDecorator:
   def __init__(self,builder):
     self.theBuilder = builder

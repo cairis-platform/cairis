@@ -15,12 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 from cairis.core.armid import *
 import wx
 from cairis.core.Borg import Borg
 from TraceExplorer import TraceExplorer
 from cairis.core.ARM import *
+
+__author__ = 'Shamal Faily'
 
 class TraceableList(wx.ListCtrl):
 

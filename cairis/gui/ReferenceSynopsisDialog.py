@@ -23,6 +23,8 @@ from cairis.core.Borg import Borg
 from cairis.core.ReferenceSynopsis import ReferenceSynopsis
 from ReferenceSynopsisPanel import ReferenceSynopsisPanel
 
+__author__ = 'Shamal Faily'
+
 class ReferenceSynopsisDialog(wx.Dialog):
   def __init__(self,parent,objt,charDetails = None):
     wx.Dialog.__init__(self,parent,-1,'Edit Reference Synopsis',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX,size=(475,250))

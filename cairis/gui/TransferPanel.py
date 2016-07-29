@@ -15,13 +15,14 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.armid import *
 import WidgetFactory
 from cairis.core.Borg import Borg
 from numpy import *
 from cairis.core.ResponseParameters import ResponseParameters
+
+__author__ = 'Shamal Faily'
 
 class TransferPanel(wx.Panel):
   def __init__(self,parent):

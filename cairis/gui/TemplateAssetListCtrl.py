@@ -21,8 +21,9 @@ from cairis.core.armid import *
 import cairis.core.AssetParametersFactory
 from cairis.core.Borg import Borg
 from DimensionNameDialog import DimensionNameDialog
-
 from cairis.core.ARM import *
+
+__author__ = 'Shamal Faily'
 
 class TemplateAssetListCtrl(wx.ListCtrl):
 

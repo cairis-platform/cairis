@@ -22,6 +22,8 @@ from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from GoalObstacleDialog import GoalObstacleDialog
 
+__author__ = 'Shamal Faily'
+
 class GoalObstacleListCtrl(wx.ListCtrl):
   def __init__(self,parent,winId,cvName,envName):
     wx.ListCtrl.__init__(self,parent,winId,size=wx.DefaultSize,style=wx.LC_REPORT)

@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 from DimensionListCtrl import DimensionListCtrl
 
+__author__ = 'Shamal Faily'
+
 class CountermeasureRoleListCtrl(DimensionListCtrl):
   def __init__(self,parent,dp,personaList):
     DimensionListCtrl.__init__(self,parent,COUNTERMEASURE_LISTROLES_ID,wx.DefaultSize,'Role','role',dp,listStyle=wx.LC_REPORT | wx.LC_SINGLE_SEL)

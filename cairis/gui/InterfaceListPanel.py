@@ -21,6 +21,8 @@ from cairis.core.armid import *
 from BasePanel import BasePanel
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class InterfaceListPanel(BasePanel):
   def __init__(self,parent):
     BasePanel.__init__(self,parent,INTERFACELISTDIALOG_ID)

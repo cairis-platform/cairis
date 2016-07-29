@@ -15,7 +15,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
 import wx
 from cairis.core.ObjectFactory import *
 from cairis.core.armid import *
@@ -25,6 +24,8 @@ import DialogClassParameters
 import TraceDialogParameters
 import DimensionBaseDialog
 from cairis.core.ARM import *
+
+__author__ = 'Shamal Faily'
 
 class TracesDialog(DimensionBaseDialog.DimensionBaseDialog):
   def __init__(self,parent):

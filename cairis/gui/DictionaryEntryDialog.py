@@ -20,6 +20,8 @@ import wx
 from cairis.core.armid import *
 import WidgetFactory
 
+__author__ = 'Shamal Faily'
+
 class DictionaryEntryDialog(wx.Dialog):
   def __init__(self,parent,name = '',definition = ''):
     wx.Dialog.__init__(self,parent,DICTIONARYENTRY_ID,'Add Dictionary Entry',style=wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.THICK_FRAME|wx.RESIZE_BORDER,size=(500,300))

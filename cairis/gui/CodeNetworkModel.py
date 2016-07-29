@@ -23,6 +23,8 @@ import wx
 import os
 from cairis.core.ARM import *
 
+__author__ = 'Shamal Faily'
+
 class CodeNetworkModel:
   def __init__(self,codeNetwork,personaName,graphName = 'codenetwork'):
     self.theCodeNetwork = codeNetwork

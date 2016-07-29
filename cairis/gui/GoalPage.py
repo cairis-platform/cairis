@@ -19,6 +19,8 @@
 import wx
 from GoalAssociationListCtrl import GoalAssociationListCtrl
 
+__author__ = 'Shamal Faily'
+
 class GoalPage(wx.Panel):
   def __init__(self,parent,winId,isGoal,dp):
     wx.Panel.__init__(self,parent)

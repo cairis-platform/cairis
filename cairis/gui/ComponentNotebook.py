@@ -23,6 +23,8 @@ from DimensionListCtrl import DimensionListCtrl
 from InterfacePage import InterfacePage
 from cairis.core.Borg import Borg
 
+__author__ = 'Shamal Faily'
+
 class MLTextPage(wx.Panel):
   def __init__(self,parent,winId):
     wx.Panel.__init__(self,parent)
