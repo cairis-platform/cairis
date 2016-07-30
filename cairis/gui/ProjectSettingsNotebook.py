@@ -21,7 +21,6 @@ from cairis.core.armid import *
 from DictionaryListCtrl import DictionaryListCtrl
 from ContributorListCtrl import ContributorListCtrl
 from RevisionListCtrl import RevisionListCtrl
-from DomainListCtrl import DomainListCtrl
 from PersonalImageView import PersonalImageView
 
 __author__ = 'Shamal Faily'

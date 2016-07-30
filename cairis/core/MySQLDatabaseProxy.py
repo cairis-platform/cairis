@@ -442,55 +442,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting requirement ' + reqId + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
 
-  def getDomains(self,constraintId = -1):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call getDomains(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Undefined error while getting domains'
-        raise DatabaseProxyException(exceptionText) 
-      domains = []
-      for row in curs.fetchall():
-        row = list(row)
-        domainId = row[0]
-        domainName = row[1]
-        shortCode = row[2]
-        domainDesc = row[3]
-        domainType = row[4]
-        givenIndicator = row[5]
-        domains.append((domainId,domainName,shortCode,domainDesc,domainType,givenIndicator))
-      curs.close()
-      domDict = {}
-      for domainId,domainName,shortCode,domainDesc,domainType,givenIndicator in domains:
-        domainAssociations = self.getDomainAssociations(domainId)
-        domParameters = DomainParameters(domainName,shortCode,domainDesc,domainType,givenIndicator,domainAssociations)
-        dom = ObjectFactory.build(domainId,domParameters)
-        domDict[domainName] = dom
-      return domDict
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error loading requirement module ' + modName + ' (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
-
-  def getDomainAssociations(self,domainId):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call getDomainAssociations(%s)',[domainId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Undefined error while getting domains associated with domain id ' + str(domainId)
-        raise DatabaseProxyException(exceptionText) 
-      domains = []
-      for row in curs.fetchall():
-        row = list(row)
-        domainAssociation = DomainAssociation('domain','domainname','domain',row[0],row[1])
-        domains.append(domainAssociation)
-      curs.close()
-      return domains
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting domains associated with domain id ' + str(domainId) + ' (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
-
   def getOrderedRequirements(self,constraintId = '',isAsset = True):
     try:
       curs = self.conn.cursor()
@@ -4773,25 +4724,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       parameters = ClassAssociationParameters(environmentName,assetName,'asset',headNav,headAdornment,headNry,headRole,tailRole,tailNry,tailAdornment,tailNav,'asset',tailAsset)
       self.addClassAssociation(parameters) 
 
-  def addDomainAssociations(self,domainId,domainAssociations):
-    for toDomain,domPhen,cDom in domainAssociations:
-      self.addDomainAssociation(domainId,toDomain,domPhen,cDom) 
-
-  def addDomainAssociation(self,domainId,toDomainName,domPhen,cDom):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call add_domain_association(%s,%s,%s,%s)',[domainId,toDomainName,domPhen,cDom])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error adding domain association from domain id ' + str(domainId) + ' to domain ' + toDomainName
-        raise DatabaseProxyException(exceptionText) 
-      curs.close()
-
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding domain association from domain id ' + str(domainId) + ' to domain ' + toDomainName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
   def goalLabel(self,goalId,environmentId):
     try:
       curs = self.conn.cursor()
@@ -5367,57 +5299,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting requirement versions (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
-
-  def addDomain(self,parameters):
-    domainId = self.newId()
-    modName = parameters.name()
-    modShortCode = parameters.shortCode()
-    modDesc = parameters.description()
-    domType = parameters.type()
-    givenIndicator = parameters.given()
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call addDomain(%s,%s,%s,%s,%s,%s)',[domainId,modName,modShortCode,modDesc,domType,givenIndicator])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new requirement module ' + modName
-        raise DatabaseProxyException(exceptionText) 
-      self.addDomainAssociations(domainId,parameters.domains())
-      self.conn.commit()
-      curs.close()
-      return domainId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding requirement module ' + modName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
-  def updateDomain(self,parameters):
-    domainId = parameters.id()
-    modName = parameters.name()
-    modShortCode = parameters.shortCode()
-    modDesc = parameters.description()
-    domType = parameters.type()
-    givenIndicator = parameters.given()
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call deleteDomainComponents(%s)',[domainId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating domain ' + modName
-        raise DatabaseProxyException(exceptionText) 
-      curs.execute('call updateDomain(%s,%s,%s,%s,%s,%s)',[domainId,modName,modShortCode,modDesc,domType,givenIndicator])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating requirement module ' + modName
-        raise DatabaseProxyException(exceptionText) 
-      self.addDomainAssociations(domainId,parameters.domains())
-      self.conn.commit()
-      curs.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating requirement module ' + modName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
-  def deleteDomain(self,r):
-    self.deleteObject(r,'domain')
-    self.conn.commit()
 
   def contextModelElements(self,envName):
     try:
