@@ -77,6 +77,18 @@ class RequirementTest(unittest.TestCase):
     self.assertEqual(str(ireq.type()),str(oreq.type()))
     self.assertEqual(str(ireq.asset()),str(oreq.asset()))
 
+    soreqs = b.dbProxy.getRequirement(oreq.label())
+    soreq = soreqs[ireq.description()]
+    self.assertEqual(str(oreq.name()),str(soreq.name()))
+    self.assertEqual(str(oreq.description()),str(soreq.description()))
+    self.assertEqual(str(oreq.rationale()),str(soreq.rationale()))
+    self.assertEqual(str(oreq.fitCriterion()),str(soreq.fitCriterion()))
+    self.assertEqual(str(oreq.version()),str(soreq.version()))
+    self.assertEqual(str(oreq.originator()),str(soreq.originator()))
+    self.assertEqual(str(oreq.type()),str(soreq.type()))
+    self.assertEqual(str(oreq.asset()),str(soreq.asset()))
+
+
     uireq = oreq
     uireq.update('description','revised description')
     uireq.update('name','revised name')
@@ -94,7 +106,6 @@ class RequirementTest(unittest.TestCase):
     self.assertEqual(str(uireq.originator()),str(uoreq.originator()))
     self.assertEqual(str(uireq.type()),str(uoreq.type()))
     self.assertEqual(str(uireq.asset()),str(uoreq.asset()))
-
 
     b.dbProxy.deleteRequirement(ireq.id())
 

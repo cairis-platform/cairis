@@ -431,7 +431,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         originator = row[ORIGINATOR_COL]
         reqType = row[TYPE_COL]
         reqVersion = row[VERSION_COL]
-        r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqVersion)
+        reqDomain = row[ASSET_COL]
+        r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
         reqDict[reqDesc] = r
       curs.close()
       return reqDict
