@@ -96,11 +96,9 @@ class RiskTest(unittest.TestCase):
     self.ovtv = b.dbProxy.getValueTypes('vulnerability_type')
     self.iassets = d['assets']
     self.iaeps1 = [AssetEnvironmentProperties(self.iassets[0]["theEnvironmentProperties"][0][0],self.iassets[0]["theEnvironmentProperties"][0][1],self.iassets[0]["theEnvironmentProperties"][0][2])]
-    self.iaeps2 = [AssetEnvironmentProperties(self.iassets[1]["theEnvironmentProperties"][0][0],self.iassets[1]["theEnvironmentProperties"][0][1],self.iassets[1]["theEnvironmentProperties"][0][2])]
-    self.iaeps3 = [AssetEnvironmentProperties(self.iassets[2]["theEnvironmentProperties"][0][0],self.iassets[2]["theEnvironmentProperties"][0][1],self.iassets[2]["theEnvironmentProperties"][0][2])]
     self.iap1 = AssetParameters(self.iassets[0]["theName"],self.iassets[0]["theShortCode"],self.iassets[0]["theDescription"],self.iassets[0]["theSignificance"],self.iassets[0]["theType"],"0","N/A",[],[],self.iaeps1)
-    self.iap2 = AssetParameters(self.iassets[1]["theName"],self.iassets[1]["theShortCode"],self.iassets[1]["theDescription"],self.iassets[1]["theSignificance"],self.iassets[1]["theType"],"0","N/A",[],[],self.iaeps2)
-    self.iap3 = AssetParameters(self.iassets[2]["theName"],self.iassets[2]["theShortCode"],self.iassets[2]["theDescription"],self.iassets[2]["theSignificance"],self.iassets[2]["theType"],"0","N/A",[],[],self.iaeps3)
+    self.iap2 = AssetParameters(self.iassets[1]["theName"],self.iassets[1]["theShortCode"],self.iassets[1]["theDescription"],self.iassets[1]["theSignificance"],self.iassets[1]["theType"],"0","N/A",[],[],self.iaeps1)
+    self.iap3 = AssetParameters(self.iassets[2]["theName"],self.iassets[2]["theShortCode"],self.iassets[2]["theDescription"],self.iassets[2]["theSignificance"],self.iassets[2]["theType"],"0","N/A",[],[],self.iaeps1)
     b.dbProxy.addAsset(self.iap1)
     b.dbProxy.addAsset(self.iap2)
     b.dbProxy.addAsset(self.iap3)
@@ -129,6 +127,12 @@ class RiskTest(unittest.TestCase):
     self.assertEqual(irp.name(), o.name())
     self.assertEqual(irp.threat(),o.threat())
     self.assertEqual(irp.vulnerability(),o.vulnerability())
+
+    scoreDetails = b.dbProxy.riskScore(self.iRisks[0]["threatName"],self.iRisks[0]["vulName"],self.iaeps1[0].name())
+    preScore = scoreDetails[0][1]
+    postScore = scoreDetails[0][2]
+    self.assertEqual(preScore,9)
+    self.assertEqual(postScore,9)
 
     imcp.theName = 'Updated risk'
     imcp.theId = o.misuseCase().id()

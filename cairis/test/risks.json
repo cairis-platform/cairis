@@ -148,16 +148,8 @@
      "theEnvironmentProperties" :
       [
         ["Day",
-         [0,2,0,0,0,0,0,0], 
+         [0,2,3,2,0,0,0,0], 
          ["None","","None","None","None","None","None","None"]
-        ],
-        ["Day",
-         [0,0,3,0,0,0,0,0], 
-         ["None","None","","None","None","None","None","None"]
-        ],
-        ["Day",
-         [0,0,0,2,0,0,0,0], 
-         ["None","None","None","","None","None","None","None"]
         ]
       ]
     },
