@@ -472,22 +472,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
   
   
-  def lastId(self):
-    try: 
-      curs = self.conn.cursor()
-      curs.execute('call lastId()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting last id'
-        raise DatabaseProxyException(exceptionText) 
-      row = curs.fetchone()
-      lastId = row[0]
-      curs.close()
-      return lastId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting latest identifier (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
-
   def newId(self):
     try: 
       curs = self.conn.cursor()
