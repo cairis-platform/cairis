@@ -77,8 +77,6 @@ from GoalAssociationParameters import GoalAssociationParameters
 from DependencyParameters import DependencyParameters
 from GoalEnvironmentProperties import GoalEnvironmentProperties
 from ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
-from DomainParameters import DomainParameters
-from DomainAssociation import DomainAssociation
 from ValueTypeParameters import ValueTypeParameters
 from ExternalDocumentParameters import ExternalDocumentParameters
 from InternalDocumentParameters import InternalDocumentParameters
