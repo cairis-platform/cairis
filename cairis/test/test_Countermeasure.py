@@ -196,11 +196,19 @@ class CountermeasureTest(unittest.TestCase):
     b.dbProxy.addCountermeasure(icm)
     ocms = b.dbProxy.getCountermeasures()
     ocm = ocms[self.iCountermeasures[0]["theName"]]
-
     self.assertEqual(icm.name(), ocm.name())
     self.assertEqual(icm.type(),ocm.type())
     self.assertEqual(icm.description(),ocm.description())
-    
+
+    icm.theName = 'Updated countermeasure'
+    icm.setId(ocm.id())
+    b.dbProxy.updateCountermeasure(icm)
+    ocms = b.dbProxy.getCountermeasures()
+    ocm = ocms['Updated countermeasure']
+    self.assertEqual('Updated countermeasure', ocm.name())
+    self.assertEqual(icm.type(),ocm.type())
+    self.assertEqual(icm.description(),ocm.description())
+
     b.dbProxy.deleteCountermeasure(ocm.id())
   
   def tearDown(self):
