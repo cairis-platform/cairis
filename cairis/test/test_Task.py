@@ -99,12 +99,13 @@ class TaskTest(unittest.TestCase):
     self.assertEqual(iTask.objective(),oTask.objective())
     self.assertEqual(iTask.assumption(),oTask.assumption())
     self.assertEqual(iTask.author(),oTask.author())
-    self.assertEqual(iTask.environmentProperties()[0].personas(),oTask.environmentProperties()[0].personas())
-    self.assertEqual(iTask.environmentProperties()[0].assets(),oTask.environmentProperties()[0].assets())
-    self.assertEqual(iTask.environmentProperties()[0].narrative(),oTask.environmentProperties()[0].narrative())
+    self.assertEqual(iTask.environmentProperties()[0].personas(),oTask.personas(envName,'',envName))
+    self.assertEqual(iTask.environmentProperties()[0].assets(),oTask.assets(envName,''))
+    self.assertEqual(iTask.environmentProperties()[0].narrative(),oTask.narrative(envName,''))
     self.assertEqual(iTask.environmentProperties()[0].consequences(),oTask.environmentProperties()[0].consequences())
     self.assertEqual(iTask.environmentProperties()[0].benefits(),oTask.environmentProperties()[0].benefits())
     self.assertEqual(iTask.environmentProperties()[0].dependencies(),oTask.environmentProperties()[0].dependencies())
+    self.assertEqual(oTask.usability(envName,''),5)
 
     iTask.theName = 'Updated name'
     iTask.setId(oTask.id())
