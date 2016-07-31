@@ -1,6 +1,21 @@
-/**
- * Created by Raf on 30/04/2015.
- */
+/*  Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+    Authors: Raf Vandelaer, Shamal Faily */
 
 
 
@@ -205,6 +220,46 @@ $('#riskView').click(function(){
             debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
     })});
+
+
+/*
+ When riskview is clicked
+ */
+$('#taskView').click(function(){
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+            session_id: String($.session.get('sessionID'))
+
+        },
+        crossDomain: true,
+        url: serverIP + "/api/environments/all/names",
+        success: function (data) {
+            $("#comboboxDialogSelect").empty();
+            $.each(data, function(i, item) {
+                $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+            });
+            $( "#comboboxDialog" ).dialog({
+                modal: true,
+                buttons: {
+                    Ok: function() {
+                        $( this ).dialog( "close" );
+                        //Created a function, for readability
+                        getTaskview($( "#comboboxDialogSelect").find("option:selected" ).text());
+                    }
+                }
+            });
+            $(".comboboxD").css("visibility","visible");
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+    })});
+
 
 
 $("#vulnerabilitiesClick").click(function(){

@@ -1,6 +1,22 @@
-/**
- * Created by Raf on 14/05/2015.
- */
+/*  Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+    Authors: Raf Vandelaer, Shamal Faily */
+
 var AssetEnvironmentProperty =
 {
     "__python_obj__": "tools.ModelDefinitions.AssetEnvironmentPropertiesModel",
@@ -98,6 +114,7 @@ var threatDefault = {
     "theEnvironmentProperties": [],
     "theProperties": []
 };
+
 var attackerEnvDefault = {
     "__python_obj__": "AttackerEnvironmentProperties.AttackerEnvironmentProperties",
     "theRoles": [],
@@ -105,6 +122,7 @@ var attackerEnvDefault = {
     "theCapabilities": [],
     "theEnvironmentName": ""
 };
+
 var attackerDefault = {
     "__python_obj__": "Attacker.Attacker",
     "theDescription": "",
@@ -115,6 +133,34 @@ var attackerDefault = {
     "theImage": "",
     "theEnvironmentProperties": []
 };
+
+var personaEnvDefault = {
+    "__python_obj__": "PersonaEnvironmentProperties.PersonaEnvironmentProperties",
+    "theDirectFlag": 1,
+    "theNarrative": "",
+    "theRoles": [],
+    "theCodes": []
+};
+
+var personaDefault = {
+    "__python_obj__": "Persona.Persona",
+    "theDescription": "",
+    "theId": -1,
+    "theName": "",
+    "theTags": [],
+    "theActivities": "",
+    "theAttitudes": "",
+    "theAptitudes": "",
+    "theMotivations": "",
+    "theSkills": "",
+    "theIntrinsic": "",
+    "theContextual": "",
+    "theImage": "",
+    "isAssumption": 0,
+    "thePersonaType": "Primary",
+    "theEnvironmentProperties": []
+};
+
 var goalEnvDefault =     {
         "__python_obj__": "GoalEnvironmentProperties.GoalEnvironmentProperties",
         "theFitCriterion": "",

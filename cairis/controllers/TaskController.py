@@ -24,7 +24,7 @@ from cairis.data.TaskDAO import TaskDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import TaskMessage, ValueTypeMessage
 from cairis.tools.ModelDefinitions import TaskModel, ValueTypeModel
-from cairis.tools.SessionValidator import get_session_id
+from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
 __author__ = 'Shamal Faily'
 
@@ -256,4 +256,45 @@ class TaskByNameAPI(Resource):
     resp_dict = {'message': 'Task successfully deleted'}
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
+    return resp
+
+class TaskModelByNameAPI(Resource):
+  #region Swagger Doc
+  @swagger.operation(
+    notes='Get task model for a specific environment',
+    responseClass=str.__name__,
+    nickname='task-model-by-task-environment-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  #endregion
+  def get(self, environment):
+    session_id = get_session_id(session, request)
+    model_generator = get_model_generator()
+
+    dao = TaskDAO(session_id)
+    dot_code = dao.get_task_model(environment)
+    dao.close()
+
+    resp = make_response(model_generator.generate(dot_code, model_type='task'), httplib.OK)
+
+    accept_header = request.headers.get('Accept', 'image/svg+xml')
+    if accept_header.find('text/plain') > -1:
+      resp.headers['Content-type'] = 'text/plain'
+    else:
+      resp.headers['Content-type'] = 'image/svg+xml'
     return resp

@@ -285,20 +285,21 @@ class RiskAnalysisModelByNameAPI(Resource):
     #endregion
     def get(self, environment):
         session_id = get_session_id(session, request)
+        model_generator = get_model_generator()
         dim_name = request.args.get('dimension_name', '')
         obj_name = request.args.get('object_name', '')
 
         dao = RiskDAO(session_id)
-        dotcode = dao.get_risk_analysis_model(environment, dim_name, obj_name)
-        model_gen = get_model_generator()
-        svg_code = model_gen.generate(dotcode, model_type='risk')
+        dot_code = dao.get_risk_analysis_model(environment, dim_name, obj_name)
+        dao.close()
 
-        accept_header = request.headers.get('accept', 'image/svg+xml')
-        resp = make_response(svg_code, httplib.OK)
-        if accept_header.find('image/svg+xml') or accept_header.find('text/html'):
-            resp.contenttype = 'image/svg+xml'
+        resp = make_response(model_generator.generate(dot_code, model_type='risk'), httplib.OK)
+
+        accept_header = request.headers.get('Accept', 'image/svg+xml')
+        if accept_header.find('text/plain') > -1:
+          resp.headers['Content-type'] = 'text/plain'
         else:
-            resp.contenttype = 'text/plain'
+          resp.headers['Content-type'] = 'image/svg+xml'
         return resp
 
 

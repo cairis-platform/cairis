@@ -23,10 +23,11 @@ from cairis.core.Task import Task
 from cairis.core.TaskParameters import TaskParameters
 from cairis.core.ValueType import ValueType
 from cairis.core.ValueTypeParameters import ValueTypeParameters
+from cairis.misc.KaosModel import KaosModel
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import TaskModel, TaskEnvironmentPropertiesModel
-from cairis.tools.SessionValidator import check_required_keys
+from cairis.tools.SessionValidator import check_required_keys, get_fonts
 __author__ = 'Shamal Faily'
 
 
@@ -221,3 +222,19 @@ class TaskDAO(CairisDAO):
       self.close()
       raise MissingParameterHTTPError(param_names=['real_props', 'fake_props'])
     return new_props
+
+  def get_task_model(self, environment_name):
+    fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    try:
+      associationDirectory = self.db_proxy.taskModel(environment_name)
+      associations = KaosModel(associationDirectory.values(), environment_name, kaosModelType = 'task',db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
+      dot_code = associations.graph()
+      if not dot_code:
+        raise ObjectNotFoundHTTPError('The task model')
+      return dot_code
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)

@@ -267,6 +267,7 @@ def start():
     # Task routes
     api.add_resource(TaskController.TasksAPI, '/api/tasks')
     api.add_resource(TaskController.TaskByNameAPI, '/api/tasks/name/<string:name>')
+    api.add_resource(TaskController.TaskModelByNameAPI, '/api/tasks/model/environment/<string:environment>')
 
     # Threat routes
     api.add_resource(ThreatController.ThreatAPI, '/api/threats')
