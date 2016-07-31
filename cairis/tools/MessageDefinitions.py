@@ -201,3 +201,13 @@ class VulnerabilityMessage(DefaultMessage):
 class PersonaMessage(DefaultMessage):
     resource_fields = gen_message_fields(ModelDefinitions.PersonaModel)
     required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+    object=ModelDefinitions.TaskModel.__name__,
+)
+# endregion
+class TaskMessage(DefaultMessage):
+    resource_fields = gen_message_fields(ModelDefinitions.TaskModel)
+    required = DefaultMessage.required

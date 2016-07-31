@@ -130,12 +130,86 @@ $('#assetView').click(function(){
     })});
 
 
+/*
+ When goalview is clicked
+ */
+$('#goalView').click(function(){
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+            session_id: String($.session.get('sessionID'))
+
+        },
+        crossDomain: true,
+        url: serverIP + "/api/environments/all/names",
+        success: function (data) {
+            $("#comboboxDialogSelect").empty();
+            $.each(data, function(i, item) {
+                $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+            });
+            $( "#comboboxDialog" ).dialog({
+                modal: true,
+                buttons: {
+                    Ok: function() {
+                        $( this ).dialog( "close" );
+                        //Created a function, for readability
+                        getGoalview($( "#comboboxDialogSelect").find("option:selected" ).text());
+                    }
+                }
+            });
+            $(".comboboxD").css("visibility","visible");
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+    })});
+
+/*
+ When riskview is clicked
+ */
+$('#riskView').click(function(){
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+            session_id: String($.session.get('sessionID'))
+
+        },
+        crossDomain: true,
+        url: serverIP + "/api/environments/all/names",
+        success: function (data) {
+            $("#comboboxDialogSelect").empty();
+            $.each(data, function(i, item) {
+                $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+            });
+            $( "#comboboxDialog" ).dialog({
+                modal: true,
+                buttons: {
+                    Ok: function() {
+                        $( this ).dialog( "close" );
+                        //Created a function, for readability
+                        getRiskview($( "#comboboxDialogSelect").find("option:selected" ).text());
+                    }
+                }
+            });
+            $(".comboboxD").css("visibility","visible");
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+    })});
+
 
 $("#vulnerabilitiesClick").click(function(){
    createVulnerabilityTable()
 });
-
-
 
 
 $(document).on('click', "button.editRoleButton",function() {
