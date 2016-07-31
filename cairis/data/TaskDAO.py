@@ -16,21 +16,21 @@
 #  under the License.
 
 from cairis.core.ARM import *
-from cairis.core.PersonaEnvironmentProperties import PersonaEnvironmentProperties
+from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
 from cairis.daemon.CairisHTTPError import ARMHTTPError, ObjectNotFoundHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, \
     OverwriteNotAllowedHTTPError
-from cairis.core.Persona import Persona
-from cairis.core.PersonaParameters import PersonaParameters
+from cairis.core.Task import Task
+from cairis.core.TaskParameters import TaskParameters
 from cairis.core.ValueType import ValueType
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-from cairis.tools.ModelDefinitions import PersonaModel, PersonaEnvironmentPropertiesModel
+from cairis.tools.ModelDefinitions import TaskModel, TaskEnvironmentPropertiesModel
 from cairis.tools.SessionValidator import check_required_keys
 __author__ = 'Shamal Faily'
 
 
-class PersonaDAO(CairisDAO):
+class TaskDAO(CairisDAO):
 
   def __init__(self, session_id):
     """
@@ -38,14 +38,14 @@ class PersonaDAO(CairisDAO):
     """
     CairisDAO.__init__(self, session_id)
 
-  def get_personas(self, constraint_id=-1, simplify=True):
+  def get_tasks(self, constraint_id=-1, simplify=True):
     """
-    :rtype: dict[str,Persona]
+    :rtype: dict[str,Task]
     :return
     :raise ARMHTTPError:
     """
     try:
-      personas = self.db_proxy.getPersonas(constraint_id)
+      tasks = self.db_proxy.getTasks(constraint_id)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -54,55 +54,48 @@ class PersonaDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in personas.items():
-        personas[key] = self.simplify(value)
+      for key, value in tasks.items():
+        tasks[key] = self.simplify(value)
 
-    return personas
+    return tasks
 
-  def get_persona_by_name(self, name, simplify=True):
+  def get_task_by_name(self, name, simplify=True):
     """
-    :rtype: Persona
+    :rtype: Task
     :raise ObjectNotFoundHTTPError:
     """
-    personas = self.get_personas(simplify=simplify)
-    found_persona = personas.get(name, None)
+    tasks = self.get_tasks(simplify=simplify)
+    found_task = tasks.get(name, None)
 
-    if found_persona is None:
+    if found_task is None:
       self.close()
-      raise ObjectNotFoundHTTPError('The provided persona name')
+      raise ObjectNotFoundHTTPError('The provided task name')
 
-    return found_persona
+    return found_task
 
-  def add_persona(self, persona):
+  def add_task(self, task):
     """
-    :type persona: Persona
+    :type task: Task
     :rtype: int
     :raise ARMHTTPError:
     """
-    persona_params = PersonaParameters(
-      name=persona.name(),
-      activities=persona.activities(),
-      attitudes=persona.attitudes(),
-      aptitudes=persona.aptitudes(),
-      motivations=persona.motivations(),
-      skills=persona.skills(),
-      intrinsic=persona.intrinsic(),
-      contextual=persona.contextual(),
-      image=persona.image(),
-      isAssumption=persona.assumption(),
-      pType=persona.type(),
-      tags=persona.tags(),
-      properties=persona.environmentProperties(),
-      pCodes=persona.theCodes
+    task_params = TaskParameters(
+      tName=task.name(),
+      tSName=task.shortCode(),
+      tObjt=task.objective(),
+      isAssumption=task.assumption(),
+      tAuth=task.author(),
+      tags=task.tags(),
+      cProps=task.environmentProperties()
     )
 
     try:
-      if not self.check_existing_persona(persona.name()):
-        new_id = self.db_proxy.addPersona(persona_params)
+      if not self.check_existing_task(task.name()):
+        new_id = self.db_proxy.addTask(task_params)
         return new_id
       else:
         self.close()
-        raise OverwriteNotAllowedHTTPError(obj_name=persona.name())
+        raise OverwriteNotAllowedHTTPError(obj_name=task.name())
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -110,30 +103,23 @@ class PersonaDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_persona(self, persona, name):
-    found_persona = self.get_persona_by_name(name, simplify=False)
+  def update_task(self, task, name):
+    found_task = self.get_task_by_name(name, simplify=False)
 
-    persona_params = PersonaParameters(
-      name=persona.name(),
-      activities=persona.activities(),
-      attitudes=persona.attitudes(),
-      aptitudes=persona.aptitudes(),
-      motivations=persona.motivations(),
-      skills=persona.skills(),
-      intrinsic=persona.intrinsic(),
-      contextual=persona.contextual(),
-      image=persona.image(),
-      isAssumption=persona.assumption(),
-      pType=persona.type(),
-      tags=persona.tags(),
-      properties=persona.environmentProperties(),
-      pCodes=persona.theCodes
+    task_params = TaskParameters(
+      tName=task.name(),
+      tSName=task.shortCode(),
+      tObjt=task.objective(),
+      isAssumption=task.assumption(),
+      tAuth=task.author(),
+      tags=task.tags(),
+      cProps=task.environmentProperties()
     )
 
-    persona_params.setId(found_persona.id())
+    task_params.setId(found_task.id())
 
     try:
-      self.db_proxy.updatePersona(persona_params)
+      self.db_proxy.updateTask(task_params)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -141,12 +127,12 @@ class PersonaDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_persona(self, name):
-    found_persona = self.get_persona_by_name(name, simplify=False)
-    persona_id = found_persona.id()
+  def delete_task(self, name):
+    found_task = self.get_task_by_name(name, simplify=False)
+    task_id = found_task.id()
 
     try:
-      self.db_proxy.deletePersona(persona_id)
+      self.db_proxy.deleteTask(task_id)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -154,13 +140,13 @@ class PersonaDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def check_existing_persona(self, name):
+  def check_existing_task(self, name):
     """
     :rtype: bool
     :raise: ARMHTTPError
     """
     try:
-      self.db_proxy.nameCheck(name, 'persona')
+      self.db_proxy.nameCheck(name, 'task')
       return False
     except DatabaseProxyException as ex:
       if str(ex.value).find('already exists') > -1:
@@ -176,7 +162,7 @@ class PersonaDAO(CairisDAO):
 
   def from_json(self, request):
     """
-    :rtype : Persona
+    :rtype : Task
     :raise MalformedJSONHTTPError:
     """
     json = request.get_json(silent=True)
@@ -185,25 +171,24 @@ class PersonaDAO(CairisDAO):
       raise MalformedJSONHTTPError(data=request.get_data())
 
     json_dict = json['object']
-    check_required_keys(json_dict, PersonaModel.required)
-    json_dict['__python_obj__'] = Persona.__module__ + '.' + Persona.__name__
+    check_required_keys(json_dict, TaskModel.required)
+    json_dict['__python_obj__'] = Task.__module__ + '.' + Task.__name__
 
-    persona_props = self.convert_props(fake_props=json_dict['theEnvironmentProperties'])
+    task_props = self.convert_props(fake_props=json_dict['theEnvironmentProperties'])
     json_dict['theEnvironmentProperties'] = []
 
-    persona = json_serialize(json_dict)
-    persona = json_deserialize(persona)
-    persona.theEnvironmentProperties = persona_props
-    if not isinstance(persona, Persona):
+    task = json_serialize(json_dict)
+    task = json_deserialize(task)
+    task.theEnvironmentProperties = task_props
+    if not isinstance(task, Task):
       self.close()
       raise MalformedJSONHTTPError(data=request.get_data())
     else:
-      return persona
+      return task
 
   def simplify(self, obj):
-    assert isinstance(obj, Persona)
+    assert isinstance(obj, Task)
     obj.theEnvironmentDictionary = {}
-    obj.thePersonaPropertyDictionary = {}
 
     delattr(obj, 'theEnvironmentDictionary')
     obj.theEnvironmentProperties = self.convert_props(real_props=obj.theEnvironmentProperties)
@@ -214,18 +199,22 @@ class PersonaDAO(CairisDAO):
     if real_props is not None:
       if len(real_props) > 0:
         for real_prop in real_props:
-          assert isinstance(real_prop, PersonaEnvironmentProperties)
+          assert isinstance(real_prop, TaskEnvironmentProperties)
           new_props.append(real_prop)
     elif fake_props is not None:
       if len(fake_props) > 0:
         for fake_prop in fake_props:
-          check_required_keys(fake_prop, PersonaEnvironmentPropertiesModel.required)
-          new_prop = PersonaEnvironmentProperties(
+          check_required_keys(fake_prop, TaskEnvironmentPropertiesModel.required)
+          new_prop = TaskEnvironmentProperties(
                        environmentName=fake_prop['theEnvironmentName'],
-                       direct=fake_prop['theDirectFlag'],
-                       description=fake_prop['theNarrative'],
-                       roles=fake_prop['theRoles'],
-                       pCodes=fake_prop['theCodes']
+                       deps=fake_prop['theDependencies'],
+                       personas=fake_prop['thePersonas'],
+                       assets=fake_prop['theAssets'],
+                       concs=fake_prop['theConcernAssociations'],
+                       narrative=fake_prop['theNarrative'],
+                       consequences=fake_prop['theConsequences'],
+                       benefits=fake_prop['theBenefits'],
+                       tCodes=fake_prop['theCodes']
                      )
           new_props.append(new_prop)
     else:

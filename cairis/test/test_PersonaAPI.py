@@ -167,10 +167,8 @@ class PersonaAPITests(CairisDaemonTestCase):
     new_persona.theEnvironmentProperties = new_persona_props
 
     new_persona.theEnvironmentDictionary = {}
-    new_persona.thePersonaPropertyDictionary = {}
 
     delattr(new_persona, 'theEnvironmentDictionary')
-    delattr(new_persona, 'thePersonaPropertyDictionary')
 
     return new_persona
 

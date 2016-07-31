@@ -29,7 +29,7 @@ from CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.core.ARM import ARMException, DatabaseProxyException
 from cairis.controllers import AssetController, AttackerController, CImportController, DependencyController, \
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
-    RequirementController, ResponseController, RiskController, RoleController, ThreatController, \
+    RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, UserController, VulnerabilityController
 
 __author__ = 'Robin Quetin'
@@ -263,6 +263,10 @@ def start():
     api.add_resource(RoleController.RolesByNameAPI, '/api/roles/name/<string:name>')
     api.add_resource(RoleController.RolesByIdAPI, '/api/roles/id/<int:id>')
     api.add_resource(RoleController.RoleEnvironmentPropertiesAPI, '/api/roles/name/<string:name>/properties')
+
+    # Task routes
+    api.add_resource(TaskController.TasksAPI, '/api/tasks')
+    api.add_resource(TaskController.TaskByNameAPI, '/api/tasks/name/<string:name>')
 
     # Threat routes
     api.add_resource(ThreatController.ThreatAPI, '/api/threats')
