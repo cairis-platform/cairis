@@ -29,6 +29,8 @@ from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
 from cairis.core.MisuseCase import MisuseCase
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from cairis.core.MitigateEnvironmentProperties import MitigateEnvironmentProperties
+from cairis.core.Persona import Persona
+from cairis.core.PersonaEnvironmentProperties import PersonaEnvironmentProperties
 from cairis.core.Requirement import Requirement
 from cairis.core.Risk import Risk
 from cairis.core.Role import Role
@@ -39,7 +41,7 @@ from cairis.core.Vulnerability import Vulnerability
 from cairis.core.VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
 from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 obj_id_field = "__python_obj__"
 likelihood_metadata = { "enum": ['Incredible', 'Improbable', 'Remote', 'Occasional', 'Probable', 'Frequent'] }
@@ -592,3 +594,49 @@ class VulnerabilityModel(object):
             "enum": ['Configuration', 'Design', 'Implementation']
         }
     }
+
+class PersonaEnvironmentPropertiesModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        'theDirectFlag': fields.Integer,
+        'theNarrative': fields.String,
+        'theRoles': fields.List(fields.String),
+        'theCodes': fields.List(fields.String)
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metadata = {
+        obj_id_field: gen_class_metadata(PersonaEnvironmentProperties)
+    }
+
+@swagger.model
+@swagger.nested(
+    theEnvironmentProperties=PersonaEnvironmentPropertiesModel.__name__
+)
+class PersonaModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        'theEnvironmentDictionary': fields.List(fields.Nested(PersonaEnvironmentPropertiesModel.resource_fields)),
+        'theId': fields.Integer,
+        'theName': fields.String,
+        'theTags': fields.List(fields.String),
+        'theActivities': fields.String,
+        'theAttitudes': fields.String,
+        'theAptitudes': fields.String,
+        'theMotivations': fields.String,
+        'theSkills': fields.String,
+        'theIntrinsic': fields.String,
+        'theContextual': fields.String,
+        'theImage': fields.String,
+        'isAssumption': fields.Integer,
+        'thePersonaType': fields.String,
+        'theEnvironmentProperties': fields.List(fields.Nested(PersonaEnvironmentPropertiesModel.resource_fields)),
+        'theCodes': fields.List(fields.String)
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    required.remove('theEnvironmentDictionary')
+    swagger_metadata = {
+        obj_id_field: gen_class_metadata(Persona)
+    }
+

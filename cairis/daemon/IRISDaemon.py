@@ -28,7 +28,7 @@ from cairis.core.Borg import Borg
 from CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.core.ARM import ARMException, DatabaseProxyException
 from cairis.controllers import AssetController, AttackerController, CImportController, DependencyController, \
-    DimensionController, EnvironmentController, GoalController, MisuseCaseController, ProjectController, \
+    DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, ThreatController, \
     UploadController, UserController, VulnerabilityController
 
@@ -223,6 +223,10 @@ def start():
     # Misuse case routes
     api.add_resource(MisuseCaseController.MisuseCasesAPI, '/api/misuse-cases')
     api.add_resource(MisuseCaseController.MisuseCaseByNameAPI, '/api/misuse-cases/risk/<string:risk_name>')
+
+    # Persona routes
+    api.add_resource(PersonaController.PersonasAPI, '/api/personas')
+    api.add_resource(PersonaController.PersonaByNameAPI, '/api/personas/name/<string:name>')
 
     # Project routes
     api.add_resource(ProjectController.ProjectSettingsAPI, '/api/settings')

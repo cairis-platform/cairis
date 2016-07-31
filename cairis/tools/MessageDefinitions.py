@@ -19,7 +19,7 @@ from flask.ext.restful import fields
 from flask.ext.restful_swagger import swagger
 import PseudoClasses
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 import ModelDefinitions
 
@@ -190,4 +190,14 @@ class ValueTypeMessage(DefaultMessage):
 # endregion
 class VulnerabilityMessage(DefaultMessage):
     resource_fields = gen_message_fields(ModelDefinitions.VulnerabilityModel)
+    required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+    object=ModelDefinitions.PersonaModel.__name__,
+)
+# endregion
+class PersonaMessage(DefaultMessage):
+    resource_fields = gen_message_fields(ModelDefinitions.PersonaModel)
     required = DefaultMessage.required

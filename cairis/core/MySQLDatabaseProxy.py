@@ -101,7 +101,6 @@ from ConnectorParameters import ConnectorParameters;
 from WeaknessTarget import WeaknessTarget
 from ImpliedProcess import ImpliedProcess
 from ImpliedProcessParameters import ImpliedProcessParameters
-
 import string
 import os
 from numpy import *
