@@ -150,6 +150,8 @@ class ResponseTest(unittest.TestCase):
     self.assertEqual(iar1.name(),self.oar1.name())
     self.assertEqual(iar1.risk(),self.oar1.risk())
     self.assertEqual(iar1.responseType(),self.oar1.responseType())
+    self.assertEqual(iar1.environmentProperties()[0].cost(),self.oar1.environmentProperties()[0].cost())
+    self.assertEqual(iar1.environmentProperties()[0].description(),self.oar1.environmentProperties()[0].description())
 
     self.assertEqual(iar2.name(),self.oar2.name())
     self.assertEqual(iar2.risk(),self.oar2.risk())

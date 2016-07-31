@@ -105,10 +105,24 @@ class ThreatTest(unittest.TestCase):
     self.assertEqual(itps.method(),o.method())
     oteps = o.environmentProperties()
     self.assertEqual(iteps[0].name(), oteps[0].name())
+
     self.assertEqual(iteps[0].likelihood()[0], oteps[0].likelihood()[0])
-    self.assertEqual(str(iteps[0].assets()[0]), str(oteps[0].assets()[0]))
-    self.assertEqual(str(iteps[0].attackers()[0]), str(oteps[0].attackers()[0]))
-    self.assertEqual(str(iteps[0].rationale()[0]), str(oteps[0].rationale()[0]))
+    self.assertEqual(iteps[0].assets(), oteps[0].assets())
+    self.assertEqual(iteps[0].attackers(), oteps[0].attackers())
+    self.assertEqual(str(iteps[0].rationale()[0]), oteps[0].rationale()[0])
+    self.assertEqual(str(iteps[0].rationale()[1]), oteps[0].rationale()[1])
+    self.assertEqual(str(iteps[0].rationale()[2]), oteps[0].rationale()[2])
+    self.assertEqual(str(iteps[0].rationale()[3]), oteps[0].rationale()[3])
+    self.assertEqual(str(iteps[0].rationale()[4]), oteps[0].rationale()[4])
+    self.assertEqual(str(iteps[0].rationale()[5]), oteps[0].rationale()[5])
+    self.assertEqual(str(iteps[0].rationale()[6]), oteps[0].rationale()[6])
+    self.assertEqual(str(iteps[0].rationale()[7]), oteps[0].rationale()[7])
+
+    envName = self.iThreats[0]["theEnvironmentProperties"][0]["theName"]
+    self.assertEqual(iteps[0].likelihood(), o.likelihood(envName,'',envName))
+    self.assertEqual(iteps[0].assets(), o.assets(envName,''))
+    self.assertEqual(iteps[0].attackers(), o.attackers(envName,''))
+
 
     itps.theName = 'Updated threat'
     itps.setId(o.id())

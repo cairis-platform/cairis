@@ -87,6 +87,14 @@ class GoalTest(unittest.TestCase):
     self.assertEqual(igep1.concerns(), ogep1.concerns())
     self.assertEqual(igep1.concernAssociations(), ogep1.concernAssociations())
 
+    envName = self.iGoals[0]["theEnvironmentProperties"][0]
+    self.assertEqual(igep1.label(), og1.label(envName))
+    self.assertEqual(igep1.definition(), og1.definition(envName,''))
+    self.assertEqual(igep1.category(), og1.category(envName,''))
+    self.assertEqual(igep1.priority(), og1.priority(envName,''))
+    self.assertEqual(igep1.fitCriterion(), og1.fitCriterion(envName,''))
+    self.assertEqual(igep1.issue(), og1.issue(envName,''))
+
     self.assertEqual(igep2.label(), ogep2.label())
     self.assertEqual(igep2.definition(), ogep2.definition())
     self.assertEqual(igep2.category(), ogep2.category())
