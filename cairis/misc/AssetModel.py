@@ -20,6 +20,7 @@ from cairis.core.Borg import Borg
 import pydot
 import os
 
+__author__ = 'Shamal Faily, Robin Quetin'
 
 class AssetModel:
   def __init__(self,associations,envName,assetName = '',hideConcerns = False, graphName='asset.dot', db_proxy=None, fontName=None, fontSize=None):
@@ -48,11 +49,12 @@ class AssetModel:
     objtUrl = dimName + '#' + objtName
     if (dimName == 'persona'):
       objt = self.dbProxy.dimensionObject(objtName,'persona')
+      b = Borg()
       if (objt.assumption() == True):
         objtLabel = "&lt;&lt;Assumption&gt;&gt;" + objtName
-        self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='ellipse',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+        self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shapefile='/images/assetModelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
       else:
-        self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+        self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/images/assetModelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'goalconcern' or dimName == 'taskconcern'):
       self.theGraph.add_node(pydot.Node(objtName,shape='note',fontname=self.fontName,fontsize=self.fontSize,fontcolor='blue',color='blue',URL=objtUrl))
     elif (dimName == 'obstacleconcern'):
