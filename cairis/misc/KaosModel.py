@@ -54,6 +54,7 @@ class KaosModel:
 
   def buildNode(self,dimName,objtName):
     objtUrl = dimName + '#' + objtName
+    b = Borg()
     if (dimName == 'goal'):
       self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
 # soft-goal attributes      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',style='rounded',sides='6',distortion='-0.537997',orientation='52',skew='-0.960726',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
@@ -98,11 +99,11 @@ class KaosModel:
       objt = self.dbProxy.dimensionObject(objtName,'persona')
       if (objt.assumption() == True):
         objtLabel = "&lt;&lt;Assumption&gt;&gt;" + objtName 
-        self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='circle',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+        self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shapefile=b.staticDir + '/images/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
       else: 
-        self.theGraph.add_node(pydot.Node(objtName,shape='circle',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+        self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/images/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'attacker'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='circle',style='filled',color='black',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/images/modelAttacker.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'response'):
       self.theGraph.add_node(pydot.Node(objtName,shape='note',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'asset'):
