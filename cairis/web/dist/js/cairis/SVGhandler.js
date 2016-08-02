@@ -54,7 +54,7 @@ $( document ).ajaxComplete(function() {
                             session_id: String($.session.get('sessionID'))
                         },
                         crossDomain: true,
-                        url: serverIP + "/api/assets/id/"+ data.theId + "/properties",
+                        url: serverIP + "/api/assets/name/"+ data.theName,
                         success: function(data2){
                             var jsonObj = eval(data2);
                             var theTableArr = [];
