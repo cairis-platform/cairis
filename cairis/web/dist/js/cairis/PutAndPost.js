@@ -15,10 +15,9 @@
     specific language governing permissions and limitations
     under the License.
 
-    Authors: Raf Vandelaer */
+    Authors: Raf Vandelaer, Shamal Faily */
 
 
-//TODO: functions in cairis.js zetten
 function updateRequirement(row){
     if ($(row).attr('class') != undefined) {
         // if new Row, POST

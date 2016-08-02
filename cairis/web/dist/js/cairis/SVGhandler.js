@@ -15,7 +15,7 @@
     specific language governing permissions and limitations
     under the License.
 
-    Authors: Raf Vandelaer */
+    Authors: Raf Vandelaer, Shamal Faily */
 
 $( document ).ajaxComplete(function() {
     $("svg > g > g .node > a ").on('click', function (event) {
@@ -76,7 +76,11 @@ $( document ).ajaxComplete(function() {
                                 }
                             }
                             dataArr["assetproptable"] = theTableArr;
-                            fillOptionMenu("fastTemplates/AssetOptions.html", "#optionsContent", dataArr,false,true);
+                            fillOptionMenu("fastTemplates/AssetOptions.html", "#optionsContent", dataArr,false,true,function(){
+                              // Get asset properties for name and environment here and fill assetproptable
+                              //$('#assetproptable').find("tbody").empty();
+                              //$('#assetproptable').append('<tr><td>Confidentiality</td><td>High</td>')
+                            });
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             console.log(this.url);
