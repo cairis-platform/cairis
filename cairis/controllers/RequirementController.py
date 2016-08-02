@@ -199,7 +199,6 @@ class RequirementsAPI(Resource):
     # endregion
     def put(self):
         session_id = get_session_id(session, request)
-
         dao = RequirementDAO(session_id)
         req = dao.from_json(request)
         dao.update_requirement(req, req_id=req.theId)

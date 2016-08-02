@@ -325,14 +325,12 @@ class RequirementAttributesModel(object):
 
 @swagger.model
 @swagger.nested(
-    dirtyAttrs=RequirementAttributesModel.__name__,
     attrs=RequirementAttributesModel.__name__
 )
 class RequirementModel(object):
     resource_fields = {
         obj_id_field: fields.String,
         "theId": fields.Integer,
-        "dirtyAttrs": fields.Nested(RequirementAttributesModel.resource_fields),
         "attrs": fields.Nested(RequirementAttributesModel.resource_fields),
         "theName": fields.String,
         "theLabel": fields.String,

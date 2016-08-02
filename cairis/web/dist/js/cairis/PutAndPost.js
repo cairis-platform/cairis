@@ -74,7 +74,7 @@ function putRequirementRow(row){
         accept: "application/json",
         data: objectoutput,
         crossDomain: true,
-        url: serverIP + "/api/requirements/update" ,
+        url: serverIP + "/api/requirements" ,
         success: function (data) {
             showPopup(true);
         },
@@ -88,18 +88,21 @@ function putRequirementRow(row){
 
 }
 function postRequirementRow(row,whatKind,value){
-    json = reqRowtoJSON(row);
+    var json = reqRowtoJSON(row);
+    var ursl = serverIP + "/api/requirements?asset=" + $('#assetsbox').find('option:selected').text().replace(' ',"%20");
+    var object = {};
+    object.object = json;
+    object.session_id= $.session.get('sessionID');
+    var objectoutput = JSON.stringify(object);
+
     $.ajax({
         type: "POST",
         dataType: "json",
         contentType: "application/json",
         accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID')),
-           body: JSON.stringify(json)
-        },
+        data: objectoutput,
         crossDomain: true,
-        url: serverIP + "/api/requirements/update?" + whatKind+"="+value.replace(' ',"%20"),
+        url: ursl,
         success: function (data) {
             showPopup(true);
         },

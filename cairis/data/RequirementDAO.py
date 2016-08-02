@@ -53,7 +53,7 @@ class RequirementDAO(CairisDAO):
 
         idx = 0
         while found_requirement is None and idx < len(requirements):
-            if requirements.values()[idx].theId == req_id:
+            if requirements.values()[idx].theId == int(req_id):
                 found_requirement = requirements.values()[idx]
             idx += 1
 
