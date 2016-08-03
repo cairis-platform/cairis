@@ -31,6 +31,22 @@ def threatColourCode(valueId):
   elif (valueId == 1): return '37 .07 1'
   elif (valueId < 1): return '37 .07 1'
 
+def threatLikelihoodColourCode(tlValue):
+# Based on orrd5 color scheme
+  if tlValue == 'Incredible': return '1'
+  elif tlValue == 'Improbable': return '2'
+  elif tlValue == 'Remote': return '3'
+  elif tlValue == 'Occasional': return '4'
+  else: return '5'
+
+def vulnerabilitySeverityColourCode(vsValue):
+# Based on orrd4 color scheme
+  if vsValue == 'Negligible': return '1'
+  elif vsValue == 'Marginal': return '2'
+  elif vsValue == 'Critical': return '3'
+  else: return '4'
+
+
 def responseColourCode(valueId):
   if (valueId == 1): return '359 1 .5'
   elif (valueId == 2): return '359 1 .7'

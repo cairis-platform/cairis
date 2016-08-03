@@ -20,6 +20,8 @@ import pydot
 from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from cairis.core.colourcodes import threatColourCode
+from cairis.core.colourcodes import threatLikelihoodColourCode
+from cairis.core.colourcodes import vulnerabilitySeverityColourCode
 from cairis.core.colourcodes import usabilityColourCode
 from cairis.core.colourcodes import riskTextColourCode
 
@@ -31,6 +33,7 @@ class EnvironmentModel:
     self.theTraceLinks = tlinks
     self.theEnvironmentName = environmentName
     self.dbProxy = dp
+    self.theEnvironmentObject = self.dbProxy.dimensionObject(self.theEnvironmentName,'environment')
     self.theGraph = pydot.Dot()
     b = Borg()
     self.fontSize = fontSize or b.fontSize
@@ -61,9 +64,13 @@ class EnvironmentModel:
         borderColour = 'red'
       self.theGraph.add_node(pydot.Node(objtName,shape='record',color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'threat'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      thrObjt = self.dbProxy.dimensionObject(objtName,'threat')
+      thrLhood = thrObjt.likelihood(self.theEnvironmentName,self.theEnvironmentObject.duplicateProperty(),self.theEnvironmentObject.overridingEnvironment())
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',colorscheme='orrd5',color='black',fillcolor=threatLikelihoodColourCode(thrLhood),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'vulnerability'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      vulObjt = self.dbProxy.dimensionObject(objtName,'vulnerability')
+      vulSev = vulObjt.severity(self.theEnvironmentName,self.theEnvironmentObject.duplicateProperty(),self.theEnvironmentObject.overridingEnvironment())
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',colorscheme='orrd4',color='black',fillcolor=vulnerabilitySeverityColourCode(vulSev),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'risk'):
       riskObjt = self.dbProxy.dimensionObject(objtName,'risk')
       riskScores = self.dbProxy.riskScore(riskObjt.threat(),riskObjt.vulnerability(),self.theEnvironmentName,objtName)
@@ -72,7 +79,7 @@ class EnvironmentModel:
         currentScore = riskScore[2]
         if (currentScore > highestScore):
           highestScore = currentScore
-      self.theGraph.add_node(pydot.Node(objtName,shape='diamond',style='filled',color=threatColourCode(highestScore),fontcolor=riskTextColourCode(highestScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='diamond',style='filled',color='black',fillcolor=threatColourCode(highestScore),fontcolor=riskTextColourCode(highestScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'response'):
       self.theGraph.add_node(pydot.Node(objtName,shape='note',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'countermeasure'):
