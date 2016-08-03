@@ -30,7 +30,7 @@ $("#addRow").click(function() {
         alert("Please select an asset or an environment");
     }
     else{
-        if($( "#assetsbox").find("option:selected" ).text() != "All"){
+        if($( "#assetsbox").find("option:selected" ).text() != ""){
             kind = "asset:" + $( "#assetsbox").find("option:selected" ).text();
         }else{
             kind = "environment:"+$( "#environmentsbox").find("option:selected" ).text();

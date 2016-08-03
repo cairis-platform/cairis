@@ -88,7 +88,13 @@ function putRequirementRow(row){
 }
 function postRequirementRow(row,whatKind,value){
     var json = reqRowtoJSON(row);
-    var ursl = serverIP + "/api/requirements?asset=" + $('#assetsbox').find('option:selected').text().replace(' ',"%20");
+    var dimName = "asset";
+    var objtName = $( "#assetsbox").find("option:selected").text();
+    if (objtName == "") {
+      dimName = "environment";
+      objtName = $( "#environmentsbox").find("option:selected").text();
+    }
+    var ursl = serverIP + "/api/requirements?" + dimName + "=" + objtName.replace(' ',"%20");
     var object = {};
     object.object = json;
     object.session_id= $.session.get('sessionID');
