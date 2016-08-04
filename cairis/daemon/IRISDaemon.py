@@ -226,7 +226,9 @@ def start():
 
     # Persona routes
     api.add_resource(PersonaController.PersonasAPI, '/api/personas')
+    api.add_resource(PersonaController.PersonaNamesAPI, '/api/personas/names', '/api/personas/all/names')
     api.add_resource(PersonaController.PersonaByNameAPI, '/api/personas/name/<string:name>')
+    api.add_resource(PersonaController.PersonaModelByNameAPI, '/api/personas/model/name/<string:persona>')
 
     # Project routes
     api.add_resource(ProjectController.ProjectSettingsAPI, '/api/settings')

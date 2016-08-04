@@ -223,7 +223,7 @@ $('#riskView').click(function(){
 
 
 /*
- When riskview is clicked
+ When taskview is clicked
  */
 $('#taskView').click(function(){
 
@@ -260,6 +260,44 @@ $('#taskView').click(function(){
         }
     })});
 
+
+/*
+ When personaview is clicked
+ */
+$('#personaView').click(function(){
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+            session_id: String($.session.get('sessionID'))
+
+        },
+        crossDomain: true,
+        url: serverIP + "/api/personas/all/names",
+        success: function (data) {
+            $("#comboboxDialogSelect").empty();
+            $.each(data, function(i, item) {
+                $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+            });
+            $( "#comboboxDialog" ).dialog({
+                modal: true,
+                buttons: {
+                    Ok: function() {
+                        $( this ).dialog( "close" );
+                        //Created a function, for readability
+                        getPersonaview($( "#comboboxDialogSelect").find("option:selected" ).text());
+                    }
+                }
+            });
+            $(".comboboxD").css("visibility","visible");
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+    })});
 
 
 $("#vulnerabilitiesClick").click(function(){

@@ -24,8 +24,7 @@ from cairis.data.PersonaDAO import PersonaDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import PersonaMessage, ValueTypeMessage
 from cairis.tools.ModelDefinitions import PersonaModel, ValueTypeModel
-from cairis.tools.SessionValidator import get_session_id
-
+from cairis.tools.SessionValidator import get_session_id, get_model_generator
 __author__ = 'Shamal Faily'
 
 
@@ -255,5 +254,81 @@ class PersonaByNameAPI(Resource):
 
     resp_dict = {'message': 'Persona successfully deleted'}
     resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
+class PersonaModelByNameAPI(Resource):
+  #region Swagger Doc
+  @swagger.operation(
+    notes='Get persona model for a specific persona',
+    responseClass=str.__name__,
+    nickname='persona-model-by-name-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  #endregion
+  def get(self, persona):
+    session_id = get_session_id(session, request)
+    model_generator = get_model_generator()
+
+    dao = PersonaDAO(session_id)
+    dot_code = dao.get_persona_model(persona)
+    dao.close()
+
+    resp = make_response(model_generator.generate(dot_code, model_type='persona'), httplib.OK)
+
+    accept_header = request.headers.get('Accept', 'image/svg+xml')
+    if accept_header.find('text/plain') > -1:
+      resp.headers['Content-type'] = 'text/plain'
+    else:
+      resp.headers['Content-type'] = 'image/svg+xml'
+    return resp
+
+class PersonaNamesAPI(Resource):
+  #region Swagger Docs
+  @swagger.operation(
+    notes='Get all persona names',
+    nickname='persona-names-get',
+    responseClass=str.__name__,
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  #endregion
+  def get(self):
+    session_id = get_session_id(session, request)
+
+    dao = PersonaDAO(session_id)
+    persona_names = dao.get_persona_names()
+    dao.close()
+
+    resp = make_response(json_serialize(persona_names, session_id=session_id), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

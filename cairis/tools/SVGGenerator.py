@@ -104,7 +104,10 @@ def correctHref(line, model_type):
             if (model_type == 'goal' or model_type == 'risk') and type == 'requirement':
                 new_link = '/api/{0}s/shortcode/{1}'.format(type, object)
             else:
-                new_link = '/api/{0}s/name/{1}'.format(type, object)
+                if type == 'grounds': 
+                  new_link = '/api/{0}/name/{1}'.format(type, object)
+                else:
+                  new_link = '/api/{0}s/name/{1}'.format(type, object)
             line = line.replace(old_link, new_link)
 
         href_exists = line.find('<a xlink:href="', href_exists+1)

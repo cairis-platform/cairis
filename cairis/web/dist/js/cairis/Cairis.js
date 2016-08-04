@@ -306,6 +306,29 @@ function getTaskview(environment){
     });
 }
 
+function getPersonaview(pName){
+    window.personaName = pName;
+    $.ajax({
+        type:"GET",
+        accept:"application/json",
+        data: {
+            session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + "/api/personas/model/name/" + personaName.replace(" ","%20"),
+        success: function(data){
+          // console.log("in getPersonaView " + data.innerHTML);
+           // console.log(this.url);
+           fillSvgViewer(data);
+
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+    });
+}
+
 
 /*
 A function for filling the table with requirements

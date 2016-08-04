@@ -26,7 +26,8 @@ from cairis.core.ValueTypeParameters import ValueTypeParameters
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import PersonaModel, PersonaEnvironmentPropertiesModel
-from cairis.tools.SessionValidator import check_required_keys
+from cairis.tools.SessionValidator import check_required_keys, get_fonts
+from cairis.misc.PersonaModel import PersonaModel
 __author__ = 'Shamal Faily'
 
 
@@ -58,6 +59,23 @@ class PersonaDAO(CairisDAO):
         personas[key] = self.simplify(value)
 
     return personas
+
+  def get_persona_names(self):
+    """
+    Get the available persona names.
+    :rtype list[str]
+    :raise ARMHTTPError:
+    """
+    try:
+      persona_names = self.db_proxy.getDimensionNames('persona')
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    return persona_names
+
 
   def get_persona_by_name(self, name, simplify=True):
     """
@@ -232,3 +250,19 @@ class PersonaDAO(CairisDAO):
       self.close()
       raise MissingParameterHTTPError(param_names=['real_props', 'fake_props'])
     return new_props
+
+  def get_persona_model(self, persona_name):
+    fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    try:
+      modelAssocs = self.db_proxy.assumptionPersonaModel(persona_name)
+      associations = PersonaModel(modelAssocs,font_name=fontName,font_size=fontSize)
+      dot_code = associations.graph()
+      if not dot_code:
+        raise ObjectNotFoundHTTPError('The persona model')
+      return dot_code
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
