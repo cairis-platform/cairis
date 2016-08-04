@@ -28,6 +28,23 @@ from cairis.core.colourcodes import riskTextColourCode
 USECASE_TYPE = 0
 MISUSECASE_TYPE = 1
 
+def arrayToSecurityPropertiesTable(spArray,objtName):
+  colorScheme = ["black","red","green","blue","yellow","cyan","purple","gray"]
+  buf = '<<TABLE cellborder="1" border="0" cellspacing="2">'
+  buf += '<TR><TD colspan="3">' + objtName + '</TD></TR>' 
+  ci = 0 
+  for x in spArray:
+    if x != 0:
+      i = x
+      buf += '<TR>'
+      while i > 0:
+        buf += '<TD bgcolor="' + colorScheme[ci] + '"></TD>'
+        i-= 1
+      buf += '</TR>'
+    ci += 1
+  buf += '</TABLE>>'
+  return buf
+
 class EnvironmentModel:
   def __init__(self,tlinks,environmentName,dp, fontName=None, fontSize=None):
     self.theTraceLinks = tlinks
@@ -62,7 +79,7 @@ class EnvironmentModel:
       borderColour = 'black'
       if (assetObjt.critical()):
         borderColour = 'red'
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,width='0',height='0',margin='0',style='filled',fillcolor='white',label=arrayToSecurityPropertiesTable(assetObjt.securityProperties(self.theEnvironmentName),objtName)))
     elif (dimName == 'threat'):
       thrObjt = self.dbProxy.dimensionObject(objtName,'threat')
       thrLhood = thrObjt.likelihood(self.theEnvironmentName,self.theEnvironmentObject.duplicateProperty(),self.theEnvironmentObject.overridingEnvironment())
