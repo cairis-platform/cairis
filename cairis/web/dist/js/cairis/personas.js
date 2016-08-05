@@ -123,7 +123,7 @@ function createPersonasTable(){
                 textToInsert[i++] = '</td>';
 
                 textToInsert[i++] = '<td name="theType">';
-                textToInsert[i++] = item.theDescription;
+                textToInsert[i++] = item.theType;
                 textToInsert[i++] = '</td>';
 
                 textToInsert[i++] = '</tr>';

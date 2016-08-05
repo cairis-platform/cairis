@@ -24,42 +24,42 @@
 
     <div id="activities">
       <label>Activities</label><br>
-      <textarea id="activitiesID" class-"personaUpdate"></textarea>
+      <textarea id="theActivities" class="personaUpdate"></textarea>
     </div>
 
     <div id="attitudes">
       <label>Attitudes</label><br>
-      <textarea id="attitudesField" class="personaUpdate"></textarea>
+      <textarea id="theAttitudes" class="personaUpdate"></textarea>
     </div>
 
     <div id="aptitudes">
       <label>Aptitudes</label><br>
-      <textarea id="aptitudesField" class="personaUpdate"></textarea>
+      <textarea id="theAptitudes" class="personaUpdate"></textarea>
     </div>
 
     <div id="motivations">
       <label>Motivations</label><br>
-      <textarea id="motivationsField" class="personaUpdate"></textarea>
+      <textarea id="theMotivations" class="personaUpdate"></textarea>
     </div>
 
     <div id="skills">
       <label>Skills</label><br>
-      <textarea id="skillsField" class="personaUpdate"></textarea>
+      <textarea id="theSkills" class="personaUpdate"></textarea>
     </div>
 
     <div id="contextual">
       <label>Contextual</label><br>
-      <textarea id="contextualField" class="personaUpdate"></textarea>
+      <textarea id="theContextual" class="personaUpdate"></textarea>
     </div>
 
     <div id="intrinsic">
       <label>Intrinsic</label><br>
-      <textarea id="intrinsicField" class="personaUpdate"></textarea>
+      <textarea id="theIntrinsic" class="personaUpdate"></textarea>
     </div>
   </div>
   <div class="right">
     <div style="position: relative;">
-      <img id="theImages" src="" height="200" width="200"
+      <img id="theImage" src="" height="200" width="200"
         onerror="this.src='images/default-avatar.png';" style=
         "margin-bottom: 5px">
 
@@ -74,13 +74,9 @@
   </div><br>
 
   <div class="inblock">
-    <table class="left clickable-table" id=
-      "thePersonaEnvironments">
+    <table class="left clickable-table" id="theEnvironmentDictionary">
       <thead>
-        <tr>
-          <th id="addPersonaEnv" style="width: 15px;"></th>
-          <th>Environment</th>
-        </tr>
+        <tr><th> <i class="fa fa-plus addEnvironmentPlus"></i></th><th>Environment</th></tr>
       </thead>
     </table>
 
@@ -93,13 +89,14 @@
         "gearOptions clickable-table scrollableTable">
         <div class="inblock">
           <div id="summary">
-            <label>Direct/Indirect</label> <input id="summaryDirect" class="personaUpdate"></p>
-            <br>
+            <label>Direct/Indirect</label>
+            <select name="theDirectFlag" id="theDirectFlag" class="personaUpdate"></p>
+            </select>
             <table id="personaRole" class="left" style=
           "width: 50%">
               <thead>
                 <tr>
-                  <th id="addRoletoPersona" style="width: 15px;">
+                  <th id="theRoles" style="width: 15px;">
                   </th>
                   <th>Role</th>
                 </tr>
@@ -108,7 +105,7 @@
           </div>
           <div id="narrative">
             <label>Narrative</label><br>
-            <textarea id="narrativeField" class="personaUpdate"></textarea>
+            <textarea id="theNarrative" class="personaUpdate"></textarea>
           </div>
         </div>
       </div>
