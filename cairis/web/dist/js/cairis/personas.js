@@ -17,6 +17,78 @@
 
     Authors: Raf Vandelaer */
 
+$(document).on('click', "button.editPersonasButton",function(){
+    var name = $(this).attr("value");
+    $.session.set("PersonaName", name.trim());
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+            session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + "/api/personas/name/" + name.replace(" ", "%20"),
+        success: function (newdata) {
+            // console.log(JSON.stringify(rawData));
+            fillOptionMenu("fastTemplates/editPersonasOptions.html","#optionsContent",null,true,true, function(){
+                    $.session.set("Persona", JSON.stringify(newdata));
+                    $('#editPersonasOptionsForm').loadJSON(newdata,null);
+                    forceOpenOptions();
+                    $.ajax({
+                        type: "GET",
+                        dataType: "json",
+                        accept: "application/json",
+                        data: {
+                            session_id: String($.session.get('sessionID'))
+                        },
+                        crossDomain: true,
+                        url: serverIP + "/api/personas/name/" + newdata.theName + "/properties",
+                        success: function (data) {
+                            $.session.set("PersonaProperties", JSON.stringify(data));
+                            fillEditPersonasEnvironment();
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                accept: "application/json",
+                                data: {
+                                    session_id: String($.session.get('sessionID'))
+                                },
+                                crossDomain: true,
+                                url: serverIP + "/api/personas/types",
+                                success: function (data) {
+                                    var typeSelect =  $('#theType');
+                                    $.each(data, function (index, type) {
+                                        typeSelect
+                                            .append($("<option></option>")
+                                                .attr("value",type.theName)
+                                                .text(type.theName));
+                                    });
+
+                                },
+                                error: function (xhr, textStatus, errorThrown) {
+                                    debugLogger(String(this.url));
+                                    debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+                                }
+                            });
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            debugLogger(String(this.url));
+                            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+                        }
+                    });
+                }
+            );
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+    });
+});
+
+
 $("#personaClick").click(function () {
     createPersonasTable();
 });
@@ -82,10 +154,10 @@ $(document).on('click', ".editPersonaButton", function () {
         url: serverIP + "/api/personas/name/" + name.replace(" ", "%20"),
         success: function (data) {
             // console.log(JSON.stringify(rawData));
-            fillOptionMenu("fastTemplates/editPersonaOptions.html", "#optionsContent", null, true, true, function () {
+            fillOptionMenu("fastTemplates/editPersonasOptions.html", "#optionsContent", null, true, true, function () {
                     forceOpenOptions();
                     $.session.set("Persona", JSON.stringify(data));
-                    $('#editPersonaOptionsForm').loadJSON(data, null);
+                    $('#editPersonasOptionsForm').loadJSON(data, null);
                     var tags = data.theTags;
                     var text = "";
                     $.each(tags, function (index, type) {
@@ -214,10 +286,10 @@ optionsContent.on('click', '#UpdatePersona', function (e) {
         persona.theTags = tags;
     }
     //IF NEW Persona
-    if($("#editPersonaOptionsForm").hasClass("new")){
+    if($("#editPersonasOptionsForm").hasClass("new")){
         postPersona(persona, function () {
             createPersonasTable();
-            $("#editPersonaOptionsForm").removeClass("new")
+            $("#editPersonasOptionsForm").removeClass("new")
         });
     } else {
         putPersona(persona, oldName, function () {
@@ -226,8 +298,8 @@ optionsContent.on('click', '#UpdatePersona', function (e) {
     }
 });
 $(document).on("click", "#addNewPersona", function () {
-    fillOptionMenu("fastTemplates/editPersonaOptions.html", "#optionsContent", null, true, true, function () {
-        $("#editPersonaOptionsForm").addClass("new");
+    fillOptionMenu("fastTemplates/editPersonasOptions.html", "#optionsContent", null, true, true, function () {
+        $("#editPersonasOptionsForm").addClass("new");
         $("#Properties").hide();
         $.session.set("Persona", JSON.stringify(jQuery.extend(true, {},personaDefault )));
         forceOpenOptions();
@@ -313,7 +385,7 @@ function postImage(imagedir, actualDir) {
 }
 
 function personaToggle(){
-    $("#editPersonaOptionsForm").toggle();
+    $("#editPersonasOptionsForm").toggle();
 }
 function appendPersonaEnvironment(environment){
     $("#thePersonaEnvironments").find("tbody").append('<tr><td class="deletePersonaEnv"><i class="fa fa-minus"></i></td><td class="personaEnvironment">'+environment+'</td></tr>');

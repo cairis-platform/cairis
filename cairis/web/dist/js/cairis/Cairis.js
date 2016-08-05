@@ -510,9 +510,38 @@ function createAssetsTable(data, callback){
     });
     theTable.append(textToInsert.join(''));
     callback();
-
-
 }
+
+function createPersonasTable(data, callback){
+
+    var theTable = $(".theTable");
+    var textToInsert = [];
+    var i = 0;
+
+    //var thedata = $.parseJSON(data);
+    $.each(data, function(count, item) {
+        textToInsert[i++] = "<tr>"
+
+        textToInsert[i++] = '<td><button class="editPersonaButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deletePersonaButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
+
+        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = item.theName;
+        textToInsert[i++] = '</td>';
+
+        textToInsert[i++] = '<td name="theType">';
+        textToInsert[i++] = item.theType;
+        textToInsert[i++] = '</td>';
+
+        textToInsert[i++] = '<td name="theId" style="display:none;">';
+        textToInsert[i++] = item.theId;
+        textToInsert[i++] = '</td>';
+        textToInsert[i++] = '</tr>';
+    });
+    theTable.append(textToInsert.join(''));
+    callback();
+}
+
+
 /*
 filling up the environment table
  */
@@ -1203,6 +1232,10 @@ function setTableHeader(){
         case "Attackers":
             debugLogger("Is Attacker");
             thead = "<th width='120px' id='addNewAttacker'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Description</th>";
+            break;
+        case "Personas":
+            debugLogger("Is Persona");
+            thead = "<th width='120px' id='addNewPersona'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
             break;
         case "Risks":
             debugLogger("Is Risk");

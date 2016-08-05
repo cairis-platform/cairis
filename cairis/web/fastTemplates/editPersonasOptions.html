@@ -1,0 +1,117 @@
+<form id="editPersonasOptionsForm" xmlns="http://www.w3.org/1999/html" >
+
+  <div class="left">
+  <p>
+    <label>Name</label>
+    <input class="optionsInput personaUpdate" type="text" name="theName" id="theName">
+  </p>
+  <p>
+    <label>Tags</label>
+    <input class="optionsInput personaUpdate" type="text" value="" id="theTags" name="theTags" style="float: right;">
+  </p>
+
+  <div class="tabs">
+    <ul>
+      <li><a href="#activities">Activities</a></li>
+      <li><a href="#attitudes">Attitudes</a></li>
+      <li><a href="#aptitudes">Aptitudes</a></li>
+      <li><a href="#motivations">Motivations</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contextual">Contextual Trust</a></li>
+      <li><a href="#intrinsic">Intrinsic Trust</a></li>
+    </ul>
+
+
+    <div id="activities">
+      <label>Activities</label><br>
+      <textarea id="activitiesID" class-"personaUpdate"></textarea>
+    </div>
+
+    <div id="attitudes">
+      <label>Attitudes</label><br>
+      <textarea id="attitudesField" class="personaUpdate"></textarea>
+    </div>
+
+    <div id="aptitudes">
+      <label>Aptitudes</label><br>
+      <textarea id="aptitudesField" class="personaUpdate"></textarea>
+    </div>
+
+    <div id="motivations">
+      <label>Motivations</label><br>
+      <textarea id="motivationsField" class="personaUpdate"></textarea>
+    </div>
+
+    <div id="skills">
+      <label>Skills</label><br>
+      <textarea id="skillsField" class="personaUpdate"></textarea>
+    </div>
+
+    <div id="contextual">
+      <label>Contextual</label><br>
+      <textarea id="contextualField" class="personaUpdate"></textarea>
+    </div>
+
+    <div id="intrinsic">
+      <label>Intrinsic</label><br>
+      <textarea id="intrinsicField" class="personaUpdate"></textarea>
+    </div>
+  </div>
+  <div class="right">
+    <div style="position: relative;">
+      <img id="theImages" src="" height="200" width="200"
+        onerror="this.src='images/default-avatar.png';" style=
+        "margin-bottom: 5px">
+
+      <div class="progress" style="display: none">
+        <div class="progress-bar" role="progressbar"
+          aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+          <span class="sr-only">70% Complete</span>
+        </div>
+      </div>
+    </div>
+    <p><input type="file" id="fileupload" style="display: none"></p> 
+  </div><br>
+
+  <div class="inblock">
+    <table class="left clickable-table" id=
+      "thePersonaEnvironments">
+      <thead>
+        <tr>
+          <th id="addPersonaEnv" style="width: 15px;"></th>
+          <th>Environment</th>
+        </tr>
+      </thead>
+    </table>
+
+    <div class="tabs right infoWidth">
+      <ul>
+        <li><a href="#summary">Summary</a></li>
+        <li><a href="#narrative">Narrative</a></li> 
+      </ul>
+      <div id="Properties" class=
+        "gearOptions clickable-table scrollableTable">
+        <div class="inblock">
+          <div id="summary">
+            <label>Direct/Indirect</label> <input id="summaryDirect" class="personaUpdate"></p>
+            <br>
+            <table id="personaRole" class="left" style=
+          "width: 50%">
+              <thead>
+                <tr>
+                  <th id="addRoletoPersona" style="width: 15px;">
+                  </th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div id="narrative">
+            <label>Narrative</label><br>
+            <textarea id="narrativeField" class="personaUpdate"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><button id="UpdatePersona">Update</button>
+</form>
