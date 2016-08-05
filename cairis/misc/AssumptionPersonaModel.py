@@ -24,7 +24,7 @@ from cairis.core.Borg import Borg
 
 __author__ = 'Shamal Faily'
 
-class PersonaModel:
+class AssumptionPersonaModel:
   def __init__(self,tlinks,font_name = None, font_size = None):
     self.theTraceLinks = tlinks
     b = Borg()

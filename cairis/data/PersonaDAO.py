@@ -27,7 +27,7 @@ from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import PersonaModel, PersonaEnvironmentPropertiesModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
-from cairis.misc.PersonaModel import PersonaModel
+from cairis.misc.AssumptionPersonaModel import AssumptionPersonaModel
 __author__ = 'Shamal Faily'
 
 
@@ -255,7 +255,7 @@ class PersonaDAO(CairisDAO):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       modelAssocs = self.db_proxy.assumptionPersonaModel(persona_name)
-      associations = PersonaModel(modelAssocs,font_name=fontName,font_size=fontSize)
+      associations = AssumptionPersonaModel(modelAssocs,font_name=fontName,font_size=fontSize)
       dot_code = associations.graph()
       if not dot_code:
         raise ObjectNotFoundHTTPError('The persona model')
