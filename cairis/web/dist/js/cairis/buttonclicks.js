@@ -1151,7 +1151,7 @@ $(document).on('click', "button.deletePersonaButton",function(){
             name: name
         },
         crossDomain: true,
-        url: serverIP + "/api/persona/name/" + newdata.theName + "/properties",
+        url: serverIP + "/api/persona/name/" + name,
         success: function (data) {
             $.ajax({
                 type: "GET",
