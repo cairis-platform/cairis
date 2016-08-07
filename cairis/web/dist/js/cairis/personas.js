@@ -252,6 +252,13 @@ $(document).on("click", "#addNewPersona", function () {
     $("#Properties").hide();
     $.session.set("Persona", JSON.stringify(jQuery.extend(true, {},personaDefault )));
     forceOpenOptions();
+
+    getPersonaTypes(function createTypes(types) {
+      $.each(types, function (pType,index) {
+        $('#thePersonaType').append($("<option></option>").attr("value", pType).text(pType));
+      });
+      $("#thePersonaType").val(data.thePersonaType);
+    });
   });
 });
 
