@@ -1,15 +1,25 @@
 <form id="editPersonasOptionsForm" xmlns="http://www.w3.org/1999/html" >
 
   <div class="left">
-  <p>
-    <label>Name</label>
-    <input class="optionsInput personaUpdate" type="text" name="theName" id="theName">
-  </p>
-  <p>
-    <label>Tags</label>
-    <input class="optionsInput personaUpdate" type="text" value="" id="theTags" name="theTags" style="float: right;">
-  </p>
-
+    <p>
+      <label>Name</label>
+      <input class="optionsInput personaUpdate" type="text" name="theName" id="theName">
+    </p>
+    <p>
+      <label for='thePersonaType'>Type</label>
+        <select name='Type' id="thePersonaType" style="float: right">
+          <option selected>Primary</option>
+          <option selected>Secondary</option>
+          <option selected>Supplemental</option>
+          <option selected>Customer</option>
+          <option selected>Served</option>
+          <option selected>Negative</option>
+        </select>
+    </p>
+    <p>
+      <label>Tags</label>
+      <input class="optionsInput personaUpdate" type="text" value="" id="theTags" name="theTags" style="float: right;">
+    </p>
   <div class="tabs">
     <ul>
       <li><a href="#activities">Activities</a></li>
@@ -20,8 +30,6 @@
       <li><a href="#contextual">Contextual Trust</a></li>
       <li><a href="#intrinsic">Intrinsic Trust</a></li>
     </ul>
-
-
     <div id="activities">
       <label>Activities</label><br>
       <textarea id="theActivities" class="personaUpdate"></textarea>
@@ -57,21 +65,18 @@
       <textarea id="theIntrinsic" class="personaUpdate"></textarea>
     </div>
   </div>
+
   <div class="right">
     <div style="position: relative;">
-      <img id="theImage" src="" height="200" width="200"
-        onerror="this.src='images/default-avatar.png';" style=
-        "margin-bottom: 5px">
-
+      <img id="theImage" src="" height="200" width="200" onerror="this.src='images/default-avatar.png';" style="margin-bottom: 5px">
       <div class="progress" style="display: none">
-        <div class="progress-bar" role="progressbar"
-          aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar" role="progressbar"  aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
           <span class="sr-only">70% Complete</span>
         </div>
       </div>
     </div>
     <p><input type="file" id="fileupload" style="display: none"></p> 
-  </div><br>
+  </div><br/>
 
   <div class="inblock">
     <table class="left clickable-table" id="thePersonaEnvironments">
@@ -110,5 +115,6 @@
         </div>
       </div>
     </div>
-  </div><button id="UpdatePersona">Update</button>
+  </div>
+  <button id="UpdatePersona">Update</button>
 </form>
