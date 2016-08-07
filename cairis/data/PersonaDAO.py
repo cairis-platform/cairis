@@ -266,3 +266,54 @@ class PersonaDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+  def get_persona_types(self):
+    try:
+      pTypes = self.db_proxy.getDimensions('persona_type')
+      return pTypes 
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def get_persona_props(self, name, simplify=True):
+    persona = self.get_persona_by_name(name, simplify=False)
+    props = persona.theEnvironmentProperties
+
+    if simplify:
+      props = self.convert_props(real_props=props)
+    return props
+
+  def update_persona_properties(self, props, name, existing_params=None):
+    if existing_params is None:
+      persona = self.get_persona_by_name(name, simplify=False)
+
+      existing_params = PersonaParameters(
+        name=persona.name(),
+        activities=persona.activities(),
+        attitudes=persona.attitudes(),
+        aptitudes=persona.aptitudes(),
+        motivations=persona.motivations(),
+        skills=persona.skills(),
+        intrinsic=persona.intrinsic(),
+        contextual=persona.contextual(),
+        image=persona.image(),
+        isAssumption=persona.assumption(),
+        pType=persona.type(),
+        tags=persona.tags(),
+        properties=persona.environmentProperties(),
+        pCodes=persona.theCodes
+      )
+      existing_params.setId(persona.id())
+    existing_params.theEnvironmentProperties = props
+
+    try:
+      self.db_proxy.updatePersona(existing_params)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)

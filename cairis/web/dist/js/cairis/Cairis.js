@@ -97,9 +97,7 @@ function hideLoading(){
     $(".loadingWrapper").fadeOut(500);
 }
 
-/*
-Filling the asset environment in the HTML
- */
+// Filling the asset environment in the HTML
 function fillEditAssetsEnvironment(){
     var data = JSON.parse( $.session.get("AssetProperties"));
     var i = 0;
@@ -111,7 +109,6 @@ function fillEditAssetsEnvironment(){
     });
     $('#theEnvironmentDictionary').find("tbody").empty();
     $('#theEnvironmentDictionary').append(textToInsert.join(''));
-    // $(".clickable-environments").contextMenu(menu);
 
     var env = $( "#theEnvironmentDictionary").find("tbody tr:eq(0) > td:eq(0)").text();
 
@@ -121,18 +118,13 @@ function fillEditAssetsEnvironment(){
             getAssetDefinition(group.attributes);
             //props = group.attributes;
             $.session.set("thePropObject", JSON.stringify(group));
-
            // $.session.set("Arrayindex",arrayID);
-
         }
     });
     $("#theEnvironmentDictionary").find(".assetEnvironmetRow:first").trigger('click');
-
 }
 
-/*
-For converting the form in JSON
- */
+// For converting the form in JSON
 $.fn.serializeObject = function()
 {
     var o = {};
@@ -528,8 +520,8 @@ function createPersonasTable(data, callback){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theType">';
-        textToInsert[i++] = item.theType;
+        textToInsert[i++] = '<td name="thePersonaType">';
+        textToInsert[i++] = item.thePersonaType;
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '<td name="theId" style="display:none;">';
@@ -1502,8 +1494,8 @@ function getAssetDefinition(props){
         }
      });
     $('#Properties').find('tbody').append(textToInsert.join(''));
-
 }
+
 function getImagedir(imageName){
     return serverIP + "/images/"+ imageName;
 }

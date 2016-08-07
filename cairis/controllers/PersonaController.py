@@ -22,8 +22,8 @@ from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.PersonaDAO import PersonaDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import PersonaMessage, ValueTypeMessage
-from cairis.tools.ModelDefinitions import PersonaModel, ValueTypeModel
+from cairis.tools.MessageDefinitions import PersonaMessage, PersonaEnvironmentPropertiesMessage, ValueTypeMessage
+from cairis.tools.ModelDefinitions import PersonaModel, PersonaEnvironmentPropertiesModel, ValueTypeModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 __author__ = 'Shamal Faily'
 
@@ -331,4 +331,111 @@ class PersonaNamesAPI(Resource):
 
     resp = make_response(json_serialize(persona_names, session_id=session_id), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
+    return resp
+
+class PersonaTypesAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get all persona types',
+    nickname='persona-types-get',
+    responseClass=ValueTypeModel.__name__,
+    responseContainer='List',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self):
+    session_id = get_session_id(session, request)
+    dao = PersonaDAO(session_id)
+    pTypes = dao.get_persona_types()
+    dao.close()
+    resp = make_response(json_serialize(pTypes, session_id=session_id), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+class PersonaEnvironmentPropertiesAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get the environment properties for a specific persona',
+    nickname='persona-envprops-by-name-get',
+    responseClass=PersonaEnvironmentPropertiesModel.__name__,
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self, persona_name):
+    session_id = get_session_id(session, request)
+    dao = PersonaDAO(session_id)
+    persona_props = dao.get_persona_props(name=persona_name)
+    dao.close()
+    resp = make_response(json_serialize(asset_props, session_id=session_id))
+    resp.contenttype = 'application/json'
+    return resp
+
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Updates the environment properties for a specific persona',
+    nickname='persona-envprops-by-name-put',
+    parameters=[
+      {
+        "name": "body",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": PersonaEnvironmentPropertiesMessage.__name__,
+        "paramType": "body"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def put(self, persona_name):
+    session_id = get_session_id(session, request)
+    dao = PersonaDAO(session_id)
+    persona_prop = dao.from_json(request, to_props=True)
+    dao.update_persona_properties(persona_prop, name=persona_name)
+    dao.close()
+    resp_dict = {'message': 'The persona properties were successfully updated.'}
+    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp.contenttype = 'application/json'
     return resp

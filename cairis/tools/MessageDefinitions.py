@@ -195,6 +195,16 @@ class VulnerabilityMessage(DefaultMessage):
 # region Swagger Doc
 @swagger.model
 @swagger.nested(
+    object=ModelDefinitions.PersonaEnvironmentPropertiesModel.__name__
+)
+# endregion
+class PersonaEnvironmentPropertiesMessage(DefaultMessage):
+    resource_fields = gen_message_multival_fields(ModelDefinitions.PersonaEnvironmentPropertiesModel)
+    required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
     object=ModelDefinitions.PersonaModel.__name__,
 )
 # endregion

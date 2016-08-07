@@ -74,10 +74,12 @@
   </div><br>
 
   <div class="inblock">
-    <table class="left clickable-table" id="theEnvironmentDictionary">
+    <table class="left clickable-table" id="thePersonaEnvironments">
       <thead>
         <tr><th> <i class="fa fa-plus addEnvironmentPlus"></i></th><th>Environment</th></tr>
       </thead>
+      <tbody>
+      </tbody>
     </table>
 
     <div class="tabs right infoWidth">
@@ -85,22 +87,20 @@
         <li><a href="#summary">Summary</a></li>
         <li><a href="#narrative">Narrative</a></li> 
       </ul>
-      <div id="Properties" class=
-        "gearOptions clickable-table scrollableTable">
+      <div id="Properties" class="gearOptions clickable-table scrollableTable">
         <div class="inblock">
           <div id="summary">
-            <label>Direct/Indirect</label>
-            <select name="theDirectFlag" id="theDirectFlag" class="personaUpdate"></p>
-            </select>
-            <table id="personaRole" class="left" style=
-          "width: 50%">
+            <input type="checkbox" id="theDirectFlag">Direct</input>
+            <table id="personaRole" class="left" style="width: 50%">
               <thead>
                 <tr>
-                  <th id="theRoles" style="width: 15px;">
+                  <th id="addRoleToPersona" style="width: 15px;"><i class="fa fa-plus"></i>
                   </th>
                   <th>Role</th>
                 </tr>
               </thead>
+              <tbody>
+              </tbody>
             </table>
           </div>
           <div id="narrative">
