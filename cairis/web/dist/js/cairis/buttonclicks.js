@@ -70,11 +70,34 @@ $("#addRow").click(function() {
  */
 $("#removeReq").click(function() {
     if(window.activeTable =="Requirements"){
-        var oldrow = $("tr").eq(getActiveindex()).detach();
+      var reqName = $("tr").eq(getActiveindex()).find("td").eq(1).html();
+      var ursl = serverIP + "/api/requirements/name/" + reqName.replace(' ',"%20");
+      var object = {};
+      object.session_id= $.session.get('sessionID');
+      var objectoutput = JSON.stringify(object);
+
+      $.ajax({
+        type: "DELETE",
+        dataType: "json",
+        contentType: "application/json",
+        accept: "application/json",
+        data: objectoutput,
+        crossDomain: true,
+        url: ursl,
+        success: function (data) {
+          $("tr").eq(getActiveindex()).detach();
+          showPopup(true);
+          sortTableByRow(0);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            var error = JSON.parse(xhr.responseText);
+            showPopup(false, String(error.message));
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
     }
 
-    //of remove
-    //TODO: AJAX CALL BEFORE REMOVE
 });
 
 $("#gridReq").click(function(){
