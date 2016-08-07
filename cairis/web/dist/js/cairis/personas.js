@@ -88,6 +88,14 @@ $(document).on('click', ".editPersonaButton", function () {
         forceOpenOptions();
         $.session.set("Persona", JSON.stringify(data));
         $('#editPersonasOptionsForm').loadJSON(data, null);
+
+        getPersonaTypes(function createTypes(types) {
+          $.each(types, function (pType,index) {
+            $('#thePersonaType').append($("<option></option>").attr("value", pType).text(pType));
+          });
+          $("#thePersonaType").val(data.thePersonaType);
+        });
+
         if (data.theTags.length > 0) {
           var text = "";
           $.each(data.theTags, function (index, type) {
@@ -339,3 +347,26 @@ function clearPersonaEnvInfo(){
   $("#personaRole").find("tbody").empty();
   $("#theNarrative").val('');
 }
+
+function getPersonaTypes(callback){
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/personas/types",
+    success: function (data) {
+      if(jQuery.isFunction(callback)){
+        callback(data);
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
