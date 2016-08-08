@@ -231,7 +231,7 @@ function getAssetview(environment){
 }
 
 function getGoalview(environment){
-    window.goalEnvironment = environment;
+    window.assetEnvironment = environment;
     $.ajax({
         type:"GET",
         accept:"application/json",
@@ -254,7 +254,7 @@ function getGoalview(environment){
 }
 
 function getRiskview(environment){
-    window.riskEnvironment = environment;
+    window.assetEnvironment = environment;
     $.ajax({
         type:"GET",
         accept:"application/json",

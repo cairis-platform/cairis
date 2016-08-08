@@ -78,7 +78,6 @@ $( document ).ajaxComplete(function() {
       });
     } 
     else if(link.indexOf("personas") > -1) {
-      forceOpenOptions();
 
       $.ajax({
         type: "GET",
@@ -103,15 +102,9 @@ $( document ).ajaxComplete(function() {
             url: serverIP + "/api/personas/name/"+ data.theName,
             success: function(){
               fillOptionMenu("fastTemplates/PersonaOptions.html", "#optionsContent", data,false,true,function(){
-                $("#theName").val(data.theName);
-                $("#theActivities").val(data.theActivities);
-                $("#theAptitudes").val(data.theAptitudes);
-                $("#theAttitudes").val(data.theAttitudes);
-                $("#theMotivations").val(data.theMotivations);
-                $("#theSkills").val(data.theMotivations);
-                $("#theIntrinsic").val(data.theIntrinsic);
-                $("#theContextual").val(data.theContextual);
-
+                $.session.set("Persona", JSON.stringify(data));
+                $('#personasForm').loadJSON(data,null);
+                forceOpenOptions();
                 $.each(data.theEnvironmentProperties, function (idx, env) {
                   if (window.assetEnvironment == env.theEnvironmentName) {
                     $("#theNarrative").val(env.theNarrative);
@@ -158,16 +151,15 @@ $( document ).ajaxComplete(function() {
             url: serverIP + "/api/vulnerabilities/name/"+ data.theVulnerabilityName,
             success: function(){
               fillOptionMenu("fastTemplates/VulnerabilityOptions.html", "#optionsContent", data,false,true,function(){
-                $("#theName").val(data.theVulnerabilityName);
-                $("#theType").val(data.theVulnerabilityType);
-                $("#theDescription").val(data.theVulnerabilityDescription);
-
+                $.session.set("Vulnerability", JSON.stringify(data));
+                $('#vulnerabilitiesForm').loadJSON(data,null);
+                forceOpenOptions();
                 $.each(data.theEnvironmentProperties, function (idx, env) {
                   if (window.assetEnvironment == env.theEnvironmentName) {
                     $("#theSeverity").val(env.theSeverity);
                     var assetValues = [];
                     for (var i = 0; i < env.theAssets.length; i++) {
-                      assetValues.push("<tr><td>" + env.theAssets[i].name + "</td><td></tr>"); 
+                      assetValues.push("<tr><td>" + env.theAssets[i] + "</td></tr>"); 
                     }
                     $("#assetTable").find("tbody").append(assetValues.join(' '));
                   }
