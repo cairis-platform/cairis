@@ -220,5 +220,69 @@ $( document ).ajaxComplete(function() {
         }
       });
     }
+    else if(link.indexOf("threats") > -1) {
+      forceOpenOptions();
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + link.replace(" ", "%20"),
+        success: function (data) {
+          var theTableArr =[];
+
+          $.ajax({
+            type:"GET",
+            dataType: "json",
+            accept:"application/json",
+            data: {
+              session_id: String($.session.get('sessionID'))
+            },
+            crossDomain: true,
+            url: serverIP + "/api/threats/name/"+ data.theThreatName,
+            success: function(){
+              fillOptionMenu("fastTemplates/ThreatOptions.html", "#optionsContent", data,false,true,function(){
+                $.session.set("Threat", JSON.stringify(data));
+                $('#threatsForm').loadJSON(data,null);
+                forceOpenOptions();
+                $.each(data.theEnvironmentProperties, function (idx, env) {
+                  if (window.assetEnvironment == env.theEnvironmentName) {
+                    $("#theLikelihood").val(env.theLikelihood);
+                    var dimValues = [];
+                    for (var i = 0; i < env.theAssets.length; i++) {
+                      dimValues.push("<tr><td>" + env.theAssets[i] + "</td></tr>"); 
+                    }
+                    $("#assetTable").find("tbody").append(dimValues.join(' '));
+                    dimValues = [];
+                    for (var i = 0; i < env.theAttackers.length; i++) {
+                      dimValues.push("<tr><td>" + env.theAttackers[i] + "</td></tr>"); 
+                    }
+                    $("#attackerTable").find("tbody").append(dimValues.join(' '));
+                    dimValues = [];
+                    for (var i = 0; i < env.theProperties.length; i++) {
+                      if (env.theProperties[i].value != "None") {
+                        dimValues.push("<tr><td>" + env.theProperties[i].name + "</td><td>" + env.theProperties[i].value + "</td><td>" + env.theRationale[i] + "</td></tr>"); 
+                      }
+                    }
+                    $("#propTable").find("tbody").append(dimValues.join(' '));
+                  }
+                });
+              });
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.log(this.url);
+              debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+            }
+          });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          console.log(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
   });
 });
