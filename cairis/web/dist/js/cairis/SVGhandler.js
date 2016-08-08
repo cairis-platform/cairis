@@ -132,6 +132,61 @@ $( document ).ajaxComplete(function() {
         }
       });
     }
+    else if(link.indexOf("vulnerabilities") > -1) {
+      forceOpenOptions();
+
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + link.replace(" ", "%20"),
+        success: function (data) {
+          var theTableArr =[];
+
+          $.ajax({
+            type:"GET",
+            dataType: "json",
+            accept:"application/json",
+            data: {
+              session_id: String($.session.get('sessionID'))
+            },
+            crossDomain: true,
+            url: serverIP + "/api/vulnerabilities/name/"+ data.theVulnerabilityName,
+            success: function(){
+              fillOptionMenu("fastTemplates/VulnerabilityOptions.html", "#optionsContent", data,false,true,function(){
+                $("#theName").val(data.theVulnerabilityName);
+                $("#theType").val(data.theVulnerabilityType);
+                $("#theDescription").val(data.theVulnerabilityDescription);
+
+                $.each(data.theEnvironmentProperties, function (idx, env) {
+                  if (window.assetEnvironment == env.theEnvironmentName) {
+                    $("#theSeverity").val(env.theSeverity);
+                    var assetValues = [];
+                    for (var i = 0; i < env.theAssets.length; i++) {
+                      assetValues.push("<tr><td>" + env.theAssets[i].name + "</td><td></tr>"); 
+                    }
+                    $("#assetTable").find("tbody").append(assetValues.join(' '));
+                  }
+                });
+
+              });
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.log(this.url);
+              debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+            }
+          });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          console.log(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
  
   });
 });
