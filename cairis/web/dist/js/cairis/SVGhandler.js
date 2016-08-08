@@ -330,5 +330,56 @@ $( document ).ajaxComplete(function() {
         }
       });
     }
+else if(link.indexOf("goals") > -1) {
+      forceOpenOptions();
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + link.replace(" ", "%20"),
+        success: function (data) {
+          var theTableArr =[];
+
+          $.ajax({
+            type:"GET",
+            dataType: "json",
+            accept:"application/json",
+            data: {
+              session_id: String($.session.get('sessionID'))
+            },
+            crossDomain: true,
+            url: serverIP + "/api/goals/name/"+ data.theName,
+            success: function(){
+              fillOptionMenu("fastTemplates/GoalOptions.html", "#optionsContent", data,false,true,function(){
+                $.session.set("Goal", JSON.stringify(data));
+                $('#goalsForm').loadJSON(data,null);
+                forceOpenOptions();
+                $.each(data.theEnvironmentProperties, function (idx, env) {
+                  if (window.assetEnvironment == env.theEnvironmentName) {
+                    $("#theCategory").val(env.theCategory);
+                    $("#theDefinition").val(env.theDefinition);
+                    $("#theFitCriterion").val(env.theFitCriterion);
+                    $("#thePriority").val(env.thePriority);
+                    $("#theIssue").val(env.theIssue);
+                  }
+                });
+              });
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.log(this.url);
+              debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+            }
+          });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          console.log(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
   });
 });
