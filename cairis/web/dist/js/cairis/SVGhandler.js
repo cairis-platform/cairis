@@ -107,18 +107,6 @@ $( document ).ajaxComplete(function() {
           url: serverIP + link.replace(" ", "%20"),
           success: function (data) {
             //forceOpenOptions();
-            var dataArr = [];
-            dataArr["#theName"] = String(data.theName);
-            dataArr["#theActivities"] = String(data.theActivities);
-            dataArr["#theAttitudes"] = String(data.theAttitudes);
-            dataArr["#theAptitudes"] = String(data.theAptitudes);
-            dataArr["#theMotivations"] = String(data.theMotivations);
-            dataArr["#theMotivations"] = String(data.theSkills);
-            dataArr["#theInstrinsic"] = String(data.theIntrinsic);
-            dataArr["#theContextual"] = String(data.theContextual);
-            dataArr["#theImage"] = String(data.theImage);
-            dataArr["#isAssumption"] = String(data.isAssumption);
-            dataArr["#thePersonaType"] = String(data.thePersonaType);
             var theTableArr =[];
 
             $.ajax({
@@ -133,35 +121,47 @@ $( document ).ajaxComplete(function() {
               success: function(data2){
                 var jsonObj = eval(data2);
                 var theTableArr = [];
-                  for (var key in jsonObj) {
-                    if (jsonObj.hasOwnProperty(key)) {
-                      if(key == window.personaEnvironment){
-                        var goodData =  eval(jsonObj[key]);
-                        for (var ky in goodData) {
-                          //goodData[ky] = Availibility  + intgr
-                          for (var k in goodData[ky]) {
-                            if(k == "value"){
-                              theTableArr[String(ky)] = String(goodData[ky][k]);
-                              debugLogger(String(ky) + " " + String(goodData[ky][k]));
-                            }
-                            //console.log(goodData[ky][k] + " " + k);
+                for (var key in jsonObj) {
+                  if (jsonObj.hasOwnProperty(key)) {
+                    if(key == window.personaEnvironment){
+                      var goodData =  eval(jsonObj[key]);
+                      for (var ky in goodData) {
+                        //goodData[ky] = Availibility  + intgr
+                        for (var k in goodData[ky]) {
+                          if(k == "value"){
+                            theTableArr[String(ky)] = String(goodData[ky][k]);
+                            debugLogger(String(ky) + " " + String(goodData[ky][k]));
                           }
+                          //console.log(goodData[ky][k] + " " + k);
                         }
                       }
                     }
                   }
-                  dataArr["narrative"] = theTableArr;
-                  fillOptionMenu("fastTemplates/PersonaOptions.html", "#optionsContent", dataArr,false,true,function(){
-                    // Get environment specific narrative here and populate table
-                    //$('#narrativeField').value("Some narrative");
-                  });
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                  console.log(this.url);
-                  debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
                 }
-              });
-            },
+                fillOptionMenu("fastTemplates/PersonaOptions.html", "#optionsContent", data,false,true,function(){
+                  $("#theName").val(data.theName);
+                  $("#theActivities").val(data.theActivities);
+                  $("#theAptitudes").val(data.theAptitudes);
+                  $("#theAttitudes").val(data.theAttitudes);
+                  $("#theMotivations").val(data.theMotivations);
+                  $("#theSkills").val(data.theMotivations);
+                  $("#theIntrinsic").val(data.theIntrinsic);
+                  $("#theContextual").val(data.theContextual);
+
+                  $.each(data.theEnvironmentProperties, function (idx, env) {
+                    if (window.assetEnvironment == env.theEnvironmentName) {
+                      $("#theNarrative").val(env.theNarrative);
+                    }
+                  });
+
+                });
+              },
+              error: function(xhr, textStatus, errorThrown) {
+                console.log(this.url);
+                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+              }
+            });
+          },
           error: function (xhr, textStatus, errorThrown) {
             console.log(String(this.url));
             debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
