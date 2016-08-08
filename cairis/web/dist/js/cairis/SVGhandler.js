@@ -284,5 +284,51 @@ $( document ).ajaxComplete(function() {
         }
       });
     }
+    else if(link.indexOf("requirements") > -1) {
+      forceOpenOptions();
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + link.replace(" ", "%20"),
+        success: function (data) {
+          var theTableArr =[];
+
+          $.ajax({
+            type:"GET",
+            dataType: "json",
+            accept:"application/json",
+            data: {
+              session_id: String($.session.get('sessionID'))
+            },
+            crossDomain: true,
+            url: serverIP + "/api/requirements/name/"+ data.theName,
+            success: function(){
+              fillOptionMenu("fastTemplates/RequirementOptions.html", "#optionsContent", data,false,true,function(){
+                $.session.set("Requirement", JSON.stringify(data));
+                $('#requirementsForm').loadJSON(data,null);
+                forceOpenOptions();
+                $('#originator').val(data.attrs.originator);
+                $('#rationale').val(data.attrs.rationale);
+                $('#fitCriterion').val(data.attrs.fitCriterion);
+                $('#type').val(data.attrs.type);
+              });
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.log(this.url);
+              debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+            }
+          });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          console.log(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
   });
 });
