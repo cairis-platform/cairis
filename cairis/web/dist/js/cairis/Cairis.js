@@ -276,7 +276,7 @@ function getRiskview(environment){
 }
 
 function getTaskview(environment){
-    window.taskEnvironment = environment;
+    window.assetEnvironment = environment;
     $.ajax({
         type:"GET",
         accept:"application/json",
