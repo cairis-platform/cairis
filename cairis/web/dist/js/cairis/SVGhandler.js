@@ -330,7 +330,7 @@ $( document ).ajaxComplete(function() {
         }
       });
     }
-else if(link.indexOf("goals") > -1) {
+    else if(link.indexOf("goals") > -1) {
       forceOpenOptions();
       $.ajax({
         type: "GET",
@@ -365,6 +365,67 @@ else if(link.indexOf("goals") > -1) {
                     $("#theFitCriterion").val(env.theFitCriterion);
                     $("#thePriority").val(env.thePriority);
                     $("#theIssue").val(env.theIssue);
+                  }
+                });
+              });
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.log(this.url);
+              debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+            }
+          });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          console.log(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
+    else if(link.indexOf("attackers") > -1) {
+      forceOpenOptions();
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + link.replace(" ", "%20"),
+        success: function (data) {
+          var theTableArr =[];
+
+          $.ajax({
+            type:"GET",
+            dataType: "json",
+            accept:"application/json",
+            data: {
+              session_id: String($.session.get('sessionID'))
+            },
+            crossDomain: true,
+            url: serverIP + "/api/attackers/name/"+ data.theName,
+            success: function(){
+              fillOptionMenu("fastTemplates/AttackerOptions.html", "#optionsContent", data,false,true,function(){
+                $.session.set("Attacker", JSON.stringify(data));
+                $('#attackersForm').loadJSON(data,null);
+                forceOpenOptions();
+                $.each(data.theEnvironmentProperties, function (idx, env) {
+                  if (window.assetEnvironment == env.theEnvironmentName) {
+                    var dimValues = [];
+                    for (var i = 0; i < env.theRoles.length; i++) {
+                      dimValues.push("<tr><td>" + env.theRoles[i] + "</td></tr>"); 
+                    }
+                    $("#rolesTable").find("tbody").append(dimValues.join(' '));
+                    dimValues = [];
+                    for (var i = 0; i < env.theMotives.length; i++) {
+                      dimValues.push("<tr><td>" + env.theMotives[i] + "</td></tr>"); 
+                    }
+                    $("#motivesTable").find("tbody").append(dimValues.join(' '));
+                    dimValues = [];
+                    for (var i = 0; i < env.theCapabilities.length; i++) {
+                      dimValues.push("<tr><td>" + env.theCapabilities[i].name + "</td><td>" + env.theCapabilities[i].value + "</td></tr>"); 
+                    }
+                    $("#capabilitiesTable").find("tbody").append(dimValues.join(' '));
                   }
                 });
               });
