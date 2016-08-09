@@ -442,5 +442,87 @@ $( document ).ajaxComplete(function() {
         }
       });
     }
+    else if(link.indexOf("risks") > -1) {
+      forceOpenOptions();
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + link.replace(" ", "%20"),
+        success: function (data) {
+          $.ajax({
+            type:"GET",
+            dataType: "json",
+            accept:"application/json",
+            data: {
+              session_id: String($.session.get('sessionID'))
+            },
+            crossDomain: true,
+            url: serverIP + "/api/risks/name/"+ data.theName,
+            success: function(){
+              fillOptionMenu("fastTemplates/RiskOptions.html", "#optionsContent", data,false,true,function(){
+                $.session.set("Risk", JSON.stringify(data));
+                $('#risksForm').loadJSON(data,null);
+                forceOpenOptions();
+
+                var riskName = $("#theName").val();
+                var threatName = $("#theThreatName").val();
+                var vulName = $("#theVulnerabilityName").val();
+                var envName = window.assetEnvironment;
+                $.ajax({
+                  type: "GET",
+                  dataType: "json",
+                  accept: "application/json",
+                  data: {
+                    session_id: String($.session.get('sessionID'))
+                  },
+                  crossDomain: true,
+                  url: serverIP + "/api/risks/threat/" + threatName + "/vulnerability/"+ vulName + "/environment/" + envName,
+                  success: function (data) {
+                    $("#theRating").val(data.rating);
+                    $.ajax({
+                      type: "GET",
+                      dataType: "json",
+                      accept: "application/json",
+                      data: {
+                        session_id: String($.session.get('sessionID'))
+                      },
+                      crossDomain: true,
+                      url: serverIP + "/api/risks/name/"+ riskName +"/threat/" + threatName + "/vulnerability/"+ vulName + "/environment/" + envName,
+                      success: function (data) {
+                        $("#theResponses").find("tbody").empty();
+                        $.each(data, function (index, resp) {
+                          $("#theResponses").find("tbody").append('<tr></td><td>'+resp.responseName+'</td><td>'+ resp.unmitScore +'</td><td>'+ resp.mitScore +'</td></tr>');
+                        })
+                      },
+                      error: function (xhr, textStatus, errorThrown) {
+                        debugLogger(String(this.url));
+                        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+                      }
+                    });
+                  },
+                  error: function (xhr, textStatus, errorThrown) {
+                    debugLogger(String(this.url));
+                    debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+                  }
+                });
+              });
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.log(this.url);
+              debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+            }
+          });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          console.log(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
   });
 });

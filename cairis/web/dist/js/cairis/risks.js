@@ -175,7 +175,7 @@ function getRiskEnvironments(){
         data: {
             session_id: String($.session.get('sessionID'))
         },
-        crfossDomain: true,
+        crossDomain: true,
         url: serverIP + "/api/environments/threat/" + threatName + "/vulnerability/"+ vulName + "/names",
         success: function (data) {
             $('#theRiskEnvironments').find('tbody').empty();
