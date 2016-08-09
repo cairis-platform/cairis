@@ -736,8 +736,27 @@ function fileDialogbox(callback){
         }
     });
     $(".comboboxD").css("visibility", "visible");
-
 }
+
+function fileExportDialogbox(callback){
+    var dialogwindow = $("#typeOfFile");
+    var select = dialogwindow.find("select");
+    dialogwindow.dialog({
+        modal: true,
+        buttons: {
+            Ok: function () {
+                var text =  select.find("option:selected" ).text();
+                if(jQuery.isFunction(callback)){
+                    callback(text);
+                    $("#exportFile").trigger('click')
+                }
+                $(this).dialog("close");
+            }
+        }
+    });
+    $(".comboboxD").css("visibility", "visible");
+}
+
 /*
  Dialog for choosing a new role for the responses
  */

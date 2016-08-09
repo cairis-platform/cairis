@@ -28,7 +28,6 @@ from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import CExportMessage
 from cairis.tools.ModelDefinitions import CExportParams
 from cairis.tools.SessionValidator import get_session_id
-
 __author__ = 'Shamal Faily'
 
 
@@ -36,7 +35,7 @@ class CExportTextAPI(Resource):
   # region Swagger Doc
   @swagger.operation(
     notes='Exports data from XML text',
-    nickname='cexport-text-post',
+    nickname='cexport-text-get',
     parameters=[
       {
         "name": "session_id",
@@ -59,7 +58,7 @@ class CExportTextAPI(Resource):
     ]
   )
   # endregion
-  def post(self):
+  def get(self):
     session_id = get_session_id(session, request)
 
     try:
