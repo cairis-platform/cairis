@@ -85,9 +85,9 @@ def buildConceptMap(p,envName,graphName):
   return True
 
 
-def exportRedmineScenarios(outFile):
+def exportRedmineScenarios(outFile,session_id = None):
   b = Borg()
-  rmScenarios = b.dbProxy.redmineScenarios()
+  rmScenarios = b.get_dbproxy(session_id).redmineScenarios()
 
   buf = ''
   noScenarios = 0
@@ -102,7 +102,7 @@ def exportRedmineScenarios(outFile):
   
 def exportRedmineUseCases(outFile):
   b = Borg()
-  rmUseCases = b.dbProxy.redmineUseCases()
+  rmUseCases = b.get_dbproxy(session_id).redmineUseCases()
 
   buf = ''
   noUseCases = 0
@@ -124,9 +124,9 @@ def exportRedmineUseCases(outFile):
   return 'Exported ' + str(noUseCases) + ' use cases.'
 
 
-def exportRedmineRequirements(outFileName):
+def exportRedmineRequirements(outFileName,session_id = None):
   b = Borg()
-  reqs = b.dbProxy.getRedmineRequirements()
+  reqs = b.get_dbproxy(session_id).getRedmineRequirements()
 
   envNames = reqs.keys()
   envNames.sort()
@@ -139,7 +139,7 @@ def exportRedmineRequirements(outFileName):
     buf = 'h1. ' + envName + ' requirements\n\n' 
 
     cmFile = envCode + '_conceptMap'
-    buildConceptMap(b.dbProxy,envName,cmFile)
+    buildConceptMap(b.get_dbproxy(session_id),envName,cmFile)
     buf +='!' + cmFile + '!\n\n'
     
     buf += '|*Short Name*|*Comments*|*Scenarios*|*Use Cases*|*Backlog*|\n'
@@ -165,11 +165,11 @@ def exportRedmineRequirements(outFileName):
   outputFile.close()
   return 'Exported requirements'
 
-def exportGRL(outFileName,personaNames,taskNames,envName):
+def exportGRL(outFileName,personaNames,taskNames,envName,session_id = None):
   b = Borg()
   pStr = ', '.join(personaNames)
   tStr = ', '.join(taskNames)
-  buf = b.dbProxy.pcToGrl(pStr,tStr,envName)
+  buf = b.get_dbproxy(session_id).pcToGrl(pStr,tStr,envName)
   rFile = open(outFileName,'w')
   rFile.write(buf)
   rFile.close()
@@ -207,9 +207,9 @@ def buildRiskObstacleModel(p,apName,envName,graphName):
   drawGraph(graph,graphName)
   return True
 
-def exportArchitecture(outFile):
+def exportArchitecture(outFile,session_id = None):
   b = Borg()
-  rmArchitecture = b.dbProxy.redmineArchitecture()
+  rmArchitecture = b.get_dbproxy(session_id).redmineArchitecture()
 
   buf = ''
   noAPs = 0
@@ -219,11 +219,11 @@ def exportArchitecture(outFile):
     if (aType == 'component'):
       caName = aName.replace(' ','_') + 'AssetModel.jpg'
       cgName = aName.replace(' ','_') + 'GoalModel.jpg'
-      buildComponentAssetModel(b.dbProxy,aName,caName)
-      buildComponentGoalModel(b.dbProxy,aName,cgName)
+      buildComponentAssetModel(b.get_dbproxy(session_id),aName,caName)
+      buildComponentGoalModel(b.get_dbproxy(session_id),aName,cgName)
     elif (aType == 'architectural_pattern'):
       graphName = aName.replace(' ','_') + 'ComponentModel.jpg'
-      buildComponentModel(b.dbProxy,aName,graphName)
+      buildComponentModel(b.get_dbproxy(session_id),aName,graphName)
   
   aFile = open(outFile,'w')
   aFile.write(buf)
@@ -232,7 +232,7 @@ def exportArchitecture(outFile):
   outFilePrefix,outFilePostfix = outFile.split('.')
   summaryFile = outFilePrefix + '-summary.' + outFilePostfix
 
-  archSumm = b.dbProxy.redmineArchitectureSummary('Complete')
+  archSumm = b.get_dbproxy(session_id).redmineArchitectureSummary('Complete')
   buf = ''
   for aName,sTxt in archSumm:
     buf += sTxt + '\n'
@@ -243,9 +243,9 @@ def exportArchitecture(outFile):
  
   return 'Exported ' + str(noAPs) + ' architectural patterns.'
 
-def exportAttackPatterns(outFile):
+def exportAttackPatterns(outFile,session_id = None):
   b = Borg()
-  rmAttackPatterns = b.dbProxy.redmineAttackPatterns()
+  rmAttackPatterns = b.get_dbproxy(session_id).redmineAttackPatterns()
 
   buf = 'h1. Contextualised Attack Patterns\n\nThis section was automatically generated based on the contents of the webinos WP 2 git repository at http://dev.webinos.org/git/wp2.git.\n\nh2. Obstacle probability: colour codes\n\n!{width:200px}ObsColour.jpg!\n\n'
   apdxBuf = ''
@@ -254,7 +254,7 @@ def exportAttackPatterns(outFile):
     if (cType == 'body'):
       buf += apTxt + '\n'
       gmName = apName.replace(' ','_') + 'ObstacleModel.jpg'
-      buildRiskObstacleModel(b.dbProxy,apName,envName,gmName)
+      buildRiskObstacleModel(b.get_dbproxy(session_id),apName,envName,gmName)
     else:
       apdxBuf += apTxt + '\n' 
     noAPs += 1
@@ -264,24 +264,27 @@ def exportAttackPatterns(outFile):
 
   fileName,filePostfix = outFile.split('.')
   summaryFile = fileName + '-summary.txt'
-  buf = b.dbProxy.redmineAttackPatternsSummary('Complete')
+  buf = b.get_dbproxy(session_id).redmineAttackPatternsSummary('Complete')
   aFile = open(summaryFile,'w')
   aFile.write(buf)
   aFile.close()
 
   return 'Exported ' + str(noAPs) + ' attack patterns.'
 
-def exportModel(outFile):
+def exportModel(outFile = None,session_id = None):
   b = Borg()
   xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">\n<cairis_model>\n\n\n'
-  xmlBuf+= b.dbProxy.tvTypesToXml(0)[0] + '\n\n'
-  xmlBuf+= b.dbProxy.domainValuesToXml(0)[0] + '\n\n'
-  xmlBuf+= b.dbProxy.projectToXml(0) + '\n\n'
-  xmlBuf+= b.dbProxy.riskAnalysisToXml(0)[0] + '\n\n'
-  xmlBuf+= b.dbProxy.usabilityToXml(0)[0] + '\n\n'
-  xmlBuf+= b.dbProxy.goalsToXml(0)[0] + '\n\n'
-  xmlBuf+= b.dbProxy.associationsToXml(0)[0] + '\n\n</cairis_model>'
-  f = open(outFile,'w')
-  f.write(xmlBuf)
-  f.close()
-  return 'Exported model'
+  xmlBuf+= b.get_dbproxy(session_id).tvTypesToXml(0)[0] + '\n\n'
+  xmlBuf+= b.get_dbproxy(session_id).domainValuesToXml(0)[0] + '\n\n'
+  xmlBuf+= b.get_dbproxy(session_id).projectToXml(0) + '\n\n'
+  xmlBuf+= b.get_dbproxy(session_id).riskAnalysisToXml(0)[0] + '\n\n'
+  xmlBuf+= b.get_dbproxy(session_id).usabilityToXml(0)[0] + '\n\n'
+  xmlBuf+= b.get_dbproxy(session_id).goalsToXml(0)[0] + '\n\n'
+  xmlBuf+= b.get_dbproxy(session_id).associationsToXml(0)[0] + '\n\n</cairis_model>'
+  if outFile == None:
+    return xmlBuf
+  else:
+    f = open(outFile,'w')
+    f.write(xmlBuf)
+    f.close()
+    return 'Exported model'

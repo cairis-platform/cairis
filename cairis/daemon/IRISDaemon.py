@@ -27,7 +27,7 @@ from flask.ext.restful_swagger import swagger
 from cairis.core.Borg import Borg
 from CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.core.ARM import ARMException, DatabaseProxyException
-from cairis.controllers import AssetController, AttackerController, CImportController, DependencyController, \
+from cairis.controllers import AssetController, AttackerController, CImportController, CExportController, DependencyController, \
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, UserController, VulnerabilityController
@@ -215,6 +215,9 @@ def start():
     api.add_resource(GoalController.GoalsAPI, '/api/goals')
     api.add_resource(GoalController.GoalByNameAPI, '/api/goals/name/<string:name>')
     api.add_resource(GoalController.GoalModelAPI, '/api/goals/model/environment/<string:environment>')
+
+    # Export routes
+    api.add_resource(CExportController.CExportTextAPI, '/api/export/text')
 
     # Import routes
     api.add_resource(CImportController.CImportTextAPI, '/api/import/text')

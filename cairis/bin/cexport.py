@@ -18,12 +18,11 @@
 
 import argparse
 import sys
-
 __author__ = 'Shamal Faily'
 
 def main(args=None):
-
-  parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Export to Redmine')
+  import cairis.core.BorgFactory
+  parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Export')
   parser.add_argument('outputFile',help='output file name')
   parser.add_argument('--type',dest='modelFormat',help='model type to export.  One of all, requirements, scenarios, usecases, architecture, attackpatterns or GRL')
   parser.add_argument('--persona',nargs='+',help='Persona name (relevant for GRL export only)')
@@ -31,25 +30,28 @@ def main(args=None):
   parser.add_argument('--environment',dest='envName',help='Environment name (relevant for GRL export only)')
   args = parser.parse_args() 
   cairis.core.BorgFactory.initialise()
-   
+  file_export(args.modelFormat,args.outputFile,args.persona,args.task,args.envName)
+
+def file_export(modelFormat = 'all', outputFile = None, persona = None, task = None, envName = None, session_id = None):
+  from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineRequirements,exportRedmineUseCases,exportArchitecture,exportAttackPatterns
   msgStr = ''
-  if (args.modelFormat == 'all'):
-    msgStr += exportModel(args.outputFile)
+  if (modelFormat == 'all'):
+    msgStr += exportModel(outputFile,session_id)
   elif (args.modelFormat == 'scenarios'):
-    msgStr += exportRedmineScenarios(args.outputFile)
+    msgStr += exportRedmineScenarios(outputFile,session_id)
   elif (args.modelFormat == 'requirements'):
-    msgStr += exportRedmineRequirements(args.outputFile)
+    msgStr += exportRedmineRequirements(outputFile,session_id)
   elif (args.modelFormat == 'usecases'):
-    msgStr += exportRedmineUseCases(args.outputFile)
+    msgStr += exportRedmineUseCases(outputFile,session_id)
   elif (args.modelFormat == 'architecture'):
-    msgStr += exportArchitecture(args.outputFile)
+    msgStr += exportArchitecture(outputFile,session_id)
   elif (args.modelFormat == 'attackpatterns'):
-    msgStr += exportAttackPatterns(args.outputFile)
+    msgStr += exportAttackPatterns(outputFile,session_id)
   elif (args.modelFormat == 'GRL'):
     personaNames = []
-    personaNames.extend(args.persona)
+    personaNames.extend(persona)
     taskNames = []
-    taskNames.extend(args.task)
+    taskNames.extend(task)
 
     if len(personaNames) == 0:
       raise ARMException('Persona name not specified for GRL export')
@@ -58,16 +60,14 @@ def main(args=None):
     elif args.envName == None:
       raise ARMException('Environment name not specified for GRL export')
     else:
-      msgStr += exportGRL(args.outputFile,personaNames,taskNames,args.envName)
+      msgStr += exportGRL(args.outputFile,personaNames,taskNames,envName,session_id)
   else:
-    raise ARMException('Export model type ' + args.modelFormat + ' not recognised')
+    raise ARMException('Export model type ' + modelFormat + ' not recognised')
+  return msgStr
 
 if __name__ == '__main__':
-
+  from cairis.core.ARM import *
   try:
-    import cairis.core.BorgFactory
-    from cairis.mio.ModelExport import *
-    from cairis.core.ARM import *
     main()
   except ImportError:
     print "Fatal CAIRIS error: Could not import the Python dependencies needed by CAIRIS.  Either your Python installation is incomplete, or - if you have downloaded CAIRIS directly from github - PYTHONPATH needs to be set to the root directly of your source installation; this is the same directory that setup.py can be found in."

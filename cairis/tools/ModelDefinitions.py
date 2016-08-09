@@ -190,6 +190,14 @@ class CImportParams(object):
     }
 
 @swagger.model
+class CExportParams(object):
+    resource_fields = {
+      'theModel': fields.String
+    }
+    required = resource_fields.keys()
+
+
+@swagger.model
 class DependencyModel(object):
     resource_fields = {
         obj_id_field: fields.String,
