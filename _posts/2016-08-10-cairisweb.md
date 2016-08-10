@@ -27,7 +27,7 @@ People seem excited about CAIRIS, but less excited about using a GUI that runs o
 
 ### 2. Opening CAIRIS for other apps and services ###
 
-We wanted to develop an API that people could use for leveraging CAIRIS' analytical capabilities without using the GUI.  When CAIRIS was used on the [webinos project](http://webinos.org), many of the requirements and architectural design models were created and generated without using the GUI at all, and (scripts were used to import data into CAIRIS for processing, and export data from CAIRIS into various formats)[https://github.com/webinos/webinos-design-data].  By interacting with the CAIRIS database exclusively through the web services, the CAIRIS web app has become a design tool that uses the CAIRIS API.  
+We wanted to develop an API that people could use for leveraging CAIRIS' analytical capabilities without using the GUI.  When CAIRIS was used on the [webinos project](http://webinos.org), many of the requirements and architectural design models were created and generated without using the GUI at all, and [scripts were used to import data into CAIRIS for processing, and export data from CAIRIS into various formats](https://github.com/webinos/webinos-design-data).  By interacting with the CAIRIS database exclusively through the web services, the CAIRIS web app has become a design tool that uses the CAIRIS API.  
 
 
 ### 3.  Evolving CAIRIS into multiple apps ###
@@ -37,7 +37,7 @@ We wanted to develop an API that people could use for leveraging CAIRIS' analyti
 
 ### Next steps ###
 
-This initial version of the CAIRIS web app currently supports everything needed to manage risks and related artifacts, personas, and several of the visual models.  We are currently hard at work implementing the functionality that will make the web app functionally equivalent to the desktop app.  We're also developing a prototype ``CAIRIS risk'' app to explore the different forms that security design tools might take.
+This initial version of the CAIRIS web app currently supports everything needed to manage risks and related artifacts, personas, and several of the visual models.  We are currently hard at work implementing the functionality that will make the web app functionally equivalent to the desktop app.  We're also developing a prototype *CAIRIS risk* app to explore the different forms that security design tools might take.
 
 
 ### We want your feedback ###
