@@ -40,6 +40,7 @@ $(document).on('click', "button.editAssetsButton",function(){
             fillOptionMenu("fastTemplates/editAssetsOptions.html","#optionsContent",null,true,true, function(){
                     $.session.set("Asset", JSON.stringify(newdata));
                     $('#editAssetsOptionsform').loadJSON(newdata,null);
+                    $("#optionsHeaderGear").text("Asset properties");
                     forceOpenOptions();
                     $.ajax({
                         type: "GET",
@@ -211,6 +212,7 @@ optionsContent.on('click', '.addEnvironmentPlus',function(){
                             $(this).dialog("close");
                             //Created a function, for readability
                             //$( "#comboboxDialogSelect").find("option:selected" ).text()
+                            $("#optionsHeaderGear").text("Asset properties");
                             forceOpenOptions();
                             var chosenText = $( "#comboboxDialogSelect").find("option:selected" ).text();
                             $("#theEnvironmentDictionary").find("tbody").append("<tr><td class='deleteAssetEnv'><i class='fa fa-minus'></i></td><td class='clickable-environments'>" + chosenText +"</td></tr>");

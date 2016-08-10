@@ -92,6 +92,7 @@ $(document).on('click', ".editThreatsButton", function () {
         success: function (data) {
             // console.log(JSON.stringify(rawData));
             fillOptionMenu("fastTemplates/editThreatOptions.html", "#optionsContent", null, true, true, function () {
+                    $("#optionsHeaderGear").text("Threat properties");
                     forceOpenOptions();
                     $("#addPropertyDiv").hide();
                     getThreatTypes(function createTypes(types) {
@@ -144,6 +145,7 @@ $(document).on("click", "#addNewThreat", function () {
         });
 
         $.session.set("theThreat", JSON.stringify(jQuery.extend(true, {},threatDefault )));
+        $("#optionsHeaderGear").text("Threat properties");
         forceOpenOptions();
         //$("reqTable").find("tbody").append('<tr><td><button class="editThreatsButton" value="">Edit</button> <button class="deleteThreatsButton" value="Replay attack">Delete</button></td><td name="theName"></td><td name="theType"></td></tr>')
     });

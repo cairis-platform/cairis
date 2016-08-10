@@ -119,6 +119,7 @@ $(document).on('click', '.editRiskButton', function () {
         success: function (mainData) {
             // console.log(JSON.stringify(rawData));
             fillOptionMenu("fastTemplates/editRiskOptions.html", "#optionsContent", null, true, true, function () {
+                    $("#optionsHeaderGear").text("Risk properties");
                     forceOpenOptions();
                     var threatSelect = $("#theThreatNames");
                     var vulnSelect = $("#theVulnerabilityNames");

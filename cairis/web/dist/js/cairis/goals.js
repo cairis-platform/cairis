@@ -15,7 +15,7 @@
     specific language governing permissions and limitations
     under the License.
 
-    Authors: Raf Vandelaer */
+    Authors: Raf Vandelaer, Shamal Faily */
 
 $("#EditGoals").click(function(){
     createEditGoalsTable()
@@ -315,6 +315,7 @@ optionsContent.on('change', ".goalAutoUpdater" ,function() {
 $(document).on('click', '#addNewGoal', function () {
     fillGoalOptionMenu(null, function () {
         $("#editGoalOptionsForm").addClass('new');
+        $("#optionsHeaderGear").text("Goal properties");
         forceOpenOptions();
         $("#goalsProperties").hide();
     });
@@ -478,6 +479,7 @@ function fillGoalOptionMenu(data,callback){
                 $.each(data.theEnvironmentProperties, function (index, prop) {
                     appendGoalEnvironment(prop.theEnvironmentName);
                 });
+                $("#optionsHeaderGear").text("Goal properties");
                 forceOpenOptions();
                 $("#theGoalEnvironments").find(".goalEnvProperties:first").trigger('click');
 

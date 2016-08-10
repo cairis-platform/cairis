@@ -87,6 +87,7 @@ $(document).on('click', ".editAttackerButton", function () {
         success: function (data) {
             // console.log(JSON.stringify(rawData));
             fillOptionMenu("fastTemplates/editAttackerOptions.html", "#optionsContent", null, true, true, function () {
+                    $("#optionsHeaderGear").text("Attacker properties");
                     forceOpenOptions();
                     $("#addAttackerPropertyDiv").hide();
                     $.session.set("Attacker", JSON.stringify(data));
@@ -340,6 +341,7 @@ $(document).on("click", "#addNewAttacker", function () {
         $("#editAttackerOptionsForm").addClass("new");
         $("#Properties").hide();
         $.session.set("Attacker", JSON.stringify(jQuery.extend(true, {},attackerDefault )));
+        $("#optionsHeaderGear").text("Attacker properties");
         forceOpenOptions();
     });
 });

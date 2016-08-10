@@ -15,7 +15,7 @@
     specific language governing permissions and limitations
     under the License.
 
-    Authors: Raf Vandelaer */
+    Authors: Raf Vandelaer, Shamal Faily */
 
 $("#responsesTable").click(function () {
     createResponsesTable();
@@ -34,9 +34,8 @@ $(document).on('click', ".editResponseButton", function () {
         success: function (data) {
             // console.log(JSON.stringify(rawData));
             fillOptionMenu("fastTemplates/editResponseOptions.html", "#optionsContent", null, true, true, function () {
-
+                    $("#optionsHeaderGear").text("Response properties");
                     var tags = data.theTags;
-
                     $("#theResponseName").val(data.theName);
                     $.session.set("response", JSON.stringify(data));
                     var text = "";

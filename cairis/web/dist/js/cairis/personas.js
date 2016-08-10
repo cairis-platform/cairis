@@ -85,6 +85,7 @@ $(document).on('click', ".editPersonaButton", function () {
     success: function (data) {
       // console.log(JSON.stringify(rawData));
       fillOptionMenu("fastTemplates/editPersonasOptions.html", "#optionsContent", null, true, true, function () {
+        $("#optionsHeaderGear").text("Persona properties");
         forceOpenOptions();
         $.session.set("Persona", JSON.stringify(data));
         $('#editPersonasOptionsForm').loadJSON(data, null);
@@ -271,6 +272,7 @@ $(document).on("click", "#addNewPersona", function () {
     $("#editPersonasOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("Persona", JSON.stringify(jQuery.extend(true, {},personaDefault )));
+    $("#optionsHeaderGear").text("Persona properties");
     forceOpenOptions();
 
     getPersonaTypes(function createTypes(types) {

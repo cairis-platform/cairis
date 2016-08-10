@@ -52,6 +52,7 @@ $( document ).ajaxComplete(function() {
           url: serverIP + "/api/assets/name/"+ data.theName,
           success: function() {
             fillOptionMenu("fastTemplates/AssetOptions.html", "#optionsContent", dataArr,false,true,function(){
+              $("#optionsHeaderGear").text("Asset properties");
               $.each(data.theEnvironmentProperties, function (idx, env) {
                 if (window.assetEnvironment == env.theEnvironmentName) {
                   var propValues = [];
@@ -104,6 +105,7 @@ $( document ).ajaxComplete(function() {
               fillOptionMenu("fastTemplates/PersonaOptions.html", "#optionsContent", data,false,true,function(){
                 $.session.set("Persona", JSON.stringify(data));
                 $('#personasForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Persona properties");
                 forceOpenOptions();
                 $.each(data.theEnvironmentProperties, function (idx, env) {
                   if (window.assetEnvironment == env.theEnvironmentName) {
@@ -152,6 +154,7 @@ $( document ).ajaxComplete(function() {
               fillOptionMenu("fastTemplates/VulnerabilityOptions.html", "#optionsContent", data,false,true,function(){
                 $.session.set("Vulnerability", JSON.stringify(data));
                 $('#vulnerabilitiesForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Vulnerability properties");
                 forceOpenOptions();
                 $.each(data.theEnvironmentProperties, function (idx, env) {
                   if (window.assetEnvironment == env.theEnvironmentName) {
@@ -205,6 +208,7 @@ $( document ).ajaxComplete(function() {
               fillOptionMenu("fastTemplates/RoleOptions.html", "#optionsContent", data,false,true,function(){
                 $.session.set("Role", JSON.stringify(data));
                 $('#rolesForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Role properties");
                 forceOpenOptions();
               });
             },
@@ -247,6 +251,7 @@ $( document ).ajaxComplete(function() {
               fillOptionMenu("fastTemplates/ThreatOptions.html", "#optionsContent", data,false,true,function(){
                 $.session.set("Threat", JSON.stringify(data));
                 $('#threatsForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Threat properties");
                 forceOpenOptions();
                 $.each(data.theEnvironmentProperties, function (idx, env) {
                   if (window.assetEnvironment == env.theEnvironmentName) {
@@ -311,6 +316,7 @@ $( document ).ajaxComplete(function() {
               fillOptionMenu("fastTemplates/RequirementOptions.html", "#optionsContent", data,false,true,function(){
                 $.session.set("Requirement", JSON.stringify(data));
                 $('#requirementsForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Requirement properties");
                 forceOpenOptions();
                 $('#originator').val(data.attrs.originator);
                 $('#rationale').val(data.attrs.rationale);
@@ -357,6 +363,7 @@ $( document ).ajaxComplete(function() {
               fillOptionMenu("fastTemplates/GoalOptions.html", "#optionsContent", data,false,true,function(){
                 $.session.set("Goal", JSON.stringify(data));
                 $('#goalsForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Goal properties");
                 forceOpenOptions();
                 $.each(data.theEnvironmentProperties, function (idx, env) {
                   if (window.assetEnvironment == env.theEnvironmentName) {
@@ -408,6 +415,7 @@ $( document ).ajaxComplete(function() {
               fillOptionMenu("fastTemplates/AttackerOptions.html", "#optionsContent", data,false,true,function(){
                 $.session.set("Attacker", JSON.stringify(data));
                 $('#attackersForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Attacker properties");
                 forceOpenOptions();
                 $.each(data.theEnvironmentProperties, function (idx, env) {
                   if (window.assetEnvironment == env.theEnvironmentName) {
@@ -467,6 +475,7 @@ $( document ).ajaxComplete(function() {
               fillOptionMenu("fastTemplates/RiskOptions.html", "#optionsContent", data,false,true,function(){
                 $.session.set("Risk", JSON.stringify(data));
                 $('#risksForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Risk properties");
                 forceOpenOptions();
 
                 var riskName = $("#theName").val();
@@ -551,6 +560,7 @@ $( document ).ajaxComplete(function() {
               fillOptionMenu("fastTemplates/TaskOptions.html", "#optionsContent", data,false,true,function(){
                 $.session.set("Task", JSON.stringify(data));
                 $('#tasksForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Task properties");
                 forceOpenOptions();
                 $.each(data.theEnvironmentProperties, function (idx, env) {
                   if (window.assetEnvironment == env.theEnvironmentName) {
