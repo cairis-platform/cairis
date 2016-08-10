@@ -31,7 +31,7 @@ class CExportTests(CairisDaemonTestCase):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
     self.logger = logging.getLogger(__name__)
 
-  def test_cexport_data_post(self):
+  def test_cexport_data_get(self):
     method = 'test_cimport_text_get?session_id=test'
     url = '/api/export/text'
     self.logger.info('[%s] URL: %s', method, url)
