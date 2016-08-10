@@ -15,7 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from cairis.core.ARM import DatabaseProxyException
+from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import CairisHTTPError
 from cairis.data.CairisDAO import CairisDAO
 __author__ = 'Shamal Faily'
