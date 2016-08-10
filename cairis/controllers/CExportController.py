@@ -16,25 +16,26 @@
 #  under the License.
 
 import httplib
-from flask import make_response, request, session
+from flask import make_response, request, session, send_file
 from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
 from cairis.core.ARM import DatabaseProxyException, ARMException
 from cairis.core.Borg import Borg
 from cairis.daemon.CairisHTTPError import MalformedJSONHTTPError, CairisHTTPError, ARMHTTPError, MissingParameterHTTPError
-from cairis.bin.cexport import *
-from cairis.data.CairisDAO import CairisDAO
+from cairis.data.ExportDAO import ExportDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import CExportMessage
 from cairis.tools.ModelDefinitions import CExportParams
 from cairis.tools.SessionValidator import get_session_id
+from StringIO import StringIO
+
 __author__ = 'Shamal Faily'
 
 
 class CExportTextAPI(Resource):
   # region Swagger Doc
   @swagger.operation(
-    notes='Exports data from XML text',
+    notes='Exports data to XML text',
     nickname='cexport-text-get',
     parameters=[
       {
@@ -60,16 +61,9 @@ class CExportTextAPI(Resource):
   # endregion
   def get(self):
     session_id = get_session_id(session, request)
-
-    try:
-      modelBuf = file_export(session_id=session_id)
-    except DatabaseProxyException as ex:
-      raise ARMHTTPError(ex)
-    except ARMException as ex:
-      raise ARMHTTPError(ex)
-    except Exception as ex:
-      raise CairisHTTPError(status_code=500,message=str(ex.message),status='Unknown error')
-
+    dao = ExportDAO(session_id)
+    modelBuf = dao.file_export()
+    dao.close()
     resp = make_response(json_serialize(modelBuf, session_id=session_id), httplib.OK)
     resp.headers['Content-Type'] = 'application/json'
     return resp

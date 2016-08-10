@@ -18,38 +18,7 @@
     Authors: Shamal Faily */
 
 $("#exportClick").click(function () {
-  fileExportDialogbox(function (type) {
-    $.session.set("fileType", type);
-  }) 
-});
-$(document).on('change','#exportFile', function () {
-  var fileTag = $(document).find('#exportFile');
-  var fd = new FormData();
-  fd.append("file", fileTag[0].files[0]);
-  var fileType = $.session.get("fileType");
-
-  $.ajax({
-    type: "GET",
-    dataType: "json", 
-    accept: "application/json",
-    data: { session_id : String($.session.get('sessionID'))},
-    crossDomain: true,
-    url: serverIP + "/api/export/text?session_id="+  String($.session.get('sessionID')),
-    success: function (data) {
-      var exportFile = new File(fileType);
-      exportFile.writeln(data.theModel);
-      exportFile.open("w");
-      exportFile.write(data.theModel);
-      exportFile.close();
-      showPopup(true);
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      var error = JSON.parse(xhr.responseText);
-      showPopup(false, String(error.message));
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
+  window.open('/api/export/text?session_id=' + String($.session.get('sessionID')),'Export model');
 });
 
 
