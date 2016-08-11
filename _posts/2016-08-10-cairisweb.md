@@ -34,8 +34,8 @@ We wanted to develop an API that people could use for leveraging CAIRIS' analyti
 
 <h3> Next steps </h3>
 
-This initial version of the CAIRIS web app currently supports everything needed to manage risks and related artifacts, personas, and several of the visual models.  [We are currently hard at work implementing the functionality that will make the web app functionally equivalent to the desktop app](https://github.com/failys/cairis/issues/36).  We're also developing a prototype *CAIRIS risk* app to explore the different forms that security design tools might take.
+This initial version of the CAIRIS web app currently supports everything needed to manage risks and related artifacts, personas, and several of the visual models.  [We are currently hard at work implementing the functionality that will make the web app functionally equivalent to the desktop app](https://github.com/failys/cairis/issues/36).  We're also developing a prototype *CAIRIS risk* app to explore the different forms a risk-centered tool might take.
 
 <h3> We want your feedback </h3>
 
-Although the web app is still in its early stages and unstable in places, we would love to know what you think about the tool, and hear about possible features you would like to see.  Please feel free to raise [issues](https://github.com/failys/cairis/issues) with your feedback and comments, particularly if you find any problems.
+Although the web app is still in its early stages and unstable in places, we would love to hear about possible features you would like to see.  Please feel free to raise [issues](https://github.com/failys/cairis/issues) with your feedback and comments, particularly if you find any problems with the web app.
