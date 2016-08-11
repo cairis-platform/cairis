@@ -672,5 +672,51 @@ $( document ).ajaxComplete(function() {
         }
       });
     }
+    else if(link.indexOf("misusecases") > -1) {
+      forceOpenOptions();
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + link.replace(" ", "%20"),
+        success: function (data) {
+          $.ajax({
+            type:"GET",
+            dataType: "json",
+            accept:"application/json",
+            data: {
+              session_id: String($.session.get('sessionID'))
+            },
+            crossDomain: true,
+            url: serverIP + "/api/misusecases/name/"+ data.theName,
+            success: function(){
+              fillOptionMenu("fastTemplates/MisuseCaseOptions.html", "#optionsContent", data,false,true,function(){
+                $.session.set("MisuseCase", JSON.stringify(data));
+                $('#misuseCaseForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Misuse Case properties");
+                forceOpenOptions();
+                $.each(data.theEnvironmentDictionary, function (idx, env) {
+                  if (window.assetEnvironment == env.theEnvironmentName) {
+                    $('#theDescription').val(env.theDescription);
+                  } 
+                });
+              }); 
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.log(this.url);
+              debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+            }
+          });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          console.log(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
   });
 });

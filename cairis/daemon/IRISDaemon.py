@@ -224,8 +224,9 @@ def start():
     api.add_resource(CImportController.CImportFileAPI, '/api/import/file/type/<string:type>')
 
     # Misuse case routes
-    api.add_resource(MisuseCaseController.MisuseCasesAPI, '/api/misuse-cases')
-    api.add_resource(MisuseCaseController.MisuseCaseByNameAPI, '/api/misuse-cases/risk/<string:risk_name>')
+    api.add_resource(MisuseCaseController.MisuseCasesAPI, '/api/misusecases')
+    api.add_resource(MisuseCaseController.MisuseCaseByRiskNameAPI, '/api/misusecases/risk/<string:risk_name>')
+    api.add_resource(MisuseCaseController.MisuseCaseByNameAPI, '/api/misusecases/name/<string:misuse_case_name>')
 
     # Persona routes
     api.add_resource(PersonaController.PersonasAPI, '/api/personas')
