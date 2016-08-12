@@ -30,7 +30,7 @@ class ImportDAO(CairisDAO):
 
   def file_import(self,importFile,mFormat,overwriteFlag):
     try:
-      file_import(importFile,mFormat,overwriteFlag,self.session_id)
+      return file_import(importFile,mFormat,overwriteFlag,self.session_id)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
