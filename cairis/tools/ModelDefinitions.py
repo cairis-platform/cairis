@@ -26,6 +26,9 @@ from cairis.core.AttackerEnvironmentProperties import AttackerEnvironmentPropert
 from cairis.core.Dependency import Dependency
 from cairis.core.Goal import Goal
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
+from cairis.core.Obstacle import Obstacle
+from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
+from cairis.core.DomainProperty import DomainProperty
 from cairis.core.MisuseCase import MisuseCase
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from cairis.core.MitigateEnvironmentProperties import MitigateEnvironmentProperties
@@ -41,6 +44,8 @@ from cairis.core.TransferEnvironmentProperties import TransferEnvironmentPropert
 from cairis.core.ValueType import ValueType
 from cairis.core.Vulnerability import Vulnerability
 from cairis.core.VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
+from cairis.core.Countermeasure import Countermeasure
+from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
 from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -48,6 +53,8 @@ __author__ = 'Robin Quetin, Shamal Faily'
 obj_id_field = "__python_obj__"
 likelihood_metadata = { "enum": ['Incredible', 'Improbable', 'Remote', 'Occasional', 'Probable', 'Frequent'] }
 severity_metadata = { "enum": ['Negligible', 'Marginal', 'Critical', 'Catastrophic'] }
+value_metadata = { "enum": ['None','Low', 'Medium', 'High'] }
+assettype_metadata = { "enum" : ['Information','Systems','Software','Hardware','People']}
 
 def gen_class_metadata(class_ref):
     return {
@@ -275,6 +282,64 @@ class GoalModel(object):
     swagger_metadata = {
         obj_id_field : gen_class_metadata(Goal)
     }
+
+@swagger.model
+class ObstacleEnvironmentPropertiesModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        "theLabel": fields.String,
+        "theDefinition": fields.String,
+        "theCategory": fields.String,
+        "theGoalRefinements": fields.List(fields.String),
+        "theSubGoalRefinements": fields.List(fields.String),
+        "theConcerns": fields.List(fields.String),
+        "theProbability": fields.Float,
+        "theProbabilityRationale": fields.String
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metadata = {
+        obj_id_field : gen_class_metadata(ObstacleEnvironmentProperties)
+    }
+
+@swagger.model
+@swagger.nested(
+    theEnvironmentProperties=ObstacleEnvironmentPropertiesModel.__name__
+)
+class ObstacleModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        "theId": fields.Integer,
+        "theName": fields.String,
+        "theTags": fields.List(fields.String),
+        "theOriginator": fields.String,
+        "theEnvironmentProperties": fields.List(fields.Nested(GoalEnvironmentPropertiesModel.resource_fields)),
+        "theEnvironmentDictionary": fields.List
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    required.remove("theEnvironmentDictionary")
+    swagger_metadata = {
+        obj_id_field : gen_class_metadata(Obstacle)
+    }
+
+@swagger.model
+class DomainPropertyModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        "theId": fields.Integer,
+        "theName": fields.String,
+        "theTags": fields.List(fields.String),
+        "theDescription": fields.String,
+        "theType": fields.String,
+        "theOriginator": fields.String
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metadata = {
+        obj_id_field : gen_class_metadata(DomainProperty)
+    }
+
 
 @swagger.model
 @swagger.nested(
@@ -600,6 +665,51 @@ class VulnerabilityModel(object):
         'theVulnerabilityType' : {
             "enum": ['Configuration', 'Design', 'Implementation']
         }
+    }
+
+@swagger.model
+class CountermeasureEnvironmentPropertiesModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        "theEnvironmentName": fields.String,
+        "theRequirements": fields.List(fields.String),
+        "theTargets": fields.List(fields.String),
+        "theProperties": fields.List(fields.Nested(SecurityAttribute.resource_fields)),
+        "theRationale": fields.List(fields.String),
+        "theCost": fields.String,
+        "theRoles": fields.List(fields.String),
+        "thePersonas": fields.List(fields.String)
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metadata = {
+        obj_id_field : gen_class_metadata(CountermeasureEnvironmentProperties),
+        "theCost": value_metadata
+    }
+
+@swagger.model
+@swagger.nested(
+    theEnvironmentProperties=CountermeasureEnvironmentPropertiesModel.__name__,
+    theEnvironmentDictionary=CountermeasureEnvironmentPropertiesModel.__name__
+)
+class CountermeasureModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        'theName': fields.String,
+        'theTags': fields.List(fields.String),
+        'theDescription': fields.String,
+        'theType': fields.String,
+        'theVulnerabilityId': fields.Integer,
+        'severityLookup': fields.List(fields.String),
+        'theEnvironmentDictionary': fields.List(fields.Nested(CountermeasureEnvironmentPropertiesModel.resource_fields)),
+        'theEnvironmentProperties': fields.List(fields.Nested(CountermeasureEnvironmentPropertiesModel.resource_fields))
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    required.remove('theEnvironmentDictionary')
+    swagger_metadata = {
+        obj_id_field: gen_class_metadata(Countermeasure),
+        'theType' : assettype_metadata
     }
 
 class PersonaEnvironmentPropertiesModel(object):

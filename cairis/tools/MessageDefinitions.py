@@ -124,6 +124,36 @@ class GoalMessage(DefaultMessage):
 # region Swagger Doc
 @swagger.model
 @swagger.nested(
+    object=ModelDefinitions.ObstacleModel.__name__
+)
+# endregion
+class ObstacleMessage(DefaultMessage):
+    resource_fields = gen_message_fields(ModelDefinitions.ObstacleModel)
+    required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+    object=ModelDefinitions.DomainPropertyModel.__name__
+)
+# endregion
+class DomainPropertyMessage(DefaultMessage):
+    resource_fields = gen_message_fields(ModelDefinitions.DomainPropertyModel)
+    required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+    object=ModelDefinitions.CountermeasureModel.__name__
+)
+# endregion
+class CountermeasureMessage(DefaultMessage):
+    resource_fields = gen_message_fields(ModelDefinitions.CountermeasureModel)
+    required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
     object=PseudoClasses.ProjectSettings.__name__
 )
 # endregion
