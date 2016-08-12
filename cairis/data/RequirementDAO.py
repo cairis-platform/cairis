@@ -74,9 +74,8 @@ class RequirementDAO(CairisDAO):
         if requirements is not None:
             idx = 0
             while found_requirement is None and idx < len(requirements):
-                if requirements.values()[idx].theName == name:
+                if (requirements.values()[idx].theName == name) or (requirements.values()[idx].theLabel == name):
                     found_requirement = requirements.values()[idx]
-
                 idx += 1
 
         if found_requirement is None:
