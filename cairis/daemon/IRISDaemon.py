@@ -30,7 +30,7 @@ from cairis.core.ARM import ARMException, DatabaseProxyException
 from cairis.controllers import AssetController, AttackerController, CImportController, CExportController, DependencyController, \
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
-    UploadController, UserController, VulnerabilityController
+    UploadController, UserController, VulnerabilityController, ObstacleController
 
 __author__ = 'Robin Quetin'
 ''' This module uses Flask (tested using 0.10) & Flask-Restful (tested using 0.3.3) '''
@@ -227,6 +227,11 @@ def start():
     api.add_resource(MisuseCaseController.MisuseCasesAPI, '/api/misusecases')
     api.add_resource(MisuseCaseController.MisuseCaseByRiskNameAPI, '/api/misusecases/risk/<string:risk_name>')
     api.add_resource(MisuseCaseController.MisuseCaseByNameAPI, '/api/misusecases/name/<string:misuse_case_name>')
+
+    # Obstacle routes
+    api.add_resource(ObstacleController.ObstaclesAPI, '/api/obstacles')
+    api.add_resource(ObstacleController.ObstacleByNameAPI, '/api/obstacles/name/<string:name>')
+    api.add_resource(ObstacleController.ObstacleModelAPI, '/api/obstacles/model/environment/<string:environment>')
 
     # Persona routes
     api.add_resource(PersonaController.PersonasAPI, '/api/personas')
