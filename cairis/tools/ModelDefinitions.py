@@ -163,10 +163,8 @@ class CImportParams(object):
     resource_fields = {
         'urlenc_file_contents': fields.String,
         'type': fields.String,
-        'overwrite': fields.Integer
     }
     required = resource_fields.keys()
-    required.remove('overwrite')
     swagger_metadata = {
         'type': {
             'enum': [

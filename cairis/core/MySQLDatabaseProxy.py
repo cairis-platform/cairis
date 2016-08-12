@@ -104,7 +104,6 @@ from ImpliedProcessParameters import ImpliedProcessParameters
 import string
 import os
 from numpy import *
-
 __author__ = 'Shamal Faily, Robin Quetin'
 
 LABEL_COL = 0

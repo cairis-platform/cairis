@@ -39,7 +39,7 @@ class MisuseCaseAPITests(CairisDaemonTestCase):
 
   def test_get_all(self):
     method = 'test_get_all'
-    rv = self.app.get('/api/misuse-cases?session_id=test')
+    rv = self.app.get('/api/misusecases?session_id=test')
     misuse_cases = jsonpickle.decode(rv.data)
     self.assertIsNotNone(misuse_cases, 'No results after deserialization')
     self.assertIsInstance(misuse_cases, dict, 'The result is not a dictionary as expected')
@@ -50,7 +50,7 @@ class MisuseCaseAPITests(CairisDaemonTestCase):
 
   def test_get_by_name(self):
     method = 'test_get_by_risk'
-    url = '/api/misuse-cases/risk/%s?session_id=test' % quote(self.existing_risk_name)
+    url = '/api/misusecases/risk/%s?session_id=test' % quote(self.existing_risk_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
