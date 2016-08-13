@@ -22,8 +22,17 @@ $( document ).ajaxComplete(function() {
     event.stopImmediatePropagation();
     event.preventDefault();
     var link = $(this).attr("xlink:href");
+    
+    if (self.theVisualModel == 'asset') {
+      window.assetEnvironment = $('#environmentsbox').val();
+    }
+    else if (self.theVisualModel == 'goal' || self.theVisualModel == 'obstacle') {
+      window.assetEnvironment = $('#gmenvironmentsbox').val();
+    }
+    else if (self.theVisualModel == 'risk') {
+      window.assetEnvironment = $('#rmenvironmentsbox').val();
+    }
 
-    window.assetEnvironment = $('#environmentsbox').val();
     if(link.indexOf("assets") > -1) {
       forceOpenOptions();
       $.ajax({

@@ -178,10 +178,11 @@ $('#assetsbox').change(function() {
   }
 });
 
+$('#gmgoalbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  getGoalview($('#gmenvironmentsbox').val(),selection);
+});
 
-/*
-Same for the environments
-*/
 $('#environmentsbox').change(function() {
   var selection = $(this).find('option:selected').text();
   if (window.theVisualModel == 'None') {
@@ -237,6 +238,34 @@ $('#environmentsbox').change(function() {
   }
 });
 
+
+$('#gmenvironmentsbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+    },
+    crossDomain: true,
+    url: serverIP + "/api/goals/environment/" + selection.replace(" ","%20") + "/names",
+    success: function (data) {
+      $('#gmgoalbox').empty();
+      $('#gmgoalbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+      $.each(data, function (index, item) {
+        $('#gmgoalbox').append($('<option>', {value: item, text: item},'</option>'));
+      });
+      $('#gmgoalbox').change();
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+
 $('#concernsbox').change(function() {
   if (window.theVisualModel == 'asset') {
     getAssetview($('#environmentsbox').val());
@@ -258,8 +287,6 @@ function getAssetview(environment){
         crossDomain: true,
         url: serverIP + "/api/assets/model/environment/" + environment.replace(" ","%20") + "/asset/" + assetName.replace(" ","%20"),
         success: function(data){
-          // console.log("in getAssetView " + data.innerHTML);
-           // console.log(this.url);
            fillSvgViewer(data);
         },
         error: function(xhr, textStatus, errorThrown) {
@@ -270,27 +297,57 @@ function getAssetview(environment){
     });
 }
 
-function getGoalview(environment){
-    window.assetEnvironment = environment;
+function getGoalview(environment,goalName,ucName){
+  window.assetEnvironment = environment;
+  $('#gmenvironmentsbox').val(environment);
+  if (goalName == undefined) {
     $.ajax({
-        type:"GET",
-        accept:"application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/goals/model/environment/" + environment.replace(" ","%20"),
-        success: function(data){
-          // console.log("in getGoalView " + data.innerHTML);
-           // console.log(this.url);
-           fillSvgViewer(data);
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + "/api/goals/environment/" + environment.replace(" ","%20") + "/names",
 
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
+      success: function (data) {
+        $("#gmgoalbox").empty()
+        $('#gmgoalbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+        $.each(data, function (index, item) {
+          $('#gmgoalbox').append($('<option>', {value: item, text: item},'</option>'));
+        });
+        goalName = 'all';
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
     });
+  }
+  if (ucName == undefined) {
+    $("#gmusecasebox").empty()
+    $('#gmusecasebox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+  }
+  goalName = (goalName == undefined || goalName == 'All') ? "all" : goalName;
+  ucName = (ucName == undefined || ucName == 'All') ? "all" : ucName;
+
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/goals/model/environment/" + environment.replace(" ","%20") + "/goal/" + goalName.replace(" ","%20") + "/usecase/" + ucName.replace(" ","%20"),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
 function getObstacleview(environment){
@@ -304,8 +361,6 @@ function getObstacleview(environment){
         crossDomain: true,
         url: serverIP + "/api/obstacles/model/environment/" + environment.replace(" ","%20"),
         success: function(data){
-          // console.log("in getGoalView " + data.innerHTML);
-           // console.log(this.url);
            fillSvgViewer(data);
 
         },
@@ -1191,13 +1246,18 @@ var sess = String($.session.get('sessionID'));
             url: serverIP + "/api/environments/all/names",
 
             success: function (data) {
-                var boxoptions = $("#environmentsbox");
-                boxoptions.empty();
-                boxoptions.append("<option>All</option>");
+                var envBox = $("#environmentsbox");
+                var gmEnvBox = $("#gmenvironmentsbox");
+                var rmEnvBox = $("#rmenvironmentsbox");
+                envBox.empty();
+                gmEnvBox.empty();
+                rmEnvBox.empty();
                 $.each(data, function () {
-                    boxoptions.append($("<option />").val(this).text(this));
+                    envBox.append($("<option />").val(this).text(this));
+                    gmEnvBox.append($("<option />").val(this).text(this));
+                    rmEnvBox.append($("<option />").val(this).text(this));
                 });
-                boxoptions.css("visibility", "visible");
+                envBox.css("visibility", "visible");
                 window.boxesAreFilled = true;
             },
             error: function (xhr, textStatus, errorThrown) {
