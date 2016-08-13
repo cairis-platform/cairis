@@ -315,11 +315,11 @@ class AssetDAO(CairisDAO):
             self.close()
             raise ARMHTTPError(ex)
 
-    def get_asset_model(self, environment_name, with_concerns=True):
+    def get_asset_model(self, environment_name, asset_name, hide_concerns=True):
         fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
         try:
-            associationDictionary = self.db_proxy.classModel(environment_name, hideConcerns=(with_concerns is False))
-            associations = GraphicalAssetModel(associationDictionary.values(), environment_name, db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize)
+            associationDictionary = self.db_proxy.classModel(environment_name, asset_name, hideConcerns=hide_concerns)
+            associations = GraphicalAssetModel(associationDictionary.values(), environment_name, asset_name, hideConcerns=hide_concerns, db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize)
             dot_code = associations.graph()
             return dot_code
         except DatabaseProxyException as ex:

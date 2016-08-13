@@ -26,6 +26,9 @@ from cairis.tools.MessageDefinitions import AssetMessage, AssetEnvironmentProper
 from cairis.tools.ModelDefinitions import AssetModel as SwaggerAssetModel, AssetEnvironmentPropertiesModel, ValueTypeModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
+__author__ = 'Robin Quetin, Shamal Faily'
+
+
 class AssetsAPI(Resource):
     # region Swagger Doc
     @swagger.operation(
@@ -386,8 +389,16 @@ class AssetModelAPI(Resource):
                 "paramType": "query"
             },
             {
-                "name": "with_concerns",
-                "description": "Defines if concerns should be included in the model",
+                "name": "asset",
+                "description": "The asset filter",
+                "required": True,
+                "allowMultiple": False,
+                "dataType": str.__name__,
+                "paramType": "query"
+            },
+            {
+                "name": "hide_concerns",
+                "description": "Defines if concerns should be hidden in the model",
                 "required": False,
                 "allowMultiple": False,
                 "dataType": str.__name__,
@@ -411,15 +422,19 @@ class AssetModelAPI(Resource):
         ]
     )
     # endregion
-    def get(self, environment):
+    def get(self, environment,asset):
         session_id = get_session_id(session, request)
-        with_concerns = request.args.get('with_concerns', True)
-        if with_concerns == '0' or with_concerns == 0:
-            with_concerns = False
+        hide_concerns = request.args.get('hide_concerns', '1')
+        if hide_concerns == '0' or hide_concerns == 0:
+            hide_concerns = False
+        else:
+            hide_concerns = True
+        if asset == 'all':
+          asset = ''
         model_generator = get_model_generator()
 
         dao = AssetDAO(session_id)
-        dot_code = dao.get_asset_model(environment, with_concerns=with_concerns)
+        dot_code = dao.get_asset_model(environment, asset, hide_concerns=hide_concerns)
         dao.close()
 
         if not isinstance(dot_code, str):

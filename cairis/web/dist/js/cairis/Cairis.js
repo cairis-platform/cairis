@@ -144,83 +144,123 @@ $.fn.serializeObject = function()
 
 // For the assetsbox, if filter is selected
 $('#assetsbox').change(function() {
-    var selection = $(this).find('option:selected').text();
+  var selection = $(this).find('option:selected').text();
+  if (window.theVisualModel == 'None') {
     debugLogger("Selection: " + selection);
     // Clearing the environmentsbox
     $('#environmentsbox').prop('selectedIndex', -1);
-
-        if (selection.toLowerCase() == "all") {
-            startingTable();
-        } else {
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                accept: "application/json",
-                data: {
-                    session_id: String($.session.get('sessionID'))
-                },
-                crossDomain: true,
-                url: serverIP + "/api/requirements/asset/" + encodeURIComponent(selection),
-                success: function (data) {
-                    createRequirementsTable(data);
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    debugLogger(String(this.url));
-                    debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-                }
-
-            });
+    if (selection.toLowerCase() == "all") {
+      startingTable();
+    }  
+    else {
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + "/api/requirements/asset/" + encodeURIComponent(selection),
+        success: function (data) {
+          createRequirementsTable(data);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          debugLogger(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
-
+      });
+    }
+  }
+  else if (window.theVisualModel == 'asset') {
+    debugLogger("Selection: " + selection);
+    getAssetview($('#environmentsbox').val());
+  }
 });
+
+
 /*
 Same for the environments
 */
 $('#environmentsbox').change(function() {
-    var selection = $(this).find('option:selected').text();
-    // Clearing the assetsbox
+  var selection = $(this).find('option:selected').text();
+  if (window.theVisualModel == 'None') {
     $('#assetsbox').prop('selectedIndex', -1);
 
     if (selection.toLowerCase() == "all") {
-        startingTable();
-    } else {
-        //Assetsbox
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            accept: "application/json",
-            data: {
-                session_id: String($.session.get('sessionID'))
-            },
-            crossDomain: true,
-            url: serverIP + "/api/requirements/environment/" + encodeURIComponent(selection),
-            success: function (data) {
-                createRequirementsTable(data);
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                debugLogger(String(this.url));
-                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-            }
-
-        });
+      startingTable();
+    }   
+    else {
+      //Assetsbox
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + "/api/requirements/environment/" + encodeURIComponent(selection),
+        success: function (data) {
+          createRequirementsTable(data);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          debugLogger(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
     }
-
+  }
+  else if (window.theVisualModel == 'asset') {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID')),
+      },
+      crossDomain: true,
+      url: serverIP + "/api/assets/environment/" + selection.replace(" ","%20") + "/names",
+      success: function (data) {
+        $('#assetsbox').empty();
+        $('#assetsbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+        $.each(data, function (index, item) {
+          $('#assetsbox').append($('<option>', {value: item, text: item},'</option>'));
+        });
+        $('#assetsbox').change();
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  }
 });
+
+$('#concernsbox').change(function() {
+  if (window.theVisualModel == 'asset') {
+    getAssetview($('#environmentsbox').val());
+  }
+});
+
 function getAssetview(environment){
     window.assetEnvironment = environment;
+    $('#environmentsbox').val(environment);
+    var assetName = $('#assetsbox').val();
+    assetName = assetName == "All" ? "all" : assetName;
     $.ajax({
         type:"GET",
         accept:"application/json",
         data: {
-            session_id: String($.session.get('sessionID'))
+            session_id: String($.session.get('sessionID')),
+            hide_concerns: $('#concernsbox').find('option:selected').text() == 'Yes' ? '1' : '0'
         },
         crossDomain: true,
-        url: serverIP + "/api/assets/model/environment/" + environment.replace(" ","%20"),
+        url: serverIP + "/api/assets/model/environment/" + environment.replace(" ","%20") + "/asset/" + assetName.replace(" ","%20"),
         success: function(data){
           // console.log("in getAssetView " + data.innerHTML);
            // console.log(this.url);
            fillSvgViewer(data);
-
         },
         error: function(xhr, textStatus, errorThrown) {
             debugLogger(String(this.url));
@@ -1204,18 +1244,31 @@ function activeElement(elementid){
     if(elementid != "reqTable"){
         $("#reqTable").hide();
         $("#filtercontent").hide();
+        $("#filterconcerns").hide();
+        $("#filterriskmodelcontent").hide();
+        $("#filtergoalmodelcontent").hide();
+        if (window.theVisualModel == 'risk') {
+          $("#filterriskmodelcontent").show();
+        }
+        else if (window.theVisualModel == 'goal' || window.theVisualModel == 'obstacle' || window.theVisualModel == 'responsibility') {
+          $("#filtergoalmodelcontent").show();
+        }
+        else if (window.theVisualModel == 'asset') {
+          $("#filtercontent").show();
+          $("#filterconcerns").show();
+        }
     }
     if(elementid != "svgViewer"){
         $("#svgViewer").hide();
+        $("#filterriskmodelcontent").hide();
+        $("#filtergoalmodelcontent").hide();
     }
 
     if(elementid == "reqTable"){
        //If it is the table, we need to see which table it is
+        window.theVisualModel = 'None';
         setActiveOptions();
     }
-    //////ADDED
-    setActiveOptions();
-
     elementid = "#" + elementid;
     $(elementid).show();
 
@@ -1294,12 +1347,15 @@ function setActiveOptions(){
     //If chosen to create a new function for this, because this will increase readability
     //First disable them all
     $("#filtercontent").hide();
+    $("#filterriskmodelcontent").hide();
+    $("#filtergoalmodelcontent").hide();
     $("#editAssetsOptions").hide();
 
     //VERY OLD FUNCTION
     switch (window.activeTable) {
         case "Requirements":
             $("#filtercontent").show();
+            $("#filterconcerns").hide()
             break;
         case "Goals":
             break;

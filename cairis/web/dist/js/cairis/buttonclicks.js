@@ -133,7 +133,7 @@ $("#showRolesButton").click(function () {
  When assetview is clicked
  */
 $('#assetView').click(function(){
-
+    window.theVisualModel = 'asset';
     $.ajax({
         type: "GET",
         dataType: "json",
@@ -172,7 +172,7 @@ $('#assetView').click(function(){
  When goalview is clicked
  */
 $('#goalView').click(function(){
-
+    window.theVisualModel = 'goal';
     $.ajax({
         type: "GET",
         dataType: "json",
@@ -210,7 +210,7 @@ $('#goalView').click(function(){
  When goalview is clicked
  */
 $('#obstacleView').click(function(){
-
+    window.theVisualModel = 'obstacle';
     $.ajax({
         type: "GET",
         dataType: "json",
@@ -248,7 +248,7 @@ $('#obstacleView').click(function(){
  When riskview is clicked
  */
 $('#riskView').click(function(){
-
+    window.theVisualModel = 'risk';
     $.ajax({
         type: "GET",
         dataType: "json",
@@ -287,7 +287,7 @@ $('#riskView').click(function(){
  When taskview is clicked
  */
 $('#taskView').click(function(){
-
+    window.theVisualModel = 'task';
     $.ajax({
         type: "GET",
         dataType: "json",
@@ -326,7 +326,7 @@ $('#taskView').click(function(){
  When personaview is clicked
  */
 $('#personaView').click(function(){
-
+    window.theVisualModel = 'persona';
     $.ajax({
         type: "GET",
         dataType: "json",

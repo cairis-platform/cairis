@@ -177,7 +177,7 @@ def start():
     api.add_resource(AssetController.AssetTypeByNameAPI, '/api/assets/types/name/<string:name>')
     api.add_resource(AssetController.AssetValuesAPI, '/api/environments/<string:environment_name>/asset-values')
     api.add_resource(AssetController.AssetValueByNameAPI, '/api/environments/<string:environment_name>/asset-values/name/<string:name>')
-    api.add_resource(AssetController.AssetModelAPI, '/api/assets/model/environment/<string:environment>')
+    api.add_resource(AssetController.AssetModelAPI, '/api/assets/model/environment/<string:environment>/asset/<string:asset>')
     api.add_resource(AssetController.AssetEnvironmentPropertiesAPI, '/api/assets/name/<string:asset_name>/properties')
 
     # Attacker routes

@@ -23,6 +23,7 @@ $( document ).ajaxComplete(function() {
     event.preventDefault();
     var link = $(this).attr("xlink:href");
 
+    window.assetEnvironment = $('#environmentsbox').val();
     if(link.indexOf("assets") > -1) {
       forceOpenOptions();
       $.ajax({
