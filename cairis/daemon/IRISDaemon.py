@@ -221,6 +221,7 @@ def start():
     api.add_resource(GoalController.GoalByNameAPI, '/api/goals/name/<string:name>')
     api.add_resource(GoalController.GoalByEnvironmentNamesAPI, '/api/goals/environment/<string:environment>/names')
     api.add_resource(GoalController.GoalModelAPI, '/api/goals/model/environment/<string:environment>/goal/<string:goal>/usecase/<string:usecase>')
+    api.add_resource(GoalController.ResponsibilityModelAPI, '/api/responsibility/model/environment/<string:environment>')
 
     # Export routes
     api.add_resource(CExportController.CExportTextAPI, '/api/export/text')

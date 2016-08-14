@@ -372,3 +372,61 @@ class GoalByEnvironmentNamesAPI(Resource):
     resp.headers['Content-Type'] = "application/json"
     return resp
 
+class ResponsibilityModelAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get the responsibility model for a specific environment',
+    responseClass=SwaggerGoalModel.__name__,
+    nickname='goal-by-name-get',
+    parameters=[
+      {
+        "name": "environment",
+        "description": "The responsibility model environment",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      },
+      {
+        "code": httplib.NOT_FOUND,
+        "message": "Environment not found"
+      },
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "Environment not defined"
+      }
+    ]
+  )
+  # endregion
+  def get(self, environment):
+    session_id = get_session_id(session, request)
+    model_generator = get_model_generator()
+
+    dao = GoalDAO(session_id)
+    dot_code = dao.get_responsibility_model(environment)
+    dao.close()
+
+    resp = make_response(model_generator.generate(dot_code, model_type='responsibility',renderer='dot'), httplib.OK)
+    accept_header = request.headers.get('Accept', 'image/svg+xml')
+    if accept_header.find('text/plain') > -1:
+      resp.headers['Content-type'] = 'text/plain'
+    else:
+      resp.headers['Content-type'] = 'image/svg+xml'
+    return resp
+
+
+

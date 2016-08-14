@@ -509,6 +509,29 @@ function getObstacleview(environment,obstacle){
   });
 }
 
+function getResponsibilityview(environment){
+  window.assetEnvironment = environment;
+  $('#omenvironmentsbox').val(environment);
+
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/responsibility/model/environment/" + environment.replace(" ","%20"),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+
 function getRiskview(environment,dimName,objtName,modelLayout){
   window.assetEnvironment = environment;
   $('#rmenvironmentsbox').val(environment);
