@@ -29,7 +29,7 @@ class SVGGenerator(object):
     def __init__(self):
         self.extension = 'svg'
 
-    def generate(self, dot_code, model_type):
+    def generate(self, dot_code, model_type, renderer = 'dot'):
         if not dot_code:
             dot_code = ''
         fd, temp_abspath = make_tempfile(suffix=self.extension)
@@ -37,7 +37,7 @@ class SVGGenerator(object):
         temp_file.write(dot_code)
         temp_file.close()
         os.close(fd)
-        output = cmd(['dot', '-Tsvg', temp_abspath])
+        output = cmd([renderer, '-Tsvg', temp_abspath])
         os.remove(temp_abspath)
         output = self.process_output(str(output), model_type)
         return output

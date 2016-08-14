@@ -11656,3 +11656,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting metrics for template asset ' + taName + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
+
+  def riskModelElements(self,envName):
+    try: 
+      curs = self.conn.cursor()
+      curs.execute('call riskAnalysisModelElements(%s)',[envName])
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting elements for risk model in environment ' + envName
+        raise DatabaseProxyException(exceptionText) 
+      elNames = []
+      for elNameRow in curs.fetchall():
+        elNameRow = list(elNameRow)
+        elNames.append(elNameRow[1])
+      curs.close() 
+      return elNames
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting elements for risk model in environment ' + envName + ' (id:' + str(id) + ',message:' + msg
+      raise DatabaseProxyException(exceptionText) 

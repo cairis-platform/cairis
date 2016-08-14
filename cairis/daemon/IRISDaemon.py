@@ -270,7 +270,8 @@ def start():
         '/api/risks/threat/<string:threat>/vulnerability/<string:vulnerability>/environment/<string:environment>',
         '/api/risks/vulnerability/<string:vulnerability>/threat/<string:threat>/environment/<string:environment>'
     )
-    api.add_resource(RiskController.RiskAnalysisModelByNameAPI, '/api/risks/model/environment/<string:environment>')
+    api.add_resource(RiskController.RiskAnalysisModelAPI, '/api/risks/model/environment/<string:environment>')
+    api.add_resource(RiskController.RiskAnalysisModelNamesAPI, '/api/risks/model/environment/<string:environment>/names')
 
     # Role routes
     api.add_resource(RoleController.RolesAPI, '/api/roles')

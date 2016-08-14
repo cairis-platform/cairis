@@ -62,7 +62,7 @@ def arrayToThreatSecurityPropertiesTable(spArray,objtName):
 
 
 class EnvironmentModel:
-  def __init__(self,tlinks,environmentName,dp, fontName=None, fontSize=None):
+  def __init__(self,tlinks,environmentName,dp, modelLayout, fontName=None, fontSize=None):
     self.theTraceLinks = tlinks
     self.theEnvironmentName = environmentName
     self.dbProxy = dp
@@ -72,7 +72,7 @@ class EnvironmentModel:
     self.fontSize = fontSize or b.fontSize
     self.fontName = fontName or b.fontName
     self.theGraphName = b.tmpDir + '/pydotout.dot'
-
+    self.theRenderer = modelLayout
     self.theNodeLookup = {}
 
   def buildGraph(self):
@@ -148,11 +148,6 @@ class EnvironmentModel:
     self.nodeNameSet = set([])
     self.dimNameSet = set([])
 
-#    envReqs = self.dbProxy.getDimensionNames('requirement',self.theEnvironmentName)
-#    for envReq in envReqs:
-#      self.buildNode('requirement',envReq)
-#      self.nodeNameSet.add(envReq)
-
     for dotLink in self.theTraceLinks:
       fromDimName = dotLink.fromObject()
       self.dimNameSet.add(fromDimName)
@@ -172,6 +167,6 @@ class EnvironmentModel:
       self.theGraph.add_edge(edge)
     return self.layout()
 
-  def layout(self,renderer = 'fdp'):
-    self.theGraph.write_xdot(self.theGraphName,prog=renderer)
+  def layout(self):
+    self.theGraph.write_xdot(self.theGraphName,prog=self.theRenderer)
     return open(self.theGraphName).read()

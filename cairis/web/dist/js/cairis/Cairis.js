@@ -265,6 +265,84 @@ $('#gmenvironmentsbox').change(function() {
   });
 });
 
+$('#rmenvironmentsbox').change(function() {
+  var envName = $(this).find('option:selected').val();
+  $('#rmdimensionbox').val('All');
+  var modelLayout = $('#rmlayout').val();
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+    },
+    crossDomain: true,
+    url: "/api/risks/model/environment/" + envName.replace(" ","%20") + "/names",
+    success: function (data) {
+      fillObjectBox('#rmobjectbox','All',data);
+      $('#rmobjectbox').val('All');
+      getRiskview(envName,'All','All',modelLayout);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+function fillObjectBox(cBoxId,dimName,objtNames) {
+  $(cBoxId).empty();
+  $(cBoxId).append($('<option>', {value: 'All', text: 'All'},'</option>'));
+  $.each(objtNames, function (index, item) {
+    $(cBoxId).append($('<option>', {value: item, text: item},'</option>'));
+  });
+  $(cBoxId).change();
+}
+
+$('#rmdimensionbox').change(function() {
+  var envName = $('#rmenvironmentsbox').val();
+  var dimName = $(this).find('option:selected').val();
+  var modelLayout = $('#rmlayout').val();
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+    },
+    crossDomain: true,
+    url: "/api/dimensions/table/" + dimName.replace(" ","%20") + "/environment/" + envName.replace(" ","%20"),
+    success: function (data) {
+      fillObjectBox('#rmobjectbox',dimName,data);
+      $('#rmobjectbox').val('All');
+      getRiskview(envName,dimName,'All',modelLayout);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+
+});
+
+$('#rmobjectbox').change(function() {
+  var envName = $('#rmenvironmentsbox').val()
+  var dimName = $('#rmdimensionbox').val()
+  var objtName = $('#rmobjectbox').val()
+  var modelLayout = $('#rmlayout').val()
+  getRiskview(envName,dimName,objtName,modelLayout);
+});
+
+
+$('#rmlayout').change(function() {
+  var envName = $('#rmenvironmentsbox').val()
+  var dimName = $('#rmdimensionbox').val()
+  var objtName = $('#rmobjectbox').val()
+  var modelLayout = $('#rmlayout').val()
+  getRiskview(envName,dimName,objtName,modelLayout);
+});
 
 $('#concernsbox').change(function() {
   if (window.theVisualModel == 'asset') {
@@ -371,26 +449,31 @@ function getObstacleview(environment){
     });
 }
 
-function getRiskview(environment){
-    window.assetEnvironment = environment;
-    $.ajax({
-        type:"GET",
-        accept:"application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/risks/model/environment/" + environment.replace(" ","%20"),
-        success: function(data){
-          // console.log("in getRiskview " + data.innerHTML);
-           // console.log(this.url);
-           fillSvgViewer(data);
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    });
+function getRiskview(environment,dimName,objtName,modelLayout){
+  window.assetEnvironment = environment;
+  $('#rmenvironmentsbox').val(environment);
+  dimName = (dimName == undefined || dimName == 'All') ? 'all' : dimName;
+  objtName = (objtName == undefined || objtName == 'All') ? 'all' : objtName;
+  modelLayout = modelLayout == undefined  ? "Hierarchical" : modelLayout;
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+      dimension_name : dimName,
+      object_name : objtName,
+      layout : modelLayout
+    },
+    crossDomain: true,
+    url: serverIP + "/api/risks/model/environment/" + environment.replace(" ","%20"),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
 function getTaskview(environment){

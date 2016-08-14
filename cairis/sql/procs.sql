@@ -851,6 +851,7 @@ drop procedure if exists locationsNames;
 drop procedure if exists locationsRiskModel;
 drop procedure if exists architecturalPatternToXml;
 drop procedure if exists templateAssetMetrics;
+drop procedure if exists riskAnalysisModelElements;
 
 
 delimiter //
@@ -22521,5 +22522,44 @@ begin
   end if; 
 end
 //
+
+create procedure riskAnalysisModelElements(in environmentName text)
+begin
+  declare environmentId int;
+  declare compositeCount int;
+  select id into environmentId from environment where name = environmentName limit 1;
+  select count(*) into compositeCount from composite_environment where composite_environment_id = environmentId;
+
+  if compositeCount <= 0
+  then
+    select 'asset',a.name from asset a,environment_asset ea where ea.environment_id = environmentId and ea.asset_id = a.id 
+    union
+    select 'attacker',a.name from attacker a, environment_attacker ea where ea.environment_id = environmentId and ea.attacker_id = a.id
+    union
+    select 'countermeasure',c.name from countermeasure c, environment_countermeasure ec where ec.environment_id = environmentId and ec.countermeasure_id = c.id 
+    union
+    select 'misusecase',m.name from misusecase m, environment_misusecase em where em.environment_id = environmentId and em.misusecase_id = m.id
+    union
+    select 'obstacle',o.name from obstacle o, environment_obstacle eo where eo.environment_id = environmentId and eo.obstacle_id = o.id
+    union
+    select 'requirement', concat(a.short_code,'-',r.label) from requirement r, asset_requirement ar, environment_asset ea, asset a where ea.environment_id = environmentId and ea.asset_id = ar.asset_id and ea.asset_id = a.id and  ar.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
+    union
+    select 'requirement', concat(e.short_code,'-',r.label) from requirement r, environment_requirement er, asset e where er.environment_id = environmentId and er.environment_id = e.id and  er.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
+    union
+    select 'response',r.name from response r, environment_response er  where er.environment_id = environmentId and er.response_id = r.id
+    union
+    select 'risk',r.name from risk r, environment_risk er  where er.environment_id = environmentId and er.id = r.id
+    union
+    select 'role',r.name from role r, environment_role er  where er.environment_id = environmentId and er.role_id = r.id
+    union
+    select 'task',t.name from task t, environment_task et  where et.environment_id = environmentId and et.task_id = t.id
+    union
+    select 'threat',t.name from threat t, environment_threat et  where et.environment_id = environmentId and et.threat_id = t.id
+    union
+    select 'vulnerability',v.name from vulnerability v, environment_vulnerability ev  where ev.environment_id = environmentId and ev.vulnerability_id = v.id order by 2;
+  end if;
+end
+//
+
 
 delimiter ;

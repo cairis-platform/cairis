@@ -15,20 +15,29 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from cairis.tools.SVGGenerator import SVGGenerator
+from cairis.core.ARM import *
+from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
+from cairis.data.CairisDAO import CairisDAO
+from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
 
-__author__ = 'Robin Quetin, Shamal Faily'
+__author__ = 'Shamal Faily'
 
-class GraphicsGenerator(object):
-  def __init__(self, output_format='svg'):
-    output_format = output_format.lower()
-    if output_format == 'svg':
-      self.ded_generator = SVGGenerator()
-    else:
-      raise RuntimeError('There is no generator registered for the provided output format.')
 
-  def generate(self, dot_code, output_path=None, model_type=None, renderer=None):
-    if output_path is None:
-      return self.ded_generator.generate(dot_code, model_type, renderer)
-    else:
-      self.ded_generator.generate_file(dot_code, output_path, model_type, renderer)
+class DimensionDAO(CairisDAO):
+
+  def __init__(self, session_id):
+    CairisDAO.__init__(self, session_id)
+
+  def getDimensions(self,table,id):
+    try:
+      return self.db_proxy.getDimensions(table,id).keys()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def getDimensionNames(self,table,environment):
+    try:
+      return self.db_proxy.getDimensionNames(table,environment)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
