@@ -777,5 +777,80 @@ else if(link.indexOf("obstacles") > -1) {
         }
       });
     }
+    else if(link.indexOf("countermeasures") > -1) {
+      forceOpenOptions();
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + link.replace(" ", "%20"),
+        success: function (data) {
+          $.ajax({
+            type:"GET",
+            dataType: "json",
+            accept:"application/json",
+            data: {
+              session_id: String($.session.get('sessionID'))
+            },
+            crossDomain: true,
+            url: serverIP + "/api/countermeasures/name/"+ data.theName,
+            success: function(){
+              fillOptionMenu("fastTemplates/CountermeasureOptions.html", "#optionsContent", data,false,true,function(){
+                $.session.set("Countermeasure", JSON.stringify(data));
+                $('#countermeasuresForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Countermeasure properties");
+                forceOpenOptions();
+                $.each(data.theEnvironmentProperties, function (idx, env) {
+                  if (window.assetEnvironment == env.theEnvironmentName) {
+                     $('#theCost').val(env.theCost)
+                     var dimValues = [];
+                     for (var i = 0; i < env.theRoles.length; i++) {
+                       dimValues.push("<tr><td>" + env.theRoles[i] + "</td></tr>"); 
+                     }
+                     $("#theRoles").find("tbody").append(dimValues.join(' '));
+                     dimValues = [];
+                     for (var i = 0; i < env.theTargets.length; i++) {
+                       dimValues.push("<tr><td>" + env.theTargets[i].theName + "</td><td>" + env.theTargets[i].theEffectiveness + "</td><td>" + env.theTargets[i].theRationale + "</td></tr>"); 
+                     }
+                     $("#theTargets").find("tbody").append(dimValues.join(' '));
+                     dimValues = [];
+                     for (var i = 0; i < env.theRequirements.length; i++) {
+                       dimValues.push("<tr><td>" + env.theRequirements[i] + "</td></tr>"); 
+                     }
+                     $("#theRequirements").find("tbody").append(dimValues.join(' '));
+                     dimValues = [];
+                     for (var i = 0; i < env.theProperties.length; i++) {
+                       if (env.theProperties[i].value != "None") {
+                          dimValues.push("<tr><td>" + env.theProperties[i].name + "</td><td>" + env.theProperties[i].value + "</td></tr>"); 
+                       }
+                     }
+                     $("#theProperties").find("tbody").append(dimValues.join(' '));
+                     dimValues = [];
+                     for (var i = 0; i < env.thePersonas.length; i++) {
+                       var pCol = [];
+                       $.each(env.thePersonas[i], function(idx,val) { pCol.push(val); });
+                       dimValues.push("<tr><td>" + pCol[0][0] + "</td><td>" + pCol[0][1] + "</td><td>" + pCol[0][2] + "</td><td>" + pCol[0][3] + "</td><td>" + pCol[0][4] + "</td><td>" + pCol[0][5] + "</td></tr>"); 
+                     }
+                     $("#thePersonas").find("tbody").append(dimValues.join(' '));
+                  } 
+                });
+              }); 
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.log(this.url);
+              debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+            }
+          });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          console.log(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
   });
 });
