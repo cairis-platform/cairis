@@ -30,7 +30,7 @@ from cairis.core.ARM import ARMException, DatabaseProxyException
 from cairis.controllers import AssetController, AttackerController, CImportController, CExportController, DependencyController, \
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
-    UploadController, UserController, VulnerabilityController, ObstacleController
+    UploadController, UserController, VulnerabilityController, ObstacleController, CountermeasureController
 
 __author__ = 'Robin Quetin'
 ''' This module uses Flask (tested using 0.10) & Flask-Restful (tested using 0.3.3) '''
@@ -187,6 +187,11 @@ def start():
     api.add_resource(AttackerController.AttackerCapabilityByNameAPI, '/api/attackers/capabilities/name/<string:name>')
     api.add_resource(AttackerController.AttackerMotivationsAPI, '/api/attackers/motivations')
     api.add_resource(AttackerController.AttackerMotivationByNameAPI, '/api/attackers/motivations/name/<string:name>')
+
+    # Countermeasure routes
+    api.add_resource(CountermeasureController.CountermeasureAPI, '/api/countermeasures')
+    api.add_resource(CountermeasureController.CountermeasureByNameAPI, '/api/countermeasures/name/<string:name>')
+
 
     # Dependency routes
     api.add_resource(DependencyController.DependenciesAPI, '/api/dependencies')

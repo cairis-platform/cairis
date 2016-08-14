@@ -37,6 +37,7 @@ from cairis.core.PersonaEnvironmentProperties import PersonaEnvironmentPropertie
 from cairis.core.Requirement import Requirement
 from cairis.core.Risk import Risk
 from cairis.core.Role import Role
+from cairis.core.Target import Target
 from cairis.core.Task import Task
 from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
@@ -46,7 +47,7 @@ from cairis.core.Vulnerability import Vulnerability
 from cairis.core.VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
 from cairis.core.Countermeasure import Countermeasure
 from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
-from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating
+from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -673,8 +674,8 @@ class CountermeasureEnvironmentPropertiesModel(object):
         obj_id_field: fields.String,
         "theEnvironmentName": fields.String,
         "theRequirements": fields.List(fields.String),
-        "theTargets": fields.List(fields.String),
-        "theProperties": fields.List(fields.Nested(SecurityAttribute.resource_fields)),
+        "theTargets": fields.List(fields.Nested(CountermeasureTarget.resource_fields)),
+        'theProperties': fields.List(fields.Nested(SecurityAttribute.resource_fields)),
         "theRationale": fields.List(fields.String),
         "theCost": fields.String,
         "theRoles": fields.List(fields.String),
@@ -690,7 +691,6 @@ class CountermeasureEnvironmentPropertiesModel(object):
 @swagger.model
 @swagger.nested(
     theEnvironmentProperties=CountermeasureEnvironmentPropertiesModel.__name__,
-    theEnvironmentDictionary=CountermeasureEnvironmentPropertiesModel.__name__
 )
 class CountermeasureModel(object):
     resource_fields = {
@@ -699,10 +699,7 @@ class CountermeasureModel(object):
         'theTags': fields.List(fields.String),
         'theDescription': fields.String,
         'theType': fields.String,
-        'theVulnerabilityId': fields.Integer,
-        'severityLookup': fields.List(fields.String),
         'theEnvironmentDictionary': fields.List(fields.Nested(CountermeasureEnvironmentPropertiesModel.resource_fields)),
-        'theEnvironmentProperties': fields.List(fields.Nested(CountermeasureEnvironmentPropertiesModel.resource_fields))
     }
     required = resource_fields.keys()
     required.remove(obj_id_field)
