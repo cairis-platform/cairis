@@ -237,7 +237,8 @@ def start():
     # Obstacle routes
     api.add_resource(ObstacleController.ObstaclesAPI, '/api/obstacles')
     api.add_resource(ObstacleController.ObstacleByNameAPI, '/api/obstacles/name/<string:name>')
-    api.add_resource(ObstacleController.ObstacleModelAPI, '/api/obstacles/model/environment/<string:environment>')
+    api.add_resource(ObstacleController.ObstacleByEnvironmentNamesAPI, '/api/obstacles/environment/<string:environment>/names')
+    api.add_resource(ObstacleController.ObstacleModelAPI, '/api/obstacles/model/environment/<string:environment>/obstacle/<string:obstacle>')
 
     # Persona routes
     api.add_resource(PersonaController.PersonasAPI, '/api/personas')

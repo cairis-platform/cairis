@@ -108,12 +108,15 @@ class ObstacleDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_obstacle_model(self, environment_name):
+  def get_obstacle_model(self, environment_name, obstacle_name):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
 
     try:
-      associationDictionary = self.db_proxy.obstacleModel(environment_name)
-      associations = KaosModel(associationDictionary.values(), environment_name, db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
+      obstacle_filter = 0
+      if obstacle_name != '': obstacle_filter = 1
+
+      associationDictionary = self.db_proxy.obstacleModel(environment_name, obstacle_name, obstacle_filter)
+      associations = KaosModel(associationDictionary.values(), environment_name, 'obstacle',obstacle_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
       dot_code = associations.graph()
       return dot_code
     except DatabaseProxyException as ex:
@@ -319,3 +322,15 @@ class ObstacleDAO(CairisDAO):
     obstacle.theEnvironmentDictionary = {}
     delattr(obstacle, 'theEnvironmentDictionary')
     return obstacle
+
+  def get_obstacle_names(self, environment=''):
+    try:
+      obstacle_names = self.db_proxy.getDimensionNames('obstacle', environment)
+      return obstacle_names
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+

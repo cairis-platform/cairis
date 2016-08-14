@@ -183,6 +183,12 @@ $('#gmgoalbox').change(function() {
   getGoalview($('#gmenvironmentsbox').val(),selection);
 });
 
+$('#omobstaclebox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  getObstacleview($('#omenvironmentsbox').val(),selection);
+});
+
+
 $('#environmentsbox').change(function() {
   var selection = $(this).find('option:selected').text();
   if (window.theVisualModel == 'None') {
@@ -257,6 +263,32 @@ $('#gmenvironmentsbox').change(function() {
         $('#gmgoalbox').append($('<option>', {value: item, text: item},'</option>'));
       });
       $('#gmgoalbox').change();
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+$('#omenvironmentsbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+    },
+    crossDomain: true,
+    url: serverIP + "/api/obstacles/environment/" + selection.replace(" ","%20") + "/names",
+    success: function (data) {
+      $('#omobstaclebox').empty();
+      $('#omobstaclebox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+      $.each(data, function (index, item) {
+        $('#omobstaclebox').append($('<option>', {value: item, text: item},'</option>'));
+      });
+      $('#omobstaclebox').change();
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -428,25 +460,53 @@ function getGoalview(environment,goalName,ucName){
   });
 }
 
-function getObstacleview(environment){
-    window.assetEnvironment = environment;
-    $.ajax({
-        type:"GET",
-        accept:"application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/obstacles/model/environment/" + environment.replace(" ","%20"),
-        success: function(data){
-           fillSvgViewer(data);
+function getObstacleview(environment,obstacle){
+  window.assetEnvironment = environment;
+  $('#omenvironmentsbox').val(environment);
 
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
+  if (obstacle == undefined) {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + "/api/obstacles/environment/" + environment.replace(" ","%20") + "/names",
+
+      success: function (data) {
+        $("#omobstaclebox").empty()
+        $('#omobstaclebox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+        $.each(data, function (index, item) {
+          $('#omobstaclebox').append($('<option>', {value: item, text: item},'</option>'));
+        });
+        obstacle = 'all';
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
     });
+  }
+  obstacle = (obstacle == undefined || obstacle == 'All') ? "all" : obstacle;
+
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/obstacles/model/environment/" + environment.replace(" ","%20") + "/obstacle/" + obstacle.replace(" ","%20"),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
 function getRiskview(environment,dimName,objtName,modelLayout){
@@ -1331,13 +1391,16 @@ var sess = String($.session.get('sessionID'));
             success: function (data) {
                 var envBox = $("#environmentsbox");
                 var gmEnvBox = $("#gmenvironmentsbox");
+                var omEnvBox = $("#omenvironmentsbox");
                 var rmEnvBox = $("#rmenvironmentsbox");
                 envBox.empty();
                 gmEnvBox.empty();
+                omEnvBox.empty();
                 rmEnvBox.empty();
                 $.each(data, function () {
                     envBox.append($("<option />").val(this).text(this));
                     gmEnvBox.append($("<option />").val(this).text(this));
+                    omEnvBox.append($("<option />").val(this).text(this));
                     rmEnvBox.append($("<option />").val(this).text(this));
                 });
                 envBox.css("visibility", "visible");
@@ -1390,12 +1453,18 @@ function activeElement(elementid){
         $("#filterconcerns").hide();
         $("#filterriskmodelcontent").hide();
         $("#filtergoalmodelcontent").hide();
+        $("#filterobstaclemodelcontent").hide();
+
         if (window.theVisualModel == 'risk') {
           $("#filterriskmodelcontent").show();
         }
-        else if (window.theVisualModel == 'goal' || window.theVisualModel == 'obstacle' || window.theVisualModel == 'responsibility') {
+        else if (window.theVisualModel == 'goal') {
           $("#filtergoalmodelcontent").show();
         }
+        else if (window.theVisualModel == 'obstacle') {
+          $("#filterobstaclemodelcontent").show();
+        }
+
         else if (window.theVisualModel == 'asset') {
           $("#filtercontent").show();
           $("#filterconcerns").show();
@@ -1405,6 +1474,7 @@ function activeElement(elementid){
         $("#svgViewer").hide();
         $("#filterriskmodelcontent").hide();
         $("#filtergoalmodelcontent").hide();
+        $("#filterobstaclemodelcontent").hide();
     }
 
     if(elementid == "reqTable"){
@@ -1492,6 +1562,7 @@ function setActiveOptions(){
     $("#filtercontent").hide();
     $("#filterriskmodelcontent").hide();
     $("#filtergoalmodelcontent").hide();
+    $("#filterobstaclemodelcontent").hide();
     $("#editAssetsOptions").hide();
 
     //VERY OLD FUNCTION

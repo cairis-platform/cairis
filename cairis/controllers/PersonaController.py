@@ -289,7 +289,7 @@ class PersonaModelByNameAPI(Resource):
     dot_code = dao.get_persona_model(persona)
     dao.close()
 
-    resp = make_response(model_generator.generate(dot_code, model_type='persona'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code, model_type='persona', renderer='dot'), httplib.OK)
 
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:

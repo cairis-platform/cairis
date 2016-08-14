@@ -26,9 +26,13 @@ $( document ).ajaxComplete(function() {
     if (self.theVisualModel == 'asset') {
       window.assetEnvironment = $('#environmentsbox').val();
     }
-    else if (self.theVisualModel == 'goal' || self.theVisualModel == 'obstacle') {
+    else if (self.theVisualModel == 'goal') {
       window.assetEnvironment = $('#gmenvironmentsbox').val();
     }
+    else if (self.theVisualModel == 'obstacle') {
+      window.assetEnvironment = $('#omenvironmentsbox').val();
+    }
+
     else if (self.theVisualModel == 'risk') {
       window.assetEnvironment = $('#rmenvironmentsbox').val();
     }

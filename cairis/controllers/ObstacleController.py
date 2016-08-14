@@ -253,6 +253,22 @@ class ObstacleModelAPI(Resource):
     nickname='obstacle-by-name-get',
     parameters=[
       {
+        "name": "environment",
+        "description": "The obstacle model environment",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "goal",
+        "description": "The obstacle model filtering goal",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
         "name": "session_id",
         "description": "The ID of the user's session",
         "required": False,
@@ -277,18 +293,54 @@ class ObstacleModelAPI(Resource):
     ]
   )
   # endregion
-  def get(self, environment):
+  def get(self, environment, obstacle):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
 
     dao = ObstacleDAO(session_id)
-    dot_code = dao.get_obstacle_model(environment)
+    if obstacle == 'all':  obstacle = ''
+    dot_code = dao.get_obstacle_model(environment,obstacle)
     dao.close()
 
-    resp = make_response(model_generator.generate(dot_code, model_type='obstacle'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code, model_type='obstacle',renderer='dot'), httplib.OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'
     else:
       resp.headers['Content-type'] = 'image/svg+xml'
+    return resp
+
+class ObstacleByEnvironmentNamesAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get all the obstacle names associated with a specific environment',
+    responseClass=SwaggerObstacleModel.__name__,
+    nickname='obstacles-by-environment-names-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self, environment):
+    session_id = get_session_id(session, request)
+
+    dao = ObstacleDAO(session_id)
+    goals = dao.get_obstacle_names(environment=environment)
+    dao.close()
+
+    resp = make_response(json_serialize(goals, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
     return resp
