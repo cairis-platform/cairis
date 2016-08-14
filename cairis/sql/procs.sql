@@ -1017,29 +1017,29 @@ begin
   declare workingPanProperty int default 0;
   declare workingUnlProperty int default 0;
   declare workingUnoProperty int default 0;
-  declare cRationale varchar(4000);
-  declare iRationale varchar(4000);
-  declare avRationale varchar(4000);
-  declare acRationale varchar(4000);
-  declare anRationale varchar(4000);
-  declare panRationale varchar(4000);
-  declare unlRationale varchar(4000);
-  declare unoRationale varchar(4000);
-  declare workingCRationale varchar(4000);
-  declare workingIRationale varchar(4000);
-  declare workingAvRationale varchar(4000);
-  declare workingAcRationale varchar(4000);
-  declare workingAnRationale varchar(4000);
-  declare workingPanRationale varchar(4000);
-  declare workingUnlRationale varchar(4000);
-  declare workingUnoRationale varchar(4000);
+  declare cRationale varchar(500);
+  declare iRationale varchar(500);
+  declare avRationale varchar(500);
+  declare acRationale varchar(500);
+  declare anRationale varchar(500);
+  declare panRationale varchar(500);
+  declare unlRationale varchar(500);
+  declare unoRationale varchar(500);
+  declare workingCRationale varchar(500);
+  declare workingIRationale varchar(500);
+  declare workingAvRationale varchar(500);
+  declare workingAcRationale varchar(500);
+  declare workingAnRationale varchar(500);
+  declare workingPanRationale varchar(500);
+  declare workingUnlRationale varchar(500);
+  declare workingUnoRationale varchar(500);
   declare done int default 0;
   declare currentEnvironmentId int;
   declare propertiesCursor cursor for select environment_id from composite_environment where composite_environment_id = environmentId;  
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_assetproperties;
-  create temporary table temp_assetproperties (cProperty int,iProperty int,avProperty int, acProperty int, anProperty int, panProperty int, unlProperty int, unoProperty int, c_rat varchar(4000), i_rat varchar(4000), av_rat varchar(4000), ac_rat varchar(4000), an_rat varchar(4000), pan_rat varchar(4000), unl_rat varchar(4000), uno_rat varchar(4000));
+  create temporary table temp_assetproperties (cProperty int,iProperty int,avProperty int, acProperty int, anProperty int, panProperty int, unlProperty int, unoProperty int, c_rat varchar(500), i_rat varchar(500), av_rat varchar(500), ac_rat varchar(500), an_rat varchar(500), pan_rat varchar(500), unl_rat varchar(500), uno_rat varchar(500));
 
   select count(environment_id) into compositeCount from composite_environment where composite_environment_id = environmentId limit 1;
   if compositeCount > 0
@@ -1300,29 +1300,29 @@ begin
   declare workingPanProperty int default 0;
   declare workingUnlProperty int default 0;
   declare workingUnoProperty int default 0;
-  declare cRationale varchar(4000);
-  declare iRationale varchar(4000);
-  declare avRationale varchar(4000);
-  declare acRationale varchar(4000);
-  declare anRationale varchar(4000);
-  declare panRationale varchar(4000);
-  declare unlRationale varchar(4000);
-  declare unoRationale varchar(4000);
-  declare workingCRationale varchar(4000);
-  declare workingIRationale varchar(4000);
-  declare workingAvRationale varchar(4000);
-  declare workingAcRationale varchar(4000);
-  declare workingAnRationale varchar(4000);
-  declare workingPanRationale varchar(4000);
-  declare workingUnlRationale varchar(4000);
-  declare workingUnoRationale varchar(4000);
+  declare cRationale varchar(500);
+  declare iRationale varchar(500);
+  declare avRationale varchar(500);
+  declare acRationale varchar(500);
+  declare anRationale varchar(500);
+  declare panRationale varchar(500);
+  declare unlRationale varchar(500);
+  declare unoRationale varchar(500);
+  declare workingCRationale varchar(500);
+  declare workingIRationale varchar(500);
+  declare workingAvRationale varchar(500);
+  declare workingAcRationale varchar(500);
+  declare workingAnRationale varchar(500);
+  declare workingPanRationale varchar(500);
+  declare workingUnlRationale varchar(500);
+  declare workingUnoRationale varchar(500);
   declare done int default 0;
   declare currentEnvironmentId int;
   declare propertiesCursor cursor for select environment_id from composite_environment where composite_environment_id = environmentId;  
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_threatproperties;
-  create temporary table temp_threatproperties (cProperty int,iProperty int,avProperty int, acProperty int, anProperty int, panProperty int, unlProperty int, unoProperty int, c_rat varchar(4000), i_rat varchar(4000), av_rat varchar(4000), ac_rat varchar(4000), an_rat varchar(4000), pan_rat varchar(4000), unl_rat varchar(4000), uno_rat varchar(4000));
+  create temporary table temp_threatproperties (cProperty int,iProperty int,avProperty int, acProperty int, anProperty int, panProperty int, unlProperty int, unoProperty int, c_rat varchar(500), i_rat varchar(500), av_rat varchar(500), ac_rat varchar(500), an_rat varchar(500), pan_rat varchar(500), unl_rat varchar(500), uno_rat varchar(500));
 
   select count(environment_id) into compositeCount from composite_environment where composite_environment_id = environmentId limit 1;
   if compositeCount > 0
@@ -1582,29 +1582,29 @@ begin
   declare workingPanProperty int default 0;
   declare workingUnlProperty int default 0;
   declare workingUnoProperty int default 0;
-  declare cRationale varchar(4000);
-  declare iRationale varchar(4000);
-  declare avRationale varchar(4000);
-  declare acRationale varchar(4000);
-  declare anRationale varchar(4000);
-  declare panRationale varchar(4000);
-  declare unlRationale varchar(4000);
-  declare unoRationale varchar(4000);
-  declare workingCRationale varchar(4000);
-  declare workingIRationale varchar(4000);
-  declare workingAvRationale varchar(4000);
-  declare workingAcRationale varchar(4000);
-  declare workingAnRationale varchar(4000);
-  declare workingPanRationale varchar(4000);
-  declare workingUnlRationale varchar(4000);
-  declare workingUnoRationale varchar(4000);
+  declare cRationale varchar(500);
+  declare iRationale varchar(500);
+  declare avRationale varchar(500);
+  declare acRationale varchar(500);
+  declare anRationale varchar(500);
+  declare panRationale varchar(500);
+  declare unlRationale varchar(500);
+  declare unoRationale varchar(500);
+  declare workingCRationale varchar(500);
+  declare workingIRationale varchar(500);
+  declare workingAvRationale varchar(500);
+  declare workingAcRationale varchar(500);
+  declare workingAnRationale varchar(500);
+  declare workingPanRationale varchar(500);
+  declare workingUnlRationale varchar(500);
+  declare workingUnoRationale varchar(500);
   declare done int default 0;
   declare currentEnvironmentId int;
   declare propertiesCursor cursor for select environment_id from composite_environment where composite_environment_id = environmentId;  
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_countermeasureproperties;
-  create temporary table temp_countermeasureproperties (c_property int,i_property int,av_property int, ac_property int, an_property int, pan_property int, unl_property int, uno_property int, c_rat varchar(4000), i_rat varchar(4000), av_rat varchar(4000), ac_rat varchar(4000), an_rat varchar(4000), pan_rat varchar(4000), unl_rat varchar(4000), uno_rat varchar(4000));
+  create temporary table temp_countermeasureproperties (c_property int,i_property int,av_property int, ac_property int, an_property int, pan_property int, unl_property int, uno_property int, c_rat varchar(500), i_rat varchar(500), av_rat varchar(500), ac_rat varchar(500), an_rat varchar(500), pan_rat varchar(500), unl_rat varchar(500), uno_rat varchar(500));
 
   select count(environment_id) into compositeCount from composite_environment where composite_environment_id = environmentId limit 1;
   if compositeCount > 0
@@ -7346,15 +7346,15 @@ begin
   declare msev int default 0;
   declare mitigatingSeverities int default 0;
   declare cmNo int default 0;
-  declare msComments varchar(1000) default '';
-  declare mlComments varchar(1000) default '';
-  declare msCurrentComments varchar(1000) default '';
-  declare mlCurrentComments varchar(1000) default '';
+  declare msComments varchar(200) default '';
+  declare mlComments varchar(200) default '';
+  declare msCurrentComments varchar(200) default '';
+  declare mlCurrentComments varchar(200) default '';
   declare cmCursor cursor for select distinct countermeasure_id from temp_countermeasure where response_id = responseId;
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_mitigatingvalues;
-  create temporary table temp_mitigatingvalues (likelihood int, severity int,cProperty int,iProperty int,avProperty int, acProperty int, anProperty int, panProperty int, unlProperty int, unoProperty int, ms_comments varchar(1000),ml_comments varchar(1000));
+  create temporary table temp_mitigatingvalues (likelihood int, severity int,cProperty int,iProperty int,avProperty int, acProperty int, anProperty int, panProperty int, unlProperty int, unoProperty int, ms_comments varchar(200),ml_comments varchar(200));
 
   select count(*) into compositeCount from composite_environment where composite_environment_id = envId; 
   if (compositeCount > 0)
@@ -16054,10 +16054,10 @@ end
 //
 
 create function tensionValue(envId int, spId int,prId int) 
-returns varchar(5100)
+returns varchar(500)
 deterministic 
 begin
-  declare tValue varchar(5100);
+  declare tValue varchar(500);
   select concat(tension_id,'#',tension_rationale) into tValue from value_tension where environment_id = envId and security_property_id = spId and privacy_property_id = prId;
   return tValue;
 end
@@ -16070,7 +16070,7 @@ begin
   select id into envId from environment where name = envName;
   
   drop table if exists temp_tensions;
-  create temporary table temp_tensions (anTension varchar(5100), panTension varchar(5100), unlTension varchar(5100), unoTension varchar(5100));
+  create temporary table temp_tensions (anTension varchar(500), panTension varchar(500), unlTension varchar(500), unoTension varchar(500));
 
   insert into temp_tensions(anTension,panTension,unlTension,unoTension) values( tensionValue(envId,0,4), tensionValue(envId,0,5), tensionValue(envId,0,6), tensionValue(envId,0,7));
   insert into temp_tensions(anTension,panTension,unlTension,unoTension) values( tensionValue(envId,1,4), tensionValue(envId,1,5), tensionValue(envId,1,6), tensionValue(envId,1,7));
@@ -17380,7 +17380,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_usecase;
-  create temporary table temp_usecase (name varchar(200),short_code varchar(100), author varchar(255), text varchar(90000000));
+  create temporary table temp_usecase (name varchar(200),short_code varchar(100), author varchar(255), text varchar(90000));
 
   open ucCursor;
   ucCursor_loop: loop
@@ -17600,7 +17600,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_task;
-  create temporary table temp_task (name varchar(200),environment varchar(50), text varchar(90000000));
+  create temporary table temp_task (name varchar(200),environment varchar(50), text varchar(90000));
 
   open taskCursor;
   task_loop: loop
@@ -17951,7 +17951,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_depcheck;
-  create temporary table temp_depcheck (requirement_name varchar(255), has_circular_dependency int, dependency_chain varchar(900000000));
+  create temporary table temp_depcheck (requirement_name varchar(255), has_circular_dependency int, dependency_chain varchar(900000));
 
   open reqCursor;
   req_loop: loop
@@ -20293,7 +20293,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_architecture;
-  create temporary table temp_architecture (name varchar(200),artifact_type varchar(50),text varchar(90000000));
+  create temporary table temp_architecture (name varchar(200),artifact_type varchar(50),text varchar(90000));
 
   set done = 0;
 
@@ -20700,7 +20700,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_attackpattern;
-  create temporary table temp_attackpattern (name varchar(200),environment_name varchar(50), content_type varchar(50), text varchar(90000000));
+  create temporary table temp_attackpattern (name varchar(200),environment_name varchar(50), content_type varchar(50), text varchar(90000));
 
   open apCursor;
   ap_loop: loop
@@ -20892,7 +20892,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_architecturesummary;
-  create temporary table temp_architecturesummary (name varchar(200),text varchar(90000000));
+  create temporary table temp_architecturesummary (name varchar(200),text varchar(90000));
 
   select id into envId from environment where name = envName limit 1;
 

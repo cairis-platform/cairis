@@ -153,24 +153,24 @@ class RiskAPITests(CairisDaemonTestCase):
         self.assertIsNotNone(rating, 'No results after deserialization')
         self.logger.info('[%s] Risk rating: %s\n', method, rating['rating'])
 
-#    def test_get_scoring_by_rtve(self):
-#        method = 'test_get_scoring_by_rtve'
-#        url = '/api/risks/name/%s/threat/%s/vulnerability/%s/environment/%s?session_id=test' % (
-#            quote(self.existing_risk_name),
-#            quote(self.existing_threat_name),
-#            quote(self.existing_vulnerability),
-#            quote(self.existing_environment_name)
-#        )
-#        rv = self.app.get(url)
-#        self.assertIsNotNone(rv.data, 'No response')
-#        self.logger.debug('[%s] Response data: %s', method, rv.data)
-#        scores = jsonpickle.decode(rv.data)
-#        self.assertIsNotNone(scores, 'No results after deserialization')
-#        self.assertGreater(len(scores), 0, 'No results for current criteria')
-#        score = scores[0]
-#        has_all_keys = all (k in score.keys() for k in RiskScore.required)
-#        self.assertTrue(has_all_keys, 'Response is not a RiskScore object')
-#        self.logger.info('[%s] %s - %d - %d\n', method, score['responseName'], score['unmitScore'], score['mitScore'])
+    def test_get_scoring_by_rtve(self):
+        method = 'test_get_scoring_by_rtve'
+        url = '/api/risks/name/%s/threat/%s/vulnerability/%s/environment/%s?session_id=test' % (
+            quote(self.existing_risk_name),
+            quote(self.existing_threat_name),
+            quote(self.existing_vulnerability),
+            quote(self.existing_environment_name)
+        )
+        rv = self.app.get(url)
+        self.assertIsNotNone(rv.data, 'No response')
+        self.logger.debug('[%s] Response data: %s', method, rv.data)
+        scores = jsonpickle.decode(rv.data)
+        self.assertIsNotNone(scores, 'No results after deserialization')
+        self.assertGreater(len(scores), 0, 'No results for current criteria')
+        score = scores[0]
+        has_all_keys = all (k in score.keys() for k in RiskScore.required)
+        self.assertTrue(has_all_keys, 'Response is not a RiskScore object')
+        self.logger.info('[%s] %s - %d - %d\n', method, score['responseName'], score['unmitScore'], score['mitScore'])
 
     def prepare_new_risk(self):
         new_misuse_case = MisuseCaseParameters(
