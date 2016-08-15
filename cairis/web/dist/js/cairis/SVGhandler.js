@@ -856,5 +856,48 @@ else if(link.indexOf("obstacles") > -1) {
         }
       });
     }
+    else if(link.indexOf("domainproperties") > -1) {
+      forceOpenOptions();
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + link.replace(" ", "%20"),
+        success: function (data) {
+          var theTableArr =[];
+
+          $.ajax({
+            type:"GET",
+            dataType: "json",
+            accept:"application/json",
+            data: {
+              session_id: String($.session.get('sessionID'))
+            },
+            crossDomain: true,
+            url: serverIP + "/api/domainproperties/name/"+ data.theName,
+            success: function(){
+              fillOptionMenu("fastTemplates/DomainPropertyOptions.html", "#optionsContent", data,false,true,function(){
+                $.session.set("DomainProperty", JSON.stringify(data));
+                $('#domainpropertiesForm').loadJSON(data,null);
+                $("#optionsHeaderGear").text("Domain Property properties");
+                forceOpenOptions();
+              });
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.log(this.url);
+              debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+            }
+          });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          console.log(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
   });
 });

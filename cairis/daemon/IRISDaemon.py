@@ -30,14 +30,13 @@ from cairis.core.ARM import ARMException, DatabaseProxyException
 from cairis.controllers import AssetController, AttackerController, CImportController, CExportController, DependencyController, \
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
-    UploadController, UserController, VulnerabilityController, ObstacleController, CountermeasureController
+    UploadController, UserController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController
 
-__author__ = 'Robin Quetin'
-''' This module uses Flask (tested using 0.10) & Flask-Restful (tested using 0.3.3) '''
+__author__ = 'Robin Quetin, Shamal Faily'
 
 
 app = Flask(__name__)
-api = swagger.docs(Api(app), apiVersion='0.1', description='CAIRIS API', api_spec_url='/api/cairis')
+api = swagger.docs(Api(app), apiVersion='1.2.2', description='CAIRIS API', api_spec_url='/api/cairis')
 cors = CORS(app)
 b = Borg()
 
@@ -189,7 +188,7 @@ def start():
     api.add_resource(AttackerController.AttackerMotivationByNameAPI, '/api/attackers/motivations/name/<string:name>')
 
     # Countermeasure routes
-    api.add_resource(CountermeasureController.CountermeasureAPI, '/api/countermeasures')
+    api.add_resource(CountermeasureController.CountermeasuresAPI, '/api/countermeasures')
     api.add_resource(CountermeasureController.CountermeasureByNameAPI, '/api/countermeasures/name/<string:name>')
 
 
@@ -200,6 +199,10 @@ def start():
     # DimensionController
     api.add_resource(DimensionController.DimensionsAPI, '/api/dimensions/table/<string:table>')
     api.add_resource(DimensionController.DimensionNamesAPI, '/api/dimensions/table/<string:table>/environment/<string:environment>')
+
+    # Domain Property routes
+    api.add_resource(DomainPropertyController.DomainPropertiesAPI, '/api/domainproperties')
+    api.add_resource(DomainPropertyController.DomainPropertiesByNameAPI, '/api/domainproperties/name/<string:name>')
 
    # Environment routes
     api.add_resource(EnvironmentController.EnvironmentsAPI, '/api/environments')

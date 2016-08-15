@@ -101,6 +101,10 @@ def correctHref(line, model_type):
             if type[-1] == 'y':
                 type = type[:-1]+'ie'
             object = ''.join(parts[1:])
+ 
+            if type == 'domainproperty':
+                new_link = '/api/domainproperties/shortcode/{0}'.format(object)
+               
             if (model_type == 'goal' or model_type == 'risk') and type == 'requirement':
                 new_link = '/api/{0}s/shortcode/{1}'.format(type, object)
             else:

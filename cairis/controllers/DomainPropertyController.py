@@ -20,21 +20,21 @@ from flask import request, session, make_response
 from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
-from cairis.data.CountermeasureDAO import CountermeasureDAO
+from cairis.data.DomainPropertyDAO import DomainPropertyDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import CountermeasureMessage, ValueTypeMessage
-from cairis.tools.ModelDefinitions import CountermeasureModel, ValueTypeModel
+from cairis.tools.MessageDefinitions import DomainPropertyMessage, ValueTypeMessage
+from cairis.tools.ModelDefinitions import DomainPropertyModel, ValueTypeModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
 __author__ = 'Shamal Faily'
 
 
-class CountermeasuresAPI(Resource):
+class DomainPropertiesAPI(Resource):
   #region Swagger Doc
   @swagger.operation(
-    notes='Get all countermeasures',
-    nickname='countermeasures-get',
-    responseClass=CountermeasureModel.__name__,
+    notes='Get all domainproperties',
+    nickname='domainproperties-get',
+    responseClass=DomainPropertyModel.__name__,
     responseContainer='List',
     parameters=[
       {
@@ -67,25 +67,25 @@ class CountermeasuresAPI(Resource):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
 
-    dao = CountermeasureDAO(session_id)
-    countermeasures = dao.get_countermeasures(constraint_id=constraint_id)
+    dao = DomainPropertyDAO(session_id)
+    domain_properties = dao.get_domain_properties(constraint_id=constraint_id)
     dao.close()
 
-    resp = make_response(json_serialize(countermeasures, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(domain_properties, session_id=session_id), httplib.OK)
     resp.contenttype = 'application/json'
     return resp
 
   # region Swagger Doc
   @swagger.operation(
-    notes='Creates a new countermeasure',
-    nickname='countermeasures-post',
+    notes='Creates a new domainproperty',
+    nickname='domainproperties-post',
     parameters=[
       {
         "name": "body",
-        "description": "The serialized version of the new countermeasure to be added",
+        "description": "The serialized version of the new domainproperty to be added",
         "required": True,
         "allowMultiple": False,
-        "type": CountermeasureMessage.__name__,
+        "type": DomainPropertyMessage.__name__,
         "paramType": "body"
       },
       {
@@ -120,22 +120,22 @@ class CountermeasuresAPI(Resource):
   def post(self):
     session_id = get_session_id(session, request)
 
-    dao = CountermeasureDAO(session_id)
-    new_countermeasure = dao.from_json(request)
-    countermeasure_id = dao.add_countermeasure(new_countermeasure)
+    dao = DomainPropertyDAO(session_id)
+    new_domain_property = dao.from_json(request)
+    dao.add_domain_property(new_domain_property)
     dao.close()
 
-    resp_dict = {'message': 'Countermeasure successfully added', 'countermeasure_id': countermeasure_id}
+    resp_dict = {'message': 'DomainProperty successfully added'}
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.contenttype = 'application/json'
     return resp
 
-class CountermeasureByNameAPI(Resource):
+class DomainPropertiesByNameAPI(Resource):
   # region Swagger Doc
   @swagger.operation(
-    notes='Get a countermeasure by name',
-    nickname='countermeasure-by-name-get',
-    responseClass=CountermeasureModel.__name__,
+    notes='Get a domainproperty by name',
+    nickname='domainproperty-by-name-get',
+    responseClass=DomainPropertyModel.__name__,
     parameters=[
       {
         "name": "session_id",
@@ -157,25 +157,25 @@ class CountermeasureByNameAPI(Resource):
   def get(self, name):
     session_id = get_session_id(session, request)
 
-    dao = CountermeasureDAO(session_id)
-    countermeasure = dao.get_countermeasure_by_name(name=name)
+    dao = DomainPropertyDAO(session_id)
+    domain_property = dao.get_domain_property_by_name(name=name)
     dao.close()
 
-    resp = make_response(json_serialize(countermeasure, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(domain_property, session_id=session_id), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
   # region Swagger Docs
   @swagger.operation(
-    notes='Updates a countermeasure',
-    nickname='countermeasure-by-name-put',
+    notes='Updates a domain_property',
+    nickname='domain_property-by-name-put',
     parameters=[
       {
         'name': 'body',
-        "description": "JSON serialized version of the countermeasure to be updated",
+        "description": "JSON serialized version of the domain_property to be updated",
         "required": True,
         "allowMultiple": False,
-        'type': CountermeasureMessage.__name__,
+        'type': DomainPropertyMessage.__name__,
         'paramType': 'body'
       },
       {
@@ -194,7 +194,7 @@ class CountermeasureByNameAPI(Resource):
       },
       {
         'code': httplib.BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'Countermeasure' is defined.'''
+        'message': '''Some parameters are missing. Be sure 'DomainProperty' is defined.'''
       }
     ]
   )
@@ -202,20 +202,20 @@ class CountermeasureByNameAPI(Resource):
   def put(self, name):
     session_id = get_session_id(session, request)
 
-    dao = CountermeasureDAO(session_id)
+    dao = DomainPropertyDAO(session_id)
     req = dao.from_json(request)
-    dao.update_countermeasure(req, name=name)
+    dao.update_domain_property(req, name=name)
     dao.close()
 
-    resp_dict = {'message': 'Countermeasure successfully updated'}
+    resp_dict = {'message': 'DomainProperty successfully updated'}
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
   # region Swagger Doc
   @swagger.operation(
-    notes='Deletes an existing countermeasure',
-    nickname='countermeasure-by-name-delete',
+    notes='Deletes an existing domain_property',
+    nickname='domain_property-by-name-delete',
     parameters=[
       {
         "name": "session_id",
@@ -233,7 +233,7 @@ class CountermeasureByNameAPI(Resource):
       },
       {
         'code': httplib.NOT_FOUND,
-        'message': 'The provided countermeasure name could not be found in the database'
+        'message': 'The provided domainProperty name could not be found in the database'
       },
       {
         'code': httplib.CONFLICT,
@@ -249,11 +249,11 @@ class CountermeasureByNameAPI(Resource):
   def delete(self, name):
     session_id = get_session_id(session, request)
 
-    dao = CountermeasureDAO(session_id)
-    dao.delete_countermeasure(name=name)
+    dao = DomainPropertyDAO(session_id)
+    dao.delete_domain_property(name=name)
     dao.close()
 
-    resp_dict = {'message': 'Countermeasure successfully deleted'}
+    resp_dict = {'message': 'DomainProperty successfully deleted'}
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
