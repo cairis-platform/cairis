@@ -286,7 +286,7 @@ function createResponsesTable(){
         crossDomain: true,
         url: serverIP + "/api/responses",
         success: function (data) {
-            window.activeTable = "Respones";
+            window.activeTable = "Responses";
             setTableHeader();
             var theTable = $(".theTable");
             $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();

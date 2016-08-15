@@ -1632,9 +1632,13 @@ function setTableHeader(){
             debugLogger("Is Risk");
             thead = "<th width='120px' id='addnewRisk'><i class='fa fa-plus floatCenter'></i></th><th>Name</th>";
             break;
-        case "Respones":
+        case "Responses":
             debugLogger("Is Response");
             thead = "<th width='120px' id='addNewResponse'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
+            break;
+        case "Tasks":
+            debugLogger("Is Task");
+            thead = "<th width='120px' id='addNewTask'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Objective</th>";
             break;
     }
     $("#reqTable").find("thead").empty();
