@@ -136,11 +136,11 @@ class GoalDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_responsibility_model(self, environment_name):
+  def get_responsibility_model(self, environment_name, role_name):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
-      associationDictionary = self.db_proxy.responsibilityModel(environment_name)
-      associations = KaosModel(associationDictionary.values(), environment_name, 'responsibility',db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
+      associationDictionary = self.db_proxy.responsibilityModel(environment_name, role_name)
+      associations = KaosModel(associationDictionary.values(), environment_name, 'responsibility',goalName=role_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
       dot_code = associations.graph()
       return dot_code
     except DatabaseProxyException as ex:

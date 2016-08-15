@@ -388,6 +388,14 @@ class ResponsibilityModelAPI(Resource):
         "paramType": "query"
       },
       {
+        "name": "role",
+        "description": "The responsibility model filtering goal",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
         "name": "session_id",
         "description": "The ID of the user's session",
         "required": False,
@@ -412,12 +420,14 @@ class ResponsibilityModelAPI(Resource):
     ]
   )
   # endregion
-  def get(self, environment):
+  def get(self, environment, role):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
 
+    if role == 'all': role = ''
+
     dao = GoalDAO(session_id)
-    dot_code = dao.get_responsibility_model(environment)
+    dot_code = dao.get_responsibility_model(environment, role)
     dao.close()
 
     resp = make_response(model_generator.generate(dot_code, model_type='responsibility',renderer='dot'), httplib.OK)
