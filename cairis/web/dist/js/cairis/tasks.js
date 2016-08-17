@@ -143,8 +143,9 @@ optionsContent.on("click",".taskEnvironment", function () {
     }
     updatedEnvProps.push(env);
   });
-  task.theEnvironmentPropertie = updatedEnvProps;
+  task.theEnvironmentProperties = updatedEnvProps;
   $.session.set("Task", JSON.stringify(task));
+  task = JSON.parse($.session.get("Task"));
 
 
   clearTaskEnvInfo();
@@ -349,7 +350,7 @@ optionsContent.on('click', '#UpdateTask', function (e) {
     }
     updatedEnvProps.push(env);
   });
-  task.theEnvironmentPropertie = updatedEnvProps;
+  task.theEnvironmentProperties = updatedEnvProps;
 
 
   if($("#editTaskOptionsForm").hasClass("new")){
