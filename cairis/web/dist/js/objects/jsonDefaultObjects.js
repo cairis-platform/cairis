@@ -219,3 +219,12 @@ var respEnvDefault = {"__python_obj__": "TransferEnvironmentProperties.TransferE
     "theRoles": [],
     "theEnvironmentName": "Stroke"
 };
+var domainPropertyDefault = {
+    "__python_obj__": "DomainProperty.DomainProperty",
+    "theId": -1,
+    "theName": "",
+    "theTags": [],
+    "theDescription": "",
+    "theType": "",
+    "theOriginator": ""
+};

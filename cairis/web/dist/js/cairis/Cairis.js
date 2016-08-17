@@ -1765,6 +1765,10 @@ function setTableHeader(){
             debugLogger("Is Task");
             thead = "<th width='120px' id='addNewTask'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Objective</th>";
             break;
+        case "DomainProperties":
+            debugLogger("Is Domain Property");
+            thead = "<th width='120px' id='addNewDomainProperty'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
+            break;
     }
     $("#reqTable").find("thead").empty();
    // $("#reqTable").empty();
