@@ -667,6 +667,13 @@
 
     </select>
 </div>
+<div id="ChooseConcernDialog" title="Choose a task concern" style="display: none">
+    <select>
+
+    </select>
+</div>
+
+
 <div id="ChooseRoleDialog" title="Choose a role" style="display: none">
     <select>
 
@@ -693,6 +700,38 @@
         <option>Medium</option>
         <option>High</option>
     </select>
+</div>
+<div id="ChoosePersonaForTask" title="Add a participating persona" style="display: none">
+  <label>Persona</label>
+  <select id="theTaskPersona">
+  </select>
+  <br/>
+  <label>Duration</label>
+  <select id="theTaskDuration">
+    <option id="Low">Seconds</option>
+    <option id="Medium">Minutes</option>
+    <option id="High">Hours or Longer</option>
+  </select>
+  <label>Frequency</label>
+  <select id="theTaskFrequency">
+    <option id="Low">Hours or more</option>
+    <option id="Medium">Daily - Weekly</option>
+    <option id="High">Monthly or less</option>
+  </select>
+  <label>Demands</label>
+  <select id="theTaskDemands">
+    <option id="None">None</option>
+    <option id="Low">Low</option>
+    <option id="Medium">Medium</option>
+    <option id="High">High</option>
+  </select>
+  <label>Goal Conflict</label>
+  <select id="theTaskGoalConflict">
+    <option id="None">None</option>
+    <option id="Low">Low</option>
+    <option id="Medium">Medium</option>
+    <option id="High">High</option>
+  </select>
 </div>
 <div id="typeOfFile" title="Which type?" style="display: none">
     <select>

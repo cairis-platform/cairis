@@ -28,6 +28,8 @@ from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import TaskModel, TaskEnvironmentPropertiesModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
+from cairis.tools.PseudoClasses import PersonaTaskCharacteristics
+
 __author__ = 'Shamal Faily'
 
 
@@ -201,11 +203,20 @@ class TaskDAO(CairisDAO):
       if len(real_props) > 0:
         for real_prop in real_props:
           assert isinstance(real_prop, TaskEnvironmentProperties)
+          ptList = []
+          for ptc in real_prop.personas():
+            ptList.append(PersonaTaskCharacteristics(ptc[0],ptc[1],ptc[2],ptc[3],ptc[4])) 
+          real_prop.thePersonas = ptList
           new_props.append(real_prop)
     elif fake_props is not None:
       if len(fake_props) > 0:
         for fake_prop in fake_props:
           check_required_keys(fake_prop, TaskEnvironmentPropertiesModel.required)
+          ptList = [] 
+          for ptc in fake_prop['thePersonas']:
+            ptList.append([ptc['thePersona'],ptc['theDuration'],ptc['theFrequency'],ptc['theDemands'],ptc['theGoalConflict']]) 
+          fake_prop['thePersonas'] = ptList
+          
           new_prop = TaskEnvironmentProperties(
                        environmentName=fake_prop['theEnvironmentName'],
                        deps=fake_prop['theDependencies'],

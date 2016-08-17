@@ -24,6 +24,7 @@ from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
 from cairis.mio.ModelImport import importModelFile
+from cairis.tools.PseudoClasses import PersonaTaskCharacteristics
 
 __author__ = 'Shamal Faily'
 
@@ -38,7 +39,7 @@ class TaskAPITests(CairisDaemonTestCase):
     self.existing_task_name = 'Upload data'
     self.existing_environment_name = 'Psychosis'
     self.existing_direct_flag=False
-    self.existing_personas=[('Claire','Medium','Medium','Low','Medium')]
+    self.existing_personas=[PersonaTaskCharacteristics('Claire','Medium','Medium','Low','Medium')]
     self.existing_assets=['Clinical data','Portal','Client workstation']
     self.existing_concern_associations=[]
     self.existing_narrative='Claire wants to analyse a data set, in relation to other data sets on NeuroGrid.  She anonymises her data to the extent that as much personalised data is removed as possible, but not to the extent that her analysis software will fail.  She then uploads this data, tagging this as available only to members of her exemplar.'

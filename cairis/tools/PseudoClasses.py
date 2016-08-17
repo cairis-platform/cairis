@@ -313,6 +313,73 @@ class CountermeasureTarget(object):
   def rationale(self): return self.theRationale
 
 
+@swagger.model
+class PersonaTaskCharacteristics(object):
+  def __init__(self, pName, pDur, pFreq, pDemands, pGoalConflict):
+    """
+    :type pName: str
+    :type pDur: str
+    :type pFreq: str
+    :type pDemands: str
+    :type pGoalConflict: str
+    """
+    self.thePersona = pName
+    self.theDuration = pDur
+    self.theFrequency = pFreq
+    self.theDemands = pDemands
+    self.theGoalConflict = pGoalConflict
+
+  # region Swagger Doc
+  resource_fields = {
+    "__python_obj__": fields.String,
+    "thePersona": fields.String,
+    "theDuration": fields.String,
+    "theFrequency": fields.String,
+    "theDemands": fields.String,
+    "theGoalConflict": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    "theDuration": {
+      "enum": [
+        "Low",
+        "Medium",
+        "High"
+       ]
+    },
+    "theFrequency": {
+      "enum": [
+        "Low",
+        "Medium",
+        "High"
+       ]
+    },
+    "theDemands": {
+      "enum": [
+        "None",
+        "Low",
+        "Medium",
+        "High"
+       ]
+    },
+    "theGoalConflict": {
+      "enum": [
+        "None",
+        "Low",
+        "Medium",
+        "High"
+       ]
+    }
+  }
+  # endregion
+  def persona(self): return self.thePersona
+  def duration(self): return self.theDuration
+  def frequency(self): return self.theFrequency
+  def demands(self): return self.theDemands
+  def goalConflict(self): return self.theGoalConflict
+
+
 
 
 @swagger.model

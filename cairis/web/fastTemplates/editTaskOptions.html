@@ -1,22 +1,27 @@
 <form id="editTaskOptionsForm" xmlns="http://www.w3.org/1999/html" >
 
-  <div>
-    <p>
-      <label for="theName">Name</label>
-      <input class="optionsInput taskUpdate" type="text" name="theName" id="theName" style="float: right; width: 75%">
-    </p>
-    <p>
-      <label for="theTags">Tags</label>
-      <input class="optionsInput taskUpdate" type="text" value="" id="theTags" name="theTags" style="float: right; width: 75%">
-    </p>
-    <p>
-      <label>Authors</label>
-      <input class="optionsInput taskUpdate" type="text" name="theAuthor" id="theAuthor" style="float: right; width: 75%">
-    </p>
-    <p>
-      <label>Objective</label><br>
+  <div class="tabs infoWidth" style="width: 100%;">
+    <ul>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#objectives">Objectives</a></li>
+    </ul>
+    <div id="summary">
+      <p>
+        <label for="theName">Name</label>
+        <input class="optionsInput taskUpdate" type="text" name="theName" id="theName" style="float: right; width: 75%">
+      </p>
+      <p>
+        <label for="theTags">Tags</label>
+        <input class="optionsInput taskUpdate" type="text" value="" id="theTags" name="theTags" style="float: right; width: 75%">
+      </p>
+      <p>
+        <label>Authors</label>
+        <input class="optionsInput taskUpdate" type="text" name="theAuthor" id="theAuthor" style="float: right; width: 75%">
+      </p>
+    </div>   
+    <div id="objectives">
       <textarea id="theObjective" class="taskUpdate" style="width: 100%"></textarea>
-    </p>
+    </div>   
   </div>
   <div class="inblock">
     <table class="left clickable-table" id="theEnvironments">
@@ -29,51 +34,59 @@
 
     <div class="tabs right infoWidth">
       <ul>
-        <li><a href="#summary">Summary</a></li>
+        <li><a href="#dependencies">Dependencies</a></li>
         <li><a href="#narrative">Narrative</a></li>
         <li><a href="#consequences">Consequences</a></li>
         <li><a href="#benefits">Benefits</a></li>
+        <li><a href="#participants">Participants</a></li>
+        <li><a href="#concerns">Concerns</a></li>
         <li><a href="#concernassociations">Concern Associations</a></li>
       </ul>
       <div id="Properties" class="gearOptions clickable-table scrollableTable">
         <div class="inblock">
-          <div id="summary">
-            <p>
-              <label>Dependencies</label><br>
-              <textarea id="theDependencies" class="taskUpdate"></textarea>
-            </p>
-            <p>
-              <label for="thePersonas">Personas</label>
-              <table id="thePersonas" style="width: 100%">
-                <thead><tr><th>Persona</th><th>Duration</th><th>Frequency</th><th>Demands</th><th>Goal Conflict</th></tr></thead>
-                <tbody>
-                </tbody>
-              </table>
-            </p>
-            <p>
-              <label for="theConcerns">Concerns</label>
-              <table id="theConcerns" style="width: 100%">
-                <tbody>
-                </tbody>
-              </table>
-            </p>
+          <div id="participants">
+            <table id="thePersonas" style="width: 100%">
+              <thead>
+                <tr>
+                  <th id="addPersonaToTask"><i class="fa fa-plus"></i></th>
+                  <th>Persona</th><th>Duration</th><th>Frequency</th><th>Demands</th><th>Goal Conflict</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+          <div id="concerns">
+            <table id="theConcerns" class="right" style="width: 100%">
+              <thead>
+                <tr>
+                  <th id="addConcernToTask"> <i class="fa fa-plus"></i></th><th>Concern</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+          <div id="dependencies">
+            <textarea id="theDependencies" class="taskUpdate"></textarea>
           </div>
           <div id="narrative">
-            <label>Narrative</label><br>
             <textarea id="theNarrative" class="taskUpdate"></textarea>
           </div>
           <div id="consequences">
-            <label>Consequences</label><br>
             <textarea id="theConsequences" class="taskUpdate"></textarea>
           </div>
           <div id="benefits">
-            <label>Benefits</label><br>
             <textarea id="theBenefits" class="taskUpdate"></textarea>
           </div>
           <div id="concernassociations">
-            <label for="theConcernAssociations">Concern Associations</label>
             <table id="theConcernAssociations" style="width: 100%">
-              <thead><tr><th>Source</th><th>n</th><th>Link Verb</th><th>n</th><th>Target</th></tr></thead>
+              <thead>
+                <tr>
+                  <th id="addConcernAssociationToTask"><i class="fa fa-plus"></i></th>
+                  <th>Source</th><th>n</th><th>Link Verb</th><th>n</th><th>Target</th>
+                </tr>
+              </thead>
               <tbody>
               </tbody>
             </table>

@@ -134,6 +134,31 @@ var attackerDefault = {
     "theEnvironmentProperties": []
 };
 
+var taskEnvDefault = {
+    "__python_obj__": "TaskEnvironmentProperties.TaskEnvironmentProperties",
+    "theEnvironmentName": "",
+    "thePersonas": [],
+    "theAssets": [],
+    "theDependencies": "",
+    "theNarrative": "",
+    "theConsequences": "",
+    "theBenefits": "",
+    "theConcernAssociations": [],
+    "theCodes": []
+};
+
+var taskDefault = {
+    "__python_obj__": "Task.Task",
+    "theId": -1,
+    "theName": "",
+    "theShortCode": "",
+    "theObjective": "",
+    "isAssumption": false,
+    "theAuthor": "",
+    "theTags": [],
+    "theEnvironmentProperties": []
+};
+
 var personaEnvDefault = {
     "__python_obj__": "PersonaEnvironmentProperties.PersonaEnvironmentProperties",
     "theDirectFlag": 1,

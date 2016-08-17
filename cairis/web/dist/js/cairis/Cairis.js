@@ -1368,6 +1368,131 @@ function roleDialogBox(hasRole ,callback){
 }
 
 /*
+ Dialog for choosing a persona for a task
+ */
+function taskPersonaDialogBox(hasPersona ,callback){
+  var dialogwindow = $("#ChoosePersonaForTask");
+  var envName = $.session.get("taskEnvironmentName");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/persona/environment/" + envName,
+    success: function (data) {
+      $("#theTaskPersona").empty();
+      var none = true;
+      $.each(data, function(key, persona) {
+        var found = false;
+        $.each(hasPersona,function(index, text) {
+          if(text == persona){
+            found = true
+          }
+        });
+        //if not found in personas
+        if(!found) {
+          $("#theTaskPersona").append("<option value=" + persona + ">" + persona + "</option>");
+          none = false;
+        }
+      });
+      if(!none) {
+        //dialogwindow.show();
+        dialogwindow.dialog({
+          modal: true,
+          buttons: {
+            Ok: function () {
+              var persona = $("#theTaskPersona").find("option:selected" ).text();
+              var duration = $("#theTaskDuration").find("option:selected").text();
+              var frequency = $("#theTaskFrequency").find("option:selected").text();
+              var demands = $("#theTaskDemands").find("option:selected").text();
+              var goalConflict = $("#theTaskGoalConflict").find("option:selected").text();
+              if(jQuery.isFunction(callback)){
+                callback(persona, duration, frequency, demands, goalConflict);
+              }
+              $(this).dialog("close");
+            }
+          }
+        });
+        $(".comboboxD").css("visibility", "visible");
+      }  
+      else {
+        alert("All possible personas are already added");
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+
+
+
+
+/*
+ Dialog for choosing a concern
+ */
+function concernDialogBox(hasRole ,callback){
+    var dialogwindow = $("#ChooseConcernDialog");
+    var select = dialogwindow.find("select");
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+            session_id: String($.session.get('sessionID'))
+
+        },
+        crossDomain: true,
+        url: serverIP + "/api/assets",
+        success: function (data) {
+            select.empty();
+            var none = true;
+            $.each(data, function(key, asset) {
+                var found = false;
+                $.each(hasAsset,function(index, text) {
+                    if(text == key){
+                        found = true
+                    }
+                });
+                //if not found in assets
+                if(!found) {
+                            select.append("<option value=" + key + ">" + key + "</option>");
+                            none = false;
+                }
+            });
+            if(!none) {
+                //dialogwindow.show();
+                dialogwindow.dialog({
+                    modal: true,
+                    buttons: {
+                        Ok: function () {
+                            var text =  select.find("option:selected" ).text();
+                            if(jQuery.isFunction(callback)){
+                                callback(text);
+                            }
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                $(".comboboxD").css("visibility", "visible");
+            }else {
+                alert("All possible concerns are already added");
+            }
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+    });
+}
+
+
+/*
  Dialog for choosing a motive
  */
 function motivationDialogBox(hasMotive ,callback){

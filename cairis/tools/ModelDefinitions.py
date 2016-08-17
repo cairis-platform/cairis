@@ -47,7 +47,7 @@ from cairis.core.Vulnerability import Vulnerability
 from cairis.core.VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
 from cairis.core.Countermeasure import Countermeasure
 from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
-from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget
+from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -757,7 +757,7 @@ class PersonaModel(object):
 class TaskEnvironmentPropertiesModel(object):
     resource_fields = {
         obj_id_field: fields.String,
-        'thePersonas': fields.List(fields.String),
+        'thePersonas': fields.List(fields.Nested(PersonaTaskCharacteristics.resource_fields)),
         'theAssets': fields.List(fields.String),
         'theDependencies': fields.String,
         'theNarrative': fields.String,
