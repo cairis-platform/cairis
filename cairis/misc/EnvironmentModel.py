@@ -53,8 +53,8 @@ def arrayToThreatSecurityPropertiesTable(spArray,objtName):
   for x in spArray:
     if x != 0:
       if x == 1: buf += '<TR><TD></TD><TD></TD><TD bgcolor="' + colorScheme[ci] + '"></TD></TR>'
-      elif x == 2: buf += '<TR><TD></TD><TD bgcolor="' + colorScheme[ci] + '" border="1"></TD><TD bgcolor="' + colorScheme[ci] + '" border="1"></TD></TR>'
-      else: buf += '<TR><TD bgcolor="' + colorScheme[ci] + '" border="1"></TD><TD bgcolor="' + colorScheme[ci] + '" border="1"></TD><TD bgcolor="' + colorScheme[ci] + '" border="1"></TD></TR>'
+      elif x == 2: buf += '<TR><TD></TD><TD bgcolor="' + colorScheme[ci] + '" border="0"></TD><TD bgcolor="' + colorScheme[ci] + '" border="0"></TD></TR>'
+      else: buf += '<TR><TD bgcolor="' + colorScheme[ci] + '" border="0"></TD><TD bgcolor="' + colorScheme[ci] + '" border="0"></TD><TD bgcolor="' + colorScheme[ci] + '" border="0"></TD></TR>'
     ci += 1
   buf += '</TABLE>>'
   return buf
