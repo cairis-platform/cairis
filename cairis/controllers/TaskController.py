@@ -266,6 +266,30 @@ class TaskModelByNameAPI(Resource):
     nickname='task-model-by-task-environment-get',
     parameters=[
       {
+        "name": "environmentl",
+        "description": "The task model environment",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "task",
+        "description": "The task model filtering task",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "misusecase",
+        "description": "The task model filtering misusecase",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
         "name": "session_id",
         "description": "The ID of the user's session",
         "required": False,
@@ -282,12 +306,15 @@ class TaskModelByNameAPI(Resource):
     ]
   )
   #endregion
-  def get(self, environment):
+  def get(self, environment,task,misusecase):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
 
     dao = TaskDAO(session_id)
-    dot_code = dao.get_task_model(environment)
+    if task == 'all':  task = ''
+    if misusecase == 'all': misusecase = ''
+
+    dot_code = dao.get_task_model(environment,task,misusecase)
     dao.close()
 
     resp = make_response(model_generator.generate(dot_code, model_type='task',renderer='dot'), httplib.OK)

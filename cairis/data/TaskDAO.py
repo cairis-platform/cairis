@@ -234,11 +234,16 @@ class TaskDAO(CairisDAO):
       raise MissingParameterHTTPError(param_names=['real_props', 'fake_props'])
     return new_props
 
-  def get_task_model(self, environment_name):
+  def get_task_model(self, environment_name,task_name,misusecase_name):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
-      associationDirectory = self.db_proxy.taskModel(environment_name)
-      associations = KaosModel(associationDirectory.values(), environment_name, kaosModelType = 'task',db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
+      mcFilter = False
+      filter_name = task_name
+      if misusecase_name != '': 
+        mcFilter = True
+        filter_name = misusecase_name
+      associationDirectory = self.db_proxy.taskModel(environment_name,filter_name,mcFilter)
+      associations = KaosModel(associationDirectory.values(), environment_name, kaosModelType = 'task',goalName = filter_name,db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
       dot_code = associations.graph()
       if not dot_code:
         raise ObjectNotFoundHTTPError('The task model')

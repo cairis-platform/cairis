@@ -183,6 +183,16 @@ $('#gmgoalbox').change(function() {
   getGoalview($('#gmenvironmentsbox').val(),selection);
 });
 
+$('#tmtaskbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  getTaskview($('#tmenvironmentsbox').val(),selection,'');
+});
+
+$('#tmmisusecasebox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  getTaskview($('#tmenvironmentsbox').val(),'',selection);
+});
+
 $('#remrolebox').change(function() {
   var selection = $(this).find('option:selected').text();
   getResponsibilityview($('#remenvironmentsbox').val(),selection);
@@ -276,6 +286,33 @@ $('#gmenvironmentsbox').change(function() {
     }
   });
 });
+
+$('#tmenvironmentsbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/task/environment/" + selection.replace(" ","%20"),
+    success: function (data) {
+      $('#tmtaskbox').empty();
+      $('#tmtaskbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+      $.each(data, function (index, item) {
+        $('#tmtaskbox').append($('<option>', {value: item, text: item},'</option>'));
+      });
+      $('#tmtaskbox').change();
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
 
 $('#omenvironmentsbox').change(function() {
   var selection = $(this).find('option:selected').text();
@@ -619,8 +656,63 @@ function getRiskview(environment,dimName,objtName,modelLayout){
   });
 }
 
-function getTaskview(environment){
-    window.assetEnvironment = environment;
+function getTaskview(environment,task,misusecase){
+  window.assetEnvironment = environment;
+
+  $('#tmenvironmentsbox').val(environment);
+  if (task == undefined) {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + "/api/tasks/environment/" + environment.replace(" ","%20") + "/names",
+
+      success: function (data) {
+        $("#tmtaskbox").empty()
+        $('#tmtaskbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+        $.each(data, function (index, item) {
+          $('#tmtaskbox').append($('<option>', {value: item, text: item},'</option>'));
+        });
+        task = 'all';
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  }
+  if (misusecase == undefined) {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + "/api/dimensions/table/misusecase/environment/" + environment.replace(" ","%20"),
+
+      success: function (data) {
+        $("#tmmisusecasebox").empty()
+        $('#tmmisusecasebox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+        $.each(data, function (index, item) {
+          $('#tmmisusecasebox').append($('<option>', {value: item, text: item},'</option>'));
+        });
+        task = 'all';
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  }
+  task = (task == undefined || task == 'All') ? "all" : task;
+  misusecase = (misusecase == undefined || misusecase == 'All') ? "all" : misusecase;
+
     $.ajax({
         type:"GET",
         accept:"application/json",
@@ -628,10 +720,8 @@ function getTaskview(environment){
             session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + "/api/tasks/model/environment/" + environment.replace(" ","%20"),
+        url: serverIP + "/api/tasks/model/environment/" + environment.replace(" ","%20") + "/task/" + task.replace(" ","%20") + "/misusecase/" + misusecase.replace(" ","%20"),
         success: function(data){
-          // console.log("in getTaskView " + data.innerHTML);
-           // console.log(this.url);
            fillSvgViewer(data);
 
         },
@@ -1600,17 +1690,20 @@ var sess = String($.session.get('sessionID'));
                 var envBox = $("#environmentsbox");
                 var gmEnvBox = $("#gmenvironmentsbox");
                 var omEnvBox = $("#omenvironmentsbox");
+                var tmEnvBox = $("#tmenvironmentsbox");
                 var remEnvBox = $("#remenvironmentsbox");
                 var rmEnvBox = $("#rmenvironmentsbox");
                 envBox.empty();
                 gmEnvBox.empty();
                 omEnvBox.empty();
+                tmEnvBox.empty();
                 remEnvBox.empty();
                 rmEnvBox.empty();
                 $.each(data, function () {
                     envBox.append($("<option />").val(this).text(this));
                     gmEnvBox.append($("<option />").val(this).text(this));
                     omEnvBox.append($("<option />").val(this).text(this));
+                    tmEnvBox.append($("<option />").val(this).text(this));
                     remEnvBox.append($("<option />").val(this).text(this));
                     rmEnvBox.append($("<option />").val(this).text(this));
                 });
@@ -1665,6 +1758,7 @@ function activeElement(elementid){
         $("#filterriskmodelcontent").hide();
         $("#filterresponsibilitymodelcontent").hide();
         $("#filtergoalmodelcontent").hide();
+        $("#filtertaskmodelcontent").hide();
         $("#filterobstaclemodelcontent").hide();
 
         if (window.theVisualModel == 'risk') {
@@ -1675,6 +1769,9 @@ function activeElement(elementid){
         }
         else if (window.theVisualModel == 'obstacle') {
           $("#filterobstaclemodelcontent").show();
+        }
+        else if (window.theVisualModel == 'task') {
+          $("#filtertaskmodelcontent").show();
         }
         else if (window.theVisualModel == 'responsibility') {
           $("#filterresponsibilitymodelcontent").show();
@@ -1689,6 +1786,7 @@ function activeElement(elementid){
         $("#svgViewer").hide();
         $("#filterriskmodelcontent").hide();
         $("#filtergoalmodelcontent").hide();
+        $("#filtertaskmodelcontent").hide();
         $("#filterresponsibilitymodelcontent").hide();
         $("#filterobstaclemodelcontent").hide();
     }
@@ -1786,6 +1884,7 @@ function setActiveOptions(){
     $("#filtercontent").hide();
     $("#filterriskmodelcontent").hide();
     $("#filtergoalmodelcontent").hide();
+    $("#filtertaskmodelcontent").hide();
     $("#filterobstaclemodelcontent").hide();
     $("#editAssetsOptions").hide();
 
