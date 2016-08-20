@@ -79,14 +79,13 @@ optionsContent.on('click', "#editMisusedCase", function (e) {
             session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + "/api/misuse-cases/risk/" + name ,
+        url: serverIP + "/api/misusecases/risk/" + name ,
         success: function (data) {
+            $.session.set("MisuseCase", JSON.stringify(data));
             $("#theMisuseName").val(data.theName);
             $("#theMisuseRisk").val(data.theRiskName);
-            $.each(data.theEnvironmentDictionary, function (key, object) {
-                appendMisuseEnvironment(key);
-                //TODO misuseCASE WHEN API IS READY
-
+            $.each(data.theEnvironmentProperties, function (idx,env) {
+                appendMisuseEnvironment(env.theEnvironmentName);
             });
         },
         error: function (xhr, textStatus, errorThrown) {
@@ -97,11 +96,64 @@ optionsContent.on('click', "#editMisusedCase", function (e) {
 
 });
 
+optionsContent.on("click",".misusecaseEnvironment", function () {
+
+// Uncomment when proper handling for adding and updating misuse cases
+/*  var lastEnvName = $.session.get("misusecaseEnvironmentName");
+  var misusecase = JSON.parse($.session.get("MisuseCase"));
+  var updatedEnvProps = [];
+  $.each(misusecase.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == lastEnvName){
+      env.theDescription = $('#theMisuseCaseNarrative').val();
+    }
+    updatedEnvProps.push(env);
+  });
+  misusecase.theEnvironmentProperties = updatedEnvProps;
+  $.session.set("MisuseCase", JSON.stringify(misusecase)); */
+
+  clearMisuseCaseInfo();
+  var misusecase = JSON.parse($.session.get("MisuseCase"));
+
+  var theEnvName = $(this).text();
+  $.session.set("misusecaseEnvironmentName", theEnvName);
+  $.each(misusecase.theEnvironmentProperties, function (idx,env) {
+
+    if (env.theEnvironmentName == theEnvName) {
+      $("#theMisuseObjective").val(env.theObjective);
+      $("#misuseThreat").val(misusecase.theThreatName);
+      $("#misuseLikelihood").val(env.theLikelihood);
+      $("#misuseVulnerability").val(misusecase.theVulnerabilityName);
+      $("#misuseSeverity").val(env.theSeverity);
+      $("#misuseRiskRating").val(env.theRiskRating.rating);
+      $("#theMisuseNarrative").val(env.theDescription);
+      $.each(env.theAssets, function (index, asset) {
+        $("#assetTable tbody").append("<tr><td>" + asset + "</td></tr>");
+      });
+      $.each(env.theAttackers, function (index, attacker) {
+        $("#attackerTable tbody").append("<tr><td>" + attacker + "</td></tr>");
+      });
+    }
+  });
+});
+
+
+function clearMisuseCaseInfo() {
+  $("#theMisuseObjective").val("");
+  $("#misuseThreat").val("");
+  $("#misuseLikelihood").val("");
+  $("#misuseVulnerability").val("");
+  $("#misuseSeverity").val("");
+  $("#misuseRiskRating").val("");
+  $("#misuseNarrative").val("");
+  $("#assetTable").find("tbody").empty();
+  $("#attackerTable").find("tbody").empty();
+  $("#theObjective").val("");
+}
+
 function toggleRiskWindows(){
     $("#editMisusedCaseDiv").toggle();
     $("#editRisksForm").toggle();
 }
-
 
 //fillOptionMenu("fastTemplates/editAttackerOptions.html", "#optionsContent", null, true, true, function () {
 $(document).on('click', '.editRiskButton', function () {
@@ -141,7 +193,7 @@ $(document).on('click', '.editRiskButton', function () {
                         getRiskEnvironments();
                     });
                     $("#theName").val(mainData.theName);
-                    var tags = data.theTags;
+                    var tags = mainData.theTags;
                     var text = "";
                     $.each(tags, function (index, type) {
                         text += type + ", ";
@@ -157,6 +209,7 @@ $(document).on('click', '.editRiskButton', function () {
     });
 
 });
+
 optionsContent.on('click', '.riskEnvironment', function () {
     var env = $(this).text();
     var name = $("#theName").val();
@@ -288,5 +341,5 @@ function appendRiskResponse(resp){
     $("#theResponses").find("tbody").append('<tr></td><td>'+resp.responseName+'</td><td>'+ resp.unmitScore +'</td><td>'+ resp.mitScore +'</td></tr>');
 }
 function appendMisuseEnvironment(environment){
-    $("#theMisuseEnvironments").find("tbody").append('<tr><td>'+environment+'</td></tr>');
+    $("#theMisuseEnvironments").find("tbody").append('<tr><td class="misusecaseEnvironment">'+environment+'</td></tr>');
 }
