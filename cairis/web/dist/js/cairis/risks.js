@@ -67,6 +67,7 @@ function createRisksTable(){
 optionsContent.on('dblclick', ".riskEnvironment", function () {
 
 });
+
 optionsContent.on('click', "#editMisusedCase", function (e) {
     e.preventDefault();
     var name = $.session.get("riskName");
@@ -87,32 +88,42 @@ optionsContent.on('click', "#editMisusedCase", function (e) {
             $.each(data.theEnvironmentProperties, function (idx,env) {
                 appendMisuseEnvironment(env.theEnvironmentName);
             });
+            $("#theMisuseEnvironments").find(".misusecaseEnvironment:first").trigger('click');
+
         },
         error: function (xhr, textStatus, errorThrown) {
             debugLogger(String(this.url));
             debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
     })
+});
+
+optionsContent.on('click', "#updateMisuseCase", function (e) {
+  e.preventDefault();
+  var risk = JSON.parse($.session.get("Risk"));
+  risk.theMisuseCase = JSON.parse($.session.get("MisuseCase"));
+  $.session.set("Risk",JSON.stringify(risk));
+  clearMisuseCaseInfo();
+  $("#theMisuseEnvironments").find("tbody").empty();
+  toggleRiskWindows();
 
 });
 
 optionsContent.on("click",".misusecaseEnvironment", function () {
 
-// Uncomment when proper handling for adding and updating misuse cases
-/*  var lastEnvName = $.session.get("misusecaseEnvironmentName");
+  var lastEnvName = $.session.get("misusecaseEnvironmentName");
   var misusecase = JSON.parse($.session.get("MisuseCase"));
   var updatedEnvProps = [];
   $.each(misusecase.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == lastEnvName){
-      env.theDescription = $('#theMisuseCaseNarrative').val();
+      env.theDescription = $('#theMisuseNarrative').val();
     }
     updatedEnvProps.push(env);
   });
   misusecase.theEnvironmentProperties = updatedEnvProps;
-  $.session.set("MisuseCase", JSON.stringify(misusecase)); */
+  $.session.set("MisuseCase", JSON.stringify(misusecase)); 
 
   clearMisuseCaseInfo();
-  var misusecase = JSON.parse($.session.get("MisuseCase"));
 
   var theEnvName = $(this).text();
   $.session.set("misusecaseEnvironmentName", theEnvName);
@@ -169,6 +180,7 @@ $(document).on('click', '.editRiskButton', function () {
         crossDomain: true,
         url: serverIP + "/api/risks/name/" + name.replace(" ", "%20"),
         success: function (mainData) {
+            $.session.set("Risk",JSON.stringify(mainData));
             // console.log(JSON.stringify(rawData));
             fillOptionMenu("fastTemplates/editRiskOptions.html", "#optionsContent", null, true, true, function () {
                     $("#optionsHeaderGear").text("Risk properties");
@@ -343,3 +355,29 @@ function appendRiskResponse(resp){
 function appendMisuseEnvironment(environment){
     $("#theMisuseEnvironments").find("tbody").append('<tr><td class="misusecaseEnvironment">'+environment+'</td></tr>');
 }
+
+optionsContent.on('click', '#UpdateRisk', function (e) {
+  e.preventDefault();
+  var risk = JSON.parse($.session.get("Risk"));
+  var oldName = risk.theName;
+  risk.theRiskName = $("#theName").val();
+  risk.theThreatName = $("#theThreatNames").val();
+  risk.theVulnerabilityName = $("#theVulnerabilityNames").val();
+  var tags = $("#theTags").text().split(", ");
+  if(tags[0] != ""){
+    risk.theTags = tags;
+  }
+
+  if($("#editRisksForm").hasClass("new")){
+    postRisk(risk, function () {
+      createRisksTable();
+      $("#editRisksForm").removeClass("new")
+    });
+  }
+  else {
+    putRisk(risk, oldName, function () {
+      createRisksTable();
+    });
+  }
+});
+
