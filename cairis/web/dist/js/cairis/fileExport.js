@@ -18,7 +18,26 @@
     Authors: Shamal Faily */
 
 $("#exportClick").click(function () {
-  window.open('/api/export/text?session_id=' + String($.session.get('sessionID')),'Export model');
+  var exportUrl =  serverIP + "/api/export/file?filename=model.xml"; 
+  $.ajax({
+    type: "GET",
+    accept: "application/octet-stream",
+    processData:false,
+    contentType:false,
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: exportUrl,
+    success: function (data) {
+      window.location = exportUrl;
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 });
-
-

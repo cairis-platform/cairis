@@ -32,11 +32,11 @@ from StringIO import StringIO
 __author__ = 'Shamal Faily'
 
 
-class CExportTextAPI(Resource):
+class CExportFileAPI(Resource):
   # region Swagger Doc
   @swagger.operation(
-    notes='Exports data to XML text',
-    nickname='cexport-text-get',
+    notes='Exports data to XML file',
+    nickname='cexport-file-get',
     parameters=[
       {
         "name": "session_id",
@@ -63,7 +63,11 @@ class CExportTextAPI(Resource):
     session_id = get_session_id(session, request)
     dao = ExportDAO(session_id)
     modelBuf = dao.file_export()
+    f = open('/tmp/model.xml','w')
+    f.write(modelBuf)
+    f.close()
     dao.close()
-    resp = make_response(json_serialize(modelBuf, session_id=session_id), httplib.OK)
-    resp.headers['Content-Type'] = 'application/json'
+    resp_dict = { 'message': str(0) }
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp.headers["Content-Disposition"] = "attachment; filename=/tmp/model.xml"
     return resp

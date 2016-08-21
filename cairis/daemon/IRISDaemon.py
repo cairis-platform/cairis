@@ -227,7 +227,7 @@ def start():
     api.add_resource(GoalController.ResponsibilityModelAPI, '/api/responsibility/model/environment/<string:environment>/role/<string:role>')
 
     # Export routes
-    api.add_resource(CExportController.CExportTextAPI, '/api/export/text')
+    api.add_resource(CExportController.CExportFileAPI, '/api/export/file')
 
     # Import routes
     api.add_resource(CImportController.CImportTextAPI, '/api/import/text')
