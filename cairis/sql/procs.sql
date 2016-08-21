@@ -7872,39 +7872,25 @@ begin
 end
 //
 
-create procedure addRisk(in threatName text, in vulName text, in riskId int, in riskName text,in inTxt text, in envName text)
+create procedure addRisk(in threatName text, in vulName text, in riskId int, in riskName text,in inTxt text)
 begin
   declare threatId int;
   declare vulId int;
-  declare envId int;
 
   select id into threatId from threat where name = threatName;
   select id into vulId from vulnerability where name = vulName;
-  select id into envId from environment where name = envName;
-  if envId is null
-  then
-    set envId = -1;
-  end if;
-
-  insert into risk(id,name,threat_id,vulnerability_id,intent,environment_id) values (riskId,riskName,threatId,vulId,inTxt,envId);
+  insert into risk(id,name,threat_id,vulnerability_id,intent) values (riskId,riskName,threatId,vulId,inTxt);
 end
 //
 
-create procedure updateRisk(in threatName text, in vulName text, in riskId int, in riskName text,in inTxt text, in envName text)
+create procedure updateRisk(in threatName text, in vulName text, in riskId int, in riskName text,in inTxt text)
 begin
   declare threatId int;
   declare vulId int;
-  declare envId int;
 
   select id into threatId from threat where name = threatName;
   select id into vulId from vulnerability where name = vulName;
-  select id into envId from environment where name = envName;
-  if envId is null
-  then
-    set envId = -1;
-  end if;
-
-  update risk set name = riskName,threat_id = threatId,vulnerability_id = vulId,intent = inTxt,environment_id = envId where id = riskId;
+  update risk set name = riskName,threat_id = threatId,vulnerability_id = vulId,intent = inTxt where id = riskId;
 
 end
 //

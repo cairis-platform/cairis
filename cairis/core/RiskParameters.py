@@ -21,7 +21,7 @@ import ObjectCreationParameters
 __author__ = 'Shamal Faily'
 
 class RiskParameters(ObjectCreationParameters.ObjectCreationParameters):
-  def __init__(self,riskName,threatName,vulName,mc,rTags,inTxt = '',envName = ''):
+  def __init__(self,riskName,threatName,vulName,mc,rTags,inTxt = ''):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theRiskName = riskName
     self.theThreatName = threatName
@@ -29,7 +29,6 @@ class RiskParameters(ObjectCreationParameters.ObjectCreationParameters):
     self.theMisuseCase = mc
     self.theTags = rTags
     self.theIntent = inTxt
-    self.theEnvironmentName = envName
 
   def name(self): return self.theRiskName
   def threat(self): return self.theThreatName
@@ -37,4 +36,3 @@ class RiskParameters(ObjectCreationParameters.ObjectCreationParameters):
   def misuseCase(self): return self.theMisuseCase
   def tags(self): return self.theTags
   def intent(self): return self.theIntent
-  def environment(self): return self.theEnvironmentName

@@ -1105,7 +1105,6 @@ CREATE TABLE risk (
   threat_id INT NOT NULL,
   vulnerability_id INT NOT NULL,
   intent VARCHAR(4000) DEFAULT '',
-  environment_id INT DEFAULT -1,
   PRIMARY KEY(id,threat_id,vulnerability_id),
   FOREIGN KEY(threat_id) REFERENCES threat(id),
   FOREIGN KEY(vulnerability_id) REFERENCES vulnerability(id)

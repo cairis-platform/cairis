@@ -88,7 +88,7 @@ class RiskAPITests(CairisDaemonTestCase):
         self.logger.info('[%s] URL: %s', method, url)
         new_risk_body = self.prepare_json()
 
-        self.app.delete('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()))
+#        self.app.delete('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()))
         rv = self.app.post(url, content_type='application/json', data=new_risk_body)
         self.logger.debug('[%s] Response data: %s', method, rv.data)
         json_resp = jsonpickle.decode(rv.data)
@@ -106,7 +106,7 @@ class RiskAPITests(CairisDaemonTestCase):
         self.logger.info('[%s] URL: %s', method, url)
         new_risk_body = self.prepare_json()
 
-        rv = self.app.delete('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()))
+#        rv = self.app.delete('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()))
         rv = self.app.post(url, content_type='application/json', data=new_risk_body)
         self.logger.debug('[%s] Response data: %s', method, rv.data)
         json_resp = jsonpickle.decode(rv.data)
@@ -134,7 +134,7 @@ class RiskAPITests(CairisDaemonTestCase):
         upd_risk = jsonpickle.decode(rv.data)
         self.assertIsNotNone(upd_risk, 'Unable to decode JSON data')
         self.logger.debug('[%s] Response data: %s', method, rv.data)
-        self.logger.info('[%s] Risk: %s [%d]\n', method, upd_risk['theName'])
+        self.logger.info('[%s] Risk: %s \n', method, upd_risk['theName'])
 
         rv = self.app.delete('/api/risks/name/%s?session_id=test' % quote(risk_to_update.theName))
 

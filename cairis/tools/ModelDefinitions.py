@@ -373,7 +373,7 @@ class MisuseCaseModel(object):
     resource_fields = {
         obj_id_field: fields.String,
         "theName": fields.String,
-        "theRiskName": fields.String,
+        "theRisk": fields.String,
         "theEnvironmentDictionary": fields.List(fields.Nested(MisuseCaseEnvironmentPropertiesModel.resource_fields)),
         "theEnvironmentProperties": fields.List(fields.Nested(MisuseCaseEnvironmentPropertiesModel.resource_fields))
     }

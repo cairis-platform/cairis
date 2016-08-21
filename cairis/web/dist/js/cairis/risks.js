@@ -84,7 +84,7 @@ optionsContent.on('click', "#editMisusedCase", function (e) {
         success: function (data) {
             $.session.set("MisuseCase", JSON.stringify(data));
             $("#theMisuseName").val(data.theName);
-            $("#theMisuseRisk").val(data.theRiskName);
+            $("#theMisuseRisk").val(data.theRisk);
             $.each(data.theEnvironmentProperties, function (idx,env) {
                 appendMisuseEnvironment(env.theEnvironmentName);
             });
@@ -360,7 +360,7 @@ optionsContent.on('click', '#UpdateRisk', function (e) {
   e.preventDefault();
   var risk = JSON.parse($.session.get("Risk"));
   var oldName = risk.theName;
-  risk.theRiskName = $("#theName").val();
+  risk.theRisk = $("#theName").val();
   risk.theThreatName = $("#theThreatNames").val();
   risk.theVulnerabilityName = $("#theVulnerabilityNames").val();
   var tags = $("#theTags").text().split(", ");
