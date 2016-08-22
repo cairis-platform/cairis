@@ -41,7 +41,7 @@ class Traceable:
     self.onTrace(dimensionName,fromId,True,envName)
 
   def onTraceTo(self,dimensionName,toId):
-    self.onTrace(dimensionName,toId,False,envName)
+    self.onTrace(dimensionName,toId,False,envName='')
 
   def onTrace(self,dimensionName,fromId,isFrom,envName):
     dlg = TraceExplorer(self,dimensionName,isFrom,envName)
