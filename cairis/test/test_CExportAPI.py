@@ -32,13 +32,13 @@ class CExportTests(CairisDaemonTestCase):
     self.logger = logging.getLogger(__name__)
 
   def test_cexport_data_get(self):
-    method = 'test_cimport_text_get?session_id=test'
-    url = '/api/export/text'
+    method = 'test_cexport_file_get?session_id=test'
+    url = '/api/export/file'
     self.logger.info('[%s] URL: %s', method, url)
 
     json_dict = {'session_id' : 'test'}
     json_body = jsonpickle.encode(json_dict)
     rv = self.app.get(url, data=json_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    modelBuf = jsonpickle.decode(rv.data)
-    self.assertIsNotNone(modelBuf, 'No results after deserialization')
+    successCode = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(successCode, '0')
