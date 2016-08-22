@@ -320,6 +320,7 @@ function createResponsesTable(){
         }
     });
 }
+
 function appendResponseEnvironment(environment){
     $("#theRespEnvironments").find("tbody").append('<tr><td class="deleteRespEnv"><i class="fa fa-minus"></i></td><td class="responseEnvironment">'+environment+'</td></tr>');
 }

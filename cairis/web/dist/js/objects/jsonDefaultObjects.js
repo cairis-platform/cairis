@@ -209,6 +209,30 @@ var goalDefault = {
     "theName": "",
     "theEnvironmentProperties": []
 };
+
+var obstacleEnvDefault =     {
+        "__python_obj__": "ObstacleEnvironmentProperties.ObstacleEnvironmentProperties",
+        "theLabel": "",
+        "theDefinition": "",
+        "theCategory": "",
+        "theGoalRefinements": [],
+        "theSubGoalRefinements": [],
+        "theConcerns": [],
+        "theProbability": "",
+        "theProbabilityRationale": "",
+        "theEnvironmentName": ""
+    };
+var obstacleDefault = {
+    "__python_obj__": "Obstacle.Obstacle",
+    "theColour": "",
+    "theId": -1,
+    "theName": "",
+    "theTags": [],
+    "theOriginator": "",
+    "theEnvironmentProperties": []
+};
+
+
 var respRoleDefault = {
     "__python_obj__": "tools.PseudoClasses.ValuedRole",
     "roleName": "",
