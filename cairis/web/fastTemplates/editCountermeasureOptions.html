@@ -1,0 +1,87 @@
+<form id="editCountermeasureOptionsForm" xmlns="http://www.w3.org/1999/html" >
+
+  <div class="tabs infoWidth" style="width: 100%;">
+    <ul>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#description">Description</a></li>
+    </ul>
+    <div id="summary">
+      <p>
+        <label for="theName">Name</label>
+        <input class="optionsInput countermeasureUpdate" type="text" name="theName" id="theName" style="float: right; width: 75%">
+      </p>
+      <p>
+        <label for="theTags">Tags</label>
+        <input class="optionsInput countermeasureUpdate" type="text" value="" id="theTags" name="theTags" style="float: right; width: 75%">
+      </p>
+      <p>
+        <label for="theType">Type</label>
+        <select id="theType" name="theType" style="float: right; width: 75%">
+          <option>Information</option>
+          <option>Systems</option>
+          <option>Software</option>
+          <option>Hardware</option>
+          <option>People</option>
+        </select>
+      </p>
+    </div>   
+    <div id="description">
+      <textarea id="theDescription" class="countermeasureUpdate" style="width: 100%"></textarea>
+    </div>   
+  </div>
+  <div class="inblock">
+    <table class="left clickable-table" id="theEnvironments">
+      <thead>
+        <tr><th id="addCountermeasureEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
+    <div class="tabs right infoWidth">
+      <div id="Properties" class="gearOptions clickable-table scrollableTable" style="width: 100%;" >
+        <ul>
+          <li><a href="#security">Security</a></li>
+          <li><a href="#usability">Usability</a></li>
+        </ul>
+        <div id="security" class="gearOptions clickable-table scrollableTable">
+          <div class="inblock">
+            <table id="theRequirements" class="left">
+              <thead><tr><th id="addRequirementToCountermeasure" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Requirement</th></tr></thead>
+              <tbody>
+              </tbody>
+            </table>
+            <table id="theTargets" class="right">
+              <thead><tr><th id="addTargetToCountermeasure" style="width: 30px;"> <i class="fa fa-plus"></i></th><th>Target</th><th>Effectiveness</th></tr></thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+          <table id="countermeasureProperties">
+            <thead><tr><th id="addPropertytoCountermeasure" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Property</th><th>Value</th><th>Rationale</th></tr></thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <div id="usability" class="gearOptions clickable-table scrollableTable">
+          <table id="theRoles" class="left" style="width: 100%">
+            <thead><tr><th id="addRoletoCountermeasure" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Role</th></tr></thead>
+            <tbody>
+            </tbody>
+          </table>
+          <table id="thePersonas" style="width: 100%">
+            <thead>
+              <tr>
+                <th id="addTaskToCountermeasure"><i class="fa fa-plus"></i></th>
+                <th>Task</th><th>Persona</th><th>Duration</th><th>Frequency</th><th>Demands</th><th>Goal Conflict</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button id="UpdateCountermeasure">Update</button>
+</form>

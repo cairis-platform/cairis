@@ -23,7 +23,7 @@ from cairis.core.Countermeasure import Countermeasure
 from cairis.core.Target import Target
 from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
-from cairis.tools.PseudoClasses import SecurityAttribute, CountermeasureTarget
+from cairis.tools.PseudoClasses import SecurityAttribute, CountermeasureTarget, CountermeasureTaskCharacteristics
 import os
 from cairis.mio.ModelImport import importModelFile
 
@@ -47,7 +47,7 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.existing_rationale =  ['None','None','None','None','None','None','None','None']
     self.existing_cost='Medium'
     self.existing_roles=['Data Consumer','Certificate Authority']
-    self.existing_personas=[('Upload data','Claire','None','None','None','Low Hindrance'),('Download data','Claire','None','None','None','Low Hindrance')]
+    self.existing_personas=[CountermeasureTaskCharacteristics('Upload data','Claire','None','None','None','Low Hindrance'),CountermeasureTaskCharacteristics('Download data','Claire','None','None','None','Low Hindrance')]
 
     countermeasure_class = Countermeasure.__module__+'.'+Countermeasure.__name__
     # endregion

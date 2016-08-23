@@ -1926,6 +1926,10 @@ function setTableHeader(){
             debugLogger("Is Response");
             thead = "<th width='120px' id='addNewResponse'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
             break;
+        case "Countermeasures":
+            debugLogger("Is Countermeasure");
+            thead = "<th width='120px' id='addNewCountermeasure'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
+            break;
         case "Tasks":
             debugLogger("Is Task");
             thead = "<th width='120px' id='addNewTask'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Objective</th>";

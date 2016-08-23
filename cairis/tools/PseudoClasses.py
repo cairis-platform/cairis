@@ -379,6 +379,81 @@ class PersonaTaskCharacteristics(object):
   def demands(self): return self.theDemands
   def goalConflict(self): return self.theGoalConflict
 
+@swagger.model
+class CountermeasureTaskCharacteristics(object):
+  def __init__(self, pTask, pName, pDur, pFreq, pDemands, pGoalConflict):
+    """
+    :type pTask: str
+    :type pName: str
+    :type pDur: str
+    :type pFreq: str
+    :type pDemands: str
+    :type pGoalConflict: str
+    """
+    self.theTask = pTask
+    self.thePersona = pName
+    self.theDuration = pDur
+    self.theFrequency = pFreq
+    self.theDemands = pDemands
+    self.theGoalConflict = pGoalConflict
+
+  # region Swagger Doc
+  resource_fields = {
+    "__python_obj__": fields.String,
+    "theTask": fields.String,
+    "thePersona": fields.String,
+    "theDuration": fields.String,
+    "theFrequency": fields.String,
+    "theDemands": fields.String,
+    "theGoalConflict": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    "theDuration": {
+      "enum": [
+        "Low",
+        "Medium",
+        "High"
+       ]
+    },
+    "theFrequency": {
+      "enum": [
+        "Low",
+        "Medium",
+        "High"
+       ]
+    },
+    "theDemands": {
+      "enum": [
+        "High Help",
+        "Medium Help",
+        "Low Help",
+        "None",
+        "Low Hindrance",
+        "Medium Hindrance",
+        "High Hindrance"
+       ]
+    },
+    "theGoalConflict": {
+      "enum": [
+        "High Help",
+        "Medium Help",
+        "Low Help",
+        "None",
+        "Low Hindrance",
+        "Medium Hindrance",
+        "High Hindrance"
+       ]
+    }
+  }
+  # endregion
+  def task(self): return self.theTask
+  def persona(self): return self.thePersona
+  def duration(self): return self.theDuration
+  def frequency(self): return self.theFrequency
+  def demands(self): return self.theDemands
+  def goalConflict(self): return self.theGoalConflict
 
 
 

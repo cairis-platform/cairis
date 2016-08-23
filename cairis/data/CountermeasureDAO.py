@@ -30,7 +30,7 @@ from cairis.misc.KaosModel import KaosModel
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import CountermeasureModel, CountermeasureEnvironmentPropertiesModel
-from cairis.tools.PseudoClasses import SecurityAttribute, CountermeasureTarget
+from cairis.tools.PseudoClasses import SecurityAttribute, CountermeasureTarget, CountermeasureTaskCharacteristics
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 
 __author__ = 'Shamal Faily'
@@ -229,6 +229,10 @@ class CountermeasureDAO(CairisDAO):
       if len(real_props) > 0:
         for real_prop in real_props:
           assert isinstance(real_prop, CountermeasureEnvironmentProperties)
+          ctList = []
+          for ctc in real_prop.personas():
+            ctList.append(CountermeasureTaskCharacteristics(ctc[0],ctc[1],ctc[2],ctc[3],ctc[4],ctc[5]))
+          real_prop.thePersonas = ctList
           assert len(real_prop.theProperties) == len(real_prop.theRationale)
           new_attrs = []
           for idx in range(0, len(real_prop.theProperties)):
@@ -251,6 +255,10 @@ class CountermeasureDAO(CairisDAO):
       if len(fake_props) > 0:
         for fake_prop in fake_props:
           check_required_keys(fake_prop, CountermeasureEnvironmentPropertiesModel.required)
+          ctList = []
+          for ctc in fake_prop['thePersonas']:
+            ctList.append([ctc['theTask'],ctc['thePersona'],ctc['theDuration'],ctc['theFrequency'],ctc['theDemands'],ctc['theGoalConflict']])
+          fake_prop['thePersonas'] = ctList
           new_ndprops = array([0]*8).astype(numpy.core.int32)
           new_ratios = ['None']*8
           for idx in range(0, len(fake_prop['theProperties'])):

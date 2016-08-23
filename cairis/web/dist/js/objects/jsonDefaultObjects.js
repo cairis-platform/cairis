@@ -232,6 +232,26 @@ var obstacleDefault = {
     "theEnvironmentProperties": []
 };
 
+var countermeasureEnvDefault =     {
+        "__python_obj__": "CountermeasureEnvironmentProperties.CountermeasureEnvironmentProperties",
+        "theEnvironmentName": "",
+        "theRequirements": [],
+        "theTargets": [],
+        "theProperties": [],
+        "theRationale": [],
+        "theRoles": [],
+        "thePersonas": []
+    };
+var countermeasureDefault = {
+    "__python_obj__": "Countermeasure.Countermeasure",
+    "theId": -1,
+    "theName": "",
+    "theTags": [],
+    "theDescription": "",
+    "theTyp": "",
+    "theEnvironmentProperties": []
+};
+
 
 var respRoleDefault = {
     "__python_obj__": "tools.PseudoClasses.ValuedRole",
