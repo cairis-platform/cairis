@@ -22,3 +22,4 @@ Flask-Security>=1.7.5
 Flask-WTF>=0.12
 Flask-OAuthlib>=0.9.3
 Flask-Principal>=0.4.0
+mako>=1.0.4
