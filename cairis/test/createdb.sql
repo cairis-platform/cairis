@@ -18,8 +18,11 @@
 */
 
 grant usage on *.* to 'irisuser'@'%' identified by '' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0;
+grant usage on *.* to 'flaskuser'@'%' identified by 'flaskuser' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0;
 create database if not exists `arm`;
+create database if not exists `flaskdb`;
 grant all privileges on `arm`.* to 'irisuser'@'%';
+grant all privileges on `flaskdb`.* to 'flaskuser'@'%';
 set global max_sp_recursion_depth = 255;
 
 flush tables;

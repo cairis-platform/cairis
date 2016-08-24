@@ -853,7 +853,6 @@ drop procedure if exists architecturalPatternToXml;
 drop procedure if exists templateAssetMetrics;
 drop procedure if exists riskAnalysisModelElements;
 
-
 delimiter //
 
 create procedure assetProperties(in assetId int,in environmentId int)
@@ -22548,6 +22547,5 @@ begin
   end if;
 end
 //
-
 
 delimiter ;

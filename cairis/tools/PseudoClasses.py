@@ -543,3 +543,69 @@ class ValuedRole(object):
   def __init__(self, role_name, cost):
     self.roleName = role_name
     self.cost = cost
+
+@swagger.model
+class StepAttributes(object):
+  # region Swagger Doc
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theStepText': fields.String,
+    'theSynopsis': fields.String,
+    'theActor': fields.String,
+    'theActorType': fields.String,
+    'theTags': fields.List(fields.String)
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field: { 'enum': [__name__+'.StepsAttribute'] }
+  }
+  # endregion
+  def __init__(self):
+    self.theExceptions = {}
+    self.theStepText = stepTxt
+    self.theSynopsis = stepSyn
+    self.theActor = stepActor
+    self.theActorType = stepActorType
+    self.theTags = stepTags
+
+  def synopsis(self): return self.theSynopsis
+  def actor(self): return self.theActor
+  def actorType(self): return self.theActorType
+  def tags(self): return self.theTags
+  def setSynopsis(self,s): self.theSynopsis = s
+  def setActor(self,a): self.theActor = a
+
+@swagger.model
+class StepsAttributes(object):
+  # region Swagger Doc
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theSteps': fields.List(fields.Nested(StepAttributes.resource_fields)),
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field: { 'enum': [__name__+'.StepsAttribute'] }
+  }
+  # endregion
+  def __init__(self):
+    self.theSteps = []
+
+  def __getitem__(self,stepNo):
+    return self.theSteps[stepNo]
+
+  def __setitem__(self,stepNo,s):
+    self.theSteps[stepNo] = s
+
+  def size(self):
+    return len(self.theSteps)
+
+  def append(self,s):
+    self.theSteps.append(s)
+
+  def remove(self,stepNo):
+    self.theSteps.pop(stepNo)
+
+  def insert(self,pos,s):
+    self.theSteps.insert(pos,s)

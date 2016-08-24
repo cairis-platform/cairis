@@ -24,72 +24,39 @@ window.boxesAreFilled = false;
 window.debug = true;
 
 function debugLogger(info){
-    if(debug){
-        console.log(info);
-    }
+  if(debug){
+    console.log(info);
+  }
 }
-//The config window at start
-var dialogwindow = $( "#dialogContent" ).dialog({
-    autoOpen: false,
-    modal: true,
-    buttons: {
-        OK: function() {
-            showLoading();
-            var json_text = JSON.stringify($('#configForm').serializeObject());
-            var portArr  = json_text.match('port":"(.*)","user');
-            var port = portArr[1];
-            json_text = json_text.replace('"'+port+'"',port);
-            debugLogger(json_text);
-            $.ajax({
-                type: 'POST',
-                url: serverIP + '/api/user/config',
-                data: json_text,
-                accept:"application/json",
-                contentType : "application/json",
-                success: function(data, status, xhr) {
-                    // console.log("DB Settings saved");
-                    debugLogger(data);
-                   var sessionID = data.session_id;
-                    $.session.set("sessionID", sessionID);
-                    startingTable();
-                    hideLoading();
-
-                },
-                error: function(data, status, xhr) {
-                    console.log(this.url);
-                    debugLogger("error: " + xhr.responseText +  ", textstatus: " + status + ", thrown: " + data);
-                    alert("There is a problem with the server...");
-                }
-            });
-
-            /*$('#response').html('The value entered was ' + $('#myInput').val());
-             record.find('.name').html($('#myInput').val());*/
-            $( this ).dialog( "close" );
-
-        },
-        Cancel: function() {
-            $( this ).dialog( "close" );
-            $( "#errorDialog" ).dialog();
-        }
-    }
-});
-
-
 
 $(document).ready(function() {
-  //  localStorage.removeItem('sessionID');
-    var sessionID = $.session.get('sessionID');
-    if(!sessionID){
-        dialogwindow.dialog( "open" );
+  var sessionID = $.session.get('sessionID');
+  if(!sessionID){
+    $.ajax({
+      type: 'POST',
+      url: serverIP + '/api/user/config',
+      data: {},
+      accept:"application/json",
+      contentType : "application/json",
+      success: function(data, status, xhr) {
+        debugLogger(data);
+        var sessionID = data.session_id;
+        $.session.set("sessionID", sessionID);
+        startingTable();
         hideLoading();
-    }
-    else{
-        //Else we can show the table
-       startingTable();
-    }
-
-
+      },
+      error: function(data, status, xhr) {
+        console.log(this.url);
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + status + ", thrown: " + data);
+        alert("There is a problem with the server...");
+      }
+    });
+  }
+  else {
+    startingTable();
+  }
 });
+
 function showLoading(){
     $(".loadingWrapper").fadeIn(500);
 }

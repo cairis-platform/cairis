@@ -20,6 +20,8 @@ import os
 import httplib
 
 from flask import Flask, make_response, request, send_from_directory
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 from flask.ext.cors import CORS
 from flask.ext.restful import Api
 from flask.ext.restful_swagger import swagger
@@ -36,14 +38,50 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 app = Flask(__name__)
+
+app.config['DEBUG'] = True
+app.config['SECRET_KEY'] = 'super-secret'
+# Hard coded values for now...
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://flaskuser:flaskuser@localhost/flaskdb'
+
+db = SQLAlchemy(app)
+
+roles_users = db.Table('roles_users', db.Column('user_id', db.Integer(), db.ForeignKey('user.id')), db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
+
+class Role(db.Model, RoleMixin):
+  id = db.Column(db.Integer(), primary_key=True) 
+  name = db.Column(db.String(80), unique=True) 
+  description = db.Column(db.String(255))
+
+class User(db.Model, UserMixin):
+  id = db.Column(db.Integer, primary_key=True)
+  email = db.Column(db.String(255), unique=True) 
+  password = db.Column(db.String(255))
+  active = db.Column(db.Boolean())
+  confirmed_at = db.Column(db.DateTime())
+  roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
+
+user_datastore = SQLAlchemyUserDatastore(db,User, Role)
+security = Security(app, user_datastore)
+
+#@app.before_first_request
+#def create_user(): 
+#  db.create_all()
+#  user_datastore.create_user(email='cairisuser', password='cairisuser') 
+#  db.session.commit()
+
 api = swagger.docs(Api(app), apiVersion='1.2.2', description='CAIRIS API', api_spec_url='/api/cairis')
 cors = CORS(app)
 b = Borg()
 
-
 @app.route('/')
-def index():
+@login_required
+def home():
     return app.send_static_file('index.html')
+
+#@app.route('/')
+#def index():
+#    return app.send_static_file('index.html')
 
 
 @app.route('/plugins/<path:path>')
@@ -107,14 +145,14 @@ def get_image(path):
             return send_from_directory('static/images', path)
 
 
-@app.route('/user/config.html', methods=['GET','POST'])
-def user_config_get():
-    if request.method == 'GET':
-        return UserController.serve_user_config_form()
-    elif request.method == 'POST':
-        return UserController.handle_user_config_form()
-    else:
-        raise CairisHTTPError(httplib.NOT_FOUND, message='Not found')
+#@app.route('/user/config.html', methods=['GET','POST'])
+#def user_config_get():
+#    if request.method == 'GET':
+#        return UserController.serve_user_config_form()
+#    elif request.method == 'POST':
+#        return UserController.handle_user_config_form()
+#    else:
+#        raise CairisHTTPError(httplib.NOT_FOUND, message='Not found')
 
 
 @app.errorhandler(CairisHTTPError)

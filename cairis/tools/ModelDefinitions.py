@@ -39,7 +39,9 @@ from cairis.core.Risk import Risk
 from cairis.core.Role import Role
 from cairis.core.Target import Target
 from cairis.core.Task import Task
+from cairis.core.UseCase import UseCase
 from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
+from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from cairis.core.TransferEnvironmentProperties import TransferEnvironmentProperties
 from cairis.core.ValueType import ValueType
@@ -47,7 +49,7 @@ from cairis.core.Vulnerability import Vulnerability
 from cairis.core.VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
 from cairis.core.Countermeasure import Countermeasure
 from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
-from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics
+from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepsAttributes
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -793,4 +795,40 @@ class TaskModel(object):
     required.remove('theEnvironmentDictionary')
     swagger_metadata = {
         obj_id_field: gen_class_metadata(Task)
+    }
+
+class UseCaseEnvironmentPropertiesModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        'thePreCond': fields.String,
+        'theSteps': fields.List(fields.Nested(StepsAttributes.resource_fields)),
+        'thePostCond': fields.String
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metadata = {
+        obj_id_field: gen_class_metadata(UseCaseEnvironmentProperties)
+    }
+
+@swagger.nested(
+    theEnvironmentProperties=UseCaseEnvironmentPropertiesModel.__name__
+)
+class UseCaseModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        'theEnvironmentDictionary': fields.List(fields.Nested(UseCaseEnvironmentPropertiesModel.resource_fields)),
+        'theId': fields.Integer,
+        'theName': fields.String,
+        'theTags': fields.List(fields.String),
+        'theAuthor': fields.String,
+        'theCode': fields.String,
+        'theActors': fields.List(fields.String),
+        'theDescription': fields.String,
+        'theEnvironmentProperties': fields.List(fields.Nested(UseCaseEnvironmentPropertiesModel.resource_fields))
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    required.remove('theEnvironmentDictionary')
+    swagger_metadata = {
+        obj_id_field: gen_class_metadata(UseCase)
     }

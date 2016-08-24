@@ -473,28 +473,6 @@ $(document).on('click', "button.editVulnerabilityButton",function(){
         $.session.set("Vulnerability", JSON.stringify(vul));
         fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#optionsContent", null, true, true, function () {
             $("#UpdateVulnerability").addClass("newVulnerability");
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                accept: "application/json",
-                data: {
-                    session_id: String($.session.get('sessionID'))
-                },
-                crfossDomain: true,
-                url: serverIP + "/api/vulnerabilities/types",
-                success: function (data) {
-                    $.each(data, function (index, type) {
-                        $('#theSeverity')
-                            .append($("<option></option>")
-                                .attr("value", type.theName)
-                                .text(type.theName));
-                    });
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    debugLogger(String(this.url));
-                    debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-                }
-            });
             forceOpenOptions();
         });
     }
@@ -517,29 +495,6 @@ $(document).on('click', "button.editVulnerabilityButton",function(){
                         var jsondata = $.extend(true, {}, newdata);
                         jsondata.theTags = [];
                         $('#editVulnerabilityOptionsform').loadJSON(jsondata, null);
-
-                        $.ajax({
-                            type: "GET",
-                            dataType: "json",
-                            accept: "application/json",
-                            data: {
-                                session_id: String($.session.get('sessionID'))
-                            },
-                            crfossDomain: true,
-                            url: serverIP + "/api/vulnerabilities/types",
-                            success: function (data) {
-                                $.each(data, function (index, type) {
-                                    $('#theSeverity')
-                                        .append($("<option></option>")
-                                            .attr("value",type.theName)
-                                            .text(type.theName));
-                                });
-                            },
-                            error: function (xhr, textStatus, errorThrown) {
-                                debugLogger(String(this.url));
-                                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-                            }
-                        });
                         var text = "";
                         $.each(newdata.theTags, function (index, tag) {
                             text += tag + ", ";
@@ -567,7 +522,7 @@ $(document).on('click', "button.editVulnerabilityButton",function(){
 $(document).on('click', "button.editEnvironmentButton",function(){
     var name = $(this).attr("value");
     if(name == "AnewEnvironment"){
-        fillOptionMenu("fastTemplates/editEvironmentOptions.html", "#optionsContent", null, true, true, function () {
+        fillOptionMenu("fastTemplates/editEnvironmentOptions.html", "#optionsContent", null, true, true, function () {
             forceOpenOptions();
             $("#editEnvironmentOptionsform").addClass("newEnvironment");
         });
@@ -585,7 +540,7 @@ $(document).on('click', "button.editEnvironmentButton",function(){
             url: serverIP + "/api/environments/name/" + name.replace(" ", "%20"),
             success: function (data) {
                 // console.log(JSON.stringify(rawData));
-                fillOptionMenu("fastTemplates/editEvironmentOptions.html", "#optionsContent", null, true, true, function () {
+                fillOptionMenu("fastTemplates/editEnvironmentOptions.html", "#optionsContent", null, true, true, function () {
                         forceOpenOptions();
 
                         $.session.set("editableEnvironment", JSON.stringify(data));
