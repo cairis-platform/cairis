@@ -41,7 +41,10 @@ app = Flask(__name__)
 
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'super-secret'
-# Hard coded values for now...
+app.config['SECURITY_PASSWORD_HASH'] = 'sha512_crypt'
+app.config['SECURITY_PASSWORD_SALT'] = os.urandom(64)
+
+# Hard coded connection for now...
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://flaskuser:flaskuser@localhost/flaskdb'
 
 db = SQLAlchemy(app)
@@ -64,11 +67,11 @@ class User(db.Model, UserMixin):
 user_datastore = SQLAlchemyUserDatastore(db,User, Role)
 security = Security(app, user_datastore)
 
-#@app.before_first_request
-#def create_user(): 
-#  db.create_all()
-#  user_datastore.create_user(email='cairisuser', password='cairisuser') 
-#  db.session.commit()
+@app.before_first_request
+def create_user(): 
+  db.create_all()
+  user_datastore.create_user(email='cairisuser', password='cairisuser') 
+  db.session.commit()
 
 api = swagger.docs(Api(app), apiVersion='1.2.2', description='CAIRIS API', api_spec_url='/api/cairis')
 cors = CORS(app)
