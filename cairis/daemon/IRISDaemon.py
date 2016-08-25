@@ -37,9 +37,9 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
 __author__ = 'Robin Quetin, Shamal Faily'
 
 
+b = Borg()
 app = Flask(__name__)
 app.config['DEBUG'] = True
-b = Borg()
 app.config['SECRET_KEY'] = b.secretKey
 app.config['SECURITY_PASSWORD_HASH'] = b.passwordHash
 app.config['SECURITY_PASSWORD_SALT'] = b.passwordSalt
