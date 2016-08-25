@@ -20,19 +20,23 @@ import os
 import httplib
 
 from flask import Flask, make_response, request, send_from_directory
+from flask import session
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 from flask.ext.cors import CORS
-from flask.ext.restful import Api
+from flask.ext.restful import Api, Resource
 from flask.ext.restful_swagger import swagger
+from jsonpickle import encode
 
 from cairis.core.Borg import Borg
+from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
+
 from CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.core.ARM import ARMException, DatabaseProxyException
 from cairis.controllers import AssetController, AttackerController, CImportController, CExportController, DependencyController, \
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
-    UploadController, UserController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController
+    UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -75,6 +79,34 @@ db.create_all()
 def home():
   return app.send_static_file('index.html')
 
+def set_dbproxy():
+  b = Borg()
+  db_proxy = MySQLDatabaseProxy()
+  pSettings = db_proxy.getProjectSettings()
+
+  id = b.init_settings()
+  db_proxy.close()
+  session['session_id'] = id
+  b.settings[id]['dbProxy'] = db_proxy
+  b.settings[id]['dbUser'] = b.dbUser
+  b.settings[id]['dbPasswd'] = b.dbPasswd
+  b.settings[id]['dbHost'] = b.dbHost
+  b.settings[id]['dbPort'] = b.dbPort
+  b.settings[id]['dbName'] = b.dbName
+  b.settings[id]['fontSize'] = pSettings['Font Size']
+  b.settings[id]['apFontSize'] = pSettings['AP Font Size']
+  b.settings[id]['fontName'] = pSettings['Font Name']
+  b.settings[id]['jsonPrettyPrint'] = False
+  return b.settings[id]
+
+@app.route('/api/user/config',methods=['POST'])
+@login_required
+def make_session():
+  s = set_dbproxy()
+  resp_dict = {'session_id': s['session_id'], 'message': 'Session created'}
+  resp = make_response(encode(resp_dict), httplib.OK)
+  resp.headers['Content-type'] = 'application/json'
+  return resp
 
 @app.route('/plugins/<path:path>')
 def plugin_reroute(path):
@@ -324,7 +356,7 @@ def start():
   api.add_resource(UploadController.UploadImageAPI, '/api/upload/image')
 
   # User routes
-  api.add_resource(UserController.UserConfigAPI, '/api/user/config')
+  #api.add_resource(UserController.UserConfigAPI, '/api/user/config')
 
   # Vulnerability routes
   api.add_resource(VulnerabilityController.VulnerabilityAPI, '/api/vulnerabilities')
