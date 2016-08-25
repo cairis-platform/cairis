@@ -154,10 +154,10 @@ class RequirementAPITests(CairisDaemonTestCase):
 
     for to_delete_req in to_delete_reqs:
       if to_delete_req is not None:
-        self.to_delete_ids.append(to_delete_req['theId'])
+        self.to_delete_ids.append(to_delete_req['theLabel'])
 
     for req_id in self.to_delete_ids:
-      url = '/api/requirements/id/%d?session_id=test' % req_id
+      url = '/api/requirements/name/%s?session_id=test' % req_id
       self.logger.info('[%s] URL: %s', method, url)
       rv = self.app.delete(url)
       self.logger.debug('[%s] Response data: %s', method, rv.data)
