@@ -99,8 +99,11 @@ def dInitialise():
   b.logger = logging.getLogger('cairisd')
   b.imageDir = os.path.join(b.cairisRoot,'images')
   b.configDir = os.path.join(b.cairisRoot,'config')
-
   b.uploadDir = cfgDict['upload_dir']
+  b.secretKey = cfgDict['secret_key']
+  b.passwordHash = cfgDict['password_hash']
+  b.passwordSalt = cfgDict['password_salt']
+
   try:
     b.webPort = int(cfgDict['web_port'])
   except TypeError, ex:

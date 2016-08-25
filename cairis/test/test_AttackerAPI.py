@@ -29,9 +29,13 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class AttackerAPITests(CairisDaemonTestCase):
+
+  @classmethod
+  def setUpClass(cls):
+    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+
   
   def setUp(self):
-    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
     # region Class fields
     self.logger = logging.getLogger(__name__)
     self.existing_attacker_name = 'Mallory'

@@ -31,17 +31,21 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class RiskAPITests(CairisDaemonTestCase):
-    # region Class fields
-    logger = logging.getLogger(__name__)
-    existing_risk_name = 'Replay-based resource exploit'
-    existing_environment_name = 'Core Technology'
-    existing_threat_name = 'Replay attack'
-    existing_vulnerability = 'Replay vulnerability'
-    risk_class = RiskParameters.__module__+'.'+RiskParameters.__name__
-    # endregion
+
+    @classmethod
+    def setUpClass(cls):
+        importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+
 
     def setUp(self):
-        importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+        # region Class fields
+        self.logger = logging.getLogger(__name__)
+        self.existing_risk_name = 'Replay-based resource exploit'
+        self.existing_environment_name = 'Core Technology'
+        self.existing_threat_name = 'Replay attack'
+        self.existing_vulnerability = 'Replay vulnerability'
+        self.risk_class = RiskParameters.__module__+'.'+RiskParameters.__name__
+        # endregion
 
     def test_get_all(self):
         method = 'test_get_all'

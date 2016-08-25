@@ -27,8 +27,12 @@ import os
 __author__ = 'Shamal Faily'
 
 class CExportTests(CairisDaemonTestCase):
-  def setUp(self):
+
+  @classmethod
+  def setUpClass(cls):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+
+  def setUp(self):
     self.logger = logging.getLogger(__name__)
 
   def test_cexport_data_get(self):

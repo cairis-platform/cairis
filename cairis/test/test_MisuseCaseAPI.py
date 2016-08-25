@@ -27,15 +27,17 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class MisuseCaseAPITests(CairisDaemonTestCase):
-  # region Class fields
-  logger = logging.getLogger(__name__)
-  existing_risk_name = 'Unauthorised Certificate Access'
-  misuse_case_class = MisuseCase.__module__+'.'+MisuseCase.__name__
-  # endregion
 
-  def setUp(self):
+  @classmethod
+  def setUpClass(cls):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
 
+  def setUp(self):
+    # region Class fields
+    self.logger = logging.getLogger(__name__)
+    self.existing_risk_name = 'Unauthorised Certificate Access'
+    self.misuse_case_class = MisuseCase.__module__+'.'+MisuseCase.__name__
+    # endregion
 
   def test_get_all(self):
     method = 'test_get_all'

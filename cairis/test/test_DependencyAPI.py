@@ -28,9 +28,12 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 class DependencyAPITests(CairisDaemonTestCase):
   
+  @classmethod
+  def setUpClass(cls):
+    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+
   def setUp(self):
     self.logger = logging.getLogger(__name__)
-    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
     self.working_name_1 = ('Stroke', 'all', 'all', 'all')
     self.working_name_2 = ('Stroke', 'Data%20Consumer', 'Certificate%20Authority', 'Personal%20certificate')
     self.existing_environment_1 = 'Stroke'

@@ -29,8 +29,12 @@ __author__ = 'Shamal Faily'
 
 class ObstacleAPITests(CairisDaemonTestCase):
 
-  def setUp(self):
+  @classmethod
+  def setUpClass(cls):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+
+
+  def setUp(self):
     # region Class fields
     self.logger = logging.getLogger(__name__)
     self.existing_obstacle_name = 'Control web browser'

@@ -26,6 +26,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class CImportTests(CairisDaemonTestCase):
+
     xmlfile = os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml'
     logger = logging.getLogger(__name__)
 

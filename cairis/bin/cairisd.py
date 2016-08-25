@@ -16,29 +16,29 @@
 #  specific language governing permissions and limitations
 #  under the License.
 import sys
-import cairis.daemon.IRISDaemon 
-import cairis.daemon.WebConfig 
 from cairis.daemon.CairisHTTPError import CairisHTTPError
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 def main(args):
-    options = {
-        'port': 0,
-        'unitTesting': False
-    }
+  options = {
+    'port': 0,
+    'unitTesting': False
+  }
 
-    if len(args) > 1:
-        for arg in args[1:]:
-            if arg == '-d':
-                options['loggingLevel'] = 'debug'
-            if arg == '--unit-test':
-                options['unitTesting'] = True
+  if len(args) > 1:
+    for arg in args[1:]:
+      if arg == '-d':
+        options['loggingLevel'] = 'debug'
+      if arg == '--unit-test':
+        options['unitTesting'] = True
 
-    cairis.daemon.WebConfig.config(options)
-    client = cairis.daemon.IRISDaemon.start()
-    if client is not None:
-        return client
+  import cairis.daemon.WebConfig 
+  cairis.daemon.WebConfig.config(options)
+  import cairis.daemon.IRISDaemon 
+  client = cairis.daemon.IRISDaemon.start()
+  if client is not None:
+    return client
 
 if __name__ == '__main__':
   try:
