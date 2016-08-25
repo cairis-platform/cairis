@@ -38,7 +38,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 b = Borg()
-app = Flask(__name__)
+app = Flask(__name__,template_folder=os.path.join(b.cairisRoot, 'templates'))
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = b.secretKey
 app.config['SECURITY_PASSWORD_HASH'] = b.passwordHash

@@ -1,0 +1,28 @@
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+<link href="dist/css/bootstrap.css" rel="stylesheet" />
+<link href="dist/css/font-awesome.css" rel="stylesheet" />
+<link href="dist/css/custom.css" rel="stylesheet" />
+<link href="dist/css/login.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+<div id="background">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-7">
+        <div class="panel panel-default">
+          <div class="panel-heading"> <strong class="">Cairis Login</strong>
+          </div>
+          <div class="panel-body">
+            <form action="{{ url_for_security('login') }}" method="POST" name="login_user_for" class="form-horizontal" role="form">
+              {{ login_user_form.hidden_tag() }}
+              {{ render_field_with_errors(login_user_form.email) }}
+              {{ render_field_with_errors(login_user_form.password) }}
+              {{ render_field_with_errors(login_user_form.remember) }}
+              {{ render_field(login_user_form.next) }}
+              {{ render_field(login_user_form.submit) }}
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
