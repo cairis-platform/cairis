@@ -30,10 +30,12 @@ cairis.core.BorgFactory.dInitialise()
 app = Flask(__name__)
 app.config['DEBUG'] = True
 b = Borg()
+import pytest 
+pytest.set_trace()
 app.config['SECRET_KEY'] = b.secretKey
 app.config['SECURITY_PASSWORD_HASH'] = b.passwordHash
 app.config['SECURITY_PASSWORD_SALT'] = b.passwordSalt
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://' + b.dbUser + ':' + b.dbPasswd + '@' + b.dbHost + '/' + b.dbName
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://' + b.auth_dbUser + ':' + b.auth_dbPasswd + '@' + b.auth_dbHost + '/' + b.auth_dbName
 
 db = SQLAlchemy(app)
 cors = CORS(app)
