@@ -782,16 +782,6 @@ function createRequirementsTable(data){
                         type =   '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
                         break;
                 }
-              /*  if(key == ("originator") || key == ("rationale") || key == ("fitCriterion") || key == ("type")) {
-                    // alert(key+': '+datas[key]); // this will show each key with it's value
-                    // tre.append("<td name=" + key + " contenteditable=true >" + datas[key] + "</td>");
-                    textToInsert[i++] = '<td name=';
-                    textToInsert[i++] = key;
-                    textToInsert[i++] = ' contenteditable=true >';
-                    textToInsert[i++] = datas[key];
-                    textToInsert[i++] = '</td>';
-
-                }*/
             }
         }
         textToInsert[i++] = rationale;
