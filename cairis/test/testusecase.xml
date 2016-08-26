@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">
+
+<usability>
+<usecase name="Test use case" author="Shamal Faily" code="TUC-1">
+  <description>A test description</description>
+  <actor name="Researcher" />
+  <usecase_environment name="Psychosis">
+    <preconditions>Test preconditions.</preconditions>
+    <flow>
+      <step number="1" description="Researcher does something" />
+      <step number="2" description="System does something" />
+    </flow>
+    <postconditions>Test postconditions</postconditions>
+  </usecase_environment>
+</usecase>
+</usability>
+

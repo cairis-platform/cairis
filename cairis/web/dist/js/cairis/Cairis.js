@@ -34,7 +34,7 @@ $(document).ready(function() {
   if(!sessionID){
     $.ajax({
       type: 'POST',
-      url: serverIP + '/api/user/config',
+      url: serverIP + '/make_session',
       data: {},
       accept:"application/json",
       contentType : "application/json",

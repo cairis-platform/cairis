@@ -22,7 +22,7 @@ import httplib
 from flask import Flask, make_response, request, send_from_directory
 from flask import session
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
+from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required, http_auth_required
 from flask.ext.cors import CORS
 from flask.ext.restful import Api, Resource
 from flask.ext.restful_swagger import swagger
@@ -36,7 +36,7 @@ from cairis.core.ARM import ARMException, DatabaseProxyException
 from cairis.controllers import AssetController, AttackerController, CImportController, CExportController, DependencyController, \
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
-    UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController
+    UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -99,14 +99,24 @@ def set_dbproxy():
   b.settings[id]['jsonPrettyPrint'] = False
   return b.settings[id]
 
-@app.route('/api/user/config',methods=['POST'])
-@login_required
 def make_session():
   s = set_dbproxy()
   resp_dict = {'session_id': s['session_id'], 'message': 'Session created'}
   resp = make_response(encode(resp_dict), httplib.OK)
   resp.headers['Content-type'] = 'application/json'
   return resp
+
+
+@app.route('/make_session',methods=['POST'])
+@login_required
+def webapp_make_session():
+  return make_session()
+
+@app.route('/api/session',methods=['POST'])
+@http_auth_required
+def api_make_session():
+  return make_session()
+
 
 @app.route('/plugins/<path:path>')
 def plugin_reroute(path):
@@ -355,8 +365,9 @@ def start():
   # Upload controller
   api.add_resource(UploadController.UploadImageAPI, '/api/upload/image')
 
-  # User routes
-  #api.add_resource(UserController.UserConfigAPI, '/api/user/config')
+  # Use Case routes
+  api.add_resource(UseCaseController.UseCasesAPI, '/api/usecases')
+  api.add_resource(UseCaseController.UseCaseByNameAPI, '/api/usecases/name/<string:name>')
 
   # Vulnerability routes
   api.add_resource(VulnerabilityController.VulnerabilityAPI, '/api/vulnerabilities')

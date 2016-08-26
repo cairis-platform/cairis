@@ -261,3 +261,13 @@ class PersonaMessage(DefaultMessage):
 class TaskMessage(DefaultMessage):
     resource_fields = gen_message_fields(ModelDefinitions.TaskModel)
     required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+    object=ModelDefinitions.UseCaseModel.__name__,
+)
+# endregion
+class UseCaseMessage(DefaultMessage):
+    resource_fields = gen_message_fields(ModelDefinitions.UseCaseModel)
+    required = DefaultMessage.required
