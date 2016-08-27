@@ -1,0 +1,74 @@
+<form id="editUseCaseOptionsForm" xmlns="http://www.w3.org/1999/html" >
+
+  <div class="tabs infoWidth" style="width: 100%;">
+    <ul>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#description">Description</a></li>
+      <li><a href="#actors">Actors</a></li>
+    </ul>
+    <div id="summary">
+      <p>
+        <label for="theName">Name</label>
+        <input class="optionsInput usecaseUpdate" type="text" name="theName" id="theName" style="float: right; width: 75%">
+      </p>
+      <p>
+        <label for="theTags">Tags</label>
+        <input class="optionsInput usecaseUpdate" type="text" value="" id="theTags" name="theTags" style="float: right; width: 75%">
+      </p>
+      <p>
+        <label>Authors</label>
+        <input class="optionsInput usecaseUpdate" type="text" name="theAuthor" id="theAuthor" style="float: right; width: 75%">
+      </p>
+    </div>   
+    <div id="description">
+      <textarea id="theDescription" class="usecaseUpdate" style="width: 100%"></textarea>
+    </div>   
+    <div id="actors">
+      <table id="theActors" class="right" style="width: 100%">
+        <thead>
+          <tr>
+            <th id="addActorToUseCase"> <i class="fa fa-plus"></i></th><th>Actor</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>   
+  </div>
+  <div class="inblock">
+    <table class="left clickable-table" id="theEnvironments">
+      <thead>
+        <tr><th id="addUseCaseEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
+    <div class="tabs right infoWidth">
+      <ul>
+        <li><a href="#preconditions">Preconditions</a></li>
+        <li><a href="#flow">Flow</a></li>
+        <li><a href="#postconditions">Postconditions</a></li>
+      </ul>
+      <div id="preconditions">
+        <textarea id="thePreCond" class="usecaseUpdate"></textarea>
+      </div>
+      <div id="flow">
+        <table id="theSteps" style="width: 100%">
+          <thead>
+            <tr>
+              <th id="addStepToUseCase"><i class="fa fa-plus"></i></th>
+              <th>No</th><th>Step</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div id="postconditions">
+        <textarea id="thePostCond" class="usecaseUpdate"></textarea>
+      </div>
+    </div>
+  </div>
+  <button id="UpdateUseCase">Update</button>
+</form>
