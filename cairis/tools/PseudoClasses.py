@@ -561,7 +561,7 @@ class StepAttributes(object):
     obj_id_field: { 'enum': [__name__+'.StepsAttribute'] }
   }
   # endregion
-  def __init__(self):
+  def __init__(self,stepTxt,stepSyn,stepActor,stepActorType,stepTags):
     self.theExceptions = {}
     self.theStepText = stepTxt
     self.theSynopsis = stepSyn

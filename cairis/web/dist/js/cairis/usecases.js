@@ -85,6 +85,10 @@ $(document).on('click', ".editUseCaseButton", function () {
         forceOpenOptions();
         $.session.set("UseCase", JSON.stringify(data));
         $('#editUseCaseOptionsForm').loadJSON(data, null);
+        $.each(data.theActors, function (index, actor) {
+          appendUseCaseActor(actor);
+        });
+        $("#theEnvironments").find(".usecaseEnvironment:first").trigger('click');
 
         if (data.theTags.length > 0) {
           var text = "";
@@ -113,67 +117,37 @@ $(document).on('click', ".editUseCaseButton", function () {
 
 var optionsContent = $("#optionsContent");
 optionsContent.on("click",".usecaseEnvironment", function () {
-  var lastEnvName = $.session.get("usecaseEnvironmentName");
-  var usecase = JSON.parse($.session.get("UseCase"));
-  var updatedEnvProps = [];
-  $.each(usecase.theEnvironmentProperties, function (index, env) {
-    if(env.theEnvironmentName == lastEnvName){
-      env.theDependencies = $('#theDependencies').val();
-      env.theNarrative = $('#theNarrative').val();
-      env.theConsequences = $('#theConsequences').val();
-      env.theBenefits = $('#theBenefits').val();
-    }
-    updatedEnvProps.push(env);
-  });
-  usecase.theEnvironmentProperties = updatedEnvProps;
-  $.session.set("UseCase", JSON.stringify(usecase));
-  usecase = JSON.parse($.session.get("UseCase"));
-
-
   clearUseCaseEnvInfo();
+  var usecase = JSON.parse($.session.get("UseCase"));
   var theEnvName = $(this).text();
   $.session.set("usecaseEnvironmentName", theEnvName);
   $.each(usecase.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
-      $('#theDependencies').val(env.theDependencies);
-      $('#theNarrative').val(env.theNarrative);
-      $('#theConsequences').val(env.theConsequences);
-      $('#theBenefits').val(env.theBenefits);
-          
-      $.each(env.theAssets, function(index,concern) {
-        appendUseCaseConcern(concern);
-      });
-
-      for (var i = 0; i < env.thePersonas.length; i++) {
-        appendUseCasePersona(env.thePersonas[i]['thePersona'],window.reverseDurationLookup[env.thePersonas[i]['theDuration']],window.reverseFrequencyLookup[env.thePersonas[i]['theFrequency']],env.thePersonas[i]['theDemands'],env.thePersonas[i]['theGoalConflict']);
-      }
-
-      for (var i = 0; i < env.theConcernAssociations.length; i++) {
-        var aCol = [];
-        $.each(env.theConcernAssociations[i], function(idx,val) { aCol.push(val); });
-        appendConcernAssociation(aCol[0]);
+      $('#thePreCond').val(env.thePreCond);
+      $('#thePostCond').val(env.thePostCond);
+      for (var i = 0; i < env.theSteps.length; i++) {
+        appendUseCaseSteps(env.theSteps[i].theStepText);
       }
     }
   });
 });
 
 function clearUseCaseEnvInfo(){
-  $("#theDependencies").val('');
-  $("#theNarrative").val('');
-  $("#theConsequences").val('');
-  $("#theBenefits").val('');
-  $("#theConcerns").find("tbody").empty();
-  $("#thePersonas").find("tbody").empty();
-  $("#theConcernAssociations").find("tbody").empty();
+  $("#thePreCond").val('');
+  $("#thePostCond").val('');
+  $("#theSteps").find("tbody").empty();
 }
 
 function appendUseCaseEnvironment(environment){
   $("#theEnvironments").find("tbody").append('<tr><td class="deleteUseCaseEnv"><i class="fa fa-minus"></i></td><td class="usecaseEnvironment">'+environment+'</td></tr>');
 }
 
-function appendUseCaseConcern(concern) {
-  $("#theConcerns").find("tbody").append("<tr><td class='removeUseCaseConcern'><i class='fa fa-minus'></i></td><td class='usecaseConcern'>" + concern + "</td></tr>").animate('slow');
+function appendUseCaseSteps(stepTxt) {
+  $("#theSteps").find("tbody").append("<tr><td class='removeUseCaseStep'><i class='fa fa-minus'></i></td><td class='usecaseStep'>" + stepTxt + "</td></tr>").animate('slow');
+}
 
+function appendUseCaseActor(actor) {
+  $("#theActors").find("tbody").append("<tr><td class='removeActor'><i class='fa fa-minus'></i></td><td class='usecaseActor'>" + actor + "</td></tr>").animate('slow');
 }
 
 optionsContent.on('click', '#addConcernToUseCase', function () {
@@ -194,16 +168,16 @@ optionsContent.on('click', '#addConcernToUseCase', function () {
   });
 });
 
-optionsContent.on('click', ".removeUseCaseConcern", function () {
-  var text = $(this).next(".usecaseConcern").text();
+optionsContent.on('click', ".removeUseCaseStep", function () {
+  var text = $(this).next(".usecaseStep").text();
   $(this).closest("tr").remove();
   var usecase = JSON.parse($.session.get("UseCase"));
   var theEnvName = $.session.get("usecaseEnvironmentName");
   $.each(usecase.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
-      $.each(env.theAssets, function (index2, concern) {
+      $.each(env.theSteps, function (index2, concern) {
         if(concern == text){
-          env.theAssets.splice( index2 ,1 );
+          env.theSteps.splice( index2 ,1 );
           $.session.set("UseCase", JSON.stringify(usecase));
           return false;
         }
@@ -211,60 +185,6 @@ optionsContent.on('click', ".removeUseCaseConcern", function () {
     }
   });
 });
-
-function appendUseCasePersona(persona,duration,frequency,demands,goalConflict) {
-  $("#thePersonas").find("tbody").append("<tr><td class='removeUseCasePersona'><i class='fa fa-minus'></i></td><td class='usecasePersona'>" + persona + "</td><td>" + duration + "</td><td>" + frequency + "</td><td>" + demands + "</td><td>" + goalConflict +  "</td></tr>").animate('slow');
-}
-
-optionsContent.on('click', '#addPersonaToUseCase', function () {
-  var hasPersona = [];
-  $("#thePersonas").find(".usecasePersona").each(function(index, persona){
-    hasPersona.push($(persona).text());
-  });
-  usecasePersonaDialogBox(hasPersona, function (persona,duration,frequency,demands,goalConflict) {
-    var usecase = JSON.parse($.session.get("UseCase"));
-    var theEnvName = $.session.get("usecaseEnvironmentName");
-    $.each(usecase.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        var ptc = {};
-        ptc['thePersona'] = persona;
-        ptc['theDuration'] = window.durationLookup[duration];
-        ptc['theFrequency'] = window.frequencyLookup[frequency];
-        ptc['theDemands'] = demands;
-        ptc['theGoalConflict'] = goalConflict;
-        env.thePersonas.push(ptc);
-        $.session.set("UseCase", JSON.stringify(usecase));
-        appendUseCasePersona(persona,duration,frequency,demands,goalConflict);
-      }
-    });
-  });
-});
-
-
-optionsContent.on('click', ".removeUseCasePersona", function () {
-  var text = $(this).next(".usecasePersona").text();
-  $(this).closest("tr").remove();
-  var usecase = JSON.parse($.session.get("UseCase"));
-  var theEnvName = $.session.get("usecaseEnvironmentName");
-  $.each(usecase.theEnvironmentProperties, function (index, env) {
-    if(env.theEnvironmentName == theEnvName){
-      $.each(env.thePersonas, function (index2, persona) {
-        var pName = persona.thePersona;
-        if(pName == text){
-          env.thePersonas.splice( index2 ,1 );
-          $.session.set("UseCase", JSON.stringify(usecase));
-          return false;
-        }
-      });
-    }
-  });
-});
-
-function appendConcernAssociation(assoc) {
-  $("#theConcernAssociations").find("tbody").append("<tr><td class='removeConcernAssociation'><i class='fa fa-minus'></i></td><td class='concernAssociation'>" +  assoc[0] + "</td><td>" + assoc[1] + "</td><td>" + assoc[2] + "</td><td>" + assoc[3] + "</td><td>" + assoc[4] + "</td></tr>").animate('slow'); 
-}
-
-
 
 optionsContent.on('click', ".deleteUseCaseEnv", function () {
   var envi = $(this).next(".usecaseEnvironment").text();
@@ -325,10 +245,8 @@ optionsContent.on('click', '#UpdateUseCase', function (e) {
   var updatedEnvProps = [];
   $.each(usecase.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == envName){
-      env.theDependencies = $('#theDependencies').val();
-      env.theNarrative = $('#theNarrative').val();
-      env.theConsequences = $('#theConsequences').val();
-      env.theBenefits = $('#theBenefits').val();
+      env.thePreCond = $('#thePreCond').val();
+      env.thePostCond = $('#thePostCond').val();
     }
     updatedEnvProps.push(env);
   });

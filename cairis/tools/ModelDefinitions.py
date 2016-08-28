@@ -49,7 +49,7 @@ from cairis.core.Vulnerability import Vulnerability
 from cairis.core.VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
 from cairis.core.Countermeasure import Countermeasure
 from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
-from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepsAttributes
+from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -801,7 +801,7 @@ class UseCaseEnvironmentPropertiesModel(object):
     resource_fields = {
         obj_id_field: fields.String,
         'thePreCond': fields.String,
-        'theSteps': fields.List(fields.Nested(StepsAttributes.resource_fields)),
+        'theSteps': fields.List(fields.Nested(StepAttributes.resource_fields)),
         'thePostCond': fields.String
     }
     required = resource_fields.keys()

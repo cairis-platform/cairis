@@ -202,9 +202,9 @@ class UseCaseDAO(CairisDAO):
       if len(real_props) > 0:
         for real_prop in real_props:
           assert isinstance(real_prop, UseCaseEnvironmentProperties)
-          s = Steps()
+          s = []
           for step in real_prop.steps().theSteps:
-            s.append((step.text(),step.synopsis(),step.actor(),step.actorType(),step.tags())) 
+            s.append(StepAttributes(step.text(),step.synopsis(),step.actor(),step.actorType(),step.tags())) 
           real_prop.theSteps = s
           new_props.append(real_prop)
     elif fake_props is not None:
