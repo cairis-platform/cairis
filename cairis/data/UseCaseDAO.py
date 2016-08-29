@@ -211,16 +211,16 @@ class UseCaseDAO(CairisDAO):
       if len(fake_props) > 0:
         for fake_prop in fake_props:
           check_required_keys(fake_prop, UseCaseEnvironmentPropertiesModel.required)
-          stepList = [] 
+          steps = Steps()
           for s in fake_prop['theSteps']:
-            ptList.append([s['theStepText'],s['theSynopsis'],s['theActor'],s['theActorType'],s['theTags']]) 
-          fake_prop['theSteps'] = stepList
+            steps.append(Step(s['theStepText'],s['theSynopsis'],s['theActor'],s['theActorType'],s['theTags']))
+          fake_prop['theSteps'] = steps
           
           new_prop = UseCaseEnvironmentProperties(
                        environmentName=fake_prop['theEnvironmentName'],
-                       preconds=fake_prop['thePreCond'],
+                       preCond=fake_prop['thePreCond'],
                        steps=fake_prop['theSteps'],
-                       postconds=fake_prop['thePostConds']
+                       postCond=fake_prop['thePostCond']
                      )
           new_props.append(new_prop)
     else:

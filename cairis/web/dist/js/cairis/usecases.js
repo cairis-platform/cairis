@@ -126,7 +126,7 @@ optionsContent.on("click",".usecaseEnvironment", function () {
       $('#thePreCond').val(env.thePreCond);
       $('#thePostCond').val(env.thePostCond);
       for (var i = 0; i < env.theSteps.length; i++) {
-        appendUseCaseSteps(env.theSteps[i].theStepText);
+        appendUseCaseStep(env.theSteps[i].theStepText);
       }
     }
   });
@@ -142,7 +142,7 @@ function appendUseCaseEnvironment(environment){
   $("#theEnvironments").find("tbody").append('<tr><td class="deleteUseCaseEnv"><i class="fa fa-minus"></i></td><td class="usecaseEnvironment">'+environment+'</td></tr>');
 }
 
-function appendUseCaseSteps(stepTxt) {
+function appendUseCaseStep(stepTxt) {
   $("#theSteps").find("tbody").append("<tr><td class='removeUseCaseStep'><i class='fa fa-minus'></i></td><td class='usecaseStep'>" + stepTxt + "</td></tr>").animate('slow');
 }
 
@@ -150,23 +150,54 @@ function appendUseCaseActor(actor) {
   $("#theActors").find("tbody").append("<tr><td class='removeActor'><i class='fa fa-minus'></i></td><td class='usecaseActor'>" + actor + "</td></tr>").animate('slow');
 }
 
-optionsContent.on('click', '#addConcernToUseCase', function () {
-  var hasConcern = [];
-  $("#theConcerns").find(".usecaseConcern").each(function(index, concern){
-    hasConcern.push($(concern).text());
+optionsContent.on('click', '#addActorToUseCase', function () {
+  var hasActor = [];
+  $("#theActors").find(".usecaseActor").each(function(index, actor){
+    hasActor.push($(actor).text());
   });
-  assetsDialogBox(hasConcern, function (text) {
+  roleDialogBox(hasActor, function (text) {
+    var usecase = JSON.parse($.session.get("UseCase"));
+    usecase.theActors.push(text);
+    $.session.set("UseCase", JSON.stringify(usecase));
+    appendUseCaseActor(text);
+  });
+});
+
+optionsContent.on('click', '#addStepToUseCase', function () {
+  stepDialogBox(function (text) {
     var usecase = JSON.parse($.session.get("UseCase"));
     var theEnvName = $.session.get("usecaseEnvironmentName");
     $.each(usecase.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == theEnvName){
-        env.theAssets.push(text);
-        $.session.set("UseCase", JSON.stringify(usecase));
-        appendUseCaseConcern(text);
+        var s = {
+          "theStepText" : text,
+          "theSynopsis": "",
+          "theActor": "",
+          "theActorType" : "",
+          "theTags" : []};
+        env.theSteps.push(s);
+        appendUseCaseStep(text);
       }
     });
+    $.session.set("UseCase", JSON.stringify(usecase));
   });
 });
+
+
+
+optionsContent.on('click', ".removeUseCaseActor", function () {
+  var text = $(this).next(".usecaseActor").text();
+  $(this).closest("tr").remove();
+  var usecase = JSON.parse($.session.get("UseCase"));
+  $.each(usecase.theActors, function (index2, actor) {
+    if(actor == text){
+      usecase.theSteps.splice( index2 ,1 );
+      $.session.set("UseCase", JSON.stringify(usecase));
+      return false;
+    }
+  });
+});
+
 
 optionsContent.on('click', ".removeUseCaseStep", function () {
   var text = $(this).next(".usecaseStep").text();
@@ -175,8 +206,8 @@ optionsContent.on('click', ".removeUseCaseStep", function () {
   var theEnvName = $.session.get("usecaseEnvironmentName");
   $.each(usecase.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
-      $.each(env.theSteps, function (index2, concern) {
-        if(concern == text){
+      $.each(env.theSteps, function (index2, step) {
+        if(step.theStepText == text){
           env.theSteps.splice( index2 ,1 );
           $.session.set("UseCase", JSON.stringify(usecase));
           return false;

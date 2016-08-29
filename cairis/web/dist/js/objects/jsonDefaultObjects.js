@@ -159,6 +159,27 @@ var taskDefault = {
     "theEnvironmentProperties": []
 };
 
+var useCaseEnvDefault = {
+    "__python_obj__": "UseCaseEnvironmentProperties.UseCaseEnvironmentProperties",
+    "theEnvironmentName": "",
+    "thePreCond": "",
+    "theSteps": [],
+    "thePostCond": ""
+};
+
+var useCaseDefault = {
+    "__python_obj__": "UseCase.UseCase",
+    "theId": -1,
+    "theName": "",
+    "theTags": [],
+    "theAuthor": "",
+    "theCode": "",
+    "theObjective": "",
+    "theActors": [],
+    "theDescription": "",
+    "theEnvironmentProperties": []
+};
+
 var personaEnvDefault = {
     "__python_obj__": "PersonaEnvironmentProperties.PersonaEnvironmentProperties",
     "theDirectFlag": 1,
