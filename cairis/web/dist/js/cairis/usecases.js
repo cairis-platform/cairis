@@ -246,7 +246,7 @@ optionsContent.on("click", "#addUseCaseEnv", function () {
   });
   environmentDialogBox(hasEnv, function (text) {
     appendUseCaseEnvironment(text);
-    var environment =  jQuery.extend(true, {},usecaseEnvDefault );
+    var environment =  jQuery.extend(true, {},useCaseEnvDefault );
     environment.theEnvironmentName = text;
     var usecase = JSON.parse($.session.get("UseCase"));
     usecase.theEnvironmentProperties.push(environment);
@@ -308,7 +308,7 @@ $(document).on("click", "#addNewUseCase", function () {
   fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#optionsContent", null, true, true, function () {
     $("#editUseCaseOptionsForm").addClass("new");
     $("#Properties").hide();
-    $.session.set("UseCase", JSON.stringify(jQuery.extend(true, {},usecaseDefault )));
+    $.session.set("UseCase", JSON.stringify(jQuery.extend(true, {},useCaseDefault )));
     $("#optionsHeaderGear").text("UseCase properties");
     forceOpenOptions();
   });
