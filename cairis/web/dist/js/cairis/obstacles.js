@@ -111,7 +111,7 @@ optionsContent.on('click',".deleteGoalGoal", function () {
     $.session.set("Obstacle", JSON.stringify(obstacle));
 });
 
-optionsContent.on('click',".deleteGoalEnvConcern", function () {
+optionsContent.on('click',".deleteObstacleEnvConcern", function () {
     var obstacle = JSON.parse($.session.get("Obstacle"));
     var envName = $.session.get("ObstacleEnvName");
     var name =  $(this).closest("tr").find(".ObstacleConcernName").text();
@@ -141,7 +141,7 @@ optionsContent.on('click', '#addGoaltoGoal', function () {
     toggleGoalwindow("#editGoalGoal");
     fillGoalEditGoal();
 });
-optionsContent.on("click", "#addGoalEnvironment", function () {
+optionsContent.on("click", "#addObstacleEnvironment", function () {
     var hasEnv = [];
     $(".obstacleEnvProperties").each(function (index, tag) {
         hasEnv.push($(tag).text());
@@ -156,7 +156,7 @@ optionsContent.on("click", "#addGoalEnvironment", function () {
         $.session.set("Obstacle", JSON.stringify(obstacle));
     });
 });
-optionsContent.on('click', ".deleteGoalEnv", function () {
+optionsContent.on('click', ".deleteObstacleEnv", function () {
     var envi = $(this).next(".obstacleEnvProperties").text();
     $(this).closest("tr").remove();
     var obstacle = JSON.parse($.session.get("Obstacle"));
@@ -249,7 +249,7 @@ $(document).on('click', '#addNewObstacle', function () {
 });
 
 
-optionsContent.on('click', "#updateGoalButton", function (e) {
+optionsContent.on('click', "#updateObstacleButton", function (e) {
     e.preventDefault();
     var obstacle = JSON.parse($.session.get("Obstacle"));
     var oldName = obstacle.theName;
@@ -440,7 +440,7 @@ function toggleGoalwindow(window){
     $(window).show();
 }
 
-function emptyGoalEnvTables(){
+function emptyObstacleEnvTables(){
     $("#editGoalsGoalsTable").find("tbody").empty();
     $("#editGoalsSubGoals.Table").find("tbody").empty();
     $("#editGoalsConcernTable").find("tbody").empty();

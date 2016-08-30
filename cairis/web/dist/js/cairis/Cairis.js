@@ -848,8 +848,6 @@ function createEditGoalsTable(){
 
                 textToInsert[i++] = '</tr>';
             });
-
-            // theRows[j++]=textToInsert.join('');
             theTable.append(textToInsert.join(''));
 
             theTable.css("visibility","visible");
