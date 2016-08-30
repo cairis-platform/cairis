@@ -40,6 +40,16 @@ class UseCaseAPITests(CairisDaemonTestCase):
     # region Class fields
     self.logger = logging.getLogger(__name__)
     self.existing_usecase_name = 'Test use case'
+    self.existing_environment_name = 'Psychosis'
+    self.existing_author = 'Shamal Faily'
+    self.existing_code = 'TUC-1'
+    self.existing_description = 'A test description'
+    self.existing_actors = ['Researcher']
+    self.existing_precond = 'Test preconditions'
+    self.existing_steps = []
+    self.existing_steps.append(StepAttributes('Researcher does something','','','',[]))
+    self.existing_steps.append(StepAttributes('System does something','','','',[]))
+    self.existing_postcond = 'Test postconditions'
     usecase_class = UseCase.__module__+'.'+UseCase.__name__
     # endregion
 
@@ -63,3 +73,121 @@ class UseCaseAPITests(CairisDaemonTestCase):
     usecase = jsonpickle.decode(rv.data)
     self.assertIsNotNone(usecase, 'No results after deserialization')
     self.logger.info('[%s] UseCase: %s [%d]\n', method, usecase['theName'], usecase['theId'])
+
+  def test_delete(self):
+    method = 'test_delete'
+    url = '/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name())
+    new_usecase_body = self.prepare_json()
+
+    self.app.delete(url)
+    self.logger.info('[%s] Object to delete: %s', method, new_usecase_body)
+    self.app.post('/api/usecases', content_type='application/json', data=new_usecase_body)
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.delete(url)
+    self.logger.info('[%s] Response data: %s', method, rv.data)
+    self.assertIsNotNone(rv.data, 'No response')
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message in response')
+    self.logger.info('[%s] Message: %s\n', method, message)
+
+
+  def test_post(self):
+    method = 'test_post'
+    url = '/api/usecases'
+    self.logger.info('[%s] URL: %s', method, url)
+    new_usecase_body = self.prepare_json()
+
+    self.app.delete('/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name()))
+    rv = self.app.post(url, content_type='application/json', data=new_usecase_body)
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    env_id = json_resp.get('usecase_id', None)
+    self.assertIsNotNone(env_id, 'No usecase ID returned')
+    self.assertGreater(env_id, 0, 'Invalid usecase ID returned [%d]' % env_id)
+    self.logger.info('[%s] UseCase ID: %d\n', method, env_id)
+    rv = self.app.delete('/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name()))
+
+  def test_put(self):
+    method = 'test_put'
+    url = '/api/usecases'
+    self.logger.info('[%s] URL: %s', method, url)
+    new_usecase_body = self.prepare_json()
+
+    rv = self.app.delete('/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name()))
+    rv = self.app.post(url, content_type='application/json', data=new_usecase_body)
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    env_id = json_resp.get('usecase_id', None)
+    self.assertIsNotNone(env_id, 'No usecase ID returned')
+    self.assertGreater(env_id, 0, 'Invalid usecase ID returned [%d]' % env_id)
+    self.logger.info('[%s] UseCase ID: %d', method, env_id)
+
+    usecase_to_update = self.prepare_new_usecase()
+    usecase_to_update.theName = 'Edited test usecase'
+    usecase_to_update.theId = env_id
+    upd_env_body = self.prepare_json(usecase=usecase_to_update)
+    rv = self.app.put('/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name()), data=upd_env_body, content_type='application/json')
+    self.assertIsNotNone(rv.data, 'No response')
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(json_resp)
+    self.assertIsInstance(json_resp, dict)
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message in response')
+    self.logger.info('[%s] Message: %s', method, message)
+    self.assertGreater(message.find('successfully updated'), -1, 'The usecase was not successfully updated')
+
+    rv = self.app.get('/api/usecases/name/%s?session_id=test' % quote(usecase_to_update.name()))
+    upd_usecase = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(upd_usecase, 'Unable to decode JSON data')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.logger.info('[%s] UseCase: %s [%d]\n', method, upd_usecase['theName'], upd_usecase['theId'])
+
+    rv = self.app.delete('/api/usecases/name/%s?session_id=test' % quote(usecase_to_update.theName))
+
+  def prepare_new_usecase(self):
+    new_usecase_props = [
+      UseCaseEnvironmentProperties(
+        environmentName=self.existing_environment_name,
+        preCond=self.existing_precond,
+        steps=self.existing_steps,
+        postCond=self.existing_postcond
+      )
+    ]
+    new_usecase = UseCase(
+      ucId=-1,
+      ucName='New usecase',
+      ucAuth='NU',
+      ucCode='New objective',
+      ucActors=['Researcher'],
+      ucDesc='New Author',
+      tags=[],
+      cProps=[]
+    )
+    new_usecase.theEnvironmentProperties = new_usecase_props
+    new_usecase.theEnvironmentDictionary = {}
+    delattr(new_usecase, 'theEnvironmentDictionary')
+    return new_usecase
+
+  def prepare_dict(self, usecase=None):
+    if usecase is None:
+      usecase = self.prepare_new_usecase()
+    else:
+      assert isinstance(usecase, UseCase)
+
+    return {
+      'session_id': 'test',
+      'object': usecase,
+    }
+
+  def prepare_json(self, data_dict=None, usecase=None):
+    if data_dict is None:
+      data_dict = self.prepare_dict(usecase=usecase)
+    else:
+      assert isinstance(data_dict, dict)
+    new_usecase_body = jsonpickle.encode(data_dict, unpicklable=False)
+    self.logger.info('JSON data: %s', new_usecase_body)
+    return new_usecase_body
