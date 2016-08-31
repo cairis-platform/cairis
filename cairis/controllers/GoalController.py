@@ -112,8 +112,6 @@ class GoalsAPI(Resource):
   )
   #endregion
   def post(self):
-    import pytest
-    pytest.set_trace()
     session_id = get_session_id(session, request)
 
     dao = GoalDAO(session_id)
