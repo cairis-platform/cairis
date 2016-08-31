@@ -30,7 +30,7 @@
         <div id="Definition">
             <p><label>Label</label> <input id="theLabel" type="text" name="theLabel" readonly></p>
             <p>
-            <label>Category</label> <select id="theCategory"  class="goalAutoUpdater" name="theCategory" >
+            <label>Category</label> <select id="theCategory"  class="obstacleAutoUpdater" name="theCategory" >
                 <option>Maintain</option>
                 <option>Achieve</option>
                 <option>Avoid</option>
@@ -39,13 +39,13 @@
                 <option>Maximise</option>
                 <option>Minimise</option>
             </select></p>
-            <label>Priority</label><select id="thePriority"  class="goalAutoUpdater" name="thePriority" >
+            <label>Priority</label><select id="thePriority"  class="obstacleAutoUpdater" name="thePriority" >
             <option>Low</option>
             <option>Medium</option>
             <option>High</option>
         </select>
             <br>
-            <label>Definition</label><textarea id="theDefinition"  class="goalAutoUpdater" name="theDefinition"></textarea>
+            <label>Definition</label><textarea id="theDefinition"  class="obstacleAutoUpdater" name="theDefinition"></textarea>
             <br>
             &nbsp;
             &nbsp;
@@ -54,7 +54,7 @@
         <div id="Goals">
             <table id="editObstaclesGoalsTable" class="clickable-table">
                 <thead>
-                <tr><th id="addGoaltoGoal" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Goal</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th></tr>
+                <tr><th id="obstacle_addGoaltoGoal" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Goal</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th></tr>
                 </thead>
                 <tbody>
                 </tbody>
@@ -63,7 +63,7 @@
         <div id="Sub-Goals">
             <table id="editObstaclesSubGoalsTable" class="clickable-table">
                 <thead>
-                <tr><th id="addSubGoaltoGoal" style="width: 15px;"> <i class="fa fa-plus"></i></th> <th>Sub-Goals</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th> </tr>
+                <tr><th id="obstacle_addSubGoaltoGoal" style="width: 15px;"> <i class="fa fa-plus"></i></th> <th>Sub-Goals</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th> </tr>
                 </thead>
                 <tbody>
                 </tbody>
@@ -82,11 +82,11 @@
        </div>
         <button id="updateObstacleButton">Update</button>
 </form>
-<div id="editGoalSubGoal" style="display: none;">
+<div id="obstacle_editGoalSubGoal" style="display: none;">
 
     <p>
         <label>Type</label>
-        <select id="theSubgoalType" class="right">
+        <select id="obstacle_theSubgoalType" class="right">
             <option value="goal">goal</option>
             <option value="task">task</option>
             <option value="usecase">usecase</option>
@@ -101,11 +101,11 @@
     </p>
     <p>
         <label>Sub-Goal</label>
-        <select id="theSubGoalName" class="right"></select>
+        <select id="obstacle_theSubGoalName" class="right"></select>
     </p>
     <p>
         <label>Refinement</label>
-        <select id="theRefinementSelect" class="right">
+        <select id="obstacle_theRefinementSelect" class="right">
             <option value="and">and</option>
             <option value="or">or</option>
             <option value="conflict">conflict</option>
@@ -116,23 +116,23 @@
     </p>
     <p>
         <label>Target</label>
-        <select id="theAlternate" class="right">
+        <select id="obstacle_theAlternate" class="right">
             <option>Yes</option>
             <option>No</option>
         </select>
     </p>
     <p>
         <label>Rationale</label>
-        <textarea class="right" id="theGoalSubGoalRationale"></textarea>
+        <textarea class="right" id="obstacle_theGoalSubGoalRationale"></textarea>
     </p>
-    <button id="updateGoalSubGoal">Update</button>
-    <button class="goalCancelButton">Cancel</button>
+    <button id="obstacle_updateGoalSubGoal">Update</button>
+    <button class="obstacle_goalCancelButton">Cancel</button>
 </div>
-<div id="editGoalGoal" style="display: none;">
+<div id="obstacle_editGoalGoal" style="display: none;">
 
     <p>
         <label>Type</label>
-        <select id="theGoalType" class="right">
+        <select id="obstacle_theGoalType" class="right">
             <option value="goal">goal</option>
             <option value="task">task</option>
             <option value="usecase">usecase</option>
@@ -147,11 +147,11 @@
     </p>
     <p>
         <label>Sub-Goal</label>
-        <select id="theGoalName" class="right"></select>
+        <select id="obstacle_theGoalName" class="right"></select>
     </p>
     <p>
         <label>Refinement</label>
-        <select id="theGoalRefinementSelect" class="right">
+        <select id="obstacle_theGoalRefinementSelect" class="right">
             <option value="and">and</option>
             <option value="or">or</option>
             <option value="conflict">conflict</option>
@@ -162,15 +162,15 @@
     </p>
     <p>
         <label>Target</label>
-        <select id="theGoalAlternate" class="right">
+        <select id="obstacle_theGoalAlternate" class="right">
             <option>Yes</option>
             <option>No</option>
         </select>
     </p>
     <p>
         <label>Rationale</label>
-        <textarea class="right" id="theGoalGoalRationale"></textarea>
+        <textarea class="right" id="obstacle_theGoalGoalRationale"></textarea>
     </p>
-    <button id="updateGoalGoal">Update</button>
-    <button class="goalCancelButton">Cancel</button>
+    <button id="obstacle_updateGoalGoal">Update</button>
+    <button class="obstacle_goalCancelButton">Cancel</button>
 </div>

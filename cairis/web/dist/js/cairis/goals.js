@@ -45,7 +45,7 @@ optionsContent.on('click', ".goalEnvProperties", function () {
       //theDef fitcrit issue
 
       $.each(env.theGoalRefinements, function (index, goal) {
-        appendGoalEnvGoals(goal);
+        appendGoalGoal(goal);
       });
       $.each(env.theSubGoalRefinements, function (index, subgoal) {
         appendGoalSubGoal(subgoal);
@@ -110,7 +110,7 @@ optionsContent.on('click', '#updateGoalConcernAss', function () {
       }
     });
   }
-  toggleGoalwindow("#editGoalOptionsForm");
+  toggleGoalWindow("#editGoalOptionsForm");
   fillGoalOptionMenu(goal);
   $.session.set("Goal", JSON.stringify(goal));
 });
@@ -191,7 +191,7 @@ optionsContent.on('click',".deleteGoalEnvConcern", function () {
 });
 
 optionsContent.on('click', '#addConcernAssociationstoGoal', function () {
-  toggleGoalwindow("#editgoalConcernAssociations");
+  toggleGoalWindow("#editgoalConcernAssociations");
   $("#editgoalConcernAssociations").addClass("new");
   var envName = $.session.get("GoalEnvName");
   $("#theSourceSelect").empty();
@@ -210,13 +210,13 @@ optionsContent.on('click', '#addConcernAssociationstoGoal', function () {
 
 optionsContent.on('click', '#addSubGoaltoGoal', function () {
   $("#editgoalSubGoal").addClass("new");
-  toggleGoalwindow("#editgoalSubGoal");
+  toggleGoalWindow("#editgoalSubGoal");
   fillGoalEditSubGoal();
 });
 
 optionsContent.on('click', '#addGoaltoGoal', function () {
   $("#editGoalGoal").addClass("new");
-  toggleGoalwindow("#editGoalGoal");
+  toggleGoalWindow("#editGoalGoal");
   fillGoalEditGoal();
 });
 
@@ -272,6 +272,7 @@ optionsContent.on('click', '#updateGoalSubGoal', function () {
         array[3] = $("#theAlternate").val();
         array[4] = $("#theGoalSubGoalRationale").val();
         env.theSubGoalRefinements.push(array);
+        appendGoalSubGoal(array);
       }
     });
   } 
@@ -293,7 +294,7 @@ optionsContent.on('click', '#updateGoalSubGoal', function () {
   }
   $.session.set("Goal", JSON.stringify(goal));
   fillGoalOptionMenu(goal);
-  toggleGoalwindow("#editGoalOptionsForm");
+  toggleGoalWindow("#editGoalOptionsForm");
 });
 
 optionsContent.on('change', ".goalAutoUpdater" ,function() {
@@ -352,7 +353,7 @@ optionsContent.on('click', "#updateGoalButton", function (e) {
   }
 });
 optionsContent.on('dblclick', '.editGoalSubGoalRow', function () {
-  toggleGoalwindow("#editgoalSubGoal");
+  toggleGoalWindow("#editgoalSubGoal");
   var name = $(this).find("td").eq(1).text();
   fillGoalEditSubGoal(name);
   var type = $(this).find("td").eq(2).text();
@@ -368,7 +369,7 @@ optionsContent.on('dblclick', '.editGoalSubGoalRow', function () {
 });
 
 optionsContent.on('dblclick', '.editGoalGoalRow', function () {
-  toggleGoalwindow("#editGoalGoal");
+  toggleGoalWindow("#editGoalGoal");
   var name = $(this).find("td").eq(1).text();
   fillGoalEditGoal(name);
 
@@ -409,12 +410,12 @@ optionsContent.on('dblclick', '.editGoalConcernAssoc', function () {
     $("#theLink").val(link);
     $("#theTargetSelect").val(target);
     $("#theN2Select").val(n2);
-    toggleGoalwindow("#editgoalConcernAssociations");
+    toggleGoalWindow("#editgoalConcernAssociations");
   });
 });
 
 optionsContent.on('click', '.goalCancelButton', function () {
-  toggleGoalwindow("#editGoalOptionsForm")
+  toggleGoalWindow("#editGoalOptionsForm")
 });
 
 optionsContent.on('click',"#updateGoalGoal", function () {
@@ -431,6 +432,7 @@ optionsContent.on('click',"#updateGoalGoal", function () {
         array[3] = $("#theGoalAlternate").val();
         array[4] = $("#theGoalGoalRationale").val();
         env.theGoalRefinements.push(array);
+        appendGoalGoal(array);
       }
     });
   }
@@ -452,7 +454,7 @@ optionsContent.on('click',"#updateGoalGoal", function () {
   }
   $.session.set("Goal", JSON.stringify(goal));
   fillGoalOptionMenu(goal);
-  toggleGoalwindow("#editGoalOptionsForm");
+  toggleGoalWindow("#editGoalOptionsForm");
 });
 
 function getGoalOptions(name){
@@ -545,7 +547,7 @@ function fillGoalEditGoal(theSettableValue) {
   });
 }
 
-function toggleGoalwindow(window) {
+function toggleGoalWindow(window) {
   $("#editgoalConcernAssociations").hide();
   $("#editGoalOptionsForm").hide();
   $("#editgoalSubGoal").hide();
@@ -563,7 +565,7 @@ function emptyGoalEnvTables(){
 function appendGoalEnvironment(text){
   $("#theGoalEnvironments").append("<tr><td class='deleteGoalEnv'><i class='fa fa-minus'></i></td><td class='goalEnvProperties'>"+ text +"</td></tr>");
 }
-function appendGoalEnvGoals(goal){
+function appendGoalGoal(goal){
   $("#editgoalsGoalsTable").append('<tr class="editGoalGoalRow"><td class="deleteGoalGoal"><i class="fa fa-minus"></i></td><td class="envGoalName">'+goal[0]+'</td><td>'+goal[1]+'</td><td>'+goal[2]+'</td><td>'+goal[3]+'</td><td>'+goal[4]+'</td></tr>');
 }
 function appendGoalSubGoal(subgoal){
