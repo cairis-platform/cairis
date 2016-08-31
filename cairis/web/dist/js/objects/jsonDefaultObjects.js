@@ -19,277 +19,273 @@
 
 var AssetEnvironmentProperty =
 {
-    "__python_obj__": "tools.ModelDefinitions.AssetEnvironmentPropertiesModel",
-    "associations": [],
-    "attributes": [
-    ],
-    "environment": "",
-    "attributesDictionary": {}
+  "__python_obj__": "tools.ModelDefinitions.AssetEnvironmentPropertiesModel",
+  "theAssociations": [],
+  "theProperties": [],
+  "theEnvironmentName": ""
 };
 var AssetEnvironmentPropertyAttribute =
-        {
-            "__python_obj__": "tools.ModelDefinitions.AssetSecurityAttribute",
-            "rationale": "",
-            "value": "",
-            "name": ""
-        };
+{
+  "__python_obj__": "tools.ModelDefinitions.AssetSecurityAttribute",
+  "rationale": "",
+  "value": "",
+  "name": ""
+};
 var mainAssetObject =
 {
-    "__python_obj__": "Asset.Asset",
-    "theEnvironmentDictionary": {},
-    "theDescription": "",
-    "theAssetPropertyDictionary": {},
-    "theSignificance": "",
-    "theId": -1,
-    "theTags": [],
-    "theCriticalRationale": "",
-    "theInterfaces": [],
-    "theType": "",
-    "theName": "",
-    "isCritical": 0,
-    "theShortCode": "",
-    "theEnvironmentProperties": []
+  "__python_obj__": "Asset.Asset",
+  "theEnvironmentDictionary": {},
+  "theDescription": "",
+  "theAssetPropertyDictionary": {},
+  "theSignificance": "",
+  "theId": -1,
+  "theTags": [],
+  "theCriticalRationale": "",
+  "theInterfaces": [],
+  "theType": "",
+  "theName": "",
+  "isCritical": 0,
+  "theShortCode": "",
+  "theEnvironmentProperties": []
 };
 var roleDefaultObject = {
-    "__python_obj__": "Role.Role",
-    "theEnvironmentDictionary": {},
-    "theEnvironmentProperties": [],
-    "theId": -1,
-    "costLookup": {
-    },
-    "theType": "",
-    "theName": "",
-    "theShortCode": "",
-    "theDescription": ""
+  "__python_obj__": "Role.Role",
+  "theEnvironmentDictionary": {},
+  "theEnvironmentProperties": [],
+  "theId": -1,
+  "costLookup": {},
+  "theType": "",
+  "theName": "",
+  "theShortCode": "",
+  "theDescription": ""
 };
 var tensionDefault = {
-    "__python_obj__": "tools.PseudoClasses.EnvironmentTensionModel",
-    "rationale": "",
-    "attr_id": -1,
-    "base_attr_id": -1,
-    "value": -1
+  "__python_obj__": "tools.PseudoClasses.EnvironmentTensionModel",
+  "rationale": "",
+  "attr_id": -1,
+  "base_attr_id": -1,
+  "value": -1
 };
 var environmentDefault = {"__python_obj__": "Environment.Environment",
-    "theId": -1,
-    "theDuplicateProperty": "",
-    "theTensions": [],
-    "theName": "",
-    "theEnvironments": [],
-    "theShortCode": "",
-    "theDescription": "",
-    "theOverridingEnvironment": ""
+  "theId": -1,
+  "theDuplicateProperty": "",
+  "theTensions": [],
+  "theName": "",
+  "theEnvironments": [],
+  "theShortCode": "",
+  "theDescription": "",
+  "theOverridingEnvironment": ""
 };
 var vulnerabilityDefault = {
-    "__python_obj__": "Vulnerability.Vulnerability",
-    "theEnvironmentDictionary": {},
-    "theVulnerabilityName": "",
-    "theVulnerabilityType": "",
-    "theTags": [],
-    "theVulnerabilityDescription": "",
-    "theVulnerabilityId": -1,
-    "severityLookup": {},
-    "theEnvironmentProperties": []
+  "__python_obj__": "Vulnerability.Vulnerability",
+  "theEnvironmentDictionary": {},
+  "theVulnerabilityName": "",
+  "theVulnerabilityType": "",
+  "theTags": [],
+  "theVulnerabilityDescription": "",
+  "theVulnerabilityId": -1,
+  "severityLookup": {},
+  "theEnvironmentProperties": []
 };
 var vulEnvironmentsDefault = {
-    "__python_obj__": "VulnerabilityEnvironmentProperties.VulnerabilityEnvironmentProperties",
-    "theEnvironmentName": "",
-    "theAssets": [],
-    "theSeverity": ""
+  "__python_obj__": "VulnerabilityEnvironmentProperties.VulnerabilityEnvironmentProperties",
+  "theEnvironmentName": "",
+  "theAssets": [],
+  "theSeverity": ""
 };
 var threatEnvironmentDefault = {"__python_obj__": "ThreatEnvironmentProperties.ThreatEnvironmentProperties",
-    "theAssets": [],
-    "theLikelihood": "",
-    "theEnvironmentName": "",
-    "theAttackers": [],
-    "theRationale": [],
-    "theProperties": []
+  "theAssets": [],
+  "theLikelihood": "",
+  "theEnvironmentName": "",
+  "theAttackers": [],
+  "theRationale": [],
+  "theProperties": []
 };
 var threatDefault = {
-    "__python_obj__": "Threat.Threat",
-    "theId": -1,
-    "theTags": [],
-    "theThreatName": "",
-    "theType": "",
-    "theMethod": "",
-    "theEnvironmentProperties": [],
-    "theProperties": []
+  "__python_obj__": "Threat.Threat",
+  "theId": -1,
+  "theTags": [],
+  "theThreatName": "",
+  "theType": "",
+  "theMethod": "",
+  "theEnvironmentProperties": [],
+  "theProperties": []
 };
 
 var attackerEnvDefault = {
-    "__python_obj__": "AttackerEnvironmentProperties.AttackerEnvironmentProperties",
-    "theRoles": [],
-    "theMotives": [],
-    "theCapabilities": [],
-    "theEnvironmentName": ""
+  "__python_obj__": "AttackerEnvironmentProperties.AttackerEnvironmentProperties",
+  "theRoles": [],
+  "theMotives": [],
+  "theCapabilities": [],
+  "theEnvironmentName": ""
 };
 
 var attackerDefault = {
-    "__python_obj__": "Attacker.Attacker",
-    "theDescription": "",
-    "theId": -1,
-    "theTags": [],
-    "isPersona": false,
-    "theName": "",
-    "theImage": "",
-    "theEnvironmentProperties": []
+  "__python_obj__": "Attacker.Attacker",
+  "theDescription": "",
+  "theId": -1,
+  "theTags": [],
+  "isPersona": false,
+  "theName": "",
+  "theImage": "",
+  "theEnvironmentProperties": []
 };
 
 var taskEnvDefault = {
-    "__python_obj__": "TaskEnvironmentProperties.TaskEnvironmentProperties",
-    "theEnvironmentName": "",
-    "thePersonas": [],
-    "theAssets": [],
-    "theDependencies": "",
-    "theNarrative": "",
-    "theConsequences": "",
-    "theBenefits": "",
-    "theConcernAssociations": [],
-    "theCodes": []
+  "__python_obj__": "TaskEnvironmentProperties.TaskEnvironmentProperties",
+  "theEnvironmentName": "",
+  "thePersonas": [],
+  "theAssets": [],
+  "theDependencies": "",
+  "theNarrative": "",
+  "theConsequences": "",
+  "theBenefits": "",
+  "theConcernAssociations": [],
+  "theCodes": []
 };
 
 var taskDefault = {
-    "__python_obj__": "Task.Task",
-    "theId": -1,
-    "theName": "",
-    "theShortCode": "",
-    "theObjective": "",
-    "isAssumption": false,
-    "theAuthor": "",
-    "theTags": [],
-    "theEnvironmentProperties": []
+  "__python_obj__": "Task.Task",
+  "theId": -1,
+  "theName": "",
+  "theShortCode": "",
+  "theObjective": "",
+  "isAssumption": false,
+  "theAuthor": "",
+  "theTags": [],
+  "theEnvironmentProperties": []
 };
 
 var useCaseEnvDefault = {
-    "__python_obj__": "UseCaseEnvironmentProperties.UseCaseEnvironmentProperties",
-    "theEnvironmentName": "",
-    "thePreCond": "",
-    "theSteps": [],
-    "thePostCond": ""
+  "__python_obj__": "UseCaseEnvironmentProperties.UseCaseEnvironmentProperties",
+  "theEnvironmentName": "",
+  "thePreCond": "",
+  "theSteps": [],
+  "thePostCond": ""
 };
 
 var useCaseDefault = {
-    "__python_obj__": "UseCase.UseCase",
-    "theId": -1,
-    "theName": "",
-    "theTags": [],
-    "theAuthor": "",
-    "theCode": "",
-    "theObjective": "",
-    "theActors": [],
-    "theDescription": "",
-    "theEnvironmentProperties": []
+  "__python_obj__": "UseCase.UseCase",
+  "theId": -1,
+  "theName": "",
+  "theTags": [],
+  "theAuthor": "",
+  "theCode": "",
+  "theObjective": "",
+  "theActors": [],
+  "theDescription": "",
+  "theEnvironmentProperties": []
 };
 
 var personaEnvDefault = {
-    "__python_obj__": "PersonaEnvironmentProperties.PersonaEnvironmentProperties",
-    "theDirectFlag": 1,
-    "theNarrative": "",
-    "theRoles": [],
-    "theCodes": []
+  "__python_obj__": "PersonaEnvironmentProperties.PersonaEnvironmentProperties",
+  "theDirectFlag": 1,
+  "theNarrative": "",
+  "theRoles": [],
+  "theCodes": []
 };
 
 var personaDefault = {
-    "__python_obj__": "Persona.Persona",
-    "theDescription": "",
-    "theId": -1,
-    "theName": "",
-    "theTags": [],
-    "theActivities": "",
-    "theAttitudes": "",
-    "theAptitudes": "",
-    "theMotivations": "",
-    "theSkills": "",
-    "theIntrinsic": "",
-    "theContextual": "",
-    "theImage": "",
-    "isAssumption": 0,
-    "thePersonaType": "Primary",
-    "theEnvironmentProperties": []
+  "__python_obj__": "Persona.Persona",
+  "theDescription": "",
+  "theId": -1,
+  "theName": "",
+  "theTags": [],
+  "theActivities": "",
+  "theAttitudes": "",
+  "theAptitudes": "",
+  "theMotivations": "",
+  "theSkills": "",
+  "theIntrinsic": "",
+  "theContextual": "",
+  "theImage": "",
+  "isAssumption": 0,
+  "thePersonaType": "Primary",
+  "theEnvironmentProperties": []
 };
 
-var goalEnvDefault =     {
-        "__python_obj__": "GoalEnvironmentProperties.GoalEnvironmentProperties",
-        "theFitCriterion": "",
-        "theConcerns": [],
-        "theSubGoalRefinements": [],
-        "thePriority": "",
-        "theEnvironmentName": "",
-        "theCategory": "",
-        "theDefinition": "",
-        "theConcernAssociations": [],
-        "theGoalRefinements": [],
-        "theLabel": "",
-        "theIssue": ""
-    };
+var goalEnvDefault = { 
+  "__python_obj__": "GoalEnvironmentProperties.GoalEnvironmentProperties",
+  "theFitCriterion": "",
+  "theConcerns": [],
+  "theSubGoalRefinements": [],
+  "thePriority": "",
+  "theEnvironmentName": "",
+  "theCategory": "",
+  "theDefinition": "",
+  "theConcernAssociations": [],
+  "theGoalRefinements": [],
+  "theLabel": "",
+  "theIssue": ""
+};
 var goalDefault = {
-    "__python_obj__": "Goal.Goal",
-    "theColour": "",
-    "theId": -1,
-    "theOriginator": "",
-    "theTags": [],
-    "theName": "",
-    "theEnvironmentProperties": []
+  "__python_obj__": "Goal.Goal",
+  "theColour": "",
+  "theId": -1,
+  "theOriginator": "",
+  "theTags": [],
+  "theName": "",
+  "theEnvironmentProperties": []
 };
 
 var obstacleEnvDefault =     {
-        "__python_obj__": "ObstacleEnvironmentProperties.ObstacleEnvironmentProperties",
-        "theLabel": "",
-        "theDefinition": "",
-        "theCategory": "",
-        "theGoalRefinements": [],
-        "theSubGoalRefinements": [],
-        "theConcerns": [],
-        "theProbability": "",
-        "theProbabilityRationale": "",
-        "theEnvironmentName": ""
-    };
+  "__python_obj__": "ObstacleEnvironmentProperties.ObstacleEnvironmentProperties",
+  "theLabel": "",
+  "theDefinition": "",
+  "theCategory": "",
+  "theGoalRefinements": [],
+  "theSubGoalRefinements": [],
+  "theConcerns": [],
+  "theProbability": "",
+  "theProbabilityRationale": "",
+  "theEnvironmentName": ""
+};
 var obstacleDefault = {
-    "__python_obj__": "Obstacle.Obstacle",
-    "theColour": "",
-    "theId": -1,
-    "theName": "",
-    "theTags": [],
-    "theOriginator": "",
-    "theEnvironmentProperties": []
+  "__python_obj__": "Obstacle.Obstacle",
+  "theColour": "",
+  "theId": -1,
+  "theName": "",
+  "theTags": [],
+  "theOriginator": "",
+  "theEnvironmentProperties": []
 };
 
 var countermeasureEnvDefault =     {
-        "__python_obj__": "CountermeasureEnvironmentProperties.CountermeasureEnvironmentProperties",
-        "theEnvironmentName": "",
-        "theRequirements": [],
-        "theTargets": [],
-        "theProperties": [],
-        "theRationale": [],
-        "theRoles": [],
-        "thePersonas": []
-    };
+  "__python_obj__": "CountermeasureEnvironmentProperties.CountermeasureEnvironmentProperties",
+  "theEnvironmentName": "",
+  "theRequirements": [],
+  "theTargets": [],
+  "theProperties": [],
+  "theRationale": [],
+  "theRoles": [],
+  "thePersonas": []
+};
 var countermeasureDefault = {
-    "__python_obj__": "Countermeasure.Countermeasure",
-    "theId": -1,
-    "theName": "",
-    "theTags": [],
-    "theDescription": "",
-    "theTyp": "",
-    "theEnvironmentProperties": []
+  "__python_obj__": "Countermeasure.Countermeasure",
+  "theId": -1,
+  "theName": "",
+  "theTags": [],
+  "theDescription": "",
+  "theTyp": "",
+  "theEnvironmentProperties": []
 };
-
-
 var respRoleDefault = {
-    "__python_obj__": "tools.PseudoClasses.ValuedRole",
-    "roleName": "",
-    "cost": ""
+  "__python_obj__": "tools.PseudoClasses.ValuedRole",
+  "roleName": "",
+  "cost": ""
 };
-var respEnvDefault = {"__python_obj__": "TransferEnvironmentProperties.TransferEnvironmentProperties",
-    "theRationale": "",
-    "theRoles": [],
-    "theEnvironmentName": "Stroke"
+var respEnvDefault = {
+  "__python_obj__": "TransferEnvironmentProperties.TransferEnvironmentProperties",
+  "theRationale": "",
+  "theRoles": [],
+  "theEnvironmentName": "Stroke"
 };
 var domainPropertyDefault = {
-    "__python_obj__": "DomainProperty.DomainProperty",
-    "theId": -1,
-    "theName": "",
-    "theTags": [],
-    "theDescription": "",
-    "theType": "",
-    "theOriginator": ""
+  "__python_obj__": "DomainProperty.DomainProperty",
+  "theId": -1,
+  "theName": "",
+  "theTags": [],
+  "theDescription": "",
+  "theType": "",
+  "theOriginator": ""
 };
