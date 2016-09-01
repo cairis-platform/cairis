@@ -570,26 +570,21 @@ class AssetDAO(CairisDAO):
             raise MalformedJSONHTTPError(data=request.get_data())
 
         json_dict = json['object']
-        if to_props and isinstance(json_dict, list):
-            props = self.convert_props(fake_props=json_dict)
-            return props
-        else:
-            assert isinstance(json_dict, dict)
-            check_required_keys(json_dict, AssetModel.required)
-            json_dict['__python_obj__'] = Asset.__module__+'.'+Asset.__name__
-            env_props = json_dict.pop('theEnvironmentProperties', [])
-            env_props = self.convert_props(fake_props=env_props)
-            json_dict.pop('theEnvironmentDictionary', None)
-            json_dict.pop('theAssetPropertyDictionary', None)
-            asset = json_serialize(json_dict)
-            asset = json_deserialize(asset)
+        check_required_keys(json_dict, AssetModel.required)
+        json_dict['__python_obj__'] = Asset.__module__+'.'+Asset.__name__
+        env_props = json_dict.pop('theEnvironmentProperties', [])
+        env_props = self.convert_props(fake_props=env_props)
+        json_dict.pop('theEnvironmentDictionary', None)
+        json_dict.pop('theAssetPropertyDictionary', None)
+        asset = json_serialize(json_dict)
+        asset = json_deserialize(asset)
 
-            if isinstance(asset, Asset):
-                asset.theEnvironmentProperties = env_props
-                return asset
-            else:
-                self.close()
-                raise MalformedJSONHTTPError()
+        if isinstance(asset, Asset):
+          asset.theEnvironmentProperties = env_props
+          return asset
+        else:
+          self.close()
+          raise MalformedJSONHTTPError()
 
     def simplify(self, asset):
         """

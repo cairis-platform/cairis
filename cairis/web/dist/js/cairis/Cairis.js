@@ -77,7 +77,8 @@ function fillEditAssetsEnvironment(){
     $('#theEnvironmentDictionary').find("tbody").empty();
     $('#theEnvironmentDictionary').append(textToInsert.join(''));
 
-    var env = $( "#theEnvironmentDictionary").find("tbody tr:eq(0) > td:eq(0)").text();
+//    var env = $( "#theEnvironmentDictionary").find("tbody tr:eq(0) > td:eq(0)").text();
+    var env = $.session.get("assetEnvironmentName");
 
     var props;
     $.each(data, function(arrayID,group) {
@@ -88,7 +89,7 @@ function fillEditAssetsEnvironment(){
            // $.session.set("Arrayindex",arrayID);
         }
     });
-    $("#theEnvironmentDictionary").find(".assetEnvironmetRow:first").trigger('click');
+    $("#theEnvironmentDictionary").find(".assetEnvironmentRow:first").trigger('click');
 }
 
 // For converting the form in JSON
@@ -2317,6 +2318,7 @@ function assetFormToJSON(data, newAsset){
             });
         }
     });
+    json['theEnvironmentProperties'] = JSON.parse($.session.get("AssetProperties"))
     return json
 }
 

@@ -37,7 +37,7 @@
       <textarea class="assetUpdate" id="theCriticalRationale" name="theCriticalRationale" > </textarea>
     </div>
     <div id="Interfaces">
-      <table id="editgoalsGoalsTable">
+      <table id="editassetInterfaceTable">
         <thead>
           <tr> <th>Interface</th><th>Type</th><th>Access Right</th><th>Privilege</th></tr>
         </thead>
@@ -70,8 +70,8 @@
             </tbody>
           </table>
         </div>
-        <div id="AssociationsAssetsOptions">
-          <table class="assetUpdate">
+        <div id="AssociationsAssetsOptions" class="gearOptions clickable-table scrollableTable">
+          <table id="assetAssociationsTable" class="assetUpdate">
             <thead>
               <tr><th><div class="fillparent" id="addNewAssociation"><i class="fa fa-plus"></i></div></th><th>Nav</th><th>Type</th><th>Nry</th><th>Role</th><th>Tail Role</th><th>Tail Nry</th><th>Tail Type</th><th>Tail Nav</th><th>Tail Asset</th></tr>
             </thead>
@@ -176,8 +176,8 @@
     <label>nry</label>
     <select class="optionsInput" name="headNry" id="headNry" style="width: 100%;">
       <option value="1">1</option>
-      <option value="n">*</option>
-      <option value="1..n">1..*</option>
+      <option value="*">*</option>
+      <option value="1..*">1..*</option>
     </select>
   </p>
   <p>
@@ -192,8 +192,8 @@
     <label>nry</label>
     <select class="optionsInput" name="tailNry" id="tailNry" style="width: 100%;">
       <option value="1">1</option>
-      <option value="n">*</option>
-      <option value="1..n">1..*</option>
+      <option value="*">*</option>
+      <option value="1..*">1..*</option>
     </select>
   </p>
   <p>

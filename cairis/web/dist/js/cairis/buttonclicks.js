@@ -1149,9 +1149,6 @@ optionsContent.on('click', '#cancelButtonAsset', function(){
 });
 optionsContent.on('click', '#UpdateAssetinGear',function(e){
     e.preventDefault();
-    //alert($('#theName').val());
-   //var AssetSon =  JSON.parse($.session.get("Asset"));
-    //If new aset
     if($("#editAssetsOptionsform").hasClass("new")){
         alert("HasClass");
         postAssetForm($("#editAssetsOptionsform"), function(){
@@ -1162,7 +1159,7 @@ optionsContent.on('click', '#UpdateAssetinGear',function(e){
     }
     else{
         putAssetForm($("#editAssetsOptionsform"));
-        updateAssetEnvironment($.session.get("AssetProperties"));
+//        updateAssetEnvironment($.session.get("AssetProperties"));
     }
 
     fillAssetTable();

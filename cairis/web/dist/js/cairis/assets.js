@@ -110,6 +110,32 @@ optionsContent.on('click', ".removeAssetEnvironment", function () {
   });
 });
 
+optionsContent.on('click', ".removeAssetAssociation", function () {
+  var envName = $.session.get("assetEnvironmentName");
+  $(this).closest("tr").remove();
+  var asset = JSON.parse($.session.get("AssetProperties"));
+  $.each(asset, function (index, env) {
+    if(env.theEnvironmentName == envName){
+      env.theAssociations.splice( index ,1 );
+      $.session.set("AssetProperties", JSON.stringify(asset));
+      return false;
+    }
+  });
+});
+
+optionsContent.on('click', ".removeAssetEnvironment", function () {
+  var envName = $.session.get("assetEnvironmentName");
+  $(this).closest("tr").remove();
+  var asset = JSON.parse($.session.get("AssetProperties"));
+  $.each(asset, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      env.theProperties.splice( index ,1 );
+      $.session.set("AssetProperties", JSON.stringify(asset));
+    }
+  });
+});
+
+
 optionsContent.on('click', '.assetEnvironmetRow', function(event){
   var assts = JSON.parse($.session.get("AssetProperties"));
   var text = $(this).text();
@@ -122,6 +148,10 @@ optionsContent.on('click', '.assetEnvironmetRow', function(event){
       $.session.set("Arrayindex", arrayID);
       $.session.set("UsedProperties", JSON.stringify(props));
       getAssetDefinition(props);
+
+      $.each(assts[arrayID].theAssociations,function(idx,assoc) {
+        appendAssetAssociation(assoc);
+      });
     }
   });
 });
@@ -143,6 +173,25 @@ optionsContent.on('dblclick', '.clickable-properties', function(){
     });
   });
 });
+
+optionsContent.on('dblclick', '.clickable-associations', function(){
+  var row = $(this);
+  $("#editAssetsOptionsform").hide();
+  $("#editAssociationsWindow").show(function() {
+    $("#headNav").val(row.find("#hNav").text());
+    $("#headAdorn").val(row.find("#hAdorn").text());
+    $("#headNry").val(row.find("#hNry").text());
+    $("#headRole").val(row.find("#hRole").text());
+    $("#tailRole").val(row.find("#tRole").text());
+    $("#tailNry").val(row.find("#tNry").text());
+    $("#tailAdorn").val(row.find("#tAdorn").text());
+    $("#tailNav").val(row.find("#tNav").text());
+    $("#tailAsset").val(row.find("#tAsset").text());
+  });
+});
+
+
+
 
 optionsContent.on('click', '.addEnvironmentPlus',function(){
   $.ajax({
@@ -238,6 +287,7 @@ optionsContent.on("click", "#updateButtonAsset", function(){
     assoc.push( $("#tailAsset").val());
     var idx = $.session.get("Arrayindex") || 0;
     allprops[idx].theAssociations.push(assoc);
+    appendAssetAssociation(assoc);
     $("#editAssetsOptionsform").show();
     $("#editAssociationsWindow").hide();
   }
@@ -253,13 +303,20 @@ optionsContent.on("click", "#updateButtonAsset", function(){
         allprops[$.session.get("Arrayindex")].theProperties[index].value = props.value;
         allprops[$.session.get("Arrayindex")].theProperties[index].rationale = props.rationale;
         $.session.set("AssetProperties", JSON.stringify(allprops))
-      }
-      updateAssetEnvironment(allprops,function(){
         $("#editAssetsOptionsform").show();
         $("#editpropertiesWindow").hide();
-      });
+      }
+/*      updateAssetEnvironment(allprops,function(){
+        $("#editAssetsOptionsform").show();
+        $("#editpropertiesWindow").hide();
+      }); */
     });
   }
   $.session.set("AssetProperties", JSON.stringify(allprops));
   fillEditAssetsEnvironment();
 });
+
+function appendAssetAssociation(assoc) {
+  $("#assetAssociationsTable").find("tbody").append("<tr class='clickable-associations'><td class='removeAssetAssociation'><i class='fa fa-minus'></i></td><td class='assetAssociation' id='hNav'>" + assoc[0] + "</td><td id='hAdorn'>" + assoc[1] + "</td><td id='hNry'>" + assoc[2] + "</td><td id='hRole'>" + assoc[3] + "</td><td id='tRole'>" + assoc[4] + "</td><td id='tNry'>" + assoc[5] + "</td><td id='tAdorn'>" + assoc[6] + "</td><td id='tNav'>" + assoc[7] + "</td><td id='tAsset'>" + assoc[8] + "</td></tr>").animate('slow');
+}
+
