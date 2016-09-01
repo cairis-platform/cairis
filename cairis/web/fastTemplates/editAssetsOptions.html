@@ -47,110 +47,184 @@
     </div>
   </div>
     <div class="inblock">
-        <table class="left clickable-table" id="theEnvironmentDictionary">
+      <table class="left clickable-table" id="theEnvironmentDictionary">
+        <thead>
+          <tr><th> <i class="fa fa-plus addEnvironmentPlus"></i></th><th>Environment</th></tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+      <div class="tabs right" id="assetstabsID">
+        <ul>
+          <li><a href="#Properties">Definition</a></li>
+          <li><a href="#AssociationsAssetsOptions">Associations</a></li>
+        </ul>
+        <div id="Properties" class="gearOptions clickable-table scrollableTable">
+          <table id="definitionTable" class="assetUpdate ">
             <thead>
-            <tr><th> <i class="fa fa-plus addEnvironmentPlus"></i></th><th>Environment</th></tr>
+              <tr><th><div class="fillparent" id="addNewProperty"><i class="fa fa-plus"></i></div></th><th>Property</th><th>Value</th><th>Rationale</th></tr>
             </thead>
             <tbody>
 
             </tbody>
-        </table>
-        <div class="tabs right" id="assetstabsID">
-            <ul>
-                <li><a href="#Properties">Definition</a></li>
-                <li><a href="#AssociationsAssetsOptions">Associations</a></li>
-            </ul>
-            <div id="Properties" class="gearOptions clickable-table scrollableTable">
-                <table id="definitionTable" class="assetUpdate ">
-                    <thead>
-                    <tr><th><div class="fillparent" id="addNewProperty"><i class="fa fa-plus"></i></div></th><th>Property</th><th>Value</th><th>Rationale</th></tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
-            </div>
-            <div id="AssociationsAssetsOptions">
-                <table class="assetUpdate">
-                    <thead>
-                    <tr><th>Nav</th><th>Type</th><th>Nry</th><th>Role</th><th>Tail Role</th><th>Tail Nry</th><th>Tail Type</th><th>Tail Nav</th><th>Tail Asset</th></tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
-
-            </div>
+          </table>
         </div>
+        <div id="AssociationsAssetsOptions">
+          <table class="assetUpdate">
+            <thead>
+              <tr><th><div class="fillparent" id="addNewAssociation"><i class="fa fa-plus"></i></div></th><th>Nav</th><th>Type</th><th>Nry</th><th>Role</th><th>Tail Role</th><th>Tail Nry</th><th>Tail Type</th><th>Tail Nav</th><th>Tail Asset</th></tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
     </div>
     <button id="UpdateAssetinGear">Update</button>
-
 </form>
 
 <div id="editpropertiesWindow" style="display: none;">
-    <p>
+  <p>
     <label>
-        Property
-        <select class="optionsInput" name="property" id="property">
-            <option value="Accountability">
-                Accountability
-            </option>
-            <option value="Confidentiality">
-                Confidentiality
-            </option>
-            <option value="Integrity">
-                Integrity
-            </option>
-            <option value="Availability">
-                Availability
-            </option>
-            <option value="Anonymity">
-                Anonymity
-            </option>
-            <option value="Pseudonymity">
-                Pseudonymity
-            </option>
-            <option value="Unlinkability">
-                Unlinkability
-            </option>
-            <option value="Unobservability">
-                Unobservability
-            </option>
-        </select>
+      Property
+      <select class="optionsInput" name="property" id="property">
+        <option value="Accountability">
+          Accountability
+        </option>
+        <option value="Confidentiality">
+          Confidentiality
+        </option>
+        <option value="Integrity">
+          Integrity
+        </option>
+        <option value="Availability">
+          Availability
+        </option>
+        <option value="Anonymity">
+          Anonymity
+        </option>
+        <option value="Pseudonymity">
+          Pseudonymity
+        </option>
+        <option value="Unlinkability">
+          Unlinkability
+        </option>
+        <option value="Unobservability">
+          Unobservability
+        </option>
+      </select>
     </label>
-    </p>
-    <p>
-    <label>
-        Value
-        <select class="optionsInput" name="value" id="value">
-            <option>
-                None
-            </option>
-            <option>
-                Low
-            </option>
-            <option>
-                Medium
-            </option>
-            <option>
-                High
-            </option>
-        </select>
-    </label>
-        </p>
-    <p>
-    <label>
-        Rationale
-        <textarea class="optionsInput" name="rationale" id="rationale"> </textarea>
-    </label>
-    </p>
-    <textarea id="id" name="id" style="display: none;"></textarea>
-    <p>
-        <button id="cancelButtonAsset">
-            Cancel
-        </button>
-        <button id="updateButtonAsset">
-            Update
-        </button>
-    </p>
+  </p>
+  <p>
+  <label>
+    Value
+    <select class="optionsInput" name="value" id="value">
+      <option>
+        None
+      </option>
+      <option>
+        Low
+      </option>
+      <option>
+        Medium
+      </option>
+      <option>
+        High
+      </option>
+    </select>
+  </label>
+  </p>
+  <p>
+  <label>
+    Rationale
+    <textarea class="optionsInput" name="rationale" id="rationale"> </textarea>
+  </label>
+  </p>
+  <textarea id="id" name="id" style="display: none;"></textarea>
+  <p>
+    <button id="cancelButtonAsset">
+      Cancel
+    </button>
+    <button id="updateButtonAsset">
+      Update
+    </button>
+  </p>
+</div>
+<div id="editAssociationsWindow" style="display: none;">
+  <p>
+    <label>Navigation</label>
+    <select class="optionsInput" name="headNav" id="headNav" style="width: 100%;">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="-1">-1</option>
+    </select>
+  </p>
+  <p>
+    <label>Adornment</label>
+    <select class="optionsInput" name="headAdorn" id="headAdorn" style="width: 100%;">
+      <option value="Inheritance">Inheritence</option>
+      <option value="Association">Association</option>
+      <option value="Aggregation">Aggregation</option>
+      <option value="Composition">Composition</option>
+      <option value="Dependency">Dependency</option>
+    </select>
+  </p>
+  <p>
+    <label>nry</label>
+    <select class="optionsInput" name="headNry" id="headNry" style="width: 100%;">
+      <option value="1">1</option>
+      <option value="n">*</option>
+      <option value="1..n">1..*</option>
+    </select>
+  </p>
+  <p>
+    <label>Role</label>
+    <input class="optionsInput" type="text" name="headRole" id="headRole" style="width: 100%;">
+  </p>
+  <p>
+    <label>Role</label>
+    <input class="optionsInput" type="text" name="tailRole" id="tailRole" style="width: 100%;">
+  </p>
+  <p>
+    <label>nry</label>
+    <select class="optionsInput" name="tailNry" id="tailNry" style="width: 100%;">
+      <option value="1">1</option>
+      <option value="n">*</option>
+      <option value="1..n">1..*</option>
+    </select>
+  </p>
+  <p>
+    <label>Adornment</label>
+    <select class="optionsInput" name="tailAdorn" id="tailAdorn" style="width: 100%;">
+      <option value="Inheritance">Inheritence</option>
+      <option value="Association">Association</option>
+      <option value="Aggregation">Aggregation</option>
+      <option value="Composition">Composition</option>
+      <option value="Dependency">Dependency</option>
+    </select>
+  </p>
+  <p>
+    <label>Navigation</label>
+    <select class="optionsInput" name="tailNav" id="tailNav" style="width: 100%;">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="-1">-1</option>
+    </select>
+  </p>
+  <p>
+    <label>Tail</label>
+      <select class="optionsInput" name="tailAsset" id="tailAsset" style="width: 100%;">
+      </select>
+  </p>
+  <p>
+    <button id="cancelButtonAsset">
+      Cancel
+    </button>
+    <button id="updateButtonAsset">
+      Update
+    </button>
+  </p>
 </div>

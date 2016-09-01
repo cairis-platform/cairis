@@ -113,6 +113,7 @@ optionsContent.on('click', ".removeAssetEnvironment", function () {
 optionsContent.on('click', '.assetEnvironmetRow', function(event){
   var assts = JSON.parse($.session.get("AssetProperties"));
   var text = $(this).text();
+  $.session.set("assetEnvironmentName", text);
   var props;
   $.each(assts, function(arrayID,group) {
     if(group.theEnvironmentName == text){
@@ -223,6 +224,22 @@ optionsContent.on("click", "#updateButtonAsset", function(){
     allprops[idx].theProperties.push(props);
     $("#editAssetsOptionsform").show();
     $("#editpropertiesWindow").hide();
+  }
+  else if($("#editAssociationsWindow").hasClass("newAssociation")){
+    var assoc = [];
+    assoc.push( $("#headNav").val());
+    assoc.push( $("#headAdorn").val());
+    assoc.push( $("#headNry").val());
+    assoc.push( $("#headRole").val());
+    assoc.push( $("#tailRole").val());
+    assoc.push( $("#tailNry").val());
+    assoc.push( $("#tailAdorn").val());
+    assoc.push( $("#tailNav").val());
+    assoc.push( $("#tailAsset").val());
+    var idx = $.session.get("Arrayindex") || 0;
+    allprops[idx].theAssociations.push(assoc);
+    $("#editAssetsOptionsform").show();
+    $("#editAssociationsWindow").hide();
   }
   else {
     props = JSON.parse($.session.get("thePropObject"));

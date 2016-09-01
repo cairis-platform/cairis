@@ -1066,7 +1066,7 @@ $(document).on('click', "button.deleteAssetButton",function(){
             name: name
         },
         crossDomain: true,
-        url: serverIP + "/api/assets/name/" + newdata.theName + "/properties",
+        url: serverIP + "/api/assets/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
         success: function (data) {
             $.ajax({
                 type: "GET",
@@ -1103,21 +1103,49 @@ $(document).on('click', "button.deleteAssetButton",function(){
 
 
 optionsContent.on("click", "#addNewProperty", function(){
-    $("#editAssetsOptionsform").hide();
-    $("#editpropertiesWindow").show(function(){
-            $(this).addClass("newProperty");
-    });
-
+  $("#editAssetsOptionsform").hide();
+  $("#editpropertiesWindow").show(function(){
+    $(this).addClass("newProperty");
+  });
 });
 
-optionsContent.on('change', "#theType",function (){
-  // alert($(this).val());
-    //$(this).val("selected", $(this).val());
+optionsContent.on("click", "#addNewAssociation", function(){
+  var envName = $.session.get("assetEnvironmentName");
+  var ursl = serverIP + "/api/assets/environment/" + envName.replace(' ',"%20") + "/names";
+  $("#editAssetsOptionsform").hide();
+  $("#editAssociationsWindow").show(function(){
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: ursl,
+      success: function (data) {
+        var tailAssetBox = $("#tailAsset");
+        tailAssetBox.empty()
+        $.each(data, function(idx,assetName) {
+          tailAssetBox.append("<option value=" + assetName + ">" + assetName + "</option>");
+        });
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+    $(this).addClass("newAssociation");
+  });
 });
 
 optionsContent.on('click', '#cancelButtonAsset', function(){
     $("#editAssetsOptionsform").show();
     $("#editpropertiesWindow").hide();
+    $("#editAssociationsWindow").hide();
 });
 optionsContent.on('click', '#UpdateAssetinGear',function(e){
     e.preventDefault();
