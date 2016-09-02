@@ -70,7 +70,7 @@ function fillEditAssetsEnvironment(){
     var i = 0;
     var textToInsert = [];
     $.each(data, function(arrayindex, value) {
-        textToInsert[i++] = '<tr><td class="removeAssetEnvironment"><i class="fa fa-minus"></i></td><td class="clickable-environments assetEnvironmetRow">';
+        textToInsert[i++] = '<tr><td class="removeAssetEnvironment"><i class="fa fa-minus"></i></td><td class="clickable-environments assetEnvironmentRow">';
         textToInsert[i++] = value.theEnvironmentName;
         textToInsert[i++] = '</td></tr>';
     });

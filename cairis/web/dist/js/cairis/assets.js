@@ -136,7 +136,7 @@ optionsContent.on('click', ".removeAssetEnvironment", function () {
 });
 
 
-optionsContent.on('click', '.assetEnvironmetRow', function(event){
+optionsContent.on('click', '.assetEnvironmentRow', function(event){
   var assts = JSON.parse($.session.get("AssetProperties"));
   var text = $(this).text();
   $.session.set("assetEnvironmentName", text);
@@ -265,16 +265,19 @@ optionsContent.on("click", "#updateButtonAsset", function(){
   var props;
 
   if($("#editpropertiesWindow").hasClass("newProperty")){
+    $("#editpropertiesWindow").removeClass("newProperty");
     props =  jQuery.extend(true, {},AssetEnvironmentPropertyAttribute );
     props.name =   $("#property").find("option:selected").text().trim();
     props.value =  $("#value").find("option:selected").text().trim();
     props.rationale = $("#rationale").val();
     var idx = $.session.get("Arrayindex") || 0;
     allprops[idx].theProperties.push(props);
-    $("#editAssetsOptionsform").show();
-    $("#editpropertiesWindow").hide();
+    $("#theEnvironmentDictionary").find(".assetEnvProperties:first").trigger('click');
+    $("#editAssetsOptionsform").toggle();
+    $("#editpropertiesWindow").toggle();
   }
   else if($("#editAssociationsWindow").hasClass("newAssociation")){
+    $("#editAssociationsWindow").removeClass("newAssociation");
     var assoc = [];
     assoc.push( $("#headNav").val());
     assoc.push( $("#headAdorn").val());
@@ -288,29 +291,32 @@ optionsContent.on("click", "#updateButtonAsset", function(){
     var idx = $.session.get("Arrayindex") || 0;
     allprops[idx].theAssociations.push(assoc);
     appendAssetAssociation(assoc);
-    $("#editAssetsOptionsform").show();
-    $("#editAssociationsWindow").hide();
+    $("#editAssetsOptionsform").toggle();
+    $("#editAssociationsWindow").toggle();
   }
   else {
-    props = JSON.parse($.session.get("thePropObject"));
-    props.name =   $("#property").find("option:selected").text().trim();
-    props.value =  $("#value").find("option:selected").text().trim();
-    props.rationale = $("#rationale").val();
-    var arrIndex = $.session.get("Arrayindex");
-    $.each(allprops[arrIndex].theProperties, function(index, object){
-      if(object.name == props.name){
-        allprops[$.session.get("Arrayindex")].theProperties[index].name = props.name;
-        allprops[$.session.get("Arrayindex")].theProperties[index].value = props.value;
-        allprops[$.session.get("Arrayindex")].theProperties[index].rationale = props.rationale;
-        $.session.set("AssetProperties", JSON.stringify(allprops))
-        $("#editAssetsOptionsform").show();
-        $("#editpropertiesWindow").hide();
-      }
-/*      updateAssetEnvironment(allprops,function(){
-        $("#editAssetsOptionsform").show();
-        $("#editpropertiesWindow").hide();
-      }); */
-    });
+    if($('#editpropertiesWindow').is(':visible')) {
+      props = JSON.parse($.session.get("thePropObject"));
+      props.name =   $("#property").find("option:selected").text().trim();
+      props.value =  $("#value").find("option:selected").text().trim();
+      props.rationale = $("#rationale").val();
+      var arrIndex = $.session.get("Arrayindex");
+      $.each(allprops[arrIndex].theProperties, function(index, object){
+        if(object.name == props.name){
+          allprops[$.session.get("Arrayindex")].theProperties[index].name = props.name;
+          allprops[$.session.get("Arrayindex")].theProperties[index].value = props.value;
+          allprops[$.session.get("Arrayindex")].theProperties[index].rationale = props.rationale;
+          $.session.set("AssetProperties", JSON.stringify(allprops))
+          $("#editAssetsOptionsform").toggle();
+          $("#editpropertiesWindow").toggle();
+          $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:first").trigger('click');
+        }
+      });
+    }
+    else {
+      // get clicked row
+      // update theAssociations env attribute with new association 
+    }
   }
   $.session.set("AssetProperties", JSON.stringify(allprops));
   fillEditAssetsEnvironment();

@@ -1153,7 +1153,7 @@ optionsContent.on('click', '#UpdateAssetinGear',function(e){
         alert("HasClass");
         postAssetForm($("#editAssetsOptionsform"), function(){
             //INHERE
-            newAssetEnvironment($.session.get("AssetProperties"));
+//            newAssetEnvironment($.session.get("AssetProperties"));
         });
 
     }
