@@ -314,6 +314,7 @@ optionsContent.on("click", "#updateButtonAsset", function(){
       });
     }
     else {
+      var assocRow = $(this).closest('tr').find(".clickable-associations");
       // get clicked row
       // update theAssociations env attribute with new association 
     }
