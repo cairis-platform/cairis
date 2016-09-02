@@ -241,8 +241,6 @@ class AssetByNameAPI(Resource):
     )
     # endregion
     def put(self, name):
-        import pytest
-        pytest.set_trace()
         session_id = get_session_id(session, request)
 
         dao = AssetDAO(session_id)

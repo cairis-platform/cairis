@@ -21,6 +21,7 @@
 $("#editProjectsClick").click(function () {
     getProjectSettings(function (data) {
         fillOptionMenu("fastTemplates/editProjectSettings.html", "#optionsContent", null, true, false, function () {
+            autosize($("#projectBackground"));
             forceOpenOptions();
             var image = $("#theImages");
             $('#ProjectsProperties').loadJSON(data, null);
