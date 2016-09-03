@@ -170,42 +170,6 @@ class AssetAPITests(CairisDaemonTestCase):
     asset_prop = asset_props[0]
     self.logger.info('[%s] Asset property: %s\n', method, asset_prop['theEnvironmentName'])
 
-  def test_update_props_name_put(self):
-    method = 'test_update_props_name_put'
-    rv = self.app.post('/api/assets', content_type='application/json', data=jsonpickle.encode(self.new_asset_dict))
-    url = '/api/assets/name/%s' % quote(self.new_asset.theName)
-    upd_asset = self.new_asset
-    upd_asset.theName = 'Test2'
-    upd_asset_dict = self.new_asset_dict
-    upd_asset_dict['object'] = upd_asset
-    upd_asset_body = jsonpickle.encode(upd_asset_dict)
-    rv = self.app.put(url, content_type='application/json', data=upd_asset_body)
-
-
-    url = '/api/assets/name/%s/properties' % quote(self.new_asset.theName)
-    self.logger.info('[%s] Old asset property environment name: %s', method, self.new_asset_props[0].theEnvironmentName)
-
-    upd_asset_props = self.new_asset_props
-    upd_asset_props[0].theEnvironmentName = 'Psychosis'
-    upd_asset_props_dict = {
-      'session_id': 'test',
-      'object': upd_asset_props
-    }
-    upd_asset_props_body = jsonpickle.encode(upd_asset_props_dict)
-    self.logger.info('[%s] JSON data: %s', method, upd_asset_props_body)
-
-    rv = self.app.put(url, content_type='application/json', data=upd_asset_props_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
-    self.assertIsNotNone(json_resp, 'No results after deserialization')
-    message = json_resp.get('message', None)
-    self.assertIsNotNone(message, 'No message returned')
-
-    rv = self.app.get('/api/assets/name/Test2/properties?session_id=test')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    asset_props = jsonpickle.decode(rv.data)
-    self.logger.info('[%s] Asset property environment: %s\n', method, asset_props[0]['theEnvironmentName'])
-
   def test_types_get(self):
     method = 'test_types_get'
     rv = self.app.get('/api/assets/types?session_id=test')
