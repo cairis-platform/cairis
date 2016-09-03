@@ -67,6 +67,9 @@ $(document).on('click', "button.editAssetsButton",function(){
                     .attr("value",type.theName)
                     .text(type.theName));
                 });
+                $("#theEnvironmentDictionary").find("tbody").find(".assetEnvProperties:first").trigger('click');
+                $("#assetstabsID").show("fast");
+
               },
               error: function (xhr, textStatus, errorThrown) {
                 debugLogger(String(this.url));
