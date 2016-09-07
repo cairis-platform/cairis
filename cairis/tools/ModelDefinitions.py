@@ -224,6 +224,52 @@ class DependencyModel(object):
     }
 
 @swagger.model
+class ClassAssociationModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        'theEnvironmentName': fields.String,
+        'theHeadAsset': fields.String,
+        'theHeadDim': fields.String,
+        'theHeadNav': fields.String,
+        'theHeadType': fields.String,
+        'theHeadMultiplicity': fields.String,
+        'theHeadRole': fields.String,
+        'theTailRole': fields.String,
+        'theTailMultiplicity': fields.String,
+        'theTailType': fields.String,
+        'theTailNav': fields.String,
+        'theTailDim': fields.String,
+        'theTailAsset': fields.String,
+        'theRationale': fields.String,
+        'theId': fields.Integer,
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metamodel = {
+        obj_id_field : gen_class_metadata(ClassAssociation)
+    }
+
+@swagger.model
+class GoalAssociationModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        'theEnvironmentName': fields.String,
+        'theGoal': fields.String,
+        'theGoalDimension': fields.String,
+        'theAssociation': fields.String,
+        'theSubGoal': fields.String,
+        'theSubGoalDimension': fields.String,
+        'theAlternativeId': fields.String,
+        'theRationale': fields.String,
+        'theId': fields.Integer,
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metamodel = {
+        obj_id_field : gen_class_metadata(GoalAssociation)
+    }
+
+@swagger.model
 @swagger.nested(
     theTensions=EnvironmentTensionModel.__name__,
 )
