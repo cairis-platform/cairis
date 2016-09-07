@@ -49,6 +49,8 @@ from cairis.core.Vulnerability import Vulnerability
 from cairis.core.VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
 from cairis.core.Countermeasure import Countermeasure
 from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
+from cairis.core.ClassAssociation import ClassAssociation
+from cairis.core.GoalAssociation import GoalAssociation
 from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes
 
 __author__ = 'Robin Quetin, Shamal Faily'
