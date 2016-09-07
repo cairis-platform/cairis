@@ -221,6 +221,58 @@ class DependencyByNameAPI(Resource):
         resp.headers['Content-type'] = 'application/json'
         return resp
 
+
+    #region Swagger Docs
+    @swagger.operation(
+        notes='Add a new dependency',
+        nickname='dependencies-post',
+        parameters=[
+            {
+                "name": "body",
+                "description": "The session ID and the serialized version of the asset to be updated",
+                "required": True,
+                "allowMultiple": False,
+                "type": DependencyMessage.__name__,
+                "paramType": "body"
+            },
+            {
+                "name": "session_id",
+                "description": "The ID of the user's session",
+                "required": False,
+                "allowMultiple": False,
+                "dataType": str.__name__,
+                "paramType": "query"
+            }
+        ],
+        responseMessages=[
+            {
+                "code": httplib.BAD_REQUEST,
+                "message": "The database connection was not properly set up"
+            },
+            {
+                "code": MalformedJSONHTTPError.status_code,
+                "message": MalformedJSONHTTPError.status
+            },
+            {
+                "code": ARMHTTPError.status_code,
+                "message": ARMHTTPError.status
+            }
+        ]
+    )
+    #endregion
+    def post(self, environment, depender, dependee, dependency):
+        session_id = get_session_id(session, request)
+
+        dao = DependencyDAO(session_id)
+        new_dependency = dao.from_json(request)
+        new_dependency_id = dao.add_dependency(new_dependency)
+        dao.close()
+
+        resp_dict = {'message': 'Dependency successfully added', 'dependency_id': new_dependency_id}
+        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp.headers['Content-type'] = 'application/json'
+        return resp
+
     # region Swagger Doc
     @swagger.operation(
         notes='Updates an existing dependency',

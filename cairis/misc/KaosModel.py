@@ -57,7 +57,6 @@ class KaosModel:
     b = Borg()
     if (dimName == 'goal'):
       self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
-# soft-goal attributes      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',style='rounded',sides='6',distortion='-0.537997',orientation='52',skew='-0.960726',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'obstacle'):
       obsId = self.dbProxy.getDimensionId(objtName,'obstacle')
       envId = self.dbProxy.getDimensionId(self.theEnvironmentName,'environment')
@@ -156,7 +155,7 @@ class KaosModel:
       elif (associationType == 'depend'):
         if ((subGoalName,goalName) not in edgeSet):
           objtUrl = 'depend#' + goalEnv + '/' + goalName + '/' + subGoalName
-          self.theGraph.add_node(pydot.Node(objtUrl,shape='circle',label=' ',height='.2',width='.2',URL=objtUrl))
+          self.theGraph.add_node(pydot.Node(objtUrl,shape='trapezium',style='rounded',orientation='270',label=' ',height='.2',width='.2',URL=objtUrl))
           edge1 = pydot.Edge(goalName,objtUrl,dir='forward',arrowhead='vee',weight='1')
           self.theGraph.add_edge(edge1)
           edge2 = pydot.Edge(objtUrl,subGoalName,dir='forward',arrowhead='vee',weight='1')
@@ -183,7 +182,8 @@ class KaosModel:
               self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',style='filled',color='red',label=' ',height='.2',width='.2',URL=objtUrl))
             elif (associationType == 'conflict'):
               objtUrl = 'linkconflict#' + goalEnv + '/' + goalName + '/' + subGoalName + '/' + goalDimName + '/' + subGoalDimName
-              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',color='red',label=' ',height='.2',width='.2',URL=objtUrl))
+              b = Borg()
+              self.theGraph.add_node(pydot.Node(refNodeName,shapefile=b.staticDir + '/images/modelConflict.png',label='',height='.2',width='.2',URL=objtUrl,peripheries='0'))
               assocDirection = 'none'
               arrowHead = 'none'
             goalEdge = pydot.Edge(refNodeName,goalName,dir=assocDirection,arrowhead=arrowHead,weight='1')
@@ -197,10 +197,6 @@ class KaosModel:
             edgeSet.add((subGoalName,refNodeName))
         else:
           pass
-          # Mark the node with a ? so we know the association properties might vary by environment
-#          modifiedRefNodeName = '\"' + refNodeName + '\"'
-#          refNode = self.theGraph.get_node(modifiedRefNodeName)
-#          refNode.set('label','?')
      
         
 

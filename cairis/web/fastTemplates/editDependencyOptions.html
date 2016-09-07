@@ -1,0 +1,42 @@
+<form id="editDependencyOptionsForm" xmlns="http://www.w3.org/1999/html" >
+  <div class="tabs" style="width: 100%;">
+    <ul>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#rationale">Rationale</a></li>
+    </ul>
+    <div id="summary">
+      <p>
+        <label>Environment</label>
+        <select name="theEnvironmentName optionsInput" id="theEnvironmentName">
+        </select>
+      </p>
+      <p>
+        <label>Depender</label>
+        <select name="theDependerName" id="theDependerName">
+        </select>
+      </p>
+      <p>
+        <label>Dependee</label>
+        <select name="theDependeeName" id="theDependeeName">
+        </select>
+      </p>
+      <p>
+        <label>Type</label>
+        <select name="theDependencyType" id="theDependencyType">
+          <option selected>goal</option>
+          <option>task</option>
+          <option>asset</option>
+        </select>
+      </p>
+      <p>
+        <label>Dependency</label>
+        <select name="theDependencyName" id="theDependencyName">
+        </select>
+      </p>
+    </div>
+    <div id="rationale">
+      <textarea class="dependencyUpdate optionsInput" name="theRationale" id="theRationale"></textarea>
+    </div>
+  </div>
+  <button id="UpdateDependency">Update</button>
+</form>

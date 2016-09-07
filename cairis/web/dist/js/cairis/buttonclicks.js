@@ -403,7 +403,6 @@ $("#vulnerabilitiesClick").click(function(){
    createVulnerabilityTable()
 });
 
-
 $(document).on('click', "button.editRoleButton",function() {
    var name = $(this).val();
     if(name == undefined || name == "") {

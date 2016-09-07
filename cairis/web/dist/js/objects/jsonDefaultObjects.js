@@ -289,3 +289,13 @@ var domainPropertyDefault = {
   "theType": "",
   "theOriginator": ""
 };
+var dependencyDefault = {
+  "__python_obj__": "Dependency.Dependency",
+  "theId": -1,
+  "theDependencyType": "goal",
+  "theRationale": "",
+  "theEnvironmentName": "",
+  "theDepender": "",
+  "theDependee": "",
+  "theDependency": ""
+};

@@ -1064,9 +1064,8 @@ function createVulnerabilityTable(){
             debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
     })
-
-
 }
+
 function getRisks(callback){
     $.ajax({
         type: "GET",
@@ -1089,28 +1088,71 @@ function getRisks(callback){
         }
     });
 }
-function getRoles(callback){
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/roles",
-        success: function (data) {
-            if(jQuery.isFunction(callback)){
-                callback(data);
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-            return null;
-        }
-    });
+
+function getRoles(callback) {
+  getDimensions('role',callback);
 }
+
+function getRolesInEnvironment(envName,callback) {
+  getDimensionsInEnvironment('role',envName,callback);
+}
+
+function getAssetsInEnvironment(envName,callback) {
+  getDimensionsInEnvironment('asset',envName,callback);
+}
+
+
+function getEnvironments(callback) {
+  getDimensions('environment',callback);
+}
+
+function getDimensions(dimName,callback) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/" + dimName,
+    success: function (data) {
+      if(jQuery.isFunction(callback)){
+        callback(data);
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      return null;
+    }
+  });
+}
+
+function getDimensionsInEnvironment(dimName,envName,callback) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/" + dimName + "/environment/" + envName,
+    success: function (data) {
+      if(jQuery.isFunction(callback)){
+        callback(data);
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      return null;
+    }
+  });
+}
+
+
 /*
 Dialog for choosing an asset
  */
@@ -1917,6 +1959,10 @@ function setTableHeader(){
         case "DomainProperties":
             debugLogger("Is Domain Property");
             thead = "<th width='120px' id='addNewDomainProperty'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
+            break;
+        case "Dependency":
+            debugLogger("Is Dependency");
+            thead = "<th width='120px' id='addNewDependency'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Depender</th><th>Dependee</th><th>Noun</th><th>Dependency</th>";
             break;
     }
     $("#reqTable").find("thead").empty();
