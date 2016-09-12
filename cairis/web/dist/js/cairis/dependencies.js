@@ -126,7 +126,9 @@ $(document).on('click', ".editDependencyButton", function (e) {
 });
 
 optionsContent.on('click', '#UpdateDependency', function (e) {
-  e.preventDefault();
+
+  $("#editDependencyOptionsForm").validator();
+
   var dependency = JSON.parse($.session.get("Dependency"));
   var oldEnvName = dependency.theEnvironmentName;
   var oldDepender = dependency.theDepender;
@@ -150,6 +152,7 @@ optionsContent.on('click', '#UpdateDependency', function (e) {
       createDependenciesTable();
     });
   }
+  e.preventDefault();
 });
 
 optionsContent.on('change',"#theEnvironmentName", function() {
@@ -226,3 +229,4 @@ $(document).on('click', '.deleteDependencyButton', function (e) {
     createDependenciesTable();
   });
 });
+

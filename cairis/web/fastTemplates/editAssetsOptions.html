@@ -1,4 +1,4 @@
-<form id="editAssetsOptionsform" xmlns="http://www.w3.org/1999/html" >
+<form data-toggle="validator" role="form" id="editAssetsOptionsform" xmlns="http://www.w3.org/1999/html">
 
   <div class="tabs">
     <ul>
@@ -9,28 +9,32 @@
       <li><a href="#Interfaces">Interfaces</a></li>
     </ul>
     <div id="Summary">
-      <p>
-        <label>Name</label>
-        <input class="optionsInput assetUpdate" type="text" name="theName" id="theName" style="width: 75%;">
-      </p>
+      <div class="form-group">
+        <label for="theName" class-"control-label">Name</label>
+        <input type="text" class="optionsInput assetUpdate form-control" id="theName" name="theName" style="width: 75%;" data-error="Asset name is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
       <p>
         <label>Tags</label>
         <input class="optionsInput assetUpdate" type="text" value="" id="theTags" name="theTags" style="width: 75%;">
       </p>
-      <p>
+      <div class="form-group">
         <label>Shortcode</label>
-        <input class="optionsInput assetUpdate" type="text" value="" id="theShortCode" name="theShortCode" style="width: 75%;">
-      </p>
+        <input class="optionsInput assetUpdate form-control" type="text" id="theShortCode" name="theShortCode" style="width: 75%;" data-error="Short code is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
       <p>
         <label for="theType">Type</label>
         <select name="TheType" class="assetUpdate" id="theType" style="width: 75%;"></select>
       </p>
     </div>
-    <div id="Description">
-      <textarea class="assetUpdate" name="theDescription" id="theDescription"></textarea>
+    <div class="form-group" id="Description">
+      <textarea class="assetUpdate form-control" name="theDescription" id="theDescription" data-error="Description is required" required></textarea>
+      <div class="help-block with-errors"></div>
     </div>
-    <div id="Significance">
-      <textarea class="assetUpdate" name="theSignificance" id="theSignificance"> </textarea>
+    <div class="form-group" id="Significance">
+      <textarea class="assetUpdate form-control" name="theSignificance" id="theSignificance" data-error="Significance is required" required></textarea>
+      <div class="help-block with-errors"></div>
     </div>
     <div id="Criticality">
       <input  class="assetUpdate" type="checkbox" id="isCritical">Critical Asset <br>
@@ -52,9 +56,9 @@
           <tr><th> <i class="fa fa-plus addEnvironmentPlus"></i></th><th>Environment</th></tr>
         </thead>
         <tbody>
-
         </tbody>
       </table>
+
       <div class="tabs right" id="assetstabsID">
         <ul>
           <li><a href="#Properties">Definition</a></li>
@@ -83,7 +87,7 @@
         </div>
       </div>
     </div>
-    <button id="UpdateAssetinGear">Update</button>
+    <button type="submit" class="btn btn-primary" id="UpdateAssetinGear">Update</button>
 </form>
 
 <div id="editpropertiesWindow" style="display: none;">

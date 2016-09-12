@@ -1142,26 +1142,30 @@ optionsContent.on("click", "#addNewAssociation", function(){
 });
 
 optionsContent.on('click', '#cancelButtonAsset', function(){
-    $("#editAssetsOptionsform").show();
-    $("#editpropertiesWindow").hide();
-    $("#editAssociationsWindow").hide();
+  $("#editAssetsOptionsform").show();
+  $("#editpropertiesWindow").hide();
+  $("#editAssociationsWindow").hide();
 });
-optionsContent.on('click', '#UpdateAssetinGear',function(e){
-    e.preventDefault();
-    if($("#editAssetsOptionsform").hasClass("new")){
-        alert("HasClass");
-        postAssetForm($("#editAssetsOptionsform"), function(){
-            //INHERE
-//            newAssetEnvironment($.session.get("AssetProperties"));
-        });
 
+optionsContent.on('click', '#UpdateAssetinGear',function(e){
+
+  $("#editAssetsOptionsform").validator();
+
+  // check environments have been defined
+  var envProps = $.session.get("AssetProperties");
+  if (envProps == undefined || envProps.length == 0) {
+    alert("Environments not defined");
+  }
+  else {
+    if($("#editAssetsOptionsform").hasClass("new")){
+      postAssetForm($("#editAssetsOptionsform"), function(){});
     }
     else{
-        putAssetForm($("#editAssetsOptionsform"));
-//        updateAssetEnvironment($.session.get("AssetProperties"));
+      putAssetForm($("#editAssetsOptionsform"));
     }
-
     fillAssetTable();
+  }
+  e.preventDefault();
 
 });
 

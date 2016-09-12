@@ -1,42 +1,45 @@
-<form id="editDependencyOptionsForm" xmlns="http://www.w3.org/1999/html" >
+<form data-toggle="validator" role="form" id="editDependencyOptionsForm" xmlns="http://www.w3.org/1999/html" >
   <div class="tabs" style="width: 100%;">
     <ul>
       <li><a href="#summary">Summary</a></li>
       <li><a href="#rationale">Rationale</a></li>
     </ul>
     <div id="summary">
-      <p>
-        <label>Environment</label>
-        <select name="theEnvironmentName optionsInput" id="theEnvironmentName">
+      <div class="form-group">
+        <label for="theEnvironmentName" class="control-label">Environment</label>
+        <select name="theEnvironmentName" class="optionsInput form-control" id="theEnvironmentName" name="theEnvironmentName" data-error="Environment name is required" required>
         </select>
-      </p>
-      <p>
+        <div class="help-block with-errors"></div>
+      </div>
+      <div class="form-group">
         <label>Depender</label>
-        <select name="theDependerName" id="theDependerName">
+        <select class="form-control" name="theDependerName" id="theDependerName">
         </select>
-      </p>
-      <p>
+      </div>
+      <div class="form-group">
         <label>Dependee</label>
-        <select name="theDependeeName" id="theDependeeName">
+        <select class="form-control" name="theDependeeName" id="theDependeeName">
         </select>
-      </p>
-      <p>
+      </div>
+      <div class="form-group">
         <label>Type</label>
-        <select name="theDependencyType" id="theDependencyType">
+        <select class="form-control" name="theDependencyType" id="theDependencyType">
           <option selected>goal</option>
           <option>task</option>
           <option>asset</option>
         </select>
-      </p>
-      <p>
-        <label>Dependency</label>
-        <select name="theDependencyName" id="theDependencyName">
+      </div>
+      <div class="form-group">
+        <label for="theDependencyName" class="control-label">Dependency</label>
+        <select class="form-control" name="theDependencyName" id="theDependencyName" name="theDependencyName" data-error="Dependency name is required" required>
         </select>
-      </p>
+        <div class="help-block with-errors"></div>
+      </div>
     </div>
-    <div id="rationale">
-      <textarea class="dependencyUpdate optionsInput" name="theRationale" id="theRationale"></textarea>
+    <div class="form-group" id="rationale">
+      <textarea class="dependencyUpdate optionsInput form-control" name="theRationale" id="theRationale" data-error="Rationale is required" required></textarea>
+      <div class="help-block with-errors"></div>
     </div>
   </div>
-  <button id="UpdateDependency">Update</button>
+  <button type="submit" class="btn btn-primary" id="UpdateDependency">Update</button>
 </form>

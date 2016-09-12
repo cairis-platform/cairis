@@ -2331,6 +2331,7 @@ function assetFormToJSON(data, newAsset){
     json.theName = $(data).find('#theName').val();
 
     //var data = $("#editAssetsOptionsform");
+    json["theShortCode"] = $(data).find('#theShortCode').val();
     json["theDescription"] = $(data).find('#theDescription').val();
     json["theSignificance"] = $(data).find('#theSignificance').val();
     json["theCriticalRationale"] = $(data).find('#theCriticalRationale').val();
@@ -2364,7 +2365,7 @@ function assetFormToJSON(data, newAsset){
             });
         }
     });
-    json['theEnvironmentProperties'] = JSON.parse($.session.get("AssetProperties"))
+    json['theEnvironmentProperties'] = JSON.parse($.session.get("AssetProperties"));
     return json
 }
 
