@@ -326,12 +326,6 @@
                             <span>File</span><i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="#">File
-                            </a></li>
-                            <li><a href="#">Open
-                            </a></li>
-                            <li><a href="#">Save
-                            </a></li>
                             <li><a id="importClick" href="#">Import
                             </a></li>
                             <input type="file" id="importFile" style="display:none;"/>
@@ -340,7 +334,9 @@
                             </a></li>
                             <input type="file" id="exportFile" style="display:none;"/>
                             </a></li>
-                            <li><a href="#">Documentation
+                            <li><a id="genDocClick" href="#">Documentation
+                            </a></li>
+                            <input type="file" id="genDoc" style="display:none;"/>
                             </a></li>
                         </ul>
                     </li>
@@ -776,7 +772,7 @@
 <script>
     LazyLoad.js(["dist/js/cairis/Cairis-UI.js","dist/js/cairis/buttonclicks.js", "dist/js/cairis/Cairis.js", "dist/js/cairis/readFile.js",
         "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/personas.js", "dist/js/cairis/assets.js", "dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js", "dist/js/cairis/tasks.js", "dist/js/cairis/domainproperties.js", "dist/js/cairis/obstacles.js", "dist/js/cairis/countermeasures.js", "dist/js/cairis/usecases.js",
-        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js",
+        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js",
         "dist/js/cairis/SVGhandler.js","dist/js/cairis/PutAndPost.js", "plugins/contextMenu/contextMenu.js", "dist/js/objects/jsonDefaultObjects.js"], function () {
 
        console.log("All Cairis JS loaded");
