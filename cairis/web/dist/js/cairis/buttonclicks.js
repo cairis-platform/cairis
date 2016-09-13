@@ -489,6 +489,7 @@ $(document).on('click', "button.editVulnerabilityButton",function(){
             url: serverIP + "/api/vulnerabilities/name/" + name.replace(" ", "%20"),
             success: function (newdata) {
                 fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#optionsContent", null, true, true, function () {
+                        $("#optionsHeaderGear").text("Vulnerability properties");
                         $.session.set("Vulnerability", JSON.stringify(newdata));
                         //removing theTags, because LOADJSON does some strange things with them.
                         var jsondata = $.extend(true, {}, newdata);
@@ -736,33 +737,39 @@ optionsContent.on("click", ".removeVulnEnvAsset", function () {
 });
 
 optionsContent.on('click', '#UpdateVulnerability', function (e) {
-    e.preventDefault();
+
+    $("#editVulnerabilityOptionsform").validator();
 
     var theVul = JSON.parse($.session.get("Vulnerability"));
-    theVul.theVulnerabilityName = $("#theVulnerabilityName").val();
-   var arr = $("#theTags").val().split(", ")
-    arr = $.grep(arr,function(n){ return(n) });
-    theVul.TheType = arr;
-    theVul.theVulnerabilityDescription = $("#theVulnerabilityDescription").val();
-   // var test = $("#theVulnerabilityType");
-    theVul.theVulnerabilityType = $("#theVulnerabilityType").val();
-
-    var name = $.session.get("VulnEnvironmentName");
-    $.each(theVul.theEnvironmentProperties, function (index, key) {
-        if(key.theEnvironmentName == name){
-            theVul.theEnvironmentProperties[index].theSeverity= $("#theSeverity").val();
-        }
-    });
-    if($(this).hasClass("newVulnerability")){
-        postVulnerability(theVul, function () {
-            createVulnerabilityTable();
-        });
+    if (theVul.theEnvironmentProperties.length == 0) {
+      alert("Environments not defined");
     }
     else {
-        putVulnerability(theVul, $.session.get("VulnerabilityName"), function () {
-            createVulnerabilityTable();
+      theVul.theVulnerabilityName = $("#theVulnerabilityName").val();
+      var arr = $("#theTags").val().split(", ")
+      arr = $.grep(arr,function(n){ return(n) });
+      theVul.TheType = arr;
+      theVul.theVulnerabilityDescription = $("#theVulnerabilityDescription").val();
+      theVul.theVulnerabilityType = $("#theVulnerabilityType").val();
+
+      var name = $.session.get("VulnEnvironmentName");
+      $.each(theVul.theEnvironmentProperties, function (index, key) {
+        if(key.theEnvironmentName == name){
+          theVul.theEnvironmentProperties[index].theSeverity= $("#theSeverity").val();
+        }
+      });
+      if($(this).hasClass("newVulnerability")){
+        postVulnerability(theVul, function () {
+          createVulnerabilityTable();
         });
+      }
+      else {
+        putVulnerability(theVul, $.session.get("VulnerabilityName"), function () {
+          createVulnerabilityTable();
+        });
+      }
     }
+    e.preventDefault();
 });
 
 /* For the rationale in the environments edit*/
@@ -1019,6 +1026,7 @@ Add an asset
  */
 $(document).on('click', "#addNewAsset",function(){
     fillOptionMenu("fastTemplates/editAssetsOptions.html","#optionsContent",null,true,true,function(){
+    $("#optionsHeadGear").text("Asset properties");
     forceOpenOptions();
         $.ajax({
             type: "GET",

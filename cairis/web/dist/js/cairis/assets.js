@@ -34,9 +34,9 @@ $(document).on('click', "button.editAssetsButton",function(){
     success: function (newdata) {
       // console.log(JSON.stringify(rawData));
       fillOptionMenu("fastTemplates/editAssetsOptions.html","#optionsContent",null,true,true, function(){
+        $("#optionsHeaderGear").text("Asset properties");
         $.session.set("Asset", JSON.stringify(newdata));
         $('#editAssetsOptionsform').loadJSON(newdata,null);
-        $("#optionsHeaderGear").text("Asset properties");
         forceOpenOptions();
         $.ajax({
           type: "GET",
