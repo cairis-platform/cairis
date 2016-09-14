@@ -92,6 +92,7 @@ def initialise():
 
 def dInitialise():
   cfgDict = parseConfigFile()
+  setupDocBookConfig()
   initialiseCairisDbSettings(cfgDict)
 
   b = Borg()
@@ -107,6 +108,7 @@ def dInitialise():
   b.auth_dbUser = cfgDict['auth_dbuser']
   b.auth_dbPasswd = cfgDict['auth_dbpasswd']
   b.auth_dbName = cfgDict['auth_dbname']
+
 
   try:
     b.webPort = int(cfgDict['web_port'])
@@ -190,3 +192,6 @@ def dInitialise():
 
   b.settings['test']['dbProxy'] = db_proxy
   b.dbProxy = db_proxy
+  b.fontSize = '13'
+  b.apFontSize = '7.5'
+  b.fontName = 'Times New Roman'

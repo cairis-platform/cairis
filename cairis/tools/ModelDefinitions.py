@@ -206,6 +206,15 @@ class CExportParams(object):
     }
     required = resource_fields.keys()
 
+@swagger.model
+class DocumentationParams(object):
+    resource_fields = {
+      'theDocumentType': fields.String,
+      'theTypeFlags': fields.List(fields.Integer),
+      'theSectionFlags': fields.List(fields.Integer)
+    }
+    required = resource_fields.keys()
+
 
 @swagger.model
 class DependencyModel(object):

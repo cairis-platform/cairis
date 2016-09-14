@@ -24,7 +24,6 @@ from cairis.core.Borg import Borg
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
-
 class SVGGenerator(object):
     def __init__(self):
         self.extension = 'svg'
@@ -42,11 +41,10 @@ class SVGGenerator(object):
         output = self.process_output(str(output), model_type)
         return output
 
-    def generate_file(self, dot_code, output_file, model_type):
-        output = self.generate(dot_code, model_type)
-
+    def generate_file(self, dot_code, output_file, model_type, renderer):
+        output = self.generate(dot_code, model_type, renderer)
+        fs_output = open(output_file, 'wb')
         try:
-            fs_output = open(output_file, 'rb')
             fs_output.write(output)
             fs_output.close()
         except Exception, ex:

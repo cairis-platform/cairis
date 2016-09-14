@@ -26,6 +26,7 @@ import pangocairo
 from cairis.core.armid import *
 from EnvironmentModel import EnvironmentModel
 from RequirementShape import RequirementShape
+import sys
 
 __author__ = 'Shamal Faily'
 

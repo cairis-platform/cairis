@@ -25,6 +25,7 @@ import cairo
 import pangocairo
 from cairis.core.armid import *
 from AssumptionPersonaModel import AssumptionPersonaModel
+import sys
 
 __author__ = 'Shamal Faily'
 

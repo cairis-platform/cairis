@@ -37,7 +37,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
-    DependencyController
+    DependencyController, DocumentationController
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -262,6 +262,9 @@ def start():
   api.add_resource(DimensionController.DimensionsAPI, '/api/dimensions/table/<string:table>')
   api.add_resource(DimensionController.DimensionNamesAPI, '/api/dimensions/table/<string:table>/environment/<string:environment>')
 
+  # Documentation route
+  api.add_resource(DocumentationController.DocumentationAPI, '/api/documentation')
+
   # Domain Property routes
   api.add_resource(DomainPropertyController.DomainPropertiesAPI, '/api/domainproperties')
   api.add_resource(DomainPropertyController.DomainPropertiesByNameAPI, '/api/domainproperties/name/<string:name>')
@@ -288,7 +291,7 @@ def start():
   api.add_resource(GoalController.GoalModelAPI, '/api/goals/model/environment/<string:environment>/goal/<string:goal>/usecase/<string:usecase>')
   api.add_resource(GoalController.ResponsibilityModelAPI, '/api/responsibility/model/environment/<string:environment>/role/<string:role>')
 
-  # Export routes
+  # Export route
   api.add_resource(CExportController.CExportFileAPI, '/api/export/file')
 
   # Import routes
