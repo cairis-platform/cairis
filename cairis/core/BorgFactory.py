@@ -92,7 +92,6 @@ def initialise():
 
 def dInitialise():
   cfgDict = parseConfigFile()
-  setupDocBookConfig()
   initialiseCairisDbSettings(cfgDict)
 
   b = Borg()
@@ -195,3 +194,5 @@ def dInitialise():
   b.fontSize = '13'
   b.apFontSize = '7.5'
   b.fontName = 'Times New Roman'
+
+  setupDocBookConfig()
