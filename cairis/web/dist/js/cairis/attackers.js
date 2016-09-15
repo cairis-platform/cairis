@@ -314,26 +314,32 @@ optionsContent.on('click', '#addRoletoAttacker', function () {
     });
 });
 optionsContent.on('click', '#UpdateAttacker', function (e) {
-    e.preventDefault();
-    var attacker = JSON.parse($.session.get("Attacker"));
+  e.preventDefault();
+  $("#editAttackerOptionsForm").validator('validate');
+  var attacker = JSON.parse($.session.get("Attacker"));
+  if (attacker.theEnvironmentProperties.length == 0) {
+    alert("Environments not defined");
+  }
+  else {
     var oldName = attacker.theName;
     attacker.theName = $("#theName").val();
     attacker.theDescription = $("#theDescription").val();
     var tags = $("#theTags").text().split(", ");
     if(tags[0] != ""){
-        attacker.theTags = tags;
+      attacker.theTags = tags;
     }
-    //IF NEW Attacker
     if($("#editAttackerOptionsForm").hasClass("new")){
-        postAttacker(attacker, function () {
-            createAttackersTable();
-            $("#editAttackerOptionsForm").removeClass("new")
-        });
-    } else {
-        putAttacker(attacker, oldName, function () {
-            createAttackersTable();
-        });
+      postAttacker(attacker, function () {
+        createAttackersTable();
+        $("#editAttackerOptionsForm").removeClass("new")
+      });
+    } 
+    else {
+      putAttacker(attacker, oldName, function () {
+        createAttackersTable();
+      });
     }
+  }
 });
 $(document).on("click", "#addNewAttacker", function () {
     fillOptionMenu("fastTemplates/editAttackerOptions.html", "#optionsContent", null, true, true, function () {

@@ -377,8 +377,10 @@ $('#personaView').click(function(){
         url: serverIP + "/api/personas/all/names",
         success: function (data) {
             $("#comboboxDialogSelect").empty();
+            $("#appersonasbox").empty();
             $.each(data, function(i, item) {
                 $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+                $("#appersonasbox").append("<option value=" + item + ">"  + item + "</option>")
             });
             $( "#comboboxDialog" ).dialog({
                 modal: true,
@@ -386,7 +388,7 @@ $('#personaView').click(function(){
                     Ok: function() {
                         $( this ).dialog( "close" );
                         //Created a function, for readability
-                        getPersonaview($( "#comboboxDialogSelect").find("option:selected" ).text());
+                        getPersonaview($( "#comboboxDialogSelect").find("option:selected" ).text(),'All','All');
                     }
                 }
             });

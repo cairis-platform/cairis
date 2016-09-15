@@ -49,6 +49,14 @@ function createRisksTable(){
                 textToInsert[i++] = key;
                 textToInsert[i++] = '</td>';
 
+                textToInsert[i++] = '<td name="theVulnerability">';
+                textToInsert[i++] = item.theVulnerabilityName;
+                textToInsert[i++] = '</td>';
+
+                textToInsert[i++] = '<td name="theThreat">';
+                textToInsert[i++] = item.theThreatName;
+                textToInsert[i++] = '</td>';
+
                 textToInsert[i++] = '</tr>';
             });
 

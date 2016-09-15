@@ -172,6 +172,22 @@ $('#omobstaclebox').change(function() {
   getObstacleview($('#omenvironmentsbox').val(),selection);
 });
 
+$('#appersonasbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  getPersonasiew(selection,'All','All');
+});
+
+$('#apbtbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  getPersonaview($('#appersonasbox').val(),selection,'All');
+});
+
+$('#apcharacteristicbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  getPersonaview($('#appersonasbox').val(),$('#apbtbox').val(),selection);
+});
+
+
 
 $('#environmentsbox').change(function() {
   var selection = $(this).find('option:selected').text();
@@ -700,7 +716,7 @@ function getTaskview(environment,task,misusecase){
     });
 }
 
-function getPersonaview(pName){
+function getPersonaview(pName,bvName,pcName){
     window.personaName = pName;
     $.ajax({
         type:"GET",
@@ -709,7 +725,7 @@ function getPersonaview(pName){
             session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + "/api/personas/model/name/" + personaName.replace(" ","%20"),
+        url: serverIP + "/api/personas/model/name/" + personaName.replace(" ","%20") + "/variable/" + bvName.replace(" ","%20") + "/characteristic/" + pcName.replace(" ","%20"),
         success: function(data){
           // console.log("in getPersonaView " + data.innerHTML);
            // console.log(this.url);
@@ -1839,6 +1855,7 @@ function activeElement(elementid){
         $("#filterriskmodelcontent").hide();
         $("#filterresponsibilitymodelcontent").hide();
         $("#filtergoalmodelcontent").hide();
+        $("#filterapmodelcontent").hide();
         $("#filtertaskmodelcontent").hide();
         $("#filterobstaclemodelcontent").hide();
 
@@ -1857,10 +1874,12 @@ function activeElement(elementid){
         else if (window.theVisualModel == 'responsibility') {
           $("#filterresponsibilitymodelcontent").show();
         }
-
         else if (window.theVisualModel == 'asset') {
           $("#filtercontent").show();
           $("#filterconcerns").show();
+        }
+        else if (window.theVisualModel == 'persona') {
+          $("#filterapmodelcontent").show();
         }
     }
     if(elementid != "svgViewer"){
@@ -1868,6 +1887,7 @@ function activeElement(elementid){
         $("#filterriskmodelcontent").hide();
         $("#filtergoalmodelcontent").hide();
         $("#filtertaskmodelcontent").hide();
+        $("#filterapmodelcontent").hide();
         $("#filterresponsibilitymodelcontent").hide();
         $("#filterobstaclemodelcontent").hide();
     }
@@ -1890,75 +1910,75 @@ function setTableHeader(){
     switch (window.activeTable) {
         case "Requirements":
             debugLogger("Is Requirement");
-            thead = "<th width='50px'></th><th>Name</th><th>Description</th><th>Priority</th><th>Rationale</th><th>Fit Citerion</th><th>Originator</th><th>Type</th>";
+            thead = "<th width='50px'></th><th>Requirement</th><th>Description</th><th>Priority</th><th>Rationale</th><th>Fit Citerion</th><th>Originator</th><th>Type</th>";
             break;
         case "Goals":
            debugLogger("Is Goal");
-            thead = "<th width='50px'></th><th>Name</th><th>Definition</th><th>Category</th><th>Priority</th><th>Fit Citerion</th><th>Issue</th><th>Originator</th>";
+            thead = "<th width='50px'></th><th>Goal</th><th>Definition</th><th>Category</th><th>Priority</th><th>Fit Citerion</th><th>Issue</th><th>Originator</th>";
             break;
         case "Obstacles":
             debugLogger("Is Obstacle");
-            thead = "<th width='50px'></th><th>Name</th><th>Definition</th><th>Category</th><th>Originator</th>";
+            thead = "<th width='50px'></th><th>Obstacle</th><th>Definition</th><th>Category</th><th>Originator</th>";
             break;
         case "EditGoals":
             debugLogger("Is EditGoals");
-            thead = "<th width='120px' id='addNewGoal'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Originator</th><th>Status</th>";
+            thead = "<th width='120px' id='addNewGoal'><i class='fa fa-plus floatCenter'></i></th><th>Goal</th><th>Originator</th><th>Status</th>";
             break;
         case "EditObstacles":
             debugLogger("Is EditObstacles");
-            thead = "<th width='120px' id='addNewObstacle'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Originator</th><th>Status</th>";
+            thead = "<th width='120px' id='addNewObstacle'><i class='fa fa-plus floatCenter'></i></th><th>Obstacle</th><th>Originator</th><th>Status</th>";
             break;
         case "Assets":
             debugLogger("Is Asset");
-            thead = "<th width='120px' id='addNewAsset'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
+            thead = "<th width='120px' id='addNewAsset'><i class='fa fa-plus floatCenter'></i></th><th>Asset</th><th>Type</th>";
             break;
         case "Roles":
            debugLogger("Is Role");
-            thead = "<th width='120px' id='addNewRole'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Shortcode</th><th>Type</th>";
+            thead = "<th width='120px' id='addNewRole'><i class='fa fa-plus floatCenter'></i></th><th>Role</th><th>Shortcode</th><th>Type</th>";
             break;
         case "Environment":
             debugLogger("Is Environment");
-            thead = "<th width='120px' id='addNewEnvironment'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Description</th>";
+            thead = "<th width='120px' id='addNewEnvironment'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Description</th>";
             break;
         case "Vulnerability":
             debugLogger("Is Vulnerability");
-            thead = "<th width='120px' id='addNewVulnerability'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
+            thead = "<th width='120px' id='addNewVulnerability'><i class='fa fa-plus floatCenter'></i></th><th>Vulnerability</th><th>Type</th>";
             break;
         case "Threats":
             debugLogger("Is Threat");
-            thead = "<th width='120px' id='addNewThreat'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
+            thead = "<th width='120px' id='addNewThreat'><i class='fa fa-plus floatCenter'></i></th><th>Threat</th><th>Type</th>";
             break;
         case "Attackers":
             debugLogger("Is Attacker");
-            thead = "<th width='120px' id='addNewAttacker'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Description</th>";
+            thead = "<th width='120px' id='addNewAttacker'><i class='fa fa-plus floatCenter'></i></th><th>Attacker</th><th>Description</th>";
             break;
         case "Personas":
             debugLogger("Is Persona");
-            thead = "<th width='120px' id='addNewPersona'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
+            thead = "<th width='120px' id='addNewPersona'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Type</th>";
             break;
         case "Risks":
             debugLogger("Is Risk");
-            thead = "<th width='120px' id='addnewRisk'><i class='fa fa-plus floatCenter'></i></th><th>Name</th>";
+            thead = "<th width='120px' id='addnewRisk'><i class='fa fa-plus floatCenter'></i></th><th>Risk</th><th>Vulnerability</th><th>Threat</th>";
             break;
         case "Responses":
             debugLogger("Is Response");
-            thead = "<th width='120px' id='addNewResponse'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
+            thead = "<th width='120px' id='addNewResponse'><i class='fa fa-plus floatCenter'></i></th><th>Response</th><th>Type</th>";
             break;
         case "Countermeasures":
             debugLogger("Is Countermeasure");
-            thead = "<th width='120px' id='addNewCountermeasure'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
+            thead = "<th width='120px' id='addNewCountermeasure'><i class='fa fa-plus floatCenter'></i></th><th>Countermeasure</th><th>Type</th>";
             break;
         case "Tasks":
             debugLogger("Is Task");
-            thead = "<th width='120px' id='addNewTask'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Objective</th>";
+            thead = "<th width='120px' id='addNewTask'><i class='fa fa-plus floatCenter'></i></th><th>Task</th><th>Objective</th>";
             break;
         case "UseCases":
             debugLogger("Is UseCase");
-            thead = "<th width='120px' id='addNewUseCase'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Description</th>";
+            thead = "<th width='120px' id='addNewUseCase'><i class='fa fa-plus floatCenter'></i></th><th>Use Case</th><th>Description</th>";
             break;
         case "DomainProperties":
             debugLogger("Is Domain Property");
-            thead = "<th width='120px' id='addNewDomainProperty'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Type</th>";
+            thead = "<th width='120px' id='addNewDomainProperty'><i class='fa fa-plus floatCenter'></i></th><th>Domain Property</th><th>Type</th>";
             break;
         case "Dependency":
             debugLogger("Is Dependency");
@@ -1982,6 +2002,7 @@ function setActiveOptions(){
     $("#filterriskmodelcontent").hide();
     $("#filtergoalmodelcontent").hide();
     $("#filtertaskmodelcontent").hide();
+    $("#filterapmodelcontent").hide();
     $("#filterobstaclemodelcontent").hide();
     $("#editAssetsOptions").hide();
 

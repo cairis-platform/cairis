@@ -281,12 +281,14 @@ class PersonaModelByNameAPI(Resource):
     ]
   )
   #endregion
-  def get(self, persona):
+  def get(self, persona, variable, characteristic):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
 
     dao = PersonaDAO(session_id)
-    dot_code = dao.get_persona_model(persona)
+    if variable == 'All':  variable = ''
+    if characteristic == 'All': characteristic = ''
+    dot_code = dao.get_persona_model(persona,variable,characteristic)
     dao.close()
 
     resp = make_response(model_generator.generate(dot_code, model_type='persona', renderer='dot'), httplib.OK)

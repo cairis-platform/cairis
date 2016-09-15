@@ -17,6 +17,13 @@
 
     Authors: Shamal Faily */
 
+
+$('#editDependencyOptionsForm').validator().on('submit', function (e) {
+  if (e.isDefaultPrevented()) {
+    alert("Def prevented");
+  }
+});
+
 $("#dependenciesClick").click(function(){
    createDependenciesTable()
 });
@@ -90,6 +97,7 @@ $(document).on('click', ".editDependencyButton", function (e) {
   var dependency = dependencies[$(this).index()];
 
   fillOptionMenu("fastTemplates/editDependencyOptions.html","#optionsContent",null,true,true, function(){
+    forceOpenOptions();
     $('#theRationale').val(dependency.theRationale);
     var environmentSelect = $("#theEnvironmentName");
     environmentSelect.empty()
@@ -119,7 +127,6 @@ $(document).on('click', ".editDependencyButton", function (e) {
       }); 
     });
     $("#optionsHeaderGear").text("Dependency properties");
-    forceOpenOptions();
     $.session.set("Dependency", JSON.stringify(dependency));
     $('#editDependencyOptionsForm').loadJSON(dependency, null);
   });
@@ -127,7 +134,8 @@ $(document).on('click', ".editDependencyButton", function (e) {
 
 optionsContent.on('click', '#UpdateDependency', function (e) {
 
-  $("#editDependencyOptionsForm").validator();
+  e.preventDefault();
+$("#editDependencyOptionsForm").validator();
 
   var dependency = JSON.parse($.session.get("Dependency"));
   var oldEnvName = dependency.theEnvironmentName;
@@ -152,7 +160,6 @@ optionsContent.on('click', '#UpdateDependency', function (e) {
       createDependenciesTable();
     });
   }
-  e.preventDefault();
 });
 
 optionsContent.on('change',"#theEnvironmentName", function() {

@@ -225,45 +225,52 @@ optionsContent.on('click', '#addRoleToPersona', function () {
 });
 
 optionsContent.on('click', '#UpdatePersona', function (e) {
+  $("#editPersonasOptionsForm").validator('validate');
   e.preventDefault();
   var persona = JSON.parse($.session.get("Persona"));
-  var oldName = persona.theName;
-  persona.theId = -1;
-  persona.theName = $("#theName").val();
-  persona.theDescription = $("#theDescription").val();
-  persona.theActivities = $("#theActivities").val();
-  persona.theAttitudes = $("#theAttitudes").val();
-  persona.theAptitudes = $("#theAptitudes").val();
-  persona.theMotivations = $("#theMotivations").val();
-  persona.theSkills = $("#theSkills").val();
-  persona.theIntrinsic = $("#theIntrinsic").val();
-  persona.theContextual = $("#theContextual").val();
-  persona.theImage = $("#theImage").val() || "" ;
-  persona.theAssumption = 0;
-  persona.thePersonaType = $("#thePersonaType :selected").text();
-  persona.theCodes = [];
-
-  var tags = $("#theTags").text().split(", ");
-  if(tags[0] != ""){
-    persona.theTags = tags;
+  if (persona.theEnvironmentProperties.length == 0) {
+    alert("Environments not defined");
   }
-  var theEnvName = $.session.get("personaEnvironmentName");
-  $.each(persona.theEnvironmentProperties, function (index, env) {
-    if(env.theEnvironmentName == theEnvName){
-      env.theNarrative = $("#theNarrative").val()
-      $.session.set("Persona", JSON.stringify(persona));
+  else {
+    var oldName = persona.theName;
+    persona.theId = -1;
+    persona.theName = $("#theName").val();
+    persona.theDescription = $("#theDescription").val();
+    persona.theActivities = $("#theActivities").val();
+    persona.theAttitudes = $("#theAttitudes").val();
+    persona.theAptitudes = $("#theAptitudes").val();
+    persona.theMotivations = $("#theMotivations").val();
+    persona.theSkills = $("#theSkills").val();
+    persona.theIntrinsic = $("#theIntrinsic").val();
+    persona.theContextual = $("#theContextual").val();
+    persona.theImage = $("#theImage").val() || "" ;
+    persona.theAssumption = 0;
+    persona.thePersonaType = $("#thePersonaType :selected").text();
+    persona.theCodes = [];
+
+    var tags = $("#theTags").text().split(", ");
+    if(tags[0] != ""){
+      persona.theTags = tags;
     }
-  });
-  //IF NEW Persona
-  if($("#editPersonasOptionsForm").hasClass("new")){
-    postPersona(persona, function () {
-      createPersonasTable();
-      $("#editPersonasOptionsForm").removeClass("new")
+    var theEnvName = $.session.get("personaEnvironmentName");
+    $.each(persona.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == theEnvName){
+        env.theNarrative = $("#theNarrative").val()
+        $.session.set("Persona", JSON.stringify(persona));
+      }
     });
-  } else {
-    putPersona(persona, oldName, function () {
-      createPersonasTable();
-    });
+
+    if($("#editPersonasOptionsForm").hasClass("new")){
+      postPersona(persona, function () {
+        createPersonasTable();
+        $("#editPersonasOptionsForm").removeClass("new")
+      });
+    } 
+    else {
+      putPersona(persona, oldName, function () {
+        createPersonasTable();
+      });
+    }
   }
 });
 
@@ -273,13 +280,15 @@ $(document).on("click", "#addNewPersona", function () {
     $("#Properties").hide();
     $.session.set("Persona", JSON.stringify(jQuery.extend(true, {},personaDefault )));
     $("#optionsHeaderGear").text("Persona properties");
-    forceOpenOptions();
 
     getPersonaTypes(function createTypes(types) {
       $.each(types, function (pType,index) {
         $('#thePersonaType').append($("<option></option>").attr("value", pType).text(pType));
       });
     });
+
+    forceOpenOptions();
+
   });
 });
 

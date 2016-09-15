@@ -1,70 +1,71 @@
-<form id="editAttackerOptionsForm" xmlns="http://www.w3.org/1999/html" >
+<form data-toggle="validator" role="form" id="editAttackerOptionsForm" xmlns="http://www.w3.org/1999/html">
 
-    <div class="left">
-    <p>
-        <label>Name</label>
-        <input class="optionsInput" type="text" name="theName" id="theName">
-    </p>
-    <p>
-        <label>Tags</label>
-        <input class="optionsInput" type="text" value="" id="theTags" name="theTags" style="
-    float: right;">
-    </p>
-        <div id="Description">
-    <label for="theDescription">Description</label>
-           <textarea class="right" name="theDescription" id="theDescription" style="width: 150px; margin-bottom: 15px;"></textarea>
+  <div class="panel panel-default control-group">
+  <div class="inblock">
+  <div class="left" style="width: 25%">
+    <div style="position: relative;">
+      <img id="theAttackerImage" src="" height="100" width="100" class="img-responsive" onError="this.src='images/default-avatar.png';"  style="margin-bottom: 5px">
+      <div class="progress" style="display: none" >
+        <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" >
+          <span class="sr-only">70% Complete</span>
         </div>
-        </div>
-    <div class="right">
-        <div style="position: relative;">
-                <img id="theAttackerImage" src="" height="200" width="200" onError="this.src='images/default-avatar.png';"  style="margin-bottom: 5px">
-            <div class="progress" style="display: none" >
-                <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" >
-                    <span class="sr-only">70% Complete</span>
-                </div>
-            </div>
-        </div>
-        <p>
-            <input type="file" id="fileupload" style="display: none">
-         <!--   <div id="progress" style="background-color : #fff">
-                <div class="bar" style="width: 0%;"></div>
-            </div>-->
-        </p>
-        </div>
-    <br/>
-
-    <div class="inblock">
-        <table class="left clickable-table" id="theAttackerEnvironments">
-            <thead>
-            <tr><th id="addAttackerEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
-        <div class="tabs right infoWidth" >
-            <div id="Properties" class="gearOptions clickable-table scrollableTable" >
-                <div class="inblock">
-                <table id="attackerRole" class="left" style="width: 50%">
-                    <thead><tr><th id="addRoletoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Role</th></tr></thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <table id="attackerMotive" class="right" style="width: 50%">
-                    <thead><tr><th id="addMotivetoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Motivations</th></tr></thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                </div>
-                <table id="attackerCapability">
-                    <thead><tr><th id="addCapabilitytoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Capability</th><th>Value</th></tr></thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+      </div>
     </div>
-    <button id="UpdateAttacker">Update</button>
+    <p><input type="file" id="fileupload" style="display: none"></p>
+  </div><br/>
+  <div class="right" style="width: 75%;">
+    <div class="form-group">
+      <label for="theName" class="control-label">Name</label>
+      <input class="optionsInput form-control" type="text" name="theName" id="theName" style="width: 100%;" data-error="Attacker name is required" required>
+      <div class="help-block with-errors"></div>
+    </div>
+    <div>
+      <label for="theTags">Tags</label>
+      <input class="optionsInput" type="text" value="" id="theTags" name="theTags" style="width: 100%;">
+    </div>
+  </div>
+  </div>
+  <div class="form-group" id="Description">
+    <label for="theDescription" class="control-label">Description</label>
+    <textarea class="right form-control" name="theDescription" id="theDescription" style="width: 100%; margin-bottom: 15px;" data-error="Description is required" required></textarea>
+    <div class="help-block with-errors"></div>
+  </div>
+  </div>
+
+
+  <div class="panel panel-default control-group inblock">
+    <table class="left clickable-table" id="theAttackerEnvironments">
+      <thead>
+        <tr><th id="addAttackerEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <div class="tabs right infoWidth" >
+      <div id="Properties" class="gearOptions clickable-table scrollableTable" >
+        <div class="inblock">
+          <table id="attackerRole" class="left" style="width: 50%">
+            <thead><tr><th id="addRoletoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Role</th></tr></thead>
+            <tbody>
+            </tbody>
+          </table>
+          <table id="attackerMotive" class="right" style="width: 50%">
+            <thead><tr><th id="addMotivetoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Motivations</th></tr></thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <table id="attackerCapability">
+          <thead><tr><th id="addCapabilitytoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Capability</th><th>Value</th></tr></thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<div class="form-group">
+  <button type="submit" class="btn btn-primary" id="UpdateAttacker">Update</button>
+</div>
 </form>
 <div id="addAttackerPropertyDiv" >
     <p>
@@ -81,5 +82,7 @@
             <option value="High">High</option>
         </select>
     </p>
-    <button id="UpdateAttackerCapability">Update</button>
+<div class="form-group">
+  <button type="submit" class="btn btn-primary" id="UpdateAttackerCapability">Update</button>
+</div>
 </div>

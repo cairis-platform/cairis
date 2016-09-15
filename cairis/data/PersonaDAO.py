@@ -251,10 +251,10 @@ class PersonaDAO(CairisDAO):
       raise MissingParameterHTTPError(param_names=['real_props', 'fake_props'])
     return new_props
 
-  def get_persona_model(self, persona_name):
+  def get_persona_model(self, persona_name,variable_name,characteristic_name):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
-      modelAssocs = self.db_proxy.assumptionPersonaModel(persona_name)
+      modelAssocs = self.db_proxy.assumptionPersonaModel(persona_name,variable_name,characteristic_name)
       associations = AssumptionPersonaModel(modelAssocs,font_name=fontName,font_size=fontSize)
       dot_code = associations.graph()
       if not dot_code:
