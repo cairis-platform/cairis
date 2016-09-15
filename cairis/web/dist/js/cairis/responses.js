@@ -69,7 +69,6 @@ $(document).on('click', ".editResponseButton", function () {
                             toggleResponse("#acceptWindow");
                             break;
                         default :
-                            alert("You have an old, unsupported project");
                             break;
                     }
                     $("#theRespEnvironments").find(".responseEnvironment:first").trigger('click');

@@ -91,71 +91,42 @@
 </form>
 
 <div id="editpropertiesWindow" style="display: none;">
-  <p>
-    <label>
-      Property
-      <select class="optionsInput" name="property" id="property">
-        <option value="Accountability">
-          Accountability
-        </option>
-        <option value="Confidentiality">
-          Confidentiality
-        </option>
-        <option value="Integrity">
-          Integrity
-        </option>
-        <option value="Availability">
-          Availability
-        </option>
-        <option value="Anonymity">
-          Anonymity
-        </option>
-        <option value="Pseudonymity">
-          Pseudonymity
-        </option>
-        <option value="Unlinkability">
-          Unlinkability
-        </option>
-        <option value="Unobservability">
-          Unobservability
-        </option>
-      </select>
-    </label>
-  </p>
-  <p>
-  <label>
-    Value
-    <select class="optionsInput" name="value" id="value">
-      <option>
-        None
-      </option>
-      <option>
-        Low
-      </option>
-      <option>
-        Medium
-      </option>
-      <option>
-        High
-      </option>
+  <div class="panel panel-default">
+  <div class="form-group">
+    <label for="property" class="control-label">Property</label>
+    <select class="optionsInput form-control" name="property" id="property" style="width: 75%;" required>
+      <option value="Confidentiality">Confidentiality</option>
+      <option value="Integrity">Integrity</option>
+      <option value="Availability">Availability</option>
+      <option value="Accountability">Accountability</option>
+      <option value="Anonymity">Anonymity</option>
+      <option value="Pseudonymity">Pseudonymity</option>
+      <option value="Unlinkability">Unlinkability</option>
+      <option value="Unobservability">Unobservability</option>
     </select>
+  </div>
+  <div class="form-group">
+    <label for="value" class="control-label">Value</label>
+    <select class="optionsInput form-control" style="width: 75%;" name="value" id="value">
+      <option>None</option>
+      <option>Low</option>
+      <option>Medium</option>
+      <option>High</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="rationale" class="control-label">Rationale</label>
+    <textarea class="optionsInput form-control" name="rationale" id="rationale" data-error="Rationale not provided" required> </textarea>
+    <div class="help-block with-errors"></div>
   </label>
-  </p>
-  <p>
-  <label>
-    Rationale
-    <textarea class="optionsInput" name="rationale" id="rationale"> </textarea>
-  </label>
-  </p>
+  </div>
   <textarea id="id" name="id" style="display: none;"></textarea>
-  <p>
-    <button id="cancelButtonAsset">
-      Cancel
-    </button>
-    <button id="updateButtonAsset">
-      Update
-    </button>
-  </p>
+  </div>
+
+  <div class="form-group inblock">
+    <button type="submit" class="btn btn-primary" id="updateButtonAsset">Update</button>
+    <button type="submit" class="btn btn-default" id="cancelButtonAsset">Cancel</button>
+  </div>
 </div>
 <div id="editAssociationsWindow" style="display: none;">
   <p>

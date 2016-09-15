@@ -68,8 +68,11 @@ class AssumptionPersonaModel:
   def graph(self):
     self.nodeNameSet = set([])
     self.dimNameSet = set([])
+    self.personaCharacteristics = set([])
 
     for fromName,fromDim,toName,toDim,personaName,bvName,pcName in self.theTraceLinks:
+      self.personaCharacteristics.add(pcName)
+
       self.dimNameSet.add(fromDim)
       if (fromName not in self.nodeNameSet):
         self.buildNode(fromDim,fromName)
@@ -83,6 +86,9 @@ class AssumptionPersonaModel:
       edge = pydot.Edge(str(fromName),str(toName),URL=fromDim + '#' + toDim)
       self.theGraph.add_edge(edge)
     return self.layout()
+
+  def characteristics(self):
+    return list(self.personaCharacteristics)
 
   def layout(self,renderer = 'dot'):
     self.theGraph.write_xdot(self.theGraphName,prog=renderer)

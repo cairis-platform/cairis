@@ -174,19 +174,50 @@ $('#omobstaclebox').change(function() {
 
 $('#appersonasbox').change(function() {
   var selection = $(this).find('option:selected').text();
-  getPersonasiew(selection,'All','All');
+  appendPersonaCharacteristics(selection,'All','All');
+  getPersonasview(selection,'All','All');
 });
 
 $('#apbtbox').change(function() {
   var selection = $(this).find('option:selected').text();
-  getPersonaview($('#appersonasbox').val(),selection,'All');
+  var pName = $('#appersonasbox').val();
+  appendPersonaCharacteristics(pName,'All','All');
+  getPersonaview(pName,selection,'All');
 });
 
 $('#apcharacteristicbox').change(function() {
   var selection = $(this).find('option:selected').text();
-  getPersonaview($('#appersonasbox').val(),$('#apbtbox').val(),selection);
+  var pName = $('#appersonasbox').val();
+  var bvName = $('#apbtbox').val();
+  appendPersonaCharacteristics(pName,bvName,'All');
+  getPersonaview(pName,bvName,selection);
 });
 
+function appendPersonaCharacteristics(pName,bvName,pcName) {
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/personas/characteristics/name/" + pName.replace(" ","%20") + "/variable/" + bvName.replace(" ","%20") + "/characteristic/" + pcName.replace(" ","%20"),
+    success: function (data) {
+      $('#apcharacteristicbox').empty();
+      $('#apcharacteristicbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+      $.each(data, function (index, item) {
+        $('#apcharacteristicbox').append($('<option>', {value: item, text: item},'</option>'));
+      });
+      $('#apcharacteristicbox').val(pcName);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
 
 
 $('#environmentsbox').change(function() {
@@ -707,7 +738,6 @@ function getTaskview(environment,task,misusecase){
         url: serverIP + "/api/tasks/model/environment/" + environment.replace(" ","%20") + "/task/" + task.replace(" ","%20") + "/misusecase/" + misusecase.replace(" ","%20"),
         success: function(data){
            fillSvgViewer(data);
-
         },
         error: function(xhr, textStatus, errorThrown) {
             debugLogger(String(this.url));
@@ -730,7 +760,6 @@ function getPersonaview(pName,bvName,pcName){
           // console.log("in getPersonaView " + data.innerHTML);
            // console.log(this.url);
            fillSvgViewer(data);
-
         },
         error: function(xhr, textStatus, errorThrown) {
             debugLogger(String(this.url));
@@ -2029,22 +2058,21 @@ function setActiveOptions(){
 for filling up the SVG viewer
  */
 function fillSvgViewer(data){
-    var xmlString = (new XMLSerializer()).serializeToString(data);
-    //console.log(String(xmlString));
-    var svgDiv = $("#svgViewer");
-    svgDiv.show();
-    svgDiv.css("height",$("#maincontent").height());
-    svgDiv.css("width","100%");
-    svgDiv.html(xmlString);
-    $("svg").attr("id","svg-id");
-    activeElement("svgViewer");
-    panZoomInstance = svgPanZoom('#svg-id', {
-        zoomEnabled: true,
-        controlIconsEnabled: true,
-        fit: true,
-        center: true,
-        minZoom: 0.2
-    })
+  var xmlString = (new XMLSerializer()).serializeToString(data);
+  var svgDiv = $("#svgViewer");
+  svgDiv.show();
+  svgDiv.css("height",$("#maincontent").height());
+  svgDiv.css("width","100%");
+  svgDiv.html(xmlString);
+  $("svg").attr("id","svg-id");
+  activeElement("svgViewer");
+  panZoomInstance = svgPanZoom('#svg-id', {
+    zoomEnabled: true,
+    controlIconsEnabled: true,
+    fit: true,
+    center: true,
+    minZoom: 0.2
+  });
 }
 
 /*

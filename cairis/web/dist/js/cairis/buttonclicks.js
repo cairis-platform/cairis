@@ -388,7 +388,9 @@ $('#personaView').click(function(){
                     Ok: function() {
                         $( this ).dialog( "close" );
                         //Created a function, for readability
-                        getPersonaview($( "#comboboxDialogSelect").find("option:selected" ).text(),'All','All');
+                        var pName = $( "#comboboxDialogSelect").find("option:selected" ).text();
+                        appendPersonaCharacteristics(pName,'All','All');
+                        getPersonaview(pName,'All','All');
                     }
                 }
             });
@@ -409,6 +411,7 @@ $(document).on('click', "button.editRoleButton",function() {
    var name = $(this).val();
     if(name == undefined || name == "") {
         fillOptionMenu("fastTemplates/editRoleOptions.html", "#optionsContent", null, true, true, function () {
+            $("#optionsHeaderGear").text("Role properties");
             forceOpenOptions();
             $("#editRoleOptionsform").addClass("newRole");
         });
@@ -424,6 +427,7 @@ $(document).on('click', "button.editRoleButton",function() {
             url: serverIP + "/api/roles/name/" + name.replace(" ", "%20"),
             success: function (json) {
                 fillOptionMenu("fastTemplates/editRoleOptions.html", "#optionsContent", null, true, true, function () {
+                    $("#optionsHeaderGear").text("Role properties");
                     forceOpenOptions();
                     var form = $('#editRoleOptionsform');
                     form.loadJSON(json, null);

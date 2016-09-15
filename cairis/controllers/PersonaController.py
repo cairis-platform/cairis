@@ -265,6 +265,30 @@ class PersonaModelByNameAPI(Resource):
     nickname='persona-model-by-name-get',
     parameters=[
       {
+        "name": "name",
+        "description": "The persona name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "variable",
+        "description": "The behavioural variable",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "characteristic",
+        "description": "The persona characteristic",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
         "name": "session_id",
         "description": "The ID of the user's session",
         "required": False,
@@ -298,6 +322,67 @@ class PersonaModelByNameAPI(Resource):
       resp.headers['Content-type'] = 'text/plain'
     else:
       resp.headers['Content-type'] = 'image/svg+xml'
+    return resp
+
+class PersonaCharacteristicsByNameAPI(Resource):
+  #region Swagger Doc
+  @swagger.operation(
+    notes='Get persona characteristics for a specific persona',
+    responseClass=str.__name__,
+    nickname='persona-characteristics-by-name-get',
+    parameters=[
+      {
+        "name": "name",
+        "description": "The persona name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "variable",
+        "description": "The behavioural variable",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "characteristic",
+        "description": "The persona characteristic",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  #endregion
+  def get(self, persona, variable, characteristic):
+    session_id = get_session_id(session, request)
+    model_generator = get_model_generator()
+
+    dao = PersonaDAO(session_id)
+    if variable == 'All':  variable = ''
+    if characteristic == 'All': characteristic = ''
+    char_names = dao.get_persona_characteristics(persona,variable,characteristic)
+    dao.close()
+    resp = make_response(json_serialize(char_names, session_id=session_id), httplib.OK)
+    resp.headers['Content-type'] = 'application/json'
     return resp
 
 class PersonaNamesAPI(Resource):

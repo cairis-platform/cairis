@@ -90,6 +90,7 @@ $(document).on('click', ".editPersonaButton", function () {
         $.session.set("Persona", JSON.stringify(data));
         $('#editPersonasOptionsForm').loadJSON(data, null);
 
+
         getPersonaTypes(function createTypes(types) {
           $.each(types, function (pType,index) {
             $('#thePersonaType').append($("<option></option>").attr("value", pType).text(pType));
@@ -406,4 +407,3 @@ function getPersonaTypes(callback){
     }
   });
 }
-

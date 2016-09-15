@@ -26,6 +26,7 @@ $("#editProjectsClick").click(function () {
             $('#ProjectsProperties').loadJSON(data, null);
             image.attr("src", getImagedir(data.richPicture));
             resaleImage(image,350);
+            $("#projectBackground").height( $("#projectBackground")[0].scrollHeight );
             //definitions
             $.each(data.definitions, function (key, def) {
                 appendNamingConvention(key,def);

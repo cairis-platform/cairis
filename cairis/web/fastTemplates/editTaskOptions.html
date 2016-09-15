@@ -1,38 +1,40 @@
-<form id="editTaskOptionsForm" xmlns="http://www.w3.org/1999/html" >
+<form role="form" id="editTaskOptionsForm" xmlns="http://www.w3.org/1999/html" >
 
-  <div class="tabs infoWidth" style="width: 100%;">
+  <div class="tabs" style="width: 100%;">
     <ul>
       <li><a href="#summary">Summary</a></li>
       <li><a href="#objectives">Objectives</a></li>
     </ul>
     <div id="summary">
-      <p>
-        <label for="theName">Name</label>
-        <input class="optionsInput taskUpdate" type="text" name="theName" id="theName" style="float: right; width: 75%">
-      </p>
-      <p>
-        <label for="theTags">Tags</label>
-        <input class="optionsInput taskUpdate" type="text" value="" id="theTags" name="theTags" style="float: right; width: 75%">
-      </p>
-      <p>
-        <label>Authors</label>
-        <input class="optionsInput taskUpdate" type="text" name="theAuthor" id="theAuthor" style="float: right; width: 75%">
-      </p>
+      <div class="form-group">
+        <label for="theName" class="control-label">Name</label>
+        <input class="optionsInput taskUpdate form-control" type="text" name="theName" id="theName" style="width: 75%" data-error="Task name is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
+      <div>
+        <label for="theTags" class="control-label">Tags</label>
+        <input class="optionsInput taskUpdate form-control" type="text" value="" id="theTags" name="theTags" style="width: 75%">
+      </div>
+      <div class="form-group">
+        <label for="theAuthor" class="control-label">Authors</label>
+        <input class="optionsInput taskUpdate form-control" type="text" name="theAuthor" id="theAuthor" style="width: 75%" data-error="Authors are required" required>
+        <div class="help-block with-errors"></div>
+      </div>
     </div>   
-    <div id="objectives">
-      <textarea id="theObjective" class="taskUpdate" style="width: 100%"></textarea>
+    <div class="form-group" id="objectives">
+      <textarea id="theObjective" class="taskUpdate form-control" style="width: 100%" data-error="Objectives are required" required></textarea>
     </div>   
   </div>
   <div class="inblock">
     <table class="left clickable-table" id="theEnvironments">
       <thead>
-        <tr><th id="addTaskEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
+        <tr><th id="addTaskEnv"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
       </thead>
       <tbody>
       </tbody>
     </table>
 
-    <div class="tabs right infoWidth">
+    <div class="tabs right" style="width: 75%;">
       <ul>
         <li><a href="#dependencies">Dependencies</a></li>
         <li><a href="#narrative">Narrative</a></li>
@@ -45,7 +47,7 @@
       <div id="Properties" class="gearOptions clickable-table scrollableTable">
         <div class="inblock">
           <div id="participants">
-            <table id="thePersonas" style="width: 100%">
+            <table id="thePersonas">
               <thead>
                 <tr>
                   <th id="addPersonaToTask"><i class="fa fa-plus"></i></th>
@@ -57,7 +59,7 @@
             </table>
           </div>
           <div id="concerns">
-            <table id="theConcerns" class="right" style="width: 100%">
+            <table id="theConcerns" class="right">
               <thead>
                 <tr>
                   <th id="addConcernToTask"> <i class="fa fa-plus"></i></th><th>Concern</th>
@@ -67,20 +69,24 @@
               </tbody>
             </table>
           </div>
-          <div id="dependencies">
-            <textarea id="theDependencies" class="taskUpdate"></textarea>
+          <div class="form-group" id="dependencies">
+            <textarea id="theDependencies" class="taskUpdate form-control" data-error="Dependencies are required" required></textarea>
+            <div class="help-block with-errors"></div>
           </div>
-          <div id="narrative">
-            <textarea id="theNarrative" class="taskUpdate"></textarea>
+          <div class="form-group" id="narrative">
+            <textarea id="theNarrative" class="taskUpdate form-control" data-error="Narrative is required" required></textarea>
+            <div class="help-block with-errors"></div>
           </div>
-          <div id="consequences">
-            <textarea id="theConsequences" class="taskUpdate"></textarea>
+          <div class="form-group" id="consequences">
+            <textarea id="theConsequences" class="taskUpdate form-control" data-error="Consequences are required" required></textarea>
+            <div class="help-block with-errors"></div>
           </div>
-          <div id="benefits">
-            <textarea id="theBenefits" class="taskUpdate"></textarea>
+          <div class="form-group" id="benefits">
+            <textarea id="theBenefits" class="taskUpdate form-control" data-error="Benefits are required" required></textarea>
+            <div class="help-block with-errors"></div>
           </div>
           <div id="concernassociations">
-            <table id="theConcernAssociations" style="width: 100%">
+            <table id="theConcernAssociations">
               <thead>
                 <tr>
                   <th id="addConcernAssociationToTask"><i class="fa fa-plus"></i></th>
@@ -95,5 +101,7 @@
       </div>
     </div>
   </div>
-  <button id="UpdateTask">Update</button>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary" id="UpdateTask">Update</button>
+  </div>
 </form>

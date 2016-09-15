@@ -267,6 +267,21 @@ class PersonaDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
+  def get_persona_characteristics(self, persona_name,variable_name,characteristic_name):
+    fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    try:
+      modelAssocs = self.db_proxy.assumptionPersonaModel(persona_name,variable_name,characteristic_name)
+      associations = AssumptionPersonaModel(modelAssocs,font_name=fontName,font_size=fontSize)
+      associations.graph()
+      pChars = associations.characteristics()
+      return pChars
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
   def get_persona_types(self):
     try:
       pTypes = self.db_proxy.getDimensions('persona_type')
