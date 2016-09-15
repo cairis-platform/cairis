@@ -116,8 +116,6 @@ def drawGraph(dotTxt,renderer,graphFile):
   temp_file.write(dotTxt)
   temp_file.close()
   os.close(fd)
-  import pytest
-  pytest.set_trace()
   cmd([renderer, '-Tsvg', temp_abspath,'-o',graphFile + '.svg'])
   os.remove(temp_abspath)
 
