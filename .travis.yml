@@ -16,6 +16,10 @@ addons:
     - python-numpy 
     - git 
     - libmysqlclient-dev
+    - docbook
+    - dblatex
+    - texlive-latex-extra 
+    - docbook-utils
 
 env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog
