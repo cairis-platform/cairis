@@ -465,7 +465,8 @@ $(document).on('click', "button.editRoleButton",function() {
         });
     }
 });
-$("#startNewProject").click(function () {
+
+$("#newClick").click(function () {
     postNewProject(function () {
         window.activeTable = "Requirements";
         startingTable();

@@ -18,8 +18,7 @@
     Authors: Raf Vandelaer */
 
 
-
-$(window).load(function(){
+$(window).on('load', function(){
 
   resizable();
   makeHorizontalScrollbar();
