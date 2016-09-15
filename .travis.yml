@@ -20,6 +20,7 @@ addons:
     - dblatex
     - texlive-latex-extra 
     - docbook-utils
+    - inkscape
 
 env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog

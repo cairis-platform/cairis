@@ -94,13 +94,13 @@ def tuplesToPara(ts):
 def buildImage(imageFile,caption):
   components = imageFile.split('.')
   if (len(components) != 2):
-    format = 'PDF'
+    format = 'SVG'
   else:
     format = components[1]
   if (format == 'jpg' or format == 'jpeg' or format == 'JPG' or format == 'JPEG'):
     imageFormat = 'JPG'
   else:
-    imageFormat = 'PDF'
+    imageFormat = 'SVG'
   txt = """
     <mediaobject>
       <imageobject>
@@ -116,10 +116,10 @@ def drawGraph(dotTxt,renderer,graphFile):
   temp_file.write(dotTxt)
   temp_file.close()
   os.close(fd)
-  cmd([renderer, '-Tsvg', temp_abspath])
+  import pytest
+  pytest.set_trace()
+  cmd([renderer, '-Tsvg', temp_abspath,'-o',graphFile + '.svg'])
   os.remove(temp_abspath)
-  fs_output = open(graphFile + '.svg','wb')
-  cmd([renderer, '-Tsvg', graphFile + '.svg','-o',graphFile + '.pdf'])
 
 
 def buildModel(p,envName,modelType,graphFile):
@@ -930,7 +930,7 @@ def personaModelSection(p,pName,docDir):
       validModels = True
       txt += """
         <section><title>""" + bv + "</title>"
-      txt += buildImage(modelFile + ".pdf",pName + ' ' + bv + ' Assumptions Model')
+      txt += buildImage(modelFile + ".svg",pName + ' ' + bv + ' Assumptions Model')
       txt += """
         </section>"""
   txt += """
