@@ -1,114 +1,171 @@
-<form id="editRisksForm">
-    <p>
-        <label>Name</label>
-        <input class="optionsInput" type="text" name="theName" id="theName" style="width: 75%;">
-    </p>
-    <p>
-        <label>Tags</label>
-        <input class="optionsInput" type="text" name="theTags" id="theTags" style="width: 75%;">
-    </p>
-    <p>
-        <label>Threat</label>
-        <select class="right riskDetailsChanger" id="theThreatNames" style="width: 75%;">
-
-        </select>
-        </p>
-    <p>
-        <label>Vulnerability</label>
-        <select class="right riskDetailsChanger" id="theVulnerabilityNames" style="width: 75%;">
-
-        </select>
-    </p>
-    <p>
-        <table class="clickable-table" id="theRiskEnvironments" style="width: 100%;">
-            <thead>
-            <tr><th>Environment</th></tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
-    </p>
-    <p>
-        <label>Rating</label>
-        <input class="optionsInput" type="text" name="rating" id="rating" readonly>
-    </p>
-    <p>
-    <table class="clickable-table" id="theResponses" style="width: 100%;">
-        <thead>
-        <tr><th>Response</th><th>Unmit. Score</th><th>Mit. Score</th></tr>
-        </thead>
-        <tbody>
-
-        </tbody>
+<form role="form" id="editRisksForm">
+  <div class="row form-group">
+    <div class="col-md-3">
+      <label for="theName" class="control-label">Name</label>
+    </div>
+    <div class="col-md-9">
+      <input class="optionsInput form-control" type="text" name="theName" id="theName" data-error="Risk name required" required>
+      <div class="help-block with-errors"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <label for="theTags" class="control-label">Tags</label>
+    </div>
+    <div class="col-md-9">
+      <input class="optionsInput form-control" type="text" name="theTags" id="theTags">
+      <div class="help-block with-errors"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <label for="theThreatNames" class="control-label">Threat</label>
+    </div>
+    <div class="col-md-9">
+      <select class="right riskDetailsChanger form-control" id="theThreatNames">
+      </select>
+      <div class="help-block with-errors"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <label for="theVulnerabilityNames" class="control-label">Vulnerability</label>
+    </div>
+    <div class="col-md-9">
+      <select class="right riskDetailsChanger form-control" id="theVulnerabilityNames">
+      </select>
+      <div class="help-block with-errors"></div>
+    </div>
+  </div>
+  <div>
+    <table class="clickable-table" id="theRiskEnvironments" style="width: 100%;">
+      <thead>
+        <tr><th>Environment</th></tr>
+      </thead>
+      <tbody>
+      </tbody>
     </table>
-    </p>
+  </div>
+  <div>
+    <label for="rating" class="control-label" >Rating</label>
+    <input class="optionsInput form-control" type="text" name="rating" id="rating" readonly>
+  </div>
+  <div>
+    <table class="clickable-table" id="theResponses" style="width: 100%;">
+      <thead>
+        <tr><th>Response</th><th>Unmit. Score</th><th>Mit. Score</th></tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
 
-
-    <button id="UpdateRisk">Update</button>
-    <button id="editMisusedCase">Edit Misuse Case</button>
+  <div class="inblock form-group">
+    <button type="submit" class="btn btn-primary" id="UpdateRisk">Update</button>
+    <button type="submit" class="btn btn-primary" id="editMisusedCase">Edit Misuse Case</button>
+  </div>
 </form>
 <div id="editMisusedCaseDiv" style="display: none">
-        <p>
-            <label>Name</label>
-            <input class="optionsInput" type="text" id="theMisuseName" name="theMisuseName" style="width: 75%;" readonly>
-        </p>
-        <p>
-            <label>Risk</label>
-            <input class="optionsInput" type="text" id="theMisuseRisk" name="theMisuseRisk" style="width: 75%;" readonly>
-        </p>
-        <div class="inblock">
-            <table class="left clickable-table" id="theMisuseEnvironments" style="width: auto;">
-                <thead>
-                <th>Environment</th>
-                </thead>
-                <tbody>
-
-                </tbody>
+  <div class="row">
+    <div class="col-md-3">
+      <label for="theMisuseName" class="control-label">Name</label>
+    </div>
+    <div class="col-md-9">
+      <input class="optionsInput form-control" type="text" id="theMisuseName" name="theMisuseName" readonly>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <label for="theMisuseRisk" class="control-label">Risk</label>
+     </div>
+    <div class="col-md-9">
+      <input class="optionsInput form-control" type="text" id="theMisuseRisk" name="theMisuseRisk" readonly>
+    </div>
+  </div>
+  <div class="inblock">
+    <table class="left clickable-table" id="theMisuseEnvironments">
+      <thead>
+        <th>Environment</th>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <div class="tabs right" style="width: 75%;">
+      <ul>
+        <li><a href="#Summary">Summary</a></li>
+        <li><a href="#Narrative">Narrative</a></li>
+      </ul>
+      <div id="Summary">
+        <div class="row">
+          <div class="col-md-3">
+            <table id="attackerTable">
+              <thead><tr><th>Attacker</th></tr></thead>
+              <tbody></tbody>
             </table>
-            <div class="tabs  right infoWidth">
-                <ul>
-                    <li><a href="#Summary">Summary</a></li>
-                    <li><a href="#Narrative">Narrative</a></li>
-                </ul>
-                <div id="Summary">
-                    <p><label>Objective</label> <textarea id="theMisuseObjective" type="text" name="theMisuseObjective" readonly> </textarea></p>
-                    <div style="display: inline-block; width: 100%">
-                        <table id="attackerTable" style="float: left;">
-                    <thead><tr><th>Attacker</th></tr></thead>
-                            <tbody></tbody>
-                        </table>
-
-                        <table id="assetTable" style="float: right;">
-                        <thead><tr><th>Asset</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                    </div>
-                    <p>
-                        <label for="misuseThreat">Threat</label>
-                        <input type="text" id="misuseThreat" readonly>
-                    </p>
-                    <p>
-                        <label for="misuseLikelihood">Likelihood</label>
-                        <input type="text" id="misuseLikelihood" readonly>
-                    </p>
-                    <p>
-                        <label for="misuseVulnerability">Vulnerability</label>
-                        <input type="text" id="misuseVulnerability" readonly>
-                    </p>
-                    <p>
-                        <label for="misuseSeverity">Severity</label>
-                        <input type="text" id="misuseSeverity" readonly>
-                    </p>
-                    <p>
-                        <label for="misuseRiskRating">Risk Rating</label>
-                        <input type="text" id="misuseRiskRating" readonly>
-                    </p>
-                </div>
-                <div id="Narrative">
-                    <textarea id="theMisuseNarrative" class="optionsInput" name="theMisuseNarrative"> </textarea>
-                </div>
-            </div>
+          </div>
+          <div class="col-md-9">
+            <table id="assetTable">
+              <thead><tr><th>Asset</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
-        <button id="updateMisuseCase">Update</button>
+        <div class="row">
+          <div class="col-md-3">
+            <label for="theMisuseObject" class="control-label">Objective</label> 
+          </div>
+          <div class="col-md-9">
+            <textarea id="theMisuseObjective" class="form-control" type="text" name="theMisuseObjective" readonly> </textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label for="misuseThreat" class="control-label">Threat</label>
+          </div>
+          <div class="col-md-9">
+            <input type="text" id="misuseThreat" class="form-control" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label for="misuseLikelihood" class="control-label">Likelihood</label>
+          </div>
+          <div class="col-md-9">
+            <input type="text" id="misuseLikelihood" class="form-control" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label for="misuseVulnerability" class="control-label">Vulnerability</label>
+          </div>
+          <div class="col-md-9">
+            <input type="text" id="misuseVulnerability" class="form-control" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label for="misuseSeverity" class="control-label">Severity</label>
+          </div>
+          <div class="col-md-9">
+            <input type="text" id="misuseSeverity" class="form-control" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label for="misuseRiskRating" class="control-label">Risk Rating</label>
+          </div>
+          <div class="col-md-9">
+            <input type="text" id="misuseRiskRating" class="form-control" readonly>
+          </div>
+        </div>
+      </div>
+      <div id="Narrative">
+        <textarea id="theMisuseNarrative" class="optionsInput form-control" name="theMisuseNarrative" data-error="Misuse Case narrative required" required> </textarea>
+        <div class="help-block with-errors"></div>
+      </div>
+    </div>
+  </div>
+  <div class="inblock form-group">
+    <button type="submit" class="btn btn-primary" id="updateMisuseCase">Update</button>
+  </div>
 </div>

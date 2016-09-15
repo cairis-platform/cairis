@@ -119,7 +119,7 @@ optionsContent.on('click', "#updateMisuseCase", function (e) {
 
 optionsContent.on("click",".misusecaseEnvironment", function () {
 
-  var lastEnvName = $.session.get("misusecaseEnvironmentName");
+/*  var lastEnvName = $.session.get("misusecaseEnvironmentName");
   var misusecase = JSON.parse($.session.get("MisuseCase"));
   var updatedEnvProps = [];
   $.each(misusecase.theEnvironmentProperties, function (index, env) {
@@ -130,8 +130,9 @@ optionsContent.on("click",".misusecaseEnvironment", function () {
   });
   misusecase.theEnvironmentProperties = updatedEnvProps;
   $.session.set("MisuseCase", JSON.stringify(misusecase)); 
-
+*/
   clearMisuseCaseInfo();
+  var misusecase = JSON.parse($.session.get("MisuseCase"));
 
   var theEnvName = $(this).text();
   $.session.set("misusecaseEnvironmentName", theEnvName);
