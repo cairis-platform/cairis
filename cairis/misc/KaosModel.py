@@ -27,27 +27,28 @@ from cairis.core.colourcodes import obstacleColourCode
 
 class KaosModel:
   def __init__(self,associations,envName,kaosModelType = 'goal',goalName = '', db_proxy=None, font_name=None, font_size=None):
-      self.theAssociations = associations
-      self.theEnvironmentName = envName
-      self.theGoalName = goalName
+    self.theAssociations = associations
+    self.theEnvironmentName = envName
+    self.theGoalName = goalName
+    self.dbProxy = db_proxy
+    self.fontName = font_name
+    self.fontSize = font_size
 
-      b = Borg()
-      if db_proxy is None or font_size is None or font_name is None:
-          self.dbProxy = b.dbProxy
-          self.fontName = b.fontName
-          self.fontSize = b.fontSize
-      else:
-          self.dbProxy = db_proxy
-          self.fontName = font_name
-          self.fontSize = font_size
+    b = Borg()
+    if db_proxy is None: 
+      self.dbProxy = b.dbProxy
 
-      self.theGraph = pydot.Dot()
-      self.theKaosModel = kaosModelType
-      if (self.theKaosModel == 'task'):
-          self.theGraph.set_graph_defaults(rankdir='LR')
-      else:
-          self.theGraph.set_graph_defaults(rankdir='BT')
-      self.theGraphName = b.tmpDir + '/' + self.theKaosModel + '.dot'
+    if font_size is None or font_name is None:
+      self.fontName = b.fontName
+      self.fontSize = b.fontSize
+
+    self.theGraph = pydot.Dot()
+    self.theKaosModel = kaosModelType
+    if (self.theKaosModel == 'task'):
+      self.theGraph.set_graph_defaults(rankdir='LR')
+    else:
+      self.theGraph.set_graph_defaults(rankdir='BT')
+    self.theGraphName = b.tmpDir + '/' + self.theKaosModel + '.dot'
 
   def size(self):
     return len(self.theAssociations)

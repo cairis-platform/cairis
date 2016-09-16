@@ -47,8 +47,16 @@ class DocumentationAPI(Resource):
         "paramType": "query"
       },
       {
-        'name': 'body',
-        "description": "The new updated requirement",
+        'name': 'doc_type',
+        "description": "Document type",
+        "required": True,
+        "allowMultiple": False,
+        'type': DocumentationMessage.__name__,
+        'paramType': 'body'
+      },
+      {
+        'name': 'doc_format',
+        "description": "Document format",
         "required": True,
         "allowMultiple": False,
         'type': DocumentationMessage.__name__,
@@ -67,14 +75,24 @@ class DocumentationAPI(Resource):
     ]
   )
   # endregion
-  def post(self):
+  def get(self,doc_type,doc_format):
     session_id = get_session_id(session, request)
     dao = DocumentationDAO(session_id)
-    docParams = dao.from_json(request)
-    reportName = '/tmp/report.pdf'
-    dao.generate_documentation(docParams['theDocumentType'],docParams['theSectionFlags'],docParams['theTypeFlags'])
+    sectionFlags = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    if (doc_format == 'PDF'):
+      filePostfix = 'pdf'
+      doc_format = [0,0,1]
+    else:
+      filePostfix = 'rtf'
+      doc_format = [0,1,0]
+    reportName = '/tmp/report.' + filePostfix
+
+    dao.generate_documentation(doc_type,sectionFlags,doc_format)
     dao.close()
-    resp_dict = { 'message': str(0) }
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
-    resp.headers["Content-Disposition"] = "attachment; filename=" + reportName
+
+    binary_pdf = open('/tmp/report.' + filePostfix).read()
+    resp = make_response(binary_pdf)
+    resp.headers['Content-Type'] = 'application/' + filePostfix
+    resp.headers['Content-Disposition'] = 'inline; filename=report.' + filePostfix
     return resp
+

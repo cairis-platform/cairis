@@ -32,8 +32,10 @@ class AssetModel:
     self.fontName = fontName
     self.fontSize = fontSize
 
-    if db_proxy is None or fontName is None or fontSize is None:
+    if db_proxy is None:
       self.dbProxy = b.dbProxy
+
+    if fontName is None or fontSize is None:
       self.fontName = b.fontName
       self.fontSize = b.fontSize
 

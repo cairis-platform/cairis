@@ -36,17 +36,9 @@ class DocumentationAPITests(CairisDaemonTestCase):
     self.logger = logging.getLogger(__name__)
 
   def test_generate_documentation(self):
-    method = 'test_generate_documentation?session_id=test'
-    url = '/api/documentation'
+    method = 'test_generate_documentation'
+    url = '/api/documentation/type/Requirements/format/PDF?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
 
-    json = {'theDocumentType' : 'Requirements',
-            'theSectionFlags' : [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-            'theTypeFlags' : [0,0,1]}
-
-    json_dict = {'session_id' : 'test', 'object' : json}
-    json_body = jsonpickle.encode(json_dict)
-    rv = self.app.post(url, data=json_body, content_type='application/json')
+    rv = self.app.get(url, content_type='application/pdf')
     self.assertIsNotNone(rv.data, 'No response')
-    successCode = jsonpickle.decode(rv.data)
-    self.assertIsNotNone(successCode, '0')

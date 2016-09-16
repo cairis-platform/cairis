@@ -263,7 +263,7 @@ def start():
   api.add_resource(DimensionController.DimensionNamesAPI, '/api/dimensions/table/<string:table>/environment/<string:environment>')
 
   # Documentation route
-  api.add_resource(DocumentationController.DocumentationAPI, '/api/documentation')
+  api.add_resource(DocumentationController.DocumentationAPI, '/api/documentation/type/<string:doc_type>/format/<string:doc_format>')
 
   # Domain Property routes
   api.add_resource(DomainPropertyController.DomainPropertiesAPI, '/api/domainproperties')
