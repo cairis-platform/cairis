@@ -1,0 +1,188 @@
+<form data-toggle="validator" role="form" id="editSearchOptionsForm" xmlns="http://www.w3.org/1999/html" >
+  <div class="form-group">
+    <label for="theSearchString" class="control-label">Find</label>
+    <input class="optionsInput form-control" type="text" name="theSearchString" id="theSearchString" style="width: 100%;" data-error="Search string is required" required>
+    <div class="help-block with-errors"></div>
+  </div>
+  </br>
+  <div class="tabs">
+    <ul>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#options">Options</a></li>
+    </ul>
+    <div id="results" class="form-group">
+      <table class="clickable-table" id="theResults">
+        <thead>
+          <tr><th>Environment</th><th>Type</th><th>Name</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div id="options" class="form-group">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theToggleAll" value="" id="theToggleAll" checked>Toggle all</label>
+          </div>
+        </div> 
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theProjectSettings" value="" id="theProjectSettings" checked>Project Settings</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theEnvironments" value="" id="theEnvironments" checked>Environmentss</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theRoles" value="" id="theRoles" checked>Roles</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="thePersonaCharacteristics" value="" id="thePersonaCharacteristics" checked>Persona Characteristics</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theTaskCharacteristics" value="" id="theTaskCharacteristics" checked>Task Characteristics</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theReferences" value="" id="theReferences" checked>References</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="thePersonas" value="" id="thePersonas" checked>Personas</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theTasks" value="" id="theTasks" checked>Tasks</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theUseCases" value="" id="theUseCases" checked>Use Cases</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theDomainProperties" value="" id="theDomainProperties" checked>Domain Properties</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theGoals" value="" id="theGoals" checked>Goals</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theObstacles" value="" id="theObstacles" checked>Obstacles</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theRequirements" value="" id="theRequirements" checked>Requirements</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theAssets" value="" id="theAssets" checked>Assets</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theVulnerabilities" value="" id="theVulnerabilities" checked>Vulnerabilities</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theAttackers" value="" id="theAttackers" checked>Attackers</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theThreats" value="" id="theThreats" checked>Threats</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theRisks" value="" id="theRisks" checked>Risks</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theResponses" value="" id="theResponses" checked>Responses</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theCountermeasures" value="" id="theCountermeasures" checked>Countermeasures</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theDirectories" value="" id="theDirectories" checked>Directories</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theCodes" value="" id="theCodes" checked>Codes</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theMemos" value="" id="theMemos" checked>Memos</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theInternalDocuments" value="" id="theInternalDocuments" checked>InternalDocuments</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkbox">
+            <label><input type="checkbox" name="theTags" value="" id="theTags" checked>Tags</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary" id="Find">Find</button>
+    <button type="submit" class="btn btn-primary" id="Close">Close</button>
+  </div>
+
+</form>
