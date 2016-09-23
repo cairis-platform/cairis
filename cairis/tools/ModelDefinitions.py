@@ -401,6 +401,7 @@ class DomainPropertyModel(object):
     }
 
 
+
 @swagger.model
 @swagger.nested(
     theRiskRating=RiskRating.__name__
@@ -889,3 +890,21 @@ class UseCaseModel(object):
     swagger_metadata = {
         obj_id_field: gen_class_metadata(UseCase)
     }
+
+class SearchValuesModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        'theEnvironmentName': fields.String,
+        'theTypeName': fields.String,
+        'theObjectName': fields.String
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+
+class FindModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        'theSearchValues': fields.List(fields.Nested(SearchValuesModel.resource_fields))
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)

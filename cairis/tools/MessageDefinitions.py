@@ -281,3 +281,14 @@ class TaskMessage(DefaultMessage):
 class UseCaseMessage(DefaultMessage):
     resource_fields = gen_message_fields(ModelDefinitions.UseCaseModel)
     required = DefaultMessage.required
+
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+    object=ModelDefinitions.FindModel.__name__,
+)
+# endregion
+class FindMessage(DefaultMessage):
+    resource_fields = gen_message_fields(ModelDefinitions.FindModel)
+    required = DefaultMessage.required

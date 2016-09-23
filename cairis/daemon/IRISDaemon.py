@@ -37,7 +37,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
-    DependencyController, DocumentationController
+    DependencyController, DocumentationController, FindController
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -293,6 +293,9 @@ def start():
 
   # Export route
   api.add_resource(CExportController.CExportFileAPI, '/api/export/file')
+
+  # Find route
+  api.add_resource(FindController.FindAPI, '/api/find/<string:search_string>')
 
   # Import routes
   api.add_resource(CImportController.CImportTextAPI, '/api/import/text')
