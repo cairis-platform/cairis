@@ -599,3 +599,17 @@ class AssetDAO(CairisDAO):
         asset.theEnvironmentDictionary = {}
         asset.theAssetPropertyDictionary = {}
         return asset
+
+    def get_asset_association(self, environment_name, head_name, tail_name):
+        assocs = self.db_proxy.classModel(environment_name)
+        if assocs is None or len(assocs) < 1:
+            self.close()
+            raise ObjectNotFoundHTTPError('Asset Associations')
+        for key in assocs:
+          envName,headName,tailName = key.split('/')
+          if (envName == environment_name) and (((headName == head_name) and (tailName == tail_name)) or ((headName == tail_name) and (tailName == head_name))):
+            assoc = assocs[key]
+            self.close()
+            return assoc 
+        self.close()
+        raise ObjectNotFoundHTTPError('The provided asset association parameters')
