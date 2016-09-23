@@ -23,6 +23,7 @@ from cairis.core.Asset import Asset
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 from cairis.core.Attacker import Attacker
 from cairis.core.AttackerEnvironmentProperties import AttackerEnvironmentProperties
+from cairis.core.ClassAssociation import ClassAssociation
 from cairis.core.Dependency import Dependency
 from cairis.core.Goal import Goal
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
@@ -908,3 +909,29 @@ class FindModel(object):
     }
     required = resource_fields.keys()
     required.remove(obj_id_field)
+
+@swagger.model
+class AssetAssociationModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        "theEnvironmentName": fields.String,
+        "theHeadAsset": fields.String,
+        "theHeadType": fields.String,
+        "theHeadDim": fields.String,
+        "theHeadNavigation": fields.String,
+        "theHeadMultiplicity": fields.String,
+        "theHeadRole": fields.String,
+        "theTailRole": fields.String,
+        "theTailMultiplicity": fields.String,
+        "theTailType": fields.String,
+        "theTailNavigation": fields.String,
+        "theTailDim": fields.String,
+        "theTailAsset": fields.String,
+        "theRationale": fields.String
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metadata = {
+        obj_id_field : gen_class_metadata(ClassAssociation)
+    }
+

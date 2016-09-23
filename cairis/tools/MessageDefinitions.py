@@ -64,6 +64,16 @@ class AssetMessage(DefaultMessage):
 # region Swagger Doc
 @swagger.model
 @swagger.nested(
+    object=ModelDefinitions.AssetAssociationModel.__name__
+)
+# endregion
+class AssetAssociationMessage(DefaultMessage):
+    resource_fields = gen_message_fields(ModelDefinitions.AssetAssociationModel)
+    required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
     object=ModelDefinitions.AttackerModel.__name__,
 )
 # endregion

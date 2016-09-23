@@ -22,8 +22,8 @@ from flask.ext.restful import Resource
 from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError
 from cairis.data.AssetDAO import AssetDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import AssetMessage, AssetEnvironmentPropertiesMessage, ValueTypeMessage
-from cairis.tools.ModelDefinitions import AssetModel as SwaggerAssetModel, AssetEnvironmentPropertiesModel, ValueTypeModel
+from cairis.tools.MessageDefinitions import AssetMessage, AssetEnvironmentPropertiesMessage, ValueTypeMessage, AssetAssociationMessage
+from cairis.tools.ModelDefinitions import AssetModel as SwaggerAssetModel, AssetAssociationModel, AssetEnvironmentPropertiesModel, ValueTypeModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -868,3 +868,95 @@ class AssetValueByNameAPI(Resource):
         resp = make_response(json_serialize(resp_dict), httplib.OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
+
+
+class AssetAssociationAPI(Resource):
+    # region Swagger Doc
+    @swagger.operation(
+        notes='Get an asset association',
+        responseClass=AssetAssociationModel.__name__,
+        nickname='asset-association-get',
+        parameters=[
+            {
+                "name": "session_id",
+                "description": "The ID of the user's session",
+                "required": False,
+                "allowMultiple": False,
+                "dataType": str.__name__,
+                "paramType": "query"
+            }
+        ],
+        responseMessages=[
+            {
+                "code": httplib.BAD_REQUEST,
+                "message": "The database connection was not properly set up"
+            },
+            {
+                'code': httplib.BAD_REQUEST,
+                'message': '''Some parameters are missing. Be sure asset association is defined.'''
+            }
+        ]
+    )
+    # endregion
+    def get(self):
+        session_id = get_session_id(session, request)
+
+        dao = AssetDAO(session_id)
+        assoc = dao.get_asset_association(head_name,tail_name)
+        dao.close()
+
+        resp = make_response(json_serialize(assoc, session_id=session_id))
+        resp.headers['Content-Type'] = "application/json"
+        return resp
+
+    # region Swagger Doc
+    @swagger.operation(
+        notes='Creates a new asset association',
+        nickname='asset-association-post',
+        parameters=[
+            {
+                "name": "body",
+                "description": "The serialized version of the new asset association to be added",
+                "required": True,
+                "allowMultiple": False,
+                "type": AssetAssociationMessage.__name__,
+                "paramType": "body"
+            },
+            {
+                "name": "session_id",
+                "description": "The ID of the user's session",
+                "required": False,
+                "allowMultiple": False,
+                "dataType": str.__name__,
+                "paramType": "query"
+            }
+        ],
+        responseMessages=[
+            {
+                'code': httplib.BAD_REQUEST,
+                'message': 'One or more attributes are missing'
+            },
+            {
+                'code': httplib.CONFLICT,
+                'message': 'Some problems were found during the name check'
+            },
+            {
+                'code': httplib.CONFLICT,
+                'message': 'A database error has occurred'
+            }
+        ]
+    )
+    # endregion
+    def post(self):
+        session_id = get_session_id(session, request)
+
+        dao = AssetDAO(session_id)
+        assoc = dao.from_json(request)
+        new_id = dao.add_asset_association(assoc)
+        dao.close()
+
+        resp_dict = {'message': 'Asset Association successfully added'}
+        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp.contenttype = 'application/json'
+        return resp
+
