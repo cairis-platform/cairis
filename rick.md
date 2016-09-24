@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Rick
-description: An instrument technician at ACME water
+description: A plant operator at ACME water
 categories: persona
 image:
   teaser: Rick_teaser.gif
