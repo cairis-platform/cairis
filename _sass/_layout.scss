@@ -90,7 +90,7 @@
 		@include span-columns(12);
 	}
 	@include media($large) {
-		@include span-columns(7);
+		@include span-columns(10);
 		ul {
 			position: absolute;
 			right: 0;
