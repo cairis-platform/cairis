@@ -26,5 +26,5 @@
   excerpt: "About CAIRIS"
 
 - title: Contact Us
-  url: mailto:cairisproject@gmail.com
+  url: mailto:{{ site.author.email }}
   excerpt: "Contact us"
