@@ -21,7 +21,7 @@
 .site-title {
 	@include row;
 	@include media($large) {
-		@include span-columns(2);
+		@include span-columns(4);
 	}
 	padding: (.25 * $masthead-height) 0; // fourth the height to center vertically
 	height: $masthead-height;
