@@ -24,3 +24,7 @@
 - title: About
   url: /about
   excerpt: "About CAIRIS"
+
+- title: Contact Us
+  url: mailto:cairisproject@gmail.com
+  excerpt: "Contact us"
