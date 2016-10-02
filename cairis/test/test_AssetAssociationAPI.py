@@ -20,8 +20,10 @@ from urllib import quote
 from StringIO import StringIO
 import os
 import jsonpickle
+from cairis.core.ClassAssociation import ClassAssociation
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.mio.ModelImport import importModelFile
+from cairis.tools.JsonConverter import json_deserialize
 import os
 
 __author__ = 'Shamal Faily'
@@ -32,8 +34,30 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
   def setUpClass(cls):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
 
+
   def setUp(self):
     self.logger = logging.getLogger(__name__)
+    self.new_assoc = ClassAssociation(
+      associationId = '-1',
+      envName = 'Psychosis',
+      headName = 'Portal',
+      headDim = 'asset',
+      headNav = '0',
+      headType = 'Association',
+      headMultiplicity = '*',
+      headRole = '',
+      tailRole = '',
+      tailMultiplicity = '*',
+      tailType = 'Association',
+      tailNav = '0',
+      tailDim = 'asset',
+      tailName = 'User certificate',
+      rationale='None'
+    )
+    self.new_assoc_dict = {
+      'session_id' : 'test',
+      'object': self.new_assoc
+    }
 
   def test_get(self):
     method = 'test_asset_association'
@@ -45,3 +69,39 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(assoc, 'No results after deserialization')
     self.assertEqual(assoc['theHeadAsset'],'Client workstation')
     self.assertEqual(assoc['theTailAsset'],'Web-browser')
+
+  def test_post(self):
+    method = 'test_post_new'
+    rv = self.app.post('/api/assets/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = json_deserialize(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    ackMsg = json_resp.get('message', None)
+    self.assertEqual(ackMsg, 'Asset Association successfully added')
+
+  def test_put(self):
+    method = 'test_put'
+
+    self.new_assoc_dict['object'].theTailNavigation = '1'
+    rv = self.app.put('/api/assets/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = json_deserialize(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    ackMsg = json_resp.get('message', None)
+    self.assertEqual(ackMsg, 'Asset Association successfully updated')
+
+  def test_delete(self):
+    method = 'test_delete'
+
+    rv = self.app.post('/api/assets/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = json_deserialize(rv.data)
+
+    url = '/api/assets/association/environment/Psychosis/head/Portal/tail/User%20certificate?session_id=test'
+    rv = self.app.delete(url)
+
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = json_deserialize(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    ackMsg = json_resp.get('message', None)
+    self.assertEqual(ackMsg, 'Asset Association successfully deleted')

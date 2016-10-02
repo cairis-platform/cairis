@@ -613,3 +613,53 @@ class AssetDAO(CairisDAO):
             return assoc 
         self.close()
         raise ObjectNotFoundHTTPError('The provided asset association parameters')
+
+    def add_asset_assocition(self, assoc):
+    
+        assocParams = ClassAssociationParameters(
+            envName=assoc.theEnvironmentName,
+            headName=assoc.theHeadAsset,
+            headDim=assoc.theHeadDim,
+            headNav=assoc.theHeadNav,
+            headType=assoc.theHeadType,
+            headMultiplicity=assoc.theHeadMultiplicity,
+            headRole=assoc.theHeadRole,
+            tailRole=assoc.theTailRole,
+            tailMultiplicity=assoc.theTailMultiplicity,
+            tailType=assoc.theTailType,
+            tailNav=assoc.theTailNav,
+            tailDim=assoc.theTailDim,
+            tailName=assoc.theTailAsset,
+            rationale=asset.theRationale)
+        try:
+            self.db_proxy.addClassAssociation(assocParams)
+        except ARMException as ex:
+            self.close()
+            raise ARMHTTPError(ex)
+
+
+    def update_asset_assocition(self, environment_name,head_name,tail_name,assoc):
+        old_assoc = self.get_asset_association(environment_name,head_name,tail_name)
+        id = old_assoc['theId']
+    
+        assocParams = ClassAssociationParameters(
+            envName=assoc.theEnvironmentName,
+            headName=assoc.theHeadAsset,
+            headDim=assoc.theHeadDim,
+            headNav=assoc.theHeadNav,
+            headType=assoc.theHeadType,
+            headMultiplicity=assoc.theHeadMultiplicity,
+            headRole=assoc.theHeadRole,
+            tailRole=assoc.theTailRole,
+            tailMultiplicity=assoc.theTailMultiplicity,
+            tailType=assoc.theTailType,
+            tailNav=assoc.theTailNav,
+            tailDim=assoc.theTailDim,
+            tailName=assoc.theTailAsset,
+            rationale=asset.theRationale)
+        assocParams.setId(id)
+        try:
+            self.db_proxy.updateClassAssociation(assocParams)
+        except ARMException as ex:
+            self.close()
+            raise ARMHTTPError(ex)

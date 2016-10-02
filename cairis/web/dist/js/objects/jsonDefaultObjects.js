@@ -299,3 +299,33 @@ var dependencyDefault = {
   "theDependee": "",
   "theDependency": ""
 };
+var classAssociationDefault = {
+  "__python_obj__": "ClassAssociation.ClassAssociation",
+  "theId": -1,
+  "theEnvironmentName" : "",
+  "theHeadAsset" : "",
+  "theHeadType" : "",
+  "theHeadDim" : "",
+  "theHeadNavigation" : "",
+  "theHeadMultiplicity" : "",
+  "theHeadRole" : "",
+  "theTailRole" : "",
+  "theTailMultiplicity" : "",
+  "theTailType" : "",
+  "theTailNavigation" : "",
+  "theTailDim" : "",
+  "theTailAsset" : "",
+  "theRationale" : ""
+};
+var goalAssociationDefault = {
+  "__python_obj__": "GoalAssociation.GoalAssociation",
+  "theId": -1,
+  "theEnvironmentName" : "",
+  "theGoal" : "",
+  "theGoalDimension" : "",
+  "theAssociationType" : "",
+  "theSubGoal" : "",
+  "theSubGoalDimension" : "",
+  "theAlternativeId" : "",
+  "theRationale" : ""
+};
