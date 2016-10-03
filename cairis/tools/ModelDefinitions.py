@@ -24,6 +24,7 @@ from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 from cairis.core.Attacker import Attacker
 from cairis.core.AttackerEnvironmentProperties import AttackerEnvironmentProperties
 from cairis.core.ClassAssociation import ClassAssociation
+from cairis.core.GoalAssociation import GoalAssociation
 from cairis.core.Dependency import Dependency
 from cairis.core.Goal import Goal
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
@@ -935,3 +936,21 @@ class AssetAssociationModel(object):
         obj_id_field : gen_class_metadata(ClassAssociation)
     }
 
+@swagger.model
+class GoalAssociationModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        "theEnvironmentName": fields.String,
+        "theGoal": fields.String,
+        "theGoalDimension": fields.String,
+        "theAssociationType": fields.String,
+        "theSubGoal": fields.String,
+        "theSubGoalDimension": fields.String,
+        "theAlternativeId": fields.String,
+        "theRationale": fields.String
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metadata = {
+        obj_id_field : gen_class_metadata(GoalAssociation)
+    }

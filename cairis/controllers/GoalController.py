@@ -20,9 +20,10 @@ from flask import session, request, make_response
 from flask.ext.restful_swagger import swagger
 from flask_restful import Resource
 from cairis.data.GoalDAO import GoalDAO
+from cairis.data.GoalAssociationDAO import GoalAssociationDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import GoalMessage
-from cairis.tools.ModelDefinitions import GoalModel as SwaggerGoalModel
+from cairis.tools.MessageDefinitions import GoalMessage, GoalAssociationMessage
+from cairis.tools.ModelDefinitions import GoalModel as SwaggerGoalModel, GoalAssociationModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -438,5 +439,232 @@ class ResponsibilityModelAPI(Resource):
       resp.headers['Content-type'] = 'image/svg+xml'
     return resp
 
+class GoalAssociationByNameAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get a goal association',
+    responseClass=GoalAssociationModel.__name__,
+    nickname='goal-association-get',
+    parameters=[
+      {
+        "name": "environment_name",
+        "description": "The environment name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "goal_name",
+        "description": "The goal name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "subgoal_name",
+        "description": "The subgoal name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      },
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': '''Some parameters are missing. Be sure asset association is defined.'''
+      }
+    ]
+  )
+  # endregion
+  def get(self,environment_name,goal_name,subgoal_name):
+    session_id = get_session_id(session, request)
 
+    dao = GoalAssociationDAO(session_id)
+    assoc = dao.get_goal_association(environment_name,goal_name,subgoal_name)
+    dao.close()
 
+    resp = make_response(json_serialize(assoc, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
+    return resp
+
+  # region Swagger Docs
+  @swagger.operation(
+    notes='Delete a goal-association',
+    nickname='goal-association-delete',
+    parameters=[
+      {
+        "name": "environment_name",
+        "description": "The environment name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "goal_name",
+        "description": "The goal name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "subgoal_name",
+        "description": "The subgoal name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'One or more attributes are missing'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'A database error has occurred'
+      }
+    ]
+  )
+  # endregion
+  def delete(self,environment_name,goal_name,subgoal_name):
+    session_id = get_session_id(session, request)
+    dao = GoalAssociationDAO(session_id)
+    dao.delete_goal_association(environment_name,goal_name,subgoal_name)
+    dao.close()
+
+    resp_dict = {'message': 'Goal Association successfully deleted'}
+    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+class GoalAssociationAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Creates a new goal association',
+    nickname='goal-association-post',
+    parameters=[
+      {
+        "name": "body",
+        "description": "The serialized version of the new goal association to be added",
+        "required": True,
+        "allowMultiple": False,
+        "type": GoalAssociationMessage.__name__,
+        "paramType": "body"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'One or more attributes are missing'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'A database error has occurred'
+      }
+    ]
+  )
+  # endregion
+  def post(self):
+    session_id = get_session_id(session, request)
+
+    dao = GoalAssociationDAO(session_id)
+    assoc = dao.from_json(request)
+    dao.add_goal_association(assoc)
+    dao.close()
+
+    resp_dict = {'message': 'Goal Association successfully added'}
+    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+  # region Swagger Docs
+  @swagger.operation(
+    notes='Updates a goal-association',
+    nickname='goal-association-put',
+    parameters=[
+      {
+        "name": "body",
+        "description": "The serialized version of the goal association to be updated",
+        "required": True,
+        "allowMultiple": False,
+        "type": GoalAssociationMessage.__name__,
+        "paramType": "body"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'One or more attributes are missing'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'A database error has occurred'
+      }
+    ]
+  )
+  # endregion
+  def put(self):
+    session_id = get_session_id(session, request)
+    dao = GoalAssociationDAO(session_id)
+    assoc = dao.from_json(request)
+    dao.update_goal_association(assoc)
+    dao.close()
+
+    resp_dict = {'message': 'Goal Association successfully updated'}
+    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp
