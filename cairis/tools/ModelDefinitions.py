@@ -53,6 +53,8 @@ from cairis.core.Countermeasure import Countermeasure
 from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
 from cairis.core.ClassAssociation import ClassAssociation
 from cairis.core.GoalAssociation import GoalAssociation
+from cairis.core.ExternalDocument import ExternalDocument
+from cairis.core.DocumentReference import DocumentReference
 from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -953,4 +955,35 @@ class GoalAssociationModel(object):
     required.remove(obj_id_field)
     swagger_metadata = {
         obj_id_field : gen_class_metadata(GoalAssociation)
+    }
+
+@swagger.model
+class ExternalDocumentModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        "theName": fields.String,
+        "theVersion": fields.String,
+        "thePublicationDate": fields.String,
+        "theAuthors": fields.String,
+        "theDescription": fields.String
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metadata = {
+        obj_id_field : gen_class_metadata(ExternalDocument)
+    }
+
+@swagger.model
+class DocumentReferenceModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        "theName": fields.String,
+        "theDocName": fields.String,
+        "theContributor": fields.String,
+        "theExcerpt": fields.String
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metadata = {
+        obj_id_field : gen_class_metadata(ExternalDocument)
     }

@@ -312,3 +312,23 @@ class UseCaseMessage(DefaultMessage):
 class FindMessage(DefaultMessage):
     resource_fields = gen_message_fields(ModelDefinitions.FindModel)
     required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+    object=ModelDefinitions.ExternalDocumentModel.__name__,
+)
+# endregion
+class FindMessage(DefaultMessage):
+    resource_fields = gen_message_fields(ModelDefinitions.ExternalDocumentModel)
+    required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+    object=ModelDefinitions.DocumentReferenceModel.__name__,
+)
+# endregion
+class FindMessage(DefaultMessage):
+    resource_fields = gen_message_fields(ModelDefinitions.DocumentReferenceModel)
+    required = DefaultMessage.required
