@@ -319,7 +319,7 @@ class FindMessage(DefaultMessage):
     object=ModelDefinitions.ExternalDocumentModel.__name__,
 )
 # endregion
-class FindMessage(DefaultMessage):
+class ExternalDocumentMessage(DefaultMessage):
     resource_fields = gen_message_fields(ModelDefinitions.ExternalDocumentModel)
     required = DefaultMessage.required
 
@@ -329,6 +329,6 @@ class FindMessage(DefaultMessage):
     object=ModelDefinitions.DocumentReferenceModel.__name__,
 )
 # endregion
-class FindMessage(DefaultMessage):
+class DocumentReferenceMessage(DefaultMessage):
     resource_fields = gen_message_fields(ModelDefinitions.DocumentReferenceModel)
     required = DefaultMessage.required

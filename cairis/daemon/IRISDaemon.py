@@ -37,7 +37,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
-    DependencyController, DocumentationController, FindController
+    DependencyController, DocumentationController, FindController, ExternalDocumentController
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -285,6 +285,11 @@ def start():
     '/api/environments/threat/<string:threat>/vulnerability/<string:vulnerability>/names',
     '/api/environments/vulnerability/<string:vulnerability>/threat/<string:threat>/names'
   )
+
+  # External Document routes
+  api.add_resource(ExternalDocumentController.ExternalDocumentsAPI, '/api/external_documents')
+  api.add_resource(ExternalDocumentController.ExternalDocumentByNameAPI, '/api/external_documents/name/<string:name>')
+
 
   # Goal routes
   api.add_resource(GoalController.GoalsAPI, '/api/goals')
