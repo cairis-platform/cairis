@@ -37,7 +37,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
-    DependencyController, DocumentationController, FindController, ExternalDocumentController
+    DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -263,6 +263,10 @@ def start():
   # DimensionController
   api.add_resource(DimensionController.DimensionsAPI, '/api/dimensions/table/<string:table>')
   api.add_resource(DimensionController.DimensionNamesAPI, '/api/dimensions/table/<string:table>/environment/<string:environment>')
+
+  # Document Reference routes
+  api.add_resource(DocumentReferenceController.DocumentReferencesAPI, '/api/document_references')
+  api.add_resource(DocumentReferenceController.DocumentReferenceByNameAPI, '/api/document_references/name/<string:name>')
 
   # Documentation route
   api.add_resource(DocumentationController.DocumentationAPI, '/api/documentation/type/<string:doc_type>/format/<string:doc_format>')
