@@ -26,6 +26,61 @@ obj_id_field = '__python_obj__'
 def gen_class_metadata(class_ref):
   return {"enum": [class_ref.__module__+'.'+class_ref.__name__]}
 
+@swagger.model
+class PersonaCharacteristicReference(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theReferenceName' : fields.String,
+    'theCharacteristicType' : fields.String,
+    'theReferenceDescription' : fields.String,
+    'theDimensionName' : fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field: {
+      'enum': [__name__+'.PersonaCharacteristicReference']
+    },
+    "theCharacteristicType": {
+      "enum": [
+        "grounds",
+        "warrant",
+        "rebuttal"
+       ]
+    },
+    "theDimensionName" : {
+      "enum" : [
+        "document",
+        "asset",
+        "attacker",
+        "countermeasure",
+        "domainproperty",
+        "environment",
+        "goal",
+        "misusecase",
+        "obstacle",
+        "persona",
+        "requirement",
+        "response",
+        "risk",
+        "role",
+        "task",
+        "threat",
+        "vulnerability"
+      ]
+    } 
+  }
+  def __init__(self, refName=None, crTypeName='grounds', refDesc=None, dimName='document'):
+    """
+    :type refName: str
+    :type crTypeName: str
+    :type refDesc: str
+    :type dimName: str
+    """
+    self.theReferenceName = refName
+    self.theCharacteristicType = crTypeName
+    self.theReferenceDescription = refDesc
+    self.theDimensionName = dimName
 
 @swagger.model
 class Contributor(object):

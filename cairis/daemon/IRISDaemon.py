@@ -37,7 +37,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
-    DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController
+    DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, PersonaCharacteristicController
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -333,6 +333,10 @@ def start():
   api.add_resource(PersonaController.PersonaCharacteristicsByNameAPI, '/api/personas/characteristics/name/<string:persona>/variable/<string:variable>/characteristic/<string:characteristic>')
   api.add_resource(PersonaController.PersonaTypesAPI, '/api/personas/types')
   api.add_resource(PersonaController.PersonaEnvironmentPropertiesAPI, '/api/personas/name/<string:persona_name>/properties')
+
+  # Persona Characteristic routes
+  api.add_resource(PersonaCharacteristicController.PersonaCharacteristicsAPI, '/api/persona_characteristics')
+  api.add_resource(PersonaCharacteristicController.PersonaCharacteristicByNameAPI, '/api/persona_characteristics/name/<string:name>')
 
   # Project routes
   api.add_resource(ProjectController.ProjectSettingsAPI, '/api/settings')

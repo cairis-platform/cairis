@@ -55,7 +55,8 @@ from cairis.core.ClassAssociation import ClassAssociation
 from cairis.core.GoalAssociation import GoalAssociation
 from cairis.core.ExternalDocument import ExternalDocument
 from cairis.core.DocumentReference import DocumentReference
-from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes
+from cairis.core.PersonaCharacteristic import PersonaCharacteristic
+from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, PersonaCharacteristicReference
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -985,5 +986,24 @@ class DocumentReferenceModel(object):
     required = resource_fields.keys()
     required.remove(obj_id_field)
     swagger_metadata = {
-        obj_id_field : gen_class_metadata(ExternalDocument)
+        obj_id_field : gen_class_metadata(DocumentReference)
+    }
+
+@swagger.model
+class PersonaCharacteristicModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        "thePersonaName": fields.String,
+        "theModQual": fields.String,
+        "theVariable": fields.String,
+        "theCharacteristic": fields.String,
+        "theGrounds": fields.List(fields.Nested(PersonaCharacteristicReference.resource_fields)),
+        "theWarrant": fields.List(fields.Nested(PersonaCharacteristicReference.resource_fields)),
+        "theRebuttal": fields.List(fields.Nested(PersonaCharacteristicReference.resource_fields)),
+        "theBacking": fields.List(fields.String)
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+    swagger_metadata = {
+        obj_id_field : gen_class_metadata(PersonaCharacteristic)
     }

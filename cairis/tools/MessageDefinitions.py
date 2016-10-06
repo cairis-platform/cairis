@@ -332,3 +332,13 @@ class ExternalDocumentMessage(DefaultMessage):
 class DocumentReferenceMessage(DefaultMessage):
     resource_fields = gen_message_fields(ModelDefinitions.DocumentReferenceModel)
     required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+    object=ModelDefinitions.PersonaCharacteristicModel.__name__,
+)
+# endregion
+class PersonaCharacteristicMessage(DefaultMessage):
+    resource_fields = gen_message_fields(ModelDefinitions.PersonaCharacteristicModel)
+    required = DefaultMessage.required
