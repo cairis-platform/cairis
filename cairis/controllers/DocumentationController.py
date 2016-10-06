@@ -85,12 +85,13 @@ class DocumentationAPI(Resource):
     else:
       filePostfix = 'rtf'
       doc_format = [0,1,0]
-    reportName = '/tmp/report.' + filePostfix
+    b = Borg()
+    reportName = b.tmpDir + '/report.' + filePostfix
 
     dao.generate_documentation(doc_type,sectionFlags,doc_format)
     dao.close()
 
-    binary_pdf = open('/tmp/report.' + filePostfix).read()
+    binary_pdf = open(reportName).read()
     resp = make_response(binary_pdf)
     resp.headers['Content-Type'] = 'application/' + filePostfix
     resp.headers['Content-Disposition'] = 'inline; filename=report.' + filePostfix

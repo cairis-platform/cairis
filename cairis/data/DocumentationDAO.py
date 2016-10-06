@@ -16,6 +16,7 @@
 #  under the License.
 
 from cairis.core.ARM import *
+from cairis.core.Borg import Borg
 from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.data.CairisDAO import CairisDAO
 import cairis.misc.DocumentBuilder
@@ -29,7 +30,8 @@ class DocumentationDAO(CairisDAO):
 
   def generate_documentation(self,docType,sectionFlags,typeFlags):
     try:
-      docDir = '/tmp'
+      b = Borg()
+      docDir = b.tmpDir
       fileName = 'report'
       cairis.misc.DocumentBuilder.build(self.db_proxy,docType,sectionFlags,typeFlags,fileName,docDir)
     except ARMException as ex:
