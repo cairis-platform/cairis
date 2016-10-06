@@ -1,3 +1,4 @@
+apt
 python-coveralls
 #httpretty
 git+https://github.com/melor/HTTPretty.git@py33
