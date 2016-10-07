@@ -17,12 +17,12 @@
 
     Authors: Shamal Faily */
 
-$("#domainPropertyClick").click(function () {
-  createDomainPropertiesTable();
+
+$("#externalDocumentsClick").click(function(){
+  createExternalDocumentsTable();
 });
 
-
-function createDomainPropertiesTable(){
+function createExternalDocumentsTable(){
 
   $.ajax({
     type: "GET",
@@ -32,9 +32,9 @@ function createDomainPropertiesTable(){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/domainproperties",
+    url: serverIP + "/api/external_documents",
     success: function (data) {
-      window.activeTable = "DomainProperties";
+      window.activeTable = "ExternalDocuments";
       setTableHeader();
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
@@ -43,14 +43,14 @@ function createDomainPropertiesTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editDomainPropertyButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteDomainPropertyButton" value="' + key + '">' + 'Delete' + '</button></td>';
+        textToInsert[i++] = '<td><button class="editExternalDocumentButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteExternalDocumentButton" value="' + key + '">' + 'Delete' + '</button></td>';
 
         textToInsert[i++] = '<td name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theType">';
-        textToInsert[i++] = item.theType;
+        textToInsert[i++] = '<td name="theDescription">';
+        textToInsert[i++] = item.theDescription;
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '</tr>';
@@ -68,7 +68,7 @@ function createDomainPropertiesTable(){
   })
 }
 
-$(document).on('click', ".editDomainPropertyButton", function () {
+$(document).on('click', ".editExternalDocumentButton", function () {
   var name = $(this).val();
   $.ajax({
     type: "GET",
@@ -78,24 +78,13 @@ $(document).on('click', ".editDomainPropertyButton", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/domainproperties/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/external_documents/name/" + name.replace(" ", "%20"),
     success: function (data) {
-      fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#optionsContent", null, true, true, function () {
-        $("#optionsHeaderGear").text("Domain Property properties");
+      fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#optionsContent", null, true, true, function () {
+        $("#optionsHeaderGear").text("External Document properties");
         forceOpenOptions();
-        $.session.set("DomainProperty", JSON.stringify(data));
-        $('#editDomainPropertyOptionsForm').loadJSON(data, null);
-
-        if (data.theTags.length > 0) {
-          var text = "";
-          $.each(data.theTags, function (index, type) {
-            text += type;
-            if (index < (data.theTags.length - 1)) {
-              text += ", ";
-            }
-          });
-          $("#theTags").val(text);
-        }
+        $.session.set("ExternalDocument", JSON.stringify(data));
+        $('#editExternalDocumentOptionsForm').loadJSON(data, null);
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -105,50 +94,49 @@ $(document).on('click', ".editDomainPropertyButton", function () {
   });
 });
 
-optionsContent.on('click', '#UpdateDomainProperty', function (e) {
+optionsContent.on('click', '#UpdateExternalDocument', function (e) {
   e.preventDefault();
-  var dp = JSON.parse($.session.get("DomainProperty"));
-  var oldName = dp.theName;
-  dp.theName = $("#theName").val();
-  dp.theType = $("#theType").val();
-  dp.theDescription = $("#theDescription").val();
-  var tags = $("#theTags").text().split(", ");
-  if(tags[0] != ""){
-    dp.theTags = tags;
-  }
+  var edoc = JSON.parse($.session.get("ExternalDocument"));
+  var oldName = edoc.theName;
+  edoc.theName = $("#theName").val();
+  edoc.theVersion = $("#theVersion").val();
+  edoc.theAuthors = $("#theAuthors").val();
+  edoc.thePublicationDate = $("#thePublicationDate").val();
+  edoc.theDescription = $("#theDescription").val();
 
-  if($("#editDomainPropertyOptionsForm").hasClass("new")){
-    postDomainProperty(dp, function () {
-      createDomainPropertiesTable();
-      $("#editDomainPropertyOptionsForm").removeClass("new")
+  if($("#editExternalDocumentOptionsForm").hasClass("new")){
+    postExternalDocument(edoc, function () {
+      createExternalDocumentsTable();
+      $("#editExternalDocumentOptionsForm").removeClass("new")
     });
-  } 
+  }
   else {
-    putDomainProperty(dp, oldName, function () {
-      createDomainPropertiesTable();
+    putExternalDocument(edoc, oldName, function () {
+      createExternalDocumentsTable();
     });
   }
 });
 
-$(document).on('click', '.deleteDomainPropertyButton', function (e) {
+$(document).on('click', '.deleteExternalDocumentButton', function (e) {
   e.preventDefault();
-  deleteDomainProperty($(this).val(), function () {
-    createDomainPropertiesTable();
+  deleteExternalDocument($(this).val(), function () {
+    createExternalDocumentsTable();
   });
 });
 
-$(document).on("click", "#addNewDomainProperty", function () {
-  fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#optionsContent", null, true, true, function () {
-    $("#editDomainPropertyOptionsForm").addClass("new");
-    $.session.set("DomainProperty", JSON.stringify(jQuery.extend(true, {},domainPropertyDefault )));
-    $("#optionsHeaderGear").text("Domain Property properties");
+$(document).on("click", "#addNewExternalDocument", function () {
+  fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#optionsContent", null, true, true, function () {
+    $("#editExternalDocumentOptionsForm").addClass("new");
+    $.session.set("ExternalDocument", JSON.stringify(jQuery.extend(true, {},externalDocumentDefault )));
+    $("#optionsHeaderGear").text("External Document properties");
     forceOpenOptions();
   });
 });
 
-function putDomainProperty(dp, oldName, usePopup, callback){
+
+function putExternalDocument(edoc, oldName, usePopup, callback){
   var output = {};
-  output.object = dp;
+  output.object = edoc;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
   debugLogger(output);
@@ -162,7 +150,7 @@ function putDomainProperty(dp, oldName, usePopup, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/domainproperties/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/external_documents/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       if(usePopup) {
         showPopup(true);
@@ -182,9 +170,9 @@ function putDomainProperty(dp, oldName, usePopup, callback){
   });
 }
 
-function postDomainProperty(dp, callback){
+function postExternalDocument(edoc, callback){
   var output = {};
-  output.object = dp;
+  output.object = edoc;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
   debugLogger(output);
@@ -198,7 +186,7 @@ function postDomainProperty(dp, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/domainproperties" + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/external_documents" + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -214,7 +202,7 @@ function postDomainProperty(dp, callback){
   });
 }
 
-function deleteDomainProperty(name, callback){
+function deleteExternalDocument(name, callback){
   $.ajax({
     type: "DELETE",
     dataType: "json",
@@ -223,7 +211,7 @@ function deleteDomainProperty(name, callback){
     crossDomain: true,
     processData: false,
     origin: serverIP,
-    url: serverIP + "/api/domainproperties/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/external_documents/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

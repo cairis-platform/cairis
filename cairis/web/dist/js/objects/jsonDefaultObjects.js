@@ -329,3 +329,33 @@ var goalAssociationDefault = {
   "theAlternativeId" : "",
   "theRationale" : ""
 };
+var externalDocumentDefault = {
+  "__python_obj__": "ExternalDocument.ExternalDocument",
+  "theId": -1,
+  "theName" : "",
+  "theVersion" : "",
+  "thePublicationDate" : "",
+  "theAuthors" : "",
+  "theDescription" : ""
+};
+var documentReferenceDefault = {
+  "__python_obj__": "DocumentReference.DocumentReference",
+  "theId": -1,
+  "theName" : "",
+  "theDocName" : "",
+  "theContributor" : "",
+  "theExcerpt" : ""
+};
+var personaCharacteristicDefault = {
+  "__python_obj__": "PersonaCharacteristic.PersonaCharacteristic",
+  "theId": -1,
+  "thePersonaName" : "",
+  "theModQual" : "",
+  "theVariable" : "",
+  "theCharacteristic" : "",
+  "theGrounds" : [],
+  "theWarrant" : [],
+  "theRebuttal" : [],
+  "theBacking" :[] 
+};
+

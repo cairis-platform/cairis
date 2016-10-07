@@ -83,7 +83,7 @@ class ExternalDocumentDAO(CairisDAO):
       edDate=edoc.thePublicationDate,
       edAuths=edoc.theAuthors,
       edDesc=edoc.theDescription)
-    edParams.setId(id)
+    edParams.setId(found_edoc.theId)
     try:
       self.db_proxy.updateExternalDocument(edParams)
     except ARMException as ex:

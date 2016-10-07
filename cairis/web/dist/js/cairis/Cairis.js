@@ -2013,6 +2013,10 @@ function setTableHeader(){
             debugLogger("Is Dependency");
             thead = "<th width='120px' id='addNewDependency'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Depender</th><th>Dependee</th><th>Noun</th><th>Dependency</th>";
             break;
+        case "ExternalDocuments":
+            debugLogger("Is External Documents");
+            thead = "<th width='120px' id='addNewExternalDocument'><i class='fa fa-plus floatCenter'></i></th><th>External Document</th><th>Description</th>";
+            break;
     }
     $("#reqTable").find("thead").empty();
    // $("#reqTable").empty();

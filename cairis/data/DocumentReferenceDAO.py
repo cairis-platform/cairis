@@ -81,7 +81,7 @@ class DocumentReferenceDAO(CairisDAO):
       docName=dr.theDocName,
       cName=dr.theContributor,
       docExc=dr.theExcerpt)
-    drParams.setId(id)
+    drParams.setId(found_dr.theId)
     try:
       self.db_proxy.updateDocumentReference(drParams)
     except ARMException as ex:
