@@ -2017,6 +2017,10 @@ function setTableHeader(){
             debugLogger("Is External Documents");
             thead = "<th width='120px' id='addNewExternalDocument'><i class='fa fa-plus floatCenter'></i></th><th>External Document</th><th>Description</th>";
             break;
+        case "DocumentReferences":
+            debugLogger("Is Document References");
+            thead = "<th width='120px' id='addNewDocumentReference'><i class='fa fa-plus floatCenter'></i></th><th>Document Reference</th><th>Document</th>";
+            break;
     }
     $("#reqTable").find("thead").empty();
    // $("#reqTable").empty();
