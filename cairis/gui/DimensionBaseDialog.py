@@ -22,7 +22,7 @@ from cairis.core.Borg import Borg
 from cairis.core.ObjectFactory import *
 from cairis.core.armid import *
 import DialogClassParameters
-import cairis.core.DimensionNameIdentifier
+import DimensionNameIdentifier
 import DimensionBaseDialog
 import DependentsDialog
 from ExposedCountermeasureDialog import ExposedCountermeasureDialog

@@ -16,9 +16,9 @@
 #  under the License.
 
 
-from ARM import *
-import RequirementFactory
-from Borg import Borg
+from cairis.core.ARM import *
+import cairis.core.RequirementFactory
+from cairis.core.Borg import Borg
 
 __author__ = 'Shamal Faily'
 

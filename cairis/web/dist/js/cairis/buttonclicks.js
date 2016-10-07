@@ -126,7 +126,7 @@ $("#gridObstacles").click(function() {
     window.activeTable = "Obstacles";
     setTableHeader();
 });
-$("#showRolesButton").click(function () {
+$("#rolesClick").click(function () {
    fillRolesTable();
 });
 /*

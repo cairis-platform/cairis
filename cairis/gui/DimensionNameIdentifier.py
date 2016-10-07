@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from ARM import *
+from cairis.core.ARM import *
 
 __author__ = 'Shamal Faily'
 

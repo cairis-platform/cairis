@@ -17,7 +17,7 @@
 
 __author__ = 'Shamal Faily'
 
-from Requirement import Requirement
+from cairis.core.Requirement import Requirement
 
 IMPERATIVES = set(['shall','must','is required to','are applicable','are to','responsible for','will','should'])
 OPTIONS = ['can','may','optionally']

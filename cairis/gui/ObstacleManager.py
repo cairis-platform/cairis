@@ -16,11 +16,11 @@
 #  under the License.
 
 
-import ARM
-from Borg import Borg
-from ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
-from Obstacle import Obstacle
-from ObstacleParameters import ObstacleParameters
+import cairis.core.ARM
+from cairis.core.Borg import Borg
+from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
+from cairis.core.Obstacle import Obstacle
+from cairis.core.ObstacleParameters import ObstacleParameters
 
 __author__ = 'Shamal Faily'
 

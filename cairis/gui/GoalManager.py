@@ -16,11 +16,11 @@
 #  under the License.
 
 
-import ARM
-from Borg import Borg
-from GoalEnvironmentProperties import GoalEnvironmentProperties
-from Goal import Goal
-from GoalParameters import GoalParameters
+import cairis.core.ARM
+from cairis.core.Borg import Borg
+from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
+from cairis.core.Goal import Goal
+from cairis.core.GoalParameters import GoalParameters
 
 __author__ = 'Shamal Faily'
 

@@ -19,7 +19,7 @@
 import wx
 import wx.grid
 import wx.lib.gridmovers as gridmovers
-from cairis.core.RequirementManager import RequirementManager
+from RequirementManager import RequirementManager
 import cairis.core.Requirement
 from cairis.core.ARM import *
 from cairis.core.armid import *
