@@ -21,7 +21,7 @@ from cairis.core.armid import *
 from BasePanel import BasePanel
 import cairis.core.TemplateAsset
 from cairis.core.Borg import Borg
-from cairis.core.ValueDictionary import ValueDictionary
+from ValueDictionary import ValueDictionary
 from AssetSummaryNotebook import AssetSummaryNotebook
 from SingleEnvironmentPropertiesListCtrl import SingleEnvironmentPropertiesListCtrl
 

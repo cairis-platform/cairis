@@ -21,7 +21,7 @@ from DimensionListCtrl import DimensionListCtrl
 from EnvironmentListCtrl import EnvironmentListCtrl
 from PropertiesListCtrl import PropertiesListCtrl
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
-from cairis.core.ValueDictionary import ValueDictionary
+from ValueDictionary import ValueDictionary
 
 __author__ = 'Shamal Faily'
 

@@ -20,7 +20,7 @@ import wx
 from cairis.core.armid import *
 from cairis.core.ARM import *
 from PropertyDialog import PropertyDialog
-from cairis.core.ValueDictionary import ValueDictionary
+from ValueDictionary import ValueDictionary
 
 __author__ = 'Shamal Faily'
 

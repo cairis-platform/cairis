@@ -18,7 +18,7 @@
 
 import wx
 from cairis.core.armid import *
-from cairis.core.ValueDictionary import ValueDictionary
+from ValueDictionary import ValueDictionary
 from DimensionListCtrl import DimensionListCtrl
 from TargetListCtrl import TargetListCtrl
 from PropertiesListCtrl import PropertiesListCtrl
