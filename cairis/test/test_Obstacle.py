@@ -65,9 +65,12 @@ class ObstacleTest(unittest.TestCase):
     self.assertEqual(igp1.name(), og1.name())
     self.assertEqual(igp1.originator(), og1.originator())
     ogep1 = og1.environmentProperty(igep1.name())
-    
     self.assertEqual(igep1.definition(), ogep1.definition())
     self.assertEqual(igep1.category(), ogep1.category())
+
+    igp1.setId(og1.id())
+    b.dbProxy.updateObstacle(igp1)
+
 
     b.dbProxy.deleteObstacle(og1.id())
  
