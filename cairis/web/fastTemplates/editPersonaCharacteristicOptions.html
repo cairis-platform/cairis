@@ -1,0 +1,70 @@
+<form role="form" data-toggle="validator" id="editPersonaCharacteristicOptionsForm" xmlns="http://www.w3.org/1999/html" >
+  <div class="tabs">
+    <ul>
+      <li><a href="#general">General</a></li>
+      <li><a href="#grounds">Grounds</a></li>
+      <li><a href="#warrants">Warrant</a></li>
+      <li><a href="#backing">Backing</a></li>
+      <li><a href="#rebuttal">Rebuttal</a></li>
+    </ul>
+    <div id="general">
+      <div class="form-group">
+        <label for="theModQual" class="control-label">Modal Qualifier</label>
+        <input class="optionsInput personaCharacteristicUpdate form-control" type="text" name="theModQual" id="theModQual" style="width: 75%;" data-error="Modal Qualifier is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
+      <div class="form-group">
+        <label for='theCharacteristic' class="control-label">Definition</label>
+        <textarea class="form-control" name="theCharacteristic" id="theCharacteristic" style="width: 100%" data-error="Definition is required" required></textarea>
+        <div class="help-block with-errors"></div>
+      </div>
+    </div>
+    <div id="grounds">
+    <div class="form-group">
+      <table class="clickable-table" id="theGrounds">
+        <thead>
+          <tr><th id="addGrounds"><i class="fa fa-plus"></i></th><th>Reference</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    <div id="warrant">
+    <div class="form-group">
+      <table class="clickable-table" id="theWarrant">
+        <thead>
+          <tr><th id="addWarrant"><i class="fa fa-plus"></i></th><th>Reference</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    <div id="backing">
+    <div class="form-group">
+      <table class="clickable-table" id="theBacking">
+        <thead>
+          <tr><th>Reference</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    <div id="rebuttal">
+    <div class="form-group">
+      <table class="clickable-table" id="theRebuttal">
+        <thead>
+          <tr><th id="addRebuttal"><i class="fa fa-plus"></i></th><th>Reference</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary" id="UpdatePersonaCharacteristic">Update</button>
+  </div>
+</form>

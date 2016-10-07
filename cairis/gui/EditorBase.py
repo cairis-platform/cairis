@@ -30,7 +30,6 @@ class EditorBase(wx.Panel):
     b = Borg()
     self.dbProxy = b.dbProxy
     directoryPrefix = b.imageDir + '/'
-    contextModelBmp = wx.Image(directoryPrefix + 'contextModel.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     environmentModelBmp = wx.Image(directoryPrefix + 'environmentModel.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     assetModelBmp = wx.Image(directoryPrefix + 'classModel.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()
     goalModelBmp = wx.Image(directoryPrefix + 'goalModel.png',wx.BITMAP_TYPE_PNG).ConvertToBitmap()

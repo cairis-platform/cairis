@@ -2021,6 +2021,10 @@ function setTableHeader(){
             debugLogger("Is Document References");
             thead = "<th width='120px' id='addNewDocumentReference'><i class='fa fa-plus floatCenter'></i></th><th>Document Reference</th><th>Document</th>";
             break;
+        case "PersonaCharacteristics":
+            debugLogger("Is Persona Characteristics");
+            thead = "<th width='120px' id='addNewPersonaCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Variable</th><th>Characteristic</th>";
+            break;
     }
     $("#reqTable").find("thead").empty();
    // $("#reqTable").empty();

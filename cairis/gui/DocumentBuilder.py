@@ -144,12 +144,6 @@ def buildModel(p,envName,modelType,graphFile):
       return False
     parser = KaosXDotParser('class',model.graph())
     graph = parser.parse()
-  elif (modelType == 'Context'):
-    model = p.contextModel(envName)
-    if (model.size() == 0):
-      return False
-    parser = XDotParser(model.graph())
-    graph = parser.parse()
   elif (modelType == 'Goal'):
     model = KaosModel(p.goalModel(envName).values(),envName,'goal')
     if (model.size() == 0):

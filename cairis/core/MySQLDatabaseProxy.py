@@ -5279,44 +5279,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting requirement versions (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def contextModelElements(self,envName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call contextModelElements(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining context model elements'
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        elements = []
-        for row in curs.fetchall():
-          row = list(row)
-          elements.append((row[0],row[1]))
-        curs.close()
-        return elements
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting class model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
-  def exposedDomains(self,envName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call exposedDomains(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining domains exposed by environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        doms = []
-        for row in curs.fetchall():
-          row = list(row)
-          doms.append(row[0])
-        curs.close()
-        return doms
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting domains exposed by environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
   def existingResponseGoal(self,responseId):
     try:
       curs = self.conn.cursor()
@@ -5454,37 +5416,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         stats[row[0]] = row[1]
         curs.close()
       return stats
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting threat statistics (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
-  def riskScatter(self,envName = ''):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call getRiskElements(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting threat types'
-        raise DatabaseProxyException(exceptionText) 
-      xPoints = []
-      yPoints = []
-      riskDetails = []
-      for row in curs.fetchall():
-        row = list(row)
-        riskDetails.append((row[0],row[1],row[2]))
-        xPoints.append(row[3])
-        yPoints.append(row[4])
-        curs.close()
-
-      scores = []
-      for risk,threat,vulnerability in riskDetails:
-        scoreDetails = self.riskScore(threat,vulnerability,envName,risk)
-        highestScore = 0
-        for resp,preScore,postScore,details in scoreDetails:
-          if (postScore > highestScore):
-            highestScore = postScore
-        scores.append(highestScore)
-      return xPoints,yPoints,scores
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting threat statistics (id:' + str(id) + ',message:' + msg + ')'
