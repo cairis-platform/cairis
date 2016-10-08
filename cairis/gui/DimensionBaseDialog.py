@@ -64,7 +64,7 @@ class DimensionBaseDialog(BaseDialog):
     BaseDialog.__init__(self,parent,winId,winLabel,initSize)
     b = Borg()
     self.dbProxy = b.dbProxy
-    self.theDimensionName = cairis.core.DimensionNameIdentifier.dimensionName(self.__class__.__name__)
+    self.theDimensionName = DimensionNameIdentifier.dimensionName(self.__class__.__name__)
     self.selectedLabel = ""
     self.selectedIdx = -1
     dimIcon = wx.Icon(b.imageDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
