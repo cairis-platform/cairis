@@ -20,7 +20,7 @@ from cairis.core.armid import *
 from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from ExceptionDialog import ExceptionDialog
-import cairis.core.ObstacleFactory
+import ObstacleFactory
 
 __author__ = 'Shamal Faily'
 

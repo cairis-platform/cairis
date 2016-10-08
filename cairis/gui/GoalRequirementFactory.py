@@ -16,8 +16,8 @@
 #  under the License.
 
 
-from GoalAssociationParameters import GoalAssociationParameters
-from Borg import Borg
+from cairis.core.GoalAssociationParameters import GoalAssociationParameters
+from cairis.core.Borg import Borg
 
 __author__ = 'Shamal Faily'
 

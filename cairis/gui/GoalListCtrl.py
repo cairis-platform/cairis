@@ -18,7 +18,7 @@
 
 import wx
 from cairis.core.armid import *
-import cairis.core.GoalRequirementFactory
+import GoalRequirementFactory
 from cairis.core.Borg import Borg
 from DimensionNameDialog import DimensionNameDialog
 from cairis.core.ARM import *
