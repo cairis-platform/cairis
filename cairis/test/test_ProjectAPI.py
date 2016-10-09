@@ -117,7 +117,7 @@ class ProjectAPITests(CairisDaemonTestCase):
         ps.contributions[idx] = Contributor(
           first_name=ps.contributions[idx]['firstName'],
           surname=ps.contributions[idx]['surname'],
-          affliation=ps.contributions[idx]['affliation'],
+          affiliation=ps.contributions[idx]['affiliation'],
           role=ps.contributions[idx]['role']
         )
 
