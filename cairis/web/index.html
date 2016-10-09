@@ -140,98 +140,179 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div id="filtercontent" class="extraContent">
-        <label  class="topCombobox" for="assetsbox">Assets</label>
-        <select class="topCombobox" id="assetsbox" ></select>
-        <label  class="topCombobox" for="environmentsbox">Environments</label>
-        <select class="topCombobox" id="environmentsbox"></select>
+    <section class="content-header" style="margin-left: 5px; margin-right: 5px; margin-bottom: 5px;">
+      <div id="filtercontent" class="extraContent row form-group">
+        <div class="col-md-1">
+          <label class="topCombobox control-label">Assets</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="assetsbox" ></select>
+        </div>
+        <div class="col-md-2">
+          <label class="topCombobox control-label" for="environmentsbox">Environments</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="environmentsbox"></select>
+        </div>
       </div>
-      <div id="filtergoalmodelcontent" class="extraContent" style="display:none">
-        <label  class="topCombobox" for="gmenvironmentsbox">Environment</label>
-        <select class="topCombobox" id="gmenvironmentsbox" ></select>
-        <label  class="topCombobox" for="gmgoalbox">Goal</label>
-        <select class="topCombobox" id="gmgoalbox"></select>
-        <label  class="topCombobox" for="gmusecasebox">Use Case</label>
-        <select class="topCombobox" id="gmusecasebox"></select>
+
+      <div id="filtergoalmodelcontent" class="extraContent row form-group" style="display:none">
+        <div class="col-md-1">
+          <label  class="topCombobox control-label" for="gmenvironmentsbox">Environment</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="gmenvironmentsbox" ></select>
+        </div>
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="gmgoalbox">Goal</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="gmgoalbox"></select>
+        </div>
+        <div class="col-md-1">
+          <label  class="topCombobox control-label" for="gmusecasebox">Use Case</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="gmusecasebox"></select>
+        </div>
       </div>
-      <div id="filterobstaclemodelcontent" class="extraContent" style="display:none">
-        <label  class="topCombobox" for="omenvironmentsbox">Environment</label>
-        <select class="topCombobox" id="omenvironmentsbox" ></select>
-        <label  class="topCombobox" for="omobstaclebox">Obstacle</label>
-        <select class="topCombobox" id="omobstaclebox"></select>
+      <div id="filterobstaclemodelcontent" class="extraContent row form-group" style="display:none">
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="omenvironmentsbox">Environment</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="omenvironmentsbox" ></select>
+        </div>
+        <div class="col-md-1">
+          <label  class="topCombobox control-label" for="omobstaclebox">Obstacle</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="omobstaclebox"></select>
+        </div>
       </div>
-      <div id="filterresponsibilitymodelcontent" class="extraContent" style="display:none">
-        <label  class="topCombobox" for="remenvironmentsbox">Environment</label>
-        <select class="topCombobox" id="remenvironmentsbox" ></select>
-        <label  class="topCombobox" for="remrolebox">Role</label>
-        <select class="topCombobox" id="remrolebox"></select>
+      <div id="filterresponsibilitymodelcontent" class="extraContent row form-group" style="display:none">
+        <div class="col-md-1">
+          <label  class="topCombobox control-label" for="remenvironmentsbox">Environment</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="remenvironmentsbox" ></select>
+        </div>
+        <div class="col-md-1">
+          <label  class="topCombobox control-label" for="remrolebox">Role</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-group" id="remrolebox"></select>
+        </div>
       </div>
-      <div id="filtertaskmodelcontent" class="extraContent" style="display:none">
-        <label  class="topCombobox" for="tmenvironmentsbox">Environment</label>
-        <select class="topCombobox" id="tmenvironmentsbox" ></select>
-        <label  class="topCombobox" for="tmtaskbox">Task</label>
-        <select class="topCombobox" id="tmtaskbox"></select>
-        <label  class="topCombobox" for="tmmisusecasebox">Misuse Case</label>
-        <select class="topCombobox" id="tmmisusecasebox"></select>
+      <div id="filtertaskmodelcontent" class="extraContent row form-group" style="display:none">
+        <div class="col-md-1">
+          <label  class="topCombobox control-label" for="tmenvironmentsbox">Environment</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="tmenvironmentsbox" ></select>
+        </div>
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="tmtaskbox">Task</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="tmtaskbox"></select>
+        </div>
+        <div class="col-md-1">
+          <label  class="topCombobox control-label" for="tmmisusecasebox">Misuse Case</label>
+        </div>
+        <div class="col-md-1">
+          <select class="topCombobox form-control" id="tmmisusecasebox"></select>
+        </div>
       </div>
-      <div id="filterapmodelcontent" class="extraContent" style="display:none">
-        <label  class="topCombobox" for="appersonasbox">Persona</label>
-        <select class="topCombobox" id="appersonasbox" ></select>
-        <label  class="topCombobox" for="apbtbox">Behaviour Type</label>
-        <select class="topCombobox" id="apbtbox">
-          <option value="All">All</option>
-          <option value="Activities">Activities</option>
-          <option value="Attitudes">Attitudes</option>
-          <option value="Aptitudes">Aptitudes</option>
-          <option value="Motivations">Motivations</option>
-          <option value="Skills">Skills</option>
-          <option value="Environment Narrative">Environment Narrative</option>
-          <option value="Intrinsic">Intrinsic</option>
-          <option value="Contextual">Contextual</option>
-        </select>
-        <label  class="topCombobox" for="apcharacteristicbox">Characteristic</label>
-        <select class="topCombobox" id="apcharacteristicbox"></select>
+      <div id="filterapmodelcontent" class="extraContent row form-group" style="display:none">
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="appersonasbox">Persona</label>
+        </div>
+        <div class="col-md-1">
+          <select class="topCombobox form-control" id="appersonasbox" ></select>
+        </div>
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="apbtbox">Behaviour Type</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="apbtbox">
+            <option value="All">All</option>
+            <option value="Activities">Activities</option>
+            <option value="Attitudes">Attitudes</option>
+            <option value="Aptitudes">Aptitudes</option>
+            <option value="Motivations">Motivations</option>
+            <option value="Skills">Skills</option>
+            <option value="Environment Narrative">Environment Narrative</option>
+            <option value="Intrinsic">Intrinsic</option>
+            <option value="Contextual">Contextual</option>
+          </select>
+        </div>
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="apcharacteristicbox">Characteristic</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="apcharacteristicbox"></select>
+        </div>
       </div>
-      <div id="filterriskmodelcontent" class="extraContent" style="display:none">
-        <label  class="topCombobox" for="rmenvironmentsbox">Environment</label>
-        <select class="topCombobox" id="rmenvironmentsbox" ></select>
-        <label  class="topCombobox" for="rmdimensionbox">Type</label>
-        <select class="topCombobox" id="rmdimensionbox">
-          <option value="all">All</option>
-          <option value="asset">Asset</option>
-          <option value="attacker">Attacker</option>
-          <option value="countermeasure">Countermeasure</option>
-          <option value="misusecase">Misuse Case</option>
-          <option value="obstacle">Obstacle</option>
-          <option value="requirement">Requirement</option>
-          <option value="response">Response</option>
-          <option value="risk">Risk</option>
-          <option value="role">Role</option>
-          <option value="task">Task</option>
-          <option value="threat">Threat</option>
-          <option value="vulnerability">Vulnerability</option>
-        </select>
-        <label  class="topCombobox" for="rmobjectbox">Name</label>
-        <select class="topCombobox" id="rmobjectbox"></select>
-        <label  class="topCombobox" for="rmlayout">Type</label>
-        <select class="topCombobox" id="rmlayout">
-          <option value="Hierarchical">Hierarchical</option>
-          <option value="Spring">Spring</option>
-          <option value="Radial">Radial</option>
-          <option value="Circular">Circular</option>
-        </select>
+      <div id="filterriskmodelcontent" class="extraContent row form-group" style="display:none">
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="rmenvironmentsbox">Environment</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="rmenvironmentsbox" ></select>
+        </div>
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="rmdimensionbox">Type</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="rmdimensionbox">
+            <option value="all">All</option>
+            <option value="asset">Asset</option>
+            <option value="attacker">Attacker</option>
+            <option value="countermeasure">Countermeasure</option>
+            <option value="misusecase">Misuse Case</option>
+            <option value="obstacle">Obstacle</option>
+            <option value="requirement">Requirement</option>
+            <option value="response">Response</option>
+            <option value="risk">Risk</option>
+            <option value="role">Role</option>
+            <option value="task">Task</option>
+            <option value="threat">Threat</option>
+            <option value="vulnerability">Vulnerability</option>
+          </select>
+        </div>
+        <div class="col-md-1">
+          <label  class="topCombobox control-label" for="rmobjectbox">Name</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="rmobjectbox"></select>
+        </div>
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="rmlayout">Type</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="rmlayout">
+            <option value="Hierarchical">Hierarchical</option>
+            <option value="Spring">Spring</option>
+            <option value="Radial">Radial</option>
+            <option value="Circular">Circular</option>
+          </select>
+        </div>
       </div>
-      <div id="filterconcerns" class="extraContent">
-        <label  class="topCombobox" for="concernsbox">Hide Concerns</label>
-        <select class="topCombobox" id="concernsbox">
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
+      <div id="filterconcerns" class="extraContent row form-group">
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="concernsbox">Hide Concerns</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="concernsbox">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
       </div>
     </section>
     <!-- Main content -->
-    <section id="maincontent" class="content">
+    <section id="maincontent" class="content" style="margin-left: 5px; margin-right: 5px">
       <!-- Your Page Content Here -->
       <table id="reqTable"class="theTable table table-striped table-bordered sortable">
         <thead class="thead-inverse"></thead>
