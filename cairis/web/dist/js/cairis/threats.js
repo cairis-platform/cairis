@@ -15,13 +15,17 @@
     specific language governing permissions and limitations
     under the License.
 
-    Authors: Raf Vandelaer */
+    Authors: Raf Vandelaer, Shamal Faily */
 
 /*
 I've made this file to make it easier for me to program. everything (except PUT POST and DELETE) for the threats will be coded here
  It is possible that I will use some already developed functions inside some other files
  */
 $("#threatsClick").click(function () {
+   createThreatsTable();
+});
+
+$("#threatMenuClick").click(function () {
    createThreatsTable();
 });
 

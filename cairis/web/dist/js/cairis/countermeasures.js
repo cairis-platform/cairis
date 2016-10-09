@@ -21,6 +21,11 @@ $("#countermeasuresClick").click(function () {
   createCountermeasuresTable();
 });
 
+$("#countermeasureMenuClick").click(function () {
+  createCountermeasuresTable();
+});
+
+
 /*
  A function for filling the table with Countermeasures
  */

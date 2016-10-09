@@ -15,7 +15,7 @@
     specific language governing permissions and limitations
     under the License.
 
-    Authors: Raf Vandelaer */
+    Authors: Raf Vandelaer, Shamal Faily */
 
 /*
  I've made this file to make it easier for me to program. Everything (except PUT POST and DELETE) for the attackers will be coded here
@@ -24,6 +24,11 @@
 $("#attackerClick").click(function () {
     createAttackersTable();
 });
+
+$("#attackerMenuClick").click(function () {
+    createAttackersTable();
+});
+
 /*
  A function for filling the table with Threats
  */

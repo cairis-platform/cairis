@@ -88,7 +88,7 @@ class Contributor(object):
     obj_id_field: fields.String,
     'firstName': fields.String,
     'surname': fields.String,
-    'affliation': fields.String,
+    'affiliation': fields.String,
     'role': fields.String
   }
   required = resource_fields.keys()
@@ -99,21 +99,21 @@ class Contributor(object):
     }
   }
 
-  def __init__(self, first_name=None, surname=None, affliation=None, role=None, tuple_form=None):
+  def __init__(self, first_name=None, surname=None, affiliation=None, role=None, tuple_form=None):
     """
     :type first_name: str
     :type surname: str
-    :type affliation: str
+    :type affiliation: str
     :type role: str
     :type tuple_form: tuple
     """
     if tuple_form is None:
       self.firstName = first_name or ''
       self.surname = surname or ''
-      self.affliation = affliation or ''
+      self.affiliation = affiliation or ''
       self.role = role or ''
     else:
-      attrs = ['firstName', 'surname', 'affliation', 'role']
+      attrs = ['firstName', 'surname', 'affiliation', 'role']
       for idx in range(0, len(tuple_form)):
         self.__setattr__(attrs[idx], tuple_form[idx] or '')
 

@@ -17,6 +17,10 @@
 
     Authors: Shamal Faily */
 
+$("#personaMenuClick").click(function () {
+  createPersonasTable();
+});
+
 $("#personaClick").click(function () {
   createPersonasTable();
 });

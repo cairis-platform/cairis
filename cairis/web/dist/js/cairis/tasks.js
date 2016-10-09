@@ -39,6 +39,10 @@ $("#taskClick").click(function () {
   createTasksTable();
 });
 
+$("#taskMenuClick").click(function () {
+  createTasksTable();
+});
+
 
 function createTasksTable(){
 

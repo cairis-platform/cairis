@@ -17,7 +17,11 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
-$("#EditGoals").click(function(){
+$("#goalsClick").click(function(){
+  createEditGoalsTable()
+});
+
+$("#goalMenuClick").click(function(){
   createEditGoalsTable()
 });
 

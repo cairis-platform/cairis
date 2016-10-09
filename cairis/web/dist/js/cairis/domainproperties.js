@@ -21,6 +21,10 @@ $("#domainPropertyClick").click(function () {
   createDomainPropertiesTable();
 });
 
+$("#domainPropertyMenuClick").click(function () {
+  createDomainPropertiesTable();
+});
+
 
 function createDomainPropertiesTable(){
 

@@ -80,7 +80,7 @@ class RequirementDAO(CairisDAO):
 
         if found_requirement is None:
             self.close()
-            raise ObjectNotFoundHTTPError('The provided requirement name')
+            raise ObjectNotFoundHTTPError('The provided requirement name ' + '"' + name + '"')
 
         return found_requirement
 

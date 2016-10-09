@@ -22,7 +22,16 @@
 /*
  Function for adding a row to the table
  */
-$("#addRow").click(function() {
+$("#addReq").click(function() {
+  addReq();
+});
+
+$("#addReqMenu").click(function() {
+  addReq();
+});
+
+function addReq() {
+
     var kind  = "";
 
     //var clonedRow = $("#reqTable tr:last").clone();
@@ -63,48 +72,53 @@ $("#addRow").click(function() {
         sortTableByRow(0);
     }
 
-});
+}
 
 /*
  Removing the active tr
  */
 $("#removeReq").click(function() {
-    if(window.activeTable =="Requirements"){
-      var reqName = $("tr").eq(getActiveindex()).find("td").eq(1).html();
-      var ursl = serverIP + "/api/requirements/name/" + reqName.replace(' ',"%20");
-      var object = {};
-      object.session_id= $.session.get('sessionID');
-      var objectoutput = JSON.stringify(object);
-
-      $.ajax({
-        type: "DELETE",
-        dataType: "json",
-        contentType: "application/json",
-        accept: "application/json",
-        data: objectoutput,
-        crossDomain: true,
-        url: ursl,
-        success: function (data) {
-          $("tr").eq(getActiveindex()).detach();
-          showPopup(true);
-          sortTableByRow(0);
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            var error = JSON.parse(xhr.responseText);
-            showPopup(false, String(error.message));
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-      });
-    }
-
+  removeReq();
 });
 
-$("#gridReq").click(function(){
-    window.activeTable = "Requirements";
-    startingTable();
+$("#removeReqMenu").click(function() {
+  removeReq();
 });
 
+function removeReq(reqName) {
+  if(window.activeTable =="Requirements"){
+    var ursl = serverIP + "/api/requirements/name/" + reqName.replace(' ',"%20");
+    var object = {};
+    object.session_id= $.session.get('sessionID');
+    var objectoutput = JSON.stringify(object);
+
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      data: objectoutput,
+      crossDomain: true,
+      url: ursl,
+      success: function (data) {
+        $("tr").eq(getActiveindex()).detach();
+        showPopup(true);
+        sortTableByRow(0);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  }
+}
+
+$("#requirementsClick").click(function(){
+  window.activeTable = "Requirements";
+  startingTable();
+});
 
 //Just for debugLogger
 $("#testingButton").click(function(){
@@ -113,103 +127,96 @@ $("#testingButton").click(function(){
 
 //For debugLogger
 $("#removesessionButton").click(function() {
-    $.session.remove('sessionID');
-    location.reload();
+  $.session.remove('sessionID');
+  location.reload();
 });
 
 $("#gridGoals").click(function() {
-    window.activeTable = "Goals";
-    setTableHeader();
+  window.activeTable = "Goals";
+  setTableHeader();
 });
 //gridObstacles
 $("#gridObstacles").click(function() {
-    window.activeTable = "Obstacles";
-    setTableHeader();
+  window.activeTable = "Obstacles";
+  setTableHeader();
+});
+
+$("#roleMenuClick").click(function () {
+  fillRolesTable();
 });
 $("#rolesClick").click(function () {
-   fillRolesTable();
+  fillRolesTable();
 });
-/*
- When assetview is clicked
- */
-$('#assetView').click(function(){
-    window.theVisualModel = 'asset';
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
 
-        },
-        crossDomain: true,
-        url: serverIP + "/api/environments/all/names",
-        success: function (data) {
-            $("#comboboxDialogSelect").empty();
-            $.each(data, function(i, item) {
-                $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
-            });
-            $( "#comboboxDialog" ).dialog({
-                modal: true,
-                buttons: {
-                    Ok: function() {
-                        $( this ).dialog( "close" );
-                        //Created a function, for readability
-                        getAssetview($( "#comboboxDialogSelect").find("option:selected" ).text());
-                    }
-                }
-            });
-            $(".comboboxD").css("visibility","visible");
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+$('#assetModelClick').click(function(){
+  window.theVisualModel = 'asset';
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/environments/all/names",
+    success: function (data) {
+      $("#comboboxDialogSelect").empty();
+      $.each(data, function(i, item) {
+        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+      });
+      $( "#comboboxDialog" ).dialog({
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+            getAssetview($( "#comboboxDialogSelect").find("option:selected" ).text());
+          }
         }
-    })});
+      });
+      $(".comboboxD").css("visibility","visible");
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  })
+});
 
-
-/*
- When goalview is clicked
- */
-$('#goalView').click(function(){
-    window.theVisualModel = 'goal';
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/environments/all/names",
-        success: function (data) {
-            $("#comboboxDialogSelect").empty();
-            $.each(data, function(i, item) {
-                $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
-            });
-            $( "#comboboxDialog" ).dialog({
-                modal: true,
-                buttons: {
-                    Ok: function() {
-                        $( this ).dialog( "close" );
-                        //Created a function, for readability
-                        getGoalview($( "#comboboxDialogSelect").find("option:selected" ).text());
-                    }
-                }
-            });
-            $(".comboboxD").css("visibility","visible");
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+$('#goalModelClick').click(function(){
+  window.theVisualModel = 'goal';
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/environments/all/names",
+    success: function (data) {
+      $("#comboboxDialogSelect").empty();
+      $.each(data, function(i, item) {
+        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+      });
+      $( "#comboboxDialog" ).dialog({
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+            getGoalview($( "#comboboxDialogSelect").find("option:selected" ).text());
+          }
         }
-    })});
+      });
+      $(".comboboxD").css("visibility","visible");
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  })
+});
 
-/*
- When responsibilityview is clicked
- */
-$('#responsibilityView').click(function(){
+$('#responsibilityModelClick').click(function(){
     window.theVisualModel = 'responsibility';
     $.ajax({
         type: "GET",
@@ -247,7 +254,7 @@ $('#responsibilityView').click(function(){
 /*
  When goalview is clicked
  */
-$('#obstacleView').click(function(){
+$('#obstacleModelClick').click(function(){
     window.theVisualModel = 'obstacle';
     $.ajax({
         type: "GET",
@@ -282,49 +289,42 @@ $('#obstacleView').click(function(){
         }
     })});
 
-/*
- When riskview is clicked
- */
-$('#riskView').click(function(){
-    window.theVisualModel = 'risk';
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/environments/all/names",
-        success: function (data) {
-            $("#comboboxDialogSelect").empty();
-            $.each(data, function(i, item) {
-                $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
-            });
-            $( "#comboboxDialog" ).dialog({
-                modal: true,
-                buttons: {
-                    Ok: function() {
-                        $( this ).dialog( "close" );
-                        //Created a function, for readability
-                        getRiskview($( "#comboboxDialogSelect").find("option:selected" ).text());
-                    }
-                }
-            });
-            $(".comboboxD").css("visibility","visible");
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+$('#riskModelClick').click(function(){
+  window.theVisualModel = 'risk';
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/environments/all/names",
+    success: function (data) {
+      $("#comboboxDialogSelect").empty();
+      $.each(data, function(i, item) {
+        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+      });
+      $( "#comboboxDialog" ).dialog({
+        modal: true,
+        position: {my: 'center', at: 'center', collision: 'fit'},
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+            getRiskview($( "#comboboxDialogSelect").find("option:selected" ).text());
+          }
         }
+      });
+      $(".comboboxD").css("visibility","visible");
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
     })});
 
 
-/*
- When taskview is clicked
- */
-$('#taskView').click(function(){
+$('#taskModelClick').click(function(){
     window.theVisualModel = 'task';
     $.ajax({
         type: "GET",
@@ -363,7 +363,7 @@ $('#taskView').click(function(){
 /*
  When personaview is clicked
  */
-$('#personaView').click(function(){
+$('#personaModelClick').click(function(){
     window.theVisualModel = 'persona';
     $.ajax({
         type: "GET",
@@ -404,6 +404,9 @@ $('#personaView').click(function(){
 
 
 $("#vulnerabilitiesClick").click(function(){
+   createVulnerabilityTable()
+});
+$("#vulnerabilityMenuClick").click(function(){
    createVulnerabilityTable()
 });
 
@@ -596,11 +599,14 @@ $(document).on('click', "button.deleteEnvironmentButton",function(){
     });
 });
 
-$("#editEnvironmentsButton").click(function () {
-
+$("#environmentsClick").click(function () {
     fillEnvironmentsTable();
-
 });
+
+$("#environmentMenuClick").click(function () {
+    fillEnvironmentsTable();
+});
+
 
 $("#reqTable").on("click", "#addNewRole", function () {
     $("#reqTable").find("tbody").append('<tr><td><button class="editRoleButton" value="">Edit</button> <button class="deleteRoleButton" value="">Delete</button></td><td name="theName"></td><td name="theShortCode"></td><td name="theType"></td></tr>')
@@ -1192,7 +1198,12 @@ $("#reqTable").on("click", "td", function() {
     //$('#reqTable').find('td:last').focus();
     $('#reqTable tr').eq(getActiveindex()).find('td:first').focus();
 });
-$("#editAssetsClick").click(function(){
+
+$("#assetMenuClick").click(function(){
+   fillAssetTable();
+});
+
+$("#assetsClick").click(function(){
    fillAssetTable();
 });
 

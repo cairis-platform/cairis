@@ -17,7 +17,11 @@
 
     Authors: Shamal Faily */
 
-$("#EditObstacles").click(function(){
+$("#obstaclesClick").click(function(){
+  createEditObstaclesTable();
+});
+
+$("#obstacleMenuClick").click(function(){
   createEditObstaclesTable();
 });
 

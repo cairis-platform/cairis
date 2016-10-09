@@ -87,7 +87,7 @@ class ProjectDAO(CairisDAO):
         for idx in range(0, len(contrs)):
             try:
                 check_required_keys(contrs[idx], Contributor.required)
-                json_dict['contributions'][idx] = (contrs[idx]['firstName'], contrs[idx]['surname'], contrs[idx]['affliation'], contrs[idx]['role'])
+                json_dict['contributions'][idx] = (contrs[idx]['firstName'], contrs[idx]['surname'], contrs[idx]['affiliation'], contrs[idx]['role'])
             except MissingParameterHTTPError:
                 SilentHTTPError('A contribution did not contain all required fields. Skipping this one.')
 

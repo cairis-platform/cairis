@@ -17,9 +17,13 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
-$("#responsesTable").click(function () {
+$("#responsesClick").click(function () {
     createResponsesTable();
 });
+$("#responseMenuClick").click(function () {
+    createResponsesTable();
+});
+
 $(document).on('click', ".editResponseButton", function () {
     var name = $(this).val();
     $.ajax({

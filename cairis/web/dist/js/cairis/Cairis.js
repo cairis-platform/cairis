@@ -841,6 +841,25 @@ function createRequirementsTable(data){
     theTable.append(textToInsert.join(''));
 
     theTable.css("visibility","visible");
+
+    $('#reqTable').contextMenu({
+      selector: 'tr',
+      items: {
+        "add": {
+           name: "Add", 
+           callback: function(key, opt) {
+             addReq();
+           }
+         },
+        "remove": {
+           name: "Remove", 
+           callback: function(key, opt) {
+             var reqName = $(this).find("td").eq(1).html();
+             removeReq(reqName);
+           }
+        }
+      }
+    }); 
 }
 
 /*
@@ -1877,8 +1896,9 @@ function startingTable(){
 This is for saying which element has the main focus
  */
 function activeElement(elementid){
-    if(elementid != "reqTable"){
+    if(elementid == "svgViewer"){
         $("#reqTable").hide();
+        $("#projectViewer").hide();
         $("#filtercontent").hide();
         $("#filterconcerns").hide();
         $("#filterriskmodelcontent").hide();
@@ -1913,6 +1933,7 @@ function activeElement(elementid){
     }
     if(elementid != "svgViewer"){
         $("#svgViewer").hide();
+        $("#projectViewer").hide();
         $("#filterriskmodelcontent").hide();
         $("#filtergoalmodelcontent").hide();
         $("#filtertaskmodelcontent").hide();
@@ -1925,6 +1946,10 @@ function activeElement(elementid){
        //If it is the table, we need to see which table it is
         window.theVisualModel = 'None';
         setActiveOptions();
+    }
+    if (elementid == 'projectViewer') {
+      $("#reqTable").hide();
+      $("#filtercontent").hide();
     }
     elementid = "#" + elementid;
     $(elementid).show();
