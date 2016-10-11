@@ -16,6 +16,7 @@
 #  under the License.
 
 import httplib
+import os.path
 from flask import make_response, request, session, send_file
 from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
@@ -91,9 +92,11 @@ class DocumentationAPI(Resource):
     dao.generate_documentation(doc_type,sectionFlags,doc_format)
     dao.close()
 
-    binary_pdf = open(reportName).read()
-    resp = make_response(binary_pdf)
-    resp.headers['Content-Type'] = 'application/' + filePostfix
-    resp.headers['Content-Disposition'] = 'inline; filename=report.' + filePostfix
-    return resp
-
+    if os.path.isfile(reportName):
+      binary_pdf = open(reportName).read()
+      resp = make_response(binary_pdf)
+      resp.headers['Content-Type'] = 'application/' + filePostfix
+      resp.headers['Content-Disposition'] = 'inline; filename=report.' + filePostfix
+      return resp
+    else:
+      raise CairisHTTPError(status_code=500,message='report file not found',status='Unknown error')
