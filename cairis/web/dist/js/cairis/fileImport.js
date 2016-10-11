@@ -15,38 +15,67 @@
     specific language governing permissions and limitations
     under the License.
 
-    Authors: Raf Vandelaer */
+    Authors: Raf Vandelaer, Shamal Faily */
 
 $("#importClick").click(function () {
   fileDialogbox(function (type) {
-    $.session.set("fileType", type);
-  }) 
-});
+    var fileType = $("#theImportModelType").val();
+    var object = {};
+    var json = {'urlenc_file_contents' : $.session.get('importModelContent'),'type': fileType};
+    object.object = json;
+    object.session_id = $.session.get('sessionID');
+    var objectoutput = JSON.stringify(object);
 
-$(document).on('change','#importFile', function () {
-  var fileTag = $(document).find('#importFile');
-  var fd = new FormData();
-  fd.append("file", fileTag[0].files[0]);
-  var fileType = $.session.get("fileType");
-
-  $.ajax({
-    type: "POST",
-    accept: "application/json",
-    processData:false,
-    contentType:false,
-    data: fd,
-    crossDomain: true,
-    url: serverIP + "/api/import/file/type/"+ fileType +"?session_id="+  String($.session.get('sessionID')),
-    success: function (data) {
-      showPopup(true);
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      var error = JSON.parse(xhr.responseText);
-      showPopup(false, String(error.message));
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+    $.ajax({
+      type: "POST",
+      dataType: "json",
+      contentType:"application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData:false,
+      origin: serverIP,
+      data: objectoutput,
+      url: serverIP + "/api/import/text",
+      success: function (data) {
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
   });
 });
 
+function fileDialogbox(callback){
+  var dialogwindow = $("#typeOfFile");
+  var select = dialogwindow.find("select");
+  dialogwindow.dialog({
+    modal: true,
+    buttons: {
+      Ok: function () {
+        var text =  select.find("option:selected" ).text();
+        if(jQuery.isFunction(callback)){
+          callback(text);
+          $("#importClick").trigger('click')
+        }
+        $(this).dialog("close");
+      }
+    }
+  });
+  $(".comboboxD").css("visibility", "visible");
+}
+
+var readImportFile = function(event) {
+  var input = event.target;
+
+  var reader = new FileReader();
+  reader.onload = function(){
+    var text = reader.result;
+    $.session.set('importModelContent',text);
+  };
+  reader.readAsText(input.files[0]);
+};
 

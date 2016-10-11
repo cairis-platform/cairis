@@ -1276,26 +1276,6 @@ function assetsDialogBox(haveEnv,callback){
     });
 }
 
-// Dialog for choosing a file
-function fileDialogbox(callback){
-  var dialogwindow = $("#typeOfFile");
-  var select = dialogwindow.find("select");
-  dialogwindow.dialog({
-    modal: true,
-    buttons: {
-      Ok: function () {
-        var text =  select.find("option:selected" ).text();
-        if(jQuery.isFunction(callback)){
-          callback(text);
-          $("#importFile").trigger('click')
-        }
-        $(this).dialog("close");
-      }
-    }
-  });
-  $(".comboboxD").css("visibility", "visible");
-}
-
 function fileExportDialogbox(callback){
   var dialogwindow = $("#typeOfFile");
   var select = dialogwindow.find("select");

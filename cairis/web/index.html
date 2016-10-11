@@ -418,8 +418,8 @@
       <option id="High">High</option>
     </select>
   </div>
-  <div id="typeOfFile" title="Which type?" style="display: none">
-    <select>
+  <div id="typeOfFile" title="Which type?" class="form-group" style="display: none">
+    <select name="theImportModelType" id="theImportModelType" class="form-control">
       <option>Model</option>
       <option>Project data</option>
       <option>Requirements</option>
@@ -436,6 +436,7 @@
       <option>Assets</option>
       <option>Processes</option>
     </select>
+    <input class="form-control" type="file" accept="text/xml" onchange="readImportFile(event)" id="theImportModelFile" name="theImportModelFile" />
   </div>
   <div class="loadingWrapper">
     <div class="divLoading">

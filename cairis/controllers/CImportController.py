@@ -72,6 +72,8 @@ class CImportTextAPI(Resource):
   )
   # endregion
   def post(self):
+    import pytest
+    pytest.set_trace()
     session_id = get_session_id(session, request)
     json_dict = request.get_json(silent=True)
 
