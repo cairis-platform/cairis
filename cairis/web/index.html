@@ -46,27 +46,22 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span> 
         </button>
-        <a class="navbar-brand" href="#">CAIRIS
-        </a>
+        <a class="navbar-brand" id="homeClick" href="#" role="button"><span class="glyphicon glyphicon-home"></span> CAIRIS</a>
       </div>
       <div id="navbar" class="left navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li class="dropdown messsages-menu">
-            <a href="#" id="homeClick" class="dropdown-toggle" data-toggle="dropdown" role="button"><span class="glyphicon glyphicon-home"></span> Home</a>
-          </li>
           <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><span class="glyphicon glyphicon-book"></span> Specification<span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><span class="glyphicon glyphicon-book"></span> System<span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a id="newClick" href="#">New</a></li>
               <li><a id="importClick" href="#">Import</a></li>
               <li><a id="exportClick" href="#">Export</a></li>
               <li><a id="genDocClick" href="#">Documentation</a></li>
               <li><a id="projectClick" href="#">Properties</a></li>
-              <li><a id="findClick" href="#">Find</a></li>
             </ul>
           </li>
           <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><span class="glyphicon glyphicon-check"> Requirements<span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><span class="glyphicon glyphicon-check"> Requirements<span class="caret"></span></a> 
             <ul class="dropdown-menu">
               <li><a id="requirementsClick" href="#">Requirements</a></li>
               <li><a id="domainPropertyMenuClick" href="#">Domain Properties</a></li>
@@ -135,6 +130,18 @@
               <li><a href="#">Vulnerability Types</a></li>
             </ul>
           </li>
+        
+          <div class="col-sm-3 col-md-3">
+            <form class="navbar-form" role="search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" id="theSearchString" name="theSearchString">
+                <div class="input-group-btn">
+                  <button class="btn btn-default" id="FindButton" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                </div>
+              </div>
+            </form>
+          </div> 
+
         </ul>
       </div>
     </div>

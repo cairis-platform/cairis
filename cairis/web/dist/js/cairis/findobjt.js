@@ -18,39 +18,32 @@
     Authors: Shamal Faily */
 
 
-$("#findClick").click(function(e){
+$("#FindButton").click(function(e){
   e.preventDefault();
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editSearchOptions.html","#objectViewer",null,true,true, function(){
+    var searchString = $("#theSearchString").val();
 
-  fillOptionMenu("fastTemplates/editSearchOptions.html","#optionsContent",null,true,true, function(){
-    forceOpenOptions();
-    $("#optionsHeaderGear").text("Find object");
-  });
-});
-
-optionsContent.on('click','#FindButton', function(e) {
-  e.preventDefault();
-  $("#editSearchOptionsForm").validator();
-  var searchString = $("#theSearchString").val();
-
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/find/" + searchString.replace(" ", "%20"),
-    success: function (data) {
-      $("#theResults").find("tbody").empty();
-      $.each(data, function(idx,searchRes) {
-        appendResults(searchRes);
-      });
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + "/api/find/" + searchString.replace(" ", "%20"),
+      success: function (data) {
+        $("#theResults").find("tbody").empty();
+        $.each(data, function(idx,searchRes) {
+          appendResults(searchRes);
+        });
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
   });
 });
 
