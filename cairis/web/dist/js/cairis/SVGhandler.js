@@ -24,7 +24,7 @@ $( document ).ajaxComplete(function() {
     var link = $(this).attr("xlink:href");
     
     if (self.theVisualModel == 'asset') {
-      window.assetEnvironment = $('#environmentsbox').val();
+      window.assetEnvironment = $('#amenvironmentsbox').val();
     }
     else if (self.theVisualModel == 'goal') {
       window.assetEnvironment = $('#gmenvironmentsbox').val();

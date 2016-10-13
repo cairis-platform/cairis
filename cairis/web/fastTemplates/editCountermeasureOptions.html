@@ -1,4 +1,4 @@
-<form id="editCountermeasureOptionsForm" xmlns="http://www.w3.org/1999/html" >
+<form role="form" id="editCountermeasureOptionsForm" xmlns="http://www.w3.org/1999/html" >
 
   <div class="tabs infoWidth" style="width: 100%;">
     <ul>
@@ -6,27 +6,29 @@
       <li><a href="#description">Description</a></li>
     </ul>
     <div id="summary">
-      <p>
-        <label for="theName">Name</label>
-        <input class="optionsInput countermeasureUpdate" type="text" name="theName" id="theName" style="float: right; width: 75%">
-      </p>
-      <p>
-        <label for="theTags">Tags</label>
-        <input class="optionsInput countermeasureUpdate" type="text" value="" id="theTags" name="theTags" style="float: right; width: 75%">
-      </p>
-      <p>
-        <label for="theType">Type</label>
-        <select id="theType" name="theType" style="float: right; width: 75%">
+      <div class="form-group">
+        <label for="theName" class="control-label">Name</label>
+        <input class="optionsInput countermeasureUpdate form-control" type="text" name="theName" id="theName" style="float: right; width: 75%" date-error="Name is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
+      <div class="form-group">
+        <label for="theTags" class="control-label">Tags</label>
+        <input class="optionsInput countermeasureUpdate form-control" type="text" value="" id="theTags" name="theTags" style="float: right; width: 75%">
+      </div>
+      <div class="form-group">
+        <label for="theType" class="control-label">Type</label>
+        <select id="theType" name="theType" class="form-control" style="float: right; width: 75%">
           <option>Information</option>
           <option>Systems</option>
           <option>Software</option>
           <option>Hardware</option>
           <option>People</option>
         </select>
-      </p>
+      </div>
     </div>   
-    <div id="description">
-      <textarea id="theDescription" class="countermeasureUpdate" style="width: 100%"></textarea>
+    <div class="form-group" id="description">
+      <textarea id="theDescription" class="countermeasureUpdate form-control" style="width: 100%" date-error="Description is required" required></textarea>
+      <div class="help-block with-errors"></div>
     </div>   
   </div>
   <div class="inblock">
@@ -83,5 +85,8 @@
       </div>
     </div>
   </div>
-  <button id="UpdateCountermeasure">Update</button>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary" id="UpdateCountermeasure">Update</button>
+    <button type="submit" class="btn btn-secondary" id="CloseCountermeasure">Close</button>
+  </div>
 </form>

@@ -51,6 +51,9 @@
       </div>
       <div id="navbar" class="left navbar-collapse collapse">
         <ul class="nav navbar-nav">
+          <li class="dropdown messsages-menu">
+            <a href="#" id="homeClick" class="dropdown-toggle" data-toggle="dropdown" role="button"><span class="glyphicon glyphicon-home"></span> Home</a>
+          </li>
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><span class="glyphicon glyphicon-book"></span> Specification<span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -299,12 +302,24 @@
           </select>
         </div>
       </div>
-      <div id="filterconcerns" class="extraContent row form-group">
+      <div id="filterassetmodelcontent" class="extraContent row form-group">
         <div class="col-md-1">
-          <label class="topCombobox control-label" for="concernsbox">Hide Concerns</label>
+          <label class="topCombobox control-label" for="amassetsbox">Assets</label>
         </div>
         <div class="col-md-2">
-          <select class="topCombobox form-control" id="concernsbox">
+          <select class="topCombobox form-control" id="amassetsbox" ></select>
+        </div>
+        <div class="col-md-2">
+          <label class="topCombobox control-label" for="amenvironmentsbox">Environments</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="amenvironmentsbox" ></select>
+        </div>
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="amconcernsbox">Hide Concerns</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="amconcernsbox">
             <option value="Yes">Yes</option>
             <option value="No">No</option>
           </select>
@@ -319,13 +334,14 @@
         <tbody>
         </tbody>
       </table>
+      <div id="homePanel"></div>
       <div id="svgViewer"></div>
-      <div id="projectViewer"></div>
+      <div id="objectViewer" class="no-print"></div>
     </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
     <!-- rightnav -->
     <div id="rightnavGear" class="no-print"
-      style="position: fixed; top: 100px; right: 0px; border-radius: 5px 0px 0px 5px; padding: 10px 15px; font-size: 16px; z-index: 100; cursor: pointer; color: rgb(60, 141, 188); box-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 3px; background: rgb(255, 255, 255);">
+      style="display:none;position: fixed; top: 100px; right: 0px; border-radius: 5px 0px 0px 5px; padding: 10px 15px; font-size: 16px; z-index: 100; cursor: pointer; color: rgb(60, 141, 188); box-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 3px; background: rgb(255, 255, 255);">
       <i class="fa fa-gear"></i>
     </div>
     <div id="rightnavMenu" class="no-print"
@@ -340,8 +356,8 @@
     <!-- The configuration dialog window-->
   </div>
   <div class="comboboxD" id="comboboxDialog" title="Dialog">
-    <label> Choose the environment</label>
-    <select class="comboboxD" id="comboboxDialogSelect">
+    <label for="comboboxDialogSelect" class="control-label"> Choose the environment</label>
+    <select class="comboboxD form-control" id="comboboxDialogSelect">
     </select>
   </div>
   <div id="errorDialog" title="ERROR">
@@ -352,66 +368,66 @@
     <div class="Fail"><i class="fa fa-exclamation fa-2x"></i><div class="infoText">Something went wrong...<p class="faultInfo"></p></div></div>
   </div>
   <div id="ChooseAssetDialog" title="Choose an Asset" style="display: none">
-    <select>
+    <select class="form-control">
     </select>
   </div>
   <div id="ChooseConcernDialog" title="Choose a task concern" style="display: none">
-    <select>
+    <select class="form-control">
     </select>
   </div>
   <div id="ChooseRoleDialog" title="Choose a role" style="display: none">
-    <select>
+    <select class="form-control">
     </select>
   </div>
   <div id="EnterUseCaseStep" title="Enter use case step" style="display: none">
-    <textarea id="theStep" style="width: 100%"></textarea>
+    <textarea id="theStep" style="width: 100%" class="form-control"></textarea>
   </div>
   <div id="ChooseMotivationsDialog" title="Choose a motivation" style="display: none">
-    <select>
+    <select class="form-control">
     </select>
   </div>
   <div id="ChooseEnvAssetsDialog" title="Choose a motivation" style="display: none">
-    <select>
+    <select class="form-control">
     </select>
   </div>
   <div id="ChooseRoleForResponse" title="Add a role cost" style="display: none">
-    <label>Role</label>
-    <select id="theNewRole">
+    <label for="theNewRole" class="control-label">Role</label>
+    <select id="theNewRole" class="form-control">
     </select>
     <br/>
-    <label>Cost</label>
-    <select id="theRoleCost">
+    <label for="theRoleCost" class="control-label">Cost</label>
+    <select id="theRoleCost" class="form-control">
       <option>Low</option>
       <option>Medium</option>
       <option>High</option>
     </select>
   </div>
   <div id="ChoosePersonaForTask" title="Add a participating persona" style="display: none">
-    <label>Persona</label>
-    <select id="theTaskPersona">
+    <label for="theTaskPersona" class="control-label">Persona</label>
+    <select class="form-control" id="theTaskPersona">
     </select>
     <br/>
-    <label>Duration</label>
-    <select id="theTaskDuration">
+    <label for="theTaskDuration" class="control-label">Duration</label>
+    <select class="form-control" id="theTaskDuration">
       <option id="Low">Seconds</option>
       <option id="Medium">Minutes</option>
       <option id="High">Hours or Longer</option>
     </select>
-    <label>Frequency</label>
-    <select id="theTaskFrequency">
+    <label for="theTaskFrequency" class="control-label">Frequency</label>
+    <select class="form-control" id="theTaskFrequency">
       <option id="Low">Hours or more</option>
       <option id="Medium">Daily - Weekly</option>
       <option id="High">Monthly or less</option>
     </select>
-    <label>Demands</label>
-    <select id="theTaskDemands">
+    <label for="theTaskDemands" class="control-label">Demands</label>
+    <select id="theTaskDemands" class="form-control">
       <option id="None">None</option>
       <option id="Low">Low</option>
       <option id="Medium">Medium</option>
       <option id="High">High</option>
     </select>
-    <label>Goal Conflict</label>
-    <select id="theTaskGoalConflict">
+    <label for="theTaskGoalConflict" class="control-label">Goal Conflict</label>
+    <select id="theTaskGoalConflict" class="form-control">
       <option id="None">None</option>
       <option id="Low">Low</option>
       <option id="Medium">Medium</option>
@@ -460,8 +476,8 @@
   <script src="plugins/slimScroll/jquery.slimscroll.js" type="text/javascript"></script>
   <script>
     LazyLoad.js(["dist/js/cairis/Cairis-UI.js","dist/js/cairis/buttonclicks.js", "dist/js/cairis/Cairis.js", "dist/js/cairis/readFile.js",
-        "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/personas.js", "dist/js/cairis/assets.js", "dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js", "dist/js/cairis/tasks.js", "dist/js/cairis/domainproperties.js", "dist/js/cairis/obstacles.js", "dist/js/cairis/countermeasures.js", "dist/js/cairis/usecases.js",
-        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js",
+        "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/personas.js", "dist/js/cairis/assets.js", "dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js", "dist/js/cairis/tasks.js", "dist/js/cairis/domainproperties.js", "dist/js/cairis/obstacles.js", "dist/js/cairis/countermeasures.js", "dist/js/cairis/usecases.js","dist/js/cairis/vulnerabilities.js",
+        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js",
         "dist/js/cairis/SVGhandler.js","dist/js/cairis/PutAndPost.js", "dist/js/objects/jsonDefaultObjects.js"], function () {
 
       console.log("All Cairis JS loaded");

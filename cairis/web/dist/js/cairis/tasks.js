@@ -91,6 +91,7 @@ function createTasksTable(){
 }
 
 $(document).on('click', ".editTaskButton", function () {
+  activeElement("objectViewer");
   var name = $(this).val();
   $.ajax({
     type: "GET",
@@ -102,9 +103,7 @@ $(document).on('click', ".editTaskButton", function () {
     crossDomain: true,
     url: serverIP + "/api/tasks/name/" + name.replace(" ", "%20"),
     success: function (data) {
-      fillOptionMenu("fastTemplates/editTaskOptions.html", "#optionsContent", null, true, true, function () {
-        $("#optionsHeaderGear").text("Task properties");
-        forceOpenOptions();
+      fillOptionMenu("fastTemplates/editTaskOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("Task", JSON.stringify(data));
         $('#editTaskOptionsForm').loadJSON(data, null);
 
@@ -133,8 +132,8 @@ $(document).on('click', ".editTaskButton", function () {
 });
 
 
-var optionsContent = $("#optionsContent");
-optionsContent.on("click",".taskEnvironment", function () {
+var mainContent = $("#objectViewer");
+mainContent.on("click",".taskEnvironment", function () {
   var lastEnvName = $.session.get("taskEnvironmentName");
   var task = JSON.parse($.session.get("Task"));
   var updatedEnvProps = [];
@@ -198,7 +197,7 @@ function appendTaskConcern(concern) {
 
 }
 
-optionsContent.on('click', '#addConcernToTask', function () {
+mainContent.on('click', '#addConcernToTask', function () {
   var hasConcern = [];
   $("#theConcerns").find(".taskConcern").each(function(index, concern){
     hasConcern.push($(concern).text());
@@ -216,7 +215,7 @@ optionsContent.on('click', '#addConcernToTask', function () {
   });
 });
 
-optionsContent.on('click', ".removeTaskConcern", function () {
+mainContent.on('click', ".removeTaskConcern", function () {
   var text = $(this).next(".taskConcern").text();
   $(this).closest("tr").remove();
   var task = JSON.parse($.session.get("Task"));
@@ -238,7 +237,7 @@ function appendTaskPersona(persona,duration,frequency,demands,goalConflict) {
   $("#thePersonas").find("tbody").append("<tr><td class='removeTaskPersona'><i class='fa fa-minus'></i></td><td class='taskPersona'>" + persona + "</td><td>" + duration + "</td><td>" + frequency + "</td><td>" + demands + "</td><td>" + goalConflict +  "</td></tr>").animate('slow');
 }
 
-optionsContent.on('click', '#addPersonaToTask', function () {
+mainContent.on('click', '#addPersonaToTask', function () {
   var hasPersona = [];
   $("#thePersonas").find(".taskPersona").each(function(index, persona){
     hasPersona.push($(persona).text());
@@ -263,7 +262,7 @@ optionsContent.on('click', '#addPersonaToTask', function () {
 });
 
 
-optionsContent.on('click', ".removeTaskPersona", function () {
+mainContent.on('click', ".removeTaskPersona", function () {
   var text = $(this).next(".taskPersona").text();
   $(this).closest("tr").remove();
   var task = JSON.parse($.session.get("Task"));
@@ -288,7 +287,7 @@ function appendConcernAssociation(assoc) {
 
 
 
-optionsContent.on('click', ".deleteTaskEnv", function () {
+mainContent.on('click', ".deleteTaskEnv", function () {
   var envi = $(this).next(".taskEnvironment").text();
   $(this).closest("tr").remove();
   var task = JSON.parse($.session.get("Task"));
@@ -310,7 +309,7 @@ optionsContent.on('click', ".deleteTaskEnv", function () {
   });
 });
 
-optionsContent.on("click", "#addTaskEnv", function () {
+mainContent.on("click", "#addTaskEnv", function () {
   var hasEnv = [];
   $(".taskEnvironment").each(function (index, tag) {
     hasEnv.push($(tag).text());
@@ -331,7 +330,7 @@ optionsContent.on("click", "#addTaskEnv", function () {
   });
 });
 
-optionsContent.on('click', '#UpdateTask', function (e) {
+mainContent.on('click', '#UpdateTask', function (e) {
   e.preventDefault();
   var task = JSON.parse($.session.get("Task"));
   var oldName = task.theName;
@@ -378,11 +377,15 @@ $(document).on('click', '.deleteTaskButton', function (e) {
 });
 
 $(document).on("click", "#addNewTask", function () {
-  fillOptionMenu("fastTemplates/editTaskOptions.html", "#optionsContent", null, true, true, function () {
+  fillOptionMenu("fastTemplates/editTaskOptions.html", "#objectViewer", null, true, true, function () {
     $("#editTaskOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("Task", JSON.stringify(jQuery.extend(true, {},taskDefault )));
-    $("#optionsHeaderGear").text("Task properties");
-    forceOpenOptions();
   });
 });
+
+mainContent.on('click', '#CloseTask', function (e) {
+  e.preventDefault();
+  createTasksTable();
+});
+

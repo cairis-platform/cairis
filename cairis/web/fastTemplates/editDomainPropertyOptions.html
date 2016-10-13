@@ -1,23 +1,30 @@
-<form id="editDomainPropertyOptionsForm" xmlns="http://www.w3.org/1999/html" >
+<form role="form" id="editDomainPropertyOptionsForm" xmlns="http://www.w3.org/1999/html" >
 
-  <p>
-    <label>Name</label>
-    <input class="optionsInput" type="text" name="theName" id="theName" style="float: right; width: 75%">
-  </p>
-  <p>
-    <label for="theType">Type</label>
-    <select name="TheType" id="theType" style="float: right; width: 75%">
+  <div class="form-group">
+    <label for="theName" class="control-label">Name</label>
+    <input class="optionsInput form-control" type="text" name="theName" id="theName" date-error="Domain Property name is required" required>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="form-group">
+    <label for="theType" class="control-label">Type</label>
+    <select name="TheType" id="theType" class="form-control" data-error="Domain Property type is required" required>
       <option value="Hypothesis" selected>Hypothesis</option>
       <option value="Invariant">Invariant</option>
     </select>
-  </p>
-  <p>
-    <label>Originator</label>
-    <input class="optionsInput" type="text" name="theOriginator" id="theOriginator" style="float: right; width: 75%">
-  </p>
-  <div id="Description">
-    <label for="theDescription">Description</label>
-    <textarea class="right" name="theDescription" id="theDescription" style="width: 100%"></textarea>
+    <div class="help-block with-errors"></div>
   </div>
-  <button id="UpdateDomainProperty">Update</button>
+  <div class="form-group">
+    <label for="theOriginator" class="control-label">Originator</label>
+    <input class="optionsInput form-control" type="text" name="theOriginator" id="theOriginator" data-error="Domain Property originator is required" required>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="form-group" id="Description">
+    <label for="theDescription" class="control-label">Description</label>
+    <textarea class="form-control" name="theDescription" id="theDescription" data-error="Description is required" required></textarea>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary" id="UpdateDomainProperty">Update</button>
+    <button type="submit" class="btn btn-secondary" id="CloseDomainProperty">Close</button>
+  </div>
 </form>

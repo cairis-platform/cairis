@@ -1,176 +1,190 @@
-<form xmlns="http://www.w3.org/1999/html" id="editObstacleOptionsForm" class="gearOptions">
-    <p>
-        <label>Name</label>
-        <input class="optionsInput" type="text" id="theName" name="theName">
-    </p>
-    <p>
-        <label>Tags</label>
-        <input class="optionsInput" type="text" id="theTags " name="theTags">
-    </p>
-    <p>
-        <label>Originator</label>
-        <input class="optionsInput" type="text" id="theOriginator" name="theOriginator">
-    </p>
-    <div class="inblock">
-        <table class="left clickable-table" id="theObstacleEnvironments" style="width: auto;">
-            <thead>
-            <th id="addObstacleEnvironment" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
+<form role="form" xmlns="http://www.w3.org/1999/html" id="editObstacleOptionsForm" class="gearOptions">
+  <div class="form-group">
+    <label for="theName" class="control-label">Name</label>
+    <input class="optionsInput form-control" type="text" id="theName" name="theName" data-error="Obstacle name is required" required>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="form-group">
+    <label for="theTags" class="control-label">Tags</label>
+    <input class="optionsInput form-control" type="text" id="theTags " name="theTags">
+  </div>
+  <div>
+    <label for="theOriginator" class="control-label">Originator</label>
+    <input class="optionsInput form-control" type="text" id="theOriginator" name="theOriginator" data-error="Originator is required" required>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="inblock">
+    <table class="left clickable-table" id="theObstacleEnvironments" class="form-control" style="width: auto;">
+      <thead>
+        <th id="addObstacleEnvironment" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
     <div id="obstaclesProperties" class="tabs right" style="width: 75%;">
-        <ul>
-            <li><a href="#Definition">Definition</a></li>
-            <li><a href="#Goals">Goals</a></li>
-            <li><a href="#Sub-Goals">Sub-Goals</a></li>
-            <li><a href="#Concerns">Concerns</a></li>
-        </ul>
-        <div id="Definition">
-            <p><label>Label</label> <input id="theLabel" type="text" name="theLabel" readonly></p>
-            <p>
-            <label>Category</label> <select id="theCategory"  class="obstacleAutoUpdater" name="theCategory" >
-                <option>Maintain</option>
-                <option>Achieve</option>
-                <option>Avoid</option>
-                <option>Improve</option>
-                <option>Increase</option>
-                <option>Maximise</option>
-                <option>Minimise</option>
-            </select></p>
-            <label>Priority</label><select id="thePriority"  class="obstacleAutoUpdater" name="thePriority" >
+      <ul>
+        <li><a href="#Definition">Definition</a></li>
+        <li><a href="#Goals">Goals</a></li>
+        <li><a href="#Sub-Goals">Sub-Goals</a></li>
+        <li><a href="#Concerns">Concerns</a></li>
+      </ul>
+      <div id="Definition">
+        <div class="form-group">
+          <label for="theLabel" class="control-label">Label</label> 
+          <input id="theLabel" class="form-control" type="text" name="theLabel" readonly>
+        </div>
+        <div class="form-group">
+          <label for="theCategory" class="control-label">Category</label> 
+          <select id="theCategory"  class="obstacleAutoUpdater form-control" name="theCategory" >
+            <option>Maintain</option>
+            <option>Achieve</option>
+            <option>Avoid</option>
+            <option>Improve</option>
+            <option>Increase</option>
+            <option>Maximise</option>
+            <option>Minimise</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="thePriority" class="control-label">Priority</label>
+          <select id="thePriority"  class="obstacleAutoUpdater form-control" name="thePriority" >
             <option>Low</option>
             <option>Medium</option>
             <option>High</option>
-        </select>
-            <br>
-            <label>Definition</label><textarea id="theDefinition"  class="obstacleAutoUpdater" name="theDefinition"></textarea>
-            <br>
-            &nbsp;
-            &nbsp;
-            &nbsp;
+          </select>
         </div>
-        <div id="Goals">
-            <table id="editObstaclesGoalsTable" class="clickable-table">
-                <thead>
-                <tr><th id="obstacle_addGoaltoGoal" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Goal</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th></tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+        <div class="form-group">
+          <label for="theDefinition" class="control-label">Definition</label>
+          <textarea id="theDefinition"  class="obstacleAutoUpdater form-control" name="theDefinition" data-error="Definition is required" required></textarea>
+          <div class="help-block with-errors"></div>
         </div>
-        <div id="Sub-Goals">
-            <table id="editObstaclesSubGoalsTable" class="clickable-table">
-                <thead>
-                <tr><th id="obstacle_addSubGoaltoGoal" style="width: 15px;"> <i class="fa fa-plus"></i></th> <th>Sub-Goals</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th> </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-        <div id="Concerns">
-            <table id="editObstaclesConcernTable" class="clickable-table">
-                <thead>
-                <tr><th id="addConcerntoObstacle" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Concern</th></tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
+      </div>
+      <div id="Goals" class="form-group">
+        <table id="editObstaclesGoalsTable" class="clickable-table">
+          <thead>
+            <tr><th id="obstacle_addGoaltoGoal" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Goal</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div id="Sub-Goals" class="form-group">
+        <table id="editObstaclesSubGoalsTable" class="clickable-table">
+          <thead>
+            <tr><th id="obstacle_addSubGoaltoGoal" style="width: 15px;"> <i class="fa fa-plus"></i></th> <th>Sub-Goals</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th> </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div id="Concerns" class="form-group">
+        <table id="editObstaclesConcernTable" class="clickable-table">
+          <thead>
+            <tr><th id="addConcerntoObstacle" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Concern</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
     </div>
-       </div>
-        <button id="updateObstacleButton">Update</button>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary" id="updateObstacleButton">Update</button>
+    <button type="submit" class="btn btn-secondary" id="closeObstacleButton">Close</button>
+  </div>
 </form>
 <div id="obstacle_editGoalSubGoal" style="display: none;">
-
-    <p>
-        <label>Type</label>
-        <select id="obstacle_theSubgoalType" class="right">
-            <option value="goal">goal</option>
-            <option value="task">task</option>
-            <option value="usecase">usecase</option>
-            <option value="requirement">requirement</option>
-            <option value="obstacle">obstacle</option>
-            <option value="domainproperty">domainproperty</option>
-            <option value="threat">threat</option>
-            <option value="vulnerability">vulnerability</option>
-            <option value="role">role</option>
-            <option value="misusecase">misusecase</option>
-        </select>
-    </p>
-    <p>
-        <label>Sub-Goal</label>
-        <select id="obstacle_theSubGoalName" class="right"></select>
-    </p>
-    <p>
-        <label>Refinement</label>
-        <select id="obstacle_theRefinementSelect" class="right">
-            <option value="and">and</option>
-            <option value="or">or</option>
-            <option value="conflict">conflict</option>
-            <option value="responsible">responsible</option>
-            <option value="obstruct">obstruct</option>
-            <option value="resolve">resolve</option>
-        </select>
-    </p>
-    <p>
-        <label>Target</label>
-        <select id="obstacle_theAlternate" class="right">
-            <option>Yes</option>
-            <option>No</option>
-        </select>
-    </p>
-    <p>
-        <label>Rationale</label>
-        <textarea class="right" id="obstacle_theGoalSubGoalRationale"></textarea>
-    </p>
-    <button id="obstacle_updateGoalSubGoal">Update</button>
-    <button class="obstacle_goalCancelButton">Cancel</button>
+  <div class="form-group">
+    <label for="obstacle_theSubgoalType" class="control-label">Type</label>
+    <select id="obstacle_theSubgoalType" class="right form-control">
+      <option value="goal">goal</option>
+      <option value="task">task</option>
+      <option value="usecase">usecase</option>
+      <option value="requirement">requirement</option>
+      <option value="obstacle">obstacle</option>
+      <option value="domainproperty">domainproperty</option>
+      <option value="threat">threat</option>
+      <option value="vulnerability">vulnerability</option>
+      <option value="role">role</option>
+      <option value="misusecase">misusecase</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="obstacle_theSubGoalName" class="control-label">Sub-Goal</label>
+    <select id="obstacle_theSubGoalName" class="right form-control"></select>
+  </div>
+  <div class="form-group">
+    <label for="obstacle_theRefinementSelect" class="control-label">Refinement</label>
+    <select id="obstacle_theRefinementSelect" class="right form-control">
+      <option value="and">and</option>
+      <option value="or">or</option>
+      <option value="conflict">conflict</option>
+      <option value="responsible">responsible</option>
+      <option value="obstruct">obstruct</option>
+      <option value="resolve">resolve</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="obstacle_theAlternate" class="control-label">Target</label>
+    <select id="obstacle_theAlternate" class="right form-control">
+      <option>Yes</option>
+      <option>No</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="obstacle_theGoalSubGoalRationale" class="control-label">Rationale</label>
+    <textarea class="right form-control" id="obstacle_theGoalSubGoalRationale" data-error="Rationale is required" required></textarea>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary" id="obstacle_updateGoalSubGoal">Update</button>
+    <button type="submit" class="btn btn-secondary obstacle_goalCancelButton">Cancel</button>
+  </div>
 </div>
 <div id="obstacle_editGoalGoal" style="display: none;">
-
-    <p>
-        <label>Type</label>
-        <select id="obstacle_theGoalType" class="right">
-            <option value="goal">goal</option>
-            <option value="task">task</option>
-            <option value="usecase">usecase</option>
-            <option value="requirement">requirement</option>
-            <option value="obstacle">obstacle</option>
-            <option value="domainproperty">domainproperty</option>
-            <option value="threat">threat</option>
-            <option value="vulnerability">vulnerability</option>
-            <option value="role">role</option>
-            <option value="misusecase">misusecase</option>
-        </select>
-    </p>
-    <p>
-        <label>Sub-Goal</label>
-        <select id="obstacle_theGoalName" class="right"></select>
-    </p>
-    <p>
-        <label>Refinement</label>
-        <select id="obstacle_theGoalRefinementSelect" class="right">
-            <option value="and">and</option>
-            <option value="or">or</option>
-            <option value="conflict">conflict</option>
-            <option value="responsible">responsible</option>
-            <option value="obstruct">obstruct</option>
-            <option value="resolve">resolve</option>
-        </select>
-    </p>
-    <p>
-        <label>Target</label>
-        <select id="obstacle_theGoalAlternate" class="right">
-            <option>Yes</option>
-            <option>No</option>
-        </select>
-    </p>
-    <p>
-        <label>Rationale</label>
-        <textarea class="right" id="obstacle_theGoalGoalRationale"></textarea>
-    </p>
-    <button id="obstacle_updateGoalGoal">Update</button>
-    <button class="obstacle_goalCancelButton">Cancel</button>
+  <div class="form-group">
+    <label for="obstacle_theGoalType" class="control-label">Type</label>
+    <select id="obstacle_theGoalType" class="form-control right">
+      <option value="goal">goal</option>
+      <option value="task">task</option>
+      <option value="usecase">usecase</option>
+      <option value="requirement">requirement</option>
+      <option value="obstacle">obstacle</option>
+      <option value="domainproperty">domainproperty</option>
+      <option value="threat">threat</option>
+      <option value="vulnerability">vulnerability</option>
+      <option value="role">role</option>
+      <option value="misusecase">misusecase</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="obstacle_theGoalName" class="control-label">Sub-Goal</label>
+    <select id="obstacle_theGoalName" class="form-control right"></select>
+  </div>
+  <div class="form-group">
+    <label for="obstacle_theGoalRefinementSelect" class="control-label">Refinement</label>
+    <select id="obstacle_theGoalRefinementSelect" class="form-control right">
+      <option value="and">and</option>
+      <option value="or">or</option>
+      <option value="conflict">conflict</option>
+      <option value="responsible">responsible</option>
+      <option value="obstruct">obstruct</option>
+      <option value="resolve">resolve</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="obstacle_theGoalAlternate" class="control-label">Target</label>
+    <select id="obstacle_theGoalAlternate" class="form-control right">
+      <option>Yes</option>
+      <option>No</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="obstacle_theGoalGoalRationale" class="control-label">Rationale</label>
+    <textarea class="form-control right" id="obstacle_theGoalGoalRationale"></textarea>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary" id="obstacle_updateGoalGoal">Update</button>
+    <button type="submit" class="btn btn-secondary obstacle_goalCancelButton">Cancel</button>
+  </div>
 </div>

@@ -69,6 +69,7 @@ function createUseCasesTable(){
 }
 
 $(document).on('click', ".editUseCaseButton", function () {
+  activeElement("objectViewer");
   var name = $(this).val();
   $.ajax({
     type: "GET",
@@ -80,9 +81,7 @@ $(document).on('click', ".editUseCaseButton", function () {
     crossDomain: true,
     url: serverIP + "/api/usecases/name/" + name.replace(" ", "%20"),
     success: function (data) {
-      fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#optionsContent", null, true, true, function () {
-        $("#optionsHeaderGear").text("UseCase properties");
-        forceOpenOptions();
+      fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("UseCase", JSON.stringify(data));
         $('#editUseCaseOptionsForm').loadJSON(data, null);
         $.each(data.theActors, function (index, actor) {
@@ -115,8 +114,8 @@ $(document).on('click', ".editUseCaseButton", function () {
 });
 
 
-var optionsContent = $("#optionsContent");
-optionsContent.on("click",".usecaseEnvironment", function () {
+var mainContent = $("#objectViewer");
+mainContent.on("click",".usecaseEnvironment", function () {
   clearUseCaseEnvInfo();
   var usecase = JSON.parse($.session.get("UseCase"));
   var theEnvName = $(this).text();
@@ -150,7 +149,7 @@ function appendUseCaseActor(actor) {
   $("#theActors").find("tbody").append("<tr><td class='removeActor'><i class='fa fa-minus'></i></td><td class='usecaseActor'>" + actor + "</td></tr>").animate('slow');
 }
 
-optionsContent.on('click', '#addActorToUseCase', function () {
+mainContent.on('click', '#addActorToUseCase', function () {
   var hasActor = [];
   $("#theActors").find(".usecaseActor").each(function(index, actor){
     hasActor.push($(actor).text());
@@ -163,7 +162,7 @@ optionsContent.on('click', '#addActorToUseCase', function () {
   });
 });
 
-optionsContent.on('click', '#addStepToUseCase', function () {
+mainContent.on('click', '#addStepToUseCase', function () {
   stepDialogBox(function (text) {
     var usecase = JSON.parse($.session.get("UseCase"));
     var theEnvName = $.session.get("usecaseEnvironmentName");
@@ -183,9 +182,7 @@ optionsContent.on('click', '#addStepToUseCase', function () {
   });
 });
 
-
-
-optionsContent.on('click', ".removeUseCaseActor", function () {
+mainContent.on('click', ".removeUseCaseActor", function () {
   var text = $(this).next(".usecaseActor").text();
   $(this).closest("tr").remove();
   var usecase = JSON.parse($.session.get("UseCase"));
@@ -199,7 +196,7 @@ optionsContent.on('click', ".removeUseCaseActor", function () {
 });
 
 
-optionsContent.on('click', ".removeUseCaseStep", function () {
+mainContent.on('click', ".removeUseCaseStep", function () {
   var text = $(this).next(".usecaseStep").text();
   $(this).closest("tr").remove();
   var usecase = JSON.parse($.session.get("UseCase"));
@@ -217,7 +214,7 @@ optionsContent.on('click', ".removeUseCaseStep", function () {
   });
 });
 
-optionsContent.on('click', ".deleteUseCaseEnv", function () {
+mainContent.on('click', ".deleteUseCaseEnv", function () {
   var envi = $(this).next(".usecaseEnvironment").text();
   $(this).closest("tr").remove();
   var usecase = JSON.parse($.session.get("UseCase"));
@@ -239,7 +236,7 @@ optionsContent.on('click', ".deleteUseCaseEnv", function () {
   });
 });
 
-optionsContent.on("click", "#addUseCaseEnv", function () {
+mainContent.on("click", "#addUseCaseEnv", function () {
   var hasEnv = [];
   $(".usecaseEnvironment").each(function (index, tag) {
     hasEnv.push($(tag).text());
@@ -260,7 +257,7 @@ optionsContent.on("click", "#addUseCaseEnv", function () {
   });
 });
 
-optionsContent.on('click', '#UpdateUseCase', function (e) {
+mainContent.on('click', '#UpdateUseCase', function (e) {
   e.preventDefault();
   var usecase = JSON.parse($.session.get("UseCase"));
   var oldName = usecase.theName;
@@ -305,11 +302,15 @@ $(document).on('click', '.deleteUseCaseButton', function (e) {
 });
 
 $(document).on("click", "#addNewUseCase", function () {
-  fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#optionsContent", null, true, true, function () {
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#objectViewer", null, true, true, function () {
     $("#editUseCaseOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("UseCase", JSON.stringify(jQuery.extend(true, {},useCaseDefault )));
-    $("#optionsHeaderGear").text("UseCase properties");
-    forceOpenOptions();
   });
+});
+
+mainContent.on('click', '#CloseUseCase', function (e) {
+  e.preventDefault();
+  createUseCasesTable();
 });

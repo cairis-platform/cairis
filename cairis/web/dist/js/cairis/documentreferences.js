@@ -69,6 +69,7 @@ function createDocumentReferencesTable(){
 }
 
 $(document).on('click', ".editDocumentReferenceButton", function () {
+  activeElement("objectViewer");
   var name = $(this).val();
   $.ajax({
     type: "GET",
@@ -80,9 +81,7 @@ $(document).on('click', ".editDocumentReferenceButton", function () {
     crossDomain: true,
     url: serverIP + "/api/document_references/name/" + name.replace(" ", "%20"),
     success: function (data) {
-      fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#optionsContent", null, true, true, function () {
-        $("#optionsHeaderGear").text("Document Reference properties");
-        forceOpenOptions();
+      fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#objectViewer", null, true, true, function () {
         var docNameSelect = $("#theDocName");
         var docName = data.theDocName;
         getDocNames(function(data) {
@@ -102,7 +101,8 @@ $(document).on('click', ".editDocumentReferenceButton", function () {
   });
 });
 
-optionsContent.on('click', '#UpdateDocumentReference', function (e) {
+var mainContent = $("#objectViewer");
+mainContent.on('click', '#UpdateDocumentReference', function (e) {
   e.preventDefault();
   var dr = JSON.parse($.session.get("DocumentReference"));
   var oldName = dr.theName;
@@ -132,11 +132,10 @@ $(document).on('click', '.deleteDocumentReferenceButton', function (e) {
 });
 
 $(document).on("click", "#addNewDocumentReference", function () {
-  fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#optionsContent", null, true, true, function () {
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#objectViewer", null, true, true, function () {
     $("#editDocumentReferenceOptionsForm").addClass("new");
     $.session.set("DocumentReference", JSON.stringify(jQuery.extend(true, {},documentReferenceDefault )));
-    $("#optionsHeaderGear").text("Document Reference properties");
-    forceOpenOptions();
     var docNameSelect = $("#theDocName");
     getDocNames(function(data) {
       $.each(data, function(key, obj) {
@@ -261,3 +260,9 @@ function getDocNames(callback){
     }
   });
 }
+
+mainContent.on('click', '#CloseDocumentReference', function (e) {
+  e.preventDefault();
+  createDocumentReferencesTable();
+});
+

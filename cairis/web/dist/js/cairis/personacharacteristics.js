@@ -73,6 +73,7 @@ function createPersonaCharacteristicsTable(){
 }
 
 $(document).on('click', ".editPersonaCharacteristicButton", function () {
+  activeElement("objectViewer");
   var name = $(this).val();
   $.ajax({
     type: "GET",
@@ -84,9 +85,7 @@ $(document).on('click', ".editPersonaCharacteristicButton", function () {
     crossDomain: true,
     url: serverIP + "/api/persona_characteristics/name/" + name.replace(" ", "%20"),
     success: function (data) {
-      fillOptionMenu("fastTemplates/editPersonaCharacteristicOptions.html", "#optionsContent", null, true, true, function () {
-        $("#optionsHeaderGear").text("Persona Characteristic properties");
-        forceOpenOptions();
+      fillOptionMenu("fastTemplates/editPersonaCharacteristicOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("PersonaCharacteristic", JSON.stringify(data));
         $('#editPersonaCharacteristicOptionsForm').loadJSON(data, null);
       });
@@ -98,7 +97,8 @@ $(document).on('click', ".editPersonaCharacteristicButton", function () {
   });
 });
 
-optionsContent.on('click', '#UpdatePersonaCharacteristic', function (e) {
+var mainContent = $("#objectViewer");
+mainContent.on('click', '#UpdatePersonaCharacteristic', function (e) {
   e.preventDefault();
   var pc = JSON.parse($.session.get("PersonaCharacteristic"));
   var oldName = pc.theCharacteristic;
@@ -124,11 +124,10 @@ $(document).on('click', '.deletePersonaCharacteristicsButton', function (e) {
 });
 
 $(document).on("click", "#addNewPersonaCharacteristic", function () {
-  fillOptionMenu("fastTemplates/editPersonaCharacteristicOptions.html", "#optionsContent", null, true, true, function () {
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editPersonaCharacteristicOptions.html", "#objectViewer", null, true, true, function () {
     $("#editPersonaCharacteristicOptionsForm").addClass("new");
     $.session.set("PersonaCharacteristic", JSON.stringify(jQuery.extend(true, {},personaCharacteristicDefault )));
-    $("#optionsHeaderGear").text("Persona Characteristic properties");
-    forceOpenOptions();
   });
 });
 
@@ -225,3 +224,9 @@ function deletePersonaCharacteristic(name, callback){
     }
   });
 }
+
+mainContent.on('click', '#ClosePersonaCharacteristic', function (e) {
+  e.preventDefault();
+  createPersonaCharacteristicsTable();
+});
+

@@ -76,6 +76,7 @@ function createPersonasTable(){
 }
 
 $(document).on('click', ".editPersonaButton", function () {
+  activeElement("objectViewer");
   var name = $(this).val();
   $.ajax({
     type: "GET",
@@ -87,10 +88,7 @@ $(document).on('click', ".editPersonaButton", function () {
     crossDomain: true,
     url: serverIP + "/api/personas/name/" + name.replace(" ", "%20"),
     success: function (data) {
-      // console.log(JSON.stringify(rawData));
-      fillOptionMenu("fastTemplates/editPersonasOptions.html", "#optionsContent", null, true, true, function () {
-        $("#optionsHeaderGear").text("Persona properties");
-        forceOpenOptions();
+      fillOptionMenu("fastTemplates/editPersonasOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("Persona", JSON.stringify(data));
         $('#editPersonasOptionsForm').loadJSON(data, null);
 
@@ -128,8 +126,8 @@ $(document).on('click', ".editPersonaButton", function () {
   });
 });
 
-var optionsContent = $("#optionsContent");
-optionsContent.on("click",".personaEnvironment", function () {
+var mainContent = $("#objectViewer");
+mainContent.on("click",".personaEnvironment", function () {
   clearPersonaEnvInfo();
   var persona = JSON.parse($.session.get("Persona"));
   var theEnvName = $(this).text();
@@ -150,7 +148,7 @@ optionsContent.on("click",".personaEnvironment", function () {
   });
 });
 
-optionsContent.on('click', ".removePersonaRole", function () {
+mainContent.on('click', ".removePersonaRole", function () {
   var text = $(this).next(".personaRole").text();
   $(this).closest("tr").remove();
   var persona = JSON.parse($.session.get("Persona"));
@@ -168,7 +166,7 @@ optionsContent.on('click', ".removePersonaRole", function () {
   });
 });
 
-optionsContent.on('click', ".deletePersonaEnv", function () {
+mainContent.on('click', ".deletePersonaEnv", function () {
   var envi = $(this).next(".personaEnvironment").text();
   $(this).closest("tr").remove();
   var persona = JSON.parse($.session.get("Persona"));
@@ -190,7 +188,7 @@ optionsContent.on('click', ".deletePersonaEnv", function () {
   });
 });
 
-optionsContent.on("click", "#addPersonaEnv", function () {
+mainContent.on("click", "#addPersonaEnv", function () {
   var hasEnv = [];
   $(".personaEnvironment").each(function (index, tag) {
     hasEnv.push($(tag).text());
@@ -211,7 +209,7 @@ optionsContent.on("click", "#addPersonaEnv", function () {
   });
 });
 
-optionsContent.on('click', '#addRoleToPersona', function () {
+mainContent.on('click', '#addRoleToPersona', function () {
   var hasRole = [];
   $("#personaRole").find(".personaRole").each(function(index, role){
     hasRole.push($(role).text());
@@ -229,7 +227,7 @@ optionsContent.on('click', '#addRoleToPersona', function () {
   });
 });
 
-optionsContent.on('click', '#UpdatePersona', function (e) {
+mainContent.on('click', '#UpdatePersona', function (e) {
   $("#editPersonasOptionsForm").validator('validate');
   e.preventDefault();
   var persona = JSON.parse($.session.get("Persona"));
@@ -280,20 +278,17 @@ optionsContent.on('click', '#UpdatePersona', function (e) {
 });
 
 $(document).on("click", "#addNewPersona", function () {
-  fillOptionMenu("fastTemplates/editPersonasOptions.html", "#optionsContent", null, true, true, function () {
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editPersonasOptions.html", "#objectViewer", null, true, true, function () {
     $("#editPersonasOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("Persona", JSON.stringify(jQuery.extend(true, {},personaDefault )));
-    $("#optionsHeaderGear").text("Persona properties");
 
     getPersonaTypes(function createTypes(types) {
       $.each(types, function (pType,index) {
         $('#thePersonaType').append($("<option></option>").attr("value", pType).text(pType));
       });
     });
-
-    forceOpenOptions();
-
   });
 });
 
@@ -305,17 +300,17 @@ $(document).on('click', '.deletePersonaButton', function (e) {
   });
 });
 
-/*
-Image uploading functions
- */
+
+// Image uploading functions
 var uploading = false;
-$("#optionsContent").on('click', '#theImage', function () {
+mainContent.on('click', '#theImage', function (e) {
   if(!uploading) {
     $('#fileupload').trigger("click");
   }
 });
 
-$("#optionsContent").on('change','#fileupload', function () {
+
+mainContent.on('change','#fileupload', function () {
   uploading = true;
   var test = $(document).find('#fileupload');
   var fd = new FormData();
@@ -366,10 +361,10 @@ function postImage(imagedir, actualDir) {
     var persona = JSON.parse($.session.get("Persona"));
 
     persona.theImage = imagedir;
-    $("#theImages").attr("src", actualDir);
+    $("#theImage").attr("src", actualDir);
     putPersona(persona, persona.theName, false, function () {
-        $("#theImages").attr("src", actualDir);
-        resaleImage($("#theImages"),200);
+        $("#theImage").attr("src", actualDir);
+        resaleImage($("#theImage"),200);
     });
 
     $.session.set("Persona", JSON.stringify(persona));
@@ -411,3 +406,8 @@ function getPersonaTypes(callback){
     }
   });
 }
+
+mainContent.on('click', '#ClosePersona', function (e) {
+  e.preventDefault();
+  createPersonasTable();
+});

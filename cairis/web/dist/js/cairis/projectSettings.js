@@ -19,11 +19,10 @@
 
 
 $("#projectClick").click(function () {
-  activeElement("projectViewer");
+  activeElement("objectViewer");
   getProjectSettings(function (data) {
 
-    fillOptionMenu("fastTemplates/editProjectSettings.html", "#projectViewer", null, true, false, function () {
-      //  forceOpenOptions();
+    fillOptionMenu("fastTemplates/editProjectSettings.html", "#objectViewer", null, true, false, function () {
       var image = $("#theImages");
       $('#ProjectsProperties').loadJSON(data, null);
       image.attr("src", getImagedir(data.richPicture));
@@ -74,7 +73,7 @@ function getProjectSettings(callback){
  */
 var uploading = false;
 var optionsContent = $("#optionsContent");
-var mainContent = $("#projectViewer");
+var mainContent = $("#objectViewer");
 
 mainContent.on('click', '#theImages', function () {
   if(!uploading) {

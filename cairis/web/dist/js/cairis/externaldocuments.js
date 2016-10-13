@@ -69,6 +69,7 @@ function createExternalDocumentsTable(){
 }
 
 $(document).on('click', ".editExternalDocumentButton", function () {
+  activeElement("objectViewer");
   var name = $(this).val();
   $.ajax({
     type: "GET",
@@ -80,9 +81,7 @@ $(document).on('click', ".editExternalDocumentButton", function () {
     crossDomain: true,
     url: serverIP + "/api/external_documents/name/" + name.replace(" ", "%20"),
     success: function (data) {
-      fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#optionsContent", null, true, true, function () {
-        $("#optionsHeaderGear").text("External Document properties");
-        forceOpenOptions();
+      fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("ExternalDocument", JSON.stringify(data));
         $('#editExternalDocumentOptionsForm').loadJSON(data, null);
       });
@@ -94,7 +93,8 @@ $(document).on('click', ".editExternalDocumentButton", function () {
   });
 });
 
-optionsContent.on('click', '#UpdateExternalDocument', function (e) {
+var mainContent = $("#objectViewer");
+mainContent.on('click', '#UpdateExternalDocument', function (e) {
   e.preventDefault();
   var edoc = JSON.parse($.session.get("ExternalDocument"));
   var oldName = edoc.theName;
@@ -125,11 +125,10 @@ $(document).on('click', '.deleteExternalDocumentButton', function (e) {
 });
 
 $(document).on("click", "#addNewExternalDocument", function () {
-  fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#optionsContent", null, true, true, function () {
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#objectViewer", null, true, true, function () {
     $("#editExternalDocumentOptionsForm").addClass("new");
     $.session.set("ExternalDocument", JSON.stringify(jQuery.extend(true, {},externalDocumentDefault )));
-    $("#optionsHeaderGear").text("External Document properties");
-    forceOpenOptions();
   });
 });
 
@@ -226,3 +225,9 @@ function deleteExternalDocument(name, callback){
     }
   });
 }
+
+mainContent.on('click', '#CloseExternalDocument', function (e) {
+  e.preventDefault();
+  createExternalDocumentsTable();
+});
+

@@ -30,8 +30,8 @@ $(document).on('click', "button.editObstaclesButton",function() {
   getObstacleOptions(name);
 });
 
-var optionsContent = $("#optionsContent");
-optionsContent.on('click', ".obstacleEnvProperties", function () {
+var mainContent = $("#objectViewer");
+mainContent.on('click', ".obstacleEnvProperties", function () {
   var obstacle = JSON.parse($.session.get("Obstacle"));
   var name = $(this).text();
   $.session.set("ObstacleEnvName", name);
@@ -55,7 +55,7 @@ optionsContent.on('click', ".obstacleEnvProperties", function () {
   });
 });
 
-optionsContent.on('click',".obstacle_deleteGoalSubGoal", function () {
+mainContent.on('click',".obstacle_deleteGoalSubGoal", function () {
   var obstacle = JSON.parse($.session.get("Obstacle"));
   var envName = $.session.get("ObstacleEnvName");
   var subGoalName =  $(this).closest("tr").find(".subGoalName").text();
@@ -72,7 +72,7 @@ optionsContent.on('click',".obstacle_deleteGoalSubGoal", function () {
   $.session.set("Obstacle", JSON.stringify(obstacle));
 });
 
-optionsContent.on('click',"#addConcerntoObstacle", function () {
+mainContent.on('click',"#addConcerntoObstacle", function () {
   hasAsset = [];
   $("#editObstaclesConcernTable").find('tbody').find('.ObstacleConcernName').each(function (index, td) {
     hasAsset.push($(td).text());
@@ -90,7 +90,7 @@ optionsContent.on('click',"#addConcerntoObstacle", function () {
   });
 });
 
-optionsContent.on('click',".obstacle_deleteGoalGoal", function () {
+mainContent.on('click',".obstacle_deleteGoalGoal", function () {
   var obstacle = JSON.parse($.session.get("Obstacle"));
   var envName = $.session.get("ObstacleEnvName");
   var subGoalName =  $(this).closest("tr").find(".envGoalName").text();
@@ -109,7 +109,7 @@ optionsContent.on('click',".obstacle_deleteGoalGoal", function () {
   $.session.set("Obstacle", JSON.stringify(obstacle));
 });
 
-optionsContent.on('click',".deleteObstacleEnvConcern", function () {
+mainContent.on('click',".deleteObstacleEnvConcern", function () {
   var obstacle = JSON.parse($.session.get("Obstacle"));
   var envName = $.session.get("ObstacleEnvName");
   var name =  $(this).closest("tr").find(".ObstacleConcernName").text();
@@ -128,19 +128,19 @@ optionsContent.on('click',".deleteObstacleEnvConcern", function () {
   $.session.set("Obstacle", JSON.stringify(obstacle));
 });
 
-optionsContent.on('click', '#obstacle_addSubGoaltoGoal', function () {
+mainContent.on('click', '#obstacle_addSubGoaltoGoal', function () {
   $("#obstacle_editGoalSubGoal").addClass("new");
   toggleObstacleWindow("#obstacle_editGoalSubGoal");
   fillObstacleEditSubGoal();
 });
 
-optionsContent.on('click', '#obstacle_addGoaltoGoal', function () {
+mainContent.on('click', '#obstacle_addGoaltoGoal', function () {
   $("#obstacle_editGoalGoal").addClass("new");
   toggleObstacleWindow("#obstacle_editGoalGoal");
   fillObstacleEditGoal();
 });
 
-optionsContent.on("click", "#addObstacleEnvironment", function () {
+mainContent.on("click", "#addObstacleEnvironment", function () {
   var hasEnv = [];
   $(".obstacleEnvProperties").each(function (index, tag) {
     hasEnv.push($(tag).text());
@@ -156,7 +156,7 @@ optionsContent.on("click", "#addObstacleEnvironment", function () {
   });
 });
 
-optionsContent.on('click', ".deleteObstacleEnv", function () {
+mainContent.on('click', ".deleteObstacleEnv", function () {
   var envi = $(this).next(".obstacleEnvProperties").text();
   $(this).closest("tr").remove();
   var obstacle = JSON.parse($.session.get("Obstacle"));
@@ -176,7 +176,7 @@ optionsContent.on('click', ".deleteObstacleEnv", function () {
   });
 });
 
-optionsContent.on('click', '#obstacle_updateGoalSubGoal', function () {
+mainContent.on('click', '#obstacle_updateGoalSubGoal', function () {
   var obstacle = JSON.parse($.session.get("Obstacle"));
   var envName = $.session.get("ObstacleEnvName");
   if($("#obstacle_editGoalSubGoal").hasClass("new")){
@@ -214,7 +214,7 @@ optionsContent.on('click', '#obstacle_updateGoalSubGoal', function () {
   toggleObstacleWindow("#editObstacleOptionsForm");
 });
 
-optionsContent.on('change', ".obstacleAutoUpdater" ,function() {
+mainContent.on('change', ".obstacleAutoUpdater" ,function() {
   var obstacle = JSON.parse($.session.get("Obstacle"));
   var envName = $.session.get("ObstacleEnvName");
   var name = $(this).attr("name");
@@ -237,16 +237,14 @@ optionsContent.on('change', ".obstacleAutoUpdater" ,function() {
 });
 
 $(document).on('click', '#addNewObstacle', function () {
-  fillObstacleOptionMenu(null, function () {
+  fillGoalOptionMenu(null, function () {
     $("#editObstacleOptionsForm").addClass('new');
-    $("#optionsHeaderGear").text("Obstacle properties");
-    forceOpenOptions();
     $("#obstacleProperties").hide();
   });
 });
 
 
-optionsContent.on('click', "#updateObstacleButton", function (e) {
+mainContent.on('click', "#updateObstacleButton", function (e) {
   e.preventDefault();
   var obstacle = JSON.parse($.session.get("Obstacle"));
   var oldName = obstacle.theName;
@@ -269,7 +267,7 @@ optionsContent.on('click', "#updateObstacleButton", function (e) {
   }
 });
 
-optionsContent.on('dblclick', '.obstacle_editGoalSubGoalRow', function () {
+mainContent.on('dblclick', '.obstacle_editGoalSubGoalRow', function () {
   toggleObstacleWindow("#obstacle_editGoalSubGoal");
   var name = $(this).find("td").eq(1).text();
   fillObstacleEditSubGoal(name);
@@ -285,7 +283,7 @@ optionsContent.on('dblclick', '.obstacle_editGoalSubGoalRow', function () {
   $("#obstacle_theGoalSubGoalRationale").val(rationale);
 });
 
-optionsContent.on('dblclick', '.obstacle_editGoalGoalRow', function () {
+mainContent.on('dblclick', '.obstacle_editGoalGoalRow', function () {
   toggleObstacleWindow("#obstacle_editGoalGoal");
   var name = $(this).find("td").eq(1).text();
   fillObstacleEditGoal(name);
@@ -302,7 +300,7 @@ optionsContent.on('dblclick', '.obstacle_editGoalGoalRow', function () {
   $("#obstacle_theGoalGoalRationale").val(rationale);
 });
 
-optionsContent.on('click',"#obstacle_updateGoalGoal", function () {
+mainContent.on('click',"#obstacle_updateGoalGoal", function () {
   var obstacle = JSON.parse($.session.get("Obstacle"));
   var envName = $.session.get("ObstacleEnvName");
   if($("#obstacle_editGoalGoal").hasClass("new")) {
@@ -361,7 +359,8 @@ function getObstacleOptions(name){
 }
 
 function fillObstacleOptionMenu(data,callback){
-  fillOptionMenu("fastTemplates/editObstaclesOptions.html","#optionsContent",null,true,true, function(){
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editObstaclesOptions.html","#objectViewer",null,true,true, function(){
     if(data != null) {
       $.session.set("Obstacle", JSON.stringify(data));
       $('#editObstacleOptionsForm').loadJSON(data, null);
@@ -372,8 +371,6 @@ function fillObstacleOptionMenu(data,callback){
       $.each(data.theEnvironmentProperties, function (index, prop) {
         appendObstacleEnvironment(prop.theEnvironmentName);
       });
-      $("#optionsHeaderGear").text("Obstacle properties");
-      forceOpenOptions();
       $("#theObstacleEnvironments").find(".obstacleEnvProperties:first").trigger('click');
     }
     else {
@@ -455,3 +452,8 @@ function appendObstacleSubGoal(subobstacle){
 function appendObstacleConcern(concern){
     $("#editObstaclesConcernTable").append('<tr><td class="deleteObstacleEnvConcern" value="'+ concern+'"><i class="fa fa-minus"></i></td><td class="ObstacleConcernName">'+concern+'</td></tr>');
 }
+
+mainContent.on('click', '#closeObstacleButton', function (e) {
+  e.preventDefault();
+  createEditObstaclesTable();
+});

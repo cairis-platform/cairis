@@ -14,19 +14,19 @@
         <input type="text" class="optionsInput assetUpdate form-control" id="theName" name="theName" style="width: 75%;" data-error="Asset name is required" required>
         <div class="help-block with-errors"></div>
       </div>
-      <p>
-        <label>Tags</label>
-        <input class="optionsInput assetUpdate" type="text" value="" id="theTags" name="theTags" style="width: 75%;">
-      </p>
       <div class="form-group">
-        <label>Shortcode</label>
+        <label for="theTags" class="control-label">Tags</label>
+        <input class="optionsInput assetUpdate form-control" type="text" value="" id="theTags" name="theTags" style="width: 75%;">
+      </div>
+      <div class="form-group">
+        <label for="theShortCode" class="control-label">Shortcode</label>
         <input class="optionsInput assetUpdate form-control" type="text" id="theShortCode" name="theShortCode" style="width: 75%;" data-error="Short code is required" required>
         <div class="help-block with-errors"></div>
       </div>
-      <p>
-        <label for="theType">Type</label>
-        <select name="TheType" class="assetUpdate" id="theType" style="width: 75%;"></select>
-      </p>
+      <div>
+        <label for="theType" class="control-label">Type</label>
+        <select name="TheType" class="assetUpdate form-control" id="theType" style="width: 75%;"></select>
+      </div>
     </div>
     <div class="form-group" id="Description">
       <textarea class="assetUpdate form-control" name="theDescription" id="theDescription" data-error="Description is required" required></textarea>
@@ -37,8 +37,8 @@
       <div class="help-block with-errors"></div>
     </div>
     <div id="Criticality">
-      <input  class="assetUpdate" type="checkbox" id="isCritical">Critical Asset <br>
-      <textarea class="assetUpdate" id="theCriticalRationale" name="theCriticalRationale" > </textarea>
+      <input  class="assetUpdate form-control" type="checkbox" id="isCritical">Critical Asset <br>
+      <textarea class="assetUpdate form-control" id="theCriticalRationale" name="theCriticalRationale" > </textarea>
     </div>
     <div id="Interfaces">
       <table id="editassetInterfaceTable">
@@ -87,7 +87,10 @@
         </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary" id="UpdateAssetinGear">Update</button>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" id="UpdateAsset">Update</button>
+      <button type="submit" class="btn btn-secondary" id="CloseAsset">Close</button>
+    </div>
 </form>
 
 <div id="editpropertiesWindow" style="display: none;">
@@ -118,7 +121,6 @@
     <label for="rationale" class="control-label">Rationale</label>
     <textarea class="optionsInput form-control" name="rationale" id="rationale" data-error="Rationale not provided" required> </textarea>
     <div class="help-block with-errors"></div>
-  </label>
   </div>
   <textarea id="id" name="id" style="display: none;"></textarea>
   </div>
@@ -129,77 +131,73 @@
   </div>
 </div>
 <div id="editAssociationsWindow" style="display: none;">
-  <p>
-    <label>Navigation</label>
-    <select class="optionsInput" name="headNav" id="headNav" style="width: 100%;">
+  <div class="form-group">
+    <label for="headNav" class="control-label">Navigation</label>
+    <select class="optionsInput form-control" name="headNav" id="headNav" style="width: 100%;">
       <option value="0">0</option>
       <option value="1">1</option>
       <option value="-1">-1</option>
     </select>
-  </p>
-  <p>
-    <label>Adornment</label>
-    <select class="optionsInput" name="headAdorn" id="headAdorn" style="width: 100%;">
+  </div>
+  <div class="form-group">
+    <label for="headAdorn" class="control-label">Adornment</label>
+    <select class="optionsInput form-control" name="headAdorn" id="headAdorn" style="width: 100%;">
       <option value="Inheritance">Inheritence</option>
       <option value="Association">Association</option>
       <option value="Aggregation">Aggregation</option>
       <option value="Composition">Composition</option>
       <option value="Dependency">Dependency</option>
     </select>
-  </p>
-  <p>
-    <label>nry</label>
-    <select class="optionsInput" name="headNry" id="headNry" style="width: 100%;">
+  </div>
+  <div class="form-group">
+    <label for="headNry" class="control-label">nry</label>
+    <select class="optionsInput form-control" name="headNry" id="headNry" style="width: 100%;">
       <option value="1">1</option>
       <option value="*">*</option>
       <option value="1..*">1..*</option>
     </select>
-  </p>
-  <p>
-    <label>Role</label>
-    <input class="optionsInput" type="text" name="headRole" id="headRole" style="width: 100%;">
-  </p>
-  <p>
-    <label>Role</label>
-    <input class="optionsInput" type="text" name="tailRole" id="tailRole" style="width: 100%;">
-  </p>
-  <p>
-    <label>nry</label>
-    <select class="optionsInput" name="tailNry" id="tailNry" style="width: 100%;">
+  </div>
+  <div class="form-group">
+    <label for="headRole" class="control-label">Role</label>
+    <input class="optionsInput form-control" type="text" name="headRole" id="headRole" style="width: 100%;">
+  </div>
+  <div class="form-group">
+    <label for="tailRole" class="control-label">Role</label>
+    <input class="optionsInput form-control" type="text" name="tailRole" id="tailRole" style="width: 100%;">
+  </div>
+  <div class="form-group">
+    <label for="tailNry" class="control-label">nry</label>
+    <select class="optionsInput form-control" name="tailNry" id="tailNry" style="width: 100%;">
       <option value="1">1</option>
       <option value="*">*</option>
       <option value="1..*">1..*</option>
     </select>
-  </p>
-  <p>
-    <label>Adornment</label>
-    <select class="optionsInput" name="tailAdorn" id="tailAdorn" style="width: 100%;">
+  </div>
+  <div class="form-group">
+    <label for="tailAdorn" class="control-label">Adornment</label>
+    <select class="optionsInput form-control" name="tailAdorn" id="tailAdorn" style="width: 100%;">
       <option value="Inheritance">Inheritence</option>
       <option value="Association">Association</option>
       <option value="Aggregation">Aggregation</option>
       <option value="Composition">Composition</option>
       <option value="Dependency">Dependency</option>
     </select>
-  </p>
-  <p>
-    <label>Navigation</label>
-    <select class="optionsInput" name="tailNav" id="tailNav" style="width: 100%;">
+  </div>
+  <div class="form-group">
+    <label for="tailNav" class="control-label">Navigation</label>
+    <select class="optionsInput form-control" name="tailNav" id="tailNav" style="width: 100%;">
       <option value="0">0</option>
       <option value="1">1</option>
       <option value="-1">-1</option>
     </select>
-  </p>
-  <p>
-    <label>Tail</label>
-      <select class="optionsInput" name="tailAsset" id="tailAsset" style="width: 100%;">
+  </div>
+  <div class="form-group">
+    <label for="tailAsset" class="control-label">Tail</label>
+      <select class="optionsInput form-control" name="tailAsset" id="tailAsset" style="width: 100%;">
       </select>
-  </p>
-  <p>
-    <button id="cancelButtonAsset">
-      Cancel
-    </button>
-    <button id="updateButtonAsset">
-      Update
-    </button>
-  </p>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-secondary" id="cancelButtonAsset">Cancel</button>
+    <button type="submit" class="btn btn-primary" id="updateButtonAsset">Update</button>
+  </div>
 </div>

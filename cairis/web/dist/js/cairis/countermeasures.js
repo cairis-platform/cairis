@@ -77,8 +77,9 @@ function createCountermeasuresTable(){
 }
 
 
-var optionsContent = $("#optionsContent");
+var mainContent = $("#objectViewer");
 $(document).on('click', ".editCountermeasuresButton", function () {
+  activeElement("objectViewer");
   var name = $(this).val();
   $.ajax({
     type: "GET",
@@ -90,9 +91,7 @@ $(document).on('click', ".editCountermeasuresButton", function () {
     crossDomain: true,
     url: serverIP + "/api/countermeasures/name/" + name.replace(" ", "%20"),
     success: function (data) {
-      fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#optionsContent", null, true, true, function () {
-        $("#optionsHeaderGear").text("Countermeasure properties");
-        forceOpenOptions();
+      fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
         $("#addPropertyDiv").hide();
 
         $.session.set("Countermeasure", JSON.stringify(data));
@@ -121,16 +120,15 @@ $(document).on('click', ".editCountermeasuresButton", function () {
 });
 
 $(document).on("click", "#addNewCountermeasure", function () {
-  fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#optionsContent", null, true, true, function () {
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
     $("#addPropertyDiv").hide();
     $("#editCountermeasureOptionsForm").addClass("new");
     $.session.set("Countermeasure", JSON.stringify(jQuery.extend(true, {},countermeasureDefault )));
-    $("#optionsHeaderGear").text("Countermeasure properties");
-    forceOpenOptions();
   });
 });
 
-optionsContent.on("click", ".countermeasureEnvironments", function () {
+mainContent.on("click", ".countermeasureEnvironments", function () {
   clearCountermeasureEnvInfo();
   var countermeasure = JSON.parse($.session.get("Countermeasure"));
   var envName = $(this).text();
@@ -165,56 +163,59 @@ optionsContent.on("click", ".countermeasureEnvironments", function () {
 });
 
 
-optionsContent.on('click', '#addAssettoThreat', function () {
-    var hasAssets = [];
-    $("#threatAssets").find(".threatAssets").each(function(index, asset){
-        hasAssets.push($(asset).text());
-    });
-    assetsDialogBox(hasAssets, function (text) {
-        var threat = JSON.parse($.session.get("Countermeasure"));
-        var theEnvName = $.session.get("threatEnvironmentName");
-        $.each(threat.theEnvironmentProperties, function (index, env) {
-            if(env.theEnvironmentName == theEnvName){
-                env.theAssets.push(text);
-                $.session.set("Countermeasure", JSON.stringify(threat));
-                appendThreatAsset(text);
-            }
-        });
-    });
-});
-optionsContent.on('click','#addAttackertoThreat', function () {
-    var hasAttackers = [];
-    var theEnvName = $.session.get("threatEnvironmentName");
-    $("#threatAttackers").find(".threatAttackers").each(function(index, attacker){
-        hasAttackers.push($(attacker).text());
-    });
-    if(hasAttackers.length <= 0){
-        alert("Unable to add attackers without specifying an environment.")
-    }else {
-        attackerDialogBox(hasAttackers, theEnvName, function (text) {
-            var threat = JSON.parse($.session.get("Countermeasure"));
-            $.each(threat.theEnvironmentProperties, function (index, env) {
-                if (env.theEnvironmentName == theEnvName) {
-                    env.theAttackers.push(text);
-                    $.session.set("Countermeasure", JSON.stringify(threat));
-                    appendThreatAttacker(text);
-                }
-            });
-        });
-    }
-});
-optionsContent.on('change', '#theLikelihood', function () {
+mainContent.on('click', '#addAssettoThreat', function () {
+  var hasAssets = [];
+  $("#threatAssets").find(".threatAssets").each(function(index, asset){
+    hasAssets.push($(asset).text());
+  });
+  assetsDialogBox(hasAssets, function (text) {
     var threat = JSON.parse($.session.get("Countermeasure"));
     var theEnvName = $.session.get("threatEnvironmentName");
     $.each(threat.theEnvironmentProperties, function (index, env) {
-        if(env.theEnvironmentName == theEnvName){
-            env.theLikelihood = $("#theLikelihood option:selected").text();
-            $.session.set("Countermeasure", JSON.stringify(threat));
-        }
+      if(env.theEnvironmentName == theEnvName){
+        env.theAssets.push(text);
+        $.session.set("Countermeasure", JSON.stringify(threat));
+        appendThreatAsset(text);
+      }
     });
+  });
 });
 
-optionsContent.on('click', '.removeCountermeasureRequirement', function () {
+mainContent.on('click','#addAttackertoThreat', function () {
+  var hasAttackers = [];
+  var theEnvName = $.session.get("threatEnvironmentName");
+  $("#threatAttackers").find(".threatAttackers").each(function(index, attacker){
+    hasAttackers.push($(attacker).text());
+  });
+  if(hasAttackers.length <= 0){
+    alert("Unable to add attackers without specifying an environment.")
+  }
+  else {
+    attackerDialogBox(hasAttackers, theEnvName, function (text) {
+      var threat = JSON.parse($.session.get("Countermeasure"));
+      $.each(threat.theEnvironmentProperties, function (index, env) {
+        if (env.theEnvironmentName == theEnvName) {
+          env.theAttackers.push(text);
+          $.session.set("Countermeasure", JSON.stringify(threat));
+          appendThreatAttacker(text);
+        }
+      });
+    });
+  }
+});
+
+mainContent.on('change', '#theLikelihood', function () {
+  var threat = JSON.parse($.session.get("Countermeasure"));
+  var theEnvName = $.session.get("threatEnvironmentName");
+  $.each(threat.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      env.theLikelihood = $("#theLikelihood option:selected").text();
+      $.session.set("Countermeasure", JSON.stringify(threat));
+    }
+  });
+});
+
+mainContent.on('click', '.removeCountermeasureRequirement', function () {
   var reqText = $(this).closest(".countermeasureRequirements").text();
   $(this).closest("tr").remove();
   var countermeasure = JSON.parse($.session.get("Countermeasure"));
@@ -227,7 +228,7 @@ optionsContent.on('click', '.removeCountermeasureRequirement', function () {
   });
 });
 
-optionsContent.on('click', '.removeCountermeasureTarget', function () {
+mainContent.on('click', '.removeCountermeasureTarget', function () {
   var targetText = $(this).closest(".countermeasureTargets").text();
   $(this).closest("tr").remove();
   var countermeasure = JSON.parse($.session.get("Countermeasure"));
@@ -240,7 +241,7 @@ optionsContent.on('click', '.removeCountermeasureTarget', function () {
   });
 });
 
-optionsContent.on('click', '.removeCountermeasureRole', function () {
+mainContent.on('click', '.removeCountermeasureRole', function () {
   var roleText = $(this).closest(".countermeasureRoles").text();
   $(this).closest("tr").remove();
   var countermeasure = JSON.parse($.session.get("Countermeasure"));
@@ -254,13 +255,13 @@ optionsContent.on('click', '.removeCountermeasureRole', function () {
 });
 
 
-optionsContent.on('click','#addPropertytoCountermeasure', function () {
+mainContent.on('click','#addPropertytoCountermeasure', function () {
   $("#editCountermeasureOptionsForm").hide();
   fillCountermeasurePropProperties();
   $("#addPropertyDiv").show('slow').addClass("newProp");
 });
 
-optionsContent.on('click',"#UpdateCountermeasureProperty", function () {
+mainContent.on('click',"#UpdateCountermeasureProperty", function () {
   var prop = {};
   var countermeasure = JSON.parse($.session.get("Countermeasure"));
   var theEnvName = $.session.get("countermeasureEnvironmentName");
@@ -300,7 +301,7 @@ optionsContent.on('click',"#UpdateCountermeasureProperty", function () {
   }
 });
 
-optionsContent.on("dblclick",".changeProperty", function () {
+mainContent.on("dblclick",".changeProperty", function () {
   $(this).addClass("changeAbleProp");
   toggleCountermeasureOptions();
   var text =  $(this).find("td:eq(1)").text();
@@ -310,7 +311,7 @@ optionsContent.on("dblclick",".changeProperty", function () {
   $("#thePropRationale").val($(this).find("td:eq(3)").text());
 });
 
-optionsContent.on("click", "#addCountermeasureEnv", function () {
+mainContent.on("click", "#addCountermeasureEnv", function () {
   var hasEnv = [];
   $(".countermeasureEnvironments").each(function (index, tag) {
     hasEnv.push($(tag).text());
@@ -331,7 +332,7 @@ optionsContent.on("click", "#addCountermeasureEnv", function () {
   });
 });
 
-optionsContent.on('click', '#UpdateCountermeasure', function (e) {
+mainContent.on('click', '#UpdateCountermeasure', function (e) {
   e.preventDefault();
   var test = $.session.get("Countermeasure");
   var countermeasure = JSON.parse($.session.get("Countermeasure"));
@@ -354,7 +355,7 @@ optionsContent.on('click', '#UpdateCountermeasure', function (e) {
   }
 });
 
-optionsContent.on('click', ".deleteCountermeasureEnv", function () {
+mainContent.on('click', ".deleteCountermeasureEnv", function () {
   var envi = $(this).next(".countermeasuresEnvironments").text();
   $(this).closest("tr").remove();
   var countermeasure = JSON.parse($.session.get("Countermeasure"));
@@ -375,7 +376,7 @@ optionsContent.on('click', ".deleteCountermeasureEnv", function () {
   });
 });
 
-optionsContent.on('click', ".removeCountermeasureProperty", function () {
+mainContent.on('click', ".removeCountermeasureProperty", function () {
   var attacker = $(this).closest(".threatAttackers").text();
   $(this).closest("tr").remove();
   var countermeasure = JSON.parse($.session.get("Countermeasure"));
@@ -404,36 +405,33 @@ function fillCountermeasurePropProperties(extra){
     if(env.theEnvironmentName == theEnvName){
       $.each(env.theProperties, function (index, prop) {
         if(prop.value == "None"){
-          propBox.append($("<option></option>")
-            .text(prop.name));
+          propBox.append($("<option></option>").text(prop.name));
         }
       });
     }
   });
   if(typeof extra !== undefined && extra !=""){
-    propBox.append($("<option></option>")
-      .text(extra).val(extra));
-    propBox.val(extra);
+    propBox.append($("<option></option>").text(extra).val(extra));
   }
 }
 function toggleCountermeasureOptions(){
-    $("#editCountermeasureOptionsform").toggle();
-    $("#addPropertyDiv").toggle();
+  $("#editCountermeasureOptionsform").toggle();
+  $("#addPropertyDiv").toggle();
 }
 function appendCountermeasureEnvironment(environment){
-    $("#theEnvironments").find("tbody").append('<tr><td class="deleteCountermeasureEnv"><i class="fa fa-minus"></i></td><td class="countermeasureEnvironments">'+environment+'</td></tr>');
+  $("#theEnvironments").find("tbody").append('<tr><td class="deleteCountermeasureEnv"><i class="fa fa-minus"></i></td><td class="countermeasureEnvironments">'+environment+'</td></tr>');
 }
 
 function appendCountermeasureRequirement(requirement){
-    $("#theRequirements").find("tbody").append("<tr><td class='removeCountermeasureRequirement'><i class='fa fa-minus'></i></td><td class='countermeasureRequirements'>" + requirement + "</td></tr>").animate('slow');
+  $("#theRequirements").find("tbody").append("<tr><td class='removeCountermeasureRequirement'><i class='fa fa-minus'></i></td><td class='countermeasureRequirements'>" + requirement + "</td></tr>").animate('slow');
 }
 
 function appendCountermeasureTarget(target){
-    $("#theTargets").find("tbody").append("<tr><td class='removeCountermeasureTarget'><i class='fa fa-minus'></i></td><td class='countermeasureTargets'>" + target.theName + "</td><td>" + target.theEffectiveness + "</td></tr>").animate('slow');
+  $("#theTargets").find("tbody").append("<tr><td class='removeCountermeasureTarget'><i class='fa fa-minus'></i></td><td class='countermeasureTargets'>" + target.theName + "</td><td>" + target.theEffectiveness + "</td></tr>").animate('slow');
 }
 
 function appendCountermeasureRole(role){
-    $("#theRoles").find("tbody").append("<tr><td class='removeCountermeasureRole'><i class='fa fa-minus'></i></td><td class='countermeasureRoles'>" + role + "</td></tr>").animate('slow');
+  $("#theRoles").find("tbody").append("<tr><td class='removeCountermeasureRole'><i class='fa fa-minus'></i></td><td class='countermeasureRoles'>" + role + "</td></tr>").animate('slow');
 }
 
 function appendCountermeasurePersona(task,persona,duration,frequency,demands,goalConflict) {
@@ -441,12 +439,18 @@ function appendCountermeasurePersona(task,persona,duration,frequency,demands,goa
 }
 
 function appendCountermeasureProperty(prop){
-    $("#countermeasureProperties").find("tbody").append("<tr class='changeProperty'><td class='removeCountermeasureProperty'><i class='fa fa-minus'></i></td><td class='countermeasureProperties'>" + prop.name + "</td><td>"+ prop.value +"</td><td>"+ prop.rationale+"</td></tr>").animate('slow');;
+  $("#countermeasureProperties").find("tbody").append("<tr class='changeProperty'><td class='removeCountermeasureProperty'><i class='fa fa-minus'></i></td><td class='countermeasureProperties'>" + prop.name + "</td><td>"+ prop.value +"</td><td>"+ prop.rationale+"</td></tr>").animate('slow');;
 }
 function clearCountermeasureEnvInfo(){
-    $("#countermeasureProperties").find("tbody").empty();
-    $("#theRequirements").find("tbody").empty();
-    $("#theTargets").find("tbody").empty();
-    $("#theRoles").find("tbody").empty();
-    $("#thePersonas").find("tbody").empty();
+  $("#countermeasureProperties").find("tbody").empty();
+  $("#theRequirements").find("tbody").empty();
+  $("#theTargets").find("tbody").empty();
+  $("#theRoles").find("tbody").empty();
+  $("#thePersonas").find("tbody").empty();
 }
+
+mainContent.on('click', '#CloseCountermeasure', function (e) {
+  e.preventDefault();
+  createCountermeasuresTable();
+});
+

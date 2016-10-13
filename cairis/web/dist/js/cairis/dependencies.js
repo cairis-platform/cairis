@@ -92,12 +92,11 @@ function createDependenciesTable(){
 }
 
 $(document).on('click', ".editDependencyButton", function (e) {
-  e.preventDefault();
+  activeElement("objectViewer");
   var dependencies = JSON.parse($.session.get("Dependencies"));
   var dependency = dependencies[$(this).index()];
 
-  fillOptionMenu("fastTemplates/editDependencyOptions.html","#optionsContent",null,true,true, function(){
-    forceOpenOptions();
+  fillOptionMenu("fastTemplates/editDependencyOptions.html","#objectViewer",null,true,true, function(){
     $('#theRationale').val(dependency.theRationale);
     var environmentSelect = $("#theEnvironmentName");
     environmentSelect.empty()
@@ -126,16 +125,16 @@ $(document).on('click', ".editDependencyButton", function (e) {
         $("#theDependencyName").append('<option>' + objt + '</option>');
       }); 
     });
-    $("#optionsHeaderGear").text("Dependency properties");
     $.session.set("Dependency", JSON.stringify(dependency));
     $('#editDependencyOptionsForm').loadJSON(dependency, null);
   });
 });
 
-optionsContent.on('click', '#UpdateDependency', function (e) {
+var mainContent = $("#objectViewer");
+mainContent.on('click', '#UpdateDependency', function (e) {
 
   e.preventDefault();
-$("#editDependencyOptionsForm").validator();
+  $("#editDependencyOptionsForm").validator();
 
   var dependency = JSON.parse($.session.get("Dependency"));
   var oldEnvName = dependency.theEnvironmentName;
@@ -162,7 +161,7 @@ $("#editDependencyOptionsForm").validator();
   }
 });
 
-optionsContent.on('change',"#theEnvironmentName", function() {
+mainContent.on('change',"#theEnvironmentName", function() {
   var envName = $(this).find('option:selected').text();
 
   var dependerSelect = $("#theDependerName");
@@ -178,7 +177,7 @@ optionsContent.on('change',"#theEnvironmentName", function() {
 });
 
 
-optionsContent.on('change',"#theDependencyType", function() {
+mainContent.on('change',"#theDependencyType", function() {
   var depType = $(this).find('option:selected').text();
   var envName = $("#theEnvironmentName").val();
   $("#theDependencyName").empty();
@@ -190,7 +189,8 @@ optionsContent.on('change',"#theDependencyType", function() {
 });
 
 $(document).on("click", "#addNewDependency", function () {
-  fillOptionMenu("fastTemplates/editDependencyOptions.html", "#optionsContent", null, true, true, function () {
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editDependencyOptions.html", "#objectViewer", null, true, true, function () {
     $("#editDependencyOptionsForm").addClass("new");
     $.session.set("Dependency", JSON.stringify(jQuery.extend(true, {},dependencyDefault )));
 
@@ -221,10 +221,6 @@ $(document).on("click", "#addNewDependency", function () {
         $("#theDependencyName").append('<option>' + objt + '</option>');
       }); 
     });
-
-
-    $("#optionsHeaderGear").text("Dependency properties");
-    forceOpenOptions();
   });
 });
 
@@ -237,3 +233,7 @@ $(document).on('click', '.deleteDependencyButton', function (e) {
   });
 });
 
+mainContent.on('click', '#CloseDependency', function (e) {
+  e.preventDefault();
+  createDependenciesTable();
+});

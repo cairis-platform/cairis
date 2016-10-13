@@ -142,7 +142,7 @@ $('#assetsbox').change(function() {
   }
   else if (window.theVisualModel == 'asset') {
     debugLogger("Selection: " + selection);
-    getAssetview($('#environmentsbox').val());
+    getAssetview($('#amenvironmentsbox').val());
   }
 });
 
@@ -260,12 +260,12 @@ $('#environmentsbox').change(function() {
       crossDomain: true,
       url: serverIP + "/api/assets/environment/" + selection.replace(" ","%20") + "/names",
       success: function (data) {
-        $('#assetsbox').empty();
-        $('#assetsbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+        $('#amassetsbox').empty();
+        $('#amassetsbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
         $.each(data, function (index, item) {
-          $('#assetsbox').append($('<option>', {value: item, text: item},'</option>'));
+          $('#amassetsbox').append($('<option>', {value: item, text: item},'</option>'));
         });
-        $('#assetsbox').change();
+        $('#amassetsbox').change();
       },
       error: function (xhr, textStatus, errorThrown) {
         debugLogger(String(this.url));
@@ -462,23 +462,23 @@ $('#rmlayout').change(function() {
   getRiskview(envName,dimName,objtName,modelLayout);
 });
 
-$('#concernsbox').change(function() {
+$('#amconcernsbox').change(function() {
   if (window.theVisualModel == 'asset') {
-    getAssetview($('#environmentsbox').val());
+    getAssetview($('#amenvironmentsbox').val());
   }
 });
 
 function getAssetview(environment){
     window.assetEnvironment = environment;
-    $('#environmentsbox').val(environment);
-    var assetName = $('#assetsbox').val();
+    $('#amenvironmentsbox').val(environment);
+    var assetName = $('#amassetsbox').val();
     assetName = assetName == "All" ? "all" : assetName;
     $.ajax({
         type:"GET",
         accept:"application/json",
         data: {
             session_id: String($.session.get('sessionID')),
-            hide_concerns: $('#concernsbox').find('option:selected').text() == 'Yes' ? '1' : '0'
+            hide_concerns: $('#amconcernsbox').find('option:selected').text() == 'Yes' ? '1' : '0'
         },
         crossDomain: true,
         url: serverIP + "/api/assets/model/environment/" + environment.replace(" ","%20") + "/asset/" + assetName.replace(" ","%20"),
@@ -1076,58 +1076,6 @@ function createEnvironmentsTable(data, callback){
     theTable.append(textToInsert.join(''));
     callback();
 
-}
-
-/*
- A function for filling the table with Vulnerabilities
- */
-function createVulnerabilityTable(){
-
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crfossDomain: true,
-        url: serverIP + "/api/vulnerabilities",
-        success: function (data) {
-            window.activeTable = "Vulnerability";
-            setTableHeader();
-            var theTable = $(".theTable");
-            $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
-            //var arr = reallyLongArray;
-            var textToInsert = [];
-            var i = 0;
-
-            $.each(data, function(count, item) {
-                textToInsert[i++] = "<tr>"
-                textToInsert[i++] = '<td><button class="editVulnerabilityButton" value="' + item.theVulnerabilityName + '">' + 'Edit' + '</button> <button class="deleteVulnerabilityButton" value="' + item.theVulnerabilityName + '">' + 'Delete' + '</button></td>';
-                textToInsert[i++] = '<td name="theVulnerabilityName">';
-                textToInsert[i++] = item.theVulnerabilityName;
-                textToInsert[i++] = '</td>';
-
-                textToInsert[i++] = '<td name="theVulnerabilityType">';
-                textToInsert[i++] = item.theVulnerabilityType;
-                textToInsert[i++] = '</td>';
-
-
-                textToInsert[i++] = '</tr>';
-            });
-
-            // theRows[j++]=textToInsert.join('');
-            theTable.append(textToInsert.join(''));
-
-            theTable.css("visibility","visible");
-            activeElement("reqTable");
-            sortTableByRow(0);
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    })
 }
 
 function getRisks(callback){
@@ -1785,10 +1733,14 @@ var sess = String($.session.get('sessionID'));
             success: function (data) {
                 // we make a successful JSONP call!
                 var options = $("#assetsbox");
+                var amoptions = $("#amassetsbox");
                 options.empty();
+                amoptions.empty();
                 options.append("<option>All</option>");
+                amoptions.append("<option>All</option>");
                 $.each(data, function () {
                     options.append($("<option />").val(this).text(this));
+                    amoptions.append($("<option />").val(this).text(this));
                 });
                 $(".topCombobox").css("visibility", "visible");
 
@@ -1812,12 +1764,14 @@ var sess = String($.session.get('sessionID'));
 
             success: function (data) {
                 var envBox = $("#environmentsbox");
+                var amEnvBox = $("#amenvironmentsbox");
                 var gmEnvBox = $("#gmenvironmentsbox");
                 var omEnvBox = $("#omenvironmentsbox");
                 var tmEnvBox = $("#tmenvironmentsbox");
                 var remEnvBox = $("#remenvironmentsbox");
                 var rmEnvBox = $("#rmenvironmentsbox");
                 envBox.empty();
+                amEnvBox.empty();
                 gmEnvBox.empty();
                 omEnvBox.empty();
                 tmEnvBox.empty();
@@ -1825,6 +1779,7 @@ var sess = String($.session.get('sessionID'));
                 rmEnvBox.empty();
                 $.each(data, function () {
                     envBox.append($("<option />").val(this).text(this));
+                    amEnvBox.append($("<option />").val(this).text(this));
                     gmEnvBox.append($("<option />").val(this).text(this));
                     omEnvBox.append($("<option />").val(this).text(this));
                     tmEnvBox.append($("<option />").val(this).text(this));
@@ -1875,17 +1830,22 @@ function startingTable(){
 This is for saying which element has the main focus
  */
 function activeElement(elementid){
-    if(elementid == "svgViewer"){
+    if(elementid == "svgViewer" || elementid == 'homePanel'){
         $("#reqTable").hide();
-        $("#projectViewer").hide();
+        $("#objectViewer").hide();
         $("#filtercontent").hide();
-        $("#filterconcerns").hide();
+        $("#filterassetmodelcontent").hide();
         $("#filterriskmodelcontent").hide();
         $("#filterresponsibilitymodelcontent").hide();
         $("#filtergoalmodelcontent").hide();
         $("#filterapmodelcontent").hide();
         $("#filtertaskmodelcontent").hide();
         $("#filterobstaclemodelcontent").hide();
+        $("#rightnavGear").hide();
+
+        if (elementid == 'svgViewer') {
+          $("#rightnavGear").show();
+        }
 
         if (window.theVisualModel == 'risk') {
           $("#filterriskmodelcontent").show();
@@ -1903,8 +1863,7 @@ function activeElement(elementid){
           $("#filterresponsibilitymodelcontent").show();
         }
         else if (window.theVisualModel == 'asset') {
-          $("#filtercontent").show();
-          $("#filterconcerns").show();
+          $("#filterassetmodelcontent").show();
         }
         else if (window.theVisualModel == 'persona') {
           $("#filterapmodelcontent").show();
@@ -1912,13 +1871,16 @@ function activeElement(elementid){
     }
     if(elementid != "svgViewer"){
         $("#svgViewer").hide();
-        $("#projectViewer").hide();
+        $("#homePanel").hide();
+        $("#objectViewer").hide();
+        $("#filterassetmodelcontent").hide();
         $("#filterriskmodelcontent").hide();
         $("#filtergoalmodelcontent").hide();
         $("#filtertaskmodelcontent").hide();
         $("#filterapmodelcontent").hide();
         $("#filterresponsibilitymodelcontent").hide();
         $("#filterobstaclemodelcontent").hide();
+        $("#rightnavGear").hide();
     }
 
     if(elementid == "reqTable"){
@@ -1926,10 +1888,10 @@ function activeElement(elementid){
         window.theVisualModel = 'None';
         setActiveOptions();
     }
-    if (elementid == 'projectViewer') {
+    if (elementid == 'objectViewer') {
       $("#reqTable").hide();
-      $("#filtercontent").hide();
     }
+
     elementid = "#" + elementid;
     $(elementid).show();
 
@@ -2044,6 +2006,7 @@ function setActiveOptions(){
     //If chosen to create a new function for this, because this will increase readability
     //First disable them all
     $("#filtercontent").hide();
+    $("#filterassetmodelcontent").hide();
     $("#filterriskmodelcontent").hide();
     $("#filtergoalmodelcontent").hide();
     $("#filtertaskmodelcontent").hide();
@@ -2055,7 +2018,6 @@ function setActiveOptions(){
     switch (window.activeTable) {
         case "Requirements":
             $("#filtercontent").show();
-            $("#filterconcerns").hide()
             break;
         case "Goals":
             break;
@@ -2336,52 +2298,6 @@ function showPopup(succes, text){
     }
     popup.show("slide", { direction: "down" },1500).delay(time).fadeOut("slow",function(){
     });
-}
-function fillRolesTable(){
-    window.activeTable = "Roles";
-    setTableHeader();
-    activeElement("reqTable");
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/roles",
-        success: function (json) {
-            $.session.set("allRoles", JSON.stringify(json));
-            var i = 0;
-            var textToInsert = [];
-            $.each(json, function (key, value) {
-
-                textToInsert[i++] = "<tr>";
-                textToInsert[i++] = '<td><button class="editRoleButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteRoleButton" value="' + key + '">' + 'Delete' + '</button></td>';
-
-                textToInsert[i++] = '<td name="theName">';
-                textToInsert[i++] = value.theName;
-                textToInsert[i++] = '</td>';
-
-                textToInsert[i++] = '<td name="theShortCode">';
-                textToInsert[i++] = value.theShortCode;
-                textToInsert[i++] = '</td>';
-
-                textToInsert[i++] = '<td name="theType">';
-                textToInsert[i++] = value.theType;
-                textToInsert[i++] = '</td>';
-                textToInsert[i++] = '</tr>';
-            });
-            $("#reqTable").append(textToInsert.join(''));
-
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    });
-    sortTableByRow(1);
 }
 
 function assetFormToJSON(data, newAsset){

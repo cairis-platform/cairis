@@ -73,6 +73,7 @@ function createDomainPropertiesTable(){
 }
 
 $(document).on('click', ".editDomainPropertyButton", function () {
+  activeElement("objectViewer");
   var name = $(this).val();
   $.ajax({
     type: "GET",
@@ -84,9 +85,7 @@ $(document).on('click', ".editDomainPropertyButton", function () {
     crossDomain: true,
     url: serverIP + "/api/domainproperties/name/" + name.replace(" ", "%20"),
     success: function (data) {
-      fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#optionsContent", null, true, true, function () {
-        $("#optionsHeaderGear").text("Domain Property properties");
-        forceOpenOptions();
+      fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("DomainProperty", JSON.stringify(data));
         $('#editDomainPropertyOptionsForm').loadJSON(data, null);
 
@@ -109,7 +108,7 @@ $(document).on('click', ".editDomainPropertyButton", function () {
   });
 });
 
-optionsContent.on('click', '#UpdateDomainProperty', function (e) {
+mainContent.on('click', '#UpdateDomainProperty', function (e) {
   e.preventDefault();
   var dp = JSON.parse($.session.get("DomainProperty"));
   var oldName = dp.theName;
@@ -142,11 +141,11 @@ $(document).on('click', '.deleteDomainPropertyButton', function (e) {
 });
 
 $(document).on("click", "#addNewDomainProperty", function () {
-  fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#optionsContent", null, true, true, function () {
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#mainContent", null, true, true, function () {
     $("#editDomainPropertyOptionsForm").addClass("new");
     $.session.set("DomainProperty", JSON.stringify(jQuery.extend(true, {},domainPropertyDefault )));
     $("#optionsHeaderGear").text("Domain Property properties");
-    forceOpenOptions();
   });
 });
 
@@ -242,3 +241,9 @@ function deleteDomainProperty(name, callback){
     }
   });
 }
+
+mainContent.on('click', '#CloseDomainProperty', function (e) {
+  e.preventDefault();
+  createDomainPropertiesTable();
+});
+
