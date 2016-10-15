@@ -108,6 +108,8 @@ $(document).on('click', ".editDomainPropertyButton", function () {
   });
 });
 
+var mainContent = $("#objectViewer");
+
 mainContent.on('click', '#UpdateDomainProperty', function (e) {
   e.preventDefault();
   var dp = JSON.parse($.session.get("DomainProperty"));
@@ -142,7 +144,7 @@ $(document).on('click', '.deleteDomainPropertyButton', function (e) {
 
 $(document).on("click", "#addNewDomainProperty", function () {
   activeElement("objectViewer");
-  fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#mainContent", null, true, true, function () {
+  fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#objectViewer", null, true, true, function () {
     $("#editDomainPropertyOptionsForm").addClass("new");
     $.session.set("DomainProperty", JSON.stringify(jQuery.extend(true, {},domainPropertyDefault )));
     $("#optionsHeaderGear").text("Domain Property properties");

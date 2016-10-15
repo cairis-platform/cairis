@@ -2036,10 +2036,11 @@ function setActiveOptions(){
 for filling up the SVG viewer
  */
 function fillSvgViewer(data){
+
   var xmlString = (new XMLSerializer()).serializeToString(data);
   var svgDiv = $("#svgViewer");
   svgDiv.show();
-  svgDiv.css("height",$("#maincontent").height());
+  svgDiv.css("height","100%");
   svgDiv.css("width","100%");
   svgDiv.html(xmlString);
   $("svg").attr("id","svg-id");

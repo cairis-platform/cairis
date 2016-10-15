@@ -74,7 +74,8 @@ function createPersonaCharacteristicsTable(){
 
 $(document).on('click', ".editPersonaCharacteristicButton", function () {
   activeElement("objectViewer");
-  var name = $(this).val();
+  var key = $(this).val();
+  var name = key.split("/")[2];
   $.ajax({
     type: "GET",
     dataType: "json",
