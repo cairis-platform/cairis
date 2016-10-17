@@ -91,6 +91,8 @@ class AssetTest(unittest.TestCase):
     self.assertEqual(str(iaeps[0].properties()[7]), str(oap.securityProperties(envName,'',envName)[7]))
 
     oap.theShortCode = 'TESTCODE'
+    oap.theAssetPropertyDictionary['Psychosis'].theSecurityProperties[0] = 1;
+
     b.dbProxy.updateAsset(oap)
 
     oaps2 = b.dbProxy.getAssets(oap.id())
