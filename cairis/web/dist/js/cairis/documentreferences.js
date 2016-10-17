@@ -17,6 +17,7 @@
 
     Authors: Shamal Faily */
 
+'use strict';
 
 $("#documentReferencesClick").click(function(){
   createDocumentReferencesTable();

@@ -17,6 +17,8 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
+'use strict';
+
 $( document ).ajaxComplete(function() {
   $("svg > g > g .node > a ").on('click', function (event) {
     event.stopImmediatePropagation();

@@ -17,6 +17,7 @@
 
     Authors: Shamal Faily */
 
+'use strict';
 
 $("#FindButton").click(function(e){
   e.preventDefault();

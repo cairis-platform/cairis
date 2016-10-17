@@ -17,6 +17,7 @@
 
     Authors: Shamal Faily */
 
+'use strict';
 
 $("#homeClick").click(function () {
   activeElement("homePanel");

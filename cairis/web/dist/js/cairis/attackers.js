@@ -17,10 +17,7 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
-/*
- I've made this file to make it easier for me to program. Everything (except PUT POST and DELETE) for the attackers will be coded here
- It is possible that I will use some already developed functions inside some other files
- */
+'use strict';
 
 $("#attackerMenuClick").click(function () {
   createAttackersTable();

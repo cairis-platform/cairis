@@ -17,6 +17,8 @@
 
     Authors: Shamal Faily */
 
+'use strict';
+
 $("#exportClick").click(function () {
   var exportUrl =  serverIP + "/api/export/file?filename=model.xml"; 
   $.ajax({

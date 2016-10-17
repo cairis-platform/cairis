@@ -17,6 +17,8 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
+'use strict';
+
 $("#importClick").click(function () {
   fileDialogbox(function (type) {
     var fileType = $("#theImportModelType").val();

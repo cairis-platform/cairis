@@ -17,6 +17,7 @@
 
     Authors: Shamal Faily */
 
+'use strict';
 
 $("#personaCharacteristicsClick").click(function(){
   createPersonaCharacteristicsTable();

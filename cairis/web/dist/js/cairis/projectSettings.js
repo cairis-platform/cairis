@@ -17,6 +17,7 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
+'use strict';
 
 $("#projectClick").click(function () {
   activeElement("objectViewer");
@@ -72,7 +73,6 @@ function getProjectSettings(callback){
  Image uploading functions
  */
 var uploading = false;
-var optionsContent = $("#optionsContent");
 var mainContent = $("#objectViewer");
 
 mainContent.on('click', '#theImages', function () {

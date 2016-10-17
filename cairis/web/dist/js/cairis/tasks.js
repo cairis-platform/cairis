@@ -17,6 +17,8 @@
 
     Authors: Shamal Faily */
 
+'use strict';
+
 window.durationLookup = {};
 window.durationLookup['Seconds'] = 'Low';
 window.durationLookup['Minutes'] = 'Medium';

@@ -17,10 +17,11 @@
 
     Authors: Shamal Faily */
 
+'use strict';
+
 $("#useCaseClick").click(function () {
   createUseCasesTable();
 });
-
 
 function createUseCasesTable(){
 

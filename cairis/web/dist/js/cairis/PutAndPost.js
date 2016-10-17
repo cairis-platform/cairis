@@ -17,6 +17,7 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
+'use strict';
 
 function updateRequirement(row){
     if ($(row).attr('class') != undefined) {

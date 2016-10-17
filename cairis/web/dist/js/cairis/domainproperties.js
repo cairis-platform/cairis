@@ -17,6 +17,8 @@
 
     Authors: Shamal Faily */
 
+'use strict';
+
 $("#domainPropertyClick").click(function () {
   createDomainPropertiesTable();
 });

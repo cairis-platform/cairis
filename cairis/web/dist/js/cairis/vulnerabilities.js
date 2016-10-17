@@ -17,10 +17,11 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
+'use strict';
+
 $("#vulnerabilityMenuClick").click(function(){
    createVulnerabilityTable()
 });
-
 
 function createVulnerabilityTable(){
   $.ajax({

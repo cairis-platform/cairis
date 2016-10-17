@@ -17,6 +17,8 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
+'use strict';
+
 $("#responseMenuClick").click(function () {
   createResponsesTable();
 });

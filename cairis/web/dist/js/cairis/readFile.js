@@ -17,6 +17,8 @@
 
     Authors: Raf Vandelaer */
 
+'use strict';
+
 function fillOptionMenu(filePath,theElement,theData,createTabs,optionsHeader,callback) {
   jQuery.get(filePath, function(data) {
     var optionsDIV = $("#optionsHeaderGear");

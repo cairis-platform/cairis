@@ -17,6 +17,8 @@
 
     Authors: Shamal Faily */
 
+'use strict';
+
 $("#roleMenuClick").click(function () {
   fillRolesTable();
 });
@@ -127,10 +129,10 @@ mainContent.on('click','#UpdateRole', function (event) {
 
   if ($("#editRoleOptionsform").hasClass("newRole")) {
     var theRoleObject = jQuery.extend(true, {},roleDefaultObject );
-    theRoleObject.theName = optionsContent.find("#theName").val();
-    theRoleObject.theShortCode = optionsContent.find("#theShortCode").val();
-    theRoleObject.theDescription = optionsContent.find("#theDescription").val();
-    theRoleObject.theType = optionsContent.find("#theType option:selected").text().trim();
+    theRoleObject.theName = mainContent.find("#theName").val();
+    theRoleObject.theShortCode = mainContent.find("#theShortCode").val();
+    theRoleObject.theDescription = mainContent.find("#theDescription").val();
+    theRoleObject.theType = mainContent.find("#theType option:selected").text().trim();
     if (theRoleObject.theName == "" || theRoleObject.theShortCode == "" || theRoleObject.theDescription == "" || theRoleObject.theType == "") {
       alert("The Name, Shortcode, Description and Type must have a value");
     }
@@ -143,10 +145,10 @@ mainContent.on('click','#UpdateRole', function (event) {
   else {
     var theRoleObject = JSON.parse($.session.get("RoleObject"));
     var oldname = theRoleObject.theName;
-    theRoleObject.theName = optionsContent.find("#theName").val();
-    theRoleObject.theShortCode = optionsContent.find("#theShortCode").val();
-    theRoleObject.theDescription = optionsContent.find("#theDescription").val();
-    theRoleObject.theType = optionsContent.find("#theType option:selected").text().trim();
+    theRoleObject.theName = mainContent.find("#theName").val();
+    theRoleObject.theShortCode = mainContent.find("#theShortCode").val();
+    theRoleObject.theDescription = mainContent.find("#theDescription").val();
+    theRoleObject.theType = mainContent.find("#theType option:selected").text().trim();
     if (theRoleObject.theName == "" || theRoleObject.theShortCode == "" || theRoleObject.theDescription == "" || theRoleObject.theType == "") {
       alert("The Name, Shortcode, Description and Type must have a value");
     }

@@ -17,6 +17,8 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
+'use strict';
+
 $("#riskMenuClick").click(function () {
   createRisksTable();
 });

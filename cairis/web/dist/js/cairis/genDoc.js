@@ -17,6 +17,8 @@
 
     Authors: Shamal Faily */
 
+'use strict';
+
 $("#genDocClick").click(function () {
   fillOptionMenu("fastTemplates/editGenDocOptions.html", "#optionsContent", null, true, true, function () {
     $("#optionsHeaderGear").text("Generate Documentation");

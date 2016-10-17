@@ -17,6 +17,8 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
+'use strict';
+
 $("#threatMenuClick").click(function () {
   createThreatsTable();
 });

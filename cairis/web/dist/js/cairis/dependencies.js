@@ -17,6 +17,7 @@
 
     Authors: Shamal Faily */
 
+'use strict';
 
 $('#editDependencyOptionsForm').validator().on('submit', function (e) {
   if (e.isDefaultPrevented()) {

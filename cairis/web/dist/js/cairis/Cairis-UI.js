@@ -17,6 +17,7 @@
 
     Authors: Raf Vandelaer */
 
+'use strict';
 
 $(window).on('load', function(){
 

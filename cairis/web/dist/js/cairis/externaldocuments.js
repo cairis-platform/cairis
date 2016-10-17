@@ -17,6 +17,7 @@
 
     Authors: Shamal Faily */
 
+'use strict';
 
 $("#externalDocumentsClick").click(function(){
   createExternalDocumentsTable();
