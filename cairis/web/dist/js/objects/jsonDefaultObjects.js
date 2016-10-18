@@ -17,6 +17,8 @@
 
     Authors: Raf Vandelaer, Shamal Faily */
 
+'use strict';
+
 var AssetEnvironmentProperty =
 {
   "__python_obj__": "tools.ModelDefinitions.AssetEnvironmentPropertiesModel",

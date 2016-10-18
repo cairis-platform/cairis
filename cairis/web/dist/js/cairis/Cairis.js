@@ -60,56 +60,32 @@ $(document).ready(function() {
 });
 
 function showLoading(){
-    $(".loadingWrapper").fadeIn(500);
+  $(".loadingWrapper").fadeIn(500);
 }
 function hideLoading(){
-    $(".loadingWrapper").fadeOut(500);
+  $(".loadingWrapper").fadeOut(500);
 }
 
-// Filling the asset environment in the HTML
-function fillEditAssetsEnvironment(){
-    var data = JSON.parse( $.session.get("AssetProperties"));
-    var i = 0;
-    var textToInsert = [];
-    $.each(data, function(arrayindex, value) {
-        textToInsert[i++] = '<tr><td class="removeAssetEnvironment"><i class="fa fa-minus"></i></td><td class="clickable-environments assetEnvironmentRow">';
-        textToInsert[i++] = value.theEnvironmentName;
-        textToInsert[i++] = '</td></tr>';
-    });
-    $('#theEnvironmentDictionary').find("tbody").empty();
-    $('#theEnvironmentDictionary').append(textToInsert.join(''));
 
-//    var env = $( "#theEnvironmentDictionary").find("tbody tr:eq(0) > td:eq(0)").text();
-    var env = $.session.get("assetEnvironmentName");
 
-    var props;
-    $.each(data, function(arrayID,group) {
-        if(group.environment == env){
-            getAssetDefinition(group.attributes);
-            //props = group.attributes;
-            $.session.set("thePropObject", JSON.stringify(group));
-           // $.session.set("Arrayindex",arrayID);
-        }
-    });
-    $("#theEnvironmentDictionary").find(".assetEnvironmentRow:first").trigger('click');
-}
 
 // For converting the form in JSON
 $.fn.serializeObject = function()
 {
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    return o;
+  var o = {};
+  var a = this.serializeArray();
+  $.each(a, function() {
+    if (o[this.name] !== undefined) {
+      if (!o[this.name].push) {
+        o[this.name] = [o[this.name]];
+      }
+      o[this.name].push(this.value || '');
+    } 
+    else {
+      o[this.name] = this.value || '';
+    }
+  });
+  return o;
 };
 
 // For the assetsbox, if filter is selected
@@ -471,28 +447,27 @@ $('#amconcernsbox').change(function() {
 });
 
 function getAssetview(environment){
-    window.assetEnvironment = environment;
-    $('#amenvironmentsbox').val(environment);
-    var assetName = $('#amassetsbox').val();
-    assetName = assetName == "All" ? "all" : assetName;
-    $.ajax({
-        type:"GET",
-        accept:"application/json",
-        data: {
-            session_id: String($.session.get('sessionID')),
-            hide_concerns: $('#amconcernsbox').find('option:selected').text() == 'Yes' ? '1' : '0'
-        },
-        crossDomain: true,
-        url: serverIP + "/api/assets/model/environment/" + environment.replace(" ","%20") + "/asset/" + assetName.replace(" ","%20"),
-        success: function(data){
-           fillSvgViewer(data);
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-
-    });
+  window.assetEnvironment = environment;
+  $('#amenvironmentsbox').val(environment);
+  var assetName = $('#amassetsbox').val();
+  assetName = assetName == "All" ? "all" : assetName;
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+      hide_concerns: $('#amconcernsbox').find('option:selected').text() == 'Yes' ? '1' : '0'
+    },
+    crossDomain: true,
+    url: serverIP + "/api/assets/model/environment/" + environment.replace(" ","%20") + "/asset/" + assetName.replace(" ","%20"),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
 function getGoalview(environment,goalName,ucName){
@@ -730,50 +705,46 @@ function getTaskview(environment,task,misusecase){
   task = (task == undefined || task == 'All') ? "all" : task;
   misusecase = (misusecase == undefined || misusecase == 'All') ? "all" : misusecase;
 
-    $.ajax({
-        type:"GET",
-        accept:"application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/tasks/model/environment/" + environment.replace(" ","%20") + "/task/" + task.replace(" ","%20") + "/misusecase/" + misusecase.replace(" ","%20"),
-        success: function(data){
-           fillSvgViewer(data);
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    });
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/tasks/model/environment/" + environment.replace(" ","%20") + "/task/" + task.replace(" ","%20") + "/misusecase/" + misusecase.replace(" ","%20"),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
 function getPersonaview(pName,bvName,pcName){
-    window.personaName = pName;
-    $.ajax({
-        type:"GET",
-        accept:"application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/personas/model/name/" + personaName.replace(" ","%20") + "/variable/" + bvName.replace(" ","%20") + "/characteristic/" + pcName.replace(" ","%20"),
-        success: function(data){
-          // console.log("in getPersonaView " + data.innerHTML);
-           // console.log(this.url);
-           fillSvgViewer(data);
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    });
+  window.personaName = pName;
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/personas/model/name/" + personaName.replace(" ","%20") + "/variable/" + bvName.replace(" ","%20") + "/characteristic/" + pcName.replace(" ","%20"),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
 
-/*
-A function for filling the table with requirements
- */
+// A function for filling the table with requirements
 function createRequirementsTable(data){
     var tre;
     var theTable = $(".theTable");
@@ -864,193 +835,14 @@ function createRequirementsTable(data){
     }); 
 }
 
-/*
- A function for filling the table with goals
- */
-function createEditGoalsTable(){
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crfossDomain: true,
-        url: serverIP + "/api/goals",
-        success: function (data) {
-            window.activeTable = "EditGoals";
-            setTableHeader();
-            var theTable = $(".theTable");
-            $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
-            //var arr = reallyLongArray;
-            var textToInsert = [];
-            var i = 0;
-
-            $.each(data, function(count, item) {
-                textToInsert[i++] = "<tr>";
-                textToInsert[i++] = '<td><button class="editGoalsButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteGoalButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
-
-                textToInsert[i++] = '<td name="theName">';
-                textToInsert[i++] = item.theName;
-                textToInsert[i++] = '</td>';
-
-                textToInsert[i++] = '<td name="theOriginator">';
-                textToInsert[i++] = item.theOriginator;
-                textToInsert[i++] = '</td>';
-
-                textToInsert[i++] = '<td name="Status">';
-                if(item.theColour == 'black'){
-                    textToInsert[i++] = "Check";
-                }else if(item.theColour == 'red'){
-                    textToInsert[i++] = "To refine";
-                }else{
-                    textToInsert[i++] = "OK";
-                }
-
-                textToInsert[i++] = '</td>';
-
-                textToInsert[i++] = '<td name="theId"  style="display:none;">';
-                textToInsert[i++] = item.theId;
-                textToInsert[i++] = '</td>';
-
-                textToInsert[i++] = '</tr>';
-            });
-            theTable.append(textToInsert.join(''));
-
-            theTable.css("visibility","visible");
-            activeElement("reqTable");
-            sortTableByRow(0);
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    })
-}
-
-/*
- A function for filling the table with goals
- */
-function createEditObstaclesTable(){
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crfossDomain: true,
-        url: serverIP + "/api/obstacles",
-        success: function (data) {
-            window.activeTable = "EditObstacles";
-            setTableHeader();
-            var theTable = $(".theTable");
-            $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
-            //var arr = reallyLongArray;
-            var textToInsert = [];
-            var i = 0;
-
-            $.each(data, function(count, item) {
-                textToInsert[i++] = "<tr>";
-                textToInsert[i++] = '<td><button class="editObstaclesButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteObstacleButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
-
-                textToInsert[i++] = '<td name="theName">';
-                textToInsert[i++] = item.theName;
-                textToInsert[i++] = '</td>';
-
-                textToInsert[i++] = '<td name="theOriginator">';
-                textToInsert[i++] = item.theOriginator;
-                textToInsert[i++] = '</td>';
-
-                textToInsert[i++] = '<td name="Status">';
-                if(item.theColour == 'black'){
-                    textToInsert[i++] = "Check";
-                }else if(item.theColour == 'red'){
-                    textToInsert[i++] = "To refine";
-                }else{
-                    textToInsert[i++] = "OK";
-                }
-
-                textToInsert[i++] = '</td>';
-
-                textToInsert[i++] = '<td name="theId"  style="display:none;">';
-                textToInsert[i++] = item.theId;
-                textToInsert[i++] = '</td>';
-
-                textToInsert[i++] = '</tr>';
-            });
-            theTable.append(textToInsert.join(''));
-            theTable.css("visibility","visible");
-            activeElement("reqTable");
-            sortTableByRow(0);
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    })
-}
 
 
-function createAssetsTable(data, callback){
-
-    var theTable = $(".theTable");
-    var textToInsert = [];
-    var i = 0;
-
-    //var thedata = $.parseJSON(data);
-    $.each(data, function(count, item) {
-        textToInsert[i++] = "<tr>"
-
-        textToInsert[i++] = '<td><button class="editAssetsButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteAssetButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
-
-        textToInsert[i++] = '<td name="theName">';
-        textToInsert[i++] = item.theName;
-        textToInsert[i++] = '</td>';
-
-        textToInsert[i++] = '<td name="theType">';
-        textToInsert[i++] = item.theType;
-        textToInsert[i++] = '</td>';
-
-        textToInsert[i++] = '<td name="theId" style="display:none;">';
-        textToInsert[i++] = item.theId;
-        textToInsert[i++] = '</td>';
-        textToInsert[i++] = '</tr>';
 
 
-    });
-    theTable.append(textToInsert.join(''));
-    callback();
-}
 
-function createPersonasTable(data, callback){
 
-    var theTable = $(".theTable");
-    var textToInsert = [];
-    var i = 0;
 
-    //var thedata = $.parseJSON(data);
-    $.each(data, function(count, item) {
-        textToInsert[i++] = "<tr>"
 
-        textToInsert[i++] = '<td><button class="editPersonaButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deletePersonaButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
-
-        textToInsert[i++] = '<td name="theName">';
-        textToInsert[i++] = item.theName;
-        textToInsert[i++] = '</td>';
-
-        textToInsert[i++] = '<td name="thePersonaType">';
-        textToInsert[i++] = item.thePersonaType;
-        textToInsert[i++] = '</td>';
-
-        textToInsert[i++] = '<td name="theId" style="display:none;">';
-        textToInsert[i++] = item.theId;
-        textToInsert[i++] = '</td>';
-        textToInsert[i++] = '</tr>';
-    });
-    theTable.append(textToInsert.join(''));
-    callback();
-}
 
 
 /*

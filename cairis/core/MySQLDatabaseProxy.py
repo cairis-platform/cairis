@@ -3247,11 +3247,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         if (curs.rowcount == -1):
           exceptionText = 'Error associating target ' + target.name() + ' with countermeasure ' + str(cmId) + ' in environment ' + environmentName
           raise DatabaseProxyException(exceptionText) 
-#        for responseName in target.responses():
-#          curs.execute('call addCountermeasureTargetResponse(%s,%s,%s,%s)',(cmId,target.name(),responseName,environmentName))
-#          if (curs.rowcount == -1):
-#            exceptionText = 'Error associating target ' + target.name() + ' and response ' + response + ' with countermeasure ' + str(cmId) + ' in environment ' + environmentName
-#            raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3271,10 +3266,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         if (curs.rowcount == -1):
           exceptionText = 'Error associating target ' + target.name() + ' with countermeasure ' + str(cmId) + ' in environment ' + environmentName
           raise DatabaseProxyException(exceptionText) 
-#        for responseName in target.responses():
-#          curs.execute('call addCountermeasureTargetResponse(%s,%s,%s,%s)',(cmId,target.name(),responseName,environmentName))
-#          if (curs.rowcount == -1):
-#            exceptionText = 'Error associating target ' + target.name() + ' and response ' + response + ' with countermeasure ' + str(cmId) + ' in environment ' + environmentName
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e

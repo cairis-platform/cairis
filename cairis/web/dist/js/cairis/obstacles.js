@@ -27,6 +27,67 @@ $("#obstacleMenuClick").click(function(){
   createEditObstaclesTable();
 });
 
+function createEditObstaclesTable(){
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crfossDomain: true,
+    url: serverIP + "/api/obstacles",
+    success: function (data) {
+      window.activeTable = "EditObstacles";
+      setTableHeader();
+      var theTable = $(".theTable");
+      $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
+      var textToInsert = [];
+      var i = 0;
+
+      $.each(data, function(count, item) {
+        textToInsert[i++] = "<tr>";
+        textToInsert[i++] = '<td><button class="editObstaclesButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteObstacleButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
+
+        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = item.theName;
+        textToInsert[i++] = '</td>';
+
+        textToInsert[i++] = '<td name="theOriginator">';
+        textToInsert[i++] = item.theOriginator;
+        textToInsert[i++] = '</td>';
+
+        textToInsert[i++] = '<td name="Status">';
+        if(item.theColour == 'black'){
+          textToInsert[i++] = "Check";
+        }
+        else if(item.theColour == 'red'){
+          textToInsert[i++] = "To refine";
+        }
+        else {
+          textToInsert[i++] = "OK";
+        }
+
+        textToInsert[i++] = '</td>';
+
+        textToInsert[i++] = '<td name="theId"  style="display:none;">';
+        textToInsert[i++] = item.theId;
+        textToInsert[i++] = '</td>';
+
+        textToInsert[i++] = '</tr>';
+      });
+      theTable.append(textToInsert.join(''));
+      theTable.css("visibility","visible");
+      activeElement("reqTable");
+      sortTableByRow(0);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  })
+}
+
 $(document).on('click', "button.editObstaclesButton",function() {
   var name = $(this).attr("value");
   getObstacleOptions(name);

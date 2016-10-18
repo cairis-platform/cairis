@@ -24,33 +24,58 @@ $("#assetMenuClick").click(function(){
 });
 
 function fillAssetTable(){
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/assets",
-        success: function (data) {
-            window.activeTable = "Assets";
-            setTableHeader();
-            createAssetsTable(data, function(){
-                newSorting(1);
-            });
-            $.session.set("allAssets", JSON.stringify(data));
-            activeElement("reqTable");
-
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    });
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/assets",
+    success: function (data) {
+      window.activeTable = "Assets";
+      setTableHeader();
+      createAssetsTable(data, function(){
+        newSorting(1);
+      });
+      $.session.set("allAssets", JSON.stringify(data));
+      activeElement("reqTable");
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
+function createAssetsTable(data, callback){
+  var theTable = $(".theTable");
+  var textToInsert = [];
+  var i = 0;
 
+  $.each(data, function(count, item) {
+    textToInsert[i++] = "<tr>"
+
+    textToInsert[i++] = '<td><button class="editAssetsButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteAssetButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
+
+    textToInsert[i++] = '<td name="theName">';
+    textToInsert[i++] = item.theName;
+    textToInsert[i++] = '</td>';
+
+    textToInsert[i++] = '<td name="theType">';
+    textToInsert[i++] = item.theType;
+    textToInsert[i++] = '</td>';
+
+    textToInsert[i++] = '<td name="theId" style="display:none;">';
+    textToInsert[i++] = item.theId;
+    textToInsert[i++] = '</td>';
+    textToInsert[i++] = '</tr>';
+
+  });
+  theTable.append(textToInsert.join(''));
+  callback();
+}
 
 $(document).on('click', "button.editAssetsButton",function(){
   activeElement("objectViewer");
@@ -595,4 +620,28 @@ mainContent.on('click', '#CloseAsset', function (e) {
   e.preventDefault();
   fillAssetTable();
 });
+
+function fillEditAssetsEnvironment(){
+  var data = JSON.parse( $.session.get("AssetProperties"));
+  var i = 0;
+  var textToInsert = [];
+  $.each(data, function(arrayindex, value) {
+    textToInsert[i++] = '<tr><td class="removeAssetEnvironment"><i class="fa fa-minus"></i></td><td class="clickable-environments assetEnvironmentRow">';
+    textToInsert[i++] = value.theEnvironmentName;
+    textToInsert[i++] = '</td></tr>';
+  });
+  $('#theEnvironmentDictionary').find("tbody").empty();
+  $('#theEnvironmentDictionary').append(textToInsert.join(''));
+
+  var env = $.session.get("assetEnvironmentName");
+
+  var props;
+  $.each(data, function(arrayID,group) {
+    if(group.environment == env){
+      getAssetDefinition(group.attributes);
+      $.session.set("thePropObject", JSON.stringify(group));
+    }
+  });
+  $("#theEnvironmentDictionary").find(".assetEnvironmentRow:first").trigger('click');
+}
 

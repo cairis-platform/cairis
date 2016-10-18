@@ -27,9 +27,7 @@ $("#personaClick").click(function () {
   createPersonasTable();
 });
 
-/*
- A function for filling the table with Personas
- */
+
 function createPersonasTable(){
 
   $.ajax({
