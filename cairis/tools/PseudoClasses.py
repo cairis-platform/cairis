@@ -664,3 +664,21 @@ class StepsAttributes(object):
 
   def insert(self,pos,s):
     self.theSteps.insert(pos,s)
+
+@swagger.model
+class ObjectDependency(object):
+  # region Swagger Doc
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theDimensionName': fields.String,
+    'theObjectName': fields.String,
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field: { 'enum': [__name__+'.ObjectDependency'] }
+  }
+  # endregion
+  def __init__(self,dimension_name,object_name):
+    self.theDimensionName = dimension_name
+    self.theObjectName = object_name

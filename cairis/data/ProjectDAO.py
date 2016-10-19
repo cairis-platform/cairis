@@ -26,84 +26,84 @@ __author__ = 'Robin Quetin'
 
 
 class ProjectDAO(CairisDAO):
-    def __init__(self, session_id):
-        CairisDAO.__init__(self, session_id)
+  def __init__(self, session_id):
+    CairisDAO.__init__(self, session_id)
 
-    def create_new_project(self):
-        try:
-            self.db_proxy.clearDatabase(session_id=self.session_id)
-        except DatabaseProxyException as ex:
-            raise ARMHTTPError(ex)
-        except ARMException as ex:
-            raise ARMHTTPError(ex)
+  def create_new_project(self):
+    try:
+      self.db_proxy.clearDatabase(session_id=self.session_id)
+    except DatabaseProxyException as ex:
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      raise ARMHTTPError(ex)
 
-    def get_settings(self):
-        try:
-            pSettings = self.db_proxy.getProjectSettings()
-            pDict = self.db_proxy.getDictionary()
-            contributors = self.db_proxy.getContributors()
-            revisions = self.db_proxy.getRevisions()
-        except DatabaseProxyException as ex:
-            raise ARMHTTPError(ex)
-        except ARMException as ex:
-            raise ARMHTTPError(ex)
+  def get_settings(self):
+    try:
+      pSettings = self.db_proxy.getProjectSettings()
+      pDict = self.db_proxy.getDictionary()
+      contributors = self.db_proxy.getContributors()
+      revisions = self.db_proxy.getRevisions()
+    except DatabaseProxyException as ex:
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      raise ARMHTTPError(ex)
 
-        settings = ProjectSettings(pSettings, pDict, contributors, revisions)
-        return settings
+    settings = ProjectSettings(pSettings, pDict, contributors, revisions)
+    return settings
 
-    def apply_settings(self, settings):
-        try:
-            self.db_proxy.updateSettings(
-                settings.projectName,
-                settings.projectBackground,
-                settings.projectGoals,
-                settings.projectScope,
-                settings.definitions,
-                settings.contributions,
-                settings.revisions,
-                settings.richPicture,
-                settings.fontSize,
-                settings.fontName
-            )
-        except DatabaseProxyException as ex:
-            raise ARMHTTPError(ex)
-        except ARMException as ex:
-            raise ARMHTTPError(ex)
+  def apply_settings(self, settings):
+    try:
+      self.db_proxy.updateSettings(
+        settings.projectName,
+        settings.projectBackground,
+        settings.projectGoals,
+        settings.projectScope,
+        settings.definitions,
+        settings.contributions,
+        settings.revisions,
+        settings.richPicture,
+        settings.fontSize,
+        settings.fontName
+      )
+    except DatabaseProxyException as ex:
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      raise ARMHTTPError(ex)
 
-    def from_json(self, request):
-        json = request.get_json(silent=True)
-        if json is False or json is None:
-            self.close()
-            raise MalformedJSONHTTPError(data=request.get_data())
+  def from_json(self, request):
+    json = request.get_json(silent=True)
+    if json is False or json is None:
+      self.close()
+      raise MalformedJSONHTTPError(data=request.get_data())
 
-        json_dict = json['object']
-        check_required_keys(json_dict, ProjectSettings.required)
-        json_dict['__python_obj__'] = ProjectSettings.__module__+'.'+ProjectSettings.__name__
+    json_dict = json['object']
+    check_required_keys(json_dict, ProjectSettings.required)
+    json_dict['__python_obj__'] = ProjectSettings.__module__+'.'+ProjectSettings.__name__
 
-        contrs = json_dict['contributions'] or []
-        if not isinstance(contrs, list):
-            contrs = []
+    contrs = json_dict['contributions'] or []
+    if not isinstance(contrs, list):
+      contrs = []
 
-        for idx in range(0, len(contrs)):
-            try:
-                check_required_keys(contrs[idx], Contributor.required)
-                json_dict['contributions'][idx] = (contrs[idx]['firstName'], contrs[idx]['surname'], contrs[idx]['affiliation'], contrs[idx]['role'])
-            except MissingParameterHTTPError:
-                SilentHTTPError('A contribution did not contain all required fields. Skipping this one.')
+    for idx in range(0, len(contrs)):
+      try:
+        check_required_keys(contrs[idx], Contributor.required)
+        json_dict['contributions'][idx] = (contrs[idx]['firstName'], contrs[idx]['surname'], contrs[idx]['affiliation'], contrs[idx]['role'])
+      except MissingParameterHTTPError:
+        SilentHTTPError('A contribution did not contain all required fields. Skipping this one.')
 
-        revisions = json_dict['revisions'] or []
-        if not isinstance(revisions, list):
-            revisions = []
+    revisions = json_dict['revisions'] or []
+    if not isinstance(revisions, list):
+      revisions = []
 
-        for idx in range(0, len(revisions)):
-            try:
-                check_required_keys(revisions[idx], Revision.required)
-                json_dict['revisions'][idx] = (revisions[idx]['id'], revisions[idx]['date'], revisions[idx]['description'])
-            except MissingParameterHTTPError:
-                SilentHTTPError('A revision did not contain all required fields. Skipping this one.')
+    for idx in range(0, len(revisions)):
+      try:
+        check_required_keys(revisions[idx], Revision.required)
+        json_dict['revisions'][idx] = (revisions[idx]['id'], revisions[idx]['date'], revisions[idx]['description'])
+      except MissingParameterHTTPError:
+        SilentHTTPError('A revision did not contain all required fields. Skipping this one.')
 
-        json_dict['definitions'] = json_dict.get('definitions', None) or {}
-        json_dict['definitions'] = json_dict['definitions'].items()
+    json_dict['definitions'] = json_dict.get('definitions', None) or {}
+    json_dict['definitions'] = json_dict['definitions'].items()
 
-        settings = json_deserialize(json_dict)
-        return settings
+    settings = json_deserialize(json_dict)
+    return settings

@@ -56,7 +56,7 @@ from cairis.core.GoalAssociation import GoalAssociation
 from cairis.core.ExternalDocument import ExternalDocument
 from cairis.core.DocumentReference import DocumentReference
 from cairis.core.PersonaCharacteristic import PersonaCharacteristic
-from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, PersonaCharacteristicReference
+from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, PersonaCharacteristicReference,ObjectDependency
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -1007,3 +1007,15 @@ class PersonaCharacteristicModel(object):
     swagger_metadata = {
         obj_id_field : gen_class_metadata(PersonaCharacteristic)
     }
+
+@swagger.model
+class ObjectDependencyModel(object):
+    resource_fields = {
+        obj_id_field: fields.String,
+        "theDependencies": fields.List(fields.Nested(ObjectDependency.resource_fields))
+    }
+    required = resource_fields.keys()
+    required.remove(obj_id_field)
+
+    def __init__(self):
+      self.theDependencies = []

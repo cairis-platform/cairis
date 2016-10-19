@@ -37,7 +37,8 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
-    DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, PersonaCharacteristicController
+    DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
+    PersonaCharacteristicController, ObjectDependencyController
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -318,6 +319,9 @@ def start():
   api.add_resource(MisuseCaseController.MisuseCasesAPI, '/api/misusecases')
   api.add_resource(MisuseCaseController.MisuseCaseByRiskNameAPI, '/api/misusecases/risk/<string:risk_name>')
   api.add_resource(MisuseCaseController.MisuseCaseByNameAPI, '/api/misusecases/name/<string:misuse_case_name>')
+
+  # Object dependency routes
+  api.add_resource(ObjectDependencyController.ObjectDependencyAPI, '/api/object_dependency/dimension/<string:dimension_name>/object/<string:object_name>')
 
   # Obstacle routes
   api.add_resource(ObstacleController.ObstaclesAPI, '/api/obstacles')
