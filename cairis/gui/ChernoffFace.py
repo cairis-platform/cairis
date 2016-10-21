@@ -26,7 +26,7 @@ __author__ = 'Shamal Faily'
 
 class ChernoffFace:
   def __init__(self,objtName,dp):
-    self.p = cairis.core.RequirementScoreFactory.build(dp.dimensionObject(objtName,'requirement'))
+    self.p = cairis.gui.RequirementScoreFactory.build(dp.dimensionObject(objtName,'requirement'))
     self.head_radius = 30
     self.eye_radius = 5
     self.eye_left_x = 40
