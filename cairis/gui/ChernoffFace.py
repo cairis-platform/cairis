@@ -20,7 +20,7 @@ import random, math
 from math import pi
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
 from cairis.core.Requirement import Requirement
-import cairis.core.RequirementScoreFactory
+import cairis.gui.RequirementScoreFactory
 
 __author__ = 'Shamal Faily'
 
