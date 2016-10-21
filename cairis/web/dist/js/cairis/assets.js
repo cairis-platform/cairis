@@ -510,17 +510,22 @@ $(document).on('click', "#addNewAsset",function(){
 });
 
 $(document).on('click', "button.deleteAssetButton",function(){
+  var dimName = 'asset';
   var name = $(this).attr("value");
+  deleteObject(dimName,name,deleteAsset);
+});
+
+function deleteAsset(assetName) {
   $.ajax({
     type: "DELETE",
     dataType: "json",
     accept: "application/json",
     data: {
       session_id: String($.session.get('sessionID')),
-      name: name
+      name: assetName
     },
     crossDomain: true,
-    url: serverIP + "/api/assets/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/assets/name/" + assetName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       $.ajax({
         type: "GET",
@@ -550,7 +555,7 @@ $(document).on('click', "button.deleteAssetButton",function(){
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
+}
 
 mainContent.on("click", "#addNewProperty", function(){
   $("#editAssetsOptionsform").hide();
@@ -612,6 +617,7 @@ mainContent.on('click', '#UpdateAsset',function(e){
       putAssetForm($("#editAssetsOptionsform"));
     }
     fillAssetTable();
+
   }
   e.preventDefault();
 });
@@ -645,3 +651,56 @@ function fillEditAssetsEnvironment(){
   $("#theEnvironmentDictionary").find(".assetEnvironmentRow:first").trigger('click');
 }
 
+function assetFormToJSON(data, newAsset){
+  var json
+  if(newAsset){
+    json = jQuery.extend(true, {},mainAssetObject );
+  }
+  else{
+    json =  JSON.parse($.session.get("Asset"));
+  }
+  json.theName = $(data).find('#theName').val();
+
+  json["theShortCode"] = $(data).find('#theShortCode').val();
+  json["theDescription"] = $(data).find('#theDescription').val();
+  json["theSignificance"] = $(data).find('#theSignificance').val();
+  json["theCriticalRationale"] = $(data).find('#theCriticalRationale').val();
+  json["isCritical"] = +$("#isCritical").is( ':checked' );
+  json.theType =  $(data).find( "#theType option:selected" ).text().trim();
+
+
+  $(data).children().each(function () {
+    if(String($(this).prop("tagName")).toLowerCase() == "p"){
+      $(this).children().each(function() {
+        if(String($(this).prop("tagName")).toLowerCase() == "input"){
+          json[$(this).prop("name")] = $(this).val();
+        }
+
+        if(String($(this).prop("tagName")).toLowerCase() == "select"){
+          var id = $(this).attr('id');
+          $(this).children().each(function() {
+            var attr = $(this).attr('selected');
+            if (typeof attr !== typeof undefined && attr !== false) {
+              json[id] = $(this).val();
+            }
+          });
+        }
+      });
+    }
+  });
+  json['theEnvironmentProperties'] = JSON.parse($.session.get("AssetProperties"));
+  return json
+}
+
+function putAssetForm(data){
+  putAsset(assetFormToJSON(data));
+}
+
+function postAssetForm(data,callback){
+  var newAsset = assetFormToJSON(data,true);
+  var assetName = $(data).find('#theName').val();
+  var asobject = {};
+  asobject.object = newAsset
+  $.session.set("AssetName",assetName);
+  postAsset(asobject,callback);
+}

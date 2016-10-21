@@ -368,6 +368,16 @@
   <div id="errorDialog" title="ERROR">
     <p style="color: black">You can't use CAIRIS without any settings</p>
   </div>
+  <div id="reportObjectDependencies" title="Delete " style="display: none">
+    <label class="control-label">Removing this object will also remove the following objects.  Do you want to continue?</label>
+    <table id="objectDependencyTable" class="table-striped table-bordered">
+      <thead>
+        <tr><th>Artifact</th><th>Name</th></tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
   <div class="popupMessage" style="display:none;" >
     <div class="Succes"><i class="fa fa-check fa-2x"></i><div class="infoText">Success</div></div>
     <div class="Fail"><i class="fa fa-exclamation fa-2x"></i><div class="infoText">Something went wrong...<p class="faultInfo"></p></div></div>

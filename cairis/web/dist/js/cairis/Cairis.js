@@ -836,15 +836,6 @@ function createRequirementsTable(data){
 }
 
 
-
-
-
-
-
-
-
-
-
 /*
 filling up the environment table
  */
@@ -959,66 +950,62 @@ function getDimensionsInEnvironment(dimName,envName,callback) {
 }
 
 
-/*
-Dialog for choosing an asset
- */
+// Dialog for choosing an asset
 function assetsDialogBox(haveEnv,callback){
-    var dialogwindow = $("#ChooseAssetDialog");
-    var select = dialogwindow.find("select");
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/assets",
-        success: function (data) {
-
-            select.empty();
-            var none = true;
-            $.each(data, function(key, object) {
-                var found = false;
-                $.each(haveEnv,function(index, text) {
-                    if(text == key){
-                        found = true
-                    }
-                });
-                //if not found in assets
-                if(!found) {
-                    select.append("<option value=" + key + ">" + key + "</option>");
-                    none = false;
-                }
-            });
-            if(!none) {
-                //dialogwindow.show();
-                dialogwindow.dialog({
-                    modal: true,
-                    buttons: {
-                        Ok: function () {
-                            var text =  select.find("option:selected" ).text();
-                            if(jQuery.isFunction(callback)){
-                                callback(text);
-                            }
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-                $(".comboboxD").css("visibility", "visible");
-            }else {
-                alert("All assets are already added");
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+  var dialogwindow = $("#ChooseAssetDialog");
+  var select = dialogwindow.find("select");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/assets",
+    success: function (data) {
+      select.empty();
+      var none = true;
+      $.each(data, function(key, object) {
+        var found = false;
+        $.each(haveEnv,function(index, text) {
+          if(text == key){
+            found = true
+          }
+        });
+        //if not found in assets
+        if(!found) {
+          select.append("<option value=" + key + ">" + key + "</option>");
+          none = false;
         }
-    });
+      });
+      if(!none) {
+        dialogwindow.dialog({
+          modal: true,
+          buttons: {
+            Ok: function () {
+              var text =  select.find("option:selected" ).text();
+              if(jQuery.isFunction(callback)){
+                callback(text);
+              }
+              $(this).dialog("close");
+            }
+          }
+        });
+        $(".comboboxD").css("visibility", "visible");
+      }
+      else {
+        alert("All assets are already added");
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
-function fileExportDialogbox(callback){
+function fileExportDialogbox(callback) {
   var dialogwindow = $("#typeOfFile");
   var select = dialogwindow.find("select");
   dialogwindow.dialog({
@@ -2095,69 +2082,75 @@ function showPopup(succes, text){
     });
 }
 
-function assetFormToJSON(data, newAsset){
-    var json
-    if(newAsset){
-        json = jQuery.extend(true, {},mainAssetObject );
-
-    }
-    else{
-        json =  JSON.parse($.session.get("Asset"));
-    }
-    json.theName = $(data).find('#theName').val();
-
-    //var data = $("#editAssetsOptionsform");
-    json["theShortCode"] = $(data).find('#theShortCode').val();
-    json["theDescription"] = $(data).find('#theDescription').val();
-    json["theSignificance"] = $(data).find('#theSignificance').val();
-    json["theCriticalRationale"] = $(data).find('#theCriticalRationale').val();
-    json["isCritical"] = +$("#isCritical").is( ':checked' );
-
-    json.theType =  $(data).find( "#theType option:selected" ).text().trim();
 
 
-    $(data).children().each(function () {
-        if(String($(this).prop("tagName")).toLowerCase() == "p"){
-            $(this).children().each(function() {
-                if(String($(this).prop("tagName")).toLowerCase() == "input"){
-                    json[$(this).prop("name")] = $(this).val();
-                    // console.log($(this).prop("name") +" " +$(this).val());
-                }
 
-                if(String($(this).prop("tagName")).toLowerCase() == "select"){
-
-                    var id = $(this).attr('id');
-
-                    $(this).children().each(function() {
-                        var attr = $(this).attr('selected');
-                        if (typeof attr !== typeof undefined && attr !== false) {
-                            json[id] = $(this).val();
-                            // console.log( id + "  " +$(this).val());
-                        }
-                    });
-                }
-
-
+function deleteObject(dimName,objtName,deleteFn) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    async:false,
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/object_dependency/dimension/" + dimName + "/object/" + objtName.replace(" ", "%20"),
+    success: function (data) {
+      if (data['theDependencies'].length == 0) {
+        deleteFn(dimName,objtName);
+      }
+      else {
+        $("#objectDependencyTable").find("tbody").empty();
+        $.each(data['theDependencies'], function(index,dep) {
+          $("#objectDependencyTable").find("tbody").append('<tr><td>' + dep['theDimensionName'] + '</td><td>' + dep['theObjectName'] + '</td></tr>');
+        });
+        objectDependenciesDialogBox( function(isAccept) {
+          if (isAccept) {
+            $.ajax({
+              type: "DELETE",
+              dataType: "json",
+              accept: "application/json",
+              async:false,
+              data: {
+                session_id: String($.session.get('sessionID'))
+              },
+              crossDomain: true,
+              url: serverIP + "/api/object_dependency/dimension/" + dimName + "/object/" + objtName.replace(" ", "%20"),
+              success: function (data) {
+                deleteFn(objtName);
+              },
+              error: function (xhr, textStatus, errorThrown) {
+                debugLogger(String(this.url));
+                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+              }
             });
-        }
-    });
-    json['theEnvironmentProperties'] = JSON.parse($.session.get("AssetProperties"));
-    return json
+          }
+        });
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
-function putAssetForm(data){
-    putAsset(assetFormToJSON(data));
+function objectDependenciesDialogBox(callback){
+  var dialogwindow = $("#reportObjectDependencies");
+  var select = dialogwindow.find("select");
+  dialogwindow.dialog({
+    modal: true,
+    buttons: {
+      Ok: function () {
+        callback(true);
+        $(this).dialog("close");
+      },
+      Close: function () {
+        callback(false);
+        $(this).dialog("close");
+      }
+    }
+  });
+  $(".comboboxD").css("visibility", "visible");
 }
-
-function postAssetForm(data,callback){
-    //var allAssets = JSON.parse($.session.get("allAssets"));
-    var newAsset = assetFormToJSON(data,true);
-   var assetName = $(data).find('#theName').val();
-    var asobject = {};
-    asobject.object = newAsset
-    $.session.set("AssetName",assetName);
-    //allAssets[assetName] = newAsset;
-    postAsset(asobject,callback);
-}
-
-
