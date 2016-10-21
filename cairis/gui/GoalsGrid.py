@@ -19,7 +19,7 @@
 import wx
 import wx.grid
 import wx.lib.gridmovers as gridmovers
-from cairis.core.GoalManager import GoalManager
+from cairis.gui.GoalManager import GoalManager
 import cairis.core.Requirement
 from cairis.core.ARM import *
 from cairis.core.armid import *
