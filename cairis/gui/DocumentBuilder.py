@@ -30,7 +30,6 @@ from AssumptionPersonaModel import AssumptionPersonaModel
 from envxdot import EnvironmentXDotParser
 from kaosxdot import KaosXDotParser
 from apxdot import APXDotParser
-from contextxdot import XDotParser
 import cairo
 import pangocairo
 from cairis.core.armid import *
