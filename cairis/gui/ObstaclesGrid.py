@@ -19,7 +19,7 @@
 import wx
 import wx.grid
 import wx.lib.gridmovers as gridmovers
-from cairis.core.ObstacleManager import ObstacleManager
+from cairis.gui.ObstacleManager import ObstacleManager
 from cairis.core.ARM import *
 from cairis.core.armid import *
 from cairis.core.Borg import Borg
