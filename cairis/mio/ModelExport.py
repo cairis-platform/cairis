@@ -100,7 +100,7 @@ def exportRedmineScenarios(outFile,session_id = None):
   return 'Exported ' + str(noScenarios) + ' scenarios.'
 
   
-def exportRedmineUseCases(outFile):
+def exportRedmineUseCases(outFile,session_id = None):
   b = Borg()
   rmUseCases = b.get_dbproxy(session_id).redmineUseCases()
 

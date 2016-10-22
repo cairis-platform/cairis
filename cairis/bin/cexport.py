@@ -37,17 +37,17 @@ def file_export(modelFormat = 'all', outputFile = None, persona = None, task = N
   msgStr = ''
   if (modelFormat == 'all'):
     msgStr += exportModel(outputFile,session_id)
-  elif (args.modelFormat == 'scenarios'):
+  elif (modelFormat == 'scenarios'):
     msgStr += exportRedmineScenarios(outputFile,session_id)
-  elif (args.modelFormat == 'requirements'):
+  elif (modelFormat == 'requirements'):
     msgStr += exportRedmineRequirements(outputFile,session_id)
-  elif (args.modelFormat == 'usecases'):
+  elif (modelFormat == 'usecases'):
     msgStr += exportRedmineUseCases(outputFile,session_id)
-  elif (args.modelFormat == 'architecture'):
+  elif (modelFormat == 'architecture'):
     msgStr += exportArchitecture(outputFile,session_id)
-  elif (args.modelFormat == 'attackpatterns'):
+  elif (modelFormat == 'attackpatterns'):
     msgStr += exportAttackPatterns(outputFile,session_id)
-  elif (args.modelFormat == 'GRL'):
+  elif (modelFormat == 'GRL'):
     personaNames = []
     personaNames.extend(persona)
     taskNames = []

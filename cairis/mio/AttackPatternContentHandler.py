@@ -335,4 +335,4 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
         self.theObstacleAssociationParameters.append(GoalAssociationParameters(self.theEnvironment,self.theExploitObstacle,'obstacle','or',self.theExploit,'vulnerability',0,'None'))
       rep = MisuseCaseEnvironmentProperties(self.theEnvironment,self.theImplementation )
       mc = MisuseCase(-1,'Exploit ' + self.thePatternName,[rep],self.thePatternName)
-      self.theRiskParameters = RiskParameters(self.thePatternName,self.theAttack,self.theExploit,mc,[],self.theIntent,self.theEnvironment)
+      self.theRiskParameters = RiskParameters(self.thePatternName,self.theAttack,self.theExploit,mc,[],self.theIntent)

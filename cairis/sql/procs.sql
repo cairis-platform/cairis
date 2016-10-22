@@ -20667,7 +20667,7 @@ begin
   declare obsDef varchar(1000);
   declare buf varchar(90000000) default '';
   declare done int default 0;
-  declare apCursor cursor for select id,name,threat_id,vulnerability_id,intent,environment_id from risk order by 1;
+  declare apCursor cursor for select id,name,threat_id,vulnerability_id,intent from risk order by 1;
   declare tpCursor cursor for select sp.name,spv.name,tp.property_rationale from threat_property tp, security_property sp, security_property_value spv where tp.threat_id = threatId and tp.environment_id = envId and tp.property_value_id != 0 and tp.property_id = sp.id and tp.property_value_id = spv.id order by 1;
   declare attackerCursor cursor for select a.id,a.name from threat_attacker ta, attacker a where ta.threat_id = threatId and ta.environment_id = envId and ta.attacker_id = a.id order by 1;
   declare motiveCursor cursor for select m.name from attacker_motivation am, motivation m where am.attacker_id = attackerId and am.environment_id = envId and am.motivation_id = m.id order by 1;
@@ -20691,7 +20691,7 @@ begin
 
   open apCursor;
   ap_loop: loop
-    fetch apCursor into riskId,riskName,threatId,vulId,intentTxt,envId;
+    fetch apCursor into riskId,riskName,threatId,vulId,intentTxt;
     if done = 1
     then
       leave ap_loop;
