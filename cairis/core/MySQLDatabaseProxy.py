@@ -8414,14 +8414,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         lbl = g.label(envName)
         goals[lbl] = g
       lbls = goals.keys()
-      shortCode = lbls[0].split('-')[0]
-      lblNos = []
-      for lbl in lbls:
-        lblNos.append(lbl.split('-')[1])
-      lblNos.sort(key=lambda x: [int(y) for y in x.split('.')])
-      lbls = []
-      for ln in lblNos:
-        lbls.append(shortCode + '-' + ln) 
+      if (len(lbls) > 0):
+        shortCode = lbls[0].split('-')[0]
+        lblNos = []
+        for lbl in lbls:
+          lblNos.append(lbl.split('-')[1])
+        lblNos.sort(key=lambda x: [int(y) for y in x.split('.')])
+        lbls = []
+        for ln in lblNos:
+          lbls.append(shortCode + '-' + ln) 
       return lbls,goals
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e

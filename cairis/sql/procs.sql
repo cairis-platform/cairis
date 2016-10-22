@@ -13645,13 +13645,13 @@ begin
   declare envName varchar(50);
   declare goalName varchar(100);
   declare goalDim varchar(50);
-  declare subGoalName varchar(50);
+  declare subGoalName varchar(100);
   declare subGoalDim varchar(50);
   declare alternativeId int;
   declare altRationale varchar(1000);
   declare cmName varchar(50);
   declare reqName varchar(50);
-  declare responseName varchar(50);
+  declare responseName varchar(100);
   declare roleName varchar(50);
   declare costName varchar(50);
   declare dependerName varchar(50);
