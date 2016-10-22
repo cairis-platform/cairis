@@ -38,7 +38,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, ObjectDependencyController
+    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -229,6 +229,9 @@ def handle_exception(e):
 
 def start():
 
+  # Architectural Pattern routes
+  api.add_resource(ArchitecturalPatternController.ArchitecturalPatternsAPI, '/api/architectural_patterns')
+ 
   # Asset routes
   api.add_resource(AssetController.AssetsAPI, '/api/assets')
   api.add_resource(AssetController.AssetByNameAPI, '/api/assets/name/<string:name>')

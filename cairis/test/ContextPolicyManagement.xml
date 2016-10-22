@@ -1,0 +1,365 @@
+<?xml version="1.0"?>
+<!DOCTYPE architectural_pattern PUBLIC "-//CAIRIS//DTD ARCHITECTURAL PATTERN 1.0//EN" "http://cairis.org/dtd/architectural_pattern.dtd">
+
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+
+<architectural_pattern name="Context Policy Management">
+<synopsis>Model illustrating how policy management mediates the </synopsis>
+
+<access_right name="trusted" value="10">
+  <description>Subject needs to be trusted to access resource.</description>
+  <rationale>Subject needs to be trusted to access resource.</rationale>
+</access_right>
+<access_right name="authenticated" value="5">
+  <description>Subject needs to be explicitly authenticated to access resource.</description>
+  <rationale>Subject needs to be explicitly authenticated to access resource.</rationale>
+</access_right>
+<access_right name="anonymous" value="1">
+  <description>Subject can access resource anonymously.</description>
+  <rationale>Subject can access resource anonymously.</rationale>
+</access_right>
+<access_right name="Undefined" value="1">
+  <description>Access rights undefined.</description>
+  <rationale>Access rights undefined.</rationale>
+</access_right>
+
+<protocol name="JSON-RPC" value="10">
+  <description>Unencrypted JSON-RPC</description>
+  <rationale>Unencrypted JSON-RPC</rationale>
+</protocol>
+<protocol name="RPC" value="10">
+  <description>Generic remote procedure call</description>
+  <rationale>None</rationale>
+</protocol>
+<protocol name="TLS" value="1">
+  <description>Transport Layer Security (TLS)</description>
+  <rationale>Transport Layer Security (TLS)</rationale>
+</protocol>
+<protocol name="Undefined" value="10">
+  <description>Protocol undefined</description>
+  <rationale>Protocol undefined</rationale>
+</protocol>
+
+<privilege name="privileged" value="10">
+  <description>Subject operates at a privileged level of operation.</description>
+  <rationale>Subject operates at a privileged level of operation.</rationale>
+</privilege>
+<privilege name="normal" value="1">
+  <description>Subject operates at a non-privileged level of operation.</description>
+  <rationale>Subject operates at a non-privileged level of operation.</rationale>
+</privilege>
+<privilege name="Undefined" value="10">
+  <description>Subject operates at an unknown level of privilege.</description>
+  <rationale>Subject operates at an unknown level of privilege.</rationale>
+</privilege>
+
+<surface_type name="JSON" value="10">
+  <description>JavaScript Object Notation (JSON) representing data structures and algorithms.</description>
+  <rationale>JavaScript Object Notation (JSON) representing data structures and algorithms.</rationale>
+</surface_type>
+<surface_type name="Unconstrained XML" value="5">
+  <description>Well-formed, non-externally validated XML document.</description>
+  <rationale>Well-formed, non-externally validated XML document.</rationale>
+</surface_type>
+<surface_type name="Constrained XML" value="1">
+  <description>Well-formed, non-externally validated XML document.</description>
+  <rationale>Well-formed, non-externally validated XML document.</rationale>
+</surface_type>
+<surface_type name="Client application" value="10">
+  <description>Untrusted client application or software component.</description>
+  <rationale>Untrusted client application or software component.</rationale>
+</surface_type>
+<surface_type name="Privileged application" value="1">
+  <description>Trusted webinos application or software component, usually running at an elevated privilege level.</description>
+  <rationale>Trusted webinos application or software component, usually running at an elevated privilege level.</rationale>
+</surface_type>
+<surface_type name="Undefined" value="10">
+  <description>Unknown surface type.</description>
+  <rationale>Unknown surface type.</rationale>
+</surface_type>
+
+<role name="Developer of webinos Apps" type="Stakeholder" short_code="DEV_APP" />
+<role name="Developer of webinos Platform" type="Stakeholder" short_code="DEV_APP" />
+
+<asset name="Application Data" short_code="APPDATA" type="Information" surface_type="JSON" access_right="authenticated">
+  <description>Application Data</description>
+  <significance>Application Data</significance>
+</asset>
+<asset name="Context Object" short_code="CTXOBJT" type="Information" surface_type="JSON" access_right="authenticated">
+  <description>Structure contextual information</description>
+  <significance>Can be customised by applications</significance>
+</asset>
+<asset name="Context Query" short_code="CTXQRY" type="Information" surface_type="JSON" access_right="authenticated">
+  <description>Query from context database</description>
+  <significance>Poorly-defined queries may return privacy-invasive data</significance>
+</asset>
+<asset name="Policy File" short_code="POL" type="Information" surface_type="Unconstrained XML" access_right="trusted">
+  <description>XACML Policy File</description>
+  <tag name="Policy" />
+  <significance>Defines the basis of policy decisions.</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>Unwanted modification of policies may lead to unauthorised access of data.</rationale>
+  </security_property>
+</asset>
+<asset name="Access Request" short_code="AC_REQ" type="Information" surface_type="JSON" access_right="authenticated">
+  <description>Request for a resources</description>
+  <significance>Request for a resources</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>Unwanted modification of request may lead to unauthorised access of data.</rationale>
+  </security_property>
+</asset>
+<asset name="Access Requestor" short_code="AC_RE" type="Software" surface_type="Client application" access_right="authenticated">
+  <description>Requests access to resources</description>
+  <significance>Requests access to resources</significance>
+</asset>
+<asset name="Decision Wrapper" short_code="DE_WR" type="Software" surface_type="Privileged application" access_right="trusted">
+  <description>Manages the dialogue between clients and the policy manager</description>
+  <significance>Response for the dialogue between clients and the policy manager</significance>
+</asset>
+<asset name="Access Manager" short_code="AC_MA" type="Software" surface_type="Privileged application" access_right="trusted">
+  <description>Makes policy decisions</description>
+  <significance>Makes the final decision by combining XACML access control with DHDF data</significance>
+</asset>
+<asset name="Data Reader" short_code="DA_RE" type="Software" surface_type="Privileged application" access_right="trusted">
+  <description>Data Reader</description>
+  <significance>Responsible for abstracting the communication between the DHDF Engine and the Request Context</significance>
+</asset>
+<asset name="Request Context" short_code="RE_CO" type="Information" surface_type="Unconstrained XML" access_right="trusted">
+  <description>Encapsulates the data and credentials released by a user in a given session.</description>
+  <significance>Responsible for converting the request data into the canonical form required for evaluation</significance>
+</asset>
+<asset name="DHDF Engine" short_code="DHDF_ENG" type="Software" surface_type="Privileged application" access_right="trusted">
+  <description>Provides privacy and data handling functionality</description>
+  <significance>Responsible for managing and evaluating relevant data handling (privacy) policies</significance>
+</asset>
+<asset name="PDP Cache" short_code="PDPC" type="Software" surface_type="Privileged application" access_right="trusted">
+  <description>PDP Cache</description>
+  <significance>Stores PDP decisions that could be shared among personal devices.</significance>
+</asset>
+<asset name="JSON-RPC Object" short_code="JSON-RPC_OBJT" type="Information" surface_type="JSON" access_right="authenticated">
+  <description>JSON-RPC Object</description>
+  <significance>Encapsulates data sent between API clients and API implementations</significance>
+</asset>
+<asset name="JSON Object" short_code="JSON_OBJT" type="Information" surface_type="JSON" access_right="authenticated">
+  <description>JSON Object</description>
+  <significance>Encapsulates data sent between components within the same node process</significance>
+</asset>
+<asset name="RPC Call Log" short_code="RPCCL" type="Information" surface_type="JSON" access_right="trusted">
+  <description>RPC call log</description>
+  <significance>A log of all RPC calls</significance>
+</asset>
+<asset name="Context DB Instance" short_code="CTXTDB" type="Software" surface_type="Privileged application" access_right="trusted">
+  <description>SQLite context database instance</description>
+  <significance>Database of context objects that can be used to reconstruct contextual data.</significance>
+</asset>
+<goal name="API control">
+  <definition>Users and other stakeholders shall be able to control access by web applications to JavaScript APIs.  These APIs may allow access to local and remote resources.</definition>
+  <rationale>None</rationale>
+  <concern name="Access Requestor" /> 
+</goal>
+<goal name="Device policy">
+  <definition>Users shall be able to create both device-specific and device-agnostic policies.</definition>
+  <rationale>None</rationale>
+  <concern name="Access Requestor" /> 
+</goal>
+<goal name="Policy synchronisation">
+  <definition>The platform shall provide synchronisation for access control policies, so that policies can be desceibed on one platform and enforced on all.</definition>
+  <rationale>None</rationale>
+  <concern name="PDP Cache" />
+</goal>
+<goal name="Context-sensitive access control">
+  <definition>The platform shall allow context-sensitive access control decisions: e.g. these may change depending on the environment.</definition>
+  <rationale>None</rationale>
+  <concern name="Request Context" />
+</goal>
+<goal name="Qualified data use">
+  <definition>The platform shall protect user privacy: access requestors shall be able to qualify how they will use the data they are requesting, and users shall be able to express constraints about data disclosure.</definition>
+  <rationale>None</rationale>
+  <concern name="Request Context" /> 
+</goal>
+<goal name="Usage Constraint">
+  <definition>Users shall specify constraints about data disclosure.</definition>
+  <rationale>None</rationale>
+</goal>
+<goal name="Usage Request">
+  <definition>Access requestors shall specify how they will use the data they are requesting.</definition>
+  <rationale>None</rationale>
+</goal>
+<goal name="Data Usage Request">
+  <definition>Users shall specify how they will use data they are requesting.</definition>
+  <rationale>None</rationale>
+  <concern name="Access Request" />
+  <responsibility name="Developer of webinos Apps" />
+</goal>
+<goal name="Access request validation">
+  <definition>Access requests shall contain a validating DTD or schema.</definition>
+  <rationale>This is currently being implemented</rationale>
+  <concern name="Access Request" />
+  <responsibility name="Developer of webinos Platform" />
+</goal>
+<goal name="Canonical request specification" >
+  <definition>The request specification shall be verified before use.</definition>
+  <rationale>Each request is enforced separately by definition.  Hence, it's impossible to grant access to more resources than required.</rationale>
+  <concern name="Access Request" />
+  <responsibility name="Developer of webinos Platform" />
+</goal>
+<goal name="User identifier permission" >
+  <definition>Application shall be authorised to access to user interface.</definition>
+  <rationale>User identifier is a controllable resource.</rationale>
+</goal>
+<goal name="Mandated request" >
+  <definition>Access requests shall be non-repudiable.</definition>
+  <rationale>All access requests are served between PZPs over TLS.</rationale>
+</goal>
+<goal name="Messaging authentication">
+  <definition>Messaging API users shall be authenticated before API use.</definition>
+  <rationale>This can be configured usign the policy framework, but this is not the default.</rationale>
+</goal>
+<goal name="Permissive default policy">
+  <definition>The default webinos policy shall be permissive enough to require no modification for the majority of webinos applications.</definition>
+  <rationale>The API default options are reasonable given the majority of expected applications.</rationale>
+  <concern name="Policy File" />
+</goal>
+<goal name="Policy file validation">
+  <definition>Policy files shall contain a validating DTD or schema.</definition>
+  <rationale>This is currently being implemented.</rationale>
+  <concern name="Policy File" />
+  <responsibility name="Developer of webinos Platform" />
+</goal>
+<goal name="Policy management secrecy">
+  <definition>Policy management requests shall be visible only to authorised users.</definition>
+  <rationale>Policy management calls are sent over TLS.</rationale>
+  <concern name="Access Request" />
+  <responsibility name="Developer of webinos Platform" />
+</goal>
+<goal name="Secret request enforcement channel">
+  <definition>Request enforcement channels shall be visible only to authorised users.</definition>
+  <rationale>Access requests come either over the overlay network (which is only served using TLS) or between the widget renderer and PZP using a secure websocket.  However, there is the potential for man-in-the-browser attacks.</rationale>
+  <responsibility name="Developer of webinos Platform" />
+</goal>
+
+
+<goal name="Restricted request specifications">
+  <definition>User agent requests to network resources shall be restricted.</definition>
+  <rationale>Requests to access network resources are represented by the feature http://webinos.org/action/network-access</rationale>
+  <concern name="Access Request" />
+  <responsibility name="Developer of webinos Apps" />
+</goal>
+<goal name="Restricted resource">
+  <definition>Resource restrictions shall be commensurate with their specifications.</definition>
+  <rationale>Each request is enforced separately by definition.  Hence, it's impossible to grant access to more resources than required.</rationale>
+  <concern name="Access Request" />
+  <responsibility name="Developer of webinos Apps" />
+</goal>
+<goal name="Specified resource">
+  <definition>Access requests shall specify the resources required authorisation.</definition>
+  <rationale>Policy manager permits or denies access to resources only after matching the requested feature list against policies.  Therefore, all required resources must be specified in the requests.  However, resources that don't have associated resources cannot be directly controlled by the policy manager.</rationale>
+  <concern name="Access Request" />
+  <responsibility name="Developer of webinos Apps" />
+</goal>
+
+
+
+<component name="Policy Manager">
+  <description>XACML based policy manager component.</description>
+  <interface name="enforceRequest" type="provided" access_right="trusted" privilege="normal" />
+  <structure head_asset="Decision Wrapper" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_nav="1" tail_adornment="Association" tail_asset="Access Request" />
+  <structure head_asset="Decision Wrapper" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="Access Manager" />
+  <structure head_asset="Access Manager" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="DHDF Engine" />
+  <structure head_asset="DHDF Engine" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="Data Reader" />
+  <structure head_asset="Data Reader" head_adornment="Association" head_nav="0" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_nav="1" tail_adornment="Association" tail_asset="Request Context" />
+  <structure head_asset="Access Manager" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="PDP Cache" />
+  <structure head_asset="PDP Cache" head_adornment="Aggregation" head_nav="1" head_nry="a" head_role="" tail_role="loads" tail_nry="1..a" tail_nav="0" tail_adornment="Association" tail_asset="Policy File" />
+  <structure head_asset="Application Data" head_adornment="Inheritance" head_nav="0" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Access Request" />
+  <component_goal name="Policy synchronisation" />
+  <component_goal name="API control" />
+  <component_goal name="Device policy" />
+  <component_goal name="Context-sensitive access control" />
+  <component_goal name="Qualified data use" />
+  <component_goal name="Usage Constraint" />
+  <component_goal name="Usage Request" />
+  <component_goal name="Data Usage Request" />
+  <component_goal name="Mandated request" />
+  <component_goal name="Access request validation" />
+  <component_goal name="Canonical request specification" />
+  <component_goal name="User identifier permission" />
+  <component_goal name="Messaging authentication" />
+  <component_goal name="Permissive default policy" />
+  <component_goal name="Policy file validation" />
+  <component_goal name="Policy management secrecy" />
+  <component_goal name="Restricted request specifications" />
+  <component_goal name="Restricted resource" />
+  <component_goal name="Secret request enforcement channel" />
+  <component_goal name="Specified resource" />
+  <component_goal_association goal_name="Qualified data use" ref_type="and" subgoal_name="Usage Constraint"/>
+  <component_goal_association goal_name="Qualified data use" ref_type="and" subgoal_name="Usage Request"/>
+  <component_goal_association goal_name="Usage Request" ref_type="and" subgoal_name="Data Usage Request"/>
+
+  <!-- mitigating goal associations -->
+  <component_goal_association goal_name="Usage Request" ref_type="and" subgoal_name="Mandated request"/>
+
+  <component_goal_association goal_name="Policy file validation" ref_type="and" subgoal_name="Specified resource"/>
+  <component_goal_association goal_name="Specified resource" ref_type="and" subgoal_name="Restricted request specifications"/>
+  <component_goal_association goal_name="Specified resource" ref_type="and" subgoal_name="Restricted resource"/>
+  <component_goal_association goal_name="Restricted request specifications" ref_type="and" subgoal_name="Canonical request specification"/>
+  <component_goal_association goal_name="Restricted request specifications" ref_type="and" subgoal_name="Access request validation"/>
+  <component_goal_association goal_name="Restricted resource" ref_type="and" subgoal_name="User identifier permission"/>
+  <component_goal_association goal_name="Policy management secrecy" ref_type="and" subgoal_name="Secret request enforcement channel"/>
+  <component_goal_association goal_name="Permissive default policy" ref_type="and" subgoal_name="Messaging authentication"/>
+</component>
+
+<component name="Context Manager">
+  <description>Context Manager implementation</description>
+  <interface name="enforceRequest" type="required" access_right="trusted" privilege="normal" />
+  <interface name="logContext" type="provided" access_right="trusted" privilege="normal" />
+  <interface name="handleContextData" type="required" access_right="authenticated" privilege="normal" />
+  <interface name="queryContext" type="provided" access_right="authenticated" privilege="normal" />
+  <structure head_asset="Access Requestor" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="Access Request" />
+  <structure head_asset="Context Object" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Access Request" />
+  <structure head_asset="JSON-RPC Object" head_adornment="Inheritance" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Context Object" />
+</component>
+
+<component name="webinos API">
+  <description>General webinos API </description>
+  <interface name="logContext" type="required" access_right="trusted" privilege="normal" />
+  <structure head_asset="Context Object" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="Access Request" />
+</component>
+
+<component name="Context API">
+  <description>Context API client</description>
+  <interface name="queryContext" type="required" access_right="authenticated" privilege="normal" />
+  <structure head_asset="Context Object" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="Access Request" />
+  <structure head_asset="Access Request" head_adornment="Inheritance" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Context Query" />
+</component>
+
+<component name="Context Database">
+  <description>Database of context objects</description>
+  <interface name="handleContextData" type="provided" access_right="authenticated" privilege="normal" />
+  <structure head_asset="Context Object" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="1" tail_adornment="Association" tail_asset="Access Request" />
+  <structure head_asset="Context Object" head_adornment="Association" head_nav="0" head_nry="1..a" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Composition" tail_asset="Context DB Instance" />
+  <structure head_asset="RPC Call Log" head_adornment="Association" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_nav="0" tail_adornment="Association" tail_asset="Access Request" />
+</component>
+
+<connector name="logcontext" from_component="webinos API" from_role="request-logcontext" from_interface="logContext" to_component="Context Manager" to_interface="logContext" to_role="provide-logcontext" protocol="RPC" access_right="authenticated" asset_name="RPC Call Log"/>
+<connector name="permission" from_component="Context Manager" from_role="request-permission" from_interface="enforceRequest" to_component="Policy Manager" to_interface="enforceRequest" to_role="provide-permission" protocol="TLS" access_right="trusted" asset_name="Access Request" />
+<connector name="insertContext" from_component="Context Manager" from_role="request-insertContext" from_interface="handleContextData" to_component="Context Database" to_interface="handleContextData" to_role="provide-insertContext" protocol="RPC" access_right="authenticated" asset_name="Context Object" />
+<connector name="queryContext" from_component="Context API" from_role="request-queryContext" from_interface="queryContext" to_component="Context Manager" to_interface="queryContext" to_role="provide-queryContext" protocol="RPC" access_right="authenticated" asset_name="Context Query" />
+</architectural_pattern>
