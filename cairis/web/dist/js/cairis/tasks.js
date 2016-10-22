@@ -373,10 +373,31 @@ mainContent.on('click', '#UpdateTask', function (e) {
 
 $(document).on('click', '.deleteTaskButton', function (e) {
   e.preventDefault();
-  deleteTask($(this).val(), function () {
-    createTasksTable();
+  var taskName = $(this).val();
+  deleteObject('task', taskName, function (taskName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/tasks/name/" + taskName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        createTasksTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
   });
 });
+
 
 $(document).on("click", "#addNewTask", function () {
   fillOptionMenu("fastTemplates/editTaskOptions.html", "#objectViewer", null, true, true, function () {
@@ -390,4 +411,64 @@ mainContent.on('click', '#CloseTask', function (e) {
   e.preventDefault();
   createTasksTable();
 });
+
+function taskPersonaDialogBox(hasPersona ,callback){
+  var dialogwindow = $("#ChoosePersonaForTask");
+  var envName = $.session.get("taskEnvironmentName");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/persona/environment/" + envName,
+    success: function (data) {
+      $("#theTaskPersona").empty();
+      var none = true;
+      $.each(data, function(key, persona) {
+        var found = false;
+        $.each(hasPersona,function(index, text) {
+          if(text == persona){
+            found = true
+          }
+        });
+        //if not found in personas
+        if(!found) {
+          $("#theTaskPersona").append("<option value=" + persona + ">" + persona + "</option>");
+          none = false;
+        }
+      });
+      if(!none) {
+        //dialogwindow.show();
+        dialogwindow.dialog({
+          modal: true,
+          buttons: {
+            Ok: function () {
+              var persona = $("#theTaskPersona").find("option:selected" ).text();
+              var duration = $("#theTaskDuration").find("option:selected").text();
+              var frequency = $("#theTaskFrequency").find("option:selected").text();
+              var demands = $("#theTaskDemands").find("option:selected").text();
+              var goalConflict = $("#theTaskGoalConflict").find("option:selected").text();
+              if(jQuery.isFunction(callback)){
+                callback(persona, duration, frequency, demands, goalConflict);
+              }
+              $(this).dialog("close");
+            }
+          }
+        });
+        $(".comboboxD").css("visibility", "visible");
+      }  
+      else {
+        alert("All possible personas are already added");
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
 

@@ -333,3 +333,31 @@ mainContent.on('click', '#CloseResponse', function (e) {
   createResponsesTable();
 });
 
+$(document).on('click', '.deleteResponseButton', function (e) {
+  e.preventDefault();
+  var respName = $(this).val();
+  deleteObject('response', respName, function (respName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/responses/name/" + respName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        createResponsesTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  });
+});
+
+

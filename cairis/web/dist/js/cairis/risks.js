@@ -369,4 +369,30 @@ mainContent.on('click', '#CloseRisk', function (e) {
   e.preventDefault();
   createRisksTable();
 });
-
+ 
+$(document).on('click', '.deleteRiskButton', function (e) {
+  e.preventDefault();
+  var riskName = $(this).val();
+  deleteObject('risk', riskName, function (riskName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/risks/name/" + riskName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        createRisksTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  });
+});

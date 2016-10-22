@@ -411,3 +411,29 @@ mainContent.on('click', '#ClosePersona', function (e) {
   e.preventDefault();
   createPersonasTable();
 });
+
+function deletePersona(name, callback){
+  $.ajax({
+    type: "DELETE",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    url: serverIP + "/api/personas/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      showPopup(true);
+      if(jQuery.isFunction(callback)){
+        callback();
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+

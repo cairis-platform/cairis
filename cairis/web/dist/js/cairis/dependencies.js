@@ -238,3 +238,29 @@ mainContent.on('click', '#CloseDependency', function (e) {
   e.preventDefault();
   createDependenciesTable();
 });
+
+function deleteDependency(dependency, callback){
+  $.ajax({
+    type: "DELETE",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    url: serverIP +  "/api/dependencies/environment/" + dependency.theEnvironmentName.replace(" ","%20") + "/depender/" + dependency.theDepender.replace(" ","%20") + "/dependee/" + dependency.theDependee + "/dependency/" + dependency.theDependency.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      showPopup(true);
+      if(jQuery.isFunction(callback)){
+        callback();
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+

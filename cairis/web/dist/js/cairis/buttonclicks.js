@@ -30,51 +30,48 @@ $("#addReqMenu").click(function() {
 
 function addReq() {
 
-    var kind  = "";
+  var kind  = "";
 
-    //var clonedRow = $("#reqTable tr:last").clone();
-    if($( "#assetsbox").find("option:selected" ).text() == "All" && $( "#environmentsbox").find("option:selected" ).text() == "All"){
-        alert("Please select an asset or an environment");
+  if($( "#assetsbox").find("option:selected" ).text() == "All" && $( "#environmentsbox").find("option:selected" ).text() == "All"){
+    alert("Please select an asset or an environment");
+  }
+  else{
+    if($( "#assetsbox").find("option:selected" ).text() != ""){
+      kind = "asset:" + $( "#assetsbox").find("option:selected" ).text();
     }
     else{
-        if($( "#assetsbox").find("option:selected" ).text() != ""){
-            kind = "asset:" + $( "#assetsbox").find("option:selected" ).text();
-        }else{
-            kind = "environment:"+$( "#environmentsbox").find("option:selected" ).text();
-        }
-        var template = "";
-        var num = findLabel();
-        switch (window.activeTable) {
-            case "Requirements":
-                template = '<tr class="' + kind + '">' +
-                    '<td name="theLabel">' + num + '</td>' +
-                '<td name="theName" contenteditable="true"></td>'+
-                '<td name="theDescription" contenteditable="true"></td>'+
-                '<td name="thePriority" contenteditable="true">1</td>'+
-                '<td name="theId" style="display:none;"></td>'+
-                '<td name="theVersion" style="display:none;"></td>'+
-                '<td name="rationale" contenteditable="true">None</td>'+
-                '<td name="fitCriterion" contenteditable="true">None</td>'+
-                '<td name="originator" contenteditable="true"></td>'+
-                '<td name="type" contenteditable="true">Functional</td>'+
-                '</tr>';
-                break;
-            case "Goals":
-                template = '<tr><td name="theLabel">' + num + '</td><td name="theName" contenteditable="true" ></td><td name="theDefinition" contenteditable="true"></td><td name="theCategory" contenteditable="true">Maintain</td><td name="thePriority" contenteditable="true">Low</td><td name="theId" style="display:none;"></td><td name="fitCriterion" contenteditable="true" >None</td><td  name="theIssue" contenteditable="true">None</td><td name="originator" contenteditable="true"></td></tr>';
-                break;
-            case "Obstacles":
-                template = '<tr><td name="theLabel">' + num + '</td><td name="theName" contenteditable="true">Name</td><td name="theDefinition" contenteditable="true">Definition</td><td name="theCategory" contenteditable="true">Category</td><td name="theId" style="display:none;"></td><td name="originator" contenteditable="true">Originator</td></tr>';
-                break;
-        }
-        $("#reqTable").append(template);
-        sortTableByRow(0);
+      kind = "environment:"+$( "#environmentsbox").find("option:selected" ).text();
     }
-
+    var template = "";
+    var num = findLabel();
+    switch (window.activeTable) {
+      case "Requirements":
+        template = '<tr class="' + kind + '">' +
+                   '<td name="theLabel">' + num + '</td>' +
+                   '<td name="theName" contenteditable="true"></td>'+
+                   '<td name="theDescription" contenteditable="true"></td>'+
+                   '<td name="thePriority" contenteditable="true">1</td>'+
+                   '<td name="theId" style="display:none;"></td>'+
+                   '<td name="theVersion" style="display:none;"></td>'+
+                   '<td name="rationale" contenteditable="true">None</td>'+
+                   '<td name="fitCriterion" contenteditable="true">None</td>'+
+                   '<td name="originator" contenteditable="true"></td>'+
+                   '<td name="type" contenteditable="true">Functional</td>'+
+                   '</tr>';
+        break;
+      case "Goals":
+        template = '<tr><td name="theLabel">' + num + '</td><td name="theName" contenteditable="true" ></td><td name="theDefinition" contenteditable="true"></td><td name="theCategory" contenteditable="true">Maintain</td><td name="thePriority" contenteditable="true">Low</td><td name="theId" style="display:none;"></td><td name="fitCriterion" contenteditable="true" >None</td><td  name="theIssue" contenteditable="true">None</td><td name="originator" contenteditable="true"></td></tr>';
+        break;
+      case "Obstacles":
+        template = '<tr><td name="theLabel">' + num + '</td><td name="theName" contenteditable="true">Name</td><td name="theDefinition" contenteditable="true">Definition</td><td name="theCategory" contenteditable="true">Category</td><td name="theId" style="display:none;"></td><td name="originator" contenteditable="true">Originator</td></tr>';
+        break;
+    }
+    $("#reqTable").append(template);
+    sortTableByRow(0);
+  }
 }
 
-/*
- Removing the active tr
- */
+// Removing the active tr
 $("#removeReq").click(function() {
   removeReq();
 });
@@ -83,34 +80,38 @@ $("#removeReqMenu").click(function() {
   removeReq();
 });
 
-function removeReq(reqName) {
-  if(window.activeTable =="Requirements"){
-    var ursl = serverIP + "/api/requirements/name/" + reqName.replace(' ',"%20");
-    var object = {};
-    object.session_id= $.session.get('sessionID');
-    var objectoutput = JSON.stringify(object);
 
-    $.ajax({
-      type: "DELETE",
-      dataType: "json",
-      contentType: "application/json",
-      accept: "application/json",
-      data: objectoutput,
-      crossDomain: true,
-      url: ursl,
-      success: function (data) {
-        $("tr").eq(getActiveindex()).detach();
-        showPopup(true);
-        sortTableByRow(0);
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        var error = JSON.parse(xhr.responseText);
-        showPopup(false, String(error.message));
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-    });
-  }
+
+function removeReq(reqName) {
+  deleteObject('requirement',reqName,function(reqName) {
+    if(window.activeTable =="Requirements"){
+      var ursl = serverIP + "/api/requirements/name/" + reqName.replace(' ',"%20");
+      var object = {};
+      object.session_id= $.session.get('sessionID');
+      var objectoutput = JSON.stringify(object);
+
+      $.ajax({
+        type: "DELETE",
+        dataType: "json",
+        contentType: "application/json",
+        accept: "application/json",
+        data: objectoutput,
+        crossDomain: true,
+        url: ursl,
+        success: function (data) {
+          $("tr").eq(getActiveindex()).detach();
+          showPopup(true);
+          sortTableByRow(0);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
+          debugLogger(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
+  });
 }
 
 $("#requirementsClick").click(function(){
@@ -209,77 +210,72 @@ $('#goalModelClick').click(function(){
 });
 
 $('#responsibilityModelClick').click(function(){
-    window.theVisualModel = 'responsibility';
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/environments/all/names",
-        success: function (data) {
-            $("#comboboxDialogSelect").empty();
-            $.each(data, function(i, item) {
-                $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
-            });
-            $( "#comboboxDialog" ).dialog({
-                modal: true,
-                buttons: {
-                    Ok: function() {
-                        $( this ).dialog( "close" );
-                        //Created a function, for readability
-                        getResponsibilityview($( "#comboboxDialogSelect").find("option:selected" ).text());
-                    }
-                }
-            });
-            $(".comboboxD").css("visibility","visible");
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+  window.theVisualModel = 'responsibility';
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/environments/all/names",
+    success: function (data) {
+      $("#comboboxDialogSelect").empty();
+      $.each(data, function(i, item) {
+        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+      });
+      $( "#comboboxDialog" ).dialog({
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+            getResponsibilityview($( "#comboboxDialogSelect").find("option:selected" ).text());
+          }
         }
-    })});
+      });
+      $(".comboboxD").css("visibility","visible");
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
 
-/*
- When goalview is clicked
- */
 $('#obstacleModelClick').click(function(){
-    window.theVisualModel = 'obstacle';
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/environments/all/names",
-        success: function (data) {
-            $("#comboboxDialogSelect").empty();
-            $.each(data, function(i, item) {
-                $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
-            });
-            $( "#comboboxDialog" ).dialog({
-                modal: true,
-                buttons: {
-                    Ok: function() {
-                        $( this ).dialog( "close" );
-                        //Created a function, for readability
-                        getObstacleview($( "#comboboxDialogSelect").find("option:selected" ).text());
-                    }
-                }
-            });
-            $(".comboboxD").css("visibility","visible");
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+  window.theVisualModel = 'obstacle';
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/environments/all/names",
+    success: function (data) {
+      $("#comboboxDialogSelect").empty();
+      $.each(data, function(i, item) {
+        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+      });
+      $( "#comboboxDialog" ).dialog({
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+            getObstacleview($( "#comboboxDialogSelect").find("option:selected" ).text());
+          }
         }
-    })});
+      });
+      $(".comboboxD").css("visibility","visible");
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
 
 $('#riskModelClick').click(function(){
   window.theVisualModel = 'risk';
@@ -313,160 +309,145 @@ $('#riskModelClick').click(function(){
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
-    })});
-
-
-$('#taskModelClick').click(function(){
-    window.theVisualModel = 'task';
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/environments/all/names",
-        success: function (data) {
-            $("#comboboxDialogSelect").empty();
-            $.each(data, function(i, item) {
-                $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
-            });
-            $( "#comboboxDialog" ).dialog({
-                modal: true,
-                buttons: {
-                    Ok: function() {
-                        $( this ).dialog( "close" );
-                        //Created a function, for readability
-                        getTaskview($( "#comboboxDialogSelect").find("option:selected" ).text());
-                    }
-                }
-            });
-            $(".comboboxD").css("visibility","visible");
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    })});
-
-
-/*
- When personaview is clicked
- */
-$('#personaModelClick').click(function(){
-    window.theVisualModel = 'persona';
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/personas/all/names",
-        success: function (data) {
-            $("#comboboxDialogSelect").empty();
-            $("#appersonasbox").empty();
-            $.each(data, function(i, item) {
-                $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
-                $("#appersonasbox").append("<option value=" + item + ">"  + item + "</option>")
-            });
-            $( "#comboboxDialog" ).dialog({
-                modal: true,
-                buttons: {
-                    Ok: function() {
-                        $( this ).dialog( "close" );
-                        //Created a function, for readability
-                        var pName = $( "#comboboxDialogSelect").find("option:selected" ).text();
-                        appendPersonaCharacteristics(pName,'All','All');
-                        getPersonaview(pName,'All','All');
-                    }
-                }
-            });
-            $(".comboboxD").css("visibility","visible");
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    })});
-
-
-$("#newClick").click(function () {
-    postNewProject(function () {
-        window.activeTable = "Requirements";
-        startingTable();
-    });
+  });
 });
 
 
+$('#taskModelClick').click(function(){
+  window.theVisualModel = 'task';
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/environments/all/names",
+    success: function (data) {
+      $("#comboboxDialogSelect").empty();
+      $.each(data, function(i, item) {
+        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+      });
+      $( "#comboboxDialog" ).dialog({
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+            getTaskview($( "#comboboxDialogSelect").find("option:selected" ).text());
+          }
+        }
+      });
+      $(".comboboxD").css("visibility","visible");
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
 
+// When personaview is clicked
+$('#personaModelClick').click(function(){
+  window.theVisualModel = 'persona';
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/personas/all/names",
+    success: function (data) {
+      $("#comboboxDialogSelect").empty();
+      $("#appersonasbox").empty();
+      $.each(data, function(i, item) {
+        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+        $("#appersonasbox").append("<option value=" + item + ">"  + item + "</option>")
+      });
+      $( "#comboboxDialog" ).dialog({
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+            var pName = $( "#comboboxDialogSelect").find("option:selected" ).text();
+            appendPersonaCharacteristics(pName,'All','All');
+            getPersonaview(pName,'All','All');
+          }
+        }
+      });
+      $(".comboboxD").css("visibility","visible");
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+
+$("#newClick").click(function () {
+  postNewProject(function () {
+    window.activeTable = "Requirements";
+    startingTable();
+  });
+});
 
 //This is delegation
 var mainContent = $('#objectViewer');
 mainContent.on('contextmenu', '.clickable-environments', function(){
-    return false;
+  return false;
 });
-
-
-
-// on environment radio change
 
 
 
 $("#reqTable").on("click", "td", function() {
-   // console.log(getActiveindex());
-    if(window.activeTable == "Requirements"){
-
-    }
-    //$('#reqTable').find('td:last').focus();
-    $('#reqTable tr').eq(getActiveindex()).find('td:first').focus();
+  if(window.activeTable == "Requirements"){
+  }
+  $('#reqTable tr').eq(getActiveindex()).find('td:first').focus();
 });
 
 
 $(document).on('click', "button.deletePersonaButton",function(){
-    var name = $(this).attr("value");
-    $.ajax({
-        type: "DELETE",
+  var name = $(this).attr("value");
+  $.ajax({
+    type: "DELETE",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+      name: name
+    },
+    crossDomain: true,
+    url: serverIP + "/api/persona/name/" + name,
+    success: function (data) {
+      $.ajax({
+        type: "GET",
         dataType: "json",
         accept: "application/json",
         data: {
-            session_id: String($.session.get('sessionID')),
-            name: name
+          session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + "/api/persona/name/" + name,
+        url: serverIP + "/api/personas",
         success: function (data) {
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                accept: "application/json",
-                data: {
-                    session_id: String($.session.get('sessionID'))
-                },
-                crossDomain: true,
-                url: serverIP + "/api/personas",
-                success: function (data) {
-                    window.activeTable = "Personas";
-                    setTableHeader();
-                    createPersonasTable(data, function(){
-                        newSorting(1);
-                    });
-                    activeElement("reqTable");
-
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    debugLogger(String(this.url));
-                    debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-                }
-            });
+          window.activeTable = "Personas";
+          setTableHeader();
+          createPersonasTable(data, function(){
+            newSorting(1);
+          });
+          activeElement("reqTable");
         },
         error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+          debugLogger(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
-    });
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 });

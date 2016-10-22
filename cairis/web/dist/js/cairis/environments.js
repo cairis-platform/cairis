@@ -284,3 +284,49 @@ mainContent.on('click', '#CloseEnvironment', function (e) {
   fillEnvironmentsTable();
 });
 
+function createEnvironmentsTable(data, callback){
+  var theTable = $("#reqTable");
+  var textToInsert = [];
+  var i = 0;
+
+  $.each(data, function(count, item) {
+    textToInsert[i++] = "<tr>";
+    textToInsert[i++] = '<td><button class="editEnvironmentButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteEnvironmentButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
+
+    textToInsert[i++] = '<td name="theName">';
+    textToInsert[i++] = item.theName;
+    textToInsert[i++] = '</td>';
+
+    textToInsert[i++] = '<td name="theType">';
+    textToInsert[i++] = item.theDescription;
+    textToInsert[i++] = '</td></tr>';
+  });
+  theTable.append(textToInsert.join(''));
+  callback();
+}
+
+function deleteEnvironment(name, callback){
+  $.ajax({
+    type: "DELETE",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    url: serverIP + "/api/environments/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      showPopup(true);
+      if(jQuery.isFunction(callback)){
+        callback();
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+

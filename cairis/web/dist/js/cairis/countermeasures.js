@@ -391,13 +391,6 @@ mainContent.on('click', ".removeCountermeasureProperty", function () {
   });
 });
 
-$(document).on('click', '.deleteCountermeasuresButton', function (e) {
-  e.preventDefault();
-  deleteCountermeasure($(this).val(), function () {
-    createCountermeasuresTable();
-  });
-});
-
 function fillCountermeasurePropProperties(extra){
   var propBox = $("#thePropName");
   propBox.empty();
@@ -454,5 +447,32 @@ function clearCountermeasureEnvInfo(){
 mainContent.on('click', '#CloseCountermeasure', function (e) {
   e.preventDefault();
   createCountermeasuresTable();
+});
+
+$(document).on('click', '.deleteCountermeasuresButton', function (e) {
+  e.preventDefault();
+  var cmName = $(this).val();
+  deleteObject('countermeasure', cmName, function (cmName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/countermeasures/name/" + cmName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        createRisksTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  });
 });
 

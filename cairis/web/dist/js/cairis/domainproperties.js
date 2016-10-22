@@ -139,10 +139,33 @@ mainContent.on('click', '#UpdateDomainProperty', function (e) {
 
 $(document).on('click', '.deleteDomainPropertyButton', function (e) {
   e.preventDefault();
-  deleteDomainProperty($(this).val(), function () {
-    createDomainPropertiesTable();
+  var dpName = $(this).val();
+  deleteObject('domainproperty',dpName,function(dpName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/domainproperties/name/" + dpName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        createDomainPropertiesTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
   });
 });
+
+
+
 
 $(document).on("click", "#addNewDomainProperty", function () {
   activeElement("objectViewer");
@@ -206,31 +229,6 @@ function postDomainProperty(dp, callback){
     origin: serverIP,
     data: output,
     url: serverIP + "/api/domainproperties" + "?session_id=" + $.session.get('sessionID'),
-    success: function (data) {
-      showPopup(true);
-      if(jQuery.isFunction(callback)){
-        callback();
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      var error = JSON.parse(xhr.responseText);
-      showPopup(false, String(error.message));
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
-}
-
-function deleteDomainProperty(name, callback){
-  $.ajax({
-    type: "DELETE",
-    dataType: "json",
-    contentType: "application/json",
-    accept: "application/json",
-    crossDomain: true,
-    processData: false,
-    origin: serverIP,
-    url: serverIP + "/api/domainproperties/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

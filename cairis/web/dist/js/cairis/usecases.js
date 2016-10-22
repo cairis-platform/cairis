@@ -297,8 +297,28 @@ mainContent.on('click', '#UpdateUseCase', function (e) {
 
 $(document).on('click', '.deleteUseCaseButton', function (e) {
   e.preventDefault();
-  deleteUseCase($(this).val(), function () {
-    createUseCasesTable();
+  var ucName = $(this).val();
+  deleteObject('usecase',ucName,function(ucName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/usecases/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        createUseCasesTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
   });
 });
 
@@ -315,3 +335,22 @@ mainContent.on('click', '#CloseUseCase', function (e) {
   e.preventDefault();
   createUseCasesTable();
 });
+
+// Dialog for entering a use case step
+function stepDialogBox(callback){
+  var dialogwindow = $("#EnterUseCaseStep");
+  var select = dialogwindow.find("select");
+  dialogwindow.dialog({
+    modal: true,
+    buttons: {
+      Ok: function () {
+        var text =  select.find("option:selected" ).text();
+        if(jQuery.isFunction(callback)){
+          callback($("#theStep").val());
+        }
+        $(this).dialog("close");
+      }
+    }
+  });
+  $(".comboboxD").css("visibility", "visible");
+}

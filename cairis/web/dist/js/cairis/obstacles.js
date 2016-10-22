@@ -520,3 +520,30 @@ mainContent.on('click', '#closeObstacleButton', function (e) {
   e.preventDefault();
   createEditObstaclesTable();
 });
+
+$(document).on('click', '.deleteObstacleButton', function (e) {
+  e.preventDefault();
+  var obsName = $(this).val();
+  deleteObject('obstacle',obsName,function(obsName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/obstacles/name/" + obsName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        createEditObstaclesTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  });
+});

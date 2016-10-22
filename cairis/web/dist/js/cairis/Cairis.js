@@ -746,144 +746,112 @@ function getPersonaview(pName,bvName,pcName){
 
 // A function for filling the table with requirements
 function createRequirementsTable(data){
-    var tre;
-    var theTable = $(".theTable");
-    $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
-    //var arr = reallyLongArray;
-    var textToInsert = [];
-    var  originator, rationale, fitCriterion, type = "";
+  var tre;
+  var theTable = $(".theTable");
+  $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
+  var textToInsert = [];
+  var  originator, rationale, fitCriterion, type = "";
 
-    var theRows = [];
-    var i = 0;
-    var j = 0;
-    $.each(data, function(count, item) {
-        textToInsert[i++] = '<tr><td name="theLabel">';
-        textToInsert[i++] = item.theLabel;
-        textToInsert[i++] = '<'+'/td>';
+  var theRows = [];
+  var i = 0;
+  var j = 0;
+  $.each(data, function(count, item) {
+    textToInsert[i++] = '<tr><td name="theLabel">';
+    textToInsert[i++] = item.theLabel;
+    textToInsert[i++] = '<'+'/td>';
 
-        textToInsert[i++] = '<td name="theName" contenteditable=true>';
-        textToInsert[i++] = item.theName;
-        textToInsert[i++] = '</td>';
+    textToInsert[i++] = '<td name="theName" contenteditable=true>';
+    textToInsert[i++] = item.theName;
+    textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theDescription" contenteditable=true>';
-        textToInsert[i++] = item.theDescription;
-        textToInsert[i++] = '</td>';
+    textToInsert[i++] = '<td name="theDescription" contenteditable=true>';
+    textToInsert[i++] = item.theDescription;
+    textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="thePriority"  contenteditable=true>';
-        textToInsert[i++] = item.thePriority;
-        textToInsert[i++] = '</td>';
+    textToInsert[i++] = '<td name="thePriority"  contenteditable=true>';
+    textToInsert[i++] = item.thePriority;
+    textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theId"  style="display:none;">';
-        textToInsert[i++] = item.theId;
-        textToInsert[i++] = '</td>';
+    textToInsert[i++] = '<td name="theId"  style="display:none;">';
+    textToInsert[i++] = item.theId;
+    textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theVersion"  style="display:none;">';
-        textToInsert[i++] = item.theVersion;
-        textToInsert[i++] = '</td>';
+    textToInsert[i++] = '<td name="theVersion"  style="display:none;">';
+    textToInsert[i++] = item.theVersion;
+    textToInsert[i++] = '</td>';
 
-        var datas = eval(item.attrs);
-        for (var key in datas) {
-            if (datas.hasOwnProperty(key)) {
-                /*
-                Made this so the TD's are in the right order.
-                 */
-                switch(key){
-                    case "originator":
-                        originator =   '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
-                        break;
-                    case "rationale":
-                        rationale =   '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
-                        break;
-                    case "fitCriterion":
-                        fitCriterion =   '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
-                        break;
-                    case "type":
-                        type =   '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
-                        break;
-                }
-            }
-        }
-        textToInsert[i++] = rationale;
-        textToInsert[i++] = fitCriterion;
-        textToInsert[i++] = originator;
-        textToInsert[i++] = type;
-        textToInsert[i++] = '</tr>';
-    });
-
-    // theRows[j++]=textToInsert.join('');
-    theTable.append(textToInsert.join(''));
-
-    theTable.css("visibility","visible");
-
-    $('#reqTable').contextMenu({
-      selector: 'tr',
-      items: {
-        "add": {
-           name: "Add", 
-           callback: function(key, opt) {
-             addReq();
-           }
-         },
-        "remove": {
-           name: "Remove", 
-           callback: function(key, opt) {
-             var reqName = $(this).find("td").eq(1).html();
-             removeReq(reqName);
-           }
+    var datas = eval(item.attrs);
+    for (var key in datas) {
+      if (datas.hasOwnProperty(key)) {
+        // Made this so the TD's are in the right order.
+        switch(key){
+          case "originator":
+            originator = '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
+            break;
+          case "rationale":
+            rationale = '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
+            break;
+          case "fitCriterion":
+            fitCriterion = '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
+            break;
+          case "type":
+            type = '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
+            break;
         }
       }
-    }); 
-}
+    }
+    textToInsert[i++] = rationale;
+    textToInsert[i++] = fitCriterion;
+    textToInsert[i++] = originator;
+    textToInsert[i++] = type;
+    textToInsert[i++] = '</tr>';
+  });
 
+  theTable.append(textToInsert.join(''));
 
-/*
-filling up the environment table
- */
-function createEnvironmentsTable(data, callback){
+  theTable.css("visibility","visible");
 
-    var theTable = $("#reqTable");
-    var textToInsert = [];
-    var i = 0;
-
-    //var thedata = $.parseJSON(data);
-    $.each(data, function(count, item) {
-        textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editEnvironmentButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteEnvironmentButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
-
-        textToInsert[i++] = '<td name="theName">';
-        textToInsert[i++] = item.theName;
-        textToInsert[i++] = '</td>';
-
-        textToInsert[i++] = '<td name="theType">';
-        textToInsert[i++] = item.theDescription;
-        textToInsert[i++] = '</td></tr>';
-    });
-    theTable.append(textToInsert.join(''));
-    callback();
-
+  $('#reqTable').contextMenu({
+    selector: 'tr',
+    items: {
+      "add": {
+        name: "Add", 
+        callback: function(key, opt) {
+          addReq();
+        }
+      },
+      "remove": {
+        name: "Remove", 
+        callback: function(key, opt) {
+          var reqName = $(this).find("td").eq(1).html();
+          removeReq(reqName);
+        }
+      }
+    }
+  }); 
 }
 
 function getRisks(callback){
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/risks",
-        success: function (data) {
-            if(jQuery.isFunction(callback)){
-                callback(data);
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-            return null;
-        }
-    });
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/risks",
+    success: function (data) {
+      if(jQuery.isFunction(callback)){
+        callback(data);
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      return null;
+    }
+  });
 }
 
 function getRoles(callback) {
@@ -1024,282 +992,27 @@ function fileExportDialogbox(callback) {
   $(".comboboxD").css("visibility", "visible");
 }
 
-/*
- Dialog for choosing a new role for the responses
- */
+// Dialog for choosing a new role for the responses
 function newRoleDialogbox(callback){
-    var dialogwindow = $("#ChooseRoleForResponse");
-    var roleSelect = dialogwindow.find("#theNewRole");
-    var costSelect = dialogwindow.find("#theRoleCost");
-    getRoles(function (roles) {
-        $.each(roles, function (key, obj) {
-            roleSelect.append($('<option>', { value : key })
-                .text(key));
-        });
+  var dialogwindow = $("#ChooseRoleForResponse");
+  var roleSelect = dialogwindow.find("#theNewRole");
+  var costSelect = dialogwindow.find("#theRoleCost");
+  getRoles(function (roles) {
+    $.each(roles, function (key, obj) {
+      roleSelect.append($('<option>', { value : key }).text(key));
     });
-    dialogwindow.dialog({
-        modal: true,
-        buttons: {
-            Ok: function () {
-                var role =  roleSelect.find("option:selected" ).text();
-                var cost =  costSelect.find("option:selected" ).text();
-                if(jQuery.isFunction(callback)){
-                    var newRole =  jQuery.extend(true, {}, respRoleDefault );
-                    newRole.roleName = role;
-                    newRole.cost = cost;
-                    callback(newRole);
-                }
-                $(this).dialog("close");
-            }
-        }
-    });
-    $(".comboboxD").css("visibility", "visible");
-
-}
-
-
-/*
- Dialog for choosing an asset in a certain environment
- */
-function assetsInEnvDialogBox(environ, haveEnv, callback){
-    var dialogwindow = $("#ChooseEnvAssetsDialog");
-    var select = dialogwindow.find("select");
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/assets/environment/" + environ.replace(" ", "%20")+ "/names",
-        success: function (data) {
-
-            select.empty();
-            var none = true;
-            $.each(data, function(index1, object) {
-                var found = false;
-                $.each(haveEnv,function(index, text) {
-                    if(text == object){
-                        found = true
-                    }
-                });
-                //if not found in assets
-                if(!found) {
-                    select.append("<option value=" + object + ">" + object + "</option>");
-                    none = false;
-                }
-            });
-            if(!none) {
-                //dialogwindow.show();
-                dialogwindow.dialog({
-                    modal: true,
-                    buttons: {
-                        Ok: function () {
-                            var text =  select.find("option:selected" ).text();
-                            if(jQuery.isFunction(callback)){
-                                callback(text);
-                            }
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-                $(".comboboxD").css("visibility", "visible");
-            }else {
-                alert("All assets are already added");
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    });
-}
-
-
-function environmentDialogBox(haveEnv,callback){
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/environments/all/names",
-        success: function (data) {
-
-            $("#comboboxDialogSelect").empty();
-            var none = true;
-            $.each(data, function(i, item) {
-                var found = false;
-                $.each(haveEnv,function(index, text) {
-                    if(text == item){
-                        found = true
-                    }
-                });
-                //if not found in environments
-                if(!found) {
-                    $("#comboboxDialogSelect").append("<option value=" + item + ">" + item + "</option>");
-                    none = false;
-                }
-            });
-            if(!none) {
-                $("#comboboxDialog").dialog({
-                    modal: true,
-                    buttons: {
-                        Ok: function () {
-                            var text =  $( "#comboboxDialogSelect").find("option:selected" ).text();
-                            if(jQuery.isFunction(callback)){
-                                callback(text);
-                            }
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-                $(".comboboxD").css("visibility", "visible");
-            }else {
-                alert("All environments are already added");
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    });
-}
-/*
- Dialog for choosing an attacker
- */
-function attackerDialogBox(hassAtt, environment ,callback){
-    var dialogwindow = $("#ChooseAssetDialog");
-    var select = dialogwindow.find("select");
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/attackers",
-        success: function (data) {
-            select.empty();
-            var none = true;
-            $.each(data, function(key, attacker) {
-                var found = false;
-                $.each(hassAtt,function(index, text) {
-                    if(text == key){
-                        found = true
-                    }
-                });
-                //if not found in assets
-                if(!found) {
-                    $.each(attacker.theEnvironmentProperties, function (index, prop) {
-                        if(prop.theEnvironmentName == environment){
-                            select.append("<option value=" + key + ">" + key + "</option>");
-                            none = false;
-                        }
-                    });
-
-                }
-            });
-            if(!none) {
-                //dialogwindow.show();
-                dialogwindow.dialog({
-                    modal: true,
-                    buttons: {
-                        Ok: function () {
-                            var text =  select.find("option:selected" ).text();
-                            if(jQuery.isFunction(callback)){
-                                callback(text);
-                            }
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-                $(".comboboxD").css("visibility", "visible");
-            }else {
-                alert("All possible attackers are already added");
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    });
-}
-
-// Dialog for choosing a role
-function roleDialogBox(hasRole ,callback){
-    var dialogwindow = $("#ChooseRoleDialog");
-    var select = dialogwindow.find("select");
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/roles",
-        success: function (data) {
-            select.empty();
-            var none = true;
-            $.each(data, function(key, role) {
-                var found = false;
-                $.each(hasRole,function(index, text) {
-                    if(text == key){
-                        found = true
-                    }
-                });
-                //if not found in assets
-                if(!found) {
-                            select.append("<option value=" + key + ">" + key + "</option>");
-                            none = false;
-                }
-            });
-            if(!none) {
-                //dialogwindow.show();
-                dialogwindow.dialog({
-                    modal: true,
-                    buttons: {
-                        Ok: function () {
-                            var text =  select.find("option:selected" ).text();
-                            if(jQuery.isFunction(callback)){
-                                callback(text);
-                            }
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-                $(".comboboxD").css("visibility", "visible");
-            }else {
-                alert("All possible attackers are already added");
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    });
-}
-
-// Dialog for entering a use case step
-function stepDialogBox(callback){
-  var dialogwindow = $("#EnterUseCaseStep");
-  var select = dialogwindow.find("select");
+  });
   dialogwindow.dialog({
     modal: true,
     buttons: {
       Ok: function () {
-        var text =  select.find("option:selected" ).text();
+        var role =  roleSelect.find("option:selected" ).text();
+        var cost =  costSelect.find("option:selected" ).text();
         if(jQuery.isFunction(callback)){
-          callback($("#theStep").val());
+          var newRole =  jQuery.extend(true, {}, respRoleDefault );
+          newRole.roleName = role;
+          newRole.cost = cost;
+          callback(newRole);
         }
         $(this).dialog("close");
       }
@@ -1309,13 +1022,10 @@ function stepDialogBox(callback){
 }
 
 
-
-/*
- Dialog for choosing a persona for a task
- */
-function taskPersonaDialogBox(hasPersona ,callback){
-  var dialogwindow = $("#ChoosePersonaForTask");
-  var envName = $.session.get("taskEnvironmentName");
+// Dialog for choosing an asset in a certain environment
+function assetsInEnvDialogBox(environ, haveEnv, callback){
+  var dialogwindow = $("#ChooseEnvAssetsDialog");
+  var select = dialogwindow.find("select");
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -1324,45 +1034,39 @@ function taskPersonaDialogBox(hasPersona ,callback){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/dimensions/table/persona/environment/" + envName,
+    url: serverIP + "/api/assets/environment/" + environ.replace(" ", "%20")+ "/names",
     success: function (data) {
-      $("#theTaskPersona").empty();
+      select.empty();
       var none = true;
-      $.each(data, function(key, persona) {
+      $.each(data, function(index1, object) {
         var found = false;
-        $.each(hasPersona,function(index, text) {
-          if(text == persona){
+        $.each(haveEnv,function(index, text) {
+          if(text == object){
             found = true
           }
         });
-        //if not found in personas
         if(!found) {
-          $("#theTaskPersona").append("<option value=" + persona + ">" + persona + "</option>");
+          select.append("<option value=" + object + ">" + object + "</option>");
           none = false;
         }
       });
       if(!none) {
-        //dialogwindow.show();
         dialogwindow.dialog({
           modal: true,
           buttons: {
             Ok: function () {
-              var persona = $("#theTaskPersona").find("option:selected" ).text();
-              var duration = $("#theTaskDuration").find("option:selected").text();
-              var frequency = $("#theTaskFrequency").find("option:selected").text();
-              var demands = $("#theTaskDemands").find("option:selected").text();
-              var goalConflict = $("#theTaskGoalConflict").find("option:selected").text();
+              var text =  select.find("option:selected" ).text();
               if(jQuery.isFunction(callback)){
-                callback(persona, duration, frequency, demands, goalConflict);
+                callback(text);
               }
               $(this).dialog("close");
             }
           }
         });
         $(".comboboxD").css("visibility", "visible");
-      }  
+      }
       else {
-        alert("All possible personas are already added");
+        alert("All assets are already added");
       }
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -1373,449 +1077,524 @@ function taskPersonaDialogBox(hasPersona ,callback){
 }
 
 
+function environmentDialogBox(haveEnv,callback){
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/environments/all/names",
+    success: function (data) {
 
+      $("#comboboxDialogSelect").empty();
+      var none = true;
+      $.each(data, function(i, item) {
+        var found = false;
+        $.each(haveEnv,function(index, text) {
+          if(text == item){
+            found = true
+          }
+        });
+        if(!found) {
+          $("#comboboxDialogSelect").append("<option value=" + item + ">" + item + "</option>");
+          none = false;
+        }
+      });
+      if(!none) {
+        $("#comboboxDialog").dialog({
+          modal: true,
+          buttons: {
+            Ok: function () {
+              var text =  $( "#comboboxDialogSelect").find("option:selected" ).text();
+              if(jQuery.isFunction(callback)){
+                callback(text);
+              }
+              $(this).dialog("close");
+            }
+          }
+        });
+        $(".comboboxD").css("visibility", "visible");
+      }
+      else {
+        alert("All environments are already added");
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
 
+// Dialog for choosing an attacker
+function attackerDialogBox(hassAtt, environment ,callback){
+  var dialogwindow = $("#ChooseAssetDialog");
+  var select = dialogwindow.find("select");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/attackers",
+    success: function (data) {
+      select.empty();
+      var none = true;
+      $.each(data, function(key, attacker) {
+        var found = false;
+        $.each(hassAtt,function(index, text) {
+          if(text == key){
+            found = true
+          }
+        });
+        if(!found) {
+          $.each(attacker.theEnvironmentProperties, function (index, prop) {
+            if(prop.theEnvironmentName == environment){
+              select.append("<option value=" + key + ">" + key + "</option>");
+              none = false;
+            }
+          });
+        }
+      });
+      if(!none) {
+        dialogwindow.dialog({
+          modal: true,
+          buttons: {
+            Ok: function () {
+              var text =  select.find("option:selected" ).text();
+              if(jQuery.isFunction(callback)){
+                callback(text);
+              }
+              $(this).dialog("close");
+            }
+          }
+        });
+        $(".comboboxD").css("visibility", "visible");
+      }
+      else {
+        alert("All possible attackers are already added");
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
 
-/*
- Dialog for choosing a concern
- */
+// Dialog for choosing a role
+function roleDialogBox(hasRole ,callback){
+  var dialogwindow = $("#ChooseRoleDialog");
+  var select = dialogwindow.find("select");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/roles",
+    success: function (data) {
+      select.empty();
+      var none = true;
+      $.each(data, function(key, role) {
+        var found = false;
+        $.each(hasRole,function(index, text) {
+          if(text == key){
+            found = true
+          }
+        });
+        if(!found) {
+          select.append("<option value=" + key + ">" + key + "</option>");
+          none = false;
+        }
+      });
+      if(!none) {
+        dialogwindow.dialog({
+          modal: true,
+          buttons: {
+            Ok: function () {
+              var text =  select.find("option:selected" ).text();
+              if(jQuery.isFunction(callback)){
+                callback(text);
+              }
+              $(this).dialog("close");
+            }
+          }
+        });
+        $(".comboboxD").css("visibility", "visible");
+      }
+      else {
+        alert("All possible attackers are already added");
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+// Dialog for choosing a concern
 function concernDialogBox(hasRole ,callback){
-    var dialogwindow = $("#ChooseConcernDialog");
-    var select = dialogwindow.find("select");
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/assets",
-        success: function (data) {
-            select.empty();
-            var none = true;
-            $.each(data, function(key, asset) {
-                var found = false;
-                $.each(hasAsset,function(index, text) {
-                    if(text == key){
-                        found = true
-                    }
-                });
-                //if not found in assets
-                if(!found) {
-                            select.append("<option value=" + key + ">" + key + "</option>");
-                            none = false;
-                }
-            });
-            if(!none) {
-                //dialogwindow.show();
-                dialogwindow.dialog({
-                    modal: true,
-                    buttons: {
-                        Ok: function () {
-                            var text =  select.find("option:selected" ).text();
-                            if(jQuery.isFunction(callback)){
-                                callback(text);
-                            }
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-                $(".comboboxD").css("visibility", "visible");
-            }else {
-                alert("All possible concerns are already added");
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+  var dialogwindow = $("#ChooseConcernDialog");
+  var select = dialogwindow.find("select");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/assets",
+    success: function (data) {
+      select.empty();
+      var none = true;
+      $.each(data, function(key, asset) {
+        var found = false;
+        $.each(hasAsset,function(index, text) {
+          if(text == key){
+            found = true
+          }
+        });
+        if(!found) {
+          select.append("<option value=" + key + ">" + key + "</option>");
+          none = false;
         }
-    });
+      });
+      if(!none) {
+        dialogwindow.dialog({
+          modal: true,
+          buttons: {
+            Ok: function () {
+              var text =  select.find("option:selected" ).text();
+              if(jQuery.isFunction(callback)){
+                callback(text);
+              }
+              $(this).dialog("close");
+            }
+          }
+        });
+        $(".comboboxD").css("visibility", "visible");
+      }
+      else {
+        alert("All possible concerns are already added");
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
-
-/*
- Dialog for choosing a motive
- */
-function motivationDialogBox(hasMotive ,callback){
-    var dialogwindow = $("#ChooseMotivationsDialog");
-    var select = dialogwindow.find("select");
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-
-        },
-        crossDomain: true,
-        url: serverIP + "/api/attackers/motivations",
-        success: function (data) {
-            select.empty();
-            var none = true;
-            $.each(data, function(index, motive) {
-                var found = false;
-                $.each(hasMotive,function(index, text) {
-                    if(text == motive.theName){
-                        found = true
-                    }
-                });
-                //if not found in assets
-                if(!found) {
-                    select.append("<option value=" + motive.theName + ">" + motive.theName + "</option>");
-                    none = false;
-                }
-            });
-            if(!none) {
-                //dialogwindow.show();
-                dialogwindow.dialog({
-                    modal: true,
-                    buttons: {
-                        Ok: function () {
-                            var text =  select.find("option:selected" ).text();
-                            if(jQuery.isFunction(callback)){
-                                callback(text);
-                            }
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-                $(".comboboxD").css("visibility", "visible");
-            }else {
-                alert("All possible attackers are already added");
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-    });
-}
-
-
-/*
-Function for creating the comboboxes
- */
+// Function for creating the comboboxes
 function createComboboxes(){
-var sess = String($.session.get('sessionID'));
-    //Assetsbox
-    if(!window.boxesAreFilled) {
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            accept: "application/json",
-            data: {
-                session_id: String($.session.get('sessionID'))
-            },
-            crossDomain: true,
-            url: serverIP + "/api/assets/all/names",
-
-            success: function (data) {
-                // we make a successful JSONP call!
-                var options = $("#assetsbox");
-                var amoptions = $("#amassetsbox");
-                options.empty();
-                amoptions.empty();
-                options.append("<option>All</option>");
-                amoptions.append("<option>All</option>");
-                $.each(data, function () {
-                    options.append($("<option />").val(this).text(this));
-                    amoptions.append($("<option />").val(this).text(this));
-                });
-                $(".topCombobox").css("visibility", "visible");
-
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                debugLogger(String(this.url));
-                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-            }
-
-        });
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            // async: false,
-            accept: "application/json",
-            data: {
-                session_id: String($.session.get('sessionID'))
-            },
-            crossDomain: true,
-            url: serverIP + "/api/environments/all/names",
-
-            success: function (data) {
-                var envBox = $("#environmentsbox");
-                var amEnvBox = $("#amenvironmentsbox");
-                var gmEnvBox = $("#gmenvironmentsbox");
-                var omEnvBox = $("#omenvironmentsbox");
-                var tmEnvBox = $("#tmenvironmentsbox");
-                var remEnvBox = $("#remenvironmentsbox");
-                var rmEnvBox = $("#rmenvironmentsbox");
-                envBox.empty();
-                amEnvBox.empty();
-                gmEnvBox.empty();
-                omEnvBox.empty();
-                tmEnvBox.empty();
-                remEnvBox.empty();
-                rmEnvBox.empty();
-                $.each(data, function () {
-                    envBox.append($("<option />").val(this).text(this));
-                    amEnvBox.append($("<option />").val(this).text(this));
-                    gmEnvBox.append($("<option />").val(this).text(this));
-                    omEnvBox.append($("<option />").val(this).text(this));
-                    tmEnvBox.append($("<option />").val(this).text(this));
-                    remEnvBox.append($("<option />").val(this).text(this));
-                    rmEnvBox.append($("<option />").val(this).text(this));
-                });
-                envBox.css("visibility", "visible");
-                window.boxesAreFilled = true;
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                debugLogger(String(this.url));
-                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-            }
-
-        });
-    }
-
-   /* }))).map(function () {
-        return $('<option>').val(this.value).text(this.label);
-    }).appendTo('#assetsbox');*/
-}
-function startingTable(){
-    createComboboxes();
+  var sess = String($.session.get('sessionID'));
+  if(!window.boxesAreFilled) {
     $.ajax({
-        type:"GET",
-        dataType: "json",
-        accept:"application/json",
-        crossDomain: true,
-        url: serverIP + "/api/requirements",
-        data: {session_id: String($.session.get('sessionID')),
-                ordered: "1"
-        },
-        success: function(data) {
-            // $("#test").append(JSON.stringify(data));
-            setTableHeader("Requirements");
-            createRequirementsTable(data);
-            activeElement("reqTable");
-            $(".loadingWrapper").fadeOut(500);
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + "/api/assets/all/names",
 
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
+      success: function (data) {
+        // we make a successful JSONP call!
+        var options = $("#assetsbox");
+        var amoptions = $("#amassetsbox");
+        options.empty();
+        amoptions.empty();
+        options.append("<option>All</option>");
+        amoptions.append("<option>All</option>");
+        $.each(data, function () {
+          options.append($("<option />").val(this).text(this));
+          amoptions.append($("<option />").val(this).text(this));
+        });
+        $(".topCombobox").css("visibility", "visible");
+
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+
     });
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + "/api/environments/all/names",
+
+      success: function (data) {
+        var envBox = $("#environmentsbox");
+        var amEnvBox = $("#amenvironmentsbox");
+        var gmEnvBox = $("#gmenvironmentsbox");
+        var omEnvBox = $("#omenvironmentsbox");
+        var tmEnvBox = $("#tmenvironmentsbox");
+        var remEnvBox = $("#remenvironmentsbox");
+        var rmEnvBox = $("#rmenvironmentsbox");
+        envBox.empty();
+        amEnvBox.empty();
+        gmEnvBox.empty();
+        omEnvBox.empty();
+        tmEnvBox.empty();
+        remEnvBox.empty();
+        rmEnvBox.empty();
+        $.each(data, function () {
+          envBox.append($("<option />").val(this).text(this));
+          amEnvBox.append($("<option />").val(this).text(this));
+          gmEnvBox.append($("<option />").val(this).text(this));
+          omEnvBox.append($("<option />").val(this).text(this));
+          tmEnvBox.append($("<option />").val(this).text(this));
+          remEnvBox.append($("<option />").val(this).text(this));
+          rmEnvBox.append($("<option />").val(this).text(this));
+        });
+        envBox.css("visibility", "visible");
+        window.boxesAreFilled = true;
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+
+    });
+  }
 }
-/*
-This is for saying which element has the main focus
- */
+
+function startingTable(){
+  createComboboxes();
+  $.ajax({
+    type:"GET",
+    dataType: "json",
+    accept:"application/json",
+    crossDomain: true,
+    url: serverIP + "/api/requirements",
+    data: {session_id: String($.session.get('sessionID')),
+      ordered: "1"
+    },
+    success: function(data) {
+      setTableHeader("Requirements");
+      createRequirementsTable(data);
+      activeElement("reqTable");
+      $(".loadingWrapper").fadeOut(500);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+// This is for saying which element has the main focus
 function activeElement(elementid){
-    if(elementid == "svgViewer" || elementid == 'homePanel'){
-        $("#reqTable").hide();
-        $("#objectViewer").hide();
-        $("#filtercontent").hide();
-        $("#filterassetmodelcontent").hide();
-        $("#filterriskmodelcontent").hide();
-        $("#filterresponsibilitymodelcontent").hide();
-        $("#filtergoalmodelcontent").hide();
-        $("#filterapmodelcontent").hide();
-        $("#filtertaskmodelcontent").hide();
-        $("#filterobstaclemodelcontent").hide();
-        $("#rightnavGear").hide();
-
-        if (elementid == 'svgViewer') {
-          $("#rightnavGear").show();
-        }
-
-        if (window.theVisualModel == 'risk') {
-          $("#filterriskmodelcontent").show();
-        }
-        else if (window.theVisualModel == 'goal') {
-          $("#filtergoalmodelcontent").show();
-        }
-        else if (window.theVisualModel == 'obstacle') {
-          $("#filterobstaclemodelcontent").show();
-        }
-        else if (window.theVisualModel == 'task') {
-          $("#filtertaskmodelcontent").show();
-        }
-        else if (window.theVisualModel == 'responsibility') {
-          $("#filterresponsibilitymodelcontent").show();
-        }
-        else if (window.theVisualModel == 'asset') {
-          $("#filterassetmodelcontent").show();
-        }
-        else if (window.theVisualModel == 'persona') {
-          $("#filterapmodelcontent").show();
-        }
-    }
-    if(elementid != "svgViewer"){
-        $("#svgViewer").hide();
-        $("#homePanel").hide();
-        $("#objectViewer").hide();
-        $("#filterassetmodelcontent").hide();
-        $("#filterriskmodelcontent").hide();
-        $("#filtergoalmodelcontent").hide();
-        $("#filtertaskmodelcontent").hide();
-        $("#filterapmodelcontent").hide();
-        $("#filterresponsibilitymodelcontent").hide();
-        $("#filterobstaclemodelcontent").hide();
-        $("#rightnavGear").hide();
-    }
-
-    if(elementid == "reqTable"){
-       //If it is the table, we need to see which table it is
-        window.theVisualModel = 'None';
-        setActiveOptions();
-    }
-    if (elementid == 'objectViewer') {
-      $("#reqTable").hide();
-    }
-
-    elementid = "#" + elementid;
-    $(elementid).show();
-
-}
-/*
-function for setting the table head
- */
-function setTableHeader(){
-    var thead = "";
-
-    switch (window.activeTable) {
-        case "Requirements":
-            debugLogger("Is Requirement");
-            thead = "<th width='50px'></th><th>Requirement</th><th>Description</th><th>Priority</th><th>Rationale</th><th>Fit Citerion</th><th>Originator</th><th>Type</th>";
-            break;
-        case "Goals":
-           debugLogger("Is Goal");
-            thead = "<th width='50px'></th><th>Goal</th><th>Definition</th><th>Category</th><th>Priority</th><th>Fit Citerion</th><th>Issue</th><th>Originator</th>";
-            break;
-        case "Obstacles":
-            debugLogger("Is Obstacle");
-            thead = "<th width='50px'></th><th>Obstacle</th><th>Definition</th><th>Category</th><th>Originator</th>";
-            break;
-        case "EditGoals":
-            debugLogger("Is EditGoals");
-            thead = "<th width='120px' id='addNewGoal'><i class='fa fa-plus floatCenter'></i></th><th>Goal</th><th>Originator</th><th>Status</th>";
-            break;
-        case "EditObstacles":
-            debugLogger("Is EditObstacles");
-            thead = "<th width='120px' id='addNewObstacle'><i class='fa fa-plus floatCenter'></i></th><th>Obstacle</th><th>Originator</th><th>Status</th>";
-            break;
-        case "Assets":
-            debugLogger("Is Asset");
-            thead = "<th width='120px' id='addNewAsset'><i class='fa fa-plus floatCenter'></i></th><th>Asset</th><th>Type</th>";
-            break;
-        case "Roles":
-           debugLogger("Is Role");
-            thead = "<th width='120px' id='addNewRole'><i class='fa fa-plus floatCenter'></i></th><th>Role</th><th>Shortcode</th><th>Type</th>";
-            break;
-        case "Environment":
-            debugLogger("Is Environment");
-            thead = "<th width='120px' id='addNewEnvironment'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Description</th>";
-            break;
-        case "Vulnerability":
-            debugLogger("Is Vulnerability");
-            thead = "<th width='120px' id='addNewVulnerability'><i class='fa fa-plus floatCenter'></i></th><th>Vulnerability</th><th>Type</th>";
-            break;
-        case "Threats":
-            debugLogger("Is Threat");
-            thead = "<th width='120px' id='addNewThreat'><i class='fa fa-plus floatCenter'></i></th><th>Threat</th><th>Type</th>";
-            break;
-        case "Attackers":
-            debugLogger("Is Attacker");
-            thead = "<th width='120px' id='addNewAttacker'><i class='fa fa-plus floatCenter'></i></th><th>Attacker</th><th>Description</th>";
-            break;
-        case "Personas":
-            debugLogger("Is Persona");
-            thead = "<th width='120px' id='addNewPersona'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Type</th>";
-            break;
-        case "Risks":
-            debugLogger("Is Risk");
-            thead = "<th width='120px' id='addnewRisk'><i class='fa fa-plus floatCenter'></i></th><th>Risk</th><th>Vulnerability</th><th>Threat</th>";
-            break;
-        case "Responses":
-            debugLogger("Is Response");
-            thead = "<th width='120px' id='addNewResponse'><i class='fa fa-plus floatCenter'></i></th><th>Response</th><th>Type</th>";
-            break;
-        case "Countermeasures":
-            debugLogger("Is Countermeasure");
-            thead = "<th width='120px' id='addNewCountermeasure'><i class='fa fa-plus floatCenter'></i></th><th>Countermeasure</th><th>Type</th>";
-            break;
-        case "Tasks":
-            debugLogger("Is Task");
-            thead = "<th width='120px' id='addNewTask'><i class='fa fa-plus floatCenter'></i></th><th>Task</th><th>Objective</th>";
-            break;
-        case "UseCases":
-            debugLogger("Is UseCase");
-            thead = "<th width='120px' id='addNewUseCase'><i class='fa fa-plus floatCenter'></i></th><th>Use Case</th><th>Description</th>";
-            break;
-        case "DomainProperties":
-            debugLogger("Is Domain Property");
-            thead = "<th width='120px' id='addNewDomainProperty'><i class='fa fa-plus floatCenter'></i></th><th>Domain Property</th><th>Type</th>";
-            break;
-        case "Dependency":
-            debugLogger("Is Dependency");
-            thead = "<th width='120px' id='addNewDependency'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Depender</th><th>Dependee</th><th>Noun</th><th>Dependency</th>";
-            break;
-        case "ExternalDocuments":
-            debugLogger("Is External Documents");
-            thead = "<th width='120px' id='addNewExternalDocument'><i class='fa fa-plus floatCenter'></i></th><th>External Document</th><th>Description</th>";
-            break;
-        case "DocumentReferences":
-            debugLogger("Is Document References");
-            thead = "<th width='120px' id='addNewDocumentReference'><i class='fa fa-plus floatCenter'></i></th><th>Document Reference</th><th>Document</th>";
-            break;
-        case "PersonaCharacteristics":
-            debugLogger("Is Persona Characteristics");
-            thead = "<th width='120px' id='addNewPersonaCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Variable</th><th>Characteristic</th>";
-            break;
-    }
-    $("#reqTable").find("thead").empty();
-   // $("#reqTable").empty();
-    $("#reqTable").find("thead").append(thead);
-    $("#reqTable").find("tbody").empty();
-
-}
-/*
- This sets the right comboboxes etc in the main window
- */
-function setActiveOptions(){
-//filtercontent
-    //If chosen to create a new function for this, because this will increase readability
-    //First disable them all
+  if(elementid == "svgViewer" || elementid == 'homePanel'){
+    $("#reqTable").hide();
+    $("#objectViewer").hide();
     $("#filtercontent").hide();
+    $("#filterassetmodelcontent").hide();
+    $("#filterriskmodelcontent").hide();
+    $("#filterresponsibilitymodelcontent").hide();
+    $("#filtergoalmodelcontent").hide();
+    $("#filterapmodelcontent").hide();
+    $("#filtertaskmodelcontent").hide();
+    $("#filterobstaclemodelcontent").hide();
+    $("#rightnavGear").hide();
+
+    if (elementid == 'svgViewer') {
+      $("#rightnavGear").show();
+    }
+
+    if (window.theVisualModel == 'risk') {
+      $("#filterriskmodelcontent").show();
+    }
+    else if (window.theVisualModel == 'goal') {
+      $("#filtergoalmodelcontent").show();
+    }
+    else if (window.theVisualModel == 'obstacle') {
+      $("#filterobstaclemodelcontent").show();
+    }
+    else if (window.theVisualModel == 'task') {
+      $("#filtertaskmodelcontent").show();
+    }
+    else if (window.theVisualModel == 'responsibility') {
+      $("#filterresponsibilitymodelcontent").show();
+    }
+    else if (window.theVisualModel == 'asset') {
+      $("#filterassetmodelcontent").show();
+    }
+    else if (window.theVisualModel == 'persona') {
+      $("#filterapmodelcontent").show();
+    }
+  }
+  if(elementid != "svgViewer"){
+    $("#svgViewer").hide();
+    $("#homePanel").hide();
+    $("#objectViewer").hide();
     $("#filterassetmodelcontent").hide();
     $("#filterriskmodelcontent").hide();
     $("#filtergoalmodelcontent").hide();
     $("#filtertaskmodelcontent").hide();
     $("#filterapmodelcontent").hide();
+    $("#filterresponsibilitymodelcontent").hide();
     $("#filterobstaclemodelcontent").hide();
-    $("#editAssetsOptions").hide();
+    $("#rightnavGear").hide();
+  }
 
-    //VERY OLD FUNCTION
-    switch (window.activeTable) {
-        case "Requirements":
-            $("#filtercontent").show();
-            break;
-        case "Goals":
-            break;
-        case "Obstacles":
-        case "Roles":
-            break;
-        case "EditGoals":
-            break;
-        case "Assets":
-            $("#editAssetsOptions").show();
-            break;
-    }
+  if(elementid == "reqTable"){
+    //If it is the table, we need to see which table it is
+    window.theVisualModel = 'None';
+    setActiveOptions();
+  }
+  if (elementid == 'objectViewer') {
+    $("#reqTable").hide();
+  }
+
+  elementid = "#" + elementid;
+  $(elementid).show();
 }
 
-/*
-for filling up the SVG viewer
- */
+// function for setting the table head
+function setTableHeader(){
+  var thead = "";
+
+  switch (window.activeTable) {
+    case "Requirements":
+      debugLogger("Is Requirement");
+      thead = "<th width='50px'></th><th>Requirement</th><th>Description</th><th>Priority</th><th>Rationale</th><th>Fit Citerion</th><th>Originator</th><th>Type</th>";
+      break;
+    case "Goals":
+      debugLogger("Is Goal");
+      thead = "<th width='50px'></th><th>Goal</th><th>Definition</th><th>Category</th><th>Priority</th><th>Fit Citerion</th><th>Issue</th><th>Originator</th>";
+      break;
+    case "Obstacles":
+      debugLogger("Is Obstacle");
+      thead = "<th width='50px'></th><th>Obstacle</th><th>Definition</th><th>Category</th><th>Originator</th>";
+      break;
+    case "EditGoals":
+      debugLogger("Is EditGoals");
+      thead = "<th width='120px' id='addNewGoal'><i class='fa fa-plus floatCenter'></i></th><th>Goal</th><th>Originator</th><th>Status</th>";
+      break;
+    case "EditObstacles":
+      debugLogger("Is EditObstacles");
+      thead = "<th width='120px' id='addNewObstacle'><i class='fa fa-plus floatCenter'></i></th><th>Obstacle</th><th>Originator</th><th>Status</th>";
+      break;
+    case "Assets":
+      debugLogger("Is Asset");
+      thead = "<th width='120px' id='addNewAsset'><i class='fa fa-plus floatCenter'></i></th><th>Asset</th><th>Type</th>";
+      break;
+    case "Roles":
+      debugLogger("Is Role");
+      thead = "<th width='120px' id='addNewRole'><i class='fa fa-plus floatCenter'></i></th><th>Role</th><th>Shortcode</th><th>Type</th>";
+      break;
+    case "Environment":
+      debugLogger("Is Environment");
+      thead = "<th width='120px' id='addNewEnvironment'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Description</th>";
+      break;
+    case "Vulnerability":
+      debugLogger("Is Vulnerability");
+      thead = "<th width='120px' id='addNewVulnerability'><i class='fa fa-plus floatCenter'></i></th><th>Vulnerability</th><th>Type</th>";
+      break;
+    case "Threats":
+      debugLogger("Is Threat");
+      thead = "<th width='120px' id='addNewThreat'><i class='fa fa-plus floatCenter'></i></th><th>Threat</th><th>Type</th>";
+      break;
+    case "Attackers":
+      debugLogger("Is Attacker");
+      thead = "<th width='120px' id='addNewAttacker'><i class='fa fa-plus floatCenter'></i></th><th>Attacker</th><th>Description</th>";
+      break;
+    case "Personas":
+      debugLogger("Is Persona");
+      thead = "<th width='120px' id='addNewPersona'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Type</th>";
+      break;
+    case "Risks":
+      debugLogger("Is Risk");
+      thead = "<th width='120px' id='addnewRisk'><i class='fa fa-plus floatCenter'></i></th><th>Risk</th><th>Vulnerability</th><th>Threat</th>";
+      break;
+    case "Responses":
+      debugLogger("Is Response");
+      thead = "<th width='120px' id='addNewResponse'><i class='fa fa-plus floatCenter'></i></th><th>Response</th><th>Type</th>";
+      break;
+    case "Countermeasures":
+      debugLogger("Is Countermeasure");
+      thead = "<th width='120px' id='addNewCountermeasure'><i class='fa fa-plus floatCenter'></i></th><th>Countermeasure</th><th>Type</th>";
+      break;
+    case "Tasks":
+      debugLogger("Is Task");
+      thead = "<th width='120px' id='addNewTask'><i class='fa fa-plus floatCenter'></i></th><th>Task</th><th>Objective</th>";
+      break;
+    case "UseCases":
+      debugLogger("Is UseCase");
+      thead = "<th width='120px' id='addNewUseCase'><i class='fa fa-plus floatCenter'></i></th><th>Use Case</th><th>Description</th>";
+      break;
+    case "DomainProperties":
+      debugLogger("Is Domain Property");
+      thead = "<th width='120px' id='addNewDomainProperty'><i class='fa fa-plus floatCenter'></i></th><th>Domain Property</th><th>Type</th>";
+      break;
+    case "Dependency":
+      debugLogger("Is Dependency");
+      thead = "<th width='120px' id='addNewDependency'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Depender</th><th>Dependee</th><th>Noun</th><th>Dependency</th>";
+      break;
+    case "ExternalDocuments":
+      debugLogger("Is External Documents");
+      thead = "<th width='120px' id='addNewExternalDocument'><i class='fa fa-plus floatCenter'></i></th><th>External Document</th><th>Description</th>";
+      break;
+    case "DocumentReferences":
+      debugLogger("Is Document References");
+      thead = "<th width='120px' id='addNewDocumentReference'><i class='fa fa-plus floatCenter'></i></th><th>Document Reference</th><th>Document</th>";
+      break;
+    case "PersonaCharacteristics":
+      debugLogger("Is Persona Characteristics");
+      thead = "<th width='120px' id='addNewPersonaCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Variable</th><th>Characteristic</th>";
+      break;
+  }
+  $("#reqTable").find("thead").empty();
+  $("#reqTable").find("thead").append(thead);
+  $("#reqTable").find("tbody").empty();
+}
+
+// This sets the right comboboxes etc in the main window
+function setActiveOptions(){
+  $("#filtercontent").hide();
+  $("#filterassetmodelcontent").hide();
+  $("#filterriskmodelcontent").hide();
+  $("#filtergoalmodelcontent").hide();
+  $("#filtertaskmodelcontent").hide();
+  $("#filterapmodelcontent").hide();
+  $("#filterobstaclemodelcontent").hide();
+  $("#editAssetsOptions").hide();
+
+  switch (window.activeTable) {
+    case "Requirements":
+      $("#filtercontent").show();
+      break;
+    case "Goals":
+      break;
+    case "Obstacles":
+    case "Roles":
+      break;
+    case "EditGoals":
+      break;
+    case "Assets":
+      $("#editAssetsOptions").show();
+      break;
+  }
+}
+
 function fillSvgViewer(data){
 
   var xmlString = (new XMLSerializer()).serializeToString(data);
@@ -1835,255 +1614,191 @@ function fillSvgViewer(data){
   });
 }
 
-/*
-finding the lowest label in the table
- */
+// finding the lowest label in the table
 function findLabel() {
-    var numbers = [];
-    var index = 0;
-    $("tbody").find("tr").each(function () {
-        numbers[index] = parseInt($(this).find("td:first").text());
-        index++;
-
-    });
-    numbers.sort();
-    var number = numbers.length + 1;
-    for(var i =0; i < numbers.length; i++){
-        if(i+1 !=numbers[i]){
-          // console.log(i+1 + " is the number");
-            return i+1;
-        }
+  var numbers = [];
+  var index = 0;
+  $("tbody").find("tr").each(function () {
+    numbers[index] = parseInt($(this).find("td:first").text());
+    index++;
+  });
+  numbers.sort();
+  var number = numbers.length + 1;
+  for(var i =0; i < numbers.length; i++){
+    if(i+1 !=numbers[i]){
+      return i+1;
     }
-   // console.log(i+1 + " is the number");
-    return i+1;
-}
-function getAllAssets(callback) {
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/assets",
-        success: function (data) {
-            if (jQuery.isFunction(callback)) {
-                callback(data);
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-            return null;
-        }
-    })
-}
-function getAllAssetsInEnv(env,callback) {
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/assets/environment/" + env.replace(" ", "%20") + "/names" ,
-        success: function (data) {
-            if (jQuery.isFunction(callback)) {
-                callback(data);
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-            return null;
-        }
-    })
-}
-function getAllRequirements(callback) {
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/requirements",
-        success: function (data) {
-            if (jQuery.isFunction(callback)) {
-                callback(data);
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-            return null;
-        }
-    })
-}
-function getAllgoals(callback) {
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-            session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/goals",
-        success: function (data) {
-            if (jQuery.isFunction(callback)) {
-                callback(data);
-            }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-            return null;
-        }
-    })
+  }
+  return i+1;
 }
 
+function getAllAssets(callback) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/assets",
+    success: function (data) {
+      if (jQuery.isFunction(callback)) {
+        callback(data);
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      return null;
+    }
+  });
+}
+
+function getAllAssetsInEnv(env,callback) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/assets/environment/" + env.replace(" ", "%20") + "/names" ,
+    success: function (data) {
+      if (jQuery.isFunction(callback)) {
+        callback(data);
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      return null;
+    }
+  });
+}
+
+function getAllRequirements(callback) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/requirements",
+    success: function (data) {
+      if (jQuery.isFunction(callback)) {
+        callback(data);
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      return null;
+    }
+  });
+}
 
 function sortTable(){
-    var tbl = document.getElementById("reqTable").tBodies[0];
-    var store = [];
-    for(var i=0, len=tbl.rows.length; i<len; i++){
-        var row = tbl.rows[i];
-        var sortnr = parseFloat(row.cells[0].textContent || row.cells[0].innerText);
-        if(!isNaN(sortnr)) store.push([sortnr, row]);
-    }
-    store.sort(function(x,y){
-        return x[0] - y[0];
-    });
-    for(var i=0, len=store.length; i<len; i++){
-        tbl.appendChild(store[i][1]);
-    }
-    store = null;
+  var tbl = document.getElementById("reqTable").tBodies[0];
+  var store = [];
+  for(var i=0, len=tbl.rows.length; i<len; i++){
+    var row = tbl.rows[i];
+    var sortnr = parseFloat(row.cells[0].textContent || row.cells[0].innerText);
+    if(!isNaN(sortnr)) store.push([sortnr, row]);
+  }
+  store.sort(function(x,y){
+    return x[0] - y[0];
+  });
+  for(var i=0, len=store.length; i<len; i++){
+    tbl.appendChild(store[i][1]);
+  }
+  store = null;
 }
 
 function sortTableByRow(rownumber){
-    var tbl = document.getElementById("reqTable").tBodies[0];
-    var store = [];
-    for(var i=0, len=tbl.rows.length; i<len; i++){
-        var row = tbl.rows[i];
-        var sortnr = parseFloat(row.cells[rownumber].textContent || row.cells[rownumber].innerText);
-        if(!isNaN(sortnr)) store.push([sortnr, row]);
-    }
-    store.sort(function(x,y){
-        return x[0] - y[0];
-    });
-    for(var i=0, len=store.length; i<len; i++){
-        tbl.appendChild(store[i][1]);
-    }
-    store = null;
+  var tbl = document.getElementById("reqTable").tBodies[0];
+  var store = [];
+  for(var i=0, len=tbl.rows.length; i<len; i++){
+    var row = tbl.rows[i];
+    var sortnr = parseFloat(row.cells[rownumber].textContent || row.cells[rownumber].innerText);
+    if(!isNaN(sortnr)) store.push([sortnr, row]);
+  }
+  store.sort(function(x,y){
+    return x[0] - y[0];
+  });
+  for(var i=0, len=store.length; i<len; i++){
+    tbl.appendChild(store[i][1]);
+  }
+  store = null;
 }
 
 function newSorting(rownr){
-    var $sort = this;
-    var $table = $('#reqTable');
-    var $rows = $('tbody > tr',$table);
-    $rows.sort(function(a, b){
-        var keyA = $('td:eq('+rownr+')',a).text();
-        var keyB = $('td:eq('+rownr+')',b).text();
-        if($($sort).hasClass('asc')){
-            return (keyA > keyB) ? 1 : 0;
-        } else {
-            return (keyA < keyB) ? 1 : 0;
-        }
-    });
-    $.each($rows, function(index, row){
-        $table.append(row);
-    });
-}
-
-/*
-for edit assets
- */
-
-function getAssetDefinition(props){
-    $('#Properties').find('tbody').empty();
-    var i = 0;
-    var textToInsert = [];
-    $.each(props, function(index, object) {
-        //fa-minus
-        if(object.value != "None") {
-
-            textToInsert[i++] = '<tr class="clickable-properties" ><td style="display:none;">';
-            textToInsert[i++] = object.id;
-            textToInsert[i++] = '</td>';
-
-            textToInsert[i++] = '<td>';
-            textToInsert[i++] = '<div class="fillparent deleteProperty"><i class="fa fa-minus"></i></div>';
-            textToInsert[i++] = '</td>';
-
-            textToInsert[i++] = '<td class="theAssetPropName" name="name">';
-            textToInsert[i++] = object.name;
-            textToInsert[i++] = '</td>';
-
-            textToInsert[i++] = '<td name="value">';
-            textToInsert[i++] = object.value;
-            textToInsert[i++] = '</td>';
-
-            textToInsert[i++] = '<td name="rationale">';
-            textToInsert[i++] = object.rationale;
-            textToInsert[i++] = '</td>';
-
-            textToInsert[i++] = '</tr>';
-        }
-     });
-    $('#Properties').find('tbody').append(textToInsert.join(''));
+  var $sort = this;
+  var $table = $('#reqTable');
+  var $rows = $('tbody > tr',$table);
+  $rows.sort(function(a, b){
+    var keyA = $('td:eq('+rownr+')',a).text();
+    var keyB = $('td:eq('+rownr+')',b).text();
+    if($($sort).hasClass('asc')){
+      return (keyA > keyB) ? 1 : 0;
+    } 
+    else {
+      return (keyA < keyB) ? 1 : 0;
+    }
+  });
+  $.each($rows, function(index, row){
+    $table.append(row);
+  });
 }
 
 function getImagedir(imageName){
-    return serverIP + "/images/"+ imageName;
+  return serverIP + "/images/"+ imageName;
 }
 
 function deepEquals(o1, o2) {
-    var k1 = Object.keys(o1).sort();
-    var k2 = Object.keys(o2).sort();
-    if (k1.length != k2.length) return false;
-    return k1.zip(k2, function(keyPair) {
-        if(typeof o1[keyPair[0]] == typeof o2[keyPair[1]] == "object"){
-            return deepEquals(o1[keyPair[0]], o2[keyPair[1]])
-        } else {
-            return o1[keyPair[0]] == o2[keyPair[1]];
-        }
-    }).all();
+  var k1 = Object.keys(o1).sort();
+  var k2 = Object.keys(o2).sort();
+  if (k1.length != k2.length) return false;
+  return k1.zip(k2, function(keyPair) {
+    if(typeof o1[keyPair[0]] == typeof o2[keyPair[1]] == "object"){
+      return deepEquals(o1[keyPair[0]], o2[keyPair[1]])
+    } 
+    else {
+      return o1[keyPair[0]] == o2[keyPair[1]];
+    }
+  }).all();
 }
 
 function showPopup(succes, text){
-    var popup = $('.popupMessage');
-    var time = 0;
-    popup.css("margin-left",$(document).width()/2);
+  var popup = $('.popupMessage');
+  var time = 0;
+  popup.css("margin-left",$(document).width()/2);
 
-    if(succes){
-        //just 5 seconds
-        time = 5000;
-        popup.css("width","175px");
-        popup.css("height","50px");
+  if(succes){
+    //just 5 seconds
+    time = 5000;
+    popup.css("width","175px");
+    popup.css("height","50px");
 
-        $(".Succes").show();
-        $(".Fail").hide();
-    }
-    else{
-        var charcount = text.length;
-        charcount = charcount/47;
-        time = 7000;
-        popup.css("width","350px");
-        popup.css("height",30*(charcount+1));
-        $(".Fail").show();
-        $(".Fail").find(".faultInfo").text(text);
-        $(".Succes").hide();
-    }
-    popup.show("slide", { direction: "down" },1500).delay(time).fadeOut("slow",function(){
-    });
+    $(".Succes").show();
+    $(".Fail").hide();
+  }
+  else{
+    var charcount = text.length;
+    charcount = charcount/47;
+    time = 7000;
+    popup.css("width","350px");
+    popup.css("height",30*(charcount+1));
+    $(".Fail").show();
+    $(".Fail").find(".faultInfo").text(text);
+    $(".Succes").hide();
+  }
+  popup.show("slide", { direction: "down" },1500).delay(time).fadeOut("slow",function(){
+  });
 }
-
-
-
 
 function deleteObject(dimName,objtName,deleteFn) {
   $.ajax({

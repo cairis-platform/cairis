@@ -95,9 +95,6 @@ $(document).on('click', "button.editGoalsButton",function() {
   getGoalOptions(name);
 });
 
-/*
- on environment in Goals edit
- */
 var mainContent = $("#objectViewer");
 mainContent.on('click', ".goalEnvProperties", function () {
   var goal = JSON.parse($.session.get("Goal"));
@@ -647,4 +644,54 @@ function appendGoalConcernAssoc(assoc){
 mainContent.on('click', '#closeGoalButton', function (e) {
   e.preventDefault();
   createEditGoalsTable();
+});
+
+function getAllgoals(callback) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/goals",
+    success: function (data) {
+      if (jQuery.isFunction(callback)) {
+        callback(data);
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      return null;
+    }
+  });
+}
+
+$(document).on('click', '.deleteGoalButton', function (e) {
+  e.preventDefault();
+  var goalName = $(this).val();
+  deleteObject('goal',goalName,function(goalName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/goals/name/" + goalName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        createEditGoalsTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  });
 });

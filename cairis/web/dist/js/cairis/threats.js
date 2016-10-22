@@ -372,8 +372,28 @@ mainContent.on('click', ".removeThreatProperty", function () {
 
 $(document).on('click', '.deleteThreatsButton', function (e) {
   e.preventDefault();
-  deleteThreat($(this).val(), function () {
-    createThreatsTable();
+  var threatName = $(this).val();
+  deleteObject('threat', threatName, function (threatName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/threats/name/" + threatName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        createThreatsTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
   });
 });
 

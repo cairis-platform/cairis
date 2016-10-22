@@ -162,12 +162,34 @@ mainContent.on('click','#UpdateRole', function (event) {
 
 $("#reqTable").on('click','.deleteRoleButton', function (event) {
   event.preventDefault();
-  var name = $(this).attr("value");
-  debugLogger("Delete: " + name + ".");
-  deleteRole( name, function () {
-    fillRolesTable();
+  var roleName = $(this).attr("value");
+  deleteObject('role',roleName,function(roleName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      data: roleName,
+      url: serverIP + "/api/roles/name/" + roleName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        fillRolesTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
   });
 });
+
+
+
 
 mainContent.on("click", '.roleEnvironmentClick', function () {
   $("#theCounterMeasures").find('tbody').empty();

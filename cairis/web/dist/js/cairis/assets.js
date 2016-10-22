@@ -702,3 +702,37 @@ function postAssetForm(data,callback){
   $.session.set("AssetName",assetName);
   postAsset(asobject,callback);
 }
+
+function getAssetDefinition(props){
+  $('#Properties').find('tbody').empty();
+  var i = 0;
+  var textToInsert = [];
+  $.each(props, function(index, object) {
+    //fa-minus
+    if(object.value != "None") {
+      textToInsert[i++] = '<tr class="clickable-properties" ><td style="display:none;">';
+      textToInsert[i++] = object.id;
+      textToInsert[i++] = '</td>';
+
+      textToInsert[i++] = '<td>';
+      textToInsert[i++] = '<div class="fillparent deleteProperty"><i class="fa fa-minus"></i></div>';
+      textToInsert[i++] = '</td>';
+
+      textToInsert[i++] = '<td class="theAssetPropName" name="name">';
+      textToInsert[i++] = object.name;
+      textToInsert[i++] = '</td>';
+
+      textToInsert[i++] = '<td name="value">';
+      textToInsert[i++] = object.value;
+      textToInsert[i++] = '</td>';
+
+      textToInsert[i++] = '<td name="rationale">';
+      textToInsert[i++] = object.rationale;
+      textToInsert[i++] = '</td>';
+
+      textToInsert[i++] = '</tr>';
+    }
+  });
+  $('#Properties').find('tbody').append(textToInsert.join(''));
+}
+
