@@ -2098,7 +2098,7 @@ function deleteObject(dimName,objtName,deleteFn) {
     url: serverIP + "/api/object_dependency/dimension/" + dimName + "/object/" + objtName.replace(" ", "%20"),
     success: function (data) {
       if (data['theDependencies'].length == 0) {
-        deleteFn(dimName,objtName);
+        deleteFn(objtName);
       }
       else {
         $("#objectDependencyTable").find("tbody").empty();

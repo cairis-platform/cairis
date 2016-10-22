@@ -510,52 +510,50 @@ $(document).on('click', "#addNewAsset",function(){
 });
 
 $(document).on('click', "button.deleteAssetButton",function(){
-  var dimName = 'asset';
-  var name = $(this).attr("value");
-  deleteObject(dimName,name,deleteAsset);
-});
+  var assetName = $(this).attr("value");
+  deleteObject('asset',assetName, function(assetName) {
 
-function deleteAsset(assetName) {
-  $.ajax({
-    type: "DELETE",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID')),
-      name: assetName
-    },
-    crossDomain: true,
-    url: serverIP + "/api/assets/name/" + assetName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
-    success: function (data) {
-      $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-          session_id: String($.session.get('sessionID'))
-        },
-        crossDomain: true,
-        url: serverIP + "/api/assets",
-        success: function (data) {
-          window.activeTable = "Assets";
-          setTableHeader();
-          createAssetsTable(data, function(){
-            newSorting(1);
-          });
-          activeElement("reqTable");
-        },
-        error: function (xhr, textStatus, errorThrown) {
-          debugLogger(String(this.url));
-          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-      });
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID')),
+        name: assetName
+      },
+      crossDomain: true,
+      url: serverIP + "/api/assets/name/" + assetName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        $.ajax({
+          type: "GET",
+          dataType: "json",
+          accept: "application/json",
+          data: {
+            session_id: String($.session.get('sessionID'))
+          },
+          crossDomain: true,
+          url: serverIP + "/api/assets",
+          success: function (data) {
+            window.activeTable = "Assets";
+            setTableHeader();
+            createAssetsTable(data, function(){
+              newSorting(1);
+            });
+            activeElement("reqTable");
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+          }
+        });
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
   });
-}
+});
 
 mainContent.on("click", "#addNewProperty", function(){
   $("#editAssetsOptionsform").hide();

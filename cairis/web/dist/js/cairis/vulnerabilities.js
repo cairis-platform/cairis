@@ -249,10 +249,28 @@ mainContent.on('click', '#UpdateVulnerability', function (e) {
 
 $("#reqTable").on('click','.deleteVulnerabilityButton', function (event) {
   event.preventDefault();
-  var name = $(this).attr("value");
-  debugLogger("Delete: " + name + ".");
-  deleteVulnerability( name, function () {
-    createVulnerabilityTable();
+  var vulName = $(this).attr("value");
+  deleteObject('vulnerability',vulName,function(vulName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/vulnerabilities/name/" + vulName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        createVulnerabilityTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
   });
 });
 
