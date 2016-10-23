@@ -17,8 +17,6 @@
 
 
 from cairis.core.Borg import Borg
-from cairis.gui.kaosxdot import KaosXDotParser
-from cairis.gui.componentxdot import ComponentXDotParser
 import cairo
 import pangocairo
 from cairis.gui.ConceptMapModel import ConceptMapModel
@@ -75,6 +73,7 @@ def drawGraph(graph,graphName):
   os.system(cmd2)
 
 def buildConceptMap(p,envName,graphName):
+  from cairis.gui.kaosxdot import KaosXDotParser
   model = ConceptMapModel(p.conceptMapModel(envName).values(),envName,'',True)
   if (model.size() == 0):
     return False
@@ -176,6 +175,7 @@ def exportGRL(outFileName,personaNames,taskNames,envName,session_id = None):
   return 'Exported GRL for ' + pStr + ' in tasks ' + tStr + ' situated in environment ' + envName
 
 def buildComponentModel(p,apName,graphName):
+  from cairis.gui.componentxdot import ComponentXDotParser
   interfaces,connectors = p.componentView(apName)
   model = ComponentModel(interfaces,connectors)
   parser = ComponentXDotParser(model.graph())
@@ -184,6 +184,7 @@ def buildComponentModel(p,apName,graphName):
   return True
 
 def buildComponentAssetModel(p,cName,graphName):
+  from cairis.gui.kaosxdot import KaosXDotParser
   assocs = p.componentAssetModel(cName)
   model = AssetModel(assocs.values(),'')
   parser = KaosXDotParser('class',model.graph())
@@ -192,6 +193,7 @@ def buildComponentAssetModel(p,cName,graphName):
   return True
 
 def buildComponentGoalModel(p,cName,graphName):
+  from cairis.gui.kaosxdot import KaosXDotParser
   assocs = p.componentGoalModel(cName)
   model = KaosModel(assocs.values(),'','template_goal')
   parser = KaosXDotParser('goal',model.graph())
@@ -200,6 +202,7 @@ def buildComponentGoalModel(p,cName,graphName):
   return True
 
 def buildRiskObstacleModel(p,apName,envName,graphName):
+  from cairis.gui.kaosxdot import KaosXDotParser
   assocs = p.riskObstacleModel(apName,envName)
   model = KaosModel(assocs.values(),envName,'obstacle',apName)
   parser = KaosXDotParser('obstacle',model.graph())
