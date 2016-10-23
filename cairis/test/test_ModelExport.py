@@ -19,7 +19,7 @@ import unittest
 import os
 import logging
 from cairis.mio.ModelImport import importTVTypeFile,importModelFile,importAttackPattern,importComponentViewFile,importDirectoryFile
-from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineRequirements,exportRedmineUseCases,exportArchitecture,exportAttackPatterns
+from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineRequirements,exportRedmineUseCases
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 
@@ -67,11 +67,11 @@ class ModelExportTests(unittest.TestCase):
     self.assertEqual(os.path.isfile(outFile),True)
 
   def testExportArchitecture(self):
-    outFile = '/tmp/exportedArchitecture.txt'
-    self.assertEqual(exportArchitecture(outFile),'Exported 7 architectural patterns.')
-    self.assertEqual(os.path.isfile(outFile),True)
+    b = Borg()
+    b.dbProxy.redmineArchitecture()
+    b.dbProxy.redmineArchitectureSummary('Complete')
 
   def testExportAttackPatterns(self):
-    outFile = '/tmp/exportedAttackPatterns.txt'
-    self.assertEqual(exportAttackPatterns(outFile),'Exported 0 attack patterns.')
-    self.assertEqual(os.path.isfile(outFile),True)
+    b = Borg()
+    b.dbProxy.redmineAttackPatterns()
+    b.dbProxy.redmineAttackPatternsSummary('Complete')
