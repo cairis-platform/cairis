@@ -23,7 +23,6 @@ addons:
     - docbook-utils
     - inkscape
     - python-gtk2 
-    - python-wxglade 
     - python-glade2 
 
 env:
