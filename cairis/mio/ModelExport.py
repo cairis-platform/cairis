@@ -17,10 +17,6 @@
 
 
 from cairis.core.Borg import Borg
-from cairis.gui.ConceptMapModel import ConceptMapModel
-from cairis.gui.ComponentModel import ComponentModel
-from cairis.gui.AssetModel import AssetModel
-from cairis.gui.KaosModel import KaosModel
 import os
 import re
 
@@ -74,6 +70,7 @@ def drawGraph(graph,graphName):
 
 def buildConceptMap(p,envName,graphName):
   from cairis.gui.kaosxdot import KaosXDotParser
+  from cairis.gui.ConceptMapModel import ConceptMapModel
   model = ConceptMapModel(p.conceptMapModel(envName).values(),envName,'',True)
   if (model.size() == 0):
     return False
@@ -176,6 +173,7 @@ def exportGRL(outFileName,personaNames,taskNames,envName,session_id = None):
 
 def buildComponentModel(p,apName,graphName):
   from cairis.gui.componentxdot import ComponentXDotParser
+  from cairis.gui.ComponentModel import ComponentModel
   interfaces,connectors = p.componentView(apName)
   model = ComponentModel(interfaces,connectors)
   parser = ComponentXDotParser(model.graph())
@@ -185,6 +183,7 @@ def buildComponentModel(p,apName,graphName):
 
 def buildComponentAssetModel(p,cName,graphName):
   from cairis.gui.kaosxdot import KaosXDotParser
+  from cairis.gui.AssetModel import AssetModel
   assocs = p.componentAssetModel(cName)
   model = AssetModel(assocs.values(),'')
   parser = KaosXDotParser('class',model.graph())
@@ -194,6 +193,7 @@ def buildComponentAssetModel(p,cName,graphName):
 
 def buildComponentGoalModel(p,cName,graphName):
   from cairis.gui.kaosxdot import KaosXDotParser
+  from cairis.gui.KaosModel import KaosModel
   assocs = p.componentGoalModel(cName)
   model = KaosModel(assocs.values(),'','template_goal')
   parser = KaosXDotParser('goal',model.graph())
@@ -203,6 +203,7 @@ def buildComponentGoalModel(p,cName,graphName):
 
 def buildRiskObstacleModel(p,apName,envName,graphName):
   from cairis.gui.kaosxdot import KaosXDotParser
+  from cairis.gui.KaosModel import KaosModel
   assocs = p.riskObstacleModel(apName,envName)
   model = KaosModel(assocs.values(),envName,'obstacle',apName)
   parser = KaosXDotParser('obstacle',model.graph())
