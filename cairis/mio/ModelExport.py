@@ -17,8 +17,6 @@
 
 
 from cairis.core.Borg import Borg
-import cairo
-import pangocairo
 from cairis.gui.ConceptMapModel import ConceptMapModel
 from cairis.gui.ComponentModel import ComponentModel
 from cairis.gui.AssetModel import AssetModel
@@ -40,6 +38,8 @@ def listToString(l):
   return s
 
 def drawGraph(graph,graphName):
+  import cairo
+  import pangocairo
   b = Borg()
   tmpDir = b.tmpDir
   outputDir = os.environ['OUTPUT_DIR']
