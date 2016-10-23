@@ -25,5 +25,8 @@ grant all privileges on `arm`.* to 'irisuser'@'%';
 grant all privileges on `flaskdb`.* to 'flaskuser'@'%';
 set global max_sp_recursion_depth = 255;
 
+alter database arm default character set utf8;
+alter database arm default collate utf8_general_ci;
+
 flush tables;
 flush privileges;
