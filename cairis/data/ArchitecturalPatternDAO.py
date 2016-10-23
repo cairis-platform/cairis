@@ -38,12 +38,12 @@ class ArchitecturalPatternDAO(CairisDAO):
         ap['theName'] = cvs[cvKey].name()
         ap['theSynopsis'] = cvs[cvKey].synopsis()
         ap['theComponents'] = []
-        for c in cvs[cvKey].components():
+        for co in cvs[cvKey].components():
           fComp = {}
-          fComp['theName'] = c.name()
-          fComp['theDescription'] = c.description()
+          fComp['theName'] = co.name()
+          fComp['theDescription'] = co.description()
           fComp['theInterfaces'] = []
-          for ci in c.interfaces():
+          for ci in co.interfaces():
             fci = {}
             fci['theInterfaceName'] = ci[0]
             fci['theInterfaceType'] = ci[1]
@@ -51,7 +51,7 @@ class ArchitecturalPatternDAO(CairisDAO):
             fci['theProtocol'] = ci[3]
             fComp['theInterfaces'].append(fci)
           fComp['theStructure'] = []
-          for cs in c.structure():
+          for cs in co.structure():
             fcs = {}
             fcs['theHeadAsset'] = cs[0]
             fcs['theHeadAssetType'] = cs[1]
@@ -64,10 +64,10 @@ class ArchitecturalPatternDAO(CairisDAO):
             fcs['theTailAssetType'] = cs[8]
             fcs['theTailAsset'] = cs[9]
             fComp['theStructure'].append(fcs)
-          fComp['theRequirements'] = c.requirements()
-          fComp['theGoals'] = c.goals()
+          fComp['theRequirements'] = co.requirements()
+          fComp['theGoals'] = co.goals()
           fComp['theGoalAssociations'] = []
-          for cga in c.associations():
+          for cga in co.associations():
             fcga = {}
             fcga['theHeadGoal'] = cga[0] 
             fcga['theRefType'] = cga[1] 
@@ -76,20 +76,20 @@ class ArchitecturalPatternDAO(CairisDAO):
             fComp['theGoalAssociations'].append(fcga) 
           ap['theComponents'].append(fComp)
         ap['theConnectors'] = []
-        for c in cvs[cvKey].connectors():
+        for cn in cvs[cvKey].connectors():
           fConn = {} 
-          fConn['theConnectorName'] = c[0]
-          fConn['theFromComponent'] = c[1]
-          fConn['theFromRole'] = c[2]
-          fConn['theFromInterface'] = c[3]
-          fConn['theToComponent'] = c[4]
-          fConn['theToInterface'] = c[5]
-          fConn['theToRole'] = c[6]
-          fConn['theAssetName'] = c[7]
-          fConn['theProtocolName'] = c[8]
-          fConn['theAccessRightName'] = c[9]
-          ap['theConnectors'].append(fComp)
-        ap['theAttackSurfaceMetric'] = cvs[cvKey].attackSurfaceMetric()
+          fConn['theConnectorName'] = cn[0]
+          fConn['theFromComponent'] = cn[1]
+          fConn['theFromRole'] = cn[2]
+          fConn['theFromInterface'] = cn[3]
+          fConn['theToComponent'] = cn[4]
+          fConn['theToInterface'] = cn[5]
+          fConn['theToRole'] = cn[6]
+          fConn['theAssetName'] = cn[7]
+          fConn['theProtocolName'] = cn[8]
+          fConn['theAccessRightName'] = cn[9]
+          ap['theConnectors'].append(fConn)
+        ap['theAttackSurfaceMetric'] = list(cvs[cvKey].attackSurfaceMetric())
         fakeAPs.append(ap)
       return fakeAPs
     except DatabaseProxyException as ex:

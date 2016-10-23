@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE directory PUBLIC "-//CAIRIS/DTD DIRECTORY 1.0//EN" "http://cairis.org/dtd/directory.dtd">
+
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<!-- Threats and vulnerabilities new to D2.8 -->
+
+<directory>
+<vulnerability label="Automatic login" name="Automatic login" type="Configuration Vulnerability" reference="D2.8">
+  <description>With automatic login enabled, anyone can authenticate himlself as the default user.</description>
+</vulnerability>
+<vulnerability label="Cloud hosted PZH" name="Cloud hosted PZH" type="Environmental Vulnerability" reference="D2.8">
+  <description>Vulnerabilities associated with the virtual appliance hosting a PZH also affect the PZH.</description>
+</vulnerability>
+<vulnerability label="Improper privacy protection" name="Improper privacy protection" type="Sensitive Data Protection Vulnerability" reference="D2.8">
+  <description>Sensitive data do not have more protection than other data.</description>
+</vulnerability>
+<vulnerability label="Improper timeout" name="Improper timeout" type="Session Management Vulnerability" reference="D2.8">
+  <description>The session is not automatically closed after a reasonable period of inactivity.</description>
+</vulnerability>
+<vulnerability label="Lack of data provenance" name="Lack of data provenance" type="Sensitive Data Protection Vulnerability" reference="D2.8">
+  <description>An attacker can abuse the lack of provenance associated with context and event data to bypass policy enforcement mechanisms.</description>
+</vulnerability>
+<vulnerability label="Permissive convergence preferences" name="Permissive convergence preferences" type="Obscuring potential information flow" reference="D2.8">
+  <description>Permissive convergence preferences might be unintentionally linkable to other webinos applications.</description>
+</vulnerability>
+<vulnerability label="Weak credential" name="Weak credential" type="Authentication Vulnerability" reference="D2.8">
+  <description>A weak credential may be easily broken by an attacker.</description>
+</vulnerability>
+<vulnerability label="Weak cryptography" name="Weak cryptography" type="Cryptographic Vulnerability" reference="D2.8">
+  <description>Data is encrypted using a weak cryptographical algorithm.</description>
+</vulnerability>
+<vulnerability label="System data trust" name="System data trust" type="Environmental Vulnerability" reference="D2.8">
+  <description>Security based on event locations is insecure and can be spoofed.</description>
+</vulnerability>
+
+<threat label="Asymmetric resource consumption" name="Asymmetric resource consumption" type="Resource Depletion" reference="D2.8">
+  <description>The attacker forces the victim to consume more resources than it should be allowed.</description>
+</threat>
+<threat label="Autologin abuse" name="Autologin abuse" type="Exploitation of Authentication" reference="D2.8">
+  <description>If the autologin is enabled, an attacker can authenticate himself as the default user.</description>
+</threat>
+<threat label="NFC replay attack" name="NFC replay attack" type="Abuse of Functionality" reference="D2.8">
+  <description>Using a ghost and leech device, an attack forwards a request to the victim's reader device and relays the answer back in real time via a webinos overlay network.</description>
+</threat>
+<threat label="Session hijacking" name="Session hijacking" type="Exploitation of Authentication" reference="D2.8">
+  <description>The attack exploits the web session control mechanism to hijack the user session.</description>
+</threat>
+</directory>

@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!DOCTYPE attack_pattern PUBLIC "-//CAIRIS//DTD ATTACKPATTERN 1.0//EN" "http://cairis.org/dtd/attack_pattern.dtd">
+
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+
+<attack_pattern name="Request footprinting" likelihood="Occasional" severity="Critical"> 
+
+  <obstacle name="Eavesdrop access requests" category="Confidentiality_Threat" >
+    <definition>Eavesdrop access requests</definition>
+  </obstacle>
+  <obstacle name="Eavesdrop request enforcement channel" category="Confidentiality_Threat" >
+    <definition>Eavesdrop access request enforcement channel.</definition>
+  </obstacle>
+  <obstacle name="Eavesdrop Context Manager" category="Confidentiality_Threat" >
+    <definition>Eavesdrop use of policy management in context manager</definition>
+  </obstacle>
+  <obstacle name="Eavesdrop Policy Manager" category="Confidentiality_Threat" >
+    <definition>Eavesdrop software making use of the Policy Manager</definition>
+    <concern name="Access Requestor" />
+  </obstacle>
+  <obstacle name="Eavesdrop RPC Call Log" category="Confidentiality_Threat" >
+    <definition>Eavesdrop logged use of policy management in RPC call log</definition>
+    <concern name="RPC Call Log" />
+  </obstacle>
+  <obstacle name="Eavesdrop Context Database" category="Confidentiality_Threat" >
+    <definition>Eavesdrop use of policy management in Context Database</definition>
+    <concern name="Context DB Instance" />
+  </obstacle>
+
+  <obstacle name="Missing XML document validation" category="Vulnerability" >
+    <definition>XML document does not contain a validating DTD or schema</definition>
+  </obstacle>
+  <obstacle name="Missing Access Request validation" category="Vulnerability" >
+    <definition>XML representation of access request contains no validating DTD or schema.</definition>
+    <concern name="Access Request" />
+    <responsibility name="Developer of webinos Platform" />
+  </obstacle>
+  <obstacle name="Missing Policy file validation" category="Vulnerability" >
+    <definition>Policy file contains no validating DTD or schema</definition>
+    <concern name="Policy File" />
+    <responsibility name="Developer of webinos Platform" />
+  </obstacle>
+
+  <intent>Glean an understanding of what resources are available on a device by eavesdropping on requests.</intent> 
+  <motivation goal="confidentiality" value="Low"> 
+    <description>Ethan wants to get a better understanding of what resources are under policy control.</description>
+  </motivation>
+  <applicability environment="Complete" />
+  <structure attack="Network Eavesdropping" attack_obstacle="Eavesdrop request enforcement channel" exploit="Missing XML Validation" exploit_obstacle="Missing XML document validation" /> 
+  <participant name="Ethan">
+    <motive name="System resource theft" />
+    <capability name="Technology" value="Medium" />
+    <capability name="Software" value="Medium" />
+    <capability name="Knowledge/Methods" value="Medium" />
+  </participant>
+  <collaboration>
+    <target name="Application Data" /> 
+    <exploit name="Application Data" />
+  </collaboration>
+  <consequences>Impact of attack</consequences>
+  <implementation>
+    <description>Ethan eavesdrop on traffic to and from the policy manager to find possible policy management vulnerabilities.</description>
+
+    <obstacle_association obstacle_name="Missing XML document validation" ref_type="or" subobstacle_name="Missing Access Request validation">
+      <rationale>No evidence of validation in the current policy manager implementation.</rationale>
+    </obstacle_association>
+    <obstacle_association obstacle_name="Missing XML document validation" ref_type="or" subobstacle_name="Missing policy file validation">
+      <rationale>No evidence of validation in the current policy manager implementation.</rationale>
+    </obstacle_association>
+    <obstacle_association obstacle_name="Eavesdrop access requests" ref_type="or" subobstacle_name="Eavesdrop request enforcement channel">
+      <rationale></rationale>
+    </obstacle_association>
+    <obstacle_association obstacle_name="Eavesdrop access requests" ref_type="or" subobstacle_name="Eavesdrop Policy Manager">
+      <rationale></rationale>
+    </obstacle_association>
+    <obstacle_association obstacle_name="Eavesdrop access requests" ref_type="or" subobstacle_name="Eavesdrop Context Manager">
+      <rationale></rationale>
+    </obstacle_association>
+    <obstacle_association obstacle_name="Eavesdrop Context Manager" ref_type="or" subobstacle_name="Eavesdrop RPC Call Log">
+      <rationale></rationale>
+    </obstacle_association>
+    <obstacle_association obstacle_name="Eavesdrop Context Manager" ref_type="or" subobstacle_name="Eavesdrop Context Database">
+      <rationale></rationale>
+    </obstacle_association>
+  </implementation>
+  <known_uses>None</known_uses>
+  <related_patterns>None</related_patterns>
+</attack_pattern>

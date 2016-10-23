@@ -44,5 +44,7 @@ class ObjectDependencyAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     aps = jsonpickle.decode(rv.data)
     ap = aps[0]
+    import pytest
+    pytest.set_trace()
     self.assertIsInstance(ap, dict, 'Response is not a valid JSON object')
     self.assertEqual(ap['theName'],'Context Policy Management')
