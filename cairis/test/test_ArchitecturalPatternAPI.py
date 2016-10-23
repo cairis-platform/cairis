@@ -27,7 +27,7 @@ from cairis.mio.ModelImport import importModelFile, importComponentViewFile
 __author__ = 'Shamal Faily'
 
 
-class ObjectDependencyAPITests(CairisDaemonTestCase):
+class ArchitecturalPatternAPITests(CairisDaemonTestCase):
 
   def setUp(self):
     # region Class fields
