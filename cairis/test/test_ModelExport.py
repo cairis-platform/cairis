@@ -19,7 +19,7 @@ import unittest
 import os
 import logging
 from cairis.mio.ModelImport import importTVTypeFile,importModelFile,importAttackPattern,importComponentViewFile,importDirectoryFile
-from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineRequirements,exportRedmineUseCases
+from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineUseCases
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 
@@ -57,9 +57,8 @@ class ModelExportTests(unittest.TestCase):
     self.assertEqual(os.path.isfile(outFile),True)
 
   def testExportRedmineRequirements(self):
-    outFile = '/tmp/exportedRequirements.txt'
-    self.assertEqual(exportRedmineRequirements(outFile),'Exported requirements')
-    self.assertEqual(os.path.isfile(outFile),True)
+    b = Borg()
+    b.dbProxy.getRedmineRequirements()
 
   def testExportRedmineUseCases(self):
     outFile = '/tmp/exportedUseCases.txt'
