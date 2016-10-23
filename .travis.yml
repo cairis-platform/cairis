@@ -25,6 +25,7 @@ addons:
     - python-gtk2 
     - python-glade2 
     - python-gobject
+    - gobject-introspection
 
 env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog
