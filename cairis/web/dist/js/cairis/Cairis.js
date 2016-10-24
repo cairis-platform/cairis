@@ -1561,6 +1561,10 @@ function setTableHeader(){
       debugLogger("Is Persona Characteristics");
       thead = "<th width='120px' id='addNewPersonaCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Variable</th><th>Characteristic</th>";
       break;
+    case "ArchitecturalPatterns":
+      debugLogger("Is Architectural Patterns");
+      thead = "<th width='120px' id='addNewArchitecturalPattern'><i class='fa fa-plus floatCenter'></i></th><th>Model</th><th>Interfaces DER</th><th>Channels DER</th><th>Untrusted Surface DES</th>";
+      break;
   }
   $("#reqTable").find("thead").empty();
   $("#reqTable").find("thead").append(thead);
