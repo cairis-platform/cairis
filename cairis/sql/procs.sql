@@ -10056,10 +10056,8 @@ create procedure deleteSecurityPatternComponents(in patternId int)
 begin
   if patternId = -1
   then
-    delete from securitypattern_requirement;
     delete from securitypattern_classassociation;
   else
-    delete from securitypattern_requirement where pattern_id = patternId;
     delete from securitypattern_classassociation where pattern_id = patternId;
   end if;
 end
