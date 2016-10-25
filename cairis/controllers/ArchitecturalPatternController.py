@@ -60,3 +60,44 @@ class ArchitecturalPatternsAPI(Resource):
     resp = make_response(json_serialize(aps, session_id=session_id), httplib.OK)
     resp.contenttype = 'application/json'
     return resp
+
+class ArchitecturalPatternByNameAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get architectural patterns',
+    nickname='architectural-patterns-get',
+    responseClass=str.__name__,
+    parameters=[
+      {
+        'name': 'name',
+        'description': 'Architectural pattern name',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      },
+      {
+        'name': 'session_id',
+        'description': 'The ID of the session to use',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'The database connection was not properly setup'
+      },
+    ]
+  )
+  # endregion
+  def get(self,name):
+    session_id = get_session_id(session, request)
+    dao = ArchitecturalPatternDAO(session_id)
+    ap = dao.get_architectural_pattern(name)
+    dao.close()
+    resp = make_response(json_serialize(ap, session_id=session_id), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp

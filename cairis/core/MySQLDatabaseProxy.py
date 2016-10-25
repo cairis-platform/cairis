@@ -3917,157 +3917,54 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting task countermeasure load with environment id ' + str(taskId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def environmentAssets(self,envName):
+  def environmentDimensions(self,dimension,envName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call assetNames(%s)',[envName])
+      curs.execute('call ' + dimension + 'Names(%s)',[envName])
       if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining assets for environment ' + envName
+        exceptionText = 'Error obtaining ' + dimension + 's for environment ' + envName
         raise DatabaseProxyException(exceptionText) 
       else:
-        assets = []
+        dims = []
         for row in curs.fetchall():
           row = list(row)
-          assets.append(row[0])
+          dims.append(row[0])
         curs.close()
-        return assets
+        return dims
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL error getting assets associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'MySQL error getting ' + dimension + 's associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def environmentAssets(self,envName):
+    return environmentDimensions('asset',envName)
 
   def environmentGoals(self,envName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call goalNames(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining goals for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        goals = []
-        for row in curs.fetchall():
-          row = list(row)
-          goals.append(row[0])
-        curs.close()
-        return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goals associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return environmentDimensions('goal',envName)
 
   def environmentObstacles(self,envName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call obstacleNames(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining obstacles for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        obstacles = []
-        for row in curs.fetchall():
-          row = list(row)
-          obstacles.append(row[0])
-        curs.close()
-        return obstacles 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting obstacles associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return environmentDimensions('obstacle',envName)
 
   def environmentDomainProperties(self,envName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call domainPropertyNames(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining domain properties for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        goals = []
-        for row in curs.fetchall():
-          row = list(row)
-          goals.append(row[0])
-        curs.close()
-        return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting domain properties associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return environmentDimensions('domainProperty',envName)
 
   def environmentCountermeasures(self,envName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call countermeasureNames(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining countermeasures for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        goals = []
-        for row in curs.fetchall():
-          row = list(row)
-          goals.append(row[0])
-        curs.close()
-        return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting countermeasures associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return environmentDimensions('countermeasure',envName)
 
   def environmentTasks(self,envName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call taskNames(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining tasks for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        goals = []
-        for row in curs.fetchall():
-          row = list(row)
-          goals.append(row[0])
-        curs.close()
-        return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting tasks associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return environmentDimensions('task',envName)
 
   def environmentThreats(self,envName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call threatNames(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining threats for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        goals = []
-        for row in curs.fetchall():
-          row = list(row)
-          goals.append(row[0])
-        curs.close()
-        return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting threats associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return environmentDimensions('threat',envName)
 
   def environmentVulnerabilities(self,envName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call vulnerabilityNames(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining vulnerabilities for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        goals = []
-        for row in curs.fetchall():
-          row = list(row)
-          goals.append(row[0])
-        curs.close()
-        return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting vulnerabilities associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return environmentDimensions('vulnerability',envName)
+
+  def environmentUseCases(self,envName):
+    return environmentDimensions('usecase',envName)
+
+  def environmentMisuseCases(self,envName):
+    return environmentDimensions('misusecase',envName)
 
   def goalModelElements(self,envName):
     try:
@@ -5317,9 +5214,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting customisable values for ' + dimName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
-
-  def deleteCapability(self,objtId):
-    self.deleteObject(objtId,'capability')
 
   def deleteCapability(self,objtId):
     self.deleteObject(objtId,'capability')
@@ -7225,44 +7119,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.deleteObject(ucId,'usecase')
     self.conn.commit()
 
-  def environmentUseCases(self,envName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call usecaseNames(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining use cases for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        goals = []
-        for row in curs.fetchall():
-          row = list(row)
-          goals.append(row[0])
-        curs.close()
-        return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting use cases associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
-  def environmentMisuseCases(self,envName):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call misusecaseNames(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining misuse cases for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        mcs = []
-        for row in curs.fetchall():
-          row = list(row)
-          mcs.append(row[0])
-        curs.close()
-        return mcs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting misuse cases associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
   def riskModel(self,environmentName,riskName):
     try:
       curs = self.conn.cursor()
@@ -8548,29 +8404,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL exporting domain values to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
-  def redmineTempGoals(self):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('select originator,environment,priority,definition,fit_criterion from redmine_goal order by 2,1')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error selecting interim redmine goals'
-        raise DatabaseProxyException(exceptionText) 
-      rows = []
-      for row in curs.fetchall():
-        row = list(row)
-        orig = row[0]
-        env = row[1]
-        pri = row[2] 
-        defn = row[3]
-        fc = row[4]
-        rows.append((orig,env,pri,defn,fc))
-      curs.close()
-      return rows 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL selecting interim redmine goals (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def clearDatabase(self,session_id = None):

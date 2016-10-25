@@ -39,5 +39,8 @@ class ModelTests(unittest.TestCase):
     b.get_dbproxy().obstacleModel('Psychosis')
     b.get_dbproxy().taskModel('Psychosis')
     b.get_dbproxy().riskAnalysisModel('Psychosis')
+    b.get_dbproxy().riskAnalysisModel('Psychosis','risk','Unauthorised Certificate Access')
     b.get_dbproxy().assumptionPersonaModel('Claire')
+    b.get_dbproxy().textualArgumentationModel('Claire','Activities')
+    
 

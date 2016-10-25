@@ -46,3 +46,13 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     ap = aps[0]
     self.assertIsInstance(ap, dict, 'Response is not a valid JSON object')
     self.assertEqual(ap['theName'],'Context Policy Management')
+
+  def test_architectural_pattern_get(self):
+    url = '/api/architectural_patterns/name/Context%20Policy%20Management?session_id=test'
+    method = 'test_architectural_pattern_get'
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    ap = jsonpickle.decode(rv.data)
+    self.assertIsInstance(ap, dict, 'Response is not a valid JSON object')
+    self.assertEqual(ap['theName'],'Context Policy Management')
