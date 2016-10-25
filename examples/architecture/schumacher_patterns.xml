@@ -22,7 +22,43 @@
 
 
 <security_patterns>
-<asset name="PFFirewall" short_code ="PFF" type = "Software">
+
+<access_right name="trusted" value="10">
+  <description>None</description>
+  <rationale>None</rationale>
+</access_right>
+<access_right name="authenticated" value="5">
+  <description>None</description>
+  <rationale>None</rationale>
+</access_right>
+<access_right name="anonymous" value="1">
+  <description>None</description>
+  <rationale>None</rationale>
+</access_right>
+
+<surface_type name="JSON" value="10">
+  <description>None</description>
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Unconstrained XML" value="5">
+  <description>None</description>
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Constrained XML" value="1">
+  <description>None</description>
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Client application" value="10">
+  <description>None</description>
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Privileged application" value="1">
+  <description>None</description>
+  <rationale>None</rationale>
+</surface_type>
+
+
+<asset name="PFFirewall" short_code ="PFF" type = "Software" access_right="trusted" surface_type="Privileged application">
   <description>Intercepts all traffic coming and going from a port P and inspects its packets.</description>
   <significance>Effectiveness and speed may be limited due to its rule set.  Can only enforce traffic going through the firewall.  Can't stop attacks at anything higher than an IP level.  Performance impact due to analysing each and every packet.</significance>
   <security_property property="integrity" value="Medium">
@@ -32,7 +68,7 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="RuleBase" short_code ="FRB" type = "Software">
+<asset name="RuleBase" short_code ="FRB" type = "Software" access_right="trusted" surface_type="JSON">
   <description>Encapsulates data structures and operations to manage rules in a conventional way.</description>
   <significance>Addition of new rules may interfere with existing rules, so a careful approach should be taken in adding and updating access rules.</significance>
   <security_property property="integrity" value="Medium">
@@ -42,22 +78,22 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="Rule" short_code ="FR" type = "Information">
+<asset name="Rule" short_code ="FR" type = "Information" access_right="trusted" surface_type="JSON">
   <description>Encapsulates organisational policy.</description>
   <significance>None</significance>
   <security_property property="availability" value="High">
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="ExternalHost" short_code ="EH" type = "Systems">
+<asset name="ExternalHost" short_code ="EH" type = "Systems" access_right="trusted" surface_type="Privileged application">
   <description>External Host interface</description>
   <significance>None</significance>
 </asset>
-<asset name="LocalHost" short_code ="LH" type = "Systems">
+<asset name="LocalHost" short_code ="LH" type = "Systems" access_right="trusted" surface_type="Privileged application">
   <description>Local Host interface</description>
   <significance>None</significance>
 </asset>
-<asset name="Proxy-Based Firewall" short_code = "PBF" type = "Systems">
+<asset name="Proxy-Based Firewall" short_code = "PBF" type = "Systems" access_right="trusted" surface_type="Privileged application">
   <description>Inspects and filters incoming and outgoing network traffic based on the type of application service to be accessed, or performing the access.</description>
   <significance>None</significance>
   <security_property property="integrity" value="Medium">
@@ -67,15 +103,15 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="Service" short_code ="GS" type = "Software">
+<asset name="Service" short_code ="GS" type = "Software" access_right="trusted" surface_type="Privileged application">
   <description>Service interface</description>
   <significance>None</significance>
 </asset>
-<asset name="Proxy" short_code ="GP" type = "Software">
+<asset name="Proxy" short_code ="GP" type = "Software" access_right="trusted" surface_type="Privileged application">
   <description>Proxy interface</description>
   <significance>None</significance>
 </asset>
-<asset name="Stateful Firewall" short_code ="SFF" type = "Systems">
+<asset name="Stateful Firewall" short_code ="SFF" type = "Systems" access_right="trusted" surface_type="Privileged application">
   <description>Filters incoming and outgoing network traffic in a computer system based on state information derived from past communications.</description>
   <significance>None</significance>
   <security_property property="integrity" value="Medium">
@@ -85,7 +121,7 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="State Table" short_code ="SFT" type = "Information">
+<asset name="State Table" short_code ="SFT" type = "Information" access_right="trusted" surface_type="Privileged application">
   <description>Describes existing network connections.</description>
   <significance>None</significance>
   <security_property property="integrity" value="High">
@@ -95,7 +131,7 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="Client browser" short_code = "GCB" type = "Software">
+<asset name="Client browser" short_code = "GCB" type = "Software" access_right="trusted" surface_type="Privileged application">
   <description>Vanilla web-browser used by end-user.</description>
   <significance>None</significance>
   <security_property property="integrity" value="Medium">
@@ -105,7 +141,7 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="External router" short_code = "GER" type = "Software">
+<asset name="External router" short_code = "GER" type = "Software" access_right="trusted" surface_type="Privileged application">
   <description>External filtering router, whose principle responsibility is to ensure thal all inbound traffic is directed to the firewall. Its secondary responsibility may be to keep out random traffic generated by attackers.</description>
   <significance>None</significance>
   <security_property property="integrity" value="High">
@@ -118,7 +154,7 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="Firewall" short_code = "GF" type = "Software">
+<asset name="Firewall" short_code = "GF" type = "Software" access_right="trusted" surface_type="Privileged application">
   <description>Responsible for receiving inbound requests from the external router and subjecting them to more sophisticated analysis, such as stateful inspection.  Legitimate requests are forwarded to an appropriate web server.</description>
   <significance>None</significance>
   <security_property property="integrity" value="High">
@@ -131,7 +167,7 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="Web Server" short_code = "GWS" type = "Software">
+<asset name="Web Server" short_code = "GWS" type = "Software" access_right="trusted" surface_type="Privileged application">
   <description>Provides access to application functionality and information.</description>
   <significance>None</significance>
   <security_property property="integrity" value="High">
@@ -144,7 +180,7 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="Internal router" short_code = "GIR" type = "Software">
+<asset name="Internal router" short_code = "GIR" type = "Software" access_right="trusted" surface_type="Privileged application">
   <description>Internal filtering router, whose principle responsibility is to ensure it only passes legitimate traffic from the Wb servers through to the internal network.</description>
   <significance>None</significance>
   <security_property property="integrity" value="High">
@@ -157,7 +193,7 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="Application Server" short_code = "GAS" type = "Software">
+<asset name="Application Server" short_code = "GAS" type = "Software" access_right="trusted" surface_type="Privileged application">
   <description>A platform on which the application's code runs, typically in the form of Web components.</description>
   <significance>None</significance>
   <security_property property="integrity" value="High">
@@ -170,7 +206,7 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="Reverse Proxy" short_code = "GRP" type = "Software">
+<asset name="Reverse Proxy" short_code = "GRP" type = "Software" access_right="trusted" surface_type="Privileged application">
   <description>Reverse Proxy</description>
   <significance>None</significance>
   <security_property property="integrity" value="High">
@@ -183,7 +219,7 @@
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="BackEnd Server" short_code = "GBS" type = "Systems">
+<asset name="BackEnd Server" short_code = "GBS" type = "Systems" access_right="trusted" surface_type="Privileged application">
   <description>Back-end server</description>
   <significance>None</significance>
   <security_property property="integrity" value="High">
