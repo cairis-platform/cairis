@@ -56,6 +56,10 @@ class ModelExportTests(unittest.TestCase):
     self.assertEqual(exportRedmineScenarios(outFile),'Exported 32 scenarios.')
     self.assertEqual(os.path.isfile(outFile),True)
 
+  def testExportRedmineGoals(self):
+    b = Borg()
+    b.dbProxy.redmineGoals('Complete')
+
   def testExportRedmineRequirements(self):
     b = Borg()
     b.dbProxy.getRedmineRequirements()
@@ -69,6 +73,7 @@ class ModelExportTests(unittest.TestCase):
     b = Borg()
     b.dbProxy.redmineArchitecture()
     b.dbProxy.redmineArchitectureSummary('Complete')
+    b.dbProxy.architecturalPatternToXml('Context Policy Management')
 
   def testExportAttackPatterns(self):
     b = Borg()

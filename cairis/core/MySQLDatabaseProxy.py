@@ -7280,22 +7280,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error exporting project data to XML (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def modelToXml(self,includeHeader=True):
-    try:
-      curs = self.conn.cursor()
-      curs.execute('call modelToXml(%s)',[includeHeader])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting model to XML'
-        raise DatabaseProxyException(exceptionText) 
-      row = curs.fetchone()
-      xmlBuf = row[0] 
-      curs.close()
-      return xmlBuf
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error exporting model to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
   def architecturalPatternToXml(self,apName):
     try:
       curs = self.conn.cursor()
