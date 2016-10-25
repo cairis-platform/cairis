@@ -62,18 +62,18 @@ class SVGGenerator(object):
         if lines[i].find('<svg') > -1:
           svg_start = i
 
-        if line.find('class="node"') > -1:
-          is_node = True
+      if line.find('class="node"') > -1:
+        is_node = True
 
-        line = substitute(b.staticDir,"",line)
-        line = substitute("<!--.*?-->", "", line)
-        if line.find('fill="none"') > -1 and is_node:
-          line = line.replace('fill="none"', 'fill="white"')
-          is_node = False
+      line = substitute(b.staticDir,"",line)
+      line = substitute("<!--.*?-->", "", line)
+      if line.find('fill="none"') > -1 and is_node:
+        line = line.replace('fill="none"', 'fill="white"')
+        is_node = False
 
-        line = correctHref(line, model_type)
+      line = correctHref(line, model_type)
 
-        lines[i] = line
+      lines[i] = line
 
     if svg_start > -1:
       lines = lines[svg_start:]
