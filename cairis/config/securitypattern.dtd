@@ -19,15 +19,26 @@
 
 <!-- DTD for CAIRIS security patterns -->
 
-<!ELEMENT security_patterns (asset*,pattern*)>
+<!ELEMENT security_patterns (access_right*,surface_type*,asset*,pattern*)>
 
 <!ELEMENT tag EMPTY>
 <!ATTLIST tag name CDATA #REQUIRED>
+
+<!ELEMENT access_right (description,rationale)>
+<!ATTLIST access_right name CDATA #REQUIRED>
+<!ATTLIST access_right value CDATA #REQUIRED>
+
+<!ELEMENT surface_type (description,rationale)>
+<!ATTLIST surface_type name CDATA #REQUIRED>
+<!ATTLIST surface_type value CDATA #REQUIRED>
 
 <!ELEMENT asset (description,tag*,significance,interface*,security_property*)>
 <!ATTLIST asset name CDATA #REQUIRED>
 <!ATTLIST asset short_code CDATA #REQUIRED>
 <!ATTLIST asset type (Information | Systems | Software | Hardware | People) #REQUIRED>
+<!ATTLIST asset surface_type CDATA #REQUIRED>
+<!ATTLIST asset access_right CDATA #REQUIRED>
+
 
 <!ELEMENT security_property (rationale)>
 <!ATTLIST security_property property (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
