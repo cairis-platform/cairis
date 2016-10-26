@@ -70,23 +70,23 @@ class ArchitecturalPatternDAO(CairisDAO):
       fComp['theInterfaces'] = []
       for ci in co.interfaces():
         fci = {}
-        fci['theInterfaceName'] = ci[0]
-        fci['theInterfaceType'] = ci[1]
+        fci['theName'] = ci[0]
+        fci['theType'] = ci[1]
         fci['theAccessRight'] = ci[2]
-        fci['theProtocol'] = ci[3]
+        fci['thePrivilege'] = ci[3]
         fComp['theInterfaces'].append(fci)
       fComp['theStructure'] = []
       for cs in co.structure():
         fcs = {}
         fcs['theHeadAsset'] = cs[0]
-        fcs['theHeadAssetType'] = cs[1]
+        fcs['theHeadAdornment'] = cs[1]
         fcs['theHeadNav'] = cs[2]
         fcs['theHeadNry'] = cs[3]
         fcs['theHeadRole'] = cs[4]
         fcs['theTailRole'] = cs[5]
         fcs['theTailNry'] = cs[6]
         fcs['theTailNav'] = cs[7]
-        fcs['theTailAssetType'] = cs[8]
+        fcs['theTailAdornment'] = cs[8]
         fcs['theTailAsset'] = cs[9]
         fComp['theStructure'].append(fcs)
       fComp['theRequirements'] = co.requirements()
@@ -94,9 +94,9 @@ class ArchitecturalPatternDAO(CairisDAO):
       fComp['theGoalAssociations'] = []
       for cga in co.associations():
         fcga = {}
-        fcga['theHeadGoal'] = cga[0] 
+        fcga['theGoalName'] = cga[0] 
         fcga['theRefType'] = cga[1] 
-        fcga['theTailGoal'] = cga[2] 
+        fcga['theSubGoalName'] = cga[2] 
         fcga['theRationale'] = cga[3] 
         fComp['theGoalAssociations'].append(fcga) 
       ap['theComponents'].append(fComp)
@@ -111,8 +111,8 @@ class ArchitecturalPatternDAO(CairisDAO):
       fConn['theToInterface'] = cn[5]
       fConn['theToRole'] = cn[6]
       fConn['theAssetName'] = cn[7]
-      fConn['theProtocolName'] = cn[8]
-      fConn['theAccessRightName'] = cn[9]
+      fConn['theProtocol'] = cn[8]
+      fConn['theAccessRight'] = cn[9]
       ap['theConnectors'].append(fConn)
     ap['theAttackSurfaceMetric'] = list(cv.attackSurfaceMetric())
     return ap

@@ -75,7 +75,7 @@ class ComponentViewTest(unittest.TestCase):
     for i in self.iTemplateGoals:
       self.theGoals.append(TemplateGoalParameters(i["theName"],i["theDefinition"],i["theRationale"],i["theConcerns"],i["theResponsibilities"]))
 
-    self.iComponentViews = d['component_views']
+    self.iComponentViews = d['architectural_patterns']
     
 
   def testComponentView(self):
@@ -94,11 +94,11 @@ class ComponentViewTest(unittest.TestCase):
         cStructs.append((cs["theHeadAsset"],cs["theHeadAdornment"],cs["theHeadNav"],cs["theHeadNry"],cs["theHeadRole"],cs["theTailRole"],cs["theTailNry"],cs["theTailNav"],cs["theTailAdornment"],cs["theTailAsset"]))
       cReqs = []
       cGoals = []
-      for i in c["theComponentGoals"]:
+      for i in c["theGoals"]:
         cGoals.append(i)
 
       cGoalAssocs = []
-      for cga in c["theComponentGoalAssociations"]:
+      for cga in c["theGoalAssociations"]:
         cGoalAssocs.append((cga["theGoalName"],cga["theSubGoalName"],cga["theRefType"],'None'))
       theComponents.append(ComponentParameters(cName,cDesc,cInts,cStructs,cReqs,cGoals,cGoalAssocs))
 

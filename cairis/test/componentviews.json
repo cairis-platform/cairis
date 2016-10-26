@@ -81,7 +81,7 @@
        "theConcerns" : [],
        "theResponsibilities" : []}
   ],
-  "component_views" : [
+  "architectural_patterns" : [
      {"theName" : "Context Policy Management",
       "theSynopsis" : "Model illustrating how policy management mediates the",
       "theComponents" : [
@@ -106,11 +106,12 @@
             "theTailAdornment" : "Association",
             "theTailAsset" : "Access Request"} 
          ],
-         "theComponentGoals" : ["Qualified data use","Usage Request"],
-         "theComponentGoalAssociations" : [
+         "theGoals" : ["Qualified data use","Usage Request"],
+         "theGoalAssociations" : [
            {"theGoalName" : "Qualified data use",
             "theRefType" : "and",
-            "theSubGoalName" : "Usage Request"}
+            "theSubGoalName" : "Usage Request",
+            "theRationale" : "None"}
          ]
         },
         {"theName" : "Context Manager",
@@ -134,8 +135,8 @@
             "theTailAdornment" : "Association",
             "theTailAsset" : "Access Request"} 
          ],
-         "theComponentGoals" : [],
-         "theComponentGoalAssociations" : []
+         "theGoals" : [],
+         "theGoalAssociations" : []
        }
       ],
       "theConnectors" : [

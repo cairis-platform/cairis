@@ -1092,8 +1092,8 @@ class ConnectorModel(object):
     "theToInterface": fields.String,
     "theToRole": fields.String,
     "theAssetName": fields.String,
-    "theProtocolName": fields.String,
-    "theAccessRightName": fields.String
+    "theProtocol": fields.String,
+    "theAccessRight": fields.String
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)

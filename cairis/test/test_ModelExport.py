@@ -79,3 +79,7 @@ class ModelExportTests(unittest.TestCase):
     b = Borg()
     b.dbProxy.redmineAttackPatterns()
     b.dbProxy.redmineAttackPatternsSummary('Complete')
+
+  def testExportPersona(self):
+    b = Borg()
+    b.dbProxy.personaToXml('Helen')
