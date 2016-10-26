@@ -18,7 +18,9 @@
 
 from xml.sax.handler import ContentHandler,EntityResolver
 from cairis.core.TemplateAssetParameters import TemplateAssetParameters
+from cairis.core.TemplateRequirementParameters import TemplateRequirementParameters
 from cairis.core.SecurityPatternParameters import SecurityPatternParameters
+from cairis.core.ValueTypeParameters import ValueTypeParameters
 from cairis.core.Borg import Borg
 
 __author__ = 'Shamal Faily'
@@ -43,6 +45,7 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theAssets = []
     self.theSecurityPatterns = []
+    self.theMetricTypes = []
     b = Borg()
     self.configDir = b.configDir
     self.resetAssetAttributes()
@@ -54,6 +57,9 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
 
   def patterns(self):
     return self.theSecurityPatterns
+
+  def metricTypes(self):
+    return self.theMetricTypes
 
   def assets(self):
     return self.theAssets
@@ -82,6 +88,8 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
     self.theAssetType = ''
     self.theDescription = ''
     self.theSignificance = ''
+    self.theSurfaceType = ''
+    self.theAccessRight = ''
     self.theTags = []
     self.theInterfaces = []
     self.theSecurityProperties = []
@@ -109,7 +117,14 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
     self.theDescription = ''
     self.theRationale = ''
     self.theFitCriterion = ''
-    
+
+  def resetValueTypeAttributes(self):
+    self.inDescription = 0
+    self.inRationale = 0
+    self.theName = ''
+    self.theDescription = ''
+    self.theRationale = ''
+    self.theScore = 0
 
   def startElement(self,name,attrs):
     self.currentElementName = name
@@ -117,6 +132,8 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name']
       self.theShortCode = attrs['short_code']
       self.theAssetType = attrs['type']
+      self.theSurfaceType = attrs['surface_type']
+      self.theAccessRight = attrs['access_right']
       self.theSecurityProperties = []
     elif name == 'tag':
       self.theTags.append(attrs['name'])
@@ -172,6 +189,10 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
     elif name == 'fit_criterion':
       self.inFitCriterion = 1
       self.theFitCriterion = ''
+    elif name == 'access_right' or name == 'surface_type':
+      self.theName = attrs['name']
+      self.theScore = int(attrs['value'])
+
 
   def characters(self,data):
     if self.inDescription:
@@ -215,7 +236,7 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
       spValues.append(spDict['pseudonymity'])
       spValues.append(spDict['unlinkability'])
       spValues.append(spDict['unobservability'])
-      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,spValues,self.theTags,self.theInterfaces)
+      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.theSurfaceType,self.theAccessRight,spValues,self.theTags,self.theInterfaces)
       self.theAssets.append(p)
       self.resetAssetAttributes()
     elif name == 'security_property':
@@ -229,7 +250,8 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
       self.theStructure.append((self.theHeadName,self.theHeadAdornment,self.theHeadNry,self.theHeadRole,self.theTailRole,self.theTailNry,self.theTailAdornment,self.theTailName))
       self.resetStructure()
     elif name == 'requirement':
-      self.theRequirements.append((self.theReqName,self.theDescription,self.theType,self.theRationale,self.theFitCriterion,self.theAsset))
+      tr = TemplateRequirementParameters(self.theReqName,self.theAsset,self.theType,self.theDescription,self.theRationale,self.theFitCriterion)
+      self.theRequirements.append(tr)
       self.resetRequirement()
     elif name == 'description':
       self.inDescription = 0
@@ -245,3 +267,8 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
       self.inSolution = 0
     elif name == 'fit_criterion':
       self.inFitCriterion = 0
+    elif name == 'access_right' or name == 'surface_type':
+      p = ValueTypeParameters(self.theName,self.theDescription,name,'',self.theScore,self.theRationale)
+      self.theMetricTypes.append(p)
+      self.resetValueTypeAttributes()
+

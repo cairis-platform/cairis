@@ -46,6 +46,7 @@ def importSecurityPatterns(importFile,session_id=None):
     parser.parse(importFile)
     taps = handler.assets()
     spps = handler.patterns()
+    vts = handler.metricTypes()
     noOfTaps = len(taps)
     noOfSpps = len(spps)
 
@@ -57,6 +58,10 @@ def importSecurityPatterns(importFile,session_id=None):
       tapId = 0;
       db_proxy.deleteSecurityPattern(-1)
       db_proxy.deleteTemplateAsset(-1)
+
+      for vt in vts:
+        db_proxy.addValueType(vt)
+
       for tap in taps:
         tap.setId(tapId)
         db_proxy.addTemplateAsset(tap)

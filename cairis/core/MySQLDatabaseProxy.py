@@ -5927,12 +5927,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addPatternRequirements(self,patternId,patternRequirements):
     for idx,reqData in enumerate(patternRequirements):
-      self.addPatternRequirement(idx+1,patternId,reqData[0],reqData[1],reqData[2],reqData[3],reqData[4],reqData[5])
+      self.addTemplateRequirement(reqData)
+      self.addPatternRequirement(idx+1,patternId,reqData.name())
 
-  def addPatternRequirement(self,reqLabel,patternId,reqName,reqDesc,reqType,reqRationale,reqFC,reqAsset):
+  def addPatternRequirement(self,reqLabel,patternId,reqName):
     try:
       curs = self.conn.cursor()
-      curs.execute('call addSecurityPatternRequirement(%s,%s,%s,%s,%s,%s,%s,%s)',[reqLabel,patternId,reqType,reqName,reqDesc,reqRationale,reqFC,reqAsset])
+      curs.execute('call addSecurityPatternRequirement(%s,%s,%s)',[reqLabel,patternId,reqName])
       if (curs.rowcount == -1):
         exceptionText = 'Error adding requirement to pattern id ' + str(patternId) 
         raise DatabaseProxyException(exceptionText) 
