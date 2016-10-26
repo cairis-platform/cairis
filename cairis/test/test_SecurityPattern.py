@@ -31,6 +31,7 @@ class SecurityPatternTests(unittest.TestCase):
   def setUpClass(cls):
     cairis.core.BorgFactory.initialise()
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1)
+    importSecurityPatterns(os.environ['CAIRIS_SRC'] + '/../examples/architecture/schumacher_patterns.xml')
 
   def setUp(self):
     pass
@@ -38,5 +39,7 @@ class SecurityPatternTests(unittest.TestCase):
   def tearDown(self):
     pass
 
-  def testImportSecurityPatterns(self):
-    importSecurityPatterns(os.environ['CAIRIS_SRC'] + '/../examples/architecture/schumacher_patterns.xml')
+  def testGetSecurityPatterns(self):
+    b = Borg()
+    sps = b.dbProxy.getSecurityPatterns()
+    self.assertEqual(len(sps), 5)
