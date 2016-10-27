@@ -21,6 +21,9 @@ from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.ModelDefinitions import ArchitecturalPatternModel,ComponentModel,ConnectorModel,ComponentInterfaceModel,ComponentGoalAssociationModel,ComponentStructureModel
 from cairis.tools.SessionValidator import check_required_keys
+from cairis.core.ComponentParameters import ComponentParameters
+from cairis.core.ConnectorParameters import ConnectorParameters
+from cairis.core.ComponentViewParameters import ComponentViewParameters
 
 __author__ = 'Shamal Faily'
 
@@ -45,6 +48,17 @@ class ArchitecturalPatternDAO(CairisDAO):
       cvId = self.db_proxy.getDimensionId(name,'component_view')
       cv = self.db_proxy.getComponentViews(cvId)
       return self.realToFakeAP(cv[name])
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def delete_architectural_pattern(self,name):
+    try:
+      cvId = self.db_proxy.getDimensionId(name,'component_view')
+      self.db_proxy.deleteComponentView(cvId)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -116,3 +130,75 @@ class ArchitecturalPatternDAO(CairisDAO):
       ap['theConnectors'].append(fConn)
     ap['theAttackSurfaceMetric'] = list(cv.attackSurfaceMetric())
     return ap
+
+  def add_architectural_pattern(self,ap):
+    cvParams = self.fakeToRealAp(ap)
+    try:
+      if not self.check_existing_architectural_pattern(cvParams.name()):
+        self.db_proxy.addComponentView(cvParams)
+      else:
+        self.close()
+        raise OverwriteNotAllowedHTTPError(obj_name=cvParams.name())
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def update_architectural_pattern(self,ap):
+    cvParams = self.fakeToRealAp(ap)
+    try:
+      cvId = self.db_proxy.getDimensionId(cvParams.name(),'component_view')
+      cvParams.setId(cvId)
+      self.db_proxy.updateComponentView(cvParams)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def check_existing_architectural_pattern(self,cvName):
+    try:
+      self.db_proxy.nameCheck(cvName, 'component_view')
+      return False
+    except DatabaseProxyException as ex:
+      if str(ex.value).find('already exists') > -1:
+        return True
+        self.close()
+        raise ARMHTTPError(ex)
+    except ARMException as ex:
+      if str(ex.value).find('already exists') > -1:
+        return True
+        self.close()
+        raise ARMHTTPError(ex)
+
+  def fakeToRealAp(self,ap):
+    apName = ap["theName"]
+    apSyn = ap["theSynopsis"]
+    theComponents = []
+    for c in ap["theComponents"]:
+      cName = c["theName"]
+      cDesc = c["theDescription"]
+      cInts = []
+      for i in c["theInterfaces"]:
+        cInts.append((i["theName"],i["theType"],i["theAccessRight"],i["thePrivilege"]))
+      cStructs = []
+      for cs in c["theStructure"]:
+        cStructs.append((cs["theHeadAsset"],cs["theHeadAdornment"],cs["theHeadNav"],cs["theHeadNry"],cs["theHeadRole"],cs["theTailRole"],cs["theTailNry"],cs["theTailNav"],cs["theTailAdornment"],cs["theTailAsset"]))
+      cReqs = []
+      cGoals = []
+      for i in c["theGoals"]:
+        cGoals.append(i)
+
+      cGoalAssocs = []
+      for cga in c["theGoalAssociations"]:
+        cGoalAssocs.append((cga["theGoalName"],cga["theSubGoalName"],cga["theRefType"],'None'))
+      theComponents.append(ComponentParameters(cName,cDesc,cInts,cStructs,cReqs,cGoals,cGoalAssocs))
+    theConnectors = []
+    for conn in ap["theConnectors"]:
+      theConnectors.append(ConnectorParameters(conn["theName"],apName,conn["theFromComponent"],conn["theFromRole"],conn["theFromInterface"],conn["theToComponent"],conn["theToInterface"],conn["theToRole"],conn["theAssetName"],conn["theProtocol"],conn["theAccessRight"]))
+
+    cvParams = ComponentViewParameters(apName,apSyn,[],[],[],[],[],theComponents,theConnectors)
+    return cvParams

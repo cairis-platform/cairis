@@ -358,6 +358,6 @@ class ObjectDependencyMessage(DefaultMessage):
   object=ModelDefinitions.ArchitecturalPatternModel.__name__,
 )
 # endregion
-class ObjectDependencyMessage(DefaultMessage):
+class ArchitecturalPatternMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ArchitecturalPatternModel)
   required = DefaultMessage.required
