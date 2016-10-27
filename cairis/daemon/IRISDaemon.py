@@ -52,7 +52,7 @@ app.config['SECURITY_PASSWORD_SALT'] = b.passwordSalt
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://' + b.auth_dbUser + ':' + b.auth_dbPasswd + '@' + b.auth_dbHost + '/' + b.auth_dbName
 
 db = SQLAlchemy(app)
-api = swagger.docs(Api(app), apiVersion='1.2.2', description='CAIRIS API', api_spec_url='/api/cairis')
+api = swagger.docs(Api(app), apiVersion='1.2.7', description='CAIRIS API', api_spec_url='/api/cairis')
 cors = CORS(app)
 
 roles_users = db.Table('roles_users', db.Column('user_id', db.Integer(), db.ForeignKey('auth_user.id')), db.Column('role_id', db.Integer(), db.ForeignKey('auth_role.id')))
