@@ -115,60 +115,6 @@ class ArchitecturalPatternsAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Update architectural pattern',
-    nickname='architectural-pattern-update',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the architectural pattern to be updated",
-        "required": True,
-        "allowMultiple": False,
-        "type": ArchitecturalPatternMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': httplib.BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-      {
-        'code': httplib.CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': httplib.CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
-  def put(self):
-    session_id = get_session_id(session, request)
-    dao = ArchitecturalPatternDAO(session_id)
-    upd_ap = dao.from_json(request)
-    dao.update_architectural_pattern(upd_ap)
-    dao.close()
-    resp_dict = {'message': 'Architectural Pattern successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
-    resp.contenttype = 'application/json'
-    return resp
-
 
 class ArchitecturalPatternByNameAPI(Resource):
   # region Swagger Doc
@@ -210,6 +156,70 @@ class ArchitecturalPatternByNameAPI(Resource):
     resp = make_response(json_serialize(ap, session_id=session_id), httplib.OK)
     resp.contenttype = 'application/json'
     return resp
+
+
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Update architectural pattern',
+    nickname='architectural-pattern-update',
+    responseClass=str.__name__,
+    parameters=[
+      {
+        'name': 'name',
+        'description': 'Architectural pattern name',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      },
+      {
+        "name": "body",
+        "description": "The serialized version of the architectural pattern to be updated",
+        "required": True,
+        "allowMultiple": False,
+        "type": ArchitecturalPatternMessage.__name__,
+        "paramType": "body"
+      },
+      {
+        'name': 'session_id',
+        'description': 'The ID of the session to use',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'The database connection was not properly setup'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'A database error has occurred'
+      },
+      {
+        'code': ARMHTTPError.status_code,
+        'message': ARMHTTPError.status
+      }
+    ]
+  )
+  # endregion
+  def put(self,name):
+    session_id = get_session_id(session, request)
+    dao = ArchitecturalPatternDAO(session_id)
+    upd_ap = dao.from_json(request)
+    dao.update_architectural_pattern(upd_ap,name)
+    dao.close()
+    resp_dict = {'message': 'Architectural Pattern successfully updated'}
+    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp
+
 
   # region Swagger Doc
   @swagger.operation(

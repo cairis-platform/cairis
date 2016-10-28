@@ -5216,24 +5216,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def deleteCapability(self,objtId):
-    self.deleteObject(objtId,'capability')
-    self.conn.commit()
+    self.deleteValueType(objtId,'capability')
 
   def deleteMotivation(self,objtId):
-    self.deleteObject(objtId,'motivation')
-    self.conn.commit()
+    self.deleteValueType(objtId,'motivation')
 
   def deleteAssetType(self,objtId):
-    self.deleteObject(objtId,'asset_type')
-    self.conn.commit()
+    self.deleteValueType(objtId,'asset_type')
 
   def deleteThreatType(self,objtId):
-    self.deleteObject(objtId,'threat_type')
-    self.conn.commit()
+    self.deleteValueType(objtId,'threat_type')
 
   def deleteVulnerabilityType(self,objtId):
-    self.deleteObject(objtId,'vulnerability_type')
+    self.deleteValueType(objtId,'vulnerability_type')
+
+  def deleteValueType(self,objtId,value_type):
+    self.deleteObject(objtId,value_type)
     self.conn.commit()
+
 
   def addValueType(self,parameters):
     if (parameters.id() != -1):

@@ -216,10 +216,8 @@ class AssetAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    type_id = json_resp.get('asset_type_id', None)
-    self.assertIsNotNone(type_id, 'No asset type ID returned')
-    self.assertGreater(type_id, 0, 'Invalid asset type ID returned [%d]' % type_id)
-    self.logger.info('[%s] Asset type ID: %d\n', method, type_id)
+    ackMsg = json_resp.get('message', None)
+    self.assertEquals(ackMsg, 'Asset type successfully added')
 
     rv = self.app.delete('/api/assets/types/name/%s?session_id=test' % quote(self.prepare_new_asset_type().theName))
 
@@ -236,14 +234,11 @@ class AssetAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    type_id = json_resp.get('asset_type_id', None)
-    self.assertIsNotNone(type_id, 'No asset type ID returned')
-    self.assertGreater(type_id, 0, 'Invalid asset type ID returned [%d]' % type_id)
-    self.logger.info('[%s] Asset type ID: %d', method, type_id)
+    ackMsg = json_resp.get('message', None)
+    self.assertIsNotNone(ackMsg, 'Asset type successfully updated')
 
     type_to_update = self.prepare_new_asset_type()
     type_to_update.theName = 'Edited test asset type'
-    type_to_update.theId = type_id
     json_dict = {'session_id': 'test', 'object': type_to_update}
     upd_type_body = jsonpickle.encode(json_dict)
     rv = self.app.put('/api/assets/types/name/%s?session_id=test' % quote(self.prepare_new_asset_type().theName), data=upd_type_body, content_type='application/json')

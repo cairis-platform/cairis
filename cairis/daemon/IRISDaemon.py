@@ -21,11 +21,11 @@ import httplib
 
 from flask import Flask, make_response, request, send_from_directory
 from flask import session
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required, http_auth_required
-from flask.ext.cors import CORS
-from flask.ext.restful import Api, Resource
-from flask.ext.restful_swagger import swagger
+from flask_sqlalchemy import SQLAlchemy
+from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required, http_auth_required
+from flask_cors import CORS
+from flask_restful import Api, Resource
+from flask_restful_swagger import swagger
 from jsonpickle import encode
 
 from cairis.core.Borg import Borg
@@ -38,7 +38,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController
+    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -401,6 +401,11 @@ def start():
   # Use Case routes
   api.add_resource(UseCaseController.UseCasesAPI, '/api/usecases')
   api.add_resource(UseCaseController.UseCaseByNameAPI, '/api/usecases/name/<string:name>')
+
+  # Value Type routes
+  api.add_resource(ValueTypeController.ValueTypesAPI, '/api/value_types/type/<string:type_name>/environment/<string:environment_name>')
+  api.add_resource(ValueTypeController.ValueTypesByNameAPI, '/api/value_types/type/<string:type_name>/environment/<string:environment_name>/name/<string:object_name>')
+  api.add_resource(ValueTypeController.ValueTypesCreateAPI, '/api/value_types/')
 
   # Vulnerability routes
   api.add_resource(VulnerabilityController.VulnerabilityAPI, '/api/vulnerabilities')

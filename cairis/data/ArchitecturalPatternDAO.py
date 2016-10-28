@@ -146,10 +146,10 @@ class ArchitecturalPatternDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_architectural_pattern(self,ap):
-    cvParams = self.fakeToRealAp(ap)
+  def update_architectural_pattern(self,ap,name):
     try:
-      cvId = self.db_proxy.getDimensionId(cvParams.name(),'component_view')
+      cvId = self.db_proxy.getDimensionId(name,'component_view')
+      cvParams = self.fakeToRealAp(ap)
       cvParams.setId(cvId)
       self.db_proxy.updateComponentView(cvParams)
     except DatabaseProxyException as ex:

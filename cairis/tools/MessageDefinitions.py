@@ -361,3 +361,13 @@ class ObjectDependencyMessage(DefaultMessage):
 class ArchitecturalPatternMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ArchitecturalPatternModel)
   required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+  object=ModelDefinitions.ValueTypeModel.__name__,
+)
+# endregion
+class ArchitecturalPatternMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.ValueTypeModel)
+  required = DefaultMessage.required

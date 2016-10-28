@@ -115,14 +115,14 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     self.assertEquals(msg, 'Architectural Pattern successfully added')
 
   def test_put(self):
-    url = '/api/architectural_patterns?session_id=test'
+    url = '/api/architectural_patterns/name/Context%20Policy%20Management?session_id=test'
     method = 'test_put'
     self.logger.info('[%s] URL: %s', method, url)
     f = open(os.environ['CAIRIS_SRC'] + '/test/componentviews.json')
     d = json.load(f)
     addAPDependentData(d)
     ap = d['architectural_patterns'][0]
-    rv = self.app.post(url, content_type='application/json', data=self.prepare_json(ap))
+    rv = self.app.post('/api/architectural_patterns?session_id=test', content_type='application/json', data=self.prepare_json(ap))
     ap['theSynopsis'] = 'Revised synopsis'
     rv = self.app.put(url, content_type='application/json', data=self.prepare_json(ap))
     self.logger.debug('[%s] Response data: %s', method, rv.data)

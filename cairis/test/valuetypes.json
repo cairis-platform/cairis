@@ -1,10 +1,12 @@
 {
-  "valuetypes" : [
+  "vulnerability_type" : [
       {"theName" : "Authentication Vulnerability",
       "theDescription" : "Authentication Vulnerability",
-      "theType" : "vulnerability_type"},
+      "theType" : "vulnerability_type"}
+   ],
+   "threat_type" : [
       {"theName" : "Path Traversal Attack",
        "theDescription" : "Path Traversal Attack",
        "theType" : "threat_type"}
-  ]
+   ] 
 }

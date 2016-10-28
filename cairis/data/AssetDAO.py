@@ -381,7 +381,7 @@ class AssetDAO(CairisDAO):
         )
 
         try:
-            return self.db_proxy.addValueType(params)
+            self.db_proxy.addValueType(params)
         except DatabaseProxyException as ex:
             self.close()
             raise ARMHTTPError(ex)

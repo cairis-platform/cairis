@@ -610,10 +610,10 @@ class AssetTypesAPI(Resource):
 
     dao = AssetDAO(session_id)
     new_value_type = dao.type_from_json(request)
-    asset_type_id = dao.add_asset_type(new_value_type, environment_name=environment_name)
+    dao.add_asset_type(new_value_type, environment_name=environment_name)
     dao.close()
 
-    resp_dict = {'message': 'Asset type successfully added', 'asset_type_id': asset_type_id}
+    resp_dict = {'message': 'Asset type successfully added'}
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.contenttype = 'application/json'
     return resp
@@ -657,7 +657,7 @@ class AssetTypeByNameAPI(Resource):
 
   # region Swagger Docs
   @swagger.operation(
-    notes='Updates a asset type',
+    notes='Updates an asset type',
     nickname='asset-type-by-name-put',
     parameters=[
       {

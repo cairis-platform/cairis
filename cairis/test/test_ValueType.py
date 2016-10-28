@@ -34,7 +34,7 @@ class ValueTypeTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/valuetypes.json')
     d = json.load(f)
     f.close()
-    self.iVtypes = d['valuetypes']
+    self.iVtypes = d['vulnerability_type'] + d['threat_type']
     
   def testValueType(self):
     ivt1 = ValueTypeParameters(self.iVtypes[0]["theName"], self.iVtypes[0]["theDescription"], self.iVtypes[0]["theType"])
