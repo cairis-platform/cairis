@@ -16,10 +16,6 @@ Flask-RESTful>= 0.3.5
 flask-restful-swagger>= 0.19
 Flask-Cors>= 3.0.2
 Flask-SQLAlchemy>=2.1
-Flask-Login==0.3.2
-Flask-Mail>=0.9.1
 Flask-Security>=1.7.5
-Flask-WTF>=0.13.1
 Flask-OAuthlib>=0.9.3
-Flask-Principal>=0.4.0
 mako>=1.0.4
