@@ -19659,7 +19659,7 @@ end
 
 create procedure updateTemplateGoal(in goalId int, in goalName text, in goalDef text, in goalRat text)
 begin
-  update template_goal set name = goalName, definition = goalDef, rationale = reqRat where id = goalId;
+  update template_goal set name = goalName, definition = goalDef, rationale = goalRat where id = goalId;
 end
 //
 

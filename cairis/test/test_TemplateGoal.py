@@ -76,6 +76,15 @@ class TemplateGoalTest(unittest.TestCase):
     self.assertEqual(iTag2.concerns(),oTag2.concerns())
     self.assertEqual(iTag2.responsibilities(),oTag2.responsibilities())
 
+    iTag1.theDefinition = 'updated definition'
+    iTag1.setId(oTag1.id())
+    b.dbProxy.updateTemplateGoal(iTag1)
+
+    oTags = b.dbProxy.getTemplateGoals()
+    oTag1 = oTags[self.iTemplateGoals[0]["theName"]]
+    self.assertEqual(iTag1.definition(), oTag1.definition())
+
+
     b.dbProxy.deleteTemplateGoal(oTag1.id())
     b.dbProxy.deleteTemplateGoal(oTag2.id())
   
