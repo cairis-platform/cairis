@@ -360,4 +360,14 @@ var personaCharacteristicDefault = {
   "theRebuttal" : [],
   "theBacking" :[] 
 };
+var valueTypeDefault = {
+  "__python_obj__": "ValueType.ValueType",
+  "theId": -1,
+  "theName" : "",
+  "theType" : "",
+  "theEnvironmentName" : "all",
+  "theDescription" : "",
+  "theRationale" : "None",
+  "theScore" : 0
+};
 

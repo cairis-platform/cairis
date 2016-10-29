@@ -264,7 +264,8 @@ class ValueTypesByNameAPI(Resource):
   #endregion
   def put(self, type_name, environment_name, object_name):
     session_id = get_session_id(session, request)
-
+    import pytest
+    pytest.set_trace()
     dao = ValueTypeDAO(session_id)
     upd_vt = dao.from_json(request)
     dao.update_value_type(upd_vt, type_name, environment_name, object_name)

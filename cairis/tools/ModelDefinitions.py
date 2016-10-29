@@ -1107,8 +1107,6 @@ class ValueTypeModel(object):
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)
-  required.remove("theEnvironmentName")
-  required.remove("theScore")
   swagger_metadata = {
     obj_id_field : gen_class_metadata(ValueType),
     "theType": {

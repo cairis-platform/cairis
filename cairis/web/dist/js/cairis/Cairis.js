@@ -66,9 +66,6 @@ function hideLoading(){
   $(".loadingWrapper").fadeOut(500);
 }
 
-
-
-
 // For converting the form in JSON
 $.fn.serializeObject = function()
 {
@@ -1564,6 +1561,62 @@ function setTableHeader(){
     case "ArchitecturalPatterns":
       debugLogger("Is Architectural Patterns");
       thead = "<th width='120px' id='addNewArchitecturalPattern'><i class='fa fa-plus floatCenter'></i></th><th>Model</th><th>Interfaces DER</th><th>Channels DER</th><th>Untrusted Surface DES</th>";
+      break;
+    case "asset_value":
+      debugLogger("Is Asset Value");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Asset Value</th><th>Description</th>";
+      break;
+    case "asset_type":
+      debugLogger("Is Asset Type");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Asset Type</th><th>Description</th>";
+      break;
+    case "access_right":
+      debugLogger("Is Access Right");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Access Right</th><th>Description</th>";
+      break;
+    case "protocol":
+      debugLogger("Is Protocol");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Protocol</th><th>Description</th>";
+      break;
+    case "privilege":
+      debugLogger("Is Privilege");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Privilege</th><th>Description</th>";
+      break;
+    case "surface_type":
+      debugLogger("Is Surface Type");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Surface Type</th><th>Description</th>";
+      break;
+    case "vulnerability_type":
+      debugLogger("Is Vulnerability Type");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Vulnerability Type</th><th>Description</th>";
+      break;
+    case "severity":
+      debugLogger("Is Severity");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Severity</th><th>Description</th>";
+      break;
+    case "capability":
+      debugLogger("Is Capability");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Capability</th><th>Description</th>";
+      break;
+    case "motivation":
+      debugLogger("Is Motivation");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Motivation</th><th>Description</th>";
+      break;
+    case "threat_type":
+      debugLogger("Is Threat Type");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Threat Type</th><th>Description</th>";
+      break;
+    case "likelihood":
+      debugLogger("Is Likelihood");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Likelihood</th><th>Description</th>";
+      break;
+    case "threat_value":
+      debugLogger("Is Threat Value");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Threat Value</th><th>Description</th>";
+      break;
+    case "risk_value":
+      debugLogger("Is Risk Value");
+      thead = "<th width='120px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Risk Value</th><th>Description</th>";
       break;
   }
   $("#reqTable").find("thead").empty();

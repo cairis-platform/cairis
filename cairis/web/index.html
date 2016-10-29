@@ -112,23 +112,26 @@
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><span class="glyphicon glyphicon-wrench"> Options<span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a href="#">Asset Values</a></li>
-              <li><a href="#">Asset Types</a></li>
-              <li><a href="#">Access Rights</a></li>
-              <li><a href="#">Capabilities</a></li>
-              <li><a href="#">Countermeasure Values</a></li>
-              <li><a href="#">Motivations</a></li>
-              <li><a href="#">Protocols</a></li>
-              <li><a href="#">Privileges</a></li>
-              <li><a href="#">Risk Values</a></li>
-              <li><a href="#">Surface Types</a></li>
-              <li><a href="#">Threat Likelihoods</a></li>
-              <li><a href="#">Threat Types</a></li>
-              <li><a href="#">Threat Values</a></li>
-              <li><a href="#">Template Assets</a></li>
-              <li><a href="#">Template Requirements</a></li>
-              <li><a href="#">Vulnerability Severities</a></li>
-              <li><a href="#">Vulnerability Types</a></li>
+              <li><a id="assetValuesClick" href="#">Asset Values</a></li>
+              <li><a id="assetTypesClick" href="#">Asset Types</a></li>
+              <li><div class="divider"></li>
+              <li><a id="accessRightsClick" href="#">Access Rights</a></li>
+              <li><a id="protocolsClick" href="#">Protocols</a></li>
+              <li><a id="privilegesClick" href="#">Privileges</a></li>
+              <li><a id="surfaceTypesClick" href="#">Surface Types</a></li>
+              <li><div class="divider"></li>
+              <li><a id="vulnerabilityTypesClick" href="#">Vulnerability Types</a></li>
+              <li><a id="vulnerabilitySeveritiesClick" href="#">Vulnerability Severities</a></li>
+              <li><a id="capabilitiesClick" href="#">Capabilities</a></li>
+              <li><a id="motivationsClick" href="#">Motivations</a></li>
+              <li><a id="threatTypesClick" href="#">Threat Types</a></li>
+              <li><a id="threatLikelihoodsClick" href="#">Threat Likelihoods</a></li>
+              <li><a id="threatValuesClick" href="#">Threat Values</a></li>
+              <li><a id="riskValuesClick" href="#">Risk Values</a></li>
+              <li><div class="divider"></li>
+              <li><a id="templateAssetsClick" href="#">Template Assets</a></li>
+              <li><a id="templateRequirementsClick" href="#">Template Requirements</a></li>
+              <li><a id="countermeasureValuesClick" href="#">Countermeasure Values</a></li>
             </ul>
           </li>
         
@@ -494,7 +497,7 @@
   <script>
     LazyLoad.js(["dist/js/cairis/Cairis-UI.js","dist/js/cairis/buttonclicks.js", "dist/js/cairis/Cairis.js", "dist/js/cairis/readFile.js",
         "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/personas.js", "dist/js/cairis/assets.js", "dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js", "dist/js/cairis/tasks.js", "dist/js/cairis/domainproperties.js", "dist/js/cairis/obstacles.js", "dist/js/cairis/countermeasures.js", "dist/js/cairis/usecases.js","dist/js/cairis/vulnerabilities.js","dist/js/cairis/architecturalpatterns.js",
-        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js","dist/js/cairis/environments.js",
+        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js","dist/js/cairis/environments.js","dist/js/cairis/valuetypes.js",
         "dist/js/cairis/SVGhandler.js","dist/js/cairis/PutAndPost.js", "dist/js/objects/jsonDefaultObjects.js"], function () {
 
       console.log("All Cairis JS loaded");
