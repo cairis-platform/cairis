@@ -186,10 +186,8 @@ class ThreatAPITests(CairisDaemonTestCase):
         self.logger.debug('[%s] Response data: %s', method, rv.data)
         json_resp = jsonpickle.decode(rv.data)
         self.assertIsNotNone(json_resp, 'No results after deserialization')
-        type_id = json_resp.get('threat_type_id', None)
-        self.assertIsNotNone(type_id, 'No threat type ID returned')
-        self.assertGreater(type_id, 0, 'Invalid threat type ID returned [%d]' % type_id)
-        self.logger.info('[%s] Threat type ID: %d\n', method, type_id)
+        ackMsg = json_resp.get('message', None)
+        self.assertEquals(ackMsg, 'Threat type successfully added')
 
         rv = self.app.delete('/api/threats/types/name/%s?session_id=test' % quote(self.prepare_new_threat_type().theName))
 
@@ -206,14 +204,11 @@ class ThreatAPITests(CairisDaemonTestCase):
         self.logger.debug('[%s] Response data: %s', method, rv.data)
         json_resp = jsonpickle.decode(rv.data)
         self.assertIsNotNone(json_resp, 'No results after deserialization')
-        type_id = json_resp.get('threat_type_id', None)
-        self.assertIsNotNone(type_id, 'No threat type ID returned')
-        self.assertGreater(type_id, 0, 'Invalid threat type ID returned [%d]' % type_id)
-        self.logger.info('[%s] Threat type ID: %d', method, type_id)
+        ackMsg = json_resp.get('message', None)
+        self.assertEquals(ackMsg, 'Threat type successfully added')
 
         type_to_update = self.prepare_new_threat_type()
         type_to_update.theName = 'Edited test threat type'
-        type_to_update.theId = type_id
         json_dict = {'session_id': 'test', 'object': type_to_update}
         upd_type_body = jsonpickle.encode(json_dict)
         rv = self.app.put('/api/threats/types/name/%s?session_id=test' % quote(self.prepare_new_threat_type().theName), data=upd_type_body, content_type='application/json')
@@ -294,6 +289,7 @@ class ThreatAPITests(CairisDaemonTestCase):
             valueTypeDescription='This is a test threat type',
             vType='threat-type'
         )
+        new_type.theEnvironmentName = 'all'
         return new_type
 
     def prepare_dict(self, threat=None):
