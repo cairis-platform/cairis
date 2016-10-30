@@ -55,24 +55,25 @@ function createDependenciesTable(){
         dependencies[di] = item;
         textToInsert[i++] = "<tr>";
         var itemKey = item.theEnvironmentName + '/' + item.theDepender + '/' + item.theDependee + '/' + item.theDependency;
-        textToInsert[i++] = '<td><button class="editDependencyButton" value="' + itemKey + '">' + 'Edit' + '</button> <button class="deleteDependencyButton" value="' + item.theVulnerabilityName + '">' + 'Delete' + '</button></td>';
-        textToInsert[i++] = '<td name="theEnvironmentName">';
+        textToInsert[i++] = '<td class="deleteDependencyButton"><i class="fa fa-minus" value="' + itemKey + '"></i></td>';
+
+        textToInsert[i++] = '<td class="dependency-rows" name="theEnvironmentName" value="' + itemKey + '">';
         textToInsert[i++] = item.theEnvironmentName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theDepender">';
+        textToInsert[i++] = '<td class="dependency-rows" name="theDepender" value="' + itemKey + '">';
         textToInsert[i++] = item.theDepender;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theDependee">';
+        textToInsert[i++] = '<td class="dependency-rows" name="theDependee" value="' + itemKey + '">';
         textToInsert[i++] = item.theDependee;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theDependenyType">';
+        textToInsert[i++] = '<td class="dependency-rows" name="theDependenyType" value="' + itemKey + '">';
         textToInsert[i++] = item.theDependencyType;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theDependeny">';
+        textToInsert[i++] = '<td class="dependency-rows" name="theDependeny" value="' + itemKey + '">';
         textToInsert[i++] = item.theDependency;
         textToInsert[i++] = '</td>';
         textToInsert[i++] = '</tr>';
@@ -92,7 +93,7 @@ function createDependenciesTable(){
   });
 }
 
-$(document).on('click', ".editDependencyButton", function (e) {
+$(document).on('click', "td.dependency-rows", function(){
   activeElement("objectViewer");
   var dependencies = JSON.parse($.session.get("Dependencies"));
   var dependency = dependencies[$(this).index()];
@@ -225,7 +226,7 @@ $(document).on("click", "#addNewDependency", function () {
   });
 });
 
-$(document).on('click', '.deleteDependencyButton', function (e) {
+$(document).on('click', 'td.deleteDependencyButton', function (e) {
   e.preventDefault();
   var dependencies = JSON.parse($.session.get("Dependencies"));
   var dependency = dependencies[$(this).index()];

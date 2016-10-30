@@ -49,9 +49,9 @@ function createDomainPropertiesTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editDomainPropertyButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteDomainPropertyButton" value="' + key + '">' + 'Delete' + '</button></td>';
+        textToInsert[i++] = '<td class="deleteDomainPropertyButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
 
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="domainproperty-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -74,9 +74,9 @@ function createDomainPropertiesTable(){
   })
 }
 
-$(document).on('click', ".editDomainPropertyButton", function () {
+$(document).on('click', "td.domainproperty-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).val();
+  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -137,9 +137,9 @@ mainContent.on('click', '#UpdateDomainProperty', function (e) {
   }
 });
 
-$(document).on('click', '.deleteDomainPropertyButton', function (e) {
+$(document).on('click', 'td.deleteDomainPropertyButton', function (e) {
   e.preventDefault();
-  var dpName = $(this).val();
+  var dpName = $(this).find('i').attr("value");
   deleteObject('domainproperty',dpName,function(dpName) {
     $.ajax({
       type: "DELETE",

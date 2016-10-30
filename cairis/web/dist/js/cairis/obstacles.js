@@ -47,9 +47,9 @@ function createEditObstaclesTable(){
 
       $.each(data, function(count, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editObstaclesButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteObstacleButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
+        textToInsert[i++] = '<td class="deleteObstacleButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
 
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="obstacle-rows" name="theName">';
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
@@ -88,8 +88,8 @@ function createEditObstaclesTable(){
   })
 }
 
-$(document).on('click', "button.editObstaclesButton",function() {
-  var name = $(this).attr("value");
+$(document).on('click', "td.obstacle-rows",function() {
+  var name = $(this).text();
   getObstacleOptions(name);
 });
 
@@ -521,9 +521,9 @@ mainContent.on('click', '#closeObstacleButton', function (e) {
   createEditObstaclesTable();
 });
 
-$(document).on('click', '.deleteObstacleButton', function (e) {
+$(document).on('click', "td.deleteObstacleButton", function (e) {
   e.preventDefault();
-  var obsName = $(this).val();
+  var obsName = $(this).find('i').attr("value");
   deleteObject('obstacle',obsName,function(obsName) {
     $.ajax({
       type: "DELETE",

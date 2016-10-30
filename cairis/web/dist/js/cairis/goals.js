@@ -47,9 +47,9 @@ function createEditGoalsTable(){
 
       $.each(data, function(count, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editGoalsButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteGoalButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
+        textToInsert[i++] = '<td class="deleteGoalButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
 
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="goal-rows" name="theName">';
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
@@ -90,8 +90,8 @@ function createEditGoalsTable(){
 }
 
 
-$(document).on('click', "button.editGoalsButton",function() {
-  var name = $(this).attr("value");
+$(document).on('click', "td.goal-rows", function(){
+  var name = $(this).text();
   getGoalOptions(name);
 });
 
@@ -669,9 +669,9 @@ function getAllgoals(callback) {
   });
 }
 
-$(document).on('click', '.deleteGoalButton', function (e) {
+$(document).on('click', "td.deleteGoalButton", function (e) {
   e.preventDefault();
-  var goalName = $(this).val();
+  var goalName = $(this).find('i').attr("value");
   deleteObject('goal',goalName,function(goalName) {
     $.ajax({
       type: "DELETE",
