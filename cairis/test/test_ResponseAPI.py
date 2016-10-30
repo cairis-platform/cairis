@@ -26,7 +26,6 @@ from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import ValuedRole
 from cairis.mio.ModelImport import importModelFile
 import os
-import pytest
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
