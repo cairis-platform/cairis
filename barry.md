@@ -11,7 +11,7 @@ image:
 
 # Rick
 
-![fig:BarryPortrait]({{ site.baseurl }}/images/Barry_portrait.jpg "Barry")
+![fig:BarryPortrait]({{ site.baseurl }}/images/Barry.jpg "Barry")
 
 [Image source](https://www.flickr.com/photos/savidgefamily/6962111611)
 
