@@ -43,8 +43,9 @@ function createVulnerabilityTable(){
 
       $.each(data, function(count, item) {
         textToInsert[i++] = "<tr>"
-        textToInsert[i++] = '<td><button class="editVulnerabilityButton" value="' + item.theVulnerabilityName + '">' + 'Edit' + '</button> <button class="deleteVulnerabilityButton" value="' + item.theVulnerabilityName + '">' + 'Delete' + '</button></td>';
-        textToInsert[i++] = '<td name="theVulnerabilityName">';
+
+        textToInsert[i++] = '<td class="deleteVulnerabilityButton"><i class="fa fa-minus" value="' + item.theVulnerabilityName + '"></i></td>';
+        textToInsert[i++] = '<td class="vulnerability-rows" name="theName">';
         textToInsert[i++] = item.theVulnerabilityName;
         textToInsert[i++] = '</td>';
 
@@ -69,7 +70,7 @@ function createVulnerabilityTable(){
 }
 
 
-$(document).on('click', "button.editVulnerabilityButton",function(){
+$(document).on('click', "td.vulnerability-rows",function(){
   activeElement("objectViewer");
   if($(this).hasClass("newVulnerability")){
     var vul = jQuery.extend(true, {}, vulnerabilityDefault);
@@ -79,7 +80,7 @@ $(document).on('click', "button.editVulnerabilityButton",function(){
     });
   }
   else {
-    var name = $(this).attr("value");
+    var name = $(this).text();
     $.session.set("VulnerabilityName", name.trim());
     $.ajax({
       type: "GET",
@@ -247,9 +248,9 @@ mainContent.on('click', '#UpdateVulnerability', function (e) {
 });
 
 
-$("#reqTable").on('click','.deleteVulnerabilityButton', function (event) {
+$(document).on('click','td.deleteVulnerabilityButton', function (event) {
   event.preventDefault();
-  var vulName = $(this).attr("value");
+  var vulName = $(this).find('i').attr("value");
   deleteObject('vulnerability',vulName,function(vulName) {
     $.ajax({
       type: "DELETE",

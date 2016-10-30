@@ -43,10 +43,9 @@ function createRisksTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editRiskButton" value="' + key + '">' + 'Edit' + '</button> ' +
-          '<button class="deleteRiskButton" value="' + key + '">' + 'Delete' + '</button></td>';
 
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteRiskButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="risk-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -168,9 +167,9 @@ function toggleRiskWindows(){
     $("#editRisksForm").toggle();
 }
 
-$(document).on('click', '.editRiskButton', function () {
+$(document).on('click', 'td.risk-rows', function () {
   activeElement("objectViewer");
-  var name = $(this).val();
+  var name = $(this).text();
   $.session.set("riskName", name);
   $.ajax({
     type: "GET",
@@ -376,9 +375,9 @@ mainContent.on('click', '#CloseRisk', function (e) {
   createRisksTable();
 });
  
-$(document).on('click', '.deleteRiskButton', function (e) {
+$(document).on('click', 'td.deleteRiskButton', function (e) {
   e.preventDefault();
-  var riskName = $(this).val();
+  var riskName = $(this).find('i').attr("value");
   deleteObject('risk', riskName, function (riskName) {
     $.ajax({
       type: "DELETE",

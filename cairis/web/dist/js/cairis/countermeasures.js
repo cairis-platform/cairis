@@ -51,9 +51,9 @@ function createCountermeasuresTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editCountermeasuresButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteCountermeasuresButton" value="' + key + '">' + 'Delete' + '</button></td>';
 
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteCountermeasureButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="countermeasure-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -80,9 +80,9 @@ function createCountermeasuresTable(){
 
 
 var mainContent = $("#objectViewer");
-$(document).on('click', ".editCountermeasuresButton", function () {
+$(document).on('click', "td.countermeasure-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).val();
+  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -449,9 +449,9 @@ mainContent.on('click', '#CloseCountermeasure', function (e) {
   createCountermeasuresTable();
 });
 
-$(document).on('click', '.deleteCountermeasuresButton', function (e) {
+$(document).on('click', 'td.deleteCountermeasureButton', function (e) {
   e.preventDefault();
-  var cmName = $(this).val();
+  var cmName = $(this).find('i').attr("value");
   deleteObject('countermeasure', cmName, function (cmName) {
     $.ajax({
       type: "DELETE",

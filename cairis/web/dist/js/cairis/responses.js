@@ -23,9 +23,9 @@ $("#responseMenuClick").click(function () {
   createResponsesTable();
 });
 
-$(document).on('click', ".editResponseButton", function () {
+$(document).on('click', "td.response-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).val();
+  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -295,9 +295,9 @@ function createResponsesTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editResponseButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteResponseButton" value="' + key + '">' + 'Delete' + '</button></td>';
 
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteResponseButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="response-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -333,9 +333,9 @@ mainContent.on('click', '#CloseResponse', function (e) {
   createResponsesTable();
 });
 
-$(document).on('click', '.deleteResponseButton', function (e) {
+$(document).on('click', 'td.deleteResponseButton', function (e) {
   e.preventDefault();
-  var respName = $(this).val();
+  var respName = $(this).find('i').attr("value");
   deleteObject('response', respName, function (respName) {
     $.ajax({
       type: "DELETE",

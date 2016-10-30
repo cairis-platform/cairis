@@ -67,9 +67,9 @@ function createTasksTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editTaskButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteTaskButton" value="' + key + '">' + 'Delete' + '</button></td>';
 
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteTaskButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="task-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -92,9 +92,9 @@ function createTasksTable(){
   })
 }
 
-$(document).on('click', ".editTaskButton", function () {
+$(document).on('click', "td.task-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).val();
+  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -371,9 +371,9 @@ mainContent.on('click', '#UpdateTask', function (e) {
   }
 });
 
-$(document).on('click', '.deleteTaskButton', function (e) {
+$(document).on('click', 'td.deleteTaskButton', function (e) {
   e.preventDefault();
-  var taskName = $(this).val();
+  var taskName = $(this).find('i').attr("value");
   deleteObject('task', taskName, function (taskName) {
     $.ajax({
       type: "DELETE",

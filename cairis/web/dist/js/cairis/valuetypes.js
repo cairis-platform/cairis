@@ -97,9 +97,9 @@ function createValueTypesTable(valueType){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editValueTypeButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteValueTypeButton" value="' + key + '">' + 'Delete' + '</button></td>';
 
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteValueTypeButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
+        textToInsert[i++] = '<td class="valuetype-rows" name="theName">';
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
@@ -122,9 +122,9 @@ function createValueTypesTable(valueType){
   })
 }
 
-$(document).on('click', ".editValueTypeButton", function () {
+$(document).on('click', "td.valuetype-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).val();
+  var name = $(this).text();
   var valueType = $.session.get("value_type");
   $.ajax({
     type: "GET",
@@ -186,9 +186,9 @@ mainContent.on('click', '#UpdateValueType', function (e) {
   }
 });
 
-$(document).on('click', '.deleteValueTypeButton', function (e) {
+$(document).on('click', 'td.deleteValueTypeButton', function (e) {
   e.preventDefault();
-  var vtName = $(this).val();
+  var vtName = $(this).find('i').attr("value");
   var valueType = $.session.get("value_type");
   deleteObject('value_type',vtName,function(vtName) {
     $.ajax({

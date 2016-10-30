@@ -44,9 +44,8 @@ function createUseCasesTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editUseCaseButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteUseCaseButton" value="' + key + '">' + 'Delete' + '</button></td>';
-
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteUseCaseButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="usecase-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -69,9 +68,9 @@ function createUseCasesTable(){
   })
 }
 
-$(document).on('click', ".editUseCaseButton", function () {
+$(document).on('click', "td.usecase-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).val();
+  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -295,9 +294,9 @@ mainContent.on('click', '#UpdateUseCase', function (e) {
   }
 });
 
-$(document).on('click', '.deleteUseCaseButton', function (e) {
+$(document).on('click', 'td.deleteUseCaseButton', function (e) {
   e.preventDefault();
-  var ucName = $(this).val();
+  var ucName = $(this).find('i').attr("value");
   deleteObject('usecase',ucName,function(ucName) {
     $.ajax({
       type: "DELETE",

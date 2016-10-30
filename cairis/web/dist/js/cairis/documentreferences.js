@@ -44,9 +44,9 @@ function createDocumentReferencesTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editDocumentReferenceButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteDocumentReferenceButton" value="' + key + '">' + 'Delete' + '</button></td>';
 
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteDocumentReferenceButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="documentreference-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -69,9 +69,9 @@ function createDocumentReferencesTable(){
   })
 }
 
-$(document).on('click', ".editDocumentReferenceButton", function () {
+$(document).on('click', "td.documentreference-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).val();
+  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -125,9 +125,9 @@ mainContent.on('click', '#UpdateDocumentReference', function (e) {
   }
 });
 
-$(document).on('click', '.deleteDocumentReferenceButton', function (e) {
+$(document).on('click', 'td.deleteDocumentReferenceButton', function (e) {
   e.preventDefault();
-  deleteDocumentReference($(this).val(), function () {
+  deleteDocumentReference($(this).find('i').attr("value"), function () {
     createDocumentReferencesTable();
   });
 });

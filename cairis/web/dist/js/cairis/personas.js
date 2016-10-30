@@ -49,9 +49,8 @@ function createPersonasTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editPersonaButton" value="' + key + '">' + 'Edit' + '</button> <button class="deletePersonaButton" value="' + key + '">' + 'Delete' + '</button></td>';
-
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deletePersonaButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="persona-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -75,9 +74,9 @@ function createPersonasTable(){
   })
 }
 
-$(document).on('click', ".editPersonaButton", function () {
+$(document).on('click', "td.persona-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).val();
+  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -293,9 +292,9 @@ $(document).on("click", "#addNewPersona", function () {
 });
 
 //deletePersonaButton
-$(document).on('click', '.deletePersonaButton', function (e) {
+$(document).on('click', 'td.deletePersonaButton', function (e) {
   e.preventDefault();
-  deletePersona($(this).val(), function () {
+  deletePersona($(this).find('i').attr("value"), function () {
     createPersonasTable();
   });
 });

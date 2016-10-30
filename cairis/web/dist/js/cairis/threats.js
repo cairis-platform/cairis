@@ -43,9 +43,8 @@ function createThreatsTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editThreatsButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteThreatsButton" value="' + key + '">' + 'Delete' + '</button></td>';
-
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteThreatButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="threat-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -71,8 +70,8 @@ function createThreatsTable(){
 
 
 var mainContent = $("#objectViewer");
-$(document).on('click', ".editThreatsButton", function () {
-  var name = $(this).val();
+$(document).on('click', "td.threat-rows", function () {
+  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -370,9 +369,9 @@ mainContent.on('click', ".removeThreatProperty", function () {
   });
 });
 
-$(document).on('click', '.deleteThreatsButton', function (e) {
+$(document).on('click', 'td.deleteThreatButton', function (e) {
   e.preventDefault();
-  var threatName = $(this).val();
+  var threatName = $(this).find('i').attr("value");
   deleteObject('threat', threatName, function (threatName) {
     $.ajax({
       type: "DELETE",

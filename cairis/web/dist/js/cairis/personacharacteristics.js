@@ -44,9 +44,9 @@ function createPersonaCharacteristicsTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editPersonaCharacteristicButton" value="' + key + '">' + 'Edit' + '</button> <button class="deletePersonaCharacteristicButton" value="' + key + '">' + 'Delete' + '</button></td>';
 
-        textToInsert[i++] = '<td name="thePersonaName">';
+        textToInsert[i++] = '<td class="deletePersonaCharacteristicButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="personacharacteristic-rows" name="theName">';
         textToInsert[i++] = item.thePersonaName;
         textToInsert[i++] = '</td>';
 
@@ -73,9 +73,9 @@ function createPersonaCharacteristicsTable(){
   })
 }
 
-$(document).on('click', ".editPersonaCharacteristicButton", function () {
+$(document).on('click', "td.personacharacteristic-rows", function () {
   activeElement("objectViewer");
-  var key = $(this).val();
+  var key = $(this).text();
   var name = key.split("/")[2];
   $.ajax({
     type: "GET",
@@ -118,9 +118,9 @@ mainContent.on('click', '#UpdatePersonaCharacteristic', function (e) {
   }
 });
 
-$(document).on('click', '.deletePersonaCharacteristicsButton', function (e) {
+$(document).on('click', 'td.deletePersonaCharacteristicsButton', function (e) {
   e.preventDefault();
-  deletePersonaCharacteristic($(this).val(), function () {
+  deletePersonaCharacteristic($(this).find('i').attr("value"), function () {
     createPersonaCharacteristicsTable();
   });
 });

@@ -43,9 +43,8 @@ function createAttackersTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editAttackerButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteAttackerButton" value="' + key + '">' + 'Delete' + '</button></td>';
-
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteAttackerButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
+        textToInsert[i++] = '<td class="attacker-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -69,9 +68,9 @@ function createAttackersTable(){
   })
 }
 
-$(document).on('click', ".editAttackerButton", function () {
+$(document).on('click', "td.attacker-rows", function () {
   activeElement("objectViewer"); 
-  var name = $(this).val();
+  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -394,9 +393,9 @@ mainContent.on('dblclick', ".changeCapability", function () {
   attackerToggle();
 });
 
-$(document).on('click', '.deleteAttackerButton', function (e) {
+$(document).on('click', 'td.deleteAttackerButton', function (e) {
   e.preventDefault();
-  var attackerName = $(this).val();
+  var attackerName = $(this).find('i').attr("value");
   deleteObject('attacker',attackerName,function(attackerName) {
     $.ajax({
       type: "DELETE",

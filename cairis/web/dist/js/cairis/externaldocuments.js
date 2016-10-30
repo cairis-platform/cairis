@@ -44,9 +44,9 @@ function createExternalDocumentsTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editExternalDocumentButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteExternalDocumentButton" value="' + key + '">' + 'Delete' + '</button></td>';
 
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteExternalDocumentButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="externaldocument-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -69,9 +69,9 @@ function createExternalDocumentsTable(){
   })
 }
 
-$(document).on('click', ".editExternalDocumentButton", function () {
+$(document).on('click', "td.externaldocument-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).val();
+  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -118,9 +118,9 @@ mainContent.on('click', '#UpdateExternalDocument', function (e) {
   }
 });
 
-$(document).on('click', '.deleteExternalDocumentButton', function (e) {
+$(document).on('click', 'td.deleteExternalDocumentButton', function (e) {
   e.preventDefault();
-  deleteExternalDocument($(this).val(), function () {
+  deleteExternalDocument($(this).find('i').attr("value"), function () {
     createExternalDocumentsTable();
   });
 });
