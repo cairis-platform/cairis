@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">
+
+<cairis_model>
+
+<cairis>
+  <project_settings name="Default">
+    <contributors>
+      <contributor first_name="None" surname="None" affiliation="Shamal Faily" role="Scribe" />
+    </contributors>
+  </project_settings>
+  <environment name="Default" short_code="Default">
+    <definition>Default</definition>
+    <asset_values>
+      <none>TBC</none>
+      <low>TBC</low>
+      <medium>TBC</medium>
+      <high>TBC</high>
+    </asset_values>
+  </environment>
+</cairis>
+
+<riskanalysis>
+  <role name="Instrument Technician" type="Stakeholder" short_code="TECH" >
+    <description>Instrument Technicians are responsible for maintaining operational SCADA, Telemetry, and Control System software.</description>
+  </role>
+</riskanalysis>
+
+<usability>
+
+<persona name="Barry" type="Secondary" assumption_persona="FALSE" image="Barry.jpg" >
+  <!-- Image source: https://www.flickr.com/photos/wistechcolleges/7221593332 -->
+  <activities>Much of Barry's work involves equipment modification and instrument calibration; this work arises from requests from Process, or activities as part of on-going projects to improve plant efficiency.  As part of these changes, Barry may need to modify alarms on outstations, and make minor changes to PLCs and HMIs.
+
+Barry is often called out to troubleshoot problems at sites and kiosks within his area of operations in Dorset, which can also involve software changes ranging from simply downloading software to a device to clean up its memory, through to re-generating the software from configuration sheets if no software backup is available.</activities>
+  <attitudes>Barry has learned the hard way that you only start learning when things go wrong.  As such, Barry tries to keep up-to-speed with planned SCADA, PLC, and outstation changes as much as possible; he knows that avenues of support may not be easily available in 5-10 years when a piece of equipment is modified, and the associated software needs to change.
+
+If he finds out that some plant modifications are planned in his area, Barry will try to get hold of the relevant work manual; he knows that otherwise he won't be able to get hold of documentation which might be useful in the future.
+
+Although aware of security, Barry is not exceptionally worried about it.  After all, no-one really knows anything about the software he looks after and, in terms of physical security, all the manned site on his patch have security guards. </attitudes>
+  <aptitudes>Barry has been using many of his day-to-day software tools almost as long as the tools have been around.  Barry knows quite a bit about telemetry software, so often gets called up by the more junior instrument techs to deal with any telemetry issues.  Conversely, Barry is less experienced with some of the SCADAs in use, so is reliant on people working in plants, or other colleagues, for any detailed troubleshooting.
+
+Due to the lack of ACME ICT support for PC hardware at his site, Barry has learned how to backup his site PCs, his personal laptop, and recover from PC hardware failures - a significant problem given the age of some of the PCs in his area.</aptitudes>
+  <motivations>Barry gets annoyed when he needs to make a software change at a remote site, and finds that he can't get at the software he needs from a PLC or outstation, can't trust the on-site backup left behind or the software on his laptop.</motivations>
+  <skills>Barry doesn't have any specific experience of software repositories or version control.  He does, however, have lots of experience archiving and restoring PLC and telemetry software.</skills>
+  <intrinsic></intrinsic>
+  <contextual></contextual>
+  <persona_environment name="Default" is_direct="FALSE" >
+    <persona_role name="Instrument Technician" />
+    <narrative>On any given day, Barry makes several modifications and several different locations.  Therefore, it is important that the interface for working with the repository is built around Barry, rather than the other way around.</narrative>
+  </persona_environment>
+</persona>
+</usability>
+</cairis_model>
