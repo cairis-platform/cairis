@@ -94,6 +94,7 @@ mainContent.on('click', "#editMisusedCase", function (e) {
       $.session.set("MisuseCase", JSON.stringify(data));
       $("#theMisuseName").val(data.theName);
       $("#theMisuseRisk").val(data.theRisk);
+      $("#theMisuseEnvironments").find("tbody").empty();
       $.each(data.theEnvironmentProperties, function (idx,env) {
         appendMisuseEnvironment(env.theEnvironmentName);
       });
@@ -114,7 +115,12 @@ mainContent.on('click', "#updateMisuseCase", function (e) {
   clearMisuseCaseInfo();
   $("#theMisuseEnvironments").find("tbody").empty();
   toggleRiskWindows();
+});
 
+
+mainContent.on('click', "#cancelMisuseCase", function (e) {
+  e.preventDefault();
+  toggleRiskWindows();
 });
 
 mainContent.on("click",".misusecaseEnvironment", function () {

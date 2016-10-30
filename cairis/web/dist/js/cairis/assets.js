@@ -55,11 +55,11 @@ function createAssetsTable(data, callback){
   var i = 0;
 
   $.each(data, function(count, item) {
-    textToInsert[i++] = "<tr>"
+    textToInsert[i++] = '<tr>'
 
-    textToInsert[i++] = '<td><button class="editAssetsButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteAssetButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
+    textToInsert[i++] = '<td class="deleteAssetButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
 
-    textToInsert[i++] = '<td name="theName">';
+    textToInsert[i++] = '<td class="asset-rows" name="theName" value="' + item.theName + '">';
     textToInsert[i++] = item.theName;
     textToInsert[i++] = '</td>';
 
@@ -77,9 +77,9 @@ function createAssetsTable(data, callback){
   callback();
 }
 
-$(document).on('click', "button.editAssetsButton",function(){
+$(document).on('click', "td.asset-rows", function(){
   activeElement("objectViewer");
-  var name = $(this).attr("value");
+  var name = $(this).attr('value');
   $.session.set("AssetName", name.trim());
 
   $.ajax({
@@ -509,8 +509,9 @@ $(document).on('click', "#addNewAsset",function(){
   });
 });
 
-$(document).on('click', "button.deleteAssetButton",function(){
-  var assetName = $(this).attr("value");
+$(document).on('click', "td.deleteAssetButton",function(e){
+  var assetName = $(this).find('i').attr('value');
+  e.preventDefault();
   deleteObject('asset',assetName, function(assetName) {
 
     $.ajax({

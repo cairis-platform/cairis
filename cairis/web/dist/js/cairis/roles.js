@@ -42,8 +42,8 @@ function fillRolesTable(){
       var textToInsert = [];
       $.each(json, function (key, value) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editRoleButton" value="' + key + '">' + 'Edit' + '</button> <button class="deleteRoleButton" value="' + key + '">' + 'Delete' + '</button></td>';
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteRoleButton"><i class="fa fa-minus" value="' + value.theName + '"></i></td>';
+        textToInsert[i++] = '<td class="role-rows" name="theName">';
         textToInsert[i++] = value.theName;
         textToInsert[i++] = '</td>';
 
@@ -66,9 +66,9 @@ function fillRolesTable(){
   sortTableByRow(1);
 }
 
-$(document).on('click', "button.editRoleButton",function() {
+$(document).on('click', "td.role-rows", function(){
   activeElement("objectViewer");
-  var name = $(this).val();
+  var name = $(this).text();
   if(name == undefined || name == "") {
     fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
       $("#editRoleOptionsform").addClass("newRole");
@@ -86,9 +86,8 @@ $(document).on('click', "button.editRoleButton",function() {
       url: serverIP + "/api/roles/name/" + name.replace(" ", "%20"),
       success: function (json) {
         fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
-          var form = $('#editRoleOptionsform');
-          form.loadJSON(json, null);
           $.session.set("RoleObject", JSON.stringify(json));
+          $("#editRoleOptionsform").loadJSON(json, null);
           $.ajax({
             type: "GET",
             dataType: "json",
@@ -160,9 +159,9 @@ mainContent.on('click','#UpdateRole', function (event) {
   }
 });
 
-$("#reqTable").on('click','.deleteRoleButton', function (event) {
+$(document).on('click',"td.deleteRoleButton",function(event){
   event.preventDefault();
-  var roleName = $(this).attr("value");
+  var roleName = $(this).find('i').attr("value");
   deleteObject('role',roleName,function(roleName) {
     $.ajax({
       type: "DELETE",
