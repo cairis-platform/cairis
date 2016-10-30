@@ -3937,34 +3937,34 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def environmentAssets(self,envName):
-    return environmentDimensions('asset',envName)
+    return self.environmentDimensions('asset',envName)
 
   def environmentGoals(self,envName):
-    return environmentDimensions('goal',envName)
+    return self.environmentDimensions('goal',envName)
 
   def environmentObstacles(self,envName):
-    return environmentDimensions('obstacle',envName)
+    return self.environmentDimensions('obstacle',envName)
 
   def environmentDomainProperties(self,envName):
-    return environmentDimensions('domainProperty',envName)
+    return self.environmentDimensions('domainProperty',envName)
 
   def environmentCountermeasures(self,envName):
-    return environmentDimensions('countermeasure',envName)
+    return self.environmentDimensions('countermeasure',envName)
 
   def environmentTasks(self,envName):
-    return environmentDimensions('task',envName)
+    return self.environmentDimensions('task',envName)
 
   def environmentThreats(self,envName):
-    return environmentDimensions('threat',envName)
+    return self.environmentDimensions('threat',envName)
 
   def environmentVulnerabilities(self,envName):
-    return environmentDimensions('vulnerability',envName)
+    return self.environmentDimensions('vulnerability',envName)
 
   def environmentUseCases(self,envName):
-    return environmentDimensions('usecase',envName)
+    return self.environmentDimensions('usecase',envName)
 
   def environmentMisuseCases(self,envName):
-    return environmentDimensions('misusecase',envName)
+    return self.environmentDimensions('misusecase',envName)
 
   def goalModelElements(self,envName):
     try:
