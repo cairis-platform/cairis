@@ -38,7 +38,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController
+    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateRequirementController
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -387,6 +387,14 @@ def start():
   api.add_resource(TaskController.TasksAPI, '/api/tasks')
   api.add_resource(TaskController.TaskByNameAPI, '/api/tasks/name/<string:name>')
   api.add_resource(TaskController.TaskModelByNameAPI, '/api/tasks/model/environment/<string:environment>/task/<string:task>/misusecase/<string:misusecase>')
+
+  # Template Goal routes
+  api.add_resource(TemplateGoalController.TemplateGoalsAPI, '/api/template_goals')
+  api.add_resource(TemplateGoalController.TemplateGoalByNameAPI, '/api/template_goals/name/<string:name>')
+
+  # Template Requirement routes
+  api.add_resource(TemplateRequirementController.TemplateRequirementsAPI, '/api/template_requirements')
+  api.add_resource(TemplateRequirementController.TemplateRequirementByNameAPI, '/api/template_requirements/name/<string:name>')
 
   # Threat routes
   api.add_resource(ThreatController.ThreatAPI, '/api/threats')

@@ -368,6 +368,26 @@ class ArchitecturalPatternMessage(DefaultMessage):
   object=ModelDefinitions.ValueTypeModel.__name__,
 )
 # endregion
-class ArchitecturalPatternMessage(DefaultMessage):
+class ValueTypeMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ValueTypeModel)
+  required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+  object=ModelDefinitions.TemplateGoalModel.__name__,
+)
+# endregion
+class TemplateGoalMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.TemplateGoalModel)
+  required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+  object=ModelDefinitions.TemplateRequirementModel.__name__,
+)
+# endregion
+class TemplateRequirementMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.TemplateRequirementModel)
   required = DefaultMessage.required

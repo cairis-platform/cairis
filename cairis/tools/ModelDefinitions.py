@@ -58,6 +58,8 @@ from cairis.core.DocumentReference import DocumentReference
 from cairis.core.PersonaCharacteristic import PersonaCharacteristic
 from cairis.core.ComponentView import ComponentView
 from cairis.core.Component import Component
+from cairis.core.TemplateGoal import TemplateGoal
+from cairis.core.TemplateRequirement import TemplateRequirement
 from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, PersonaCharacteristicReference,ObjectDependency
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -1112,4 +1114,37 @@ class ValueTypeModel(object):
     "theType": {
       "enum": ['asset_value','threat_value','risk_class','countermeasure_value','capability','motivation','asset_type','threat_type','vulnerability_type','severity','likelihood','access_right','protocol','privilege','surface_type']
     }
+  }
+
+@swagger.model
+class TemplateGoalModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theName": fields.String,
+    "theDefinition": fields.String,
+    "theRationale": fields.String,
+    "theConcerns": fields.List(fields.String),
+    "theResponsibilities": fields.List(fields.String)
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(TemplateGoal)
+  }
+
+@swagger.model
+class TemplateRequirementModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theName": fields.String,
+    "theAssetName": fields.String,
+    "theType": fields.String,
+    "theDescription": fields.String,
+    "theRationale": fields.String,
+    "theFitCriterion": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(TemplateRequirement)
   }
