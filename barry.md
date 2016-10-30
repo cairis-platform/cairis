@@ -9,7 +9,7 @@ image:
 
 {% include toc.html %}
 
-# Rick
+# Barry
 
 ![fig:BarryPortrait]({{ site.baseurl }}/images/Barry_portrait.jpg "Barry")
 
