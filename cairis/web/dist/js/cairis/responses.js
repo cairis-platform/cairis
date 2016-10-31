@@ -62,7 +62,16 @@ $(document).on('click', "td.response-rows", function () {
           case "Transfer":
             toggleResponse("#transferWindow");
             break;
-          case "Mitigate":
+          case "Prevent":
+            toggleResponse("#mitigateWindow");
+            break;
+          case "Deter":
+            toggleResponse("#mitigateWindow");
+            break;
+          case "Detect":
+            toggleResponse("#mitigateWindow");
+            break;
+          case "React":
             toggleResponse("#mitigateWindow");
             break;
           case "Accept":
