@@ -45,4 +45,6 @@ class ModelTests(unittest.TestCase):
     
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/ACME_Water/ACME_Water.xml',1,'test')
     importLocationsFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/ACME_Water/PooleWWTW.xml')
+    b.get_dbproxy().locationsRiskModel('PooleWWTW','Day')
+
 
