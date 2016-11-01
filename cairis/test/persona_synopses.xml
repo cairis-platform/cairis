@@ -1,0 +1,300 @@
+<?xml version="1.0"?>
+<!DOCTYPE synopses PUBLIC "-//CAIRIS//DTD SYNOPSES 1.0//EN" "http://cairis.org/dtd/synopses.dtd">
+
+<synopses>
+<!-- Justin characteristics -->
+<characteristic_synopsis characteristic="Uses mobile applications frequently" synopsis="Mobile app reliance" dimension="softgoal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Hyperactive multi-tasker" synopsis="Multi-task activities" dimension="softgoal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Disposable income" synopsis="Purchase expensive tech" dimension="goal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Metrosexual" synopsis="Fashion conscious" dimension="softgoal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Exercises frequently" synopsis="Maintain healthy lifestyle" dimension="goal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Uses technology to organise life" synopsis="Technology-centricity" dimension="softgoal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Not particularly security or privacy conscious" synopsis="Maintain security indifference" dimension="softgoal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Willing to share personal data" synopsis="Share personal data" dimension="softgoal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Likes new gadgets and technology" synopsis="Uses new gadgets" dimension="softgoal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Cares deeply about style and personal appearance" synopsis="Maintain personal appearance" dimension="softgoal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Young and single" synopsis="Maintain independent life" dimension="softgoal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Enjoys using cutting-edge technology" synopsis="Apply cutting-edge tech" dimension="softgoal" actor_type="persona" actor="Justin" />
+<characteristic_synopsis characteristic="Trusts technology" synopsis="Trust technology" dimension="softgoal" actor_type="persona" actor="Justin" />
+
+<!-- Ethan characteristics -->
+<characteristic_synopsis characteristic="Illegal spammer" synopsis="Send bulk email" dimension="goal" actor_type="persona" actor="Ethan" />
+<characteristic_synopsis characteristic="Student" synopsis="Study undergraduate degree" dimension="goal" actor_type="persona" actor="Ethan" />
+<characteristic_synopsis characteristic="Crime-prone" synopsis="Criminal tendancies" dimension="softgoal" actor_type="persona" actor="Ethan" />
+<characteristic_synopsis characteristic="Credit card data trader" synopsis="Trade credit card data" dimension="goal" actor_type="persona" actor="Ethan" />
+<characteristic_synopsis characteristic="Data harvester" synopsis="Harvest data" dimension="goal" actor_type="persona" actor="Ethan" />
+<characteristic_synopsis characteristic="Vulnerability exploiter" synopsis="Exploit vulnerabilities" dimension="softgoal" actor_type="persona" actor="Ethan" />
+<characteristic_synopsis characteristic="Hacktivist" synopsis="Promote online activism" dimension="softgoal" actor_type="persona" actor="Ethan" />
+<characteristic_synopsis characteristic="Wants to make money fast" synopsis="Make quick profit" dimension="softgoal" actor_type="persona" actor="Ethan" />
+<characteristic_synopsis characteristic="Botnet administrator knowledge" synopsis="Administer botnets" dimension="goal" actor_type="persona" actor="Ethan" />
+<characteristic_synopsis characteristic="Administration knowledge of spamming software" synopsis="Manage spamming infrastructure" dimension="goal" actor_type="persona" actor="Ethan" />
+<characteristic_synopsis characteristic="Security aware" synopsis="Security perception" dimension="softgoal" actor_type="persona" actor="Ethan" />
+
+
+<!-- Jimmy characteristics -->
+<characteristic_synopsis characteristic="Focused on mobile and Web development" synopsis="Develop mobile webapps" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<characteristic_synopsis characteristic="Passionate and experienced professional software developer" synopsis="Programmer lifestyle" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<characteristic_synopsis characteristic="Passionate and successful blogger" synopsis="Blog experiences" dimension="goal" actor_type="persona" actor="Jimmy" />
+<characteristic_synopsis characteristic="Knows what he wants and chooses tool chain and architectural design accordingly" synopsis="Select development toolchain" dimension="goal" actor_type="persona" actor="Jimmy" />
+<characteristic_synopsis characteristic="Prefers open source" synopsis="Prefer open source" dimension="goal" actor_type="persona" actor="Jimmy" />
+<characteristic_synopsis characteristic="Follows a pragmatic hands-on design and implementation approach" synopsis="Design pragmatically" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<characteristic_synopsis characteristic="Knows how to do business with his applications" synopsis="Grow business" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<characteristic_synopsis characteristic="Stays up-to-date on various technologies" synopsis="Maintain ecosystem awareness" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<characteristic_synopsis characteristic="Is fond of gadgets which interact on his home network" synopsis="Hacker" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<characteristic_synopsis characteristic="Is comfortable with developing low-level functional details" synopsis="Exploit device features" dimension="goal" actor_type="persona" actor="Jimmy" /> 
+
+<!-- David characteristics -->
+
+<characteristic_synopsis characteristic="Convicted felon" synopsis="Ex-prisoner" dimension="softgoal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="He is a talented sportsman" synopsis="Competitive sportsman" dimension="softgoal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="He is an expert car repairman" synopsis="Repair vehicles" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Frail personality" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+
+<!--<characteristic_synopsis characteristic="Hard life in early age" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Illegal inclination" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Uncomfortable to rules and laws" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Reckless" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Competitive" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Attention seeker" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Good problem solver" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Comfortable with car's internals" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Money greedy" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Knowledge of basic exploits" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Successful tamperer" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Deranged personality" synopsis="" dimension="goal" actor_type="persona" actor="David" />
+<characteristic_synopsis characteristic="Careless of his own action's consequences" synopsis="" dimension="goal" actor_type="persona" actor="David" /> -->
+
+<!-- Helen characteristics -->
+<characteristic_synopsis characteristic="A Sales and Marketing manager" synopsis="Market products" dimension="goal" actor_type="persona" actor="Helen" />
+<characteristic_synopsis characteristic="A professional commuter" synopsis="Commute to work" dimension="goal" actor_type="persona" actor="Helen" />
+<characteristic_synopsis characteristic="Patterns of behaviour planned" synopsis="Plan schedule" dimension="goal" actor_type="persona" actor="Helen" />
+<characteristic_synopsis characteristic="Is Family-centered" synopsis="Center life around family" dimension="softgoal" actor_type="persona" actor="Helen" />
+<characteristic_synopsis characteristic="Maintains a Work-Life split" synopsis="Balance work and life" dimension="softgoal" actor_type="persona" actor="Helen" />
+<characteristic_synopsis characteristic="Keeps busy" synopsis="Keep active" dimension="softgoal" actor_type="persona" actor="Helen" />
+<characteristic_synopsis characteristic="Shares data to manage schedule" synopsis="Share work data" dimension="goal" actor_type="persona" actor="Helen" />
+
+
+<!-- Helen references -->
+<reference_synopsis reference="LinkedIn user" synopsis="Professionally social network" dimension="softgoal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Works office hours" synopsis="Work 9-5" dimension="softgoal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Receives LinkedIn notifications" synopsis="Track social network" dimension="goal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Car owner" synopsis="Possess vehicle" dimension="goal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="SatNav driver" synopsis="Follow SatNav" dimension="goal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Predictable behaviour" synopsis="Maintain routine schedule" dimension="softgoal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Predictable social contexts" synopsis="Work in routine locations" dimension="softgoal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Married" synopsis="Maintain marriage" dimension="softgoal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Mother of toddler" synopsis="Parent toddler" dimension="softgoal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Takes and shares photo snaps" synopsis="Share photos" dimension="goal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Uses cloud-based photo storage" synopsis="Cloud-store photos" dimension="goal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Frequently around contact network" synopsis="Meet friends/colleagues" dimension="softgoal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Has several social network accounts" synopsis="Manage multiple social networks" dimension="softgoal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Partitions social network usage" synopsis="Separate social networks" dimension="softgoal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Selective about where media is viewed" synopsis="Restrict media viewing" dimension="softgoal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Phones on the road" synopsis="Call on the move" dimension="goal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Uses calendar on home media system" synopsis="Manage diary at home" dimension="goal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Shares usage data" synopsis="Share usage data" dimension="goal" actor_type="persona" actor="Helen" />
+<reference_synopsis reference="Synchronises calendars with the cloud" synopsis="Cloud-manage calendar" dimension="goal" actor_type="persona" actor="Helen" />
+
+<!-- Justin references -->
+<reference_synopsis reference="Uses mobile phone to organise life" synopsis="Schedule diary with mobile" dimension="goal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Installs a third-party application" synopsis="Adhoc mobile app install" dimension="goal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Uses his mobile to pay for small purchases without authentication" synopsis="Unauthenticated purchasing" dimension="goal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Fills time wherever possible" synopsis="Maintains cultural awareness" dimension="softgoal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Constantly listening to music" synopsis="Listen on the move" dimension="softgoal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Buys an BMW 3-series" synopsis="Purchase modern car" dimension="goal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Has other smart devices" synopsis="Converge apps" dimension="goal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Spends a lot of time exercising" synopsis="Exercise frequently" dimension="softgoal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Wants to customise the style and features of his new car" synopsis="Personalise content" dimension="goal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Metrosexuals are young, wealthy, near a city, fashion-conscious" synopsis="Style conscious" dimension="softgoal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Takes 3 days off to buy a car" synopsis="Purchase leisurely" dimension="softgoal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Does not live with family" synopsis="Control living environment" dimension="softgoal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Uses and contributes to online social networks" synopsis="Leverage social networks" dimension="softgoal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Uses mobile phone for complex tasks" synopsis="Complete tasks with mobile" dimension="goal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Shares personal data with BMW" synopsis="Shares personal data with 3rd party" dimension="softgoal" actor_type="persona" actor="Justin" />
+<reference_synopsis reference="Early adopter of technology" synopsis="Adopt early technology" dimension="softgoal" actor_type="persona" actor="Justin" />
+
+<!-- Ethan references -->
+<reference_synopsis reference="Emails sent on behalf of individuals who sell counterfeit goods" synopsis="Earn commission" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Email campaign for a pump and dump scheme" synopsis="Manage email campaign" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Sending unsolicited commercial email is illegal" synopsis="Use technology illegally" dimension="softgoal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Enrolled at the university" synopsis="Undergraduate student" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Use of university network to control a botnet" synopsis="Leverage university resources" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Use of compromised computers to spread malicious codes" synopsis="Leverage personal computers" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Set up a website to sell synthetic cannabis" synopsis="Maintain illegal online business" dimension="softgoal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="IRC user" synopsis="Use IRC" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="CVV thief" synopsis="Obtain credit card data" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Scan internet searching for vulnerable networks" synopsis="Find vulnerable networks" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Gain access and control over vulnerable systems" synopsis="Control unauthorised systems" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Use of hijacked online brokerage accounts" synopsis="Control unauthorised account" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Knock offline websites belonging to conservative pundits" synopsis="Attack political website" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Send messages by use of a botnet" synopsis="Send control messages" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Launch DDoS attacks" synopsis="Launch DDoS" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Alter emails to avoid spam filters" synopsis="Alter email content" dimension="goal" actor_type="persona" actor="Ethan" />
+<reference_synopsis reference="Disguise emails true origin" synopsis="Hide email origin" dimension="goal" actor_type="persona" actor="Ethan" />
+
+<!-- Jimmy references -->
+<reference_synopsis reference="A developer who loves developing mobile applications" synopsis="Achieve commercial success" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="Professional software developer" synopsis="Separate development environments" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="ex-gonzo programmer" synopsis="Work long hours" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="An active and successful blogger" synopsis="Obtain supplemental income" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="Respected blogger" synopsis="Create respected content" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="Prefers to decide on his own on which level of abstraction he wants to design his applications" synopsis="Select design abstractions" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="Likes to control the services he is using" synopsis="Manage hardware infrastructure" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="expects Javascript device interfaces" synopsis="Select device interfaces" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="A developer who prefers open source over closed source" synopsis="Source open-source options" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="A developer who is interested in writing applications which run on the TV, but he did not do yet" synopsis="Unfamiliar with UPnP and DLNA" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="has iPhone SDK expertise" synopsis="Develop iPhone apps" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="acquainted with application porting" synopsis="Port application" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="has software security expertise" synopsis="Apply security control" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="network app development expertise" synopsis="Manage network infrastructure" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="A developer who is a practitioner" synopsis="Experiment with designs" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="pragmatic designer" synopsis="Use notations pragmatically" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="Looking for new markets" synopsis="Control profit margins" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="Looking to target new devices" synopsis="Exploit technology advances" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="Likes to understand the details of the technologies which he uses" synopsis="Explore technical possibilities" dimension="softgoal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="Up-to-date with research developments" synopsis="Track new FLOSS projects" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="Interested in using device plugins" synopsis="Use device APIs" dimension="goal" actor_type="persona" actor="Jimmy" />
+<reference_synopsis reference="reverse engineers plugins" synopsis="Reverse engineer plugins" dimension="goal" actor_type="persona" actor="Jimmy" />
+
+<!-- David references -->
+<reference_synopsis reference="Guilty of multiple, serious felonies" synopsis="Convicted prisoner" dimension="goal" actor_type="persona" actor="David" />
+<reference_synopsis reference="Racing cars driver" synopsis="Drive expensive car" dimension="goal" actor_type="persona" actor="David" />
+<reference_synopsis reference="participation in a baseball tournament" synopsis="Play competitive sports" dimension="softgoal" actor_type="persona" actor="David" />
+<reference_synopsis reference="Good worker in the machine shop" synopsis="Machinary expertise" dimension="softgoal" actor_type="persona" actor="David" />
+<reference_synopsis reference="He mixed with car experts from early age" synopsis="Close contact with cars" dimension="softgoal" actor_type="persona" actor="David" />
+
+
+<step_synopsis environment="Complete" usecase="Installation and update of webinos applications" step_no="2" synopsis="Check local policy" actor_type="component" actor="Policy Manager" />
+<step_synopsis environment="Complete" usecase="Installation and update of webinos applications" step_no="3" synopsis="Display application claims" actor_type="component" actor="Discovery Client" />
+<step_synopsis environment="Complete" usecase="Installation and update of webinos applications" step_no="4" synopsis="Plan installation distribution" actor_type="role" actor="User" />
+<step_synopsis environment="Complete" usecase="Installation and update of webinos applications" step_no="5" synopsis="Distribute applications" actor_type="component" actor="Discovery Manager" />
+
+<!-- Justin contributions -->
+<reference_contribution source="Schedule diary with mobile" destination="Mobile app reliance" means_end="means" contribution="Help" />
+<reference_contribution source="Adhoc mobile app install" destination="Mobile app reliance" means_end="means" contribution="Help" />
+<reference_contribution source="Unauthenticated purchasing" destination="Mobile app reliance" means_end="end" contribution="Make" />
+<reference_contribution source="Maintains cultural awareness" destination="Multi-task activities" means_end="end" contribution="Help" />
+<reference_contribution source="Listen on the move" destination="Multi-task activities" means_end="means" contribution="Help" />
+<reference_contribution source="Purchase modern car" destination="Purchase expensive tech" means_end="end" contribution="Help" />
+<reference_contribution source="Converge apps" destination="Purchase expensive tech" means_end="end" contribution="Help" />
+<reference_contribution source="Exercise frequently" destination="Fashion conscious" means_end="means" contribution="Help" />
+<reference_contribution source="Personalise content" destination="Fashion conscious" means_end="means" contribution="Help" />
+<reference_contribution source="Style conscious" destination="Fashion conscious" means_end="means" contribution="Make" />
+<reference_contribution source="Exercise frequently" destination="Maintain healthy lifestyle" means_end="means" contribution="Make" />
+<reference_contribution source="Purchase leisurely" destination="Maintain independent life" means_end="end" contribution="Help" />
+<reference_contribution source="Control living environment" destination="Maintain independent life" means_end="means" contribution="Hurt" />
+<reference_contribution source="Exercise frequently" destination="Maintain independent life" means_end="means" contribution="Hurt" />
+<reference_contribution source="Leverage social networks" destination="Maintain independent life" means_end="means" contribution="Help" />
+<reference_contribution source="Converge apps" destination="Apply cutting-edge tech" means_end="end" contribution="Help" />
+<reference_contribution source="Adopt early technology" destination="Apply cutting-edge tech" means_end="means" contribution="SomePositive" />
+<reference_contribution source="Schedule diary with mobile" destination="Trust technology" means_end="means" contribution="SomePositive" />
+<reference_contribution source="Adhoc mobile app install" destination="Trust technology" means_end="means" contribution="SomePositive" />
+<reference_contribution source="Leverage social networks" destination="Trust technology" means_end="means" contribution="SomePositive" />
+<reference_contribution source="Shares personal data with 3rd party" destination="Trust technology" means_end="end" contribution="SomePositive" />
+<reference_contribution source="Unauthenticated purchasing" destination="Trust technology" means_end="end" contribution="Make" />
+<reference_contribution source="Schedule diary with mobile" destination="Technology-centricity" means_end="end" contribution="Make" />
+<reference_contribution source="Complete tasks with mobile" destination="Technology-centricity" means_end="means" contribution="SomePositive" />
+<reference_contribution source="Leverage social networks" destination="Maintain security indifference" means_end="end" contribution="Help" />
+<reference_contribution source="Adhoc mobile app install" destination="Maintain security indifference" means_end="end" contribution="SomePositive" />
+<reference_contribution source="Personalise content" destination="Maintain security indifference" means_end="end" contribution="SomePositive" />
+<reference_contribution source="Unauthenticated purchasing" destination="Maintain security indifference" means_end="end" contribution="Make" />
+<reference_contribution source="Leverage social networks" destination="Share personal data" means_end="end" contribution="Help" />
+<reference_contribution source="Personalise content" destination="Share personal data" means_end="end" contribution="Help" />
+<reference_contribution source="Shares personal data with 3rd party" destination="Share personal data" means_end="end" contribution="SomePositive" />
+<reference_contribution source="Purchase leisurely" destination="Uses new gadgets" means_end="end" contribution="Help" />
+<reference_contribution source="Converge apps" destination="Uses new gadgets" means_end="end" contribution="Help" />
+<reference_contribution source="Adopt early technology" destination="Uses new gadgets" means_end="end" contribution="SomePositive" />
+<reference_contribution source="Exercise frequently" destination="Maintain personal appearance" means_end="end" contribution="SomePositive" />
+<reference_contribution source="Personalise content" destination="Maintain personal appearance" means_end="means" contribution="Help" />
+<reference_contribution source="Style conscious" destination="Maintain personal appearance" means_end="means" contribution="SomePositive" />
+<reference_contribution source="Schedule diary with mobile" destination="Maintain personal appearance" means_end="end" contribution="Help" />
+
+<!-- Ethan contributions -->
+<reference_contribution source="Earn commission" destination="Send bulk email" means_end="end" contribution="Make" />
+<reference_contribution source="Manage email campaign" destination="Send bulk email" means_end="end" contribution="Help" />
+<reference_contribution source="Use technology illegally" destination="Send bulk email" means_end="end" contribution="Help" />
+<reference_contribution source="Undergraduate student" destination="Study undergraduate degree" means_end="means" contribution="Help" />
+<reference_contribution source="Leverage university resources" destination="Criminal tendancies" means_end="end" contribution="Help" />
+<reference_contribution source="Leverage personal computers" destination="Criminal tendancies" means_end="end" contribution="SomePositive" />
+<reference_contribution source="Maintain illegal online business" destination="Criminal tendancies" means_end="end" contribution="SomePositive" />
+<reference_contribution source="Use IRC" destination="Trade credit card data" means_end="means" contribution="SomePositive" />
+<reference_contribution source="Obtain credit card data" destination="Trade credit card data" means_end="means" contribution="Make" />
+<reference_contribution source="Find vulnerable networks" destination="Harvest data" means_end="means" contribution="Make" />
+<reference_contribution source="Obtain credit card data" destination="Harvest data" means_end="end" contribution="Make" />
+<reference_contribution source="Leverage university resources" destination="Harvest data" means_end="means" contribution="Help" />
+<reference_contribution source="Control unauthorised systems" destination="Exploit vulnerabilities" means_end="end" contribution="Make" />
+<reference_contribution source="Control unauthorised account" destination="Exploit vulnerabilities" means_end="end" contribution="SomePositive" />
+<reference_contribution source="Attack political website" destination="Promote online activism" means_end="end" contribution="Make" />
+<reference_contribution source="Earn commission" destination="Make quick profit" means_end="means" contribution="Help" />
+<reference_contribution source="Use technology illegally" destination="Make quick profit" means_end="means" contribution="Help" />
+<reference_contribution source="Send control messages" destination="Administer botnets" means_end="means" contribution="Help" />
+<reference_contribution source="Launch DDoS" destination="Administer botnets" means_end="end" contribution="Make" />
+<reference_contribution source="Manage email campaign" destination="Manage spamming infrastructure" means_end="end" contribution="Make" />
+<reference_contribution source="Alter email content" destination="Administer botnets" means_end="end" contribution="Help" />
+<reference_contribution source="Alter email content" destination="Security perception" means_end="means" contribution="Help" />
+<reference_contribution source="Hide email origin" destination="Security perception" means_end="means" contribution="Help" />
+
+<!-- Jimmy contributions -->
+<reference_contribution source="Unfamiliar with UPnP and DLNA" destination="Develop mobile webapps" means_end="means" contribution="Hurt" />
+<reference_contribution source="Develop iPhone apps" destination="Develop mobile webapps" means_end="means" contribution="Help" />
+<reference_contribution source="Port application" destination="Develop mobile webapps" means_end="means" contribution="Help" />
+<reference_contribution source="Apply security control" destination="Develop mobile webapps" means_end="means" contribution="Help" />
+<reference_contribution source="Manage network infrastructure" destination="Develop mobile webapps" means_end="means" contribution="Help" />
+<reference_contribution source="Achieve commercial success" destination="Programmer lifestyle" means_end="means" contribution="SomePositive" />
+<reference_contribution source="Separate development environments" destination="Programmer lifestyle" means_end="end" contribution="Help" />
+<reference_contribution source="Develop iPhone apps" destination="Programmer lifestyle" means_end="end" contribution="Help" />
+<reference_contribution source="Work long hours" destination="Programmer lifestyle" means_end="means" contribution="Help" />
+<reference_contribution source="Obtain supplemental income" destination="Blog experiences" means_end="means" contribution="Help" />
+<reference_contribution source="Create respected content" destination="Blog experiences" means_end="end" contribution="Make" />
+<reference_contribution source="Select design abstractions" destination="Select development toolchain" means_end="means" contribution="Help" />
+<reference_contribution source="Manage hardware infrastructure" destination="Select development toolchain" means_end="means" contribution="Help" />
+<reference_contribution source="Select device interfaces" destination="Select development toolchain" means_end="end" contribution="Help" />
+<reference_contribution source="Separate development environments" destination="Select development toolchain" means_end="means" contribution="Help" />
+<reference_contribution source="Source open-source options" destination="Prefer open source" means_end="end" contribution="Make" />
+<reference_contribution source="Experiment with designs" destination="Design pragmatically" means_end="means" contribution="Help" /> 
+<reference_contribution source="Use notations pragmatically" destination="Design pragmatically" means_end="means" contribution="Help" /> 
+<reference_contribution source="Obtain supplemental income" destination="Grow business" means_end="means" contribution="SomePositive" /> 
+<reference_contribution source="Control profit margins" destination="Grow business" means_end="means" contribution="SomePositive" /> 
+<reference_contribution source="Exploit technology advances" destination="Grow business" means_end="means" contribution="Help" /> 
+<reference_contribution source="Explore technical possibilities" destination="Maintain ecosystem awareness" means_end="means" contribution="Help" /> 
+<reference_contribution source="Track new FLOSS projects" destination="Maintain ecosystem awareness" means_end="means" contribution="Help" /> 
+<reference_contribution source="Unfamiliar with UPnP and DLNA" destination="Hacker" means_end="means" contribution="Help" />
+<reference_contribution source="Use device APIs" destination="Hacker" means_end="means" contribution="Help" />
+<reference_contribution source="Manage network infrastructure" destination="Hacker" means_end="end" contribution="Help" />
+<reference_contribution source="Reverse engineer plugins" destination="Exploit device features" means_end="end" contribution="Help" />
+
+<!-- David contributions -->
+<reference_contribution source="Convicted prisoner" destination="Ex-prisoner" means_end="means" contribution="Make" />
+<reference_contribution source="Drive expensive car" destination="Competitive sportsman" means_end="means" contribution="Help" />
+<reference_contribution source="Play competitive sports" destination="Competitive sportsman" means_end="means" contribution="Make" />
+<reference_contribution source="Machinary expertise" destination="Repair vehicles" means_end="end" contribution="Help" />
+<reference_contribution source="Close contact with cars" destination="Repair vehicles" means_end="means" contribution="Help" />
+
+
+<!-- Helen contributions -->
+<reference_contribution source="Professionally social network" destination="Market products" means_end="means" contribution="Help" />
+<reference_contribution source="Work 9-5" destination="Market products" means_end="means" contribution="Help" />
+<reference_contribution source="Track social network" destination="Market products" means_end="means" contribution="Help" />
+<reference_contribution source="Possess vehicle" destination="Commute to work" means_end="means" contribution="Make" />
+<reference_contribution source="Follow SatNav" destination="Commute to work" means_end="means" contribution="Help" />
+<reference_contribution source="Maintain routine schedule" destination="Plan schedule" means_end="end" contribution="Make" />
+<reference_contribution source="Work in routine locations" destination="Plan schedule" means_end="means" contribution="SomePositive" />
+<reference_contribution source="Maintain marriage" destination="Center life around family" means_end="means" contribution="Make" />
+<reference_contribution source="Parent toddler" destination="Center life around family" means_end="means" contribution="Make" />
+<reference_contribution source="Share photos" destination="Center life around family" means_end="means" contribution="Help" />
+<reference_contribution source="Cloud-store photos" destination="Center life around family" means_end="means" contribution="Hurt" />
+<reference_contribution source="Meet friends/colleagues" destination="Balance work and life" means_end="means" contribution="Help" />
+<reference_contribution source="Manage multiple social networks" destination="Balance work and life" means_end="means" contribution="Make" />
+<reference_contribution source="Separate social networks" destination="Balance work and life" means_end="end" contribution="Help" />
+<reference_contribution source="Restrict media viewing" destination="Balance work and life" means_end="means" contribution="Help" />
+<reference_contribution source="Work 9-5" destination="Balance work and life" means_end="means" contribution="Make" />
+<reference_contribution source="Parent toddler" destination="Balance work and life" means_end="means" contribution="Help" />
+<reference_contribution source="Call on the move" destination="Keep active" means_end="end" contribution="Help" />
+<reference_contribution source="Manage diary at home" destination="Keep active" means_end="end" contribution="Help" />
+<reference_contribution source="Share usage data" destination="Share work data" means_end="means" contribution="Help" />
+<reference_contribution source="Cloud-manage calendar" destination="Share work data" means_end="means" contribution="Help" />
+<reference_contribution source="Parent toddler" destination="Share work data" means_end="means" contribution="Hurt" />
+
+
+<usecase_contribution usecase="Installation and update of webinos applications" referent="Mobile app reliance" means_end="end" contribution="SomePositive" />
+</synopses>

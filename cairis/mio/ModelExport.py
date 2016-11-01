@@ -163,8 +163,8 @@ def exportRedmineRequirements(outFileName,session_id = None):
 
 def exportGRL(outFileName,personaNames,taskNames,envName,session_id = None):
   b = Borg()
-  pStr = ', '.join(personaNames)
-  tStr = ', '.join(taskNames)
+  pStr = personaNames
+  tStr = taskNames
   buf = b.get_dbproxy(session_id).pcToGrl(pStr,tStr,envName)
   rFile = open(outFileName,'w')
   rFile.write(buf)

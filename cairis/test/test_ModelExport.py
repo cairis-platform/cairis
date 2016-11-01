@@ -19,7 +19,7 @@ import unittest
 import os
 import logging
 from cairis.mio.ModelImport import importTVTypeFile,importModelFile,importAttackPattern,importComponentViewFile,importDirectoryFile
-from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineUseCases
+from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineUseCases,exportGRL
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 
@@ -39,6 +39,7 @@ class ModelExportTests(unittest.TestCase):
     importDirectoryFile(os.environ['CAIRIS_SRC'] + '/test/D28TV.xml',0)
     importComponentViewFile(os.environ['CAIRIS_SRC'] + '/test/ContextPolicyManagement.xml',0)
     importAttackPattern(os.environ['CAIRIS_SRC'] + '/test/XACMLAttackPattern.xml',0)
+    importModelFile(os.environ['CAIRIS_SRC'] + '/test/persona_synopses.xml',0)
 
   def setUp(self):
     os.environ['OUTPUT_DIR'] = '/tmp'
@@ -83,3 +84,8 @@ class ModelExportTests(unittest.TestCase):
   def testExportPersona(self):
     b = Borg()
     b.dbProxy.personaToXml('Helen')
+
+  def testExportGRL(self):
+    outFile = '/tmp/exportedGRL.grl'
+    self.assertEqual(exportGRL(outFile,'all','Unsafe application install','Complete'),'Exported GRL for all in tasks Unsafe application install situated in environment Complete')
+    self.assertEqual(os.path.isfile(outFile),True)

@@ -33,7 +33,7 @@ def main(args=None):
   file_export(args.modelFormat,args.outputFile,args.persona,args.task,args.envName)
 
 def file_export(modelFormat = 'all', outputFile = None, persona = None, task = None, envName = None, session_id = None):
-  from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineRequirements,exportRedmineUseCases,exportArchitecture,exportAttackPatterns
+  from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineRequirements,exportRedmineUseCases,exportArchitecture,exportAttackPatterns,exportGRL
   msgStr = ''
   if (modelFormat == 'all'):
     msgStr += exportModel(outputFile,session_id)
@@ -57,10 +57,10 @@ def file_export(modelFormat = 'all', outputFile = None, persona = None, task = N
       raise ARMException('Persona name not specified for GRL export')
     elif len(taskNames) == 0:
       raise ARMException('Task name not specified for GRL export')
-    elif args.envName == None:
+    elif envName == None:
       raise ARMException('Environment name not specified for GRL export')
     else:
-      msgStr += exportGRL(args.outputFile,personaNames,taskNames,envName,session_id)
+      msgStr += exportGRL(outputFile,personaNames,taskNames,envName,session_id)
   else:
     raise ARMException('Export model type ' + modelFormat + ' not recognised')
   return msgStr
