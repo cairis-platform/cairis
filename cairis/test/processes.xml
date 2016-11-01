@@ -1,0 +1,349 @@
+<?xml version="1.0"?>
+<!DOCTYPE processes PUBLIC "-//CAIRIS//DTD PROCESSES 1.0//EN" "http://cairis.org/dtd/processes.dtd">
+
+<processes>
+<internal_document name="JimmyAmbiesense">
+  <description>Jimmy Ambiesense</description>
+  <content>h5. Jimmy Focus Group 3
+
+h6.  Session background
+
+The session was held in the Focus Group Room of the Usability lab at City University on Friday, 12th August 2011, between 1400 and 1700. It was based around the Jimmy persona. The usability lab facility is available for industry companies to conduct usability studies and focus groups. The session was run with a total of 4 participants all based within City University.
+
+* 2 PhD Students from the School of Informatics
+* 1 Member of IT technical support 
+* 1 HCI Researcher 
+
+The participants were recruited directly by the session organiser. Two video cameras, two digital cameras, and a digital audio recorder were used to record the session.
+
+!{width:500px}jimmy_focus_group_3_1.jpg!
+
+h6. Object clustering
+
+!{width:500px}jimmy_focus_group_3_2.jpg!
+
+During this phase there was more of a focus on which concepts would be preferred by immediate stakeholders (i.e. prospective/current students, lectures and staff within the University. The discussion initially centred around concepts which would be favoured by both academic and non-academic staff within the University, (i.e. room booking, tracking student attendance etc). The discussion then moved on to which concepts would be useful for students (prospective and present). The respondents recalled the concept of webinos from the introductory video and did use this as a baseline for developing a few concepts associated with the system (i.e. ability to push content from a mobile device to their laptop, University eBay). However, there did seem to be more of a focus on the different types of resources that would be available to stakeholders rather than concepts that really embraced the functionality and potential of webinos (i.e. cross platform services).
+
+During the second phase of the task, there was some difficulty in identifying categories in which to group the concepts. Respondents felt that there was a lot of overlap in terms of concepts being able to fit into two categories. Initially the ‘services’ group contained a large majority of the concepts, but after some discussion it was found that this could be split into resources, admin support, and facts. This activity was helpful in identifying further concepts as, via discussion, new ideas emerged.
+
+!{width:500px}jimmy_focus_group_3_3.jpg!
+
+
+
+h6. Subject clustering
+
+There were a total of 11 subjects identified in this stage:
+
+* Corporate employers
+* Prospective students
+* Government
+* Marketing
+* Lecturers
+* Journalists/Press
+* Administrators
+* Researchers
+* Industry Partners
+* Funding Bodies
+* Current Students
+ 
+
+Due to time constraints, we were only able to focus upon 2 specific subjects in our discussion. 
+
+1) Current Students
+
+!{width:500px}jimmy_focus_group_3_5.jpg!
+
+When looking at the ‘current student’ subject, there seemed to be reluctance on disallowing access to many, if not all of the identified concepts. This seemed partly due to the fact that students were identified as one of the main stakeholders in the previous exercise, and a lot of the concepts were devised with students in mind. 
+
+There was an interesting discussion around the availability of course timetables for all subjects being available to all students. There were issues raised around how easy it would be for student A (on a different course) to identify the whereabouts of student B just by knowing which course they were taking. There was one respondent in the group who was uncomfortable with this. The argument for having such information available was that it would be something could help any potential applicants in determining their university or course choice (especially part-time students). This discussion in particular raised some interesting points about how individuals’ personal privacy could be affected to serve the needs of a wider community. 
+
+Similarly to the ‘current students’ subject, respondent’s expressed some difficulties in identifying concepts which lecturers should not have access to. There were some interesting conversations around items such as message boards and forums, as some participants found that lecturers shouldn’t have access to private or student-only forums. The counter argument was that by having such access, lecturers could obtain critical feedback about their courses and University services in general, which could help improvements to be made in these areas. 
+
+!{width:500px}jimmy_focus_group_3_6.png!
+
+h6. Context clustering
+
+!{width:500px}jimmy_focus_group_3_7.jpg!
+
+At the beginning of this stage, there were a total of 16 different contexts identified. 
+
+* Commuting
+* Public Spaces
+* Finding out university information
+* Academic research
+* Remote working
+* Where I am with my smartphone
+* Submitting coursework
+* Informal learning (Uni)
+* Formal learning (lectures)
+* Organising one’s social life
+* Accessing exam results
+* Choosing a prospective course
+* When looking for a room 
+* My timetable
+* Looking for opportunities to make money
+* Organising and preparing for studies
+
+Due to time constraints, only four context/subject combinations were looked at in detail during this exercise. 
+
+There was a mixture of physical contexts and mental contexts that were elicited during this stage. Although several different physical contexts were identified, it was observed that several of them could be grouped into ‘remote working’ and ‘campus-based working’. The mental contexts identified were rather interesting, as they would not necessarily match with all subjects, so some time was spent at the beginning of this stage to identify which pairings of context/subject were most important. 
+
+1) Lecturers and Working Remotely 
+
+!{width:500px}jimmy_focus_group_3_8.jpg!
+
+2) Students and Working Remotely
+
+!{width:500px}jimmy_focus_group_3_9.jpg!
+
+
+Both of the above pairings yielded the same results as participants felt that the main purpose of developing a mobile app was so that all of the information available within the portal could be made available from technically any type of location. 
+
+There were interesting discussions around how much students should be allowed to access resources outside of the physical University environment, as some suggested that this could discourage students from coming into the University. Counter arguments to this point were that as mature adults, the onus would be on the student to decide how much or how little they would chose to access the teaching resources remotely rather than physically attending lectures/tutorials. A point was also made on the possibility of lecturers also working remotely and giving a lecture via the webcam, so it appeared that the app could work for subjects in similar ways. 
+
+In order to stimulate further discussions, the participants were asked to think of a totally different subject – Journalists, and the press. 
+
+3) Journalists/press and Looking for opportunities to make money
+
+!{width:800px}jimmy_focus_group_3_10.jpg!
+
+
+In this context it became clear that there would be many items that such subjects should not have access to. There did appear to be a grey area for journalists however, in that it was decided that they should have access to limited historical data associated with the University and teaching materials (primarily for promotional services). 
+
+4) Alumni and Looking for opportunities for collaborative work 
+
+!{width:500px}jimmy_focus_group_3_12.jpg!
+
+The alumni subjects seemed to have access to a lot more concepts than the journalists (more concept items had been added to the diagram), but they were also limited in the amount of information they received related to specific course material in particular. 
+
+!{width:800px}jimmy_focus_group_3_11.jpg!
+
+h6. Discussion
+
+There were some issues with timing during each of these phases, and our session did run over somewhat. In future sessions, it would be advised to focus on 2-3 main subjects (i.e. the most important) during stage 2, and 2-3 subject/context pairs in stage 3. 
+
+Looking at the contexts in which the app would be used was also a stumbling point for the participants as they were considering both physical and mental contexts, which we found difficult to prioritise when working on the later phase of allow/disallow, for future sessions it would be advisable to specify either one or the other.  
+
+Having more structure in stage three could help in eliciting more detailed affinity diagrams, i.e. the inclusion of variables such as ‘need to know, nice to know, not allowed to know,’ as this removes the binary yes or no response which was not always easy to categorise.   
+
+As we were working with respondents fitting the Jimmy persona, it was clear that whilst working through exercises, they were thinking rather technically in terms of how the application would function which would probably be a different type of approach when compared to some of the other personas. For this reason, it seems suitable to run a similar activity across multiple persona types to observe difference in the outputs. 
+
+h6. Main take-aways
+
+The participants were indeed able to think and reason about which information or documents that the subjects should be allowed access to. Current students and lecturers were granted the widest access to information and documents in the mobile application for the university. Journalists, however, seemed to be granted least access. The alumni was granted more access to the information and documents.
+
+Perhaps social closeness could be used as an indicator regarding how much a subject should be granted access to information and documents. The willingness to share information and documents certainly seems to be influenced by how close the subject is to the university. Thus, the closeness in social relation seems to influence an information sharing choice.
+
+Sharing information seems to be affected by both the context and the social relation between the persons involved. Providing technology that makes automatic information sharing choices on behalf of a user therefore seems very difficult, if not impossible to obtain. Rather, it seems that users should explicitly make these choices on their own, and that technology should only enable and deliver on the information sharing choices.
+
+The task of allowing and disallowing access to objects given a subject and/or a given context, seemed to work very well for the participants. The answer to whether a person should be allowed or disallowed access seems to be: "It depends on who it is, what object is being shared, and in which context the sharing is supposed to happen".
+
+The suggestion is to try to answer the following question:
+* How to allow/ disallow access to any object for any subject, regardless of the context?
+
+This question could also be expressed as:
+* How to make an object public/private/shared to any subject or context?
+
+The recommendation is to try to answer this question in a user interface design context.</content>
+</internal_document>
+<internal_document name="JimmyOxford">
+  <description>Jimmy Oxford focus group</description>
+  <content>Jimmy Focus Group 1
+
+h6.  Session background
+
+The session was held at Oxford on Thursday, 19th July between 1030 and 1220, and was based around the Jimmy persona.
+
+The session was run with 3 participants. Each participant was a software engineer employed by the University of Oxford; collectively, the participants developed and maintained the Software Engineering web-site the exercise scenario was built around.  Each participant was recruited directly by the session organiser.
+
+
+
+h6. Results
+
+h7. Object clustering
+
+!{width:500px}ObjectClusteringShot.jpg!
+
+!{width:500px}ObjectClusters.jpg!
+
+Rather than carrying out unstructured ideation, the participants seemed to follow a rigorous process for identifying core concepts, but going through the "who"s and the "what"s associated with the system.  This was apparent when, after identifying some initial concepts, one participant noted that they had elicited the "who"s, so it now it was time to start eliciting the "what"s.  Later in this stage, another participant drew analogies between this exercise, data modelling, and concept modelling using UML.
+
+In the first half of this stage, the elicited concepts seemed to be focused on the intrinsics of course management rather than the possibilities afforded by webinos and mobile web-apps.  When the participants were encouraged to start grouping concepts then a number of new concepts were identified.  However, rather than thinking outside the box, the group appeared to spend more time introspecting on the intrinsic nature of the concepts themselves and possible attributes. 
+ 
+Towards the end of this stage, it was noticed that one concept, transcript, was isolated from the other clusters. When challenging about this, the group discussed how this concept fitted in with the categories that already existed, rather than considering how the concept challenged (or led to a rethink about) the pre-existing categories.
+
+h7. Subject clustering
+
+!{width:500px}SubjectClusteringShot.jpg!
+
+At the beginning of the session, 10 subjects were elicited: course attendee, potential attendee, observer, lecturer, TA, administrator, examiner, "assignment only" student, moderator, cancelled participant.  Due to time constraints, there was only time to explore 3 of these:  course attendees, potential attendees, and administrators.
+
+!{width:500px}CourseAttendeeClusters.jpg!
+
+During the course attendee affinity diagramming, it was noted that general categories began to emerge during the grouping of concepts rather than after.  For the allow section, these were primarily based around concepts that needed to be modified, "need to know", and "nice to know" concepts.  Initially, "disallow" concepts were grouped together but, when challenged, these were grouped into "don't need to know" and "not allowed to know" categories.
+
+During the object clustering stage, a general functionality concept emerged for what were perceived to be general administration concepts, e.g. schedules, calendars, reminders, etc.  This cluster remained unchanged for both the subject and context clustering stage of the exercise, although whether this category was situated in an allow or disallow section varied based on the subject or subject/context combination.
+
+!{width:500px}PotentialAttendeeClusters.jpg!
+
+The concept groupings were different for the potential attendee affinity diagram, and there was some movement of concepts between the allow and disallow sections of the board.  In a number of cases, when moving one concept, participants noticed other concepts in the same or nearby categories which needed to be moved as well.  However, rather than choosing categories for emergent groups of concepts, the participants instead grouped concepts by pre-existing category names.  One of the consequences of this was a tendency to restrict thinking about concepts in terms of this rigid set of categories.  For example, when moving the one concept, a participant queried whether this should be a 'need to know' or 'nice to know'.  Another participant responded by saying that, from their perspective, it didn't matter either way.
+
+!{width:500px}AdministratorClusters.jpg!
+
+Initial discussion during affinity diagramming around administrators centered around what these subjects needed to know.  In particular, the participants believed that administrators did not need to know about certain concepts, but the practicalities of how administrators use the current system meant that they did.  As such, the group gradually formed the consensus that, moving forward, administrators needed the capabilities to enact or modify all concepts.  At the end of this stage, the participants agreed that they weren't entirely sure how administrators should be defined so they assumed that the administrative staff associated with the current system would be a suitable model upon which to base their thinking.  Ultimately, discussion around the wisdom of this choice led to a more broader discussion about what capabilities future administrators of this system would need, and what capabilities the system itself should support.
+
+
+h7. Context clustering
+
+!{width:500px}ContextClusteringShot.jpg!
+
+At the stage of this stage, 19 different contexts were elicited.  12 of these were permutations of before/during/after courses, pre-study, marking, and moderation. The remaining contexts were home, work, out and about, inside university, inside classroom, "other people around", and "alone".   Due to time constraints there was only time to explore two context/subject combinations: course attendees at home before a course, and lecturers at home after a course.
+
+As the contexts were being written on the board, participants started thinking about the sheer number of contextual possibilities arising from a cartesian product of context and subject.  This seemed to flummox the participants to the extent that it was necessary to prompt the participant to pick one context and subject to progress the exercise.  
+
+!{width:500px}CourseAttendeeHomeBeforeClusters.jpg!
+
+The affinity diagramming process for course attendees at home before a course was largely similar to that for the subject clusters, however the completion of this first subject/context combination led to further group discussion about whether being at home or university made that much difference.  In particular, thinking about physical locations where the mobile web-app would be used led to discussions around lecturers carrying out activities which _should_ be done at university but may well be undertaken at home, and what consequences might arise if the mobile web-app facilitates activities being carried out in inappropriate locations.  For this reason, the group decided to explicitly explore the context of a lecturer working at home after a course.
+
+!{width:500px}LecturerHomeAfterCourseClusters.jpg!
+
+It was clear that all participants had a clear working model about the lecturer subject for the 'at home after course' context.  This was most apparent when, towards the end of this exercise, one participant verbally walked through the model from the perspective of a lecturer.  One of the possible corollaries of this clearer expectation about users and contexts was a comparatively greater movement of clusters between categories and across allowed/disallowed sections.
+  
+h6. Discussion
+
+During the de-brief, the participants agreed that the focus group exercise provided a better indication of how the mobile web-app might look compared to sitting down and trying to code it.  The notion of thinking about context was also useful, but participants acknowledged that rigorously attempting to go through the product of objects, subjects, and contexts was both tedious due to similarities between contexts, but also mind-blowing because of subtle nuances between what appear to be similar contexts.   The participants also acknowledge that the context that they use more often is time, because of the timelines associated with administering each course.  
+
+h7. Existing system focus
+
+Throughout the exercise, the participants tended to focus on the existing system and existing system roles, rather than the possibilities of what a mobile web-app might bring.  This brings to mind two questions.  First, is this thinking specific to developers of an existing system, or do users of an existing system with a comparative knowledge of the domain hold a similar "existing system" bias?  Second, when making policy decisions, can a balance be struck between over-constraining and under-constraining a system based on both existing or perceived affordances of a system?  One way of answering this latter question might be to synthesise a context of use for affinity diagramming based on a vignette of webinos being used in a future context, which encapsulates the social and cultural consequences arising of design decisions made.
+
+h7. Categories and abstractions
+
+This session also demonstrated how developer participants fit concepts around categories, rather than vice versa.  Based on the analogies drawn between this exercise and other design activities, this may have occurred because the developers treated categories as abstractions that support longer-term design activities.  This is as opposed to spending less time on categorisation and accepting these might evolve as concepts move between different clusters.  At this stage, it is unclear whether policy management tools should support longer-lived, more flexible categorisations of objects or subjects, or both.
+
+h7. General functionality
+
+Results from a number of focus groups indicate that participants seem to group what they consider general functionality in one place.  It remains unclear whether this is good or bad, but it does suggest that breaking this conceptual grouping from a policy standpoint is likely to be disruptive.</content>
+</internal_document>
+<internal_document name="JimmyPolito">
+  <description>JimmyPolito</description>
+  <content>h5. Jimmy Focus Group 2
+
+h6.  Session background
+
+The session was held at Telecom Italia Lab, Turin, on Wednesday, 13rd July between 1900 and 2100, and was based around the Jimmy persona.
+
+The focus group was composed of 4 mobile developers working in Telecom Italia's Turin premises, both consultants and internal developers. The participants were recruited starting from friends working in Telecom Italia Lab. All of them are friends and work in the same group.
+
+!{width:400px}jimmy_polito.jpg!
+
+h6. Results
+
+h7. Object clustering
+
+!{width:500px}ObjectJimmyPolito.png!
+
+During first part of the exercise, the affinity diagramming focused on what the system should do and who will use it, in fact autonomously introducing part of the subject clustering phase. All participants hold a Master of science, so the scenario resulted clear and was analyzed through personal experience of what was the every day university life.
+From those discussion emerged data concept (like Content Types) and, mainly, practical issues, like client required capabilities, overall system functions, access controls, data classification and protection. 
+
+In particular, the discussion of what services the system should expose went on very tightly with who should use the system. Easy of use and access to candidate user categories (i.e. system administrator, teacher, teacher assistant, student) was an orienting concept in the discussion, probably due to practical experience and peculiar mindframe of participants. 
+
+User security and privacy, (approached as part of the user experience) was lengthy discussed, with care on how to achieve them in practice. Among others, hot security topics discussed was sensitive contents (e.g. what is sensitive or not, like student credit cards or exam location) content authentication (suggested technical solution was digital signature attached to all posted content) and secured provisioning (as they defined the process to add and remove users).
+
+Curiously, a concept emerged is that it is very difficult to (meaningfully) organize access control to sensitive data through a hierarchical categorization of data itself (e.g. plain, sensitive, very confidential, secret, top secret) or, even worse, in a just binary classification like sensitive or not. To solve the problem, there is a need of a matrix of what could be accessed by who, de facto anticipating part of the experiment next phase's discussions.
+
+Participants was very careful to not introduce undiscussed concepts. Before write it on a post-it, many terms were collectively considered, and some mentioned concept (e.g. teacher visiting time) was not added in the affinity diagram since not considered discussion-enriching (e.g. because comprised in some other higher level concepts). From one hand this carefulness made the diagram more "clean" and clear, but from the other introduce the risk to drop out concepts that in a next phase would be enriched and become more valuable.
+
+
+
+h7. Subject clustering
+
+!{width:500px}ObjectRevisedJimmyPolito.png!
+
+!{width:500px}SubjectJimmyPolito.png!
+
+In this second phase, first discussion topic was to clarify what should be a "role". Interestingly, it was discussed if some non-human roles would be listed, e.g. the system who sent SMS notification to student.
+Some thoughts were focused on how to represent role and access permissions. Following the already emerged idea of the matrix, it was suggested to represent it accordingly, in a matrix where the first line identifies the objects elicited in the object phase, the first column the identified roles, and the crossing cell should be marked by a red or green post-it in order to indicate the role in the first column "should" or "should not" access to the object in the first row.  At last, since not all participants were sure on the improvement that this representation would introduce, they started with the suggested method. However, the fact that a different representation was discussed, as well as other comments raised during the exercise, suggests that some aiding tool, which simplifies the representation task, would be welcomed by participants.
+
+During the discussion, some objects have been refined to differentiate among different actor duties and rights. Some clusters have been revised as consequence of a more role-focused analysis. In particular, iterative refining phases allow to create finer-grained concept on the base of who is the owner, e.g from generic student data to data owned by a specific student and data who are not owned by a student but can be accessed only by student attending the course whose data refer to. 
+
+Some of the subjects introduced in the previous step are refined and then added the (non-human) "Bank interface" and the "SMS system" roles. Student and teacher were split between course student/teacher and other student/teacher.
+
+For objects not listed under any red/green label, no strong opinions came forth during this phase. 
+
+h7. Context clustering
+
+!{width:500px}ObjectRevised2JimmyPolito.png!
+
+!{width:500px}SubjectRevisedJimmyPolito.png!
+
+!{width:500px}ContextJimmyPolito.png!
+
+Participants agreed in the first part of the discussion that the location per se does not introduce any difference, since the system is designed to interact remotely. 
+
+After, participants considered role changes as different contexts (former teacher, former student, former course teacher, former course student), when possibly different access may be considered. Interestingly, this slightly differs and enrich the former role discussion in previous phase, since introduce the concept of "data dynamism", a data should be accessible by a certain person at one time, but not in another time, since his/her role is changed. So, a secure system must consider appropriately role management as well.
+
+At last, participants reconsidered if different location would influence the access, but concluded that not much the place, but instead the "security level" of the environment should modify what should be accessible (including the type of device in the evaluation of environment security level). E.g.  they thought that admin access to sensitive data should be allowed only when accessing through a secure connection.
+
+h6. Discussion
+
+Even if roles was a concept already present in the first phase, explicitly mentioning it enabled a deeper discussion of what data means, and emerged that the same data concept is different (and should be identified by a different post-it) on the base of who is the owner or legitimate user or user class (e.g. student data).
+
+Participants took longer than expected to do the exercise, so concentration waned in the latter step. Tools to simplify the representation of concepts (and also to diminish the number of used post-it, accordingly to concept of sustainability and paper waste) would increase the willing to develop new concept close to the end of the experiment. 
+
+Participants struggled a bit to start thinking about clusters. They began adding new roles and considering them as different context. Even if useful, it appeared that a clear statement of what can be considered a context change would have made more fast and straightforward some initial discussion. In a later phase, it appears worth to converge discussion on core points, to achieve effectiveness after quite much time of argumentation.
+
+Along this line, at the end of the exercise, participants remarked their appreciation to tools capable to avoid post-it duplication. The suggestion to use a matrix, as firstly introduced in the subject phase, was re-stated as useful to focus only on concepts and to spend less time on representation matter.</content>
+</internal_document>
+<code name="concept introspection" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="concept reuse" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="general concepts" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="indifference" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="method analogy" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="need to know" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="restricted thinking" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="structured process" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<quotation code="concept introspection" type="code" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="1416" to_index="1416" />
+<quotation code="concept reuse" type="code" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="3619" to_index="3619" />
+<quotation code="indifference" type="code" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="4018" to_index="4018" />
+<quotation code="method analogy" type="code" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="1020" to_index="1020" />
+<quotation code="need to know" type="code" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="2527" to_index="2527" />
+<quotation code="restricted thinking" type="code" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="3768" to_index="3768" />
+<quotation code="structured process" type="code" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="670" to_index="670" />
+<quotation code="general concepts" type="code" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="2826" to_index="3007" />
+<quotation code="general concepts" type="code" artifact_type="internal_document" artifact_name="JimmyAmbiesense" section="none" start_index="2001" to_index="2181" />
+<code_network persona="Jimmy" relationship_type="implies" from_code="concept reuse" to_code="restricted thinking" />
+<code_network persona="Jimmy" relationship_type="implies" from_code="restricted thinking" to_code="indifference" />
+</processes>
