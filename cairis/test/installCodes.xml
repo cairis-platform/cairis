@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE processes PUBLIC "-//CAIRIS//DTD PROCESSES 1.0//EN" "http://cairis.org/dtd/processes.dtd">
+
+<!-- Events that are associated with installing applications and making decisions about what application should be allowed access to -->
+
+<processes>
+<code name="pick" type="event">
+  <description>User picks an application to install for his/her device.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+
+<code name="requested" type="event">
+  <description>Request a permission for an app running on a user's device.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+
+<code name="run" type="event">
+  <description>Run the app on a user's device according to a set permission.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+
+<code name="res" type="event">
+  <description>Level of permissions granted to an app running on a user's device.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+
+<code name="verify" type="event">
+  <description>Verify the permissions to be a set for an app running on a user's device.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+
+<code name="distract" type="event">
+  <description>User is distracted.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+
+<code name="concentrate" type="event">
+  <description>User is concentrating</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+
+</processes>
