@@ -39,4 +39,5 @@ class CodeTests(unittest.TestCase):
 
   def testImportProcesses(self):
     importProcessesFile(os.environ['CAIRIS_SRC'] + '/test/installCodes.xml',0)
+    importProcessesFile(os.environ['CAIRIS_SRC'] + '/test/coding.xml',0)
     importProcessesFile(os.environ['CAIRIS_SRC'] + '/test/processes.xml',0)
