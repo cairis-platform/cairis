@@ -17,7 +17,7 @@
 
 import unittest
 import os
-from cairis.mio.ModelImport import importModelFile
+from cairis.mio.ModelImport import importModelFile, importLocationsFile
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 
@@ -43,4 +43,6 @@ class ModelTests(unittest.TestCase):
     b.get_dbproxy().assumptionPersonaModel('Claire')
     b.get_dbproxy().textualArgumentationModel('Claire','Activities')
     
+    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/ACME_Water/ACME_Water.xml',1,'test')
+    importLocationsFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/ACME_Water/PooleWWTW.xml')
 

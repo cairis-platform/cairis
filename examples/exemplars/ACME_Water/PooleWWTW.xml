@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE locations PUBLIC "-//CAIRIS//DTD LOCATIONS  1.0//EN" "http://cairis.org/dtd/locations.dtd">
+
+<locations name="PooleWWTW" diagram="None">
+  <location name="PC1">
+    <link name="WCH_1" />
+    <link name="WCH_2" />
+    <link name="WCH_3" />
+    <link name="WCH_4" />
+  </location>
+  <location name="WCH_1">
+    <asset_instance name="PC-9" asset="ICT PC" />
+    <link name="PC1" />
+  </location>
+  <location name="WCH_2">
+    <asset_instance name="PC-67" asset="ICT PC" />
+    <link name="PC1" />
+  </location>
+  <location name="WCH_3">
+    <asset_instance name="PC-76" asset="ICT PC" />
+    <link name="PC1" />
+  </location>
+  <location name="WCH_4">
+    <asset_instance name="SWS-1" asset="SCADA Workstation" />
+    <asset_instance name="PC-23" asset="ICT PC" />
+    <asset_instance name="PC-24" asset="ICT PC" />
+    <asset_instance name="PC-25" asset="ICT PC" />
+    <persona_instance name="Rick" persona="Rick" />
+    <link name="PC1" />
+    <link name="PC2" />
+    <link name="WCH_5" />
+  </location>
+  <location name="WCH_5">
+    <link name="WCH_4" />
+    <link name="WCH_6" />
+  </location>
+  <location name="WCH_6">
+    <asset_instance name="M12" asset="Modem" />
+    <asset_instance name="R18" asset="Router" />
+    <asset_instance name="PC-11" asset="ICT PC" />
+    <persona_instance name="Barry" persona="Barry" />
+    <link name="WCH_5" />
+  </location>
+  <location name="PC2">
+    <link name="WCH_4" />
+    <link name="MR_1" />
+    <link name="MR_2" />
+    <link name="MR_3" />
+    <link name="MR_4" />
+  </location>
+  <location name="MR_1">
+    <link name="PC2" />
+  </location>
+  <location name="MR_2">
+    <link name="PC2" />
+  </location>
+  <location name="MR_3">
+    <link name="PC2" />
+  </location>
+  <location name="MR_4">
+    <link name="PC2" />
+  </location>
+</locations>
