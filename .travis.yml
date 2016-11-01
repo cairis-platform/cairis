@@ -22,6 +22,8 @@ addons:
     - texlive-latex-extra 
     - docbook-utils
     - inkscape
+    - libxml2-dev
+    - libxslt1-dev
 
 env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog
