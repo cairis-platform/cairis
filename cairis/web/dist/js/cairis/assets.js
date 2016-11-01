@@ -74,6 +74,9 @@ function createAssetsTable(data, callback){
 
   });
   theTable.append(textToInsert.join(''));
+  $.contextMenu('destroy',$('.requirement-rows'));
+  $("#reqTable").find("tbody").removeClass();
+
   callback();
 }
 

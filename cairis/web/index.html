@@ -399,6 +399,13 @@
     <select class="form-control">
     </select>
   </div>
+  <div id="ChooseResponseDialog" title="Select response" style="display: none">
+    <select class="form-control">
+      <option id="Accept">Accept</option>
+      <option id="Transfer">Transfer</option>
+      <option id="Mitigate">Mitigate</option>
+    </select>
+  </div>
   <div id="EnterUseCaseStep" title="Enter use case step" style="display: none">
     <textarea id="theStep" style="width: 100%" class="form-control"></textarea>
   </div>
@@ -496,7 +503,7 @@
   <script src="plugins/slimScroll/jquery.slimscroll.js" type="text/javascript"></script>
   <script>
     LazyLoad.js(["dist/js/cairis/Cairis-UI.js","dist/js/cairis/buttonclicks.js", "dist/js/cairis/Cairis.js", "dist/js/cairis/readFile.js",
-        "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/personas.js", "dist/js/cairis/assets.js", "dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js", "dist/js/cairis/tasks.js", "dist/js/cairis/domainproperties.js", "dist/js/cairis/obstacles.js", "dist/js/cairis/countermeasures.js", "dist/js/cairis/usecases.js","dist/js/cairis/vulnerabilities.js","dist/js/cairis/architecturalpatterns.js",
+        "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/personas.js", "dist/js/cairis/assets.js", "dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js", "dist/js/cairis/tasks.js", "dist/js/cairis/domainproperties.js", "dist/js/cairis/obstacles.js", "dist/js/cairis/countermeasures.js", "dist/js/cairis/usecases.js","dist/js/cairis/vulnerabilities.js","dist/js/cairis/architecturalpatterns.js","dist/js/cairis/requirements.js",
         "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js","dist/js/cairis/environments.js","dist/js/cairis/valuetypes.js",
         "dist/js/cairis/SVGhandler.js","dist/js/cairis/PutAndPost.js", "dist/js/objects/jsonDefaultObjects.js"], function () {
 

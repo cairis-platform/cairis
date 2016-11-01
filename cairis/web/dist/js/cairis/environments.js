@@ -302,6 +302,9 @@ function createEnvironmentsTable(data, callback){
     textToInsert[i++] = '</td></tr>';
   });
   theTable.append(textToInsert.join(''));
+  $.contextMenu('destroy',$('.requirement-rows'));
+  $("#reqTable").find("tbody").removeClass();
+
   callback();
 }
 

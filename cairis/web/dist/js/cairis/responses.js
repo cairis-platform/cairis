@@ -23,6 +23,46 @@ $("#responseMenuClick").click(function () {
   createResponsesTable();
 });
 
+$(document).on("click", "#addNewResponse", function () {
+
+  $("#ChooseResponseDialog" ).dialog({
+    modal: true,
+    buttons: {
+      Ok: function() {
+        $( this ).dialog( "close" );
+        var responseType = $("#ChooseResponseDialog").find("option:selected").attr("id");
+
+        activeElement("objectViewer");
+        fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
+          $("#editResponseOptionsform").addClass("newResponse");
+          var select = $("#chooseRisk");
+          select.empty();
+          getRisks(function (risks) {
+            $.each(risks, function (key, obj) {
+              select.append($('<option>', { value : key }).text(key));
+            });
+          });
+          switch (responseType){
+            case "Transfer":
+              toggleResponse("#transferWindow");
+              break;
+            case "Mitigate":
+              toggleResponse("#mitigateWindow");
+              break;
+            case "Accept":
+              toggleResponse("#acceptWindow");
+              break;
+            default :
+              toggleResponse("#mitigateWindow");
+              break;
+          }
+        });
+      }
+    }
+  });
+});
+
+
 $(document).on('click', "td.response-rows", function () {
   activeElement("objectViewer");
   var name = $(this).text();
@@ -319,6 +359,9 @@ function createResponsesTable(){
 
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
+      $.contextMenu('destroy',$('.requirement-rows'));
+      $("#reqTable").find("tbody").removeClass();
+
       activeElement("reqTable");
       sortTableByRow(0);
     },

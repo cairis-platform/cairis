@@ -67,6 +67,9 @@ function createArchitecturalPatternsTable(){
 
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
+      $.contextMenu('destroy',$('.requirement-rows'));
+      $("#reqTable").find("tbody").removeClass();
+
       activeElement("reqTable");
       sortTableByRow(0);
     },

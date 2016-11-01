@@ -57,6 +57,9 @@ function fillRolesTable(){
         textToInsert[i++] = '</tr>';
       });
       $("#reqTable").append(textToInsert.join(''));
+      $.contextMenu('destroy',$('.requirement-rows'));
+      $("#reqTable").find("tbody").removeClass();
+
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
