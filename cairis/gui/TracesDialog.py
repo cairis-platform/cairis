@@ -16,7 +16,7 @@
 #  under the License.
 
 import wx
-from cairis.core.ObjectFactory import *
+import cairis.core.ObjectFactory
 from cairis.core.armid import *
 import cairis.core.Trace
 import TraceDialog

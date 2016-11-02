@@ -24,7 +24,7 @@ from cairis.core.Borg import Borg
 from cairis.core.VulnerabilityParameters import VulnerabilityParameters
 from cairis.core.ThreatParameters import ThreatParameters
 from DirectoryEntryDialog import DirectoryEntryDialog
-from cairis.core.ObjectFactory import *
+import cairis.core.ObjectFactory
 
 __author__ = 'Shamal Faily'
 

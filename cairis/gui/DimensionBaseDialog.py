@@ -19,7 +19,7 @@
 import wx
 from BaseDialog import BaseDialog
 from cairis.core.Borg import Borg
-from cairis.core.ObjectFactory import *
+import cairis.core.ObjectFactory
 from cairis.core.armid import *
 import DialogClassParameters
 import DimensionNameIdentifier
