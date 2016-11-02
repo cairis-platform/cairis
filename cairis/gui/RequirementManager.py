@@ -93,7 +93,7 @@ class RequirementManager:
     modName = self.modCombo.GetStringSelection()
     if (modName == ''):
       modName = self.modCombo.GetString(0)
-    r = RequirementFactory.build(reqId,newLabel,newName,newDescription,newPriority,newRationale,newFitCriterion,newOriginator,newType,modName)
+    r = cairis.core.RequirementFactory.build(reqId,newLabel,newName,newDescription,newPriority,newRationale,newFitCriterion,newOriginator,newType,modName)
 
     self.dbProxy.addRequirement(r,modName,self.isAsset)
     if (idx != -1):
