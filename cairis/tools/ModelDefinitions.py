@@ -556,6 +556,7 @@ class ResponseModel(object):
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)
+  required.remove('theTags')
 
 @swagger.model
 @swagger.nested(

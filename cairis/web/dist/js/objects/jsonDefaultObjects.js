@@ -276,12 +276,26 @@ var respRoleDefault = {
   "roleName": "",
   "cost": ""
 };
-var respEnvDefault = {
+var acceptEnvDefault = {
+  "__python_obj__": "AcceptEnvironmentProperties.AcceptEnvironmentProperties",
+  "theCost": "",
+  "theRationale": "",
+  "theEnvironmentName": ""
+};
+var transferEnvDefault = {
   "__python_obj__": "TransferEnvironmentProperties.TransferEnvironmentProperties",
   "theRationale": "",
   "theRoles": [],
-  "theEnvironmentName": "Stroke"
+  "theEnvironmentName": ""
 };
+var mitigateEnvDefault = {
+  "__python_obj__": "MitigateEnvironmentProperties.MitigateEnvironmentProperties",
+  "theDetectionMechanisms": [],
+  "theDetectionPoint": "",
+  "theType": "",
+  "theEnvironmentName" : ""
+};
+
 var domainPropertyDefault = {
   "__python_obj__": "DomainProperty.DomainProperty",
   "theId": -1,
@@ -370,4 +384,12 @@ var valueTypeDefault = {
   "theRationale" : "None",
   "theScore" : 0
 };
-
+var responseDefault = {
+  "__python_obj__": "Response.Response",
+  "theId": -1,
+  "theRisk" : "",
+  "theName" : "",
+  "theEnvironmentProperties" : {'accept': [],'mitigate':[],'transfer':[]},
+  "theResponseType" : "",
+  "theTags" : []
+};

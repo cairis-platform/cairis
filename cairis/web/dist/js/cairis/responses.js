@@ -36,12 +36,20 @@ $(document).on("click", "#addNewResponse", function () {
         fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
           $("#editResponseOptionsform").addClass("newResponse");
           var select = $("#chooseRisk");
+          $.session.set("response", JSON.stringify(jQuery.extend(true, {},responseDefault )));
           select.empty();
           getRisks(function (risks) {
             $.each(risks, function (key, obj) {
               select.append($('<option>', { value : key }).text(key));
             });
+            var resp = JSON.parse($.session.get("response"));
+            resp.theRisk = $("#chooseRisk").val();
+            resp.theResponseType = responseType;
+            $.session.set("response", JSON.stringify(resp));
+            $("#chooseRisk").trigger('click');
           });
+
+          $.session.set("responseKind",responseType);
           switch (responseType){
             case "Transfer":
               toggleResponse("#transferWindow");
@@ -56,6 +64,7 @@ $(document).on("click", "#addNewResponse", function () {
               toggleResponse("#mitigateWindow");
               break;
           }
+          $("#Properties").hide();
         });
       }
     }
@@ -79,6 +88,7 @@ $(document).on('click', "td.response-rows", function () {
       fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
         var tags = data.theTags;
         $("#theResponseName").val(data.theName);
+        $.session.set("ResponseName", data.theName);
         $.session.set("response", JSON.stringify(data));
         var text = "";
         $.each(tags, function (index, type) {
@@ -118,6 +128,7 @@ $(document).on('click', "td.response-rows", function () {
             toggleResponse("#acceptWindow");
             break;
           default :
+            toggleResponse("#mitigateWindow");
             break;
         }
         $("#theRespEnvironments").find(".responseEnvironment:first").trigger('click');
@@ -154,15 +165,26 @@ mainContent.on('click', "#addRespEnv", function () {
     hasEnv.push($(tag).text());
   });
   environmentDialogBox(hasEnv, function (text) {
-    appendAttackerEnvironment(text);
-    var environment =  jQuery.extend(true, {},respEnvDefault );
+    var type =  $.session.get("responseKind");
+    var envObjt = mitigateEnvDefault;
+    if (type == 'Accept') {
+      envObjt = acceptEnvDefault;
+    }
+    else if (type == 'Transfer') {
+      envObjt = transferEnvDefault;
+    } 
+    var environment =  jQuery.extend(true, {},envObjt );
     environment.theEnvironmentName = text;
     var resp = JSON.parse($.session.get("response"));
-    var type =  $.session.get("responseKind");
     appendResponseEnvironment(text);
     resp.theEnvironmentProperties[type.toLowerCase()].push(environment);
-    $("#Properties").show("fast");
     $.session.set("response", JSON.stringify(resp));
+    $(document).find(".responseEnvironment").each(function () {
+      if($(this).text() == text){
+        $(this).trigger("click");
+        $("#Properties").show("fast");
+      }
+    });
   });
 });
 
@@ -323,7 +345,6 @@ function toggleResponse(window){
   $(window).show();
 }
 
-
 function createResponsesTable(){
   $.ajax({
     type: "GET",
@@ -412,4 +433,121 @@ $(document).on('click', 'td.deleteResponseButton', function (e) {
   });
 });
 
+$(document).on('click','#chooseRisk', function(e) {
+  var responseType = $.session.get("responseKind");
+  if (responseType == 'Mitigate') {
+    responseType = $("#respMitigateType");
+  }
+  $("#theResponseName").val(responseType + " " + $("#chooseRisk").val());
+});
+
+$(document).on('click','#respMitigateType', function(e) {
+  $("#theResponseName").val($("#respMitigateType") + " " + $("#chooseRisk").val());
+});
+
+function putResponse(response, oldName, usePopup, callback){
+  var output = {};
+  output.object = response;
+  output.session_id = $.session.get('sessionID');
+  output = JSON.stringify(output);
+  debugLogger(output);
+
+  $.ajax({
+    type: "PUT",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    data: output,
+    url: serverIP + "/api/responses/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      if(usePopup) {
+        showPopup(true);
+      }
+      if(jQuery.isFunction(callback)){
+        callback();
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      if(usePopup) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+      }
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+function postResponse(response, callback){
+  var output = {};
+  output.object = response;
+  output.session_id = $.session.get('sessionID');
+  output = JSON.stringify(output);
+  debugLogger(output);
+
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    data: output,
+    url: serverIP + "/api/responses" + "?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      showPopup(true);
+      if(jQuery.isFunction(callback)){
+        callback();
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+mainContent.on('click', '#UpdateResponse', function (e) {
+  e.preventDefault();
+
+  $("#editResponseOptionsform").validator();
+
+  var resp = JSON.parse($.session.get("response"));
+  var respKind = $.session.get("responseKind");
+  if (resp.theEnvironmentProperties[respKind.toLowerCase()].length == 0) {
+    alert("Environments not defined");
+  }
+  else {
+    resp.theName = $("#theResponseName").val();
+    var arr = $("#theTags").val().split(", ")
+    resp.TheTags = arr;
+    resp.theRisk = $("#chooseRisk").val();
+
+    resp.theResponseType = respKind;
+    if (respKind != 'Accept' && respKind != 'Transfer') {
+      resp.theResponseType = $("#respMitigateType").value();
+    }
+    else {
+      resp.theResponseType = respKind;
+    } 
+
+    if($("#editResponseOptionsform").hasClass("newResponse")){
+      postResponse(resp, function () {
+        createResponsesTable();
+        $("#editResponseOptionsform").removeClass("newResponse")
+      });
+    }
+    else {
+      putResponse(resp, $.session.get("ResponseName"), function () {
+        createResponsesTable();
+      });
+    }
+  }
+});
 

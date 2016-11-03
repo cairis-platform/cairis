@@ -199,3 +199,95 @@ function createRequirementsTable(data){
     }
   }); 
 }
+
+function updateRequirement(row){
+  if ($(row).attr('class') != undefined) {
+    var clazz = $(row).attr('class');
+    $(clazz).removeClass(clazz);
+    arr = clazz.split(':');
+    var whatKind = arr[0];
+    var vall = arr[1];
+    postRequirementRow(row,whatKind,vall);
+  }
+  else{
+    putRequirementRow(row)
+  }
+}
+
+
+function reqRowtoJSON(row){
+  var json = {};
+  json.attrs = {};
+
+  $.each(row[0].children, function (i, v) {
+    name =  $(v).attr("name");
+    if(name != "originator" && name != "rationale" && name != "type" && name != "fitCriterion"){
+      json[name] =  v.innerHTML;
+    }
+    else{
+      json.attrs[name] = v.innerHTML;
+    }
+  });
+  return json
+}
+
+function putRequirementRow(row){
+  var json = reqRowtoJSON(row);
+  var object = {};
+  object.object = json;
+  object.session_id= $.session.get('sessionID');
+  var objectoutput = JSON.stringify(object);
+  $.ajax({
+    type: "PUT",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    data: objectoutput,
+    crossDomain: true,
+    url: serverIP + "/api/requirements" ,
+    success: function (data) {
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+function postRequirementRow(row,whatKind,value){
+  var json = reqRowtoJSON(row);
+  var dimName = "asset";
+  var objtName = $( "#assetsbox").find("option:selected").text();
+  if (objtName == "") {
+    dimName = "environment";
+    objtName = $( "#environmentsbox").find("option:selected").text();
+  }
+  var ursl = serverIP + "/api/requirements?" + dimName + "=" + objtName.replace(' ',"%20");
+  var object = {};
+  object.object = json;
+  object.session_id= $.session.get('sessionID');
+  var objectoutput = JSON.stringify(object);
+
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    data: objectoutput,
+    crossDomain: true,
+    url: ursl,
+    success: function (data) {
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
