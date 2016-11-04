@@ -44,7 +44,7 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.existing_countermeasure_type = 'Information'
     self.existing_countermeasure_description = 'X.509 certificates extended to tie client workstations so NeuroGrid tasks can only be carried out on these.'
     self.existing_environment_name = 'Psychosis'
-    self.existing_requirements = ['User Certificate']
+    self.existing_requirements = ['User certificate']
     self.existing_targets = [CountermeasureTarget('Certificate Ubiquity','High','Discourages certificate sharing')]
     self.existing_properties = []
     self.existing_rationale =  ['None','None','None','None','None','None','None','None']
@@ -111,6 +111,19 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Countermeasure ID: %d\n', method, env_id)
 
     rv = self.app.delete('/api/countermeasures/name/%s?session_id=test' % quote(self.prepare_new_countermeasure().name()))
+
+  def test_target_names(self):
+    method = 'test_countermeasure-targets-by-requirement-get'
+    url = '/api/countermeasures/targets/environment/Psychosis'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url, content_type='application/json', data=self.prepare_requirements_json(['User certificate']))
+    targetList = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(targetList, 'No results after deserialization')
+    self.assertGreater(len(targetList), 0, 'No targets returned')
+    self.logger.info('[%s] Targets found: %d', method, len(targetList))
+    self.assertEqual(targetList[0],'Certificate ubiquity')
+    self.assertEqual(targetList[1],'Social engineering')
+
 
   def test_put(self):
     method = 'test_put'
@@ -195,3 +208,9 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     new_countermeasure_body = jsonpickle.encode(data_dict, unpicklable=False)
     self.logger.info('JSON data: %s', new_countermeasure_body)
     return new_countermeasure_body
+
+  def prepare_requirements_json(self, reqList):
+    return jsonpickle.encode({
+      'session_id' : 'test',
+      'object' : {'requirements' : reqList}
+    },unpicklable=False)

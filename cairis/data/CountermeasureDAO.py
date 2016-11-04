@@ -185,6 +185,34 @@ class CountermeasureDAO(CairisDAO):
         self.close()
         raise ARMHTTPError(ex)
 
+  def get_countermeasure_targets(self,reqList,envName):
+    """
+    Get the available target names.
+    :rtype list[str]
+    :raise ARMHTTPError:
+    """
+    try:
+      return self.db_proxy.targetNames(reqList,envName).keys()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def requirements_from_json(self, request):
+    """
+    :rtype : list[str]
+    :raise MalformedJSONHTTPError:
+    """
+    json = request.get_json(silent=True)
+    if json is False or json is None:
+      self.close()
+      raise MalformedJSONHTTPError(data=request.get_data())
+    json_dict = json['object']
+    if 'requirements' not in json_dict.keys():
+      raise MissingParameterHTTPError(param_names=['requirements'])
+    return json_dict['requirements']
 
   def from_json(self, request):
     """

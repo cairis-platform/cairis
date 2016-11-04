@@ -542,3 +542,78 @@ function postCountermeasure(countermeasure, callback){
   });
 }
 
+$(document).on("click", "#addRequirementToCountermeasure", function () {
+  var hasReqs = [];
+  $("#theRequirements").find(".countermeasureRequirements").each(function(index, req){
+    hasReqs.push($(req).text());
+  });
+  countermeasureRequirementsDialogBox(hasReqs, function (text) {
+    var cm = JSON.parse($.session.get("Countermeasure"));
+    var theEnvName = $.session.get("countermeasureEnvironmentName");
+    $.each(cm.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == theEnvName){
+        env.theRequirements.push(text);
+        $.session.set("Countermeasure", JSON.stringify(cm));
+        appendCountermeasureRequirement(text);
+      }
+    });
+  });
+});
+
+$(document).on("click", "#addTargetToCountermeasure", function () {
+
+
+});
+
+function countermeasureRequirementsDialogBox(haveReq,callback){
+  var dialogwindow = $("#ChooseRequirementDialog");
+  var select = dialogwindow.find("select");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/requirement",
+    success: function (data) {
+      select.empty();
+      var none = true;
+      $.each(data, function(key, object) {
+        var found = false;
+        $.each(haveReq,function(index, text) {
+          if(text == key){
+            found = true
+          }
+        });
+        if(!found) {
+          select.append("<option value=" + object + ">" + object + "</option>");
+          none = false;
+        }
+      });
+      if(!none) {
+        dialogwindow.dialog({
+          modal: true,
+          buttons: {
+            Ok: function () {
+              var text =  select.find("option:selected" ).text();
+              if(jQuery.isFunction(callback)){
+                callback(text);
+              }
+              $(this).dialog("close");
+            }
+          }
+        });
+        $(".comboboxD").css("visibility", "visible");
+      }
+      else {
+        alert("All requirements are already added");
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}

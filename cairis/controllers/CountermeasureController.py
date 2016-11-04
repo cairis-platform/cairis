@@ -257,3 +257,41 @@ class CountermeasureByNameAPI(Resource):
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
+
+class TargetsAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get countermeasure targets by requirements',
+    nickname='countermeasure-targets-by-requirement-get',
+    responseClass=list.__name__,
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self, environment):
+    session_id = get_session_id(session, request)
+
+    dao = CountermeasureDAO(session_id)
+    reqList = dao.requirements_from_json(request)
+
+    targets = dao.get_countermeasure_targets(reqList,environment)
+    dao.close()
+
+    resp = make_response(json_serialize(targets, session_id=session_id), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp
+    dao.close()

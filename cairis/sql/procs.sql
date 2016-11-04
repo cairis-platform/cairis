@@ -8056,9 +8056,9 @@ begin
 
   if constraintId = -1
   then
-    set dimSql = concat('select id, name from ',dimensionTable);
+    set dimSql = concat('select id, name from ',dimensionTable,' order by 2');
   else
-    set dimSql = concat('select id, name from ',dimensionTable,' where id = ',constraintId);
+    set dimSql = concat('select id, name from ',dimensionTable,' where id = ',constraintId,' order by 2');
   end if;
   set @sql = dimSql;
   prepare stmt from @sql;
