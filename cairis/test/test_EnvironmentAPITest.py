@@ -59,6 +59,19 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     list_str = ' - '.join(environments)
     self.logger.info('[%s] Environment names: %s\n', method, list_str)
 
+  def test_get_names_by_risk(self):
+    method = 'test_get_names_by_risk'
+    riskName = 'User Certificate Theft'
+    url = '/api/environments/risk/%s/names?session_id=test' % quote(riskName)
+    rv = self.app.get(url)
+    environments = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(environments, 'No results after deserialization')
+    self.assertIsInstance(environments, list, 'The result is not a list as expected')
+    self.assertGreater(len(environments), 0, 'No environments in the list')
+    self.logger.info('[%s] Environments found: %d', method, len(environments))
+    list_str = ' - '.join(environments)
+    self.logger.info('[%s] Environment names: %s\n', method, list_str)
+
   def test_get_by_name(self):
     method = 'test_get_by_name'
     url = '/api/environments/name/%s?session_id=test' % quote(self.existing_environment_name)

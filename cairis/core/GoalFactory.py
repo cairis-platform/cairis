@@ -24,7 +24,7 @@ from Borg import Borg
 
 __author__ = 'Shamal Faily'
 
-def preventDeterText(response):
+def preventDeterText(response,dbProxy):
   genGoalDef = 'Under normal operating conditions, the system shall '
   if (response.type('','None','') == 'Prevent'):
     genGoalDef += 'prevent ' 
@@ -36,9 +36,12 @@ def preventDeterText(response):
   riskGoalDef = genGoalDef
   thrGoalDef = genGoalDef
   vulGoalDef = genGoalDef
-  b = Borg()
   riskName = response.risk()
-  thrName,vulName = b.dbProxy.riskComponents(riskName)
+  
+  if (dbProxy == None):
+    b = Borg()
+    dbProxy = b.dbProxy
+  thrName,vulName = dbProxy.riskComponents(riskName)
   riskGoalDef += 'risk ' + response.risk() + '.'
   thrGoalDef += 'threat ' + thrName + '.'
   vulGoalDef += 'vulnerability ' + vulName + '.'
@@ -47,11 +50,13 @@ def preventDeterText(response):
   vulGoalName = goalCat + vulName
   return [(riskGoalName,riskGoalDef,goalCat),(thrGoalName,thrGoalDef,goalCat),(vulGoalName,vulGoalDef,goalCat)]
 
-def detectText(response):
+def detectText(response,dbProxy):
   goalCategory = 'Detect'
   riskName = response.risk()
-  b = Borg()
-  thrName,vulName = b.dbProxy.riskComponents(riskName)
+  if (dbProxy == None):
+    b = Borg()
+    dbProxy = b.dbProxy
+  thrName,vulName = dbProxy.riskComponents(riskName)
   riskGoalName = goalCategory + riskName
   thrGoalName = goalCategory + thrName
   vulGoalName = goalCategory + vulName
@@ -76,11 +81,14 @@ def detectText(response):
   vulGoalDef += 'its occurrence.'
   return [(riskGoalName,riskGoalDef,goalCategory),(thrGoalName,thrGoalDef,goalCategory),(vulGoalName,vulGoalDef,goalCategory)]
 
-def reactText(response):
+def reactText(response,dbProxy):
   goalCat = 'React'
   riskName = response.risk()
-  b = Borg()
-  thrName,vulName = b.dbProxy.riskComponents(riskName)
+
+  if (dbProxy == None):
+    b = Borg()
+    dbProxy = b.dbProxy
+  thrName,vulName = dbProxy.riskComponents(riskName)
  
   riskGoalName = goalCat + riskName
   thrGoalName = goalCat + thrName
@@ -113,7 +121,7 @@ def transferText(response):
   goalDef = 'The roles of ' + str(response.roleNames('','Maximise','')) + ' shall be accountable for mitigating ' + response.risk() + '.'
   return goalName,goalDef
 
-def mitigateText(response):
+def mitigateText(response,dbProxy):
   environmentProperties = response.environmentProperties()
   firstResponse = environmentProperties[0]
   firstMitType = firstResponse.type()
@@ -135,13 +143,13 @@ def mitigateText(response):
         raise ConflictingType(exceptionText)
    
   if ((firstMitType == 'Prevent') or (firstMitType == 'Deter')):
-    return preventDeterText(response)
+    return preventDeterText(response,dbProxy)
   elif (firstMitType == 'Detect'):
-    return detectText(response)
+    return detectText(response,dbProxy)
   else:
-    return reactText(response)
+    return reactText(response,dbProxy)
  
-def build(response):
+def build(response,dbProxy = None):
   goalCategory = response.responseType()
   goalOriginator = 'Response ' + response.name()
   if (goalCategory == 'Transfer'):
@@ -153,7 +161,7 @@ def build(response):
     tParameters = GoalParameters(goalName,goalOriginator,[],goalEnvProperties)
     return [tParameters]
   else:
-    mitText = mitigateText(response)
+    mitText = mitigateText(response,dbProxy)
     riskText = mitText[0]
     riskGoalName= riskText[0]
     riskGoalDef = riskText[1]

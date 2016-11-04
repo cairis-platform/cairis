@@ -330,6 +330,41 @@ class EnvironmentNamesByThreatVulnerability(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
+class EnvironmentNamesByRisk(Resource):
+  #region Swagger Docs
+  @swagger.operation(
+    notes='Get environment names a risk reside in',
+    nickname='environment-names-by-risk-get',
+    responseClass=list.__name__,
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  #endregion
+  def get(self, risk):
+    session_id = get_session_id(session, request)
+
+    dao = EnvironmentDAO(session_id)
+    environments = dao.get_environment_names_by_risk(risk)
+    dao.close()
+
+    resp = make_response(json_serialize(environments, session_id=session_id), httplib.OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
 
 class EnvironmentNamesAPI(Resource):
   #region Swagger Docs

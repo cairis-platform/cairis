@@ -121,6 +121,14 @@ class ResponseAPITests(CairisDaemonTestCase):
     self.assertGreater(env_id, 0, 'Invalid response ID returned [%d]' % env_id)
     self.logger.info('[%s] Response ID: %d\n', method, env_id)
 
+    rv = self.app.post('/api/responses/name/%s/generate_goal?session_id=test' % quote(self.prepare_new_response().theName))
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    ackMsg = json_resp.get('message', None)
+    self.assertEqual(ackMsg, 'Goal successfully generated')
+   
+
     rv = self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
 
 

@@ -122,6 +122,7 @@ drop procedure if exists duplicateProperties;
 drop procedure if exists overridingEnvironment;
 drop procedure if exists addCompositeEnvironmentProperties;
 drop procedure if exists riskEnvironments;
+drop procedure if exists riskEnvironmentsByRisk;
 drop procedure if exists riskRating;
 drop procedure if exists addResponse;
 drop procedure if exists updateResponse;
@@ -2442,7 +2443,12 @@ end
 
 create procedure riskNames(in environmentName text)
 begin
-  select name from risk order by 1;
+  if environmentName != ''
+  then
+    select name from risk order by 1;
+  else
+    select r.name from environment_risk er, risk r, environment e where r.id = er.id and er.environment_id = e.id and e.name = environmentName;
+  end if;
 end
 //
 
@@ -2564,6 +2570,12 @@ create procedure riskEnvironments(in threatName text, in vulName text)
 begin
   select c.name from threat t,environment_threat ct, environment c where t.name = threatName and t.id = ct.threat_id and ct.environment_id = c.id and c.name in
   (select c.name from vulnerability v,environment_vulnerability cv, environment c where v.name = vulName and v.id = cv.vulnerability_id and cv.environment_id = c.id);
+end
+//
+
+create procedure riskEnvironmentsByRisk(in riskName text)
+begin
+  select e.name from risk r, environment_risk er, environment e where r.name = riskName and r.id = er.id and er.environment_id = e.id;
 end
 //
 

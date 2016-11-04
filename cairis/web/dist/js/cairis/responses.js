@@ -170,7 +170,8 @@ mainContent.on('click', "#addRespEnv", function () {
   $(".responseEnvironment").each(function (index, tag) {
     hasEnv.push($(tag).text());
   });
-  environmentDialogBox(hasEnv, function (text) {
+  var riskName = $("#chooseRisk").val();
+  riskEnvironmentDialogBox(hasEnv, riskName, function (text) {
     var type =  $.session.get("responseKind");
     var envObjt = mitigateEnvDefault;
     if (type == 'Accept') {
@@ -392,10 +393,45 @@ function createResponsesTable(){
       $.contextMenu('destroy',$('.requirement-rows'));
       $("#reqTable").find("tbody").removeClass();
 
+      $("#reqTable").find("tbody").addClass('response-rows');
+      $('.response-rows').contextMenu({
+        selector: 'td',
+        items: {
+          "generate": {
+            name: "Generate Goal",
+            callback: function(key, opt) {
+              var goalName = $(this).closest("tr").find("td").eq(1).html();
+              generateGoal(goalName);
+            }
+          }
+        }
+      });
       activeElement("reqTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+function generateGoal(respName) {
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    url: serverIP + "/api/responses/name/" + respName.replace(" ","%20") + "/generate_goal?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -549,4 +585,56 @@ mainContent.on('click', '#UpdateResponse', function (e) {
     }
   }
 });
+
+function riskEnvironmentDialogBox(haveEnv,riskName,callback){
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/environments/risk/" + encodeURIComponent(riskName) + "/names",
+    success: function (data) {
+
+      $("#comboboxDialogSelect").empty();
+      var none = true;
+      $.each(data, function(i, item) {
+        var found = false;
+        $.each(haveEnv,function(index, text) {
+          if(text == item){
+            found = true
+          }
+        });
+        if(!found) {
+          $("#comboboxDialogSelect").append("<option value=" + item + ">" + item + "</option>");
+          none = false;
+        }
+      });
+      if(!none) {
+        $("#comboboxDialog").dialog({
+          modal: true,
+          buttons: {
+            Ok: function () {
+              var text =  $( "#comboboxDialogSelect").find("option:selected" ).text();
+              if(jQuery.isFunction(callback)){
+                callback(text);
+              }
+              $(this).dialog("close");
+            }
+          }
+        });
+        $(".comboboxD").css("visibility", "visible");
+      }
+      else {
+        alert("All environments are already added");
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
 

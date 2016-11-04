@@ -28,6 +28,7 @@ from cairis.tools.ModelDefinitions import ResponseModel, ResponseEnvironmentProp
     MitigateEnvironmentPropertiesModel, TransferEnvironmentPropertiesModel
 from cairis.tools.PseudoClasses import ValuedRole
 from cairis.tools.SessionValidator import check_required_keys
+import cairis.core.GoalFactory
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -255,3 +256,26 @@ class ResponseDAO(CairisDAO):
       raise ex
 
     return obj
+
+  def generate_goal(self,responseName):
+    try:
+      respId = self.db_proxy.getDimensionId(responseName,'response')
+      responses = self.db_proxy.getResponses(respId)
+      goalParameters = cairis.core.GoalFactory.build(responses[responseName],self.db_proxy)
+      riskParameters = goalParameters[0]
+      riskGoalId = self.db_proxy.addGoal(riskParameters)
+      self.db_proxy.addTrace('response_goal',respId,riskGoalId)
+      if (goalParameters > 1):
+        threatParameters = goalParameters[1]
+        vulnerabilityParameters = goalParameters[2]
+        self.db_proxy.addGoal(vulnerabilityParameters)
+        self.db_proxy.addGoal(threatParameters)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+
+

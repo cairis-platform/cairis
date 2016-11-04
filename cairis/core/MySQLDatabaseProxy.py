@@ -598,6 +598,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting environments associated with threat ' + threatName + ' and vulnerability ' + vulName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def riskEnvironmentsByRisk(self,riskName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call riskEnvironmentsByRisk(%s)',[riskName])
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting environments associated with risk ' + riskName 
+        raise DatabaseProxyException(exceptionText) 
+      environments = []
+      for row in curs.fetchall():
+        row = list(row)
+        environments.append(row[0])
+      curs.close()
+      return environments
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting environments associated with risk ' + riskName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
   def updateEnvironment(self,parameters):
     environmentId = parameters.id()
     environmentName = parameters.name()

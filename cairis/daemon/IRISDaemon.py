@@ -294,6 +294,7 @@ def start():
     '/api/environments/threat/<string:threat>/vulnerability/<string:vulnerability>/names',
     '/api/environments/vulnerability/<string:vulnerability>/threat/<string:threat>/names'
   )
+  api.add_resource(EnvironmentController.EnvironmentNamesByRisk,'/api/environments/risk/<string:risk>/names')
 
   # External Document routes
   api.add_resource(ExternalDocumentController.ExternalDocumentsAPI, '/api/external_documents')
@@ -360,6 +361,7 @@ def start():
   # Response routes
   api.add_resource(ResponseController.ResponsesAPI, '/api/responses')
   api.add_resource(ResponseController.ResponseByNameAPI, '/api/responses/name/<string:name>')
+  api.add_resource(ResponseController.ResponseByNameGenerateAPI, '/api/responses/name/<string:name>/generate_goal')
 
   # Risk routes
   api.add_resource(RiskController.RisksAPI, '/api/risks')

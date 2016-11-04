@@ -257,3 +257,39 @@ class ResponseByNameAPI(Resource):
         resp = make_response(json_serialize(resp_dict), httplib.OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
+
+class ResponseByNameGenerateAPI(Resource):
+    #region Swagger Docs
+    @swagger.operation(
+        notes='Generate goals based on a response name',
+        nickname='response-by-name-generate_goal',
+        responseClass=SwaggerResponseModel.__name__,
+        parameters=[
+            {
+                "name": "session_id",
+                "description": "The ID of the user's session",
+                "required": False,
+                "allowMultiple": False,
+                "dataType": str.__name__,
+                "paramType": "query"
+            }
+        ],
+        responseMessages=[
+            {
+                "code": httplib.BAD_REQUEST,
+                "message": "The database connection was not properly set up"
+            }
+        ]
+    )
+    #endregion
+    def post(self, name):
+        session_id = get_session_id(session, request)
+
+        dao = ResponseDAO(session_id)
+        dao.generate_goal(name)
+        dao.close()
+
+        resp_dict = {'message': 'Goal successfully generated'}
+        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp.headers['Content-type'] = 'application/json'
+        return resp
