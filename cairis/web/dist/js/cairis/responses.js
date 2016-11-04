@@ -54,7 +54,10 @@ $(document).on("click", "#addNewResponse", function () {
             case "Transfer":
               toggleResponse("#transferWindow");
               break;
-            case "Mitigate":
+            case "Prevent":
+            case "Detect":
+            case "Deter":
+            case "React":
               toggleResponse("#mitigateWindow");
               break;
             case "Accept":
@@ -95,6 +98,9 @@ $(document).on('click', "td.response-rows", function () {
           text += type + ", ";
         });
         $("#theTags").val(text);
+        if (data.theResponseType == 'Prevent' || data.theResponseType == 'Deter' || data.theResponseType == 'Detect' || data.theResponseType == 'React') {
+          data.theResponseType = 'Mitigate';
+        }
         $.session.set("responseKind",data.theResponseType);
         $.each(data.theEnvironmentProperties[data.theResponseType.toLocaleLowerCase()], function (index, env) {
           appendResponseEnvironment(env.theEnvironmentName);
@@ -223,6 +229,7 @@ mainContent.on('click', ".responseEnvironment", function () {
       $.each(resp.theEnvironmentProperties["transfer"], function (index, env) {
         if(env.theEnvironmentName == environmentName) {
           $("#theRespTransferRationale").val(env.theRationale);
+          $("#transferRolesTable").find("tbody").empty()
           $.each(env.theRoles, function (ind, role) {
             appendResponseTransferRole(role);
           });
@@ -335,9 +342,9 @@ mainContent.on('click', "#addRespTransferRole", function () {
       if(env.theEnvironmentName == envName){
         env.theRoles.push(role);
       }
-    })
+    });
+    $.session.set("response", JSON.stringify(resp));
   });
-  $.session.set("response", JSON.stringify(resp));
 });
 
 function toggleResponse(window){

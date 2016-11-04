@@ -184,9 +184,12 @@ class ResponseDAO(CairisDAO):
     response_type = response_type.lower()
 
     if real_props:
+      if response_type in ('prevent','detect','deter','react'):
+        response_type = 'mitigate'
       new_props_list = []
       for idx in range(0, len(real_props)):
         real_prop = real_props[idx]
+        
         if isinstance(real_prop, AcceptEnvironmentProperties) and response_type == 'accept':
           new_props_list.append(real_prop)
         elif isinstance(real_prop, MitigateEnvironmentProperties) and response_type == 'mitigate':
