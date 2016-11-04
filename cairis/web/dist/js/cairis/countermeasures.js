@@ -112,7 +112,7 @@ $(document).on('click', "td.countermeasure-rows", function () {
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendCountermeasureEnvironment(env.theEnvironmentName)
         });
-        $("#theEnvironments").find(".countermeasureEnvironments:first").trigger('click');
+        $("#theEnvironments").find(".countermeasuresEnvironments:first").trigger('click');
 
       });
     },
@@ -129,10 +129,11 @@ $(document).on("click", "#addNewCountermeasure", function () {
     $("#addPropertyDiv").hide();
     $("#editCountermeasureOptionsForm").addClass("new");
     $.session.set("Countermeasure", JSON.stringify(jQuery.extend(true, {},countermeasureDefault )));
+    $("#Properties").hide();
   });
 });
 
-mainContent.on("click", ".countermeasureEnvironments", function () {
+mainContent.on("click", ".countermeasuresEnvironments", function () {
   clearCountermeasureEnvInfo();
   var countermeasure = JSON.parse($.session.get("Countermeasure"));
   var envName = $(this).text();
@@ -317,12 +318,12 @@ mainContent.on("dblclick",".changeProperty", function () {
 
 mainContent.on("click", "#addCountermeasureEnv", function () {
   var hasEnv = [];
-  $(".countermeasureEnvironments").each(function (index, tag) {
+  $(".countermeasuresEnvironments").each(function (index, tag) {
     hasEnv.push($(tag).text());
   });
   environmentDialogBox(hasEnv, function (text) {
     appendCountermeasureEnvironment(text);
-    var environment =  jQuery.extend(true, {},threatEnvironmentDefault );
+    var environment =  jQuery.extend(true, {},countermeasureEnvDefault );
     environment.theEnvironmentName = text;
     var countermeasure = JSON.parse($.session.get("Countermeasure"));
     countermeasure.theEnvironmentProperties.push(environment);
@@ -416,7 +417,7 @@ function toggleCountermeasureOptions(){
   $("#addPropertyDiv").toggle();
 }
 function appendCountermeasureEnvironment(environment){
-  $("#theEnvironments").find("tbody").append('<tr><td class="deleteCountermeasureEnv"><i class="fa fa-minus"></i></td><td class="countermeasureEnvironments">'+environment+'</td></tr>');
+  $("#theEnvironments").find("tbody").append('<tr><td class="deleteCountermeasureEnv"><i class="fa fa-minus"></i></td><td class="countermeasuresEnvironments">'+environment+'</td></tr>');
 }
 
 function appendCountermeasureRequirement(requirement){
@@ -465,7 +466,7 @@ $(document).on('click', 'td.deleteCountermeasureButton', function (e) {
       origin: serverIP,
       url: serverIP + "/api/countermeasures/name/" + cmName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createRisksTable();
+        createCountermeasuresTable();
         showPopup(true);
       },
       error: function (xhr, textStatus, errorThrown) {
