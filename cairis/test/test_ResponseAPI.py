@@ -124,23 +124,21 @@ class ResponseAPITests(CairisDaemonTestCase):
     rv = self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
 
 
-#  def test_new_transfer_post(self):
-#    method = 'test_new_transfer_post'
-#    url = '/api/responses'
-#    self.logger.info('[%s] URL: %s', method, url)
-#    new_response_body = self.prepare_json(response_type='Transfer')
+  def test_new_transfer_post(self):
+    method = 'test_new_transfer_post'
+    url = '/api/responses'
+    self.logger.info('[%s] URL: %s', method, url)
+    new_response_body = self.prepare_json(response_type='Transfer')
 
-#    self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
-#    rv = self.app.post(url, content_type='application/json', data=new_response_body)
+    self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
+    rv = self.app.post(url, content_type='application/json', data=new_response_body)
 
-#    self.logger.debug('[%s] Response data: %s', method, rv.data)
-#    json_resp = jsonpickle.decode(rv.data)
-#    self.assertIsNotNone(json_resp, 'No results after deserialization')
-#    env_id = json_resp.get('response_id', None)
-#    self.assertIsNotNone(env_id, 'No response ID returned')
-#    self.assertGreater(env_id, 0, 'Invalid response ID returned [%d]' % env_id)
-#    self.logger.info('[%s] Response ID: %d\n', method, env_id)
-#    rv = self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    ackMsg = json_resp.get('message', None)
+    self.assertEqual(ackMsg, 'Response successfully added')
+    rv = self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
 
 
   def test_put(self):
@@ -182,25 +180,37 @@ class ResponseAPITests(CairisDaemonTestCase):
     rv = self.app.delete('/api/responses/name/%s?session_id=test' % quote(response_to_update.theName))
 
   def prepare_new_response(self, response_type='Mitigate'):
+    new_response = Response(
+      respId=-1,
+      respName='Test response',
+      respRisk=self.existing_risk_name,
+      tags=['test'],
+      cProps=[],
+      respType=response_type
+    )
     if response_type == 'Mitigate':
-      new_response_props = [
+      new_response_props ={"mitigate" : [
         MitigateEnvironmentProperties(
           environmentName=self.existing_environment_name,
           type='Detect',
           detPoint='At',
           detMechs=[]
         )
-      ]
+      ],
+      "transfer" : [],
+      "accept" : []}
     elif response_type == 'Accept':
-      new_response_props = [
+      new_response_props = {"accept" : [
         AcceptEnvironmentProperties(
           environmentName=self.existing_environment_name,
           cost='Low',
           rationale='Test'
         )
-      ]
+      ],
+      "transfer" : [],
+      "mitigate" : []}
     elif response_type == 'Transfer':
-      new_response_props = [
+      new_response_props = {"transfer" : [
         TransferEnvironmentProperties(
           environmentName=self.existing_environment_name,
           rationale='Test',
@@ -208,19 +218,12 @@ class ResponseAPITests(CairisDaemonTestCase):
             (self.existing_role_name, 'Low')
           ]
         )
-      ]
+      ],
+      "accept" : [],
+      "mitigate" : []}
     else:
-      new_response_props = []
-
-    new_response = Response(
-      respId=-1,
-      respName='Test response',
-      respRisk=self.existing_risk_name,
-      tags=['test'],
-      cProps=new_response_props,
-      respType=response_type
-    )
-
+      new_response_props = {"accept" : [],"transfer" : [], "mitigate" : []}
+    new_response.theEnvironmentProperties = new_response_props
     return new_response
 
   def prepare_dict(self, response=None, response_type='Mitigate'):
@@ -230,7 +233,7 @@ class ResponseAPITests(CairisDaemonTestCase):
       assert isinstance(response, Response)
 
     if response.theResponseType == 'Transfer': 
-      transfer_props = response.theEnvironmentProperties
+      transfer_props = response.theEnvironmentProperties["transfer"]
       for idx in range(0, len(transfer_props)):
         the_roles = transfer_props[idx].theRoles
         for idx in range(0, len(the_roles)):
@@ -239,10 +242,7 @@ class ResponseAPITests(CairisDaemonTestCase):
                              cost=the_roles[idx][1]
                            )
         transfer_props[idx].theRoles = the_roles
-
-      response.theEnvironmentProperties = {
-        response.theResponseType.lower(): response.theEnvironmentProperties
-      }
+      response.theEnvironmentProperties = { "transfer" : transfer_props, "accept" : [], "mitigate" : []}
 
     return {
       'session_id': 'test',

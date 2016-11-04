@@ -819,7 +819,7 @@ function newRoleDialogbox(callback){
   var costSelect = dialogwindow.find("#theRoleCost");
   getRoles(function (roles) {
     $.each(roles, function (key, obj) {
-      roleSelect.append($('<option>', { value : key }).text(key));
+      roleSelect.append($('<option>', { value : obj }).text(obj));
     });
   });
   dialogwindow.dialog({

@@ -389,7 +389,7 @@ var responseDefault = {
   "theId": -1,
   "theRisk" : "",
   "theName" : "",
-  "theEnvironmentProperties" : {'accept': [],'mitigate':[],'transfer':[]},
+  "theEnvironmentProperties" : {'accept': [], 'mitigate' : [], 'transfer' : []},
   "theResponseType" : "",
   "theTags" : []
 };
