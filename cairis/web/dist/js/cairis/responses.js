@@ -222,7 +222,7 @@ mainContent.on('click', ".responseEnvironment", function () {
     case "Transfer":
       $.each(resp.theEnvironmentProperties["transfer"], function (index, env) {
         if(env.theEnvironmentName == environmentName) {
-          $("#theRespTransferRationale").val(resp.theRationale);
+          $("#theRespTransferRationale").val(env.theRationale);
           $.each(env.theRoles, function (ind, role) {
             appendResponseTransferRole(role);
           });
@@ -279,6 +279,7 @@ mainContent.on('change', "#acceptRationale", function () {
 });
 
 mainContent.on('change', "#respMitigateType", function () {
+  $("#theResponseName").val($("#respMitigateType").val() + " " + $("#chooseRisk").val());
   var newType = $(this).val().toLowerCase();
   var resp = JSON.parse($.session.get("response"));
   var type =  $.session.get("responseKind");
@@ -301,6 +302,7 @@ mainContent.on('change', "#respMitigateType", function () {
 mainContent.on('change', "#theDetectionPoint", function () {
   var value = $(this).val();
   var resp = JSON.parse($.session.get("response"));
+  var type =  $.session.get("responseKind");
   var envName = $.session.get("responseEnvironment");
   if(value != " "){
     $.each(resp.theEnvironmentProperties[type.toLowerCase()], function (index, env) {
@@ -318,7 +320,7 @@ mainContent.on('change', "#theRespTransferRationale", function () {
   var envName = $.session.get("responseEnvironment");
   $.each(resp.theEnvironmentProperties[type.toLowerCase()], function (index, env) {
     if(env.theEnvironmentName == envName){
-      env.theRationale = $(this).val();
+      env.theRationale = $("#theRespTransferRationale").val();
     }
   });
   $.session.set("response", JSON.stringify(resp));
@@ -436,14 +438,11 @@ $(document).on('click', 'td.deleteResponseButton', function (e) {
 $(document).on('click','#chooseRisk', function(e) {
   var responseType = $.session.get("responseKind");
   if (responseType == 'Mitigate') {
-    responseType = $("#respMitigateType");
+    responseType = $("#respMitigateType").val();
   }
   $("#theResponseName").val(responseType + " " + $("#chooseRisk").val());
 });
 
-$(document).on('click','#respMitigateType', function(e) {
-  $("#theResponseName").val($("#respMitigateType") + " " + $("#chooseRisk").val());
-});
 
 function putResponse(response, oldName, usePopup, callback){
   var output = {};
@@ -528,14 +527,7 @@ mainContent.on('click', '#UpdateResponse', function (e) {
     var arr = $("#theTags").val().split(", ")
     resp.TheTags = arr;
     resp.theRisk = $("#chooseRisk").val();
-
     resp.theResponseType = respKind;
-    if (respKind != 'Accept' && respKind != 'Transfer') {
-      resp.theResponseType = $("#respMitigateType").value();
-    }
-    else {
-      resp.theResponseType = respKind;
-    } 
 
     if($("#editResponseOptionsform").hasClass("newResponse")){
       postResponse(resp, function () {
