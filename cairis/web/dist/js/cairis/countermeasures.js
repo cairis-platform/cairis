@@ -562,8 +562,88 @@ $(document).on("click", "#addRequirementToCountermeasure", function () {
 
 $(document).on("click", "#addTargetToCountermeasure", function () {
 
+  var hasTargets = [];
+  $("#theTargets").find(".countermeasureTargets").each(function(index, req){
+    hasTargets.push($(req).text());
+  });
+  countermeasureTargetsDialogBox(hasTargets, function (target) {
+    var cm = JSON.parse($.session.get("Countermeasure"));
+    var envName = $.session.get("countermeasureEnvironmentName");
+    $.each(cm.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == envName){
+        env.theTargets.push(target);
+        $.session.set("Countermeasure", JSON.stringify(cm));
+        appendCountermeasureTarget(target);
+      }
+    });
+  });
+
 
 });
+
+function countermeasureTargetsDialogBox(haveTarget,callback){
+  var dialogwindow = $("#ChooseTargetDialog");
+  var envName = $.session.get("countermeasureEnvironmentName");
+  var cm = JSON.parse($.session.get("Countermeasure"));
+  var reqParams = '';
+  $.each(cm.theEnvironmentProperties, function(index,env) {
+    if (env.theEnvironmentName = envName) {
+      reqParams = encodeQueryList('requirement',env.theRequirements);
+    }
+  });
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/countermeasures/targets/environment/" + envName.replace(" ","%20") + '?' + reqParams,
+    success: function (data) {
+      $("#chooseTarget").empty();
+      var none = true;
+      $.each(data, function(key, object) {
+        var found = false;
+        $.each(haveTarget,function(index, text) {
+          if(text == key){
+            found = true
+          }
+        });
+        if(!found) {
+          $("#chooseTarget").append("<option value=" + object + ">" + object + "</option>");
+          none = false;
+        }
+      });
+      if(!none) {
+        dialogwindow.dialog({
+          modal: true,
+          buttons: {
+            Ok: function () {
+              var target = {}
+              target.theName =  $("#chooseTarget").find("option:selected" ).text();
+              target.theEffectiveness =  $("#chooseEffectiveness").val();
+              target.theRationale =  $("#enterRationale").val();
+              if(jQuery.isFunction(callback)){
+                callback(target);
+              }
+              $(this).dialog("close");
+            }
+          }
+        });
+        $(".comboboxD").css("visibility", "visible");
+      }
+      else {
+        alert("All targets are already added");
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
 
 function countermeasureRequirementsDialogBox(haveReq,callback){
   var dialogwindow = $("#ChooseRequirementDialog");

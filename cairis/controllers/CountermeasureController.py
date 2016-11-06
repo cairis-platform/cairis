@@ -266,6 +266,22 @@ class TargetsAPI(Resource):
     responseClass=list.__name__,
     parameters=[
       {
+        "name": "environment",
+        "description": "Countermeasure environments",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "requirements",
+        "description": "Countermeasure requirements",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": list.__name__,
+        "paramType": "query"
+      },
+      {
         "name": "session_id",
         "description": "The ID of the user's session",
         "required": False,
@@ -284,10 +300,8 @@ class TargetsAPI(Resource):
   # endregion
   def get(self, environment):
     session_id = get_session_id(session, request)
-
+    reqList = request.args.getlist('requirement')
     dao = CountermeasureDAO(session_id)
-    reqList = dao.requirements_from_json(request)
-
     targets = dao.get_countermeasure_targets(reqList,environment)
     dao.close()
 

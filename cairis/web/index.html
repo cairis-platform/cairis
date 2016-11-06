@@ -395,6 +395,26 @@
     <select class="form-control">
     </select>
   </div>
+  <div id="ChooseTargetDialog" title="Choose a target" style="display: none">
+    <div class="form-group">
+      <label for="chooseTarget" class="control-label">Target</label>
+      <select id="chooseTarget" class="form-control">
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="chooseEffectiveness" class="control-label">Effectiveness</label>
+      <select id="chooseEffectiveness" class="form-control">
+      <option id="None">None</option>
+      <option id="Low">Low</option>
+      <option id="Medium">Medium</option>
+      <option id="High">High</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="enterRationale" class="control-label">Rationale</label>
+      <textarea rows="4" class="form-control" id="enterRationale" data-error="Rationale is required" required></textarea>
+    </div>
+  </div>
   <div id="ChooseConcernDialog" title="Choose a task concern" style="display: none">
     <select class="form-control">
     </select>

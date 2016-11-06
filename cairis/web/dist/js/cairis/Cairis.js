@@ -1749,3 +1749,11 @@ function objectDependenciesDialogBox(callback){
   });
   $(".comboboxD").css("visibility", "visible");
 }
+
+function encodeQueryList(q,data) {
+  var l = [];
+  for (let d in data) {
+    l.push(q + '=' + encodeURIComponent(data[d]));
+  }
+  return l.join('&');
+}

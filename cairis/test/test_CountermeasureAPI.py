@@ -114,9 +114,9 @@ class CountermeasureAPITests(CairisDaemonTestCase):
 
   def test_target_names(self):
     method = 'test_countermeasure-targets-by-requirement-get'
-    url = '/api/countermeasures/targets/environment/Psychosis'
+    url = '/api/countermeasures/targets/environment/Psychosis?requirement=User%20certificate&session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
-    rv = self.app.get(url, content_type='application/json', data=self.prepare_requirements_json(['User certificate']))
+    rv = self.app.get(url)
     targetList = jsonpickle.decode(rv.data)
     self.assertIsNotNone(targetList, 'No results after deserialization')
     self.assertGreater(len(targetList), 0, 'No targets returned')
@@ -208,9 +208,3 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     new_countermeasure_body = jsonpickle.encode(data_dict, unpicklable=False)
     self.logger.info('JSON data: %s', new_countermeasure_body)
     return new_countermeasure_body
-
-  def prepare_requirements_json(self, reqList):
-    return jsonpickle.encode({
-      'session_id' : 'test',
-      'object' : {'requirements' : reqList}
-    },unpicklable=False)
