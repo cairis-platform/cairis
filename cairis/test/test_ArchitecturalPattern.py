@@ -116,6 +116,9 @@ class ComponentViewTest(unittest.TestCase):
     self.assertEqual(icvp.name(), ocvp.name())
     self.assertEqual(icvp.synopsis(), ocvp.synopsis())
 
+    self.assertEqual(b.dbProxy.componentAttackSurface('Policy Manager'),3.0)
+    cg = b.dbProxy.componentGoalModel('Policy Manager')
+
     icvp.setId(ocvp.id())
     icvp.theSynopsis = 'revised synopsis'
     b.dbProxy.updateComponentView(icvp)
@@ -124,7 +127,6 @@ class ComponentViewTest(unittest.TestCase):
 
     self.assertEqual(icvp.name(), ocvp.name())
     self.assertEqual(ocvp.synopsis(), 'revised synopsis')
-
 
 
     b.dbProxy.deleteComponentView(ocvp.id())
