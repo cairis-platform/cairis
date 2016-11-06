@@ -124,6 +124,17 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.assertEqual(targetList[0],'Certificate ubiquity')
     self.assertEqual(targetList[1],'Social engineering')
 
+  def test_task_names(self):
+    method = 'test_countermeasure-tasks-by-role-get'
+    url = '/api/countermeasures/tasks/environment/Psychosis?role=Certificate%20Authority&role=Data%20Consumer&role=Researcher&session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    taskDict = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(taskDict, 'No results after deserialization')
+    self.assertEqual(len(taskDict),2)
+    self.assertEqual("('Download data', 'Claire')" in taskDict,True)
+    self.assertEqual("('Upload data', 'Claire')" in taskDict,True)
+
 
   def test_put(self):
     method = 'test_put'

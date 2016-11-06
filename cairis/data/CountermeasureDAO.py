@@ -200,6 +200,22 @@ class CountermeasureDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
+  def get_countermeasure_tasks(self,roleList,envName):
+    """
+    Get the available task names.
+    :rtype list[str]
+    :raise ARMHTTPError:
+    """
+    try:
+      return self.db_proxy.roleTasks(envName,roleList)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+
   def from_json(self, request):
     """
     :rtype : Countermeasure

@@ -309,3 +309,56 @@ class TargetsAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
     dao.close()
+
+
+class CountermeasureTasksAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get countermeasure tasks by roles',
+    nickname='countermeasure-tasks-by-role-get',
+    responseClass=dict.__name__,
+    parameters=[
+      {
+        "name": "environment",
+        "description": "Countermeasure environments",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "roles",
+        "description": "Countermeasure roles",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": list.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self, environment):
+    session_id = get_session_id(session, request)
+    roleList = request.args.getlist('role')
+    dao = CountermeasureDAO(session_id)
+    tasks = dao.get_countermeasure_tasks(roleList,environment)
+    dao.close()
+
+    resp = make_response(json_serialize(tasks, session_id=session_id), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp
+    dao.close()

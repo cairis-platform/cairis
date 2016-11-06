@@ -260,6 +260,7 @@ def start():
   api.add_resource(CountermeasureController.CountermeasuresAPI, '/api/countermeasures')
   api.add_resource(CountermeasureController.CountermeasureByNameAPI, '/api/countermeasures/name/<string:name>')
   api.add_resource(CountermeasureController.TargetsAPI, '/api/countermeasures/targets/environment/<string:environment>')
+  api.add_resource(CountermeasureController.CountermeasureTasksAPI, '/api/countermeasures/tasks/environment/<string:environment>')
 
 
   # Dependency routes
