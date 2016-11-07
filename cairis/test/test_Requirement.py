@@ -77,6 +77,8 @@ class RequirementTest(unittest.TestCase):
     self.assertEqual(str(ireq.type()),str(oreq.type()))
     self.assertEqual(str(ireq.asset()),str(oreq.asset()))
 
+    self.assertEqual(len(b.dbProxy.getRequirementVersions(ireq.id())),1)
+
     soreqs = b.dbProxy.getRequirement(oreq.label())
     soreq = soreqs[ireq.description()]
     self.assertEqual(str(oreq.name()),str(soreq.name()))
