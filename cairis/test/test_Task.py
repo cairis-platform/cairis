@@ -107,6 +107,8 @@ class TaskTest(unittest.TestCase):
     self.assertEqual(iTask.environmentProperties()[0].dependencies(),oTask.environmentProperties()[0].dependencies())
     self.assertEqual(oTask.usability(envName,''),5)
 
+    self.assertEqual(b.dbProxy.taskLoad(oTask.id(),104),5)
+
     iTask.theName = 'Updated name'
     iTask.setId(oTask.id())
     b.dbProxy.updateTask(iTask)
