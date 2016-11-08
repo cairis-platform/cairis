@@ -314,8 +314,6 @@ mainContent.on('click', '.addEnvironmentPlus',function(){
           buttons: {
             Ok: function () {
               $(this).dialog("close");
-              $("#optionsHeaderGear").text("Asset properties");
-              forceOpenOptions();
               var chosenText = $( "#comboboxDialogSelect").find("option:selected" ).text();
               $("#theEnvironmentDictionary").find("tbody").append("<tr><td class='deleteAssetEnv'><i class='fa fa-minus'></i></td><td class='clickable-environments'>" + chosenText +"</td></tr>");
               var sessionProps = $.session.get("AssetProperties");

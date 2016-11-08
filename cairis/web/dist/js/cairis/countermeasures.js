@@ -168,58 +168,6 @@ mainContent.on("click", ".countermeasuresEnvironments", function () {
 });
 
 
-mainContent.on('click', '#addAssettoThreat', function () {
-  var hasAssets = [];
-  $("#threatAssets").find(".threatAssets").each(function(index, asset){
-    hasAssets.push($(asset).text());
-  });
-  assetsDialogBox(hasAssets, function (text) {
-    var threat = JSON.parse($.session.get("Countermeasure"));
-    var theEnvName = $.session.get("threatEnvironmentName");
-    $.each(threat.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        env.theAssets.push(text);
-        $.session.set("Countermeasure", JSON.stringify(threat));
-        appendThreatAsset(text);
-      }
-    });
-  });
-});
-
-mainContent.on('click','#addAttackertoThreat', function () {
-  var hasAttackers = [];
-  var theEnvName = $.session.get("threatEnvironmentName");
-  $("#threatAttackers").find(".threatAttackers").each(function(index, attacker){
-    hasAttackers.push($(attacker).text());
-  });
-  if(hasAttackers.length <= 0){
-    alert("Unable to add attackers without specifying an environment.")
-  }
-  else {
-    attackerDialogBox(hasAttackers, theEnvName, function (text) {
-      var threat = JSON.parse($.session.get("Countermeasure"));
-      $.each(threat.theEnvironmentProperties, function (index, env) {
-        if (env.theEnvironmentName == theEnvName) {
-          env.theAttackers.push(text);
-          $.session.set("Countermeasure", JSON.stringify(threat));
-          appendThreatAttacker(text);
-        }
-      });
-    });
-  }
-});
-
-mainContent.on('change', '#theLikelihood', function () {
-  var threat = JSON.parse($.session.get("Countermeasure"));
-  var theEnvName = $.session.get("threatEnvironmentName");
-  $.each(threat.theEnvironmentProperties, function (index, env) {
-    if(env.theEnvironmentName == theEnvName){
-      env.theLikelihood = $("#theLikelihood option:selected").text();
-      $.session.set("Countermeasure", JSON.stringify(threat));
-    }
-  });
-});
-
 mainContent.on('click', '.removeCountermeasureRequirement', function () {
   var reqText = $(this).closest(".countermeasureRequirements").text();
   $(this).closest("tr").remove();
@@ -310,10 +258,74 @@ mainContent.on('click', '.removeCountermeasurePersona', function () {
 
 
 mainContent.on('click','#addPropertytoCountermeasure', function () {
-  $("#editCountermeasureOptionsForm").hide();
-  fillCountermeasurePropProperties();
-  $("#addPropertyDiv").show('slow').addClass("newProp");
+  var hasProperties = [];
+  $("#countermeasureProperties").find(".countermeasureProperties").each(function(index, prop){
+    hasProperties.push($(prop).text());
+  });
+  securityPropertyDialogBox(hasProperties, undefined, function (prop) {
+    var cm = JSON.parse($.session.get("Countermeasure"));
+    var theEnvName = $.session.get("countermeasureEnvironmentName");
+    $.each(cm.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == theEnvName){
+        $.each(env.theProperties, function(idx, cmProp){
+          if (prop.name == cmProp.name) {
+            cmProp.value = prop.value;
+            cmProp.rationale = prop.rationale;
+            cm.theEnvironmentProperties[index].theProperties[idx] = cmProp;
+            $.session.set("Countermeasure", JSON.stringify(cm));
+            appendCountermeasureProperty(prop);
+          }
+        });
+      }
+    });
+  });
 });
+
+mainContent.on('click', '.countermeasureProperties', function() {
+  var propRow = $(this).closest("tr");
+  var propName = propRow.find("td:eq(1)").text();
+  var cm = JSON.parse($.session.get("Countermeasure"));
+  var theEnvName = $.session.get("countermeasureEnvironmentName");
+
+  var currentProp = {};
+  $.each(cm.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      $.each(env.theProperties, function(idx, cmProp){
+        if (propName == cmProp.name) {
+          currentProp = cmProp;
+          var defaultProp = {};
+          defaultProp.name = propName;
+          defaultProp.value = 'None';
+          defaultProp.rationale = '';
+          cm.theEnvironmentProperties[index].theProperties[idx] = defaultProp;
+        }
+      });
+    }
+  });
+
+  var hasProperties = [];
+  $("#countermeasureProperties").find(".countermeasureProperties").each(function(index, prop){
+    hasProperties.push($(prop).text());
+  });
+
+  securityPropertyDialogBox(hasProperties, currentProp, function (updProp) {
+    $.each(cm.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == theEnvName){
+        $.each(env.theProperties, function(idx, cmProp){
+          if (updProp.name == cmProp.name) {
+            cm.theEnvironmentProperties[index].theProperties[idx] = updProp;
+            $.session.set("Countermeasure", JSON.stringify(cm));
+            propRow.find("td:eq(1)").text(updProp.name);
+            propRow.find("td:eq(2)").text(updProp.value);
+            propRow.find("td:eq(3)").text(updProp.rationale);
+          }
+        });
+      }
+    });
+  });
+
+});
+
 
 mainContent.on('click',"#UpdateCountermeasureProperty", function () {
   var prop = {};
@@ -431,14 +443,20 @@ mainContent.on('click', ".deleteCountermeasureEnv", function () {
 });
 
 mainContent.on('click', ".removeCountermeasureProperty", function () {
-  var attacker = $(this).closest(".threatAttackers").text();
+  var propName = $(this).closest("tr").find("td:eq(1)").text();
   $(this).closest("tr").remove();
   var countermeasure = JSON.parse($.session.get("Countermeasure"));
   var theEnvName = $.session.get("countermeasureEnvironmentName");
   $.each(countermeasure.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
-      env.theAttackers.splice( $.inArray(attacker,env.theAttackers) ,1 );
-      $.session.set("Countermeasure", JSON.stringify(threat));
+      var idxToGo = 0;
+      $.each(env.theProperties, function(index,prop) {
+        if (prop.name == propName) {
+          idxToGo = index;
+        }
+      });
+      env.theProperties.splice( idxToGo ,1 );
+      $.session.set("Countermeasure", JSON.stringify(countermeasure));
     }
   });
 });
