@@ -29,7 +29,7 @@ import cairis.core.armid
 from cairis.misc.KaosModel import KaosModel
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-from cairis.tools.ModelDefinitions import CountermeasureModel, CountermeasureEnvironmentPropertiesModel
+from cairis.tools.ModelDefinitions import CountermeasureModel, CountermeasureEnvironmentPropertiesModel,CountermeasureTask
 from cairis.tools.PseudoClasses import SecurityAttribute, CountermeasureTarget, CountermeasureTaskCharacteristics
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 
@@ -207,7 +207,12 @@ class CountermeasureDAO(CairisDAO):
     :raise ARMHTTPError:
     """
     try:
-      return self.db_proxy.roleTasks(envName,roleList)
+      roleTasks = self.db_proxy.roleTasks(envName,roleList)
+      outRoleTasks = []
+      for key in roleTasks:
+        taskData = roleTasks[key]
+        outRoleTasks.append(CountermeasureTask(key[1],key[0],taskData[0],taskData[1],taskData[2],taskData[3]))
+      return outRoleTasks
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

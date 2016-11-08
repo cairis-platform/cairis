@@ -156,7 +156,7 @@ mainContent.on("click", ".countermeasuresEnvironments", function () {
         appendCountermeasureRole(role);
       });
       $.each(env.thePersonas, function (index,persona) {
-        appendCountermeasurePersona(env.thePersonas[index]['theTask'],env.thePersonas[index]['thePersona'],env.thePersonas[index]['theDuration'],env.thePersonas[index]['theFrequency'],env.thePersonas[index]['theDemands'],env.thePersonas[index]['theGoalConflict']);
+        appendCountermeasurePersona(env.thePersonas[index].theTask,env.thePersonas[index].thePersona,env.thePersonas[index].theDuration,env.thePersonas[index].theFrequency,env.thePersonas[index].theDemands,env.thePersonas[index].theGoalConflict);
       });
       $.each(env.theProperties, function (index,prop) {
         if( prop.value != "None"){
@@ -246,6 +246,42 @@ mainContent.on('click', '.removeCountermeasureTarget', function () {
   });
 });
 
+
+mainContent.on('click', '.countermeasureTargets', function () {
+  var targetRow = $(this).closest("tr");
+  var targetTxt = targetRow.find("td:eq(1)").text();
+  var countermeasure = JSON.parse($.session.get("Countermeasure"));
+  var theEnvName = $.session.get("countermeasureEnvironmentName");
+  $.each(countermeasure.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      var targetIdx = 0;
+      for (var i = 0; i < env.theTargets.length; i++) {
+        if (targetTxt == env.theTargets[i].theName) {
+          targetIdx = i;
+          break;
+        }
+      }
+      var hasTargets = [];
+          targetIdx = i;
+      $("#theTargets").find(".countermeasureTargets").each(function(index, req){
+        hasTargets.push($(req).text());
+      });
+      countermeasureTargetsDialogBox(hasTargets,env.theTargets[targetIdx], function (target) {
+        var cm = JSON.parse($.session.get("Countermeasure"));
+        var envName = $.session.get("countermeasureEnvironmentName");
+        $.each(cm.theEnvironmentProperties, function (index, env) {
+          if(env.theEnvironmentName == envName){
+            env.theTargets[targetIdx] = target;
+            $.session.set("Countermeasure", JSON.stringify(cm));
+            targetRow.find("td:eq(1)").text(target.theName); 
+            targetRow.find("td:eq(2)").text(target.theEffectiveness); 
+          }
+        });
+      });
+    }
+  });
+});
+
 mainContent.on('click', '.removeCountermeasureRole', function () {
   var roleText = $(this).closest(".countermeasureRoles").text();
   $(this).closest("tr").remove();
@@ -254,6 +290,19 @@ mainContent.on('click', '.removeCountermeasureRole', function () {
   $.each(countermeasure.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
       env.theRoles.splice( $.inArray(roleText,env.theRoles) ,1 );
+      $.session.set("Countermeasure", JSON.stringify(countermeasure));
+    }
+  });
+});
+
+mainContent.on('click', '.removeCountermeasurePersona', function () {
+  var taskText = $(this).closest(".countermeasurePersonas").text();
+  $(this).closest("tr").remove();
+  var countermeasure = JSON.parse($.session.get("Countermeasure"));
+  var theEnvName = $.session.get("countermeasureEnvironmentName");
+  $.each(countermeasure.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      env.thePersonas.splice( $.inArray(taskText,env.thePersonas) ,1 );
       $.session.set("Countermeasure", JSON.stringify(countermeasure));
     }
   });
@@ -566,7 +615,7 @@ $(document).on("click", "#addTargetToCountermeasure", function () {
   $("#theTargets").find(".countermeasureTargets").each(function(index, req){
     hasTargets.push($(req).text());
   });
-  countermeasureTargetsDialogBox(hasTargets, function (target) {
+  countermeasureTargetsDialogBox(hasTargets,undefined, function (target,undefined) {
     var cm = JSON.parse($.session.get("Countermeasure"));
     var envName = $.session.get("countermeasureEnvironmentName");
     $.each(cm.theEnvironmentProperties, function (index, env) {
@@ -581,7 +630,7 @@ $(document).on("click", "#addTargetToCountermeasure", function () {
 
 });
 
-function countermeasureTargetsDialogBox(haveTarget,callback){
+function countermeasureTargetsDialogBox(haveTarget,currentTarget,callback){
   var dialogwindow = $("#ChooseTargetDialog");
   var envName = $.session.get("countermeasureEnvironmentName");
   var cm = JSON.parse($.session.get("Countermeasure"));
@@ -612,10 +661,15 @@ function countermeasureTargetsDialogBox(haveTarget,callback){
           }
         });
         if(!found) {
-          $("#chooseTarget").append("<option value=" + object + ">" + object + "</option>");
+          $("#chooseTarget").append('<option value="' + object + '">' + object + '</option>');
           none = false;
         }
       });
+      if(currentTarget != undefined) {
+        $("#chooseTarget").val(currentTarget.theName);
+        $("#chooseEffectiveness").val(currentTarget.theEffectiveness);
+        $("#enterRationale").val(currentTarget.theRationale);
+      }
       if(!none) {
         dialogwindow.dialog({
           modal: true,

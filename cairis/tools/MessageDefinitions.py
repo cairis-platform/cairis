@@ -391,3 +391,7 @@ class TemplateGoalMessage(DefaultMessage):
 class TemplateRequirementMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TemplateRequirementModel)
   required = DefaultMessage.required
+
+class CountermeasureTaskMessage(DefaultMessage):
+  resource_fields = fields.List(fields.Nested(ModelDefinitions.CountermeasureTask.resource_fields))
+  required = DefaultMessage.required

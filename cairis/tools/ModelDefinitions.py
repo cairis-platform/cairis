@@ -715,6 +715,40 @@ class VulnerabilityModel(object):
   }
 
 @swagger.model
+class CountermeasureTask(object):
+  resource_fields = {
+    "thePersona": fields.String,
+    "theTask": fields.String,
+    "theDuration": fields.String,
+    "theFrequency": fields.String,
+    "theDemands": fields.String,
+    "theGoalConflict": fields.String
+  }
+  required = resource_fields.keys()
+  swagger_metadata = {
+    'theDuration' : {
+      "enum": ['High Help','Medium Help','Low Help','None','Low Hindrance','Medium Hindrance','High Hindrance']
+    },
+    'theFrequency' : {
+      "enum": ['High Help','Medium Help','Low Help','None','Low Hindrance','Medium Hindrance','High Hindrance']
+    },
+    'theDemands' : {
+      "enum": ['High Help','Medium Help','Low Help','None','Low Hindrance','Medium Hindrance','High Hindrance']
+    },
+    'theGoalConflict' : {
+      "enum": ['High Help','Medium Help','Low Help','None','Low Hindrance','Medium Hindrance','High Hindrance']
+    }
+  }
+
+  def __init__(self,pName,tName,tDur,tFreq,tDemands,tGoalConflict):
+    self.thePersona = pName
+    self.theTask = tName
+    self.theDuration = tDur
+    self.theFrequency = tFreq
+    self.theDemands = tDemands
+    self.theGoalConflict = tGoalConflict
+
+@swagger.model
 class CountermeasureEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -725,7 +759,7 @@ class CountermeasureEnvironmentPropertiesModel(object):
     "theRationale": fields.List(fields.String),
     "theCost": fields.String,
     "theRoles": fields.List(fields.String),
-    "thePersonas": fields.List(fields.String)
+    "thePersonas": fields.List(fields.Nested(CountermeasureTask.resource_fields))
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)

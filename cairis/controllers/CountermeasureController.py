@@ -22,8 +22,8 @@ from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.CountermeasureDAO import CountermeasureDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import CountermeasureMessage, ValueTypeMessage
-from cairis.tools.ModelDefinitions import CountermeasureModel, ValueTypeModel
+from cairis.tools.MessageDefinitions import CountermeasureMessage, ValueTypeMessage,CountermeasureTaskMessage
+from cairis.tools.ModelDefinitions import CountermeasureModel, ValueTypeModel,CountermeasureTask
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
 __author__ = 'Shamal Faily'
@@ -316,7 +316,7 @@ class CountermeasureTasksAPI(Resource):
   @swagger.operation(
     notes='Get countermeasure tasks by roles',
     nickname='countermeasure-tasks-by-role-get',
-    responseClass=dict.__name__,
+    responseClass=CountermeasureTaskMessage.__name__,
     parameters=[
       {
         "name": "environment",

@@ -129,12 +129,13 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     url = '/api/countermeasures/tasks/environment/Psychosis?role=Certificate%20Authority&role=Data%20Consumer&role=Researcher&session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    taskDict = jsonpickle.decode(rv.data)
-    self.assertIsNotNone(taskDict, 'No results after deserialization')
-    self.assertEqual(len(taskDict),2)
-    self.assertEqual("('Download data', 'Claire')" in taskDict,True)
-    self.assertEqual("('Upload data', 'Claire')" in taskDict,True)
-
+    taskList = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(taskList, 'No results after deserialization')
+    self.assertEqual(len(taskList),2)
+    self.assertEqual(taskList[0]['theTask'],'Download data')
+    self.assertEqual(taskList[0]['thePersona'],'Claire')
+    self.assertEqual(taskList[1]['theTask'],'Upload data')
+    self.assertEqual(taskList[1]['thePersona'],'Claire')
 
   def test_put(self):
     method = 'test_put'
