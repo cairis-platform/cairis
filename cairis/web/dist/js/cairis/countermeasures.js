@@ -423,13 +423,12 @@ mainContent.on('click', ".removeCountermeasureProperty", function () {
   var theEnvName = $.session.get("countermeasureEnvironmentName");
   $.each(countermeasure.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
-      var idxToGo = 0;
-      $.each(env.theProperties, function(index,prop) {
+      $.each(env.theProperties, function(idx,prop) {
         if (prop.name == propName) {
-          idxToGo = index;
+          countermeasure.theEnvironmentProperties[index].theProperties[idx].value = 'None';
+          countermeasure.theEnvironmentProperties[index].theProperties[idx].rationale = 'None';
         }
       });
-      env.theProperties.splice( idxToGo ,1 );
       $.session.set("Countermeasure", JSON.stringify(countermeasure));
     }
   });

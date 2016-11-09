@@ -219,7 +219,7 @@ mainContent.on('click', '.assetEnvironmentRow', function(event){
   });
 });
 
-mainContent.on('click', '.clickable-properties', function(){
+mainContent.on('click', '.theAssetPropName', function(){
   var propRow = $(this).closest("tr");
   var propName = propRow.find("td:eq(2)").text();
   var assetProperties = JSON.parse( $.session.get("AssetProperties"));
@@ -452,27 +452,21 @@ mainContent.on('click', '.removeEnvironment', function () {
 });
 
 mainContent.on("click",".deleteProperty", function(){
-   var removablerow = AssetEnvironmentPropertyAttribute;
-   $(this).closest('tr').find("td").each( function(index, object){
-     var attr = $(object).attr('name');
-     if (typeof attr !== typeof undefined && attr !== false) {
-       if (attr == "name" || attr == "rationale" || attr == "value") {
-         removablerow[attr] = object.innerText;
-       }
-     }
-   });
-   var assts = JSON.parse($.session.get("AssetProperties"));
-   var props = assts[  $.session.get("Arrayindex")];
-   $.each(props.attributes, function(index, obj){
-     if (removablerow["name"] == obj["name"] &&  removablerow["value"] == obj["value"]){
-       props.attributes.splice(index, 1);
-       assts[  $.session.get("Arrayindex")] = props;
-       /*updating webpage & database*/
-       updateAssetEnvironment(assts);
-       $.session.set("AssetProperties", JSON.stringify(assts));
-       fillEditAssetsEnvironment();
-     }
-   });
+  var propName = $(this).closest("tr").find("td:eq(1)").text();
+  $(this).closest("tr").remove();
+  var assets = JSON.parse($.session.get("AssetProperties"));
+  var theEnvName = $.session.get("assetEnvironmentName");
+  $.each(assets, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      $.each(env.theProperties, function(idx,prop) {
+        if (prop.name == propName) {
+          assets[index].theProperties[idx].value = 'None';
+          assets[index].theProperties[idx].rationale = 'None';
+        }
+      });
+      $.session.set("AssetProperties", JSON.stringify(assets));
+    }
+  });
 });
 
 $(document).on('click', "#addNewAsset",function(){
