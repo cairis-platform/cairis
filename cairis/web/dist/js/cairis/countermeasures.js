@@ -239,6 +239,7 @@ mainContent.on('click', '.removeCountermeasureRole', function () {
     if(env.theEnvironmentName == theEnvName){
       env.theRoles.splice( $.inArray(roleText,env.theRoles) ,1 );
       $.session.set("Countermeasure", JSON.stringify(countermeasure));
+      updateCountermeasureTasks(theEnvName,env.theRoles);
     }
   });
 });
@@ -252,6 +253,32 @@ mainContent.on('click', '.removeCountermeasurePersona', function () {
     if(env.theEnvironmentName == theEnvName){
       env.thePersonas.splice( $.inArray(taskText,env.thePersonas) ,1 );
       $.session.set("Countermeasure", JSON.stringify(countermeasure));
+    }
+  });
+});
+
+mainContent.on('click', '.countermeasurePersona', function () {
+  var taskRow = $(this).closest("tr");
+  var taskName = taskRow.find("td:eq(0)").text();
+  var personaName = taskRow.find("td:eq(1)").text();
+  var cm = JSON.parse($.session.get("Countermeasure"));
+  var envName = $.session.get("countermeasureEnvironmentName");
+
+  $.each(cm.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == envName){
+      var taskIdx = 0;
+      $.each(env.thePersonas, function (idx, currentTp) {
+        if ((currentTp.theTask == taskName) && (currentTp.thePersona = personaName)) {
+          countermeasureTaskDialogBox(currentTp, function(updTp) {
+            cm.theEnvironmentProperties[index].thePersonas[idx] = updTp;
+            $.session.set("Countermeasure", JSON.stringify(cm));
+            taskRow.find("td:eq(2)").text(updTp.theDuration);
+            taskRow.find("td:eq(3)").text(updTp.theFrequency);
+            taskRow.find("td:eq(4)").text(updTp.theDemands);
+            taskRow.find("td:eq(5)").text(updTp.theGoalConflict);
+          });
+        }
+      });
     }
   });
 });
@@ -326,57 +353,6 @@ mainContent.on('click', '.countermeasureProperties', function() {
 
 });
 
-
-mainContent.on('click',"#UpdateCountermeasureProperty", function () {
-  var prop = {};
-  var countermeasure = JSON.parse($.session.get("Countermeasure"));
-  var theEnvName = $.session.get("countermeasureEnvironmentName");
-  prop.value = $("#thePropValue option:selected").text();
-  prop.name = $("#thePropName option:selected").text();
-  prop.rationale = $("#thePropRationale").val();
-
-  if($("#addPropertyDiv").hasClass("newProp")){
-    appendCountermeasureProperty(prop);
-    $.each(countermeasure.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        env.theProperties.push(prop);
-      }
-    });
-    $.session.set("Countermeasure", JSON.stringify(threat));
-    toggleCountermeasureOptions();
-  } 
-  else {
-    var theRow = $(".changeAbleProp");
-    var oldname = $(theRow).find("td:eq(1)").text();
-    $(theRow).find("td:eq(1)").text(prop.name);
-    $(theRow).find("td:eq(2)").text(prop.value);
-    $(theRow).find("td:eq(3)").text(prop.rationale);
-    $.each(countermeasure.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        $.each(env.theProperties, function (index, proper) {
-          if(proper.name == oldname){
-            proper.name = prop.name;
-            proper.value = prop.value;
-            proper.rationale = prop.rationale;
-          }
-        });
-      }
-    });
-    $.session.set("Countermeasure", JSON.stringify(countermeasure));
-    toggleCountermeasureOptions();
-  }
-});
-
-mainContent.on("dblclick",".changeProperty", function () {
-  $(this).addClass("changeAbleProp");
-  toggleCountermeasureOptions();
-  var text =  $(this).find("td:eq(1)").text();
-  fillCountermeasurePropProperties(text);
-  var value = $(this).find("td:eq(2)").text();
-  $("#thePropValue").val(value);
-  $("#thePropRationale").val($(this).find("td:eq(3)").text());
-});
-
 mainContent.on("click", "#addCountermeasureEnv", function () {
   var hasEnv = [];
   $(".countermeasuresEnvironments").each(function (index, tag) {
@@ -400,22 +376,20 @@ mainContent.on("click", "#addCountermeasureEnv", function () {
 
 mainContent.on('click', '#UpdateCountermeasure', function (e) {
   e.preventDefault();
-  var test = $.session.get("Countermeasure");
-  var countermeasure = JSON.parse($.session.get("Countermeasure"));
-  var oldName = countermeasure.theName;
-  countermeasure.theName = $("#CountermeasureName").val();
-  threat.theMethod = $("#theMethod").val();
+  var cm = JSON.parse($.session.get("Countermeasure"));
+  var oldName = cm.theName;
+  cm.theName = $("#theName").val();
   var tags = $("#theTags").text().split(", ");
-  threat.theTags = tags;
-  threat.theType = $("#theType option:selected").text();
+  cm.theTags = tags;
+  cm.theType = $("#theType option:selected").text();
 
   if($("#editCountermeasureOptionsForm").hasClass("new")){
-    postCountermeasure(threat, function () {
+    postCountermeasure(cm, function () {
       createCountermeasuresTable();
     });
   } 
   else {
-    putCountermeasure(threat, oldName, function () {
+    putCountermeasure(cm, oldName, function () {
       createCountermeasuresTable();
     });
   }
@@ -424,13 +398,13 @@ mainContent.on('click', '#UpdateCountermeasure', function (e) {
 mainContent.on('click', ".deleteCountermeasureEnv", function () {
   var envi = $(this).next(".countermeasuresEnvironments").text();
   $(this).closest("tr").remove();
-  var countermeasure = JSON.parse($.session.get("Countermeasure"));
-  $.each(countermeasure.theEnvironmentProperties, function (index, env) {
+  var cm = JSON.parse($.session.get("Countermeasure"));
+  $.each(cm.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == envi){
-      countermeasure.theEnvironmentProperties.splice( index ,1 );
-      $.session.set("Countermeasure", JSON.stringify(threat));
+      cm.theEnvironmentProperties.splice( index ,1 );
+      $.session.set("Countermeasure", JSON.stringify(cm));
 
-      var UIenv = $("#CountermeasureEnvironments").find("tbody");
+      var UIenv = $("#theEnvironments").find("tbody");
       if(jQuery(UIenv).has(".countermeasuresEnvironments").length){
         UIenv.find(".countermeasuresEnvironments:first").trigger('click');
       }
@@ -500,7 +474,7 @@ function appendCountermeasureRole(role){
 }
 
 function appendCountermeasurePersona(task,persona,duration,frequency,demands,goalConflict) {
-  $("#thePersonas").find("tbody").append("<tr><td class='removeCountermeasurePersona'><i class='fa fa-minus'></i></td><td class='countermeasurePersona'>" + task + "</td><td>" + persona + "</td><td>" + duration + "</td><td>" + frequency + "</td><td>" + demands + "</td><td>" + goalConflict +  "</td></tr>").animate('slow');
+  $("#thePersonas").find("tbody").append("<tr><td class='countermeasurePersona'>" + task + "</td><td>" + persona + "</td><td>" + duration + "</td><td>" + frequency + "</td><td>" + demands + "</td><td>" + goalConflict +  "</td></tr>").animate('slow');
 }
 
 function appendCountermeasureProperty(prop){
@@ -766,6 +740,88 @@ function countermeasureRequirementsDialogBox(haveReq,callback){
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+function countermeasureTaskDialogBox(currentTp,callback){
+  var dialogwindow = $("#EditCountermeasureTaskDialog");
+  $("#theTask").val(currentTp.theTask);
+  $("#thePersona").val(currentTp.thePersona);
+  $("#theDuration").val(currentTp.theDuration);
+  $("#theFrequency").val(currentTp.theFrequency);
+  $("#theDemands").val(currentTp.theDemands);
+  $("#theGoalConflict").val(currentTp.theGoalConflict);
+
+  dialogwindow.dialog({
+    modal: true,
+    buttons: {
+      Ok: function () {
+        var updTp = {};
+        updTp.theTask =  $("#theTask").val();
+        updTp.thePersona =  $("#thePersona").val();
+        updTp.theDuration =  $("#theDuration").val();
+        updTp.theFrequency =  $("#theFrequency").val();
+        updTp.theDemands =  $("#theDemands").val();
+        updTp.theGoalConflict =  $("#theGoalConflict").val();
+        if(jQuery.isFunction(callback)){
+          callback(updTp);
+        }
+        $(this).dialog("close");
+      }
+    }
+  });
+  $("#EditCountermeasureTaskDialog").show();
+}
+
+
+mainContent.on('click', '#addRoleToCountermeasure', function () {
+  var hasRole = [];
+  $("#theRoles").find(".personaRole").each(function(index, role){
+    hasRole.push($(role).text());
+  });
+  roleDialogBox(hasRole, function (text) {
+    var cm = JSON.parse($.session.get("Countermeasure"));
+    var theEnvName = $.session.get("countermeasureEnvironmentName");
+    $.each(cm.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == theEnvName){
+        env.theRoles.push(text);
+        $.session.set("Countermeasure", JSON.stringify(cm));
+        appendCountermeasureRole(text);
+        updateCountermeasureTasks(theEnvName,env.theRoles);
+      }
+    });
+  });
+});
+
+function updateCountermeasureTasks(envName,roleList) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/countermeasures/tasks/environment/" + envName.replace(" ","%20") + "?" + encodeQueryList("role",roleList),
+    success: function (data) {
+      $("#thePersonas").find("tbody").empty(); 
+      var taskList = [];
+      $.each(data, function(index,task) {
+        taskList.push(task);
+        appendCountermeasurePersona(task.theTask,task.thePersona,task.theDuration,task.theFrequency,task.theDemands,task.theGoalConflict); 
+      });
+      var cm = JSON.parse($.session.get("Countermeasure"));
+      $.each(cm.theEnvironmentProperties, function (index, env) {
+        if(env.theEnvironmentName == envName){
+          env.thePersonas = taskList;
+          $.session.set("Countermeasure", JSON.stringify(cm));
+        }
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
 }

@@ -783,6 +783,7 @@ class CountermeasureModel(object):
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)
+  required.remove('theTags')
   required.remove('theEnvironmentDictionary')
   swagger_metadata = {
     obj_id_field: gen_class_metadata(Countermeasure),
