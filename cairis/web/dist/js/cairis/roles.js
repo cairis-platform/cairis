@@ -218,8 +218,12 @@ mainContent.on("click", '.roleEnvironmentClick', function () {
   })
 });
 
-$("#reqTable").on("click", "#addNewRole", function () {
-  $("#reqTable").find("tbody").append('<tr><td><button class="editRoleButton" value="">Edit</button> <button class="deleteRoleButton" value="">Delete</button></td><td name="theName"></td><td name="theShortCode"></td><td name="theType"></td></tr>')
+$(document).on('click', '#addNewRole', function () {
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editRoleOptionsform").addClass("newRole");
+    $.session.set("RoleObject", JSON.stringify(jQuery.extend(true, {},roleDefaultObject )));
+  });
 });
 
 mainContent.on('click', '#CloseRole', function (e) {
