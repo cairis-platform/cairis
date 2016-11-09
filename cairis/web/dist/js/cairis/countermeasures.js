@@ -478,7 +478,7 @@ function appendCountermeasurePersona(task,persona,duration,frequency,demands,goa
 }
 
 function appendCountermeasureProperty(prop){
-  $("#countermeasureProperties").find("tbody").append("<tr class='changeProperty'><td class='removeCountermeasureProperty'><i class='fa fa-minus'></i></td><td class='countermeasureProperties'>" + prop.name + "</td><td>"+ prop.value +"</td><td>"+ prop.rationale+"</td></tr>").animate('slow');;
+  $("#countermeasureProperties").find("tbody").append("<tr class='changeProperty'><td class='removeCountermeasureProperty'><i class='fa fa-minus'></i></td><td class='countermeasureProperties'>" + prop.name + "</td><td>"+ prop.value +"</td><td>"+ prop.rationale+"</td></tr>").animate('slow');
 }
 function clearCountermeasureEnvInfo(){
   $("#countermeasureProperties").find("tbody").empty();

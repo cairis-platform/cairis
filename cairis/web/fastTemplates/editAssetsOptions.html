@@ -93,43 +93,6 @@
     </div>
 </form>
 
-<div id="editpropertiesWindow" style="display: none;">
-  <div class="panel panel-default">
-  <div class="form-group">
-    <label for="property" class="control-label">Property</label>
-    <select class="optionsInput form-control" name="property" id="property" style="width: 75%;" required>
-      <option value="Confidentiality">Confidentiality</option>
-      <option value="Integrity">Integrity</option>
-      <option value="Availability">Availability</option>
-      <option value="Accountability">Accountability</option>
-      <option value="Anonymity">Anonymity</option>
-      <option value="Pseudonymity">Pseudonymity</option>
-      <option value="Unlinkability">Unlinkability</option>
-      <option value="Unobservability">Unobservability</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="value" class="control-label">Value</label>
-    <select class="optionsInput form-control" style="width: 75%;" name="value" id="value">
-      <option>None</option>
-      <option>Low</option>
-      <option>Medium</option>
-      <option>High</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="rationale" class="control-label">Rationale</label>
-    <textarea rows="15" class="optionsInput form-control" name="rationale" id="rationale" data-error="Rationale not provided" required> </textarea>
-    <div class="help-block with-errors"></div>
-  </div>
-  <textarea id="id" name="id" style="display: none;"></textarea>
-  </div>
-
-  <div class="form-group inblock">
-    <button type="submit" class="btn btn-primary" id="updateButtonAsset">Update</button>
-    <button type="submit" class="btn btn-default" id="cancelButtonAsset">Cancel</button>
-  </div>
-</div>
 <div id="editAssociationsWindow" style="display: none;">
   <div class="form-group">
     <label for="headNav" class="control-label">Navigation</label>

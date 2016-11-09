@@ -219,19 +219,46 @@ mainContent.on('click', '.assetEnvironmentRow', function(event){
   });
 });
 
-mainContent.on('dblclick', '.clickable-properties', function(){
-  var test = $(this);
-  $("#editAssetsOptionsform").hide();
-  var label = test.find(".theAssetPropName").text();
+mainContent.on('click', '.clickable-properties', function(){
+  var propRow = $(this).closest("tr");
+  var propName = propRow.find("td:eq(2)").text();
+  var assetProperties = JSON.parse( $.session.get("AssetProperties"));
+  var theEnvName = $.session.get("assetEnvironmentName");
 
-  $("#editpropertiesWindow").show(function(){
-    var jsonn = JSON.parse($.session.get("thePropObject"));
-    var theRightprop;
-    $.each(jsonn.theProperties,function(arrayID,data){
-      if(data.name == label){
-        theRightprop = data;
-        $("#property").val(theRightprop.name);
-        $('#editpropertiesWindow').loadJSON(theRightprop,null);
+  var currentProp = {};
+  $.each(assetProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      $.each(env.theProperties, function(idx, assetProp){
+        if (propName == assetProp.name) {
+          currentProp = assetProp;
+          var defaultProp = {};
+          defaultProp.name = propName;
+          defaultProp.value = 'None';
+          defaultProp.rationale = '';
+          assetProperties[index].theProperties[idx] = defaultProp;
+        }
+      });
+    }
+  });
+
+  var hasProperties = [];
+  $("#definitionTable").find(".theAssetPropName").each(function(index, prop){
+    hasProperties.push($(prop).text());
+  });
+
+  securityPropertyDialogBox(hasProperties, currentProp, function (updProp) {
+    $.each(assetProperties, function (index, env) {
+      if(env.theEnvironmentName == theEnvName){
+        $.each(env.theProperties, function(idx, assetProp){
+          if (updProp.name == assetProp.name) {
+
+            assetProperties[index].theProperties[idx] = updProp;
+            $.session.set("AssetProperties", JSON.stringify(assetProperties));
+            propRow.find("td:eq(2)").text(updProp.name);
+            propRow.find("td:eq(3)").text(updProp.value);
+            propRow.find("td:eq(4)").text(updProp.rationale);
+          }
+        });
       }
     });
   });
@@ -352,19 +379,7 @@ mainContent.on("click", "#updateButtonAsset", function(){
   var allprops = JSON.parse($.session.get("AssetProperties"));
   var props;
 
-  if($("#editpropertiesWindow").hasClass("newProperty")){
-    $("#editpropertiesWindow").removeClass("newProperty");
-    props =  jQuery.extend(true, {},AssetEnvironmentPropertyAttribute );
-    props.name =   $("#property").find("option:selected").text().trim();
-    props.value =  $("#value").find("option:selected").text().trim();
-    props.rationale = $("#rationale").val();
-    var idx = $.session.get("Arrayindex") || 0;
-    allprops[idx].theProperties.push(props);
-    $("#theEnvironmentDictionary").find(".assetEnvProperties:first").trigger('click');
-    $("#editAssetsOptionsform").toggle();
-    $("#editpropertiesWindow").toggle();
-  }
-  else if($("#editAssociationsWindow").hasClass("newAssociation")){
+  if($("#editAssociationsWindow").hasClass("newAssociation")){
     $("#editAssociationsWindow").removeClass("newAssociation");
     var assoc = [];
     assoc.push( $("#headNav").val());
@@ -383,51 +398,31 @@ mainContent.on("click", "#updateButtonAsset", function(){
     $("#editAssociationsWindow").toggle();
   }
   else {
-    if($('#editpropertiesWindow').is(':visible')) {
-      props = JSON.parse($.session.get("thePropObject"));
-      props.name =   $("#property").find("option:selected").text().trim();
-      props.value =  $("#value").find("option:selected").text().trim();
-      props.rationale = $("#rationale").val();
-      var arrIndex = $.session.get("Arrayindex");
-      $.each(allprops[arrIndex].theProperties, function(index, object){
-        if(object.name == props.name){
-          allprops[$.session.get("Arrayindex")].theProperties[index].name = props.name;
-          allprops[$.session.get("Arrayindex")].theProperties[index].value = props.value;
-          allprops[$.session.get("Arrayindex")].theProperties[index].rationale = props.rationale;
-          $.session.set("AssetProperties", JSON.stringify(allprops))
-          $("#editAssetsOptionsform").toggle();
-          $("#editpropertiesWindow").toggle();
-          $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:first").trigger('click');
-        }
-      });
-    }
-    else {
-      var row = $.session.get("associationRow");	
-      var assoc = [];
-      assoc.push( $("#headNav").val());
-      assoc.push( $("#headAdorn").val());
-      assoc.push( $("#headNry").val());
-      assoc.push( $("#headRole").val());
-      assoc.push( $("#tailRole").val());
-      assoc.push( $("#tailNry").val());
-      assoc.push( $("#tailAdorn").val());
-      assoc.push( $("#tailNav").val());
-      assoc.push( $("#tailAsset").val());
-      var arrIndex = $.session.get("Arrayindex");
+    var row = $.session.get("associationRow");	
+    var assoc = [];
+    assoc.push( $("#headNav").val());
+    assoc.push( $("#headAdorn").val());
+    assoc.push( $("#headNry").val());
+    assoc.push( $("#headRole").val());
+    assoc.push( $("#tailRole").val());
+    assoc.push( $("#tailNry").val());
+    assoc.push( $("#tailAdorn").val());
+    assoc.push( $("#tailNav").val());
+    assoc.push( $("#tailAsset").val());
+    var arrIndex = $.session.get("Arrayindex");
 
-      var associationIdx = $.session.get("AssociationIndex");
-      $.each(allprops[arrIndex].theAssociations, function(idx,eAssoc) {
-        if (idx == associationIdx) {
-          allprops[arrIndex].theAssociations[idx] = assoc;
-          $("#assetAssociationsTable").find("tr").eq(associationIdx + 1).replaceWith(assocToTr(assoc));
-          $.session.set("AssetProperties", JSON.stringify(allprops))
-          $("#editAssetsOptionsform").toggle();
-          $("#editAssociationsWindow").toggle();
-          $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:first").trigger('click');
+    var associationIdx = $.session.get("AssociationIndex");
+    $.each(allprops[arrIndex].theAssociations, function(idx,eAssoc) {
+      if (idx == associationIdx) {
+        allprops[arrIndex].theAssociations[idx] = assoc;
+        $("#assetAssociationsTable").find("tr").eq(associationIdx + 1).replaceWith(assocToTr(assoc));
+        $.session.set("AssetProperties", JSON.stringify(allprops))
+        $("#editAssetsOptionsform").toggle();
+        $("#editAssociationsWindow").toggle();
+        $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:first").trigger('click');
 
-        }
-      });
-    }
+      }
+    });
   }
   $.session.set("AssetProperties", JSON.stringify(allprops));
   fillEditAssetsEnvironment();
@@ -558,11 +553,36 @@ $(document).on('click', "td.deleteAssetButton",function(e){
 });
 
 mainContent.on("click", "#addNewProperty", function(){
-  $("#editAssetsOptionsform").hide();
-  $("#editpropertiesWindow").show(function(){
-    $(this).addClass("newProperty");
+
+  var hasProperties = [];
+  $("#definitionTable").find(".theAssetPropName").each(function(index, prop){
+    hasProperties.push($(prop).text());
+  });
+
+  securityPropertyDialogBox(hasProperties, undefined, function (prop) {
+    var assetProperties = JSON.parse( $.session.get("AssetProperties"));
+    var theEnvName = $.session.get("assetEnvironmentName");
+    $.each(assetProperties, function (index, env) {
+      if(env.theEnvironmentName == theEnvName){
+        $.each(env.theProperties, function(idx, assetProp){
+          if (prop.name == assetProp.name) {
+            assetProp.value = prop.value;
+            assetProp.rationale = prop.rationale;
+            assetProperties[index].theProperties[idx] = assetProp;
+            $.session.set("AssetProperties", JSON.stringify(assetProperties));
+            appendSecurityProperty(prop);
+          }
+        });
+      }
+    });
   });
 });
+
+function appendSecurityProperty(prop){
+  $("#definitionTable").find("tbody").append('<tr class="clickable-properties"><td style="display: none;">' + prop.id + '</td><td><div class="fillparent deleteProperty"><i class="fa fa-minus"></i></div></td><td class="theAssetPropName" name="name">' + prop.name + '</td><td name="value">'+ prop.value +'</td><td name="rationale">'+ prop.rationale +'</td></tr>').animate('slow');
+};
+
+
 
 mainContent.on("click", "#addNewAssociation", function(){
   var envName = $.session.get("assetEnvironmentName");
@@ -599,7 +619,6 @@ mainContent.on("click", "#addNewAssociation", function(){
 
 mainContent.on('click', '#cancelButtonAsset', function(){
   $("#editAssetsOptionsform").show();
-  $("#editpropertiesWindow").hide();
   $("#editAssociationsWindow").hide();
 });
 
@@ -710,29 +729,8 @@ function getAssetDefinition(props){
   var i = 0;
   var textToInsert = [];
   $.each(props, function(index, object) {
-    //fa-minus
-    if(object.value != "None") {
-      textToInsert[i++] = '<tr class="clickable-properties" ><td style="display:none;">';
-      textToInsert[i++] = object.id;
-      textToInsert[i++] = '</td>';
-
-      textToInsert[i++] = '<td>';
-      textToInsert[i++] = '<div class="fillparent deleteProperty"><i class="fa fa-minus"></i></div>';
-      textToInsert[i++] = '</td>';
-
-      textToInsert[i++] = '<td class="theAssetPropName" name="name">';
-      textToInsert[i++] = object.name;
-      textToInsert[i++] = '</td>';
-
-      textToInsert[i++] = '<td name="value">';
-      textToInsert[i++] = object.value;
-      textToInsert[i++] = '</td>';
-
-      textToInsert[i++] = '<td name="rationale">';
-      textToInsert[i++] = object.rationale;
-      textToInsert[i++] = '</td>';
-
-      textToInsert[i++] = '</tr>';
+    if (object.value != "None") {
+      appendSecurityProperty(object);
     }
   });
   $('#Properties').find('tbody').append(textToInsert.join(''));

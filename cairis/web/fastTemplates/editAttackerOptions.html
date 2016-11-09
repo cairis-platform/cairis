@@ -69,20 +69,19 @@
 </div>
 </form>
 <div id="addAttackerPropertyDiv" >
-    <p>
-        <label>Property</label>
-        <select name='theCap' id="theCap" style="float: right">
-
-        </select>
-    </p>
-    <p>
-        <label>Value</label>
-        <select name='thePropValue' id="thePropValue" style="float: right">
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-        </select>
-    </p>
+  <div class="form-group">
+    <label for="theCap" class="control-label">Property</label>
+    <select name="theCap" id="theCap" class="form-control" style="float: right">
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="thePropValue" class="control-label">Value</label>
+    <select name='thePropValue' class="form-control" id="thePropValue" style="float: right">
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select>
+  </div>
 <div class="form-group">
   <button type="submit" class="btn btn-primary" id="UpdateAttackerCapability">Update</button>
   <button type="submit" class="btn btn-secondary" id="CancelAttackerCapability">Cancel</button>
