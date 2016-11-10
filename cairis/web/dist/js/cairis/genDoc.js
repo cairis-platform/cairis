@@ -20,14 +20,13 @@
 'use strict';
 
 $("#genDocClick").click(function () {
-  fillOptionMenu("fastTemplates/editGenDocOptions.html", "#optionsContent", null, true, true, function () {
-    $("#optionsHeaderGear").text("Generate Documentation");
-    forceOpenOptions();
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editGenDocOptions.html", "#objectViewer", null, true, true, function () {
   });
 });
 
-var optionsContent = $("#optionsContent");
-optionsContent.on('change',"#theDocumentType",function(){
+var mainContent = $("#objectViewer");
+mainContent.on('change',"#theDocumentType",function(){
   var docType = $(this).find('option:selected').text();
   if (docType == 'Requirements') {
     $("#requirementsSection").addClass('show');
@@ -43,13 +42,30 @@ optionsContent.on('change',"#theDocumentType",function(){
   }
 }); 
 
-optionsContent.on('click',"#GenerateDocumentation", function (e) {
+mainContent.on('click',"#GenerateDocumentation", function (e) {
   e.preventDefault();
   var json = {}; 
   var docType = $("#theDocumentType").val();
   var outputType = $("#theOutputType").val();
+  var genDocUrl = serverIP + "/api/documentation/type/" + docType + "/format/" + outputType;
+  showLoading();
 
-  var genDocUrl = serverIP + "/api/documentation/type/" + docType + "/format/" + outputType + "?session_id=" + String($.session.get('sessionID'))
-  window.open(genDocUrl)
+  $.ajax({
+    type: "GET",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: genDocUrl,
+    success: function (data) {
+      window.location.assign(genDocUrl);
+    },
+    complete: function() {
+      hideLoading();
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 });
-

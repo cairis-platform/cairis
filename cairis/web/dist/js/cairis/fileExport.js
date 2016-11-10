@@ -21,19 +21,20 @@
 
 $("#exportClick").click(function () {
   var exportUrl =  serverIP + "/api/export/file?filename=model.xml"; 
+  showLoading();
   $.ajax({
     type: "GET",
-    accept: "application/octet-stream",
-    processData:false,
-    contentType:false,
     data: {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
     url: exportUrl,
     success: function (data) {
-      window.location = exportUrl;
+      window.location.assign(exportUrl);
       showPopup(true);
+    },
+    complete: function() {
+      hideLoading();
     },
     error: function (xhr, textStatus, errorThrown) {
       var error = JSON.parse(xhr.responseText);

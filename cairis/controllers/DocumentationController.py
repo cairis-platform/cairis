@@ -96,7 +96,7 @@ class DocumentationAPI(Resource):
       binary_pdf = open(reportName).read()
       resp = make_response(binary_pdf)
       resp.headers['Content-Type'] = 'application/' + filePostfix
-      resp.headers['Content-Disposition'] = 'inline; filename=report.' + filePostfix
+      resp.headers['Content-Disposition'] = 'Attachment; filename=report.' + filePostfix
       return resp
     else:
       raise CairisHTTPError(status_code=500,message='report file not found',status='Unknown error')

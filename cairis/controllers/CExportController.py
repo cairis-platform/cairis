@@ -16,6 +16,7 @@
 #  under the License.
 
 import httplib
+import os
 from flask import make_response, request, session, send_file
 from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
@@ -63,11 +64,8 @@ class CExportFileAPI(Resource):
     session_id = get_session_id(session, request)
     dao = ExportDAO(session_id)
     modelBuf = dao.file_export()
-    f = open('/tmp/model.xml','w')
-    f.write(modelBuf)
-    f.close()
     dao.close()
-    resp_dict = { 'message': str(0) }
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
-    resp.headers["Content-Disposition"] = "attachment; filename=/tmp/model.xml"
+    resp = make_response(modelBuf)
+    resp.headers["Content-Type"] = 'application/xml'
+    resp.headers["Content-Disposition"] = 'Attachment; filename=model.xml'
     return resp
