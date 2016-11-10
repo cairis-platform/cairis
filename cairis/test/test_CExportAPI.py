@@ -18,11 +18,11 @@
 import logging
 from urllib import quote
 from StringIO import StringIO
-import os
-import jsonpickle
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.mio.ModelImport import importModelFile
+from cairis.mio.TVTypeContentHandler import TVTypeContentHandler
 import os
+import xml.sax
 
 __author__ = 'Shamal Faily'
 
@@ -37,12 +37,8 @@ class CExportTests(CairisDaemonTestCase):
 
   def test_cexport_data_get(self):
     method = 'test_cexport_file_get?session_id=test'
-    url = '/api/export/file'
+    url = '/api/export/file?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
-
-    json_dict = {'session_id' : 'test'}
-    json_body = jsonpickle.encode(json_dict)
-    rv = self.app.get(url, data=json_body, content_type='application/json')
+    rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    successCode = jsonpickle.decode(rv.data)
-    self.assertIsNotNone(successCode, '0')
+    self.assertIsNone(xml.sax.parseString(rv.data,TVTypeContentHandler()))
