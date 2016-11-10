@@ -133,6 +133,17 @@ $(document).on("click", "#addNewCountermeasure", function () {
   });
 });
 
+mainContent.on("change", "#theCost", function() {
+  var cm = JSON.parse($.session.get("Countermeasure"));
+  var theEnvName = $.session.get("countermeasureEnvironmentName");
+  $.each(cm.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      cm.theEnvironmentProperties[index].theCost = $("#theCost").val();
+      $.session.set("Countermeasure", JSON.stringify(cm));
+    }
+  });
+});
+
 mainContent.on("click", ".countermeasuresEnvironments", function () {
   clearCountermeasureEnvInfo();
   var countermeasure = JSON.parse($.session.get("Countermeasure"));

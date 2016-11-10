@@ -204,7 +204,7 @@ function updateRequirement(row){
   if ($(row).attr('class') != undefined) {
     var clazz = $(row).attr('class');
     $(clazz).removeClass(clazz);
-    arr = clazz.split(':');
+    var arr = clazz.split(':');
     var whatKind = arr[0];
     var vall = arr[1];
     postRequirementRow(row,whatKind,vall);
