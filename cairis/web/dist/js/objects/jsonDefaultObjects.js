@@ -443,10 +443,32 @@ var responseDefault = {
   "theTags" : []
 };
 
+var riskRatingDefault = {
+  "__python_obj__": "PseudoClasses.RiskRating",
+  "environment" : "",
+  "rating" : "",
+  "threat" : "",
+  "vulnerability" : "" 
+};
+
+var misuseCaseEnvironmentDefault = {
+  "__python_obj__": "MisuseCaseEnvironmentProperties.MisuseCaseEnvironmentProperties",
+  "theAssets" : [],
+  "theAttackers" : [],
+  "theDescription" : [],
+  "theEnvironmentName" : [],
+  "theLikelihood" : "",
+  "theObjective" : "",
+  "theRiskRating" : riskRatingDefault
+};
+
 var misuseCaseDefault = {
   "__python_obj__": "MisuseCase.MisuseCase",
+  "theId" : -1,
   "theName" : "",
-  "theRisk" : "",
+  "theRiskName" : "",
+  "theThreatName" : "",
+  "theVulnerabilityName" : "",
   "theEnvironmentProperties" : []
 };
 
@@ -457,5 +479,5 @@ var riskDefault = {
   "theMisuseCase" : "",
   "theTags" : [],
   "theThreatName" : "",
-  "theRisk" : ""
+  "theRiskName" : ""
 };

@@ -133,3 +133,38 @@ class MisuseCaseByNameAPI(Resource):
     resp = make_response(json_serialize(found_misuse_case, session_id=session_id), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
+
+class MisuseCaseByTVAPI(Resource):
+  #region Swagger Docs
+  @swagger.operation(
+    notes='Get a misuse case by threat and vulnerability',
+    nickname='misuse-case-by-threat-vulnerability-get',
+    responseClass=MisuseCaseModel.__name__,
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+    )
+  #endregion
+  def get(self, threat,vulnerability):
+    session_id = get_session_id(session, request)
+
+    dao = RiskDAO(session_id)
+    template_misuse_case = dao.get_misuse_case_by_threat_vulnerability(threat,vulnerability)
+    dao.close()
+
+    resp = make_response(json_serialize(template_misuse_case, session_id=session_id), httplib.OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp

@@ -22,7 +22,7 @@ class MisuseCase:
     self.theId = mcId
     self.theName = mcName
     self.theEnvironmentProperties = cProps
-    self.theRisk = riskName
+    self.theRiskName = riskName
     self.theThreatName = ''
     self.theVulnerabilityName = ''
     self.theEnvironmentDictionary = {}
@@ -34,7 +34,7 @@ class MisuseCase:
 
   def id(self): return self.theId
   def name(self): return self.theName
-  def risk(self): return self.theRisk
+  def risk(self): return self.theRiskName
   def threat(self): return self.theThreatName
   def vulnerability(self): return self.theVulnerabilityName
 

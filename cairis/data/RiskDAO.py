@@ -18,6 +18,7 @@
 from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import ARMHTTPError, ObjectNotFoundHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, \
     OverwriteNotAllowedHTTPError, SilentHTTPError
+import cairis.core.MisuseCaseFactory
 from cairis.core.MisuseCaseParameters import MisuseCaseParameters
 from cairis.core.MisuseCase import MisuseCase
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
@@ -230,6 +231,16 @@ class RiskDAO(CairisDAO):
       misuse_case = self.simplify(misuse_case)
 
     return misuse_case
+
+  def get_misuse_case_by_threat_vulnerability(self, threat_name,vulnerability_name):
+    try:
+      return self.simplify(cairis.core.MisuseCaseFactory.build(threat_name,vulnerability_name,self.db_proxy))
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
   def get_misuse_case_assets(self, threat_name, environment_name):
     """

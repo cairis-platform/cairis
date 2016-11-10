@@ -59,3 +59,18 @@ class MisuseCaseAPITests(CairisDaemonTestCase):
     misuse_case = jsonpickle.decode(rv.data)
     self.assertIsNotNone(misuse_case, 'No results after deserialization')
     self.logger.info('[%s] MisuseCase: %s [%d]\n', method, misuse_case['theName'], misuse_case['theId'])
+
+  def test_get_by_threat_vulnerability(self):
+    method = 'test_get_by_threat_vulnerability'
+    url = '/api/misusecases/threat/Social%20Engineering/vulnerability/Certificate%20ubiquity?session_id=test'
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    mc = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(mc, 'No results after deserialization')
+    mcEnv = mc['theEnvironmentProperties'][0]
+    self.assertEqual(mcEnv['theEnvironmentName'],'Psychosis')
+    self.assertEqual(mcEnv['theLikelihood'],'Occasional')
+    self.assertEqual(mcEnv['theSeverity'],'Critical')
+    self.assertEqual(mcEnv['theRiskRating']['rating'],'Undesirable')
+    self.assertEqual(mcEnv['theObjective'],'Exploit vulnerabilities in User certificate to threaten User certificate,Client workstation.')

@@ -326,6 +326,7 @@ def start():
   api.add_resource(MisuseCaseController.MisuseCasesAPI, '/api/misusecases')
   api.add_resource(MisuseCaseController.MisuseCaseByRiskNameAPI, '/api/misusecases/risk/<string:risk_name>')
   api.add_resource(MisuseCaseController.MisuseCaseByNameAPI, '/api/misusecases/name/<string:misuse_case_name>')
+  api.add_resource(MisuseCaseController.MisuseCaseByTVAPI, '/api/misusecases/threat/<string:threat>/vulnerability/<string:vulnerability>')
 
   # Object dependency routes
   api.add_resource(ObjectDependencyController.ObjectDependencyAPI, '/api/object_dependency/dimension/<string:dimension_name>/object/<string:object_name>')

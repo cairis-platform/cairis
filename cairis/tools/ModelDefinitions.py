@@ -440,7 +440,7 @@ class MisuseCaseModel(object):
   resource_fields = {
     obj_id_field: fields.String,
     "theName": fields.String,
-    "theRisk": fields.String,
+    "theRiskName": fields.String,
     "theEnvironmentDictionary": fields.List(fields.Nested(MisuseCaseEnvironmentPropertiesModel.resource_fields)),
     "theEnvironmentProperties": fields.List(fields.Nested(MisuseCaseEnvironmentPropertiesModel.resource_fields))
   }
@@ -573,6 +573,7 @@ class RiskModel(object):
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)
+  required.remove("theTags")
   swagger_metadata = {
     obj_id_field : gen_class_metadata(Risk)
   }

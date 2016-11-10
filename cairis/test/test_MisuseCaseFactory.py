@@ -37,6 +37,6 @@ class MisuseCaseFactoryTests(unittest.TestCase):
     self.assertEqual(mcEnv.theEnvironmentName,'Psychosis')
     self.assertEqual(mcEnv.theLikelihood,'Occasional')
     self.assertEqual(mcEnv.theSeverity,'Critical')
-    self.assertEqual(mcEnv.theRiskRating,'Undesirable')
+    self.assertEqual(mcEnv.theRiskRating.rating,'Undesirable')
     self.assertEqual(mcEnv.theObjective,'Exploit vulnerabilities in User certificate to threaten User certificate,Client workstation.')
 

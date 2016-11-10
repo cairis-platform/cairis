@@ -76,35 +76,68 @@ function createRisksTable(){
 }
 
 var mainContent = $("#objectViewer");
-
 mainContent.on('click', "#editMisusedCase", function (e) {
   e.preventDefault();
   var name = $.session.get("riskName");
   toggleRiskWindows();
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/misusecases/risk/" + name ,
-    success: function (data) {
-      $.session.set("MisuseCase", JSON.stringify(data));
-      $("#theMisuseName").val(data.theName);
-      $("#theMisuseRisk").val(data.theRisk);
-      $("#theMisuseEnvironments").find("tbody").empty();
-      $.each(data.theEnvironmentProperties, function (idx,env) {
-        appendMisuseEnvironment(env.theEnvironmentName);
-      });
-      $("#theMisuseEnvironments").find(".misusecaseEnvironment:first").trigger('click');
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  })
+  if ($("#editRisksForm").hasClass("new")) {
+    var threatName = $("#theThreatNames").val();
+    var vulName = $("#theVulnerabilityNames").val();
+    var riskName = $("#theName").val();
+    var mcName = 'Exploit ' + riskName;
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + "/api/misusecases/threat/" + encodeURIComponent(threatName) + "/vulnerability/" + encodeURIComponent(vulName),
+      success: function (data) {
+        data.theName = mcName;
+        data.theRiskName = riskName;
+        $.session.set("MisuseCase", JSON.stringify(data));
+        $("#theMisuseName").val(mcName);
+        $("#theMisuseRisk").val(riskName);
+        $("#theMisuseEnvironments").find("tbody").empty();
+        $.each(data.theEnvironmentProperties, function (idx,env) {
+          appendMisuseEnvironment(env.theEnvironmentName);
+        });
+        $("#theMisuseEnvironments").find(".misusecaseEnvironment:first").trigger('click');
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  }
+  else {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + "/api/misusecases/risk/" + name ,
+      success: function (data) {
+        $.session.set("MisuseCase", JSON.stringify(data));
+        $("#theMisuseName").val(data.theName);
+        $("#theMisuseRisk").val(data.theRiskName);
+        $("#theMisuseEnvironments").find("tbody").empty();
+        $.each(data.theEnvironmentProperties, function (idx,env) {
+          appendMisuseEnvironment(env.theEnvironmentName);
+        });
+        $("#theMisuseEnvironments").find(".misusecaseEnvironment:first").trigger('click');
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  }
 });
 
 mainContent.on('click', "#updateMisuseCase", function (e) {
@@ -149,6 +182,17 @@ mainContent.on("click",".misusecaseEnvironment", function () {
   });
 });
 
+mainContent.on("change","#theMisuseNarrative",function() {
+  var mc = JSON.parse($.session.get("MisuseCase"));
+  var envName = $.session.get("misusecaseEnvironmentName");
+
+  $.each(mc.theEnvironmentProperties, function (idx,env) {
+    if (env.theEnvironmentName == envName) {
+      mc.theEnvironmentProperties[idx].theDescription = $("#theMisuseNarrative").val();
+      $.session.set("MisuseCase", JSON.stringify(mc));
+    }
+  });
+});
 
 function clearMisuseCaseInfo() {
   $("#theMisuseObjective").val("");
@@ -157,7 +201,7 @@ function clearMisuseCaseInfo() {
   $("#misuseVulnerability").val("");
   $("#misuseSeverity").val("");
   $("#misuseRiskRating").val("");
-  $("#misuseNarrative").val("");
+  $("#theMisuseNarrative").val("");
   $("#assetTable").find("tbody").empty();
   $("#attackerTable").find("tbody").empty();
   $("#theObjective").val("");
@@ -219,6 +263,7 @@ $(document).on('click','#addNewRisk', function() {
   activeElement("objectViewer");
   $.session.set("Risk", JSON.stringify(jQuery.extend(true, {},riskDefault )));
   fillOptionMenu("fastTemplates/editRiskOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editRisksForm").addClass("new");
     var threatSelect = $("#theThreatNames");
     var vulnSelect = $("#theVulnerabilityNames");
     getThreats(function (data) {
@@ -370,7 +415,7 @@ mainContent.on('click', '#UpdateRisk', function (e) {
   e.preventDefault();
   var risk = JSON.parse($.session.get("Risk"));
   var oldName = risk.theName;
-  risk.theRisk = $("#theName").val();
+  risk.theRiskName = $("#theName").val();
   risk.theThreatName = $("#theThreatNames").val();
   risk.theVulnerabilityName = $("#theVulnerabilityNames").val();
   var tags = $("#theTags").text().split(", ");

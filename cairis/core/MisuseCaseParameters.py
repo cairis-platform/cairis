@@ -24,9 +24,9 @@ class MisuseCaseParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,scName,cProps,risk):
     ObjectCreationParameters.ObjectCreationParameters.__init__(self)
     self.theName = scName
-    self.theRisk = risk
+    self.theRiskName = risk
     self.theEnvironmentProperties = cProps
 
   def name(self): return self.theName
-  def risk(self): return self.theRisk
+  def risk(self): return self.theRiskName
   def environmentProperties(self): return self.theEnvironmentProperties

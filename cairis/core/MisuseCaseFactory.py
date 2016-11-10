@@ -19,6 +19,7 @@
 from ARM import *
 from MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from MisuseCase import MisuseCase
+from cairis.tools.PseudoClasses import RiskRating
 from Borg import Borg
 
 __author__ = 'Shamal Faily'
@@ -53,7 +54,7 @@ def build(threatName,vulnerabilityName,dbProxy = None):
   for envName in envNames:
     mcEnv = MisuseCaseEnvironmentProperties(envName)
 
-    mcEnv.theRiskRating = dbProxy.riskRating(threatName,vulnerabilityName,envName)
+    mcEnv.theRiskRating = RiskRating(threatName,vulnerabilityName,envName,dbProxy.riskRating(threatName,vulnerabilityName,envName))
     envId = dbProxy.getDimensionId(envName,'environment')
     mcEnv.theLikelihood = dbProxy.threatLikelihood(threatId,envId)
     mcEnv.theSeverity = dbProxy.vulnerabilitySeverity(vulId,envId)
