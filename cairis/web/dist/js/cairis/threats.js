@@ -183,21 +183,16 @@ mainContent.on('click','#addAttackertoThreat', function () {
   $("#threatAttackers").find(".threatAttackers").each(function(index, attacker){
     hasAttackers.push($(attacker).text());
   });
-  if(hasAttackers.length <= 0){
-    alert("Unable to add attackers without specifying an environment.")
-  }
-  else {
-    attackerDialogBox(hasAttackers, theEnvName, function (text) {
-      var threat = JSON.parse($.session.get("theThreat"));
-      $.each(threat.theEnvironmentProperties, function (index, env) {
-        if (env.theEnvironmentName == theEnvName) {
-          env.theAttackers.push(text);
-          $.session.set("theThreat", JSON.stringify(threat));
-          appendThreatAttacker(text);
-        }
-      });
+  attackerDialogBox(hasAttackers, theEnvName, function (text) {
+    var threat = JSON.parse($.session.get("theThreat"));
+    $.each(threat.theEnvironmentProperties, function (index, env) {
+      if (env.theEnvironmentName == theEnvName) {
+        env.theAttackers.push(text);
+        $.session.set("theThreat", JSON.stringify(threat));
+        appendThreatAttacker(text);
+      }
     });
-  }
+  });
 });
 
 mainContent.on('change', '#theLikelihood', function () {
