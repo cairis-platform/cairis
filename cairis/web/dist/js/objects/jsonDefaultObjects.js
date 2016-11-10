@@ -442,3 +442,20 @@ var responseDefault = {
   "theResponseType" : "",
   "theTags" : []
 };
+
+var misuseCaseDefault = {
+  "__python_obj__": "MisuseCase.MisuseCase",
+  "theName" : "",
+  "theRisk" : "",
+  "theEnvironmentProperties" : []
+};
+
+var riskDefault = {
+  "__python_obj__": "Risk.Risk",
+  "theId" : -1,
+  "theVulnerabilityName" : "",
+  "theMisuseCase" : "",
+  "theTags" : [],
+  "theThreatName" : "",
+  "theRisk" : ""
+};

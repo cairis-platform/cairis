@@ -76,8 +76,6 @@ function createRisksTable(){
 }
 
 var mainContent = $("#objectViewer");
-mainContent.on('dblclick', ".riskEnvironment", function () {
-});
 
 mainContent.on('click', "#editMisusedCase", function (e) {
   e.preventDefault();
@@ -214,6 +212,26 @@ $(document).on('click', 'td.risk-rows', function () {
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
+  });
+});
+
+$(document).on('click','#addNewRisk', function() {
+  activeElement("objectViewer");
+  $.session.set("Risk", JSON.stringify(jQuery.extend(true, {},riskDefault )));
+  fillOptionMenu("fastTemplates/editRiskOptions.html", "#objectViewer", null, true, true, function () {
+    var threatSelect = $("#theThreatNames");
+    var vulnSelect = $("#theVulnerabilityNames");
+    getThreats(function (data) {
+      $.each(data, function (key, obj) {
+        threatSelect.append($("<option></option>").attr("value",key).text(key));
+      });
+    });
+    getVulnerabilities(function (data) {
+      $.each(data, function (key, obj) {
+        vulnSelect.append($("<option></option>").attr("value",key).text(key));
+      });
+      getRiskEnvironments();
+    });
   });
 });
 

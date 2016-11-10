@@ -1376,7 +1376,7 @@ function setTableHeader(){
       break;
     case "Risks":
       debugLogger("Is Risk");
-      thead = "<th width='50px' id='addnewRisk'><i class='fa fa-plus floatCenter'></i></th><th>Risk</th><th>Vulnerability</th><th>Threat</th>";
+      thead = "<th width='50px' id='addNewRisk'><i class='fa fa-plus floatCenter'></i></th><th>Risk</th><th>Vulnerability</th><th>Threat</th>";
       break;
     case "Responses":
       debugLogger("Is Response");
