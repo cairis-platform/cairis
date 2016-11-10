@@ -346,7 +346,7 @@ mainContent.on('click', '.addEnvironmentPlus',function(){
               var sessionProps = $.session.get("AssetProperties");
               if(! sessionProps) {
                 var Assetprops = [];
-                var newProp = jQuery.extend(true, {}, AssetEnvironmentProperty);
+                var newProp = jQuery.extend(true, {}, assetEnvironmentDefault);
                 newProp.theEnvironmentName = chosenText;
                 Assetprops.push(newProp);
               } 

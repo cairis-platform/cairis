@@ -19,19 +19,68 @@
 
 'use strict';
 
-var AssetEnvironmentProperty =
+var ConfidentialitySecurityAttribute =
+{
+  "__python_obj__": "tools.PseudoClasses.SecurityAttribute",
+  "rationale": "None",
+  "value": "None",
+  "name": "Confidentiality"
+};
+var IntegritySecurityAttribute =
+{
+  "__python_obj__": "tools.PseudoClasses.SecurityAttribute",
+  "rationale": "None",
+  "value": "None",
+  "name": "Integrity"
+};
+var AvailabilitySecurityAttribute =
+{
+  "__python_obj__": "tools.PseudoClasses.SecurityAttribute",
+  "rationale": "None",
+  "value": "None",
+  "name": "Availability"
+};
+var AccountabilitySecurityAttribute =
+{
+  "__python_obj__": "tools.PseudoClasses.SecurityAttribute",
+  "rationale": "None",
+  "value": "None",
+  "name": "Accountability"
+};
+var AnonymitySecurityAttribute =
+{
+  "__python_obj__": "tools.PseudoClasses.SecurityAttribute",
+  "rationale": "None",
+  "value": "None",
+  "name": "Anonymity"
+};
+var PseudonymitySecurityAttribute =
+{
+  "__python_obj__": "tools.PseudoClasses.SecurityAttribute",
+  "rationale": "None",
+  "value": "None",
+  "name": "Pseudonymity"
+};
+var UnlinkabilitySecurityAttribute =
+{
+  "__python_obj__": "tools.PseudoClasses.SecurityAttribute",
+  "rationale": "None",
+  "value": "None",
+  "name": "Unlinkability"
+};
+var UnobservabilitySecurityAttribute =
+{
+  "__python_obj__": "tools.PseudoClasses.SecurityAttribute",
+  "rationale": "None",
+  "value": "None",
+  "name": "Unobservability"
+};
+var assetEnvironmentDefault =
 {
   "__python_obj__": "tools.ModelDefinitions.AssetEnvironmentPropertiesModel",
   "theAssociations": [],
-  "theProperties": [],
+  "theProperties": [ConfidentialitySecurityAttribute,IntegritySecurityAttribute,AvailabilitySecurityAttribute,AccountabilitySecurityAttribute,AnonymitySecurityAttribute,PseudonymitySecurityAttribute,UnlinkabilitySecurityAttribute,UnobservabilitySecurityAttribute],
   "theEnvironmentName": ""
-};
-var AssetEnvironmentPropertyAttribute =
-{
-  "__python_obj__": "tools.ModelDefinitions.AssetSecurityAttribute",
-  "rationale": "",
-  "value": "",
-  "name": ""
 };
 var mainAssetObject =
 {
@@ -101,7 +150,7 @@ var threatEnvironmentDefault = {"__python_obj__": "ThreatEnvironmentProperties.T
   "theEnvironmentName": "",
   "theAttackers": [],
   "theRationale": [],
-  "theProperties": []
+  "theProperties": [ConfidentialitySecurityAttribute,IntegritySecurityAttribute,AvailabilitySecurityAttribute,AccountabilitySecurityAttribute,AnonymitySecurityAttribute,PseudonymitySecurityAttribute,UnlinkabilitySecurityAttribute,UnobservabilitySecurityAttribute]
 };
 var threatDefault = {
   "__python_obj__": "Threat.Threat",
@@ -257,7 +306,7 @@ var countermeasureEnvDefault =     {
   "theEnvironmentName": "",
   "theRequirements": [],
   "theTargets": [],
-  "theProperties": [],
+  "theProperties": [ConfidentialitySecurityAttribute,IntegritySecurityAttribute,AvailabilitySecurityAttribute,AccountabilitySecurityAttribute,AnonymitySecurityAttribute,PseudonymitySecurityAttribute,UnlinkabilitySecurityAttribute,UnobservabilitySecurityAttribute],
   "theRationale": [],
   "theRoles": [],
   "thePersonas": []
