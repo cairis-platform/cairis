@@ -68,9 +68,12 @@
       </table>
     </div>
   </div>
-  <div class="form-group">
-    <button type="submit" class="btn btn-primary" id="updateProjectButton">Update</button>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="updateProjectButton">Update</button>
+    </div>
   </div>
+
 </form>
 <div id="editContributorWindow" style="display: none; margin:10px;">
   <div class="form-group">
@@ -96,9 +99,11 @@
       <option value="Scribe">Scribe</option>
     </select>
   </div>
-  <div class="form-group">
-    <button type="submit" class="btn btn-primary" id="updateContributor">Update</button>
-    <button type="submit" class="btn btn-secondary projectSettingsCancel">Cancel</button>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="updateContributor">Update</button>
+      <button type="submit" class="btn btn-secondary" id="projectSettingsCancel">Close</button>
+    </div>
   </div>
 </div>
 <div id="addRevision" style="display: none; margin:10px;">
@@ -107,9 +112,11 @@
     <textarea id="revisionTextArea" class="form-control" data-error="Revision text is required" required></textarea>
     <div class="help-block with-errors"></div>
   </div>
-  <div class="form-group">
-    <button type="submit" class="btn btn-primary" id="addRevisionButton">Add Revision</button>
-    <button type="submit" class="btn btn-secondary projectSettingsCancel">Cancel</button>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="addRevisionButton">Update</button>
+      <button type="submit" class="btn btn-secondary" id="projectSettingsCancel">Close</button>
+    </div>
   </div>
 </div>
 <div id="editNamingConvention" style="display: none; margin:10px;">
@@ -123,8 +130,10 @@
     <textarea class="optionsInput form-control" id="conventionDefinition" data-error"Convention definition is required" required></textarea>
     <div class="help-block with-errors"></div>
   </div>
-  <div class="form-group">
-    <button type="submit" class="btn btn-primary" id="updateNamingConventions">Update</button>
-    <button type="submit" class="btn btn-secondary projectSettingsCancel">Cancel</button>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="updateNamingConventions">Update</button>
+      <button type="submit" class="btn btn-secondary" id="projectSettingsCancel">Close</button>
+    </div>
   </div>
 </div>

@@ -239,6 +239,7 @@ drop procedure if exists responseDependents;
 drop procedure if exists requirementDependents;
 drop procedure if exists countermeasureDependents;
 drop procedure if exists assetDependents;
+drop procedure if exists environmentDependents;
 drop procedure if exists domainPropertyDependents;
 drop procedure if exists vulnerabilityDependents;
 drop function if exists requirementNameId;
@@ -4737,10 +4738,12 @@ end
 create procedure reportDependents(in dimId int, in dimName text)
 begin
   drop table if exists temp_asset;
+  drop table if exists temp_attacker;
   drop table if exists temp_domainproperty;
   drop table if exists temp_threat;
   drop table if exists temp_vulnerability;
   drop table if exists temp_risk;
+  drop table if exists temp_role;
   drop table if exists temp_response;
   drop table if exists temp_requirement;
   drop table if exists temp_countermeasure;
@@ -4748,12 +4751,15 @@ begin
   drop table if exists temp_obstacle;
   drop table if exists temp_task;
   drop table if exists temp_usecase;
+  drop table if exists temp_misusecase;
   drop table if exists temp_persona;
   create temporary table temp_asset (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_attacker (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_domainproperty (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_threat (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_vulnerability (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_risk (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_role (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_response (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_requirement (id INT NOT NULL,name VARCHAR(255) NOT NULL);
   create temporary table temp_countermeasure (id INT NOT NULL,name VARCHAR(200) NOT NULL);
@@ -4761,6 +4767,7 @@ begin
   create temporary table temp_obstacle (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_task (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_usecase (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_misusecase (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_persona (id INT NOT NULL,name VARCHAR(200) NOT NULL);
 
   if (dimName = 'attacker')
@@ -4776,6 +4783,11 @@ begin
   if (dimName = 'domainproperty')
   then
     call domainPropertyDependents(dimId);
+  end if;
+
+  if (dimName = 'environment')
+  then
+    call environmentDependents(dimId);
   end if;
 
   if (dimName = 'threat')
@@ -4853,6 +4865,8 @@ begin
   union
   select distinct 'requirement',id,name from temp_requirement
   union
+  select distinct 'misusecase',id,name from temp_misusecase
+  union
   select distinct 'risk',id,name from temp_risk
   union
   select distinct 'threat',id,name from temp_threat
@@ -4861,13 +4875,17 @@ begin
   union
   select distinct 'domainproperty',id,name from temp_domainproperty
   union
-  select distinct 'asset',id,name from temp_asset
-  union
   select distinct 'task',id,name from temp_task
   union
   select distinct 'usecase',id,name from temp_usecase
   union
-  select distinct 'persona',id,name from temp_persona;
+  select distinct 'persona',id,name from temp_persona
+  union
+  select distinct 'attacker',id,name from temp_attacker
+  union
+  select distinct 'asset',id,name from temp_asset
+  union
+  select distinct 'role',id,name from temp_role;
 end
 //
 
@@ -22558,4 +22576,206 @@ begin
 end
 //
 
+create procedure environmentDependents(in envId int)
+begin
+  declare done int default 0;
+  declare dimId int;
+  declare dimName varchar(200);
+  declare assetCursor cursor for select distinct d.id, d.name from environment_asset ed, asset d where ed.environment_id = envId and ed.asset_id = d.id;  
+  declare attackerCursor cursor for select distinct d.id, d.name from environment_attacker ed, attacker d where ed.environment_id = envId and ed.attacker_id = d.id;  
+  declare cmCursor cursor for select distinct d.id, d.name from environment_countermeasure ed, countermeasure d where ed.environment_id = envId and ed.countermeasure_id = d.id;  
+  declare goalCursor cursor for select distinct d.id, d.name from environment_goal ed, goal d where ed.environment_id = envId and ed.goal_id = d.id;  
+  declare mcCursor cursor for select distinct d.id, d.name from environment_misusecase ed, misusecase d where ed.environment_id = envId and ed.misusecase_id = d.id;  
+  declare obsCursor cursor for select distinct d.id, d.name from environment_obstacle ed, obstacle d where ed.environment_id = envId and ed.obstacle_id = d.id;  
+  declare personaCursor cursor for select distinct d.id, d.name from environment_persona ed, persona d where ed.environment_id = envId and ed.persona_id = d.id;  
+  declare reqCursor cursor for select distinct d.id, d.name from environment_requirement ed, requirement d where ed.environment_id = envId and ed.requirement_id = d.id;  
+  declare respCursor cursor for select distinct d.id, d.name from environment_response ed, response d where ed.environment_id = envId and ed.response_id = d.id;  
+  declare riskCursor cursor for select distinct d.id, d.name from environment_risk ed, risk d where ed.environment_id = envId and ed.id = d.id;  
+  declare roleCursor cursor for select distinct d.id, d.name from environment_role ed, role d where ed.environment_id = envId and ed.role_id = d.id;  
+  declare taskCursor cursor for select distinct d.id, d.name from environment_task ed, task d where ed.environment_id = envId and ed.task_id = d.id;  
+  declare thrCursor cursor for select distinct d.id, d.name from environment_threat ed, threat d where ed.environment_id = envId and ed.threat_id = d.id;  
+  declare ucCursor cursor for select distinct d.id, d.name from environment_usecase ed, usecase d where ed.environment_id = envId and ed.usecase_id = d.id; 
+  declare vulCursor cursor for select distinct d.id, d.name from environment_vulnerability ed, vulnerability d where ed.environment_id = envId and ed.vulnerability_id = d.id;  
+  declare continue handler for not found set done = 1;
+
+  open assetCursor;
+  asset_loop: loop
+    fetch assetCursor into dimId,dimName;
+    if done = 1
+    then
+      leave asset_loop;
+    end if;
+    insert into temp_asset values(dimId,dimName);
+  end loop asset_loop;
+  close assetCursor;
+  set done = 0;
+
+  open attackerCursor;
+  attacker_loop: loop
+    fetch attackerCursor into dimId,dimName;
+    if done = 1
+    then
+      leave attacker_loop;
+    end if;
+    insert into temp_attacker values(dimId,dimName);
+  end loop attacker_loop;
+  close attackerCursor;
+  set done = 0;
+
+  open cmCursor;
+  cm_loop: loop
+    fetch cmCursor into dimId,dimName;
+    if done = 1
+    then
+      leave cm_loop;
+    end if;
+    insert into temp_countermeasure values(dimId,dimName);
+  end loop cm_loop;
+  close cmCursor;
+  set done = 0;
+
+  open goalCursor;
+  goal_loop: loop
+    fetch goalCursor into dimId,dimName;
+    if done = 1
+    then
+      leave goal_loop;
+    end if;
+    insert into temp_goal values(dimId,dimName);
+  end loop goal_loop;
+  close goalCursor;
+  set done = 0;
+
+  open mcCursor;
+  mc_loop: loop
+    fetch mcCursor into dimId,dimName;
+    if done = 1
+    then
+      leave mc_loop;
+    end if;
+    insert into temp_misusecase values(dimId,dimName);
+  end loop mc_loop;
+  close mcCursor;
+  set done = 0;
+
+  open obsCursor;
+  obs_loop: loop
+    fetch obsCursor into dimId,dimName;
+    if done = 1
+    then
+      leave obs_loop;
+    end if;
+    insert into temp_obstacle values(dimId,dimName);
+  end loop obs_loop;
+  close obsCursor;
+  set done = 0;
+
+  open personaCursor;
+  persona_loop: loop
+    fetch personaCursor into dimId,dimName;
+    if done = 1
+    then
+      leave persona_loop;
+    end if;
+    insert into temp_persona values(dimId,dimName);
+  end loop persona_loop;
+  close personaCursor;
+  set done = 0;
+
+  open reqCursor;
+  req_loop: loop
+    fetch reqCursor into dimId,dimName;
+    if done = 1
+    then
+      leave req_loop;
+    end if;
+    insert into temp_requirement values(dimId,dimName);
+  end loop req_loop;
+  close reqCursor;
+  set done = 0;
+
+  open respCursor;
+  resp_loop: loop
+    fetch respCursor into dimId,dimName;
+    if done = 1
+    then
+      leave resp_loop;
+    end if;
+    insert into temp_response values(dimId,dimName);
+  end loop resp_loop;
+  close respCursor;
+  set done = 0;
+
+  open riskCursor;
+  risk_loop: loop
+    fetch riskCursor into dimId,dimName;
+    if done = 1
+    then
+      leave risk_loop;
+    end if;
+    insert into temp_risk values(dimId,dimName);
+  end loop risk_loop;
+  close riskCursor;
+  set done = 0;
+
+  open roleCursor;
+  role_loop: loop
+    fetch roleCursor into dimId,dimName;
+    if done = 1
+    then
+      leave role_loop;
+    end if;
+    insert into temp_role values(dimId,dimName);
+  end loop role_loop;
+  close roleCursor;
+  set done = 0;
+
+  open taskCursor;
+  task_loop: loop
+    fetch taskCursor into dimId,dimName;
+    if done = 1
+    then
+      leave task_loop;
+    end if;
+    insert into temp_task values(dimId,dimName);
+  end loop task_loop;
+  close taskCursor;
+  set done = 0;
+
+  open thrCursor;
+  thr_loop: loop
+    fetch thrCursor into dimId,dimName;
+    if done = 1
+    then
+      leave thr_loop;
+    end if;
+    insert into temp_threat values(dimId,dimName);
+  end loop thr_loop;
+  close thrCursor;
+  set done = 0;
+
+  open ucCursor;
+  uc_loop: loop
+    fetch ucCursor into dimId,dimName;
+    if done = 1
+    then
+      leave uc_loop;
+    end if;
+    insert into temp_usecase values(dimId,dimName);
+  end loop uc_loop;
+  close ucCursor;
+  set done = 0;
+
+  open vulCursor;
+  vul_loop: loop
+    fetch vulCursor into dimId,dimName;
+    if done = 1
+    then
+      leave vul_loop;
+    end if;
+    insert into temp_vulnerability values(dimId,dimName);
+  end loop vul_loop;
+  close vulCursor;
+end
+//
 delimiter ;
