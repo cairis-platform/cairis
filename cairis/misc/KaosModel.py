@@ -71,7 +71,7 @@ class KaosModel:
     elif ((dimName == 'role') and (self.theKaosModel != 'task')):
       self.theGraph.add_node(pydot.Node(objtName,shape='hexagon',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif ((dimName == 'role') and (self.theKaosModel == 'task')):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/images/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'usecase'):
       self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task'):
@@ -99,11 +99,11 @@ class KaosModel:
       objt = self.dbProxy.dimensionObject(objtName,'persona')
       if (objt.assumption() == True):
         objtLabel = "&lt;&lt;Assumption&gt;&gt;" + objtName 
-        self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shapefile=b.staticDir + '/images/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+        self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
       else: 
-        self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/images/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+        self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'attacker'):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/images/modelAttacker.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelAttacker.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'response'):
       self.theGraph.add_node(pydot.Node(objtName,shape='note',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'asset'):
@@ -184,7 +184,7 @@ class KaosModel:
             elif (associationType == 'conflict'):
               objtUrl = 'linkconflict#' + goalEnv + '/' + goalName + '/' + subGoalName + '/' + goalDimName + '/' + subGoalDimName
               b = Borg()
-              self.theGraph.add_node(pydot.Node(refNodeName,shapefile=b.staticDir + '/images/modelConflict.png',label='',height='.2',width='.2',URL=objtUrl,peripheries='0'))
+              self.theGraph.add_node(pydot.Node(refNodeName,shapefile=b.staticDir + '/assets/modelConflict.png',label='',height='.2',width='.2',URL=objtUrl,peripheries='0'))
               assocDirection = 'none'
               arrowHead = 'none'
             goalEdge = pydot.Edge(refNodeName,goalName,dir=assocDirection,arrowhead=arrowHead,weight='1')

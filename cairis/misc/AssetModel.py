@@ -54,9 +54,9 @@ class AssetModel:
       b = Borg()
       if (objt.assumption() == True):
         objtLabel = "&lt;&lt;Assumption&gt;&gt;" + objtName
-        self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shapefile='/images/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+        self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shapefile='/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
       else:
-        self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/images/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+        self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'goalconcern' or dimName == 'taskconcern'):
       self.theGraph.add_node(pydot.Node(objtName,shape='note',fontname=self.fontName,fontsize=self.fontSize,fontcolor='blue',color='blue',URL=objtUrl))
     elif (dimName == 'obstacleconcern'):

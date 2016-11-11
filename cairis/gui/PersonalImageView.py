@@ -18,6 +18,7 @@
 
 import wx.lib.imagebrowser
 from cairis.core.armid import *
+from cairis.core.Borg import Borg
 
 __author__ = 'Shamal Faily'
 
@@ -36,16 +37,18 @@ class PersonalImageView(wx.lib.imagebrowser.ImageView):
     self.PopupMenu(self.theLoadMenu)
 
   def onLoadImage(self,evt):
-    dlg = wx.FileDialog(None,style = wx.OPEN)
+    b = Borg()
+    dlg = wx.FileDialog(None,style = wx.OPEN,defaultDir=b.imageDir)
     if (dlg.ShowModal() == wx.ID_OK):
-      self.theImageFile = dlg.GetPath()
-      self.SetValue(self.theImageFile)
+      self.theImageFile = dlg.GetFilename()
+      self.SetValue(dlg.GetPath())
     dlg.Destroy()
 
   def loadImage(self,imageFile):
     if (imageFile != ''):
+      b = Borg()
       self.theImageFile = imageFile
-      self.SetValue(self.theImageFile)
+      self.SetValue(b.imageDir + "/" + imageFile)
 
   def personaImage(self):
     return self.theImageFile

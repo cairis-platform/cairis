@@ -33,7 +33,7 @@ class ComponentModelViewer(componentxdot.ComponentDotWindow):
     self.widget.connect('clicked', self.on_url_clicked)
     self.widget.connect('button_press_event', self.onClick)
     b = Borg()
-    directoryPrefix = b.imageDir + '/'
+    directoryPrefix = b.iconDir + '/'
     self.set_icon_from_file(directoryPrefix + 'component_view.png')
 
   def onClick(self,widget,event):

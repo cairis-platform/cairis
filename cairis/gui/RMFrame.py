@@ -103,7 +103,7 @@ class RMFrame(wx.Frame):
 
     self.toolbar = self.CreateToolBar()
 
-    self.directoryPrefix = self.b.imageDir + '/'
+    self.directoryPrefix = self.b.iconDir + '/'
     dimIcon = wx.Icon(self.directoryPrefix + 'iris.png',wx.BITMAP_TYPE_PNG)
     self.SetIcon(dimIcon)
 

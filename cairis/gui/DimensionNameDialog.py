@@ -65,7 +65,7 @@ class DimensionNameDialog(wx.Dialog):
     wx.EVT_BUTTON(self,DIMNAME_BUTTONACTION_ID,self.onAdd)
 
     b = Borg()
-    dimIcon = wx.Icon(b.imageDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
+    dimIcon = wx.Icon(b.iconDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
     self.SetIcon(dimIcon)
 
 

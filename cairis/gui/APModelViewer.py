@@ -35,7 +35,7 @@ class APModelViewer(apxdot.APDotWindow):
     self.theInitialBv = bvName
     self.widget.connect('clicked', self.on_url_clicked)
 
-    self.set_icon_from_file(b.imageDir + '/apModel.png')
+    self.set_icon_from_file(b.iconDir + '/apModel.png')
 
 
   def on_url_clicked(self, widget, url, event):

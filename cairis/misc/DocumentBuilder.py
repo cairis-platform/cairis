@@ -101,6 +101,7 @@ def buildImage(imageFile,caption):
     imageFormat = 'JPG'
   else:
     imageFormat = 'SVG'
+  b = Borg()
   txt = """
     <mediaobject>
       <imageobject>
@@ -566,12 +567,13 @@ def personas(p,docDir):
     </section>
     <section><title>Personas</title>
 """
+  b = Borg()
   personas = p.getPersonas()
   for idx,persona in personas.iteritems():
     personaName = persona.name()
     chapterTxt += """
       <section id=\"""" + personaName.replace(" ","_") + "\"><title>" + personaName + "</title>"
-    chapterTxt += buildImage(persona.image(),persona.name())
+    chapterTxt += buildImage(b.imageDir + "/" + persona.image(),persona.name())
     chapterTxt += """
         <section><title>Type</title>
           """ + paraText(persona.type()) + """
@@ -670,6 +672,7 @@ def attackers(p):
   chapterTxt += buildTable("AttackerCapabilitiesTable","Attacker Capabilities",['Capability','Description'],capabilityRows,0) + """
     </section>
 """
+  b = Borg()
   attackers = p.getAttackers()
   if (attackers == None):
     return ""
@@ -677,7 +680,7 @@ def attackers(p):
     attackerName = attacker.name()
     chapterTxt += """
     <section id=\"""" + attackerName.replace(" ","_") + "\"><title>" + attackerName + "</title>"
-    chapterTxt += buildImage(attacker.image(),attacker.name())
+    chapterTxt += buildImage(b.imageDir + "/" + attacker.image(),attacker.name())
     chapterTxt += paraText(attacker.description())
 
     aaRows = []
@@ -939,10 +942,11 @@ def personaModelSection(p,pName,docDir):
     return txt
 
 def richPictureSection(rpFile):
+  b = Borg()
   txt = """
     <section><title>Scope of work</title>
       <para>The following rich picture illustrates the scope of this document.</para>"""
-  txt += buildImage(rpFile,'Rich picture of the problem domain')
+  txt += buildImage(b.imageDir + "/" + rpFile,'Rich picture of the problem domain')
    
   txt += """
     </section>"""

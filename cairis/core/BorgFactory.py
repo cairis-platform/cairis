@@ -83,7 +83,7 @@ def initialise():
   b = Borg()
   b.runmode = 'desktop'
   b.logger = logging.getLogger('cairis_gui')
-  b.imageDir = b.cairisRoot + '/images' 
+  b.iconDir = b.cairisRoot + '/images' 
   b.configDir = b.cairisRoot + '/config'
   setupDocBookConfig()
 
@@ -97,7 +97,6 @@ def dInitialise():
   b = Borg()
   b.runmode = 'web'
   b.logger = logging.getLogger('cairisd')
-  b.imageDir = os.path.join(b.cairisRoot,'images')
   b.configDir = os.path.join(b.cairisRoot,'config')
   b.uploadDir = cfgDict['upload_dir']
   b.secretKey = cfgDict['secret_key']

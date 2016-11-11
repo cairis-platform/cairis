@@ -109,7 +109,7 @@ function forceCloseOptions(){
 }
 
 // for rescaling an image
-function resaleImage(image, maxWidth){
+function rescaleImage(image, maxWidth){
   var theImage = new Image();
   theImage.src = image.attr("src");
 

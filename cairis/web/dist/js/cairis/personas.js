@@ -118,7 +118,7 @@ $(document).on('click', "td.persona-rows", function () {
         });
         $("#thePersonaEnvironments").find(".personaEnvironment:first").trigger('click');
         $("#theImage").attr("src",getImagedir(data.theImage));
-        resaleImage($("#theImage"));
+        rescaleImage($("#theImage"),300);
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -248,7 +248,6 @@ mainContent.on('click', '#UpdatePersona', function (e) {
     persona.theSkills = $("#theSkills").val();
     persona.theIntrinsic = $("#theIntrinsic").val();
     persona.theContextual = $("#theContextual").val();
-    persona.theImage = $("#theImage").val() || "" ;
     persona.theAssumption = 0;
     persona.thePersonaType = $("#thePersonaType :selected").text();
     persona.theCodes = [];
@@ -334,10 +333,7 @@ mainContent.on('change','#fileupload', function () {
       outerbar.hide("slide", { direction: "down" }, 750);
       uploading = false;
       data = JSON.parse(data);
-
-      postImage(data.filename, getImagedir(data.filename));
-
-
+      updatePersonaImage(data.filename, getImagedir(data.filename));
     },
     error: function (xhr, textStatus, errorThrown) {
       uploading = false;
@@ -359,18 +355,12 @@ mainContent.on('change','#fileupload', function () {
   });
 });
 
-function postImage(imagedir, actualDir) {
-    var persona = JSON.parse($.session.get("Persona"));
-
-    persona.theImage = imagedir;
-    $("#theImage").attr("src", actualDir);
-    putPersona(persona, persona.theName, false, function () {
-        $("#theImage").attr("src", actualDir);
-        resaleImage($("#theImage"),200);
-    });
-
-    $.session.set("Persona", JSON.stringify(persona));
-
+function updatePersonaImage(imagedir, actualDir) {
+  var persona = JSON.parse($.session.get("Persona"));
+  persona.theImage = imagedir;
+  $("#theImage").attr("src", actualDir);
+  rescaleImage($("#theImage"),300);
+  $.session.set("Persona", JSON.stringify(persona));
 }
 
 function personaToggle(){

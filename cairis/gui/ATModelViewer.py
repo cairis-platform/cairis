@@ -33,7 +33,7 @@ class ATModelViewer(atxdot.ATDotWindow):
     self.dbProxy = b.dbProxy
     self.theInitialTask = tName
     self.widget.connect('clicked', self.on_url_clicked)
-    self.set_icon_from_file(b.imageDir + '/atModel.png')
+    self.set_icon_from_file(b.iconDir + '/atModel.png')
 
 
   def on_url_clicked(self, widget, url, event):

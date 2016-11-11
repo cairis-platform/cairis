@@ -85,11 +85,11 @@ class EnvironmentModel:
     b = Borg()
     objtUrl = dimName + '#' + str(objtName)
     if (dimName == 'persona'):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/images/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'tag'):
       self.theGraph.add_node(pydot.Node(objtName,shape='note',style='filled',pencolor='black',color='yellow',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'attacker'):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/images/modelAttacker.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelAttacker.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'asset'):
       assetObjt = self.dbProxy.dimensionObject(objtName,'asset')
       borderColour = 'black'
@@ -126,7 +126,7 @@ class EnvironmentModel:
     elif (dimName == 'obstacle'):
       self.theGraph.add_node(pydot.Node(objtName,shape='polygon',skew='-1',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'role'):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/images/modelRole.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelRole.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'responsibility'):
       self.theGraph.add_node(pydot.Node(objtName,shape='doubleoctagon',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'environment'):

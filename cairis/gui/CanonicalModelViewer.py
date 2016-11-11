@@ -40,7 +40,7 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
     self.widget.connect('button_press_event', self.onClick)
     self.modelType = modelType
 
-    directoryPrefix = b.imageDir + '/'
+    directoryPrefix = b.iconDir + '/'
 
     if (modelType == 'class'):
       self.set_icon_from_file(directoryPrefix + 'classModel.png')

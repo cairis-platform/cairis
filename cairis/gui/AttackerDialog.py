@@ -42,8 +42,10 @@ class AttackerDialog(wx.Dialog):
  
   def load(self,attacker):
     self.theAttackerId = attacker.id()
-    imageFile = attacker.image()
-    if ((imageFile != None) and (imageFile != '')):
+    b = Borg()
+    attackerImage = attacker.image()
+    imageFile = b.imageDir + "/" + attackerImage
+    if ((attackerImage != None) and (imageFile != '')):
       if (os.path.exists(imageFile) == False):
         attacker.theImage = ''
         errorText = 'Attacker image ' + imageFile + ' does not exist.'

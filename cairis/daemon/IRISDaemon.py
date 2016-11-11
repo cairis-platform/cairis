@@ -155,28 +155,30 @@ def bootstrap_reroute(path):
   except AttributeError:
     return send_from_directory('static/bootstrap', path)
 
+@app.route('/assets/<path:path>')
+def get_asset(path):
+  try:
+    web_image_dir = os.path.join(b.staticDir, 'assets')
+    return send_from_directory(web_image_dir, path)
+  except AttributeError:
+    return send_from_directory('static/assets', path)
 
 @app.route('/images/<path:path>')
 def get_image(path):
   try:
-    image_dir = b.imageDir
+    fixed_img_path = b.imageDir
+    upload_img_path = b.uploadDir
   except AttributeError:
     image_dir = 'images'
-  try:
-    image_upload_dir = os.path.join(b.uploadDir, 'images')
-  except AttributeError:
-    image_upload_dir = 'static/images'
 
-  fixed_img_path = os.path.join(image_dir, path)
-  upload_img_path = os.path.join(image_upload_dir, path)
   if os.path.exists(fixed_img_path):
-    return send_from_directory(image_dir, path)
+    return send_from_directory(fixed_img_path, path)
   elif os.path.exists(upload_img_path):
-    return send_from_directory(image_upload_dir, path)
+    return send_from_directory(upload_img_path, path)
   else:
     try:
-      web_image_dir = os.path.join(b.staticDir, 'images')
-      return send_from_directory(web_image_dir, path)
+      web_img_dir = os.path.join(b.staticDir, 'images')
+      return send_from_directory(web_img_dir, path)
     except AttributeError:
       return send_from_directory('static/images', path)
 

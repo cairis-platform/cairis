@@ -266,9 +266,6 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
     elif name == 'attacker':
       self.theName = attrs['name']
       self.theImage = attrs['image']
-      if self.theImage != "" and os.path.isfile(self.theImage) == False:
-        b = Borg()
-        self.theImage = b.imageDir + "/" + self.theImage
     elif name == 'attacker_environment':
       self.theEnvironmentName = attrs['name']
     elif name == 'attacker_role':

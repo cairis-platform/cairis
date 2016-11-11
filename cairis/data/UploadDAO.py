@@ -35,7 +35,7 @@ class UploadDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
     b = Borg()
-    self.image_dir = os.path.join(b.uploadDir, 'images')
+    self.image_dir = b.uploadDir
 
   def upload_image(self, file):
     """

@@ -60,8 +60,10 @@ class PersonaDialog(wx.Dialog):
 
   def load(self,persona):
     self.thePersonaId = persona.id()
-    imageFile = persona.image()
-    if ((imageFile != None) and (imageFile != '')):
+    personaImage = persona.image()
+    b = Borg()
+    imageFile = b.imageDir + "/" + persona.image()
+    if ((personaImage != None) and (imageFile != '')):
       if (os.path.exists(imageFile) == False):
         errorText = 'Persona image ' + imageFile + ' does not exist.'
         dlg = wx.MessageDialog(self.theParent,errorText,'Load Persona Image',wx.OK | wx.ICON_ERROR)

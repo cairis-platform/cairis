@@ -67,7 +67,7 @@ class DimensionBaseDialog(BaseDialog):
     self.theDimensionName = DimensionNameIdentifier.dimensionName(self.__class__.__name__)
     self.selectedLabel = ""
     self.selectedIdx = -1
-    dimIcon = wx.Icon(b.imageDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
+    dimIcon = wx.Icon(b.iconDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
     self.SetIcon(dimIcon)
 
 

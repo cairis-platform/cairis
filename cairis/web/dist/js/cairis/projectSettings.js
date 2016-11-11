@@ -27,7 +27,7 @@ $("#projectClick").click(function () {
       var image = $("#theImages");
       $('#ProjectsProperties').loadJSON(data, null);
       image.attr("src", getImagedir(data.richPicture));
-      resaleImage(image,350);
+      rescaleImage(image,350);
       $("#projectBackground").height( $("#projectBackground")[0].scrollHeight );
       //definitions
       $.each(data.definitions, function (key, def) {
@@ -256,7 +256,7 @@ mainContent.on('change','#projectSettingsUpload', function () {
       outerbar.hide("slide", { direction: "down" }, 750);
       uploading = false;
       data = JSON.parse(data);
-      postProjectImage(data.filename, getImagedir(data.filename));
+      updateProjectImage(data.filename, getImagedir(data.filename));
     },
     error: function (xhr, textStatus, errorThrown) {
       uploading = false;
@@ -313,10 +313,8 @@ function postProjectImage(imagedir, actualDir) {
 
   settings.richPicture = imagedir;
   var theImage = $("#theImages");
-  putProjectSettings(settings, function () {
-    theImage.attr("src", actualDir);
-    resaleImage(theImage, 350);
-  });
+  theImage.attr("src", actualDir);
+  rescaleImage(theImage, 350);
   $.session.set("ProjectSettings", JSON.stringify(settings));
 }
 

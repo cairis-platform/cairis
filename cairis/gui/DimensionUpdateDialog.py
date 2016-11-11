@@ -58,7 +58,7 @@ class DimensionUpdateDialog(wx.Dialog):
     wx.EVT_BUTTON(self,DIMUPDATE_BUTTONUPDATE_ID,self.onUpdate)
     wx.EVT_BUTTON(self,wx.ID_CLOSE,self.onClose)
     dimIconFile = self.theDimensionName + '.png'
-    dimIcon = wx.Icon(b.imageDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
+    dimIcon = wx.Icon(b.iconDir + '/' + dimIconFile,wx.BITMAP_TYPE_PNG)
     self.SetIcon(dimIcon)
 
 

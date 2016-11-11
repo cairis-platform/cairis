@@ -98,7 +98,7 @@ $(document).on('click', "td.attacker-rows", function () {
         });
         $("#theAttackerEnvironments").find(".attackerEnvironment:first").trigger('click');
         $("#theAttackerImage").attr("src",getImagedir(data.theImage));
-        resaleImage($("#theAttackerImage"));
+        rescaleImage($("#theAttackerImage"),300);
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -486,9 +486,6 @@ $("#objectViewer").on('click', '#theAttackerImage', function () {
   if(!uploading) {
     $('#fileupload').trigger("click");
   }
-/*  else if($("#addAttackerPropertyDiv").hasClass("new")){
-    alert("First, update the attacker.");
-  } */
 });
 
 $("#objectViewer").on('change','#fileupload', function () {
@@ -513,7 +510,7 @@ $("#objectViewer").on('change','#fileupload', function () {
       outerbar.hide("slide", { direction: "down" }, 750);
       uploading = false;
       data = JSON.parse(data);
-      postAttackerImage(data.filename, getImagedir(data.filename));
+      updateAttackerImage(data.filename, getImagedir(data.filename));
     },
     error: function (xhr, textStatus, errorThrown) {
       uploading = false;
@@ -535,16 +532,11 @@ $("#objectViewer").on('change','#fileupload', function () {
   });
 });
 
-function postAttackerImage(imagedir, actualDir) {
+function updateAttackerImage(imagedir, actualDir) {
   var attacker = JSON.parse($.session.get("Attacker"));
-
   attacker.theImage = imagedir;
   $("#theAttackerImage").attr("src", actualDir);
-  putAttacker(attacker, attacker.theName, false, function () {
-    $("#theAttackerImage").attr("src", actualDir);
-    resaleImage($("#theAttackerImage"),200);
-  });
-
+  rescaleImage($("#theAttackerImage"),300);
   $.session.set("Attacker", JSON.stringify(attacker));
 }
 
