@@ -70,60 +70,57 @@ function fillRolesTable(){
 }
 
 $(document).on('click', "td.role-rows", function(){
-  activeElement("objectViewer");
-  var name = $(this).text();
-  if(name == undefined || name == "") {
-    fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
-      $("#editRoleOptionsform").addClass("newRole");
-    });
-  } 
-  else {
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
-      crossDomain: true,
-      url: serverIP + "/api/roles/name/" + name.replace(" ", "%20"),
-      success: function (json) {
-        fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
-          $.session.set("RoleObject", JSON.stringify(json));
-          $("#editRoleOptionsform").loadJSON(json, null);
-          $.ajax({
-            type: "GET",
-            dataType: "json",
-            accept: "application/json",
-            data: {
-              session_id: String($.session.get('sessionID'))
-            },
-            crossDomain: true,
-            url: serverIP + "/api/roles/name/" + name.replace(" ", "%20") + "/properties",
-            success: function (json) {
-              $.each(json, function (index, value) {
-                $("#theEnvironments").find("tbody").append("<tr><td class='roleEnvironmentClick'>" + value.theEnvironmentName + "</td></tr>");
-              });
-              $.session.set("RoleEnvironments", JSON.stringify(json))
-            },
-            error: function (xhr, textStatus, errorThrown) {
-              var error = JSON.parse(xhr.responseText);
-              showPopup(false, String(error.message));
-              debugLogger(String(this.url));
-              debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-            }
-          });
-        });
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        var error = JSON.parse(xhr.responseText);
-        showPopup(false, String(error.message));
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-    });
-  }
+  var roleName = $(this).text();
+  viewRole(roleName);
 });
+
+function viewRole(roleName) {
+  activeElement("objectViewer");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/roles/name/" + roleName.replace(" ", "%20"),
+    success: function (json) {
+      fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
+        $.session.set("RoleObject", JSON.stringify(json));
+        $("#editRoleOptionsform").loadJSON(json, null);
+        $.ajax({
+          type: "GET",
+          dataType: "json",
+          accept: "application/json",
+          data: {
+            session_id: String($.session.get('sessionID'))
+          },
+          crossDomain: true,
+          url: serverIP + "/api/roles/name/" + roleName.replace(" ", "%20") + "/properties",
+          success: function (json) {
+            $.each(json, function (index, value) {
+              $("#theEnvironments").find("tbody").append("<tr><td class='roleEnvironmentClick'>" + value.theEnvironmentName + "</td></tr>");
+            });
+            $.session.set("RoleEnvironments", JSON.stringify(json))
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            var error = JSON.parse(xhr.responseText);
+            showPopup(false, String(error.message));
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+          }
+        });
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+};
 
 var mainContent = $("#objectViewer");
 mainContent.on('click','#UpdateRole', function (event) {

@@ -91,8 +91,8 @@ function createEditObstaclesTable(){
 }
 
 $(document).on('click', "td.obstacle-rows",function() {
-  var name = $(this).text();
-  getObstacleOptions(name);
+  var obsName = $(this).text();
+  viewObstacle(obsName);
 });
 
 var mainContent = $("#objectViewer");
@@ -403,7 +403,7 @@ mainContent.on('click',"#obstacle_updateGoalGoal", function () {
   toggleObstacleWindow("#editObstacleOptionsForm");
 });
 
-function getObstacleOptions(name){
+function viewObstacle(obsName){
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -412,7 +412,7 @@ function getObstacleOptions(name){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/obstacles/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/obstacles/name/" + obsName.replace(" ", "%20"),
     success: function (data) {
       fillObstacleOptionMenu(data);
     },

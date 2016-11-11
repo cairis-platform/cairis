@@ -74,7 +74,11 @@ function createThreatsTable(){
 
 var mainContent = $("#objectViewer");
 $(document).on('click', "td.threat-rows", function () {
-  var name = $(this).text();
+  var thrName = $(this).text();
+  viewThreat(thrName);
+});
+
+function viewThreat(thrName) {
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -83,7 +87,7 @@ $(document).on('click', "td.threat-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/threats/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/threats/name/" + thrName.replace(" ", "%20"),
     success: function (data) {
       activeElement("objectViewer");
       fillOptionMenu("fastTemplates/editThreatOptions.html", "#objectViewer", null, true, true, function () {
@@ -116,7 +120,7 @@ $(document).on('click', "td.threat-rows", function () {
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
+};
 
 $(document).on("click", "#addNewThreat", function () {
   activeElement("objectViewer");

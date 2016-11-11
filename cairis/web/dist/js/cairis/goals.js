@@ -94,8 +94,8 @@ function createEditGoalsTable(){
 
 
 $(document).on('click', "td.goal-rows", function(){
-  var name = $(this).text();
-  getGoalOptions(name);
+  var goalName = $(this).text();
+  viewGoal(goalName);
 });
 
 var mainContent = $("#objectViewer");
@@ -524,7 +524,7 @@ mainContent.on('click',"#updateGoalGoal", function () {
   toggleGoalWindow("#editGoalOptionsForm");
 });
 
-function getGoalOptions(name){
+function viewGoal(goalName){
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -533,7 +533,7 @@ function getGoalOptions(name){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/goals/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/goals/name/" + goalName.replace(" ", "%20"),
     success: function (data) {
       fillGoalOptionMenu(data);
     },

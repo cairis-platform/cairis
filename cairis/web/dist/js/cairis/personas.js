@@ -78,8 +78,12 @@ function createPersonasTable(){
 }
 
 $(document).on('click', "td.persona-rows", function () {
+  var personaName = $(this).text();
+  viewPersona(personaName);
+});
+
+function viewPersona(personaName) {
   activeElement("objectViewer");
-  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -88,7 +92,7 @@ $(document).on('click', "td.persona-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/personas/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/personas/name/" + personaName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editPersonasOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("Persona", JSON.stringify(data));
@@ -126,7 +130,7 @@ $(document).on('click', "td.persona-rows", function () {
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
+};
 
 var mainContent = $("#objectViewer");
 mainContent.on("click",".personaEnvironment", function () {

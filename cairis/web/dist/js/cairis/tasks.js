@@ -96,8 +96,12 @@ function createTasksTable(){
 }
 
 $(document).on('click', "td.task-rows", function () {
+  var taskName = $(this).text();
+  viewTask(taskName);
+});
+
+function viewTask(taskName) {
   activeElement("objectViewer");
-  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -106,7 +110,7 @@ $(document).on('click', "td.task-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/tasks/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/tasks/name/" + taskName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editTaskOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("Task", JSON.stringify(data));
@@ -134,7 +138,7 @@ $(document).on('click', "td.task-rows", function () {
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
+};
 
 
 var mainContent = $("#objectViewer");

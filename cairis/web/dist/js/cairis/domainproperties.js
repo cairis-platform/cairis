@@ -77,8 +77,12 @@ function createDomainPropertiesTable(){
 }
 
 $(document).on('click', "td.domainproperty-rows", function () {
+  var dpName = $(this).text();
+  viewDomainProperty(dpName);
+});
+
+function viewDomainProperty(dpName) {
   activeElement("objectViewer");
-  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -87,7 +91,7 @@ $(document).on('click', "td.domainproperty-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/domainproperties/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/domainproperties/name/" + dpName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("DomainProperty", JSON.stringify(data));
@@ -110,7 +114,7 @@ $(document).on('click', "td.domainproperty-rows", function () {
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
+};
 
 var mainContent = $("#objectViewer");
 

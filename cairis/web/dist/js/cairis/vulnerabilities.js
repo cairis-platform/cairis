@@ -74,52 +74,46 @@ function createVulnerabilityTable(){
 
 
 $(document).on('click', "td.vulnerability-rows",function(){
-  activeElement("objectViewer");
-  if($(this).hasClass("newVulnerability")){
-    var vul = jQuery.extend(true, {}, vulnerabilityDefault);
-    $.session.set("Vulnerability", JSON.stringify(vul));
-    fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
-      $("#UpdateVulnerability").addClass("newVulnerability");
-    });
-  }
-  else {
-    var name = $(this).text();
-    $.session.set("VulnerabilityName", name.trim());
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
-      crossDomain: true,
-      url: serverIP + "/api/vulnerabilities/name/" + name.replace(" ", "%20"),
-      success: function (newdata) {
-        fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
-          $.session.set("Vulnerability", JSON.stringify(newdata));
-          var jsondata = $.extend(true, {}, newdata);
-          jsondata.theTags = [];
-          $('#editVulnerabilityOptionsform').loadJSON(jsondata, null);
-          var text = "";
-          $.each(newdata.theTags, function (index, tag) {
-            text += tag + ", ";
-          });
-          $("#theTags").val(text);
-
-          $.each(newdata.theEnvironmentProperties, function (index, envprop) {
-            $("#theVulEnvironments").append("<tr class='clickable-environments'><td class='deleteVulEnv'><i class='fa fa-minus'></i></td><td class='vulEnvProperties'>" + envprop.theEnvironmentName + "</td></tr>");
-          });
-          $("#theVulEnvironments").find(".vulEnvProperties:first").trigger('click');
-          $.session.set("VulnEnvironmentName", $("#theVulEnvironments").find(".vulEnvProperties:first").text());
-        });
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-    });
-  }
+  var vulName = $(this).text();
+  viewVulnerability(vulName);
 });
+
+function viewVulnerability(vulName) {
+  activeElement("objectViewer");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/vulnerabilities/name/" + vulName.replace(" ", "%20"),
+    success: function (newdata) {
+      fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
+        $.session.set("Vulnerability", JSON.stringify(newdata));
+        var jsondata = $.extend(true, {}, newdata);
+        jsondata.theTags = [];
+        $('#editVulnerabilityOptionsform').loadJSON(jsondata, null);
+        var text = "";
+        $.each(newdata.theTags, function (index, tag) {
+          text += tag + ", ";
+        });
+        $("#theTags").val(text);
+
+        $.each(newdata.theEnvironmentProperties, function (index, envprop) {
+          $("#theVulEnvironments").append("<tr class='clickable-environments'><td class='deleteVulEnv'><i class='fa fa-minus'></i></td><td class='vulEnvProperties'>" + envprop.theEnvironmentName + "</td></tr>");
+        });
+        $("#theVulEnvironments").find(".vulEnvProperties:first").trigger('click');
+        $.session.set("VulnEnvironmentName", $("#theVulEnvironments").find(".vulEnvProperties:first").text());
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+};
 
 $("#reqTable").on("click", "#addNewVulnerability", function () {
   activeElement("objectViewer");

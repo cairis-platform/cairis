@@ -81,9 +81,13 @@ function createAssetsTable(data, callback){
 }
 
 $(document).on('click', "td.asset-rows", function(){
+  var assetName = $(this).attr('value');
+  viewAsset(assetName);
+});
+
+function viewAsset(assetName) {
   activeElement("objectViewer");
-  var name = $(this).attr('value');
-  $.session.set("AssetName", name.trim());
+  $.session.set("AssetName", assetName.trim());
 
   $.ajax({
     type: "GET",
@@ -93,7 +97,7 @@ $(document).on('click', "td.asset-rows", function(){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/assets/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/assets/name/" + assetName.replace(" ", "%20"),
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editAssetsOptions.html","#objectViewer",null,true,true, function(){
         $.session.set("Asset", JSON.stringify(newdata));
@@ -148,7 +152,7 @@ $(document).on('click', "td.asset-rows", function(){
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
+};
 
 var mainContent = $("#objectViewer");
 mainContent.on('click', ".removeAssetEnvironment", function () {

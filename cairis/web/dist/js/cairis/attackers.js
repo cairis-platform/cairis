@@ -72,8 +72,12 @@ function createAttackersTable(){
 }
 
 $(document).on('click', "td.attacker-rows", function () {
+  var attackerName = $(this).text();
+  viewAttacker(attackerName);
+});
+
+function viewAttacker(attackerName) {
   activeElement("objectViewer"); 
-  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -82,7 +86,7 @@ $(document).on('click', "td.attacker-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/attackers/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/attackers/name/" + attackerName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editAttackerOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("Attacker", JSON.stringify(data));
@@ -106,7 +110,7 @@ $(document).on('click', "td.attacker-rows", function () {
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
+};
 
 var mainContent = $("#objectViewer");
 mainContent.on("click",".attackerEnvironment", function () {

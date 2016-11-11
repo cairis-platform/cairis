@@ -76,8 +76,12 @@ $(document).on("click", "#addNewResponse", function () {
 
 
 $(document).on('click', "td.response-rows", function () {
+  var roleName = $(this).text();
+  viewResponse(roleName);
+});
+
+function viewResponse(roleName) {
   activeElement("objectViewer");
-  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -86,7 +90,7 @@ $(document).on('click', "td.response-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/responses/name/" + name,
+    url: serverIP + "/api/responses/name/" + roleName,
     success: function (data) {
       fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
         var tags = data.theTags;
@@ -145,7 +149,7 @@ $(document).on('click', "td.response-rows", function () {
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
+};
 
 var mainContent = $("#objectViewer");
 mainContent.on('click', ".deleteTransferRole", function () {

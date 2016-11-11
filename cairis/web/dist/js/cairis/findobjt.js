@@ -49,6 +49,65 @@ $("#FindButton").click(function(e){
 });
 
 function appendResults(searchResults){
-  $("#theResults").append("<tr><td>" + searchResults[0] +"</td><td>" + searchResults[1] + "</td><td>" + searchResults[2] + "</td></tr>");
+  $("#theResults").append('<tr class="' + searchResults[1].replace(" ","").toLowerCase() + '-rows"><td>' + searchResults[0] +'</td><td>' + searchResults[1] + '</td><td>' + searchResults[2] + '</td></tr>');
 }
 
+$(document).on('click', "tr.domainproperty-rows", function () {
+  var dpName = $(this).find('td:eq(2)').text();
+  viewDomainProperty(dpName);
+});
+
+$(document).on('click', "tr.goal-rows", function () {
+  var goalName = $(this).find('td:eq(2)').text();
+  viewGoal(goalName);
+});
+
+$(document).on('click', "tr.obstacle-rows", function () {
+  var obsName = $(this).find('td:eq(2)').text();
+  viewObstacle(obsName);
+});
+
+$(document).on('click', "tr.persona-rows", function () {
+  var personaName = $(this).find('td:eq(2)').text();
+  viewPersona(personaName);
+});
+
+$(document).on('click', "tr.task-rows", function () {
+  var taskName = $(this).find('td:eq(2)').text();
+  viewTask(taskName);
+});
+
+$(document).on('click', "tr.role-rows", function () {
+  var roleName = $(this).find('td:eq(2)').text();
+  viewRole(roleName);
+});
+
+$(document).on('click', "tr.response-rows", function () {
+  var respName = $(this).find('td:eq(2)').text();
+  viewResponse(respName);
+});
+
+$(document).on('click', "tr.threat-rows", function () {
+  var thrName = $(this).find('td:eq(2)').text();
+  viewThreat(thrName);
+});
+
+$(document).on('click', "tr.vulnerability-rows", function () {
+  var vulName = $(this).find('td:eq(2)').text();
+  viewVulnerability(vulName);
+});
+
+$(document).on('click', "tr.attacker-rows", function () {
+  var attackerName = $(this).find('td:eq(2)').text();
+  viewAttacker(attackerName);
+});
+
+$(document).on('click', "tr.role-rows", function () {
+  var roleName = $(this).find('td:eq(2)').text();
+  viewRole(roleName);
+});
+
+$(document).on('click', "tr.asset-rows", function () {
+  var assetName = $(this).find('td:eq(2)').text();
+  viewAsset(assetName);
+});

@@ -71,8 +71,12 @@ function createUseCasesTable(){
 }
 
 $(document).on('click', "td.usecase-rows", function () {
+  var ucName = $(this).text();
+  viewUseCase(ucName); 
+});
+
+function viewUseCase(ucName) {
   activeElement("objectViewer");
-  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -81,7 +85,7 @@ $(document).on('click', "td.usecase-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/usecases/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/usecases/name/" + ucName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("UseCase", JSON.stringify(data));
@@ -113,7 +117,7 @@ $(document).on('click', "td.usecase-rows", function () {
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
+};
 
 
 var mainContent = $("#objectViewer");

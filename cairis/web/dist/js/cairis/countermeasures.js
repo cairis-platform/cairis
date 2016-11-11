@@ -83,8 +83,12 @@ function createCountermeasuresTable(){
 
 var mainContent = $("#objectViewer");
 $(document).on('click', "td.countermeasure-rows", function () {
+  var cmName = $(this).text();
+  viewCountermeasure(cmName);
+});
+
+function viewCountermeasure(cmName) {
   activeElement("objectViewer");
-  var name = $(this).text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -93,7 +97,7 @@ $(document).on('click', "td.countermeasure-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/countermeasures/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/countermeasures/name/" + cmName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
         $("#addPropertyDiv").hide();
@@ -121,7 +125,7 @@ $(document).on('click', "td.countermeasure-rows", function () {
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
+};
 
 $(document).on("click", "#addNewCountermeasure", function () {
   activeElement("objectViewer");
