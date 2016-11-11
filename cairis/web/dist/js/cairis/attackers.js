@@ -85,7 +85,6 @@ $(document).on('click', "td.attacker-rows", function () {
     url: serverIP + "/api/attackers/name/" + name.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editAttackerOptions.html", "#objectViewer", null, true, true, function () {
-        $("#addAttackerPropertyDiv").hide();
         $.session.set("Attacker", JSON.stringify(data));
         $('#editAttackerOptionsForm').loadJSON(data, null);
         var tags = data.theTags;
@@ -150,17 +149,60 @@ mainContent.on("click", "#addMotivetoAttacker", function () {
 });
 
 mainContent.on('click', "#addCapabilitytoAttacker", function () {
-  $("#addAttackerPropertyDiv").addClass("new");
+
+  var attacker = JSON.parse($.session.get("Attacker"));
+  var theEnvName = $.session.get("attackerEnvironmentName");
+
   var hasCaps = [];
   $("#attackerCapability").find(".attackerCapability").each(function(index, asset){
     hasCaps.push($(asset).text());
   });
-  capabilityfilling(hasCaps);
-  attackerToggle();
+
+  attackerPropertyDialogBox(hasCaps, undefined, function (cap) {
+    $.each(attacker.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == theEnvName){
+        attacker.theEnvironmentProperties[index].theCapabilities.push(cap);
+        $.session.set("Attacker", JSON.stringify(attacker));
+        appendAttackerCapability(cap);
+      }
+    });
+  });
 });
 
-function capabilityfilling(hasCap, original){
-  var select = $(document).find("#theCap");
+
+mainContent.on('dblclick', ".changeCapability", function () {
+  var capRow = $(this).closest("tr");
+  var currentCap = {};
+  currentCap.name = capRow.find("td:eq(1)").text();
+  currentCap.value = capRow.find("td:eq(2)").text();
+  var attacker = JSON.parse($.session.get("Attacker"));
+  var theEnvName = $.session.get("attackerEnvironmentName");
+
+  var hasCaps = [];
+  $("#attackerCapability").find(".attackerCapability").each(function(index, asset){
+    hasCaps.push($(asset).text());
+  });
+
+  attackerPropertyDialogBox(hasCaps, currentCap, function (updCap) {
+    $.each(attacker.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == theEnvName){
+        $.each(env.theCapabilities,function(idx,cap) {
+          if (cap.name == updCap.name) {
+            attacker.theEnvironmentProperties[index].theCapabilities[idx].value = updCap.value;
+            $.session.set("Attacker", JSON.stringify(attacker));
+            capRow.find("td:eq(1)").text(updCap.name);
+            capRow.find("td:eq(2)").text(updCap.value);
+          }
+        });
+      }
+    });
+  });
+});
+
+
+function attackerPropertyDialogBox(hasCap,currentCap,callback){
+  var dialogwindow = $("#addAttackerPropertyDialog");
+  var select = $("#theCap");
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -173,9 +215,10 @@ function capabilityfilling(hasCap, original){
     success: function (data) {
       select.empty();
       var none = true;
-      if(typeof original != 'undefined' ){
-        select.append("<option value=" + original + ">" + original + "</option>");
-        select.val(original);
+      if(typeof currentCap != 'undefined' ){
+        select.append("<option value=" + currentCap.name + ">" + currentCap.name + "</option>");
+        select.val(currentCap.name);
+        $("#thePropValue").val(currentCap.value);
       }
       $.each(data, function(key, object) {
         var found = false;
@@ -189,6 +232,27 @@ function capabilityfilling(hasCap, original){
           none = false;
         }
       });
+
+      if(!none) {
+        dialogwindow.dialog({
+          modal: true,
+          buttons: {
+            Ok: function () {
+              var prop = {};
+              prop.name = $("#theCap option:selected").text();
+              prop.value = $("#thePropValue option:selected").text();
+              if(jQuery.isFunction(callback)){
+                callback(prop);
+              }
+              $(this).dialog("close");
+            }
+          }
+        });
+        $("#addAttackPropertyDialog.").show();
+      }
+      else {
+        alert("All possible capabilities are already added");
+      }
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -196,6 +260,7 @@ function capabilityfilling(hasCap, original){
     }
   });
 }
+
 
 mainContent.on('click', ".removeAttackerMotive", function () {
   var text = $(this).next(".attackerMotive").text();
@@ -326,13 +391,13 @@ mainContent.on('click', '#UpdateAttacker', function (e) {
 $(document).on("click", "#addNewAttacker", function () {
   activeElement("objectViewer"); 
   fillOptionMenu("fastTemplates/editAttackerOptions.html", "#objectViewer", null, true, true, function () {
-    $("#addAttackerPropertyDiv").hide();
     $("#editAttackerOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("Attacker", JSON.stringify(jQuery.extend(true, {},attackerDefault )));
   });
 });
 
+/*
 mainContent.on('click', "#UpdateAttackerCapability", function () {
   var attacker = JSON.parse($.session.get("Attacker"));
   var theEnvName = $.session.get("attackerEnvironmentName");
@@ -366,6 +431,7 @@ mainContent.on('click', "#UpdateAttackerCapability", function () {
     });
   }
 }); 
+*/
 
 mainContent.on("click", ".removeAttackerCapability", function () {
   var text = $(this).closest('tr').find(".attackerCapability").text();
@@ -383,17 +449,6 @@ mainContent.on("click", ".removeAttackerCapability", function () {
       });
     }
   });
-});
-
-mainContent.on('dblclick', ".changeCapability", function () {
-  var hasCaps = [];
-  var currentCap = $(this).find(".attackerCapability").text();
-  $.session.set("AttackerCapName", currentCap);
-  $("#attackerCapability").find(".attackerCapability").each(function(index, asset){
-    hasCaps.push($(asset).text());
-  });
-  capabilityfilling(hasCaps, currentCap);
-  attackerToggle();
 });
 
 $(document).on('click', 'td.deleteAttackerButton', function (e) {
@@ -431,9 +486,9 @@ $("#objectViewer").on('click', '#theAttackerImage', function () {
   if(!uploading) {
     $('#fileupload').trigger("click");
   }
-  else if($("#addAttackerPropertyDiv").hasClass("new")){
+/*  else if($("#addAttackerPropertyDiv").hasClass("new")){
     alert("First, update the attacker.");
-  }
+  } */
 });
 
 $("#objectViewer").on('change','#fileupload', function () {
@@ -493,10 +548,6 @@ function postAttackerImage(imagedir, actualDir) {
   $.session.set("Attacker", JSON.stringify(attacker));
 }
 
-function attackerToggle(){
-  $("#addAttackerPropertyDiv").toggle();
-  $("#editAttackerOptionsForm").toggle();
-}
 function appendAttackerEnvironment(environment){
   $("#theAttackerEnvironments").find("tbody").append('<tr><td class="deleteAttackerEnv"><i class="fa fa-minus"></i></td><td class="attackerEnvironment">'+environment+'</td></tr>');
 }
