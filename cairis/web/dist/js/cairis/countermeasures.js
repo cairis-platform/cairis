@@ -298,74 +298,107 @@ mainContent.on('click', '.countermeasurePersona', function () {
   });
 });
 
+function updateCountermeasurePropertyList() {
+  resetSecurityPropertyList();
 
-mainContent.on('click','#addPropertytoCountermeasure', function () {
-  var hasProperties = [];
+  var currentProperty = $("#chooseSecurityProperty").attr('data-currentproperty');
+  if (currentProperty != '') {
+    currentProperty = JSON.parse(currentProperty);
+  }
+
   $("#countermeasureProperties").find(".countermeasureProperties").each(function(index, prop){
-    hasProperties.push($(prop).text());
+    if ((currentProperty != '') && (currentProperty.name == $(prop).text())) {
+      // don't remove
+    }
+    else {
+      $("#theSecurityPropertyName option[value='" + $(prop).text() + "']").remove();
+    }
   });
-  securityPropertyDialogBox(hasProperties, undefined, function (prop) {
-    var cm = JSON.parse($.session.get("Countermeasure"));
-    var theEnvName = $.session.get("countermeasureEnvironmentName");
-    $.each(cm.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        $.each(env.theProperties, function(idx, cmProp){
-          if (prop.name == cmProp.name) {
-            cmProp.value = prop.value;
-            cmProp.rationale = prop.rationale;
-            cm.theEnvironmentProperties[index].theProperties[idx] = cmProp;
-            $.session.set("Countermeasure", JSON.stringify(cm));
-            appendCountermeasureProperty(prop);
-          }
-        });
-      }
-    });
-  });
-});
+  if (currentProperty != '') {
+    $("#theSecurityPropertyName").val(currentProperty.name);
+    $("#theSecurityPropertyValue").val(currentProperty.value);
+    $("#theSecurityPropertyRationale").val(currentProperty.rationale);
+  }
+}
 
-mainContent.on('click', '.countermeasureProperties', function() {
-  var propRow = $(this).closest("tr");
-  var propName = propRow.find("td:eq(1)").text();
+function addCountermeasureSecurityProperty(e) {
+  e.preventDefault()
+  var prop = {};
+  prop.name =  $("#theSecurityPropertyName").find("option:selected").text();
+  prop.value =  $("#theSecurityPropertyValue").val();
+  prop.rationale =  $("#theSecurityPropertyRationale").val()
+
   var cm = JSON.parse($.session.get("Countermeasure"));
   var theEnvName = $.session.get("countermeasureEnvironmentName");
-
-  var currentProp = {};
   $.each(cm.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
-      $.each(env.theProperties, function(idx, cmProp){
-        if (propName == cmProp.name) {
-          currentProp = cmProp;
-          var defaultProp = {};
-          defaultProp.name = propName;
-          defaultProp.value = 'None';
-          defaultProp.rationale = '';
-          cm.theEnvironmentProperties[index].theProperties[idx] = defaultProp;
+      $.each(env.theProperties, function(idx, secProp){
+        if (prop.name == secProp.name) {
+          secProp.value = prop.value;
+          secProp.rationale = prop.rationale;
+          cm.theEnvironmentProperties[index].theProperties[idx] = secProp;
+          $.session.set("Countermeasure", JSON.stringify(cm));
+          appendCountermeasureProperty(prop);
         }
       });
     }
   });
+  $("#chooseSecurityProperty").modal('hide');
+}
 
-  var hasProperties = [];
-  $("#countermeasureProperties").find(".countermeasureProperties").each(function(index, prop){
-    hasProperties.push($(prop).text());
+function updateCountermeasureSecurityProperty() {
+  var currentProperty = JSON.parse($("#chooseSecurityProperty").attr("data-currentproperty"));
+  var propRow = undefined;
+
+  $("#countermeasureProperties").find("tr").each(function(index, row){
+    if (currentProperty.name == $(row).find("td:eq(1)").text()) {
+      propRow = $(row);
+    }
   });
 
-  securityPropertyDialogBox(hasProperties, currentProp, function (updProp) {
-    $.each(cm.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        $.each(env.theProperties, function(idx, cmProp){
-          if (updProp.name == cmProp.name) {
-            cm.theEnvironmentProperties[index].theProperties[idx] = updProp;
-            $.session.set("Countermeasure", JSON.stringify(cm));
-            propRow.find("td:eq(1)").text(updProp.name);
-            propRow.find("td:eq(2)").text(updProp.value);
-            propRow.find("td:eq(3)").text(updProp.rationale);
-          }
-        });
-      }
-    });
-  });
+  var updProp = {};
+  updProp.name =  $("#theSecurityPropertyName").find("option:selected").text();
+  updProp.value =  $("#theSecurityPropertyValue").val();
+  updProp.rationale =  $("#theSecurityPropertyRationale").val();
 
+  var cm = JSON.parse($.session.get("Countermeasure"));
+  var theEnvName = $.session.get("countermeasureEnvironmentName");
+
+  $.each(cm.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      $.each(env.theProperties, function(idx, secProp){
+        if (updProp.name == secProp.name) {
+          cm.theEnvironmentProperties[index].theProperties[idx] = updProp;
+          $.session.set("Countermeasure", JSON.stringify(cm));
+          propRow.find("td:eq(1)").text(updProp.name);
+          propRow.find("td:eq(2)").text(updProp.value);
+          propRow.find("td:eq(3)").text(updProp.rationale);
+        }
+      });
+    }
+  });
+  $("#chooseSecurityProperty").modal('hide');
+}
+
+
+mainContent.on('click','#addPropertytoCountermeasure', function () {
+
+  $("#chooseSecurityProperty").attr('data-updatepropertylist',"updateCountermeasurePropertyList");
+  $("#chooseSecurityProperty").attr("data-buildproperty","addCountermeasureSecurityProperty");
+  $("#chooseSecurityProperty").modal('show');
+});
+
+mainContent.on('click', '.countermeasureProperties', function() {
+  var propRow = $(this).closest("tr");
+  var selectedProp = {};
+  selectedProp.name = propRow.find("td:eq(1)").text();
+  selectedProp.value = propRow.find("td:eq(2)").text();
+  selectedProp.rationale = propRow.find("td:eq(3)").text();
+
+  $("#chooseSecurityProperty").attr('data-updatepropertylist',"updateCountermeasurePropertyList");
+  $("#chooseSecurityProperty").attr("data-buildproperty","updateCountermeasureSecurityProperty");
+  $("#chooseSecurityProperty").attr("data-currentproperty",JSON.stringify(selectedProp));
+  $("#chooseSecurityProperty").modal('show');
 });
 
 mainContent.on("click", "#addCountermeasureEnv", function () {

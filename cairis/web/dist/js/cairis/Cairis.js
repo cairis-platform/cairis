@@ -1115,39 +1115,6 @@ function concernDialogBox(hasRole ,callback){
   });
 }
 
-function securityPropertyDialogBox(haveProperties,currentProperty,callback){
-  var dialogwindow = $("#chooseSecurityProperty");
-  $.each(haveProperties,function(index, text) {
-    if ((currentProperty != undefined) && (currentProperty.name == text)) {
-      // don't remove
-    }
-    else {
-      $("#theSecurityPropertyName option[value='" + text + "']").remove();
-    }
-  });
-  if(currentProperty != undefined) {
-    $("#theSecurityPropertyName").val(currentProperty.name);
-    $("#theSecurityPropertyValue").val(currentProperty.value);
-    $("#theSecurityPropertyRationale").val(currentProperty.rationale);
-  }
-  dialogwindow.dialog({
-    modal: true,
-    buttons: {
-      Ok: function () {
-        var prop = {}
-        prop.name =  $("#theSecurityPropertyName").find("option:selected").text();
-        prop.value =  $("#theSecurityPropertyValue").val();
-        prop.rationale =  $("#theSecurityPropertyRationale").val();
-        if(jQuery.isFunction(callback)){
-          callback(prop);
-        }
-        $(this).dialog("close");
-      }
-    }
-  });
-  $("#chooseSecurityProperty").show();
-}
-
 // Function for creating the comboboxes
 function createComboboxes(){
   var sess = String($.session.get('sessionID'));
@@ -1790,3 +1757,22 @@ function encodeQueryList(q,data) {
   }
   return l.join('&');
 }
+
+function resetSecurityPropertyList() {
+  $("#theSecurityPropertyName").find('option').remove();
+  var spList = ['Confidentiality','Integrity','Availability','Accountability','Anonymity','Pseudonymity','Unobservability','Unlinkability'];
+  $.each(spList,function(idx,spValue) {
+    $("#theSecurityPropertyName").append('<option value="' + spValue + '">' + spValue + '</option>');
+  });
+}
+
+$("#chooseSecurityProperty").on('shown.bs.modal', function() {
+  var cmd = eval($("#chooseSecurityProperty").attr("data-updatepropertylist"));
+  cmd();
+});
+
+$("#chooseSecurityProperty").on('click', '#saveSecurityProperty',function(e) {
+  var cmd = eval($("#chooseSecurityProperty").attr("data-buildproperty"));
+  cmd(e);
+});
+

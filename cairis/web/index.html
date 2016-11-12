@@ -569,36 +569,43 @@
     </select>
     <input class="form-control" type="file" accept="text/xml" onchange="readImportFile(event)" id="theImportModelFile" name="theImportModelFile" />
   </div>
-  <div id="chooseSecurityProperty" title="Specify a security property" style="display: none;">
-    <div class="form-group">
-      <label for="theSecurityPropertyName" class="control-label">Property</label>
-      <select class="optionsInput form-control" name="theSecurityPropertyName" id="theSecurityPropertyName" style="width: 75%;" required>
-        <option value="Confidentiality">Confidentiality</option>
-        <option value="Integrity">Integrity</option>
-        <option value="Availability">Availability</option>
-        <option value="Accountability">Accountability</option>
-        <option value="Anonymity">Anonymity</option>
-        <option value="Pseudonymity">Pseudonymity</option>
-        <option value="Unlinkability">Unlinkability</option>
-        <option value="Unobservability">Unobservability</option>
-      </select>
+  <div class="modal fade" id="chooseSecurityProperty" tabindex="-1" role="dialog" aria-labelledby="cSP_label" data-updatepropertylist="" data-buildproperty="" data-currentproperty="">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Choose security property</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="theSecurityPropertyName" class="control-label">Property</label>
+            <select class="optionsInput form-control" name="theSecurityPropertyName" id="theSecurityPropertyName" style="width: 75%;" required>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="theSecurityPropertyValue" class="control-label">Value</label>
+            <select class="optionsInput form-control" style="width: 75%;" name="theSecurityPropertyValue" id="theSecurityPropertyValue">
+              <option>None</option>
+              <option>Low</option>
+              <option>Medium</option>
+              <option>High</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="theSecurityPropertyRationale" class="control-label">Rationale</label>
+            <textarea rows="5" class="optionsInput form-control" name="theSecurityPropertyRationale" id="theSecurityPropertyRationale" data-error="Rationale not provided" required> </textarea>
+            <div class="help-block with-errors"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="saveSecurityProperty" class="btn btn-primary">Save</button>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="theSecurityPropertyValue" class="control-label">Value</label>
-      <select class="optionsInput form-control" style="width: 75%;" name="theSecurityPropertyValue" id="theSecurityPropertyValue">
-        <option>None</option>
-        <option>Low</option>
-        <option>Medium</option>
-        <option>High</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="theSecurityPropertyRationale" class="control-label">Rationale</label>
-      <textarea rows="5" class="optionsInput form-control" name="theSecurityPropertyRationale" id="theSecurityPropertyRationale" data-error="Rationale not provided" required> </textarea>
-      <div class="help-block with-errors"></div>
-    </div>
-    <textarea id="id" name="id" style="display: none;"></textarea>
   </div>
+
+
+
   <div class="loadingWrapper">
     <div class="divLoading">
     </div>

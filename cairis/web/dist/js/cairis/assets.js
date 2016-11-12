@@ -223,49 +223,51 @@ mainContent.on('click', '.assetEnvironmentRow', function(event){
   });
 });
 
-mainContent.on('click', '.theAssetPropName', function(){
-  var propRow = $(this).closest("tr");
-  var propName = propRow.find("td:eq(2)").text();
-  var assetProperties = JSON.parse( $.session.get("AssetProperties"));
+function updateAssetSecurityProperty() {
+  var currentProperty = JSON.parse($("#chooseSecurityProperty").attr("data-currentproperty"));
+  var propRow = undefined;
+
+  $("#definitionTable").find("tr").each(function(index, row){
+    if (currentProperty.name == $(row).find("td:eq(2)").text()) {
+      propRow = $(row);
+    }
+  });
+
+  var updProp = {};
+  updProp.name =  $("#theSecurityPropertyName").find("option:selected").text();
+  updProp.value =  $("#theSecurityPropertyValue").val();
+  updProp.rationale =  $("#theSecurityPropertyRationale").val();
+
+  var secProperties = JSON.parse($.session.get("AssetProperties"));
   var theEnvName = $.session.get("assetEnvironmentName");
 
-  var currentProp = {};
-  $.each(assetProperties, function (index, env) {
+  $.each(secProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
-      $.each(env.theProperties, function(idx, assetProp){
-        if (propName == assetProp.name) {
-          currentProp = assetProp;
-          var defaultProp = {};
-          defaultProp.name = propName;
-          defaultProp.value = 'None';
-          defaultProp.rationale = '';
-          assetProperties[index].theProperties[idx] = defaultProp;
+      $.each(env.theProperties, function(idx, secProp){
+        if (updProp.name == secProp.name) {
+          secProperties[index].theProperties[idx] = updProp;
+          $.session.set("AssetProperties", JSON.stringify(secProperties));
+          propRow.find("td:eq(2)").text(updProp.name);
+          propRow.find("td:eq(3)").text(updProp.value);
+          propRow.find("td:eq(4)").text(updProp.rationale);
         }
       });
     }
   });
+  $("#chooseSecurityProperty").modal('hide');
+}
 
-  var hasProperties = [];
-  $("#definitionTable").find(".theAssetPropName").each(function(index, prop){
-    hasProperties.push($(prop).text());
-  });
+mainContent.on('click', '.theAssetPropName', function(){
+  var propRow = $(this).closest("tr");
+  var selectedProp = {};
+  selectedProp.name = propRow.find("td:eq(2)").text();
+  selectedProp.value = propRow.find("td:eq(3)").text();
+  selectedProp.rationale = propRow.find("td:eq(4)").text();
 
-  securityPropertyDialogBox(hasProperties, currentProp, function (updProp) {
-    $.each(assetProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        $.each(env.theProperties, function(idx, assetProp){
-          if (updProp.name == assetProp.name) {
-
-            assetProperties[index].theProperties[idx] = updProp;
-            $.session.set("AssetProperties", JSON.stringify(assetProperties));
-            propRow.find("td:eq(2)").text(updProp.name);
-            propRow.find("td:eq(3)").text(updProp.value);
-            propRow.find("td:eq(4)").text(updProp.rationale);
-          }
-        });
-      }
-    });
-  });
+  $("#chooseSecurityProperty").attr('data-updatepropertylist',"updateAssetPropertyList");
+  $("#chooseSecurityProperty").attr("data-buildproperty","updateAssetSecurityProperty");
+  $("#chooseSecurityProperty").attr("data-currentproperty",JSON.stringify(selectedProp));
+  $("#chooseSecurityProperty").modal('show');
 });
 
 mainContent.on('dblclick', '.clickable-associations', function(){
@@ -550,31 +552,70 @@ $(document).on('click', "td.deleteAssetButton",function(e){
   });
 });
 
-mainContent.on("click", "#addNewProperty", function(){
+function updateAssetPropertyList() {
+  resetSecurityPropertyList();
 
-  var hasProperties = [];
+  var currentProperty = $("#chooseSecurityProperty").attr('data-currentproperty');
+  if (currentProperty != '') {
+    currentProperty = JSON.parse(currentProperty);
+  }
+
   $("#definitionTable").find(".theAssetPropName").each(function(index, prop){
-    hasProperties.push($(prop).text());
+    if ((currentProperty != '') && (currentProperty.name == $(prop).text())) {
+      // don't remove
+    }
+    else {
+      $("#theSecurityPropertyName option[value='" + $(prop).text() + "']").remove();
+    }
   });
+  if (currentProperty != '') {
+    $("#theSecurityPropertyName").val(currentProperty.name);
+    $("#theSecurityPropertyValue").val(currentProperty.value);
+    $("#theSecurityPropertyRationale").val(currentProperty.rationale);
+  }
+}
 
-  securityPropertyDialogBox(hasProperties, undefined, function (prop) {
-    var assetProperties = JSON.parse( $.session.get("AssetProperties"));
-    var theEnvName = $.session.get("assetEnvironmentName");
-    $.each(assetProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        $.each(env.theProperties, function(idx, assetProp){
-          if (prop.name == assetProp.name) {
-            assetProp.value = prop.value;
-            assetProp.rationale = prop.rationale;
-            assetProperties[index].theProperties[idx] = assetProp;
-            $.session.set("AssetProperties", JSON.stringify(assetProperties));
-            appendSecurityProperty(prop);
-          }
-        });
-      }
-    });
+function addAssetSecurityProperty(e) {
+  e.preventDefault()
+  var prop = {};
+  prop.name =  $("#theSecurityPropertyName").find("option:selected").text();
+  prop.value =  $("#theSecurityPropertyValue").val();
+  prop.rationale =  $("#theSecurityPropertyRationale").val()
+  var secProperties = JSON.parse( $.session.get("AssetProperties"));
+  var theEnvName = $.session.get("assetEnvironmentName");
+  $.each(secProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      $.each(env.theProperties, function(idx, secProp){
+        if (prop.name == secProp.name) {
+          secProp.value = prop.value;
+          secProp.rationale = prop.rationale;
+          secProperties[index].theProperties[idx] = secProp;
+          $.session.set("AssetProperties", JSON.stringify(secProperties));
+          appendSecurityProperty(prop);
+        }
+      });
+    }
   });
+  $("#chooseSecurityProperty").modal('hide');
+}
+
+mainContent.on("click", "#addNewProperty", function(){
+  $("#chooseSecurityProperty").attr('data-updatepropertylist',"updateAssetPropertyList");
+  $("#chooseSecurityProperty").attr("data-buildproperty","addAssetSecurityProperty");
+  $("#chooseSecurityProperty").modal('show');
 });
+
+$("#chooseSecurityProperty").on('shown.bs.modal', function() {
+  var cmd = eval($("#chooseSecurityProperty").attr("data-updatepropertylist"));
+  cmd();
+});
+
+$("#chooseSecurityProperty").on('click', '#saveSecurityProperty',function() {
+  var cmd = eval($("#chooseSecurityProperty").attr("data-buildproperty"));
+  cmd();
+});
+
+
 
 function appendSecurityProperty(prop){
   $("#definitionTable").find("tbody").append('<tr class="clickable-properties"><td style="display: none;">' + prop.id + '</td><td><div class="fillparent deleteProperty"><i class="fa fa-minus"></i></div></td><td class="theAssetPropName" name="name">' + prop.name + '</td><td name="value">'+ prop.value +'</td><td name="rationale">'+ prop.rationale +'</td></tr>').animate('slow');

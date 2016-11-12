@@ -236,73 +236,110 @@ mainContent.on('click','.removeThreatAttacker', function () {
   });
 });
 
-mainContent.on('click','#addPropertytoThreat', function () {
+function updateThreatPropertyList() {
+  resetSecurityPropertyList();
 
-  var hasProperties = [];
+  var currentProperty = $("#chooseSecurityProperty").attr('data-currentproperty');
+  if (currentProperty != '') {
+    currentProperty = JSON.parse(currentProperty);
+  }
+
   $("#threatProperties").find(".threatProperties").each(function(index, prop){
-    hasProperties.push($(prop).text());
+    if ((currentProperty != '') && (currentProperty.name == $(prop).text())) {
+      // don't remove
+    }
+    else {
+      $("#theSecurityPropertyName option[value='" + $(prop).text() + "']").remove();
+    }
   });
-  securityPropertyDialogBox(hasProperties, undefined, function (prop) {
-    var threat = JSON.parse($.session.get("theThreat"));
-    var theEnvName = $.session.get("threatEnvironmentName");
-    $.each(threat.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        $.each(env.theProperties, function(idx, thrProp){
-          if (prop.name == thrProp.name) {
-            thrProp.value = prop.value;
-            thrProp.rationale = prop.rationale;
-            threat.theEnvironmentProperties[index].theProperties[idx] = thrProp;
-            $.session.set("theThreat", JSON.stringify(threat));
-            appendThreatProperty(thrProp);
-          }
-        });
-      }
-    });
-  });
-});
+  if (currentProperty != '') {
+    $("#theSecurityPropertyName").val(currentProperty.name);
+    $("#theSecurityPropertyValue").val(currentProperty.value);
+    $("#theSecurityPropertyRationale").val(currentProperty.rationale);
+  }
+}
 
-mainContent.on("click",".threatProperties", function () {
-  var propRow = $(this).closest("tr");
-  var propName = propRow.find("td:eq(1)").text();
+function addThreatSecurityProperty(e) {
+  e.preventDefault()
+  var prop = {};
+  prop.name =  $("#theSecurityPropertyName").find("option:selected").text();
+  prop.value =  $("#theSecurityPropertyValue").val();
+  prop.rationale =  $("#theSecurityPropertyRationale").val()
+
   var threat = JSON.parse($.session.get("theThreat"));
   var theEnvName = $.session.get("threatEnvironmentName");
-
-  var currentProp = {};
   $.each(threat.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
-      $.each(env.theProperties, function(idx, thrProp){
-        if (propName == thrProp.name) {
-          currentProp = thrProp;
-          var defaultProp = {};
-          defaultProp.name = propName;
-          defaultProp.value = 'None';
-          defaultProp.rationale = '';
-          threat.theEnvironmentProperties[index].theProperties[idx] = defaultProp;
+      $.each(env.theProperties, function(idx, secProp){
+        if (prop.name == secProp.name) {
+          secProp.value = prop.value;
+          secProp.rationale = prop.rationale;
+          threat.theEnvironmentProperties[index].theProperties[idx] = secProp;
+          $.session.set("theThreat", JSON.stringify(threat));
+          appendThreatProperty(prop);
         }
       });
     }
   });
+  $("#chooseSecurityProperty").modal('hide');
+}
 
-  var hasProperties = [];
-  $("#threatProperties").find(".threatProperties").each(function(index, prop){
-    hasProperties.push($(prop).text());
+
+
+
+mainContent.on('click','#addPropertytoThreat', function () {
+  $("#chooseSecurityProperty").attr('data-updatepropertylist',"updateThreatPropertyList");
+  $("#chooseSecurityProperty").attr("data-buildproperty","addThreatSecurityProperty");
+  $("#chooseSecurityProperty").modal('show');
+});
+
+function updateThreatSecurityProperty() {
+  var currentProperty = JSON.parse($("#chooseSecurityProperty").attr("data-currentproperty"));
+  var propRow = undefined;
+
+  $("#threatProperties").find("tr").each(function(index, row){
+    if (currentProperty.name == $(row).find("td:eq(1)").text()) {
+      propRow = $(row);
+    }
   });
 
-  securityPropertyDialogBox(hasProperties, currentProp, function (updProp) {
-    $.each(threat.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        $.each(env.theProperties, function(idx, thrProp){
-          if (updProp.name == thrProp.name) {
-            threat.theEnvironmentProperties[index].theProperties[idx] = updProp;
-            $.session.set("theThreat", JSON.stringify(threat));
-            propRow.find("td:eq(1)").text(updProp.name);
-            propRow.find("td:eq(2)").text(updProp.value);
-            propRow.find("td:eq(3)").text(updProp.rationale);
-          }
-        });
-      }
-    });
+  var updProp = {};
+  updProp.name =  $("#theSecurityPropertyName").find("option:selected").text();
+  updProp.value =  $("#theSecurityPropertyValue").val();
+  updProp.rationale =  $("#theSecurityPropertyRationale").val();
+
+  var threat = JSON.parse($.session.get("theThreat"));
+  var theEnvName = $.session.get("threatEnvironmentName");
+
+  $.each(threat.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      $.each(env.theProperties, function(idx, secProp){
+        if (updProp.name == secProp.name) {
+          threat.theEnvironmentProperties[index].theProperties[idx] = updProp;
+          $.session.set("theThreat", JSON.stringify(threat));
+          propRow.find("td:eq(1)").text(updProp.name);
+          propRow.find("td:eq(2)").text(updProp.value);
+          propRow.find("td:eq(3)").text(updProp.rationale);
+        }
+      });
+    }
   });
+  $("#chooseSecurityProperty").modal('hide');
+}
+
+
+
+mainContent.on("click",".threatProperties", function () {
+  var propRow = $(this).closest("tr");
+  var selectedProp = {};
+  selectedProp.name = propRow.find("td:eq(1)").text();
+  selectedProp.value = propRow.find("td:eq(2)").text();
+  selectedProp.rationale = propRow.find("td:eq(3)").text();
+
+  $("#chooseSecurityProperty").attr('data-updatepropertylist',"updateThreatPropertyList");
+  $("#chooseSecurityProperty").attr("data-buildproperty","updateThreatSecurityProperty");
+  $("#chooseSecurityProperty").attr("data-currentproperty",JSON.stringify(selectedProp));
+  $("#chooseSecurityProperty").modal('show');
 });
 
 mainContent.on("click", "#addThreatEnv", function () {
