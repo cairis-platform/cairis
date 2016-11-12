@@ -78,8 +78,7 @@ function createPersonaCharacteristicsTable(){
 
 $(document).on('click', "td.personacharacteristic-rows", function () {
   activeElement("objectViewer");
-  var key = $(this).text();
-  var name = key.split("/")[2];
+  var name = $(this).closest("tr").find("td:eq(3)").text();
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -88,10 +87,28 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/persona_characteristics/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/persona_characteristics/name/" + encodeURIComponent(name),
     success: function (data) {
       fillOptionMenu("fastTemplates/editPersonaCharacteristicOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("PersonaCharacteristic", JSON.stringify(data));
+
+        $("#theGrounds").find("tbody").empty();
+        $.each(data.theGrounds,function(idx,item) {
+          appendGWR("#theGrounds",'grounds',item); 
+        });
+        $("#theWarrant").find("tbody").empty();
+        $.each(data.theWarrant,function(idx,item) {
+          appendGWR("#theWarrant",'warrant',item); 
+        });
+        $("#theRebuttal").find("tbody").empty();
+        $.each(data.theRebuttal,function(idx,item) {
+          appendGWR("#theRebuttal",'rebuttal',item); 
+        });
+        $("#theBacking").find("tbody").empty();
+        $.each(data.theBacking,function(idx,item) {
+          appendBacking(item); 
+        });
+
         $('#editPersonaCharacteristicOptionsForm').loadJSON(data, null);
       });
     },
@@ -153,7 +170,7 @@ function putPersonaCharacteristic(pc, oldName, usePopup, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/persona_characteristics/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/persona_characteristics/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       if(usePopup) {
         showPopup(true);
@@ -214,7 +231,7 @@ function deletePersonaCharacteristic(name, callback){
     crossDomain: true,
     processData: false,
     origin: serverIP,
-    url: serverIP + "/api/persona_characteristics/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/persona_characteristics/name/" + encodeURIComponent(name) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -235,3 +252,10 @@ mainContent.on('click', '#ClosePersonaCharacteristic', function (e) {
   createPersonaCharacteristicsTable();
 });
 
+function appendGWR(tableId,gwrType,item) {
+  $(tableId).find("tbody").append('<tr><td class="delete' + gwrType + '"><i class="fa fa-minus"></i></td><td class="' + gwrType + '"">'+ item.theReferenceName +'</td><td>' + item.theReferenceDescription + '</td></tr>');
+};
+
+function appendBacking(item) {
+  $("#theBacking").find("tbody").append('<tr><td class="backing"">'+ item +'</td></tr>');
+};
