@@ -933,11 +933,11 @@ else if(link.indexOf("usecases") > -1) {
                 forceOpenOptions();
                 $.each(data.theEnvironmentProperties, function (idx, env) {
                   if (window.assetEnvironment == env.theEnvironmentName) {
-                    $("#thePreConds").val(env.thePreCond);
-                    $("#thePostConds").val(env.thePostCond);
+                    $("#thePreCond").val(env.thePreCond);
+                    $("#thePostCond").val(env.thePostCond);
                     var dimValues = [];
                     for (var i = 0; i < env.theSteps.length; i++) {
-                      dimValues.push("<tr><td>" + String(i) + "</td><td>" + env.theSteps[i].theStepText + "</td></tr>"); 
+                      dimValues.push("<tr><td>" + String(i + 1) + "</td><td>" + env.theSteps[i].theStepText + "</td></tr>"); 
                     }
                     $("#theSteps").find("tbody").append(dimValues.join(' '));
                     dimValues = [];

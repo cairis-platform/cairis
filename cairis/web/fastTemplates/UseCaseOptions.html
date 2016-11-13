@@ -1,33 +1,32 @@
-<form xmlns="http://www.w3.org/1999/html" id="useCasesForm" class="gearOptions">
-  <p>
-    <label>Name</label>
-    <input class="optionsInput" type="text" value="null" id="theName" name="theName" readonly>
-  </p>
-  <p>
-    <label>Description</label>
-    <textarea rows="2" cols="50" id="theDescription" readonly></textarea>
-  </p>
-  <p>
+<form role="form" xmlns="http://www.w3.org/1999/html" id="useCasesForm" class="gearOptions">
+  <div class="form-group">
+    <label for="theName" class="control-label">Name</label>
+    <input class="optionsInput form-control" type="text" id="theName" name="theName" readonly>
+  </div>
+  <div class="form-group">
+    <label for="theDescription" class="control-label">Description</label>
+    <textarea lines="5" id="theDescription" name="theDescription" class="form-control" readonly></textarea>
+  </div>
+  <div>
     <label for="theActors">Actors</label>
-    <table id="theActors" style="width: 100%">
+    <table id="theActors" class="table-striped" style="width: 100%">
       <tbody>
       </tbody>
     </table>
-  </p>
-  <p>
-    <label>Preconditions</label>
-    <textarea rows="2" cols="50" id="thePreCond" readonly></textarea>
-  </p>
-  <p>
-    <label for="theSteps">Steps</label>
-    <table id="theSteps" style="width: 100%">
+  </div>
+  <div id="preconditions" class="form-group">
+    <label for="thePreCond" class="control-label">Preconditions</label>
+    <textarea class="form-control" lines="5" id="thePreCond" name="thePreCond" readonly></textarea>
+  </div>
+  <div id="steps" class="form-group">
+    <table id="theSteps" class="table-striped" style="width: 100%">
       <thead><tr><th>No</th><th>Step</th></tr></thead>
       <tbody>
       </tbody>
     </table>
-  </p>
-  <p>
-    <label>Postconditions</label>
-    <textarea rows="2" cols="50" id="thePostCond" readonly></textarea>
-  </p>
+  </div>
+  <div id="postconditions" class="form-group">
+    <label for="thePostCond" class="control-label">Postconditions</label>
+    <textarea lines="5" class="form-control" id="thePostCond" name="thePostCond" readonly></textarea>
+  </div>
 </form>
