@@ -604,8 +604,42 @@
     </div>
   </div>
 
-
-
+  <div class="modal fade" id="editCharacteristicReference" tabindex="-1" role="dialog" aria-labelledby="cCR_label" data-loadcr="" data-savecr="" data-currentcr="">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Edit Characteristic Reference</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="theDocumentType" class="control-label">Document Type</label>
+            <select class="optionsInput form-control" name="theDocumentType" id="theDocumentType" style="width: 75%;" required>
+              <option>document</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="theArtifactName" class="control-label">Artifact</label>
+            <select class="optionsInput form-control" style="width: 75%;" name="theArtifactName" id="theArtifactName">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="theReferenceName" class="control-label">Reference</label>
+            <select class="optionsInput form-control" style="width: 75%;" name="theReferenceName" id="theReferenceName">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="theDescription" class="control-label">Description</label>
+            <textarea rows="5" class="optionsInput form-control" name="theDescription" id="theDescription" data-error="Description not provided" required> </textarea>
+            <div class="help-block with-errors"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="saveCharacteristicReference" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="loadingWrapper">
     <div class="divLoading">
     </div>

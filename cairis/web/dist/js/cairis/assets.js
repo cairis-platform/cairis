@@ -605,17 +605,6 @@ mainContent.on("click", "#addNewProperty", function(){
   $("#chooseSecurityProperty").modal('show');
 });
 
-$("#chooseSecurityProperty").on('shown.bs.modal', function() {
-  var cmd = eval($("#chooseSecurityProperty").attr("data-updatepropertylist"));
-  cmd();
-});
-
-$("#chooseSecurityProperty").on('click', '#saveSecurityProperty',function() {
-  var cmd = eval($("#chooseSecurityProperty").attr("data-buildproperty"));
-  cmd();
-});
-
-
 
 function appendSecurityProperty(prop){
   $("#definitionTable").find("tbody").append('<tr class="clickable-properties"><td style="display: none;">' + prop.id + '</td><td><div class="fillparent deleteProperty"><i class="fa fa-minus"></i></div></td><td class="theAssetPropName" name="name">' + prop.name + '</td><td name="value">'+ prop.value +'</td><td name="rationale">'+ prop.rationale +'</td></tr>').animate('slow');

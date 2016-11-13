@@ -259,3 +259,58 @@ function appendGWR(tableId,gwrType,item) {
 function appendBacking(item) {
   $("#theBacking").find("tbody").append('<tr><td class="backing"">'+ item +'</td></tr>');
 };
+
+function loadCharacteristicReference() {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/document_reference",
+    success: function (data) {
+      $("#theReferenceName").empty();
+      $.each(data, function(key, item) {
+        $("#theReferenceName").append("<option>" + item + "</option>");
+      }); 
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+};
+
+function addCharacteristicReference() {
+};
+
+
+mainContent.on("click", "#addGrounds", function(){
+  $("#editCharacteristicReference").attr('data-loadcr',"loadCharacteristicReference");
+  $("#editCharacteristicReference").attr("data-savecr","addCharacteristicReference");
+  $("#editCharacteristicReference").modal('show');
+});
+
+$("#editCharacteristicReference").on('shown.bs.modal', function() {
+  var cmd = eval($("#editCharacteristicReference").attr("data-loadcr"));
+  cmd();
+});
+
+$("#editCharacteristicReference").on('click', '#saveCharacteristicReference',function() {
+  var cmd = eval($("#editCharacteristicReference").attr("data-savecr"));
+  cmd();
+});
+
+mainContent.on("click",".grounds", function () {
+  var propRow = $(this).closest("tr");
+  var selectedCr = {};
+  selectedCr.reference = propRow.find("td:eq(1)").text();
+  selectedCr.description = propRow.find("td:eq(2)").text();
+
+  $("#editCharacteristicReference").attr('data-loadcr',"loadCharacteristicReference");
+  $("#editCharacteristicReference").attr("data-savecr","updateCharacteristicReference");
+  $("#editCharacteristicReference").attr("data-currentcr",JSON.stringify(selectedCr));
+  $("#editCharacteristicReference").modal('show');
+});

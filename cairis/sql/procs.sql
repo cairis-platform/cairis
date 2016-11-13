@@ -10866,19 +10866,19 @@ end
 
 create procedure external_documentNames(in eName text)
 begin
-  select name from external_document;
+  select name from external_document order by 1;
 end
 //
 
 create procedure document_referenceNames(in eName text)
 begin
-  select name from document_reference;
+  select name from document_reference order by 1;
 end
 //
 
 create procedure behavioural_variableNames(in eName text)
 begin
-  select name from behavioural_variable;
+  select name from behavioural_variable order by 1;
 end
 //
 

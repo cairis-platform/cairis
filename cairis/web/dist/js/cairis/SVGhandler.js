@@ -591,7 +591,7 @@ $( document ).ajaxComplete(function() {
                     for (var i = 0; i < env.thePersonas.length; i++) {
                       var pCol = [];
                       $.each(env.thePersonas[i], function(idx,val) { pCol.push(val); });
-                      dimValues.push("<tr><td>" + pCol[0][0] + "</td><td>" + pCol[0][1] + "</td><td>" + pCol[0][2] + "</td><td>" + pCol[0][3] + "</td><td>" + pCol[0][4] + "</td></tr>"); 
+                      dimValues.push("<tr><td>" + pCol[1] + "</td><td>" + window.reverseDurationLookup[pCol[2]] + "</td><td>" + window.reverseFrequencyLookup[pCol[3]] + "</td><td>" + pCol[4] + "</td><td>" + pCol[5] + "</td></tr>"); 
                     }
                     $("#thePersonas").find("tbody").append(dimValues.join(' '));
                     // Usability score
@@ -929,20 +929,21 @@ else if(link.indexOf("usecases") > -1) {
                 $.session.set("UseCase", JSON.stringify(data));
                 $('#useCasesForm').loadJSON(data,null);
                 $("#optionsHeaderGear").text("Use Case properties");
+                $("#theDescription").val(data.theDescription);
                 forceOpenOptions();
                 $.each(data.theEnvironmentProperties, function (idx, env) {
                   if (window.assetEnvironment == env.theEnvironmentName) {
-                    $("#thePreConds").val(env.thePreConds);
-                    $("#thePostConds").val(env.thePostConds);
+                    $("#thePreConds").val(env.thePreCond);
+                    $("#thePostConds").val(env.thePostCond);
                     var dimValues = [];
                     for (var i = 0; i < env.theSteps.length; i++) {
-                      dimValues.push("<tr><td>" + env.theSteps[i][0] + "</td><td>" + env.theSteps[i][1] + "</td></tr>"); 
+                      dimValues.push("<tr><td>" + String(i) + "</td><td>" + env.theSteps[i].theStepText + "</td></tr>"); 
                     }
                     $("#theSteps").find("tbody").append(dimValues.join(' '));
                     dimValues = [];
-                    for (var i = 0; i < env.theActors.length; i++) {
+                    for (var i = 0; i < data.theActors.length; i++) {
  
-                      dimValues.push("<tr><td>" + env.theActors[i]+ "</td></tr>"); 
+                      dimValues.push("<tr><td>" + data.theActors[i]+ "</td></tr>"); 
                     }
                     $("#theActors").find("tbody").append(dimValues.join(' '));
                   }
