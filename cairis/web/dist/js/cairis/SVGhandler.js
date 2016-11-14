@@ -51,7 +51,7 @@ $( document ).ajaxComplete(function() {
         crossDomain: true,
         url: serverIP + link.replace(" ", "%20"),
         success: function (data) {
-        var dataArr = [];
+        var dataArr = {};
         dataArr["#theName"] = String(data.theName);
         dataArr["#theDescription"] = String(data.theDescription);
         dataArr["#theSignificance"] = String(data.theSignificance);
@@ -69,6 +69,7 @@ $( document ).ajaxComplete(function() {
           success: function() {
             fillOptionMenu("fastTemplates/AssetOptions.html", "#optionsContent", dataArr,false,true,function(){
               $("#optionsHeaderGear").text("Asset properties");
+
               $.each(data.theEnvironmentProperties, function (idx, env) {
                 if (window.assetEnvironment == env.theEnvironmentName) {
                   var propValues = [];
@@ -887,9 +888,7 @@ else if(link.indexOf("obstacles") > -1) {
                      $("#theProperties").find("tbody").append(dimValues.join(' '));
                      dimValues = [];
                      for (var i = 0; i < env.thePersonas.length; i++) {
-                       var pCol = [];
-                       $.each(env.thePersonas[i], function(idx,val) { pCol.push(val); });
-                       dimValues.push("<tr><td>" + pCol[0][0] + "</td><td>" + pCol[0][1] + "</td><td>" + pCol[0][2] + "</td><td>" + pCol[0][3] + "</td><td>" + pCol[0][4] + "</td><td>" + pCol[0][5] + "</td></tr>"); 
+                       dimValues.push("<tr><td>" + env.thePersonas[i].theTask + "</td><td>" + env.thePersonas[i].thePersona + "</td><td>" + env.thePersonas[i].theDuration + "</td><td>" + env.thePersonas[i].theFrequency + "</td><td>" + env.thePersonas[i].theDemands + "</td><td>" + env.thePersonas[i].theGoalConflict + "</td></tr>"); 
                      }
                      $("#thePersonas").find("tbody").append(dimValues.join(' '));
                   } 
