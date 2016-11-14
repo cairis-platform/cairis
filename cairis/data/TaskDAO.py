@@ -254,3 +254,37 @@ class TaskDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+  def task_score_by_name_environment(self,task_name,environment_name):
+    try:
+      return self.db_proxy.taskUsabilityScore(task_name,environment_name)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def task_load_by_name_environment(self,task_name,environment_name):
+    try:
+      taskId = self.db_proxy.getDimensionId(task_name,'task')
+      envId = self.db_proxy.getDimensionId(environment_name,'environment')
+      return self.db_proxy.taskLoad(taskId,envId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def task_hindrance_by_name_environment(self,task_name,environment_name):
+    try:
+      taskId = self.db_proxy.getDimensionId(task_name,'task')
+      envId = self.db_proxy.getDimensionId(environment_name,'environment')
+      return self.db_proxy.countermeasureLoad(taskId,envId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)

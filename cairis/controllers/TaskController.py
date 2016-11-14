@@ -325,3 +325,99 @@ class TaskModelByNameAPI(Resource):
     else:
       resp.headers['Content-type'] = 'image/svg+xml'
     return resp
+
+class TaskLoadByNameAPI(Resource):
+  #region Swagger Doc
+  @swagger.operation(
+    notes='Get task usability load score for a given task/environment',
+    responseClass=str.__name__,
+    nickname='task-load-by-task-environment-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  #endregion
+  def get(self, task,environment):
+    session_id = get_session_id(session, request)
+    dao = TaskDAO(session_id)
+    taskLoad = dao.task_load_by_name_environment(task,environment)
+    dao.close()
+    resp = make_response(json_serialize(taskLoad, session_id=session_id), httplib.OK)
+    return resp
+
+class TaskHindranceByNameAPI(Resource):
+  #region Swagger Doc
+  @swagger.operation(
+    notes='Get task hindrance score for a given task/environment',
+    responseClass=str.__name__,
+    nickname='task-hindrance-by-task-environment-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  #endregion
+  def get(self, task,environment):
+    session_id = get_session_id(session, request)
+    dao = TaskDAO(session_id)
+    cmLoad = dao.task_hindrance_by_name_environment(task,environment)
+    dao.close()
+    resp = make_response(json_serialize(cmLoad, session_id=session_id), httplib.OK)
+    return resp
+
+class TaskScoreByNameAPI(Resource):
+  #region Swagger Doc
+  @swagger.operation(
+    notes='Get task score for a given task/environment',
+    responseClass=str.__name__,
+    nickname='task-score-by-task-environment-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  #endregion
+  def get(self, task,environment):
+    session_id = get_session_id(session, request)
+    dao = TaskDAO(session_id)
+    taskScore = dao.task_score_by_name_environment(task,environment)
+    dao.close()
+    resp = make_response(json_serialize(taskScore, session_id=session_id), httplib.OK)
+    return resp

@@ -594,9 +594,59 @@ $( document ).ajaxComplete(function() {
                       dimValues.push("<tr><td>" + pCol[1] + "</td><td>" + window.reverseDurationLookup[pCol[2]] + "</td><td>" + window.reverseFrequencyLookup[pCol[3]] + "</td><td>" + pCol[4] + "</td><td>" + pCol[5] + "</td></tr>"); 
                     }
                     $("#thePersonas").find("tbody").append(dimValues.join(' '));
-                    // Usability score
-                    // Task Load
-                    // Countermeasure Load
+
+                    $.ajax({
+                      type: "GET",
+                      dataType: "json",
+                      accept: "application/json",
+                      data: {
+                        session_id: String($.session.get('sessionID'))
+                      },
+                      crossDomain: true,
+                      url: serverIP + "/api/tasks/name/" + encodeURIComponent(data.theName) + "/environment/" + encodeURIComponent(env.theEnvironmentName) + "/score",
+                      success: function (data) {
+                        $("#theUsability").val(data);
+                      },
+                      error: function(xhr, textStatus, errorThrown) {
+                        console.log(this.url);
+                        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+                      }
+                    });
+                    $.ajax({
+                      type: "GET",
+                      dataType: "json",
+                      accept: "application/json",
+                      data: {
+                        session_id: String($.session.get('sessionID'))
+                      },
+                      crossDomain: true,
+                      url: serverIP + "/api/tasks/name/" + encodeURIComponent(data.theName) + "/environment/" + encodeURIComponent(env.theEnvironmentName) + "/load",
+                      success: function (data) {
+                        $("#theTaskLoad").val(data);
+                      },
+                      error: function(xhr, textStatus, errorThrown) {
+                        console.log(this.url);
+                        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+                      }
+                    });
+
+                    $.ajax({
+                      type: "GET",
+                      dataType: "json",
+                      accept: "application/json",
+                      data: {
+                        session_id: String($.session.get('sessionID'))
+                      },
+                      crossDomain: true,
+                      url: serverIP + "/api/tasks/name/" + encodeURIComponent(data.theName) + "/environment/" + encodeURIComponent(env.theEnvironmentName) + "/hindrance",
+                      success: function (data) {
+                        $("#theCountermeasureLoad").val(data);
+                      },
+                      error: function(xhr, textStatus, errorThrown) {
+                        console.log(this.url);
+                        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+                      }
+                    });
                   }
                 });
               });

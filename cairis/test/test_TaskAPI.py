@@ -75,6 +75,33 @@ class TaskAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(task, 'No results after deserialization')
     self.logger.info('[%s] Task: %s [%d]\n', method, task['theName'], task['theId'])
 
+  def test_load_by_name(self):
+    method = 'test_load_by_name'
+    url = '/api/tasks/name/' + quote(self.existing_task_name) + '/environment/Psychosis/load?session_id=test'
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.assertIsNotNone(rv.data, 'No results after deserialization')
+    self.assertEqual(rv.data,'5');
+
+  def test_hindrance_by_name(self):
+    method = 'test_hindrance_by_name'
+    url = '/api/tasks/name/' + quote(self.existing_task_name) + '/environment/Psychosis/hindrance?session_id=test'
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.assertIsNotNone(rv.data, 'No results after deserialization')
+    self.assertEqual(rv.data,'1');
+
+  def test_score_by_name(self):
+    method = 'test_score_by_name'
+    url = '/api/tasks/name/' + quote(self.existing_task_name) + '/environment/Psychosis/score?session_id=test'
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.assertIsNotNone(rv.data, 'No results after deserialization')
+    self.assertEqual(rv.data,'6');
+
   def test_delete(self):
     method = 'test_delete'
     url = '/api/tasks/name/%s?session_id=test' % quote(self.prepare_new_task().name())

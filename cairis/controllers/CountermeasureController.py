@@ -362,3 +362,5 @@ class CountermeasureTasksAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
     dao.close()
+
+

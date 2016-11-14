@@ -394,6 +394,9 @@ def start():
   api.add_resource(TaskController.TasksAPI, '/api/tasks')
   api.add_resource(TaskController.TaskByNameAPI, '/api/tasks/name/<string:name>')
   api.add_resource(TaskController.TaskModelByNameAPI, '/api/tasks/model/environment/<string:environment>/task/<string:task>/misusecase/<string:misusecase>')
+  api.add_resource(TaskController.TaskLoadByNameAPI, '/api/tasks/name/<string:task>/environment/<string:environment>/load')
+  api.add_resource(TaskController.TaskHindranceByNameAPI, '/api/tasks/name/<string:task>/environment/<string:environment>/hindrance')
+  api.add_resource(TaskController.TaskScoreByNameAPI, '/api/tasks/name/<string:task>/environment/<string:environment>/score')
 
   # Template Goal routes
   api.add_resource(TemplateGoalController.TemplateGoalsAPI, '/api/template_goals')
