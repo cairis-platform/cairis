@@ -18,7 +18,7 @@
 import httplib
 import os.path
 from flask import make_response, request, session, send_file
-from flask.ext.restful import Resource
+from flask_restful import Resource
 from flask_restful_swagger import swagger
 from cairis.core.ARM import DatabaseProxyException, ARMException
 from cairis.core.Borg import Borg

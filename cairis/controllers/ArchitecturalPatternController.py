@@ -17,8 +17,8 @@
 
 import httplib
 from flask import session, request, make_response
-from flask.ext.restful import Resource
-from flask.ext.restful_swagger import swagger
+from flask_restful import Resource
+from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.ArchitecturalPatternDAO import ArchitecturalPatternDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -119,8 +119,8 @@ class ArchitecturalPatternsAPI(Resource):
 class ArchitecturalPatternByNameAPI(Resource):
   # region Swagger Doc
   @swagger.operation(
-    notes='Get architectural patterns',
-    nickname='architectural-patterns-get',
+    notes='Get architectural patterns by name',
+    nickname='architectural-patterns-get-by-name',
     responseClass=str.__name__,
     parameters=[
       {

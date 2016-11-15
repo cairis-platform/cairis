@@ -18,7 +18,7 @@
 import httplib
 from flask import request, session, make_response
 from flask_restful_swagger import swagger
-from flask.ext.restful import Resource
+from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError
 from cairis.data.AssetDAO import AssetDAO
 from cairis.data.AssetAssociationDAO import AssetAssociationDAO

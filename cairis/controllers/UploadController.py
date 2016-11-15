@@ -18,8 +18,8 @@
 import httplib
 from flask import session, make_response
 from flask import request
-from flask.ext.restful import Resource
-from flask.ext.restful_swagger import swagger
+from flask_restful import Resource
+from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import MissingParameterHTTPError, CairisHTTPError
 from cairis.data.UploadDAO import UploadDAO
 from cairis.tools.JsonConverter import json_serialize

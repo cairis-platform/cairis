@@ -18,8 +18,8 @@
 import httplib
 from flask import session, make_response
 from flask import request
-from flask.ext.restful import Resource
-from flask.ext.restful_swagger import swagger
+from flask_restful import Resource
+from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError, ObjectNotFoundHTTPError
 from cairis.daemon.CairisHTTPError import MalformedJSONHTTPError
 from cairis.data.DependencyDAO import DependencyDAO

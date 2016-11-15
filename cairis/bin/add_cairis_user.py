@@ -18,9 +18,9 @@
 
 import argparse
 from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
-from flask.ext.cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
+from flask_cors import CORS
 from cairis.core.Borg import Borg
 import cairis.core.BorgFactory
 

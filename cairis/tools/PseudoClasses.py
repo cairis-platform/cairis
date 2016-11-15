@@ -18,8 +18,8 @@
 from collections import OrderedDict
 import logging
 
-from flask.ext.restful import fields
-from flask.ext.restful_swagger import swagger
+from flask_restful import fields
+from flask_restful_swagger import swagger
 
 __author__ = 'Robin Quetin, Shamal Faily'
 obj_id_field = '__python_obj__'

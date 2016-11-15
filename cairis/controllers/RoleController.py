@@ -17,7 +17,7 @@
 
 import httplib
 from flask import request, session, make_response
-from flask.ext.restful import Resource
+from flask_restful import Resource
 from flask_restful_swagger import swagger
 from cairis.data.RoleDAO import RoleDAO
 from cairis.tools.JsonConverter import json_serialize

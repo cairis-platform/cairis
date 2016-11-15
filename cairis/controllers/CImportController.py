@@ -21,7 +21,7 @@ from os import remove as remove_file
 from tempfile import mkstemp
 from urllib import unquote
 from flask import make_response, request, session
-from flask.ext.restful import Resource
+from flask_restful import Resource
 from flask_restful_swagger import swagger
 from werkzeug.datastructures import FileStorage
 from cairis.core.ARM import DatabaseProxyException, ARMException

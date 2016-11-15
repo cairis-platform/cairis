@@ -17,8 +17,8 @@
 
 import httplib
 from flask import session, request, make_response
-from flask.ext.restful import Resource
-from flask.ext.restful_swagger import swagger
+from flask_restful import Resource
+from flask_restful_swagger import swagger
 from cairis.data.RiskDAO import RiskDAO
 from cairis.tools.ModelDefinitions import MisuseCaseModel
 from cairis.tools.SessionValidator import get_session_id

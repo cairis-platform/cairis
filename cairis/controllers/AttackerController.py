@@ -17,7 +17,7 @@
 
 import httplib
 from flask import request, session, make_response
-from flask.ext.restful import Resource
+from flask_restful import Resource
 from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.AttackerDAO import AttackerDAO
