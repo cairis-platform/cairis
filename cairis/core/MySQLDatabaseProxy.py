@@ -374,6 +374,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error building dimension lookup tables (id:' + str(id) + ',message:' + msg
+      raise DatabaseProxyException(exceptionText) 
     
   def close(self):
     if self.conn.open:
