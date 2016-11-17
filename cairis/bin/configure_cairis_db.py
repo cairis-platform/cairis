@@ -133,7 +133,10 @@ def main(args=None):
   if args is None:
     args = sys.argv[1:]
     App = CAIRISConfigurationApp()
-    App.run() 
+    try:
+      App.run()
+    except np.wgwidget.NotEnoughSpaceForWidget:
+      print "The terminal window is too small to display the configuration form, please resize it and try again."
 
 if __name__ == '__main__':
   main()
