@@ -29,21 +29,33 @@ __author__ = 'Shamal Faily'
 class CAIRISConfigurationForm(np.ActionForm):
 
   def create(self):
+    self.findRootDir()
     self.name = "Configure CAIRIS"
-    self.theHost = self.add(np.TitleText, name = "Host:", value = "localhost")
-    self.thePort = self.add(np.TitleText, name = "Port:", value = "3306")
-    self.theUser = self.add(np.TitleText, name = "User:", value = "cairisuser")
+    self.theHost = self.add(np.TitleText, name = "Database host:", value = "localhost")
+    self.thePort = self.add(np.TitleText, name = "Database port:", value = "3306")
     self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = "")
-    self.thePassword = self.add(np.TitlePassword, name = "User Password:", value = "cairis123")
-    self.theDbName = self.add(np.TitleText, name = "Database name:", value = "cairis")
+    self.theDbName = self.add(np.TitleText, name = "Database name (created if non-existent):", value = "cairis")
+    self.theUser = self.add(np.TitleText, name = "Database user (created if non-existent):", value = "cairisuser")
+    defaultUserPassword = os.urandom(10).encode('hex')
+    self.thePassword = self.add(np.TitlePassword, name = "Database user password:", value = defaultUserPassword)
     self.theTmpDir = self.add(np.TitleText, name = "Temp directory:", value = "/tmp")
-    self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = "/usr/local/lib/python2.7/dist-packages/cairis")
+    self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = self.defaultRootDir)
     self.theImageDir = self.add(np.TitleText, name = "Default image directory:", value = ".")
     self.theFileName = self.add(np.TitleText, name = "CAIRIS configuration file name:", value = os.environ.get("HOME") + "/cairis.cnf")
     self.theWebPort = self.add(np.TitleText,name = "Web port:", value = "7071")
     self.theLogLevel = self.add(np.TitleText,name = "Log level:", value = "warning");
-    self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = "/usr/local/lib/python2.7/dist-packages/cairis/web")
+    self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = os.path.join(self.defaultRootDir, "web"))
     self.theUploadDir = self.add(np.TitleText,name = "Upload directory:", value = "/tmp")
+
+    self.theSecretKey = os.urandom(16).encode('hex')
+    self.theSalt = os.urandom(16).encode('hex')
+
+  def findRootDir(self):
+    self.defaultRootDir = "/usr/local/lib/python2.7/dist-packages/cairis"
+    for cpath in sys.path:
+      if "/dist-packages/cairis-" in cpath and cpath.endswith(".egg"):
+        self.defaultRootDir = os.path.join(cpath, "cairis")
+        break
 
   def on_ok(self):
     self.createDatabase()
@@ -120,6 +132,17 @@ class CAIRISConfigurationForm(np.ActionForm):
     f.write("web_static_dir = " + self.theStaticDir.value + "\n")
     f.write("upload_dir = " + self.theUploadDir.value + "\n")
 
+    f.write("\n")
+    f.write("auth_dbhost = " + self.theHost.value + "\n")
+    f.write("auth_dbuser = " + self.theUser.value + "\n")
+    f.write("auth_dbpasswd = " + self.thePassword.value + "\n")
+    f.write("auth_dbname = " + self.theDbName.value + "\n")
+
+    f.write("\n")
+    f.write("secret_key = " + self.theSecretKey + "\n")
+    f.write("password_hash = sha512_crypt\n")
+    f.write("password_salt = " + self.theSalt + "\n")
+
     f.close()
     self.parentApp.setNextForm(None)
 
@@ -133,7 +156,10 @@ def main(args=None):
   if args is None:
     args = sys.argv[1:]
     App = CAIRISConfigurationApp()
-    App.run() 
+    try:
+      App.run()
+    except np.wgwidget.NotEnoughSpaceForWidget:
+      print "The terminal window is too small to display the configuration form, please resize it and try again."
 
 if __name__ == '__main__':
   main()

@@ -58,7 +58,7 @@ class User(db.Model, UserMixin):
 user_datastore = SQLAlchemyUserDatastore(db,User, Role)
 security = Security(app, user_datastore)
 
-if __name__ == '__main__':
+def main():
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Add CAIRIS user')
   parser.add_argument('user',help='Email address')
   parser.add_argument('password',help='password')
@@ -68,3 +68,6 @@ if __name__ == '__main__':
   user_datastore.create_user(email=args.user, password=args.password) 
   db.session.commit()
 
+
+if __name__ == '__main__':
+  main()

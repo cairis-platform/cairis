@@ -1062,7 +1062,7 @@ def risks(p,docDir):
     <section><title>Overview</title>
       <para>This chapter describes the identified risks which impact the planned system. These arise when attackers launch attacks, manifested as threats, which expose a vulnerability.  A risk is only evident if both the threat and vulnerability exist in at least one environment.</para>
     </section>
-    <section><title>Rick categories</title>
+    <section><title>Risk categories</title>
 """
   chapterTxt += buildTable("RiskCategoriesTable","Risk Categories",['Categoriry','Description'],riskClassRows,0) + """
     </section>

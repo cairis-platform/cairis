@@ -917,7 +917,7 @@ CREATE TABLE usecase (
 CREATE TABLE requirement_requirement (
   from_id INT NOT NULL,
   to_id INT NOT NULL,
-  label VARCHAR(255) NULL,
+  label VARCHAR(255) UNIQUE,
   PRIMARY KEY(from_id,to_id,label),
   FOREIGN KEY(from_id) REFERENCES requirement(id),
   FOREIGN KEY(to_id) REFERENCES requirement(id)
@@ -2179,7 +2179,7 @@ CREATE TABLE role_reference (
   id INT NOT NULL,
   role_id INT NOT NULL,
   name VARCHAR(200),
-  description VARCHAR(4444000) NOT NULL,
+  description VARCHAR(4000) NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(role_id) REFERENCES role(id)
 ) ENGINE=INNODB;
@@ -3046,7 +3046,7 @@ CREATE TABLE internal_document (
   id INT NOT NULL,
   name VARCHAR(2000) NOT NULL,
   description VARCHAR(2000) NOT NULL,
-  content VARCHAR(9000000),
+  content LONGTEXT,
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 
@@ -3964,9 +3964,9 @@ INSERT INTO behavioural_variable(id,name) values (7,'Contextual');
 INSERT INTO characteristic_reference_type(id,name) values(0,'grounds');
 INSERT INTO characteristic_reference_type(id,name) values(1,'warrant');
 INSERT INTO characteristic_reference_type(id,name) values(2,'rebuttal');
-INSERT INTO tension(id,name) values(-1,'Conflicting');
-INSERT INTO tension(id,name) values(0,'None');
-INSERT INTO tension(id,name) values(1,'Complementary');
+INSERT INTO tension(id,name,short_code) values(-1,'Conflicting','conflicting');
+INSERT INTO tension(id,name,short_code) values(0,'None','none');
+INSERT INTO tension(id,name,short_code) values(1,'Complementary','complementary');
 insert into contribution_end (id,name) values (0,'means');
 insert into contribution_end (id,name) values (1,'end');
 insert into link_contribution (id,name) values (3,'Make');
