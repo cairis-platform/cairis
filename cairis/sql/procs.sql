@@ -12112,7 +12112,7 @@ begin
   declare tailName varchar(50);
   declare headNav int;
   declare tailNav int;
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE riskanalysis PUBLIC "-//CAIRIS//DTD RISKANALYSIS 1.0//EN" "http://cairis.org/dtd/riskanalysis.dtd">\n\n<riskanalysis>\n';
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE riskanalysis PUBLIC "-//CAIRIS//DTD RISKANALYSIS 1.0//EN" "http://cairis.org/dtd/riskanalysis.dtd">\n\n<riskanalysis>\n';
   declare done int default 0;
   declare assetIFCursor cursor for select i.name,ai.required_id from asset_interface ai, interface i where ai.asset_id = assetId and ai.interface_id = i.id;
   declare assetTagCursor cursor for select t.name from asset_tag at, tag t where at.asset_id = assetId and at.tag_id = t.id;
@@ -12718,7 +12718,7 @@ begin
   declare obsCount int default 0;
   declare reqCount int default 0;
   declare cmCount int default 0;
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE goals PUBLIC "-//CAIRIS//DTD REQUIREMENTS 1.0//EN" "http://cairis.org/dtd/goals.dtd">\n\n<goals>\n';
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE goals PUBLIC "-//CAIRIS//DTD REQUIREMENTS 1.0//EN" "http://cairis.org/dtd/goals.dtd">\n\n<goals>\n';
   declare done int default 0;
   declare dpCursor cursor for select dp.name,dp.description,dpt.name,dp.originator from domainproperty dp, domainproperty_type dpt where dp.domainproperty_type_id = dpt.id;
   declare goalCursor cursor for select id,name,originator from goal;
@@ -13117,7 +13117,7 @@ begin
   declare ucExcDesc varchar(2000);
   declare ucCount int default 0;
   declare tagName varchar(255);
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">\n\n<usability>\n';
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">\n\n<usability>\n';
   declare done int default 0;
   declare personaCursor cursor for select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
   declare personaEnvCursor cursor for select ep.environment_id,e.name from environment_persona ep, environment e where ep.persona_id = personaId and ep.environment_id = e.id;
@@ -13664,7 +13664,7 @@ end
 
 create procedure associationsToXml(in includeHeader int)
 begin
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE associations PUBLIC "-//CAIRIS//DTD ASSOCIATIONS 1.0//EN" "http://cairis.org/dtd/associations.dtd">\n\n<associations>\n';
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE associations PUBLIC "-//CAIRIS//DTD ASSOCIATIONS 1.0//EN" "http://cairis.org/dtd/associations.dtd">\n\n<associations>\n';
   declare fromDim varchar(50);
   declare fromName varchar(50);
   declare toDim varchar(50);
@@ -13813,7 +13813,7 @@ end
 
 create procedure projectToXml(in includeHeader int)
 begin
-  declare buf varchar(900000000) default '<?xml version="1.0"?>\n<!DOCTYPE cairis PUBLIC "-//CAIRIS//DTD PROJECT 1.0//EN" "http://cairis.org.org/dtd/cairis.dtd">\n\n<cairis>\n'; 
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE cairis PUBLIC "-//CAIRIS//DTD PROJECT 1.0//EN" "http://cairis.org.org/dtd/cairis.dtd">\n\n<cairis>\n'; 
   declare projName varchar(4000) default 'None';
   declare background varchar(4000) default '';
   declare strategicGoals varchar(4000) default '';
@@ -14260,7 +14260,7 @@ end
 
 create procedure goalsPrettyPrint(in catName text)
 begin
-/*  declare buf varchar(90000000) default ''; */
+/*  declare buf LONGTEXT default ''; */
   declare buf VARCHAR(65535) default '|_ReqID |_.Requirement |_.Notes |_. Use Case Refs|\n'; 
   declare idx int default 0;
   declare catId int;
@@ -15858,7 +15858,7 @@ begin
   declare gwrType varchar(20);
   declare gwrRef varchar(200);
   declare gwrConcept varchar(50);
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">\n\n<usability>\n';
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">\n\n<usability>\n';
   declare done int default 0;
   declare personaEnvCursor cursor for select ep.environment_id,e.name from environment_persona ep, environment e where ep.persona_id = personaId and ep.environment_id = e.id;
   declare personaRolesCursor cursor for select r.name from persona_role sr, role r where sr.persona_id = personaId and sr.environment_id = envId and sr.role_id = r.id;
@@ -16125,7 +16125,7 @@ begin
   declare pId int;
   declare tId int default -1;
   declare envId int default -1;
-  declare buf varchar(90000000) default '<?xml version="1.0" encoding="ISO-8859-1"?>\n<grl-catalog catalog-name="URNspec" description="" author="Shamal Faily">\n  <element-def>\n';
+  declare buf LONGTEXT default '<?xml version="1.0" encoding="ISO-8859-1"?>\n<grl-catalog catalog-name="URNspec" description="" author="Shamal Faily">\n  <element-def>\n';
   declare refId int;
   declare charId int;
   declare endId int;
@@ -17358,7 +17358,7 @@ end
 
 create procedure usecasesToRedmine()
 begin
-  declare buf varchar(90000000) default '';
+  declare buf LONGTEXT default '';
   declare ucId int;
   declare envId int;
   declare scName varchar(200);
@@ -17603,7 +17603,7 @@ begin
   declare freqName varchar(50);
   declare demName varchar(50);
   declare gcName varchar(50);
-  declare buf varchar(90000000) default '';
+  declare buf LONGTEXT default '';
   declare taskNarrative varchar(5000);
   declare taskConsequences varchar(4000);
   declare taskBenefits varchar(4000);
@@ -17691,7 +17691,7 @@ begin
   declare ttCount int default 0;
   declare vtCount int default 0;
   declare done int default 0;
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE tvtypes PUBLIC "-//CAIRIS//DTD TVTYPES 1.0//EN" "http://cairis.org/dtd/tvtypes.dtd">\n\n<tvtypes>\n';
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE tvtypes PUBLIC "-//CAIRIS//DTD TVTYPES 1.0//EN" "http://cairis.org/dtd/tvtypes.dtd">\n\n<tvtypes>\n';
   declare vtCursor cursor for select name,description from vulnerability_type order by 1;
   declare ttCursor cursor for select name,description from threat_type order by 1;
   declare continue handler for not found set done = 1;
@@ -17741,7 +17741,7 @@ begin
   declare svCount int default 0;
   declare lvCount int default 0;
   declare done int default 0;
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE domainvalues PUBLIC "-//CAIRIS//DTD DOMAINVALUES 1.0//EN" "http://cairis.org/dtd/domainvalues.dtd">\n\n<domainvalues>\n';
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE domainvalues PUBLIC "-//CAIRIS//DTD DOMAINVALUES 1.0//EN" "http://cairis.org/dtd/domainvalues.dtd">\n\n<domainvalues>\n';
   declare tvCursor cursor for select name,description from threat_value order by id;
   declare rvCursor cursor for select name,description from risk_class order by id;
   declare cvCursor cursor for select name,description from countermeasure_value order by id;
@@ -17960,7 +17960,7 @@ begin
   declare reqName varchar(255);
   declare startId int;
   declare isCircularDependency int default 0;
-  declare buf varchar(900000000);
+  declare buf LONGTEXT;
   declare done int default 0;
   declare reqCursor cursor for select name from requirement order by 1;
   declare continue handler for not found set done = 1;
@@ -20288,7 +20288,7 @@ begin
   declare metricName varchar(50);
   declare metricDesc varchar(1000);
   declare metricValue int;
-  declare buf varchar(90000000) default '';
+  declare buf LONGTEXT default '';
 
   declare done int default 0;
   declare cCursor cursor for select id,name,description from component order by 2;
@@ -20693,7 +20693,7 @@ begin
   declare obsName varchar(100);
   declare obsCat varchar(50);
   declare obsDef varchar(1000);
-  declare buf varchar(90000000) default '';
+  declare buf LONGTEXT default '';
   declare done int default 0;
   declare apCursor cursor for select id,name,threat_id,vulnerability_id,intent from risk order by 1;
   declare tpCursor cursor for select sp.name,spv.name,tp.property_rationale from threat_property tp, security_property sp, security_property_value spv where tp.threat_id = threatId and tp.environment_id = envId and tp.property_value_id != 0 and tp.property_id = sp.id and tp.property_value_id = spv.id order by 1;
@@ -20897,9 +20897,9 @@ begin
   declare der_i float default 0;
   declare envId int;
   declare tvName varchar(200);
-  declare apSumBuf varchar(90000000);
-  declare derBuf varchar(90000000);
-  declare waBuf varchar(90000000);
+  declare apSumBuf LONGTEXT;
+  declare derBuf LONGTEXT;
+  declare waBuf LONGTEXT;
   declare apCursor cursor for select id,name,synopsis from component_view order by 2;
   declare componentCursor cursor for select c.name from component_view_component cvc, component c where cvc.component_view_id = apId and cvc.component_id = c.id order by 1;
   declare apVulCursor cursor for select distinct v.name from component c, component_asset ca, asset a, template_asset ta, asset_vulnerability av, vulnerability v where ca.component_id = c.id and ca.component_id in (select component_id from component_view_component where component_view_id = apId) and ca.asset_id = ta.id and ta.name = a.name and a.id = av.asset_id and av.environment_id = envId and av.vulnerability_id = v.id order by 1;
@@ -21025,7 +21025,7 @@ begin
   declare riskName varchar(200);
   declare thrName varchar(200);
   declare vulName varchar(200);
-  declare buf varchar(90000000);
+  declare buf LONGTEXT;
   declare done int default 0;
   declare obsCursor cursor for select goal_id from obstacleobstacle_goalassociation where environment_id = envId and subgoal_id in 
      (select ga.goal_id from obstaclethreat_goalassociation ga, risk r, environment_threat et where r.id = riskId and r.threat_id = et.threat_id and et.environment_id = envId and et.threat_id = ga.subgoal_id and et.environment_id = ga.environment_id
@@ -21182,11 +21182,11 @@ end
 
 create procedure processesToXml(in includeHeader int)
 begin
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE processes PUBLIC "-//CAIRIS//DTD PROCESSES 1.0//EN" "http://cairis.org/dtd/processes.dtd">\n\n<processes>\n';
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE processes PUBLIC "-//CAIRIS//DTD PROCESSES 1.0//EN" "http://cairis.org/dtd/processes.dtd">\n\n<processes>\n';
   declare done int default 0;
   declare idName varchar(200);
   declare idDesc varchar(2000);
-  declare idContent varchar(9000000);
+  declare idContent LONGTEXT;
   declare pcnId int;
   declare codeName varchar(200);
   declare fromCode varchar(200);
@@ -21538,7 +21538,7 @@ end
 
 create procedure impliedProcess(in procName text)
 begin
-  declare buf varchar(90000000) default '';
+  declare buf LONGTEXT default '';
   declare ipId int;
   declare augProcName varchar(200);
   declare channelName varchar(200);
@@ -22254,7 +22254,7 @@ begin
   declare connPro varchar(50);
   declare connAr varchar(50);
   declare connAsset varchar(50);
-  declare buf varchar(90000000) default '<?xml version="1.0"?>\n<!DOCTYPE architectural_pattern PUBLIC "-//CAIRIS//DTD ARCHITECTURAL PATTERN 1.0//EN" "http://cairis.org/dtd/architectural_pattern.dtd">\n\n';
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE architectural_pattern PUBLIC "-//CAIRIS//DTD ARCHITECTURAL PATTERN 1.0//EN" "http://cairis.org/dtd/architectural_pattern.dtd">\n\n';
   declare done int default 0;
   declare cvId int;
   declare accessRightCursor cursor for select name, description, value, rationale from access_right;
@@ -22779,4 +22779,5 @@ begin
 end
 //
 delimiter ;
+
 
