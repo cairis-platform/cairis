@@ -46,6 +46,9 @@ class CAIRISConfigurationForm(np.ActionForm):
     self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = os.path.join(self.defaultRootDir, "web"))
     self.theUploadDir = self.add(np.TitleText,name = "Upload directory:", value = "/tmp")
 
+    self.theSecretKey = os.urandom(16).encode('hex')
+    self.theSalt = os.urandom(16).encode('hex')
+
   def findRootDir(self):
     self.defaultRootDir = "/usr/local/lib/python2.7/dist-packages/cairis"
     for cpath in sys.path:
@@ -127,6 +130,17 @@ class CAIRISConfigurationForm(np.ActionForm):
     f.write("log_level = " + self.theLogLevel.value + "\n")
     f.write("web_static_dir = " + self.theStaticDir.value + "\n")
     f.write("upload_dir = " + self.theUploadDir.value + "\n")
+
+    f.write("\n")
+    f.write("auth_dbhost = " + self.theHost.value + "\n")
+    f.write("auth_dbuser = " + self.theUser.value + "\n")
+    f.write("auth_dbpasswd = " + self.thePassword.value + "\n")
+    f.write("auth_dbname = " + self.theDbName.value + "\n")
+
+    f.write("\n")
+    f.write("secret_key = " + self.theSecretKey + "\n")
+    f.write("password_hash = sha512_crypt\n")
+    f.write("password_salt = " + self.theSalt + "\n")
 
     f.close()
     self.parentApp.setNextForm(None)
