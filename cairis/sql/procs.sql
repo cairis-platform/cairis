@@ -14261,7 +14261,7 @@ end
 create procedure goalsPrettyPrint(in catName text)
 begin
 /*  declare buf varchar(90000000) default ''; */
-  declare buf varchar(90000) default '|_ReqID |_.Requirement |_.Notes |_. Use Case Refs|\n'; 
+  declare buf VARCHAR(65535) default '|_ReqID |_.Requirement |_.Notes |_. Use Case Refs|\n'; 
   declare idx int default 0;
   declare catId int;
   declare envId int;
@@ -14302,7 +14302,7 @@ end
 
 create procedure goalLabels(in envName text)
 begin
-  declare buf varchar(90000) default '|_ReqID |_.Requirement |_.Notes |_. Use Case Refs|\n'; 
+  declare buf VARCHAR(65535) default '|_ReqID |_.Requirement |_.Notes |_. Use Case Refs|\n'; 
   declare goalId int;
   declare sgId int;
   declare goalDefinition varchar(1000);
@@ -22779,3 +22779,4 @@ begin
 end
 //
 delimiter ;
+
