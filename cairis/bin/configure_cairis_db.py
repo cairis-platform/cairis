@@ -29,6 +29,7 @@ __author__ = 'Shamal Faily'
 class CAIRISConfigurationForm(np.ActionForm):
 
   def create(self):
+    self.findRootDir()
     self.name = "Configure CAIRIS"
     self.theHost = self.add(np.TitleText, name = "Host:", value = "localhost")
     self.thePort = self.add(np.TitleText, name = "Port:", value = "3306")
@@ -37,13 +38,20 @@ class CAIRISConfigurationForm(np.ActionForm):
     self.thePassword = self.add(np.TitlePassword, name = "User Password:", value = "cairis123")
     self.theDbName = self.add(np.TitleText, name = "Database name:", value = "cairis")
     self.theTmpDir = self.add(np.TitleText, name = "Temp directory:", value = "/tmp")
-    self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = "/usr/local/lib/python2.7/dist-packages/cairis")
+    self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = self.defaultRootDir)
     self.theImageDir = self.add(np.TitleText, name = "Default image directory:", value = ".")
     self.theFileName = self.add(np.TitleText, name = "CAIRIS configuration file name:", value = os.environ.get("HOME") + "/cairis.cnf")
     self.theWebPort = self.add(np.TitleText,name = "Web port:", value = "7071")
     self.theLogLevel = self.add(np.TitleText,name = "Log level:", value = "warning");
-    self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = "/usr/local/lib/python2.7/dist-packages/cairis/web")
+    self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = os.path.join(self.defaultRootDir, "web"))
     self.theUploadDir = self.add(np.TitleText,name = "Upload directory:", value = "/tmp")
+
+  def findRootDir(self):
+    self.defaultRootDir = "/usr/local/lib/python2.7/dist-packages/cairis"
+    for cpath in sys.path:
+      if "/dist-packages/cairis-" in cpath and cpath.endswith(".egg"):
+        self.defaultRootDir = os.path.join(cpath, "cairis")
+        break
 
   def on_ok(self):
     self.createDatabase()
