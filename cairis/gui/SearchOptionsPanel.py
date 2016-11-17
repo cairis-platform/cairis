@@ -29,7 +29,7 @@ class SearchOptionsPanel(wx.Panel):
     self.toggleCheck = wx.CheckBox(self,SEARCHPANEL_CHECKTOGGLE_ID,'Toggle all')
     self.toggleCheck.SetValue(True)
     mainSizer.Add(self.toggleCheck,0,wx.EXPAND)
-    optSizer = wx.GridSizer(10,2,5,5)
+    optSizer = wx.GridSizer(0,2,5,5)
     mainSizer.Add(optSizer,1,wx.EXPAND)
 
     self.psCheck = wx.CheckBox(self,SEARCHPANEL_CHECKPS_ID,'Project Settings')
