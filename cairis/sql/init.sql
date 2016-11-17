@@ -917,7 +917,7 @@ CREATE TABLE usecase (
 CREATE TABLE requirement_requirement (
   from_id INT NOT NULL,
   to_id INT NOT NULL,
-  label VARCHAR(255) NULL,
+  label VARCHAR(255) UNIQUE,
   PRIMARY KEY(from_id,to_id,label),
   FOREIGN KEY(from_id) REFERENCES requirement(id),
   FOREIGN KEY(to_id) REFERENCES requirement(id)
