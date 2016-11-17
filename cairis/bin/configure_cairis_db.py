@@ -31,12 +31,13 @@ class CAIRISConfigurationForm(np.ActionForm):
   def create(self):
     self.findRootDir()
     self.name = "Configure CAIRIS"
-    self.theHost = self.add(np.TitleText, name = "Host:", value = "localhost")
-    self.thePort = self.add(np.TitleText, name = "Port:", value = "3306")
-    self.theUser = self.add(np.TitleText, name = "User:", value = "cairisuser")
+    self.theHost = self.add(np.TitleText, name = "Database host:", value = "localhost")
+    self.thePort = self.add(np.TitleText, name = "Database port:", value = "3306")
     self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = "")
-    self.thePassword = self.add(np.TitlePassword, name = "User Password:", value = "cairis123")
-    self.theDbName = self.add(np.TitleText, name = "Database name:", value = "cairis")
+    self.theDbName = self.add(np.TitleText, name = "Database name (created if non-existent):", value = "cairis")
+    self.theUser = self.add(np.TitleText, name = "Database user (created if non-existent):", value = "cairisuser")
+    defaultUserPassword = os.urandom(10).encode('hex')
+    self.thePassword = self.add(np.TitlePassword, name = "Database user password:", value = defaultUserPassword)
     self.theTmpDir = self.add(np.TitleText, name = "Temp directory:", value = "/tmp")
     self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = self.defaultRootDir)
     self.theImageDir = self.add(np.TitleText, name = "Default image directory:", value = ".")
