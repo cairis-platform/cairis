@@ -2179,7 +2179,7 @@ CREATE TABLE role_reference (
   id INT NOT NULL,
   role_id INT NOT NULL,
   name VARCHAR(200),
-  description VARCHAR(4444000) NOT NULL,
+  description VARCHAR(4000) NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(role_id) REFERENCES role(id)
 ) ENGINE=INNODB;
