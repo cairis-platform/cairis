@@ -20,7 +20,8 @@
 'use strict';
 
 $( document ).ajaxComplete(function() {
-  $("svg > g > g .node > a ").on('click', function (event) {
+//  $("svg > g > g .node > a ").on('click', function (event) {
+  $("svg > g > g .node > g > a").on('click', function (event) {
     event.stopImmediatePropagation();
     event.preventDefault();
     var link = $(this).attr("xlink:href");
