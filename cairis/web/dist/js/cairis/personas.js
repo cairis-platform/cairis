@@ -95,6 +95,7 @@ function viewPersona(personaName) {
     url: serverIP + "/api/personas/name/" + personaName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editPersonasOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editPersonasOptionsForm").validator();
         $.session.set("Persona", JSON.stringify(data));
         $('#editPersonasOptionsForm').loadJSON(data, null);
 
@@ -285,6 +286,7 @@ mainContent.on('click', '#UpdatePersona', function (e) {
 $(document).on("click", "#addNewPersona", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editPersonasOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editPersonasOptionsForm").validator();
     $("#editPersonasOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("Persona", JSON.stringify(jQuery.extend(true, {},personaDefault )));

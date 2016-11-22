@@ -91,13 +91,13 @@ function viewThreat(thrName) {
     success: function (data) {
       activeElement("objectViewer");
       fillOptionMenu("fastTemplates/editThreatOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editThreatOptionsform").validator();
         getThreatTypes(function createTypes(types) {
           $.each(types, function (index, type) {
             $('#theType').append($("<option></option>").attr("value",type.theName).text(type.theName));
           });
           $("#theType").val(data.theType);
         });
-
         $.session.set("theThreat", JSON.stringify(data));
         var fillerJSON = data;
         var tags = data.theTags;
@@ -125,6 +125,7 @@ function viewThreat(thrName) {
 $(document).on("click", "#addNewThreat", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editThreatOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editThreatOptionsform").validator();
     $("#editThreatOptionsform").addClass("newThreat");
     getThreatTypes(function createTypes(types) {
       $.each(types, function (index, type) {
@@ -132,7 +133,6 @@ $(document).on("click", "#addNewThreat", function () {
       });
       $("#Properties").hide();
     });
-
     $.session.set("theThreat", JSON.stringify(jQuery.extend(true, {},threatDefault )));
   });
 });
@@ -367,22 +367,27 @@ mainContent.on('click', '#UpdateThreat', function (e) {
   e.preventDefault();
   var test = $.session.get("theThreat");
   var threat = JSON.parse($.session.get("theThreat"));
-  var oldName = threat.theThreatName;
-  threat.theThreatName = $("#theThreatName").val();
-  threat.theMethod = $("#theMethod").val();
-  var tags = $("#theTags").text().split(", ");
-  threat.theTags = tags;
-  threat.theType = $("#theType option:selected").text();
-
-  if($("#editThreatOptionsform").hasClass("newThreat")){
-    postThreat(threat, function () {
-      createThreatsTable();
-    });
-  } 
+  if (threat.theEnvironmentProperties.length == 0) {
+    alert("Environments not defined");
+  }
   else {
-    putThreat(threat, oldName, function () {
-      createThreatsTable();
-    });
+    var oldName = threat.theThreatName;
+    threat.theThreatName = $("#theThreatName").val();
+    threat.theMethod = $("#theMethod").val();
+    var tags = $("#theTags").text().split(", ");
+    threat.theTags = tags;
+    threat.theType = $("#theType option:selected").text();
+
+    if($("#editThreatOptionsform").hasClass("newThreat")){
+      postThreat(threat, function () {
+        createThreatsTable();
+      });
+    } 
+    else {
+      putThreat(threat, oldName, function () {
+        createThreatsTable();
+      });
+    }
   }
 });
 

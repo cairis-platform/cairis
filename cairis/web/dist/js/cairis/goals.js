@@ -389,6 +389,7 @@ mainContent.on('change', ".goalAutoUpdater" ,function() {
 
 $(document).on('click', '#addNewGoal', function () {
   fillGoalOptionMenu(null, function () {
+    $("#editGoalOptionsForm").validator();
     $("#editGoalOptionsForm").addClass('new');
     $("#goalsProperties").hide();
     $.session.set("Goal", JSON.stringify(jQuery.extend(true, {},goalDefault )));
@@ -547,6 +548,7 @@ function viewGoal(goalName){
 function fillGoalOptionMenu(data,callback){
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editGoalsOptions.html","#objectViewer",null,true,true, function(){
+    $("#editGoalOptionsForm").validator();
     if(data != null) {
       $.session.set("Goal", JSON.stringify(data));
       $('#editGoalOptionsForm').loadJSON(data, null);

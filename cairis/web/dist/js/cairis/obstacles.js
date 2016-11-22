@@ -303,6 +303,7 @@ mainContent.on('change', ".obstacleAutoUpdater" ,function() {
 
 $(document).on('click', '#addNewObstacle', function () {
   fillGoalOptionMenu(null, function () {
+    $("#editObstacleOptionsForm").validator();
     $("#editObstacleOptionsForm").addClass('new');
     $("#obstacleProperties").hide();
   });
@@ -426,6 +427,7 @@ function viewObstacle(obsName){
 function fillObstacleOptionMenu(data,callback){
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editObstaclesOptions.html","#objectViewer",null,true,true, function(){
+    $("#editObstacleOptionsForm").validator();
     if(data != null) {
       $.session.set("Obstacle", JSON.stringify(data));
       $('#editObstacleOptionsForm').loadJSON(data, null);

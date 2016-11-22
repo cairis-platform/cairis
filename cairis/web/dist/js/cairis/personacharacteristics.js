@@ -90,6 +90,7 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
     url: serverIP + "/api/persona_characteristics/name/" + encodeURIComponent(name),
     success: function (data) {
       fillOptionMenu("fastTemplates/editPersonaCharacteristicOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editPersonaCharacteristicOptionsForm").validator();
         $.session.set("PersonaCharacteristic", JSON.stringify(data));
 
         $("#theGrounds").find("tbody").empty();
@@ -148,6 +149,7 @@ $(document).on('click', 'td.deletePersonaCharacteristicsButton', function (e) {
 $(document).on("click", "#addNewPersonaCharacteristic", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editPersonaCharacteristicOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editPersonaCharacteristicOptionsForm").validator();
     $("#editPersonaCharacteristicOptionsForm").addClass("new");
     $.session.set("PersonaCharacteristic", JSON.stringify(jQuery.extend(true, {},personaCharacteristicDefault )));
   });

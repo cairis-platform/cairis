@@ -87,6 +87,7 @@ function viewRole(roleName) {
     url: serverIP + "/api/roles/name/" + roleName.replace(" ", "%20"),
     success: function (json) {
       fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editRoleOptionsform").validator();
         $.session.set("RoleObject", JSON.stringify(json));
         $("#editRoleOptionsform").loadJSON(json, null);
         $.ajax({
@@ -218,6 +219,7 @@ mainContent.on("click", '.roleEnvironmentClick', function () {
 $(document).on('click', '#addNewRole', function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editRoleOptionsform").validator();
     $("#editRoleOptionsform").addClass("newRole");
     $.session.set("RoleObject", JSON.stringify(jQuery.extend(true, {},roleDefaultObject )));
   });

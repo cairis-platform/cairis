@@ -102,6 +102,7 @@ $(document).on('click', "td.dependency-rows", function(){
   var dependency = dependencies[$(this).index()];
 
   fillOptionMenu("fastTemplates/editDependencyOptions.html","#objectViewer",null,true,true, function(){
+    $('#editDependencyOptionsForm').validator();
     $('#theRationale').val(dependency.theRationale);
     var environmentSelect = $("#theEnvironmentName");
     environmentSelect.empty()
@@ -196,6 +197,7 @@ mainContent.on('change',"#theDependencyType", function() {
 $(document).on("click", "#addNewDependency", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editDependencyOptions.html", "#objectViewer", null, true, true, function () {
+    $('#editDependencyOptionsForm').validator();
     $("#editDependencyOptionsForm").addClass("new");
     $.session.set("Dependency", JSON.stringify(jQuery.extend(true, {},dependencyDefault )));
 

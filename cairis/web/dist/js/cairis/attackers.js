@@ -89,6 +89,7 @@ function viewAttacker(attackerName) {
     url: serverIP + "/api/attackers/name/" + attackerName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editAttackerOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editAttackerOptionsForm").validator();
         $.session.set("Attacker", JSON.stringify(data));
         $('#editAttackerOptionsForm').loadJSON(data, null);
         var tags = data.theTags;
@@ -395,6 +396,7 @@ mainContent.on('click', '#UpdateAttacker', function (e) {
 $(document).on("click", "#addNewAttacker", function () {
   activeElement("objectViewer"); 
   fillOptionMenu("fastTemplates/editAttackerOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editAttackerOptionsForm").validator();
     $("#editAttackerOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("Attacker", JSON.stringify(jQuery.extend(true, {},attackerDefault )));

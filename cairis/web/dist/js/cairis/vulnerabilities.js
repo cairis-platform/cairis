@@ -91,6 +91,7 @@ function viewVulnerability(vulName) {
     url: serverIP + "/api/vulnerabilities/name/" + vulName.replace(" ", "%20"),
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editVulnerabilityOptionsform").validator();
         $.session.set("Vulnerability", JSON.stringify(newdata));
         var jsondata = $.extend(true, {}, newdata);
         jsondata.theTags = [];
@@ -120,6 +121,7 @@ $("#reqTable").on("click", "#addNewVulnerability", function () {
   var vul = jQuery.extend(true, {}, vulnerabilityDefault);
   $.session.set("Vulnerability", JSON.stringify(vul));
   fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editVulnerabilityOptionsform").validator();
     $("#UpdateVulnerability").addClass("newVulnerability");
     $("#Properties").hide();
   });

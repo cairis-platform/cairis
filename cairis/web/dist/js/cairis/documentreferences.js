@@ -86,6 +86,7 @@ $(document).on('click', "td.documentreference-rows", function () {
     url: serverIP + "/api/document_references/name/" + name.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editDocumentReferenceOptionsForm").validator();
         var docNameSelect = $("#theDocName");
         var docName = data.theDocName;
         getDocNames(function(data) {
@@ -138,6 +139,7 @@ $(document).on('click', 'td.deleteDocumentReferenceButton', function (e) {
 $(document).on("click", "#addNewDocumentReference", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editDocumentReferenceOptionsForm").validator();
     $("#editDocumentReferenceOptionsForm").addClass("new");
     $.session.set("DocumentReference", JSON.stringify(jQuery.extend(true, {},documentReferenceDefault )));
     var docNameSelect = $("#theDocName");

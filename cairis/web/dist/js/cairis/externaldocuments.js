@@ -86,6 +86,7 @@ $(document).on('click', "td.externaldocument-rows", function () {
     url: serverIP + "/api/external_documents/name/" + name.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editExternalDocumentOptionsForm").validator();
         $.session.set("ExternalDocument", JSON.stringify(data));
         $('#editExternalDocumentOptionsForm').loadJSON(data, null);
       });
@@ -131,6 +132,7 @@ $(document).on('click', 'td.deleteExternalDocumentButton', function (e) {
 $(document).on("click", "#addNewExternalDocument", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editExternalDocumentOptionsForm").validator();
     $("#editExternalDocumentOptionsForm").addClass("new");
     $.session.set("ExternalDocument", JSON.stringify(jQuery.extend(true, {},externalDocumentDefault )));
   });

@@ -88,6 +88,7 @@ function viewUseCase(ucName) {
     url: serverIP + "/api/usecases/name/" + ucName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#objectViewer", null, true, true, function () {
+        $('#editUseCaseOptionsForm').validator();
         $.session.set("UseCase", JSON.stringify(data));
         $('#editUseCaseOptionsForm').loadJSON(data, null);
         $.each(data.theActors, function (index, actor) {
@@ -330,6 +331,7 @@ $(document).on('click', 'td.deleteUseCaseButton', function (e) {
 $(document).on("click", "#addNewUseCase", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#objectViewer", null, true, true, function () {
+    $('#editUseCaseOptionsForm').validator();
     $("#editUseCaseOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("UseCase", JSON.stringify(jQuery.extend(true, {},useCaseDefault )));

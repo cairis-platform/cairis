@@ -36,6 +36,7 @@ $(document).on('click', "td.environment-rows",function(){
     url: serverIP + "/api/environments/name/" + name.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editEnvironmentOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editEnvironmentOptionsform").validator();
         $.session.set("editableEnvironment", JSON.stringify(data));
         $('#editEnvironmentOptionsform').loadJSON(data, null);
         $.each(data.theTensions, function (index, tension) {
@@ -225,6 +226,7 @@ mainContent.on('click', "#updateButtonEnvironment", function (e) {
 $("#reqTable").on("click", "#addNewEnvironment", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editEnvironmentOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editEnvironmentOptionsform").validator();
     $("#editEnvironmentOptionsform").addClass("newEnvironment");
     $.session.set("editableEnvironment", JSON.stringify(jQuery.extend(true,{},environmentDefault)));
   });

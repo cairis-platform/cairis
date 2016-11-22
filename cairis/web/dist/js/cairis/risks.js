@@ -226,6 +226,7 @@ $(document).on('click', 'td.risk-rows', function () {
     crossDomain: true,
     url: serverIP + "/api/risks/name/" + name.replace(" ", "%20"),
     success: function (mainData) {
+      $("#editRisksForm").validator();
       $.session.set("Risk",JSON.stringify(mainData));
       fillOptionMenu("fastTemplates/editRiskOptions.html", "#objectViewer", null, true, true, function () {
         var threatSelect = $("#theThreatNames");
@@ -263,6 +264,7 @@ $(document).on('click','#addNewRisk', function() {
   activeElement("objectViewer");
   $.session.set("Risk", JSON.stringify(jQuery.extend(true, {},riskDefault )));
   fillOptionMenu("fastTemplates/editRiskOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editRisksForm").validator();
     $("#editRisksForm").addClass("new");
     var threatSelect = $("#theThreatNames");
     var vulnSelect = $("#theVulnerabilityNames");

@@ -34,6 +34,7 @@ $(document).on("click", "#addNewResponse", function () {
 
         activeElement("objectViewer");
         fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
+          $("#editResponseOptionsform").validator();
           $("#editResponseOptionsform").addClass("newResponse");
           var select = $("#chooseRisk");
           $.session.set("response", JSON.stringify(jQuery.extend(true, {},responseDefault )));
@@ -93,6 +94,7 @@ function viewResponse(roleName) {
     url: serverIP + "/api/responses/name/" + roleName,
     success: function (data) {
       fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editResponseOptionsform").validator();
         var tags = data.theTags;
         $("#theResponseName").val(data.theName);
         $.session.set("ResponseName", data.theName);

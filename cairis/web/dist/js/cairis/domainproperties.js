@@ -94,6 +94,7 @@ function viewDomainProperty(dpName) {
     url: serverIP + "/api/domainproperties/name/" + dpName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editDomainPropertyOptionsForm").validator();
         $.session.set("DomainProperty", JSON.stringify(data));
         $('#editDomainPropertyOptionsForm').loadJSON(data, null);
 
@@ -176,6 +177,7 @@ $(document).on('click', 'td.deleteDomainPropertyButton', function (e) {
 $(document).on("click", "#addNewDomainProperty", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editDomainPropertyOptionsForm").validator();
     $("#editDomainPropertyOptionsForm").addClass("new");
     $.session.set("DomainProperty", JSON.stringify(jQuery.extend(true, {},domainPropertyDefault )));
     $("#optionsHeaderGear").text("Domain Property properties");

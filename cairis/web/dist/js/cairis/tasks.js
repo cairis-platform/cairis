@@ -113,6 +113,7 @@ function viewTask(taskName) {
     url: serverIP + "/api/tasks/name/" + taskName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editTaskOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editTaskOptionsForm").validator();
         $.session.set("Task", JSON.stringify(data));
         $('#editTaskOptionsForm').loadJSON(data, null);
 
@@ -407,7 +408,9 @@ $(document).on('click', 'td.deleteTaskButton', function (e) {
 
 
 $(document).on("click", "#addNewTask", function () {
+  activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editTaskOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editTaskOptionsForm").validator();
     $("#editTaskOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("Task", JSON.stringify(jQuery.extend(true, {},taskDefault )));
