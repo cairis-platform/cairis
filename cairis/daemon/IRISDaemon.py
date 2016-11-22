@@ -233,7 +233,7 @@ def start():
 
   # Architectural Pattern routes
   api.add_resource(ArchitecturalPatternController.ArchitecturalPatternsAPI, '/api/architectural_patterns')
-  api.add_resource(ArchitecturalPatternController.ArchitecturalPatternByNameAPI, '/api/architectural_patterns/name/<string:name>')
+  api.add_resource(ArchitecturalPatternController.ArchitecturalPatternByNameAPI,'/api/architectural_patterns/name/<string:name>')
  
   # Asset routes
   api.add_resource(AssetController.AssetsAPI, '/api/assets')

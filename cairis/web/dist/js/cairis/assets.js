@@ -86,6 +86,7 @@ $(document).on('click', "td.asset-rows", function(){
 });
 
 function viewAsset(assetName) {
+  $("#UpdateAsset").text("Update");
   activeElement("objectViewer");
   $.session.set("AssetName", assetName.trim());
 
@@ -100,6 +101,7 @@ function viewAsset(assetName) {
     url: serverIP + "/api/assets/name/" + assetName.replace(" ", "%20"),
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editAssetsOptions.html","#objectViewer",null,true,true, function(){
+        $('#editAssetsOptionsform').validator();
         $.session.set("Asset", JSON.stringify(newdata));
         $('#editAssetsOptionsform').loadJSON(newdata,null);
         $.ajax({
@@ -488,6 +490,8 @@ $(document).on('click', "#addNewAsset",function(){
       crossDomain: true,
       url: serverIP + "/api/assets/types",
       success: function (data) {
+        $('#editAssetsOptionsform').validator();
+        $("#UpdateAsset").text("Create");
         var typeSelect =  $('#theType');
         $.each(data, function (index, type) {
           typeSelect.append($("<option></option>").attr("value",type.name).text(type.theName));
@@ -650,8 +654,9 @@ mainContent.on('click', '#cancelButtonAsset', function(){
   $("#editAssociationsWindow").hide();
 });
 
+
 mainContent.on('click', '#UpdateAsset',function(e){
-  $("#editAssetsOptionsform").validator();
+  e.preventDefault();
   var envProps = $.session.get("AssetProperties");
   if (envProps == undefined || envProps.length == 0) {
     alert("Environments not defined");
@@ -666,7 +671,6 @@ mainContent.on('click', '#UpdateAsset',function(e){
     fillAssetTable();
 
   }
-  e.preventDefault();
 });
 
 mainContent.on('click', '#CloseAsset', function (e) {
