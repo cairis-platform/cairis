@@ -96,6 +96,7 @@ function viewPersona(personaName) {
     success: function (data) {
       fillOptionMenu("fastTemplates/editPersonasOptions.html", "#objectViewer", null, true, true, function () {
         $("#editPersonasOptionsForm").validator();
+        $("#UpdatePersona").text("Update");
         $.session.set("Persona", JSON.stringify(data));
         $('#editPersonasOptionsForm').loadJSON(data, null);
 
@@ -287,6 +288,7 @@ $(document).on("click", "#addNewPersona", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editPersonasOptions.html", "#objectViewer", null, true, true, function () {
     $("#editPersonasOptionsForm").validator();
+    $("#UpdatePersona").text("Create");
     $("#editPersonasOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("Persona", JSON.stringify(jQuery.extend(true, {},personaDefault )));

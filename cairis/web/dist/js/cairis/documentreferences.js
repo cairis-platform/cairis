@@ -87,6 +87,7 @@ $(document).on('click', "td.documentreference-rows", function () {
     success: function (data) {
       fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#objectViewer", null, true, true, function () {
         $("#editDocumentReferenceOptionsForm").validator();
+        $("#UpdateDocumentReference").text("Update");
         var docNameSelect = $("#theDocName");
         var docName = data.theDocName;
         getDocNames(function(data) {
@@ -140,6 +141,7 @@ $(document).on("click", "#addNewDocumentReference", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#objectViewer", null, true, true, function () {
     $("#editDocumentReferenceOptionsForm").validator();
+    $("#UpdateDocumentReference").text("Create");
     $("#editDocumentReferenceOptionsForm").addClass("new");
     $.session.set("DocumentReference", JSON.stringify(jQuery.extend(true, {},documentReferenceDefault )));
     var docNameSelect = $("#theDocName");

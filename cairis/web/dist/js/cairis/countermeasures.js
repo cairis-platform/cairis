@@ -102,6 +102,7 @@ function viewCountermeasure(cmName) {
       fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
         $("#addPropertyDiv").hide();
         $("#editCountermeasureOptionsForm").validator();
+        $("#UpdateCountermeasure").text("Update");
 
         $.session.set("Countermeasure", JSON.stringify(data));
         var fillerJSON = data;
@@ -133,6 +134,7 @@ $(document).on("click", "#addNewCountermeasure", function () {
   fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
     $("#addPropertyDiv").hide();
     $("#editCountermeasureOptionsForm").validator();
+    $("#UpdateCountermeasure").text("Create");
     $("#editCountermeasureOptionsForm").addClass("new");
     $.session.set("Countermeasure", JSON.stringify(jQuery.extend(true, {},countermeasureDefault )));
     $("#Properties").hide();

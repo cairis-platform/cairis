@@ -37,6 +37,7 @@ $(document).on('click', "td.environment-rows",function(){
     success: function (data) {
       fillOptionMenu("fastTemplates/editEnvironmentOptions.html", "#objectViewer", null, true, true, function () {
         $("#editEnvironmentOptionsform").validator();
+        $("#UpdateEnvironment").text("Update");
         $.session.set("editableEnvironment", JSON.stringify(data));
         $('#editEnvironmentOptionsform').loadJSON(data, null);
         $.each(data.theTensions, function (index, tension) {
@@ -202,7 +203,7 @@ mainContent.on("click", "#addEnvtoEnv", function () {
   });
 });
 
-mainContent.on('click', "#updateButtonEnvironment", function (e) {
+mainContent.on('click', "#UpdateEnvironment", function (e) {
 
   e.preventDefault();
   var env = JSON.parse($.session.get("editableEnvironment"));
@@ -227,6 +228,7 @@ $("#reqTable").on("click", "#addNewEnvironment", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editEnvironmentOptions.html", "#objectViewer", null, true, true, function () {
     $("#editEnvironmentOptionsform").validator();
+    $("#UpdateEnvironment").text("Create");
     $("#editEnvironmentOptionsform").addClass("newEnvironment");
     $.session.set("editableEnvironment", JSON.stringify(jQuery.extend(true,{},environmentDefault)));
   });

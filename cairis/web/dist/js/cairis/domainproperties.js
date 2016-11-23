@@ -95,6 +95,7 @@ function viewDomainProperty(dpName) {
     success: function (data) {
       fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#objectViewer", null, true, true, function () {
         $("#editDomainPropertyOptionsForm").validator();
+        $("#UpdateDomainProperty").text("Update");
         $.session.set("DomainProperty", JSON.stringify(data));
         $('#editDomainPropertyOptionsForm').loadJSON(data, null);
 
@@ -178,6 +179,7 @@ $(document).on("click", "#addNewDomainProperty", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#objectViewer", null, true, true, function () {
     $("#editDomainPropertyOptionsForm").validator();
+    $("#UpdateDomainProperty").text("Create");
     $("#editDomainPropertyOptionsForm").addClass("new");
     $.session.set("DomainProperty", JSON.stringify(jQuery.extend(true, {},domainPropertyDefault )));
     $("#optionsHeaderGear").text("Domain Property properties");

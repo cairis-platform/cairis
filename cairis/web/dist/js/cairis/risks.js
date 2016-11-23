@@ -230,6 +230,7 @@ $(document).on('click', 'td.risk-rows', function () {
       $.session.set("Risk",JSON.stringify(mainData));
       fillOptionMenu("fastTemplates/editRiskOptions.html", "#objectViewer", null, true, true, function () {
         var threatSelect = $("#theThreatNames");
+        $("#UpdateRisk").text("Update");
         var vulnSelect = $("#theVulnerabilityNames");
         getThreats(function (data) {
           $.each(data, function (key, obj) {
@@ -265,6 +266,7 @@ $(document).on('click','#addNewRisk', function() {
   $.session.set("Risk", JSON.stringify(jQuery.extend(true, {},riskDefault )));
   fillOptionMenu("fastTemplates/editRiskOptions.html", "#objectViewer", null, true, true, function () {
     $("#editRisksForm").validator();
+    $("#UpdateRisk").text("Create");
     $("#editRisksForm").addClass("new");
     var threatSelect = $("#theThreatNames");
     var vulnSelect = $("#theVulnerabilityNames");

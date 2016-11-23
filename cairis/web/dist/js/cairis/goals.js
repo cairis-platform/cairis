@@ -107,7 +107,7 @@ mainContent.on('click', ".goalEnvProperties", function () {
 
   $.each(goal.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == name){
-      $('#goalsProperties').loadJSON(env,null);
+      $('#goalProperties').loadJSON(env,null);
       $("#theIssue").val(env.theIssue);
       $("#theDefinition").val(env.theDefinition);
       $("#theFitCriterion").val(env.theFitCriterion);
@@ -300,7 +300,7 @@ mainContent.on("click", "#addGoalEnvironment", function () {
     environment.theEnvironmentName = text;
     var goal = JSON.parse($.session.get("Goal"));
     goal.theEnvironmentProperties.push(environment);
-    $("#goalsProperties").show("fast");
+    $("#goalProperties").show("fast");
     $.session.set("GoalEnvName", text);
     $.session.set("Goal", JSON.stringify(goal));
   });
@@ -319,7 +319,7 @@ mainContent.on('click', ".deleteGoalEnv", function () {
         UIenv.find(".goalEnvProperties:first").trigger('click');
       }
       else{
-        $("#goalsProperties").hide("fast");
+        $("#goalProperties").hide("fast");
       }
       return false;
     }
@@ -392,7 +392,7 @@ $(document).on('click', '#addNewGoal', function () {
     $("#editGoalOptionsForm").validator();
     $("#updateGoalButton").text("Create");
     $("#editGoalOptionsForm").addClass('new');
-    $("#goalsProperties").hide();
+    $("#goalProperties").hide();
     $.session.set("Goal", JSON.stringify(jQuery.extend(true, {},goalDefault )));
   });
 });

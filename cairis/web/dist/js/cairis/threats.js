@@ -92,6 +92,7 @@ function viewThreat(thrName) {
       activeElement("objectViewer");
       fillOptionMenu("fastTemplates/editThreatOptions.html", "#objectViewer", null, true, true, function () {
         $("#editThreatOptionsform").validator();
+        $("#UpdateThreat").text("Update");
         getThreatTypes(function createTypes(types) {
           $.each(types, function (index, type) {
             $('#theType').append($("<option></option>").attr("value",type.theName).text(type.theName));
@@ -126,6 +127,7 @@ $(document).on("click", "#addNewThreat", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editThreatOptions.html", "#objectViewer", null, true, true, function () {
     $("#editThreatOptionsform").validator();
+    $("#UpdateThreat").text("Create");
     $("#editThreatOptionsform").addClass("newThreat");
     getThreatTypes(function createTypes(types) {
       $.each(types, function (index, type) {

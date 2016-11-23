@@ -89,6 +89,7 @@ function viewUseCase(ucName) {
     success: function (data) {
       fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#objectViewer", null, true, true, function () {
         $('#editUseCaseOptionsForm').validator();
+        $('#UpdateUseCase').text("Update");
         $.session.set("UseCase", JSON.stringify(data));
         $('#editUseCaseOptionsForm').loadJSON(data, null);
         $.each(data.theActors, function (index, actor) {
@@ -271,6 +272,7 @@ mainContent.on('click', '#UpdateUseCase', function (e) {
   usecase.theName = $("#theName").val();
   usecase.theAuthor = $("#theAuthor").val();
   usecase.theObjective = $("#theObjective").val();
+  usecase.theDescription = $("#theDescription").val();
   var tags = $("#theTags").text().split(", ");
   if(tags[0] != ""){
     usecase.theTags = tags;
@@ -313,7 +315,7 @@ $(document).on('click', 'td.deleteUseCaseButton', function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/usecases/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/usecases/name/" + ucName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         createUseCasesTable();
         showPopup(true);
@@ -332,6 +334,7 @@ $(document).on("click", "#addNewUseCase", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#objectViewer", null, true, true, function () {
     $('#editUseCaseOptionsForm').validator();
+    $('#UpdateUseCase').text("Create");
     $("#editUseCaseOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("UseCase", JSON.stringify(jQuery.extend(true, {},useCaseDefault )));

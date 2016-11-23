@@ -87,6 +87,7 @@ $(document).on('click', "td.externaldocument-rows", function () {
     success: function (data) {
       fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#objectViewer", null, true, true, function () {
         $("#editExternalDocumentOptionsForm").validator();
+        $("#UpdateExternalDocument").text("Update");
         $.session.set("ExternalDocument", JSON.stringify(data));
         $('#editExternalDocumentOptionsForm').loadJSON(data, null);
       });
@@ -133,6 +134,7 @@ $(document).on("click", "#addNewExternalDocument", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#objectViewer", null, true, true, function () {
     $("#editExternalDocumentOptionsForm").validator();
+    $("#UpdateExternalDocument").text("Create");
     $("#editExternalDocumentOptionsForm").addClass("new");
     $.session.set("ExternalDocument", JSON.stringify(jQuery.extend(true, {},externalDocumentDefault )));
   });

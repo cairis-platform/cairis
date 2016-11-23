@@ -139,6 +139,7 @@ $(document).on('click', "td.valuetype-rows", function () {
     crossDomain: true,
     url: serverIP + "/api/value_types/type/" + valueType + "/environment/all/name/" + encodeURIComponent(name),
     success: function (data) {
+      $("#UpdateValueType").text("Update");
       var vtPage = "editValueTypeOptions.html";
       var formObjt = "#editValueTypeOptionsForm";
       if (valueType == 'access_right' || valueType == 'protocol' || valueType == 'privilege' || valueType == 'surface_type') {
@@ -225,6 +226,7 @@ $(document).on("click", "#addNewValueType", function () {
     formObjt = "editScoredValueTypeOptions";
   }
   fillOptionMenu("fastTemplates/" + formObjt + ".html", "#objectViewer", null, true, true, function () {
+    $("#UpdateValueType").text("Create");
     $("#" + formObjt + "Form").addClass("new");
     $.session.set("ValueType", JSON.stringify(jQuery.extend(true, {},valueTypeDefault )));
   });

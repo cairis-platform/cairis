@@ -92,6 +92,7 @@ function viewVulnerability(vulName) {
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
         $("#editVulnerabilityOptionsform").validator();
+        $("#UpdateVulnerability").text("Update");
         $.session.set("Vulnerability", JSON.stringify(newdata));
         var jsondata = $.extend(true, {}, newdata);
         jsondata.theTags = [];
@@ -122,6 +123,7 @@ $("#reqTable").on("click", "#addNewVulnerability", function () {
   $.session.set("Vulnerability", JSON.stringify(vul));
   fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
     $("#editVulnerabilityOptionsform").validator();
+    $("#UpdateVulnerability").text("Create");
     $("#UpdateVulnerability").addClass("newVulnerability");
     $("#Properties").hide();
   });

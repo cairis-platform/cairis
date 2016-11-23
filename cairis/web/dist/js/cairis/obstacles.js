@@ -302,10 +302,11 @@ mainContent.on('change', ".obstacleAutoUpdater" ,function() {
 });
 
 $(document).on('click', '#addNewObstacle', function () {
-  fillGoalOptionMenu(null, function () {
+  fillObstacleOptionMenu(null, function () {
     $("#editObstacleOptionsForm").validator();
     $("#editObstacleOptionsForm").addClass('new');
     $("#obstacleProperties").hide();
+    $("#updateObstacleButton").text("Create");
   });
 });
 
@@ -428,6 +429,7 @@ function fillObstacleOptionMenu(data,callback){
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editObstaclesOptions.html","#objectViewer",null,true,true, function(){
     $("#editObstacleOptionsForm").validator();
+    $("#updateObstacleButton").text("Update");
     if(data != null) {
       $.session.set("Obstacle", JSON.stringify(data));
       $('#editObstacleOptionsForm').loadJSON(data, null);
@@ -441,7 +443,7 @@ function fillObstacleOptionMenu(data,callback){
       $("#theObstacleEnvironments").find(".obstacleEnvProperties:first").trigger('click');
     }
     else {
-      var obstacle =  jQuery.extend(true, {},obstacle.efault );
+      var obstacle =  jQuery.extend(true, {},obstacleDefault );
       $.session.set("Obstacle", JSON.stringify(obstacle));
     }
     if (jQuery.isFunction(callback)) {

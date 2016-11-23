@@ -90,6 +90,7 @@ function viewAttacker(attackerName) {
     success: function (data) {
       fillOptionMenu("fastTemplates/editAttackerOptions.html", "#objectViewer", null, true, true, function () {
         $("#editAttackerOptionsForm").validator();
+        $("#UpdateAttacker").text("Update");
         $.session.set("Attacker", JSON.stringify(data));
         $('#editAttackerOptionsForm').loadJSON(data, null);
         var tags = data.theTags;
@@ -397,6 +398,7 @@ $(document).on("click", "#addNewAttacker", function () {
   activeElement("objectViewer"); 
   fillOptionMenu("fastTemplates/editAttackerOptions.html", "#objectViewer", null, true, true, function () {
     $("#editAttackerOptionsForm").validator();
+    $("#UpdateAttacker").text("Create");
     $("#editAttackerOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("Attacker", JSON.stringify(jQuery.extend(true, {},attackerDefault )));
