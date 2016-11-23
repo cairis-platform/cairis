@@ -429,21 +429,26 @@ mainContent.on("click", "#addCountermeasureEnv", function () {
 mainContent.on('click', '#UpdateCountermeasure', function (e) {
   e.preventDefault();
   var cm = JSON.parse($.session.get("Countermeasure"));
-  var oldName = cm.theName;
-  cm.theName = $("#theName").val();
-  var tags = $("#theTags").text().split(", ");
-  cm.theTags = tags;
-  cm.theType = $("#theType option:selected").text();
-
-  if($("#editCountermeasureOptionsForm").hasClass("new")){
-    postCountermeasure(cm, function () {
-      createCountermeasuresTable();
-    });
-  } 
+  if (cm.theEnvironmentProperties.length == 0) {
+    alert("Environments not defined");
+  }
   else {
-    putCountermeasure(cm, oldName, function () {
-      createCountermeasuresTable();
-    });
+    var oldName = cm.theName;
+    cm.theName = $("#theName").val();
+    var tags = $("#theTags").text().split(", ");
+    cm.theTags = tags;
+    cm.theType = $("#theType option:selected").text();
+
+    if($("#editCountermeasureOptionsForm").hasClass("new")){
+      postCountermeasure(cm, function () {
+        createCountermeasuresTable();
+      });
+    } 
+    else {
+      putCountermeasure(cm, oldName, function () {
+        createCountermeasuresTable();
+      });
+    }
   }
 });
 

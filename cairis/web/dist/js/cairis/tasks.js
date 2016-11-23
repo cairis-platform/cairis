@@ -344,39 +344,43 @@ mainContent.on("click", "#addTaskEnv", function () {
 mainContent.on('click', '#UpdateTask', function (e) {
   e.preventDefault();
   var task = JSON.parse($.session.get("Task"));
-  var oldName = task.theName;
-  task.theName = $("#theName").val();
-  task.theAuthor = $("#theAuthor").val();
-  task.theObjective = $("#theObjective").val();
-  var tags = $("#theTags").text().split(", ");
-  if(tags[0] != ""){
-    task.theTags = tags;
-  }
-
-  var envName = $.session.get("taskEnvironmentName");
-  var updatedEnvProps = [];
-  $.each(task.theEnvironmentProperties, function (index, env) {
-    if(env.theEnvironmentName == envName){
-      env.theDependencies = $('#theDependencies').val();
-      env.theNarrative = $('#theNarrative').val();
-      env.theConsequences = $('#theConsequences').val();
-      env.theBenefits = $('#theBenefits').val();
-    }
-    updatedEnvProps.push(env);
-  });
-  task.theEnvironmentProperties = updatedEnvProps;
-
-
-  if($("#editTaskOptionsForm").hasClass("new")){
-    postTask(task, function () {
-      createTasksTable();
-      $("#editTaskOptionsForm").removeClass("new")
-    });
+  if (task.theEnvironmentProperties.length == 0) {
+    alert("Environments not defined");
   } 
   else {
-    putTask(task, oldName, function () {
-      createTasksTable();
+    var oldName = task.theName;
+    task.theName = $("#theName").val();
+    task.theAuthor = $("#theAuthor").val();
+    task.theObjective = $("#theObjective").val();
+    var tags = $("#theTags").text().split(", ");
+    if(tags[0] != ""){
+      task.theTags = tags;
+    }
+
+    var envName = $.session.get("taskEnvironmentName");
+    var updatedEnvProps = [];
+    $.each(task.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == envName){
+        env.theDependencies = $('#theDependencies').val();
+        env.theNarrative = $('#theNarrative').val();
+        env.theConsequences = $('#theConsequences').val();
+        env.theBenefits = $('#theBenefits').val();
+      }
+      updatedEnvProps.push(env);
     });
+    task.theEnvironmentProperties = updatedEnvProps;
+
+    if($("#editTaskOptionsForm").hasClass("new")){
+      postTask(task, function () {
+        createTasksTable();
+        $("#editTaskOptionsForm").removeClass("new")
+      });
+    } 
+    else {
+      putTask(task, oldName, function () {
+        createTasksTable();
+      });
+    }
   }
 });
 

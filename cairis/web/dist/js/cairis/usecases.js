@@ -268,38 +268,42 @@ mainContent.on("click", "#addUseCaseEnv", function () {
 mainContent.on('click', '#UpdateUseCase', function (e) {
   e.preventDefault();
   var usecase = JSON.parse($.session.get("UseCase"));
-  var oldName = usecase.theName;
-  usecase.theName = $("#theName").val();
-  usecase.theAuthor = $("#theAuthor").val();
-  usecase.theObjective = $("#theObjective").val();
-  usecase.theDescription = $("#theDescription").val();
-  var tags = $("#theTags").text().split(", ");
-  if(tags[0] != ""){
-    usecase.theTags = tags;
+  if (usecase.theEnvironmentProperties.length == 0) {
+    alert("Environments not defined");
   }
-
-  var envName = $.session.get("usecaseEnvironmentName");
-  var updatedEnvProps = [];
-  $.each(usecase.theEnvironmentProperties, function (index, env) {
-    if(env.theEnvironmentName == envName){
-      env.thePreCond = $('#thePreCond').val();
-      env.thePostCond = $('#thePostCond').val();
-    }
-    updatedEnvProps.push(env);
-  });
-  usecase.theEnvironmentProperties = updatedEnvProps;
-
-
-  if($("#editUseCaseOptionsForm").hasClass("new")){
-    postUseCase(usecase, function () {
-      createUseCasesTable();
-      $("#editUseCaseOptionsForm").removeClass("new")
-    });
-  } 
   else {
-    putUseCase(usecase, oldName, function () {
-      createUseCasesTable();
+    var oldName = usecase.theName;
+    usecase.theName = $("#theName").val();
+    usecase.theAuthor = $("#theAuthor").val();
+    usecase.theObjective = $("#theObjective").val();
+    usecase.theDescription = $("#theDescription").val();
+    var tags = $("#theTags").text().split(", ");
+    if(tags[0] != ""){
+      usecase.theTags = tags;
+    }
+
+    var envName = $.session.get("usecaseEnvironmentName");
+    var updatedEnvProps = [];
+    $.each(usecase.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == envName){
+        env.thePreCond = $('#thePreCond').val();
+        env.thePostCond = $('#thePostCond').val();
+      }
+      updatedEnvProps.push(env);
     });
+    usecase.theEnvironmentProperties = updatedEnvProps;
+
+    if($("#editUseCaseOptionsForm").hasClass("new")){
+      postUseCase(usecase, function () {
+        createUseCasesTable();
+        $("#editUseCaseOptionsForm").removeClass("new")
+      });
+    } 
+    else {
+      putUseCase(usecase, oldName, function () {
+        createUseCasesTable();
+      });
+    }
   }
 });
 
