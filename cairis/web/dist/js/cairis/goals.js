@@ -401,23 +401,28 @@ $(document).on('click', '#addNewGoal', function () {
 mainContent.on('click', "#updateGoalButton", function (e) {
   e.preventDefault();
   var goal = JSON.parse($.session.get("Goal"));
-  var oldName = goal.theName;
-  goal.theName = $("#theName").val();
-  goal.theOriginator = $("#theOriginator").val();
-  var tags = $("#theTags").text().split(", ");
-  if(tags[0] != ""){
-    goal.theTags = tags;
+  if (goal.theEnvironmentProperties.length == 0) {
+    alert("Environments not defined");
   }
-  if($("#editGoalOptionsForm").hasClass("new")){
-    postGoal(goal, function () {
-      createEditGoalsTable();
-      $("#editGoalOptionsForm").removeClass("new")
-    });
-  } 
   else {
-    putGoal(goal, oldName, function () {
-      createEditGoalsTable();
-    });
+    var oldName = goal.theName;
+    goal.theName = $("#theName").val();
+    goal.theOriginator = $("#theOriginator").val();
+    var tags = $("#theTags").text().split(", ");
+    if(tags[0] != ""){
+      goal.theTags = tags;
+    }
+    if($("#editGoalOptionsForm").hasClass("new")){
+      postGoal(goal, function () {
+        createEditGoalsTable();
+        $("#editGoalOptionsForm").removeClass("new")
+      });
+    } 
+    else {
+      putGoal(goal, oldName, function () {
+        createEditGoalsTable();
+      });
+    }
   }
 });
 

@@ -314,23 +314,28 @@ $(document).on('click', '#addNewObstacle', function () {
 mainContent.on('click', "#updateObstacleButton", function (e) {
   e.preventDefault();
   var obstacle = JSON.parse($.session.get("Obstacle"));
-  var oldName = obstacle.theName;
-  obstacle.theName = $("#theName").val();
-  obstacle.theOriginator = $("#theOriginator").val();
-  var tags = $("#theTags").text().split(", ");
-  if(tags[0] != ""){
-    obstacle.theTags = tags;
+  if (obstacle.theEnvironmentProperties.length == 0) {
+    alert("Environments not defined");
   }
-  if($("#editObstacleOptionsForm").hasClass("new")){
-    postGoal(obstacle, function () {
-      createEditObstaclesTable();
-      $("#editAttackerOptionsForm").removeClass("new")
-    });
-  } 
   else {
-    putGoal(obstacle, oldName, function () {
-      createEditObstaclesTable();
-    });
+    var oldName = obstacle.theName;
+    obstacle.theName = $("#theName").val();
+    obstacle.theOriginator = $("#theOriginator").val();
+    var tags = $("#theTags").text().split(", ");
+    if(tags[0] != ""){
+      obstacle.theTags = tags;
+    }
+    if($("#editObstacleOptionsForm").hasClass("new")){
+      postGoal(obstacle, function () {
+        createEditObstaclesTable();
+        $("#editAttackerOptionsForm").removeClass("new")
+      });
+    } 
+    else {
+      putGoal(obstacle, oldName, function () {
+        createEditObstaclesTable();
+      });
+    }
   }
 });
 
