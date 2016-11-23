@@ -88,6 +88,7 @@ function viewRole(roleName) {
     success: function (json) {
       fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
         $("#editRoleOptionsform").validator();
+        $("#UpdateRole").text("Update");
         $.session.set("RoleObject", JSON.stringify(json));
         $("#editRoleOptionsform").loadJSON(json, null);
         $.ajax({
@@ -220,6 +221,7 @@ $(document).on('click', '#addNewRole', function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
     $("#editRoleOptionsform").validator();
+    $("#UpdateRole").text("Create");
     $("#editRoleOptionsform").addClass("newRole");
     $.session.set("RoleObject", JSON.stringify(jQuery.extend(true, {},roleDefaultObject )));
   });
