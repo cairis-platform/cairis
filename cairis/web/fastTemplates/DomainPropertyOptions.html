@@ -1,19 +1,18 @@
 <form xmlns="http://www.w3.org/1999/html" id="domainpropertiesForm" class="gearOptions">
-  <p>
-    <label>Name</label>
-    <input class="optionsInput" type="text" value="null" id="theName" name="theName" readonly>
-  </p>
-  <p>
-   <label>Type</label>
-    <input class="optionsInput" type="text" value="null" id="theType" name="theType" readonly>
-  </p>
-  <p>
-   <label>Tags</label>
-    <input class="optionsInput" type="text" value="null" id="theTags" name="theTags" readonly>
-  </p>
-
-  <div id="description">
-    <label>Description</label>
-    <textarea rows="2" cols="50" id="theDescription" readonly></textarea>
+  <div class="form-group">
+    <label for="theName" class="control-label">Name</label>
+    <input class="optionsInput form-control" type="text" value="null" id="theName" name="theName" readonly>
+  </div>
+  <div class="form-group">
+   <label for="theType" class="control-label">Type</label>
+    <input class="optionsInput form-control" type="text" value="null" id="theType" name="theType" readonly>
+  </div>
+  <div class="form-group">
+   <label for="theTags" class="control-label">Tags</label>
+    <input class="optionsInput form-control" type="text" value="null" id="theTags" name="theTags" readonly>
+  </div>
+  <div class="form-group" id="description">
+    <label for="theDescription" class="control-label">Description</label>
+    <textarea rows="2" cols="50" id="theDescription" class="form-control" readonly></textarea>
   </div>
 </form>
