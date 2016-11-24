@@ -31,6 +31,7 @@ class SummaryPage(wx.Panel):
     activitiesSizer = wx.StaticBoxSizer(activitiesBox,wx.HORIZONTAL)
     topSizer.Add(activitiesSizer,1,wx.EXPAND)
     activitiesCtrl = BVNarrativeTextCtrl(self,PERSONA_TEXTACTIVITIES_ID)
+    activitiesCtrl.theBehaviouralVariable = 'Activites'
     activitiesSizer.Add(activitiesCtrl,1,wx.EXPAND)
     self.SetSizer(topSizer)
 
@@ -42,6 +43,7 @@ class AttitudesPage(wx.Panel):
     attitudesSizer = wx.StaticBoxSizer(attitudesBox,wx.HORIZONTAL)
     topSizer.Add(attitudesSizer,1,wx.EXPAND)
     attitudesCtrl = BVNarrativeTextCtrl(self,PERSONA_TEXTATTITUDES_ID)
+    attitudesCtrl.theBehaviouralVariable = 'Attitudes'
     attitudesSizer.Add(attitudesCtrl,1,wx.EXPAND)
     self.SetSizer(topSizer)
 
@@ -53,6 +55,7 @@ class AptitudesPage(wx.Panel):
     aptitudesSizer = wx.StaticBoxSizer(aptitudesBox,wx.HORIZONTAL)
     topSizer.Add(aptitudesSizer,1,wx.EXPAND)
     aptitudesCtrl = BVNarrativeTextCtrl(self,PERSONA_TEXTAPTITUDES_ID)
+    aptitudesCtrl.theBehaviouralVariable = 'Aptitudes'
     aptitudesSizer.Add(aptitudesCtrl,1,wx.EXPAND)
     self.SetSizer(topSizer)
 
@@ -64,6 +67,7 @@ class MotivationsPage(wx.Panel):
     mSizer = wx.StaticBoxSizer(mBox,wx.HORIZONTAL)
     topSizer.Add(mSizer,1,wx.EXPAND)
     mCtrl = BVNarrativeTextCtrl(self,PERSONA_TEXTMOTIVATIONS_ID)
+    mCtrl.theBehaviouralVariable = 'Motivations'
     mSizer.Add(mCtrl,1,wx.EXPAND)
     self.SetSizer(topSizer)
 
@@ -75,6 +79,7 @@ class SkillsPage(wx.Panel):
     sSizer = wx.StaticBoxSizer(sBox,wx.HORIZONTAL)
     topSizer.Add(sSizer,1,wx.EXPAND)
     sCtrl = BVNarrativeTextCtrl(self,PERSONA_TEXTSKILLS_ID)
+    sCtrl.theBehaviouralVariable = 'Skills'
     sSizer.Add(sCtrl,1,wx.EXPAND)
     self.SetSizer(topSizer)
 
@@ -86,6 +91,7 @@ class IntrinsicPage(wx.Panel):
     sSizer = wx.StaticBoxSizer(sBox,wx.HORIZONTAL)
     topSizer.Add(sSizer,1,wx.EXPAND)
     sCtrl = BVNarrativeTextCtrl(self,PERSONA_TEXTINTRINSIC_ID)
+    sCtrl.theBehaviouralVariable = 'Intrinsic'
     sSizer.Add(sCtrl,1,wx.EXPAND)
     self.SetSizer(topSizer)
 
@@ -97,6 +103,7 @@ class ContextualPage(wx.Panel):
     sSizer = wx.StaticBoxSizer(sBox,wx.HORIZONTAL)
     topSizer.Add(sSizer,1,wx.EXPAND)
     sCtrl = BVNarrativeTextCtrl(self,PERSONA_TEXTCONTEXTUAL_ID)
+    sCtrl.theBehaviouralVariable = 'Contextual'
     sSizer.Add(sCtrl,1,wx.EXPAND)
     self.SetSizer(topSizer)
 

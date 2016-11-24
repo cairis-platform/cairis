@@ -1,22 +1,21 @@
 <form xmlns="http://www.w3.org/1999/html" id="assetsForm" class="gearOptions">
-  <p>
-    <label>Name</label>
-    <input class="optionsInput" type="text" value="null" id="theName" name="theName" readonly>
-  </p>
-  <p>
-    <label>Description</label>
-    <input class="optionsInput" type="text" value="null" id="theDescription" name="theDescription" readonly>
-  </p>
-  <p>
-   <label>Significance</label>
-    <input class="optionsInput" type="text" value="null" id="theSignificance" name="theSignificance" readonly>
-  </p>
-  <p>
-    <label for="propTable">Properties</label>
-    <table id="propTable" style="width: 100%">
+  <div class="form-group">
+    <label for="theName" class="control-label">Name</label>
+    <input class="optionsInput form-control" type="text" id="theName" name="theName" readonly>
+  </div>
+  <div class="form-group">
+    <label for="theDescription" class="control-label">Description</label>
+    <input class="optionsInput form-control" id="theDescription" name="theDescription"readonly>
+  </div>
+  <div class="form-group">
+   <label for="theSignificance" class="control-label">Significance</label>
+    <input class="optionsInput form-control" type="text" id="theSignificance" name="theSignificance" readonly>
+  </div>
+  <div class="form-group">
+    <table class="table table-sm table-striped" id="propTable" style="width: 100%">
       <thead><tr><th>Property</th><th>Value</th></tr></thead>
       <tbody>
       </tbody>
     </table>
-  </p>
+  </div>
 </form>

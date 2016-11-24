@@ -78,12 +78,12 @@ function toggleOptions(){
   var navGear = $('#rightnavGear');
   var navMenu = $('#rightnavMenu');
   if (!navGear.hasClass("open")) {
-    navGear.animate({"right": "750px"});
+    navGear.animate({"right": "400px"});
     navMenu.animate({"right": "0"});
     navGear.addClass("open");
   } else {
     navGear.animate({"right": "0"});
-    navMenu.animate({"right": "-750px"});
+    navMenu.animate({"right": "-400px"});
     navGear.removeClass("open");
   }
 }
@@ -93,7 +93,7 @@ function forceOpenOptions(){
   var navGear = $('#rightnavGear');
   var navMenu = $('#rightnavMenu');
   if (!navGear.hasClass("open")) {
-    navGear.animate({"right": "750px"});
+    navGear.animate({"right": "400px"});
     navMenu.animate({"right": "0"});
     navGear.addClass("open");
   }
@@ -104,7 +104,7 @@ function forceCloseOptions(){
   var navGear = $('#rightnavGear');
   var navMenu = $('#rightnavMenu');
   navGear.animate({"right": "0"});
-  navMenu.animate({"right": "-750px"});
+  navMenu.animate({"right": "-400px"});
   navGear.removeClass("open");
 }
 
