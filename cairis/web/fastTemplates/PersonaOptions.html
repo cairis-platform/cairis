@@ -20,34 +20,38 @@
 -->
 
 <form xmlns="http://www.w3.org/1999/html" id="personasForm" class="gearOptions">
-  <div class="tabs">
-    <div>
-      <label for="theName" class="control-label">Name</label>
-      <input class="optionsInput form-control" type="text" value="null" id="theName" name="theName" readonly>
+  <div>
+    <label for="theName" class="control-label">Name</label>
+    <input class="optionsInput form-control" type="text" style="width: 100%;" value="null" id="theName" name="theName" readonly>
+  </div>
+  <div class=container">
+    <ul class="nav nav-pills">
+      <li><a class="active" data-toggle="pill" href="#activities">Activities</a></li>
+      <li><a data-toggle="pill" href="#attitudes">Attitudes</a></li>
+      <li><a data-toggle="pill" href="#aptitudes">Aptitudes</a></li>
+      <li><a data-toggle="pill" href="#motivations">Motivations</a></li>
+      <li><a data-toggle="pill" href="#skills">Skills</a></li>
+      <li><a data-toggle="pill" href="#narrative">Narrative</a></li>
+    </ul>
+    <div class="tab-content">
+    <div id="activities" class="tab-pane active">
+      <textarea class="form-control" rows="15" style="width: 100%;" id="theActivities" readonly></textarea>
     </div>
-    <div id="activities">
-      <label for="theActivities" class="control-label">Activities</label>
-      <textarea class="form-control" rows="2" cols="50" id="theActivities" readonly></textarea>
+    <div id="attitudes" class="tab-pane">
+      <textarea class="form-control" rows="15" style="width: 100%;" id="theAttitudes" readonly></textarea>
     </div>
-    <div id="attitudes">
-      <label for="theAttitudes" class="control-label">Attitudes</label>
-      <textarea class="form-control" rows="2" cols="50" id="theAttitudes" readonly></textarea>
+    <div id="aptitudes" class="tab-pane">
+      <textarea class="form-control" rows="15" style="width: 100%;" id="theAptitudes" readonly></textarea>
     </div>
-    <div id="aptitudes">
-      <label for="theAptitudes" class="control-label">Aptitudes</label>
-      <textarea class="form-control" rows="2" cols="50" id="theAptitudes" readonly></textarea>
+    <div id="motivations" class="tab-pane">
+      <textarea class="form-control" rows="15" style="width: 100%;" id="theMotivations" readonly></textarea>
     </div>
-    <div id="motivations">
-      <label for="theMotivations" class="control-label">Motivations</label>
-      <textarea class="form-control" rows="2" cols="50" id="theMotivations" readonly></textarea>
+    <div id="skills" class="tab-pane">
+      <textarea class="form-control" rows="15" style="width: 100%;" id="theSkills" readonly></textarea>
     </div>
-    <div id="skills">
-      <label for="theSkills" class="control-label">Skills</label>
-      <textarea class="form-control" rows="2" cols="50" id="theSkills" readonly></textarea>
+    <div id="narrative" class="tab-pane">
+      <textarea rows="15" id="theNarrative" style="width: 100%;" class="form-control" readonly></textarea>
     </div>
-    <div id="narrative">
-      <label for="theNarrative" class="control-label">Narrative</label>
-      <textarea rows="2" cols="50" id="theNarrative" class="form-control" readonly></textarea>
     </div>
   </div>
 </form>
