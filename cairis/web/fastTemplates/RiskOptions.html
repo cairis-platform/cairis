@@ -1,26 +1,25 @@
 <form xmlns="http://www.w3.org/1999/html" id="risksForm" class="gearOptions">
-  <p>
-    <label>Name</label>
-    <input class="optionsInput" type="text" value="null" id="theName" name="theName" readonly>
-  </p>
-  <p>
-    <label>Threat</label>
-    <input class="optionsInput" type="text" value="null" id="theThreatName" name="theThreatName" readonly>
-  </p>
-  <p>
-    <label>Vulnerability</label>
-    <input class="optionsInput" type="text" value="null" id="theVulnerabilityName" name="theVulnerabilityName" readonly>
-  </p>
-  <p>
-    <label>Risk Rating</label>
-    <input class="optionsInput" type="text" value="null" id="theRating" name="theRating" readonly>
-  </p>
-  <p>
-    <label for="theResponses">Score</label>
-    <table id="theResponses" style="width: 100%">
-      <thead><tr><th>Response</th><th>Unmit. Score</th><th>Mit. Score</th></tr></thead>
+  <div class="form-group">
+    <label for="theName" class="control-label">Name</label>
+    <input class="optionsInput form-control" type="text" value="null" id="theName" name="theName" style="width: 100%;" readonly>
+  </div>
+  <div class="form-group">
+    <label for="theThreatName" class="control-label">Threat</label>
+    <input class="optionsInput form-control" type="text" value="null" id="theThreatName" name="theThreatName" style="width: 100%;" readonly>
+  </div>
+  <div class="form-group">
+    <label for="theVulnerabilityName" class="control-label">Vulnerability</label>
+    <input class="optionsInput form-control" type="text" value="null" id="theVulnerabilityName" style="width: 100%;" name="theVulnerabilityName" readonly>
+  </div>
+  <div class="form-group">
+    <label for="theRating" class="control-label">Risk Rating</label>
+    <input class="optionsInput form-control" type="text" value="null" id="theRating" name="theRating" style="width: 100%;" readonly>
+  </div>
+  <div class="form-group">
+    <table id="theResponses" class="table table-sm table-striped" style="width: 100%">
+      <thead><tr><th>Response</th><th>Unmitigated Score</th><th>Mitigated Score</th></tr></thead>
       <tbody>
       </tbody>
     </table>
-  </p>
+  </div>
 </form>
