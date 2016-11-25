@@ -1,22 +1,21 @@
 <form xmlns="http://www.w3.org/1999/html" id="transferForm" class="gearOptions">
-  <p>
-    <label>Name</label>
-    <input class="optionsInput" type="text" value="null" id="theName" name="theName" readonly>
-  </p>
-  <p>
-    <label>Risk</label>
-    <input class="optionsInput" type="text" value="null" id="theRisk" name="theRisk" readonly>
-  </p>
-  <p>
-    <label for="rolesTable">Roles</label>
-    <table id="rolesTable" style="width: 100%">
+  <div ciass="form-group">
+    <label for="theName" class="control-label">Name</label>
+    <input class="optionsInput" class="form-control" type="text" value="null" id="theName" name="theName" style="width: 100%;" readonly>
+  </div>
+  <div class="form-group">
+    <label for="theRisk" class="control-label">Risk</label>
+    <input class="optionsInput form-control" type="text" value="null" id="theRisk" name="theRisk" style="width: 100%;" readonly>
+  </div>
+  <div class="form-group">
+    <table class="table table-sm table-striped" id="rolesTable" style="width: 100%">
       <thead><tr><th>Role</th><th>Cost</th></tr></thead>
       <tbody>
       </tbody>
     </table>
-  </p>
-  <p>
-    <label>Rationale</label>
-    <textarea rows="2" cols="50" id="theRationale" readonly></textarea>
+  </div>
+  <div class="form-group">
+    <label for="theRationale" class="control-label">Rationale</label>
+    <textarea rows="5" class="form-control" id="theRationale" style="width: 100%;" readonly></textarea>
   </p>
 </form>
