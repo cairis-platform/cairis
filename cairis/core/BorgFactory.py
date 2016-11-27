@@ -27,6 +27,27 @@ from TemplateGenerator import TemplateGenerator
 from ARM import ARMException
 from string import strip
 
+def testUploadDirectory(uploadDir,logger):
+  
+  image_upload_dir = os.path.join(uploadDir, 'images')
+  if os.path.exists(image_upload_dir):
+    try:
+      test_file = os.path.join(image_upload_dir, 'test.txt')
+      fs_test = open(test_file, 'wb')
+      fs_test.write('test')
+      fs_test.close()
+      os.remove(test_file)
+    except IOError:
+      err_msg = 'The upload directory for images is not writeable. Image uploading will propably not work.'
+      logger.warning(err_msg)
+  else:
+    try:
+      os.mkdir(image_upload_dir, 0775)
+    except IOError:
+      err_msg = 'Unable to create directory to store images into. Image uploading will probably not work.'
+      logger.warning(err_msg)
+
+
 def parseConfigFile():
   b = Borg()
   cfgFileName = ''
@@ -82,6 +103,7 @@ def initialise():
 
   b = Borg()
   b.runmode = 'desktop'
+  logging.basicConfig()
   b.logger = logging.getLogger('cairis_gui')
   b.iconDir = b.cairisRoot + '/images' 
   b.configDir = b.cairisRoot + '/config'
@@ -96,6 +118,7 @@ def dInitialise():
 
   b = Borg()
   b.runmode = 'web'
+  logging.basicConfig()
   b.logger = logging.getLogger('cairisd')
   b.configDir = os.path.join(b.cairisRoot,'config')
   b.uploadDir = cfgDict['upload_dir']
@@ -143,23 +166,7 @@ def dInitialise():
       b.logger.error(err_msg)
       exit(6)
 
-  image_upload_dir = os.path.join(b.uploadDir, 'images')
-  if os.path.exists(image_upload_dir):
-    try:
-      test_file = os.path.join(image_upload_dir, 'test.txt')
-      fs_test = open(test_file, 'wb')
-      fs_test.write('test')
-      fs_test.close()
-      os.remove(test_file)
-    except IOError:
-      err_msg = 'The upload directory for images is not writeable. Image uploading will propably not work.'
-      b.logger.warning(err_msg)
-  else:
-    try:
-      os.mkdir(image_upload_dir, 0775)
-    except IOError:
-      err_msg = 'Unable to create directory to store images into. Image uploading will probably not work.'
-      b.logger.warning(err_msg)
+#  testUploadDirectory(b.uploadDir,b.logger)
 
   b.template_generator = TemplateGenerator()
   b.model_generator = GraphicsGenerator('svg')
