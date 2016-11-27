@@ -54,8 +54,6 @@ $( document ).ajaxComplete(function() {
         success: function (data) {
         var dataArr = {};
         dataArr["#theName"] = String(data.theName);
-        dataArr["#theDescription"] = String(data.theDescription);
-        dataArr["#theSignificance"] = String(data.theSignificance);
         var theTableArr =[];
 
         $.ajax({
@@ -70,6 +68,8 @@ $( document ).ajaxComplete(function() {
           success: function() {
             fillOptionMenu("fastTemplates/AssetOptions.html", "#optionsContent", dataArr,false,true,function(){
               $("#optionsHeaderGear").text("Asset properties");
+              $("#theDescription").val(data.theDescription);
+              $("#theSignificance").val(data.theSignificance);
 
               $.each(data.theEnvironmentProperties, function (idx, env) {
                 if (window.assetEnvironment == env.theEnvironmentName) {
@@ -130,7 +130,6 @@ $( document ).ajaxComplete(function() {
                     $("#theNarrative").val(env.theNarrative);
                   }
                 });
-
               });
             },
             error: function(xhr, textStatus, errorThrown) {
