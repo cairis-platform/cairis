@@ -28,6 +28,7 @@ $("#importClick").click(function () {
     object.session_id = $.session.get('sessionID');
     var objectoutput = JSON.stringify(object);
 
+    showLoading();
     $.ajax({
       type: "POST",
       dataType: "json",
@@ -40,6 +41,9 @@ $("#importClick").click(function () {
       url: serverIP + "/api/import/text",
       success: function (data) {
         showPopup(true);
+      },
+      complete: function() {
+        hideLoading();
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
