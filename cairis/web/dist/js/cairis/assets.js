@@ -541,6 +541,7 @@ $(document).on('click', "td.deleteAssetButton",function(e){
               newSorting(1);
             });
             activeElement("reqTable");
+            showPopup(true);
           },
           error: function (xhr, textStatus, errorThrown) {
             debugLogger(String(this.url));

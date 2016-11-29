@@ -375,17 +375,6 @@
   <div id="errorDialog" title="ERROR">
     <p style="color: black">You can't use CAIRIS without any settings</p>
   </div>
-  <div id="reportObjectDependencies" title="Delete " style="display: none">
-    <label class="control-label">Removing this object will also remove the following objects.</label>
-    <table id="objectDependencyTable" class="table-striped table-bordered">
-      <thead>
-        <tr><th>Artifact</th><th>Name</th></tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-    <label class="control-label">Do you want to continue?</label>
-  </div>
   <div class="popupMessage" style="display:none;" >
     <div class="Succes"><i class="fa fa-check fa-2x"></i><div class="infoText">Success</div></div>
     <div class="Fail"><i class="fa fa-exclamation fa-2x"></i><div class="infoText">Something went wrong...<p class="faultInfo"></p></div></div>
@@ -601,12 +590,59 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" id="saveSecurityProperty" class="btn btn-primary">Save</button>
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="saveSecurityProperty" class="btn btn-primary">Save</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
+  <div class="modal fade" id="confirmObjectDelete" tabindex="-1" role="dialog" aria-labelledby="cOD_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Confirm object deletion</h4>
+        </div>
+        <div class="modal-body">
+          <label class="control-label">Do you really want to delete this object?</label>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="confirmDelete" class="btn btn-primary">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="reportObjectDependencies" tabindex="-1" role="dialog" aria-labelledby="rOD_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Confirm object deletion</h4>
+        </div>
+        <div class="modal-body">
+          <label class="control-label">Removing this object will also remove the following objects.</label>
+          <table id="objectDependencyTable" class="table-striped table-bordered" style="width: 100%;">
+            <thead>
+              <tr><th>Artifact</th><th>Name</th></tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          <label class="control-label">Do you want to continue?</label>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="confirmODDelete" class="btn btn-primary">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="modal fade" id="editCharacteristicReference" tabindex="-1" role="dialog" aria-labelledby="cCR_label" data-loadcr="" data-savecr="" data-currentcr="">
     <div class="modal-dialog" role="document">
       <div class="modal-content">

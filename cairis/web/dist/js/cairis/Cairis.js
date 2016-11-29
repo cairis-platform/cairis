@@ -1693,35 +1693,19 @@ function deleteObject(dimName,objtName,deleteFn) {
     url: serverIP + "/api/object_dependency/dimension/" + dimName + "/object/" + objtName.replace(" ", "%20"),
     success: function (data) {
       if (data['theDependencies'].length == 0) {
-        deleteFn(objtName);
+       $("#confirmObjectDelete").data("deleteFn",deleteFn);
+       $("#confirmObjectDelete").data("deleteFnParameter",objtName);
+       $("#confirmObjectDelete").modal('show');
       }
       else {
         $("#objectDependencyTable").find("tbody").empty();
         $.each(data['theDependencies'], function(index,dep) {
           $("#objectDependencyTable").find("tbody").append('<tr><td>' + dep['theDimensionName'] + '</td><td>' + dep['theObjectName'] + '</td></tr>');
         });
-        objectDependenciesDialogBox( function(isAccept) {
-          if (isAccept) {
-            $.ajax({
-              type: "DELETE",
-              dataType: "json",
-              accept: "application/json",
-              async:false,
-              data: {
-                session_id: String($.session.get('sessionID'))
-              },
-              crossDomain: true,
-              url: serverIP + "/api/object_dependency/dimension/" + dimName + "/object/" + objtName.replace(" ", "%20"),
-              success: function (data) {
-                deleteFn(objtName);
-              },
-              error: function (xhr, textStatus, errorThrown) {
-                debugLogger(String(this.url));
-                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-              }
-            });
-          }
-        });
+        $("#reportObjectDependencies").data("deleteFn",deleteFn);
+        $("#reportObjectDependencies").data("deleteFnParameter",objtName);
+        $("#reportObjectDependencies").data("deleteFnDimension",dimName);
+        $("#reportObjectDependencies").modal('show');
       }
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -1774,5 +1758,37 @@ $("#chooseSecurityProperty").on('shown.bs.modal', function() {
 $("#chooseSecurityProperty").on('click', '#saveSecurityProperty',function(e) {
   var cmd = eval($("#chooseSecurityProperty").attr("data-buildproperty"));
   cmd(e);
+});
+
+$("#confirmObjectDelete").on('click', '#confirmDelete',function(e) {
+  var cmd = $("#confirmObjectDelete").data("deleteFn");
+  var cmdParameter = $("#confirmObjectDelete").data("deleteFnParameter");
+  cmd(cmdParameter);
+  $("#confirmObjectDelete").modal('hide');
+});
+
+$("#reportObjectDependencies").on('click', '#confirmODDelete',function(e) {
+  var dimName = $("#reportObjectDependencies").data("deleteFnDimension");
+  var objtName = $("#reportObjectDependencies").data("deleteFnParameter");
+  $.ajax({
+    type: "DELETE",
+    dataType: "json",
+    accept: "application/json",
+    async:false,
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/object_dependency/dimension/" + dimName + "/object/" + objtName.replace(" ", "%20"),
+    success: function (data) {
+      var deleteFn = $("#reportObjectDependencies").data("deleteFn");
+      deleteFn(objtName);
+      $("#reportObjectDependencies").modal('hide');
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 });
 
