@@ -356,12 +356,14 @@ mainContent.on('click', '.addEnvironmentPlus',function(){
                 var Assetprops = [];
                 var newProp = jQuery.extend(true, {}, assetEnvironmentDefault);
                 newProp.theEnvironmentName = chosenText;
+                $.session.set("assetEnvironmentName", newProp.theEnvironmentName);
                 Assetprops.push(newProp);
               } 
               else {
                 var Assetprops = JSON.parse($.session.get("AssetProperties"));
                 var newProp = jQuery.extend(true, {}, AssetEnvironmentProperty);
                 newProp.theEnvironmentName = chosenText;
+                $.session.set("assetEnvironmentName", newProp.theEnvironmentName);
                 Assetprops.push(newProp);
               }
               $.session.set("AssetProperties", JSON.stringify(Assetprops));
