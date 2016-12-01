@@ -94,10 +94,14 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
         $("#UpdatePersonaCharacteristic").text("Update");
         $.session.set("PersonaCharacteristic", JSON.stringify(data));
 
+        $("#theModQual").val(data.theModQual);
+        $("#theCharacteristic").val(data.theCharacteristic);
+     
         $("#theGrounds").find("tbody").empty();
         $.each(data.theGrounds,function(idx,item) {
-          appendGWR("#theGrounds",'grounds',item); 
-        });
+          appendGWR("#theGrounds",'ground',item); 
+        }); 
+
         $("#theWarrant").find("tbody").empty();
         $.each(data.theWarrant,function(idx,item) {
           appendGWR("#theWarrant",'warrant',item); 
@@ -109,9 +113,7 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
         $("#theBacking").find("tbody").empty();
         $.each(data.theBacking,function(idx,item) {
           appendBacking(item); 
-        });
-
-        $('#editPersonaCharacteristicOptionsForm').loadJSON(data, null);
+        }); 
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -288,33 +290,44 @@ function loadCharacteristicReference() {
 };
 
 function addCharacteristicReference() {
-};
+  var item = {};
+  item.theReferenceName = $("#theReferenceName").val();
+  item.theReferenceDescription = $("#theDescription").val();
+  appendGWR("#theGrounds",'ground',item); 
+  $("#editCharacteristicReference").modal('hide');
+}
+
+function loadCharacteristicReference() {
+  var currentCr = $("#editCharacteristicReference").data('currentcr');
+  $("#theReferenceName").val(currentCr.theReferenceName);
+  $("#theDescription").val(currentCr.theReferenceDescription);
+}
 
 
 mainContent.on("click", "#addGrounds", function(){
-  $("#editCharacteristicReference").attr('data-loadcr',"loadCharacteristicReference");
-  $("#editCharacteristicReference").attr("data-savecr","addCharacteristicReference");
+  $("#editCharacteristicReference").data('loadcr',loadCharacteristicReference);
+  $("#editCharacteristicReference").data("savecr",addCharacteristicReference);
   $("#editCharacteristicReference").modal('show');
 });
 
 $("#editCharacteristicReference").on('shown.bs.modal', function() {
-  var cmd = eval($("#editCharacteristicReference").attr("data-loadcr"));
+  var cmd = $("#editCharacteristicReference").data("loadcr");
   cmd();
 });
 
 $("#editCharacteristicReference").on('click', '#saveCharacteristicReference',function() {
-  var cmd = eval($("#editCharacteristicReference").attr("data-savecr"));
+  var cmd = $("#editCharacteristicReference").data("savecr");
   cmd();
 });
 
-mainContent.on("click",".grounds", function () {
+mainContent.on("click",".ground", function () {
   var propRow = $(this).closest("tr");
   var selectedCr = {};
   selectedCr.reference = propRow.find("td:eq(1)").text();
   selectedCr.description = propRow.find("td:eq(2)").text();
 
-  $("#editCharacteristicReference").attr('data-loadcr',"loadCharacteristicReference");
-  $("#editCharacteristicReference").attr("data-savecr","updateCharacteristicReference");
-  $("#editCharacteristicReference").attr("data-currentcr",JSON.stringify(selectedCr));
+  $("#editCharacteristicReference").data('loadcr',loadCharacteristicReference);
+  $("#editCharacteristicReference").data("savecr",updateCharacteristicReference);
+  $("#editCharacteristicReference").data("currentcr",JSON.stringify(selectedCr));
   $("#editCharacteristicReference").modal('show');
 });
