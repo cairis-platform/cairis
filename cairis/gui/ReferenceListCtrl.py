@@ -62,7 +62,7 @@ class ReferenceListCtrl(wx.ListCtrl):
 
   def OnRightDown(self,evt):
     self.theSelectedIdx = evt.GetIndex()
-    if (self.rcItem != None):
+    if (self.rcItem != None and self.theSelectedIdx >= 0):
       refName = self.GetItemText(self.theSelectedIdx)
       hs = self.dbProxy.hasReferenceSynopsis(refName)
       if (hs == True):

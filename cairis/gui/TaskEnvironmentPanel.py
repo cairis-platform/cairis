@@ -93,25 +93,26 @@ class TaskEnvironmentPanel(wx.Panel):
       environmentName = cp.name()
       self.theEnvironmentDictionary[environmentName] = cp
       environmentNames.append(environmentName) 
-    environmentName = environmentNames[0]
-    p = self.theEnvironmentDictionary[environmentName]
+    if environmentNames:
+      environmentName = environmentNames[0]
+      p = self.theEnvironmentDictionary[environmentName]
 
-    self.dependenciesCtrl.SetValue(p.dependencies())
-    self.personaList.setEnvironment(environmentName)
-    self.assetList.setEnvironment(environmentName)
-    self.caList.setEnvironment(environmentName)   
-    self.narrativeCtrl.setEnvironment(environmentName)
-    self.personaList.load(p.personas()) 
-    self.assetList.load(p.assets()) 
-    self.caList.load(p.concernAssociations()) 
-    self.narrativeCtrl.SetValue(p.narrative())
-    self.consequencesCtrl.SetValue(p.consequences())
-    self.benefitsCtrl.SetValue(p.benefits())
-    self.narrativeCtrl.setCodes(p.codes('narrative'))
-    self.consequencesCtrl.setCodes(p.codes('consequences'))
-    self.benefitsCtrl.setCodes(p.codes('benefits'))
+      self.dependenciesCtrl.SetValue(p.dependencies())
+      self.personaList.setEnvironment(environmentName)
+      self.assetList.setEnvironment(environmentName)
+      self.caList.setEnvironment(environmentName)   
+      self.narrativeCtrl.setEnvironment(environmentName)
+      self.personaList.load(p.personas()) 
+      self.assetList.load(p.assets()) 
+      self.caList.load(p.concernAssociations()) 
+      self.narrativeCtrl.SetValue(p.narrative())
+      self.consequencesCtrl.SetValue(p.consequences())
+      self.benefitsCtrl.SetValue(p.benefits())
+      self.narrativeCtrl.setCodes(p.codes('narrative'))
+      self.consequencesCtrl.setCodes(p.codes('consequences'))
+      self.benefitsCtrl.setCodes(p.codes('benefits'))
 
-    self.environmentList.Select(0)
+      self.environmentList.Select(0)
     self.environmentList.Bind(wx.EVT_LIST_ITEM_SELECTED,self.OnEnvironmentSelected)
     self.environmentList.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.OnEnvironmentDeselected)
     self.dependenciesCtrl.Enable()
