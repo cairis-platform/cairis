@@ -4,10 +4,29 @@
       <li><a href="#general">General</a></li>
       <li><a href="#grounds">Grounds</a></li>
       <li><a href="#warrant">Warrant</a></li>
-      <li><a href="#backing">Backing</a></li>
       <li><a href="#rebuttal">Rebuttal</a></li>
     </ul>
     <div id="general">
+      <div class="form-group">
+        <label for="thePersonaName" class="control-label">Persona</label>
+        <select class="form-control" id="thePersonaName" data-error="Persona is required" required>
+        </select>
+        <div class="help-block with-errors"></div>
+      </div>
+      <div class="form-group">
+        <label for="theVariable" class="control-label">Variable</label>
+        <select class="form-control" id="theVariable" data-error="Variable is required" required>
+          <option value="Activities">Activities</option>
+          <option value="Attitudes">Attitudes</option>
+          <option value="Aptitudes">Aptitudes</option>
+          <option value="Motivations">Motivations</option>
+          <option value="Skills">Skills</option>
+          <option value="Environment Narrative">Environment Narrative</option>
+          <option value="Intrinsic">Intrinsic</option>
+          <option value="Contextual">Contextual</option>
+        </select>
+        <div class="help-block with-errors"></div>
+      </div>
       <div class="form-group">
         <label for="theModQual" class="control-label">Modal Qualifier</label>
         <input class="optionsInput personaCharacteristicUpdate form-control" type="text" name="theModQual" id="theModQual" style="width: 75%;" data-error="Modal Qualifier is required" required>
@@ -32,15 +51,6 @@
       <table class="clickable-table" id="theWarrant">
         <thead>
           <tr><th id="addWarrant"><i class="fa fa-plus"></i></th><th>Reference</th><th>Description</th></tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-    </div>
-    <div id="backing">
-      <table class="clickable-table" id="theBacking">
-        <thead>
-          <tr><th>Document</th></tr>
         </thead>
         <tbody>
         </tbody>

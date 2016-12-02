@@ -75,7 +75,7 @@ class PersonaCharacteristicDAO(CairisDAO):
       cDesc=pc.theCharacteristic,
       pcGrounds=pc.theGrounds,
       pcWarrant=pc.theWarrant,
-      pcBacking=pc.theBacking,
+      pcBacking=[],
       pcRebuttal=pc.theRebuttal)
     try:
       self.db_proxy.addPersonaCharacteristic(pcParams)
@@ -93,7 +93,7 @@ class PersonaCharacteristicDAO(CairisDAO):
       cDesc=pc.theCharacteristic,
       pcGrounds=pc.theGrounds,
       pcWarrant=pc.theWarrant,
-      pcBacking=pc.theBacking,
+      pcBacking=[],
       pcRebuttal=pc.theRebuttal)
     pcParams.setId(found_pc.theId)
     try:

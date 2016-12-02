@@ -1017,8 +1017,7 @@ class PersonaCharacteristicModel(object):
     "theCharacteristic": fields.String,
     "theGrounds": fields.List(fields.Nested(PersonaCharacteristicReference.resource_fields)),
     "theWarrant": fields.List(fields.Nested(PersonaCharacteristicReference.resource_fields)),
-    "theRebuttal": fields.List(fields.Nested(PersonaCharacteristicReference.resource_fields)),
-    "theBacking": fields.List(fields.String)
+    "theRebuttal": fields.List(fields.Nested(PersonaCharacteristicReference.resource_fields))
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)
