@@ -1,7 +1,0 @@
-#!/bin/bash
-sudo pip install setuptools
-sudo pip install cairis
-configure_cairis_db.py
-export name_var=$USER
-echo $name_var
-echo export CAIRIS_CFG=/home/$name_var/cairis.cnf >> .bashrc
