@@ -3,7 +3,7 @@
 [![Build Status](https://secure.travis-ci.org/failys/cairis.png?branch=master)](http://travis-ci.org/failys/cairis)
 [![Coverage Status](https://coveralls.io/repos/github/failys/cairis/badge.svg?branch=master)](https://coveralls.io/github/failys/cairis?branch=master)
 [![PyPI version](https://badge.fury.io/py/cairis.svg)](https://badge.fury.io/py/cairis)
-[![pypi downloads](https://img.shields.io/pypi/dm/cairis.svg)](https://pypi.python.org/pypi/cairis)
+[![DOI](https://zenodo.org/badge/3790944.svg)](https://zenodo.org/badge/latestdoi/3790944)
 [![GitHub issues](https://img.shields.io/github/issues/failys/cairis.svg?style=flat-square)](https://github.com/failys/cairis/issues?utf8=✓&q=is%3Aissue+is%3Aopen)
 [![GitHub watchers](https://img.shields.io/github/watchers/failys/cairis.svg?style=flat-square)](https://github.com/failys/cairis/watchers)
 [![GitHub stars](https://img.shields.io/github/stars/failys/cairis.svg?style=flat-square)](https://github.com/failys/cairis/stargazers)
