@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
 #  distributed with this work for additional information
@@ -15,15 +16,21 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from time import sleep
-import unittest
-import os
-from subprocess import call
-from cairis.daemon import create_app
+__author__ = 'Shamal Faily'
 
-class CairisDaemonTestCase(unittest.TestCase):
-  call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
-  app = create_app()
-  app.config['TESTING'] = True
-  app = app.test_client()
-  sleep(1)
+import os
+import sys
+sys.path.insert(0,'/home/cairisuser/cairis')
+os.environ['CAIRIS_CFG'] = '/home/cairisuser/cairis.cnf'
+from cairis.daemon import create_app
+from cairis.daemon.CairisHTTPError import CairisHTTPError
+
+
+application = create_app()
+
+if __name__ == '__main__':
+  try:
+    application.run() 
+  except CairisHTTPError, e:
+    print 'Fatal CAIRIS error: ' + str(e)
+    sys.exit(-1)

@@ -15,15 +15,18 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from time import sleep
-import unittest
-import os
-from subprocess import call
-from cairis.daemon import create_app
+__author__ = 'Shamal Faily'
 
-class CairisDaemonTestCase(unittest.TestCase):
-  call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
-  app = create_app()
-  app.config['TESTING'] = True
-  app = app.test_client()
-  sleep(1)
+import os
+from flask import Blueprint
+from flask_restful_swagger import swagger
+from flask_restful import Api
+from cairis.core.Borg import Borg
+
+b = Borg()
+main = Blueprint('main',__name__,template_folder=os.path.join(b.cairisRoot, 'templates'),static_folder=b.staticDir,static_url_path='')
+api = swagger.docs(Api(main), apiVersion='1.2.10', description='CAIRIS API', api_spec_url='/api/cairis')
+
+from cairis.daemon.main import views, errors
+
+

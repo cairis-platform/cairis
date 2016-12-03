@@ -11366,33 +11366,37 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       logger = logging.getLogger(__name__)
       self.conn.query('select @@max_sp_recursion_depth;')
       result = self.conn.store_result()
+      if (result is None):
+        exceptionText = 'Error returned stored_result'
+        raise DatabaseProxyException(exceptionText)
+
       real_result = result.fetch_row()
       if (len(real_result) < 1):
-          exceptionText = 'Error getting max_sp_recursion_depth from database'
-          raise DatabaseProxyException(exceptionText)
+        exceptionText = 'Error getting max_sp_recursion_depth from database'
+        raise DatabaseProxyException(exceptionText)
 
       try:
-          rec_value = real_result[0][0]
+        rec_value = real_result[0][0]
       except LookupError:
-          rec_value = -1
+        rec_value = -1
 
       if rec_value == -1:
-          logger.warning('Unable to get max_sp_recursion_depth. Be sure max_sp_recursion_depth is set to 255 or more.')
+        logger.warning('Unable to get max_sp_recursion_depth. Be sure max_sp_recursion_depth is set to 255 or more.')
       elif rec_value < 255:
-          self.conn.query('set max_sp_recursion_depth = 255')
-          self.conn.store_result()
+        self.conn.query('set max_sp_recursion_depth = 255')
+        self.conn.store_result()
 
-          self.conn.query('select @@max_sp_recursion_depth;')
-          result = self.conn.use_result()
-          real_result = result.fetch_row()
+        self.conn.query('select @@max_sp_recursion_depth;')
+        result = self.conn.use_result()
+        real_result = result.fetch_row()
 
-          try:
-              rec_value = real_result[0][0]
-              logger.debug('max_sp_recursion_depth is %d.' % rec_value)
-              if rec_value < 255:
-                logger.warning('WARNING: some features may not work because the maximum recursion depth for stored procedures is too low')
-          except LookupError:
-              logger.warning('Unable to get max_sp_recursion_depth. Be sure max_sp_recursion_depth is set to 255 or more.')
+        try:
+          rec_value = real_result[0][0]
+          logger.debug('max_sp_recursion_depth is %d.' % rec_value)
+          if rec_value < 255:
+            logger.warning('WARNING: some features may not work because the maximum recursion depth for stored procedures is too low')
+        except LookupError:
+          logger.warning('Unable to get max_sp_recursion_depth. Be sure max_sp_recursion_depth is set to 255 or more.')
 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e

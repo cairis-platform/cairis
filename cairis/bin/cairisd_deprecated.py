@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
 #  distributed with this work for additional information
@@ -14,16 +15,34 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
+import sys
+from cairis.daemon.CairisHTTPError import CairisHTTPError
 
-from time import sleep
-import unittest
-import os
-from subprocess import call
-from cairis.daemon import create_app
+__author__ = 'Robin Quetin, Shamal Faily'
 
-class CairisDaemonTestCase(unittest.TestCase):
-  call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
-  app = create_app()
-  app.config['TESTING'] = True
-  app = app.test_client()
-  sleep(1)
+def main(args):
+  options = {
+    'port': 0,
+    'unitTesting': False
+  }
+
+  if len(args) > 1:
+    for arg in args[1:]:
+      if arg == '-d':
+        options['loggingLevel'] = 'debug'
+      if arg == '--unit-test':
+        options['unitTesting'] = True
+
+  import cairis.daemon.WebConfig 
+  cairis.daemon.WebConfig.config(options)
+  import cairis.daemon.IRISDaemon 
+  client = cairis.daemon.IRISDaemon.start()
+  if client is not None:
+    return client
+
+if __name__ == '__main__':
+  try:
+    main(sys.argv)
+  except CairisHTTPError, e:
+    print "Fatal CAIRIS error: " + str(e)
+    sys.exit(-1)
