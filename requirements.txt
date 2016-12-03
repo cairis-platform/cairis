@@ -22,3 +22,5 @@ Flask-OAuthlib>=0.9.3
 mako>=1.0.4
 lxml>=3.6.4
 openpyxl>=2.4.0
+mod_wsgi>=4.5.9
+mod_wsgi-httpd>=2.4.23.1
