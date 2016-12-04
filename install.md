@@ -67,7 +67,7 @@ If the image_dir option is set then CAIRIS will look for somewhere other than th
 
 # Starting the CAIRIS web app
 
-To access the experimental version of the CAIRIS web app, you first need to run `cairisd.py`.  However, before doing this, you need to ensure CAIRIS has been installed to a location that the process running `cairisd` has write access to.  
+To access the experimental version of the CAIRIS web app, you first need to run `cairisd.py runserver`.  However, before doing this, you need to ensure CAIRIS has been installed to a location that the process running `cairisd` has write access to.  
 
 You will then need to create a new account using the `add_cairis_user` script (run `add_cairis_user --help` to check the parameters you need to provide).
 Once the daemon is running, you can point your browser to http://SERVERNAME:PORT_NUMBER, depending on where `cairisd` is installed, and what port it is listened to.  After you have authenticated, you should be able to interact with the web app.
