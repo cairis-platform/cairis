@@ -481,3 +481,10 @@ var riskDefault = {
   "theThreatName" : "",
   "theRiskName" : ""
 };
+
+var architecturalPatternDefault = {
+  "__python_obj__": "ArchitecturalPattern.ArchitecturalPattern",
+  "theId" : -1,
+  "theComponents" : [],
+  "theConnectors" : []
+};

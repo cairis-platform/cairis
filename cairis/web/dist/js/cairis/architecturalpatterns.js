@@ -44,9 +44,8 @@ function createArchitecturalPatternsTable(){
 
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
-        textToInsert[i++] = '<td><button class="editArchitecturalPatternButton" value="' + item.theName + '">' + 'Edit' + '</button> <button class="deleteArchitecturalPatternButton" value="' + item.theName + '">' + 'Delete' + '</button></td>';
-
-        textToInsert[i++] = '<td name="theName">';
+        textToInsert[i++] = '<td class="deleteArchitecturalPatternButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
+        textToInsert[i++] = '<td class="architecturalpattern-rows" name="theName">';
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
@@ -79,3 +78,149 @@ function createArchitecturalPatternsTable(){
     }
   })
 }
+
+$(document).on('click', "td.architecturalpattern-rows", function () {
+  var apName = $(this).text();
+  viewArchitecturalPattern(apName);
+});
+
+function viewArchitecturalPattern(apName) {
+  activeElement("objectViewer");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/architectural_patterns/name/" + apName.replace(" ", "%20"),
+    success: function (data) {
+      fillOptionMenu("fastTemplates/editArchitecturalPatternOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editArchitecturalPatternOptionsForm").validator();
+        $("#UpdateArchitecturalPattern").text("Update");
+        $.session.set("ArchitecturalPattern", JSON.stringify(data));
+        $("#theName").val(data.theName);
+        $("#theSynopsis").val(data.theSynopsis);
+        $.each(data.theComponents,function(idx,component) {
+          appendComponent(component);
+        });
+
+        $.each(data.theConnectors,function(idx,connector) {
+          appendConnector(connector);
+        });
+
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+};
+
+$(document).on("click", "#addNewArchitecturalPattern", function () {
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editArchitecturalPatternOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editArchitecturalPatternOptionsForm").validator();
+    $("#UpdateArchitecturalPattern").text("Create");
+    $("#editArchitecturalPatternOptionsForm").addClass("new");
+    $.session.set("ArchitecturalPattern", JSON.stringify(jQuery.extend(true, {},architecturalPatternDefault )));
+  });
+});
+
+function appendComponent(component) {
+    $("#theComponents").find("tbody").append('<tr><td class="deleteComponent"><i class="fa fa-minus"></i></td><td class="component-row">'+ component.theName +'</td><td>' + component.theDescription + '</td></tr>');
+};
+
+function appendConnector(connector) {
+    $("#theConnectors").find("tbody").append('<tr><td class="deleteConnector"><i class="fa fa-minus"></i></td><td class="connector-row">'+ connector.theConnectorName + '</td><td>' + connector.theFromComponent +'</td><td>' + connector.theFromRole + '</td><td>' + connector.theFromInterface + '</td><td>' + connector.theToComponent + '</td><td>' + connector.theToInterface + '</td><td>' + connector.theToRole + '</td><td>' + connector.theAssetName + '</td><td>' + connector.theProtocol + '</td><td>' + connector.theAccessRight + '</td></tr>');
+};
+
+var mainContent = $("#objectViewer");
+$(document).on('click', "td.component-row", function () {
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  var componentName = $(this).text();
+  $.each(ap.theComponents,function(idx,apc) {
+    if (apc.theName == componentName) {
+      $("#editArchitecturalPatternOptionsForm").hide();
+      $("#editComponentDiv").show(function(com) {
+        $("#theComponentName").val(apc.theName); 
+        $("#theDescription").val(apc.theDescription); 
+        $("#theInterfaces").find("tbody").empty();
+        $("#theStructure").find("tbody").empty();
+        $("#theRequirements").find("tbody").empty();
+        $("#theGoals").find("tbody").empty();
+        $("#theGoalAssociations").find("tbody").empty();
+        $.each(apc.theInterfaces,function(idx,comint) {
+          appendComponentInterface(comint);
+        });
+        $.each(apc.theStructure,function(idx,comstr) {
+          appendComponentStructure(comstr);
+        });
+        $.each(apc.theRequirements,function(idx,comreq) {
+          appendComponentRequirement(comreq);
+        });
+        $.each(apc.theGoals,function(idx,comgoal) {
+          appendComponentGoal(comgoal);
+        });
+        $.each(apc.theGoalAssociationss,function(idx,comga) {
+          appendComponentGoalAssociation(comga);
+        });
+      });
+    }
+  });
+});
+
+function appendComponentInterface(comint) {
+    $("#theInterfaces").find("tbody").append('<tr><td class="deleteComponentInterface"><i class="fa fa-minus"></i></td><td class="component-interface">'+ comint.theName +'</td><td>' + comint.theType + '</td><td>' + comint.theAccessRight + '</td><td>' + comint.thePrivilege + '</td></tr>');
+};
+
+function appendComponentStructure(comstr) {
+    $("#theStructure").find("tbody").append('<tr><td class="deleteComponentStructure"><i class="fa fa-minus"></i></td><td class="component-structure">'+ comstr.theHeadAsset +'</td><td>' + comstr.theHeadAdornment + '</td><td>' + comstr.theHeadNav + '</td><td>' + comstr.theHeadNry + '</td><td>' + comstr.theHeadRole + '</td><td>' + comstr.theTailRole + '</td><td>' + comstr.theTailNry + '</td><td>' + comstr.theTailNav + '</td><td>' + comstr.theTailAdornment + '</td><td>' + comstr.theTailAsset + '</td></tr>');
+};
+
+function appendComponentRequirement(comreq) {
+    $("#theRequirements").find("tbody").append('<tr><td class="deleteComponentInterface"><i class="fa fa-minus"></i></td><td class="component-requirement">'+ comreq + '</td></tr>');
+};
+
+function appendComponentGoal(comgoal) {
+    $("#theGoals").find("tbody").append('<tr><td class="deleteComponentGoal"><i class="fa fa-minus"></i></td><td class="component-goal">'+ comgoal + '</td></tr>');
+};
+
+function appendComponentGoalAssociation(comga) {
+    $("#theGoalAssociations").find("tbody").append('<tr><td class="deleteComponentGoalAssociation"><i class="fa fa-minus"></i></td><td class="component-goal">'+ comga.theHeadGoal + '</td><td>' + comga.theRefType + '</td><td>' + comga.theTailGoal + '</td><td>' + comga.theRationale + '</td></tr>');
+};
+
+mainContent.on('click', "td.connector-row", function () {
+  var connectorName = $(this).text();
+  $("#editArchitecturalPatternOptionsForm").hide();
+  $("#editConnectorDiv").show(function(connectorName) {
+  });
+});
+
+mainContent.on("click","#UpdateComponent",function() {
+  $("#editComponentDiv").hide();
+  $("#editArchitecturalPatternOptionsForm").show();
+});
+
+mainContent.on("click","#CloseComponent",function(e) {
+  e.preventDefault();
+  $("#editComponentDiv").hide();
+  $("#editArchitecturalPatternOptionsForm").show();
+});
+
+mainContent.on("click","#UpdateConnector",function() {
+  $("#editConnectorDiv").hide();
+  $("#editArchitecturalPatternOptionsForm").show();
+});
+
+mainContent.on("click","#CloseConnector",function() {
+  $("#editConnectorDiv").hide();
+  $("#editArchitecturalPatternOptionsForm").show();
+});
+
+mainContent.on('click', '#CloseArchitecturalPattern', function (e) {
+  e.preventDefault();
+  createArchitecturalPatternsTable();
+});

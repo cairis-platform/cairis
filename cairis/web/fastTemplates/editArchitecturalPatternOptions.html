@@ -1,0 +1,201 @@
+<form role="form" data-toggle="validator" id="editArchitecturalPatternOptionsForm" xmlns="http://www.w3.org/1999/html" >
+  <div class="panel panel-default control-group form-group">
+    <div class="form-group">
+      <label for="theName" class="control-label">Name</label>
+      <input class="optionsInput form-control" type="text" name="theName" id="theName" style="width: 75%;" data-error="Architectural Pattern name is required" required>
+      <div class="help-block with-errors"></div>
+    </div>
+    <div class="tabs">
+      <ul>
+        <li><a href="#synopsis">Synopsis</a></li>
+        <li><a href="#components">Components</a></li>
+        <li><a href="#connectors">Connectors</a></li>
+      </ul>
+      <div id="synopsis">
+        <div class="form-group">
+          <textarea rows="15" id="theSynopsis" class="form-control" data-error="Synopsis is required" required></textarea>
+        </div>
+      </div>
+      <div id="components" class="panel panel-default control-group">
+        <table class="clickable-table scrollableTable" id="theComponents">
+          <thead>
+            <tr><th id="addComponent"> <i class="fa fa-plus"></i></th><th>Component</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div id="connectors" class="panel panel-default control-group">
+        <table class="clickable-table scrollableTable" id="theConnectors">
+          <thead>
+            <tr><th id="addConnector"> <i class="fa fa-plus"></i></th><th>Connector</th><th>From</th><th>Role</th><th>Interface</th><th>To</th><th>Interface</th><th>Role</th><th>Asset</th><th>Protocol</th><th>Access Right</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="UpdateArchitecturalPattern">Update</button>
+      <button type="submit" class="btn btn-secondary" id="CloseArchitecturalPattern">Close</button>
+    </div>
+  </div>
+</form>
+
+<div id="editComponentDiv" style="display: none;">
+  <div class="panel panel-default control-group form-group">
+    <div class="form-group">
+      <label for="theComponentName" class="control-label">Name</label>
+      <input class="optionsInput form-control" type="text" name="theComponentName" id="theComponentName" style="width: 75%;" data-error="Component name is required" required>
+      <div class="help-block with-errors"></div>
+    </div>
+    <div class="tabs">
+      <ul>
+        <li><a href="#description">Description</a></li>
+        <li><a href="#interfaces">Interfaces</a></li>
+        <li><a href="#structure">Structure</a></li>
+        <li><a href="#requirements">Requirements</a></li>
+        <li><a href="#goals">Goals</a></li>
+        <li><a href="#goalassociations">Goal Associations</a></li>
+      </ul>
+      <div id="description">
+        <div class="form-group">
+          <textarea rows="15" id="theDescription" class="form-control" data-error="Description is required" required></textarea>
+        </div>
+      </div>
+      <div id="interfaces" class="panel panel-default control-group">
+        <table class="clickable-table scrollableTable" id="theInterfaces">
+          <thead>
+            <tr><th id="addComponentInterface"> <i class="fa fa-plus"></i></th><th>Interface</th><th>Type</th><th>Access Right</th><th>Privilege</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div id="structure" class="panel panel-default control-group">
+        <table class="clickable-table scrollableTable" id="theStructure">
+          <thead>
+            <tr><th id="addComponentStructure"> <i class="fa fa-plus"></i></th><th>Head Asset</th><th>Type</th><th>Nav</th><th>Nry</th><th>Role</th><th>Tail Role</th><th>Tail Nry</th><th>Tail Nav</th><th>Tail Type</th><th>Tail Asset</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div id="requirements" class="panel panel-default control-group">
+        <table class="clickable-table scrollableTable" id="theRequirements">
+          <thead>
+            <tr><th id="addComponentRequirement"> <i class="fa fa-plus"></i></th><th>Requirement</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div id="goals" class="panel panel-default control-group">
+        <table class="clickable-table scrollableTable" id="theGoals">
+          <thead>
+            <tr><th id="addComponentGoal"> <i class="fa fa-plus"></i></th><th>Goal</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div id="goalassociations" class="panel panel-default control-group">
+        <table class="clickable-table scrollableTable" id="theGoalAssociations">
+          <thead>
+            <tr><th id="addGoalAssociations"> <i class="fa fa-plus"></i></th><th>Goal</th><th>Ref Type</th><th>Sub Goal</th><th>Rationale</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="UpdateComponent">Update</button>
+      <button type="submit" class="btn btn-secondary" id="CloseComponent">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="editConnectorDiv" style="display: none;">
+  <div class="panel panel-default control-group form-group">
+    <div class="form-group">
+      <label for="theConnectorName" class="control-label">Name</label>
+      <input class="optionsInput form-control" type="text" name="theConnectorName" id="theConnectorName" style="width: 75%;" data-error="Connector name is required" required>
+      <div class="help-block with-errors"></div>
+    </div>
+    <div class="tabs">
+      <ul>
+        <li><a href="#from">From</a></li>
+        <li><a href="#to">To</a></li>
+        <li><a href="#details">Details</a></li>
+      </ul>
+      <div id="from">
+        <div class="form-group">
+          <label for="theFromRole" class="control-label">Role</label>
+          <input class="optionsInput form-control" type="text" name="theFromRole" id="theFromRole" style="width: 75%;" data-error="Role is required" required>
+          <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label for="theFromComponent" class="control-label">Component</label>
+          <select class="optionsInput form-control" id="theFromComponent" name="theFromComponent" data-error="Component name is required" required>
+          </select>
+          <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label for="theFromInterface" class="control-label">Interface</label>
+          <select class="optionsInput form-control" id="theFromInterface" name="theFromInterface" data-error="Interface name is required" required>
+          </select>
+          <div class="help-block with-errors"></div>
+        </div>
+      </div>
+      <div id="to">
+        <div class="form-group">
+          <label for="theToRole" class="control-label">Role</label>
+          <input class="optionsInput form-control" type="text" name="theToRole" id="theToRole" style="width: 75%;" data-error="Role is required" required>
+          <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label for="theToComponent" class="control-label">Component</label>
+          <select class="optionsInput form-control" id="theToComponent" name="theToComponent" data-error="Component name is required" required>
+          </select>
+          <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label for="theToInterface" class="control-label">Interface</label>
+          <select name="theToInterface" class="optionsInput form-control" id="theToInterface" name="theToInterface" data-error="Interface name is required" required>
+          </select>
+          <div class="help-block with-errors"></div>
+        </div>
+      </div>
+      <div id="details">
+        <div class="form-group">
+          <label for="theAssetName" class="control-label">Asset</label>
+          <select class="optionsInput form-control" id="theAssetName" name="theAssetName" data-error="Asset name is required" required>
+          </select>
+          <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label for="theProtocol" class="control-label">Protocol</label>
+          <select class="optionsInput form-control" id="theProtocol" name="theProtocol" data-error="Protocol is required" required>
+          </select>
+          <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label for="theAccessRight" class="control-label">Access Right</label>
+          <select class="optionsInput form-control" id="theAccessRight" name="theAccessRight" data-error="Access Right is required" required>
+          </select>
+          <div class="help-block with-errors"></div>
+        </div>
+      </div>
+    </div>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="UpdateConnector">Update</button>
+      <button type="submit" class="btn btn-secondary" id="CloseConnector">Close</button>
+    </div>
+  </div>
+</div>
