@@ -482,9 +482,37 @@ var riskDefault = {
   "theRiskName" : ""
 };
 
+var componentDefault = {
+  "__python_obj__": "Component.Component",
+  "theName" : "",
+  "theDescription": "",
+  "theInterfaces" : [],
+  "theStructure" : [],
+  "theRequirements" : [],
+  "theGoals" : [],
+  "theGoalAssociations" : []
+};
+
+var connectorDefault = {
+  "__python_obj__": "Connector.Connector",
+  "theConnectorName" : "",
+  "theFromComponent" : "",
+  "theFromRole" : "",
+  "theFromInterface" : "",
+  "theToComponent" : "",
+  "theToRole" : "",
+  "theToInterface" : "",
+  "theAssetName" : "",
+  "theProtocol" : "",
+  "theAccessRight" : ""
+};
+
 var architecturalPatternDefault = {
   "__python_obj__": "ArchitecturalPattern.ArchitecturalPattern",
   "theId" : -1,
+  "theName" : "",
+  "theSynopsis" : "",
   "theComponents" : [],
-  "theConnectors" : []
+  "theConnectors" : [],
+  "theAttackSurfaceMetric" : [0,0,0]
 };

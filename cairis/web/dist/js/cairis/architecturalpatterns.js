@@ -171,6 +171,12 @@ $(document).on('click', "td.component-row", function () {
   });
 });
 
+mainContent.on('click','#addComponent',function() {
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  $("#editArchitecturalPatternOptionsForm").hide();
+  $("#editComponentDiv").show();
+});
+
 function connectorAssets() {
   var ap = JSON.parse($.session.get("ArchitecturalPattern"));
   var fromComponent = $("#theFromComponent").val();
@@ -361,4 +367,157 @@ mainContent.on("click","#CloseConnector",function() {
 mainContent.on('click', '#CloseArchitecturalPattern', function (e) {
   e.preventDefault();
   createArchitecturalPatternsTable();
+});
+
+
+
+
+$(document).on('shown.bs.modal','#addComponentInterfaceDialog',function() {
+  var selectedInt = $('#addComponentInterfaceDialog').attr('data-selectedInterface');
+  if (selectedInt != undefined) {
+    selectedInt = JSON.parse(selectedInt);
+    $('#AddComponentInterface').text('Update');
+    $('#theInterfaceName').val(selectedInt.theName);
+    $('#theInterfaceType').val(selectedInt.theType);
+  }
+  else {
+    $('#theInterfaceName').val('');
+    $('#theInterfaceType').val('');
+    $('#AddComponentInterface').text('Add');
+  }
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/access_right",
+    success: function (accessRights) {
+      $("#theAccessRight option").remove();
+      $.each(accessRights,function(idx,accessRight) {
+        $('#theAccessRight').append($("<option></option>").attr("value",accessRight).text(accessRight));
+      });
+      if (selectedInt != undefined) {
+        $('#theAccessRight').val(selectedInt.theAccessRight);
+      }
+      else {
+        $('#theAccessRight').val('');
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/privilege",
+    success: function (privileges) {
+      $("#thePrivilege option").remove();
+      $.each(privileges,function(idx,privilege) {
+        $('#thePrivilege').append($("<option></option>").attr("value",privilege).text(privilege));
+      });
+      if (selectedInt != undefined) {
+        $('#thePrivilege').val(selectedInt.thePrivilege);
+      }
+      else {
+        $('#thePrivilege').val('');
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+mainContent.on('click','#addComponentInterface',function() {
+  $('#addComponentInterfaceDialog').removeAttr('data-selectedInterface');
+  $('#addComponentInterfaceDialog').removeAttr('data-selectedIndex');
+  $('#addComponentInterfaceDialog').modal('show');
+});
+
+mainContent.on('click','td.component-interface',function(){
+  var intRow = $(this).closest("tr");
+  var selectedInt = {};
+  selectedInt.theName = intRow.find("td:eq(1)").text();
+  selectedInt.theType = intRow.find("td:eq(2)").text();
+  selectedInt.theAccessRight = intRow.find("td:eq(3)").text();
+  selectedInt.thePrivilege = intRow.find("td:eq(4)").text();
+
+  $('#addComponentInterfaceDialog').attr('data-selectedInterface',JSON.stringify(selectedInt));
+  $('#addComponentInterfaceDialog').attr('data-selectedIndex',intRow.index());
+  $('#addComponentInterfaceDialog').modal('show');
+});
+
+mainContent.on('click','#AddComponentInterface',function() {
+  var selectedInt = {};
+  selectedInt.theName = $('#theInterfaceName').val();
+  selectedInt.theType = $('#theInterfaceType').val();
+  selectedInt.theAccessRight = $('#theAccessRight').val();
+  selectedInt.thePrivilege = $('#thePrivilege').val();
+  
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  var componentName = $('#theComponentName').val();
+  $.each(ap.theComponents,function(idx,comp) {
+    if (comp.theName == componentName) {
+      var selectedIdx = $('#addComponentInterfaceDialog').attr('data-selectedIndex');
+      if (selectedIdx != undefined) {
+        comp.theInterfaces[selectedIdx] = selectedInt;
+        $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(1)').text(selectedInt.theName);
+        $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(2)').text(selectedInt.theType);
+        $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(3)').text(selectedInt.theAccessRight);
+        $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(4)').text(selectedInt.thePrivilege);
+      }
+      else {
+        comp.theInterfaces.push(selectedInt);
+        appendComponentInterface(selectedInt);
+      }
+      $('#addComponentInterfaceDialog').modal('hide');
+    }
+  });
+});
+
+mainContent.on('click','#addComponentStructure',function() {
+  $('#addComponentStructureDialog').modal('show');
+});
+
+$(document).on('shown.bs.modal','#addComponentStructureDialog',function() {
+  var selectedStr = undefined;
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/template_asset",
+    success: function (tailAssets) {
+      $("#tailAsset option").remove();
+      $.each(tailAssets,function(idx,tailAsset) {
+        $('#tailAsset').append($("<option></option>").attr("value",tailAsset).text(tailAsset));
+      });
+      if (selectedStr != undefined) {
+        $('#tailAsset').val(selectedStr.theTailAsset);
+      }
+      else {
+        $('#tailAsset').val('');
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 });

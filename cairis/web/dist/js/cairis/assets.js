@@ -301,7 +301,7 @@ mainContent.on('dblclick', '.clickable-associations', function(){
         var tailAssetBox = $("#tailAsset");
         tailAssetBox.empty()
         $.each(data, function(idx,assetName) {
-          tailAssetBox.append("<option value=" + assetName + ">" + assetName + "</option>");
+          tailAssetBox.append('<option value="' + assetName + '">' + assetName + '</option>');
         });
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -361,7 +361,7 @@ mainContent.on('click', '.addEnvironmentPlus',function(){
               } 
               else {
                 var Assetprops = JSON.parse($.session.get("AssetProperties"));
-                var newProp = jQuery.extend(true, {}, AssetEnvironmentProperty);
+                var newProp = jQuery.extend(true, {}, assetEnvironmentDefault);
                 newProp.theEnvironmentName = chosenText;
                 $.session.set("assetEnvironmentName", newProp.theEnvironmentName);
                 Assetprops.push(newProp);
@@ -638,7 +638,7 @@ mainContent.on("click", "#addNewAssociation", function(){
         var tailAssetBox = $("#tailAsset");
         tailAssetBox.empty()
         $.each(data, function(idx,assetName) {
-          tailAssetBox.append("<option value=" + assetName + ">" + assetName + "</option>");
+          tailAssetBox.append('<option value="' + assetName + '">' + assetName + '</option>');
         });
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -906,7 +906,7 @@ function newAssetEnvironment(jsonString,callback){
   var output = {};
 
   if(typeof jsonString == 'undefined'){
-    output = jQuery.extend(true, {},AssetEnvironmentProperty );
+    output = jQuery.extend(true, {},assetEnvironmentDefault );
   }
   else{
     output.object = JSON.parse(jsonString);
