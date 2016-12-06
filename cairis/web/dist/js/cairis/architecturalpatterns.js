@@ -137,7 +137,6 @@ function appendConnector(connector) {
     $("#theConnectors").find("tbody").append('<tr><td class="deleteConnector"><i class="fa fa-minus"></i></td><td class="connector-row">'+ connector.theConnectorName + '</td><td>' + connector.theFromComponent +'</td><td>' + connector.theFromRole + '</td><td>' + connector.theFromInterface + '</td><td>' + connector.theToComponent + '</td><td>' + connector.theToInterface + '</td><td>' + connector.theToRole + '</td><td>' + connector.theAssetName + '</td><td>' + connector.theProtocol + '</td><td>' + connector.theAccessRight + '</td></tr>');
 };
 
-var mainContent = $("#objectViewer");
 $(document).on('click', "td.component-row", function () {
   var ap = JSON.parse($.session.get("ArchitecturalPattern"));
   var componentName = $(this).text();
@@ -164,13 +163,158 @@ $(document).on('click', "td.component-row", function () {
         $.each(apc.theGoals,function(idx,comgoal) {
           appendComponentGoal(comgoal);
         });
-        $.each(apc.theGoalAssociationss,function(idx,comga) {
+        $.each(apc.theGoalAssociations,function(idx,comga) {
           appendComponentGoalAssociation(comga);
         });
       });
     }
   });
 });
+
+function connectorAssets() {
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  var fromComponent = $("#theFromComponent").val();
+  var toComponent = $("#theToComponent").val();
+  var assetSet = new Set();
+  $.each(ap.theComponents,function(idx,apc) {
+    if ((apc.theName == fromComponent) || (apc.theName == toComponent)) {
+      $.each(apc.theStructure,function(idx,cstr) {
+        assetSet.add(cstr.theHeadAsset);
+        assetSet.add(cstr.theTailAsset);
+      });
+    }
+  });
+  return assetSet;
+}
+
+mainContent.on('click', "td.connector-row", function () {
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  var connectorName = $(this).text();
+  $.each(ap.theConnectors, function(idx,conn) {
+    if (connectorName == conn.theConnectorName) {
+      $("#editArchitecturalPatternOptionsForm").hide();
+      $("#editConnectorDiv").show(function() {
+        $("#theConnectorName").val(connectorName); 
+
+        $.ajax({
+          type: "GET",
+          dataType: "json",
+          accept: "application/json",
+          data: {
+            session_id: String($.session.get('sessionID'))
+          },
+          crossDomain: true,
+          url: serverIP + "/api/dimensions/table/protocol",
+          success: function (protocols) {
+            $("#theProtocol option").remove();
+            $.each(protocols,function(idx,protocol) {
+              $('#theProtocol').append($("<option></option>").attr("value",protocol).text(protocol));
+            });
+            $("#theProtocol").val(conn.theProtocol);
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+          }
+        });
+
+        $.ajax({
+          type: "GET",
+          dataType: "json",
+          accept: "application/json",
+          data: {
+            session_id: String($.session.get('sessionID'))
+          },
+          crossDomain: true,
+          url: serverIP + "/api/dimensions/table/access_right",
+          success: function (accessRights) {
+            $("#theAccessRight option").remove();
+            $.each(accessRights,function(idx,accessRight) {
+              $('#theAccessRight').append($("<option></option>").attr("value",accessRight).text(accessRight));
+            });
+            $("#theAccessRight").val(conn.theAccessRight);
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+          }
+        });
+
+        $("#theFromRole").val(conn.theFromRole); 
+        $("#theToRole").val(conn.theToRole); 
+        $("#theFromComponent option").remove();
+        $("#theToComponent option").remove();
+        $.each(ap.theComponents,function(idx,comp) {
+          $('#theFromComponent').append($("<option></option>").attr("value",comp.theName).text(comp.theName));
+          $('#theToComponent').append($("<option></option>").attr("value",comp.theName).text(comp.theName));
+        });
+        $('#theFromComponent').val(conn.theFromComponent);
+        $('#theToComponent').val(conn.theToComponent);
+
+        $("#theFromInterface option").remove();
+        $("#theToInterface option").remove();
+        $.each(ap.theComponents,function(idx,comp) {
+           if (comp.theName == conn.theFromComponent) {
+             $.each(comp.theInterfaces,function(idx,compInt) {
+               $("#theFromInterface").append($("<option></option>").attr("value",compInt.theName).text(compInt.theName));
+             });
+             $("#theFromInterface").val(conn.theFromInterface); 
+           }
+
+           if (comp.theName == conn.theToComponent) {
+             $.each(comp.theInterfaces,function(idx,compInt) {
+               $("#theToInterface").append($("<option></option>").attr("value",compInt.theName).text(compInt.theName));
+             });
+             $("#theToInterface").val(conn.theToInterface); 
+           }
+        });
+        refreshAssetBox(conn.theAssetName);
+
+        $('#theFromComponent').trigger('change');
+        $('#theToComponent').trigger('change');
+      });
+    }
+  });
+});
+
+var mainContent = $("#objectViewer");
+mainContent.on('change',"#theFromComponent", function() {
+  refreshAssetBox();
+  refreshInterfaceBox("#theFromInterface",$("#theFromComponent").val());
+});
+
+mainContent.on('change',"#theToComponent", function() {
+  refreshAssetBox();
+  refreshInterfaceBox("#theToInterface",$("#theToComponent").val());
+});
+
+function refreshAssetBox(currentAsset) {
+  if (currentAsset == undefined) {
+    currentAsset = $("#theAssetName").val();
+  }
+  $("#theAssetName option").remove();
+  var assets = connectorAssets();
+  for (let cAsset of assets) {
+    $('#theAssetName').append($("<option></option>").attr("value",cAsset).text(cAsset));
+  }
+  if (assets.has(currentAsset)) {
+    $("#theAssetName").val(currentAsset);
+  }
+};
+
+function refreshInterfaceBox(intCtrlId,cName) {
+  var currentInterface = $(intCtrlId).val();
+  $(intCtrlId + " option").remove();
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  $.each(ap.theComponents,function(idx,apc) {
+    if (apc.theName == cName) {
+      $.each(apc.theInterfaces,function(idx,apcInt) {
+        $(intCtrlId).append($("<option></option>").attr("value",apcInt.theName).text(apcInt.theName));
+      });
+      $(intCtrlId).val(currentInterface); 
+    }
+  });
+}
 
 function appendComponentInterface(comint) {
     $("#theInterfaces").find("tbody").append('<tr><td class="deleteComponentInterface"><i class="fa fa-minus"></i></td><td class="component-interface">'+ comint.theName +'</td><td>' + comint.theType + '</td><td>' + comint.theAccessRight + '</td><td>' + comint.thePrivilege + '</td></tr>');
@@ -189,15 +333,9 @@ function appendComponentGoal(comgoal) {
 };
 
 function appendComponentGoalAssociation(comga) {
-    $("#theGoalAssociations").find("tbody").append('<tr><td class="deleteComponentGoalAssociation"><i class="fa fa-minus"></i></td><td class="component-goal">'+ comga.theHeadGoal + '</td><td>' + comga.theRefType + '</td><td>' + comga.theTailGoal + '</td><td>' + comga.theRationale + '</td></tr>');
+    $("#theGoalAssociations").find("tbody").append('<tr><td class="deleteComponentGoalAssociation"><i class="fa fa-minus"></i></td><td class="component-goal">'+ comga.theGoalName + '</td><td>' + comga.theRefType + '</td><td>' + comga.theSubGoalName + '</td><td>' + comga.theRationale + '</td></tr>');
 };
 
-mainContent.on('click', "td.connector-row", function () {
-  var connectorName = $(this).text();
-  $("#editArchitecturalPatternOptionsForm").hide();
-  $("#editConnectorDiv").show(function(connectorName) {
-  });
-});
 
 mainContent.on("click","#UpdateComponent",function() {
   $("#editComponentDiv").hide();
