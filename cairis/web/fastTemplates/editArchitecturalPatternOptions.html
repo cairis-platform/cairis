@@ -118,7 +118,7 @@
       <button type="submit" class="btn btn-secondary" id="CloseComponent">Close</button>
     </div>
   </div>
-<div class="modal fade" id="addComponentInterfaceDialog" tabindex="-1" role="dialog" aria-labelledby="cAID_label">
+  <div class="modal fade" id="addComponentInterfaceDialog" tabindex="-1" role="dialog" aria-labelledby="cAID_label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -156,10 +156,9 @@
       </div>
     </div>
   </div>
-</div>
-</div>
+  </div>
 
-<div class="modal fade" id="addComponentStructureDialog" tabindex="-1" role="dialog" aria-labelledby="cACS_label">
+  <div class="modal fade" id="addComponentStructureDialog" tabindex="-1" role="dialog" aria-labelledby="cACS_label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -167,6 +166,11 @@
         <h4 class="modal-title">Add Structure</h4>
       </div>
       <div class="modal-body">
+        <div class="form-group">
+          <label for="headAsset" class="control-label">Head</label>
+          <select class="optionsInput form-control" name="headAsset" id="headAsset" style="width: 100%;">
+          </select>
+        </div>
         <div class="form-group">
           <label for="headNav" class="control-label">Navigation</label>
           <select class="optionsInput form-control" name="headNav" id="headNav" style="width: 100%;">
@@ -235,12 +239,96 @@
       </div>
       <div class="modal-footer">
         <div class="form-group col-md-2 col-md-offset-5">
-          <button type="button" id="AddComponentStructure" class="btn btn-primary">Create</button>
+          <button type="button" id="AddComponentStructure" class="btn btn-primary">Add</button>
         </div>
       </div>
     </div>
   </div>
-</div>
+  </div>
+
+  <div class="modal fade" id="addComponentGoalDialog" tabindex="-1" role="dialog" aria-labelledby="cACG_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Goal</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theComponentGoal" class="control-label">Goal</label>
+          <select class="optionsInput form-control" name="theComponentGoal" id="theComponentGoal" style="width: 100%;">
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddComponentGoal" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="modal fade" id="addComponentRequirementDialog" tabindex="-1" role="dialog" aria-labelledby="cACR_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Requirement</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theComponentRequirement" class="control-label">Requirement</label>
+          <select class="optionsInput form-control" name="theComponentRequirement" id="theComponentRequirement" style="width: 100%;">
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddComponentRequirement" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="modal fade" id="addComponentGoalAssociationDialog" tabindex="-1" role="dialog" aria-labelledby="cACGA_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Goal Association</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theHeadGoal" class="control-label">Goal</label>
+          <select id="theHeadGoal" class="right form-control"></select>
+        </div>
+        <div class="form-group">
+          <label for="theRefType" class="control-label">Refinement</label>
+          <select id="theRefType" class="right form-control">
+            <option value="and">and</option>
+            <option value="or">or</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theTailGoal" class="control-label">Sub-Goal</label>
+          <select id="theTailGoal" class="right form-control"></select>
+        </div>
+        <div>
+          <label for="theRationale" class="control-label">Rationale</label>
+          <textarea rows="15" class="right form-control" id="theRationale" data-error="Rationale is required" required></textarea>
+          <div class="help-block with-errors"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddComponentGoalAssociation" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
 </div>
 
 

@@ -1042,14 +1042,14 @@ class ComponentStructureModel(object):
   resource_fields = {
     obj_id_field: fields.String,
     "theHeadAsset": fields.String,
-    "theHeadAssetType": fields.String,
+    "theHeadAdornment": fields.String,
     "theHeadNav": fields.String,
     "theHeadNry": fields.String,
     "theHeadRole": fields.String,
     "theTailRole": fields.String,
     "theTailNry": fields.String,
     "theTailNav": fields.String,
-    "theTailAssetType": fields.String,
+    "theTailAdornment": fields.String,
     "theTailAsset": fields.String
   }
   required = resource_fields.keys()

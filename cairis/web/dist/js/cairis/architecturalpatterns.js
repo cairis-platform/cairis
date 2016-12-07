@@ -142,6 +142,7 @@ $(document).on('click', "td.component-row", function () {
   var componentName = $(this).text();
   $.each(ap.theComponents,function(idx,apc) {
     if (apc.theName == componentName) {
+      $.session.set("Component", JSON.stringify(apc));
       $("#editArchitecturalPatternOptionsForm").hide();
       $("#editComponentDiv").show(function(com) {
         $("#theComponentName").val(apc.theName); 
@@ -172,7 +173,8 @@ $(document).on('click', "td.component-row", function () {
 });
 
 mainContent.on('click','#addComponent',function() {
-  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  $.session.set("Component", JSON.stringify(jQuery.extend(true, {},componentDefault )));
+  $("#editArchitecturalPatternOptionsForm").addClass('new');
   $("#editArchitecturalPatternOptionsForm").hide();
   $("#editComponentDiv").show();
 });
@@ -311,15 +313,11 @@ function refreshAssetBox(currentAsset) {
 function refreshInterfaceBox(intCtrlId,cName) {
   var currentInterface = $(intCtrlId).val();
   $(intCtrlId + " option").remove();
-  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
-  $.each(ap.theComponents,function(idx,apc) {
-    if (apc.theName == cName) {
-      $.each(apc.theInterfaces,function(idx,apcInt) {
-        $(intCtrlId).append($("<option></option>").attr("value",apcInt.theName).text(apcInt.theName));
-      });
-      $(intCtrlId).val(currentInterface); 
-    }
+  var comp = JSON.parse($.session.get("Component"));
+  $.each(comp.theInterfaces,function(idx,compInt) {
+    $(intCtrlId).append($("<option></option>").attr("value",compInt.theName).text(compInt.theName));
   });
+  $(intCtrlId).val(currentInterface); 
 }
 
 function appendComponentInterface(comint) {
@@ -467,33 +465,76 @@ mainContent.on('click','#AddComponentInterface',function() {
   selectedInt.theAccessRight = $('#theAccessRight').val();
   selectedInt.thePrivilege = $('#thePrivilege').val();
   
-  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  var comp = JSON.parse($.session.get("Component"));
   var componentName = $('#theComponentName').val();
-  $.each(ap.theComponents,function(idx,comp) {
-    if (comp.theName == componentName) {
-      var selectedIdx = $('#addComponentInterfaceDialog').attr('data-selectedIndex');
-      if (selectedIdx != undefined) {
-        comp.theInterfaces[selectedIdx] = selectedInt;
-        $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(1)').text(selectedInt.theName);
-        $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(2)').text(selectedInt.theType);
-        $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(3)').text(selectedInt.theAccessRight);
-        $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(4)').text(selectedInt.thePrivilege);
-      }
-      else {
-        comp.theInterfaces.push(selectedInt);
-        appendComponentInterface(selectedInt);
-      }
-      $('#addComponentInterfaceDialog').modal('hide');
-    }
-  });
+  var selectedIdx = $('#addComponentInterfaceDialog').attr('data-selectedIndex');
+  if (selectedIdx != undefined) {
+    comp.theInterfaces[selectedIdx] = selectedInt;
+    $.session.set("Component", JSON.stringify(comp));
+    $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(1)').text(selectedInt.theName);
+    $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(2)').text(selectedInt.theType);
+    $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(3)').text(selectedInt.theAccessRight);
+    $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(4)').text(selectedInt.thePrivilege);
+  }
+  else {
+    comp.theInterfaces[selectedIdx].push(selectedInt);
+    $.session.set("Component", JSON.stringify(comp));
+    appendComponentInterface(selectedInt);
+  }
+  $('#addComponentInterfaceDialog').modal('hide');
 });
 
 mainContent.on('click','#addComponentStructure',function() {
+  $('#addComponentStructureDialog').removeAttr('data-selectedStructure');
+  $('#addComponentStructureDialog').removeAttr('data-selectedIndex');
+  $('#addComponentStructureDialog').modal('show');
+});
+
+mainContent.on('click','td.component-structure',function(){
+  var strRow = $(this).closest("tr");
+  var selectedStr = {};
+  selectedStr.theHeadAsset = strRow.find("td:eq(1)").text();
+  selectedStr.theHeadAdornment = strRow.find("td:eq(2)").text();
+  selectedStr.theHeadNav = strRow.find("td:eq(3)").text();
+  selectedStr.theHeadNry = strRow.find("td:eq(4)").text();
+  selectedStr.theHeadRole = strRow.find("td:eq(5)").text();
+  selectedStr.theTailRole = strRow.find("td:eq(6)").text();
+  selectedStr.theTailNry = strRow.find("td:eq(7)").text();
+  selectedStr.theTailNav = strRow.find("td:eq(8)").text();
+  selectedStr.theTailAdornment = strRow.find("td:eq(9)").text();
+  selectedStr.theTailAsset = strRow.find("td:eq(10)").text();
+
+  $('#addComponentStructureDialog').attr('data-selectedStructure',JSON.stringify(selectedStr));
+  $('#addComponentStructureDialog').attr('data-selectedIndex',strRow.index());
   $('#addComponentStructureDialog').modal('show');
 });
 
 $(document).on('shown.bs.modal','#addComponentStructureDialog',function() {
-  var selectedStr = undefined;
+  var selectedStr = $('#addComponentStructureDialog').attr('data-selectedStructure');
+  if (selectedStr != undefined) {
+    selectedStr = JSON.parse(selectedStr);
+    $('#headAdorn').val(selectedStr.theHeadAdornment);
+    $('#headNav').val(selectedStr.theHeadNav);
+    $('#headNry').val(selectedStr.theHeadNry);
+    $('#headRole').val(selectedStr.theHeadRole);
+    $('#tailRole').val(selectedStr.theTailRole);
+    $('#tailNry').val(selectedStr.theTailNry);
+    $('#tailNav').val(selectedStr.theTailNav);
+    $('#tailAdorn').val(selectedStr.theTailAdornment);
+    $('#AddComponentStructure').text('Update');
+  }
+  else {
+    $('#headAdorn').val('Association');
+    $('#headNav').val('0');
+    $('#headNry').val('*');
+    $('#headRole').val('');
+    $('#tailRole').val('');
+    $('#tailNry').val('*');
+    $('#tailNav').val('0');
+    $('#tailAdorn').val('Association');
+    $('#AddComponentStructure').text('Add');
+  }
+
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -503,15 +544,19 @@ $(document).on('shown.bs.modal','#addComponentStructureDialog',function() {
     },
     crossDomain: true,
     url: serverIP + "/api/dimensions/table/template_asset",
-    success: function (tailAssets) {
+    success: function (assets) {
+      $("#headAsset option").remove();
       $("#tailAsset option").remove();
-      $.each(tailAssets,function(idx,tailAsset) {
-        $('#tailAsset').append($("<option></option>").attr("value",tailAsset).text(tailAsset));
+      $.each(assets,function(idx,asset) {
+        $('#headAsset').append($("<option></option>").attr("value",asset).text(asset));
+        $('#tailAsset').append($("<option></option>").attr("value",asset).text(asset));
       });
       if (selectedStr != undefined) {
+        $('#headAsset').val(selectedStr.theHeadAsset);
         $('#tailAsset').val(selectedStr.theTailAsset);
       }
       else {
+        $('#headAsset').val('');
         $('#tailAsset').val('');
       }
     },
@@ -520,4 +565,60 @@ $(document).on('shown.bs.modal','#addComponentStructureDialog',function() {
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
+});
+
+mainContent.on('click','#AddComponentStructure',function() {
+  var selectedStr = {};
+  selectedStr.theHeadAsset = $('#headAsset').val();
+  selectedStr.theHeadAdornment = $('#headAdorn').val();
+  selectedStr.theHeadNav = $('#headNav').val();
+  selectedStr.theHeadNry = $('#headNry').val();
+  selectedStr.theHeadRole = $('#headRole').val();
+  selectedStr.theTailRole = $('#tailRole').val();
+  selectedStr.theTailNry = $('#tailNry').val();
+  selectedStr.theTailNav = $('#tailNav').val();
+  selectedStr.theTailAdornment = $('#tailAdorn').val();
+  selectedStr.theTailAsset = $('#tailAsset').val();
+
+  
+  var comp = JSON.parse($.session.get("Component"));
+  var selectedIdx = $('#addComponentStructureDialog').attr('data-selectedIndex');
+  if (selectedIdx != undefined) {
+    comp.theStructure[selectedIdx] = selectedStr;
+    $.session.set("Component", JSON.stringify(comp));
+    $('#theStructure').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(1)').text(selectedStr.theHeadAsset);
+    $('#theStructure').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(2)').text(selectedStr.theHeadAdornment);
+    $('#theStructure').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(3)').text(selectedStr.theHeadNav);
+    $('#theStructure').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(4)').text(selectedStr.theHeadNry);
+    $('#theStructure').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(5)').text(selectedStr.theHeadRole);
+    $('#theStructure').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(6)').text(selectedStr.theTailRole);
+    $('#theStructure').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(7)').text(selectedStr.theTailNry);
+    $('#theStructure').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(8)').text(selectedStr.theTailNav);
+    $('#theStructure').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(9)').text(selectedStr.theTailAdornment);
+    $('#theStructure').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(10)').text(selectedStr.theTailAsset);
+  }
+  else {
+    comp.theStructure.push(selectedStr);
+    $.session.set("Component", JSON.stringify(comp));
+    appendComponentStructure(selectedStr);
+  }
+  $('#addComponentStructureDialog').modal('hide');
+});
+
+mainContent.on('click','td.deleteComponentStructure',function() {
+  var strRow = $(this).closest("tr");
+  var rowIdx = strRow.index();
+  strRow.remove();
+  var comp = JSON.parse($.session.get("Component"));
+  comp.theStructure.splice(rowIdx,1);
+  $.session.set("Component", JSON.stringify(comp));
+});
+
+mainContent.on('click','td.deleteComponentInterface',function() {
+  var intRow = $(this).closest("tr");
+  var rowIdx = intRow.index();
+  intRow.remove();
+  var comp = JSON.parse($.session.get("Component"));
+  comp.theInterfaces.splice(rowIdx,1);
+  $.session.set("Component", JSON.stringify(comp));
 });
