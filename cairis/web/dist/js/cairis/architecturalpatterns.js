@@ -138,6 +138,8 @@ function appendConnector(connector) {
 };
 
 $(document).on('click', "td.component-row", function () {
+  var comRow = $(this).closest("tr");
+  $('#editComponentDiv').attr('data-selectedIndex',comRow.index());
   var ap = JSON.parse($.session.get("ArchitecturalPattern"));
   var componentName = $(this).text();
   $.each(ap.theComponents,function(idx,apc) {
@@ -174,10 +176,11 @@ $(document).on('click', "td.component-row", function () {
 
 mainContent.on('click','#addComponent',function() {
   $.session.set("Component", JSON.stringify(jQuery.extend(true, {},componentDefault )));
-  $("#editArchitecturalPatternOptionsForm").addClass('new');
+  $("#editComponentDiv").addClass('new');
   $("#editArchitecturalPatternOptionsForm").hide();
   $("#editComponentDiv").show();
 });
+
 
 function connectorAssets() {
   var ap = JSON.parse($.session.get("ArchitecturalPattern"));
@@ -195,6 +198,64 @@ function connectorAssets() {
   return assetSet;
 }
 
+function refreshConnectorDetailsPanel() {
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/protocol",
+    success: function (protocols) {
+      $("#theProtocol option").remove();
+      $.each(protocols,function(idx,protocol) {
+        $('#theProtocol').append($("<option></option>").attr("value",protocol).text(protocol));
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/access_right",
+    success: function (accessRights) {
+      $("#theConnectorAccessRight option").remove();
+      $.each(accessRights,function(idx,accessRight) {
+        $('#theConnectorAccessRight').append($("<option></option>").attr("value",accessRight).text(accessRight));
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+
+function refreshConnectorPanels(ap) {
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  $("#theFromComponent option").remove();
+  $("#theToComponent option").remove();
+  $.each(ap.theComponents,function(idx,comp) {
+    $('#theFromComponent').append($("<option></option>").attr("value",comp.theName).text(comp.theName));
+    $('#theToComponent').append($("<option></option>").attr("value",comp.theName).text(comp.theName));
+  });
+  $("#theFromInterface option").remove();
+  $("#theToInterface option").remove();
+}
+
 mainContent.on('click', "td.connector-row", function () {
   var ap = JSON.parse($.session.get("ArchitecturalPattern"));
   var connectorName = $(this).text();
@@ -203,64 +264,12 @@ mainContent.on('click', "td.connector-row", function () {
       $("#editArchitecturalPatternOptionsForm").hide();
       $("#editConnectorDiv").show(function() {
         $("#theConnectorName").val(connectorName); 
-
-        $.ajax({
-          type: "GET",
-          dataType: "json",
-          accept: "application/json",
-          data: {
-            session_id: String($.session.get('sessionID'))
-          },
-          crossDomain: true,
-          url: serverIP + "/api/dimensions/table/protocol",
-          success: function (protocols) {
-            $("#theProtocol option").remove();
-            $.each(protocols,function(idx,protocol) {
-              $('#theProtocol').append($("<option></option>").attr("value",protocol).text(protocol));
-            });
-            $("#theProtocol").val(conn.theProtocol);
-          },
-          error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-          }
-        });
-
-        $.ajax({
-          type: "GET",
-          dataType: "json",
-          accept: "application/json",
-          data: {
-            session_id: String($.session.get('sessionID'))
-          },
-          crossDomain: true,
-          url: serverIP + "/api/dimensions/table/access_right",
-          success: function (accessRights) {
-            $("#theAccessRight option").remove();
-            $.each(accessRights,function(idx,accessRight) {
-              $('#theAccessRight').append($("<option></option>").attr("value",accessRight).text(accessRight));
-            });
-            $("#theAccessRight").val(conn.theAccessRight);
-          },
-          error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-          }
-        });
-
         $("#theFromRole").val(conn.theFromRole); 
         $("#theToRole").val(conn.theToRole); 
-        $("#theFromComponent option").remove();
-        $("#theToComponent option").remove();
-        $.each(ap.theComponents,function(idx,comp) {
-          $('#theFromComponent').append($("<option></option>").attr("value",comp.theName).text(comp.theName));
-          $('#theToComponent').append($("<option></option>").attr("value",comp.theName).text(comp.theName));
-        });
+        refreshConnectorPanels(ap);
         $('#theFromComponent').val(conn.theFromComponent);
         $('#theToComponent').val(conn.theToComponent);
 
-        $("#theFromInterface option").remove();
-        $("#theToInterface option").remove();
         $.each(ap.theComponents,function(idx,comp) {
            if (comp.theName == conn.theFromComponent) {
              $.each(comp.theInterfaces,function(idx,compInt) {
@@ -276,6 +285,9 @@ mainContent.on('click', "td.connector-row", function () {
              $("#theToInterface").val(conn.theToInterface); 
            }
         });
+        refreshConnectorDetailsPanel();
+        $("#theProtocol").val(conn.theProtocol);
+        $("#theConnectorAccessRight").val(conn.theAccessRight);
         refreshAssetBox(conn.theAssetName);
 
         $('#theFromComponent').trigger('change');
@@ -283,6 +295,18 @@ mainContent.on('click', "td.connector-row", function () {
       });
     }
   });
+});
+
+mainContent.on('click','#addConnector',function() {
+  $("#editConnectorDiv").addClass('new');
+  $("#editArchitecturalPatternOptionsForm").hide();
+  $('#theConnectorName').val('');
+  $('#theFromRole').val('');
+  $('#theToRole').val('');
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  refreshConnectorPanels(ap);
+  refreshConnectorDetailsPanel();
+  $("#editConnectorDiv").show();
 });
 
 var mainContent = $("#objectViewer");
@@ -298,26 +322,30 @@ mainContent.on('change',"#theToComponent", function() {
 
 function refreshAssetBox(currentAsset) {
   if (currentAsset == undefined) {
-    currentAsset = $("#theAssetName").val();
+    currentAsset = $("#theConnectorAssetName").val();
   }
-  $("#theAssetName option").remove();
+  $("#theConnectorAssetName option").remove();
   var assets = connectorAssets();
   for (let cAsset of assets) {
-    $('#theAssetName').append($("<option></option>").attr("value",cAsset).text(cAsset));
+    $('#theConnectorAssetName').append($("<option></option>").attr("value",cAsset).text(cAsset));
   }
   if (assets.has(currentAsset)) {
-    $("#theAssetName").val(currentAsset);
+    $("#theConnectorAssetName").val(currentAsset);
   }
 };
 
 function refreshInterfaceBox(intCtrlId,cName) {
   var currentInterface = $(intCtrlId).val();
   $(intCtrlId + " option").remove();
-  var comp = JSON.parse($.session.get("Component"));
-  $.each(comp.theInterfaces,function(idx,compInt) {
-    $(intCtrlId).append($("<option></option>").attr("value",compInt.theName).text(compInt.theName));
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  $.each(ap.theComponents,function(idx,comp) {
+    if (cName == comp.theName) {
+      $.each(comp.theInterfaces,function(idx,compInt) {
+        $(intCtrlId).append($("<option></option>").attr("value",compInt.theName).text(compInt.theName));
+      });
+      $(intCtrlId).val(currentInterface); 
+    }
   });
-  $(intCtrlId).val(currentInterface); 
 }
 
 function appendComponentInterface(comint) {
@@ -337,11 +365,27 @@ function appendComponentGoal(comgoal) {
 };
 
 function appendComponentGoalAssociation(comga) {
-    $("#theGoalAssociations").find("tbody").append('<tr><td class="deleteComponentGoalAssociation"><i class="fa fa-minus"></i></td><td class="component-goal">'+ comga.theGoalName + '</td><td>' + comga.theRefType + '</td><td>' + comga.theSubGoalName + '</td><td>' + comga.theRationale + '</td></tr>');
+    $("#theGoalAssociations").find("tbody").append('<tr><td class="deleteComponentGoalAssociation"><i class="fa fa-minus"></i></td><td class="component-goalassociation">'+ comga.theGoalName + '</td><td>' + comga.theRefType + '</td><td>' + comga.theSubGoalName + '</td><td>' + comga.theRationale + '</td></tr>');
 };
 
 
 mainContent.on("click","#UpdateComponent",function() {
+
+  var comp = JSON.parse($.session.get("Component"));
+  comp.theName = $('#theComponentName').val();
+  comp.theDescription = $('#theDescription').val();
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+
+  if ($("#editComponentDiv").hasClass('new')) {
+    ap.theComponents.push(comp);
+    appendComponent(comp);
+  }
+  else {
+    var selectedIdx = $('#editComponentDiv').attr('data-selectedIndex');
+    ap.theComponents[selectedIdx] = comp;
+    $('#theComponents').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(1)').text(comp.theName);
+    $('#theComponents').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(2)').text(comp.theDescription);
+  }
   $("#editComponentDiv").hide();
   $("#editArchitecturalPatternOptionsForm").show();
 });
@@ -444,6 +488,7 @@ mainContent.on('click','#addComponentInterface',function() {
   $('#addComponentInterfaceDialog').removeAttr('data-selectedIndex');
   $('#addComponentInterfaceDialog').modal('show');
 });
+
 
 mainContent.on('click','td.component-interface',function(){
   var intRow = $(this).closest("tr");
@@ -622,3 +667,182 @@ mainContent.on('click','td.deleteComponentInterface',function() {
   comp.theInterfaces.splice(rowIdx,1);
   $.session.set("Component", JSON.stringify(comp));
 });
+
+mainContent.on('click','#addComponentGoal',function() {
+  $('#addComponentGoalDialog').modal('show');
+});
+
+$(document).on('shown.bs.modal','#addComponentGoalDialog',function() {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/template_goal",
+    success: function (goals) {
+      $("#theComponentGoal option").remove();
+      var comp = JSON.parse($.session.get("Component"));
+      $.each(goals,function(idx,goal) {
+        if (comp.theGoals.indexOf(goal) == -1) {
+          $('#theComponentGoal').append($("<option></option>").attr("value",goal).text(goal));
+        }
+      });
+      $('#theComponentGoal').val('');
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+mainContent.on('click','#AddComponentGoal',function() {
+  var goalName = $('#theComponentGoal').val();
+  var comp = JSON.parse($.session.get("Component"));
+  comp.theGoals.push(goalName);
+  $.session.set("Component", JSON.stringify(comp));
+  appendComponentGoal(goalName);
+  $('#addComponentGoalDialog').modal('hide');
+});
+
+mainContent.on('click','td.deleteComponentGoal',function() {
+  var goalRow = $(this).closest("tr");
+  var rowIdx = goalRow.index();
+  goalRow.remove();
+  var comp = JSON.parse($.session.get("Component"));
+  comp.theGoals.splice(rowIdx,1);
+  $.session.set("Component", JSON.stringify(comp));
+});
+
+
+mainContent.on('click','#addComponentRequirement',function() {
+  $('#addComponentRequirementDialog').modal('show');
+});
+
+$(document).on('shown.bs.modal','#addComponentRequirementDialog',function() {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/template_requirement",
+    success: function (reqs) {
+      $("#theComponentRequirement option").remove();
+      var comp = JSON.parse($.session.get("Component"));
+      $.each(reqs,function(idx,req) {
+        if (comp.theRequirements.indexOf(req) == -1) {
+          $('#theComponentRequirement').append($("<option></option>").attr("value",req).text(req));
+        }
+      });
+      $('#theComponentRequirement').val('');
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+mainContent.on('click','#AddComponentRequirement',function() {
+  var reqName = $('#theComponentRequirement').val();
+  var comp = JSON.parse($.session.get("Component"));
+  comp.theRequirements.push(reqName);
+  $.session.set("Component", JSON.stringify(comp));
+  appendComponentRequirement(reqName);
+  $('#addComponentRequirementDialog').modal('hide');
+});
+
+mainContent.on('click','td.deleteComponentRequirement',function() {
+  var reqRow = $(this).closest("tr");
+  var rowIdx = reqRow.index();
+  reqRow.remove();
+  var comp = JSON.parse($.session.get("Component"));
+  comp.theRequirements.splice(rowIdx,1);
+  $.session.set("Component", JSON.stringify(comp));
+});
+
+mainContent.on('click','#addComponentGoalAssociation',function() {
+  $('#addComponentGoalAssociationDialog').removeAttr('data-selectedGa');
+  $('#addComponentGoalAssociationDialog').removeAttr('data-selectedIndex');
+  $('#addComponentGoalAssociationDialog').modal('show');
+});
+
+mainContent.on('click','td.component-goalassociation',function(){
+  var gaRow = $(this).closest("tr");
+  var ga = {};
+  ga.theGoalName = gaRow.find("td:eq(1)").text();
+  ga.theRefType = gaRow.find("td:eq(2)").text();
+  ga.theSubGoalName = gaRow.find("td:eq(3)").text();
+  ga.theRationale = gaRow.find("td:eq(4)").text();
+
+  $('#addComponentGoalAssociationDialog').attr('data-selectedGa',JSON.stringify(ga));
+  $('#addComponentGoalAssociationDialog').attr('data-selectedIndex',gaRow.index());
+  $('#addComponentGoalAssociationDialog').modal('show');
+});
+
+$(document).on('shown.bs.modal','#addComponentGoalAssociationDialog',function() {
+  var selectedGa = $('#addComponentGoalAssociationDialog').attr('data-selectedGa');
+  var comp = JSON.parse($.session.get("Component"));
+  $("#theGoalName option").remove();
+  $("#theSubGoalName option").remove();
+  $.each(comp.theGoals,function(idx,goal) {
+    $('#theGoalName').append($("<option></option>").attr("value",goal).text(goal));
+    $('#theSubGoalName').append($("<option></option>").attr("value",goal).text(goal));
+  });
+  if (selectedGa != undefined) {
+    var ga = JSON.parse(selectedGa);
+    $('#theGoalName').val(ga.theGoalName);
+    $('#theSubGoalName').val(ga.theSubGoalName);
+    $('#theRefType').val(ga.theRefType);
+    $('#theRationale').val(ga.theRationale);
+  }
+  else {
+    $('#theGoalName').val('');
+    $('#theSubGoalName').val('');
+    $('#theRefType').val('and');
+    $('#theRationale').val('');
+
+  }
+});
+
+
+mainContent.on('click','#AddComponentGoalAssociation',function() {
+  var ga = {};
+  ga.theGoalName = $('#theGoalName').val();
+  ga.theSubGoalName = $('#theSubGoalName').val();
+  ga.theRefType = $('#theRefType').val();
+  ga.theRationale = $('#theRationale').val();
+  var comp = JSON.parse($.session.get("Component"));
+
+  var selectedIdx = $('#addComponentGoalAssociationDialog').attr('data-selectedIndex');
+  if (selectedIdx != undefined) {
+    comp.theGoalAssociations[selectedIdx] = ga;
+    $('#theGoalAssociations').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(1)').text(ga.theGoalName);
+    $('#theGoalAssociations').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(2)').text(ga.theRefType);
+    $('#theGoalAssociations').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(3)').text(ga.theSubGoalName);
+    $('#theGoalAssociations').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(4)').text(ga.theRationale);
+  }
+  else {
+    comp.theGoalAssociations.push(ga);
+    appendComponentGoalAssociation(ga);
+  }
+  $.session.set("Component", JSON.stringify(comp));
+  $('#addComponentGoalAssociationDialog').modal('hide');
+});
+
+
+mainContent.on('click','td.deleteComponentGoalAssociation',function() {
+  var gaRow = $(this).closest("tr");
+  var rowIdx = gaRow.index();
+  gaRow.remove();
+  var comp = JSON.parse($.session.get("Component"));
+  comp.theGoalAssociations.splice(rowIdx,1);
+  $.session.set("Component", JSON.stringify(comp));
+});
+
