@@ -1118,82 +1118,76 @@ function concernDialogBox(hasRole ,callback){
 // Function for creating the comboboxes
 function createComboboxes(){
   var sess = String($.session.get('sessionID'));
-  if(!window.boxesAreFilled) {
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
-      crossDomain: true,
-      url: serverIP + "/api/assets/all/names",
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/assets/all/names",
 
-      success: function (data) {
-        // we make a successful JSONP call!
-        var options = $("#assetsbox");
-        var amoptions = $("#amassetsbox");
-        options.empty();
-        amoptions.empty();
-        options.append("<option>All</option>");
-        amoptions.append("<option>All</option>");
-        $.each(data, function () {
-          options.append($("<option />").val(this).text(this));
-          amoptions.append($("<option />").val(this).text(this));
-        });
-        $(".topCombobox").css("visibility", "visible");
+    success: function (data) {
+      var options = $("#assetsbox");
+      var amoptions = $("#amassetsbox");
+      options.empty();
+      amoptions.empty();
+      options.append("<option>All</option>");
+      amoptions.append("<option>All</option>");
+      $.each(data, function () {
+        options.append($("<option />").val(this).text(this));
+        amoptions.append($("<option />").val(this).text(this));
+      });
+      $(".topCombobox").css("visibility", "visible");
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/environments/all/names",
 
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-
-    });
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
-      crossDomain: true,
-      url: serverIP + "/api/environments/all/names",
-
-      success: function (data) {
-        var envBox = $("#environmentsbox");
-        var amEnvBox = $("#amenvironmentsbox");
-        var gmEnvBox = $("#gmenvironmentsbox");
-        var omEnvBox = $("#omenvironmentsbox");
-        var tmEnvBox = $("#tmenvironmentsbox");
-        var remEnvBox = $("#remenvironmentsbox");
-        var rmEnvBox = $("#rmenvironmentsbox");
-        envBox.empty();
-        amEnvBox.empty();
-        gmEnvBox.empty();
-        omEnvBox.empty();
-        tmEnvBox.empty();
-        remEnvBox.empty();
-        rmEnvBox.empty();
-        $.each(data, function () {
-          envBox.append($("<option />").val(this).text(this));
-          amEnvBox.append($("<option />").val(this).text(this));
-          gmEnvBox.append($("<option />").val(this).text(this));
-          omEnvBox.append($("<option />").val(this).text(this));
-          tmEnvBox.append($("<option />").val(this).text(this));
-          remEnvBox.append($("<option />").val(this).text(this));
-          rmEnvBox.append($("<option />").val(this).text(this));
-        });
-        envBox.css("visibility", "visible");
-        window.boxesAreFilled = true;
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-
-    });
-  }
+    success: function (data) {
+      var envBox = $("#environmentsbox");
+      var amEnvBox = $("#amenvironmentsbox");
+      var gmEnvBox = $("#gmenvironmentsbox");
+      var omEnvBox = $("#omenvironmentsbox");
+      var tmEnvBox = $("#tmenvironmentsbox");
+      var remEnvBox = $("#remenvironmentsbox");
+      var rmEnvBox = $("#rmenvironmentsbox");
+      envBox.empty();
+      amEnvBox.empty();
+      gmEnvBox.empty();
+      omEnvBox.empty();
+      tmEnvBox.empty();
+      remEnvBox.empty();
+      rmEnvBox.empty();
+      $.each(data, function () {
+        envBox.append($("<option />").val(this).text(this));
+        amEnvBox.append($("<option />").val(this).text(this));
+        gmEnvBox.append($("<option />").val(this).text(this));
+        omEnvBox.append($("<option />").val(this).text(this));
+        tmEnvBox.append($("<option />").val(this).text(this));
+        remEnvBox.append($("<option />").val(this).text(this));
+        rmEnvBox.append($("<option />").val(this).text(this));
+      });
+      envBox.css("visibility", "visible");
+      window.boxesAreFilled = true;
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
 function startingTable(){

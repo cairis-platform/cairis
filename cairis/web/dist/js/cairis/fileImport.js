@@ -40,6 +40,7 @@ $("#importClick").click(function () {
       data: objectoutput,
       url: serverIP + "/api/import/text",
       success: function (data) {
+        startingTable();
         showPopup(true);
       },
       complete: function() {
