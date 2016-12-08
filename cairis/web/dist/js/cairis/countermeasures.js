@@ -441,6 +441,7 @@ mainContent.on('click', '#UpdateCountermeasure', function (e) {
 
     if($("#editCountermeasureOptionsForm").hasClass("new")){
       postCountermeasure(cm, function () {
+        $("#editCountermeasureOptionsForm").removeClass("new");
         createCountermeasuresTable();
       });
     } 

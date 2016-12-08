@@ -129,6 +129,116 @@ $(document).on("click", "#addNewArchitecturalPattern", function () {
   });
 });
 
+var mainContent = $("#objectViewer");
+mainContent.on("click","#UpdateArchitecturalPattern",function() {
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  if ($("#editArchitecturalPatternOptionsForm").hasClass("new")) {
+    ap.theName = $('#theName');
+    postArchitecturalPattern(ap,function() {
+      $("#editArchitecturalPatternsOptionsForm").removeClass("new");
+      createArchitecturalPatternsTable();
+    });
+  }
+  else {
+    var oldName = ap.theName;
+    ap.theName = $('#theName');
+    putArchitecturalPattern(ap,function() {
+      createArchitecturalPatternsTable();
+    });
+  }
+});
+
+function postArchitecturalPattern(ap, callback){
+  var output = {};
+  output.object = ap;
+  output.session_id = $.session.get('sessionID');
+  output = JSON.stringify(output);
+  debugLogger(output);
+
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    data: output,
+    url: serverIP + "/api/architectural_patterns" + "?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      showPopup(true);
+      if(jQuery.isFunction(callback)){
+        callback();
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+function putArchitecturalPattern(ap, oldName, callback){
+  var output = {};
+  output.object = ap;
+  output.session_id = $.session.get('sessionID');
+  output = JSON.stringify(output);
+  debugLogger(output);
+  
+  $.ajax({
+    type: "PUT",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    data: output,
+    url: serverIP + "/api/architectural_patterns/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      showPopup(true);
+      if(jQuery.isFunction(callback)){
+        callback();
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+} 
+
+$(document).on('click', 'td.deleteArchitecturalPatternButton', function (e) {
+  e.preventDefault();
+  var apName = $(this).find('i').attr("value");
+  deleteObject('component_view',apName,function(apName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/architectural_patterns/name/" + encodeURIComponent(apName) + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        createArchitecturalPatternsTable();
+        showPopup(true);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  });
+});
+
 function appendComponent(component) {
     $("#theComponents").find("tbody").append('<tr><td class="deleteComponent"><i class="fa fa-minus"></i></td><td class="component-row">'+ component.theName +'</td><td>' + component.theDescription + '</td></tr>');
 };
@@ -309,7 +419,6 @@ mainContent.on('click','#addConnector',function() {
   $("#editConnectorDiv").show();
 });
 
-var mainContent = $("#objectViewer");
 mainContent.on('change',"#theFromComponent", function() {
   refreshAssetBox();
   refreshInterfaceBox("#theFromInterface",$("#theFromComponent").val());
@@ -378,11 +487,13 @@ mainContent.on("click","#UpdateComponent",function() {
 
   if ($("#editComponentDiv").hasClass('new')) {
     ap.theComponents.push(comp);
+    $.session.set("ArchitecturalPattern",JSON.stringify(ap));
     appendComponent(comp);
   }
   else {
     var selectedIdx = $('#editComponentDiv').attr('data-selectedIndex');
     ap.theComponents[selectedIdx] = comp;
+    $.session.set("ArchitecturalPattern",JSON.stringify(ap));
     $('#theComponents').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(1)').text(comp.theName);
     $('#theComponents').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(2)').text(comp.theDescription);
   }
@@ -397,6 +508,41 @@ mainContent.on("click","#CloseComponent",function(e) {
 });
 
 mainContent.on("click","#UpdateConnector",function() {
+  var conn = {};
+  conn.theConnectorName = $('#theConnectorName').val();
+  conn.theFromComponent = $('#theFromComponent').val();
+  conn.theFromRole = $('#theFromRole').val();
+  conn.theFromInterface = $('#theFromInterface').val();
+  conn.theToComponent = $('#theToComponent').val();
+  conn.theToInterface = $('#theToInterface').val();
+  conn.theToRole = $('#theToRole').val();
+  conn.theAssetName = $('#theConnectorAssetName').val();
+  conn.theProtocol = $('#theProtocol').val();
+  conn.theAccessRight = $('#theConnectorAccessRight').val();
+
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+
+  if ($("#editConnectorDiv").hasClass('new')) {
+    ap.theConnectors.push(conn);
+    $.session.set("ArchitecturalPattern",JSON.stringify(ap));
+    appendConnector(conn);
+  }
+  else {
+    var selectedIdx = $('#editConnectorDiv').attr('data-selectedIndex');
+    ap.theConnectors[selectedIdx] = conn;
+    $.session.set("ArchitecturalPattern",JSON.stringify(ap));
+    $('#theConnectors').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(1)').text(conn.theConnectorName);
+    $('#theConnectors').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(2)').text(conn.theFromComponent);
+    $('#theConnectors').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(3)').text(conn.theFromRole);
+    $('#theConnectors').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(4)').text(conn.theFromInterface);
+    $('#theConnectors').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(5)').text(conn.theToComponent);
+    $('#theConnectors').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(6)').text(conn.theToInterface);
+    $('#theConnectors').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(7)').text(conn.theToRole);
+    $('#theConnectors').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(8)').text(conn.theAssetName);
+    $('#theConnectors').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(9)').text(conn.theProtocol);
+    $('#theConnectors').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(10)').text(conn.theAccessRight);
+  }
+
   $("#editConnectorDiv").hide();
   $("#editArchitecturalPatternOptionsForm").show();
 });
@@ -522,7 +668,7 @@ mainContent.on('click','#AddComponentInterface',function() {
     $('#theInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(4)').text(selectedInt.thePrivilege);
   }
   else {
-    comp.theInterfaces[selectedIdx].push(selectedInt);
+    comp.theInterfaces.push(selectedInt);
     $.session.set("Component", JSON.stringify(comp));
     appendComponentInterface(selectedInt);
   }
