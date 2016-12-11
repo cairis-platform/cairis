@@ -59,6 +59,7 @@ from cairis.core.PersonaCharacteristic import PersonaCharacteristic
 from cairis.core.ComponentView import ComponentView
 from cairis.core.Component import Component
 from cairis.core.TemplateGoal import TemplateGoal
+from cairis.core.TemplateAsset import TemplateAsset
 from cairis.core.TemplateRequirement import TemplateRequirement
 from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, PersonaCharacteristicReference,ObjectDependency
 
@@ -74,6 +75,18 @@ def gen_class_metadata(class_ref):
   return {
     "enum": [class_ref.__module__+'.'+class_ref.__name__]
   }
+
+@swagger.model
+class InterfaceModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theInterfaceName": fields.String,
+    "theInterfaceType": fields.String,
+    "theAccessRight": fields.String,
+    "thePrivilege": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
 
 @swagger.model
 @swagger.nested(attributes=SecurityAttribute.__name__)
@@ -116,7 +129,7 @@ class AssetModel(object):
     "theId": fields.Integer,
     "theTags": fields.List(fields.String),
     "theCriticalRationale": fields.String,
-    "theInterfaces": fields.List(fields.String),
+    "theInterfaces": fields.List(fields.Nested(InterfaceModel.resource_fields)),
     "theType": fields.String,
     "theName": fields.String,
     "isCritical": fields.Integer,
@@ -1068,17 +1081,6 @@ class ComponentGoalAssociationModel(object):
   required.remove(obj_id_field)
 
 
-@swagger.model
-class ComponentInterfaceModel(object):
-  resource_fields = {
-    obj_id_field: fields.String,
-    "theInterfaceName": fields.String,
-    "theInterfaceType": fields.String,
-    "theAccessRight": fields.String,
-    "theProtocol": fields.String
-  }
-  required = resource_fields.keys()
-  required.remove(obj_id_field)
 
 @swagger.model
 class ComponentModel(object):
@@ -1086,7 +1088,7 @@ class ComponentModel(object):
     obj_id_field: fields.String,
     "theName": fields.String,
     "theDescription": fields.String,
-    "theInterfaces" : fields.List(fields.Nested(ComponentInterfaceModel.resource_fields)),
+    "theInterfaces" : fields.List(fields.Nested(InterfaceModel.resource_fields)),
     "theStructure" : fields.List(fields.Nested(ComponentStructureModel.resource_fields)),
     "theRequirements" : fields.List(fields.String),
     "theGoals" : fields.List(fields.String),
@@ -1167,6 +1169,29 @@ class TemplateGoalModel(object):
   swagger_metadata = {
     obj_id_field : gen_class_metadata(TemplateGoal)
   }
+
+@swagger.model
+class TemplateAssetModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theId": fields.Integer,
+    "theName": fields.String,
+    "theShortCode": fields.String,
+    "theDescription": fields.String,
+    "theSignificance": fields.String,
+    "theType": fields.String,
+    "theSurfaceType": fields.String,
+    "theAccessRight": fields.String,
+    "theProperties": fields.List(fields.Nested(SecurityAttribute.resource_fields)),
+    "theTags": fields.String,
+    "theInterfaces" : fields.List(fields.Nested(InterfaceModel.resource_fields))
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(TemplateAsset)
+  }
+
 
 @swagger.model
 class TemplateRequirementModel(object):

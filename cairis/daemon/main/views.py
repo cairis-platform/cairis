@@ -29,7 +29,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateRequirementController
+    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -311,6 +311,10 @@ api.add_resource(TaskController.TaskModelByNameAPI, '/api/tasks/model/environmen
 api.add_resource(TaskController.TaskLoadByNameAPI, '/api/tasks/name/<string:task>/environment/<string:environment>/load',endpoint='task_load')
 api.add_resource(TaskController.TaskHindranceByNameAPI, '/api/tasks/name/<string:task>/environment/<string:environment>/hindrance',endpoint='task_hindrance')
 api.add_resource(TaskController.TaskScoreByNameAPI, '/api/tasks/name/<string:task>/environment/<string:environment>/score',endpoint='task_score')
+
+# Template Asset routes
+api.add_resource(TemplateAssetController.TemplateAssetsAPI, '/api/template_assets',endpoint='template_assets')
+api.add_resource(TemplateAssetController.TemplateAssetByNameAPI, '/api/template_assets/name/<string:name>',endpoint='template_asset')
 
 # Template Goal routes
 api.add_resource(TemplateGoalController.TemplateGoalsAPI, '/api/template_goals',endpoint='template_goals')

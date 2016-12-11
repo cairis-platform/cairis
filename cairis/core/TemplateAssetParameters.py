@@ -26,6 +26,8 @@ class TemplateAssetParameters(ObjectCreationParameters.ObjectCreationParameters)
     self.theShortCode = shortCode
     self.theDescription = assetDesc
     self.theSignificance = assetSig
+    if spValues[0] == {}:
+      spValues =  [(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None')]
     self.theProperties = spValues
     self.theConfidentialityProperty = spValues[0][0]
     self.theConfidentialityRationale = spValues[0][1]

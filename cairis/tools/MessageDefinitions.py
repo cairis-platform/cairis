@@ -385,6 +385,16 @@ class TemplateGoalMessage(DefaultMessage):
 # region Swagger Doc
 @swagger.model
 @swagger.nested(
+  object=ModelDefinitions.TemplateAssetModel.__name__,
+)
+# endregion
+class TemplateAssetMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.TemplateAssetModel)
+  required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
   object=ModelDefinitions.TemplateRequirementModel.__name__,
 )
 # endregion

@@ -240,7 +240,6 @@ class AssetDAO(CairisDAO):
     def update_asset(self, asset, name):
         old_asset = self.get_asset_by_name(name, simplify=False)
         id = old_asset.theId
-
         params = AssetParameters(
             assetName=asset.theName,
             shortCode=asset.theShortCode,
@@ -497,6 +496,24 @@ class AssetDAO(CairisDAO):
 
     # endregion
 
+    def convert_ifs(self, real_ifs=None, fake_ifs=None):
+      new_ifs = []
+      if real_ifs is not None:
+        if len(real_ifs) > 0:
+          for rIf in real_ifs:
+            ifDict = {}
+            ifDict['theInterfaceName'] = rIf[0]
+            ifDict['theInterfaceType'] = rIf[1]
+            ifDict['theAccessRight'] = rIf[2]
+            ifDict['thePrivilege'] = rIf[3]
+            new_ifs.append(ifDict)
+      elif fake_ifs is not None:
+        if len(fake_ifs) > 0:
+          for fIf in fake_ifs:
+            new_ifs.append((fIf['theInterfaceName'],fIf['theInterfaceType'],fIf['theAccessRight'],fIf['thePrivilege']))
+
+      return new_ifs
+
     def convert_props(self, real_props=None, fake_props=None):
         new_props = []
         if real_props is not None:
@@ -574,12 +591,15 @@ class AssetDAO(CairisDAO):
         json_dict['__python_obj__'] = Asset.__module__+'.'+Asset.__name__
         env_props = json_dict.pop('theEnvironmentProperties', [])
         env_props = self.convert_props(fake_props=env_props)
+        ifs = json_dict.pop('theInterfaces',[])
+        ifs = self.convert_ifs(fake_ifs=ifs)
         json_dict.pop('theEnvironmentDictionary', None)
         json_dict.pop('theAssetPropertyDictionary', None)
         asset = json_serialize(json_dict)
         asset = json_deserialize(asset)
 
         if isinstance(asset, Asset):
+          asset.theInterfaces = ifs
           asset.theEnvironmentProperties = env_props
           return asset
         else:
@@ -595,6 +615,7 @@ class AssetDAO(CairisDAO):
         :rtype: Asset
         """
         assert isinstance(asset, Asset)
+        asset.theInterfaces = self.convert_ifs(real_ifs=asset.theInterfaces)
         asset.theEnvironmentProperties = self.convert_props(real_props=asset.theEnvironmentProperties)
         asset.theEnvironmentDictionary = {}
         asset.theAssetPropertyDictionary = {}

@@ -99,6 +99,22 @@ var mainAssetObject =
   "theShortCode": "",
   "theEnvironmentProperties": []
 };
+
+var templateAssetDefault = {
+  "__python_obj__": "TemplateAsset.TemplateAsset",
+  "theId": -1,
+  "theName": "",
+  "theShortCode": "",
+  "theDescription": "",
+  "theSignificance": "",
+  "theType": "",
+  "theSurfaceType": "",
+  "theAccessRight": "",
+  "theProperties": [ConfidentialitySecurityAttribute,IntegritySecurityAttribute,AvailabilitySecurityAttribute,AccountabilitySecurityAttribute,AnonymitySecurityAttribute,PseudonymitySecurityAttribute,UnlinkabilitySecurityAttribute,UnobservabilitySecurityAttribute],
+  "theTags": [],
+  "theInterfaces": []
+};
+
 var roleDefaultObject = {
   "__python_obj__": "Role.Role",
   "theEnvironmentDictionary": {},

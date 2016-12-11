@@ -103,6 +103,9 @@ function viewAsset(assetName) {
       fillOptionMenu("fastTemplates/editAssetsOptions.html","#objectViewer",null,true,true, function(){
         $('#editAssetsOptionsform').validator();
         $.session.set("Asset", JSON.stringify(newdata));
+        $.each(newdata.theInterfaces,function(idx,aInt) {
+          appendAssetInterface(aInt);
+        });
         $('#editAssetsOptionsform').loadJSON(newdata,null);
         $.ajax({
           type: "GET",
@@ -155,6 +158,20 @@ function viewAsset(assetName) {
     }
   });
 };
+
+function appendAssetInterface(aInt) {
+  $("#theAssetInterfaces").find("tbody").append('<tr><td class="deleteAssetInterface"><i class="fa fa-minus"></i></td><td class="asset-interface">'+ aInt.theInterfaceName +'</td><td>' + aInt.theInterfaceType + '</td><td>' + aInt.theAccessRight + '</td><td>' + aInt.thePrivilege + '</td></tr>');
+}
+
+mainContent.on('click','td.deleteAssetInterface',function() {
+  var intRow = $(this).closest("tr");
+  var rowIdx = intRow.index();
+  intRow.remove();
+  var asset = JSON.parse($.session.get("Asset"));
+  asset.theInterfaces.splice(rowIdx,1);
+  $.session.set("Asset", JSON.stringify(asset));
+});
+
 
 var mainContent = $("#objectViewer");
 mainContent.on('click', ".removeAssetEnvironment", function () {
@@ -937,3 +954,49 @@ function newAssetEnvironment(jsonString,callback){
   });
 }
 
+mainContent.on('click','td.asset-interface',function(){
+  var intRow = $(this).closest("tr");
+  var selectedInt = {};
+  selectedInt.theName = intRow.find("td:eq(1)").text();
+  selectedInt.theType = intRow.find("td:eq(2)").text();
+  selectedInt.theAccessRight = intRow.find("td:eq(3)").text();
+  selectedInt.thePrivilege = intRow.find("td:eq(4)").text();
+
+  $('#addInterfaceDialog').attr('data-selectedInterface',JSON.stringify(selectedInt));
+  $('#addInterfaceDialog').attr('data-selectedIndex',intRow.index());
+  $("#addInterfaceDialog").attr('data-updateinterface',"updateAssetInterface");
+  $('#addInterfaceDialog').modal('show');
+});
+
+
+mainContent.on('click','#addAssetInterface',function() {
+  $('#addInterfaceDialog').removeAttr('data-selectedInterface');
+  $('#addInterfaceDialog').removeAttr('data-selectedIndex');
+  $("#addInterfaceDialog").attr('data-updateinterface',"updateAssetInterface");
+  $('#addInterfaceDialog').modal('show');
+});
+
+function updateAssetInterface() {
+  var selectedInt = {};
+  selectedInt.theInterfaceName = $('#theInterfaceName').val();
+  selectedInt.theInterfaceType = $('#theInterfaceType').val();
+  selectedInt.theAccessRight = $('#theAccessRight').val();
+  selectedInt.thePrivilege = $('#thePrivilege').val();
+
+  var asset = JSON.parse($.session.get("Asset"));
+  var selectedIdx = $('#addInterfaceDialog').attr('data-selectedIndex');
+  if (selectedIdx != undefined) {
+    asset.theInterfaces[selectedIdx] = selectedInt;
+    $.session.set("Asset", JSON.stringify(asset));
+    $('#theAssetInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(1)').text(selectedInt.theInterfaceName);
+    $('#theAssetInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(2)').text(selectedInt.theInterfaceType);
+    $('#theAssetInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(3)').text(selectedInt.theAccessRight);
+    $('#theAssetInterfaces').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(4)').text(selectedInt.thePrivilege);
+  }
+  else {
+    asset.theInterfaces.push(selectedInt);
+    $.session.set("Asset", JSON.stringify(asset));
+    appendAssetInterface(selectedInt);
+  }
+  $('#addInterfaceDialog').modal('hide');
+}

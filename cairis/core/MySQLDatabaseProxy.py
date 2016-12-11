@@ -8858,10 +8858,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       self.deleteInterfaces(dimObjt,dimName)
       for ifName,ifType,arName,pName in ifs:
-        ifTypeId = 1
-        if ifType == 'provided':
-          ifTypeId = 0
-        self.addInterface(dimObjt,ifName,ifTypeId,arName,pName,dimName)
+        self.addInterface(dimObjt,ifName,ifType,arName,pName,dimName)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding interfaces to ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'

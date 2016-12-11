@@ -19,7 +19,7 @@ from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, SilentHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_deserialize
-from cairis.tools.ModelDefinitions import ArchitecturalPatternModel,ComponentModel,ConnectorModel,ComponentInterfaceModel,ComponentGoalAssociationModel,ComponentStructureModel
+from cairis.tools.ModelDefinitions import ArchitecturalPatternModel,ComponentModel,ConnectorModel,InterfaceModel,ComponentGoalAssociationModel,ComponentStructureModel
 from cairis.tools.SessionValidator import check_required_keys
 from cairis.core.ComponentParameters import ComponentParameters
 from cairis.core.ConnectorParameters import ConnectorParameters

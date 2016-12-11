@@ -1311,6 +1311,10 @@ function setTableHeader(){
       debugLogger("Is Asset");
       thead = "<th width='50px' id='addNewAsset'><i class='fa fa-plus floatCenter'></i></th><th>Asset</th><th>Type</th>";
       break;
+    case "TemplateAssets":
+      debugLogger("Is TemplateAsset");
+      thead = "<th width='50px' id='addNewTemplateAsset'><i class='fa fa-plus floatCenter'></i></th><th>Template Asset</th><th>Type</th>";
+      break;
     case "Roles":
       debugLogger("Is Role");
       thead = "<th width='50px' id='addNewRole'><i class='fa fa-plus floatCenter'></i></th><th>Role</th><th>Shortcode</th><th>Type</th>";
@@ -1784,5 +1788,79 @@ $("#reportObjectDependencies").on('click', '#confirmODDelete',function(e) {
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
+});
+
+$(document).on('shown.bs.modal','#addInterfaceDialog',function() {
+  var selectedInt = $('#addInterfaceDialog').attr('data-selectedInterface');
+  if (selectedInt != undefined) {
+    selectedInt = JSON.parse(selectedInt);
+    $('#AddInterface').text('Update');
+    $('#theInterfaceName').val(selectedInt.theName);
+    $('#theInterfaceType').val(selectedInt.theType);
+  }
+  else {
+    $('#theInterfaceName').val('');
+    $('#theInterfaceType').val('');
+    $('#AddInterface').text('Add');
+  }
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/access_right",
+    success: function (accessRights) {
+      $("#theAccessRight option").remove();
+      $.each(accessRights,function(idx,accessRight) {
+        $('#theAccessRight').append($("<option></option>").attr("value",accessRight).text(accessRight));
+      });
+      if (selectedInt != undefined) {
+        $('#theAccessRight').val(selectedInt.theAccessRight);
+      }
+      else {
+        $('#theAccessRight').val('');
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/privilege",
+    success: function (privileges) {
+      $("#thePrivilege option").remove();
+      $.each(privileges,function(idx,privilege) {
+        $('#thePrivilege').append($("<option></option>").attr("value",privilege).text(privilege));
+      });
+      if (selectedInt != undefined) {
+        $('#thePrivilege').val(selectedInt.thePrivilege);
+      }
+      else {
+        $('#thePrivilege').val('');
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+$("#addInterfaceDialog").on('click', '#AddInterface',function(e) {
+  var cmd = eval($("#addInterfaceDialog").attr("data-updateinterface"));
+  cmd(e);
 });
 

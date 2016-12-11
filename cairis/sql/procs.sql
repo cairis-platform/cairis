@@ -18075,7 +18075,7 @@ begin
   declare deleteTagsSql varchar(4000);
   declare dimId int;
 
-  set dimIdSql = concat('select id into @dimId from ',tagDim,' where name = "',tagObjt,'"');
+  set dimIdSql = concat('select id into @dimId from ',tagDim,' where name = "',tagObjt,'" limit 1');
   set @sql = dimIdSql;
   prepare stmt from @sql;
   execute stmt;
@@ -18191,7 +18191,7 @@ begin
 
   if objtCount > 0
   then
-    set dimIdSql = concat('select id into @dimId from ',ifDim,' where name = "',ifObjt,'"');
+    set dimIdSql = concat('select id into @dimId from ',ifDim,' where name = "',ifObjt,'" limit 1');
     set @sql = dimIdSql;
     prepare stmt from @sql;
     execute stmt;
@@ -18233,13 +18233,13 @@ begin
     insert into interface (id,name) values (ifId,ifName);
   end if;
 
-  if ifType = 'required'
+  if ifType = 'provided'
   then
-    set reqId = 1;
-  else
     set reqId = 0;
+  else
+    set reqId = 1;
   end if;
-  
+
   set addIfSql = concat('insert into ',ifDim,'_interface (',ifDim,'_id, interface_id,required_id,access_right_id,privilege_id) values(',dimId,',',ifId,',',reqId,',',arId,',',privId,')');
   select addIfSql;
   set @sql = addIfSql;

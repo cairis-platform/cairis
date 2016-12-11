@@ -466,7 +466,7 @@ function appendComponentStructure(comstr) {
 };
 
 function appendComponentRequirement(comreq) {
-    $("#theRequirements").find("tbody").append('<tr><td class="deleteComponentInterface"><i class="fa fa-minus"></i></td><td class="component-requirement">'+ comreq + '</td></tr>');
+    $("#theRequirements").find("tbody").append('<tr><td class="deleteComponentRequirement"><i class="fa fa-minus"></i></td><td class="component-requirement">'+ comreq + '</td></tr>');
 };
 
 function appendComponentGoal(comgoal) {
@@ -657,7 +657,6 @@ mainContent.on('click','#AddComponentInterface',function() {
   selectedInt.thePrivilege = $('#thePrivilege').val();
   
   var comp = JSON.parse($.session.get("Component"));
-  var componentName = $('#theComponentName').val();
   var selectedIdx = $('#addComponentInterfaceDialog').attr('data-selectedIndex');
   if (selectedIdx != undefined) {
     comp.theInterfaces[selectedIdx] = selectedInt;

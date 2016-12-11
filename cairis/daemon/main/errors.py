@@ -20,7 +20,7 @@ __author__ = 'Shamal Faily'
 import httplib
 from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.core.ARM import ARMException, DatabaseProxyException
-from flask import request
+from flask import request, make_response
 from cairis.daemon.main import main
 
 @main.errorhandler(CairisHTTPError)
