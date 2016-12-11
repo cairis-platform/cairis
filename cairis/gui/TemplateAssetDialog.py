@@ -35,6 +35,7 @@ class TemplateAssetDialog(wx.Dialog):
     self.theSurfaceType = ''
     self.theAccessRight = ''
     self.theSecurityProperties = []
+    self.theSecurityRationale = []
     self.theInterfaces = []
     self.theTags = []
     self.theAssetId = -1
@@ -75,7 +76,7 @@ class TemplateAssetDialog(wx.Dialog):
     self.theType = typeCtrl.GetValue()
     self.theSurfaceType = stCtrl.GetValue()
     self.theAccessRight = arCtrl.GetValue()
-    self.theSecurityProperties = propertiesCtrl.properties()
+    self.theSecurityProperties,self.theSecurityRationale = propertiesCtrl.properties()
     self.theInterfaces = ifCtrl.dimensions()
 
     if len(self.theAssetName) == 0:
@@ -117,6 +118,6 @@ class TemplateAssetDialog(wx.Dialog):
       self.EndModal(TEMPLATEASSET_BUTTONCOMMIT_ID)
 
   def parameters(self):
-    parameters = TemplateAssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theSurfaceType,self.theAccessRight,self.theSecurityProperties,self.theTags,self.theInterfaces)
+    parameters = TemplateAssetParameters(self.theAssetName,self.theShortCode,self.theAssetDescription,self.theAssetSignificance,self.theType,self.theSurfaceType,self.theAccessRight,self.theSecurityProperties,self.theSecurityRationale,self.theTags,self.theInterfaces)
     parameters.setId(self.theAssetId)
     return parameters

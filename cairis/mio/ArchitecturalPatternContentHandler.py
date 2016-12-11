@@ -297,20 +297,31 @@ class ArchitecturalPatternContentHandler(ContentHandler,EntityResolver):
       self.resetRoleAttributes()
     elif name == 'asset':
       spDict = {}
-      spDict['confidentiality'] = (0,'None')
-      spDict['integrity'] = (0,'None')
-      spDict['availability'] = (0,'None')
-      spDict['accountability'] = (0,'None')
-      spDict['anonymity'] = (0,'None')
-      spDict['pseudonymity'] = (0,'None')
-      spDict['unlinkability'] = (0,'None')
-      spDict['unobservability'] = (0,'None')
+      spDict['confidentiality'] = 0
+      spDict['integrity'] = 0
+      spDict['availability'] = 0
+      spDict['accountability'] = 0
+      spDict['anonymity'] = 0
+      spDict['pseudonymity'] = 0
+      spDict['unlinkability'] = 0
+      spDict['unobservability'] = 0
+      srDict = {}
+      srDict['confidentiality'] = 'None'
+      srDict['integrity'] = 'None'
+      srDict['availability'] = 'None'
+      srDict['accountability'] = 'None'
+      srDict['anonymity'] = 'None'
+      srDict['pseudonymity'] = 'None'
+      srDict['unlinkability'] = 'None'
+      srDict['unobservability'] = 'None'
       for sp in self.theSecurityProperties:
         spName = sp[0]
         spValue = a2i(sp[1])
         spRationale = sp[2]
         if spName in spDict:
-          spDict[spName] = (spValue,spRationale)
+          spDict[spName] = spValue
+        if srName in srDict:
+          srDict[srName] = spRationale
       spValues = [] 
       spValues.append(spDict['confidentiality'])
       spValues.append(spDict['integrity'])
@@ -320,7 +331,16 @@ class ArchitecturalPatternContentHandler(ContentHandler,EntityResolver):
       spValues.append(spDict['pseudonymity'])
       spValues.append(spDict['unlinkability'])
       spValues.append(spDict['unobservability'])
-      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.theSurfaceType,self.theAccessRight,spValues,self.theTags,self.theInterfaces)
+      srValues = [] 
+      srValues.append(srDict['confidentiality'])
+      srValues.append(srDict['integrity'])
+      srValues.append(srDict['availability'])
+      srValues.append(srDict['accountability'])
+      srValues.append(srDict['anonymity'])
+      srValues.append(srDict['pseudonymity'])
+      srValues.append(srDict['unlinkability'])
+      srValues.append(srDict['unobservability'])
+      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.theSurfaceType,self.theAccessRight,spValues,srValues,self.theTags,self.theInterfaces)
       self.theAssets.append(p)
       self.resetAssetAttributes()
     elif name == 'security_property':

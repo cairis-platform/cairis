@@ -19,6 +19,10 @@
 
 'use strict';
 
+var propertyLabels = ['Confidentiality','Integrity','Availability','Accountability','Anonymity','Pseudonymity','Unlinkability','Unobservability'];
+var valueLabels = ['None','Low','Medium','High'];
+var reverseValue = {'None':0,'Low':1,'Medium':2,'High':3};
+
 $("#templateAssetsClick").click(function(){
    createTemplateAssetTable();
 });
@@ -114,6 +118,49 @@ function viewTemplateAsset(assetName) {
             $.each(data, function (index, type) {
               typeSelect.append($("<option></option>").attr("value",type.theName).text(type.theName));
             });
+
+            $.ajax({
+              type: "GET",
+              dataType: "json",
+              accept: "application/json",
+              data: {
+                session_id: String($.session.get('sessionID'))
+              },
+              crossDomain: true,
+              url: serverIP + "/api/dimensions/table/surface_type",
+              success: function (surfaceTypes) {
+                $("#theTemplateAssetSurfaceType option").remove();
+                $.each(surfaceTypes,function(idx,surfaceType) {
+                  $('#theTemplateAssetSurfaceType').append($("<option></option>").attr("value",surfaceType).text(surfaceType));
+                });
+                $('#theTemplateAssetSurfaceType').val(newdata.theSurfaceType);
+              },
+              error: function (xhr, textStatus, errorThrown) {
+                debugLogger(String(this.url));
+                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+              }
+            });
+            $.ajax({
+              type: "GET",
+              dataType: "json",
+              accept: "application/json",
+              data: {
+                session_id: String($.session.get('sessionID'))
+              },
+              crossDomain: true,
+              url: serverIP + "/api/dimensions/table/access_right",
+              success: function (accessRights) {
+                $("#theTemplateAssetAccessRight option").remove();
+                $.each(accessRights,function(idx,accessRight) {
+                  $('#theTemplateAssetAccessRight').append($("<option></option>").attr("value",accessRight).text(accessRight));
+                });
+                $('#theTemplateAssetAcccessRight').val(newdata.theAccessRight);
+              },
+              error: function (xhr, textStatus, errorThrown) {
+                debugLogger(String(this.url));
+                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+              }
+            });
           },
           error: function (xhr, textStatus, errorThrown) {
             debugLogger(String(this.url));
@@ -125,6 +172,12 @@ function viewTemplateAsset(assetName) {
         $.each(newdata.theInterfaces,function(idx,aInt) {
           appendTemplateAssetInterface(aInt);
         });
+        $.each(newdata.theProperties,function(idx,taProp) {
+          if (taProp > 0) {
+            appendTemplateSecurityProperty(propertyLabels[idx],valueLabels[taProp],newdata.theRationale[idx]);
+          }
+        });
+       
         $('#editTemplateAssetOptionsform').loadJSON(newdata,null);
       });
     },
@@ -166,15 +219,16 @@ function updateTemplateAssetSecurityProperty() {
   var ta = JSON.parse($.session.get("TemplateAsset"));
 
   $.each(ta.theProperties, function(idx, secProp){
-    if (updProp.name == secProp.name) {
-      ta.theProperties[idx] = updProp;
+    if (updProp.name == propertyLabels[idx]) {
+      ta.theProperties[idx] = reverseValue[updProp.value];
+      ta.theRationale[idx] = updProp.rationale;
       $.session.set("TemplateAsset", JSON.stringify(ta));
       propRow.find("td:eq(2)").text(updProp.name);
       propRow.find("td:eq(3)").text(updProp.value);
       propRow.find("td:eq(4)").text(updProp.rationale);
+      $("#chooseSecurityProperty").modal('hide');
     }
   });
-  $("#chooseSecurityProperty").modal('hide');
 }
 
 var mainContent = $("#objectViewer");
@@ -197,9 +251,9 @@ mainContent.on("click",".deleteTemplateProperty", function(){
   $(this).closest("tr").remove();
   var ta = JSON.parse($.session.get("TemplateAsset"));
   $.each(ta.theProperties, function(idx,prop) {
-    if (prop.name == propName) {
-      ta.theProperties[idx].value = 'None';
-      ta.theProperties[idx].rationale = 'None';
+    if (propName == propertyLabel[prop]) {
+      ta.theProperties[idx] = 0;
+      ta.theRationale[idx] = 'None';
       $.session.set("TemplateAsset", JSON.stringify(ta));
     }
   });
@@ -356,10 +410,11 @@ function addTemplateAssetSecurityProperty(e) {
   secProp.rationale =  $("#theSecurityPropertyRationale").val()
   var ta = JSON.parse( $.session.get("TemplateAsset"));
   $.each(ta.theProperties, function(idx,prop) {
-    if (prop.name == secProp.name) {
-      ta.theProperties[idx] = secProp;
+    if (secProp.name == propertyLabels[idx]) {
+      ta.theProperties[idx] = reverseValue[secProp.value];
+      ta.theRationale[idx] = secProp.rationale;
       $.session.set("TemplateAsset", JSON.stringify(ta));
-      appendTemplateSecurityProperty(secProp);
+      appendTemplateSecurityProperty(secProp.name,secProp.value,secProp.rationale);
       $("#chooseSecurityProperty").modal('hide');
     }
   });
@@ -373,8 +428,8 @@ mainContent.on("click", "#addNewTemplateProperty", function(){
 });
 
 
-function appendTemplateSecurityProperty(prop){
-  $("#theTemplateProperties").find("tbody").append('<tr class="clickable-properties"><td style="display: none;">' + prop.id + '</td><td><div class="fillparent deleteTemplateProperty"><i class="fa fa-minus"></i></div></td><td class="theTemplateAssetPropName" name="name">' + prop.name + '</td><td name="value">'+ prop.value +'</td><td name="rationale">'+ prop.rationale +'</td></tr>').animate('slow');
+function appendTemplateSecurityProperty(label,value,rationale){
+  $("#theTemplateProperties").find("tbody").append('<tr class="clickable-properties"><td style="display: none;">' + label + '</td><td><div class="fillparent deleteTemplateProperty"><i class="fa fa-minus"></i></div></td><td class="theTemplateAssetPropName" name="name">' + label + '</td><td name="value">'+ value +'</td><td name="rationale">'+ rationale +'</td></tr>').animate('slow');
 };
 
 mainContent.on('click', '#UpdateTemplateAsset',function(e){
@@ -440,7 +495,7 @@ function postTemplateAssetForm(data,callback){
 }
 
 function putTemplateAsset(json){
-  var ursl = serverIP + "/api/template_assets/name/"+ encodeURIComponent($.session.get("AssetName")) + "?session_id=" + String($.session.get('sessionID'));
+  var ursl = serverIP + "/api/template_assets/name/"+ encodeURIComponent(json.theName) + "?session_id=" + String($.session.get('sessionID'));
   var output = {};
   output.object = json;
   output = JSON.stringify(output);

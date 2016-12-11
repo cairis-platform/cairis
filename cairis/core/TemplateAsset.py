@@ -18,7 +18,7 @@
 __author__ = 'Shamal Faily'
 
 class TemplateAsset:
-  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,sType,aRight,spValues,tags,ifs):
+  def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,sType,aRight,spValues,spRat,tags,ifs):
     self.theId = assetId
     self.theName = assetName
     self.theShortCode = shortCode
@@ -28,28 +28,14 @@ class TemplateAsset:
     self.theSurfaceType = sType
     self.theAccessRight = aRight
     self.theProperties = spValues
-    self.theConfidentialityProperty = spValues[0][0]
-    self.theConfidentialityRationale = spValues[0][1]
-    self.theIntegrityProperty = spValues[1][0]
-    self.theIntegrityRationale = spValues[1][0]
-    self.theAvailabilityProperty = spValues[2][0]
-    self.theAvailabilityRationale = spValues[2][1]
-    self.theAccountabilityProperty = spValues[3][0]
-    self.theAccountabilityRationale = spValues[3][1]
-    self.theAnonymityProperty = spValues[4][0]
-    self.theAnonymityRationale = spValues[4][1]
-    self.thePseudonymityProperty = spValues[5][0]
-    self.thePseudonymityRationale = spValues[5][1]
-    self.theUnlinkabilityProperty = spValues[6][0]
-    self.theUnlinkabilityRationale = spValues[6][1]
-    self.theUnobservabilityProperty = spValues[7][0]
-    self.theUnobservabilityRationale = spValues[7][1]
+    self.theRationale = spRat
     self.theTags = tags
     self.theInterfaces = ifs
 
   def id(self): return self.theId
   def name(self): return self.theName
   def properties(self): return self.theProperties
+  def rationale(self): return self.theRationale
   def shortCode(self): return self.theShortCode
   def description(self): return self.theDescription
   def significance(self): return self.theSignificance
@@ -57,35 +43,23 @@ class TemplateAsset:
   def surfaceType(self): return self.theSurfaceType
   def accessRight(self): return self.theAccessRight
 
-  def confidentialityProperty(self): return self.theConfidentialityProperty
-  def confidentialityRationale(self): return self.theConfidentialityRationale
-  def integrityProperty(self): return self.theIntegrityProperty
-  def integrityRationale(self): return self.theIntegrityRationale
-  def availabilityProperty(self): return self.theAvailabilityProperty
-  def availabilityRationale(self): return self.theAvailabilityRationale
-  def accountabilityProperty(self): return self.theAccountabilityProperty
-  def accountabilityRationale(self): return self.theAccountabilityRationale
-  def anonymityProperty(self): return self.theAnonymityProperty
-  def anonymityRationale(self): return self.theAnonymityRationale
-  def pseudonymityProperty(self): return self.thePseudonymityProperty
-  def pseudonymityRationale(self): return self.thePseudonymityRationale
-  def unlinkabilityProperty(self): return self.theUnlinkabilityProperty
-  def unlinkabilityRationale(self): return self.theUnlinkabilityRationale
-  def unobservabilityProperty(self): return self.theUnobservabilityProperty
-  def unobservabilityRationale(self): return self.theUnobservabilityRationale
+  def confidentialityProperty(self): return self.theProperties[0]
+  def confidentialityRationale(self): return self.theRationale[0]
+  def integrityProperty(self): return self.theProperties[1]
+  def integrityRationale(self): return self.theRationale[1]
+  def availabilityProperty(self): return self.theProperties[2]
+  def availabilityRationale(self): return self.theRationale[2]
+  def accountabilityProperty(self): return self.theProperties[3]
+  def accountabilityRationale(self): return self.theRationale[3]
+  def anonymityProperty(self): return self.theProperties[4]
+  def anonymityRationale(self): return self.theRationale[4]
+  def pseudonymityProperty(self): return self.theProperties[5]
+  def pseudonymityRationale(self): return self.theRationale[5]
+  def unlinkabilityProperty(self): return self.theProperties[6]
+  def unlinkabilityRationale(self): return self.theRationale[6]
+  def unobservabilityProperty(self): return self.theProperties[7]
+  def unobservabilityRationale(self): return self.theRationale[7]
 
   def interfaces(self): return self.theInterfaces
   def tags(self): return self.theTags
-  def securityProperties(self):
-    cValue = self.theConfidentialityProperty
-    iValue = self.theIntegrityProperty
-    avValue = self.theAvailabilityProperty
-    acValue = self.theAccountabilityProperty
-    anValue = self.theAnonymityProperty
-    panValue = self.thePseudonymityProperty
-    unlValue = self.theUnlinkabilityProperty
-    unoValue = self.theUnobservabilityProperty
-    return [cValue,iValue,avValue,acValue,anValue,panValue,unlValue,unoValue]
-
-  def rationale(self):
-    return [self.theConfidentialityRationale,self.theIntegrityRationale,self.theAvailabilityRationale,self.theAccountabilityRationale,self.theAnonymityRationale,self.thePseudonymityRationale,self.theUnlinkabilityRationale,self.theUnobservabilityRationale]
+  def securityProperties(self): return self.properties()

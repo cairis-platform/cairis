@@ -1174,7 +1174,6 @@ class TemplateGoalModel(object):
 class TemplateAssetModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    "theId": fields.Integer,
     "theName": fields.String,
     "theShortCode": fields.String,
     "theDescription": fields.String,
@@ -1182,12 +1181,14 @@ class TemplateAssetModel(object):
     "theType": fields.String,
     "theSurfaceType": fields.String,
     "theAccessRight": fields.String,
-    "theProperties": fields.List(fields.Nested(SecurityAttribute.resource_fields)),
+    "theProperties": fields.List(fields.Integer),
+    "theRationale": fields.List(fields.String),
     "theTags": fields.String,
     "theInterfaces" : fields.List(fields.Nested(InterfaceModel.resource_fields))
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)
+  required.remove('theTags')
   swagger_metadata = {
     obj_id_field : gen_class_metadata(TemplateAsset)
   }

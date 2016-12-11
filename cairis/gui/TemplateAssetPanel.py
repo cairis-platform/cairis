@@ -87,5 +87,5 @@ class TemplateAssetPanel(BasePanel):
     ifCtrl = self.FindWindowById(ASSET_PAGEINTERFACE_ID)
     ifCtrl.load(asset.interfaces())
     propertiesCtrl = self.FindWindowById(TEMPLATEASSET_LISTPROPERTIES_ID)
-    propertiesCtrl.load(asset.properties())
+    propertiesCtrl.load(asset.properties(),asset.rationale())
 

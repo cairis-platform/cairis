@@ -1686,17 +1686,26 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           exceptionText = 'Error getting template asset properties'
           raise DatabaseProxyException(exceptionText) 
         properties = []
+        rationale = []
         row = curs.fetchone()
-        properties.append((row[0],row[8]))
-        properties.append((row[1],row[9]))
-        properties.append((row[2],row[10]))
-        properties.append((row[3],row[11]))
-        properties.append((row[4],row[12]))
-        properties.append((row[5],row[13]))
-        properties.append((row[6],row[14]))
-        properties.append((row[7],row[15]))
+        properties.append(row[0])
+        properties.append(row[1])
+        properties.append(row[2])
+        properties.append(row[3])
+        properties.append(row[4])
+        properties.append(row[5])
+        properties.append(row[6])
+        properties.append(row[7])
+        rationale.append(row[8])
+        rationale.append(row[9])
+        rationale.append(row[10])
+        rationale.append(row[11])
+        rationale.append(row[12])
+        rationale.append(row[13])
+        rationale.append(row[14])
+        rationale.append(row[15])
         curs.close()
-        return properties
+        return (properties,rationale)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting template asset properties  (id:' + str(id) + ',message:' + msg + ')'
@@ -5794,8 +5803,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for assetName,shortCode,assetId,assetDesc,assetType,surfaceType,accessRight in vals:
         ifs = self.getInterfaces(assetName,'template_asset')
         tags = self.getTags(assetName,'template_asset')
-        taProps = self.templateAssetProperties(assetId)
-        parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,surfaceType,accessRight,taProps,tags,ifs)
+        taProps,taRat = self.templateAssetProperties(assetId)
+        parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,surfaceType,accessRight,taProps,taRat,tags,ifs)
         templateAsset = ObjectFactory.build(assetId,parameters)
         templateAssets[assetName] = templateAsset
       return templateAssets

@@ -48,8 +48,9 @@ def addTestData():
   b.dbProxy.addValueType(iar1)
   b.dbProxy.addValueType(iar2)
   b.dbProxy.addValueType(ist1)
-  spValues = [(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None')]
-  iTap = TemplateAssetParameters(iTemplateAssets[0]["theName"], iTemplateAssets[0]["theShortCode"], iTemplateAssets[0]["theDescription"], iTemplateAssets[0]["theSignificance"],iTemplateAssets[0]["theType"],iTemplateAssets[0]["theSurfaceType"],iTemplateAssets[0]["theAccessRight"],spValues,[],[])
+  spValues = [0,0,0,0,0,0,0,0]
+  srValues = ['None','None','None','None','None','None','None','None']
+  iTap = TemplateAssetParameters(iTemplateAssets[0]["theName"], iTemplateAssets[0]["theShortCode"], iTemplateAssets[0]["theDescription"], iTemplateAssets[0]["theSignificance"],iTemplateAssets[0]["theType"],iTemplateAssets[0]["theSurfaceType"],iTemplateAssets[0]["theAccessRight"],spValues,srValues,[],[])
   b.dbProxy.addTemplateAsset(iTap)
 
 class TemplateAssetAPITests(CairisDaemonTestCase):
@@ -64,9 +65,10 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/templateassets.json')
     d = json.load(f)
     f.close()
-    spValues = [(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None')]
+    spValues = [0,0,0,0,0,0,0,0]
+    srValues = ['None','None','None','None','None','None','None','None']
     iTemplateAssets = d['template_assets']
-    self.new_ta = TemplateAsset(-1,iTemplateAssets[1]["theName"], iTemplateAssets[1]["theShortCode"], iTemplateAssets[1]["theDescription"], iTemplateAssets[1]["theSignificance"],iTemplateAssets[1]["theType"],iTemplateAssets[1]["theSurfaceType"],iTemplateAssets[1]["theAccessRight"],spValues,[],[])
+    self.new_ta = TemplateAsset(-1,iTemplateAssets[1]["theName"], iTemplateAssets[1]["theShortCode"], iTemplateAssets[1]["theDescription"], iTemplateAssets[1]["theSignificance"],iTemplateAssets[1]["theType"],iTemplateAssets[1]["theSurfaceType"],iTemplateAssets[1]["theAccessRight"],spValues,srValues,[],[])
     self.new_ta_dict = {
       'session_id' : 'test',
       'object': self.new_ta
@@ -108,7 +110,7 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
   def test_put(self):
     method = 'test_put'
     self.new_ta_dict['object'].theName = self.existing_ta_name
-    self.new_ta_dict['object'].theDefinition = 'Updated definition'
+    self.new_ta_dict['object'].theDescription = 'Updated description'
     url = '/api/template_assets/name/%s?session_id=test' % quote(self.existing_ta_name)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_ta_dict))
     self.logger.debug('[%s] Response data: %s', method, rv.data)

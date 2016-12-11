@@ -103,9 +103,9 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
       self.DeleteItem(self.theSelectedIdx)
       self.setProperties.remove(selectedValue)
 
-  def load(self,syProperties):
-    cProperty = syProperties[C_PROPERTY][0]
-    cRationale = syProperties[C_PROPERTY][1]
+  def load(self,syProperties,syRationale):
+    cProperty = syProperties[C_PROPERTY]
+    cRationale = syRationale[C_PROPERTY]
     if (cProperty != NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Confidentiality')
@@ -113,8 +113,8 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
       self.SetStringItem(idx,2,cRationale)
       self.setProperties.add('Confidentiality')
 
-    iProperty = syProperties[I_PROPERTY][0]
-    iRationale = syProperties[I_PROPERTY][1]
+    iProperty = syProperties[I_PROPERTY]
+    iRationale = syRationale[I_PROPERTY]
     if (iProperty != NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Integrity')
@@ -122,8 +122,8 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
       self.SetStringItem(idx,2,iRationale)
       self.setProperties.add('Integrity')
 
-    avProperty = syProperties[AV_PROPERTY][0]
-    avRationale = syProperties[AV_PROPERTY][1]
+    avProperty = syProperties[AV_PROPERTY]
+    avRationale = syRationale[AV_PROPERTY]
     if (avProperty != NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Availability')
@@ -131,8 +131,8 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
       self.SetStringItem(idx,2,avRationale)
       self.setProperties.add('Availability')
 
-    acProperty = syProperties[AC_PROPERTY][0]
-    acRationale = syProperties[AC_PROPERTY][1]
+    acProperty = syProperties[AC_PROPERTY]
+    acRationale = syRationale[AC_PROPERTY]
     if (acProperty != NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Accountability')
@@ -140,8 +140,8 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
       self.SetStringItem(idx,2,acRationale)
       self.setProperties.add('Accountability')
 
-    anProperty = syProperties[AN_PROPERTY][0]
-    anRationale = syProperties[AN_PROPERTY][1]
+    anProperty = syProperties[AN_PROPERTY]
+    anRationale = syRationale[AN_PROPERTY]
     if (anProperty != NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Anonymity')
@@ -149,8 +149,8 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
       self.SetStringItem(idx,2,anRationale)
       self.setProperties.add('Anonymity')
 
-    panProperty = syProperties[PAN_PROPERTY][0]
-    panRationale = syProperties[PAN_PROPERTY][1]
+    panProperty = syProperties[PAN_PROPERTY]
+    panRationale = syRationale[PAN_PROPERTY]
     if (panProperty != NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Pseudonymity')
@@ -158,8 +158,8 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
       self.SetStringItem(idx,2,panRationale)
       self.setProperties.add('Pseudonymity')
 
-    unlProperty = syProperties[UNL_PROPERTY][0]
-    unlRationale = syProperties[UNL_PROPERTY][1]
+    unlProperty = syProperties[UNL_PROPERTY]
+    unlRationale = syRationale[UNL_PROPERTY]
     if (unlProperty != NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Unlinkability')
@@ -167,15 +167,14 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
       self.SetStringItem(idx,2,unlRationale)
       self.setProperties.add('Unlinkability')
 
-    unoProperty = syProperties[UNO_PROPERTY][0]
-    unoRationale = syProperties[UNO_PROPERTY][1]
+    unoProperty = syProperties[UNO_PROPERTY]
+    unoRationale = syRationale[UNO_PROPERTY]
     if (unoProperty != NONE_VALUE):
       idx = self.GetItemCount()
       self.InsertStringItem(idx,'Unobservability')
       self.SetStringItem(idx,1,self.valueLookup.name(unoProperty))
       self.SetStringItem(idx,2,unoRationale)
       self.setProperties.add('Unobservability')
-
 
   def properties(self):
     cProp = iProp = avProp = acProp = anProp = panProp = unlProp = unoProp = 0
@@ -210,4 +209,4 @@ class SingleEnvironmentPropertiesListCtrl(wx.ListCtrl):
       elif (propertyName == 'Unobservability'):
         unoProp = self.valueLookup.id(propertyValue)
         unoRat = propertyRationale
-    return [(cProp,cRat),(iProp,iRat),(avProp,avRat),(acProp,acRat),(anProp,anRat),(panProp,panRat),(unlProp,unlRat),(unoProp,unoRat)]
+    return ([cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp],[cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat])

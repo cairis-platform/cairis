@@ -191,7 +191,6 @@ class TemplateAssetByNameAPI(Resource):
   #endregion
   def put(self, name):
     session_id = get_session_id(session, request)
-
     dao = TemplateAssetDAO(session_id)
     upd_ta = dao.from_json(request)
     dao.update_template_asset(upd_ta, name)
