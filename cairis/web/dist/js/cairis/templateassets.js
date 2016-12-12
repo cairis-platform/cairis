@@ -15,7 +15,7 @@
     specific language governing permissions and limitations
     under the License.
 
-    Authors: Raf Vandelaer, Shamal Faily */
+    Authors: Shamal Faily */
 
 'use strict';
 

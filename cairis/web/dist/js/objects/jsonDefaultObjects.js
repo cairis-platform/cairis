@@ -522,7 +522,6 @@ var connectorDefault = {
   "theProtocol" : "",
   "theAccessRight" : ""
 };
-
 var architecturalPatternDefault = {
   "__python_obj__": "ArchitecturalPattern.ArchitecturalPattern",
   "theId" : -1,
@@ -531,4 +530,23 @@ var architecturalPatternDefault = {
   "theComponents" : [],
   "theConnectors" : [],
   "theAttackSurfaceMetric" : [0,0,0]
+};
+var templateRequirementDefault = {
+  "__python_obj__": "TemplateRequirement.TemplateRequirement",
+  "theId" : -1,
+  "theName" : "",
+  "theAssetName" : "",
+  "theType" : "",
+  "theDescription" : "",
+  "theRationale" : "",
+  "theFitCriterion" : ""
+};
+var templateGoalDefault = {
+  "__python_obj__": "TemplateGoal.TemplateGoal",
+  "theId" : -1,
+  "theName" : "",
+  "theDefinition" : "",
+  "theRationale" : "",
+  "theConcerns" : [],
+  "theResponsibilities" : []
 };

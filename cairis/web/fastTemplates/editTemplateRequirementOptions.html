@@ -1,0 +1,59 @@
+<form role="form" id="editTemplateRequirementOptionsForm" xmlns="http://www.w3.org/1999/html"> 
+
+  <div class="tabs">
+    <ul>
+      <li><a href="#Summary">Summary</a></li>
+      <li><a href="#Rationale">Rationale</a></li>
+      <li><a href="#FitCriterion">Fit Criterion</a></li>
+    </ul>
+    <div id="Summary">
+      <div class="form-group">
+        <label for="theName" class="control-label">Name</label>
+        <input type="text" class="optionsInput form-control" id="theName" name="theName" style="width: 75%;" data-error="Requirement name is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
+      <div class="form-group">
+        <label for="theTemplateAssetName" class="control-label">Asset</label>
+        <select name="theTemplateAssetName" class="form-control" id="theTemplateAssetName" style="width: 75%;"></select>
+        <div class="help-block with-errors"></div>
+      </div>
+      <div class="form-group">
+        <label for="theType" class="control-label">Type</label>
+        <select name="theType" class="form-control" id="theType" style="width: 75%;">
+          <option>Functional</option>  
+          <option>Data</option>  
+          <option>Look and Feel</option>  
+          <option>Usability</option>  
+          <option>Performance</option>  
+          <option>Operational</option>  
+          <option>Maintainability</option>  
+          <option>Portability</option>  
+          <option>Security</option>  
+          <option>Cultural and Political</option>  
+          <option>Legal</option>  
+          <option>Privacy</option>  
+        </select>
+        <div class="help-block with-errors"></div>
+      </div>
+      <div>
+        <label for="theDescription" class="control-label">Description</label>
+        <textarea rows="15" class="form-control" name="theDescription" id="theDescription" data-error="Description is required" required></textarea>
+        <div class="help-block with-errors"></div>
+      </div>
+    </div>
+    <div class="form-group" id="Rationale">
+      <textarea rows="15" class="form-control" name="theRationale" id="theRationale" data-error="Rationale is required" required></textarea>
+      <div class="help-block with-errors"></div>
+    </div>
+    <div class="form-group" id="FitCriterion">
+      <textarea rows="15" class="form-control" name="theFitCriterion" id="theFitCriterion" data-error="Fit Criterion is required" required></textarea>
+      <div class="help-block with-errors"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="UpdateTemplateRequirement">Update</button>
+      <button type="submit" class="btn btn-secondary" id="CloseTemplateRequirement">Close</button>
+    </div>
+  </div>
+</form>
