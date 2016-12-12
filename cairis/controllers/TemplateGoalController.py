@@ -104,7 +104,6 @@ class TemplateGoalsAPI(Resource):
   #endregion
   def post(self):
     session_id = get_session_id(session, request)
-
     dao = TemplateGoalDAO(session_id)
     new_tg = dao.from_json(request)
     dao.add_template_goal(new_tg)

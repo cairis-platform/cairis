@@ -82,7 +82,6 @@ $(document).on('click', "td.template-requirement-rows", function(){
 });
 
 function viewTemplateRequirement(trName) {
-  $("#UpdateTemplateRequirement").text("Update");
   activeElement("objectViewer");
   $.session.set("TemplateRequirementName", trName.trim());
 
@@ -97,6 +96,7 @@ function viewTemplateRequirement(trName) {
     url: serverIP + "/api/template_requirements/name/" + encodeURIComponent(trName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editTemplateRequirementOptions.html","#objectViewer",null,true,true, function(){
+        $("#UpdateTemplateRequirement").text("Update");
         $.ajax({
           type: "GET",
           dataType: "json",
@@ -136,7 +136,6 @@ function viewTemplateRequirement(trName) {
 };
 
 $(document).on('click', "#addTemplateRequirement",function(){
-  $("#UpdateTemplateRequirement").text("Create");
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editTemplateRequirementOptions.html","#objectViewer",null,true,true,function(){
     $.ajax({
@@ -149,6 +148,7 @@ $(document).on('click', "#addTemplateRequirement",function(){
       crossDomain: true,
       url: serverIP + "/api/dimensions/table/template_asset",
       success: function (tas) {
+        $("#UpdateTemplateRequirement").text("Create");
         $("#theTemplateAssetName option").remove();
         $.each(tas,function(idx,ta) {
           $('#theTemplateAssetName').append($("<option></option>").attr("value",ta).text(ta));
@@ -230,7 +230,7 @@ mainContent.on('click', '#CloseTemplateRequirement', function (e) {
 });
 
 function templateRequirementFormToJSON(data){
-  var json =  JSON.parse($.session.get("TemplateAsset"));
+  var json =  JSON.parse($.session.get("TemplateRequirement"));
   json.theName = $(data).find('#theName').val();
 
   json["theName"] = $(data).find('#theName').val();

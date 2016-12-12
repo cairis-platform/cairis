@@ -1,0 +1,87 @@
+<form role="form" id="editTemplateGoalOptionsForm" xmlns="http://www.w3.org/1999/html"> 
+
+  <div class="form-group">
+    <label for="theName" class="control-label">Name</label>
+    <input type="text" class="optionsInput form-control" id="theName" name="theName" style="width: 75%;" data-error="Goal name is required" required>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div>
+    <label for="theDefinition" class="control-label">Definition</label>
+    <textarea rows="5" class="form-control" name="theDefinition" id="theDefinition" data-error="Definition is required" required></textarea>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div>
+    <label for="theRationale" class="control-label">Rationale</label>
+    <textarea rows="5" class="form-control" name="theRationale" id="theRationale" data-error="Rationale is required" required></textarea>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="form-group">
+    <table class="clickable-table scrollableTable" id="theTemplateGoalConcerns">
+      <thead>
+        <tr><th width='50px' id="addTemplateGoalConcern"> <i class="fa fa-plus"></i></th><th>Concern</th></tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div class="form-group">
+    <table class="clickable-table scrollableTable" id="theTemplateGoalResponsibilities">
+      <thead>
+        <tr><th width='50px' id="addTemplateGoalResponsibility"> <i class="fa fa-plus"></i></th><th>Responsibility</th></tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="UpdateTemplateGoal">Update</button>
+      <button type="submit" class="btn btn-secondary" id="CloseTemplateGoal">Close</button>
+    </div>
+  </div>
+</form>
+
+<div class="modal fade" id="addTemplateGoalConcernDialog" tabindex="-1" role="dialog" aria-labelledby="cATGC_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Concern</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theTemplateGoalConcern" class="control-label">Concern</label>
+          <select class="optionsInput form-control" name="theTemplateGoalConcern" id="theTemplateGoalConcern" style="width: 100%;">
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddTemplateGoalConcern" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="addTemplateGoalResponsibilityDialog" tabindex="-1" role="dialog" aria-labelledby="cATGR_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Responsibility</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theTemplateGoalResponsibility" class="control-label">Responsibility</label>
+          <select class="optionsInput form-control" name="theTemplateGoalResponsibility" id="theTemplateGoalResponsibility" style="width: 100%;">
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddTemplateGoalResponsibility" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

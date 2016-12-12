@@ -1295,6 +1295,10 @@ function setTableHeader(){
       debugLogger("Is Template Requirement");
       thead = "<th width='50px' id='addTemplateRequirement'><i class='fa fa-plus floatCenter'></i></th><th>Requirement</th><th>Type</th>";
       break;
+    case "TemplateGoals":
+      debugLogger("Is Template Goal");
+      thead = "<th width='50px' id='addTemplateGoal'><i class='fa fa-plus floatCenter'></i></th><th>Goal</th><th>Definition</th>";
+      break;
     case "Goals":
       debugLogger("Is Goal");
       thead = "<th width='50px'></th><th>Goal</th><th>Definition</th><th>Category</th><th>Priority</th><th>Fit Citerion</th><th>Issue</th><th>Originator</th>";
