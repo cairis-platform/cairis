@@ -125,12 +125,17 @@ $(document).on("click", "#addNewArchitecturalPattern", function () {
     $("#editArchitecturalPatternOptionsForm").validator();
     $("#UpdateArchitecturalPattern").text("Create");
     $("#editArchitecturalPatternOptionsForm").addClass("new");
+    $('#theName').val('');
+    $('#theSynopsis').val('');
+    $('#theComponents').find('tbody').empty();
+    $('#theConnectors').find('tbody').empty();
     $.session.set("ArchitecturalPattern", JSON.stringify(jQuery.extend(true, {},architecturalPatternDefault )));
   });
 });
 
 var mainContent = $("#objectViewer");
-mainContent.on("click","#UpdateArchitecturalPattern",function() {
+mainContent.on("click","#UpdateArchitecturalPattern",function(e) {
+  e.preventDefault();
   var ap = JSON.parse($.session.get("ArchitecturalPattern"));
   if ($("#editArchitecturalPatternOptionsForm").hasClass("new")) {
     ap.theName = $('#theName');
@@ -289,6 +294,14 @@ mainContent.on('click','#addComponent',function() {
   $("#editComponentDiv").addClass('new');
   $("#editArchitecturalPatternOptionsForm").hide();
   $("#editComponentDiv").show();
+  $('#theComponentName').val('');
+  $('#theDescription').val('');
+  $('#theInterfaces').find('tbody').empty();
+  $('#theStructure').find('tbody').empty();
+  $('#theRequirements').find('tbody').empty();
+  $('#theGoals').find('tbody').empty();
+  $('#theGoalAssociations').find('tbody').empty();
+  
 });
 
 
@@ -793,6 +806,24 @@ mainContent.on('click','#AddComponentStructure',function() {
     appendComponentStructure(selectedStr);
   }
   $('#addComponentStructureDialog').modal('hide');
+});
+
+mainContent.on('click','td.deleteComponent',function() {
+  var compRow = $(this).closest("tr");
+  var rowIdx = compRow.index();
+  compRow.remove();
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  ap.theComponents.splice(rowIdx,1);
+  $.session.set("ArchitecturalPattern", JSON.stringify(ap));
+});
+
+mainContent.on('click','td.deleteConnector',function() {
+  var connRow = $(this).closest("tr");
+  var rowIdx = connRow.index();
+  connRow.remove();
+  var ap = JSON.parse($.session.get("ArchitecturalPattern"));
+  ap.theConnectors.splice(rowIdx,1);
+  $.session.set("ArchitecturalPattern", JSON.stringify(ap));
 });
 
 mainContent.on('click','td.deleteComponentStructure',function() {
