@@ -198,7 +198,7 @@ class ArchitecturalPatternDAO(CairisDAO):
       theComponents.append(ComponentParameters(cName,cDesc,cInts,cStructs,cReqs,cGoals,cGoalAssocs))
     theConnectors = []
     for conn in ap["theConnectors"]:
-      theConnectors.append(ConnectorParameters(conn["theName"],apName,conn["theFromComponent"],conn["theFromRole"],conn["theFromInterface"],conn["theToComponent"],conn["theToInterface"],conn["theToRole"],conn["theAssetName"],conn["theProtocol"],conn["theAccessRight"]))
+      theConnectors.append(ConnectorParameters(conn["theConnectorName"],apName,conn["theFromComponent"],conn["theFromRole"],conn["theFromInterface"],conn["theToComponent"],conn["theToInterface"],conn["theToRole"],conn["theAssetName"],conn["theProtocol"],conn["theAccessRight"]))
 
     cvParams = ComponentViewParameters(apName,apSyn,[],[],[],[],[],theComponents,theConnectors)
     return cvParams

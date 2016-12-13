@@ -138,7 +138,8 @@ mainContent.on("click","#UpdateArchitecturalPattern",function(e) {
   e.preventDefault();
   var ap = JSON.parse($.session.get("ArchitecturalPattern"));
   if ($("#editArchitecturalPatternOptionsForm").hasClass("new")) {
-    ap.theName = $('#theName');
+    ap.theName = $('#theName').val();
+    ap.theSynopsis = $('#theSynopsis').val();
     postArchitecturalPattern(ap,function() {
       $("#editArchitecturalPatternsOptionsForm").removeClass("new");
       createArchitecturalPatternsTable();
@@ -146,8 +147,9 @@ mainContent.on("click","#UpdateArchitecturalPattern",function(e) {
   }
   else {
     var oldName = ap.theName;
-    ap.theName = $('#theName');
-    putArchitecturalPattern(ap,function() {
+    ap.theName = $('#theName').val();
+    ap.theSynopsis = $('#theSynopsis').val();
+    putArchitecturalPattern(ap,oldName,function() {
       createArchitecturalPatternsTable();
     });
   }
