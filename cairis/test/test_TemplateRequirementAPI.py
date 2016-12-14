@@ -46,8 +46,9 @@ def addTestData():
   ist1 = ValueTypeParameters(iSurfaceTypes[0]["theName"], iSurfaceTypes[0]["theDescription"], 'surface_type','',iSurfaceTypes[0]["theValue"],iSurfaceTypes[0]["theRationale"])
   b.dbProxy.addValueType(iar1)
   b.dbProxy.addValueType(ist1)
-  spValues = [(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None')]
-  iTap = TemplateAssetParameters(iTemplateAssets[0]["theName"], iTemplateAssets[0]["theShortCode"], iTemplateAssets[0]["theDescription"], iTemplateAssets[0]["theSignificance"],iTemplateAssets[0]["theType"],iTemplateAssets[0]["theSurfaceType"],iTemplateAssets[0]["theAccessRight"],spValues,[],[])
+  spValues = [0,0,0,0,0,0,0,0]
+  srValues = ['None','None','None','None','None','None','None','None']
+  iTap = TemplateAssetParameters(iTemplateAssets[0]["theName"], iTemplateAssets[0]["theShortCode"], iTemplateAssets[0]["theDescription"], iTemplateAssets[0]["theSignificance"],iTemplateAssets[0]["theType"],iTemplateAssets[0]["theSurfaceType"],iTemplateAssets[0]["theAccessRight"],spValues,srValues,[],[])
   b.dbProxy.addTemplateAsset(iTap)
   iTemplateReqs = d['template_requirements']
   iTar = TemplateRequirementParameters(iTemplateReqs[0]["theName"],iTemplateReqs[0]["theAsset"],iTemplateReqs[0]["theType"],iTemplateReqs[0]["theDescription"],iTemplateReqs[0]["theRationale"],iTemplateReqs[0]["theFitCriterion"])

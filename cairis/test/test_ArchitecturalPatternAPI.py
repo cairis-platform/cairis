@@ -48,9 +48,10 @@ def addAPDependentData(d):
     b.dbProxy.addValueType(ValueTypeParameters(i["theName"], i["theDescription"], 'protocol','',i["theValue"],i["theRationale"]))
   for i in d['privileges']:
     b.dbProxy.addValueType(ValueTypeParameters(i["theName"], i["theDescription"], 'privilege','',i["theValue"],i["theRationale"]))
-  spValues = [(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None')]
+  spValues = [0,0,0,0,0,0,0,0]
+  srValues = ['None','None','None','None','None','None','None','None']
   for i in d['template_assets']:
-    b.dbProxy.addTemplateAsset(TemplateAssetParameters(i["theName"], i["theShortCode"], i["theDescription"], i["theSignificance"],i["theType"],i["theSurfaceType"],i["theAccessRight"],spValues,[],[]))
+    b.dbProxy.addTemplateAsset(TemplateAssetParameters(i["theName"], i["theShortCode"], i["theDescription"], i["theSignificance"],i["theType"],i["theSurfaceType"],i["theAccessRight"],spValues,srValues,[],[]))
   for i in d['template_goals']:
     b.dbProxy.addTemplateGoal(TemplateGoalParameters(i["theName"],i["theDefinition"],i["theRationale"],i["theConcerns"],i["theResponsibilities"]))
 

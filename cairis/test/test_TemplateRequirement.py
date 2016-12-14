@@ -44,8 +44,9 @@ class TemplateRequirementTest(unittest.TestCase):
     b.dbProxy.addValueType(iar1)
     b.dbProxy.addValueType(ist1)
     self.iTemplateAssets = d['template_assets']
-    spValues = [(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None'),(0,'None')]
-    iTap = TemplateAssetParameters(self.iTemplateAssets[0]["theName"], self.iTemplateAssets[0]["theShortCode"], self.iTemplateAssets[0]["theDescription"], self.iTemplateAssets[0]["theSignificance"],self.iTemplateAssets[0]["theType"],self.iTemplateAssets[0]["theSurfaceType"],self.iTemplateAssets[0]["theAccessRight"],spValues,[],[])
+    spValues = [0,0,0,0,0,0,0,0]
+    srValues = ['None','None','None','None','None','None','None','None']
+    iTap = TemplateAssetParameters(self.iTemplateAssets[0]["theName"], self.iTemplateAssets[0]["theShortCode"], self.iTemplateAssets[0]["theDescription"], self.iTemplateAssets[0]["theSignificance"],self.iTemplateAssets[0]["theType"],self.iTemplateAssets[0]["theSurfaceType"],self.iTemplateAssets[0]["theAccessRight"],spValues,srValues,[],[])
     b.dbProxy.addTemplateAsset(iTap)
     oTaps = b.dbProxy.getTemplateAssets()
     self.oTap = oTaps[self.iTemplateAssets[0]["theName"]]
