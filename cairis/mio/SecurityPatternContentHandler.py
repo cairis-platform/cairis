@@ -236,8 +236,8 @@ class SecurityPatternContentHandler(ContentHandler,EntityResolver):
         spRationale = sp[2]
         if spName in spDict:
           spDict[spName] = spValue
-        if srName in srDict:
-          srDict[srName] = spRationale
+        if spName in srDict:
+          srDict[spName] = spRationale
       spValues = []
       spValues.append(spDict['confidentiality'])
       spValues.append(spDict['integrity'])
