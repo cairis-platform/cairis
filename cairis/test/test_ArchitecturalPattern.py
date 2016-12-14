@@ -105,7 +105,7 @@ class ComponentViewTest(unittest.TestCase):
 
     theConnectors = []
     for conn in self.iComponentViews[0]["theConnectors"]:
-      theConnectors.append(ConnectorParameters(conn["theName"],cvName,conn["theFromComponent"],conn["theFromRole"],conn["theFromInterface"],conn["theToComponent"],conn["theToInterface"],conn["theToRole"],conn["theAssetName"],conn["theProtocol"],conn["theAccessRight"]))
+      theConnectors.append(ConnectorParameters(conn["theConnectorName"],cvName,conn["theFromComponent"],conn["theFromRole"],conn["theFromInterface"],conn["theToComponent"],conn["theToInterface"],conn["theToRole"],conn["theAssetName"],conn["theProtocol"],conn["theAccessRight"]))
  
     icvp = ComponentViewParameters(cvName,cvSyn,self.theMetricTypes,self.theRoles,self.theAssets,self.theRequirements,self.theGoals,theComponents,theConnectors)
     b = Borg()

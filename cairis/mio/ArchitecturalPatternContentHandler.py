@@ -321,7 +321,7 @@ class ArchitecturalPatternContentHandler(ContentHandler,EntityResolver):
         if spName in spDict:
           spDict[spName] = spValue
         if spName in srDict:
-          srDict[srName] = spRationale
+          srDict[spName] = spRationale
       spValues = [] 
       spValues.append(spDict['confidentiality'])
       spValues.append(spDict['integrity'])

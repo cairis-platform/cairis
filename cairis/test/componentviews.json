@@ -140,7 +140,7 @@
        }
       ],
       "theConnectors" : [
-        {"theName" : "permission",
+        {"theConnectorName" : "permission",
          "theFromComponent" : "Context Manager",
          "theFromRole" : "request-permission",
          "theFromInterface" : "enforceRequest",
