@@ -111,7 +111,7 @@ function viewArchitecturalPattern(apName) {
         });
 
         $("#theComponents").find("tbody").removeClass();
-        $("#theComponent").find("tbody").addClass('component-rows');
+        $("#theComponents").find("tbody").addClass('component-rows');
         $('.component-rows').contextMenu({
           selector: 'td',
           items: {
@@ -143,9 +143,41 @@ function viewArchitecturalPattern(apName) {
 };
 
 function viewComponentAssetModel(cName) {
+  $.ajax({
+    type: "GET",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/architectural_patterns/component/asset/model/" + encodeURIComponent(cName),
+    success: function (data) {
+      fillApSvgViewer(data);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
 function viewComponentGoalModel(cName) {
+  $.ajax({
+    type: "GET",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/architectural_patterns/component/goal/model/" + encodeURIComponent(cName),
+    success: function (data) {
+      fillApSvgViewer(data);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 }
 
 $(document).on("click", "#addNewArchitecturalPattern", function () {
@@ -1052,4 +1084,10 @@ mainContent.on('click','td.deleteComponentGoalAssociation',function() {
   comp.theGoalAssociations.splice(rowIdx,1);
   $.session.set("Component", JSON.stringify(comp));
 });
+
+function fillApSvgViewer(data){
+  var xmlString = (new XMLSerializer()).serializeToString(data);
+  var w = window.open();
+  $(w.document.body).html(xmlString);
+}
 

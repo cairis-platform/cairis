@@ -368,7 +368,7 @@ class ComponentGoalModelAPI(Resource):
     if not isinstance(dot_code, str):
       raise ObjectNotFoundHTTPError('The model')
 
-    resp = make_response(model_generator.generate(dot_code,renderer='dot'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code,model_type='goal',renderer='dot'), httplib.OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'
