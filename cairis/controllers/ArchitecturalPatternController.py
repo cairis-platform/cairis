@@ -19,11 +19,11 @@ import httplib
 from flask import session, request, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
-from cairis.daemon.CairisHTTPError import ARMHTTPError
+from cairis.daemon.CairisHTTPError import ARMHTTPError, ObjectNotFoundHTTPError
 from cairis.data.ArchitecturalPatternDAO import ArchitecturalPatternDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import ArchitecturalPatternMessage
-from cairis.tools.SessionValidator import get_session_id
+from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
 __author__ = 'Shamal Faily'
 
@@ -273,4 +273,106 @@ class ArchitecturalPatternByNameAPI(Resource):
     resp_dict = {'message': 'Architectural Pattern successfully deleted'}
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
+    return resp
+
+class ComponentAssetModelAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get the asset model for a specific component',
+    nickname='component-asset-model-get',
+    parameters=[
+      {
+        "name": "component",
+        "description": "The component",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self, component):
+    session_id = get_session_id(session, request)
+    model_generator = get_model_generator()
+
+    dao = ArchitecturalPatternDAO(session_id)
+    dot_code = dao.get_component_asset_model(component)
+    dao.close()
+
+    if not isinstance(dot_code, str):
+      raise ObjectNotFoundHTTPError('The model')
+
+    resp = make_response(model_generator.generate(dot_code,renderer='dot'), httplib.OK)
+    accept_header = request.headers.get('Accept', 'image/svg+xml')
+    if accept_header.find('text/plain') > -1:
+      resp.headers['Content-type'] = 'text/plain'
+    else:
+      resp.headers['Content-type'] = 'image/svg+xml'
+
+    return resp
+
+class ComponentGoalModelAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get the goal model for a specific component',
+    nickname='component-goal-model-get',
+    parameters=[
+      {
+        "name": "component",
+        "description": "The component",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self, component):
+    session_id = get_session_id(session, request)
+    model_generator = get_model_generator()
+
+    dao = ArchitecturalPatternDAO(session_id)
+    dot_code = dao.get_component_goal_model(component)
+    dao.close()
+
+    if not isinstance(dot_code, str):
+      raise ObjectNotFoundHTTPError('The model')
+
+    resp = make_response(model_generator.generate(dot_code,renderer='dot'), httplib.OK)
+    accept_header = request.headers.get('Accept', 'image/svg+xml')
+    if accept_header.find('text/plain') > -1:
+      resp.headers['Content-type'] = 'text/plain'
+    else:
+      resp.headers['Content-type'] = 'image/svg+xml'
+
     return resp

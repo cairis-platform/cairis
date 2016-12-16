@@ -132,6 +132,24 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     msg = json_resp.get('message', None)
     self.assertEquals(msg, 'Architectural Pattern successfully updated')
 
+  def test_component_asset_model(self):
+    url = '/api/architectural_patterns/component/asset/model/Policy%20Manager?session_id=test'
+    method = 'test_asset_model'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url, content_type='application/json')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.assertIsNotNone(rv.data, 'No results after deserialization')
+    self.assertEquals(rv.data.find('svg'),1)
+
+  def test_component_goal_model(self):
+    url = '/api/architectural_patterns/component/goal/model/Policy%20Manager?session_id=test'
+    method = 'test_goal_model'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url, content_type='application/json')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.assertIsNotNone(rv.data, 'No results after deserialization')
+    self.assertEquals(rv.data.find('svg'),1)
+
   def prepare_json(self, ap):
     data_dict = {'session_id' : 'test','object' : ap}
     new_ap_body = jsonpickle.encode(data_dict, unpicklable=False)

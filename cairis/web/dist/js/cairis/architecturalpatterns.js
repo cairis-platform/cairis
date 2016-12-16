@@ -110,6 +110,29 @@ function viewArchitecturalPattern(apName) {
           appendConnector(connector);
         });
 
+        $("#theComponents").find("tbody").removeClass();
+        $("#theComponent").find("tbody").addClass('component-rows');
+        $('.component-rows').contextMenu({
+          selector: 'td',
+          items: {
+            "assets": {
+              name: "View Assets",
+              callback: function(key, opt) {
+                var cName = $(this).closest("tr").find("td").eq(1).html();
+                viewComponentAssetModel(cName);
+              }
+            },
+            "goals": {
+              name: "View Goals",
+              callback: function(key, opt) {
+                var cName = $(this).closest("tr").find("td").eq(1).html();
+                viewComponentGoalModel(cName);
+              }
+            }
+          }
+        });
+
+
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -118,6 +141,12 @@ function viewArchitecturalPattern(apName) {
     }
   });
 };
+
+function viewComponentAssetModel(cName) {
+}
+
+function viewComponentGoalModel(cName) {
+}
 
 $(document).on("click", "#addNewArchitecturalPattern", function () {
   activeElement("objectViewer");

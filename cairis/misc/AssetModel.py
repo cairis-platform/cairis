@@ -23,7 +23,7 @@ import os
 __author__ = 'Shamal Faily, Robin Quetin'
 
 class AssetModel:
-  def __init__(self,associations,envName,assetName = '',hideConcerns = False, graphName='asset.dot', db_proxy=None, fontName=None, fontSize=None):
+  def __init__(self,associations,envName = '',assetName = '',hideConcerns = False, graphName='asset.dot', db_proxy=None, fontName=None, fontSize=None):
     self.theAssociations = associations
     self.theEnvironmentName = envName
     self.theAssetName = assetName
@@ -95,7 +95,7 @@ class AssetModel:
 
   def graph(self):
     assets = []
-    if (self.theAssetName == ''):
+    if (self.theAssetName == '' and self.theEnvironmentName != ''):
       assets = self.dbProxy.classModelElements(self.theEnvironmentName,self.hideConcerns)
     if (len(assets) == 0 and self.theEnvironmentName == ''):
       self.theAssetName = 'Component'

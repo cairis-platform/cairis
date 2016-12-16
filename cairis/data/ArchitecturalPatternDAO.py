@@ -16,14 +16,16 @@
 #  under the License.
 
 from cairis.core.ARM import *
-from cairis.daemon.CairisHTTPError import ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, SilentHTTPError
+from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError, ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, SilentHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.ModelDefinitions import ArchitecturalPatternModel,ComponentModel,ConnectorModel,InterfaceModel,ComponentGoalAssociationModel,ComponentStructureModel
-from cairis.tools.SessionValidator import check_required_keys
+from cairis.tools.SessionValidator import check_required_keys, get_fonts
 from cairis.core.ComponentParameters import ComponentParameters
 from cairis.core.ConnectorParameters import ConnectorParameters
 from cairis.core.ComponentViewParameters import ComponentViewParameters
+from cairis.misc.AssetModel import AssetModel as GraphicalAssetModel
+from cairis.misc.KaosModel import KaosModel
 
 __author__ = 'Shamal Faily'
 
@@ -202,3 +204,35 @@ class ArchitecturalPatternDAO(CairisDAO):
 
     cvParams = ComponentViewParameters(apName,apSyn,[],[],[],[],[],theComponents,theConnectors)
     return cvParams
+
+  def get_component_asset_model(self,cName):
+    fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    try:
+      associationDictionary = self.db_proxy.componentAssetModel(cName)
+      associations = GraphicalAssetModel(associationDictionary.values(), db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize)
+      dot_code = associations.graph()
+      return dot_code
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except Exception as ex:
+      print(ex)
+
+  def get_component_goal_model(self,cName):
+    fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    try:
+      associationDictionary = self.db_proxy.componentGoalModel(cName)
+      associations = KaosModel(associationDictionary.values(), '',kaosModelType='template_goal',db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
+      dot_code = associations.graph()
+      return dot_code
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except Exception as ex:
+      print(ex)

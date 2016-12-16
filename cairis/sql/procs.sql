@@ -18538,24 +18538,27 @@ create procedure deleteComponentViewComponents(in cvId int)
 begin
   declare done int default 0;
   declare cId int;
-  declare componentCursor cursor for select component_id from component_view_component where component_view_id = cvId;
+  declare componentCursor cursor for select component_id from temp_component_id;
   declare continue handler for not found set done = 1;
 
   delete from connector where component_view_id = cvId;
+
+  create temporary table temp_component_id (component_id int);
+  insert into temp_component_id select component_id from component_view_component where component_view_id = cvId;
   delete from component_view_component where component_view_id = cvId;
 
   open componentCursor;
   component_loop: loop
     fetch componentCursor into cId;
-
     if done = 1
     then
       leave component_loop;
     end if;
-    call delete_component(cId);  
+    call delete_component(cId);
   end loop component_loop;
   close componentCursor;
 
+  drop table temp_component_id;
 end
 //
 
