@@ -133,8 +133,7 @@ If the overwrite option is set then the import process will overwrite any existi
 
 If the image_dir option is set then CAIRIS will look for somewhere other than the default_image_dir location (specified in cairis.cnf) for any image files associated with the model.  Such image files include pictures for personas and attackers, or rich picture diagrams.
 
-
-### Source installation
+### Source installation and configuration
 
 This is identical to the PyPI installation, but instead of install CAIRIS from PyPI, you instead need to clone the latest version of the CAIRIS repository, and install the dependent PyPI packages manually.
 
