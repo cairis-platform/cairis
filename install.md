@@ -27,7 +27,7 @@ When asked for credentials, provide test/test
 
 ![fig:initStartup]({{ site.baseurl }}/images/CAIRIS_docker.jpg)
 
-* Please do not use this container for CAIRIS for operational use. It uses the built-in Werkzeug development server, and uses all manner of default/easy-to-brute force credentials!
+* Please feel free to use this container to evaluate CAIRIS, but do not use it for operational use. It uses all manner of default/easy-to-brute force credentials!
 
 ### Source installation and configuration
 
