@@ -320,6 +320,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
     try:
       self.conn = MySQLdb.connect(host=b.dbHost,port=b.dbPort,user=b.dbUser,passwd=b.dbPasswd,db=b.dbName)
+      self.prepareDatabase()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + msg
@@ -349,7 +350,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.conn = MySQLdb.connect(host=b.dbHost,port=b.dbPort,user=b.dbUser,passwd=b.dbPasswd,db=b.dbName)
 
     except _mysql_exceptions.DatabaseError, e:
-      exceptionText = 'MySQL error connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
+      exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
       raise DatabaseProxyException(exceptionText) 
     self.theDimIdLookup, self.theDimNameLookup = self.buildDimensionLookup()
 
@@ -1660,18 +1661,18 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def relatedProperties(self,dimTable,objtId,environmentId):
     try:
-        curs = self.conn.cursor()
-        sqlTxt = 'call ' + dimTable + 'Properties (%s,%s)'
-        curs.execute(sqlTxt,[objtId,environmentId])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error getting ' + dimTable + ' properties in environment id ' + str(environmentId)
-          raise DatabaseProxyException(exceptionText) 
-        properties = []
-        row = curs.fetchone()
-        properties =  array((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])).astype(int32) 
-        pRationale =  [row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15]]
-        curs.close()
-        return (properties,pRationale)
+      curs = self.conn.cursor()
+      sqlTxt = 'call ' + dimTable + 'Properties (%s,%s)'
+      curs.execute(sqlTxt,[objtId,environmentId])
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting ' + dimTable + ' properties in environment id ' + str(environmentId)
+        raise DatabaseProxyException(exceptionText) 
+      properties = []
+      row = curs.fetchone()
+      properties =  array((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])).astype(int32) 
+      pRationale =  [row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15]]
+      curs.close()
+      return (properties,pRationale)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting ' + dimTable + ' properties in environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -1679,33 +1680,33 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def templateAssetProperties(self,taId):
     try:
-        curs = self.conn.cursor()
-        sqlTxt = 'call template_assetProperties(%s)'
-        curs.execute(sqlTxt,[taId])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error getting template asset properties'
-          raise DatabaseProxyException(exceptionText) 
-        properties = []
-        rationale = []
-        row = curs.fetchone()
-        properties.append(row[0])
-        properties.append(row[1])
-        properties.append(row[2])
-        properties.append(row[3])
-        properties.append(row[4])
-        properties.append(row[5])
-        properties.append(row[6])
-        properties.append(row[7])
-        rationale.append(row[8])
-        rationale.append(row[9])
-        rationale.append(row[10])
-        rationale.append(row[11])
-        rationale.append(row[12])
-        rationale.append(row[13])
-        rationale.append(row[14])
-        rationale.append(row[15])
-        curs.close()
-        return (properties,rationale)
+      curs = self.conn.cursor()
+      sqlTxt = 'call template_assetProperties(%s)'
+      curs.execute(sqlTxt,[taId])
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting template asset properties'
+        raise DatabaseProxyException(exceptionText) 
+      properties = []
+      rationale = []
+      row = curs.fetchone()
+      properties.append(row[0])
+      properties.append(row[1])
+      properties.append(row[2])
+      properties.append(row[3])
+      properties.append(row[4])
+      properties.append(row[5])
+      properties.append(row[6])
+      properties.append(row[7])
+      rationale.append(row[8])
+      rationale.append(row[9])
+      rationale.append(row[10])
+      rationale.append(row[11])
+      rationale.append(row[12])
+      rationale.append(row[13])
+      rationale.append(row[14])
+      rationale.append(row[15])
+      curs.close()
+      return (properties,rationale)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting template asset properties  (id:' + str(id) + ',message:' + msg + ')'
@@ -11406,7 +11407,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL error getting while preparing database'
+      exceptionText = 'MySQL error preparing database'
       raise DatabaseProxyException(exceptionText)
 
   def templateAssetMetrics(self,taName):

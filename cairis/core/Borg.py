@@ -20,12 +20,13 @@ __author__ = 'Shamal Faily, Robin Quetin'
 from random import choice
 import string
 from time import sleep
-
+from threading import RLock
 
 class Borg:
   __shared_state = {}
   def __init__(self):
     self.__dict__ = self.__shared_state
+    self.theLock = RLock()
 
   def get_dbproxy(self, id=None):
     if self.runmode == 'desktop':
@@ -37,7 +38,12 @@ class Borg:
       else:
         settings = self.get_settings(id)
         if settings is not None:
-          return settings.get('dbProxy', None)
+          dbProxy = settings.get('dbProxy', id)
+          if dbProxy.conn.open:
+            return dbProxy
+          else:
+            dbProxy.reconnect(session_id = id)
+            return dbProxy
         else:
           return None
     else:
@@ -48,18 +54,20 @@ class Borg:
     Creates a new settings dictionary in the Borg instance and returns the identifier for the settings dictionary
     :rtype : str
     """
+    self.theLock.acquire()
     random_id = ''.join(choice(string.ascii_letters+string.digits) for i in range(32))
     while random_id in self.settings:
       sleep(40)
       ''.join(choice(string.ascii_letters+string.digits) for i in range(32))
 
     self.settings[random_id] = {'session_id': random_id}
+    self.theLock.release()
     return random_id
 
   def get_settings(self, session_id):
     if session_id in self.settings:
       return self.settings[session_id]
     else:
-      return None
+      raise RuntimeError('No settings found for session_id:' + str(session_id))
 
 
