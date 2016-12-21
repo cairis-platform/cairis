@@ -152,7 +152,10 @@ function viewComponentAssetModel(cName) {
     crossDomain: true,
     url: serverIP + "/api/architectural_patterns/component/asset/model/" + encodeURIComponent(cName),
     success: function (data) {
-      fillApSvgViewer(data);
+      Cookies.set('model','component_asset');
+      Cookies.set('parameter',cName);
+      Cookies.set('wTitle',cName + " assets");
+      var viewerWindow = window.open('viewer.html');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -171,7 +174,10 @@ function viewComponentGoalModel(cName) {
     crossDomain: true,
     url: serverIP + "/api/architectural_patterns/component/goal/model/" + encodeURIComponent(cName),
     success: function (data) {
-      fillApSvgViewer(data);
+      Cookies.set('model','component_goal');
+      Cookies.set('parameter',cName);
+      Cookies.set('wTitle',cName + " goals");
+      var viewerWindow = window.open('viewer.html');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -1084,10 +1090,4 @@ mainContent.on('click','td.deleteComponentGoalAssociation',function() {
   comp.theGoalAssociations.splice(rowIdx,1);
   $.session.set("Component", JSON.stringify(comp));
 });
-
-function fillApSvgViewer(data){
-  var xmlString = (new XMLSerializer()).serializeToString(data);
-  var w = window.open();
-  $(w.document.body).html(xmlString);
-}
 
