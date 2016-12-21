@@ -36,12 +36,7 @@ class Borg:
       else:
         settings = self.get_settings(id)
         if settings is not None:
-          dbProxy = settings.get('dbProxy', id)
-          if dbProxy.conn.open:
-            return dbProxy
-          else:
-            dbProxy.reconnect(session_id = id)
-            return dbProxy
+          return settings.get('dbProxy', None)
         else:
           return None
     else:
@@ -64,6 +59,6 @@ class Borg:
     if session_id in self.settings:
       return self.settings[session_id]
     else:
-      raise RuntimeError('No settings found for session_id:' + str(session_id))
+      return None
 
 
