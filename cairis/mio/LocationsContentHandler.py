@@ -19,6 +19,8 @@ import os
 from xml.sax.handler import ContentHandler,EntityResolver
 from cairis.core.EnvironmentParameters import EnvironmentParameters
 from cairis.core.ValueTypeParameters import ValueTypeParameters
+from cairis.core.Location import Location
+from cairis.core.LocationsParameters import LocationsParameters
 from cairis.core.Borg import Borg
 
 __author__ = 'Shamal Faily'
@@ -30,7 +32,6 @@ class LocationsContentHandler(ContentHandler,EntityResolver):
     self.theLocationsName = ''
     self.theDiagram = ''
     self.theLocations = []
-    self.theLinks = set([])
 
     self.resetLocationAttributes()
 
@@ -41,7 +42,7 @@ class LocationsContentHandler(ContentHandler,EntityResolver):
   def diagram(self): return self.theDiagram
 
   def locations(self):
-    return self.theLocations
+    return LocationsParameters(self.theLocationsName,self.theDiagram,self.theLocations)
 
   def links(self):
     return self.theLinks
@@ -50,6 +51,7 @@ class LocationsContentHandler(ContentHandler,EntityResolver):
     self.theName = ''
     self.theAssetInstances = []
     self.thePersonaInstances = []
+    self.theLinks = []
 
   def startElement(self,name,attrs):
     self.currentElementName = name
@@ -64,11 +66,11 @@ class LocationsContentHandler(ContentHandler,EntityResolver):
       self.thePersonaInstances.append((attrs['name'],attrs['persona']))
     elif name == 'link':
       toName = attrs['name']
-      if ((self.theName,toName) not in self.theLinks) and ((toName,self.theName) not in self.theLinks):
-        self.theLinks.add((self.theName,toName))
+      self.theLinks.append(toName)
 
   def endElement(self,name):
     if name == 'location':
-      self.theLocations.append((self.theName,self.theAssetInstances,self.thePersonaInstances))
+      self.theLocations.append(Location(-1,self.theName,self.theAssetInstances,self.thePersonaInstances,self.theLinks))
       self.theAssetInstances = []
       self.thePersonaInstances = []
+      self.theLinks = []

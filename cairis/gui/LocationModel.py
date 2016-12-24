@@ -29,7 +29,8 @@ __author__ = 'Shamal Faily'
 class LocationModel:
   def __init__(self,locsName,envName,riskOverlay):
     b = Borg()
-    self.theLocs = b.dbProxy.getLocations(locsName)
+    locsId = b.dbProxy.getDimensionId(locsName,'locations')
+    self.theLocs = (b.dbProxy.getLocations(locsId))[locsName]
     self.theEnvironmentName = envName
     self.theGraph = pydot.Dot()
     self.fontName = b.fontName
@@ -48,19 +49,12 @@ class LocationModel:
     return open(self.theGraphName).read()
 
   def graph(self):
-    locs = self.theLocs[2]
-    edgeList = set([])
 
-    for location in locs:
-      locName = location[0]
-      assetInstances = location[1]
-      personaInstances = location[2]
-      locLinks = location[3]
+    for location in self.theLocs.locations():
+      locName = location.name()
+      assetInstances = location.assetInstances()
+      personaInstances = location.personaInstances()
 
-      for linkLoc in locLinks:
-        if ((linkLoc,locName) not in edgeList) and ((locName,linkLoc) not in edgeList):
-          edgeList.add((linkLoc,locName))
-      
       locCluster = pydot.Cluster(locName,label=locName,URL='location#' + locName)
       locCluster.add_node(pydot.Node('point_' + locName,label='',shape="none",fontcolor="white",URL='location#' + locName))
       for inst in assetInstances:
@@ -74,10 +68,10 @@ class LocationModel:
         locCluster.add_node(pydot.Node(instName,shape='circle',URL='persona#' + personaName))
       self.theGraph.add_subgraph(locCluster)
 
-    for edges in edgeList:
+    for edges in self.theLocs.links():
       self.theGraph.add_edge(pydot.Edge('point_' + edges[0],'point_' + edges[1],arrowhead='none',arrowtail='none',dir='both'))
 
-    edgeList.clear()
+    edgeList = set([])
     b = Borg()
     risks = set([])
     for trace in self.theOverlayTraces:

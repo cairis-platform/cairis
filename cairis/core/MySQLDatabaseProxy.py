@@ -101,6 +101,9 @@ from ConnectorParameters import ConnectorParameters;
 from WeaknessTarget import WeaknessTarget
 from ImpliedProcess import ImpliedProcess
 from ImpliedProcessParameters import ImpliedProcessParameters
+from Location import Location
+from Locations import Locations
+from LocationsParameters import LocationsParameters
 import string
 import os
 from numpy import *
@@ -11135,8 +11138,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting denied goals for code ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addLocations(self,locsName,locDiagram,locations,links):
+  def addLocations(self,parameters):
     locsId = self.newId()
+    locsName = parameters.name()
+    locDiagram = parameters.diagram()
+    locations = parameters.locations()
+    links = parameters.links()
     try:
       curs = self.conn.cursor()
       curs.execute('call addLocations(%s,%s,%s)',[locsId,locsName,locDiagram])
@@ -11158,9 +11165,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
  
   def addLocation(self,locsId,location):
     locId = self.newId()
-    locName = location[0]
-    assetInstances = location[1]
-    personaInstances = location[2]
+    locName = location.name()
+    assetInstances = location.assetInstances()
+    personaInstances = location.personaInstances()
 
     try:
       curs = self.conn.cursor()
@@ -11193,7 +11200,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error adding asset instance ' + instanceName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
-
 
   def addPersonaInstance(self,locId,personaInstance):
     instanceId = self.newId()
@@ -11233,20 +11239,29 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (curs.rowcount == -1):
         exceptionText = 'Error obtaining locations'
         raise DatabaseProxyException(exceptionText) 
-      row = curs.fetchone()
-      locsId = row[0]
-      locsDia = row[1] 
+      locationsDict = {}
+      locsRows = []
+      for row in curs.fetchall():
+        row = list(row)
+        locsId = row[0]
+        locsName = row[1] 
+        locsDia = row[2] 
+        locsRows.append((locsId,locsName,locsDia))
       curs.close()
-
-      locNames = self.getLocationNames(constraintId)
-      linkDict = self.getLocationLinks(constraintId)
-      locations = []
-      for locName in locNames:
-        assetInstances = self.getAssetInstances(locName)
-        personaInstances = self.getPersonaInstances(locName)
-        locLinks = linkDict[locName]
-        locations.append((locName,assetInstances,personaInstances,locLinks))
-      return (locsId,locsDia,locations)
+      for locsId,locsName,locsDia in locsRows:
+        locNames = self.getLocationNames(locsName)
+        linkDict = self.getLocationLinks(locsName)
+        locs = []
+        for locName in locNames:
+          assetInstances = self.getAssetInstances(locName)
+          personaInstances = self.getPersonaInstances(locName)
+          locLinks = linkDict[locName]
+          loc = Location(-1,locName,assetInstances,personaInstances,locLinks)
+          locs.append(loc)
+        p = LocationsParameters(locsName,locsDia,locs)
+        locations = ObjectFactory.build(locsId,p)
+        locationsDict[locsName] = locations
+      return locationsDict
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error obtaining locations (id:' + str(id) + ',message:' + msg + ')'

@@ -27,6 +27,8 @@ from cairis.core.PersonaParameters import PersonaParameters
 from cairis.core.PersonaEnvironmentProperties import PersonaEnvironmentProperties
 from cairis.core.AssetParameters import AssetParameters
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
+from cairis.core.Location import Location
+from cairis.core.LocationsParameters import LocationsParameters
 
 __author__ = 'Shamal Faily'
 
@@ -75,35 +77,39 @@ class LocationsTest(unittest.TestCase):
     iLoc1Name = iLoc1['theName']
     iLoc1AssetInstances = []
     iLoc1PersonaInstances = []
-    iLocations.append((iLoc1Name,iLoc1AssetInstances,iLoc1PersonaInstances))
+    iLoc1Links = iLoc1['theLinks']
+    iLocations.append(Location(-1,iLoc1Name,iLoc1AssetInstances,iLoc1PersonaInstances,iLoc1Links))
 
     iLoc2 = self.ilocations[0]['theLocations'][1] 
     iLoc2Name = iLoc2['theName']
     iLoc2AssetInstances = [(iLoc2['theAssetInstances'][0]['theName'],iLoc2['theAssetInstances'][0]['theAsset'])]
     iLoc2PersonaInstances = [(iLoc2['thePersonaInstances'][0]['theName'],iLoc2['thePersonaInstances'][0]['thePersona'])]
-    iLocations.append((iLoc2Name,iLoc2AssetInstances,iLoc2PersonaInstances))
+    iLoc2Links = iLoc2['theLinks']
+    iLocations.append(Location(-1,iLoc2Name,iLoc2AssetInstances,iLoc2PersonaInstances,iLoc2Links))
 
-    iLinks.add((iLoc1Name,iLoc1['theLinks'][0]))
+    ilp = LocationsParameters(iLocsName,iLocsDia,iLocations)
+    iLinks.add(ilp)
 
     b = Borg()
-    b.dbProxy.addLocations(iLocsName,iLocsDia,iLocations,iLinks)
+    b.dbProxy.addLocations(ilp)
 
-    oLocs = b.dbProxy.getLocations(iLocsName)
-    oLocsId = oLocs[0]
-    oLocsDia = oLocs[1]
-    oLocsLocations = oLocs[2]
+    oLocsDict = b.dbProxy.getLocations()
+    oLocs = oLocsDict[ilp.name()]
+    oLocsId = oLocs.id()
+    oLocsDia = oLocs.diagram()
+    oLocsLocations = oLocs.locations()
 
     self.assertEqual(iLocsDia,oLocsDia)
 
     oLocs1 = oLocsLocations[0]
-    self.assertEqual(iLoc1Name,oLocs1[0])
-    self.assertEqual(iLoc1AssetInstances,oLocs1[1])
-    self.assertEqual(iLoc1PersonaInstances,oLocs1[2])
+    self.assertEqual(iLoc1Name,oLocs1.name())
+    self.assertEqual(iLoc1AssetInstances,oLocs1.assetInstances())
+    self.assertEqual(iLoc1PersonaInstances,oLocs1.personaInstances())
 
     oLocs2 = oLocsLocations[1]
-    self.assertEqual(iLoc2Name,oLocs2[0])
-    self.assertEqual(iLoc2AssetInstances,oLocs2[1])
-    self.assertEqual(iLoc2PersonaInstances,oLocs2[2])
+    self.assertEqual(iLoc2Name,oLocs2.name())
+    self.assertEqual(iLoc2AssetInstances,oLocs2.assetInstances())
+    self.assertEqual(iLoc2PersonaInstances,oLocs2.personaInstances())
 
     b.dbProxy.deleteLocations(oLocsId)
 

@@ -690,19 +690,16 @@ def importLocationsFile(importFile,session_id = None):
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
-    locName = handler.name()
-    locDiagram = handler.diagram()
     locations = handler.locations()
-    links = handler.links()
-    return importLocations(locName,locDiagram,locations,links,session_id)
+    return importLocations(locations,session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
   
-def importLocations(locName,locDiagram,locations,links,session_id):
+def importLocations(locations,session_id):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
-  db_proxy.addLocations(locName,locDiagram,locations,links)
-  msgStr = 'Imported ' + str(len(locations)) + ' locations, and ' + str(len(links)) + ' links.'
+  db_proxy.addLocations(locations)
+  msgStr = 'Imported ' + locations.name()
   return msgStr
 
 def importModelFile(importFile,isOverwrite = 1,session_id = None):

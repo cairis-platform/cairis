@@ -1210,3 +1210,15 @@ class TemplateRequirementModel(object):
   swagger_metadata = {
     obj_id_field : gen_class_metadata(TemplateRequirement)
   }
+
+@swagger.model
+class LocationModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theName": fields.String,
+    "theAssetInstances": fields.List(fields.String),
+    "thePersonaInstances": fields.List(fields.String),
+    "theLinks": fields.List(fields.String),
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)

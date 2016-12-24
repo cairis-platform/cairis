@@ -97,6 +97,8 @@ from UseCase import UseCase
 from UseCaseParameters import UseCaseParameters
 from ImpliedProcess import ImpliedProcess
 from ImpliedProcessParameters import ImpliedProcessParameters
+from Locations import Locations
+from LocationsParameters import LocationsParameters
 
 __author__ = 'Shamal Faily'
 
@@ -179,5 +181,7 @@ def build(objtId,p):
     return TaskCharacteristic(objtId,p.task(),p.qualifier(),p.characteristic(),p.grounds(),p.warrant(),p.backing(),p.rebuttal())
   if (p.__class__.__name__ == 'ImpliedProcessParameters'):
     return ImpliedProcess(objtId,p.name(),p.description(),p.persona(),p.network(),p.specification(),p.channels())
+  if (p.__class__.__name__ == 'LocationsParameters'):
+    return Locations(objtId,p.name(),p.diagram(),p.locations(),p.links())
   else:
     raise UnknownParameterClass(str(objtId))

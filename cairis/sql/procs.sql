@@ -22123,9 +22123,14 @@ begin
 end
 //
 
-create procedure getLocations(in locsName text)
+create procedure getLocations(in constraintId int)
 begin
-  select id,diagram from locations where name = locsName;
+  if constraintId = -1
+  then
+    select id,name,diagram from locations;
+  else
+    select id,name,diagram from locations where id = constraintId;
+  end if;
 end
 //
 
