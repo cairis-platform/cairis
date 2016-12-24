@@ -11162,6 +11162,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error adding locations ' + locsName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def updateLocations(self,parameters):
+    locsId = parameters.id()
+    self.deleteLocations(locsId)
+    self.addLocations(parameters)
+
  
   def addLocation(self,locsId,location):
     locId = self.newId()

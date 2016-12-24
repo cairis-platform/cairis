@@ -111,7 +111,21 @@ class LocationsTest(unittest.TestCase):
     self.assertEqual(iLoc2AssetInstances,oLocs2.assetInstances())
     self.assertEqual(iLoc2PersonaInstances,oLocs2.personaInstances())
 
-    b.dbProxy.deleteLocations(oLocsId)
+    ilp.setId(oLocsId)
+    b.dbProxy.updateLocations(ilp)
+    uLocsDict = b.dbProxy.getLocations()
+    uLocs = uLocsDict[ilp.name()]
+    uLocsId = uLocs.id()
+    uLocsDia = uLocs.diagram()
+    uLocsLocations = uLocs.locations()
+    self.assertEqual(uLocsDia,oLocsDia)
+
+    uLocs1 = uLocsLocations[0]
+    self.assertEqual(uLocs1.name(),oLocs1.name())
+    self.assertEqual(uLocs1.assetInstances(),oLocs1.assetInstances())
+    self.assertEqual(uLocs1.personaInstances(),oLocs1.personaInstances())
+
+    b.dbProxy.deleteLocations(uLocsId)
 
   def tearDown(self):
     b = Borg()
