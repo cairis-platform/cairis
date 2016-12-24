@@ -11221,6 +11221,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addLocationLink(self,locsId,link):
     tailLoc = link[0]
     headLoc = link[1]
+    import pytest
+    pytest.set_trace()
     try:
       curs = self.conn.cursor()
       curs.execute('call addLocationLink(%s,%s,%s)',[locsId,tailLoc,headLoc])
