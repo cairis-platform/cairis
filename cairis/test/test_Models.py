@@ -44,7 +44,7 @@ class ModelTests(unittest.TestCase):
     b.get_dbproxy().textualArgumentationModel('Claire','Activities')
     
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/ACME_Water/ACME_Water.xml',1,'test')
-    importLocationsFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/ACME_Water/PooleWWTW.xml')
+    importLocationsFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/ACME_Water/PooleWWTW.xml','test')
     b.get_dbproxy().locationsRiskModel('PooleWWTW','Day')
 
 
