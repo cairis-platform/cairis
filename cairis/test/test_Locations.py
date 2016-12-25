@@ -71,7 +71,6 @@ class LocationsTest(unittest.TestCase):
     iLocsDia = self.ilocations[0]['theDiagram']
     
     iLocations = []
-    iLinks = set([])
 
     iLoc1 = self.ilocations[0]['theLocations'][0] 
     iLoc1Name = iLoc1['theName']
@@ -88,7 +87,6 @@ class LocationsTest(unittest.TestCase):
     iLocations.append(Location(-1,iLoc2Name,iLoc2AssetInstances,iLoc2PersonaInstances,iLoc2Links))
 
     ilp = LocationsParameters(iLocsName,iLocsDia,iLocations)
-    iLinks.add(ilp)
 
     b = Borg()
     b.dbProxy.addLocations(ilp)

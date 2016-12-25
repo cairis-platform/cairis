@@ -398,6 +398,18 @@ class TemplateAssetMessage(DefaultMessage):
   object=ModelDefinitions.TemplateRequirementModel.__name__,
 )
 # endregion
+
+class LocationsMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.LocationsModel)
+  required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+  object=ModelDefinitions.LocationsModel.__name__,
+)
+# endregion
+
 class TemplateRequirementMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TemplateRequirementModel)
   required = DefaultMessage.required

@@ -29,7 +29,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController
+    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -240,6 +240,10 @@ api.add_resource(FindController.FindAPI, '/api/find/<string:search_string>',endp
 # Import routes
 api.add_resource(CImportController.CImportTextAPI, '/api/import/text',endpoint='import_text')
 api.add_resource(CImportController.CImportFileAPI, '/api/import/file/type/<string:type>',endpoint='import_file')
+
+# Locations routes
+api.add_resource(LocationsController.LocationsAPI, '/api/locations',endpoint='locations')
+api.add_resource(LocationsController.LocationsByNameAPI, '/api/locations/name/<string:name>',endpoint='locations_name')
 
 # Misuse case routes
 api.add_resource(MisuseCaseController.MisuseCasesAPI, '/api/misusecases',endpoint='misusecases')

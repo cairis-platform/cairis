@@ -21,12 +21,12 @@ from ObjectCreationParameters import ObjectCreationParameters
 __author__ = 'Shamal Faily'
 
 class LocationsParameters(ObjectCreationParameters):
-  def __init__(self,locsName,locsDiagram,locs,links = set([])):
+  def __init__(self,locsName,locsDiagram,locs,links = []):
     ObjectCreationParameters.__init__(self)
     self.theName = locsName
     self.theDiagram = locsDiagram
     self.theLocations = locs
-    self.theLinks = links
+    self.theLinks = set(links)
     if len(self.theLinks) == 0:
       for loc in self.theLocations:
         for link in loc.links():

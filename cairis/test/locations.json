@@ -74,6 +74,35 @@
           "theLinks" : ["PC1"]
         }
       ]
+    },
+    {
+      "theName" : "SturminsterWTW",
+      "theDiagram" : "None",
+      "theLocations" :
+      [
+        {
+          "theName" : "SPC1",
+          "theLinks" : ["SP4"]
+        },
+        {
+          "theName" : "SP4",
+          "theAssetInstances" :
+          [
+            {
+              "theName" : "SSWS-1",
+              "theAsset" : "SCADA Workstation"
+            }
+          ],
+          "thePersonaInstances" :
+          [
+            {
+              "theName" : "George",
+              "thePersona" : "Rick"
+            }
+          ],
+          "theLinks" : ["SPC1"]
+        }
+      ]
     }
   ]
 }

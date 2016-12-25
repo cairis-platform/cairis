@@ -61,6 +61,8 @@ from cairis.core.Component import Component
 from cairis.core.TemplateGoal import TemplateGoal
 from cairis.core.TemplateAsset import TemplateAsset
 from cairis.core.TemplateRequirement import TemplateRequirement
+from cairis.core.Location import Location
+from cairis.core.Locations import Locations
 from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, PersonaCharacteristicReference,ObjectDependency
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -1222,3 +1224,20 @@ class LocationModel(object):
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(Location)
+  }
+
+@swagger.model
+class LocationsModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theName": fields.String,
+    "theDiagram": fields.List(fields.String),
+    "theLocations" : fields.List(fields.Nested(LocationModel.resource_fields))
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(Locations)
+  }

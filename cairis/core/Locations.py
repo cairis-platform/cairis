@@ -20,12 +20,12 @@ from Location import Location
 __author__ = 'Shamal Faily'
 
 class Locations:
-  def __init__(self,locsId,locsName,locsDiagram,locs,links=set([])):
+  def __init__(self,locsId,locsName,locsDiagram,locs,links=[]):
     self.theId = locsId
     self.theName = locsName
     self.theDiagram = locsDiagram
     self.theLocations = locs
-    self.theLinks = links
+    self.theLinks = set(links)
     if len(self.theLinks) == 0:
       for loc in self.theLocations:
         for link in loc.links():
