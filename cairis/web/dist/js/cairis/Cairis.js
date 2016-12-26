@@ -1391,6 +1391,10 @@ function setTableHeader(){
       debugLogger("Is Architectural Patterns");
       thead = "<th width='50px' id='addNewArchitecturalPattern'><i class='fa fa-plus floatCenter'></i></th><th>Model</th><th>Interfaces DER</th><th>Channels DER</th><th>Untrusted Surface DES</th>";
       break;
+    case "Locations":
+      debugLogger("Is Locations");
+      thead = "<th width='50px' id='addNewLocations'><i class='fa fa-plus floatCenter'></i></th><th>Locations</th>";
+      break;
     case "asset_value":
       debugLogger("Is Asset Value");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Asset Value</th><th>Description</th>";
