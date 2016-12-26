@@ -11,7 +11,6 @@ Update project settings
 .. figure:: projectSettings.png
    :alt: Project Settings notebook
 
-   fig:projectSettings
 
 -  Click on the Project Settings button to open the Project Settings
    notebook. By default, the notebook will open in the Background page.
@@ -61,8 +60,6 @@ Adding a new environment
 .. figure:: EnvironmentDialog.png
    :alt: Environment Dialog
 
-   fig:EnvironmentDialog
-
 -  Click on the Environment toolbar button to open the Environments
    dialog box, and click on the Add button to open the Environment
    dialog box.
@@ -91,7 +88,6 @@ On-the-fly environment creation
 .. figure:: NewEnvironmentDialog.png
    :alt: New Environment Dialog
 
-   fig:NewEnvironmentDialog
 Most artifacts in CAIRIS are situated in one or more environments. When
 creating or updating an artifact, it is usually possible to create a new
 environment on the fly by right-clicking on the environment list box in
@@ -136,7 +132,6 @@ Adding, updating, and deleting an asset
 .. figure:: AssetDialog.png
    :alt: Asset Dialog
 
-   fig:AssetDialog
 
 -  Click on the Asset toolbar button to open the Assets dialog box, and
    click on the Add button to open the Asset dialog box.
@@ -199,7 +194,6 @@ the concerns are displayed as blue comment elements.
 .. figure:: AddAssetAssociation.png
    :alt: Add Asset Association Dialog
 
-   fig:AddAssetAssociation
 Adding an asset association
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -235,7 +229,6 @@ Adding an asset association
 .. figure:: AssetInconsistency.png
    :alt: Asset Inconsistency warning
 
-   fig:AssetInconsistency
 
 -  If an asset is associated with an asset with one or more security
    properties of a lower value, then an Asset Inconsistency dialog is
@@ -250,7 +243,6 @@ button, and selecting the environment to view the environment for.
 .. figure:: AssetModel.png
    :alt: Asset Model
 
-   fig:AssetModel
 By changing the environment name in the environment combo box, the asset
 model for a different environment can be viewed. The layout of the model
 can also be replaced by selecting a layout option in the Layout combo
@@ -277,7 +269,6 @@ Adding, updating, and deleting a role
 .. figure:: RoleDialog.png
    :alt: Role Dialog
 
-   fig:RoleDialog
 
 -  Click on the Role toolbar button to open the Roles dialog box, and
    click on the Add button to open the Role dialog box.
@@ -311,7 +302,6 @@ view the environment for.
 .. figure:: ResponsibilityModel.png
    :alt: Responsibility Model
 
-   fig:ResponsibilityModel
 By changing the environment name in the environment combo box, the
 responsibility model for a different environment can be viewed. The
 layout of the model can also be replaced by selecting a layout option in
@@ -334,7 +324,6 @@ Adding, updating, or deleting a persona
 .. figure:: PersonaDialog.png
    :alt: Persona Dialog
 
-   fig:PersonaDialog
 
 -  Click on the Persona toolbar button to open the Personas dialog box,
    and click on the Add button to open the Persona dialog box.
@@ -407,7 +396,6 @@ Recording persona assumptions
 .. figure:: APModel.png
    :alt: Assumption Persona model
 
-   fig:APModel
 
 -  From the Options/External Document directory, click on the Add button
    and add information about the source of any assumptions external to
@@ -471,7 +459,6 @@ Adding, updating, or deleting a task
 .. figure:: TaskDialog.png
    :alt: Task Dialog
 
-   fig:TaskDialog
 
 -  Click on the Task toolbar button to open the Tasks dialog box, and
    click on the Add button to open the Task dialog box.
@@ -495,7 +482,6 @@ Adding, updating, or deleting a task
 .. figure:: AddTaskPersona.png
    :alt: Add Task Persona Dialog
 
-   fig:AddTaskPersona
 
 -  Right click on the persona list box and select Add from the speed
    menu to associate a persona with this task. In the Add Task Persona
@@ -536,7 +522,6 @@ Task traceability
 .. figure:: TraceabilityEditor.png
    :alt: Traceability Editor
 
-   fig:TraceabilityEditor
 Tasks can be manually traced to certain artifacts via the Tasks dialog.
 A task may contribute to an asset or a vulnerability, or be supported by
 requirement. To add a traceability link, right click on the task name,
@@ -558,7 +543,6 @@ and selecting the environment to view the environment for.
 .. figure:: TaskModel.png
    :alt: Task Model
 
-   fig:TaskModel
 By changing the environment name in the environment combo box, the task
 model for a different environment can be viewed. The layout of the model
 can also be replaced by selecting a layout option in the Layout combo
@@ -579,7 +563,6 @@ Adding, updating, and deleting a domain property
 .. figure:: DomainPropertyDialog.png
    :alt: Domain Property Dialog
 
-   fig:DomainPropertyDialog
 
 -  Click on the Domain Properties toolbar button to open the Domain
    Properties dialog box, and click on the Add button to open the Domain
@@ -626,10 +609,9 @@ Adding, updating, and deleting a goal
 .. figure:: GoalsDialog.png
    :alt: Goals Dialog
 
-   fig:GoalsDialog
 
 -  Click on the Goal toolbar button to open the Goals dialog box. As
-   [fig:GoalsDialog] illustrates, next to goal name is the current
+   the above figure illustrates, next to goal name is the current
    *status* for the goal. If a goal is defined as OK, then this goal is
    refined by a requirement, or by one or more goals. Goals with the
    status *to refine* have yet to be refined or operationalised. Goals
@@ -638,8 +620,6 @@ Adding, updating, and deleting a goal
 
 .. figure:: GoalDialog.png
    :alt: Goal Dialog
-
-   fig:GoalDialog
 
 -  Click on the Add button to open the Goal dialog box, and enter the
    name of the goal.
@@ -663,7 +643,6 @@ Adding, updating, and deleting a goal
 .. figure:: AddGoalRefinement.png
    :alt: Add Goal Refinement Dialog
 
-   fig:AddGoalRefinement
 
 -  If this goal refines a parent goal, click on the Goals tab,
    right-click on Goal refinement list, and select Add to open the Add
@@ -717,7 +696,6 @@ and selecting the environment to view the environment for.
 .. figure:: GoalModel.png
    :alt: Goal Model
 
-   fig:GoalModel
 By changing the environment name in the environment combo box, the goal
 model for a different environment can be viewed. The layout of the model
 can also be replaced by selecting a layout option in the Layout combo
@@ -748,7 +726,6 @@ Adding, updating, and deleting an obstacle
 .. figure:: ObstacleDialog.png
    :alt: Obstacle Dialog
 
-   fig:ObstacleDialog
 
 -  Click on the Obstacle toolbar button to open the Obstacles dialog
    box, and click on the Add button to open the Obstacle dialog box.
@@ -794,7 +771,6 @@ button, and selecting the environment to view the environment for.
 .. figure:: ObstacleModel.png
    :alt: Obstacle Model
 
-   fig:ObstacleModel
 In many ways, the obstacle model is very similar to the goal model. The
 main differences are goal filtering is not possible, only the obstacle
 tree is displayed, and obstacles refine to obstacles, as opposed to
@@ -922,7 +898,6 @@ Create a template asset
 .. figure:: TemplateAssetDialog.png
    :alt: Template Pattern Dialog
 
-   fig:TemplateAssetDialog
 Template assets can be best described as context-free assets. When they
 are created, template assets do not form part of analysis unless they
 are implicitly introduced. This 'implicit introduction' occurs when a
@@ -951,7 +926,6 @@ Create a security pattern
 .. figure:: SecurityPatternDialog.png
    :alt: Security Pattern Dialog
 
-   fig:SecurityPatternDialog
 
 -  Select the Options/Security Patterns menu option to open the Security
    Patterns dialog box, and click on the Add button to open the Security
@@ -992,7 +966,6 @@ Situate a security pattern
 .. figure:: SituatePatternDialog.png
    :alt: Situate Pattern Dialog
 
-   fig:SituatePatternDialog
 
 -  To introduce a security pattern into the working project, open the
    Security Patterns dialog box, right-click on the pattern, and select
@@ -1030,7 +1003,6 @@ Create a vulnerability
 .. figure:: VulnerabilityDialog.png
    :alt: Vulnerability Dialog
 
-   fig:VulnerabilityDialog
 
 -  Click on the Vulnerability toolbar button to open the Vulnerabilities
    dialog box.
@@ -1069,7 +1041,6 @@ Importing a vulnerability
 .. figure:: ImportVulnerabilityDialog.png
    :alt: Import Vulnerability
 
-   fig:ImportVulnerabilityDialog
 The CAIRIS database is pre-loaded with a database of template
 vulnerabilities based on the Common Criteria. To import one of these,
 select Import from the Vulnerabilities dialog to open the Import
@@ -1080,7 +1051,6 @@ the template.
 .. figure:: ImportedVulnerabilityDialog.png
    :alt: Imported Vulnerability
 
-   fig:ImportedVulnerabilityDialog
 Attackers
 =========
 
@@ -1099,7 +1069,6 @@ Adding, updating, and deleting an attacker
 .. figure:: AttackerDialog.png
    :alt: Attacker Dialog
 
-   fig:AttackerDialog
 
 -  Click on the Attacker toolbar button to open the Attackers dialog
    box, and click on the Add button to open the Attacker dialog box.
@@ -1157,7 +1126,6 @@ Adding, updating, and deleting a threat
 .. figure:: ThreatDialog.png
    :alt: Threat Dialog
 
-   fig:ThreatDialog
 
 -  Click on the Threat toolbar button to open the Threats dialog box,
    and click on the Add button to open the Threat dialog box.
@@ -1205,7 +1173,6 @@ Importing threats
 .. figure:: ImportThreatDialog.png
    :alt: Import Threat
 
-   fig:ImportThreatDialog
 The CAIRIS database is pre-loaded with a database of template threats
 based on the Common Criteria. To import one of these, select Import from
 the Threats dialog to open the Import Threat dialog. When a threat is
@@ -1232,7 +1199,6 @@ Adding, updating, and deleting a risk
 .. figure:: RiskDialog.png
    :alt: Risk Dialog
 
-   fig:RiskDialog
 
 -  Click on the Risk toolbar button to open the Risks dialog box, and
    click on the Add button to open the Risk dialog box.
@@ -1253,7 +1219,6 @@ Adding, updating, and deleting a risk
 .. figure:: MisuseCaseDialog.png
    :alt: Misuse Case Dialog
 
-   fig:MisuseCaseDialog
 
 -  Most of the fields in the Misuse Case dialog have already been
    completed based on the risk analysis carried out up to this point.
@@ -1286,7 +1251,6 @@ environment for.
 .. figure:: RiskAnalysisModel.png
    :alt: Risk Analysis Model
 
-   fig:RiskAnalysisModel
 By changing the environment name in the environment combo box, the risk
 analysis model for a different environment can be viewed. The layout of
 the model can also be replaced by selecting a layout option in the
@@ -1328,7 +1292,6 @@ Adding, updating, and deleting a response
 .. figure:: ResponseDialog.png
    :alt: Response Dialog
 
-   fig:ResponseDialog
 
 -  Click on the Response toolbar button to open the Responses dialog
    box, and click on the Add button. Select the response to take from
@@ -1407,11 +1370,9 @@ Adding, updating, and deleting a countermeasure
 .. figure:: CountermeasureDialogSecurity.png
    :alt: Countermeasure Dialog: Security Page
 
-   fig:CountermeasureDialogSecurity
 .. figure:: CountermeasureDialogUsability.png
    :alt: Countermeasure Dialog: Usability Page
 
-   fig:CountermeasureDialogUsability
 
 -  Click on the Countermeasure toolbar button to open the
    Countermeasures dialog box, and click on the Add button to open the
@@ -1541,5 +1502,4 @@ based on the output options selected.
 .. figure:: GenerateDocumentationDialog.png
    :alt: Generate Documentation Dialog
 
-   fig:GenerateDocumentationDialog
 
