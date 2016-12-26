@@ -9,9 +9,9 @@
   excerpt: "Sample models"
 
 
-- title: Manual
-  url: /doc
-  excerpt: "CAIRIS user manual"
+- title: Docs
+  url: http://cairis.readthedocs.io
+  excerpt: "CAIRIS Documentation"
 
 - title: Papers
   url: /papers
