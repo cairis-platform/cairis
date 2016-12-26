@@ -10,6 +10,7 @@ Welcome to CAIRIS's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   doc
 
 
 Indices and tables
