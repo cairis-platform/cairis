@@ -1,5 +1,3 @@
-{% include toc.html %}
-
 Creating a new project
 ======================
 
