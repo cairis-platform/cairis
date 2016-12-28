@@ -11463,3 +11463,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error getting elements for risk model in environment ' + envName + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
+
+  def assetRiskLevel(self,assetName):
+    try: 
+      curs = self.conn.cursor()
+      curs.execute('call assetRiskLevel(%s)',[assetName])
+      if (curs.rowcount == -1):
+        exceptionText = 'Error calculating risk level for ' + assetName
+        raise DatabaseProxyException(exceptionText)
+      results = curs.fetchone()
+      riskLevel = results[0]
+      curs.close()
+      return riskLevel
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error calculating risk level for ' + assetName + ' (id:' + str(id) + ',message:' + msg
+      raise DatabaseProxyException(exceptionText) 

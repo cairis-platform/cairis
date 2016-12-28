@@ -300,6 +300,7 @@ drop procedure if exists mitigatingMultiEnvCountermeasures;
 drop procedure if exists goalCountermeasures;
 drop procedure if exists threatAssetProperties;
 drop procedure if exists mitigatingValues;
+drop procedure if exists nvRiskScore;
 drop procedure if exists riskScore;
 drop procedure if exists calculateRiskScore;
 drop procedure if exists getRequirements;
@@ -854,6 +855,7 @@ drop procedure if exists locationsRiskModel;
 drop procedure if exists architecturalPatternToXml;
 drop procedure if exists templateAssetMetrics;
 drop procedure if exists riskAnalysisModelElements;
+drop procedure if exists assetRiskLevel;
 
 delimiter //
 
@@ -7432,7 +7434,7 @@ begin
 end
 //
 
-create procedure riskScore(in threatName text, in vulName text, envName text, riskName text)
+create procedure riskScore(in threatName text, in vulName text, in envName text, in riskName text)
 begin
   declare done int default 0;
   declare responseNo int default 0;
@@ -7446,8 +7448,8 @@ begin
   declare vulSeverity int;
   declare riskId int;
   declare responseId int default -1;
-  declare preScore int;
   declare postScore int;
+  declare preScore int;
   declare detailsBuf text;
   declare responseCursor cursor for select distinct id,name from response where risk_id = riskId;
   declare continue handler for not found set done = 1;
@@ -22786,6 +22788,116 @@ begin
   close vulCursor;
 end
 //
+
+create procedure nvRiskScore(in threatName text, in vulName text, in envName text, in riskName text)
+begin
+  declare done int default 0;
+  declare responseNo int default 0;
+  declare threatId int;
+  declare vulId int;
+  declare envId int;
+  declare responseName varchar(50);
+  declare likelihoodName varchar(50);
+  declare severityName varchar(50);
+  declare threatLikelihood int;
+  declare vulSeverity int;
+  declare riskId int;
+  declare responseId int default -1;
+  declare postScore int;
+  declare preScore int;
+  declare detailsBuf text;
+  declare responseCursor cursor for select distinct id,name from response where risk_id = riskId;
+  declare continue handler for not found set done = 1;
+
+  select id into threatId from threat where name = threatName; 
+  select id into vulId from vulnerability where name = vulName;
+
+  select id into envId from environment where name = envName;
+  if envId is null
+  then
+    select distinct cc.composite_environment_id into envId from composite_environment cc, environment e where cc.composite_environment_id = e.id and e.name = envName;
+  end if;
+
+  select threat_likelihood(threatId,envId) into likelihoodName;
+  select vulnerability_severity(vulId,envId) into severityName;
+  select id into threatLikelihood from likelihood where name = likelihoodName;
+  select id into vulSeverity from severity where name = severityName;
+  drop table if exists temp_riskscore;
+  create temporary table temp_riskscore (response_name varchar(50),preScore int, postScore int, details varchar(300));
+
+  if riskName != ''
+  then
+    select id into riskId from risk where name = riskName;
+    open responseCursor;
+    response_loop: loop
+      fetch responseCursor into responseId,responseName;
+      if done = 1
+      then
+        leave response_loop;
+      end if;
+      call calculateRiskScore(threatId,vulId,threatLikelihood,vulSeverity,envId,responseId,preScore,postScore,detailsBuf); 
+      insert into temp_riskscore values(responseName,ifnull(preScore,0),ifnull(postScore,0),ifnull(detailsBuf,''));
+      set responseNo = responseNo + 1;
+    end loop response_loop;
+    close responseCursor;
+    if responseNo = 0
+    then
+      call calculateRiskScore(threatId,vulId,threatLikelihood,vulSeverity,envId,-1,preScore,postScore,detailsBuf); 
+      insert into temp_riskscore values('None',ifnull(preScore,0),ifnull(postScore,0),ifnull(detailsBuf,''));
+    end if;
+  else
+    call calculateRiskScore(threatId,vulId,threatLikelihood,vulSeverity,envId,-1,preScore,postScore,detailsBuf); 
+    insert into temp_riskscore values('None',ifnull(preScore,0),ifnull(postScore,0),ifnull(detailsBuf,''));
+  end if;
+end
+//
+
+create procedure assetRiskLevel(in assetName text)
+begin
+  declare currentRiskScore int;
+  declare assetRiskScore int default 1;
+  declare assetId int;
+  declare envId int;
+  declare thrName varchar(200);
+  declare vulName varchar(200);
+  declare riskName  varchar(200);
+  declare envName varchar(50);
+  declare done int default 0;
+  declare envAssetCursor cursor for select environment_id from environment_asset where asset_id = assetId;
+  declare assetRiskCursor cursor for select r.name,t.name,v.name from risk r, threat t, vulnerability v, asset_threat at where at.asset_id = assetId and at.environment_id = envId and at.threat_id = r.threat_id and r.threat_id = t.id and r.vulnerability_id = v.id union select r.name,t.name,v.name from risk r, threat t, vulnerability v, asset_vulnerability av where av.asset_id = assetId and av.environment_id = envId and av.vulnerability_id = r.vulnerability_id and r.threat_id = t.id and r.vulnerability_id = v.id;
+  declare continue handler for not found set done = 1;
+
+  select id into assetId from asset where name = assetName limit 1;
+
+  open envAssetCursor;
+  envAsset_loop: loop
+    fetch envAssetCursor into envId;
+    if done = 1
+    then
+      leave envAsset_loop;
+    end if;
+    select name into envName from environment where id = envId;
+
+    open assetRiskCursor;
+    assetRisk_loop: loop
+      fetch assetRiskCursor into riskName,thrName,vulName;
+      if done = 1
+      then
+        leave assetRisk_loop;
+      end if;
+      call nvRiskScore(thrName,vulName,envName,riskName);
+      select max(postScore) into currentRiskScore from temp_riskscore;
+       
+      if currentRiskScore > assetRiskScore
+      then
+        set assetRiskScore = currentRiskScore;
+      end if;
+    end loop assetRisk_loop;
+    close assetRiskCursor;
+    set done = 1;
+  end loop envAsset_loop;
+  close envAssetCursor;
+  select assetRiskScore;
+end
+//
 delimiter ;
-
-

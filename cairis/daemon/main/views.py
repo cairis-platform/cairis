@@ -29,7 +29,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController
+    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -303,6 +303,9 @@ api.add_resource(
 )
 api.add_resource(RiskController.RiskAnalysisModelAPI, '/api/risks/model/environment/<string:environment>',endpoint='risk_model')
 api.add_resource(RiskController.RiskAnalysisModelNamesAPI, '/api/risks/model/environment/<string:environment>/names',endpoint='risk_model_name')
+
+# Risk Levels routes
+api.add_resource(RiskLevelController.RiskLevelAPI, '/api/risk_level/asset/<string:name>',endpoint='risklevel')
 
 # Role routes
 api.add_resource(RoleController.RolesAPI, '/api/roles',endpoint='roles')
