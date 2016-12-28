@@ -37,10 +37,21 @@ class RiskLevelAPITests(CairisDaemonTestCase):
   def setUp(self):
     self.logger = logging.getLogger(__name__)
     self.existing_asset_name = 'ICT PC'
+    self.existing_threat_name = 'Password enumeration'
 
   def test_get_risk_level(self):
     method = 'test_get_risk_level'
     url = '/api/risk_level/asset/%s?session_id=test' % quote(self.existing_asset_name)
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    level = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(level, 'No results after deserialization')
+    self.assertIsInstance(level, int, 'The result is not an integer as expected')
+    self.assertEqual(level, 9)
+
+  def test_get_risk_threat_level(self):
+    method = 'test_get_risk_level'
+    url = '/api/risk_level/asset/' + quote(self.existing_asset_name) + '/threat_type/' + quote(self.existing_threat_name) + '?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     level = jsonpickle.decode(rv.data)

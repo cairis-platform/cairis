@@ -61,3 +61,38 @@ class RiskLevelAPI(Resource):
     resp = make_response(json_serialize(riskLevel, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp
+
+class RiskThreatLevelAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get risk level for asset and threat',
+    responseClass=fields.Integer,
+    nickname='risk-level-by-asset-threat-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self,asset,threat):
+    session_id = get_session_id(session, request)
+
+    dao = RiskLevelDAO(session_id)
+    riskLevel = dao.get_risk_threat_level(asset,threat)
+    dao.close()
+
+    resp = make_response(json_serialize(riskLevel, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
+    return resp

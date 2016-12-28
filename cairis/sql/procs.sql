@@ -856,6 +856,7 @@ drop procedure if exists architecturalPatternToXml;
 drop procedure if exists templateAssetMetrics;
 drop procedure if exists riskAnalysisModelElements;
 drop procedure if exists assetRiskLevel;
+drop procedure if exists assetThreatRiskLevel;
 
 delimiter //
 
@@ -22855,7 +22856,7 @@ end
 create procedure assetRiskLevel(in assetName text)
 begin
   declare currentRiskScore int;
-  declare assetRiskScore int default 1;
+  declare assetRiskScore int default 0;
   declare assetId int;
   declare envId int;
   declare thrName varchar(200);
@@ -22864,7 +22865,7 @@ begin
   declare envName varchar(50);
   declare done int default 0;
   declare envAssetCursor cursor for select environment_id from environment_asset where asset_id = assetId;
-  declare assetRiskCursor cursor for select r.name,t.name,v.name from risk r, threat t, vulnerability v, asset_threat at where at.asset_id = assetId and at.environment_id = envId and at.threat_id = r.threat_id and r.threat_id = t.id and r.vulnerability_id = v.id union select r.name,t.name,v.name from risk r, threat t, vulnerability v, asset_vulnerability av where av.asset_id = assetId and av.environment_id = envId and av.vulnerability_id = r.vulnerability_id and r.threat_id = t.id and r.vulnerability_id = v.id;
+  declare riskCursor cursor for select r.name,t.name,v.name from risk r, threat t, vulnerability v, asset_threat at where at.asset_id = assetId and at.environment_id = envId and at.threat_id = r.threat_id and r.threat_id = t.id and r.vulnerability_id = v.id union select r.name,t.name,v.name from risk r, threat t, vulnerability v, asset_vulnerability av where av.asset_id = assetId and av.environment_id = envId and av.vulnerability_id = r.vulnerability_id and r.threat_id = t.id and r.vulnerability_id = v.id;
   declare continue handler for not found set done = 1;
 
   select id into assetId from asset where name = assetName limit 1;
@@ -22878,12 +22879,12 @@ begin
     end if;
     select name into envName from environment where id = envId;
 
-    open assetRiskCursor;
-    assetRisk_loop: loop
-      fetch assetRiskCursor into riskName,thrName,vulName;
+    open riskCursor;
+    risk_loop: loop
+      fetch riskCursor into riskName,thrName,vulName;
       if done = 1
       then
-        leave assetRisk_loop;
+        leave risk_loop;
       end if;
       call nvRiskScore(thrName,vulName,envName,riskName);
       select max(postScore) into currentRiskScore from temp_riskscore;
@@ -22892,9 +22893,60 @@ begin
       then
         set assetRiskScore = currentRiskScore;
       end if;
-    end loop assetRisk_loop;
-    close assetRiskCursor;
-    set done = 1;
+    end loop risk_loop;
+    close riskCursor;
+    set done = 0;
+  end loop envAsset_loop;
+  close envAssetCursor;
+  select assetRiskScore;
+end
+//
+
+create procedure assetThreatRiskLevel(in assetName text,in threatName text)
+begin
+  declare currentRiskScore int;
+  declare assetRiskScore int default 0;
+  declare assetId int;
+  declare threatId int;
+  declare envId int;
+  declare vulName varchar(200);
+  declare riskName  varchar(200);
+  declare envName varchar(50);
+  declare done int default 0;
+  declare envAssetCursor cursor for select environment_id from environment_asset where asset_id = assetId;
+  declare riskCursor cursor for select r.name,v.name from risk r, vulnerability v, asset_threat at where at.asset_id = assetId and at.environment_id = envId and at.threat_id = threatId and at.threat_id = r.threat_id and r.vulnerability_id = v.id union select r.name,v.name from risk r, vulnerability v, asset_vulnerability av where av.asset_id = assetId and av.environment_id = envId and av.vulnerability_id = r.vulnerability_id and r.threat_id = threatId and r.vulnerability_id = v.id;
+  declare continue handler for not found set done = 1;
+
+  select id into assetId from asset where name = assetName limit 1;
+  select id into threatId from threat where name = threatName limit 1;
+
+  open envAssetCursor;
+  envAsset_loop: loop
+    fetch envAssetCursor into envId;
+    if done = 1
+    then
+      leave envAsset_loop;
+    end if;
+    select name into envName from environment where id = envId;
+
+    open riskCursor;
+    risk_loop: loop
+      fetch riskCursor into riskName,vulName;
+      if done = 1
+      then
+        leave risk_loop;
+      end if;
+      call nvRiskScore(threatName,vulName,envName,riskName);
+      select max(postScore) into currentRiskScore from temp_riskscore;
+       
+      if currentRiskScore > assetRiskScore
+      then
+        set assetRiskScore = currentRiskScore;
+      end if;
+    end loop risk_loop;
+    close riskCursor;
+    set done = 0;
+
   end loop envAsset_loop;
   close envAssetCursor;
   select assetRiskScore;

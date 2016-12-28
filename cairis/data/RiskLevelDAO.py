@@ -42,3 +42,19 @@ class RiskLevelDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
     return riskLevel
+
+  def get_risk_threat_level(self,assetName,threatName):
+    """
+    :rtype: int
+    :return
+    :raise ARMHTTPError:
+    """
+    try:
+      riskLevel = self.db_proxy.assetThreatRiskLevel(assetName,threatName)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    return riskLevel
