@@ -1,0 +1,149 @@
+<form role="form" data-toggle="validator" id="editLocationsOptionsForm" xmlns="http://www.w3.org/1999/html" >
+  <div id="locationsDiv">
+  <div class="panel panel-default control-group form-group">
+    <div class="form-group">
+      <label for="theLocationsName" class="control-label">Name</label>
+      <input class="optionsInput form-control" type="text" name="theLocationsName" id="theLocationsName" style="width: 75%;" data-error="Locations name is required" required>
+      <div class="help-block with-errors"></div>
+    </div>
+    <div class="form-group">
+      <table class="clickable-table scrollableTable" id="theLocations">
+        <thead>
+          <tr><th id="addLocation" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Location</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="UpdateLocations">Update</button>
+      <button type="submit" class="btn btn-secondary" id="CloseLocations">Close</button>
+    </div>
+  </div>
+  </div>
+  <div id="locationDiv" style="display: none;">
+  <div class="panel panel-default control-group form-group">
+    <div class="form-group">
+      <label for="theLocationName" class="control-label">Name</label>
+      <input class="optionsInput form-control" type="text" name="theLocationName" id="theLocationName" style="width: 75%;" data-error="Location name is required" required>
+      <div class="help-block with-errors"></div>
+    </div>
+    <div class="tabs">
+      <ul>
+        <li><a href="#objects">Objects</a></li>
+        <li><a href="#people">People</a></li>
+        <li><a href="#links">Links</a></li>
+      </ul>
+      <div id="objects" class="panel panel-default control-group">
+        <table class="clickable-table scrollableTable" id="theObjects">
+          <thead>
+            <tr><th id="addAssetInstance" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Name</th><th>Asset</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div id="people" class="panel panel-default control-group">
+        <table class="clickable-table scrollableTable" id="thePersonas">
+          <thead>
+            <tr><th id="addPersonaInstance" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Name</th><th>Persona</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div id="links" class="panel panel-default control-group">
+        <table class="clickable-table scrollableTable" id="theLinks">
+          <thead>
+            <tr><th id="addLocationLink" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Location</th></tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="UpdateLocation">Update</button>
+      <button type="submit" class="btn btn-secondary" id="CloseLocation">Close</button>
+    </div>
+  </div>
+  <div class="modal fade" id="addAssetInstanceDialog" tabindex="-1" role="dialog" aria-labelledby="cAAI_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Asset Instance</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theAssetInstanceName" class="control-label">Instance</label>
+          <input class="optionsInput form-control" type="text" name="theAssetInstanceName" id="theAssetInstanceName" style="width: 75%;" data-error="Instance name is required" required>
+        </div>
+        <div class="form-group">
+          <label for="theAssetName" class="control-label">Asset</label>
+          <select class="optionsInput form-control" name="theAssetName" id="theAssetName" style="width: 100%;">
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddAssetInstance" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="modal fade" id="addPersonaInstanceDialog" tabindex="-1" role="dialog" aria-labelledby="cAPI_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Persona Instance</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="thePersonaInstanceName" class="control-label">Instance</label>
+          <input class="optionsInput form-control" type="text" name="thePersonaInstanceName" id="thePersonaInstanceName" style="width: 75%;" data-error="Instance name is required" required>
+        </div>
+        <div class="form-group">
+          <label for="thePersonaName" class="control-label">Persona</label>
+          <select class="optionsInput form-control" name="thePersonaName" id="thePersonaName" style="width: 100%;">
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddPersonaInstance" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="modal fade" id="addLocationLinkDialog" tabindex="-1" role="dialog" aria-labelledby="cALL_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Location Link</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theLinkName" class="control-label">Link</label>
+          <select class="optionsInput form-control" name="theLinkName" id="theLinkName" style="width: 100%;">
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddLocationLink" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+</form>

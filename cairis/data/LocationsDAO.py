@@ -77,13 +77,13 @@ class LocationsDAO(CairisDAO):
 
 
   def update_locations(self,locs,name):
-    found_locs = self.get_locations(name)
+    locs_id = self.db_proxy.getDimensionId(name, 'locations')
     p = LocationsParameters(
       locsName=locs.name(),
       locsDiagram=locs.diagram(),
       locs=locs.locations(),
       links=locs.links())
-    p.setId(locs.theId)
+    p.setId(locs_id)
     try:
       self.db_proxy.updateLocations(p)
     except ARMException as ex:

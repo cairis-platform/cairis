@@ -550,3 +550,17 @@ var templateGoalDefault = {
   "theConcerns" : [],
   "theResponsibilities" : []
 };
+var locationDefault = {
+  "__python_obj__": "Location.Location",
+  "theName" : "",
+  "theAssetInstances" : [],
+  "thePersonaInstances" : [],
+  "theLinks" : []
+};
+var locationsDefault = {
+  "__python_obj__": "Locations.Locations",
+  "theId" : -1,
+  "theName" : "",
+  "theDiagram" : "",
+  "theLocations" : []
+};
