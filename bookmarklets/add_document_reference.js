@@ -1,6 +1,10 @@
 var hTxt=((window.getSelection&&window.getSelection())||(document.getSelection&&document.getSelection())||(document.selection&&document.selection.createRange&&document.selection.createRange().text));
 var x = prompt( "Synopsis:", excerpt);
-var dr = {'theName':x,'theDocName':'OnlineTest','theContributor':'SF','theExcerpt': hTxt};
+var dr = {
+  'theName':x,
+  'theDocName': document.cookie.replace(/(?:(?:^|.*;\s*)external_document_name\s*\=\s*([^;]*).*$)|^.*$/, "$1");,
+  'theContributor': document.cookie.replace(/(?:(?:^|.*;\s*)external_document_coder\s*\=\s*([^;]*).*$)|^.*$/, "$1");,
+  'theExcerpt': hTxt};
 var output = {};
 output.object = dr;
 output.session_id = 'test';
