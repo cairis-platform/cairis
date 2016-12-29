@@ -244,6 +244,7 @@ api.add_resource(CImportController.CImportFileAPI, '/api/import/file/type/<strin
 # Locations routes
 api.add_resource(LocationsController.LocationsAPI, '/api/locations',endpoint='locations')
 api.add_resource(LocationsController.LocationsByNameAPI, '/api/locations/name/<string:name>',endpoint='locations_name')
+api.add_resource(LocationsController.LocationsModelAPI, '/api/locations/model/locations/<string:locations>/environment/<string:environment>',endpoint='locationsmodel')
 
 # Misuse case routes
 api.add_resource(MisuseCaseController.MisuseCasesAPI, '/api/misusecases',endpoint='misusecases')

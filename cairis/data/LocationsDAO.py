@@ -23,9 +23,9 @@ from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError, MalformedJSON
 import cairis.core.armid
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.ModelDefinitions import LocationModel,LocationsModel
-from cairis.tools.SessionValidator import check_required_keys
+from cairis.tools.SessionValidator import check_required_keys, get_fonts
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-
+from cairis.misc.LocationModel import LocationModel as GraphicalLocationModel
 __author__ = 'Shamal Faily'
 
 
@@ -159,3 +159,19 @@ class LocationsDAO(CairisDAO):
       self.close()
       raise MissingParameterHTTPError(param_names=['real_loc_list', 'fake_loc_list'])
     return new_loc_list
+
+  def get_locations_model(self, locations_name, environment_name):
+    fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    try:
+      riskOverlay = self.db_proxy.locationsRiskModel(locations_name,environment_name) 
+      lModel = GraphicalLocationModel(locations_name,environment_name, riskOverlay,db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
+      dot_code = lModel.graph()
+      return dot_code
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except Exception as ex:
+      print(ex)

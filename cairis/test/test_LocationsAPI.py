@@ -106,8 +106,7 @@ class LocationsAPITests(CairisDaemonTestCase):
 
   def test_put(self):
     method = 'test_put'
-    self.new_locs_dict['object'].theName = 'SturminsterWWTW'
-    url = '/api/locations/name/%s?session_id=test' % quote(self.existing_locs_name)
+    url = '/api/locations/name/%s?session_id=test' % quote(self.new_locs_dict['object'].theName)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_locs_dict))
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     json_resp = json_deserialize(rv.data)
@@ -130,3 +129,10 @@ class LocationsAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Locations successfully deleted')
+
+  def test_locations_model(self):
+    method = 'test_locations_model'
+    url = '/api/locations/model/locations/' + quote(self.existing_locs_name) + '/environment/Day?session_id=test'
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)

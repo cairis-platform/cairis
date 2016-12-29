@@ -11,7 +11,7 @@ $.ajax({
     alert(document.title + ' set');
   },
   error: function (xhr, textStatus, errorThrown) {
-    if (xhr.status == 404) {
+    if (xhr.status == 404 || xhr.status == 0) {
       var edoc = {'theName':    document.title,'theVersion':'1','thePublicationDate':document.lastModified,'theAuthors' : 'Unknown','theDescription' : window.location.href};
       var output = {};
       output.object = edoc;

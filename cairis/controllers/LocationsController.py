@@ -19,11 +19,12 @@ import httplib
 from flask import session, request, make_response
 from flask_restful_swagger import swagger
 from flask_restful import Resource
+from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError
 from cairis.data.LocationsDAO import LocationsDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import LocationsMessage
 from cairis.tools.ModelDefinitions import LocationsModel
-from cairis.tools.SessionValidator import get_session_id
+from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
 __author__ = 'Shamal Faily'
 
@@ -242,4 +243,64 @@ class LocationsByNameAPI(Resource):
     resp_dict = {'message': 'Locations successfully deleted'}
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.contenttype = 'application/json'
+    return resp
+
+class LocationsModelAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get the asset model for a specific environment',
+    nickname='asset-model-get',
+    parameters=[
+      {
+        "name": "locations",
+        "description": "The locations for the locations model",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "environment",
+        "description": "The environment for the locations model",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self, locations, environment):
+    session_id = get_session_id(session, request)
+    hide_concerns = request.args.get('hide_concerns', '1')
+    model_generator = get_model_generator()
+
+    dao = LocationsDAO(session_id)
+    dot_code = dao.get_locations_model(locations,environment)
+    dao.close()
+
+    if not isinstance(dot_code, str):
+      raise ObjectNotFoundHTTPError('The model')
+
+    resp = make_response(model_generator.generate(dot_code,renderer='dot'), httplib.OK)
+    accept_header = request.headers.get('Accept', 'image/svg+xml')
+    if accept_header.find('text/plain') > -1:
+      resp.headers['Content-type'] = 'text/plain'
+    else:
+      resp.headers['Content-type'] = 'image/svg+xml'
+
     return resp
