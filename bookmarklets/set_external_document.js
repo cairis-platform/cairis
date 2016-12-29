@@ -38,6 +38,7 @@ $.ajax({
       });
     }
     else {
+      var error = JSON.parse(xhr.responseText);
       alert(String(error.message));
     }
   }
