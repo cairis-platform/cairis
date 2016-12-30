@@ -649,7 +649,24 @@ function getPersonaview(pName,bvName,pcName){
   });
 }
 
-
+function getLocationsView(locsName,envName){
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/locations/model/locations/" + encodeURIComponent(locsName) + "/environment/" + encodeURIComponent(envName),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
 
 function getRisks(callback){
   $.ajax({
