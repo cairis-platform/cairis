@@ -104,7 +104,6 @@ class ExternalDocumentsAPI(Resource):
   #endregion
   def post(self):
     session_id = get_session_id(session, request)
-
     dao = ExternalDocumentDAO(session_id)
     new_edoc = dao.from_json(request)
     dao.add_external_document(new_edoc)
