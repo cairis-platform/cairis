@@ -1,4 +1,8 @@
-var serverIP='http://germaneriposte.org:7071';
+var serverIP = localStorage.getItem('cairis_url') || "Undefined";
+if (serverIP == 'Undefined') {
+  serverIP = prompt("Set CAIRIS URL","http://germaneriposte.org:7071");
+  localStorage.setItem('cairis_url',serverIP);
+}
 
 function addDocumentReference(external_document_name,hTxt) {
   var contributorName = localStorage.getItem('document_reference_contributor') || "Undefined";
@@ -9,8 +13,8 @@ function addDocumentReference(external_document_name,hTxt) {
 
   var x = prompt( "Synopsis:", hTxt);
   var dr = {
-    'theName':x,
-    'theDocName': external_document_name,
+    'theName': x.replace(/'/g, "\\'"),
+    'theDocName': external_document_name.replace(/'/g, "\\'"),
     'theContributor': contributorName,
     'theExcerpt': hTxt
   };
@@ -51,7 +55,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
     accept: "application/json",
     crossDomain: true,
     data: {session_id : 'test'},
-    url: serverIP + "/api/external_documents/name/" + encodeURIComponent(tab.title) + "?session_id=test",
+    url: serverIP + "/api/external_documents/name/" + encodeURIComponent(tab.title.replace(/'/g, "\\'")) + "?session_id=test",
     success: function (data) {
       chrome.tabs.executeScript({
         code: "window.getSelection().toString();"
@@ -62,7 +66,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
     error: function (xhr, textStatus, errorThrown) {
       if (xhr.status == 404) {
         var edoc= {
-          'theName': tab.title,
+          'theName': tab.title.replace(/'/g, "\\'"),
           'theVersion': '1',
           'thePublicationDate': document.lastModified,
           'theAuthors': authorName,
