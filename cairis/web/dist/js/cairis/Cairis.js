@@ -121,7 +121,7 @@ $('#appersonasbox').change(function() {
 $('#apbtbox').change(function() {
   var selection = $(this).find('option:selected').text();
   var pName = $('#appersonasbox').val();
-  appendPersonaCharacteristics(pName,'All','All');
+  appendPersonaCharacteristics(pName,selection,'All');
   getPersonaView(pName,selection,'All');
 });
 
@@ -143,7 +143,7 @@ function appendPersonaCharacteristics(pName,bvName,pcName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/personas/characteristics/name/" + pName.replace(" ","%20") + "/variable/" + bvName.replace(" ","%20") + "/characteristic/" + pcName.replace(" ","%20"),
+    url: serverIP + "/api/personas/characteristics/name/" + encodeURIComponent(pName) + "/variable/" + encodeURIComponent(bvName) + "/characteristic/" + encodeURIComponent(pcName),
     success: function (data) {
       $('#apcharacteristicbox').empty();
       $('#apcharacteristicbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
