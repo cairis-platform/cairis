@@ -115,14 +115,14 @@ $('#omobstaclebox').change(function() {
 $('#appersonasbox').change(function() {
   var selection = $(this).find('option:selected').text();
   appendPersonaCharacteristics(selection,'All','All');
-  getPersonasview(selection,'All','All');
+  getPersonaView(selection,'All','All');
 });
 
 $('#apbtbox').change(function() {
   var selection = $(this).find('option:selected').text();
   var pName = $('#appersonasbox').val();
   appendPersonaCharacteristics(pName,'All','All');
-  getPersonaview(pName,selection,'All');
+  getPersonaView(pName,selection,'All');
 });
 
 $('#apcharacteristicbox').change(function() {
@@ -130,7 +130,7 @@ $('#apcharacteristicbox').change(function() {
   var pName = $('#appersonasbox').val();
   var bvName = $('#apbtbox').val();
   appendPersonaCharacteristics(pName,bvName,'All');
-  getPersonaview(pName,bvName,selection);
+  getPersonaView(pName,bvName,selection);
 });
 
 function appendPersonaCharacteristics(pName,bvName,pcName) {
@@ -629,8 +629,9 @@ function getTaskview(environment,task,misusecase){
   });
 }
 
-function getPersonaview(pName,bvName,pcName){
+function getPersonaView(pName,bvName,pcName){
   window.personaName = pName;
+  $('#appersonasbox').val(pName);
   $.ajax({
     type:"GET",
     accept:"application/json",

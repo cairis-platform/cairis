@@ -373,7 +373,7 @@ $('#personaModelClick').click(function(){
             $( this ).dialog( "close" );
             var pName = $( "#comboboxDialogSelect").find("option:selected" ).text();
             appendPersonaCharacteristics(pName,'All','All');
-            getPersonaview(pName,'All','All');
+            getPersonaView(pName,'All','All');
           }
         }
       });
