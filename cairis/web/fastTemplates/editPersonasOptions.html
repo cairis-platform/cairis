@@ -12,15 +12,15 @@
       <p><input type="file" id="fileupload" style="display: none"></p> 
     </div><br/>
     <div class="tabs" style="float: right; width: 75%;">
-      <ul>
+      <ul id="thePersonaCharacteristicList">
         <li><a href="#summary">Summary</a></li>
-        <li><a href="#activities">Activities</a></li>
-        <li><a href="#attitudes">Attitudes</a></li>
-        <li><a href="#aptitudes">Aptitudes</a></li>
-        <li><a href="#motivations">Motivations</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#contextual">Contextual Trust</a></li>
-        <li><a href="#intrinsic">Intrinsic Trust</a></li>
+        <li class="personaContextMenu"><a href="#activities">Activities</a></li>
+        <li class="personaContextMenu"><a href="#attitudes">Attitudes</a></li>
+        <li class="personaContextMenu"><a href="#aptitudes">Aptitudes</a></li>
+        <li class="personaContextMenu"><a href="#motivations">Motivations</a></li>
+        <li class="personaContextMenu"><a href="#skills">Skills</a></li>
+        <li class="personaContextMenu"><a href="#contextual">Contextual Trust</a></li>
+        <li class="personaContextMenu"><a href="#intrinsic">Intrinsic Trust</a></li>
       </ul>
       <div id="summary">
         <div class="form-group">
@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="form-group" id="activities">
-        <textarea rows="15" id="theActivities" class="personaUpdate form-control" data-error="Activities are required" required></textarea>
+        <textarea rows="15" id="theActivities" class="personaUpdate form-control " data-error="Activities are required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group" id="attitudes">

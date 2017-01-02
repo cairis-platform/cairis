@@ -44,10 +44,10 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
       modQual = 'Maybe',
       vName = 'Activities',
       cDesc = 'This is a test characteristic',
-      pcGrounds = [PersonaCharacteristicReference('Line manager site authorisation','grounds','Can only access sites they have been authorised to; permission for authorisation changes need to be sought from the line manager.','document')],
-      pcWarrant = [PersonaCharacteristicReference('Work reports are filed','warrant','Work reports are filed and sent to ACME monthly.','document')],
-      pcBacking = ['Business compliance GT concept'],
-      pcRebuttal = [PersonaCharacteristicReference('Everything is logged','rebuttal','Everything that happens is logged.','document')])
+      pcGrounds = [{"theReferenceName": "Line manager site authorisation", "theDimensionName": "document", "theCharacteristicType": "grounds", "__python_obj__": "cairis.tools.PseudoClasses.PersonaCharacteristicReference", "theReferenceDescription": "Can only access sites they have been authorised to; permission for authorisation changes need to be sought from the line manager."}],
+      pcWarrant = [{"theReferenceDescription": "Work reports are filed and sent to ACME monthly.", "theDimensionName": "document", "theCharacteristicType": "warrant", "__python_obj__": "cairis.tools.PseudoClasses.PersonaCharacteristicReference", "theReferenceName": "Work reports are filed"}],
+      pcRebuttal = [{"theReferenceDescription": "Everything that happens is logged.", "theDimensionName": "document", "theCharacteristicType": "rebuttal", "__python_obj__": "cairis.tools.PseudoClasses.PersonaCharacteristicReference", "theReferenceName": "Everything is logged"}],
+      pcBacking = ['Business compliance GT concept'])
     self.new_pc_dict = {
       'session_id' : 'test',
       'object': self.new_pc

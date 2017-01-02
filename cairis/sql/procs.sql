@@ -11368,7 +11368,7 @@ end
 
 create procedure documentReferenceNames(in docName text)
 begin
-  select dr.name from document_reference dr, external_document ed where ed.name = docName and dr.document_id = ed.id;
+  select dr.name from document_reference dr, external_document ed where ed.name = docName and dr.document_id = ed.id order by 1;
 end
 //
 

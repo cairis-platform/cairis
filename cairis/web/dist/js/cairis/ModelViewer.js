@@ -55,13 +55,30 @@ $(window).load(function() {
 
   window.document.title = Cookies.get('wTitle');
   var modelUrl;
-  if (Cookies.get('model') == 'component_asset') {
-    modelUrl = serverIP + "/api/architectural_patterns/component/asset/model/" + encodeURIComponent(Cookies.get('parameter'));
+  var modelType = Cookies.get('model')
+  if (modelType == 'component_asset') {
+    $('#filterapmodelcontent').hide();
+    viewComponentModel(serverIP + "/api/architectural_patterns/component/asset/model/" + encodeURIComponent(Cookies.get('parameter')));
+    
+  }
+  else if (modelType == 'component_goal') {
+    $('#filterapmodelcontent').hide();
+    viewComponentModel(serverIP + "/api/architectural_patterns/component/goal/model/" + encodeURIComponent(Cookies.get('parameter')));
   }
   else {
-    modelUrl = serverIP + "/api/architectural_patterns/component/goal/model/" + encodeURIComponent(Cookies.get('parameter'));
+    $('#filterapmodelcontent').show();
+    var pName = Cookies.get('pName');
+    var bvName = Cookies.get('bvName');
+    $('#appersonasbox').empty();
+    $('#appersonasbox').append($('<option>', {value: pName, text: pName},'</option>'));
+    $('#appersonasbox').val(pName);
+    $('#apbtbox').val(bvName);
+    appendPersonaCharacteristics(pName,bvName,'All');
+    getPersonaView(pName,bvName,Cookies.get('pcName'));
   }
+});
 
+function viewComponentModel(modelUrl) {
   $.ajax({
     type: "GET",
     accept: "application/json",
@@ -78,7 +95,74 @@ $(window).load(function() {
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
+}
+
+$('#appersonasbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  appendPersonaCharacteristics(selection,'All','All');
+  getPersonaView(selection,'All','All');
 });
+
+$('#apbtbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  var pName = $('#appersonasbox').val();
+  appendPersonaCharacteristics(pName,selection,'All');
+  getPersonaView(pName,selection,'All');
+});
+
+$('#apcharacteristicbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  var pName = $('#appersonasbox').val();
+  var bvName = $('#apbtbox').val();
+  appendPersonaCharacteristics(pName,bvName,'All');
+  getPersonaView(pName,bvName,selection);
+});
+
+function appendPersonaCharacteristics(pName,bvName,pcName) {
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/personas/characteristics/name/" + encodeURIComponent(pName) + "/variable/" + encodeURIComponent(bvName) + "/characteristic/" + encodeURIComponent(pcName),
+    success: function (data) {
+      $('#apcharacteristicbox').empty();
+      $('#apcharacteristicbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+      $.each(data, function (index, item) {
+        $('#apcharacteristicbox').append($('<option>', {value: item, text: item},'</option>'));
+      });
+      $('#apcharacteristicbox').val(pcName);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+function getPersonaView(pName,bvName,pcName){
+  $('#appersonasbox').val(pName);
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/personas/model/name/" + encodeURIComponent(pName) + "/variable/" + encodeURIComponent(bvName) + "/characteristic/" + encodeURIComponent(pcName),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
 
 function fillSvgViewer(data){
   var xmlString = (new XMLSerializer()).serializeToString(data);
@@ -96,3 +180,5 @@ function fillSvgViewer(data){
     minZoom: 0.2
   });
 }
+
+

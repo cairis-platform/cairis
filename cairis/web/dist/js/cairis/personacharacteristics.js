@@ -319,6 +319,7 @@ function loadCharacteristicReference() {
     crossDomain: true,
     url: serverIP + "/api/dimensions/table/document_reference",
     success: function (data) {
+      data.sort();
       $("#theReferenceName").empty();
       $.each(data, function(key, item) {
         $("#theReferenceName").append("<option>" + item + "</option>");
@@ -336,7 +337,7 @@ function loadCharacteristicReference() {
 
 function addCharacteristicReference() {
   var cr = JSON.parse($("#editCharacteristicReference").data("crtype"));
-  var item = {};
+  var item = jQuery.extend(true, {},personaCharacteristicReferenceDefault );
   item.theReferenceName = $("#theReferenceName").val();
   item.theReferenceDescription = $("#theDescription").val();
   appendGWR(cr.tableId,cr.classId,item); 
@@ -360,7 +361,7 @@ function addCharacteristicReference() {
 
 function updateReferenceList() {
   var cr = JSON.parse($("#editCharacteristicReference").data("currentcr"));
-  var item = {};
+  var item = jQuery.extend(true, {},personaCharacteristicReferenceDefault );
   item.theReferenceName = $("#theReferenceName").val();
   item.theReferenceDescription = $("#theDescription").val();
   $(cr.tableId).find("tbody").find('tr:eq(' + cr.index + ')').find('td:eq(1)').text(item.theReferenceName);

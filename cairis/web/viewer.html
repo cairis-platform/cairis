@@ -34,15 +34,49 @@
 </head>
 
 <body>
-  <div id="svgViewer"></div>
-  <div id="rightnavGear" class="no-print"
-      style="position: fixed; top: 100px; right: 0px; border-radius: 5px 0px 0px 5px; padding: 10px 15px; font-size: 16px; z-index: 100; cursor: pointer; color: rgb(60, 141, 188); box-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 3px; background: rgb(255, 255, 255);">
-    <i class="fa fa-gear"></i>
-  </div>
-  <div id="rightnavMenu" class="no-print"
-    style="padding: 10px; position: fixed; top: 100px; right: -400px; border: 0px solid rgb(221, 221, 221); width: 400px; z-index: 100; box-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 3px; background: rgb(255, 255, 255);">
-    <h4 id="optionsHeaderGear" class="text-light-blue" style="margin: 0 0 5px 0; border-bottom: 1px solid #ddd; padding-bottom: 15px;">Options</h4>
-    <div id="optionsContent"></div>
+  <div class="wrapper">
+    <div class="content-wrapper">
+      <div id="filterapmodelcontent" class="extraContent row form-group" style="display:none">
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="appersonasbox">Persona</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="appersonasbox" ></select>
+        </div>
+        <div class="col-md-2">
+          <label class="topCombobox control-label" for="apbtbox">Behaviour Type</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="apbtbox">
+            <option value="All">All</option>
+            <option value="Activities">Activities</option>
+            <option value="Attitudes">Attitudes</option>
+            <option value="Aptitudes">Aptitudes</option>
+            <option value="Motivations">Motivations</option>
+            <option value="Skills">Skills</option>
+            <option value="Environment Narrative">Environment Narrative</option>
+            <option value="Intrinsic">Intrinsic</option>
+            <option value="Contextual">Contextual</option>
+          </select>
+        </div>
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="apcharacteristicbox">Characteristic</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="apcharacteristicbox"></select>
+        </div>
+      </div>
+      <div id="svgViewer"></div>
+      <div id="rightnavGear" class="no-print"
+        style="position: fixed; top: 100px; right: 0px; border-radius: 5px 0px 0px 5px; padding: 10px 15px; font-size: 16px; z-index: 100; cursor: pointer; color: rgb(60, 141, 188); box-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 3px; background: rgb(255, 255, 255);">
+        <i class="fa fa-gear"></i>
+      </div>
+      <div id="rightnavMenu" class="no-print"
+        style="padding: 10px; position: fixed; top: 100px; right: -400px; border: 0px solid rgb(221, 221, 221); width: 400px; z-index: 100; box-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 3px; background: rgb(255, 255, 255);">
+        <h4 id="optionsHeaderGear" class="text-light-blue" style="margin: 0 0 5px 0; border-bottom: 1px solid #ddd; padding-bottom: 15px;">Options</h4>
+        <div id="optionsContent"></div>
+      </div>
+    </div>
   </div>
   <script src="plugins/slimScroll/jquery.slimscroll.js" type="text/javascript"></script>
   <script>

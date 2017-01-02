@@ -125,6 +125,20 @@ function viewPersona(personaName) {
         $("#thePersonaEnvironments").find(".personaEnvironment:first").trigger('click');
         $("#theImage").attr("src",getImagedir(data.theImage));
         rescaleImage($("#theImage"),300);
+
+        $('#thePersonaCharacteristicList').contextMenu({
+          selector: 'li.personaContextMenu',
+          items: {
+            "visualise": {
+              name: "Visualise",
+              callback: function(key, opt) {
+                var pName = data.theName;
+                var bvName = $(this).text();
+                getTabbedPersonaView(pName,bvName,'All');
+              }
+            }
+          }
+        });
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -133,6 +147,7 @@ function viewPersona(personaName) {
     }
   });
 };
+
 
 var mainContent = $("#objectViewer");
 mainContent.on("click",".personaEnvironment", function () {
@@ -503,4 +518,13 @@ function postPersona(persona, callback){
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
+}
+
+function getTabbedPersonaView(pName,bvName,pcName){
+  Cookies.set('model','persona');
+  Cookies.set('pName',pName);
+  Cookies.set('bvName',bvName);
+  Cookies.set('pcName',pcName);
+  Cookies.set('wTitle',pName + " persona characteristics");
+  var viewerWindow = window.open('viewer.html');
 }

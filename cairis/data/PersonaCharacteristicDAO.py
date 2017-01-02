@@ -150,19 +150,16 @@ class PersonaCharacteristicDAO(CairisDAO):
       pcr_list = []
       if len(fake_pc.theGrounds) > 0:
         for pcr in fake_pc.theGrounds:
-          check_required_keys(pcr,PersonaCharacteristicReference.required)
-          pcr_list.append((pcr['theReferenceName'],pcr['theReferenceDescription'],pcr['theDimensionName']))
+          pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
         fake_pc.theGrounds = pcr_list
       if len(fake_pc.theWarrant) > 0:
         pcr_list = []
         for pcr in fake_pc.theWarrant:
-          check_required_keys(pcr,PersonaCharacteristicReference.required)
-          pcr_list.append((pcr['theReferenceName'],pcr['theReferenceDescription'],pcr['theDimensionName']))
+          pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
         fake_pc.theWarrant = pcr_list
       if len(fake_pc.theRebuttal) > 0:
         pcr_list = []
         for pcr in fake_pc.theRebuttal:
-          check_required_keys(pcr,PersonaCharacteristicReference.required)
-          pcr_list.append((pcr['theReferenceName'],pcr['theReferenceDescription'],pcr['theDimensionName']))
+          pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
         fake_pc.theRebuttal = pcr_list
       return fake_pc
