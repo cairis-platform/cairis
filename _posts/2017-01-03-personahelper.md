@@ -18,10 +18,7 @@ The extension allows designers to quickly elicit factoids from web pages, and us
 
 The extension is free to download and use, and the source code for the Persona Helper is available on [GitHub](https://github.com/failys/persona_helper).  
 
-
-## Before you start ##
-
-* The extension relies on the 'test' session that comes with default CAIRIS installation. Later versions will support authentication with CAIRIS, so only legitimate users will be able to add factoids.
+The extension relies on the 'test' session that comes with default CAIRIS installation. Later versions will support authentication with CAIRIS, so only legitimate users will be able to add factoids.
 
 ## Bugs / Requests / Suggestions ##
 
