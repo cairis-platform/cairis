@@ -70,8 +70,6 @@ from ResponseParameters import ResponseParameters
 from CountermeasureParameters import CountermeasureParameters
 from TaskParameters import TaskParameters
 from MisuseCaseParameters import MisuseCaseParameters
-from TraceParameters import TraceParameters
-from UpdateTraceParameters import UpdateTraceParameters
 from DotTraceParameters import DotTraceParameters
 from EnvironmentParameters import EnvironmentParameters
 from RoleParameters import RoleParameters
@@ -151,12 +149,8 @@ def build(objtId,p):
     return UseCase(objtId,p.name(),p.author(),p.code(),p.actors(),p.description(),p.tags(),p.environmentProperties())
   if (p.__class__.__name__ == 'MisuseCaseParameters'):
     return MisuseCase(objtId,p.name(),p.environmentProperties(),p.risk())
-  if (p.__class__.__name__ == 'TraceParameters'):
-    return Trace(p.fromObject(),p.fromName(),p.fromId(),p.toObject(),p.toName(),p.toId())
   if (p.__class__.__name__ == 'DotTraceParameters'):
     return DotTrace(p.fromObject(),p.fromName(),p.toObject(),p.toName())
-  if (p.__class__.__name__ == 'UpdateTraceParameters'):
-    return Trace(p.fromObject(),p.fromName(),p.fromId(),p.toObject(),p.toName(),p.toId())
   if (p.__class__.__name__ == 'EnvironmentParameters'):
     return Environment(objtId,p.name(),p.shortCode(),p.description(),p.environments(),p.duplicateProperty(),p.overridingEnvironment(),p.tensions())
   if (p.__class__.__name__ == 'RoleParameters'):

@@ -18,8 +18,6 @@
 import wx
 from cairis.core.armid import *
 import WidgetFactory
-import cairis.core.TraceParameters
-import cairis.core.UpdateTraceParameters
 import TracePanel
 
 __author__ = 'Shamal Faily'
@@ -65,12 +63,3 @@ class TraceDialog(wx.Dialog):
     self.theFromName = self.panel.theFromName
     self.theToName = self.panel.theToName
     self.EndModal(TRACE_BUTTONCOMMIT_ID)
-
-  def parameters(self):
-    parameters = 0
-    if (self.theOriginalFromObject == -1):
-      parameters = TraceParameters.TraceParameters(self.theFromObject,self.theFromId,self.theToObject,self.theToId,self.theFromName,self.theToName)
-    else:
-      parameters = UpdateTraceParameters.UpdateTraceParameters(self.theFromObject,self.theFromId,self.theToObject,self.theToId,self.theFromName,self.theToName,self.theOriginalFromId,self.theOriginalToId)
-    parameters.setId(-1)
-    return parameters

@@ -32,7 +32,23 @@ class TraceTests(unittest.TestCase):
 
   def testTraces(self):
     b = Borg()  
-    b.dbProxy.removableTraces('Psychosis')
 
+    fromDims = b.dbProxy.getTraceDimensions('requirement',1)
+    self.assertEqual(len(fromDims),6)
+    toDims = b.dbProxy.getTraceDimensions('requirement',0)
+    self.assertEqual(len(toDims),5)
 
+    reqId = b.dbProxy.getDimensionId('AC-1','requirement')
+    vulId = b.dbProxy.getDimensionId('Certificate ubiquity','vulnerability')
+    b.dbProxy.addTrace('requirement_vulnerability',reqId,vulId)
 
+    traces = b.dbProxy.removableTraces('Psychosis')
+    self.assertEqual(len(traces),8)
+    self.assertEqual(traces[7][0],'requirement')
+    self.assertEqual(traces[7][1],'AC-1')
+    self.assertEqual(traces[7][2],'vulnerability')
+    self.assertEqual(traces[7][3],'Certificate ubiquity')
+
+    b.dbProxy.deleteTrace('requirement','AC-1','vulnerability','Certificate ubiquity')
+    traces = b.dbProxy.removableTraces('Psychosis')
+    self.assertEqual(len(traces),7)

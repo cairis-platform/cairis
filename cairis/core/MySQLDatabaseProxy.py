@@ -52,8 +52,6 @@ import ObjectFactory
 from TaskParameters import TaskParameters
 from MisuseCaseParameters import MisuseCaseParameters
 from DomainPropertyParameters import DomainPropertyParameters
-import TraceParameters
-import UpdateTraceParameters
 import Trace
 from cairis.core.armid import *
 from DotTraceParameters import DotTraceParameters
