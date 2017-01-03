@@ -23,8 +23,6 @@ The extension is free to download and use, and the source code for the Persona H
 
 * The extension relies on the 'test' session that comes with default CAIRIS installation. Later versions will support authentication with CAIRIS, so only legitimate users will be able to add factoids.
 
-* The extension relies on [local storage](https://www.w3.org/TR/webstorage) for setting detail of the CAIRIS URL, author and contributor details. These currently can't be changed when first defined. Later versions will allow these details to be reset.
-
 ## Bugs / Requests / Suggestions ##
 
 Please raise an [issue](https://github.com/failys/persona_helper/issues) if you find any problems, or write a review on the Chrome Web Store if you have specific features/suggestions you would like to see incorporated into the extension.
