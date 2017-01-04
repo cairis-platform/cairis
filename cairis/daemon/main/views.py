@@ -345,6 +345,7 @@ api.add_resource(ThreatController.ThreatTypeByNameAPI, '/api/threats/types/name/
 # Trace routes
 api.add_resource(TraceController.TracesAPI, '/api/traces',endpoint='traces')
 api.add_resource(TraceController.TraceByEnvironmentAPI, '/api/traces/environment/<string:environment_name>',endpoint='traces_environment')
+api.add_resource(TraceController.TraceDimensionsAPI, '/api/traces/dimensions/<string:dimension_name>/is_from/<string:is_from>',endpoint='trace_dimensions')
 api.add_resource(TraceController.TraceByNameAPI, '/api/traces/from_type/<string:from_object>/from_name/<string:from_name>/to_type/<string:to_object>/to_name/<string:to_name>',endpoint='traces_name')
 
 # Upload controller

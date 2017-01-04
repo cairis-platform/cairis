@@ -47,6 +47,25 @@ class TraceAPITests(CairisDaemonTestCase):
       'object': self.new_tr
     }
 
+  def test_get_trace_dimensions(self):
+    method = 'test_get_trace_dimensions'
+    url = '/api/traces/dimensions/requirement/is_from/1?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    fromDims = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(fromDims, 'No results after deserialization')
+    self.logger.info('[%s] Traces found: %d', method, len(fromDims))
+    self.assertEquals(len(fromDims),6)
+
+    url = '/api/traces/dimensions/requirement/is_from/0?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    toDims = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(toDims, 'No results after deserialization')
+    self.logger.info('[%s] Traces found: %d', method, len(toDims))
+    self.assertEquals(len(toDims),5)
+
+
   def test_get_all(self):
     method = 'test_get_traces'
     url = '/api/traces/environment/Psychosis?session_id=test'

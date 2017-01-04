@@ -71,6 +71,14 @@ class TraceDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
+  def trace_dimensions(self,dimension_name,is_from):
+    try:
+      return self.db_proxy.getTraceDimensions(dimension_name,is_from)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+  
+
   def from_json(self, request):
     json = request.get_json(silent=True)
     if json is False or json is None:

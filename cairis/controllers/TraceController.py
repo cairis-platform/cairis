@@ -167,3 +167,50 @@ class TraceByNameAPI(Resource):
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.contenttype = 'application/json'
     return resp
+
+class TraceDimensionsAPI(Resource):
+  #region Swagger Doc
+  @swagger.operation(
+    notes='Get trace dimensions',
+    nickname='trace-dimensions',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'One or more attributes are missing'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'A database error has occurred'
+      }
+    ]
+  )
+  #endregion
+  def get(self, dimension_name,is_from):
+    session_id = get_session_id(session, request)
+
+    dao = TraceDAO(session_id)
+    if is_from == '1':
+      is_from = True
+    else:
+      is_from = False
+
+    dims = dao.trace_dimensions(dimension_name,is_from)
+    dao.close()
+
+    resp = make_response(json_serialize(dims, session_id=session_id), httplib.OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
