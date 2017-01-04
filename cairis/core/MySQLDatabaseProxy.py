@@ -2750,6 +2750,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         fromName = traceRow[FROM_ID_COL]
         toObjt = traceRow[TO_OBJT_COL]
         toName = traceRow[TO_ID_COL]
+        if (fromObjt == 'task' and toObjt == 'asset'):
+          continue
         traces.append((fromObjt,fromName,toObjt,toName))
       curs.close() 
       return traces
