@@ -410,6 +410,18 @@ class LocationsMessage(DefaultMessage):
 )
 # endregion
 
+class TraceMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.TraceModel)
+  required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+  object=ModelDefinitions.TraceModel.__name__,
+)
+# endregion
+
+
 class TemplateRequirementMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TemplateRequirementModel)
   required = DefaultMessage.required

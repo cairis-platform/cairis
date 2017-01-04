@@ -41,6 +41,7 @@ from cairis.core.Risk import Risk
 from cairis.core.Role import Role
 from cairis.core.Target import Target
 from cairis.core.Task import Task
+from cairis.core.Trace import Trace
 from cairis.core.UseCase import UseCase
 from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
@@ -1241,3 +1242,23 @@ class LocationsModel(object):
   swagger_metadata = {
     obj_id_field : gen_class_metadata(Locations)
   }
+
+@swagger.model
+class TraceModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theFromObject": fields.String,
+    "theFromName": fields.String,
+    "theToObject": fields.String,
+    "theToName": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(Trace)
+  }
+  def __init__(self,fromObjt,fromName,toObjt,toName):
+    self.theFromObject = fromObjt
+    self.theFromName = fromName
+    self.theToObject = toObjt
+    self.theToName = toName

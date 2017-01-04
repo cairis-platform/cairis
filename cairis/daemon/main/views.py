@@ -29,7 +29,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController
+    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -341,6 +341,11 @@ api.add_resource(ThreatController.ThreatByIdAPI, '/api/threats/id/<int:id>',endp
 api.add_resource(ThreatController.ThreatByNameAPI, '/api/threats/name/<string:name>',endpoint='threat')
 api.add_resource(ThreatController.ThreatTypesAPI, '/api/threats/types',endpoint='threat_types')
 api.add_resource(ThreatController.ThreatTypeByNameAPI, '/api/threats/types/name/<string:name>',endpoint='threat_type')
+
+# Trace routes
+api.add_resource(TraceController.TracesAPI, '/api/traces',endpoint='traces')
+api.add_resource(TraceController.TraceByEnvironmentAPI, '/api/traces/environment/<string:environment_name>',endpoint='traces_environment')
+api.add_resource(TraceController.TraceByNameAPI, '/api/traces/from_type/<string:from_object>/from_name/<string:from_name>/to_type/<string:to_object>/to_name/<string:to_name>',endpoint='traces_name')
 
 # Upload controller
 api.add_resource(UploadController.UploadImageAPI, '/api/upload/image',endpoint='upload')
