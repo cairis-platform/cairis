@@ -63,7 +63,7 @@ class TraceAPITests(CairisDaemonTestCase):
     toDims = jsonpickle.decode(rv.data)
     self.assertIsNotNone(toDims, 'No results after deserialization')
     self.logger.info('[%s] Traces found: %d', method, len(toDims))
-    self.assertEquals(len(toDims),5)
+    self.assertEquals(len(toDims),2)
 
 
   def test_get_all(self):

@@ -36,7 +36,7 @@ class TraceTests(unittest.TestCase):
     fromDims = b.dbProxy.getTraceDimensions('requirement',1)
     self.assertEqual(len(fromDims),6)
     toDims = b.dbProxy.getTraceDimensions('requirement',0)
-    self.assertEqual(len(toDims),5)
+    self.assertEqual(len(toDims),2)
 
     reqId = b.dbProxy.getDimensionId('Dataset policy','requirement')
     vulId = b.dbProxy.getDimensionId('Certificate ubiquity','vulnerability')
