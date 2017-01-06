@@ -124,7 +124,11 @@ class PatternStructureListCtrl(wx.ListCtrl):
       self.SetStringItem(self.theSelectedIdx,9,dlg.tailAsset())
 
   def load(self,assocs):
-    for headAsset,headAdornment,headNav,headNry,headRole,tailRole,tailNry,tailNav,tailAdornment,tailAsset in assocs:
+    import pytest
+    pytest.set_trace()
+    for headAsset,headAdornment,headNry,headRole,tailRole,tailNry,tailAdornment,tailAsset in assocs:
+      headNav = 0
+      tailNav = 0
       idx = self.GetItemCount()
       self.InsertStringItem(idx,headAsset)
       self.SetStringItem(idx,1,headAdornment)
