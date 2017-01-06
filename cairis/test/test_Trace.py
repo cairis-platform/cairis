@@ -38,17 +38,17 @@ class TraceTests(unittest.TestCase):
     toDims = b.dbProxy.getTraceDimensions('requirement',0)
     self.assertEqual(len(toDims),5)
 
-    reqId = b.dbProxy.getDimensionId('AC-1','requirement')
+    reqId = b.dbProxy.getDimensionId('Dataset policy','requirement')
     vulId = b.dbProxy.getDimensionId('Certificate ubiquity','vulnerability')
     b.dbProxy.addTrace('requirement_vulnerability',reqId,vulId)
 
     traces = b.dbProxy.removableTraces('Psychosis')
     self.assertEqual(len(traces),1)
     self.assertEqual(traces[0][0],'requirement')
-    self.assertEqual(traces[0][1],'AC-1')
+    self.assertEqual(traces[0][1],'Dataset policy')
     self.assertEqual(traces[0][2],'vulnerability')
     self.assertEqual(traces[0][3],'Certificate ubiquity')
 
-    b.dbProxy.deleteTrace('requirement','AC-1','vulnerability','Certificate ubiquity')
+    b.dbProxy.deleteTrace('requirement','Dataset policy','vulnerability','Certificate ubiquity')
     traces = b.dbProxy.removableTraces('Psychosis')
     self.assertEqual(len(traces),0)

@@ -195,7 +195,21 @@ function createRequirementsTable(data){
           var reqName = $(this).closest("tr").find("td").eq(1).html();
           removeReq(reqName);
         }
-      }
+      },
+      "supports": {
+        name: "Supported by", 
+        callback: function(key, opt) {
+          var reqName = $(this).closest("tr").find("td").eq(1).html();
+          traceExplorer('requirement',reqName,'0');
+        }
+      },
+      "contributes": {
+        name: "Contributes to", 
+        callback: function(key, opt) {
+          var reqName = $(this).closest("tr").find("td").eq(1).html();
+          traceExplorer('requirement',reqName,'1');
+        }
+      },
     }
   }); 
 }

@@ -39,7 +39,7 @@ class TraceAPITests(CairisDaemonTestCase):
     self.logger = logging.getLogger(__name__)
     self.new_tr = Trace(
       fObjt = 'requirement',
-      fName = 'AC-1',
+      fName = 'Dataset policy',
       tObjt = 'vulnerability',
       tName = 'Certificate ubiquity')
     self.new_tr_dict = {
@@ -87,7 +87,7 @@ class TraceAPITests(CairisDaemonTestCase):
 
   def test_delete(self):
     method = 'test_delete'
-    rv = self.app.delete('/api/traces/from_type/requirement/from_name/AC-1/to_type/vulnerability/to_name/Certificate%20ubiquity?session_id=test', content_type='application/json')
+    rv = self.app.delete('/api/traces/from_type/requirement/from_name/Dataset%20policy/to_type/vulnerability/to_name/Certificate%20ubiquity?session_id=test', content_type='application/json')
 
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     json_resp = json_deserialize(rv.data)

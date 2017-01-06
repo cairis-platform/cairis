@@ -1894,3 +1894,137 @@ $("#addInterfaceDialog").on('click', '#AddInterface',function(e) {
   cmd(e);
 });
 
+function traceExplorer(objtType,objtName,is_from) {
+  $('#traceExplorer').attr('data-objtType',objtType);
+  $('#traceExplorer').attr('data-objtName',objtName);
+  $('#traceExplorer').attr('data-is_from',is_from);
+  $('#traceExplorer').modal('show');
+}
+
+$("#traceExplorer").on('shown.bs.modal', function() {
+  $('#dimensionTable').find('tbody').empty();
+  $('#valueTable').find('tbody').empty();
+  var objtType = $('#traceExplorer').attr('data-objtType');
+  var isFrom = $('#traceExplorer').attr('data-is_from');
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/traces/dimensions/" + objtType + "/is_from/" + isFrom,
+    success: function (dims) {
+      $.each(dims,function(idx,dim) {
+        appendTraceDimension(dim);
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+function appendTraceDimension(dim) {
+  $('#dimensionTable').find("tbody").append('<tr class="clickable-row"><td class="trace-dimension">' + dim + '</td></tr>');
+}
+
+$('#dimensionTable').on('click', '.clickable-row', function(event) {
+ if($(this).hasClass('bg-primary')){
+   $(this).removeClass('bg-primary'); 
+ } 
+ else {
+   $(this).addClass('bg-primary').siblings().removeClass('bg-primary');
+ }
+});
+
+$('#traceExplorer').on('click',"td.trace-dimension", function() {
+  $('#valueTable').find('tbody').empty();
+  var dimName = $(this).closest("tr").find('td:eq(0)').text();
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/" + dimName,
+    success: function (vs) {
+      $.each(vs,function(idx,v) {
+        appendTraceValue(v);
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+function appendTraceValue(tValue) {
+  $('#valueTable').find("tbody").append('<tr class="clickable-row"><td>' + tValue + '</td></tr>');
+}
+
+$('#valueTable').on('click', '.clickable-row', function(event) {
+ if($(this).hasClass('bg-primary')){
+   $(this).removeClass('bg-primary'); 
+ } 
+ else {
+   $(this).addClass('bg-primary').siblings().removeClass('bg-primary');
+ }
+});
+
+$("#traceExplorer").on('click', '#AddTrace',function(e) {
+  var fromObjt = $('#traceExplorer').attr('data-objtType');
+  var fromName = $('#traceExplorer').attr('data-objtName')
+  var toObjt = $('#dimensionTable').find("tr.bg-primary").text();
+  var toName = $('#valueTable').find("tr.bg-primary").text();
+
+  var postUrl = serverIP + "/api/traces"
+  var isFrom = $('#traceExplorer').attr('data-is_from');
+  var tr = {};
+  if (isFrom == '1') {
+    tr.theFromObject = fromObjt;
+    tr.theFromName = fromName;
+    tr.theToObject = toObjt;
+    tr.theToName = toName;
+  }
+  else {
+    tr.theFromObject = toObjt;
+    tr.theFromName = toName;
+    tr.theToObject = fromObjt;
+    tr.theToName = fromName;
+  }
+
+  var output = {};
+  output.object = tr;
+  output.session_id = $.session.get('sessionID');
+  output = JSON.stringify(output);
+  debugLogger(output);
+
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    data: output,
+    url: serverIP + "/api/traces" + "?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      $('#traceExplorer').modal('hide');
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
