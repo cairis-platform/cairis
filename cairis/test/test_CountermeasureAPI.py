@@ -109,7 +109,6 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(env_id, 'No countermeasure ID returned')
     self.assertGreater(env_id, 0, 'Invalid countermeasure ID returned [%d]' % env_id)
     self.logger.info('[%s] Countermeasure ID: %d\n', method, env_id)
-
     rv = self.app.delete('/api/countermeasures/name/%s?session_id=test' % quote(self.prepare_new_countermeasure().name()))
 
   def test_target_names(self):
@@ -172,8 +171,23 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(upd_countermeasure, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     self.logger.info('[%s] Countermeasure: %s [%d]\n', method, upd_countermeasure['theName'], upd_countermeasure['theId'])
-
     rv = self.app.delete('/api/countermeasures/name/%s?session_id=test' % quote(countermeasure_to_update.theName))
+
+  def test_generate_asset(self):
+    method = 'test_generate_asset'
+    url = '/api/countermeasures/name/' + quote(self.existing_countermeasure_name) + '/generate_asset?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+
+    rv = self.app.post(url, content_type='application/json',data=jsonpickle.encode({'session_id':'test'}))
+    self.assertIsNotNone(rv.data, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    self.assertIsInstance(json_resp, dict)
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message in response')
+    self.logger.info('[%s] Message: %s\n', method, message)
+    self.assertGreater(message.find('successfully generated'), -1, 'Countermeasure asset not generated')
 
   def prepare_new_countermeasure(self):
     new_countermeasure_props = [

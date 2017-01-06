@@ -22,18 +22,19 @@ from AssetEnvironmentProperties import AssetEnvironmentProperties
 from Response import Response
 from Borg import Borg
 
-def build(target):
+def build(target,dbProxy = None):
   if target.__class__.__name__ == 'Countermeasure':
-    return buildCMAsset(target)
+    return buildCMAsset(target,dbProxy)
 
-def buildCMAsset(target):
+def buildCMAsset(target,proxy):
   assetName = target.name() + ' CM'
   assetDesc = target.description()
   assetType = target.type()
   shortCode = 'XX'
   significanceText = 'Mitigates risk '
-  b = Borg()
-  proxy = b.dbProxy
+  if (proxy == None):
+    b = Borg()
+    proxy = b.dbProxy
   risks = proxy.mitigatedRisks(target.id())
   significanceText += risks[0]
   assetEnvironmentProperties = []
@@ -41,9 +42,11 @@ def buildCMAsset(target):
     assetEnvironmentProperties.append(AssetEnvironmentProperties(cProps.name(),cProps.properties(),cProps.rationale()))
   return AssetParameters(assetName,shortCode,assetDesc,significanceText,assetType,False,'',target.tags(),[],assetEnvironmentProperties)
 
-def buildFromTemplate(assetName,assetEnvs):
-  b = Borg()
-  taObjt = b.dbProxy.dimensionObject(assetName,'template_asset')
+def buildFromTemplate(assetName,assetEnvs,dbProxy = None):
+  if (dbProxy == None):
+    b = Borg()
+    dbProxy = b.dbProxy
+  taObjt = dbProxy.dimensionObject(assetName,'template_asset')
   assetDesc = taObjt.description()
   assetType = taObjt.type()
   shortCode = taObjt.shortCode()

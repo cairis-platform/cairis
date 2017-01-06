@@ -53,7 +53,7 @@ function createCountermeasuresTable(){
         textToInsert[i++] = "<tr>";
 
         textToInsert[i++] = '<td class="deleteCountermeasureButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
-        textToInsert[i++] = '<td class="countermeasure-rows" name="theName">';
+        textToInsert[i++] = '<td class="countermeasure-row" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -68,10 +68,20 @@ function createCountermeasuresTable(){
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
       $("#reqTable").find("tbody").removeClass();
-
+      $("#reqTable").find("tbody").addClass('countermeasure-rows');
+      $('.countermeasure-rows').contextMenu({
+        selector: 'td',
+        items: {
+          "generateAsset": {
+            name: "Generate Asset",
+            callback: function(key, opt) {
+              generateAsset($(this).closest("tr").find("td").eq(1).html());
+            }
+          }
+        }
+      });
       activeElement("reqTable");
       sortTableByRow(0);
-
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -82,7 +92,7 @@ function createCountermeasuresTable(){
 
 
 var mainContent = $("#objectViewer");
-$(document).on('click', "td.countermeasure-rows", function () {
+$(document).on('click', "td.countermeasure-row", function () {
   var cmName = $(this).text();
   viewCountermeasure(cmName);
 });
@@ -881,4 +891,34 @@ function updateCountermeasureTasks(envName,roleList) {
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
+}
+
+function generateAsset(cmName) {
+  var output = {};
+  output.session_id = $.session.get('sessionID');
+  output = JSON.stringify(output);
+  debugLogger(output);
+
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    data: output,
+    url: serverIP + "/api/countermeasures/name/" + encodeURIComponent(cmName) + "/generate_asset?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+
+
 }

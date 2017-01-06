@@ -16,6 +16,7 @@
 #  under the License.
 
 import numpy.core
+import cairis.core.AssetParametersFactory
 from numpy.core.multiarray import array
 from cairis.core.ARM import *
 from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
@@ -219,6 +220,19 @@ class CountermeasureDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+  def generate_asset(self,cmName):
+    try:
+      cm = self.get_countermeasure_by_name(cmName, simplify=False)
+      assetId = self.db_proxy.addAsset(cairis.core.AssetParametersFactory.build(cm,self.db_proxy))
+      self.db_proxy.addTrace('countermeasure_asset',cm.id(),assetId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
 
 
   def from_json(self, request):
