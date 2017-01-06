@@ -50,7 +50,7 @@ function createPersonasTable(){
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
         textToInsert[i++] = '<td class="deletePersonaButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
-        textToInsert[i++] = '<td class="persona-rows" name="theName">';
+        textToInsert[i++] = '<td class="persona-row" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -65,7 +65,6 @@ function createPersonasTable(){
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
       $("#reqTable").find("tbody").removeClass();
-
       activeElement("reqTable");
       sortTableByRow(0);
 
@@ -77,7 +76,7 @@ function createPersonasTable(){
   })
 }
 
-$(document).on('click', "td.persona-rows", function () {
+$(document).on('click', "td.persona-row", function () {
   var personaName = $(this).text();
   viewPersona(personaName);
 });

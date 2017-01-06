@@ -59,7 +59,7 @@ function createAssetsTable(data, callback){
 
     textToInsert[i++] = '<td class="deleteAssetButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
 
-    textToInsert[i++] = '<td class="asset-rows" name="theName" value="' + item.theName + '">';
+    textToInsert[i++] = '<td class="asset-row" name="theName" value="' + item.theName + '">';
     textToInsert[i++] = item.theName;
     textToInsert[i++] = '</td>';
 
@@ -75,12 +75,33 @@ function createAssetsTable(data, callback){
   });
   theTable.append(textToInsert.join(''));
   $.contextMenu('destroy',$('.requirement-rows'));
+  $.contextMenu('destroy',$('.asset-rows'));
   $("#reqTable").find("tbody").removeClass();
+
+  $("#reqTable").find("tbody").addClass('asset-rows');
+
+  $('.asset-rows').contextMenu({
+    selector: 'td',
+    items: {
+      "contributes": {
+        name: "Contributes to",
+        callback: function(key, opt) {
+          var assetName = $(this).closest("tr").find("td").eq(1).html();
+          traceExplorer('asset',assetName,'1');
+        }
+      },
+    }
+  });
+
+
+
+
+
 
   callback();
 }
 
-$(document).on('click', "td.asset-rows", function(){
+$(document).on('click', "td.asset-row", function(){
   var assetName = $(this).attr('value');
   viewAsset(assetName);
 });

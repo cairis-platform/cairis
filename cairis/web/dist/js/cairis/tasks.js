@@ -69,7 +69,7 @@ function createTasksTable(){
         textToInsert[i++] = "<tr>";
 
         textToInsert[i++] = '<td class="deleteTaskButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
-        textToInsert[i++] = '<td class="task-rows" name="theName">';
+        textToInsert[i++] = '<td class="task-row" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -83,7 +83,29 @@ function createTasksTable(){
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
+      $.contextMenu('destroy',$('.task-rows'));
       $("#reqTable").find("tbody").removeClass();
+      $("#reqTable").find("tbody").addClass('task-rows');
+
+      $('.task-rows').contextMenu({
+        selector: 'td',
+        items: {
+          "supports": {
+            name: "Supported by",
+            callback: function(key, opt) {
+              var taskName = $(this).closest("tr").find("td").eq(1).html();
+              traceExplorer('task',taskName,'0');
+            }
+          },
+          "contributes": {
+            name: "Contributes to",
+            callback: function(key, opt) {
+              var taskName = $(this).closest("tr").find("td").eq(1).html();
+              traceExplorer('task',taskName,'1');
+            }
+          },
+        }
+      });
 
       activeElement("reqTable");
       sortTableByRow(0);
@@ -95,7 +117,7 @@ function createTasksTable(){
   })
 }
 
-$(document).on('click', "td.task-rows", function () {
+$(document).on('click', "td.task-row", function () {
   var taskName = $(this).text();
   viewTask(taskName);
 });

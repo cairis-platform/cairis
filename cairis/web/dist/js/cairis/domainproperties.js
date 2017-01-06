@@ -51,7 +51,7 @@ function createDomainPropertiesTable(){
         textToInsert[i++] = "<tr>";
         textToInsert[i++] = '<td class="deleteDomainPropertyButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
 
-        textToInsert[i++] = '<td class="domainproperty-rows" name="theName">';
+        textToInsert[i++] = '<td class="domainproperty-row" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -65,6 +65,7 @@ function createDomainPropertiesTable(){
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
+      $.contextMenu('destroy',$('.domainproperty-rows'));
       $("#reqTable").find("tbody").removeClass();
       activeElement("reqTable");
       sortTableByRow(0);
@@ -76,7 +77,7 @@ function createDomainPropertiesTable(){
   })
 }
 
-$(document).on('click', "td.domainproperty-rows", function () {
+$(document).on('click', "td.domainproperty-row", function () {
   var dpName = $(this).text();
   viewDomainProperty(dpName);
 });

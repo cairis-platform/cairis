@@ -45,7 +45,7 @@ function createUseCasesTable(){
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
         textToInsert[i++] = '<td class="deleteUseCaseButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
-        textToInsert[i++] = '<td class="usecase-rows" name="theName">';
+        textToInsert[i++] = '<td class="usecase-row" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
@@ -60,6 +60,29 @@ function createUseCasesTable(){
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
       $("#reqTable").find("tbody").removeClass();
+
+      $("#reqTable").find("tbody").addClass('usecase-rows');
+
+      $('.usecase-rows').contextMenu({
+        selector: 'td',
+        items: {
+          "supports": {
+            name: "Supported by",
+            callback: function(key, opt) {
+              var ucName = $(this).closest("tr").find("td").eq(1).html();
+              traceExplorer('usecase',ucName,'0');
+            }
+          },
+          "contributes": {
+            name: "Contributes to",
+            callback: function(key, opt) {
+              var ucName = $(this).closest("tr").find("td").eq(1).html();
+              traceExplorer('usecase',ucName,'1');
+            }
+          },
+        }
+      });
+
       activeElement("reqTable");
       sortTableByRow(0);
     },
@@ -70,7 +93,7 @@ function createUseCasesTable(){
   })
 }
 
-$(document).on('click', "td.usecase-rows", function () {
+$(document).on('click', "td.usecase-row", function () {
   var ucName = $(this).text();
   viewUseCase(ucName); 
 });
