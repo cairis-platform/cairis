@@ -334,7 +334,10 @@ $('#taskModelClick').click(function(){
         buttons: {
           Ok: function() {
             $( this ).dialog( "close" );
-            getTaskview($( "#comboboxDialogSelect").find("option:selected" ).text());
+            var envName = $('#comboboxDialogSelect').find("option:selected").text();
+            updateTaskBox(envName);
+            $('#tmtaskbox').val('All');
+            getTaskview(envName);
           }
         }
       });

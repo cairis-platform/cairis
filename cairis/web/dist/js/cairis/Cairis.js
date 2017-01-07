@@ -93,12 +93,13 @@ $('#gmgoalbox').change(function() {
 
 $('#tmtaskbox').change(function() {
   var selection = $(this).find('option:selected').text();
-  getTaskview($('#tmenvironmentsbox').val(),selection,'');
+  var envName = $('#tmenvironmentsbox').val();
+  getTaskview(envName,selection,'all');
 });
 
 $('#tmmisusecasebox').change(function() {
   var selection = $(this).find('option:selected').text();
-  getTaskview($('#tmenvironmentsbox').val(),'',selection);
+  getTaskview($('#tmenvironmentsbox').val(),'all',selection);
 });
 
 $('#remrolebox').change(function() {
@@ -188,28 +189,7 @@ $('#gmenvironmentsbox').change(function() {
 
 $('#tmenvironmentsbox').change(function() {
   var selection = $(this).find('option:selected').text();
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID')),
-    },
-    crossDomain: true,
-    url: serverIP + "/api/dimensions/table/task/environment/" + selection.replace(" ","%20"),
-    success: function (data) {
-      $('#tmtaskbox').empty();
-      $('#tmtaskbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
-      $.each(data, function (index, item) {
-        $('#tmtaskbox').append($('<option>', {value: item, text: item},'</option>'));
-      });
-      $('#tmtaskbox').change();
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
+  updateTaskBox(selection);
 });
 
 
@@ -555,9 +535,6 @@ function getRiskview(environment,dimName,objtName,modelLayout){
 }
 
 function getTaskview(environment,task,misusecase){
-  window.assetEnvironment = environment;
-
-  $('#tmenvironmentsbox').val(environment);
   if (task == undefined) {
     $.ajax({
       type: "GET",
@@ -567,9 +544,10 @@ function getTaskview(environment,task,misusecase){
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + "/api/tasks/environment/" + environment.replace(" ","%20") + "/names",
+      url: serverIP + "/api/tasks/environment/" + encodeURIComponent(environment) + "/names",
 
       success: function (data) {
+        updateTaskBox(environment);
         $("#tmtaskbox").empty()
         $('#tmtaskbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
         $.each(data, function (index, item) {
@@ -592,7 +570,7 @@ function getTaskview(environment,task,misusecase){
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + "/api/dimensions/table/misusecase/environment/" + environment.replace(" ","%20"),
+      url: serverIP + "/api/dimensions/table/misusecase/environment/" + encodeURIComponent(environment),
 
       success: function (data) {
         $("#tmmisusecasebox").empty()
@@ -618,7 +596,7 @@ function getTaskview(environment,task,misusecase){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/tasks/model/environment/" + environment.replace(" ","%20") + "/task/" + task.replace(" ","%20") + "/misusecase/" + misusecase.replace(" ","%20"),
+    url: serverIP + "/api/tasks/model/environment/" + encodeURIComponent(environment) + "/task/" + encodeURIComponent(task) + "/misusecase/" + encodeURIComponent(misusecase),
     success: function(data){
       fillSvgViewer(data);
     },
