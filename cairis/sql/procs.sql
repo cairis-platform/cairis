@@ -857,6 +857,9 @@ drop procedure if exists templateAssetMetrics;
 drop procedure if exists riskAnalysisModelElements;
 drop procedure if exists assetRiskLevel;
 drop procedure if exists assetThreatRiskLevel;
+drop procedure if exists riskSummary;
+drop procedure if exists threatSummary;
+drop procedure if exists vulnerabilitySummary;
 
 delimiter //
 
@@ -22942,4 +22945,86 @@ begin
   select assetRiskScore;
 end
 //
+
+create procedure riskSummary(in envName text)
+begin
+  declare envId int;
+  declare riskName varchar(200);
+  declare riskClass varchar(50);
+  declare done int default 0;
+  declare riskCursor cursor for select r.name from risk r, environment_threat et, environment_vulnerability ev where r.threat_id = et.threat_id and r.vulnerability_id = ev.vulnerability_id and et.environment_id = ev.environment_id and et.environment_id = envId;
+  declare continue handler for not found set done = 1;
+
+  select id into envId from environment where name = envName;
+  drop table if exists temp_risksummary;
+  create temporary table temp_risksummary (risk_name varchar(200),risk_class varchar(50));
+
+  open riskCursor;
+  risk_loop: loop
+    fetch riskCursor into riskName;
+    if done = 1
+    then
+      leave risk_loop;
+    end if;
+    select rc.name into riskClass from risk r, threat_likelihood tl, vulnerability_severity vs, score s, risk_class rc, environment tc, environment vc where r.name = riskName and tl.threat_id = r.threat_id and tl.environment_id = tc.id and tc.name = envName and tl.likelihood_id = s.likelihood_id and vs.vulnerability_id = r.vulnerability_id and vs.environment_id = vc.id and vc.name = envName and vs.severity_id = s.severity_id and s.class_id = rc.id;
+    insert into temp_risksummary(risk_name,risk_class) values (riskName,riskClass);
+  end loop risk_loop;
+  select risk_class,count(*) from temp_risksummary group by 1;
+end
+//
+
+create procedure threatSummary(in envName text)
+begin
+  declare envId int;
+  declare threatName varchar(200);
+  declare threatClass varchar(50);
+  declare done int default 0;
+  declare threatCursor cursor for select t.name from threat t, environment_threat et where t.id = et.threat_id and et.environment_id = envId;
+  declare continue handler for not found set done = 1;
+
+  select id into envId from environment where name = envName;
+  drop table if exists temp_threatsummary;
+  create temporary table temp_threatsummary (threat_name varchar(200),threat_class varchar(50));
+
+  open threatCursor;
+  threat_loop: loop
+    fetch threatCursor into threatName;
+    if done = 1
+    then
+      leave threat_loop;
+    end if;
+    select l.name into threatClass from threat t, threat_likelihood tl, likelihood l where t.name = threatName and t.id = tl.threat_id and tl.environment_id = envId and tl.likelihood_id = l.id;
+    insert into temp_threatsummary(threat_name,threat_class) values (threatName,threatClass);
+  end loop threat_loop;
+  select threat_class,count(*) from temp_threatsummary group by 1;
+end
+//
+
+create procedure vulnerabilitySummary(in envName text)
+begin
+  declare envId int;
+  declare vulName varchar(200);
+  declare vulClass varchar(50);
+  declare done int default 0;
+  declare vulCursor cursor for select v.name from vulnerability v, environment_vulnerability ev where v.id = ev.vulnerability_id and ev.environment_id = envId;
+  declare continue handler for not found set done = 1;
+
+  select id into envId from environment where name = envName;
+  drop table if exists temp_vulnerabilitysummary;
+  create temporary table temp_vulnerabilitysummary (vulnerability_name varchar(200),vulnerability_class varchar(50));
+
+  open vulCursor;
+  vul_loop: loop
+    fetch vulCursor into vulName;
+    if done = 1
+    then
+      leave vul_loop;
+    end if;
+    select s.name into vulClass from vulnerability v, vulnerability_severity vs, severity s where v.name = vulName and v.id = vs.vulnerability_id and vs.environment_id = envId and vs.severity_id = s.id;
+    insert into temp_vulnerabilitysummary(vulnerability_name,vulnerability_class) values (vulName,vulClass);
+  end loop vul_loop;
+  select vulnerability_class,count(*) from temp_vulnerabilitysummary group by 1;
+end
+//
+
 delimiter ;

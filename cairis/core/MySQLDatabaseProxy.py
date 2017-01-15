@@ -11495,3 +11495,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error calculating risk level for ' + assetName + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
+
+  def dimensionSummary(self,dimName,envName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call ' + dimName + 'Summary(%s)',[envName])
+      if (curs.rowcount == -1):
+        exceptionText = 'Error calculating ' + dimName + ' for environment ' + envName
+        raise DatabaseProxyException(exceptionText)
+      sums = []
+      for row in curs.fetchall():
+        row = list(row)
+        sums.append((row[0],row[1]))
+      curs.close()
+      return sums
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error calculating ' + dimName + ' summary for environment ' + envName + ' (id:' + str(id) + ',message:' + msg
+      raise DatabaseProxyException(exceptionText) 
