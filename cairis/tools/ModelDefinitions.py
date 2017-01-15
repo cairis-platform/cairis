@@ -1244,6 +1244,18 @@ class LocationsModel(object):
   }
 
 @swagger.model
+class SummaryModel(object):
+  resource_fields = {
+    "theLabel": fields.String,
+    "theValue": fields.String
+  }
+  required = resource_fields.keys()
+
+  def __init__(self,lbl,val):
+    self.theLabel = lbl 
+    self.theValue = val
+
+@swagger.model
 class TraceModel(object):
   resource_fields = {
     obj_id_field: fields.String,
