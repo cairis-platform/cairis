@@ -20,5 +20,87 @@
 'use strict';
 
 $("#homeClick").click(function () {
-  activeElement("homePanel");
+  summaryTables();
+});
+
+$('#summaryenvironmentsbox').change(function() {
+  var envName = $(this).find('option:selected').val();
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crfossDomain: true,
+    url: serverIP + "/api/summary/dimension/vulnerability/environment/" + encodeURIComponent(envName),
+    success: function (sums) {
+      nv.addGraph(function() {
+        var chart = nv.models.pieChart()
+          .x(function(d) { return d.theLabel })
+          .y(function(d) { return d.theValue })
+          .showLabels(true);
+        d3.select("#vulnerabilitySummary svg")
+          .datum(sums)
+          .transition().duration(1200)
+          .call(chart);
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crfossDomain: true,
+    url: serverIP + "/api/summary/dimension/threat/environment/" + encodeURIComponent(envName),
+    success: function (sums) {
+      nv.addGraph(function() {
+        var chart = nv.models.pieChart()
+          .x(function(d) { return d.theLabel })
+          .y(function(d) { return d.theValue })
+          .showLabels(true);
+        d3.select("#threatSummary svg")
+          .datum(sums)
+          .transition().duration(1200)
+          .call(chart);
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crfossDomain: true,
+    url: serverIP + "/api/summary/dimension/risk/environment/" + encodeURIComponent(envName),
+    success: function (sums) {
+      nv.addGraph(function() {
+        var chart = nv.models.pieChart()
+          .x(function(d) { return d.theLabel })
+          .y(function(d) { return d.theValue })
+          .showLabels(true);
+        d3.select("#riskSummary svg")
+          .datum(sums)
+          .transition().duration(1200)
+          .call(chart);
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 });

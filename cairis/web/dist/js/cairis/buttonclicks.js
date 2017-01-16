@@ -457,7 +457,7 @@ $('#locationsModelClick').click(function(){
 $("#newClick").click(function () {
   postNewProject(function () {
     window.activeTable = "Requirements";
-    startingTable();
+    summaryTable();
   });
 });
 

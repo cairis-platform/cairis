@@ -28,6 +28,9 @@
   <link href="plugins/jquery-contextmenu/jquery.contextMenu.min.css" rel="stylesheet" type="text/css"/>
   <script src="plugins/bootstrap-validator/js/validator.js"></script> 
   <script src="plugins/js-cookie/js.cookie.js"></script> 
+  <link href="plugins/d3/nv.d3.min.css" rel="stylesheet">
+  <script src="plugins/d3/d3.min.js"></script>
+  <script src="plugins/d3/nv.d3.min.js"></script>
 
 
 
@@ -351,8 +354,31 @@
         <tbody>
         </tbody>
       </table>
-      <div id="homePanel"></div>
       <div id="svgViewer"></div>
+      <div id="homePanel">
+        <div id="filtersummarytables" class="extraContent row form-group">
+          <div class="col-md-1">
+            <label class="topCombobox control-label" for="summaryenvironmentsbox">Environment</label>
+          </div>
+          <div class="col-md-2">
+            <select class="topCombobox form-control" id="summaryenvironmentsbox"></select>
+          </div>
+        </div>
+        <div class="row">
+          <div id="vulnerabilitySummary" class="col-md-4">
+            <label class="control-label">Vulnerability Summary</label>
+            <svg style="height:400px"></svg>
+          </div>
+          <div id="threatSummary" class="col-md-4">
+            <label class="control-label">Threat Summary</label>
+            <svg style="height:400px"></svg>
+          </div>
+          <div id="riskSummary" class="col-md-4">
+            <label class="control-label">Risk Summary</label>
+            <svg style="height:400px"></svg>
+          </div>
+        </div>
+      </div>
       <div id="objectViewer" class="no-print"></div>
     </section><!-- /.content -->
     </div><!-- /.content-wrapper -->

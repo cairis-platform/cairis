@@ -44,7 +44,9 @@ $(document).ready(function() {
         debugLogger(data);
         var sessionID = data.session_id;
         $.session.set("sessionID", sessionID);
-        startingTable();
+//        startingTable();
+        createComboboxes();
+        summaryTables();
         hideLoading();
       },
       error: function(data, status, xhr) {
@@ -55,7 +57,9 @@ $(document).ready(function() {
     });
   }
   else {
-    startingTable();
+//    startingTable();
+    createComboboxes();
+    summaryTables();
   }
 });
 
@@ -1135,7 +1139,7 @@ function createComboboxes(){
         options.append($("<option />").val(this).text(this));
         amoptions.append($("<option />").val(this).text(this));
       });
-      $(".topCombobox").css("visibility", "visible");
+//      $(".topCombobox").css("visibility", "visible");
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -1176,8 +1180,8 @@ function createComboboxes(){
         remEnvBox.append($("<option />").val(this).text(this));
         rmEnvBox.append($("<option />").val(this).text(this));
       });
-      envBox.css("visibility", "visible");
-      window.boxesAreFilled = true;
+//      envBox.css("visibility", "visible");
+//      window.boxesAreFilled = true;
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -1186,8 +1190,15 @@ function createComboboxes(){
   });
 }
 
+function showComboboxes() {
+  $(".topCombobox").css("visibility", "visible");
+  $('#environmentsbox').css("visibility", "visible");
+  window.boxesAreFilled = true;
+}
+
 function startingTable(){
-  createComboboxes();
+//  createComboboxes();
+  showComboboxes();
   $.ajax({
     type:"GET",
     dataType: "json",
@@ -1210,12 +1221,41 @@ function startingTable(){
   });
 }
 
+function summaryTables() {
+  activeElement("homePanel");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crfossDomain: true,
+    url: serverIP + "/api/dimensions/table/environment",
+    success: function (envs) {
+      activeElement("homePanel");
+      $("#summaryenvironmentsbox option").remove();
+      $.each(envs,function(idx,env) {
+        $('#summaryenvironmentsbox').append($("<option></option>").attr("value",env).text(env));
+      });
+      $('#summaryenvironmentsbox').change();
+      $(".loadingWrapper").fadeOut(500);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+
 // This is for saying which element has the main focus
 function activeElement(elementid){
   if(elementid == "svgViewer" || elementid == 'homePanel'){
     $("#reqTable").hide();
     $("#objectViewer").hide();
     $("#filtercontent").hide();
+    $("#filtersummarytables").hide();
     $("#filterassetmodelcontent").hide();
     $("#filterriskmodelcontent").hide();
     $("#filterresponsibilitymodelcontent").hide();
@@ -1226,8 +1266,10 @@ function activeElement(elementid){
     $("#rightnavGear").hide();
 
     if (elementid == 'svgViewer') {
+      $('#homePanel').hide();
       $("#rightnavGear").show();
     }
+
 
     if (window.theVisualModel == 'risk') {
       $("#filterriskmodelcontent").show();
@@ -1253,7 +1295,8 @@ function activeElement(elementid){
   }
   if(elementid != "svgViewer"){
     $("#svgViewer").hide();
-    $("#homePanel").hide();
+    $('#homePanel').hide();
+    $("#filtersummarytables").hide();
     $("#objectViewer").hide();
     $("#filterassetmodelcontent").hide();
     $("#filterriskmodelcontent").hide();
@@ -1272,6 +1315,11 @@ function activeElement(elementid){
   }
   if (elementid == 'objectViewer') {
     $("#reqTable").hide();
+  }
+
+  if (elementid == 'homePanel') {
+    $("#reqTable").hide();
+    $("#filtersummarytables").show();
   }
 
   elementid = "#" + elementid;
@@ -1484,8 +1532,9 @@ function setActiveOptions(){
 function fillSvgViewer(data){
 
   var xmlString = (new XMLSerializer()).serializeToString(data);
+  activeElement("svgViewer");
   var svgDiv = $("#svgViewer");
-  svgDiv.show();
+//  svgDiv.show();
   svgDiv.css("height",$("#mainContent").height());
   svgDiv.css("width","100%");
   svgDiv.html(xmlString);
