@@ -21,9 +21,20 @@
 
 $( document ).ajaxComplete(function() {
   $("svg > g > g .node > g > a").on('click', function (event) {
+    handleNodeClick(event,$(this));
+  });
+});
+
+$( document ).ajaxComplete(function() {
+  $("svg > g > g .node > a").on('click', function (event) {
+    handleNodeClick(event,$(this));
+  });
+});
+
+function handleNodeClick(event,objt) {
     event.stopImmediatePropagation();
     event.preventDefault();
-    var link = $(this).attr("xlink:href");
+    var link = objt.attr("xlink:href");
     
     if (self.theVisualModel == 'asset') {
       window.assetEnvironment = $('#amenvironmentsbox').val();
@@ -949,7 +960,7 @@ else if(link.indexOf("obstacles") > -1) {
         }
       });
     }
-else if(link.indexOf("usecases") > -1) {
+    else if(link.indexOf("usecases") > -1) {
       forceOpenOptions();
       $.ajax({
         type: "GET",
@@ -1010,5 +1021,4 @@ else if(link.indexOf("usecases") > -1) {
         }
       });
     }
-  });
-});
+}
