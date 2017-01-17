@@ -11,7 +11,6 @@ ENV PYTHONPATH=/cairis
 RUN mkdir /images
 RUN git clone https://github.com/failys/cairis /cairis
 COPY cairis.cnf /
-COPY .profile /
 RUN service mysql start && /cairis/cairis/test/initdb.sh
 RUN service mysql start && ./cairis/cairis/bin/add_cairis_user.py test test
 EXPOSE 7071
