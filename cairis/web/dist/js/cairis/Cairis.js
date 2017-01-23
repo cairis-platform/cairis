@@ -510,16 +510,131 @@ function getResponsibilityview(environment,role){
   });
 }
 
-function replaceRequirementNodes(data) {
+function getRequirementLabels(data) {
+  var lbls = [];
+  d3.select(data).selectAll('a').each(function(d) {
+    if ((d3.select(this).attr('xlink:href').indexOf('/api/requirements/shortcode') >= 0) && (d3.select(this).attr('xlink:title') != null)) {
+      lbls.push(d3.select(this).attr('xlink:title'));
+      d3.select(this).attr('class','requirement');
+    }
+  });
+  return lbls;
+}
+
+function getRequirementScores(lbls) {
+
+  var IMPERATIVES = ['shall','must','is required to','are applicable','are to','responsible for','will','should'];
+  var OPTIONS = ['can','may','optionally'];
+  var WEAKPHRASES = ['adequate','as appropriate','be able to','be capable of','capability of','capability to','effective','as required','normal','provide for','timely','easy to'];
+  var FUZZY = ['mostly','as needed','might','make sense','appropriate','might make sense','graceful','at minimum','major','slowly','may be of use','including but not limited to','and/or','suitable','various','clean and stable interface','several'];
+  var INCOMPLETES = ['TBD','TBS','TBE','TBC','TBR','not defined','not determined','but not limited to','as a minimum','None']
+
+  var reqDict = {};
+  $.each(lbls,function(idx,reqLabel) {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      async: false,
+      url: serverIP + "/api/requirements/name/" + encodeURIComponent(reqLabel),
+      success: function (req) {
+        var reqDesc = req.theDescription;
+        var reqRat = req.attrs.rationale;
+        var reqFC = req.attrs.fitCriterion;
+        var reqOrig = req.attrs.originator;
+       
+        var completeScore = 0;
+        if (reqDesc == '') {
+          completeScore += 1;
+        }
+        if (reqRat == '') {
+          completeScore += 1;
+        }
+        if (reqFC == '') {
+          completeScore += 1;
+        }
+        if (reqOrig == '') {
+          completeScore += 1;
+        }
+        $.each(INCOMPLETES,function(idx,w) {
+          if (reqDesc.indexOf(w) >= 0) {
+            completeScore += 1;
+          }
+          if (reqRat.indexOf(w) >= 0) {
+            completeScore += 1;
+          }
+          if (reqFC.indexOf(w) >= 0) {
+            completeScore += 1;
+          }
+          if (reqOrig.indexOf(w) >= 0) {
+            completeScore += 1;
+          }
+        });
+
+        var impScore = 0;
+        $.each(IMPERATIVES,function(idx,w) {
+          if (reqDesc.indexOf(w) > 0) {
+            impScore += 1;
+          }
+        });
+
+        var ambScore = 0;
+        $.each(OPTIONS.concat(WEAKPHRASES).concat(FUZZY),function(idx,w) {
+          if (reqDesc.indexOf(w) > 0) {
+            ambScore += 1;
+          }
+        });
+
+        var scObjt = {};
+        if (completeScore == 0) {
+          scObjt.completeness = 2;
+        }
+        else if (completeScore == 1) {
+          scObjt.completeness = 0;
+        }
+        else {
+          scObjt.completeness = -2;
+        }
+
+        if (impScore == 0) {
+          scObjt.imperative = [1,1];
+        }
+        else {
+          scObjt.imperative = [1.5,0.5];
+        }
+ 
+        if (ambScore == 0) {
+          scObjt.ambiguity = 2;
+        }
+        else if (ambScore < 2) {
+          scObjt.ambiguity = 0;
+        }
+        else {
+          scObjt.ambiguity = -2;
+        }
+        reqDict[reqLabel] = scObjt;
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  });
+  return reqDict;
+}
+
+function replaceRequirementNodes(data,reqDict) {
 
   d3.select(data).selectAll('a').each(function(d) {
     if ((d3.select(this).attr('xlink:href').indexOf('/api/requirements/shortcode') >= 0) && (d3.select(this).attr('xlink:title') != null)) {
-//      var txtY = d3.select(this).select('text').attr('y');
-//      d3.select(this).select('text').attr('y',txtY + 13);
+      var reqLabel = d3.select(this).attr('xlink:title');
       var cxi = d3.select(this).select('ellipse').attr('cx');
       var cyi = d3.select(this).select('ellipse').attr('cy');
       var ri = d3.select(this).select('ellipse').attr('rx');
-      var reqLabel = d3.select(this).attr('xlink:title');
       d3.select(this).select('ellipse').remove();
       var svg = d3.select(this).attr("id","face" + reqLabel);
       var c = d3.chernoff()
@@ -530,12 +645,14 @@ function replaceRequirementNodes(data) {
           .eyew(function(d) { return d.ew; })
           .eyeh(function(d) { return d.eh; })
           .brow(function(d) { return d.b; });
-      var dat = [{cx: cxi, cy: cyi, r: ri, m: 2, ew: 0.5, eh: 1.5, b: -2, face: svg}];
+
+      var scObjt = reqDict[reqLabel];
+      var dat = [{cx: cxi, cy: cyi, r: ri, m: scObjt.ambiguity, ew: scObjt.imperative[1], eh: scObjt.imperative[0], b: scObjt.completeness, face: svg}];
 
       svg.selectAll("g.chernoff").data(dat).enter()
-        .append("svg:g")
-        .attr("class", "chernoff")
-        .call(c);
+         .append("svg:g")
+         .attr("class", "chernoff")
+         .call(c);
     }
   });
 }
@@ -558,7 +675,9 @@ function getRiskview(environment,dimName,objtName,modelLayout){
     crossDomain: true,
     url: serverIP + "/api/risks/model/environment/" + environment.replace(" ","%20"),
     success: function(data){
-      replaceRequirementNodes(data);
+      var lbls = getRequirementLabels(data);
+      var reqDict = getRequirementScores(lbls);
+      replaceRequirementNodes(data,reqDict);
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {

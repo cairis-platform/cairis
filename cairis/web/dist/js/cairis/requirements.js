@@ -304,4 +304,3 @@ function postRequirementRow(row,whatKind,value){
     }
   });
 }
-
