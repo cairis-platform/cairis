@@ -510,6 +510,35 @@ function getResponsibilityview(environment,role){
   });
 }
 
+function replaceRequirementNodes(data) {
+
+  d3.select(data).selectAll('a').each(function(d) {
+    if ((d3.select(this).attr('xlink:href').indexOf('/api/requirements/shortcode') >= 0) && (d3.select(this).attr('xlink:title') != null)) {
+//      var txtY = d3.select(this).select('text').attr('y');
+//      d3.select(this).select('text').attr('y',txtY + 13);
+      var cxi = d3.select(this).select('ellipse').attr('cx');
+      var cyi = d3.select(this).select('ellipse').attr('cy');
+      var ri = d3.select(this).select('ellipse').attr('rx');
+      var reqLabel = d3.select(this).attr('xlink:title');
+      d3.select(this).select('ellipse').remove();
+      var svg = d3.select(this).attr("id","face" + reqLabel);
+      var c = d3.chernoff()
+          .xloc(function(d) { return d.cx; })
+          .yloc(function(d) { return d.cy; })
+          .frad(function(d) { return d.r; })
+          .mouth(function(d) { return d.m; })
+          .eyew(function(d) { return d.ew; })
+          .eyeh(function(d) { return d.eh; })
+          .brow(function(d) { return d.b; });
+      var dat = [{cx: cxi, cy: cyi, r: ri, m: 2, ew: 0.5, eh: 1.5, b: -2, face: svg}];
+
+      svg.selectAll("g.chernoff").data(dat).enter()
+        .append("svg:g")
+        .attr("class", "chernoff")
+        .call(c);
+    }
+  });
+}
 
 function getRiskview(environment,dimName,objtName,modelLayout){
   window.assetEnvironment = environment;
@@ -529,6 +558,7 @@ function getRiskview(environment,dimName,objtName,modelLayout){
     crossDomain: true,
     url: serverIP + "/api/risks/model/environment/" + environment.replace(" ","%20"),
     success: function(data){
+      replaceRequirementNodes(data);
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
