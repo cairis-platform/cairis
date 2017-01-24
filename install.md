@@ -17,10 +17,16 @@ The easiest way of getting up and running with the web application is to downloa
 
 * Download and run the container:  
 {% highlight bash %}
-docker run -d -P --net=bridge shamalfaily/cairis
+$ docker run -d -P --net=bridge shamalfaily/cairis
 {% endhighlight %}
 
-* From the web browser of your choice, go the access URL provided by Docker, e.g. http://localhost:32771
+* Obtain the port the container is running on:
+{% highlight bash %}
+$ docker port $(docker ps -aq)
+7071/tcp -> 0.0.0.0:32769
+{% endhighlight %}
+
+* From the web browser of your choice, connect to the CAIRIS URL and access port, e.g. http://localhost:32769
 When asked for credentials, provide test/test
 
 * If you want to interact with a pre-existing CAIRIS model, you can find some examples on the CAIRIS github, repository, e.g. [NeuroGrid](https://github.com/failys/cairis/blob/master/examples/exemplars/NeuroGrid/NeuroGrid.xml). You can import this from the System/Import menu, selecting type 'Model', and the model file to import. Allow a minute or two for this import to complete.
