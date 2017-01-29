@@ -13,6 +13,6 @@
 [![License](https://img.shields.io/github/license/failys/cairis.svg)](https://github.com/failys/cairis/blob/master/LICENSE)
 
 
-CAIRIS (Computer Aided Integration of Requirements and Information Security) is a design tool for specifying and modelling secure and usable systems. CAIRIS was built from the ground-up to support the elements necessary for usability, requirements, and risk analysis. 
+CAIRIS (Computer Aided Integration of Requirements and Information Security) is a tool for specifying and modelling secure and usable systems. CAIRIS was built from the ground-up to support the elements necessary for usability, requirements, and risk analysis. 
 
 See [the CAIRIS website](http://cairis.org) for more information on the tool, and details on how to get started.
