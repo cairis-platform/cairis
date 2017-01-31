@@ -2204,3 +2204,20 @@ $("#traceExplorer").on('click', '#AddTrace',function(e) {
     }
   });
 });
+
+$("#chooseEnvironment").on('shown.bs.modal', function() {
+});
+
+$("#chooseEnvironment").on('click', '#chooseEnvironmentButton',function(e) {
+  var cmd = eval($("#chooseEnvironment").attr("data-applyEnvironmentSelection"));
+  cmd($('#chooseEnvironmentSelect').val());
+  $('#chooseEnvironment').modal('hide');
+});
+
+$("#choosePersona").on('shown.bs.modal', function() {
+});
+
+$("#choosePersona").on('click', '#choosePersonaButton',function(e) {
+  getPersonaView($('#choosePersonaSelect').val(),'All','All');
+  $('#choosePersona').modal('hide');
+});

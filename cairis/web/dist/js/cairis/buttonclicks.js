@@ -153,20 +153,12 @@ $('#assetModelClick').click(function(){
     crossDomain: true,
     url: serverIP + "/api/environments/all/names",
     success: function (data) {
-      $("#comboboxDialogSelect").empty();
+      $("#chooseEnvironmentSelect").empty();
       $.each(data, function(i, item) {
-        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+        $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
-      $( "#comboboxDialog" ).dialog({
-        modal: true,
-        buttons: {
-          Ok: function() {
-            $( this ).dialog( "close" );
-            getAssetview($( "#comboboxDialogSelect").find("option:selected" ).text());
-          }
-        }
-      });
-      $(".comboboxD").css("visibility","visible");
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getAssetview")
+      $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -187,20 +179,12 @@ $('#goalModelClick').click(function(){
     crossDomain: true,
     url: serverIP + "/api/environments/all/names",
     success: function (data) {
-      $("#comboboxDialogSelect").empty();
+      $("#chooseEnvironmentSelect").empty();
       $.each(data, function(i, item) {
-        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+        $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
-      $( "#comboboxDialog" ).dialog({
-        modal: true,
-        buttons: {
-          Ok: function() {
-            $( this ).dialog( "close" );
-            getGoalview($( "#comboboxDialogSelect").find("option:selected" ).text());
-          }
-        }
-      });
-      $(".comboboxD").css("visibility","visible");
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getGoalview")
+      $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -221,20 +205,12 @@ $('#responsibilityModelClick').click(function(){
     crossDomain: true,
     url: serverIP + "/api/environments/all/names",
     success: function (data) {
-      $("#comboboxDialogSelect").empty();
+      $("#chooseEnvironmentSelect").empty();
       $.each(data, function(i, item) {
-        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+        $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
-      $( "#comboboxDialog" ).dialog({
-        modal: true,
-        buttons: {
-          Ok: function() {
-            $( this ).dialog( "close" );
-            getResponsibilityview($( "#comboboxDialogSelect").find("option:selected" ).text());
-          }
-        }
-      });
-      $(".comboboxD").css("visibility","visible");
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getResponsibilityview")
+      $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -255,20 +231,12 @@ $('#obstacleModelClick').click(function(){
     crossDomain: true,
     url: serverIP + "/api/environments/all/names",
     success: function (data) {
-      $("#comboboxDialogSelect").empty();
+      $("#chooseEnvironmentSelect").empty();
       $.each(data, function(i, item) {
-        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+        $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
-      $( "#comboboxDialog" ).dialog({
-        modal: true,
-        buttons: {
-          Ok: function() {
-            $( this ).dialog( "close" );
-            getObstacleview($( "#comboboxDialogSelect").find("option:selected" ).text());
-          }
-        }
-      });
-      $(".comboboxD").css("visibility","visible");
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getObstacleview")
+      $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -289,21 +257,12 @@ $('#riskModelClick').click(function(){
     crossDomain: true,
     url: serverIP + "/api/environments/all/names",
     success: function (data) {
-      $("#comboboxDialogSelect").empty();
+      $("#chooseEnvironmentSelect").empty();
       $.each(data, function(i, item) {
-        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+        $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
-      $( "#comboboxDialog" ).dialog({
-        modal: true,
-        position: {my: 'center', at: 'center', collision: 'fit'},
-        buttons: {
-          Ok: function() {
-            $( this ).dialog( "close" );
-            getRiskview($( "#comboboxDialogSelect").find("option:selected" ).text());
-          }
-        }
-      });
-      $(".comboboxD").css("visibility","visible");
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getRiskview")
+      $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -325,23 +284,12 @@ $('#taskModelClick').click(function(){
     crossDomain: true,
     url: serverIP + "/api/environments/all/names",
     success: function (data) {
-      $("#comboboxDialogSelect").empty();
+      $("#chooseEnvironmentSelect").empty();
       $.each(data, function(i, item) {
-        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
+        $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
-      $( "#comboboxDialog" ).dialog({
-        modal: true,
-        buttons: {
-          Ok: function() {
-            $( this ).dialog( "close" );
-            var envName = $('#comboboxDialogSelect').find("option:selected").text();
-            updateTaskBox(envName);
-            $('#tmtaskbox').val('All');
-            getTaskview(envName);
-          }
-        }
-      });
-      $(".comboboxD").css("visibility","visible");
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getTaskview")
+      $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -363,24 +311,11 @@ $('#personaModelClick').click(function(){
     crossDomain: true,
     url: serverIP + "/api/personas/all/names",
     success: function (data) {
-      $("#comboboxDialogSelect").empty();
-      $("#appersonasbox").empty();
+      $("#choosePersonaSelect").empty();
       $.each(data, function(i, item) {
-        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>")
-        $("#appersonasbox").append("<option value=" + item + ">"  + item + "</option>")
+        $("#choosePersonaSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
-      $( "#comboboxDialog" ).dialog({
-        modal: true,
-        buttons: {
-          Ok: function() {
-            $( this ).dialog( "close" );
-            var pName = $( "#comboboxDialogSelect").find("option:selected" ).text();
-            appendPersonaCharacteristics(pName,'All','All');
-            getPersonaView(pName,'All','All');
-          }
-        }
-      });
-      $(".comboboxD").css("visibility","visible");
+      $('#choosePersona').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));

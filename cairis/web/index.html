@@ -401,7 +401,48 @@
     <label for="comboboxDialogSelect" class="control-label"> Choose the environment</label>
     <select class="comboboxD form-control" id="comboboxDialogSelect">
     </select>
+  </div> 
+
+  <div class="modal fade" id="chooseEnvironment" tabindex="-1" role="dialog" aria-labelledby="ce_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Choose the environment</h4>
+        </div>
+        <div class="modal-body">
+          <select class="form-control" id="chooseEnvironmentSelect">
+          </select>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="chooseEnvironmentButton" class="btn btn-primary">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <div class="modal fade" id="choosePersona" tabindex="-1" role="dialog" aria-labelledby="cp_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Choose the persona</h4>
+        </div>
+        <div class="modal-body">
+          <select class="form-control" id="choosePersonaSelect">
+          </select>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="choosePersonaButton" class="btn btn-primary">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="errorDialog" title="ERROR">
     <p style="color: black">You can't use CAIRIS without any settings</p>
   </div>
@@ -673,6 +714,7 @@
       </div>
     </div>
   </div>
+
   <div class="modal fade" id="traceExplorer" tabindex="-1" role="dialog" aria-labelledby="te_label">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
