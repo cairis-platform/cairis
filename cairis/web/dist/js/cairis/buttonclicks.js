@@ -157,6 +157,7 @@ $('#assetModelClick').click(function(){
       $.each(data, function(i, item) {
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
+      $('#chooseEnvironment').attr('data-chooseDimension',"environment")
       $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getAssetview")
       $('#chooseEnvironment').modal('show');
     },
@@ -183,6 +184,7 @@ $('#goalModelClick').click(function(){
       $.each(data, function(i, item) {
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
+      $('#chooseEnvironment').attr('data-chooseDimension',"environment")
       $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getGoalview")
       $('#chooseEnvironment').modal('show');
     },
@@ -209,6 +211,7 @@ $('#responsibilityModelClick').click(function(){
       $.each(data, function(i, item) {
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
+      $('#chooseEnvironment').attr('data-chooseDimension',"environment")
       $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getResponsibilityview")
       $('#chooseEnvironment').modal('show');
     },
@@ -235,6 +238,7 @@ $('#obstacleModelClick').click(function(){
       $.each(data, function(i, item) {
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
+      $('#chooseEnvironment').attr('data-chooseDimension',"environment")
       $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getObstacleview")
       $('#chooseEnvironment').modal('show');
     },
@@ -261,6 +265,7 @@ $('#riskModelClick').click(function(){
       $.each(data, function(i, item) {
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
+      $('#chooseEnvironment').attr('data-chooseDimension',"environment")
       $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getRiskview")
       $('#chooseEnvironment').modal('show');
     },
@@ -288,6 +293,7 @@ $('#taskModelClick').click(function(){
       $.each(data, function(i, item) {
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
+      $('#chooseEnvironment').attr('data-chooseDimension',"environment")
       $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getTaskview")
       $('#chooseEnvironment').modal('show');
     },
@@ -311,11 +317,12 @@ $('#personaModelClick').click(function(){
     crossDomain: true,
     url: serverIP + "/api/personas/all/names",
     success: function (data) {
-      $("#choosePersonaSelect").empty();
+      $("#chooseEnvironmentSelect").empty();
       $.each(data, function(i, item) {
-        $("#choosePersonaSelect").append('<option value="' + item + '">'  + item + '</option>');
+        $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
-      $('#choosePersona').modal('show');
+      $('#chooseEnvironment').attr('data-chooseDimension',"persona")
+      $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));

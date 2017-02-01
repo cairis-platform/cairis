@@ -2206,18 +2206,16 @@ $("#traceExplorer").on('click', '#AddTrace',function(e) {
 });
 
 $("#chooseEnvironment").on('shown.bs.modal', function() {
+  $('#chooseTitle').text('Choose the ' + $('#chooseEnvironment').attr('data-chooseDimension') );
 });
 
 $("#chooseEnvironment").on('click', '#chooseEnvironmentButton',function(e) {
-  var cmd = eval($("#chooseEnvironment").attr("data-applyEnvironmentSelection"));
-  cmd($('#chooseEnvironmentSelect').val());
+  if ($('#chooseEnvironment').attr('data-chooseDimension') == 'persona') {
+    getPersonaView($('#chooseEnvironmentSelect').val(),'All','All');
+  }
+  else {
+    var cmd = eval($("#chooseEnvironment").attr("data-applyEnvironmentSelection"));
+    cmd($('#chooseEnvironmentSelect').val());
+  }
   $('#chooseEnvironment').modal('hide');
-});
-
-$("#choosePersona").on('shown.bs.modal', function() {
-});
-
-$("#choosePersona").on('click', '#choosePersonaButton',function(e) {
-  getPersonaView($('#choosePersonaSelect').val(),'All','All');
-  $('#choosePersona').modal('hide');
 });
