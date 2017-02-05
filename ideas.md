@@ -20,7 +20,7 @@ For a tool that supports design for security, code quality is important for CAIR
 
 <h2>CAIRIS mobile web apps</h2>
 
-The aim of this project is to develop a mobile web app that uses the CAIRIS API that can be used by security engineers or analysts to elicit data for a CAIRIS model.  Such an app might elicit data about prospective assets, or model information about tasks that people carry out with security implications.
+The aim of this project is to develop a mobile web app that uses the CAIRIS API that can be used by security engineers or analysts to elicit security or usability design data.  Such an app might elicit data about prospective assets, or capture information about tasks that people carry out with security implications.
 
 
 <h2>Student Proposals</h2>
