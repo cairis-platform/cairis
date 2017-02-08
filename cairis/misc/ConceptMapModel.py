@@ -39,7 +39,7 @@ class ConceptMapModel:
       self.fontSize = b.fontSize
 
     if (cfSet == True):
-      self.theGraph.set_node_defaults(shape='circle',colorscheme='set14',color='1',fontname=self.fontName,fontsize=self.fontSize,style='filled')
+      self.theGraph.set_node_defaults(shape='circle',colorscheme='set14',color='1',fontname=self.fontName,fontsize=self.fontSize)
     else:
       self.theGraph.set_node_defaults(shape='rectangle',colorscheme='spectral3',color='1',fontname=self.fontName,fontsize=self.fontSize)
     self.theGraph.set_edge_defaults(arrowhead='vee')
@@ -75,10 +75,12 @@ class ConceptMapModel:
     self.conceptNameSet = set([])
     self.assocSet = set([])
 
-    reqNodes = self.dbProxy.getDimensionNames('requirement',self.theEnvironmentName)
-    for nodeName in reqNodes:
-      self.buildNode(nodeName,self.theEnvironmentName)
-      self.conceptNameSet.add(nodeName)
+ 
+    if self.theConceptName == '':
+      reqNodes = self.dbProxy.getDimensionNames('requirement',self.theEnvironmentName)
+      for nodeName in reqNodes:
+        self.buildNode(nodeName,self.theEnvironmentName)
+        self.conceptNameSet.add(nodeName)
     
     for association in self.theAssociations:
       fromName = association.fromName()

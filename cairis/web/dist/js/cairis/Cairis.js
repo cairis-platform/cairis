@@ -336,6 +336,40 @@ $('#amconcernsbox').change(function() {
   }
 });
 
+$('#cmenvironmentsbox').change(function() {
+  var envName = $('#cmenvironmentsbox').val()
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+    },
+    crossDomain: true,
+    url: "/api/dimensions/table/requirement/environment/" + encodeURIComponent(envName),
+    success: function (data) {
+      fillObjectBox('#cmrequirementsbox','All',data);
+      $('#cmrequirementsbox').val('All');
+      getRequirementView(envName,'All');
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+
+
+});
+
+$('#cmrequirementsbox').change(function() {
+  if (window.theVisualModel == 'requirement') {
+    var envName = $('#cmenvironmentsbox').val()
+    var reqName = $('#cmrequirementsbox').val()
+    getRequirementView(envName,reqName);
+  }
+});
+
 function getAssetview(environment){
   window.assetEnvironment = environment;
   $('#amenvironmentsbox').val(environment);
@@ -513,7 +547,7 @@ function getResponsibilityview(environment,role){
 function getRequirementLabels(data) {
   var lbls = [];
   d3.select(data).selectAll('a').each(function(d) {
-    if ((d3.select(this).attr('xlink:href').indexOf('/api/requirements/shortcode') >= 0) && (d3.select(this).attr('xlink:title') != null)) {
+    if (((d3.select(this).attr('xlink:href').indexOf('/api/requirements/shortcode') >= 0) && (d3.select(this).attr('xlink:title') != null)) || ((d3.select(this).attr('xlink:href').indexOf('/api/requirements/name') >= 0) && (d3.select(this).attr('xlink:title') != null)))  {
       lbls.push(d3.select(this).attr('xlink:title'));
       d3.select(this).attr('class','requirement');
     }
@@ -630,7 +664,7 @@ function getRequirementScores(lbls) {
 function replaceRequirementNodes(data,reqDict) {
 
   d3.select(data).selectAll('a').each(function(d) {
-    if ((d3.select(this).attr('xlink:href').indexOf('/api/requirements/shortcode') >= 0) && (d3.select(this).attr('xlink:title') != null)) {
+    if (((d3.select(this).attr('xlink:href').indexOf('/api/requirements/shortcode') >= 0) && (d3.select(this).attr('xlink:title') != null)) || ((d3.select(this).attr('xlink:href').indexOf('/api/requirements/name') >= 0) && (d3.select(this).attr('xlink:title') != null))) {
       var reqLabel = d3.select(this).attr('xlink:title');
       var cxi = d3.select(this).select('ellipse').attr('cx');
       var cyi = d3.select(this).select('ellipse').attr('cy');
@@ -686,6 +720,32 @@ function getRiskview(environment,dimName,objtName,modelLayout){
     }
   });
 }
+
+function getRequirementView(environment,reqName){
+  window.assetEnvironment = environment;
+  $('#cmenvironmentsbox').val(environment);
+  reqName = (reqName == undefined || reqName == 'All') ? 'all' : reqName;
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+    },
+    crossDomain: true,
+    url: serverIP + "/api/requirements/model/environment/" + encodeURIComponent(environment) + "/requirement/" + encodeURIComponent(reqName),
+    success: function(data){
+      var lbls = getRequirementLabels(data);
+      var reqDict = getRequirementScores(lbls);
+      replaceRequirementNodes(data,reqDict);
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
 
 function getTaskview(environment,task,misusecase){
   if (task == undefined) {
@@ -1313,6 +1373,7 @@ function createComboboxes(){
       var tmEnvBox = $("#tmenvironmentsbox");
       var remEnvBox = $("#remenvironmentsbox");
       var rmEnvBox = $("#rmenvironmentsbox");
+      var cmEnvBox = $("#cmenvironmentsbox");
       envBox.empty();
       amEnvBox.empty();
       gmEnvBox.empty();
@@ -1320,6 +1381,7 @@ function createComboboxes(){
       tmEnvBox.empty();
       remEnvBox.empty();
       rmEnvBox.empty();
+      cmEnvBox.empty();
       $.each(data, function () {
         envBox.append($("<option />").val(this).text(this));
         amEnvBox.append($("<option />").val(this).text(this));
@@ -1328,6 +1390,7 @@ function createComboboxes(){
         tmEnvBox.append($("<option />").val(this).text(this));
         remEnvBox.append($("<option />").val(this).text(this));
         rmEnvBox.append($("<option />").val(this).text(this));
+        cmEnvBox.append($("<option />").val(this).text(this));
       });
 //      envBox.css("visibility", "visible");
 //      window.boxesAreFilled = true;
@@ -1412,6 +1475,7 @@ function activeElement(elementid){
     $("#filterapmodelcontent").hide();
     $("#filtertaskmodelcontent").hide();
     $("#filterobstaclemodelcontent").hide();
+    $("#filterconceptmapmodelcontent").hide();
     $("#rightnavGear").hide();
 
     if (elementid == 'svgViewer') {
@@ -1422,6 +1486,9 @@ function activeElement(elementid){
 
     if (window.theVisualModel == 'risk') {
       $("#filterriskmodelcontent").show();
+    }
+    if (window.theVisualModel == 'requirement') {
+      $("#filterconceptmapmodelcontent").show();
     }
     else if (window.theVisualModel == 'goal') {
       $("#filtergoalmodelcontent").show();
@@ -1454,6 +1521,7 @@ function activeElement(elementid){
     $("#filterapmodelcontent").hide();
     $("#filterresponsibilitymodelcontent").hide();
     $("#filterobstaclemodelcontent").hide();
+    $("#filterconceptmapmodelcontent").hide();
     $("#rightnavGear").hide();
   }
 

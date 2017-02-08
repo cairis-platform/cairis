@@ -276,6 +276,33 @@ $('#riskModelClick').click(function(){
   });
 });
 
+$('#requirementModelClick').click(function(){
+  window.theVisualModel = 'requirement';
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/environments/all/names",
+    success: function (data) {
+      $("#chooseEnvironmentSelect").empty();
+      $.each(data, function(i, item) {
+        $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
+      });
+      $('#chooseEnvironment').attr('data-chooseDimension',"environment")
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getRequirementView")
+      $('#chooseEnvironment').modal('show');
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
 
 $('#taskModelClick').click(function(){
   window.theVisualModel = 'task';
