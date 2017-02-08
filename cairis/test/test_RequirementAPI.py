@@ -19,6 +19,7 @@ import logging
 from urllib import quote
 import jsonpickle
 from cairis.core.Requirement import Requirement
+from cairis.core.Trace import Trace
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
 from cairis.mio.ModelImport import importModelFile
@@ -166,3 +167,39 @@ class RequirementAPITests(CairisDaemonTestCase):
       message = json_resp.get('message', None)
       self.assertIsNotNone(message, 'No message returned')
     self.logger.info('')
+
+  def test_concept_map_model(self):
+    url = '/api/requirements?environment=%s' % quote('Core Technology')
+    reqBody1 = self.new_requirement_dict
+    reqBody1['object'].theLabel='1'
+    reqBody1['object'].theName='OneRequirement'
+    reqBody1['object'].theDescription='OneRequirement description'
+    reqBody1['object'].attrs['asset'] =''
+    rv = self.app.post(url, content_type='application/json', data=jsonpickle.encode(reqBody1))
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    req_id = json_resp.get('requirement_id', None)
+    self.assertIsNotNone(req_id, 'No requirement ID returned')
+
+    reqBody2 = self.new_requirement_dict
+    reqBody2['object'].theLabel='2'
+    reqBody2['object'].theName='AnotherRequirement'
+    reqBody2['object'].theDescription='AnotherRequirement description'
+    reqBody2['object'].attrs['asset'] =''
+    rv = self.app.post(url, content_type='application/json', data=jsonpickle.encode(reqBody2))
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    req_id = json_resp.get('requirement_id', None)
+    self.assertIsNotNone(req_id, 'No requirement ID returned')
+
+    aTrace = Trace(fObjt = 'requirement',fName ='OneRequirement',tObjt = 'requirement', tName = 'AnotherRequirement')
+    traceDict = {'session_id' : 'test', 'object' : aTrace} 
+    rv = self.app.post('/api/traces', content_type='application/json', data=jsonpickle.encode(traceDict))
+
+    url = '/api/requirements/model/environment/Core%20Technology/requirement/all?session_id=test'
+    method = 'test_concept_map_model'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url, content_type='application/json')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.assertIsNotNone(rv.data, 'No results after deserialization')
+    self.assertEquals(rv.data.find('svg'),1)

@@ -285,6 +285,7 @@ api.add_resource(RequirementController.RequirementsByAssetAPI, '/api/requirement
 api.add_resource(RequirementController.RequirementsByEnvironmentAPI, '/api/requirements/environment/<string:name>',endpoint='requirement_environments')
 api.add_resource(RequirementController.RequirementByNameAPI, '/api/requirements/name/<string:name>',endpoint='requirement')
 api.add_resource(RequirementController.RequirementByShortcodeAPI, '/api/requirements/shortcode/<string:shortcode>',endpoint='requirement_shortcode')
+api.add_resource(RequirementController.ConceptMapModelAPI, '/api/requirements/model/environment/<string:environment>/requirement/<string:requirement>',endpoint='conceptmapmodel')
 
 # Response routes
 api.add_resource(ResponseController.ResponsesAPI, '/api/responses',endpoint='reponses')

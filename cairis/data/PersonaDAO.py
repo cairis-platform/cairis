@@ -28,6 +28,7 @@ from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import PersonaModel, PersonaEnvironmentPropertiesModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 from cairis.misc.AssumptionPersonaModel import AssumptionPersonaModel
+
 __author__ = 'Shamal Faily'
 
 
