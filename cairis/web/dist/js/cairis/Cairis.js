@@ -666,9 +666,13 @@ function replaceRequirementNodes(data,reqDict) {
   d3.select(data).selectAll('a').each(function(d) {
     if (((d3.select(this).attr('xlink:href').indexOf('/api/requirements/shortcode') >= 0) && (d3.select(this).attr('xlink:title') != null)) || ((d3.select(this).attr('xlink:href').indexOf('/api/requirements/name') >= 0) && (d3.select(this).attr('xlink:title') != null))) {
       var reqLabel = d3.select(this).attr('xlink:title');
+
+      var labelY = d3.select(this).selectAll('text').attr('y');
+      d3.select(this).selectAll('text').attr('y',labelY - 30);
+
       var cxi = d3.select(this).select('ellipse').attr('cx');
       var cyi = d3.select(this).select('ellipse').attr('cy');
-      var ri = d3.select(this).select('ellipse').attr('rx');
+      var ri = 25;
       d3.select(this).select('ellipse').remove();
       var svg = d3.select(this).attr("id","face" + reqLabel);
       var c = d3.chernoff()

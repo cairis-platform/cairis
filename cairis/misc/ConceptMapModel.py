@@ -62,7 +62,7 @@ class ConceptMapModel:
     if (reqObjt.priority() == 1):
       if tScore != 3: fontColour = 1
 
-    n = pydot.Node(objtName,color=str(tScore),fontcolor=str(fontColour),URL=objtUrl)
+    n = pydot.Node(objtName,color=str(tScore),fontcolor=str(fontColour),fontsize='5',URL=objtUrl)
     if (self.cfSet == False):
       n.obj_dict['attributes']['style'] = '"rounded,filled"'
     self.theClusters[envName].add_node(n)
