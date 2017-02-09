@@ -26,22 +26,6 @@ $("#genDocClick").click(function () {
 });
 
 var mainContent = $("#objectViewer");
-mainContent.on('change',"#theDocumentType",function(){
-  var docType = $(this).find('option:selected').text();
-  if (docType == 'Requirements') {
-    $("#requirementsSection").addClass('show');
-    $("#requirementsSection").removeClass('hidden');
-    $("#personasSection").addClass('hidden');
-    $("#personasSection").removeClass('show');
-  }
-  else {
-    $("#personasSection").addClass('show');
-    $("#personasSection").removeClass('hidden');
-    $("#requirementsSection").addClass('hidden');
-    $("#requirementsSection").removeClass('show');
-  }
-}); 
-
 mainContent.on('click',"#GenerateDocumentation", function (e) {
   e.preventDefault();
   var json = {}; 
