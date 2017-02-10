@@ -191,6 +191,14 @@ $('#gmenvironmentsbox').change(function() {
   });
 });
 
+$('#aparchitecturalpatternsbox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  getArchitecturalPatternView(selection);
+});
+
+
+
+
 $('#tmenvironmentsbox').change(function() {
   var selection = $(this).find('option:selected').text();
   updateTaskBox(selection);
@@ -383,7 +391,7 @@ function getAssetview(environment){
       hide_concerns: $('#amconcernsbox').find('option:selected').text() == 'Yes' ? '1' : '0'
     },
     crossDomain: true,
-    url: serverIP + "/api/assets/model/environment/" + environment.replace(" ","%20") + "/asset/" + assetName.replace(" ","%20"),
+    url: serverIP + "/api/assets/model/environment/" + encodeURIComponent(environment) + "/asset/" + assetName.replace(" ","%20"),
     success: function(data){
       fillSvgViewer(data);
     },
@@ -393,6 +401,27 @@ function getAssetview(environment){
     }
   });
 }
+
+function getArchitecturalPatternView(apName){
+  $('#aparchitecturalpatternsbox').val(apName);
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/architectural_patterns/component/model/" + encodeURIComponent(apName),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
 
 function getGoalview(environment,goalName,ucName){
   window.assetEnvironment = environment;
@@ -1480,6 +1509,7 @@ function activeElement(elementid){
     $("#filtertaskmodelcontent").hide();
     $("#filterobstaclemodelcontent").hide();
     $("#filterconceptmapmodelcontent").hide();
+    $("#filterarchitecturalpatternmodelcontent").hide();
     $("#rightnavGear").hide();
 
     if (elementid == 'svgViewer') {
@@ -1512,6 +1542,9 @@ function activeElement(elementid){
     else if (window.theVisualModel == 'persona') {
       $("#filterapmodelcontent").show();
     }
+    else if (window.theVisualModel == 'architectural_pattern') {
+      $("#filterarchitecturalpatternmodelcontent").show();
+    }
   }
   if(elementid != "svgViewer"){
     $("#svgViewer").hide();
@@ -1526,6 +1559,7 @@ function activeElement(elementid){
     $("#filterresponsibilitymodelcontent").hide();
     $("#filterobstaclemodelcontent").hide();
     $("#filterconceptmapmodelcontent").hide();
+    $("#filterarchitecturalpatternmodelcontent").hide();
     $("#rightnavGear").hide();
   }
 

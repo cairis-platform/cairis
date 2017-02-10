@@ -168,6 +168,36 @@ $('#assetModelClick').click(function(){
   })
 });
 
+$('#architecturalPatternModelClick').click(function(){
+  window.theVisualModel = 'architectural_pattern';
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/component_view",
+    success: function (data) {
+      $("#chooseEnvironmentSelect").empty();
+      $("#aparchitecturalpatternsbox").empty();
+      $.each(data, function(i, item) {
+        $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
+        $("#aparchitecturalpatternsbox").append('<option value="' + item + '">'  + item + '</option>');
+      });
+      $('#chooseEnvironment').attr('data-chooseDimension',"architectural pattern")
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getArchitecturalPatternView")
+      $('#chooseEnvironment').modal('show');
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  })
+});
+
+
 $('#goalModelClick').click(function(){
   window.theVisualModel = 'goal';
   $.ajax({
