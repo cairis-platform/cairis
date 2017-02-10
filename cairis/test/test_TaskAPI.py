@@ -176,6 +176,16 @@ class TaskAPITests(CairisDaemonTestCase):
 
     rv = self.app.delete('/api/tasks/name/%s?session_id=test' % quote(task_to_update.theName))
 
+  def test_misusability_model(self):
+    url = '/api/task/model/misusability/Policy%20conflict/characteristic/all?session_id=test'
+    method = 'test_misusability_model'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url, content_type='application/json')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.assertIsNotNone(rv.data, 'No results after deserialization')
+    self.assertEquals(rv.data.find('svg'),1)
+
+
   def prepare_new_task(self):
     new_task_props = [
       TaskEnvironmentProperties(

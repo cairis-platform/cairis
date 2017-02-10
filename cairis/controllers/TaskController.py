@@ -421,3 +421,62 @@ class TaskScoreByNameAPI(Resource):
     dao.close()
     resp = make_response(json_serialize(taskScore, session_id=session_id), httplib.OK)
     return resp
+
+class MisusabilityModelAPI(Resource):
+  #region Swagger Doc
+  @swagger.operation(
+    notes='Get task model for a specific environment',
+    responseClass=str.__name__,
+    nickname='task-model-by-task-environment-get',
+    parameters=[
+      {
+        "name": "mc_name",
+        "description": "The misusability case name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "tc_name",
+        "description": "The task characteristic name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  #endregion
+  def get(self, mc_name,tc_name):
+    session_id = get_session_id(session, request)
+    model_generator = get_model_generator()
+
+    dao = TaskDAO(session_id)
+    if tc_name == 'all':  tc_name = ''
+
+    dot_code = dao.get_misusability_model(mc_name,tc_name)
+    dao.close()
+
+    resp = make_response(model_generator.generate(dot_code, model_type='misusability',renderer='dot'), httplib.OK)
+
+    accept_header = request.headers.get('Accept', 'image/svg+xml')
+    if accept_header.find('text/plain') > -1:
+      resp.headers['Content-type'] = 'text/plain'
+    else:
+      resp.headers['Content-type'] = 'image/svg+xml'
+    return resp

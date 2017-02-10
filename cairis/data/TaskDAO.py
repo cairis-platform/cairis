@@ -24,11 +24,13 @@ from cairis.core.TaskParameters import TaskParameters
 from cairis.core.ValueType import ValueType
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 from cairis.misc.KaosModel import KaosModel
+from cairis.misc.AssumptionTaskModel import AssumptionTaskModel as GraphicalAssumptionTaskModel
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import TaskModel, TaskEnvironmentPropertiesModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 from cairis.tools.PseudoClasses import PersonaTaskCharacteristics
+
 
 __author__ = 'Shamal Faily'
 
@@ -282,6 +284,22 @@ class TaskDAO(CairisDAO):
       taskId = self.db_proxy.getDimensionId(task_name,'task')
       envId = self.db_proxy.getDimensionId(environment_name,'environment')
       return self.db_proxy.countermeasureLoad(taskId,envId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def get_misusability_model(self, mc_name,tc_name):
+    fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    try:
+      associations = self.db_proxy.assumptionTaskModel(mc_name,tc_name)
+      model = GraphicalAssumptionTaskModel(associations,db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
+      dot_code = model.graph()
+      if not dot_code:
+        raise ObjectNotFoundHTTPError('The misusability model')
+      return dot_code
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

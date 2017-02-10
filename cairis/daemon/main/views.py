@@ -328,6 +328,8 @@ api.add_resource(TaskController.TaskModelByNameAPI, '/api/tasks/model/environmen
 api.add_resource(TaskController.TaskLoadByNameAPI, '/api/tasks/name/<string:task>/environment/<string:environment>/load',endpoint='task_load')
 api.add_resource(TaskController.TaskHindranceByNameAPI, '/api/tasks/name/<string:task>/environment/<string:environment>/hindrance',endpoint='task_hindrance')
 api.add_resource(TaskController.TaskScoreByNameAPI, '/api/tasks/name/<string:task>/environment/<string:environment>/score',endpoint='task_score')
+api.add_resource(TaskController.MisusabilityModelAPI, '/api/tasks/model/misusability/<string:mc_name>/characteristic/<string:tc_name>',endpoint='misusability_model')
+
 
 # Template Asset routes
 api.add_resource(TemplateAssetController.TemplateAssetsAPI, '/api/template_assets',endpoint='template_assets')
