@@ -151,6 +151,7 @@ api.add_resource(ArchitecturalPatternController.ArchitecturalPatternsAPI, '/api/
 api.add_resource(ArchitecturalPatternController.ArchitecturalPatternByNameAPI, '/api/architectural_patterns/name/<string:name>', endpoint='architecturalpattern')
 api.add_resource(ArchitecturalPatternController.ComponentGoalModelAPI, '/api/architectural_patterns/component/goal/model/<string:component>', endpoint = 'componentgoals')
 api.add_resource(ArchitecturalPatternController.ComponentAssetModelAPI, '/api/architectural_patterns/component/asset/model/<string:component>', endpoint = 'componentassets')
+api.add_resource(ArchitecturalPatternController.ComponentModelAPI, '/api/architectural_patterns/component/model/<string:ap_name>', endpoint = 'componentmodel')
 
 # Asset routes
 api.add_resource(AssetController.AssetsAPI, '/api/assets',endpoint='assets')

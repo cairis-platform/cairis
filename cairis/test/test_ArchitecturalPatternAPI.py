@@ -150,6 +150,15 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(rv.data, 'No results after deserialization')
     self.assertEquals(rv.data.find('svg'),1)
 
+  def test_component_model(self):
+    url = '/api/architectural_patterns/component/model/Context%20Policy%20Management?session_id=test'
+    method = 'test_component_model'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url, content_type='application/json')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.assertIsNotNone(rv.data, 'No results after deserialization')
+    self.assertEquals(rv.data.find('svg'),1)
+
   def prepare_json(self, ap):
     data_dict = {'session_id' : 'test','object' : ap}
     new_ap_body = jsonpickle.encode(data_dict, unpicklable=False)

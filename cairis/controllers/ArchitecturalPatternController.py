@@ -376,3 +376,54 @@ class ComponentGoalModelAPI(Resource):
       resp.headers['Content-type'] = 'image/svg+xml'
 
     return resp
+
+class ComponentModelAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get the component model for a specific architectural pattern',
+    nickname='component-asset-model-get',
+    parameters=[
+      {
+        "name": "ap_name",
+        "description": "The architectural pattern",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self, ap_name):
+    session_id = get_session_id(session, request)
+    model_generator = get_model_generator()
+
+    dao = ArchitecturalPatternDAO(session_id)
+    dot_code = dao.get_component_model(ap_name)
+    dao.close()
+
+    if not isinstance(dot_code, str):
+      raise ObjectNotFoundHTTPError('The model')
+
+    resp = make_response(model_generator.generate(dot_code,renderer='dot'), httplib.OK)
+    accept_header = request.headers.get('Accept', 'image/svg+xml')
+    if accept_header.find('text/plain') > -1:
+      resp.headers['Content-type'] = 'text/plain'
+    else:
+      resp.headers['Content-type'] = 'image/svg+xml'
+
+    return resp

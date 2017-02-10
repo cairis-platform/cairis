@@ -25,6 +25,7 @@ from cairis.core.ComponentParameters import ComponentParameters
 from cairis.core.ConnectorParameters import ConnectorParameters
 from cairis.core.ComponentViewParameters import ComponentViewParameters
 from cairis.misc.AssetModel import AssetModel as GraphicalAssetModel
+from cairis.misc.ComponentModel import ComponentModel as GraphicalComponentModel
 from cairis.misc.KaosModel import KaosModel
 
 __author__ = 'Shamal Faily'
@@ -226,6 +227,22 @@ class ArchitecturalPatternDAO(CairisDAO):
     try:
       associationDictionary = self.db_proxy.componentGoalModel(cName)
       associations = KaosModel(associationDictionary.values(), '',kaosModelType='template_goal',db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
+      dot_code = associations.graph()
+      return dot_code
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except Exception as ex:
+      print(ex)
+
+  def get_component_model(self,cvName):
+    fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    try:
+      interfaces,connectors = self.db_proxy.componentView(cvName)
+      associations = GraphicalComponentModel(interfaces,connectors,db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
       dot_code = associations.graph()
       return dot_code
     except DatabaseProxyException as ex:
