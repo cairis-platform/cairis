@@ -427,6 +427,15 @@ var documentReferenceDefault = {
   "theContributor" : "",
   "theExcerpt" : ""
 };
+var conceptReferenceDefault = {
+  "__python_obj__": "ConceptReference.ConceptReference",
+  "theId": -1,
+  "theName" : "",
+  "theDimName" : "",
+  "theObjtName" : "",
+  "theDescription" : ""
+};
+
 var personaCharacteristicReferenceDefault = {
   "__python_obj__": "cairis.tools.PseudoClasses.PersonaCharacteristicReference",
   "theReferenceName" : "",

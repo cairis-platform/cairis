@@ -1743,6 +1743,10 @@ function setTableHeader(){
       debugLogger("Is Document References");
       thead = "<th width='50px' id='addNewDocumentReference'><i class='fa fa-plus floatCenter'></i></th><th>Document Reference</th><th>Document</th>";
       break;
+    case "ConceptReferences":
+      debugLogger("Is Concept References");
+      thead = "<th width='50px' id='addNewConceptReference'><i class='fa fa-plus floatCenter'></i></th><th>Concept Reference</th><th>Dimension</th>";
+      break;
     case "PersonaCharacteristics":
       debugLogger("Is Persona Characteristics");
       thead = "<th width='50px' id='addNewPersonaCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Variable</th><th>Characteristic</th>";

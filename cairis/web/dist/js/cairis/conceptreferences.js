@@ -19,11 +19,11 @@
 
 'use strict';
 
-$("#documentReferencesClick").click(function(){
-  createDocumentReferencesTable();
+$("#conceptReferencesClick").click(function(){
+  createConceptReferencesTable();
 });
 
-function createDocumentReferencesTable(){
+function createConceptReferencesTable(){
 
   $.ajax({
     type: "GET",
@@ -33,9 +33,9 @@ function createDocumentReferencesTable(){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/document_references",
+    url: serverIP + "/api/concept_references",
     success: function (data) {
-      window.activeTable = "DocumentReferences";
+      window.activeTable = "ConceptReferences";
       setTableHeader();
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
@@ -45,13 +45,13 @@ function createDocumentReferencesTable(){
       $.each(data, function(key, item) {
         textToInsert[i++] = "<tr>";
 
-        textToInsert[i++] = '<td class="deleteDocumentReferenceButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
-        textToInsert[i++] = '<td class="documentreference-rows" name="theName">';
+        textToInsert[i++] = '<td class="deleteConceptReferenceButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="conceptreference-rows" name="theName">';
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theDocName">';
-        textToInsert[i++] = item.theDocName;
+        textToInsert[i++] = '<td name="theDimName">';
+        textToInsert[i++] = item.theDimName;
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '</tr>';
@@ -72,7 +72,7 @@ function createDocumentReferencesTable(){
   })
 }
 
-$(document).on('click', "td.documentreference-rows", function () {
+$(document).on('click', "td.conceptreference-rows", function () {
   activeElement("objectViewer");
   var name = $(this).text();
   $.ajax({
@@ -83,21 +83,15 @@ $(document).on('click', "td.documentreference-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/document_references/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/concept_references/name/" + name.replace(" ", "%20"),
     success: function (data) {
-      fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editDocumentReferenceOptionsForm").validator();
-        $("#UpdateDocumentReference").text("Update");
-        var docNameSelect = $("#theDocName");
-        var docName = data.theDocName;
-        getDocNames(function(data) {
-          $.each(data, function(key, obj) {
-            docNameSelect.append($("<option></option>").attr("value",obj).text(obj));
-          });
-          docNameSelect.val(docName);
-        });
-        $.session.set("DocumentReference", JSON.stringify(data));
-        $('#editDocumentReferenceOptionsForm').loadJSON(data, null);
+      fillOptionMenu("fastTemplates/editConceptReferenceOptions.html", "#objectViewer", null, true, true, function () {
+        $("#editConceptReferenceOptionsForm").validator();
+        $("#UpdateConceptReference").text("Update");
+        $('#theDimName').val(data.theDimName);
+        getObjtNames(data.theDimName,data.theObjtName);
+        $.session.set("ConceptReference", JSON.stringify(data));
+        $('#editConceptReferenceOptionsForm').loadJSON(data, null);
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -107,56 +101,55 @@ $(document).on('click', "td.documentreference-rows", function () {
   });
 });
 
-var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdateDocumentReference', function (e) {
+mainContent.on('change', '#theDimName', function (e) {
   e.preventDefault();
-  var dr = JSON.parse($.session.get("DocumentReference"));
-  var oldName = dr.theName;
-  dr.theName = $("#theName").val();
-  dr.theDocName = $("#theDocName").val();
-  dr.theContributor = $("#theContributor").val();
-  dr.theExcerpt = $("#theExcerpt").val();
+  getObjtNames($('#theDimName').val());
+});
 
-  if($("#editDocumentReferenceOptionsForm").hasClass("new")){
-    postDocumentReference(dr, function () {
-      createDocumentReferencesTable();
-      $("#editDocumentReferenceOptionsForm").removeClass("new")
+var mainContent = $("#objectViewer");
+mainContent.on('click', '#UpdateConceptReference', function (e) {
+  e.preventDefault();
+  var cr = JSON.parse($.session.get("ConceptReference"));
+  var oldName = cr.theName;
+  cr.theName = $("#theName").val();
+  cr.theDimName = $("#theDimName").val();
+  cr.theObjtName = $("#theObjtName").val();
+  cr.theDescription = $("#theDescription").val();
+
+  if($("#editConceptReferenceOptionsForm").hasClass("new")){
+    postConceptReference(cr, function () {
+      createConceptReferencesTable();
+      $("#editConceptReferenceOptionsForm").removeClass("new")
     });
   }
   else {
-    putDocumentReference(dr, oldName, function () {
-      createDocumentReferencesTable();
+    putConceptReference(cr, oldName, function () {
+      createConceptReferencesTable();
     });
   }
 });
 
-$(document).on('click', 'td.deleteDocumentReferenceButton', function (e) {
+$(document).on('click', 'td.deleteConceptReferenceButton', function (e) {
   e.preventDefault();
-  deleteDocumentReference($(this).find('i').attr("value"), function () {
-    createDocumentReferencesTable();
+  deleteConceptReference($(this).find('i').attr("value"), function () {
+    createConceptReferencesTable();
   });
 });
 
-$(document).on("click", "#addNewDocumentReference", function () {
+$(document).on("click", "#addNewConceptReference", function () {
   activeElement("objectViewer");
-  fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#objectViewer", null, true, true, function () {
-    $("#editDocumentReferenceOptionsForm").validator();
-    $("#UpdateDocumentReference").text("Create");
-    $("#editDocumentReferenceOptionsForm").addClass("new");
-    $.session.set("DocumentReference", JSON.stringify(jQuery.extend(true, {},documentReferenceDefault )));
-    var docNameSelect = $("#theDocName");
-    getDocNames(function(data) {
-      $.each(data, function(key, obj) {
-        docNameSelect.append($("<option></option>").attr("value",obj).text(obj));
-      });
-    });
+  fillOptionMenu("fastTemplates/editConceptReferenceOptions.html", "#objectViewer", null, true, true, function () {
+    $("#editConceptReferenceOptionsForm").validator();
+    $("#UpdateConceptReference").text("Create");
+    $("#editConceptReferenceOptionsForm").addClass("new");
+    $.session.set("ConceptReference", JSON.stringify(jQuery.extend(true, {},conceptReferenceDefault )));
   });
 });
 
 
-function putDocumentReference(dr, oldName, callback){
+function putConceptReference(cr, oldName, callback){
   var output = {};
-  output.object = dr;
+  output.object = cr;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
   debugLogger(output);
@@ -170,7 +163,7 @@ function putDocumentReference(dr, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/document_references/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/concept_references/name/" + encodeURIComponent(oldName),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -186,9 +179,9 @@ function putDocumentReference(dr, oldName, callback){
   });
 }
 
-function postDocumentReference(dr, callback){
+function postConceptReference(cr, callback){
   var output = {};
-  output.object = dr;
+  output.object = cr;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
   debugLogger(output);
@@ -202,7 +195,7 @@ function postDocumentReference(dr, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/document_references" + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/concept_references",
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -218,7 +211,7 @@ function postDocumentReference(dr, callback){
   });
 }
 
-function deleteDocumentReference(name, callback){
+function deleteConceptReference(name, callback){
   $.ajax({
     type: "DELETE",
     dataType: "json",
@@ -227,7 +220,7 @@ function deleteDocumentReference(name, callback){
     crossDomain: true,
     processData: false,
     origin: serverIP,
-    url: serverIP + "/api/document_references/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/concept_references/name/" + encodeURIComponent(name) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -243,7 +236,7 @@ function deleteDocumentReference(name, callback){
   });
 }
 
-function getDocNames(callback){
+function getObjtNames(dimName,currentValue){
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -252,10 +245,15 @@ function getDocNames(callback){
       session_id: String($.session.get('sessionID'))
     },
     crfossDomain: true,
-    url: serverIP + "/api/dimensions/table/external_document",
+    url: serverIP + "/api/dimensions/table/" + dimName,
     success: function (data) {
-      if(jQuery.isFunction(callback)){
-        callback(data);
+      $('#theObjtName').empty();
+      $('#theObjtName').append($('<option>', {value: 'All', text: 'All'},'</option>'));
+      $.each(data, function (index, item) {
+        $('#theObjtName').append($('<option>', {value: item, text: item},'</option>'));
+      });
+      if (currentValue != undefined) {
+        $('#theObjtName').val(currentValue);
       }
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -265,8 +263,8 @@ function getDocNames(callback){
   });
 }
 
-mainContent.on('click', '#CloseDocumentReference', function (e) {
+mainContent.on('click', '#CloseConceptReference', function (e) {
   e.preventDefault();
-  createDocumentReferencesTable();
+  createConceptReferencesTable();
 });
 
