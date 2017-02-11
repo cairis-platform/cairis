@@ -27,7 +27,7 @@ def gen_class_metadata(class_ref):
   return {"enum": [class_ref.__module__+'.'+class_ref.__name__]}
 
 @swagger.model
-class PersonaCharacteristicReference(object):
+class CharacteristicReference(object):
   resource_fields = {
     obj_id_field: fields.String,
     'theReferenceName' : fields.String,
@@ -39,7 +39,7 @@ class PersonaCharacteristicReference(object):
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: {
-      'enum': [__name__+'.PersonaCharacteristicReference']
+      'enum': [__name__+'.CharacteristicReference']
     },
     "theCharacteristicType": {
       "enum": [

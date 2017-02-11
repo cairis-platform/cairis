@@ -29,7 +29,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController
+    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -334,6 +334,9 @@ api.add_resource(TaskController.TaskHindranceByNameAPI, '/api/tasks/name/<string
 api.add_resource(TaskController.TaskScoreByNameAPI, '/api/tasks/name/<string:task>/environment/<string:environment>/score',endpoint='task_score')
 api.add_resource(TaskController.MisusabilityModelAPI, '/api/tasks/model/misusability/<string:mc_name>/characteristic/<string:tc_name>',endpoint='misusability_model')
 
+# Task Characteristic routes
+api.add_resource(TaskCharacteristicController.TaskCharacteristicsAPI, '/api/task_characteristics',endpoint='task_characteristics')
+api.add_resource(TaskCharacteristicController.TaskCharacteristicByNameAPI, '/api/task_characteristics/name/<string:name>',endpoint='task_characteristic')
 
 # Template Asset routes
 api.add_resource(TemplateAssetController.TemplateAssetsAPI, '/api/template_assets',endpoint='template_assets')

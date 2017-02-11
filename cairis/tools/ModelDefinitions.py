@@ -58,6 +58,7 @@ from cairis.core.ExternalDocument import ExternalDocument
 from cairis.core.DocumentReference import DocumentReference
 from cairis.core.ConceptReference import ConceptReference
 from cairis.core.PersonaCharacteristic import PersonaCharacteristic
+from cairis.core.TaskCharacteristic import TaskCharacteristic
 from cairis.core.ComponentView import ComponentView
 from cairis.core.Component import Component
 from cairis.core.TemplateGoal import TemplateGoal
@@ -65,7 +66,7 @@ from cairis.core.TemplateAsset import TemplateAsset
 from cairis.core.TemplateRequirement import TemplateRequirement
 from cairis.core.Location import Location
 from cairis.core.Locations import Locations
-from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, PersonaCharacteristicReference,ObjectDependency
+from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, CharacteristicReference,ObjectDependency
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -1048,15 +1049,33 @@ class PersonaCharacteristicModel(object):
     "theModQual": fields.String,
     "theVariable": fields.String,
     "theCharacteristic": fields.String,
-    "theGrounds": fields.List(fields.Nested(PersonaCharacteristicReference.resource_fields)),
-    "theWarrant": fields.List(fields.Nested(PersonaCharacteristicReference.resource_fields)),
-    "theRebuttal": fields.List(fields.Nested(PersonaCharacteristicReference.resource_fields))
+    "theGrounds": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
+    "theWarrant": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
+    "theRebuttal": fields.List(fields.Nested(CharacteristicReference.resource_fields))
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field : gen_class_metadata(PersonaCharacteristic)
   }
+
+@swagger.model
+class TaskCharacteristicModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theTaskName": fields.String,
+    "theModQual": fields.String,
+    "theCharacteristic": fields.String,
+    "theGrounds": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
+    "theWarrant": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
+    "theRebuttal": fields.List(fields.Nested(CharacteristicReference.resource_fields))
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(TaskCharacteristic)
+  }
+
 
 @swagger.model
 class ObjectDependencyModel(object):

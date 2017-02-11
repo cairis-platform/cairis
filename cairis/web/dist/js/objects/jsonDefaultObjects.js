@@ -436,8 +436,8 @@ var conceptReferenceDefault = {
   "theDescription" : ""
 };
 
-var personaCharacteristicReferenceDefault = {
-  "__python_obj__": "cairis.tools.PseudoClasses.PersonaCharacteristicReference",
+var characteristicReferenceDefault = {
+  "__python_obj__": "cairis.tools.PseudoClasses.CharacteristicReference",
   "theReferenceName" : "",
   "theDimensionName" : "document",
   "theCharacteristicType" : "grounds",

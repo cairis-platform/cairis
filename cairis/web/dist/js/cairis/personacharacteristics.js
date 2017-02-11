@@ -337,7 +337,7 @@ function loadCharacteristicReference() {
 
 function addCharacteristicReference() {
   var cr = JSON.parse($("#editCharacteristicReference").data("crtype"));
-  var item = jQuery.extend(true, {},personaCharacteristicReferenceDefault );
+  var item = jQuery.extend(true, {},characteristicReferenceDefault );
   item.theReferenceName = $("#theReferenceName").val();
   item.theReferenceDescription = $("#theDescription").val();
   appendGWR(cr.tableId,cr.classId,item); 
@@ -361,7 +361,7 @@ function addCharacteristicReference() {
 
 function updateReferenceList() {
   var cr = JSON.parse($("#editCharacteristicReference").data("currentcr"));
-  var item = jQuery.extend(true, {},personaCharacteristicReferenceDefault );
+  var item = jQuery.extend(true, {},characteristicReferenceDefault );
   item.theReferenceName = $("#theReferenceName").val();
   item.theReferenceDescription = $("#theDescription").val();
   $(cr.tableId).find("tbody").find('tr:eq(' + cr.index + ')').find('td:eq(1)').text(item.theReferenceName);

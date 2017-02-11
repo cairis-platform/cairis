@@ -24,7 +24,7 @@ from cairis.core.PersonaCharacteristic import PersonaCharacteristic
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.mio.ModelImport import importModelFile
 from cairis.tools.JsonConverter import json_deserialize
-from cairis.tools.PseudoClasses import PersonaCharacteristicReference
+from cairis.tools.PseudoClasses import CharacteristicReference
 import os
 
 __author__ = 'Shamal Faily'
@@ -44,9 +44,9 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
       modQual = 'Maybe',
       vName = 'Activities',
       cDesc = 'This is a test characteristic',
-      pcGrounds = [{"theReferenceName": "Line manager site authorisation", "theDimensionName": "document", "theCharacteristicType": "grounds", "__python_obj__": "cairis.tools.PseudoClasses.PersonaCharacteristicReference", "theReferenceDescription": "Can only access sites they have been authorised to; permission for authorisation changes need to be sought from the line manager."}],
-      pcWarrant = [{"theReferenceDescription": "Work reports are filed and sent to ACME monthly.", "theDimensionName": "document", "theCharacteristicType": "warrant", "__python_obj__": "cairis.tools.PseudoClasses.PersonaCharacteristicReference", "theReferenceName": "Work reports are filed"}],
-      pcRebuttal = [{"theReferenceDescription": "Everything that happens is logged.", "theDimensionName": "document", "theCharacteristicType": "rebuttal", "__python_obj__": "cairis.tools.PseudoClasses.PersonaCharacteristicReference", "theReferenceName": "Everything is logged"}],
+      pcGrounds = [{"theReferenceName": "Line manager site authorisation", "theDimensionName": "document", "theCharacteristicType": "grounds", "__python_obj__": "cairis.tools.PseudoClasses.CharacteristicReference", "theReferenceDescription": "Can only access sites they have been authorised to; permission for authorisation changes need to be sought from the line manager."}],
+      pcWarrant = [{"theReferenceDescription": "Work reports are filed and sent to ACME monthly.", "theDimensionName": "document", "theCharacteristicType": "warrant", "__python_obj__": "cairis.tools.PseudoClasses.CharacteristicReference", "theReferenceName": "Work reports are filed"}],
+      pcRebuttal = [{"theReferenceDescription": "Everything that happens is logged.", "theDimensionName": "document", "theCharacteristicType": "rebuttal", "__python_obj__": "cairis.tools.PseudoClasses.CharacteristicReference", "theReferenceName": "Everything is logged"}],
       pcBacking = ['Business compliance GT concept'])
     self.new_pc_dict = {
       'session_id' : 'test',

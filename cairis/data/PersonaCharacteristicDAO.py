@@ -24,7 +24,7 @@ from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.ModelDefinitions import PersonaCharacteristicModel
 from cairis.tools.SessionValidator import check_required_keys
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-from cairis.tools.PseudoClasses import PersonaCharacteristicReference
+from cairis.tools.PseudoClasses import CharacteristicReference
 
 __author__ = 'Shamal Faily'
 
@@ -135,15 +135,15 @@ class PersonaCharacteristicDAO(CairisDAO):
       pcr_list = []
       if len(real_pc.theGrounds) > 0:
         for real_pcr in real_pc.theGrounds:
-          pcr_list.append(PersonaCharacteristicReference(real_pcr[0],'grounds',real_pcr[1],real_pcr[2]))
+          pcr_list.append(CharacteristicReference(real_pcr[0],'grounds',real_pcr[1],real_pcr[2]))
         real_pc.theGrounds = pcr_list
         pcr_list = []
         for real_pcr in real_pc.theWarrant:
-          pcr_list.append(PersonaCharacteristicReference(real_pcr[0],'warrant',real_pcr[1],real_pcr[2]))
+          pcr_list.append(CharacteristicReference(real_pcr[0],'warrant',real_pcr[1],real_pcr[2]))
         real_pc.theWarrant = pcr_list
         pcr_list = []
         for real_pcr in real_pc.theRebuttal:
-          pcr_list.append(PersonaCharacteristicReference(real_pcr[0],'rebuttal',real_pcr[1],real_pcr[2]))
+          pcr_list.append(CharacteristicReference(real_pcr[0],'rebuttal',real_pcr[1],real_pcr[2]))
         real_pc.theRebuttal = pcr_list
       return real_pc 
     elif fake_pc is not None:

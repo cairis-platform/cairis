@@ -355,6 +355,16 @@ class PersonaCharacteristicMessage(DefaultMessage):
 # region Swagger Doc
 @swagger.model
 @swagger.nested(
+  object=ModelDefinitions.TaskCharacteristicModel.__name__,
+)
+# endregion
+class TaskCharacteristicMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.TaskCharacteristicModel)
+  required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
   object=ModelDefinitions.ObjectDependencyModel.__name__,
 )
 # endregion
