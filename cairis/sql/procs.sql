@@ -10941,6 +10941,10 @@ begin
   elseif dimName = 'requirement'
   then
     select o.id into objtId from requirement o where o.name = objtName and o.version = (select max(i.version) from requirement i where i.id = o.id);
+    if objtId is null
+    then
+      select requirementId(objtName) into objtId;
+    end if;
     insert into requirement_reference(id,requirement_id,name,description) values (refId,objtId,refName,cDesc);
   elseif dimName = 'response'
   then
@@ -11018,6 +11022,10 @@ begin
   elseif dimName = 'requirement'
   then
     select o.id into objtId from requirement o where o.name = objtName and o.version = (select max(i.version) from requirement i where i.id = o.id);
+    if objtId is null
+    then
+      select requirementId(objtName) into objtId;
+    end if;
     update requirement_reference set requirement_id = objtId, name = refName, description = cDesc where id = refId;
   elseif dimName = 'response'
   then

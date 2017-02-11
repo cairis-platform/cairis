@@ -335,6 +335,16 @@ class DocumentReferenceMessage(DefaultMessage):
 # region Swagger Doc
 @swagger.model
 @swagger.nested(
+  object=ModelDefinitions.ConceptReferenceModel.__name__,
+)
+# endregion
+class ConceptReferenceMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.ConceptReferenceModel)
+  required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
   object=ModelDefinitions.PersonaCharacteristicModel.__name__,
 )
 # endregion

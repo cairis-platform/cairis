@@ -58,7 +58,7 @@ class PersonaCharacteristicDAO(CairisDAO):
     pcs = self.get_persona_characteristics()
     if pcs is None or len(pcs) < 1:
       self.close()
-      raise ObjectNotFoundHTTPError('External Documents')
+      raise ObjectNotFoundHTTPError('Persona characteristic')
     for key in pcs:
       pName,bvName,pcDesc = key.split('/')
       if (pcDesc == persona_characteristic_name):

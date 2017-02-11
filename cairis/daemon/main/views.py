@@ -29,7 +29,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController
+    PersonaCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -175,6 +175,10 @@ api.add_resource(AttackerController.AttackerCapabilitiesAPI, '/api/attackers/cap
 api.add_resource(AttackerController.AttackerCapabilityByNameAPI, '/api/attackers/capabilities/name/<string:name>',endpoint='attackercapability')
 api.add_resource(AttackerController.AttackerMotivationsAPI, '/api/attackers/motivations',endpoint='motivations')
 api.add_resource(AttackerController.AttackerMotivationByNameAPI, '/api/attackers/motivations/name/<string:name>',endpoint='motivationbyname')
+
+# Concept Reference routes
+api.add_resource(ConceptReferenceController.ConceptReferencesAPI, '/api/concept_references',endpoint='concept_references')
+api.add_resource(ConceptReferenceController.ConceptReferenceByNameAPI, '/api/concept_references/name/<string:name>',endpoint='concept_reference')
 
 # Countermeasure routes
 api.add_resource(CountermeasureController.CountermeasuresAPI, '/api/countermeasures',endpoint='countermeasures')

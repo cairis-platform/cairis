@@ -56,6 +56,7 @@ from cairis.core.ClassAssociation import ClassAssociation
 from cairis.core.GoalAssociation import GoalAssociation
 from cairis.core.ExternalDocument import ExternalDocument
 from cairis.core.DocumentReference import DocumentReference
+from cairis.core.ConceptReference import ConceptReference
 from cairis.core.PersonaCharacteristic import PersonaCharacteristic
 from cairis.core.ComponentView import ComponentView
 from cairis.core.Component import Component
@@ -1022,6 +1023,22 @@ class DocumentReferenceModel(object):
   swagger_metadata = {
     obj_id_field : gen_class_metadata(DocumentReference)
   }
+
+@swagger.model
+class ConceptReferenceModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theName": fields.String,
+    "theDimName": fields.String,
+    "theObjtName": fields.String,
+    "theDescription": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(ConceptReference)
+  }
+
 
 @swagger.model
 class PersonaCharacteristicModel(object):
