@@ -177,7 +177,7 @@ class TaskAPITests(CairisDaemonTestCase):
     rv = self.app.delete('/api/tasks/name/%s?session_id=test' % quote(task_to_update.theName))
 
   def test_misusability_model(self):
-    url = '/api/task/model/misusability/Policy%20conflict/characteristic/all?session_id=test'
+    url = '/api/tasks/model/misusability/Policy%20conflict/characteristic/all?session_id=test'
     method = 'test_misusability_model'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url, content_type='application/json')
