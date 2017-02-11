@@ -423,6 +423,62 @@ function getArchitecturalPatternView(apName){
 }
 
 
+function getMisusabilityView(mcName,tcName){
+//  $('#mmmisusabilitycasesbox').val(mcName);
+  if (tcName == undefined) {
+    tcName = 'All'
+  }
+  tcName = tcName == "All" ? "all" : tcName;
+
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/tasks/model/misusability/" + encodeURIComponent(mcName) + "/characteristic/" + encodeURIComponent(tcName),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+$('#mmtaskcharacteristicsbox').change(function() {
+  if (window.theVisualModel == 'misusability') {
+    getMisusabilityView($('#mmmisusabilitycasesbox').val(),$('#mmtaskcharacteristicsbox').val());
+  }
+});
+
+$('#mmmisusabilitycasesbox').change(function() {
+  var mcName = $(this).find('option:selected').val();
+  $('#mmtaskcharacteristicsbox').val('All');
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/task_characteristic/environment/" + encodeURIComponent(mcName),
+    success: function(data) {
+      fillObjectBox('#mmtaskcharacteristicsbox','All',data);
+      $('#mmtaskcharacteristicsbox').val('All');
+      getMisusabilityView(mcName,'All');
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+
+
 function getGoalview(environment,goalName,ucName){
   window.assetEnvironment = environment;
   $('#gmenvironmentsbox').val(environment);
@@ -1510,6 +1566,7 @@ function activeElement(elementid){
     $("#filterobstaclemodelcontent").hide();
     $("#filterconceptmapmodelcontent").hide();
     $("#filterarchitecturalpatternmodelcontent").hide();
+    $("#filtermisusabilitymodelcontent").hide();
     $("#rightnavGear").hide();
 
     if (elementid == 'svgViewer') {
@@ -1545,6 +1602,9 @@ function activeElement(elementid){
     else if (window.theVisualModel == 'architectural_pattern') {
       $("#filterarchitecturalpatternmodelcontent").show();
     }
+    else if (window.theVisualModel == 'misusability') {
+      $("#filtermisusabilitymodelcontent").show();
+    }
   }
   if(elementid != "svgViewer"){
     $("#svgViewer").hide();
@@ -1560,6 +1620,7 @@ function activeElement(elementid){
     $("#filterobstaclemodelcontent").hide();
     $("#filterconceptmapmodelcontent").hide();
     $("#filterarchitecturalpatternmodelcontent").hide();
+    $("#filtermisusabilitymodelcontent").hide();
     $("#rightnavGear").hide();
   }
 
@@ -2318,6 +2379,27 @@ $("#chooseEnvironment").on('shown.bs.modal', function() {
 $("#chooseEnvironment").on('click', '#chooseEnvironmentButton',function(e) {
   if ($('#chooseEnvironment').attr('data-chooseDimension') == 'persona') {
     getPersonaView($('#chooseEnvironmentSelect').val(),'All','All');
+  }
+  else if ($('#chooseEnvironment').attr('data-chooseDimension') == 'misusability case') {
+    var mcName = $('#chooseEnvironmentSelect').val();
+    $.ajax({
+      type:"GET",
+      accept:"application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + "/api/dimensions/table/task_characteristic/environment/" + encodeURIComponent(mcName),
+      success: function(data) {
+        fillObjectBox('#mmtaskcharacteristicsbox','All',data);
+        $('#mmtaskcharacteristicsbox').val('All');
+        getMisusabilityView(mcName,'All');
+      },
+      error: function(xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
   }
   else {
     var cmd = eval($("#chooseEnvironment").attr("data-applyEnvironmentSelection"));

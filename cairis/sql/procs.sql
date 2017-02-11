@@ -11529,9 +11529,14 @@ begin
 end
 //
 
-create procedure task_characteristicNames(in envName text)
+create procedure task_characteristicNames(in taskName text)
 begin
-  select description from task_characteristic order by 1;
+  if taskName != ''
+  then
+    select description from task_characteristic where task_id in (select id from task where name = taskName) order by 1;
+  else
+    select description from task_characteristic order by 1;
+  end if;
 end
 //
 

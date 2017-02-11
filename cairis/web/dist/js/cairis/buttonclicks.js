@@ -194,8 +194,38 @@ $('#architecturalPatternModelClick').click(function(){
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
-  })
+  });
 });
+
+$('#misusabilityModelClick').click(function(){
+  window.theVisualModel = 'misusability';
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/misusability_case",
+    success: function (data) {
+      $("#chooseEnvironmentSelect").empty();
+      $("#mmmisusabilitycasesbox").empty();
+      $.each(data, function(i, item) {
+        $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
+        $("#mmmisusabilitycasesbox").append('<option value="' + item + '">'  + item + '</option>');
+      });
+      $('#chooseEnvironment').attr('data-chooseDimension',"misusability case")
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getMisusabilityView")
+      $('#chooseEnvironment').modal('show');
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
 
 
 $('#goalModelClick').click(function(){
