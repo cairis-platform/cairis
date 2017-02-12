@@ -576,29 +576,3 @@ function postTask(task, callback){
     }
   });
 }
-
-function updateTaskBox(envName) {
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/dimensions/table/task/environment/" + encodeURIComponent(envName),
-    success: function (tasks) {
-      $('#tmtaskbox option').remove();
-      $('#tmtaskbox').append($("<option></option>").attr("value",'All').text('All'));
-      $.each(tasks,function(idx,task) {
-        $('#tmtaskbox').append($("<option></option>").attr("value",task).text(task));
-      });  
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      var error = JSON.parse(xhr.responseText);
-      showPopup(false, String(error.message));
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
-}

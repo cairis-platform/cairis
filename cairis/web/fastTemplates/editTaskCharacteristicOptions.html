@@ -1,0 +1,61 @@
+<form role="form" data-toggle="validator" id="editTaskCharacteristicOptionsForm" xmlns="http://www.w3.org/1999/html" >
+  <div class="tabs">
+    <ul>
+      <li><a href="#general">General</a></li>
+      <li><a href="#grounds">Grounds</a></li>
+      <li><a href="#warrant">Warrant</a></li>
+      <li><a href="#rebuttal">Rebuttal</a></li>
+    </ul>
+    <div id="general">
+      <div class="form-group">
+        <label for="theTaskName" class="control-label">Task</label>
+        <select class="form-control" id="theTaskName" data-error="Task is required" required>
+        </select>
+        <div class="help-block with-errors"></div>
+      </div>
+      <div class="form-group">
+        <label for="theModQual" class="control-label">Modal Qualifier</label>
+        <input class="optionsInput taskCharacteristicUpdate form-control" type="text" name="theModQual" id="theModQual" style="width: 75%;" data-error="Modal Qualifier is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
+      <div class="form-group">
+        <label for='theCharacteristic' class="control-label">Definition</label>
+        <textarea rows="15" class="form-control" name="theCharacteristic" id="theCharacteristic" style="width: 100%" data-error="Definition is required" required></textarea>
+        <div class="help-block with-errors"></div>
+      </div>
+    </div>
+    <div id="grounds">
+      <table class="clickable-table" id="theGrounds">
+        <thead>
+          <tr><th id="addGrounds"><i class="fa fa-plus"></i></th><th>Reference</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div id="warrant">
+      <table class="clickable-table" id="theWarrant">
+        <thead>
+          <tr><th id="addWarrant"><i class="fa fa-plus"></i></th><th>Reference</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div id="rebuttal">
+      <table class="clickable-table" id="theRebuttal">
+        <thead>
+          <tr><th id="addRebuttal"><i class="fa fa-plus"></i></th><th>Reference</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5">
+      <button type="submit" class="btn btn-primary" id="UpdateTaskCharacteristic">Update</button>
+      <button type="submit" class="btn btn-secondary" id="CloseTaskCharacteristic">Close</button>
+    </div>
+  </div>
+</form>

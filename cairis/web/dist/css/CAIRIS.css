@@ -327,7 +327,7 @@ select#theType {
     display : block;
     position : fixed;
     z-index: 100;
-    background-image : url("Preloader_3.gif");
+    background-image : url("loading.gif");
     background-repeat : no-repeat;
     background-position : center;
     left : 0;

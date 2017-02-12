@@ -31,7 +31,7 @@ mainContent.on('click',"#GenerateDocumentation", function (e) {
   var json = {}; 
   var docType = $("#theDocumentType").val();
   var outputType = $("#theOutputType").val();
-  var genDocUrl = serverIP + "/api/documentation/type/" + docType + "/format/" + outputType;
+  var genDocUrl = serverIP + "/api/documentation/type/" + docType + "/format/" + outputType + "?session_id=" + String($.session.get('sessionID'));
   showLoading();
 
   $.ajax({

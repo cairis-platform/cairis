@@ -455,6 +455,17 @@ var personaCharacteristicDefault = {
   "theRebuttal" : [],
   "theBacking" :[] 
 };
+var taskCharacteristicDefault = {
+  "__python_obj__": "TaskCharacteristic.TaskCharacteristic",
+  "theId": -1,
+  "theTaskName" : "",
+  "theModQual" : "",
+  "theCharacteristic" : "",
+  "theGrounds" : [],
+  "theWarrant" : [],
+  "theRebuttal" : [],
+  "theBacking" :[] 
+};
 var valueTypeDefault = {
   "__python_obj__": "ValueType.ValueType",
   "theId": -1,

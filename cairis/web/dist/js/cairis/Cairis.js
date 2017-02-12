@@ -44,7 +44,6 @@ $(document).ready(function() {
         debugLogger(data);
         var sessionID = data.session_id;
         $.session.set("sessionID", sessionID);
-//        startingTable();
         createComboboxes();
         summaryTables();
         hideLoading();
@@ -57,7 +56,6 @@ $(document).ready(function() {
     });
   }
   else {
-//    startingTable();
     createComboboxes();
     summaryTables();
   }
@@ -201,7 +199,7 @@ $('#aparchitecturalpatternsbox').change(function() {
 
 $('#tmenvironmentsbox').change(function() {
   var selection = $(this).find('option:selected').text();
-  updateTaskBox(selection);
+  getTaskview(selection,'all','all');
 });
 
 
@@ -344,6 +342,14 @@ $('#amconcernsbox').change(function() {
   }
 });
 
+$('#amenvironmentsbox').change(function() {
+  if (window.theVisualModel == 'asset') {
+    getAssetview($('#amenvironmentsbox').val());
+  }
+});
+
+
+
 $('#cmenvironmentsbox').change(function() {
   var envName = $('#cmenvironmentsbox').val()
 
@@ -378,6 +384,12 @@ $('#cmrequirementsbox').change(function() {
   }
 });
 
+$('#amassetsbox').change(function() {
+  if (window.theVisualModel == 'asset') {
+    getAssetview($('#amenvironmentsbox').val());
+  }
+});
+
 function getAssetview(environment){
   window.assetEnvironment = environment;
   $('#amenvironmentsbox').val(environment);
@@ -391,7 +403,7 @@ function getAssetview(environment){
       hide_concerns: $('#amconcernsbox').find('option:selected').text() == 'Yes' ? '1' : '0'
     },
     crossDomain: true,
-    url: serverIP + "/api/assets/model/environment/" + encodeURIComponent(environment) + "/asset/" + assetName.replace(" ","%20"),
+    url: serverIP + "/api/assets/model/environment/" + encodeURIComponent(environment) + "/asset/" + encodeURIComponent(assetName),
     success: function(data){
       fillSvgViewer(data);
     },
@@ -837,7 +849,7 @@ function getRequirementView(environment,reqName){
 
 
 function getTaskview(environment,task,misusecase){
-  if (task == undefined) {
+  if (task == undefined || task == 'all') {
     $.ajax({
       type: "GET",
       dataType: "json",
@@ -846,10 +858,9 @@ function getTaskview(environment,task,misusecase){
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + "/api/tasks/environment/" + encodeURIComponent(environment) + "/names",
+      url: serverIP + "/api/dimensions/table/task/environment/" + encodeURIComponent(environment),
 
       success: function (data) {
-        updateTaskBox(environment);
         $("#tmtaskbox").empty()
         $('#tmtaskbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
         $.each(data, function (index, item) {
@@ -863,7 +874,7 @@ function getTaskview(environment,task,misusecase){
       }
     });
   }
-  if (misusecase == undefined) {
+  if (misusecase == undefined || misusecase == 'all') {
     $.ajax({
       type: "GET",
       dataType: "json",
@@ -1750,6 +1761,10 @@ function setTableHeader(){
     case "PersonaCharacteristics":
       debugLogger("Is Persona Characteristics");
       thead = "<th width='50px' id='addNewPersonaCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Variable</th><th>Characteristic</th>";
+      break;
+    case "TaskCharacteristics":
+      debugLogger("Is Task Characteristics");
+      thead = "<th width='50px' id='addNewTaskCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Task</th><th>Characteristic</th>";
       break;
     case "ArchitecturalPatterns":
       debugLogger("Is Architectural Patterns");

@@ -102,6 +102,7 @@
               <li><a id="documentReferencesClick" href="#">Document References</a></li>
               <li><a id="conceptReferencesClick" href="#">Concept References</a></li>
               <li><a id="personaCharacteristicsClick" href="#">Persona Characteristics</a></li>
+              <li><a id="taskCharacteristicsClick" href="#">Task Characteristics</a></li>
               <li><a id="locationsClick" href="#">Locations</a></li>
             </ul>
           </li>
@@ -169,7 +170,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header" style="margin-left: 5px; margin-right: 5px; margin-bottom: 5px;">
-      <div id="filtercontent" class="extraContent row form-group">
+      <div id="filtercontent" class="extraContent row form-group" style="display:none">
         <div class="col-md-1">
           <label class="topCombobox control-label">Assets</label>
         </div>
@@ -327,18 +328,18 @@
           </select>
         </div>
       </div>
-      <div id="filterassetmodelcontent" class="extraContent row form-group">
-        <div class="col-md-1">
-          <label class="topCombobox control-label" for="amassetsbox">Assets</label>
-        </div>
-        <div class="col-md-2">
-          <select class="topCombobox form-control" id="amassetsbox" ></select>
-        </div>
+      <div id="filterassetmodelcontent" class="extraContent row form-group" style="display:none">
         <div class="col-md-2">
           <label class="topCombobox control-label" for="amenvironmentsbox">Environments</label>
         </div>
         <div class="col-md-2">
           <select class="topCombobox form-control" id="amenvironmentsbox" ></select>
+        </div>
+        <div class="col-md-1">
+          <label class="topCombobox control-label" for="amassetsbox">Assets</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="amassetsbox" ></select>
         </div>
         <div class="col-md-1">
           <label class="topCombobox control-label" for="amconcernsbox">Hide Concerns</label>
@@ -350,7 +351,7 @@
           </select>
         </div>
       </div>
-      <div id="filterconceptmapmodelcontent" class="extraContent row form-group">
+      <div id="filterconceptmapmodelcontent" class="extraContent row form-group" style="display:none">
         <div class="col-md-2">
           <label class="topCombobox control-label" for="cmenvironmentsbox">Environments</label>
         </div>
@@ -364,7 +365,7 @@
           <select class="topCombobox form-control" id="cmrequirementsbox" ></select>
         </div>
       </div>
-      <div id="filterarchitecturalpatternmodelcontent" class="extraContent row form-group">
+      <div id="filterarchitecturalpatternmodelcontent" class="extraContent row form-group" style="display:none">
         <div class="col-md-2">
           <label class="topCombobox control-label" for="aparchitecturalpatternsbox">Architectural Patterns</label>
         </div>
@@ -372,7 +373,7 @@
           <select class="topCombobox form-control" id="aparchitecturalpatternsbox" ></select>
         </div>
       </div>
-      <div id="filtermisusabilitymodelcontent" class="extraContent row form-group">
+      <div id="filtermisusabilitymodelcontent" class="extraContent row form-group" style="display:none">
         <div class="col-md-2">
           <label class="topCombobox control-label" for="mmmisusabilitycasesbox">Misusability Cases</label>
         </div>
@@ -789,14 +790,26 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label for="theDocumentType" class="control-label">Document Type</label>
-            <select class="optionsInput form-control" name="theDocumentType" id="theDocumentType" style="width: 75%;" required>
-              <option>document</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="theArtifactName" class="control-label">Artifact</label>
-            <select class="optionsInput form-control" style="width: 75%;" name="theArtifactName" id="theArtifactName">
+            <label for="theArtifactType" class="control-label">Artifact Type</label>
+            <select class="optionsInput form-control" name="theArtifactType" id="theArtifactType" style="width: 75%;" required>
+              <option value="document_reference">Document</option>
+              <option value="asset">Asset</option>
+              <option value="attacker">Attacker</option>
+              <option value="countermeasure">Countermeasure</option>
+              <option value="domainproperty">Domain Property</option>
+              <option value="environment">Environment</option>
+              <option value="goal">Goal</option>
+              <option value="misusecase">Misuse Case</option>
+              <option value="obstacle">Obstacle</option>
+              <option value="persona">Persona</option>
+              <option value="requirement">Requirement</option>
+              <option value="response">Response</option>
+              <option value="risk">Risk</option>
+              <option value="role">Role</option>
+              <option value="task">Task</option>
+              <option value="threat">Threat</option>
+              <option value="usecase">Use Case</option>
+              <option value="vulnerability">Vulnerability</option>
             </select>
           </div>
           <div class="form-group">
@@ -879,7 +892,7 @@
   <script>
     LazyLoad.js(["dist/js/cairis/Cairis-UI.js","dist/js/cairis/buttonclicks.js", "dist/js/cairis/Cairis.js", "dist/js/cairis/readFile.js",
         "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/personas.js", "dist/js/cairis/assets.js", "dist/js/cairis/templateassets.js","dist/js/cairis/templaterequirements.js","dist/js/cairis/templategoals.js","dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js", "dist/js/cairis/tasks.js", "dist/js/cairis/domainproperties.js", "dist/js/cairis/obstacles.js", "dist/js/cairis/countermeasures.js", "dist/js/cairis/usecases.js","dist/js/cairis/vulnerabilities.js","dist/js/cairis/architecturalpatterns.js","dist/js/cairis/requirements.js",
-        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js","dist/js/cairis/environments.js","dist/js/cairis/valuetypes.js","dist/js/cairis/locations.js","dist/js/cairis/traceability.js","dist/js/cairis/chernoff.js","dist/js/cairis/conceptreferences.js",
+        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/taskcharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js","dist/js/cairis/environments.js","dist/js/cairis/valuetypes.js","dist/js/cairis/locations.js","dist/js/cairis/traceability.js","dist/js/cairis/chernoff.js","dist/js/cairis/conceptreferences.js",
         "dist/js/cairis/SVGhandler.js","dist/js/objects/jsonDefaultObjects.js"], function () {
 
       console.log("All Cairis JS loaded");
