@@ -154,7 +154,8 @@ function viewTask(taskName) {
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendTaskEnvironment(env.theEnvironmentName);
         });
-        $("#theEnvironments").find(".taskEnvironment:first").trigger('click');
+        fillTaskEnvInfo(data.theEnvironmentProperties[0]);
+        $.session.set("taskEnvironmentName", data.theEnvironmentProperties[0].theEnvironmentName);
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -163,6 +164,28 @@ function viewTask(taskName) {
     }
   });
 };
+
+function fillTaskEnvInfo(env) {
+  clearTaskEnvInfo();
+  $('#theDependencies').val(env.theDependencies);
+  $('#theNarrative').val(env.theNarrative);
+  $('#theConsequences').val(env.theConsequences);
+  $('#theBenefits').val(env.theBenefits);
+          
+  $.each(env.theAssets, function(index,concern) {
+    appendTaskConcern(concern);
+  });
+
+  for (var i = 0; i < env.thePersonas.length; i++) {
+    appendTaskPersona(env.thePersonas[i]['thePersona'],window.reverseDurationLookup[env.thePersonas[i]['theDuration']],window.reverseFrequencyLookup[env.thePersonas[i]['theFrequency']],env.thePersonas[i]['theDemands'],env.thePersonas[i]['theGoalConflict']);
+  }
+
+  for (var i = 0; i < env.theConcernAssociations.length; i++) {
+    var aCol = [];
+    $.each(env.theConcernAssociations[i], function(idx,val) { aCol.push(val); });
+    appendConcernAssociation(aCol[0]);
+  }
+}
 
 
 var mainContent = $("#objectViewer");
@@ -183,30 +206,11 @@ mainContent.on("click",".taskEnvironment", function () {
   $.session.set("Task", JSON.stringify(task));
   task = JSON.parse($.session.get("Task"));
 
-
-  clearTaskEnvInfo();
-  var theEnvName = $(this).text();
-  $.session.set("taskEnvironmentName", theEnvName);
+  var envName = $(this).text();
+  $.session.set("taskEnvironmentName", envName);
   $.each(task.theEnvironmentProperties, function (index, env) {
-    if(env.theEnvironmentName == theEnvName){
-      $('#theDependencies').val(env.theDependencies);
-      $('#theNarrative').val(env.theNarrative);
-      $('#theConsequences').val(env.theConsequences);
-      $('#theBenefits').val(env.theBenefits);
-          
-      $.each(env.theAssets, function(index,concern) {
-        appendTaskConcern(concern);
-      });
-
-      for (var i = 0; i < env.thePersonas.length; i++) {
-        appendTaskPersona(env.thePersonas[i]['thePersona'],window.reverseDurationLookup[env.thePersonas[i]['theDuration']],window.reverseFrequencyLookup[env.thePersonas[i]['theFrequency']],env.thePersonas[i]['theDemands'],env.thePersonas[i]['theGoalConflict']);
-      }
-
-      for (var i = 0; i < env.theConcernAssociations.length; i++) {
-        var aCol = [];
-        $.each(env.theConcernAssociations[i], function(idx,val) { aCol.push(val); });
-        appendConcernAssociation(aCol[0]);
-      }
+    if(env.theEnvironmentName == envName){
+      fillTaskEnvInfo(env);
     }
   });
 });
