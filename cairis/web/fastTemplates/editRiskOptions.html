@@ -87,7 +87,7 @@
     </div>
   </div>
   <div class="inblock">
-    <table class="left clickable-table" id="theMisuseEnvironments">
+    <table class="left clickable-table" id="theMisuseEnvironments" style="width: 25%;">
       <thead>
         <th>Environment</th>
       </thead>
@@ -101,64 +101,70 @@
       </ul>
       <div id="Summary">
         <div class="row">
-          <div class="col-md-3">
-            <table id="attackerTable">
-              <thead><tr><th>Attacker</th></tr></thead>
-              <tbody></tbody>
-            </table>
+          <div class="col-md-2">
+            <label for="attackerTable" class="control-label">Attackers</label> 
           </div>
-          <div class="col-md-9">
-            <table id="assetTable">
-              <thead><tr><th>Asset</th></tr></thead>
+          <div class="col-md-10">
+            <table id="attackerTable" class="table table-bordered" style="width: 100%;">
               <tbody></tbody>
             </table>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-2">
+            <label for="assetTable" class="control-label">Assets</label> 
+          </div>
+          <div class="col-md-10">
+            <table id="assetTable" class="table table-bordered" style="width: 100%;">
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
             <label for="theMisuseObject" class="control-label">Objective</label> 
           </div>
-          <div class="col-md-9">
+          <div class="col-md-10">
             <textarea id="theMisuseObjective" class="form-control" type="text" name="theMisuseObjective" readonly> </textarea>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label for="misuseThreat" class="control-label">Threat</label>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-10">
             <input type="text" id="misuseThreat" class="form-control" readonly>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label for="misuseLikelihood" class="control-label">Likelihood</label>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-10">
             <input type="text" id="misuseLikelihood" class="form-control" readonly>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label for="misuseVulnerability" class="control-label">Vulnerability</label>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-10">
             <input type="text" id="misuseVulnerability" class="form-control" readonly>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label for="misuseSeverity" class="control-label">Severity</label>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-10">
             <input type="text" id="misuseSeverity" class="form-control" readonly>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label for="misuseRiskRating" class="control-label">Risk Rating</label>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-10">
             <input type="text" id="misuseRiskRating" class="form-control" readonly>
           </div>
         </div>
