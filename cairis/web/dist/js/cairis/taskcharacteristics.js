@@ -312,7 +312,7 @@ function loadTaskCharacteristicReference() {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/dimensions/table/" + cr.dimension,
+    url: serverIP + "/api/dimensions/table/" + cr.dimension + "_reference",
     success: function (data) {
       data.sort();
       $("#theReferenceName").empty();
@@ -340,7 +340,7 @@ $('#editCharacteristicReference').on("change", "#theArtifactType", function(){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/dimensions/table/" + artifactType,
+    url: serverIP + "/api/dimensions/table/" + artifactType + "_reference",
     success: function (data) {
       data.sort();
       $("#theReferenceName").empty();
