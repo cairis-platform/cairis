@@ -484,9 +484,11 @@ $('#locationsModelClick').click(function(){
 });
 
 $("#newClick").click(function () {
+  showLoading();
   postNewProject(function () {
     window.activeTable = "Requirements";
-    summaryTable();
+    summaryTables();
+    hideLoading();
   });
 });
 

@@ -45,10 +45,6 @@ DROP VIEW IF EXISTS misusability_case;
 DROP VIEW IF EXISTS usecase_step_synopsis_actor;
 DROP VIEW IF EXISTS quotation;
 
-DROP TABLE IF EXISTS roles_users;
-DROP TABLE IF EXISTS auth_user;
-DROP TABLE IF EXISTS auth_role;
-
 DROP TABLE IF EXISTS persona_instance;
 DROP TABLE IF EXISTS asset_instance;
 DROP TABLE IF EXISTS location_link;
