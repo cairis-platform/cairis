@@ -849,6 +849,9 @@ function getRequirementView(environment,reqName){
 
 
 function getTaskview(environment,task,misusecase){
+  window.assetEnvironment = environment;
+  $('#tmenvironmentsbox').val(environment);
+
   if (task == undefined || task == 'all') {
     $.ajax({
       type: "GET",
