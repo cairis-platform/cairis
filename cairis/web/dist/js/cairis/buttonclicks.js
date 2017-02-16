@@ -545,8 +545,13 @@ $('#locationsModelClick').click(function(){
 $("#newClick").click(function () {
   showLoading();
   postNewProject(function () {
-    summaryTables();
-    hideLoading();
+    refreshDimensionSelector($('#summaryenvironmentsbox'),'environment',undefined,function(){
+      activeElement("homePanel");
+      $('#summaryenvironmentsbox').change();
+      $(".loadingWrapper").fadeOut(500);
+      summaryTables();
+      hideLoading();
+    });
   });
 });
 
