@@ -44,29 +44,20 @@ function addReq() {
     }
     var template = "";
     var num = findLabel();
-    switch (window.activeTable) {
-      case "Requirements":
-        template = '<tr class="' + kind + '">' +
-                   '<td name="theLabel">' + num + '</td>' +
-                   '<td name="theName" contenteditable="true"></td>'+
-                   '<td name="theDescription" contenteditable="true"></td>'+
-                   '<td name="thePriority" contenteditable="true">1</td>'+
-                   '<td name="theId" style="display:none;"></td>'+
-                   '<td name="theVersion" style="display:none;"></td>'+
-                   '<td name="rationale" contenteditable="true">None</td>'+
-                   '<td name="fitCriterion" contenteditable="true">None</td>'+
-                   '<td name="originator" contenteditable="true"></td>'+
-                   '<td name="type" contenteditable="true">Functional</td>'+
-                   '</tr>';
-        break;
-      case "Goals":
-        template = '<tr><td name="theLabel">' + num + '</td><td name="theName" contenteditable="true" ></td><td name="theDefinition" contenteditable="true"></td><td name="theCategory" contenteditable="true">Maintain</td><td name="thePriority" contenteditable="true">Low</td><td name="theId" style="display:none;"></td><td name="fitCriterion" contenteditable="true" >None</td><td  name="theIssue" contenteditable="true">None</td><td name="originator" contenteditable="true"></td></tr>';
-        break;
-      case "Obstacles":
-        template = '<tr><td name="theLabel">' + num + '</td><td name="theName" contenteditable="true">Name</td><td name="theDefinition" contenteditable="true">Definition</td><td name="theCategory" contenteditable="true">Category</td><td name="theId" style="display:none;"></td><td name="originator" contenteditable="true">Originator</td></tr>';
-        break;
-    }
-    $("#reqTable").append(template);
+
+    template = '<tr class="' + kind + '">' +
+               '<td name="theLabel">' + num + '</td>' +
+               '<td name="theName" contenteditable="true"></td>'+
+               '<td name="theDescription" contenteditable="true"></td>'+
+               '<td name="thePriority" contenteditable="true">1</td>'+
+               '<td name="theId" style="display:none;"></td>'+
+               '<td name="theVersion" style="display:none;"></td>'+
+               '<td name="rationale" contenteditable="true">None</td>'+
+               '<td name="fitCriterion" contenteditable="true">None</td>'+
+               '<td name="originator" contenteditable="true"></td>'+
+               '<td name="type" contenteditable="true">Functional</td>'+
+               '</tr>';
+    $("#mainTable").append(template);
     sortTableByRow(0);
   }
 }
@@ -84,39 +75,36 @@ $("#removeReqMenu").click(function() {
 
 function removeReq(reqName) {
   deleteObject('requirement',reqName,function(reqName) {
-    if(window.activeTable =="Requirements"){
-      var ursl = serverIP + "/api/requirements/name/" + reqName.replace(' ',"%20");
-      var object = {};
-      object.session_id= $.session.get('sessionID');
-      var objectoutput = JSON.stringify(object);
+    var ursl = serverIP + "/api/requirements/name/" + reqName.replace(' ',"%20");
+    var object = {};
+    object.session_id= $.session.get('sessionID');
+    var objectoutput = JSON.stringify(object);
 
-      $.ajax({
-        type: "DELETE",
-        dataType: "json",
-        contentType: "application/json",
-        accept: "application/json",
-        data: objectoutput,
-        crossDomain: true,
-        url: ursl,
-        success: function (data) {
-          $("tr").eq(getActiveindex()).detach();
-          showPopup(true);
-          sortTableByRow(0);
-        },
-        error: function (xhr, textStatus, errorThrown) {
-          var error = JSON.parse(xhr.responseText);
-          showPopup(false, String(error.message));
-          debugLogger(String(this.url));
-          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-      });
-    }
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      data: objectoutput,
+      crossDomain: true,
+      url: ursl,
+      success: function (data) {
+        $("tr").eq(getActiveindex()).detach();
+        showPopup(true);
+        sortTableByRow(0);
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
   });
 }
 
 $("#requirementsClick").click(function(){
-  window.activeTable = "Requirements";
-  startingTable();
+  requirementsTable();
 });
 
 //Just for debugLogger
@@ -131,13 +119,11 @@ $("#removesessionButton").click(function() {
 });
 
 $("#gridGoals").click(function() {
-  window.activeTable = "Goals";
-  setTableHeader();
+  setTableHeader("Goals");
 });
-//gridObstacles
+
 $("#gridObstacles").click(function() {
-  window.activeTable = "Obstacles";
-  setTableHeader();
+  setTableHeader("Obstacles");
 });
 
 
@@ -157,8 +143,8 @@ $('#assetModelClick').click(function(){
       $.each(data, function(i, item) {
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
-      $('#chooseEnvironment').attr('data-chooseDimension',"environment")
-      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getAssetview")
+      $('#chooseEnvironment').attr('data-chooseDimension',"environment");
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"viewAssetModel");
       $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -167,6 +153,16 @@ $('#assetModelClick').click(function(){
     }
   })
 });
+
+function viewAssetModel() {
+  var envName = $('#chooseEnvironment').attr('data-chosenDimension');
+  refreshDimensionSelector($('#amenvironmentsbox'),'environment',undefined,function() {
+    refreshDimensionSelector($('#amassetsbox'),'asset',envName,function() {
+      $('#amenvironmentsbox').val(envName);
+      getAssetview(envName);
+    });
+  });
+}
 
 $('#architecturalPatternModelClick').click(function(){
   window.theVisualModel = 'architectural_pattern';
@@ -245,7 +241,7 @@ $('#goalModelClick').click(function(){
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
       $('#chooseEnvironment').attr('data-chooseDimension',"environment")
-      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getGoalview")
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"viewGoalModel")
       $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -254,6 +250,18 @@ $('#goalModelClick').click(function(){
     }
   })
 });
+
+function viewGoalModel() {
+  var envName = $('#chooseEnvironment').attr('data-chosenDimension');
+  refreshDimensionSelector($('#gmenvironmentsbox'),'environment',undefined,function() {
+    refreshDimensionSelector($('#gmgoalbox'),'goal',envName,function() {
+      refreshDimensionSelector($('#gmusecasebox'),'usecase',envName,function() {
+        $('#gmenvironmentsbox').val(envName);
+        getGoalview(envName,'All','All');
+      });
+    });
+  });
+}
 
 $('#responsibilityModelClick').click(function(){
   window.theVisualModel = 'responsibility';
@@ -272,7 +280,7 @@ $('#responsibilityModelClick').click(function(){
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
       $('#chooseEnvironment').attr('data-chooseDimension',"environment")
-      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getResponsibilityview")
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"viewResponsibilityModel")
       $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -281,6 +289,17 @@ $('#responsibilityModelClick').click(function(){
     }
   });
 });
+
+function viewResponsibilityModel() {
+  var envName = $('#chooseEnvironment').attr('data-chosenDimension');
+  refreshDimensionSelector($('#remenvironmentsbox'),'environment',undefined,function() {
+    refreshDimensionSelector($('#remrolebox'),'role',envName,function() {
+      $('#remenvironmentsbox').val(envName);
+      getResponsibilityview(envName,'All');
+    });
+  });
+}
+
 
 $('#obstacleModelClick').click(function(){
   window.theVisualModel = 'obstacle';
@@ -299,7 +318,7 @@ $('#obstacleModelClick').click(function(){
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
       $('#chooseEnvironment').attr('data-chooseDimension',"environment")
-      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getObstacleview")
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"viewObstacleModel")
       $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -308,6 +327,16 @@ $('#obstacleModelClick').click(function(){
     }
   });
 });
+
+function viewObstacleModel() {
+  var envName = $('#chooseEnvironment').attr('data-chosenDimension');
+  refreshDimensionSelector($('#omenvironmentsbox'),'environment',undefined,function() {
+    refreshDimensionSelector($('#omobstaclebox'),'obstacle',envName,function() {
+      $('#omenvironmentsbox').val(envName);
+      getObstacleview(envName,'All');
+    });
+  });
+}
 
 $('#riskModelClick').click(function(){
   window.theVisualModel = 'risk';
@@ -326,7 +355,7 @@ $('#riskModelClick').click(function(){
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
       $('#chooseEnvironment').attr('data-chooseDimension',"environment")
-      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getRiskview")
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"viewRiskModel")
       $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -335,6 +364,14 @@ $('#riskModelClick').click(function(){
     }
   });
 });
+
+function viewRiskModel() {
+  var envName = $('#chooseEnvironment').attr('data-chosenDimension');
+  refreshDimensionSelector($('#rmenvironmentsbox'),'environment',undefined,function() {
+    $('#rmenvironmentsbox').val(envName);
+    getRiskview(envName,'all','all','Hierarchical');
+  });
+}
 
 $('#requirementModelClick').click(function(){
   window.theVisualModel = 'requirement';
@@ -353,7 +390,7 @@ $('#requirementModelClick').click(function(){
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
       $('#chooseEnvironment').attr('data-chooseDimension',"environment")
-      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getRequirementView")
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"viewRequirementModel")
       $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -362,6 +399,16 @@ $('#requirementModelClick').click(function(){
     }
   });
 });
+
+function viewRequirementModel() {
+  var envName = $('#chooseEnvironment').attr('data-chosenDimension');
+  refreshDimensionSelector($('#cmenvironmentsbox'),'environment',undefined,function() {
+    refreshDimensionSelector($('#cmrequirementsbox'),'requirement',envName,function() {
+      $('#cmenvironmentsbox').val(envName);
+      getRequirementView(envName,'All');
+    });
+  });
+}
 
 
 $('#taskModelClick').click(function(){
@@ -381,7 +428,7 @@ $('#taskModelClick').click(function(){
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
       });
       $('#chooseEnvironment').attr('data-chooseDimension',"environment")
-      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"getTaskview")
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"viewTaskModel")
       $('#chooseEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -390,6 +437,18 @@ $('#taskModelClick').click(function(){
     }
   });
 });
+
+function viewTaskModel() {
+  var envName = $('#chooseEnvironment').attr('data-chosenDimension');
+  refreshDimensionSelector($('#tmenvironmentsbox'),'environment',undefined,function() {
+    refreshDimensionSelector($('#tmtaskbox'),'task',envName,function() {
+      refreshDimensionSelector($('#tmmisusecasebox'),'misusecase',envName,function() {
+        $('#tmenvironmentsbox').val(envName);
+        getTaskview(envName,'All','All');
+      });
+    });
+  });
+}
 
 // When personaview is clicked
 $('#personaModelClick').click(function(){
@@ -486,7 +545,6 @@ $('#locationsModelClick').click(function(){
 $("#newClick").click(function () {
   showLoading();
   postNewProject(function () {
-    window.activeTable = "Requirements";
     summaryTables();
     hideLoading();
   });
@@ -500,10 +558,8 @@ mainContent.on('contextmenu', '.clickable-environments', function(){
 
 
 
-$("#reqTable").on("click", "td", function() {
-  if(window.activeTable == "Requirements"){
-  }
-  $('#reqTable tr').eq(getActiveindex()).find('td:first').focus();
+$("#mainTable").on("click", "td", function() {
+  $('#mainTable tr').eq(getActiveindex()).find('td:first').focus();
 });
 
 
@@ -530,12 +586,11 @@ $(document).on('click', "button.deletePersonaButton",function(){
         crossDomain: true,
         url: serverIP + "/api/personas",
         success: function (data) {
-          window.activeTable = "Personas";
-          setTableHeader();
+          setTableHeader("Personas");
           createPersonasTable(data, function(){
             newSorting(1);
           });
-          activeElement("reqTable");
+          activeElement("mainTable");
         },
         error: function (xhr, textStatus, errorThrown) {
           debugLogger(String(this.url));

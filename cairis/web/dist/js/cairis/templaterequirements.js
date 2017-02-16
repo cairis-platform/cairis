@@ -34,12 +34,11 @@ function createTemplateRequirementsTable(){
     crossDomain: true,
     url: serverIP + "/api/template_requirements",
     success: function (data) {
-      window.activeTable = "TemplateRequirements";
-      setTableHeader();
+      setTableHeader("TemplateRequirements");
       fillTemplateRequirementsTable(data, function(){
         newSorting(1);
       });
-      activeElement("reqTable");
+      activeElement("mainTable");
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -71,7 +70,8 @@ function fillTemplateRequirementsTable(data, callback){
   });
   theTable.append(textToInsert.join(''));
   $.contextMenu('destroy',$('.requirement-rows'));
-  $("#reqTable").find("tbody").removeClass();
+  theTable.css("visibility","visible");
+  $("#mainTable").find("tbody").removeClass();
 
   callback();
 }
@@ -190,12 +190,11 @@ $(document).on('click', "td.deleteTemplateRequirementButton",function(e){
           crossDomain: true,
           url: serverIP + "/api/template_requirements",
           success: function (data) {
-            window.activeTable = "TemplateRequirements";
-            setTableHeader();
+            setTableHeader("TemplateRequirements");
             fillTemplateRequirementsTable(data, function(){
               newSorting(1);
             });
-            activeElement("reqTable");
+            activeElement("mainTable");
             showPopup(true);
           },
           error: function (xhr, textStatus, errorThrown) {

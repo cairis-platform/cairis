@@ -34,8 +34,7 @@ function createVulnerabilityTable(){
     crfossDomain: true,
     url: serverIP + "/api/vulnerabilities",
     success: function (data) {
-      window.activeTable = "Vulnerability";
-      setTableHeader();
+      setTableHeader("Vulnerability");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -60,9 +59,9 @@ function createVulnerabilityTable(){
 
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -117,7 +116,7 @@ function viewVulnerability(vulName) {
   });
 };
 
-$("#reqTable").on("click", "#addNewVulnerability", function () {
+$("#mainTable").on("click", "#addNewVulnerability", function () {
   activeElement("objectViewer");
   var vul = jQuery.extend(true, {}, vulnerabilityDefault);
   $.session.set("Vulnerability", JSON.stringify(vul));

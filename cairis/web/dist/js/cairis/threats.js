@@ -34,8 +34,7 @@ function createThreatsTable(){
     crfossDomain: true,
     url: serverIP + "/api/threats",
     success: function (data) {
-      window.activeTable = "Threats";
-      setTableHeader();
+      setTableHeader("Threats");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -58,10 +57,10 @@ function createThreatsTable(){
       theTable.append(textToInsert.join(''))
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
 
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {

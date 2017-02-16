@@ -40,8 +40,7 @@ function createPersonasTable(){
     crossDomain: true,
     url: serverIP + "/api/personas",
     success: function (data) {
-      window.activeTable = "Personas";
-      setTableHeader();
+      setTableHeader("Personas");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -64,8 +63,8 @@ function createPersonasTable(){
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
-      activeElement("reqTable");
+      $("#mainTable").find("tbody").removeClass();
+      activeElement("mainTable");
       sortTableByRow(0);
 
     },

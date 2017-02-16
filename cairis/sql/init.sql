@@ -3334,7 +3334,28 @@ CREATE VIEW environment_risk as
 CREATE VIEW environment_role as
   select distinct environment_id, subgoal_id role_id from responserole_goalassociation
   union
-  select distinct environment_id, role_id from countermeasure_role;
+  select distinct environment_id, role_id from countermeasure_role
+  union
+  select distinct environment_id, role_id from persona_role
+  union
+  select distinct environment_id, depender_id from rolegoalrole_dependency
+  union
+  select distinct environment_id, dependee_id from rolegoalrole_dependency
+  union
+  select distinct environment_id, depender_id from roleassetrole_dependency
+  union
+  select distinct environment_id, dependee_id from roleassetrole_dependency
+  union
+  select distinct environment_id, depender_id from roletaskrole_dependency
+  union
+  select distinct environment_id, dependee_id from roletaskrole_dependency
+  union
+  select distinct environment_id, subgoal_id role_id from goalrole_goalassociation
+  union
+  select distinct environment_id, subgoal_id role_id from obstaclerole_goalassociation
+  union
+  select distinct environment_id, subgoal_id role_id from requirementrole_goalassociation;
+
 
 CREATE VIEW detection_mechanism as
   select rm.response_id response_id,rm.environment_id environment_id,ca.asset_id asset_id from response_mitigate rm, countermeasure_threat_response_target ctrt, countermeasure_asset ca where rm.mitigate_type_id = 2 and rm.response_id = ctrt.response_id and rm.environment_id = ctrt.environment_id and ctrt.countermeasure_id = ca.countermeasure_id

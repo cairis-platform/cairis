@@ -34,12 +34,11 @@ function createTemplateGoalsTable(){
     crossDomain: true,
     url: serverIP + "/api/template_goals",
     success: function (data) {
-      window.activeTable = "TemplateGoals";
-      setTableHeader();
+      setTableHeader("TemplateGoals");
       fillTemplateGoalsTable(data, function(){
         newSorting(1);
       });
-      activeElement("reqTable");
+      activeElement("mainTable");
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -71,7 +70,8 @@ function fillTemplateGoalsTable(data, callback){
   });
   theTable.append(textToInsert.join(''));
   $.contextMenu('destroy',$('.requirement-rows'));
-  $("#reqTable").find("tbody").removeClass();
+  theTable.css("visibility","visible");
+  $("#mainTable").find("tbody").removeClass();
 
   callback();
 }
@@ -161,12 +161,11 @@ $(document).on('click', "td.deleteTemplateGoalButton",function(e){
           crossDomain: true,
           url: serverIP + "/api/template_goals",
           success: function (data) {
-            window.activeTable = "TemplateGoals";
-            setTableHeader();
+            setTableHeader("TemplateGoals");
             fillTemplateGoalsTable(data, function(){
               newSorting(1);
             });
-            activeElement("reqTable");
+            activeElement("mainTable");
             showPopup(true);
           },
           error: function (xhr, textStatus, errorThrown) {

@@ -34,8 +34,7 @@ function createAttackersTable(){
     crossDomain: true,
     url: serverIP + "/api/attackers",
     success: function (data) {
-      window.activeTable = "Attackers";
-      setTableHeader();
+      setTableHeader("Attackers");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -58,9 +57,9 @@ function createAttackersTable(){
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
 
     },

@@ -43,8 +43,7 @@ function createDependenciesTable(){
     url: serverIP + "/api/dependencies",
     success: function (data) {
       var dependencies = [];
-      window.activeTable = "Dependency";
-      setTableHeader();
+      setTableHeader("Dependency");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -84,9 +83,9 @@ function createDependenciesTable(){
 
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {

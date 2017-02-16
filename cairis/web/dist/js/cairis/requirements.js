@@ -27,7 +27,7 @@ $('#assetsbox').change(function() {
     // Clearing the environmentsbox
     $('#environmentsbox').prop('selectedIndex', -1);
     if (selection.toLowerCase() == "all") {
-      startingTable();
+      requirementsTable();
     }  
     else {
       $.ajax({
@@ -62,7 +62,7 @@ $('#environmentsbox').change(function() {
     $('#assetsbox').prop('selectedIndex', -1);
 
     if (selection.toLowerCase() == "all") {
-      startingTable();
+      requirementsTable();
     }   
     else {
       //Assetsbox
@@ -178,8 +178,8 @@ function createRequirementsTable(data){
 
   theTable.css("visibility","visible");
 
-  $("#reqTable").find("tbody").removeClass();
-  $("#reqTable").find("tbody").addClass('requirement-rows');
+  $("#mainTable").find("tbody").removeClass();
+  $("#mainTable").find("tbody").addClass('requirement-rows');
   $('.requirement-rows').contextMenu({
     selector: 'td',
     items: {

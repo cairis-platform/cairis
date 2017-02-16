@@ -3629,7 +3629,7 @@ begin
     select name from role;
   else
     select id into environmentId from environment where name = environmentName limit 1;
-    select name from role order by 1;
+    select r.name from role r, environment_role er where er.environment_id = environmentId and er.role_id = r.id order by 1;
   end if;
 end
 //

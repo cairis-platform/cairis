@@ -34,13 +34,12 @@ function fillAssetTable(){
     crossDomain: true,
     url: serverIP + "/api/assets",
     success: function (data) {
-      window.activeTable = "Assets";
-      setTableHeader();
+      setTableHeader("Assets");
       createAssetsTable(data, function(){
         newSorting(1);
       });
       $.session.set("allAssets", JSON.stringify(data));
-      activeElement("reqTable");
+      activeElement("mainTable");
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -76,9 +75,10 @@ function createAssetsTable(data, callback){
   theTable.append(textToInsert.join(''));
   $.contextMenu('destroy',$('.requirement-rows'));
   $.contextMenu('destroy',$('.asset-rows'));
-  $("#reqTable").find("tbody").removeClass();
+  theTable.css("visibility","visible");
+  $("#mainTable").find("tbody").removeClass();
 
-  $("#reqTable").find("tbody").addClass('asset-rows');
+  $("#mainTable").find("tbody").addClass('asset-rows');
 
   $('.asset-rows').contextMenu({
     selector: 'td',
@@ -575,12 +575,11 @@ $(document).on('click', "td.deleteAssetButton",function(e){
           crossDomain: true,
           url: serverIP + "/api/assets",
           success: function (data) {
-            window.activeTable = "Assets";
-            setTableHeader();
+            setTableHeader("Assets");
             createAssetsTable(data, function(){
               newSorting(1);
             });
-            activeElement("reqTable");
+            activeElement("mainTable");
             showPopup(true);
           },
           error: function (xhr, textStatus, errorThrown) {

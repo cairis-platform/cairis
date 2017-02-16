@@ -38,12 +38,11 @@ function createTemplateAssetTable(){
     crossDomain: true,
     url: serverIP + "/api/template_assets",
     success: function (data) {
-      window.activeTable = "TemplateAssets";
-      setTableHeader();
+      setTableHeader("TemplateAssets");
       fillTemplateAssetsTable(data, function(){
         newSorting(1);
       });
-      activeElement("reqTable");
+      activeElement("mainTable");
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -78,7 +77,8 @@ function fillTemplateAssetsTable(data, callback){
   });
   theTable.append(textToInsert.join(''));
   $.contextMenu('destroy',$('.requirement-rows'));
-  $("#reqTable").find("tbody").removeClass();
+  theTable.css("visibility","visible");
+  $("#mainTable").find("tbody").removeClass();
 
   callback();
 }
@@ -357,12 +357,11 @@ $(document).on('click', "td.deleteTemplateAssetButton",function(e){
           crossDomain: true,
           url: serverIP + "/api/template_assets",
           success: function (data) {
-            window.activeTable = "TemplateAssets";
-            setTableHeader();
+            setTableHeader("TemplateAssets");
             fillTemplateAssetsTable(data, function(){
               newSorting(1);
             });
-            activeElement("reqTable");
+            activeElement("mainTable");
             showPopup(true);
           },
           error: function (xhr, textStatus, errorThrown) {

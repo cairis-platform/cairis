@@ -35,8 +35,7 @@ function createArchitecturalPatternsTable(){
     crossDomain: true,
     url: serverIP + "/api/architectural_patterns",
     success: function (data) {
-      window.activeTable = "ArchitecturalPatterns";
-      setTableHeader();
+      setTableHeader("ArchitecturalPatterns");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -67,9 +66,9 @@ function createArchitecturalPatternsTable(){
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {

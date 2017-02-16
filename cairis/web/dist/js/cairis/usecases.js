@@ -35,8 +35,7 @@ function createUseCasesTable(){
     crossDomain: true,
     url: serverIP + "/api/usecases",
     success: function (data) {
-      window.activeTable = "UseCases";
-      setTableHeader();
+      setTableHeader("UseCases");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -59,9 +58,9 @@ function createUseCasesTable(){
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
-      $("#reqTable").find("tbody").addClass('usecase-rows');
+      $("#mainTable").find("tbody").addClass('usecase-rows');
 
       $('.usecase-rows').contextMenu({
         selector: 'td',
@@ -83,7 +82,7 @@ function createUseCasesTable(){
         }
       });
 
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {

@@ -21,8 +21,6 @@
 
 window.serverIP = "http://"+ window.location.host;
 
-window.activeTable ="Requirements";
-window.boxesAreFilled = false;
 window.debug = true;
 
 function debugLogger(info){
@@ -42,11 +40,14 @@ $(document).ready(function() {
       contentType : "application/json",
       success: function(data, status, xhr) {
         debugLogger(data);
-        var sessionID = data.session_id;
-        $.session.set("sessionID", sessionID);
-        createComboboxes();
-        summaryTables();
-        hideLoading();
+        $.session.set("sessionID", data.session_id);
+        refreshDimensionSelector($('#summaryenvironmentsbox'),'environment',undefined,function(){
+           activeElement("homePanel");
+           $('#summaryenvironmentsbox').change();
+           $(".loadingWrapper").fadeOut(500);
+           summaryTables();
+           hideLoading();
+        });
       },
       error: function(data, status, xhr) {
         console.log(this.url);
@@ -56,8 +57,13 @@ $(document).ready(function() {
     });
   }
   else {
-    createComboboxes();
-    summaryTables();
+    refreshDimensionSelector($('#summaryenvironmentsbox'),'environment',undefined,function(){
+      activeElement("homePanel");
+      $('#summaryenvironmentsbox').change();
+      $(".loadingWrapper").fadeOut(500);
+      summaryTables();
+      hideLoading();
+    });
   }
 });
 
@@ -90,18 +96,27 @@ $.fn.serializeObject = function()
 
 $('#gmgoalbox').change(function() {
   var selection = $(this).find('option:selected').text();
-  getGoalview($('#gmenvironmentsbox').val(),selection);
+  getGoalview($('#gmenvironmentsbox').val(),selection,$('#gmusecasebox').val());
 });
+
+$('#gmusecasebox').change(function() {
+  var selection = $(this).find('option:selected').text();
+  getGoalview($('#gmenvironmentsbox').val(),$('#gmgoalbox').val(),selection);
+});
+
+
 
 $('#tmtaskbox').change(function() {
   var selection = $(this).find('option:selected').text();
   var envName = $('#tmenvironmentsbox').val();
-  getTaskview(envName,selection,'all');
+  var mcName = $('#tmmisusecasebox').val();
+  getTaskview(envName,selection,mcName);
 });
 
 $('#tmmisusecasebox').change(function() {
   var selection = $(this).find('option:selected').text();
-  getTaskview($('#tmenvironmentsbox').val(),'all',selection);
+  var taskName = $('#tmtaskbox').val();
+  getTaskview($('#tmenvironmentsbox').val(),taskName,selection);
 });
 
 $('#remrolebox').change(function() {
@@ -164,29 +179,17 @@ function appendPersonaCharacteristics(pName,bvName,pcName) {
 
 
 $('#gmenvironmentsbox').change(function() {
-  var selection = $(this).find('option:selected').text();
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID')),
-    },
-    crossDomain: true,
-    url: serverIP + "/api/goals/environment/" + selection.replace(" ","%20") + "/names",
-    success: function (data) {
-      $('#gmgoalbox').empty();
-      $('#gmgoalbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
-      $.each(data, function (index, item) {
-        $('#gmgoalbox').append($('<option>', {value: item, text: item},'</option>'));
+  if (window.theVisualModel == 'goal') {
+    var envName = $('#gmenvironmentsbox').val();
+    refreshDimensionSelector($('#gmgoalbox'),'goal',envName,function() {
+      refreshDimensionSelector($('#gmusecasebox'),'usecase',envName,function() {
+        $('#gmenvironmentsbox').val(envName);
+        $('#gmgoalbox').val('All');
+        $('#gmusecasebox').val('All');
+        getGoalview(envName,'All','All');
       });
-      $('#gmgoalbox').change();
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
+    });
+  }
 });
 
 $('#aparchitecturalpatternsbox').change(function() {
@@ -198,60 +201,32 @@ $('#aparchitecturalpatternsbox').change(function() {
 
 
 $('#tmenvironmentsbox').change(function() {
-  var selection = $(this).find('option:selected').text();
-  getTaskview(selection,'all','all');
+  var envName = $(this).find('option:selected').text();
+  refreshDimensionSelector($('#tmtaskbox'),'task',envName,function() {
+    refreshDimensionSelector($('#tmmisusecasebox'),'misusecase',envName,function() {
+      $('#tmtaskbox').val('All');
+      $('#tmmisusecasebox').val('All');
+      getTaskview(envName,'all','all');
+    });
+  });
 });
 
 
 $('#omenvironmentsbox').change(function() {
-  var selection = $(this).find('option:selected').text();
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID')),
-    },
-    crossDomain: true,
-    url: serverIP + "/api/obstacles/environment/" + selection.replace(" ","%20") + "/names",
-    success: function (data) {
-      $('#omobstaclebox').empty();
-      $('#omobstaclebox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
-      $.each(data, function (index, item) {
-        $('#omobstaclebox').append($('<option>', {value: item, text: item},'</option>'));
-      });
-      $('#omobstaclebox').change();
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+  var envName = $(this).find('option:selected').text();
+  refreshDimensionSelector($('#omobstaclebox'),'obstacle',envName,function() {
+    $('#omenvironmentsbox').val(envName);
+    $('#omobstaclebox').val('All');
+    getObstacleview(envName,'All');
   });
 });
 
 $('#remenvironmentsbox').change(function() {
-  var selection = $(this).find('option:selected').text();
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID')),
-    },
-    crossDomain: true,
-    url: "/api/dimensions/table/role/environment/" + selection.replace(" ","%20"),
-    success: function (data) {
-      $('#remrolebox').empty();
-      $('#remrolebox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
-      $.each(data, function (index, item) {
-        $('#remrolebox').append($('<option>', {value: item, text: item},'</option>'));
-      });
-      $('#remrolebox').change();
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+  var envName = $(this).find('option:selected').text();
+  refreshDimensionSelector($('#remrolebox'),'role',envName,function() {
+    $('#remenvironmentsbox').val(envName);
+    $('#remrolebox').val('All');
+    getResponsibilityview(envName,'All');
   });
 });
 
@@ -259,28 +234,11 @@ $('#remenvironmentsbox').change(function() {
 
 $('#rmenvironmentsbox').change(function() {
   var envName = $(this).find('option:selected').val();
+  $('#rmenvironmentsbox').val(envName);
   $('#rmdimensionbox').val('All');
+  $('#rmobjectbox').empty();
   var modelLayout = $('#rmlayout').val();
-
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID')),
-    },
-    crossDomain: true,
-    url: "/api/risks/model/environment/" + envName.replace(" ","%20") + "/names",
-    success: function (data) {
-      fillObjectBox('#rmobjectbox','All',data);
-      $('#rmobjectbox').val('All');
-      getRiskview(envName,'All','All',modelLayout);
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
+  getRiskview(envName,'all','all',modelLayout);
 });
 
 function fillObjectBox(cBoxId,dimName,objtNames) {
@@ -296,27 +254,9 @@ $('#rmdimensionbox').change(function() {
   var envName = $('#rmenvironmentsbox').val();
   var dimName = $(this).find('option:selected').val();
   var modelLayout = $('#rmlayout').val();
-
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID')),
-    },
-    crossDomain: true,
-    url: "/api/dimensions/table/" + dimName.replace(" ","%20") + "/environment/" + envName.replace(" ","%20"),
-    success: function (data) {
-      fillObjectBox('#rmobjectbox',dimName,data);
-      $('#rmobjectbox').val('All');
-      getRiskview(envName,dimName,'All',modelLayout);
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+  refreshDimensionSelector($('#rmobjectbox'),dimName,envName,function() {
+    getRiskview(envName,dimName,'all',modelLayout);
   });
-
 });
 
 $('#rmobjectbox').change(function() {
@@ -344,7 +284,11 @@ $('#amconcernsbox').change(function() {
 
 $('#amenvironmentsbox').change(function() {
   if (window.theVisualModel == 'asset') {
-    getAssetview($('#amenvironmentsbox').val());
+    var envName = $('#amenvironmentsbox').val();
+    refreshDimensionSelector($('#amassetsbox'),'asset',envName,function() {
+      $('#amenvironmentsbox').val(envName);
+      getAssetview(envName);
+    });
   }
 });
 
@@ -352,28 +296,11 @@ $('#amenvironmentsbox').change(function() {
 
 $('#cmenvironmentsbox').change(function() {
   var envName = $('#cmenvironmentsbox').val()
-
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID')),
-    },
-    crossDomain: true,
-    url: "/api/dimensions/table/requirement/environment/" + encodeURIComponent(envName),
-    success: function (data) {
-      fillObjectBox('#cmrequirementsbox','All',data);
-      $('#cmrequirementsbox').val('All');
-      getRequirementView(envName,'All');
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+  refreshDimensionSelector($('#cmrequirementsbox'),'requirement',envName,function() {
+    $('#cmenvironmentsbox').val(envName);
+    $('#cmrequirementsbox').val('All')
+    getRequirementView(envName,'All');
   });
-
-
 });
 
 $('#cmrequirementsbox').change(function() {
@@ -392,7 +319,6 @@ $('#amassetsbox').change(function() {
 
 function getAssetview(environment){
   window.assetEnvironment = environment;
-  $('#amenvironmentsbox').val(environment);
   var assetName = $('#amassetsbox').val();
   assetName = assetName == "All" ? "all" : assetName;
   $.ajax({
@@ -493,36 +419,6 @@ $('#mmmisusabilitycasesbox').change(function() {
 
 function getGoalview(environment,goalName,ucName){
   window.assetEnvironment = environment;
-  $('#gmenvironmentsbox').val(environment);
-  if (goalName == undefined) {
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
-      crossDomain: true,
-      url: serverIP + "/api/goals/environment/" + environment.replace(" ","%20") + "/names",
-
-      success: function (data) {
-        $("#gmgoalbox").empty()
-        $('#gmgoalbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
-        $.each(data, function (index, item) {
-          $('#gmgoalbox').append($('<option>', {value: item, text: item},'</option>'));
-        });
-        goalName = 'all';
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-    });
-  }
-  if (ucName == undefined) {
-    $("#gmusecasebox").empty()
-    $('#gmusecasebox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
-  }
   goalName = (goalName == undefined || goalName == 'All') ? "all" : goalName;
   ucName = (ucName == undefined || ucName == 'All') ? "all" : ucName;
 
@@ -546,33 +442,6 @@ function getGoalview(environment,goalName,ucName){
 
 function getObstacleview(environment,obstacle){
   window.assetEnvironment = environment;
-  $('#omenvironmentsbox').val(environment);
-
-  if (obstacle == undefined) {
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
-      crossDomain: true,
-      url: serverIP + "/api/obstacles/environment/" + environment.replace(" ","%20") + "/names",
-
-      success: function (data) {
-        $("#omobstaclebox").empty()
-        $('#omobstaclebox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
-        $.each(data, function (index, item) {
-          $('#omobstaclebox').append($('<option>', {value: item, text: item},'</option>'));
-        });
-        obstacle = 'all';
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-    });
-  }
   obstacle = (obstacle == undefined || obstacle == 'All') ? "all" : obstacle;
 
   $.ajax({
@@ -582,7 +451,7 @@ function getObstacleview(environment,obstacle){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/obstacles/model/environment/" + environment.replace(" ","%20") + "/obstacle/" + obstacle.replace(" ","%20"),
+    url: serverIP + "/api/obstacles/model/environment/" + encodeURIComponent(environment) + "/obstacle/" + encodeURIComponent(obstacle),
     success: function(data){
       fillSvgViewer(data);
     },
@@ -595,34 +464,7 @@ function getObstacleview(environment,obstacle){
 
 function getResponsibilityview(environment,role){
   window.assetEnvironment = environment;
-  $('#remenvironmentsbox').val(environment);
-  if (role == undefined) {
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
-      crossDomain: true,
-      url: "/api/dimensions/table/role/environment/" + environment.replace(" ","%20"),
-      success: function (data) {
-        $("#remrolebox").empty()
-        $('#remrolebox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
-        $.each(data, function (index, item) {
-          $('#remrolebox').append($('<option>', {value: item, text: item},'</option>'));
-        });
-        role = 'all';
-        $('#remrolebox').val('All');
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-    });
-  }
   role = (role == undefined || role == 'All') ? "all" : role;
-
   $.ajax({
     type:"GET",
     accept:"application/json",
@@ -630,7 +472,7 @@ function getResponsibilityview(environment,role){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/responsibility/model/environment/" + environment.replace(" ","%20") + "/role/" + role.replace(" ","%20"),
+    url: serverIP + "/api/responsibility/model/environment/" + encodeURIComponent(environment) + "/role/" + encodeURIComponent(role),
     success: function(data){
       fillSvgViewer(data);
     },
@@ -794,7 +636,6 @@ function replaceRequirementNodes(data,reqDict) {
 
 function getRiskview(environment,dimName,objtName,modelLayout){
   window.assetEnvironment = environment;
-  $('#rmenvironmentsbox').val(environment);
   dimName = (dimName == undefined || dimName == 'All') ? 'all' : dimName;
   objtName = (objtName == undefined || objtName == 'All') ? 'all' : objtName;
   modelLayout = modelLayout == undefined  ? "Hierarchical" : modelLayout;
@@ -824,7 +665,6 @@ function getRiskview(environment,dimName,objtName,modelLayout){
 
 function getRequirementView(environment,reqName){
   window.assetEnvironment = environment;
-  $('#cmenvironmentsbox').val(environment);
   reqName = (reqName == undefined || reqName == 'All') ? 'all' : reqName;
   $.ajax({
     type:"GET",
@@ -850,58 +690,6 @@ function getRequirementView(environment,reqName){
 
 function getTaskview(environment,task,misusecase){
   window.assetEnvironment = environment;
-  $('#tmenvironmentsbox').val(environment);
-
-  if (task == undefined || task == 'all') {
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
-      crossDomain: true,
-      url: serverIP + "/api/dimensions/table/task/environment/" + encodeURIComponent(environment),
-
-      success: function (data) {
-        $("#tmtaskbox").empty()
-        $('#tmtaskbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
-        $.each(data, function (index, item) {
-          $('#tmtaskbox').append($('<option>', {value: item, text: item},'</option>'));
-        });
-        task = 'all';
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-    });
-  }
-  if (misusecase == undefined || misusecase == 'all') {
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
-      crossDomain: true,
-      url: serverIP + "/api/dimensions/table/misusecase/environment/" + encodeURIComponent(environment),
-
-      success: function (data) {
-        $("#tmmisusecasebox").empty()
-        $('#tmmisusecasebox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
-        $.each(data, function (index, item) {
-          $('#tmmisusecasebox').append($('<option>', {value: item, text: item},'</option>'));
-        });
-        task = 'all';
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-    });
-  }
   task = (task == undefined || task == 'All') ? "all" : task;
   misusecase = (misusecase == undefined || misusecase == 'All') ? "all" : misusecase;
 
@@ -1427,9 +1215,11 @@ function concernDialogBox(hasRole ,callback){
   });
 }
 
-// Function for creating the comboboxes
-function createComboboxes(){
-  var sess = String($.session.get('sessionID'));
+function refreshDimensionSelector(sBox,dimName,envName,callback) {
+  var urlText = serverIP + "/api/dimensions/table/" + dimName;
+  if (envName != undefined) {
+    urlText += '/environment/' + envName
+  }
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -1438,65 +1228,18 @@ function createComboboxes(){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/assets/all/names",
-
+    url: urlText,
     success: function (data) {
-      var options = $("#assetsbox");
-      var amoptions = $("#amassetsbox");
-      options.empty();
-      amoptions.empty();
-      options.append("<option>All</option>");
-      amoptions.append("<option>All</option>");
+      sBox.empty();
+      if (dimName == 'asset' || dimName == 'goal' || dimName == 'obstacle' || dimName == 'task' || dimName == 'usecase' || dimName == 'misusecase' || dimName == 'requirement') {
+        sBox.append("<option>All</option>");
+      }
       $.each(data, function () {
-        options.append($("<option />").val(this).text(this));
-        amoptions.append($("<option />").val(this).text(this));
+        sBox.append($("<option />").val(this).text(this));
       });
-//      $(".topCombobox").css("visibility", "visible");
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/environments/all/names",
-
-    success: function (data) {
-      var envBox = $("#environmentsbox");
-      var amEnvBox = $("#amenvironmentsbox");
-      var gmEnvBox = $("#gmenvironmentsbox");
-      var omEnvBox = $("#omenvironmentsbox");
-      var tmEnvBox = $("#tmenvironmentsbox");
-      var remEnvBox = $("#remenvironmentsbox");
-      var rmEnvBox = $("#rmenvironmentsbox");
-      var cmEnvBox = $("#cmenvironmentsbox");
-      envBox.empty();
-      amEnvBox.empty();
-      gmEnvBox.empty();
-      omEnvBox.empty();
-      tmEnvBox.empty();
-      remEnvBox.empty();
-      rmEnvBox.empty();
-      cmEnvBox.empty();
-      $.each(data, function () {
-        envBox.append($("<option />").val(this).text(this));
-        amEnvBox.append($("<option />").val(this).text(this));
-        gmEnvBox.append($("<option />").val(this).text(this));
-        omEnvBox.append($("<option />").val(this).text(this));
-        tmEnvBox.append($("<option />").val(this).text(this));
-        remEnvBox.append($("<option />").val(this).text(this));
-        rmEnvBox.append($("<option />").val(this).text(this));
-        cmEnvBox.append($("<option />").val(this).text(this));
-      });
-//      envBox.css("visibility", "visible");
-//      window.boxesAreFilled = true;
+      if (callback != undefined) {
+        callback();
+      }
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -1505,61 +1248,41 @@ function createComboboxes(){
   });
 }
 
-function showComboboxes() {
-  $(".topCombobox").css("visibility", "visible");
-  $('#environmentsbox').css("visibility", "visible");
-  window.boxesAreFilled = true;
-}
-
-function startingTable(){
-//  createComboboxes();
-  showComboboxes();
-  $.ajax({
-    type:"GET",
-    dataType: "json",
-    accept:"application/json",
-    crossDomain: true,
-    url: serverIP + "/api/requirements",
-    data: {session_id: String($.session.get('sessionID')),
-      ordered: "1"
-    },
-    success: function(data) {
-      setTableHeader("Requirements");
-      createRequirementsTable(data);
-      activeElement("reqTable");
-      $(".loadingWrapper").fadeOut(500);
-    },
-    error: function(xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+function requirementsTable(dimName){
+  refreshDimensionSelector($('#assetsbox'),'asset',undefined,function(){
+    refreshDimensionSelector($('#environmentsbox'),'environment',undefined,function(){
+      $.ajax({
+        type:"GET",
+        dataType: "json",
+        accept:"application/json",
+        crossDomain: true,
+        url: serverIP + "/api/requirements",
+        data: {session_id: String($.session.get('sessionID')),
+          ordered: "1"
+        },
+        success: function(data) {
+          setTableHeader("Requirements");
+          createRequirementsTable(data);
+          activeElement("reqTable");
+          $(".topCombobox").css("visibility", "visible");
+          $('#environmentsbox').css("visibility", "visible");
+          $(".loadingWrapper").fadeOut(500);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          debugLogger(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    });
   });
 }
 
 function summaryTables() {
   activeElement("homePanel");
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crfossDomain: true,
-    url: serverIP + "/api/dimensions/table/environment",
-    success: function (envs) {
-      activeElement("homePanel");
-      $("#summaryenvironmentsbox option").remove();
-      $.each(envs,function(idx,env) {
-        $('#summaryenvironmentsbox').append($("<option></option>").attr("value",env).text(env));
-      });
-      $('#summaryenvironmentsbox').change();
-      $(".loadingWrapper").fadeOut(500);
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+  refreshDimensionSelector($('#summaryenvironmentsbox'),'environment',function() {
+    activeElement("homePanel");
+    $('#summaryenvironmentsbox').change();
+    $(".loadingWrapper").fadeOut(500);
   });
 }
 
@@ -1567,9 +1290,9 @@ function summaryTables() {
 // This is for saying which element has the main focus
 function activeElement(elementid){
   if(elementid == "svgViewer" || elementid == 'homePanel'){
-    $("#reqTable").hide();
+    $("#mainTable").hide();
     $("#objectViewer").hide();
-    $("#filtercontent").hide();
+    $("#filterrequirementscontent").hide();
     $("#filtersummarytables").hide();
     $("#filterassetmodelcontent").hide();
     $("#filterriskmodelcontent").hide();
@@ -1638,17 +1361,24 @@ function activeElement(elementid){
     $("#rightnavGear").hide();
   }
 
+  if(elementid == "mainTable"){
+    //If it is the table, we need to see which table it is
+    window.theVisualModel = 'None';
+    $("#filterrequirementscontent").hide();
+  }
   if(elementid == "reqTable"){
     //If it is the table, we need to see which table it is
     window.theVisualModel = 'None';
-    setActiveOptions();
+    $("#filterrequirementscontent").show();
+    elementId = 'mainTable'
   }
+
   if (elementid == 'objectViewer') {
-    $("#reqTable").hide();
+    $("#mainTable").hide();
   }
 
   if (elementid == 'homePanel') {
-    $("#reqTable").hide();
+    $("#mainTable").hide();
     $("#filtersummarytables").show();
   }
 
@@ -1657,10 +1387,10 @@ function activeElement(elementid){
 }
 
 // function for setting the table head
-function setTableHeader(){
+function setTableHeader(activeTable){
   var thead = "";
 
-  switch (window.activeTable) {
+  switch (activeTable) {
     case "Requirements":
       debugLogger("Is Requirement");
       thead = "<th width='50px'></th><th>Requirement</th><th>Description</th><th>Priority</th><th>Rationale</th><th>Fit Citerion</th><th>Originator</th><th>Type</th>";
@@ -1834,37 +1564,9 @@ function setTableHeader(){
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Risk Value</th><th>Description</th>";
       break;
   }
-  $("#reqTable").find("thead").empty();
-  $("#reqTable").find("thead").append(thead);
-  $("#reqTable").find("tbody").empty();
-}
-
-// This sets the right comboboxes etc in the main window
-function setActiveOptions(){
-  $("#filtercontent").hide();
-  $("#filterassetmodelcontent").hide();
-  $("#filterriskmodelcontent").hide();
-  $("#filtergoalmodelcontent").hide();
-  $("#filtertaskmodelcontent").hide();
-  $("#filterapmodelcontent").hide();
-  $("#filterobstaclemodelcontent").hide();
-  $("#editAssetsOptions").hide();
-
-  switch (window.activeTable) {
-    case "Requirements":
-      $("#filtercontent").show();
-      break;
-    case "Goals":
-      break;
-    case "Obstacles":
-    case "Roles":
-      break;
-    case "EditGoals":
-      break;
-    case "Assets":
-      $("#editAssetsOptions").show();
-      break;
-  }
+  $("#mainTable").find("thead").empty();
+  $("#mainTable").find("thead").append(thead);
+  $("#mainTable").find("tbody").empty();
 }
 
 function fillSvgViewer(data){
@@ -1975,7 +1677,7 @@ function getAllRequirements(callback) {
 }
 
 function sortTable(){
-  var tbl = document.getElementById("reqTable").tBodies[0];
+  var tbl = document.getElementById("mainTable").tBodies[0];
   var store = [];
   for(var i=0, len=tbl.rows.length; i<len; i++){
     var row = tbl.rows[i];
@@ -1992,7 +1694,7 @@ function sortTable(){
 }
 
 function sortTableByRow(rownumber){
-  var tbl = document.getElementById("reqTable").tBodies[0];
+  var tbl = document.getElementById("mainTable").tBodies[0];
   var store = [];
   for(var i=0, len=tbl.rows.length; i<len; i++){
     var row = tbl.rows[i];
@@ -2010,7 +1712,7 @@ function sortTableByRow(rownumber){
 
 function newSorting(rownr){
   var $sort = this;
-  var $table = $('#reqTable');
+  var $table = $('#mainTable');
   var $rows = $('tbody > tr',$table);
   $rows.sort(function(a, b){
     var keyA = $('td:eq('+rownr+')',a).text();
@@ -2424,6 +2126,7 @@ $("#chooseEnvironment").on('click', '#chooseEnvironmentButton',function(e) {
     });
   }
   else {
+    $('#chooseEnvironment').attr('data-chosenDimension',$('#chooseEnvironmentSelect').val());
     var cmd = eval($("#chooseEnvironment").attr("data-applyEnvironmentSelection"));
     cmd($('#chooseEnvironmentSelect').val());
   }

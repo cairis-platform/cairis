@@ -50,7 +50,7 @@ $(window).on('load', function(){
     $("#inform").text(p.text());
 
   });
-  activeElement("reqTable");
+  activeElement("mainTable");
 
 });
 

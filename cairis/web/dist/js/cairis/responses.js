@@ -374,8 +374,7 @@ function createResponsesTable(){
     crossDomain: true,
     url: serverIP + "/api/responses",
     success: function (data) {
-      window.activeTable = "Responses";
-      setTableHeader();
+      setTableHeader("Responses");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -399,9 +398,9 @@ function createResponsesTable(){
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
-      $("#reqTable").find("tbody").addClass('response-rows');
+      $("#mainTable").find("tbody").addClass('response-rows');
       $('.response-rows').contextMenu({
         selector: 'td',
         items: {
@@ -414,7 +413,7 @@ function createResponsesTable(){
           }
         }
       });
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {

@@ -34,8 +34,7 @@ function createRisksTable(){
     crossDomain: true,
     url: serverIP + "/api/risks",
     success: function (data) {
-      window.activeTable = "Risks";
-      setTableHeader();
+      setTableHeader("Risks");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -63,9 +62,9 @@ function createRisksTable(){
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(1);
     },
     error: function (xhr, textStatus, errorThrown) {

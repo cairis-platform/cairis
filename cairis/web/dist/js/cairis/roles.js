@@ -24,9 +24,8 @@ $("#roleMenuClick").click(function () {
 });
 
 function fillRolesTable(){
-  window.activeTable = "Roles";
-  setTableHeader();
-  activeElement("reqTable");
+  setTableHeader("Roles");
+  activeElement("mainTable");
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -56,9 +55,10 @@ function fillRolesTable(){
         textToInsert[i++] = '</td>';
         textToInsert[i++] = '</tr>';
       });
-      $("#reqTable").append(textToInsert.join(''));
+      $("#mainTable").append(textToInsert.join(''));
+      $(".theTable").css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
     },
     error: function (xhr, textStatus, errorThrown) {

@@ -35,8 +35,7 @@ function createLocationsTable(){
     crossDomain: true,
     url: serverIP + "/api/locations",
     success: function (data) {
-      window.activeTable = "Locations";
-      setTableHeader();
+      setTableHeader("Locations");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -56,9 +55,9 @@ function createLocationsTable(){
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {

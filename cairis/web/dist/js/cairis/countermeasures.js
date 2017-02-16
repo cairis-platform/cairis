@@ -42,8 +42,7 @@ function createCountermeasuresTable(){
     crfossDomain: true,
     url: serverIP + "/api/countermeasures",
     success: function (data) {
-      window.activeTable = "Countermeasures";
-      setTableHeader();
+      setTableHeader("Countermeasures");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -67,8 +66,8 @@ function createCountermeasuresTable(){
       theTable.append(textToInsert.join(''))
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
-      $("#reqTable").find("tbody").addClass('countermeasure-rows');
+      $("#mainTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").addClass('countermeasure-rows');
       $('.countermeasure-rows').contextMenu({
         selector: 'td',
         items: {
@@ -80,7 +79,7 @@ function createCountermeasuresTable(){
           }
         }
       });
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -919,6 +918,8 @@ function generateAsset(cmName) {
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-
-
 }
+
+$('#countermeasureValuesClick').click(function(){
+  $('#unsupportedModal').modal('show');
+});

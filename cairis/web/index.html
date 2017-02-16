@@ -170,7 +170,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header" style="margin-left: 5px; margin-right: 5px; margin-bottom: 5px;">
-      <div id="filtercontent" class="extraContent row form-group" style="display:none">
+      <div id="filterrequirementscontent" class="extraContent row form-group" style="display:none">
         <div class="col-md-1">
           <label class="topCombobox control-label">Assets</label>
         </div>
@@ -391,7 +391,7 @@
     </section>
     <!-- Main content -->
     <section id="maincontent" class="content" style="margin-left: 5px; margin-right: 5px">
-      <table id="reqTable"class="theTable table table-striped table-bordered sortable">
+      <table id="mainTable"class="theTable table table-striped table-bordered sortable">
         <thead class="thead-inverse"></thead>
         <tbody>
         </tbody>
@@ -869,16 +869,34 @@
   </div>
   </div>
 
+  <div class="modal fade" id="unsupportedModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Not available</h4>
+        </div>
+        <div class="modal-body">
+          <p>This feature has not been implemented yet.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <div class="loadingWrapper">
     <div class="divLoading">
     </div>
   </div>
   <script>
-    var reqTabl =  $('#reqTable').editableTableWidget({editor: $('<textarea>')});
+    var mainTabl =  $('#mainTable').editableTableWidget({editor: $('<textarea>')});
     //  if the table is been scrolled, it needs to be out of focus
     $('#maincontent').scroll(function(){
-      $('#reqTable').find('td:first').focus();
-      $('#reqTable').find('td:last').focus();
+      $('#mainTable').find('td:first').focus();
+      $('#mainTable').find('td:last').focus();
     });
     $("#comboboxDialog").hide();
     $("#debugID").click(function () {
@@ -893,7 +911,7 @@
     LazyLoad.js(["dist/js/cairis/Cairis-UI.js","dist/js/cairis/buttonclicks.js", "dist/js/cairis/Cairis.js", "dist/js/cairis/readFile.js",
         "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/personas.js", "dist/js/cairis/assets.js", "dist/js/cairis/templateassets.js","dist/js/cairis/templaterequirements.js","dist/js/cairis/templategoals.js","dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js", "dist/js/cairis/tasks.js", "dist/js/cairis/domainproperties.js", "dist/js/cairis/obstacles.js", "dist/js/cairis/countermeasures.js", "dist/js/cairis/usecases.js","dist/js/cairis/vulnerabilities.js","dist/js/cairis/architecturalpatterns.js","dist/js/cairis/requirements.js",
         "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/taskcharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js","dist/js/cairis/environments.js","dist/js/cairis/valuetypes.js","dist/js/cairis/locations.js","dist/js/cairis/traceability.js","dist/js/cairis/chernoff.js","dist/js/cairis/conceptreferences.js",
-        "dist/js/cairis/SVGhandler.js","dist/js/objects/jsonDefaultObjects.js"], function () {
+        "dist/js/cairis/SVGhandler.js","dist/js/objects/jsonDefaultObjects.js","dist/js/cairis/assetassociations.js"], function () {
 
       console.log("All Cairis JS loaded");
     });

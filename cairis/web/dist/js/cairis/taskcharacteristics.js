@@ -35,8 +35,7 @@ function createTaskCharacteristicsTable(){
     crossDomain: true,
     url: serverIP + "/api/task_characteristics",
     success: function (data) {
-      window.activeTable = "TaskCharacteristics";
-      setTableHeader();
+      setTableHeader("TaskCharacteristics");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -60,9 +59,9 @@ function createTaskCharacteristicsTable(){
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {

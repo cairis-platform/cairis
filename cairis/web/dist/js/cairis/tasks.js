@@ -58,8 +58,7 @@ function createTasksTable(){
     crossDomain: true,
     url: serverIP + "/api/tasks",
     success: function (data) {
-      window.activeTable = "Tasks";
-      setTableHeader();
+      setTableHeader("Tasks");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -84,8 +83,8 @@ function createTasksTable(){
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
       $.contextMenu('destroy',$('.task-rows'));
-      $("#reqTable").find("tbody").removeClass();
-      $("#reqTable").find("tbody").addClass('task-rows');
+      $("#mainTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").addClass('task-rows');
 
       $('.task-rows').contextMenu({
         selector: 'td',
@@ -107,7 +106,7 @@ function createTasksTable(){
         }
       });
 
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {

@@ -224,7 +224,7 @@ mainContent.on('click', "#UpdateEnvironment", function (e) {
 });
 
 
-$("#reqTable").on("click", "#addNewEnvironment", function () {
+$("#mainTable").on("click", "#addNewEnvironment", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editEnvironmentOptions.html", "#objectViewer", null, true, true, function () {
     $("#editEnvironmentOptionsform").validator();
@@ -292,12 +292,11 @@ function createEnvironmentsTable(){
     crossDomain: true,
     url: serverIP + "/api/environments",
     success: function (data) {
-      window.activeTable = "Environment";
-      setTableHeader();
+      setTableHeader("Environment");
       fillEnvironmentsTable(data, function(){
         newSorting(1);
       });
-      activeElement("reqTable");
+      activeElement("mainTable");
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -312,7 +311,7 @@ mainContent.on('click', '#CloseEnvironment', function (e) {
 });
 
 function fillEnvironmentsTable(data, callback){
-  var theTable = $("#reqTable");
+  var theTable = $("#mainTable");
   var textToInsert = [];
   var i = 0;
 
@@ -329,7 +328,8 @@ function fillEnvironmentsTable(data, callback){
   });
   theTable.append(textToInsert.join(''));
   $.contextMenu('destroy',$('.requirement-rows'));
-  $("#reqTable").find("tbody").removeClass();
+  theTable.css("visibility","visible");
+  $("#mainTable").find("tbody").removeClass();
 
   callback();
 }

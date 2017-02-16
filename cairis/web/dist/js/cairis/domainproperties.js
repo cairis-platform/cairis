@@ -40,8 +40,7 @@ function createDomainPropertiesTable(){
     crossDomain: true,
     url: serverIP + "/api/domainproperties",
     success: function (data) {
-      window.activeTable = "DomainProperties";
-      setTableHeader();
+      setTableHeader("DomainProperties");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -66,8 +65,8 @@ function createDomainPropertiesTable(){
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
       $.contextMenu('destroy',$('.domainproperty-rows'));
-      $("#reqTable").find("tbody").removeClass();
-      activeElement("reqTable");
+      $("#mainTable").find("tbody").removeClass();
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {

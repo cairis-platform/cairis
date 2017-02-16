@@ -35,8 +35,7 @@ function createDocumentReferencesTable(){
     crossDomain: true,
     url: serverIP + "/api/document_references",
     success: function (data) {
-      window.activeTable = "DocumentReferences";
-      setTableHeader();
+      setTableHeader("DocumentReferences");
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
@@ -60,9 +59,9 @@ function createDocumentReferencesTable(){
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
-      $("#reqTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").removeClass();
 
-      activeElement("reqTable");
+      activeElement("mainTable");
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {
