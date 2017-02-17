@@ -439,7 +439,7 @@ mainContent.on("click", "#updateButtonAsset", function(){
     assoc.push( $("#tailAdorn").val());
     assoc.push( $("#tailNav").val());
     assoc.push( $("#tailAsset").val());
-    var arrIndex = $.session.get("Arrayindex");
+    var arrIndex = $.session.get('Arrayindex');
     allprops[arrIndex].theAssociations.push(assoc);
     appendAssetAssociation(assoc);
     $("#editAssetsOptionsform").toggle();

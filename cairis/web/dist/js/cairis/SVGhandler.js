@@ -63,13 +63,9 @@ function handleNodeClick(event,objt) {
       crossDomain: true,
       url: serverIP + link.replace(" ","%20"),
       success: function (data) {
-        var dataArr = {};
-        dataArr["#theName"] = String(data.theName);
-        fillOptionMenu("fastTemplates/AssetOptions.html", "#optionsContent", dataArr,false,true,function(){
+        fillOptionMenu("fastTemplates/AssetOptions.html", "#optionsContent", data,false,true,function(){
           $("#optionsHeaderGear").text("Asset properties");
-          $("#theDescription").val(data.theDescription);
-          $("#theSignificance").val(data.theSignificance);
-
+          $('#assetsForm').loadJSON(data,null);
           $.each(data.theEnvironmentProperties, function (idx, env) {
             if (window.assetEnvironment == env.theEnvironmentName) {
               var propValues = [];

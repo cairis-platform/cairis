@@ -1828,6 +1828,8 @@ function encodeQueryList(q,data) {
 }
 
 function resetSecurityPropertyList() {
+  $('#theSecurityPropertyValue').val('None');
+  $('#theSecurityPropertyRationale').val('');
   $("#theSecurityPropertyName").find('option').remove();
   var spList = ['Confidentiality','Integrity','Availability','Accountability','Anonymity','Pseudonymity','Unobservability','Unlinkability'];
   $.each(spList,function(idx,spValue) {
