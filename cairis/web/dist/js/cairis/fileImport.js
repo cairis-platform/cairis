@@ -40,14 +40,8 @@ $("#importClick").click(function () {
       data: objectoutput,
       url: serverIP + "/api/import/text",
       success: function (data) {
-        refreshDimensionSelector($('#summaryenvironmentsbox'),'environment',undefined,function(){
-          activeElement("homePanel");
-          $('#summaryenvironmentsbox').change();
-          $(".loadingWrapper").fadeOut(500);
-          summaryTables();
-          hideLoading();
-          showPopup(true);
-        });
+        summaryTables();
+        showPopup(true);
       },
       complete: function() {
         hideLoading();

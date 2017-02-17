@@ -304,3 +304,7 @@ function postRequirementRow(row,whatKind,value){
     }
   });
 }
+
+$(document).on('click',"#addReqMenu",function(){
+  addReq();
+});

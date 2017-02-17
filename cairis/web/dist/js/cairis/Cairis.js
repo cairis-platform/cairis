@@ -41,13 +41,8 @@ $(document).ready(function() {
       success: function(data, status, xhr) {
         debugLogger(data);
         $.session.set("sessionID", data.session_id);
-        refreshDimensionSelector($('#summaryenvironmentsbox'),'environment',undefined,function(){
-           activeElement("homePanel");
-           $('#summaryenvironmentsbox').change();
-           $(".loadingWrapper").fadeOut(500);
-           summaryTables();
-           hideLoading();
-        });
+        summaryTables();
+        hideLoading();
       },
       error: function(data, status, xhr) {
         console.log(this.url);
@@ -57,13 +52,8 @@ $(document).ready(function() {
     });
   }
   else {
-    refreshDimensionSelector($('#summaryenvironmentsbox'),'environment',undefined,function(){
-      activeElement("homePanel");
-      $('#summaryenvironmentsbox').change();
-      $(".loadingWrapper").fadeOut(500);
-      summaryTables();
-      hideLoading();
-    });
+    summaryTables();
+    hideLoading();
   }
 });
 
@@ -1279,7 +1269,7 @@ function requirementsTable(dimName){
 
 function summaryTables() {
   activeElement("homePanel");
-  refreshDimensionSelector($('#summaryenvironmentsbox'),'environment',function() {
+  refreshDimensionSelector($('#summaryenvironmentsbox'),'environment',undefined,function() {
     activeElement("homePanel");
     $('#summaryenvironmentsbox').change();
     $(".loadingWrapper").fadeOut(500);
@@ -1370,7 +1360,7 @@ function activeElement(elementid){
     //If it is the table, we need to see which table it is
     window.theVisualModel = 'None';
     $("#filterrequirementscontent").show();
-    elementId = 'mainTable'
+    elementid = 'mainTable'
   }
 
   if (elementid == 'objectViewer') {
@@ -1393,7 +1383,7 @@ function setTableHeader(activeTable){
   switch (activeTable) {
     case "Requirements":
       debugLogger("Is Requirement");
-      thead = "<th width='50px'></th><th>Requirement</th><th>Description</th><th>Priority</th><th>Rationale</th><th>Fit Citerion</th><th>Originator</th><th>Type</th>";
+      thead = "<th width='50px' id='addReqMenu'><i class='fa fa-plus floatCenter'></i></th></th><th>Requirement</th><th>Description</th><th>Priority</th><th>Rationale</th><th>Fit Citerion</th><th>Originator</th><th>Type</th>";
       break;
     case "TemplateRequirements":
       debugLogger("Is Template Requirement");

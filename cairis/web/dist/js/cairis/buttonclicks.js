@@ -24,10 +24,6 @@ $("#addReq").click(function() {
   addReq();
 });
 
-$("#addReqMenu").click(function() {
-  addReq();
-});
-
 function addReq() {
 
   var kind  = "";
@@ -545,13 +541,7 @@ $('#locationsModelClick').click(function(){
 $("#newClick").click(function () {
   showLoading();
   postNewProject(function () {
-    refreshDimensionSelector($('#summaryenvironmentsbox'),'environment',undefined,function(){
-      activeElement("homePanel");
-      $('#summaryenvironmentsbox').change();
-      $(".loadingWrapper").fadeOut(500);
-      summaryTables();
-      hideLoading();
-    });
+    summaryTables();
   });
 });
 
