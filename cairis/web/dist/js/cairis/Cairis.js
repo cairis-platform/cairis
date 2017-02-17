@@ -711,7 +711,7 @@ function getPersonaView(pName,bvName,pcName){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/personas/model/name/" + personaName.replace(" ","%20") + "/variable/" + bvName.replace(" ","%20") + "/characteristic/" + pcName.replace(" ","%20"),
+    url: serverIP + "/api/personas/model/name/" + encodeURIComponent(personaName) + "/variable/" + encodeURIComponent(bvName) + "/characteristic/" + encodeURIComponent(pcName),
     success: function(data){
       fillSvgViewer(data);
     },
@@ -2095,7 +2095,9 @@ $("#chooseEnvironment").on('shown.bs.modal', function() {
 
 $("#chooseEnvironment").on('click', '#chooseEnvironmentButton',function(e) {
   if ($('#chooseEnvironment').attr('data-chooseDimension') == 'persona') {
-    getPersonaView($('#chooseEnvironmentSelect').val(),'All','All');
+    refreshDimensionSelector($('#appersonasbox'),'persona',undefined,function() {
+      getPersonaView($('#chooseEnvironmentSelect').val(),'All','All');
+    });
   }
   else if ($('#chooseEnvironment').attr('data-chooseDimension') == 'misusability case') {
     var mcName = $('#chooseEnvironmentSelect').val();

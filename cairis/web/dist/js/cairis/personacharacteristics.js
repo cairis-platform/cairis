@@ -307,7 +307,8 @@ function appendBacking(item) {
   $("#theBacking").find("tbody").append('<tr><td class="backing"">'+ item +'</td></tr>');
 };
 
-function loadCharacteristicReference() {
+function loadCharacteristicReference(e) {
+  e.preventDefault();
   $('#theArtifactTypeDiv').hide();
   refreshDimensionSelector($('#theReferenceName'),'document_reference',undefined,function() {
     $('#theArtifactType').val('document');
@@ -323,7 +324,8 @@ function loadCharacteristicReference() {
   });
 };
 
-function addCharacteristicReference() {
+function addCharacteristicReference(e) {
+  e.preventDefault();
   if ($("#editCharacteristicReference").data("savedcr") == true) {
     var cr = JSON.parse($("#editCharacteristicReference").data("crtype"));
     var item = jQuery.extend(true, {},characteristicReferenceDefault );
@@ -350,7 +352,8 @@ function addCharacteristicReference() {
   }
 }
 
-function updateReferenceList() {
+function updateReferenceList(e) {
+  e.preventDefault();
   var cr = JSON.parse($("#editCharacteristicReference").data("currentcr"));
   var item = jQuery.extend(true, {},characteristicReferenceDefault );
   item.theReferenceName = $("#theReferenceName").val();
@@ -419,16 +422,15 @@ mainContent.on("click", "#addRebuttal", function(){
   $("#editCharacteristicReference").modal('show');
 });
 
-$("#editCharacteristicReference").on('shown.bs.modal', function() {
+$("#editCharacteristicReference").on('shown.bs.modal', function(e) {
   var cmd = $("#editCharacteristicReference").data("loadcr");
-  cmd();
+  cmd(e);
 });
 
 $("#editCharacteristicReference").on('click', '#saveCharacteristicReference',function(e) {
-  e.preventDefault();
   $("#editCharacteristicReference").data("savedcr",true);
   var cmd = $("#editCharacteristicReference").data("savecr");
-  cmd();
+  cmd(e);
 });
 
 mainContent.on("click",".ground", function () {

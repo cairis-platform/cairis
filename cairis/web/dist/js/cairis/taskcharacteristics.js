@@ -330,33 +330,33 @@ $('#editCharacteristicReference').on("change", "#theArtifactType", function(){
   });
 });
 
-function addTaskCharacteristicReference() {
-  if ($("#editCharacteristicReference").data("savedcr") == true) {
-    var cr = JSON.parse($("#editCharacteristicReference").data("crtype"));
-    var item = jQuery.extend(true, {},characteristicReferenceDefault );
-    item.theReferenceName = $("#theReferenceName").val();
-    item.theReferenceDescription = $("#theDescription").val();
-    appendTaskGWR(cr.tableId,cr.classId,item); 
-    item.theDimensionName = 'document';
-    var tc = JSON.parse($.session.get("TaskCharacteristic"));
-    if (cr.tableId == '#theGrounds') {
-      item.theCharacteristicType = 'grounds';
-      tc.theGrounds.push(item);
-    }
-    else if (cr.tableId == '#theWarrant') {
-      item.theCharacteristicType = 'warrant';
-      tc.theWarrant.push(item);
-    }
-    else {
-      item.theCharacteristicType = 'rebuttal';
-      tc.theRebuttal.push(item);
-    }
-    $.session.set("TaskCharacteristic", JSON.stringify(tc));
-    $("#editCharacteristicReference").modal('hide');
+function addTaskCharacteristicReference(e) {
+  e.preventDefault();
+  var cr = JSON.parse($("#editCharacteristicReference").data("crtype"));
+  var item = jQuery.extend(true, {},characteristicReferenceDefault );
+  item.theReferenceName = $("#theReferenceName").val();
+  item.theReferenceDescription = $("#theDescription").val();
+  appendTaskGWR(cr.tableId,cr.classId,item); 
+  item.theDimensionName = 'document';
+  var tc = JSON.parse($.session.get("TaskCharacteristic"));
+  if (cr.tableId == '#theGrounds') {
+    item.theCharacteristicType = 'grounds';
+    tc.theGrounds.push(item);
   }
+  else if (cr.tableId == '#theWarrant') {
+    item.theCharacteristicType = 'warrant';
+    tc.theWarrant.push(item);
+  }
+  else {
+    item.theCharacteristicType = 'rebuttal';
+    tc.theRebuttal.push(item);
+  }
+  $.session.set("TaskCharacteristic", JSON.stringify(tc));
+  $("#editCharacteristicReference").modal('hide');
 }
 
-function updateTaskReferenceList() {
+function updateTaskReferenceList(e) {
+  e.preventDefault();
   var cr = JSON.parse($("#editCharacteristicReference").data("currentcr"));
   var item = jQuery.extend(true, {},characteristicReferenceDefault );
   item.theReferenceName = $("#theReferenceName").val();
@@ -430,10 +430,10 @@ $("#editCharacteristicReference").on('shown.bs.modal', function() {
   cmd();
 });
 
-$("#editCharacteristicReference").on('click', '#saveCharacteristicReference',function() {
+$("#editCharacteristicReference").on('click', '#saveCharacteristicReference',function(e) {
   $("#editCharacteristicReference").data("savedcr",true);
   var cmd = $("#editCharacteristicReference").data("savecr");
-  cmd();
+  cmd(e);
 });
 
 mainContent.on("click",".ground", function () {
