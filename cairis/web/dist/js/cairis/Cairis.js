@@ -1220,6 +1220,7 @@ function refreshDimensionSelector(sBox,dimName,envName,callback) {
     crossDomain: true,
     url: urlText,
     success: function (data) {
+      data.sort();
       sBox.empty();
       if (dimName == 'asset' || dimName == 'goal' || dimName == 'obstacle' || dimName == 'task' || dimName == 'usecase' || dimName == 'misusecase' || dimName == 'requirement') {
         sBox.append("<option>All</option>");

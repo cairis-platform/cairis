@@ -308,55 +308,46 @@ function appendBacking(item) {
 };
 
 function loadCharacteristicReference() {
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/dimensions/table/document_reference",
-    success: function (data) {
-      data.sort();
-      $("#theReferenceName").empty();
-      $.each(data, function(key, item) {
-        $("#theReferenceName").append("<option>" + item + "</option>");
-      }); 
-      var cr = JSON.parse($("#editCharacteristicReference").data("currentcr"));
+  $('#theArtifactTypeDiv').hide();
+  refreshDimensionSelector($('#theReferenceName'),'document_reference',undefined,function() {
+    $('#theArtifactType').val('document');
+    var cr = $("#editCharacteristicReference").data("currentcr");
+    if (cr != undefined) {
+      cr = JSON.parse(cr);
       $("#theReferenceName").val(cr.name);
       $("#theDescription").val(cr.description);
-      $('#theArtifactType').prop('disabled','disabled');
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+    else {
+      $("#theDescription").val('');
     }
   });
 };
 
 function addCharacteristicReference() {
-  var cr = JSON.parse($("#editCharacteristicReference").data("crtype"));
-  var item = jQuery.extend(true, {},characteristicReferenceDefault );
-  item.theReferenceName = $("#theReferenceName").val();
-  item.theReferenceDescription = $("#theDescription").val();
-  appendGWR(cr.tableId,cr.classId,item); 
-  item.theDimensionName = 'document';
-  var pc = JSON.parse($.session.get("PersonaCharacteristic"));
-  if (cr.tableId == '#theGrounds') {
-    item.theCharacteristicType = 'grounds';
-    pc.theGrounds.push(item);
+  if ($("#editCharacteristicReference").data("savedcr") == true) {
+    var cr = JSON.parse($("#editCharacteristicReference").data("crtype"));
+    var item = jQuery.extend(true, {},characteristicReferenceDefault );
+    item.theReferenceName = $("#theReferenceName").val();
+    item.theReferenceDescription = $("#theDescription").val();
+    appendGWR(cr.tableId,cr.classId,item); 
+    item.theDimensionName = 'document';
+    var pc = JSON.parse($.session.get("PersonaCharacteristic"));
+    if (cr.tableId == '#theGrounds') {
+      item.theCharacteristicType = 'grounds';
+      pc.theGrounds.push(item);
+    }
+    else if (cr.tableId == '#theWarrant') {
+      item.theCharacteristicType = 'warrant';
+      pc.theWarrant.push(item);
+    }
+    else {
+      item.theCharacteristicType = 'rebuttal';
+      pc.theRebuttal.push(item);
+    }
+    $.session.set("PersonaCharacteristic", JSON.stringify(pc));
+    $("#editCharacteristicReference").data("savedcr",false);
+    $("#editCharacteristicReference").modal('hide');
   }
-  else if (cr.tableId == '#theWarrant') {
-    item.theCharacteristicType = 'warrant';
-    pc.theWarrant.push(item);
-  }
-  else {
-    item.theCharacteristicType = 'rebuttal';
-    pc.theRebuttal.push(item);
-  }
-  $.session.set("PersonaCharacteristic", JSON.stringify(pc));
-  $("#editCharacteristicReference").modal('hide');
 }
 
 function updateReferenceList() {
@@ -433,7 +424,9 @@ $("#editCharacteristicReference").on('shown.bs.modal', function() {
   cmd();
 });
 
-$("#editCharacteristicReference").on('click', '#saveCharacteristicReference',function() {
+$("#editCharacteristicReference").on('click', '#saveCharacteristicReference',function(e) {
+  e.preventDefault();
+  $("#editCharacteristicReference").data("savedcr",true);
   var cmd = $("#editCharacteristicReference").data("savecr");
   cmd();
 });
@@ -473,4 +466,31 @@ mainContent.on("click",".rebuttal", function () {
   $("#editCharacteristicReference").data('loadcr',loadCharacteristicReference);
   $("#editCharacteristicReference").data("savecr",updateReferenceList);
   $("#editCharacteristicReference").modal('show');
+});
+
+mainContent.on('click','td.deleteground',function() {
+  var gRow = $(this).closest("tr");
+  var rowIdx = gRow.index();
+  gRow.remove();
+  var pc = JSON.parse($.session.get("PersonaCharacteristic"));
+  pc.theGrounds.splice(rowIdx,1);
+  $.session.set("PersonaCharacteristic", JSON.stringify(pc));
+});
+
+mainContent.on('click','td.deletewarrant',function() {
+  var wRow = $(this).closest("tr");
+  var rowIdx = wRow.index();
+  wRow.remove();
+  var pc = JSON.parse($.session.get("PersonaCharacteristic"));
+  pc.theWarrant.splice(rowIdx,1);
+  $.session.set("PersonaCharacteristic", JSON.stringify(pc));
+});
+
+mainContent.on('click','td.deleterebuttal',function() {
+  var rRow = $(this).closest("tr");
+  var rowIdx = rRow.index();
+  rRow.remove();
+  var pc = JSON.parse($.session.get("PersonaCharacteristic"));
+  pc.theRebuttal.splice(rowIdx,1);
+  $.session.set("PersonaCharacteristic", JSON.stringify(pc));
 });
