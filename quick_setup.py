@@ -161,7 +161,7 @@ class CAIRISUserConfigurationForm(np.ActionForm):
 
   def create(self):
     self.name = "Add CAIRIS User"
-    self.theUsername = self.add(np.TitleText, name = "Username:", value = "localhost")
+    self.theUsername = self.add(np.TitleText, name = "Username:", value = "test")
     self.thePassword = self.add(np.TitlePassword, name = "Password:", value = "")
 
   def on_ok(self):
