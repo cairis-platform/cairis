@@ -59,13 +59,30 @@ $ ./configure_cairis_db.py
 
 ![fig:configure_cairis_db]({{ site.baseurl }}/images/configure_cairis_db.jpg)
 
-Assuming you didn't customise the installation location of CAIRIS when running `pip`, you can usually accept many of these defaults, except for the name and location of the CAIRIS configuration file.  When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool.
+You can usually accept many of these defaults, you will however need to modify the location of the root directory and the static directory to reflect the location of the CAIRIS files. For example if you cloned the repository to the root directory you would change the root and static directories to look like the below.
 
-* Ensure the CAIRIS_CFG environment variable to points to your CAIRIS configuration file, and is persistent, i.e.
+![fig:change_configure_cairis_db]({{ site.baseurl }}/images/change_configure_cairis_db.jpg)
+
+When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; 
+this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool.
+
+* Ensure the CAIRIS_CFG environment variable points to your CAIRIS configuration file, and is persistent, i.e.
 
 {% highlight bash %}
-echo export CAIRIS_CFG=/home/cairisuser/cairis.cnf >> .bashrc
+$ echo export CAIRIS_CFG=/home/cairisuser/cairis.cnf >> .bashrc
 {% endhighlight %}
+
+* Ensure the PYTHONPATH environment variable points to your CAIRIS application location, and is persistent, i.e.
+
+{% highlight bash %}
+$ echo export PYTHONPATH=/home/cairisuser/cairis >> .bashrc
+{% endhighlight %}
+
+* Reload your .bashrc file i.e.
+
+{% highlight bash %}
+source .bashrc
+{% endhighlight bash%}
 
 * Add a user account
 
@@ -110,7 +127,7 @@ Assuming you didn't customise the installation location of CAIRIS when running `
 * Ensure the CAIRIS_CFG environment variable to points to your CAIRIS configuration file, and is persistent, i.e.
 
 {% highlight bash %}
-echo export CAIRIS_CFG=/home/cairisuser/cairis.cnf >> .bashrc
+$ echo export CAIRIS_CFG=/home/cairisuser/cairis.cnf >> .bashrc
 {% endhighlight %}
 
 * Starting the CAIRIS desktop application
