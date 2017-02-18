@@ -68,7 +68,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     fileName = os.environ.get("HOME") + "/.bashrc"
     f = open(fileName,'a')
     f.write("export CAIRIS_CFG="+str(self.theFileName.value)+"\n")
-    f.write("export PYTHONPATH=${PYTHONPATH}:"self.pathName+"\n")
+    f.write("export PYTHONPATH=${PYTHONPATH}:"+self.pathName+"\n")
     f.close()
     self.parentApp.setNextForm("NEXT")
 
