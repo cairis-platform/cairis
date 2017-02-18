@@ -154,6 +154,7 @@ function viewTask(taskName) {
           appendTaskEnvironment(env.theEnvironmentName);
         });
         fillTaskEnvInfo(data.theEnvironmentProperties[0]);
+        $('#tasktabsID').show('fast');
         $.session.set("taskEnvironmentName", data.theEnvironmentProperties[0].theEnvironmentName);
       });
     },
@@ -328,7 +329,7 @@ mainContent.on('click', ".deleteTaskEnv", function () {
   $(this).closest("tr").remove();
   var task = JSON.parse($.session.get("Task"));
   $.each(task.theEnvironmentProperties, function (index, env) {
-    if(env.theEnvironmentName == env){
+    if(env.theEnvironmentName == envi){
       task.theEnvironmentProperties.splice( index ,1 );
       $.session.set("Task", JSON.stringify(task));
       clearTaskEnvInfo();
@@ -337,7 +338,7 @@ mainContent.on('click', ".deleteTaskEnv", function () {
       if(jQuery(UIenv).has(".taskEnvironment").length){
         UIenv.find(".taskEnvironment:first").trigger('click');
       }else{
-        $("#Properties").hide("fast");
+        $("#tasktabsID").hide("fast");
       }
 
       return false;
@@ -360,7 +361,7 @@ mainContent.on("click", "#addTaskEnv", function () {
     $(document).find(".taskEnvironment").each(function () {
       if($(this).text() == text){
         $(this).trigger("click");
-        $("#Properties").show("fast");
+        $("#tasktabsID").show("fast");
       }
     });
   });
@@ -443,8 +444,8 @@ $(document).on("click", "#addNewTask", function () {
     $("#editTaskOptionsForm").validator();
     $("#UpdateTask").text("Create");
     $("#editTaskOptionsForm").addClass("new");
-    $("#Properties").hide();
     $.session.set("Task", JSON.stringify(jQuery.extend(true, {},taskDefault )));
+    $('#tasktabsID').hide();
   });
 });
 
