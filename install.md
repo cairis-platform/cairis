@@ -59,7 +59,7 @@ $ ./configure_cairis_db.py
 
 ![fig:configure_cairis_db]({{ site.baseurl }}/images/configure_cairis_db.jpg)
 
-You can usually accept many of these defaults, except you will need to modify the location of the root directory and the static directory to reflect the location of the CAIRIS files. For example if you cloned the repository to the root directory you would change the root and static directories to look like the below.
+You can usually accept many of these defaults, you will however need to modify the location of the root directory and the static directory to reflect the location of the CAIRIS files. For example if you cloned the repository to the root directory you would change the root and static directories to look like the below.
 
 ![fig:change_configure_cairis_db]({{ site.baseurl }}/images/change_configure_cairis_db.jpg)
 
