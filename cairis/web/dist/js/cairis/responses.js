@@ -25,53 +25,58 @@ $("#responseMenuClick").click(function () {
 
 $(document).on("click", "#addNewResponse", function () {
 
-  $("#ChooseResponseDialog" ).dialog({
-    modal: true,
-    buttons: {
-      Ok: function() {
-        $( this ).dialog( "close" );
-        var responseType = $("#ChooseResponseDialog").find("option:selected").attr("id");
+  getRisks(function(risks) {
+    if (risks.length == undefined) {
+      $('#noRisksModal').modal('show');
+    }
+    else {
+      $("#ChooseResponseDialog" ).dialog({
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+            var responseType = $("#ChooseResponseDialog").find("option:selected").attr("id");
 
-        activeElement("objectViewer");
-        fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
-          $("#editResponseOptionsform").validator();
-          $("#UpdateResponse").text("Create");
-          $("#editResponseOptionsform").addClass("newResponse");
-          var select = $("#chooseRisk");
-          $.session.set("response", JSON.stringify(jQuery.extend(true, {},responseDefault )));
-          select.empty();
-          getRisks(function (risks) {
-            $.each(risks, function (key, obj) {
-              select.append($('<option>', { value : key }).text(key));
+            activeElement("objectViewer");
+            fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
+              $("#editResponseOptionsform").validator();
+              $("#UpdateResponse").text("Create");
+              $("#editResponseOptionsform").addClass("newResponse");
+              var select = $("#chooseRisk");
+              $.session.set("response", JSON.stringify(jQuery.extend(true, {},responseDefault )));
+              select.empty();
+              $.each(risks, function (key, obj) {
+                select.append($('<option>', { value : key }).text(key));
+              });
+              var resp = JSON.parse($.session.get("response"));
+              resp.theRisk = $("#chooseRisk").val();
+              resp.theResponseType = responseType;
+              $.session.set("response", JSON.stringify(resp));
+              $("#chooseRisk").trigger('click');
+
+              $.session.set("responseKind",responseType);
+              switch (responseType){
+                case "Transfer":
+                  toggleResponse("#transferWindow");
+                  break;
+                case "Prevent":
+                case "Detect":
+                case "Deter":
+                case "React":
+                  toggleResponse("#mitigateWindow");
+                  break;
+                case "Accept":
+                  toggleResponse("#acceptWindow");
+                  break;
+                default :
+                  toggleResponse("#mitigateWindow");
+                  break;
+              }
+              $("#Properties").hide();
             });
-            var resp = JSON.parse($.session.get("response"));
-            resp.theRisk = $("#chooseRisk").val();
-            resp.theResponseType = responseType;
-            $.session.set("response", JSON.stringify(resp));
-            $("#chooseRisk").trigger('click');
-          });
-
-          $.session.set("responseKind",responseType);
-          switch (responseType){
-            case "Transfer":
-              toggleResponse("#transferWindow");
-              break;
-            case "Prevent":
-            case "Detect":
-            case "Deter":
-            case "React":
-              toggleResponse("#mitigateWindow");
-              break;
-            case "Accept":
-              toggleResponse("#acceptWindow");
-              break;
-            default :
-              toggleResponse("#mitigateWindow");
-              break;
           }
-          $("#Properties").hide();
-        });
-      }
+        }
+      });
     }
   });
 });
@@ -641,6 +646,29 @@ function riskEnvironmentDialogBox(haveEnv,riskName,callback){
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+function getRisks(callback){
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/risks",
+    success: function (data) {
+      if(jQuery.isFunction(callback)){
+        callback(data);
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      return null;
     }
   });
 }
