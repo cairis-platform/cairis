@@ -2095,3 +2095,23 @@ $("#chooseEnvironment").on('click', '#chooseEnvironmentButton',function(e) {
   }
   $('#chooseEnvironment').modal('hide');
 });
+
+function getNoOfRisks(callback) {
+  $.ajax({
+    type:"GET",
+    dataType: "json",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/risk",
+    success: function(data) {
+      callback(data.length);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}

@@ -309,7 +309,7 @@ function getRiskEnvironments(){
       $('#theRiskEnvironments').find('tbody').empty();
       if (data.length > 0) {
         $('#theRiskRatingDiv').show();
-        $('#theRiskRatingEnvironmentDiv').show();
+        $('#theRiskEnvironmentDiv').show();
         $.each(data, function (index, object) {
           appendRiskEnvironment(object);
         });
@@ -317,7 +317,7 @@ function getRiskEnvironments(){
       }
       else {
         $('#theRiskRatingDiv').hide();
-        $('#theRiskRatingEnvironmentDiv').hide();
+        $('#theRiskEnvironmentDiv').hide();
       }
     },
     error: function (xhr, textStatus, errorThrown) {

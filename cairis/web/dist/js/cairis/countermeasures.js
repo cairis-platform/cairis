@@ -139,8 +139,8 @@ function viewCountermeasure(cmName) {
 };
 
 $(document).on("click", "#addNewCountermeasure", function () {
-  getRisks(function(risks) {
-    if (risks.length == undefined) {
+  getNoOfRisks(function(noOfRisks) {
+    if (noOfRisks == 0) {
       $('#noRisksModal').modal('show');
     }
     else {
