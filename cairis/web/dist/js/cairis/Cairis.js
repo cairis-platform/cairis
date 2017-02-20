@@ -1532,10 +1532,9 @@ function setTableHeader(activeTable){
 function fillSvgViewer(data){
 
   var xmlString = (new XMLSerializer()).serializeToString(data);
-  activeElement("svgViewer");
   var svgDiv = $("#svgViewer");
-//  svgDiv.show();
-  svgDiv.css("height",$("#mainContent").height());
+  svgDiv.show();
+  svgDiv.css("height","100%");
   svgDiv.css("width","100%");
   svgDiv.html(xmlString);
   $("svg").attr("id","svg-id");
