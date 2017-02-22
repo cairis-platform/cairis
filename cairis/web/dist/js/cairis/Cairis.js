@@ -741,37 +741,6 @@ function getLocationsView(locsName,envName){
   });
 }
 
-function getRisks(callback){
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/risks",
-    success: function (data) {
-      if(jQuery.isFunction(callback)){
-        callback(data);
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      return null;
-    }
-  });
-}
-
-function getRoles(callback) {
-  getDimensions('role',callback);
-}
-
-function getRolesInEnvironment(envName,callback) {
-  getDimensionsInEnvironment('role',envName,callback);
-}
-
 function getAssetsInEnvironment(envName,callback) {
   getDimensionsInEnvironment('asset',envName,callback);
 }
@@ -1563,10 +1532,9 @@ function setTableHeader(activeTable){
 function fillSvgViewer(data){
 
   var xmlString = (new XMLSerializer()).serializeToString(data);
-  activeElement("svgViewer");
   var svgDiv = $("#svgViewer");
-//  svgDiv.show();
-  svgDiv.css("height",$("#mainContent").height());
+  svgDiv.show();
+  svgDiv.css("height","100%");
   svgDiv.css("width","100%");
   svgDiv.html(xmlString);
   $("svg").attr("id","svg-id");
@@ -2127,3 +2095,23 @@ $("#chooseEnvironment").on('click', '#chooseEnvironmentButton',function(e) {
   }
   $('#chooseEnvironment').modal('hide');
 });
+
+function getNoOfRisks(callback) {
+  $.ajax({
+    type:"GET",
+    dataType: "json",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/risk",
+    success: function(data) {
+      callback(data.length);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}

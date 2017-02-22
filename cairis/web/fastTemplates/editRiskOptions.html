@@ -3,7 +3,7 @@
     <div class="col-md-2">
       <label for="theName" class="control-label">Risk</label>
     </div>
-    <div class="col-md-11">
+    <div class="col-md-10">
       <input class="optionsInput form-control" type="text" name="theName" id="theName" data-error="Risk name required" required>
       <div class="help-block with-errors"></div>
     </div>
@@ -12,33 +12,35 @@
     <div class="col-md-2">
       <label for="theTags" class="control-label">Tags</label>
     </div>
-    <div class="col-md-11">
+    <div class="col-md-10">
       <input class="optionsInput form-control" type="text" name="theTags" id="theTags">
       <div class="help-block with-errors"></div>
     </div>
   </div>
+  </br>
   <div class="row">
     <div class="col-md-2">
       <label for="theThreatNames" class="control-label">Threat</label>
     </div>
-    <div class="col-md-11">
+    <div class="col-md-10">
       <select class="right riskDetailsChanger form-control" id="theThreatNames">
       </select>
       <div class="help-block with-errors"></div>
     </div>
   </div>
+  </br>
   <div class="row">
     <div class="col-md-2">
       <label for="theVulnerabilityNames" class="control-label">Vulnerability</label>
     </div>
-    <div class="col-md-11">
+    <div class="col-md-10">
       <select class="right riskDetailsChanger form-control" id="theVulnerabilityNames">
       </select>
       <div class="help-block with-errors"></div>
     </div>
   </div>
   </br>
-  <div>
+  <div id="theRiskEnvironmentDiv" style="display:none">
     <table class="clickable-table" id="theRiskEnvironments" style="width: 100%;">
       <thead>
         <tr><th>Environment</th></tr>
@@ -48,11 +50,16 @@
     </table>
   </div>
   </br>
-  <div>
-    <label for="rating" class="control-label" >Rating</label>
-    <input class="optionsInput form-control" type="text" name="rating" id="rating" readonly>
+  <div class="row" id="theRiskRatingDiv" style="display:none">
+    <div class="col-md-2">
+      <label for="rating" class="control-label">Rating</label>
+    </div>
+    <div class="col-md-10">
+      <input class="optionsInput form-control" type="text" name="rating" id="rating" readonly>
+    </div>
   </div>
-  <div>
+  </br>
+  <div id="theRiskResponseDiv" style="display:none">
     <table class="clickable-table" id="theResponses" style="width: 100%;">
       <thead>
         <tr><th>Response</th><th>Score (Pre Mitigation)</th><th>Score (Post Mitigation)</th></tr>
@@ -177,7 +184,7 @@
   </div>
   <div class="row">
     <div class="form-group col-md-2 col-md-offset-5">
-      <button type="submit" class="btn btn-primary" id="UpdateMisuseCase">Update</button>
+      <button type="submit" class="btn btn-primary" id="updateMisuseCase">Update</button>
       <button type="submit" class="btn btn-secondary" id="cancelMisuseCase">Close</button>
     </div>
   </div>

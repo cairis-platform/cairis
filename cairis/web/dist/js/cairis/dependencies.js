@@ -335,3 +335,11 @@ function postDependency(dependency, callback){
   });
 }
 
+function getRoles(callback) {
+  getDimensions('role',callback);
+}
+
+function getRolesInEnvironment(envName,callback) {
+  getDimensionsInEnvironment('role',envName,callback);
+}
+

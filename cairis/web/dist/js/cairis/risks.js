@@ -172,10 +172,10 @@ mainContent.on("click",".misusecaseEnvironment", function () {
       $("#misuseRiskRating").val(env.theRiskRating.rating);
       $("#theMisuseNarrative").val(env.theDescription);
       $.each(env.theAssets, function (index, asset) {
-        $("#assetTable tbody").append("<tr><td>" + asset + "</td></tr>");
+        $("#assetTable tbody").append('<tr class="table-active"><td>' + asset + '</td></tr>');
       });
       $.each(env.theAttackers, function (index, attacker) {
-        $("#attackerTable tbody").append("<tr><td>" + attacker + "</td></tr>");
+        $("#attackerTable tbody").append('<tr class="table-active"><td>' + attacker + '</td></tr>');
       });
     }
   });
@@ -228,22 +228,7 @@ $(document).on('click', 'td.risk-rows', function () {
       $("#editRisksForm").validator();
       $.session.set("Risk",JSON.stringify(mainData));
       fillOptionMenu("fastTemplates/editRiskOptions.html", "#objectViewer", null, true, true, function () {
-        var threatSelect = $("#theThreatNames");
         $("#UpdateRisk").text("Update");
-        var vulnSelect = $("#theVulnerabilityNames");
-        getThreats(function (data) {
-          $.each(data, function (key, obj) {
-            threatSelect.append($("<option></option>").attr("value",key).text(key));
-          });
-          threatSelect.val(mainData.theThreatName);
-        });
-        getVulnerabilities(function (data) {
-          $.each(data, function (key, obj) {
-            vulnSelect.append($("<option></option>").attr("value",key).text(key));
-          });
-          vulnSelect.val(mainData.theVulnerabilityName);
-          getRiskEnvironments();
-        });
         $("#theName").val(mainData.theName);
         var tags = mainData.theTags;
         var text = "";
@@ -251,6 +236,21 @@ $(document).on('click', 'td.risk-rows', function () {
           text += type + ", ";
         });
         $("#theTags").val(text);
+        var threatSelect = $("#theThreatNames");
+        var vulnSelect = $("#theVulnerabilityNames");
+        getThreats(function (data) {
+          $.each(data, function (key, obj) {
+            threatSelect.append($("<option></option>").attr("value",key).text(key));
+          });
+          threatSelect.val(mainData.theThreatName);
+          getVulnerabilities(function (data) {
+            $.each(data, function (key, obj) {
+              vulnSelect.append($("<option></option>").attr("value",key).text(key));
+            });
+            vulnSelect.val(mainData.theVulnerabilityName);
+            getRiskEnvironments();
+          });
+        });
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -273,12 +273,12 @@ $(document).on('click','#addNewRisk', function() {
       $.each(data, function (key, obj) {
         threatSelect.append($("<option></option>").attr("value",key).text(key));
       });
-    });
-    getVulnerabilities(function (data) {
-      $.each(data, function (key, obj) {
-        vulnSelect.append($("<option></option>").attr("value",key).text(key));
+      getVulnerabilities(function (data) {
+        $.each(data, function (key, obj) {
+          vulnSelect.append($("<option></option>").attr("value",key).text(key));
+        });
+        getRiskEnvironments();
       });
-      getRiskEnvironments();
     });
   });
 });
@@ -307,9 +307,18 @@ function getRiskEnvironments(){
     url: serverIP + "/api/environments/threat/" + threatName + "/vulnerability/"+ vulName + "/names",
     success: function (data) {
       $('#theRiskEnvironments').find('tbody').empty();
-      $.each(data, function (index, object) {
-        appendRiskEnvironment(object);
-      })
+      if (data.length > 0) {
+        $('#theRiskRatingDiv').show();
+        $('#theRiskEnvironmentDiv').show();
+        $.each(data, function (index, object) {
+          appendRiskEnvironment(object);
+        });
+        $('#theRiskEnvironments').find('tbody').find('.riskEnvironment:first').click();
+      }
+      else {
+        $('#theRiskRatingDiv').hide();
+        $('#theRiskEnvironmentDiv').hide();
+      }
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -332,27 +341,34 @@ function getRiskEnvironmentDetails(name, environment){
     url: serverIP + "/api/risks/threat/" + threatName + "/vulnerability/"+ vulName + "/environment/" + environment,
     success: function (data) {
       $("#rating").val(data.rating);
-
-      $.ajax({
-        type: "GET",
-        dataType: "json",
-        accept: "application/json",
-        data: {
-          session_id: String($.session.get('sessionID'))
-        },
-        crfossDomain: true,
-        url: serverIP + "/api/risks/name/"+ name +"/threat/" + threatName + "/vulnerability/"+ vulName + "/environment/" + environment,
-        success: function (data) {
-          $("#theResponses").find("tbody").empty();
-          $.each(data, function (index, object) {
-            appendRiskResponse(object);
-          })
-        },
-        error: function (xhr, textStatus, errorThrown) {
-          debugLogger(String(this.url));
-          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-        }
-      });
+      if (name != '') {
+        $.ajax({
+          type: "GET",
+          dataType: "json",
+          accept: "application/json",
+          data: {
+            session_id: String($.session.get('sessionID'))
+          },
+          crfossDomain: true,
+          url: serverIP + "/api/risks/name/"+ name +"/threat/" + threatName + "/vulnerability/"+ vulName + "/environment/" + environment,
+          success: function (data) {
+            $("#theResponses").find("tbody").empty();
+            if (data.length > 0) {
+              $('#theRiskResponseDiv').show();
+              $.each(data, function (index, object) {
+                appendRiskResponse(object);
+              });
+            }
+            else {
+              $('#theRiskResponseDiv').hide();
+            }
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            debugLogger(String(this.url));
+            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+          }
+        });
+      }
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));

@@ -139,14 +139,21 @@ function viewCountermeasure(cmName) {
 };
 
 $(document).on("click", "#addNewCountermeasure", function () {
-  activeElement("objectViewer");
-  fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
-    $("#addPropertyDiv").hide();
-    $("#editCountermeasureOptionsForm").validator();
-    $("#UpdateCountermeasure").text("Create");
-    $("#editCountermeasureOptionsForm").addClass("new");
-    $.session.set("Countermeasure", JSON.stringify(jQuery.extend(true, {},countermeasureDefault )));
-    $("#Properties").hide();
+  getNoOfRisks(function(noOfRisks) {
+    if (noOfRisks == 0) {
+      $('#noRisksModal').modal('show');
+    }
+    else {
+      activeElement("objectViewer");
+      fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
+        $("#addPropertyDiv").hide();
+        $("#editCountermeasureOptionsForm").validator();
+        $("#UpdateCountermeasure").text("Create");
+        $("#editCountermeasureOptionsForm").addClass("new");
+        $.session.set("Countermeasure", JSON.stringify(jQuery.extend(true, {},countermeasureDefault )));
+        $("#Properties").hide();
+      });
+    }
   });
 });
 

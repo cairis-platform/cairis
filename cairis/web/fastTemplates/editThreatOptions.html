@@ -1,26 +1,41 @@
 <form role="form" id="editThreatOptionsform" xmlns="http://www.w3.org/1999/html" >
 
-  <div class="form-group">
-    <label for="theThreatName" class="control-label">Threat</label>
-    <input class="optionsInput form-control" type="text" name="theThreatName" id="theThreatName" style="width: 75%;" data-error="Threat name is required" required>
-    <div class="help-block with-errors"></div>
+  <div class="row form-group">
+    <div class="col-md-2">
+      <label for="theThreatName" class="control-label">Threat</label>
+    </div>
+    <div class="col-md-10">
+      <input class="optionsInput form-control" type="text" name="theThreatName" id="theThreatName" data-error="Threat name is required" required>
+      <div class="help-block with-errors"></div>
+    </div>
   </div>
-  <div class="form-group">
-    <label for="theTags" class="control-label">Tags</label>
-    <input class="optionsInput form-control" type="text" value="" id="theTags" name="theTags" style="float: right; width: 75%;">
+  <div class="row form-group">
+    <div class="col-md-2">
+      <label for="theTags" class="control-label">Tags</label>
+    </div>
+    <div class="col-md-10">
+      <input class="optionsInput form-control" type="text" value="" id="theTags" name="theTags">
+    </div>
   </div>
-  <div class="form-group">
-    <label for="theType" class="control-label">Type</label>
-    <select name="theType" id="theType" class="form-control" style="float: right; width: 75%;">
-    </select>
+  <div class="row form-group">
+    <div class="col-md-2">
+      <label for="theType" class="control-label">Type</label>
+    </div>
+    <div class="col-md-10">
+      <select name="theType" id="theType" class="form-control">
+      </select>
+    </div>
   </div>
-  <div class="form-group" id="Description">
-    <label for="theMethod" class="control-label">Method</label>
-    <textarea rows="5" class="right form-control" name="theMethod" id="theMethod" style="width: 75%; margin-bottom: 15px;" data-error="Description is required" required></textarea>
-    <div class="help-block with-errors"></div>
+  <div class="row form-group" id="Description">
+    <div class="col-md-2">
+      <label for="theMethod" class="control-label">Method</label>
+    </div>
+    <div class="col-md-10">
+      <textarea rows="5" class="right form-control" name="theMethod" id="theMethod" style="margin-bottom: 15px;" data-error="Method is required" required></textarea>
+      <div class="help-block with-errors"></div>
+    </div>
   </div>
   <br/>
-
   <div class="inblock">
     <table class="left clickable-table" id="theThreatEnvironments" style="width: 25%;">
       <thead>

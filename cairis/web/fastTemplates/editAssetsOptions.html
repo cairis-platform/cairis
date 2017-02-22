@@ -9,23 +9,40 @@
       <li><a href="#Interfaces">Interfaces</a></li>
     </ul>
     <div id="Summary">
-      <div class="form-group">
-        <label for="theName" class="control-label">Asset</label>
-        <input type="text" class="optionsInput assetUpdate form-control" id="theName" name="theName" style="width: 75%;" data-error="Asset name is required" required>
-        <div class="help-block with-errors"></div>
+
+      <div class="row form-group">
+        <div class="col-md-2">
+          <label for="theName" class="control-label">Asset</label>
+        </div>
+        <div class="col-md-10">
+          <input class="optionsInput assetUpdate form-control" type="text" name="theName" id="theName" data-error="Asset name is required" required>
+          <div class="help-block with-errors"></div>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="theTags" class="control-label">Tags</label>
-        <input class="optionsInput assetUpdate form-control" type="text" value="" id="theTags" name="theTags" style="width: 75%;">
+      <div class="row form-group">
+        <div class="col-md-2">
+          <label for="theTags" class="control-label">Tags</label>
+        </div>
+        <div class="col-md-10">
+          <input class="optionsInput assetUpdate form-control" type="text" value="" id="theTags" name="theTags">
+        </div>
       </div>
-      <div class="form-group">
-        <label for="theShortCode" class="control-label">Shortcode</label>
-        <input class="optionsInput assetUpdate form-control" type="text" id="theShortCode" name="theShortCode" style="width: 75%;" data-error="Short code is required" required>
-        <div class="help-block with-errors"></div>
+      <div class="row form-group">
+        <div class="col-md-2">
+          <label for="theShortCode" class="control-label">Shortcode</label>
+        </div>
+        <div class="col-md-10">
+          <input class="optionsInput assetUpdate form-control" type="text" id="theShortCode" name="theShortCode" data-error="Short code is required" required>
+          <div class="help-block with-errors"></div>
+        </div>
       </div>
-      <div>
-        <label for="theType" class="control-label">Type</label>
-        <select name="TheType" class="assetUpdate form-control" id="theType" style="width: 75%;"></select>
+      <div class="row form-group">
+        <div class="col-md-2">
+          <label for="theType" class="control-label">Type</label>
+        </div>
+        <div class="col-md-10">
+          <select name="TheType" class="assetUpdate form-control" id="theType"></select>
+        </div>
       </div>
     </div>
     <div class="form-group" id="Description">

@@ -103,7 +103,7 @@ function viewAttacker(attackerName) {
         });
         $("#theAttackerEnvironments").find(".attackerEnvironment:first").trigger('click');
         $("#theAttackerImage").attr("src",getImagedir(data.theImage));
-        rescaleImage($("#theAttackerImage"),300);
+        rescaleImage($("#theAttackerImage"),225);
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -543,7 +543,7 @@ function updateAttackerImage(imagedir, actualDir) {
   var attacker = JSON.parse($.session.get("Attacker"));
   attacker.theImage = imagedir;
   $("#theAttackerImage").attr("src", actualDir);
-  rescaleImage($("#theAttackerImage"),300);
+  rescaleImage($("#theAttackerImage"),200);
   $.session.set("Attacker", JSON.stringify(attacker));
 }
 

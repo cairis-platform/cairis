@@ -20,6 +20,7 @@
 'use strict';
 
 $("#assetValuesClick").click(function () {
+  $('#unsupportedModel').modal('show');
 });
 
 $("#assetTypesClick").click(function () {
