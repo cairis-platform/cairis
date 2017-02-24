@@ -62,7 +62,7 @@ class AssumptionTaskModel:
     elif (dimName == 'grounds'):
       self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     else: 
-      self.theGraph.add_node(pydot.Node(objtName,shape='point',fontname=self.fontName,label='',fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='point',fontname=self.fontName,label='',fontsize=self.fontSize))
 
   def graph(self):
     self.nodeNameSet = set([])
@@ -87,7 +87,7 @@ class AssumptionTaskModel:
         self.theNodeLookup[toName] = toDim + ' ' + toName
       if ((fromName,toName) not in edges):
         edges.add((fromName,toName)) 
-        edge = pydot.Edge(str(fromName),str(toName),URL=fromDim + '#' + toDim)
+        edge = pydot.Edge(str(fromName),str(toName))
         self.theGraph.add_edge(edge)
     return self.layout()
 
