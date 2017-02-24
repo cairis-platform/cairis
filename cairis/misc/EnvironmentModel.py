@@ -163,7 +163,7 @@ class EnvironmentModel:
         self.buildNode(toDimName,toName)
         self.nodeNameSet.add(toName)
         self.theNodeLookup[toName] = toDimName + ' ' + dotLink.toName()
-      edge = pydot.Edge(str(fromName),str(toName),dir='none',URL=fromDimName + '#' + toDimName)
+      edge = pydot.Edge(str(fromName),str(toName),dir='none')
       self.theGraph.add_edge(edge)
     return self.layout()
 
