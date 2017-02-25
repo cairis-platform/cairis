@@ -53,6 +53,14 @@ class ProjectDAO(CairisDAO):
     except ARMException as ex:
       raise ARMHTTPError(ex)
 
+  def delete_database(self,db_name):
+    try:
+      self.db_proxy.deleteDatabase(db_name,self.session_id)
+    except DatabaseProxyException as ex:
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      raise ARMHTTPError(ex)
+
   def show_databases(self):
     try:
       return self.db_proxy.showDatabases(self.session_id)

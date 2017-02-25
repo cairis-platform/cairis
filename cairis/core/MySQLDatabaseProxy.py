@@ -11577,3 +11577,25 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     curs.close()
     tmpConn.close()
     return dbs
+
+  def deleteDatabase(self,dbName,session_id):
+    b = Borg()
+    ses_settings = b.get_settings(session_id)
+    dbHost = ses_settings['dbHost']
+    dbPort = ses_settings['dbPort']
+    rPasswd = ses_settings['rPasswd']
+
+    try:
+      tmpConn = MySQLdb.connect(host=dbHost,port=dbPort,user='root',passwd=rPasswd)
+      stmt = 'drop database if exists `' + dbName + '`'
+      curs = tmpConn.cursor()
+      curs.execute(stmt)
+      if (curs.rowcount == -1):
+        exceptionText = 'Error running ' + stmt
+        raise DatabaseProxyException(exceptionText)
+      curs.close()
+      tmpConn.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error creating CAIRIS database ' + dbName + '(id:' + str(id) + ',message:' + msg
+      raise DatabaseProxyException(exceptionText) 

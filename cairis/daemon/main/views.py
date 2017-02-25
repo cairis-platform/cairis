@@ -286,6 +286,7 @@ api.add_resource(ProjectController.ProjectSettingsAPI, '/api/settings',endpoint=
 api.add_resource(ProjectController.ProjectCreateAPI, '/api/settings/create',endpoint='project_create')
 api.add_resource(ProjectController.ProjectCreateDatabaseAPI, '/api/settings/database/<string:db_name>/create',endpoint='database_create')
 api.add_resource(ProjectController.ProjectOpenDatabaseAPI, '/api/settings/database/<string:db_name>/open',endpoint='database_open')
+api.add_resource(ProjectController.ProjectDeleteDatabaseAPI, '/api/settings/database/<string:db_name>/delete',endpoint='database_delete')
 api.add_resource(ProjectController.ProjectShowDatabasesAPI, '/api/settings/databases',endpoint='show_databases')
 
 # Requirement routes

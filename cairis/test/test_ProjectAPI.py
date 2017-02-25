@@ -174,7 +174,6 @@ class ProjectAPITests(CairisDaemonTestCase):
     message = str(json_dict['message'])
     self.assertGreater(message.find('successfully'), -1, 'Failed to create testdb')
 
-
     url = '/api/settings/database/cairis_default/open?session_id=test'
     rv = self.app.post(url)
     self.assertIsNotNone(rv.data, 'No response')
@@ -189,3 +188,32 @@ class ProjectAPITests(CairisDaemonTestCase):
     self.assertGreater(len(dbs), 0, 'No databases in the list')
     self.assertEqual(len(dbs), 1, 'Incorrect number of database names returned')
     self.assertEqual(dbs[0], 'testdb', 'Expected database name not present')
+
+  def test_delete_database(self):
+    method = 'test_delete_database'
+    url = '/api/settings/database/testdb/create?session_id=test'
+    rv = self.app.post(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    json_dict = jsonpickle.decode(rv.data)
+    message = str(json_dict['message'])
+    self.assertGreater(message.find('successfully'), -1, 'Failed to create testdb')
+
+    url = '/api/settings/database/cairis_default/open?session_id=test'
+    rv = self.app.post(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    json_dict = jsonpickle.decode(rv.data)
+    message = str(json_dict['message'])
+    self.assertGreater(message.find('successfully'), -1, 'Failed to open cairis_default')
+
+    url = '/api/settings/database/testdb/delete?session_id=test'
+    rv = self.app.post(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    json_dict = jsonpickle.decode(rv.data)
+    message = str(json_dict['message'])
+    self.assertGreater(message.find('successfully'), -1, 'Failed to delete testdb')
+
+    rv = self.app.get('/api/settings/databases?session_id=test')
+    dbs = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(dbs, 'No results after deserialization')
+    self.assertIsInstance(dbs, list, 'The result is not a list as expected')
+    self.assertEqual(len(dbs), 0)

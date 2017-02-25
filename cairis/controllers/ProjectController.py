@@ -149,6 +149,51 @@ class ProjectOpenDatabaseAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
+
+class ProjectDeleteDatabaseAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Delete an existing database',
+    nickname='project-delete-database-post',
+    responseClass=str.__name__,
+    parameters=[
+      {
+        'name': 'db_name',
+        'description': 'The name of the existing database',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      },
+      {
+        'name': 'session_id',
+        'description': 'The ID of the session to use',
+        'required': False,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'The provided parameters are invalid'
+      }
+    ]
+  )
+  # endregion
+  def post(self,db_name):
+    session_id = get_session_id(session, request)
+    dao = ProjectDAO(session_id)
+    dao.delete_database(db_name)
+    dao.close()
+    resp_dict = {'message': 'Database successfully deleted'}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+
+
 class ProjectShowDatabasesAPI(Resource):
   # region Swagger Doc
   @swagger.operation(
