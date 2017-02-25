@@ -22,7 +22,7 @@ from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision
 from cairis.tools.SessionValidator import check_required_keys
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 
 class ProjectDAO(CairisDAO):
@@ -32,6 +32,30 @@ class ProjectDAO(CairisDAO):
   def create_new_project(self):
     try:
       self.db_proxy.clearDatabase(session_id=self.session_id)
+    except DatabaseProxyException as ex:
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      raise ARMHTTPError(ex)
+
+  def create_new_database(self,db_name):
+    try:
+      self.db_proxy.createDatabase(db_name,self.session_id)
+    except DatabaseProxyException as ex:
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      raise ARMHTTPError(ex)
+
+  def open_database(self,db_name):
+    try:
+      self.db_proxy.openDatabase(db_name,self.session_id)
+    except DatabaseProxyException as ex:
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      raise ARMHTTPError(ex)
+
+  def show_databases(self):
+    try:
+      return self.db_proxy.showDatabases(self.session_id)
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
     except ARMException as ex:

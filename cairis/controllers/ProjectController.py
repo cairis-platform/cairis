@@ -25,7 +25,7 @@ from cairis.tools.MessageDefinitions import ProjectMessage
 from cairis.tools.PseudoClasses import ProjectSettings
 from cairis.tools.SessionValidator import get_session_id
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 
 class ProjectCreateAPI(Resource):
@@ -57,10 +57,129 @@ class ProjectCreateAPI(Resource):
 
     dao = ProjectDAO(session_id)
     dao.create_new_project()
+    dao.close()
 
     resp_dict = {'message': 'New project successfully created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
     resp.contenttype = 'application/json'
+    return resp
+
+class ProjectCreateDatabaseAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Create a new database',
+    nickname='project-create-database-post',
+    responseClass=str.__name__,
+    parameters=[
+      {
+        'name': 'db_name',
+        'description': 'The name of the new database',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      },
+      {
+        'name': 'session_id',
+        'description': 'The ID of the session to use',
+        'required': False,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'The provided parameters are invalid'
+      }
+    ]
+  )
+  # endregion
+  def post(self,db_name):
+    session_id = get_session_id(session, request)
+    dao = ProjectDAO(session_id)
+    dao.create_new_database(db_name)
+    dao.close()
+    resp_dict = {'message': 'New database successfully created'}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+
+class ProjectOpenDatabaseAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Open an existing database',
+    nickname='project-open-database-post',
+    responseClass=str.__name__,
+    parameters=[
+      {
+        'name': 'db_name',
+        'description': 'The name of the existing database',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      },
+      {
+        'name': 'session_id',
+        'description': 'The ID of the session to use',
+        'required': False,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'The provided parameters are invalid'
+      }
+    ]
+  )
+  # endregion
+  def post(self,db_name):
+    session_id = get_session_id(session, request)
+    dao = ProjectDAO(session_id)
+    dao.open_database(db_name)
+    dao.close()
+    resp_dict = {'message': 'Database successfully opened'}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+class ProjectShowDatabasesAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Show existing databases',
+    nickname='project-show-databases-get',
+    responseClass=str.__name__,
+    parameters=[
+      {
+        'name': 'session_id',
+        'description': 'The ID of the session to use',
+        'required': False,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'The provided parameters are invalid'
+      }
+    ]
+  )
+  # endregion
+  def get(self):
+    session_id = get_session_id(session, request)
+    dao = ProjectDAO(session_id)
+    dbs = dao.show_databases()
+    dao.close()
+    resp = make_response(json_serialize(dbs, session_id=session_id), httplib.OK)
+    resp.headers['Content-type'] = 'application/json'
     return resp
 
 class ProjectSettingsAPI(Resource):

@@ -66,7 +66,6 @@ function getProjectSettings(callback){
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
-
   });
 }
 /*
@@ -466,3 +465,88 @@ function putProjectSettings(settings, callback){
     }
   });
 }
+
+$("#openClick").click(function () {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/settings/databases",
+    success: function (data) {
+      $("#chooseDatabaseSelect").empty();
+      $.each(data, function(i, item) {
+        $("#chooseDatabaseSelect").append('<option value="' + item + '">'  + item + '</option>');
+      });
+      $('#chooseDatabase').modal('show');
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+$("#newDatabaseClick").click(function () {
+  $('#createDatabase').modal('show');
+});
+
+$("#createDatabase").on('click', '#createDatabaseButton',function(e) {
+  var dbName = $('#theDatabaseName').val();
+  showLoading();
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    url: serverIP + "/api/settings/database/" + encodeURIComponent(dbName)  + "/create",
+    success: function (data) {
+      $('#createDatabase').modal('hide');
+      summaryTables();
+      hideLoading();
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+    }
+  });
+});
+
+
+$("#chooseDatabase").on('click', '#chooseDatabaseButton',function(e) {
+  var dbName = $('#chooseDatabaseSelect').val();
+  showLoading();
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    url: serverIP + "/api/settings/database/" + encodeURIComponent(dbName)  + "/open",
+    success: function (data) {
+      $('#chooseDatabase').modal('hide');
+      summaryTables();
+      hideLoading();
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+    }
+  });
+});

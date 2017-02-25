@@ -34,7 +34,7 @@ class CAIRISConfigurationForm(np.ActionForm):
     self.theHost = self.add(np.TitleText, name = "Database host:", value = "localhost")
     self.thePort = self.add(np.TitleText, name = "Database port:", value = "3306")
     self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = "")
-    self.theDbName = self.add(np.TitleText, name = "Database name (created if non-existent):", value = "cairis")
+    self.theDbName = self.add(np.TitleText, name = "Database name (created if non-existent):", value = "cairis_default")
     self.theUser = self.add(np.TitleText, name = "Database user (created if non-existent):", value = "cairisuser")
     defaultUserPassword = os.urandom(10).encode('hex')
     self.thePassword = self.add(np.TitlePassword, name = "Database user password:", value = defaultUserPassword)
