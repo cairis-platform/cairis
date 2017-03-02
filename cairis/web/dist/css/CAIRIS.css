@@ -492,3 +492,9 @@ select#theType {
     padding: 5px;
     width: 70%;
 }
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
