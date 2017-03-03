@@ -126,6 +126,7 @@ mainContent.on('click', ".goalEnvProperties", function () {
       });
     }
   });
+  $("#editGoalOptionsForm").validator('update');
 });
 
 mainContent.on('click', '.deleteGoalEnvConcernAssoc', function () {
@@ -553,7 +554,6 @@ function viewGoal(goalName){
 function fillGoalOptionMenu(data,callback){
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editGoalsOptions.html","#objectViewer",null,true,true, function(){
-    $("#editGoalOptionsForm").validator();
     $("#updateGoalButton").text("Update");
     if(data != null) {
       $.session.set("Goal", JSON.stringify(data));
@@ -565,6 +565,7 @@ function fillGoalOptionMenu(data,callback){
       $.each(data.theEnvironmentProperties, function (index, prop) {
         appendGoalEnvironment(prop.theEnvironmentName);
       });
+      $("#editGoalOptionsForm").validator('update');
       $("#theGoalEnvironments").find(".goalEnvProperties:first").trigger('click');
     }
     else {

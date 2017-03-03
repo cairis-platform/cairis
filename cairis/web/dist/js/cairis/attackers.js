@@ -88,7 +88,6 @@ function viewAttacker(attackerName) {
     url: serverIP + "/api/attackers/name/" + attackerName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editAttackerOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editAttackerOptionsForm").validator();
         $("#UpdateAttacker").text("Update");
         $.session.set("Attacker", JSON.stringify(data));
         $('#editAttackerOptionsForm').loadJSON(data, null);
@@ -104,6 +103,7 @@ function viewAttacker(attackerName) {
         $("#theAttackerEnvironments").find(".attackerEnvironment:first").trigger('click');
         $("#theAttackerImage").attr("src",getImagedir(data.theImage));
         rescaleImage($("#theAttackerImage"),225);
+        $("#editAttackerOptionsForm").validator('update');
       });
     },
     error: function (xhr, textStatus, errorThrown) {

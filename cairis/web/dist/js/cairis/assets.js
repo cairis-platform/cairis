@@ -122,7 +122,6 @@ function viewAsset(assetName) {
     url: serverIP + "/api/assets/name/" + assetName.replace(" ", "%20"),
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editAssetsOptions.html","#objectViewer",null,true,true, function(){
-        $('#editAssetsOptionsform').validator();
         $.session.set("Asset", JSON.stringify(newdata));
         $.each(newdata.theInterfaces,function(idx,aInt) {
           appendAssetInterface(aInt);
@@ -157,6 +156,7 @@ function viewAsset(assetName) {
                     .attr("value",type.theName)
                     .text(type.theName));
                 });
+                $('#editAssetsOptionsform').validator('update');
                 $("#theEnvironmentDictionary").find("tbody").find(".assetEnvProperties:first").trigger('click');
                 $("#assetstabsID").show("fast");
               },

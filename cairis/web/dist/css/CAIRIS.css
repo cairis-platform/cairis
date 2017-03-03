@@ -45,28 +45,12 @@ p.imgPopup {
     border-right-style: solid;
     padding-right: 5px;
 }
-/*Overrride from AdminLTE for bigger icons in top nav menu*/
-.navbar-custom-menu .mCustomScrollBox .navbar-nav>li>a.imgwrapper{
-    padding: 15px 6px 3px 6px;
-    margin-bottom: 12px;
-}
-/*Overrride from AdminLTE for bigger icons in top nav menu*/
-.navbar-nav>li>a.imgwrapper.isEnd {
-    padding: 15px 0px 15px 6px;
-}
 a.imgwrapper:hover .imgPopup {
     visibility: visible;
     z-index: 1;
     opacity: 1;
 }
-/*override from adminLTE*/
-.main-header .navbar-custom-menu, .main-header .navbar-right{
-    margin-right: 0px;
-}
 div#mCSB_1 {
-    height: 50px;
-}
-ul.nav.navbar-nav {
     height: 50px;
 }
 a.dropdown-toggle.imgwrapper{

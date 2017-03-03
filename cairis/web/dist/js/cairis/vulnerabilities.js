@@ -90,7 +90,6 @@ function viewVulnerability(vulName) {
     url: serverIP + "/api/vulnerabilities/name/" + vulName.replace(" ", "%20"),
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editVulnerabilityOptionsform").validator();
         $("#UpdateVulnerability").text("Update");
         $.session.set("Vulnerability", JSON.stringify(newdata));
         var jsondata = $.extend(true, {}, newdata);
@@ -101,6 +100,7 @@ function viewVulnerability(vulName) {
           text += tag + ", ";
         });
         $("#theTags").val(text);
+        $("#editVulnerabilityOptionsform").validator('update');
 
         $.each(newdata.theEnvironmentProperties, function (index, envprop) {
           $("#theVulEnvironments").append("<tr class='clickable-environments'><td class='deleteVulEnv'><i class='fa fa-minus'></i></td><td class='vulEnvProperties'>" + envprop.theEnvironmentName + "</td></tr>");
