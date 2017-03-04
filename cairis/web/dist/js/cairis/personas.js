@@ -93,7 +93,6 @@ function viewPersona(personaName) {
     url: serverIP + "/api/personas/name/" + personaName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editPersonasOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editPersonasOptionsForm").validator();
         $("#UpdatePersona").text("Update");
         $.session.set("Persona", JSON.stringify(data));
         $('#editPersonasOptionsForm').loadJSON(data, null);
@@ -120,6 +119,7 @@ function viewPersona(personaName) {
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendPersonaEnvironment(env.theEnvironmentName);
         });
+        $("#editPersonasOptionsForm").validator('update');
         $("#thePersonaEnvironments").find(".personaEnvironment:first").trigger('click');
         $("#theImage").attr("src",getImagedir(data.theImage));
         rescaleImage($("#theImage"),300);
@@ -167,6 +167,7 @@ mainContent.on("click",".personaEnvironment", function () {
       $("#theNarrative").val(env.theNarrative);
     }
   });
+  $("#editPersonasOptionsForm").validator('update');
 });
 
 mainContent.on('click', ".removePersonaRole", function () {

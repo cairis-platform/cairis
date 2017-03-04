@@ -94,7 +94,6 @@ function viewDomainProperty(dpName) {
     url: serverIP + "/api/domainproperties/name/" + dpName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editDomainPropertyOptionsForm").validator();
         $("#UpdateDomainProperty").text("Update");
         $.session.set("DomainProperty", JSON.stringify(data));
         $('#editDomainPropertyOptionsForm').loadJSON(data, null);
@@ -109,6 +108,7 @@ function viewDomainProperty(dpName) {
           });
           $("#theTags").val(text);
         }
+        $("#editDomainPropertyOptionsForm").validator('update');
       });
     },
     error: function (xhr, textStatus, errorThrown) {

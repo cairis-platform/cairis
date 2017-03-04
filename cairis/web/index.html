@@ -5,12 +5,14 @@
   <title>CAIRIS Web App</title>
   <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
   <link href="plugins/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet" type="text/css" />
   <script src="plugins/jquery-3.1.1/jquery-3.1.1.min.js"></script> 
   <script src="plugins/jquery-ui-1.12.1/jquery-ui.js"></script> 
   <script src="plugins/jquery-migrate/jquery-migrate-3.0.0.min.js"></script> 
+
   <script src="bootstrap/js/bootstrap.min.js"></script> 
-  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
   <link href="plugins/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
   <link href="plugins/ionicons-2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
@@ -59,6 +61,9 @@
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><span class="glyphicon glyphicon-book"></span> System<span class="caret"></span></a>
             <ul class="dropdown-menu">
+              <li><a id="newDatabaseClick" href="#">New Database</a></li>
+              <li><a id="openClick" href="#">Open Database</a></li>
+              <li><a id="deleteClick" href="#">Delete Database</a></li>
               <li><a id="newClick" href="#">New</a></li>
               <li><a id="importClick" href="#">Import</a></li>
               <li><a id="exportClick" href="#">Export</a></li>
@@ -463,6 +468,46 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="chooseDatabase" tabindex="-1" role="dialog" aria-labelledby="cd_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="chooseTitle">Choose the database</h4>
+        </div>
+        <div class="modal-body">
+          <select class="form-control" id="chooseDatabaseSelect">
+          </select>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="chooseDatabaseButton" class="btn btn-primary">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="createDatabase" tabindex="-1" role="dialog" aria-labelledby="crd_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="createTitle">Enter new database name</h4>
+        </div>
+        <div class="modal-body">
+          <input class="form-control" type="text" name="theDatabaseName" id="theDatabaseName">
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="createDatabaseButton" class="btn btn-primary">Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <div id="errorDialog" title="ERROR">
     <p style="color: black">You can't use CAIRIS without any settings</p>

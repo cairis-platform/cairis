@@ -85,10 +85,10 @@ $(document).on('click', "td.externaldocument-rows", function () {
     url: serverIP + "/api/external_documents/name/" + name.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editExternalDocumentOptionsForm").validator();
         $("#UpdateExternalDocument").text("Update");
         $.session.set("ExternalDocument", JSON.stringify(data));
         $('#editExternalDocumentOptionsForm').loadJSON(data, null);
+        $("#editExternalDocumentOptionsForm").validator('update');
       });
     },
     error: function (xhr, textStatus, errorThrown) {

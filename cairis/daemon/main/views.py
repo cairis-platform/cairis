@@ -48,6 +48,7 @@ def set_dbproxy():
   b.settings[id]['dbHost'] = b.dbHost
   b.settings[id]['dbPort'] = b.dbPort
   b.settings[id]['dbName'] = b.dbName
+  b.settings[id]['rPasswd'] = b.rPasswd
   b.settings[id]['fontSize'] = pSettings['Font Size']
   b.settings[id]['apFontSize'] = pSettings['AP Font Size']
   b.settings[id]['fontName'] = pSettings['Font Name']
@@ -283,6 +284,10 @@ api.add_resource(PersonaCharacteristicController.PersonaCharacteristicByNameAPI,
 # Project routes
 api.add_resource(ProjectController.ProjectSettingsAPI, '/api/settings',endpoint='project_settings')
 api.add_resource(ProjectController.ProjectCreateAPI, '/api/settings/create',endpoint='project_create')
+api.add_resource(ProjectController.ProjectCreateDatabaseAPI, '/api/settings/database/<string:db_name>/create',endpoint='database_create')
+api.add_resource(ProjectController.ProjectOpenDatabaseAPI, '/api/settings/database/<string:db_name>/open',endpoint='database_open')
+api.add_resource(ProjectController.ProjectDeleteDatabaseAPI, '/api/settings/database/<string:db_name>/delete',endpoint='database_delete')
+api.add_resource(ProjectController.ProjectShowDatabasesAPI, '/api/settings/databases',endpoint='show_databases')
 
 # Requirement routes
 api.add_resource(RequirementController.RequirementsAPI, '/api/requirements',endpoint='requirements')

@@ -333,22 +333,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (closeConn) and self.conn.open:
         self.conn.close()
       if b.runmode == 'desktop':
-        host = b.dbHost
-        port = b.dbPort
-        user = b.dbUser
-        passwd = b.dbPasswd
-        db = b.dbName
+        self.conn = MySQLdb.connect(host=b.dbHost,port=b.dbPort,user=b.dbUser,passwd=b.dbPasswd,db=b.dbName)
       elif b.runmode == 'web':
         ses_settings = b.get_settings(session_id)
-        host = ses_settings['dbHost']
-        port = ses_settings['dbPort']
-        user = ses_settings['dbUser']
-        passwd = ses_settings['dbPasswd']
-        db = ses_settings['dbName']
+        self.conn = MySQLdb.connect(host=ses_settings['dbHost'],port=ses_settings['dbPort'],user=ses_settings['dbUser'],passwd=ses_settings['dbPasswd'],db=ses_settings['dbName'])
       else:
         raise RuntimeError('Run mode not recognized')
-      self.conn = MySQLdb.connect(host=b.dbHost,port=b.dbPort,user=b.dbUser,passwd=b.dbPasswd,db=b.dbName)
-
     except _mysql_exceptions.DatabaseError, e:
       exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
       raise DatabaseProxyException(exceptionText) 
@@ -8426,28 +8416,28 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     b = Borg()
     if b.runmode == 'desktop':
       db_proxy = b.dbProxy
-      host = b.dbHost
-      port = b.dbPort
-      user = b.dbUser
-      passwd = b.dbPasswd
-      db = b.dbName
+      dbHost = b.dbHost
+      dbPort = b.dbPort
+      dbUser = b.dbUser
+      dbPasswd = b.dbPasswd
+      dbName = b.dbName
     elif b.runmode == 'web':
       ses_settings = b.get_settings(session_id)
       db_proxy = ses_settings['dbProxy']
-      host = ses_settings['dbHost']
-      port = ses_settings['dbPort']
-      user = ses_settings['dbUser']
-      passwd = ses_settings['dbPasswd']
-      db = ses_settings['dbName']
+      dbHost = ses_settings['dbHost']
+      dbPort = ses_settings['dbPort']
+      dbUser = ses_settings['dbUser']
+      dbPasswd = ses_settings['dbPasswd']
+      dbName = ses_settings['dbName']
     else:
       raise RuntimeError('Run mode not recognized')
     db_proxy.close()
     srcDir = b.cairisRoot + '/sql'
     initSql = srcDir + '/init.sql'
     procsSql = srcDir + '/procs.sql'
-    cmd = '/usr/bin/mysql -h ' + host + ' --port=' + str(port) + ' -u ' + user + ' --password=\'' + passwd + '\'' + ' --database ' + db + ' < ' + initSql
+    cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + initSql
     os.system(cmd)
-    cmd = '/usr/bin/mysql -h ' + host + ' --port=' + str(port) + ' -u ' + user + ' --password=\'' + passwd + '\'' + ' --database ' + db + ' < ' + procsSql
+    cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + procsSql
     os.system(cmd)
     db_proxy.reconnect(False, session_id)
 
@@ -11512,4 +11502,100 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error calculating ' + dimName + ' summary for environment ' + envName + ' (id:' + str(id) + ',message:' + msg
+      raise DatabaseProxyException(exceptionText) 
+
+  def createDatabase(self,dbName,session_id):
+    if self.conn.open:
+      self.conn.close()
+    b = Borg()
+    ses_settings = b.get_settings(session_id)
+    dbHost = ses_settings['dbHost']
+    dbPort = ses_settings['dbPort']
+    rPasswd = ses_settings['rPasswd']
+
+    dbUser = ses_settings['dbUser']
+    dbPasswd = ses_settings['dbPasswd']
+
+    host = b.dbHost
+    port = b.dbPort
+    user = b.dbUser
+    passwd = b.dbPasswd
+    db = dbName
+
+    try:
+      self.conn = MySQLdb.connect(host=dbHost,port=dbPort,user='root',passwd=rPasswd)
+      stmts = ['drop database if exists `' + dbName + '`',
+               'create database ' + dbName,
+               "grant all privileges on `%s`.* TO '%s'@'%s'" %(dbName,b.dbUser, b.dbHost),
+               'alter database ' + dbName + ' default character set utf8',
+               'alter database ' + dbName + ' default collate utf8_general_ci',
+               'flush tables',
+               'flush privileges']
+
+      for stmt in stmts:
+        curs = self.conn.cursor()
+        curs.execute(stmt)
+        if (curs.rowcount == -1):
+          exceptionText = 'Error running ' + stmt
+          raise DatabaseProxyException(exceptionText)
+        curs.close()
+      self.conn.close()
+      b.settings[session_id]['dbName'] = dbName
+      self.clearDatabase(session_id)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error creating CAIRIS database ' + dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + msg
+      raise DatabaseProxyException(exceptionText) 
+
+  def openDatabase(self,dbName,session_id):
+    b = Borg()
+    b.settings[session_id]['dbName'] = dbName
+    self.reconnect(True,session_id)
+
+  def showDatabases(self,session_id):
+    b = Borg()
+    ses_settings = b.get_settings(session_id)
+    dbUser = ses_settings['dbUser']
+    dbHost = ses_settings['dbHost']
+    dbPort = ses_settings['dbPort']
+    dbName = ses_settings['dbName']
+    dbPasswd = ses_settings['dbPasswd']
+    tmpConn = MySQLdb.connect(host=dbHost,port=dbPort,user=dbUser,passwd=dbPasswd)
+    curs = tmpConn.cursor()
+    curs.execute('show databases')
+    if (curs.rowcount == -1):
+      exceptionText = 'Error getting available databases'
+      raise DatabaseProxyException(exceptionText) 
+
+    dbs = []
+    restrictedDbs = ['information_schema','flaskdb','mysql','performance_schema',dbName]
+    for row in curs.fetchall():
+      row = list(row)
+      dbName = row[0]
+      if (dbName not in restrictedDbs):
+        dbs.append(row[0])
+    curs.close()
+    tmpConn.close()
+    return dbs
+
+  def deleteDatabase(self,dbName,session_id):
+    b = Borg()
+    ses_settings = b.get_settings(session_id)
+    dbHost = ses_settings['dbHost']
+    dbPort = ses_settings['dbPort']
+    rPasswd = ses_settings['rPasswd']
+
+    try:
+      tmpConn = MySQLdb.connect(host=dbHost,port=dbPort,user='root',passwd=rPasswd)
+      stmt = 'drop database if exists `' + dbName + '`'
+      curs = tmpConn.cursor()
+      curs.execute(stmt)
+      if (curs.rowcount == -1):
+        exceptionText = 'Error running ' + stmt
+        raise DatabaseProxyException(exceptionText)
+      curs.close()
+      tmpConn.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error creating CAIRIS database ' + dbName + '(id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 

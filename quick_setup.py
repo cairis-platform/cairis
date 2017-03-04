@@ -26,25 +26,27 @@ from subprocess import Popen
 
 __author__ = 'Shamal Faily'
 
-class CAIRISConfigurationForm(np.ActionForm):
+class CAIRISDatabaseConfigurationForm(np.ActionForm):
 
   def create(self):
     self.findRootDir()
-    self.name = "Configure CAIRIS"
+    self.pathName = os.path.realpath(__file__)
+    self.pathName = self.pathName.replace("quick_setup.py", "")
+    self.name = "Configure CAIRIS Database"
     self.theHost = self.add(np.TitleText, name = "Database host:", value = "localhost")
     self.thePort = self.add(np.TitleText, name = "Database port:", value = "3306")
     self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = "")
-    self.theDbName = self.add(np.TitleText, name = "Database name (created if non-existent):", value = "cairis_default")
+    self.theDbName = self.add(np.TitleText, name = "Database name (created if non-existent):", value = "cairis")
     self.theUser = self.add(np.TitleText, name = "Database user (created if non-existent):", value = "cairisuser")
     defaultUserPassword = os.urandom(10).encode('hex')
     self.thePassword = self.add(np.TitlePassword, name = "Database user password:", value = defaultUserPassword)
     self.theTmpDir = self.add(np.TitleText, name = "Temp directory:", value = "/tmp")
-    self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = self.defaultRootDir)
+    self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = self.pathName + "cairis")
     self.theImageDir = self.add(np.TitleText, name = "Default image directory:", value = ".")
     self.theFileName = self.add(np.TitleText, name = "CAIRIS configuration file name:", value = os.environ.get("HOME") + "/cairis.cnf")
     self.theWebPort = self.add(np.TitleText,name = "Web port:", value = "7071")
     self.theLogLevel = self.add(np.TitleText,name = "Log level:", value = "warning");
-    self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = os.path.join(self.defaultRootDir, "web"))
+    self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = self.pathName + "cairis/web")
     self.theUploadDir = self.add(np.TitleText,name = "Upload directory:", value = "/tmp")
 
     self.theSecretKey = os.urandom(16).encode('hex')
@@ -61,6 +63,14 @@ class CAIRISConfigurationForm(np.ActionForm):
     self.createDatabase()
     self.initialiseDatabase()
     self.createCairisCnf()
+    os.environ["CAIRIS_CFG"] = str(self.theFileName.value)
+    sys.path.insert(0, self.pathName)
+    fileName = os.environ.get("HOME") + "/.bashrc"
+    f = open(fileName,'a')
+    f.write("export CAIRIS_CFG="+str(self.theFileName.value)+"\n")
+    f.write("export PYTHONPATH=${PYTHONPATH}:"+self.pathName+"\n")
+    f.close()
+    self.parentApp.setNextForm("NEXT")
 
   def on_cancel(self):
     self.parentApp.setNextForm(None)
@@ -146,11 +156,29 @@ class CAIRISConfigurationForm(np.ActionForm):
     f.close()
     self.parentApp.setNextForm(None)
 
-  
+class CAIRISUserConfigurationForm(np.ActionForm):
+
+
+  def create(self):
+    self.name = "Add CAIRIS User"
+    self.theUsername = self.add(np.TitleText, name = "Username:", value = "test")
+    self.thePassword = self.add(np.TitlePassword, name = "Password:", value = "")
+
+  def on_ok(self):
+    from cairis.bin.add_cairis_user import user_datastore, db
+    db.create_all()
+    user_datastore.create_user(email=self.theUsername.value, password=self.thePassword.value)
+    db.session.commit()
+    self.parentApp.setNextForm(None)
+	
+  def on_cancel(self):
+    self.parentApp.setNextForm(None)
 
 class CAIRISConfigurationApp(np.NPSAppManaged):
   def onStart(self):
-    self.addForm("MAIN",CAIRISConfigurationForm)
+    self.addForm("MAIN",CAIRISDatabaseConfigurationForm)
+    self.addForm("NEXT",CAIRISUserConfigurationForm)
+
 
 def main(args=None):
   if args is None:
