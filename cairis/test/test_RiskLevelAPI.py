@@ -51,7 +51,7 @@ class RiskLevelAPITests(CairisDaemonTestCase):
 
   def test_get_risk_threat_level(self):
     method = 'test_get_risk_level'
-    url = '/api/risk_level/asset/' + quote(self.existing_asset_name) + '/threat_type/' + quote(self.existing_threat_name) + '?session_id=test'
+    url = '/api/risk_level/asset/threat_type/' + quote(self.existing_asset_name) + '/' + quote(self.existing_threat_name) + '?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     level = jsonpickle.decode(rv.data)
