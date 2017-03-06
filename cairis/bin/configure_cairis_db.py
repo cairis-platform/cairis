@@ -119,7 +119,7 @@ class CAIRISConfigurationForm(np.ActionForm):
 
   def createCairisCnf(self):
     f = open(self.theFileName.value,'w')
-	f.write("rpasswd = " +self.theRootPassword.value + "\n")
+    f.write("rpasswd = " +self.theRootPassword.value + "\n")
     f.write("dbhost = " + self.theHost.value + "\n")
     f.write("dbport = " + self.thePort.value + "\n")
     f.write("dbuser = " + self.theUser.value + "\n")
