@@ -174,6 +174,7 @@ class RMFrame(wx.Frame):
     exportMenu.Append(RMFRAME_MENU_REMAN_EXPORT,'Requirements','Export Requirements')
     exportMenu.Append(RMFRAME_MENU_RIMAN_EXPORTRA,'Risk Analysis', 'Export Risk Analysis data')
     exportMenu.Append(RMFRAME_MENU_IRIS_EXPORTUD,'Usability', 'Export usability data ')
+    exportMenu.Append(RMFRAME_MENU_IRIS_EXPORTMUD,'Misusability', 'Export misusability data ')
     exportMenu.Append(RMFRAME_MENU_IRIS_EXPORTPERSONA,'Persona', 'Export Persona data ')
     exportMenu.Append(RMFRAME_MENU_IRIS_EXPORTASSOCIATIONS,'Associations', 'Export association data ')
     exportMenu.Append(RMFRAME_MENU_OPTIONS_EXPORTTVTYPES,'Threat and Vulnerability Types','Export Threat and Vulnerability Types')
@@ -378,6 +379,7 @@ class RMFrame(wx.Frame):
     wx.EVT_MENU(self,RMFRAME_MENU_IRIS_GOALS,self.OnGoals)
     wx.EVT_MENU(self,RMFRAME_MENU_IRIS_OBSTACLES,self.OnObstacles)
     wx.EVT_MENU(self,RMFRAME_MENU_IRIS_EXPORTUD,self.OnExportUsability)
+    wx.EVT_MENU(self,RMFRAME_MENU_IRIS_EXPORTMUD,self.OnExportMisusability)
     wx.EVT_MENU(self,RMFRAME_MENU_IRIS_EXPORTPERSONA,self.OnExportPersona)
     wx.EVT_MENU(self,RMFRAME_MENU_IRIS_IMPORTUD,self.OnImportUsability)
     wx.EVT_MENU(self,RMFRAME_MENU_IRIS_EXPORTASSOCIATIONS,self.OnExportAssociations)
@@ -1465,6 +1467,27 @@ class RMFrame(wx.Frame):
       dlg = wx.MessageDialog(self,str(errorText),'Export usability data',wx.OK | wx.ICON_ERROR)
       dlg.ShowModal()
       dlg.Destroy
+
+  def OnExportMisusability(self,event):
+    try:
+      defaultBackupDir = './sql'
+      dlg = wx.FileDialog(self,message='Export misusability data',defaultDir=defaultBackupDir,style=wx.SAVE | wx.OVERWRITE_PROMPT)
+      if (dlg.ShowModal() == wx.ID_OK):
+        exportFile = dlg.GetPath() + ".xml"
+        xmlBuf,crCount,tcCount = self.dbProxy.misusabilityToXml()
+        f = open(exportFile,'w')
+        f.write(xmlBuf)
+        f.close()
+        confDlg = wx.MessageDialog(self,'Exported ' + str(crCount) + ' concept references, and ' + str(tcCount) + ' task characteristics','Export misusability data',wx.OK | wx.ICON_INFORMATION)
+        confDlg.ShowModal()
+        confDlg.Destroy()
+      dlg.Destroy()
+    except ARMException,errorText:
+      dlg = wx.MessageDialog(self,str(errorText),'Export misusability data',wx.OK | wx.ICON_ERROR)
+      dlg.ShowModal()
+      dlg.Destroy
+
+
 
 
 

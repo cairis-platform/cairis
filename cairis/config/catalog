@@ -114,6 +114,14 @@
        uri="usability.dtd"/>
 
     <public 
+       publicId="-//CAIRIS//DTD MISUSABILITY 1.0//EN"  
+       uri="misusability.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/misusability.dtd"  
+       uri="misusability.dtd"/>
+
+    <public 
        publicId="-//CAIRIS//DTD COMPONENT 1.0//EN"  
        uri="component_view.dtd"/>
 

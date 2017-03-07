@@ -24,6 +24,7 @@ from DirectoryContentHandler import DirectoryContentHandler
 from RiskAnalysisContentHandler import RiskAnalysisContentHandler
 from GoalsContentHandler import GoalsContentHandler
 from UsabilityContentHandler import UsabilityContentHandler
+from MisusabilityContentHandler import MisusabilityContentHandler
 from AssociationsContentHandler import AssociationsContentHandler
 from CairisContentHandler import CairisContentHandler
 from ArchitecturalPatternContentHandler import ArchitecturalPatternContentHandler
@@ -318,12 +319,12 @@ def importUsabilityFile(importFile,session_id = None):
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
-    return importUsability(handler.personas(),handler.externalDocuments(),handler.documentReferences(),handler.conceptReferences(),handler.personaCharacteristics(),handler.taskCharacteristics(),handler.tasks(),handler.usecases(),session_id=session_id)
+    return importUsability(handler.personas(),handler.externalDocuments(),handler.documentReferences(),handler.personaCharacteristics(),handler.tasks(),handler.usecases(),session_id=session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 
-def importUsability(personaParameterSet,edParameterSet,drParameterSet,crParameterSet,pcParameterSet,tcParameterSet,taskParameterSet,ucParameterSet,session_id):
+def importUsability(personaParameterSet,edParameterSet,drParameterSet,pcParameterSet,taskParameterSet,ucParameterSet,session_id):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
   personaCount = 0
@@ -376,6 +377,30 @@ def importUsability(personaParameterSet,edParameterSet,drParameterSet,crParamete
       db_proxy.updateUseCase(ucParameters)
     ucCount += 1
 
+
+  pcCount = 0
+  for pcParameters in pcParameterSet:
+    db_proxy.addPersonaCharacteristic(pcParameters)
+    pcCount += 1
+
+  msgStr = 'Imported ' + str(personaCount) + ' personas, ' + str(edCount) + ' external documents, ' + str(drCount) + ' document references, ' + str(pcCount) + ' persona characteristics, ' + str(taskCount) + ' tasks, and ' + str(ucCount) + ' use cases.'
+  return msgStr
+
+
+def importMisusabilityFile(importFile,session_id = None):
+  try:
+    parser = xml.sax.make_parser()
+    handler = MisusabilityContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    return importMisusability(handler.conceptReferences(),handler.taskCharacteristics(),session_id=session_id)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importMisusability(crParameterSet,tcParameterSet,session_id):
+  b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
   crCount = 0
   for crParameters in crParameterSet:
     objtId = db_proxy.existingObject(crParameters.name(),'concept_reference')
@@ -386,11 +411,6 @@ def importUsability(personaParameterSet,edParameterSet,drParameterSet,crParamete
       db_proxy.updateConceptReference(crParameters)
     crCount += 1
 
-  pcCount = 0
-  for pcParameters in pcParameterSet:
-    db_proxy.addPersonaCharacteristic(pcParameters)
-    pcCount += 1
-
   tcCount = 0
   for tcParameters in tcParameterSet:
     objtId = db_proxy.existingObject(tcParameters.task(),'task_characteristic')
@@ -400,8 +420,9 @@ def importUsability(personaParameterSet,edParameterSet,drParameterSet,crParamete
       tcParameters.setId(objtId)
       db_proxy.updateTaskCharacterisric(tcParameters)
     tcCount += 1
-  msgStr = 'Imported ' + str(personaCount) + ' personas, ' + str(edCount) + ' external documents, ' + str(drCount) + ' document references, ' + str(crCount) + ' concept references, ' + str(pcCount) + ' persona characteristics, ' + str(tcCount) + ' task characteristics, ' + str(taskCount) + ' tasks, and ' + str(ucCount) + ' use cases.'
+  msgStr = 'Imported ' + str(crCount) + ' concept references, and ' + str(tcCount) + ' task characteristics.'
   return msgStr
+
 
 def importAssociationsFile(importFile,session_id = None):
   try:
@@ -717,6 +738,7 @@ def importModelFile(importFile,isOverwrite = 1,session_id = None):
     modelTxt += importRequirementsFile(importFile,session_id) + ' '
     modelTxt += importAssociationsFile(importFile,session_id) + ' '
     modelTxt += importSynopsesFile(importFile,session_id)
+    modelTxt += importMisusabilityFile(importFile,session_id)
     return modelTxt
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())

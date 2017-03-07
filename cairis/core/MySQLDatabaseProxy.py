@@ -7266,6 +7266,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL usability data to XML (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
+  def misusabilityToXml(self,includeHeader=True):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call misusabilityToXml(%s)',[includeHeader])
+      if (curs.rowcount == -1):
+        exceptionText = 'Error exporting usability data to XML'
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      xmlBuf = row[0] 
+      crCount = row[1]
+      tcCount = row[2]
+      curs.close()
+      return (xmlBuf,crCount,tcCount)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL misusability data to XML (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
   def associationsToXml(self,includeHeader=True):
     try:
       curs = self.conn.cursor()

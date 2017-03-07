@@ -33,7 +33,6 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
   @classmethod
   def setUpClass(cls):
     importModelFile(os.environ['CAIRIS_SRC'] + '/test/webinos.xml',1,'test')
-    importModelFile(os.environ['CAIRIS_SRC'] + '/test/conceptrefs.xml',0,'test')
 
   def setUp(self):
     self.logger = logging.getLogger(__name__)
