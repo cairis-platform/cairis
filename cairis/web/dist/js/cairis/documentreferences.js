@@ -85,7 +85,6 @@ $(document).on('click', "td.documentreference-rows", function () {
     url: serverIP + "/api/document_references/name/" + name.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editDocumentReferenceOptionsForm").validator();
         $("#UpdateDocumentReference").text("Update");
         var docNameSelect = $("#theDocName");
         var docName = data.theDocName;
@@ -97,6 +96,7 @@ $(document).on('click', "td.documentreference-rows", function () {
         });
         $.session.set("DocumentReference", JSON.stringify(data));
         $('#editDocumentReferenceOptionsForm').loadJSON(data, null);
+        $("#editDocumentReferenceOptionsForm").validator('update');
       });
     },
     error: function (xhr, textStatus, errorThrown) {
