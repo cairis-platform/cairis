@@ -14,3 +14,8 @@ title: Media
 <h2>Persona Helper: a Chrome Extension to help you quickly build personas based on online data</h2>
 
 {% include vimeoPlayer.html id="197797543" %}
+
+<h2>Creating Personas using the Persona Helper, CAIRIS, and Trello</h2>
+
+{% include vimeoPlayer.html id="208162116" %}
+
