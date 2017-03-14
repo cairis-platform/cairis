@@ -211,9 +211,10 @@ mainContent.on("click", "#addObstacleEnvironment", function () {
   });
   environmentDialogBox(hasEnv, function (text) {
     appendObstacleEnvironment(text);
-    var environment =  jQuery.extend(true, {},obstacle.nvDefault );
+    var environment =  jQuery.extend(true, {},obstacleEnvDefault );
     environment.theEnvironmentName = text;
     var obstacle = JSON.parse($.session.get("Obstacle"));
+    $.session.set("ObstacleEnvName", text);
     obstacle.theEnvironmentProperties.push(environment);
     $("#obstacleProperties").show("fast");
     $.session.set("Obstacle", JSON.stringify(obstacle));
@@ -286,15 +287,9 @@ mainContent.on('change', ".obstacleAutoUpdater" ,function() {
 
   $.each(obstacle.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == envName){
-      if($(element).is("input")){
-        env[name] = $(element).val();
-      }
-      else if($(element).is("textarea")) {
-        env[name] = $(element).val();
-      }
-      else {
-        env[name] = $(element).find(":selected").text();
-      }
+      env.theDefinition = $('#theDefinition').val();
+      env.theCategory = $('#theCategory').val();
+      obstacle.theEnvironmentProperties[index] = env;
       $.session.set("Obstacle", JSON.stringify(obstacle));
     }
   });
@@ -325,13 +320,13 @@ mainContent.on('click', "#updateObstacleButton", function (e) {
       obstacle.theTags = tags;
     }
     if($("#editObstacleOptionsForm").hasClass("new")){
-      postGoal(obstacle, function () {
+      postObstacle(obstacle, function () {
         createEditObstaclesTable();
         $("#editAttackerOptionsForm").removeClass("new")
       });
     } 
     else {
-      putGoal(obstacle, oldName, function () {
+      putObstacle(obstacle, oldName, function () {
         createEditObstaclesTable();
       });
     }
