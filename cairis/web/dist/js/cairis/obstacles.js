@@ -103,8 +103,8 @@ mainContent.on('click', ".obstacleEnvProperties", function () {
 
   $.each(obstacle.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == name){
-      $('#obstacleProperties').loadJSON(env,null);
       $("#theDefinition").val(env.theDefinition);
+      $("#theCategory").val(env.theCategory);
 
       $.each(env.theGoalRefinements, function (index, obstacle) {
         appendObstacleEnvGoals(obstacle);
