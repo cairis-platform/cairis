@@ -137,7 +137,7 @@ mainContent.on('click',".obstacle_deleteGoalSubGoal", function () {
 });
 
 mainContent.on('click',"#addConcerntoObstacle", function () {
-  hasAsset = [];
+  var hasAsset = [];
   $("#editObstaclesConcernTable").find('tbody').find('.ObstacleConcernName').each(function (index, td) {
     hasAsset.push($(td).text());
   });

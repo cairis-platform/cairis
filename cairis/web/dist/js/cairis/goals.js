@@ -202,7 +202,7 @@ mainContent.on('click',".deleteGoalSubGoal", function () {
 });
 
 mainContent.on('click',"#addConcerntoGoal", function () {
-  hasAsset = [];
+  var hasAsset = [];
   $("#editgoalsConcernTable").find('tbody').find('.GoalConcernName').each(function (index, td) {
      hasAsset.push($(td).text());
   });

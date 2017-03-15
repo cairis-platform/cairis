@@ -299,7 +299,7 @@ var obstacleEnvDefault =     {
   "__python_obj__": "ObstacleEnvironmentProperties.ObstacleEnvironmentProperties",
   "theLabel": "",
   "theDefinition": "None",
-  "theCategory": "Maintain",
+  "theCategory": "Vulnerability",
   "theGoalRefinements": [],
   "theSubGoalRefinements": [],
   "theConcerns": [],
