@@ -17,7 +17,7 @@
   under the License.
 -->
 
-<!-- DTD for CAIRIS risk analysis export file -->
+<!-- DTD for CAIRIS usability export file -->
 
 <!ELEMENT usability (persona*,external_document*,document_reference*,concept_reference*,persona_characteristic*,task_characteristic*,task*,usecase*)>
 

@@ -562,6 +562,7 @@ drop function if exists b2a;
 drop function if exists durationLabel;
 drop function if exists frequencyLabel;
 drop procedure if exists usabilityToXml;
+drop procedure if exists misusabilityToXml;
 drop procedure if exists personaToXml;
 drop procedure if exists associationsToXml;
 drop procedure if exists projectToXml;
@@ -13055,6 +13056,144 @@ begin
 end
 //
 
+create procedure misusabilityToXml(in includeHeader int)
+begin
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE misusability PUBLIC "-//CAIRIS//DTD MISUSABILITY 1.0//EN" "http://cairis.org/dtd/misusability.dtd">\n\n<misusability>\n';
+  declare crName varchar(200);
+  declare crCount int default 0;
+  declare crExcerpt varchar(2000);
+  declare tcId int;
+  declare taskName varchar(50);
+  declare bvName varchar(50);
+  declare modQual varchar(50);
+  declare tcDesc varchar(2000);
+  declare tcCount int default 0;
+  declare gwrType varchar(20);
+  declare gwrRef varchar(200);
+  declare gwrConcept varchar(50);
+  declare done int default 0;
+  declare crCursor cursor for select name,dimension_name,object_name,description from concept_reference; 
+  declare tcCursor cursor for select tc.id,t.name,tc.qualifier,tc.description from task_characteristic tc, task t where tc.task_id = t.id order by 2;
+  declare taskGroundsCursor cursor for
+    select 'document',dr.name,'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'persona',cr.name,c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'usecase',cr.name,c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'requirement',cr.name,concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 0 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    union
+    select 'requirement',cr.name,concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 0 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
+  declare taskWarrantCursor cursor for
+    select 'document',dr.name,'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'persona',cr.name,c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'usecase',cr.name,c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'requirement',cr.name,concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 1 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    union
+    select 'requirement',cr.name,concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 1 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
+  declare taskRebuttalCursor cursor for
+    select 'document',dr.name,'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'persona',cr.name,c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'usecase',cr.name,c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'requirement',cr.name,concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 2 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    union
+    select 'requirement',cr.name,concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 2 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
+  declare continue handler for not found set done = 1;
+
+  if includeHeader = 0
+  then
+    set buf = '<misusability>\n';
+  end if;
+
+
+  open crCursor;
+  cr_loop : loop
+    fetch crCursor into crName,gwrType,gwrConcept,crExcerpt;
+    if done = 1
+    then
+      leave cr_loop;
+    end if;
+    set buf = concat(buf,'<concept_reference name=\"',crName,'\" concept=\"',gwrType,'\" object=\"',gwrConcept,'\" >\n  <description>',crExcerpt,'</description>\n</concept_reference>\n');
+    set crCount = crCount + 1; 
+  end loop cr_loop;
+  close crCursor;
+
+  set done = 0;
+
+  open tcCursor;
+  tc_loop : loop
+    fetch tcCursor into tcId, taskName, modQual, tcDesc;
+    if done = 1
+    then 
+      leave tc_loop;
+    end if;
+    set buf = concat(buf,'<task_characteristic task=\"',taskName,'\" modal_qualifier=\"',modQual,'\" >\n  <definition>',tcDesc,'</definition>\n');
+    set tcCount = tcCount + 1;
+      open taskGroundsCursor;
+      taskGrounds_loop: loop
+        fetch taskGroundsCursor into gwrType, gwrRef, gwrConcept;
+        if done = 1
+        then 
+          leave taskGrounds_loop;
+        end if;
+        if gwrType = 'document'
+        then
+          set buf = concat(buf,'  <grounds type=\"',gwrType,'\" reference=\"',gwrRef,'\" />\n');
+        else
+          set buf = concat(buf,'  <grounds type=\"',gwrType,'\" artifact=\"',gwrConcept,'\" reference=\"',gwrRef,'\" />\n');
+        end if;
+      end loop taskGrounds_loop;
+      close taskGroundsCursor;
+      set done = 0;
+
+      open taskWarrantCursor;
+      taskWarrant_loop: loop
+        fetch taskWarrantCursor into gwrType, gwrRef, gwrConcept;
+        if done = 1
+        then 
+          leave taskWarrant_loop;
+        end if;
+        if gwrType = 'document'
+        then
+          set buf = concat(buf,'  <warrant type=\"',gwrType,'\" reference=\"',gwrRef,'\" />\n');
+        else
+          set buf = concat(buf,'  <warrant type=\"',gwrType,'\" artifact=\"',gwrConcept,'\" reference=\"',gwrRef,'\" />\n');
+        end if;
+      end loop taskWarrant_loop;
+      close taskWarrantCursor;
+      set done = 0;
+
+      open taskRebuttalCursor;
+      taskRebuttal_loop: loop
+        fetch taskRebuttalCursor into gwrType, gwrRef, gwrConcept;
+        if done = 1
+        then 
+          leave taskRebuttal_loop;
+        end if;
+        if gwrType = 'document'
+        then
+          set buf = concat(buf,'  <rebuttal type=\"',gwrType,'\" reference=\"',gwrRef,'\" />\n');
+        else
+          set buf = concat(buf,'  <rebuttal type=\"',gwrType,'\" artifact=\"',gwrConcept,'\" reference=\"',gwrRef,'\" />\n');
+        end if;
+      end loop taskRebuttal_loop;
+      close taskRebuttalCursor;
+      set done = 0;
+
+    set buf = concat(buf,'</task_characteristic>\n');
+  end loop tc_loop;
+  close tcCursor;
+
+  set buf = concat(buf,'</misusability>');
+  select buf,crCount,tcCount;
+end
+//
 
 create procedure usabilityToXml(in includeHeader int)
 begin
@@ -13085,7 +13224,6 @@ begin
   declare drCont varchar(200);
   declare drExcerpt varchar(2000);
   declare pcId int;
-  declare tcId int;
   declare bvName varchar(50);
   declare modQual varchar(50);
   declare pcDesc varchar(2000);
@@ -13133,43 +13271,8 @@ begin
   declare personaRolesCursor cursor for select r.name from persona_role sr, role r where sr.persona_id = personaId and sr.environment_id = envId and sr.role_id = r.id;
   declare edCursor cursor for select name,version,publication_date,authors,description from external_document;
   declare drCursor cursor for select distinct dr.name,ed.name,dr.contributor,dr.excerpt from document_reference dr, external_document ed where dr.document_id = ed.id;
-  declare crCursor cursor for select name,dimension_name,object_name,description from concept_reference; 
   declare pcCursor cursor for select pc.id,p.name,bv.name,pc.qualifier,pc.description from persona_characteristic pc, persona p, behavioural_variable bv where pc.persona_id = p.id and pc.variable_id = bv.id order by 2,3;
-  declare tcCursor cursor for select tc.id,t.name,tc.qualifier,tc.description from task_characteristic tc, task t where tc.task_id = t.id order by 2;
 
-  declare taskGroundsCursor cursor for
-    select 'document',dr.name,'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 0
-    union
-    select 'persona',cr.name,c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 0
-    union
-    select 'usecase',cr.name,c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 0
-    union
-    select 'requirement',cr.name,concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 0 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
-    union
-    select 'requirement',cr.name,concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 0 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
-
-  declare taskWarrantCursor cursor for
-    select 'document',dr.name,'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 1
-    union
-    select 'persona',cr.name,c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 1
-    union
-    select 'usecase',cr.name,c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 1
-    union
-    select 'requirement',cr.name,concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 1 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
-    union
-    select 'requirement',cr.name,concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 1 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
-
-
-  declare taskRebuttalCursor cursor for
-    select 'document',dr.name,'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 2
-    union
-    select 'persona',cr.name,c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 2
-    union
-    select 'usecase',cr.name,c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 2
-    union
-    select 'requirement',cr.name,concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 2 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
-    union
-    select 'requirement',cr.name,concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 2 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
 
   declare groundsCursor cursor for
     select 'document',dr.name,'' from persona_characteristic_document pc, document_reference dr where pc.characteristic_id = pcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 0
@@ -13369,18 +13472,6 @@ begin
   end loop dr_loop;
   close drCursor;
 
-  set done = 0;
-  open crCursor;
-  cr_loop : loop
-    fetch crCursor into drName,gwrType,gwrConcept,drExcerpt;
-    if done = 1
-    then
-      leave cr_loop;
-    end if;
-    set buf = concat(buf,'<concept_reference name=\"',drName,'\" concept=\"',gwrType,'\" object=\"',gwrConcept,'\" >\n  <description>',drExcerpt,'</description>\n</concept_reference>\n');
-    set drCount = drCount + 1; 
-  end loop cr_loop;
-  close crCursor;
 
   set done = 0;
   open pcCursor;
@@ -13447,71 +13538,6 @@ begin
     set buf = concat(buf,'</persona_characteristic>\n');
   end loop pc_loop;
   close pcCursor;
-
-  set done = 0;
-  open tcCursor;
-  tc_loop : loop
-    fetch tcCursor into tcId, taskName, modQual, pcDesc;
-    if done = 1
-    then 
-      leave tc_loop;
-    end if;
-    set buf = concat(buf,'<task_characteristic task=\"',taskName,'\" modal_qualifier=\"',modQual,'\" >\n  <definition>',pcDesc,'</definition>\n');
-    set pcCount = pcCount + 1;
-      open taskGroundsCursor;
-      taskGrounds_loop: loop
-        fetch taskGroundsCursor into gwrType, gwrRef, gwrConcept;
-        if done = 1
-        then 
-          leave taskGrounds_loop;
-        end if;
-        if gwrType = 'document'
-        then
-          set buf = concat(buf,'  <grounds type=\"',gwrType,'\" reference=\"',gwrRef,'\" />\n');
-        else
-          set buf = concat(buf,'  <grounds type=\"',gwrType,'\" artifact=\"',gwrConcept,'\" reference=\"',gwrRef,'\" />\n');
-        end if;
-      end loop taskGrounds_loop;
-      close taskGroundsCursor;
-      set done = 0;
-
-      open taskWarrantCursor;
-      taskWarrant_loop: loop
-        fetch taskWarrantCursor into gwrType, gwrRef, gwrConcept;
-        if done = 1
-        then 
-          leave taskWarrant_loop;
-        end if;
-        if gwrType = 'document'
-        then
-          set buf = concat(buf,'  <warrant type=\"',gwrType,'\" reference=\"',gwrRef,'\" />\n');
-        else
-          set buf = concat(buf,'  <warrant type=\"',gwrType,'\" artifact=\"',gwrConcept,'\" reference=\"',gwrRef,'\" />\n');
-        end if;
-      end loop taskWarrant_loop;
-      close taskWarrantCursor;
-      set done = 0;
-
-      open taskRebuttalCursor;
-      taskRebuttal_loop: loop
-        fetch taskRebuttalCursor into gwrType, gwrRef, gwrConcept;
-        if done = 1
-        then 
-          leave taskRebuttal_loop;
-        end if;
-        if gwrType = 'document'
-        then
-          set buf = concat(buf,'  <rebuttal type=\"',gwrType,'\" reference=\"',gwrRef,'\" />\n');
-        else
-          set buf = concat(buf,'  <rebuttal type=\"',gwrType,'\" artifact=\"',gwrConcept,'\" reference=\"',gwrRef,'\" />\n');
-        end if;
-      end loop taskRebuttal_loop;
-      close taskRebuttalCursor;
-      set done = 0;
-
-    set buf = concat(buf,'</task_characteristic>\n');
-  end loop tc_loop;
-  close tcCursor;
 
   set done = 0;
   open taskCursor;

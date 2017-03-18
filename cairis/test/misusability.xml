@@ -1,0 +1,247 @@
+<?xml version="1.0"?>
+<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">
+
+
+<cairis_model>
+<domainvalues>
+  <motivation_value name="Novelty and Amusement">
+    <description>Novelty and Amusement</description>
+  </motivation_value>
+  <motivation_value name="Selling User Information">
+    <description>Selling User Information</description>
+  </motivation_value>
+  <motivation_value name="Stealing User Credentials">
+    <description>Stealing User Credentials</description>
+  </motivation_value>
+  <motivation_value name="Premium-Rate Calls and SMS">
+    <description>Premium-Rate Calls and SMS</description>
+  </motivation_value>
+  <motivation_value name="SMS Spam">
+    <description>SMS Spam</description>
+  </motivation_value>
+  <motivation_value name="Search Engine Optimization">
+    <description>Search Engine Optimization</description>
+  </motivation_value>
+  <motivation_value name="Ransom">
+    <description>Ransom</description>
+  </motivation_value>
+  <motivation_value name="Advertising Click Fraud">
+    <description>Advertising Click Fraud</description>
+  </motivation_value>
+  <motivation_value name="Invasive Advertising">
+    <description>Invasive Advertising</description>
+  </motivation_value>
+  <motivation_value name="In-Application Billing Fraud">
+    <description>In-Application Billing Fraud</description>
+  </motivation_value>
+  <motivation_value name="Government monitoring">
+    <description>Government monitoring</description>
+  </motivation_value>
+  <motivation_value name="E-mail spam">
+    <description>E-mail spam</description>
+  </motivation_value>
+  <motivation_value name="Distributed Denial of Service">
+    <description>Distributed Denial of Service</description>
+  </motivation_value>
+  <capability_value name="NFC and Credit Cards">
+    <description>NFC and Credit Cards</description>
+  </capability_value>
+</domainvalues>
+<usability>
+<task name="Policy conflict" author="Shamal Faily" code="S-PS4" assumption_task="FALSE">
+  <objective>After meticulously creating context-sensitive Webinos policies from her office, Gloria finds herself unexpectedly customising her policies while on the go.</objective>
+  <task_environment name="Policy and Security">
+    <dependencies>None</dependencies>
+    <task_persona persona="Gloria" duration="Minutes" frequency="Monthly_or_less" demands="Medium" goal_conflict="High" />
+    <narrative>Gloria had just finished putting the finishing touches to her office and shopping webinos privacy policy before realising she had to pop over to the Starbucks across the road to catch up with one of friends from university. She saved her settings and closed down the privacy dashboard from her PC before grabbing her phone and heading out.
+
+As she was about to enter Starbucks, her mobile phone began to buzz in her bag. On examining it, she saw a message from Webinos saying that a request for Starbucks to access her preferential data had been refused. Gloria thought she had forgotton to set this up in her shopping context, so she fired up the Webinos privacy dashboard on her HTC to modify this. As she scrolled around the screen, trying to find the option to add the service, she realised that policy editing was much easier on the 27 inch iMac in her office. After another minute of imaginary screen pinching, she eventually found the option to add a rule allowing Starbucks to the objects visible to this policy. As she entered the rule, she noticed the webinos provided explanatory text describing the impact of adding this rule, but it was barely legible given its size in comparison to the other editor controls. No matter, Gloria thought, Starbucks could only do so much damage given her shopping policy anyway. After adding the rule, Gloria went into Starbucks to catch up with her friend.</narrative>
+    <consequences>* Gloria was still in her work context when the Starbucks message arrived. Gloria did not realise this, so she inadvertently allowed Starbucks access to all the data in her work policy.
+* The explanatory information for adding this text was illegible.
+* What if the message was not from Starbucks but from somebody purporting to be Starbucks?</consequences>
+    <benefits>NoneG</benefits>
+  </task_environment>
+  <task_environment name="Complete">
+    <dependencies>None</dependencies>
+    <task_persona persona="Gloria" duration="Minutes" frequency="Monthly_or_less" demands="Medium" goal_conflict="High" />
+    <narrative>Gloria had just finished putting the finishing touches to her office and shopping webinos privacy policy before realising she had to pop over to the Starbucks across the road to catch up with one of friends from university. She saved her settings and closed down the privacy dashboard from her PC before grabbing her phone and heading out.
+
+As she was about to enter Starbucks, her mobile phone began to buzz in her bag. On examining it, she saw a message from Webinos saying that a request for Starbucks to access her preferential data had been refused. Gloria thought she had forgotton to set this up in her shopping context, so she fired up the Webinos privacy dashboard on her HTC to modify this. As she scrolled around the screen, trying to find the option to add the service, she realised that policy editing was much easier on the 27 inch iMac in her office. After another minute of imaginary screen pinching, she eventually found the option to add a rule allowing Starbucks to the objects visible to this policy. As she entered the rule, she noticed the webinos provided explanatory text describing the impact of adding this rule, but it was barely legible given its size in comparison to the other editor controls. No matter, Gloria thought, Starbucks could only do so much damage given her shopping policy anyway. After adding the rule, Gloria went into Starbucks to catch up with her friend.</narrative>
+    <consequences>* Gloria was still in her work context when the Starbucks message arrived. Gloria did not realise this, so she inadvertently allowed Starbucks access to all the data in her work policy.
+* The explanatory information for adding this text was illegible.
+* What if the message was not from Starbucks but from somebody purporting to be Starbucks?</consequences>
+    <benefits>NoneG</benefits>
+  </task_environment>
+
+</task>
+
+<task name="Unsafe application install" author="Shamal Faily" code="S-LC2" assumption_task="FALSE">
+  <objective>Justin installs a new diary app without realising its implications.</objective>
+  <task_environment name="Lifecycle">
+    <dependencies>None</dependencies>
+    <task_persona persona="Helen" duration="Minutes" frequency="Monthly_or_less" demands="Low" goal_conflict="Medium" />
+    <narrative>Having just chatted to some of his friends on the phone to arrange a meet-up after work, Helen realises she isn't very happy with current diary arrangements and the need to synchronise between his phone, tablet, and laptop.
+
+On his way to work one morning, Helen browses the app store and discovers a webinos app that allows him to keep all of her diaries in sync automatically. Helen assumes this might simply be a cloud-based scheduler, but because she is on the train and doesn't have a huge amount of time before his train pulls in, she decides to download and setup this app on her tablet now as it appears to be quite small.
+
+Helen started up the app for the first time, expecting to have to install existing data from his phone's calendar. She wasn't disappointed, but first Helen was asked to walkthrough several webinos dialogues asking him to set up things called "personal devices" and "personal zones". Helen didn't know anything about what these were so, because he was on the go, he clicked through every dialog until the application started up.
+
+After lunch that day, Helen was suddenly reminded about his meet-up that day and her need to check the time. As she was about to reach for her jacket and her phone to check his diary, she remember the new diary app she installed. She decided to give this new app a go by checking her diary using her tablet. Again, she had to download the app, click through several dialog boxes to install some sort of special runtime environment and provide more user names and passwords. This time, things seemed a bit more annoying because she had to remember some arbitrary login details she had created on the fly while installing the app to her phone while on the train. Eventually, though, the app was installed and he could check the meet-up time.</narrative>
+    <consequences>* Nothing is currently said about how the initial installation of webinos dependencies will take place, and the impact this might have on user's patience.
+* The developers intention could be interpreted as the default intention the user should take. In this case, Helen isn't aware of exactly what she has given the app permission to access.</consequences>
+    <benefits>None</benefits>
+  </task_environment>
+  <task_environment name="Complete">
+    <dependencies>None</dependencies>
+    <task_persona persona="Helen" duration="Minutes" frequency="Monthly_or_less" demands="Low" goal_conflict="Medium" />
+    <narrative>Having just chatted to some of his friends on the phone to arrange a meet-up after work, Helen realises she isn't very happy with current diary arrangements and the need to synchronise between his phone, tablet, and laptop.
+
+On his way to work one morning, Helen browses the app store and discovers a webinos app that allows him to keep all of her diaries in sync automatically. Helen assumes this might simply be a cloud-based scheduler, but because she is on the train and doesn't have a huge amount of time before his train pulls in, she decides to download and setup this app on her tablet now as it appears to be quite small.
+
+Helen started up the app for the first time, expecting to have to install existing data from his phone's calendar. She wasn't disappointed, but first Helen was asked to walkthrough several webinos dialogues asking him to set up things called "personal devices" and "personal zones". Helen didn't know anything about what these were so, because he was on the go, he clicked through every dialog until the application started up.
+
+After lunch that day, Helen was suddenly reminded about his meet-up that day and her need to check the time. As she was about to reach for her jacket and her phone to check his diary, she remember the new diary app she installed. She decided to give this new app a go by checking her diary using her tablet. Again, she had to download the app, click through several dialog boxes to install some sort of special runtime environment and provide more user names and passwords. This time, things seemed a bit more annoying because she had to remember some arbitrary login details she had created on the fly while installing the app to her phone while on the train. Eventually, though, the app was installed and he could check the meet-up time.</narrative>
+    <consequences>* Nothing is currently said about how the initial installation of webinos dependencies will take place, and the impact this might have on user's patience.
+* The developers intention could be interpreted as the default intention the user should take. In this case, Helen isn't aware of exactly what she has given the app permission to access.</consequences>
+    <benefits>None</benefits>
+  </task_environment>
+</task>
+
+<task name="Vulnerable webinos application" author="Sven Lachmund" code="S-LC3" assumption_task="FALSE">
+  <objective>Due to an ill assumption, Jimmy decides he can skip input validation in his webinos application which opens-up a cross-site scripting vulnerability in his application.</objective>
+  <task_environment name="Lifecycle">
+    <dependencies>None</dependencies>
+    <task_persona persona="Jimmy" duration="Minutes" frequency="Monthly_or_less" demands="Medium" goal_conflict="Low" />
+    <task_persona persona="Ethan" duration="Minutes" frequency="Daily_-_Weekly" demands="Medium" goal_conflict="None" />
+    <narrative>Jimmy is an ambitioned professional software developer who is always interested in new technologies. Thus he also tries webinos. As he likes interconnected devices, he is fond of webinos’ inter-device communication capabilities. He ports one of his applications (called ZenSearch) for webinos. This application is both a client frontend for the search service on the Internet and a media push service for the TV. The user uses ZenSearch for finding nice royalty-free pictures on the Internet. These pictures are transferred to the client and then pushed to the TV to display them there in full screen mode.
+
+Jimmy is a practitioner. He rather starts experimenting and he learns from examples instead of reading the documentation and understanding the philosophy behind it. As a consequence, he is not familiar with the architecture and the security concept of webinos, as well as the security guidelines provided by the project.
+
+Jimmy makes an ill assumption about webinos’ architecture and unintentionally makes an architectural decision for his application which opens an attack vector. He assumes that input validation is not necessary in his application. Actually, by porting his existing client application to webinos, he does not pay enough attention to architectural changes which are needed. He just quickly decides that the TV does not expose a critical API which could result in serious damage when being misused. Thus he does not spend enough thoughts on security and he does not notice that input validation is required. Consequently, he introduces a cross-site scripting vulnerability (XSS) in the ZenSearch client application. It allows an attacker, who can manipulate the content of a Web site which is found by the search service, to execute arbitrary JavaScript code on the ZenSearch client’s device.
+
+The attack works as follows. The search service presents search results of Web sites which contain the pictures. Each of these Web sites may contain JavaScript code. The search service has a XSS vulnerability where the URLs of found Web sites are not sanitised properly. A specially crafted URL which contains JavaScript code is forwarded to the ZenSearch client without any filtering. An attacker prepares a Web site with thousands of royalty-free pictures to provide these specially crafted URLs. Due to Jimmy’s decision, the ZenSearch client application also does not validate the URLs and the content of the Web sites which are received by the application upon search request. If the search results contain JavaScript, the code is executed by the ZenSearch client application. Webinos transparently establishes a communication channel with other devices when a remote API is accessed. Depending on the security policy under which the ZenSearch client application is executed, an attacker can cause more or less serious damage by calling various remote APIs. One example of such damage is that the user clickes a link on the search results with injected JavaScript code. This code calls the Contacts API of another device which belongs to the same personal zone. This device is found by using webinos' Discovery API. It then accesses the contacts on that device and sends them all out to the attacker’s email address without the consent of the user.
+
+Jimmy’s mistake was to assume that his ZenSearch client application cannot be a risk for the user, as it only pushes the pictures to the TV without obtaining any data from the TV. As a consequence, Jimmy thought, an attacker cannot reveal or manipulate any user data. He has overlooked that the injected code of the attacker can also establish a communication channel to another device in the personal zone of the user.</narrative>
+    <consequences>* The attacker can remote control the webinos-enabled device and execute arbitrary JavaScript code. This opens an avenue for manifold severe attacks.
+* Using the application is a risk for the user even though the application itself is harmless.</consequences>
+    <benefits>None</benefits>
+  </task_environment>
+  <task_environment name="Complete">
+    <dependencies>None</dependencies>
+    <task_persona persona="Jimmy" duration="Minutes" frequency="Monthly_or_less" demands="Medium" goal_conflict="Low" />
+    <task_persona persona="Ethan" duration="Minutes" frequency="Monthly_or_less" demands="Medium" goal_conflict="None" />
+    <narrative>Jimmy is an ambitioned professional software developer who is always interested in new technologies. Thus he also tries webinos. As he likes interconnected devices, he is fond of webinos’ inter-device communication capabilities. He ports one of his applications (called ZenSearch) for webinos. This application is both a client frontend for the search service on the Internet and a media push service for the TV. The user uses ZenSearch for finding nice royalty-free pictures on the Internet. These pictures are transferred to the client and then pushed to the TV to display them there in full screen mode.
+
+Jimmy is a practitioner. He rather starts experimenting and he learns from examples instead of reading the documentation and understanding the philosophy behind it. As a consequence, he is not familiar with the architecture and the security concept of webinos, as well as the security guidelines provided by the project.
+
+Jimmy makes an ill assumption about webinos’ architecture and unintentionally makes an architectural decision for his application which opens an attack vector. He assumes that input validation is not necessary in his application. Actually, by porting his existing client application to webinos, he does not pay enough attention to architectural changes which are needed. He just quickly decides that the TV does not expose a critical API which could result in serious damage when being misused. Thus he does not spend enough thoughts on security and he does not notice that input validation is required. Consequently, he introduces a cross-site scripting vulnerability (XSS) in the ZenSearch client application. It allows an attacker, who can manipulate the content of a Web site which is found by the search service, to execute arbitrary JavaScript code on the ZenSearch client’s device.
+
+The attack works as follows. The search service presents search results of Web sites which contain the pictures. Each of these Web sites may contain JavaScript code. The search service has a XSS vulnerability where the URLs of found Web sites are not sanitised properly. A specially crafted URL which contains JavaScript code is forwarded to the ZenSearch client without any filtering. An attacker prepares a Web site with thousands of royalty-free pictures to provide these specially crafted URLs. Due to Jimmy’s decision, the ZenSearch client application also does not validate the URLs and the content of the Web sites which are received by the application upon search request. If the search results contain JavaScript, the code is executed by the ZenSearch client application. Webinos transparently establishes a communication channel with other devices when a remote API is accessed. Depending on the security policy under which the ZenSearch client application is executed, an attacker can cause more or less serious damage by calling various remote APIs. One example of such damage is that the user clickes a link on the search results with injected JavaScript code. This code calls the Contacts API of another device which belongs to the same personal zone. This device is found by using webinos' Discovery API. It then accesses the contacts on that device and sends them all out to the attacker’s email address without the consent of the user.
+
+Jimmy’s mistake was to assume that his ZenSearch client application cannot be a risk for the user, as it only pushes the pictures to the TV without obtaining any data from the TV. As a consequence, Jimmy thought, an attacker cannot reveal or manipulate any user data. He has overlooked that the injected code of the attacker can also establish a communication channel to another device in the personal zone of the user.</narrative>
+    <consequences>* The attacker can remote control the webinos-enabled device and execute arbitrary JavaScript code. This opens an avenue for manifold severe attacks.
+* Using the application is a risk for the user even though the application itself is harmless.</consequences>
+    <benefits>None</benefits>
+  </task_environment>
+</task>
+
+<external_document name="webinos phase 1 architecture and components" version="1" date="June 2011" authors="webinos consortium" >
+  <description>Creating Applications for webinos Story</description>
+</external_document>
+
+<document_reference name="Applications contain nested applications" contributor="Shamal Faily" document="webinos phase 1 architecture and components" >
+  <excerpt>Child application: A child application is a self contained application package that is included within another application package....</excerpt>
+</document_reference>
+
+<document_reference name="Applications installed in one go" contributor="Shamal Faily" document="webinos phase 1 architecture and components" >
+  <excerpt>Installable Web Application: A Web Application that is packaged in a way to allow a single download on a user's machine or a mobile device</excerpt>
+</document_reference>
+
+<document_reference name="Application instances spread across devices" contributor="Shamal Faily" document="webinos phase 1 architecture and components" >
+  <excerpt>Child application: A child application is a self contained application package that is included within another application package..... are used as means for distributed application development and deployment where a parent application can export child applications to other devices....</excerpt>
+</document_reference>
+</usability>
+
+<misusability>
+<concept_reference name="Acknowledge target device" concept="usecase" object="Installation and update of webinos applications" contributor="Shamal Faily" >
+  <description>4. The user is asked whether the application should be made available to all their devices.
+5.  The user selects yes and installs the application to his devices.</description>
+</concept_reference>
+
+<concept_reference name="API throw errors when access control request denied" concept="requirement" object="Request denial error" contributor="Shamal Faily" >
+  <description>webinos APIs shall provide error results when an access control request is denied.</description>
+</concept_reference>
+
+<concept_reference name="Applications are up-to-date before execution" concept="usecase" object="Removal of applications" contributor="Shamal Faily" >
+  <description>Precondition:  An application is already installed.  This strongly suggests that applications must be installed not only before administration of the app, but before running it.</description>
+</concept_reference>
+
+<concept_reference name="Applications launched via events" concept="usecase" object="Background execution" contributor="Shamal Faily" >
+  <description>4. The Webinos Runtime informs the User about the occurrence of a certain event that triggers launching an Application.</description>
+</concept_reference>
+
+<concept_reference name="Autostart programmatically controlled" concept="requirement" object="Automatic background start-up" contributor="Shamal Faily" >
+  <description>It shall be possible to register a background application for automatic execution at device start-up.</description>
+</concept_reference>
+
+<concept_reference name="Editors support fine and coarse grained policy editing" concept="requirement" object="Policy view/edit level" contributor="Shamal Faily" >
+  <description>Policies shall be viewable and editable by users at both a fine-grained and coarse-grained level.</description>
+</concept_reference>
+
+<concept_reference name="Policies contain fine-grained rules" concept="requirement" object="Application identity" contributor="Shamal Faily" >
+  <description>webinos shall identify a currently running application.</description>
+</concept_reference>
+
+<concept_reference name="Sophisticated policy editing tools" concept="requirement" object="Asset-based policy" contributor="Shamal Faily" >
+  <description>The webinos policy editor shall allow asset-based policy specification, including objects, subjects, signing authorities and APIs.</description>
+</concept_reference>
+
+<concept_reference name="Policy impact is described textually" concept="requirement" object="Policy impact" contributor="Shamal Faily" >
+  <description>The webinos policy editor shall incorporate example textual descriptions of how particular policy changes affect system behaviour.</description>
+</concept_reference>
+
+<concept_reference name="webinos explains policy setting refusals" concept="requirement" object="Policy refusal reason" contributor="Shamal Faily" >
+  <description>Users shall be presented with a rationale for preventing the modification of some policy settings.</description>
+</concept_reference>
+
+<concept_reference name="User alerted on policy warning" concept="requirement" object="Policy refusal reason" contributor="Shamal Faily" >
+  <description>The webinos runtime shall be able to alert the user at runtime.</description>
+</concept_reference>
+
+<task_characteristic task="Policy conflict" modal_qualifier="Definitely" >
+  <definition>Constructs coarse grained policy from fine-grained rules</definition>
+  <grounds type="document" reference="Keeps work and personal life separate in her online identities" />
+  <grounds type="requirement" reference="Editors support fine and coarse grained policy editing" />
+  <grounds type="requirement" reference="Policies contain fine-grained rules" />
+  <grounds type="requirement" reference="Sophisticated policy editing tools" />
+  <warrant type="document" reference="Has a second privacy policy for not being observable" />
+</task_characteristic>
+
+<task_characteristic task="Policy conflict" modal_qualifier="Perhaps" >
+  <definition>Builds policies in the office</definition>
+  <grounds type="document" reference="Policy decision maker at the e-book store" />
+  <grounds type="requirement" reference="Sophisticated policy editing tools" />
+</task_characteristic>
+
+<task_characteristic task="Policy conflict" modal_qualifier="Maybe" >
+  <definition>Privacy policy betrayed</definition>
+  <grounds type="document" reference="Interested in promotions and special deals of her preferred shops" />
+  <grounds type="document" reference="Consciously sets privacy settings" />
+</task_characteristic>
+
+<task_characteristic task="Policy conflict" modal_qualifier="Possibly" >
+  <definition>Policy editing too cumbersome for mobiles</definition>
+  <grounds type="requirement" reference="Policies contain fine-grained rules" />
+  <grounds type="requirement" reference="Policy impact is described textually" />
+  <grounds type="requirement" reference="webinos explains policy setting refusals" />
+  <warrant type="requirement" reference="Sophisticated policy editing tools" />
+</task_characteristic>
+
+<task_characteristic task="Policy conflict" modal_qualifier="Possibly" >
+  <definition>webinos notifies user when out-of-context</definition>
+  <grounds type="requirement" reference="User alerted on policy warning" />
+  <warrant type="requirement" reference="API throw errors when access control request denied" />
+</task_characteristic>
+
+</misusability>
+</cairis_model>

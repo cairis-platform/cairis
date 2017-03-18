@@ -31,7 +31,7 @@ class ModelExportTests(unittest.TestCase):
   @classmethod
   def setUpClass(cls):
     cairis.core.BorgFactory.initialise()
-    importModelFile(os.environ['CAIRIS_SRC'] + '/test/webinos.xml',1)
+    importModelFile(os.environ['CAIRIS_SRC'] + '/test/webinos_incomplete.xml',1)
     importTVTypeFile(os.environ['CAIRIS_SRC'] + '/test/OWASPTypes.xml',0)
     importTVTypeFile(os.environ['CAIRIS_SRC'] + '/../examples/threat_vulnerability_types/cwecapec_tv_types.xml',0)
     importDirectoryFile(os.environ['CAIRIS_SRC'] + '/../examples/directories/owasp_directory.xml',0)
@@ -39,7 +39,7 @@ class ModelExportTests(unittest.TestCase):
     importDirectoryFile(os.environ['CAIRIS_SRC'] + '/test/D28TV.xml',0)
     importComponentViewFile(os.environ['CAIRIS_SRC'] + '/test/ContextPolicyManagement.xml',0)
     importAttackPattern(os.environ['CAIRIS_SRC'] + '/test/XACMLAttackPattern.xml',0)
-    importModelFile(os.environ['CAIRIS_SRC'] + '/test/persona_synopses.xml',0)
+    importModelFile(os.environ['CAIRIS_SRC'] + '/test/misusability.xml',0)
 
   def setUp(self):
     os.environ['OUTPUT_DIR'] = '/tmp'

@@ -21,9 +21,7 @@ from cairis.core.PersonaParameters import PersonaParameters
 from cairis.core.PersonaEnvironmentProperties import PersonaEnvironmentProperties
 from cairis.core.ExternalDocumentParameters import ExternalDocumentParameters
 from cairis.core.DocumentReferenceParameters import DocumentReferenceParameters
-from cairis.core.ConceptReferenceParameters import ConceptReferenceParameters
 from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicParameters
-from cairis.core.TaskCharacteristicParameters import TaskCharacteristicParameters
 from cairis.core.TaskParameters import TaskParameters
 from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
 from cairis.core.UseCaseParameters import UseCaseParameters
@@ -72,18 +70,14 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     self.thePersonas = []
     self.theExternalDocuments = []
     self.theDocumentReferences = []
-    self.theConceptReferences = []
     self.thePersonaCharacteristics = []
-    self.theTaskCharacteristics = []
     self.theTasks = []
     self.theUseCases = []
     b = Borg()
     self.configDir = b.configDir
     self.resetPersonaAttributes()
     self.resetDocumentReferenceAttributes()
-    self.resetConceptReferenceAttributes()
     self.resetPersonaCharacteristicAttributes()
-    self.resetTaskCharacteristicAttributes()
     self.resetTaskAttributes()
     self.resetUseCaseAttributes()
 
@@ -99,14 +93,8 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
   def documentReferences(self):
     return self.theDocumentReferences
 
-  def conceptReferences(self):
-    return self.theConceptReferences
-
   def personaCharacteristics(self):
     return self.thePersonaCharacteristics
-
-  def taskCharacteristics(self):
-    return self.theTaskCharacteristics
 
   def tasks(self):
     return self.theTasks
@@ -158,25 +146,9 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     self.theDocument = ''
     self.theExcerpt = ''
 
-  def resetConceptReferenceAttributes(self):
-    self.inDescription = 0
-    self.theName = ''
-    self.theConcept = ''
-    self.theObject = ''
-    self.theDescription = ''
-
   def resetPersonaCharacteristicAttributes(self):
     self.thePersona = ''
     self.theBvName = ''
-    self.theModalQualifier = ''
-    self.inDefinition = 0
-    self.theDefinition = ''
-    self.theGrounds = []
-    self.theWarrants = []
-    self.theRebuttals = []
-
-  def resetTaskCharacteristicAttributes(self):
-    self.theTask = ''
     self.theModalQualifier = ''
     self.inDefinition = 0
     self.theDefinition = ''
@@ -262,16 +234,9 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name'].encode('utf-8')
       self.theContributor = attrs['contributor']
       self.theDocument = attrs['document']
-    elif name == 'concept_reference':
-      self.theName = attrs['name']
-      self.theConcept = attrs['concept']
-      self.theObject = attrs['object']
     elif name == 'persona_characteristic':
       self.thePersona = attrs['persona']
       self.theBvName = u2s(attrs['behavioural_variable'])
-      self.theModalQualifier = attrs['modal_qualifier'] 
-    elif name == 'task_characteristic':
-      self.theTask = attrs['task']
       self.theModalQualifier = attrs['modal_qualifier'] 
     elif name == 'grounds':
       refName = attrs['reference']
@@ -428,18 +393,10 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       p = DocumentReferenceParameters(self.theName,self.theDocument,self.theContributor,self.theExcerpt)
       self.theDocumentReferences.append(p)
       self.resetDocumentReferenceAttributes()
-    elif name == 'concept_reference':
-      p = ConceptReferenceParameters(self.theName,self.theConcept,self.theObject,self.theDescription)
-      self.theConceptReferences.append(p)
-      self.resetConceptReferenceAttributes()
     elif name == 'persona_characteristic':
       p = PersonaCharacteristicParameters(self.thePersona,self.theModalQualifier,self.theBvName,self.theDefinition,self.theGrounds,self.theWarrants,[],self.theRebuttals)
       self.thePersonaCharacteristics.append(p)
       self.resetPersonaCharacteristicAttributes()
-    elif name == 'task_characteristic':
-      p = TaskCharacteristicParameters(self.theTask,self.theModalQualifier,self.theDefinition,self.theGrounds,self.theWarrants,[],self.theRebuttals)
-      self.theTaskCharacteristics.append(p)
-      self.resetTaskCharacteristicAttributes()
     elif name == 'task':
       p = TaskParameters(self.theName,self.theCode,self.theObjective,self.isAssumptionTask,self.theAuthor,self.theTags,self.theEnvironmentProperties)
       self.theTasks.append(p)

@@ -19,7 +19,7 @@
 
 <!-- DTD for CAIRIS XML model file -->
 
-<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis?,riskanalysis?,usability?,goals?,associations?,synopses?)>
+<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis?,riskanalysis?,usability?,goals?,associations?,synopses?,misusability?)>
 
 <!ELEMENT tvtypes (vulnerability_type+,threat_type+)>
 <!ELEMENT vulnerability_type (description)>
@@ -193,7 +193,7 @@
 <!ATTLIST asset_association tail_name CDATA #REQUIRED>
 <!ATTLIST asset_association rationale CDATA #IMPLIED>
 
-<!ELEMENT usability (persona*,external_document*,document_reference*,concept_reference*,persona_characteristic*,task_characteristic*,task*,usecase*)>
+<!ELEMENT usability (persona*,external_document*,document_reference*,persona_characteristic*,task*,usecase*)>
 
 <!ELEMENT persona (tag*,activities,attitudes,aptitudes,motivations,skills,intrinsic,contextual,persona_environment+)>
 <!ATTLIST persona name CDATA #REQUIRED>
@@ -225,10 +225,6 @@
 <!ATTLIST document_reference contributor CDATA #REQUIRED>
 <!ELEMENT excerpt (#PCDATA)>
 
-<!ELEMENT concept_reference (description)>
-<!ATTLIST concept_reference name CDATA #REQUIRED>
-<!ATTLIST concept_reference concept (asset | attacker | countermeasure | domainproperty | environment | goal | misusecase | obstacle | persona | requirement | response | risk | role | task | threat | vulnerability) #REQUIRED>
-<!ATTLIST concept_reference object CDATA #REQUIRED>
 
 <!ELEMENT persona_characteristic (definition,grounds*,warrant*,rebuttal*)>
 <!ATTLIST persona_characteristic persona CDATA #REQUIRED>
@@ -244,9 +240,6 @@
 <!ATTLIST rebuttal type (document | asset | attacker | countermeasure | domainproperty | environment | goal | misusecase | obstacle | persona | requirement | response | risk | role | task | threat | vulnerability) #REQUIRED>
 <!ATTLIST rebuttal reference CDATA #REQUIRED>
 
-<!ELEMENT task_characteristic (definition,grounds+,warrant*,rebuttal*)>
-<!ATTLIST task_characteristic task CDATA #REQUIRED>
-<!ATTLIST task_characteristic modal_qualifier CDATA #REQUIRED>
 
 <!ELEMENT task (tag*,objective,task_environment+)>
 <!ATTLIST task name CDATA #REQUIRED>
@@ -417,3 +410,14 @@
 <!ATTLIST usecase_contribution referent CDATA #REQUIRED>
 <!ATTLIST usecase_contribution means_end (means | end) #REQUIRED>
 <!ATTLIST usecase_contribution contribution (Make | SomePositive | Help | Hurt | SomeNegative | Break) #REQUIRED>
+
+<!ELEMENT misusability (concept_reference*,task_characteristic*)>
+
+<!ELEMENT concept_reference (description)>
+<!ATTLIST concept_reference name CDATA #REQUIRED>
+<!ATTLIST concept_reference concept (asset | attacker | countermeasure | domainproperty | environment | goal | misusecase | obstacle | persona | requirement | response | risk | role | task | threat | vulnerability) #REQUIRED>
+<!ATTLIST concept_reference object CDATA #REQUIRED>
+
+<!ELEMENT task_characteristic (definition,grounds+,warrant*,rebuttal*)>
+<!ATTLIST task_characteristic task CDATA #REQUIRED>
+<!ATTLIST task_characteristic modal_qualifier CDATA #REQUIRED>
