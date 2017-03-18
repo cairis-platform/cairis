@@ -69,6 +69,7 @@
               <li><a id="importClick" href="#">Import Model</a></li>
               <li><a id="fromTrello" href="#">Import from Trello</a></li>
               <li><a id="exportClick" href="#">Export Model</a></li>
+              <li><a id="exportArchitecturalPatternClick" href="#">Export Architectural Pattern</a></li>
               <li><a id="toTrello" href="#">Export to Trello</a></li>
               <li><a id="genDocClick" href="#">Documentation</a></li>
               <li><a id="projectClick" href="#">Properties</a></li>
@@ -486,6 +487,26 @@
         <div class="modal-footer">
           <div class="form-group col-md-2 col-md-offset-5">
             <button type="button" id="chooseDatabaseButton" class="btn btn-primary">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="chooseArchitecturalPattern" tabindex="-1" role="dialog" aria-labelledby="cap_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="chooseTitle">Choose architectural pattern</h4>
+        </div>
+        <div class="modal-body">
+          <select class="form-control" id="chooseArchitecturalPatternSelect">
+          </select>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="chooseArchitecturalPatternButton" class="btn btn-primary">Ok</button>
           </div>
         </div>
       </div>

@@ -240,6 +240,7 @@ api.add_resource(GoalController.GoalAssociationByNameAPI, '/api/goals/associatio
 
 # Export route
 api.add_resource(CExportController.CExportFileAPI, '/api/export/file',endpoint='export')
+api.add_resource(CExportController.CExportArchitecturalPatternAPI, '/api/export/file/architectural_pattern/<string:architectural_pattern_name>',endpoint='exportarchitecturalpattern')
 
 # Find route
 api.add_resource(FindController.FindAPI, '/api/find/<string:search_string>',endpoint='find')

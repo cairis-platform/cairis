@@ -40,3 +40,10 @@ class ExportDAO(CairisDAO):
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+  def architectural_pattern_export(self,apName):
+    try:
+      return self.db_proxy.architecturalPatternToXml(apName);
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
