@@ -861,6 +861,10 @@ drop procedure if exists assetThreatRiskLevel;
 drop procedure if exists riskSummary;
 drop procedure if exists threatSummary;
 drop procedure if exists vulnerabilitySummary;
+drop procedure if exists delete_access_right;
+drop procedure if exists delete_protocol;
+drop procedure if exists privilege;
+drop procedure if exists surface_type;
 
 delimiter //
 
@@ -23063,6 +23067,50 @@ begin
     insert into temp_vulnerabilitysummary(vulnerability_name,vulnerability_class) values (vulName,vulClass);
   end loop vul_loop;
   select vulnerability_class,count(*) from temp_vulnerabilitysummary group by 1;
+end
+//
+
+create procedure delete_access_right(in objtId int)
+begin
+  if objtId != -1
+  then
+    delete from access_right where id = objtId;
+  else
+    delete from access_right;
+  end if;
+end
+//
+
+create procedure delete_protocol(in objtId int)
+begin
+  if objtId != -1
+  then
+    delete from protocol where id = objtId;
+  else
+    delete from protocol;
+  end if;
+end
+//
+
+create procedure delete_privilege(in objtId int)
+begin
+  if objtId != -1
+  then
+    delete from protocol where id = objtId;
+  else
+    delete from protocol;
+  end if;
+end
+//
+
+create procedure delete_surface_type(in objtId int)
+begin
+  if objtId != -1
+  then
+    delete from surface_type where id = objtId;
+  else
+    delete from surface_type;
+  end if;
 end
 //
 
