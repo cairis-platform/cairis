@@ -151,6 +151,7 @@ class TemplateAssetDAO(CairisDAO):
   def simplify(self, ta):
     assert isinstance(ta, TemplateAsset)
     ta.theInterfaces = self.convert_ifs(real_ifs=ta.theInterfaces)
+    ta.theProperties = self.convert_props(real_props=ta.theProperties,rationales=ta.theRationale)
     return ta
 
   def convert_ifs(self, real_ifs=None, fake_ifs=None):
@@ -169,3 +170,39 @@ class TemplateAssetDAO(CairisDAO):
         for fIf in fake_ifs:
           new_ifs.append((fIf['theInterfaceName'],fIf['theInterfaceType'],fIf['theAccessRight'],fIf['thePrivilege']))
     return new_ifs
+
+
+  def convert_props(self, real_props=None, fake_props=None, rationales=None):
+    prop_dict = {}
+    prop_dict[0] = 'None'
+    prop_dict[1] = 'Low'
+    prop_dict[2] = 'Medium'
+    prop_dict[3] = 'High'
+    new_props = []
+    if real_props is not None:
+      if len(real_props) > 0:
+        new_sec_attrs = []
+        for idx in range(0, len(real_props)):
+          try:
+            attr_name = self.rev_attr_dict[idx]
+            attr_value = prop_dict[real_props[idx]]
+            new_sec_attr = SecurityAttribute(attr_name, attr_value, rationales[idx])
+            new_props.append(new_sec_attr)
+          except LookupError:
+            self.logger.warning('Unable to find key in dictionary. Attribute is being skipped.')
+      return new_props
+    elif fake_props is not None:
+      if len(fake_props) > 0:
+        new_props = array(8 * [0]).astype(numpy.int32)
+        new_rationale = ['None'] * 8
+        for sec_attr in fake_props:
+          attr_id = self.attr_dict[sec_attr['name']]
+          attr_value = prop_dict[sec_attr['value']]
+          attr_rationale = prop_dict[sec_attr['rationale']]
+          new_props[attr_id] = attr_value
+          new_rationale[attr_id] = attr_rationale
+      return (new_props,new_rationale)
+    else:
+      self.close()
+      raise MissingParameterHTTPError(param_names=['real_props', 'fake_props'])
+
