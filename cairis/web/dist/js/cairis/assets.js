@@ -996,6 +996,15 @@ mainContent.on('click','#addAssetInterface',function() {
   $('#addInterfaceDialog').modal('show');
 });
 
+mainContent.on('click','#isCritical', function() {
+  if ($(this).is(":checked")) {
+    $('#theCriticalRationale').prop("disabled",false); 
+  }
+  else {
+    $('#theCriticalRationale').prop("disabled",true); 
+  }
+});
+
 function updateAssetInterface() {
   var selectedInt = {};
   selectedInt.theInterfaceName = $('#theInterfaceName').val();
