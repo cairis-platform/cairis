@@ -863,8 +863,8 @@ drop procedure if exists threatSummary;
 drop procedure if exists vulnerabilitySummary;
 drop procedure if exists delete_access_right;
 drop procedure if exists delete_protocol;
-drop procedure if exists privilege;
-drop procedure if exists surface_type;
+drop procedure if exists delete_privilege;
+drop procedure if exists delete_surface_type;
 
 delimiter //
 
