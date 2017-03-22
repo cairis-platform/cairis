@@ -997,7 +997,7 @@ mainContent.on('click','#addAssetInterface',function() {
 });
 
 mainContent.on('click','#isCritical', function() {
-  if ($(this).is(":checked")) {
+  if ($("#isCritical").is(':checked')) {
     $('#theCriticalRationale').prop("disabled",false); 
   }
   else {
