@@ -61,7 +61,7 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
   def setUp(self):
     # region Class fields
     self.logger = logging.getLogger(__name__)
-    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+    importModelFile(os.environ['CAIRIS_SRC'] + '/test/webinos_presituate.xml',1,'test')
     # endregion
 
   def test_delete(self):
@@ -158,6 +158,17 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     self.assertIsNotNone(rv.data, 'No results after deserialization')
     self.assertEquals(rv.data.find('svg'),1)
+
+  def test_weakness_analysis(self):
+    importComponentViewFile(os.environ['CAIRIS_SRC'] + '/test/ContextPolicyManagement.xml','test')
+    url = '/api/architectural_patterns/name/Context%20Policy%20Management/weakness_analysis/Complete?session_id=test'
+    method = 'test_weakness_analysis'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url, content_type='application/json')
+    walm = jsonpickle.decode(rv.data)
+    self.logger.debug('[%s] Response data: %s', method, walm)
+    self.assertIsNotNone(walm, 'No results after deserialization')
+
 
   def prepare_json(self, ap):
     data_dict = {'session_id' : 'test','object' : ap}

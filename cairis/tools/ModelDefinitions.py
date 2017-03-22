@@ -66,6 +66,7 @@ from cairis.core.TemplateAsset import TemplateAsset
 from cairis.core.TemplateRequirement import TemplateRequirement
 from cairis.core.Location import Location
 from cairis.core.Locations import Locations
+from cairis.core.WeaknessTarget import WeaknessTarget
 from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, CharacteristicReference,ObjectDependency
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -1310,3 +1311,78 @@ class TraceModel(object):
     self.theFromName = fromName
     self.theToObject = toObjt
     self.theToName = toName
+
+@swagger.model
+class WeaknessTargetModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theTargetName": fields.String,
+    "theComponents": fields.List(fields.String),
+    "theTemplateAssets": fields.List(fields.String),
+    "theAssets": fields.List(fields.String),
+    "theTreatmentRequirement": fields.String,
+    "theTreatmentAsset": fields.String,
+    "theTreatmentEffectiveness": fields.String,
+    "theTreatmentRationale" : fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(WeaknessTarget)
+  }
+  def __init__(self):
+    self.theTargetName = ''
+    self.theComponents = []
+    self.theTemplateAssets = []
+    self.theAssets = []
+    self.theTreatmentRequirement = ''
+    self.theTreatmentAsset = ''
+    self.theTreatmentEffectiveness = ''
+    self.theTreatmentRationale = ''
+
+@swagger.model
+class PersonaImpactModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "thePersonaName": fields.String,
+    "theImpactScore": fields.Integer
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+
+  def __init__(self,pName,iScore):
+    self.thePersonaName = pName
+    self.theImpactScore = iScore
+
+
+@swagger.model
+class CandidateGoalObstacleModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theGoalName": fields.String,
+    "theObstacleName": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+
+  def __init__(self,gName,oName):
+    self.theGoalName = gName
+    self.theObstacleName = oName
+
+@swagger.model
+class WeaknessAnalysisModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theVulnerabilityWeaknesses" : fields.List(fields.Nested(WeaknessTargetModel.resource_fields)),
+    "theThreatWeaknesses" : fields.List(fields.Nested(WeaknessTargetModel.resource_fields)),
+    "thePersonaImpact" : fields.List(fields.Nested(PersonaImpactModel.resource_fields)),
+    "theCandidateGoals" : fields.List(fields.Nested(CandidateGoalObstacleModel.resource_fields))
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+
+  def __init__(self):
+    self.theVulnerabilityWeaknesses = []
+    self.theThreatWeaknesses = []
+    self.thePersonaImpact = []
+    self.theCandidateGoals = []
