@@ -488,7 +488,7 @@ mainContent.on('dblclick', '.editGoalConcernAssoc', function () {
   });
 });
 
-mainContent.on('click', '.goalCancelButton', function () {
+mainContent.on('click', '#goalCancelButton', function () {
   toggleGoalWindow("#editGoalOptionsForm")
 });
 
@@ -579,46 +579,14 @@ function fillGoalOptionMenu(data,callback){
 }
 
 function fillGoalEditSubGoal(theSettableValue){
-  $("#theSubGoalName").empty();
-  var subname = $("#theSubGoalName");
-  getAllgoals(function (data) {
-    $.each(data, function (key, goal) {
-      subname.append($("<option></option>")
-        .attr("value", key)
-        .text(key));
-    });
-  });
-  getAllRequirements(function (data) {
-    $.each(data, function (key, req) {
-      subname.append($("<option></option>")
-        .attr("value", req.theLabel)
-        .text(req.theLabel));
-    });
-    if (typeof theSettableValue  !== "undefined"){
-      subname.val(theSettableValue);
-    }
+  refreshDimensionSelector($('#theSubGoalName'),'goal',$.session.get("GoalEnvName"),function() {
+    $("#theSubGoalName option[value='All']").remove();
   });
 }
 
 function fillGoalEditGoal(theSettableValue) {
-  var thegoalName = $("#theGoalName");
-  thegoalName.empty();
-  getAllgoals(function (data) {
-    $.each(data, function (key, goal) {
-      thegoalName.append($("<option></option>")
-        .attr("value", key)
-        .text(key));
-    });
-  });
-  getAllRequirements(function (data) {
-    $.each(data, function (key, req) {
-      thegoalName.append($("<option></option>")
-        .attr("value", req.theLabel)
-        .text(req.theLabel));
-    });
-    if (typeof theSettableValue  !== "undefined"){
-      thegoalName.val(theSettableValue);
-    }
+  refreshDimensionSelector($('#theGoalName'),'goal',$.session.get("GoalEnvName"),function() {
+    $("#theGoalName option[value='All']").remove();
   });
 }
 
@@ -770,3 +738,7 @@ function postGoal(goal, callback){
     }
   });
 }
+
+mainContent.on('click', '#theSubgoalType', function () {
+  refreshDimensionSelector($('#theSubGoalName'),$('#theSubgoalType').val(),$.session.get("GoalEnvName"));
+});
