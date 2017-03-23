@@ -1011,6 +1011,70 @@
     </div>
   </div>
   </div>
+  <div class="modal fade" id="weaknessAnalysisDialog" tabindex="-1" role="dialog" aria-labelledby="wad_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="wadTitle">Weakness Analysis</h4>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <ul class="nav nav-tabs" id="theWeaknessAnalysisList" style="width: 45%;">
+              <li class="active"><a data-target="#threats" data-toggle="tab">Threats</a></li>
+              <li><a data-target="#vulnerabilities" data-toggle="tab">Vulnerabilities</a></li>
+              <li><a data-target="#personaimpact" data-toggle="tab">Persona Impact</a></li>
+              <li><a data-target="#obstacles" data-toggle="tab">Obstacles</a></li>
+            </ul>
+            <div class="tab-content">
+              <div id="threats" class="tab-pane active">
+                <table class="table table-responsive" id="theWeaknessAnalysisThreats" style="width:45%;">
+                  <thead>
+                    <tr><th>Target</th><th>Components</th><th>Asset</th></tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+              <div id="vulnerabilities" class="tab-pane">
+                <table class="table table-responsive" id="theWeaknessAnalysisVulnerabilities" style="width: 45%;">
+                  <thead>
+                    <tr><th>Target</th><th>Components</th><th>Asset</th></tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+              <div id="personaimpact" class="tab-pane">
+                <table class="table table-responsive" id="theWeaknessAnalysisPersonaImpact" style="width: 45%;">
+                  <thead>
+                    <tr><th>Persona</th><th>Impact</th></tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+              <div id="obstacles" class="tab-pane">
+                <table class="table table-responsive" id="theWeaknessAnalysisObstacles" style="width: 45%;">
+                  <thead>
+                    <tr><th>Obstacle</th><th>Mitigating Goal</th></tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="situateArchitecturalPatternButton" class="btn btn-primary">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="loadingWrapper">
     <div class="divLoading">
     </div>

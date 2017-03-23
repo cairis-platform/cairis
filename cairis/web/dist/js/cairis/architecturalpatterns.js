@@ -67,6 +67,24 @@ function createArchitecturalPatternsTable(){
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
       $("#mainTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").addClass('ap-rows');
+      $('.ap-rows').contextMenu({
+        selector: 'td',
+        items: {
+          "weaknessanalysis": {
+            name: "Weakness Analysis",
+            callback: function(key, opt) {
+              var apName = $(this).closest("tr").find("td").eq(1).html();
+              refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',undefined,function() {
+                $('#chooseEnvironment').attr('data-chooseDimension',"environment");
+                $('#chooseEnvironment').attr('data-apName',apName);
+                $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"viewWeaknessAnalysis");
+                $('#chooseEnvironment').modal('show');
+              });
+            }
+          }
+        }
+      });
 
       activeElement("mainTable");
       sortTableByRow(0);
@@ -130,8 +148,6 @@ function viewArchitecturalPattern(apName) {
             }
           }
         });
-
-
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -1088,5 +1104,54 @@ mainContent.on('click','td.deleteComponentGoalAssociation',function() {
   var comp = JSON.parse($.session.get("Component"));
   comp.theGoalAssociations.splice(rowIdx,1);
   $.session.set("Component", JSON.stringify(comp));
+});
+
+
+function viewWeaknessAnalysis() {
+  var apName = $('#chooseEnvironment').attr('data-apName');
+  var envName = $('#chooseEnvironmentSelect').val();
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/architectural_patterns/name/" + encodeURIComponent(apName) + '/weakness_analysis/' + encodeURIComponent(envName),
+    success: function (data) {
+      console.log(data);
+      $('#theWeaknessAnalysisVulnerabilities').find('tbody').empty();
+      $.each(data.theVulnerabilityWeaknesses,function(key,item) {
+        $("#theWeaknessAnalysisVulnerabilities").find("tbody").append('<tr><td>'+ item.theTargetName +'</td><td>' + item.theComponents+ '</td><td>' + item.theAssets + '</td></tr>');
+      });
+
+      $('#theWeaknessAnalysisThreats').find('tbody').empty();
+      $.each(data.theThreatWeaknesses,function(key,item) {
+        $("#theWeaknessAnalysisThreats").find("tbody").append('<tr><td>'+ item.theTargetName +'</td><td>' + item.theComponents+ '</td><td>' + item.theAssets + '</td></tr>');
+      });
+
+      $('#theWeaknessAnalysisPersonaImpact').find('tbody').empty();
+      $.each(data.thePersonaImpact,function(key,item) {
+        $("#theWeaknessAnalysisPersonaImpact").find("tbody").append('<tr><td>'+ item.thePersonaName +'</td><td>' + item.theImpactScore+ '</td></tr>');
+      });
+
+      $('#theWeaknessAnalysisObstacles').find('tbody').empty();
+      $.each(data.theCandidateGoals,function(key,item) {
+        $("#theWeaknessAnalysisObstacles").find("tbody").append('<tr><td>'+ item.theObstacleName +'</td><td>' + item.theGoalName+ '</td></tr>');
+      });
+
+      $('#weaknessAnalysisDialog').modal('show');
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+$("#weaknessAnalysisDialog").on('click', '#situateArchitecturalPatternButton',function(e) {
+  $('#weaknessAnalysisDialog').modal('hide');
 });
 
