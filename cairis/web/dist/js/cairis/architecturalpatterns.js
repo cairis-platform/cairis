@@ -1121,7 +1121,6 @@ function viewWeaknessAnalysis() {
     crossDomain: true,
     url: serverIP + "/api/architectural_patterns/name/" + encodeURIComponent(apName) + '/environment/' + encodeURIComponent(envName) + '/weakness_analysis',
     success: function (data) {
-      console.log(data);
       $('#theWeaknessAnalysisVulnerabilities').find('tbody').empty();
       $.each(data.theVulnerabilityWeaknesses,function(key,item) {
         $("#theWeaknessAnalysisVulnerabilities").find("tbody").append('<tr><td>'+ item.theTargetName +'</td><td>' + item.theComponents+ '</td><td>' + item.theAssets + '</td></tr>');
@@ -1152,6 +1151,29 @@ function viewWeaknessAnalysis() {
 }
 
 $("#weaknessAnalysisDialog").on('click', '#situateArchitecturalPatternButton',function(e) {
-  $('#weaknessAnalysisDialog').modal('hide');
-});
+  var apName = $('#chooseEnvironment').attr('data-apName');
+  var envName = $('#chooseEnvironmentSelect').val();
 
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    processData: false,
+    url: serverIP + "/api/architectural_patterns/name/" + encodeURIComponent(apName) + '/environment/' + encodeURIComponent(envName) + '/situate',
+    success: function (data) {
+      $('#weaknessAnalysisDialog').modal('hide');
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+
+
+});

@@ -309,7 +309,7 @@ class ArchitecturalPatternDAO(CairisDAO):
     acDict = {}
     assetParametersList = []
     for assetName,componentName in self.db_proxy.componentAssets(cvName):
-      assetParametersList.append(cairis.core.AssetParametersFactory.buildFromTemplate(assetName,[envName]))
+      assetParametersList.append(cairis.core.AssetParametersFactory.buildFromTemplate(assetName,[envName],self.db_proxy))
       if assetName not in acDict:
         acDict[assetName] = []
       acDict[assetName].append(componentName)
