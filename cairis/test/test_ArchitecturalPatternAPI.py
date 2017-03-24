@@ -58,10 +58,11 @@ def addAPDependentData(d):
 
 class ArchitecturalPatternAPITests(CairisDaemonTestCase):
 
+
   def setUp(self):
     # region Class fields
-    self.logger = logging.getLogger(__name__)
     importModelFile(os.environ['CAIRIS_SRC'] + '/test/webinos_presituate.xml',1,'test')
+    self.logger = logging.getLogger(__name__)
     # endregion
 
   def test_delete(self):
