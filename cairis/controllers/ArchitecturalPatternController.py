@@ -476,3 +476,53 @@ class WeaknessAnalysisAPI(Resource):
     resp = make_response(json_serialize(cwm, session_id=session_id), httplib.OK)
     resp.contenttype = 'application/json'
     return resp
+
+class SituateArchitecturalPatternAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Situate architectural pattern',
+    nickname='architectural-patterns-weakness-analysis-post',
+    responseClass=str.__name__,
+    parameters=[
+      {
+        'name': 'session_id',
+        'description': 'The ID of the session to use',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      },
+      {
+        'name': 'architectural_pattern_name',
+        'description': 'The architectural pattern name',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      },
+      {
+        'name': 'environment_name',
+        'description': 'The environment name',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'The database connection was not properly setup'
+      },
+    ]
+  )
+  # endregion
+  def post(self,architectural_pattern_name,environment_name):
+    session_id = get_session_id(session, request)
+    dao = ArchitecturalPatternDAO(session_id)
+    cwm = dao.situate_component_view(architectural_pattern_name,environment_name)
+    dao.close()
+    resp_dict = {'message': 'Architectural Pattern successfully situated'}
+    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp

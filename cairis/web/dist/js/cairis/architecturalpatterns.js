@@ -1119,7 +1119,7 @@ function viewWeaknessAnalysis() {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/architectural_patterns/name/" + encodeURIComponent(apName) + '/weakness_analysis/' + encodeURIComponent(envName),
+    url: serverIP + "/api/architectural_patterns/name/" + encodeURIComponent(apName) + '/environment/' + encodeURIComponent(envName) + '/weakness_analysis',
     success: function (data) {
       console.log(data);
       $('#theWeaknessAnalysisVulnerabilities').find('tbody').empty();

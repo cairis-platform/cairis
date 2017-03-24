@@ -27,6 +27,7 @@ from cairis.core.ComponentViewParameters import ComponentViewParameters
 from cairis.misc.AssetModel import AssetModel as GraphicalAssetModel
 from cairis.misc.ComponentModel import ComponentModel as GraphicalComponentModel
 from cairis.misc.KaosModel import KaosModel
+import cairis.core.AssetParametersFactory
 
 __author__ = 'Shamal Faily'
 
@@ -303,3 +304,14 @@ class ArchitecturalPatternDAO(CairisDAO):
       raise ARMHTTPError(ex)
     except Exception as ex:
       print(ex)
+
+  def situate_component_view(self,cvName,envName):
+    acDict = {}
+    assetParametersList = []
+    for assetName,componentName in self.db_proxy.componentAssets(cvName):
+      assetParametersList.append(cairis.core.AssetParametersFactory.buildFromTemplate(assetName,[envName]))
+      if assetName not in acDict:
+        acDict[assetName] = []
+      acDict[assetName].append(componentName)
+    self.db_proxy.situateComponentView(cvName,envName,acDict,assetParametersList,[],[])
+    self.db_proxy.conn.commit()

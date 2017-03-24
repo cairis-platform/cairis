@@ -153,7 +153,8 @@ api.add_resource(ArchitecturalPatternController.ArchitecturalPatternByNameAPI, '
 api.add_resource(ArchitecturalPatternController.ComponentGoalModelAPI, '/api/architectural_patterns/component/goal/model/<string:component>', endpoint = 'componentgoals')
 api.add_resource(ArchitecturalPatternController.ComponentAssetModelAPI, '/api/architectural_patterns/component/asset/model/<string:component>', endpoint = 'componentassets')
 api.add_resource(ArchitecturalPatternController.ComponentModelAPI, '/api/architectural_patterns/component/model/<string:ap_name>', endpoint = 'componentmodel')
-api.add_resource(ArchitecturalPatternController.WeaknessAnalysisAPI, '/api/architectural_patterns/name/<string:architectural_pattern_name>/weakness_analysis/<string:environment_name>', endpoint='architecturalweaknessanalysis')
+api.add_resource(ArchitecturalPatternController.WeaknessAnalysisAPI, '/api/architectural_patterns/name/<string:architectural_pattern_name>/environment/<string:environment_name>/weakness_analysis', endpoint='architecturalweaknessanalysis')
+api.add_resource(ArchitecturalPatternController.SituateArchitecturalPatternAPI, '/api/architectural_patterns/name/<string:architectural_pattern_name>/environment/<string:environment_name>/situate', endpoint='situatearchitecturalpattern')
 
 # Asset routes
 api.add_resource(AssetController.AssetsAPI, '/api/assets',endpoint='assets')

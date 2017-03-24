@@ -161,7 +161,7 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
 
   def test_weakness_analysis(self):
     importComponentViewFile(os.environ['CAIRIS_SRC'] + '/test/ContextPolicyManagement.xml','test')
-    url = '/api/architectural_patterns/name/Context%20Policy%20Management/weakness_analysis/Complete?session_id=test'
+    url = '/api/architectural_patterns/name/Context%20Policy%20Management/environment/Complete/weakness_analysis?session_id=test'
     method = 'test_weakness_analysis'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url, content_type='application/json')
@@ -169,6 +169,17 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, walm)
     self.assertIsNotNone(walm, 'No results after deserialization')
 
+  def test_situate_component_view(self):
+    importComponentViewFile(os.environ['CAIRIS_SRC'] + '/test/ContextPolicyManagement.xml','test')
+    url = '/api/architectural_patterns/name/Context%20Policy%20Management/environment/Complete/situate?session_id=test'
+    method = 'test_situate_component_view'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.post(url, content_type='application/json')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    msg = json_resp.get('message', None)
+    self.assertEquals(msg, 'Architectural Pattern successfully situated')
 
   def prepare_json(self, ap):
     data_dict = {'session_id' : 'test','object' : ap}
