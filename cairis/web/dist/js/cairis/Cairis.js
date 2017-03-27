@@ -1174,7 +1174,7 @@ function concernDialogBox(hasRole ,callback){
   });
 }
 
-function refreshDimensionSelector(sBox,dimName,envName,callback) {
+function refreshDimensionSelector(sBox,dimName,envName,callback,filterList) {
   var urlText = serverIP + "/api/dimensions/table/" + dimName;
   if (envName != undefined) {
     urlText += '/environment/' + envName
@@ -1191,14 +1191,22 @@ function refreshDimensionSelector(sBox,dimName,envName,callback) {
     success: function (data) {
       data.sort();
       sBox.empty();
-      if (dimName == 'asset' || dimName == 'goal' || dimName == 'obstacle' || dimName == 'task' || dimName == 'usecase' || dimName == 'misusecase' || dimName == 'requirement') {
+      if ((dimName == 'asset' && filterList == undefined) || (dimName == 'goal' && filterList == undefined) || (dimName == 'obstacle' && filterList == undefined) || (dimName == 'task' && filterList == undefined) || (dimName == 'usecase' && filterList == undefined) || (dimName == 'misusecase' && filterList == undefined) || (dimName == 'requirement' && filterList == undefined)) {
         sBox.append("<option>All</option>");
       }
-      $.each(data, function () {
-        sBox.append($("<option />").val(this).text(this));
-      });
-      if (callback != undefined) {
-        callback();
+      if (filterList != undefined) {
+        data = data.filter(x => filterList.indexOf(x) < 0);
+      }
+      if (data.length == 0) {
+        alert('All ' + dimName + 's have already been added.');
+      }
+      else {
+        $.each(data, function () {
+          sBox.append($("<option />").val(this).text(this));
+        });
+        if (callback != undefined) {
+          callback();
+        }
       }
     },
     error: function (xhr, textStatus, errorThrown) {

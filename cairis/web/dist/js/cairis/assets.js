@@ -325,11 +325,16 @@ mainContent.on('dblclick', '.clickable-associations', function(){
 });
 
 mainContent.on('click', '.addEnvironmentPlus',function(){
+  var filterList = [];
+  $.each($('#theEnvironmentDictionary tbody tr td:nth-child(2)'),function(idx,row) {
+    filterList.push($(row).text());
+  });
+
   refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',undefined,function(){
     $('#chooseEnvironment').attr('data-chooseDimension','environment');
     $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addAssetEnvironment');
     $('#chooseEnvironment').modal('show');
-  });
+  },filterList);
 });
 
 function addAssetEnvironment() {
