@@ -176,28 +176,32 @@ mainContent.on("click", ".vulEnvProperties", function () {
 });
 
 mainContent.on("click", "#addAssetToEnvFromVuln", function () {
-  if($("#theVulEnvironments").find("tbody").children().length == 0){
-    alert("First you have to add an environment");
-  }
-  else {
-    var hasAssets = [];
-    $(".removeVulnEnvAsset").next("td").each(function (index, tag) {
-      hasAssets.push($(tag).text());
-    });
-    assetsDialogBox(hasAssets, function (text) {
-      $("#vulnEnvAssets").find("tbody").append('<tr><td class="removeVulnEnvAsset"><i class="fa fa-minus"></i></td><td>' + text + '</td></tr>');
-      var theVul = JSON.parse($.session.get("Vulnerability"));
-      var EnvName = $.session.get("VulnEnvironmentName");
-      $.each(theVul.theEnvironmentProperties, function (index, prop) {
-        if (prop.theEnvironmentName == EnvName) {
-          prop.theAssets.push(text);
-        }
-      });
-      debugLogger(theVul);
-      $.session.set("Vulnerability", JSON.stringify(theVul));
-    });
-  }
+  var filterList = [];
+  $(".removeVulnEnvAsset").next("td").each(function (index, tag) {
+    filterList.push($(tag).text());
+  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'asset',$.session.get('VulnEnvironmentName'),function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','asset');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addAssetToVulnerabilityEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addAssetToVulnerabilityEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  $("#vulnEnvAssets").find("tbody").append('<tr><td class="removeVulnEnvAsset"><i class="fa fa-minus"></i></td><td>' + text + '</td></tr>');
+  var theVul = JSON.parse($.session.get("Vulnerability"));
+  var EnvName = $.session.get("VulnEnvironmentName");
+  $.each(theVul.theEnvironmentProperties, function (index, prop) {
+    if (prop.theEnvironmentName == EnvName) {
+      prop.theAssets.push(text);
+    }
+  });
+  debugLogger(theVul);
+  $.session.set("Vulnerability", JSON.stringify(theVul));
+};
+
 
 mainContent.on("click", ".removeVulnEnvAsset", function () {
   var name = $(this).next("td").text();
