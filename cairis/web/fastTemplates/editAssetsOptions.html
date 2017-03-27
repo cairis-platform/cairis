@@ -67,7 +67,7 @@
     <div id="Interfaces">
       <table class="clickable-table scrollableTable" id="theAssetInterfaces">
         <thead>
-          <tr><th id="addAssetInterface"> <i class="fa fa-plus"></i></th><th>Interface</th><th>Type</th><th>Access Right</th><th>Privilege</th></tr><i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Adding interface information can contribute to attack surface metric calculations" id="addAssetInterfaceHelp"></i>
+          <tr><th id="addAssetInterface"> <i class="fa fa-plus"></i></th><th>Interface <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Adding interface information can contribute to attack surface metric calculations. Access Rights and Privileges need to be added before you can add asset interfaces." id="addAssetInterfaceHelp"></i></th><th>Type</th><th>Access Right</th><th>Privilege</th></tr>
         </thead>
         <tbody>
         </tbody>
@@ -77,7 +77,7 @@
     <div class="inblock">
       <table class="left clickable-table" id="theEnvironmentDictionary" style="width: 24%;">
         <thead>
-          <tr><th> <i class="fa fa-plus addEnvironmentPlus"></i></th><th>Environment</th></tr>
+          <tr><th><i class="fa fa-plus addEnvironmentPlus"></i></th><th>Environment <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Security properties are based on the environment an asset is situated in." id="addAssetEnvironmentHelp"></i></th></tr>
         </thead>
         <tbody>
         </tbody>
@@ -91,23 +91,20 @@
         <div id="Properties" class="gearOptions clickable-table scrollableTable">
           <table id="definitionTable" class="assetUpdate ">
             <thead>
-              <tr><th><div class="fillparent" id="addNewProperty"><i class="fa fa-plus"></i></div></th><th>Property</th><th>Value</th><th>Rationale</th></tr> 
+              <tr><th><div class="fillparent" id="addNewProperty"><i class="fa fa-plus"></i></div></th><th>Property <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Security and Privacy properties that need protecting. This will be None if nothing is specified." id="addNewAssetPropertyHelp"></i></th><th>Value</th><th>Rationale</th></tr>
             </thead>
             <tbody>
-
             </tbody>
           </table>
         </div>
         <div id="AssociationsAssetsOptions" class="gearOptions clickable-table scrollableTable">
           <table id="assetAssociationsTable" class="assetUpdate">
             <thead>
-              <tr><th><div class="fillparent" id="addNewAssociation"><i class="fa fa-plus"></i></div></th><th>Nav</th><th>Type</th><th>Nry</th><th>Role</th><th>Tail Role</th><th>Tail Nry</th><th>Tail Type</th><th>Tail Nav</th><th>Tail Asset</th></tr>
+              <tr><th><div class="fillparent" id="addNewAssociation"><i class="fa fa-plus"></i></div></th><th>Nav</th><th>Type</th><th>Nry</th><th>Role</th><th>Tail Role</th><th>Tail Nry</th><th>Tail Type</th><th>Tail Nav</th><th>Tail Asset</th></tr><i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Associations between assets.  Associations are visualised in asset models." id="addNewAssetAssociationHelp"></i>
             </thead>
             <tbody>
-
             </tbody>
           </table>
-
         </div>
       </div>
     </div>
