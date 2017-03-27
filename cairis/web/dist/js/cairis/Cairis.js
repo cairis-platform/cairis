@@ -1197,7 +1197,7 @@ function refreshDimensionSelector(sBox,dimName,envName,callback,filterList) {
       if (filterList != undefined) {
         data = data.filter(x => filterList.indexOf(x) < 0);
       }
-      if (data.length == 0) {
+      if (data.length == 0 && filterList != undefined) {
         alert('All ' + dimName + 's have already been added.');
       }
       else {

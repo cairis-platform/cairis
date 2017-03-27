@@ -117,6 +117,9 @@ function viewAsset(assetName) {
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editAssetsOptions.html","#objectViewer",null,true,true, function(){
         $.session.set("Asset", JSON.stringify(newdata));
+        refreshDimensionSelector($('#theType'),'asset_type',undefined,function() {
+          $('#theType').val(newdata.theType);
+        });
         $.each(newdata.theInterfaces,function(idx,aInt) {
           appendAssetInterface(aInt);
         });
@@ -133,7 +136,6 @@ function viewAsset(assetName) {
           success: function (data) {
             $.session.set("AssetProperties", JSON.stringify(data));
             fillEditAssetsEnvironment();
-            refreshDimensionSelector($('#theType'),'asset_type');
             $('#editAssetsOptionsform').validator('update');
             $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:first").trigger('click');
           },
