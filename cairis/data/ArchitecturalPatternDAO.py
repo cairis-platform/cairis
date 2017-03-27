@@ -19,7 +19,7 @@ from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError, ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, SilentHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_deserialize
-from cairis.tools.ModelDefinitions import ArchitecturalPatternModel,ComponentModel,ConnectorModel,InterfaceModel,ComponentGoalAssociationModel,ComponentStructureModel
+from cairis.tools.ModelDefinitions import ArchitecturalPatternModel,ComponentModel,ConnectorModel,InterfaceModel,ComponentGoalAssociationModel,ComponentStructureModel, WeaknessTargetModel, PersonaImpactModel, CandidateGoalObstacleModel, WeaknessAnalysisModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 from cairis.core.ComponentParameters import ComponentParameters
 from cairis.core.ConnectorParameters import ConnectorParameters
@@ -27,6 +27,7 @@ from cairis.core.ComponentViewParameters import ComponentViewParameters
 from cairis.misc.AssetModel import AssetModel as GraphicalAssetModel
 from cairis.misc.ComponentModel import ComponentModel as GraphicalComponentModel
 from cairis.misc.KaosModel import KaosModel
+import cairis.core.AssetParametersFactory
 
 __author__ = 'Shamal Faily'
 
@@ -210,7 +211,7 @@ class ArchitecturalPatternDAO(CairisDAO):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       associationDictionary = self.db_proxy.componentAssetModel(cName)
-      associations = GraphicalAssetModel(associationDictionary.values(), db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize)
+      associations = GraphicalAssetModel(associationDictionary.values(), db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize,isComponentAssetModel=True)
       dot_code = associations.graph()
       return dot_code
     except DatabaseProxyException as ex:
@@ -253,3 +254,64 @@ class ArchitecturalPatternDAO(CairisDAO):
       raise ARMHTTPError(ex)
     except Exception as ex:
       print(ex)
+
+  def get_weakness_analysis(self,cvName,envName):
+    try:
+      walm = WeaknessAnalysisModel()
+      thrDict,vulDict = self.db_proxy.componentViewWeaknesses(cvName,envName)
+     
+      for thrName in thrDict:
+        thrWA = thrDict[thrName]
+        twt = WeaknessTargetModel()
+        twt.theTargetName = thrWA.name()
+        for cName in thrWA.components():
+          twt.theComponents.append(cName)
+        for taName in thrWA.templateAssets():
+          twt.theTemplateAssets.append(taName)
+        for aName in thrWA.assets():
+          twt.theAssets.append(aName)
+        twt.theTreatmentRequirment = thrWA.requirement()
+        twt.theThreatmentAsset = thrWA.asset()
+        twt.theTreatmentEffect = thrWA.effectiveness()
+        twt.theTreatmentRationale = thrWA.rationale()
+        walm.theThreatWeaknesses.append(twt)
+
+      for vulName in vulDict:
+        vulWA = vulDict[vulName]
+        vwt = WeaknessTargetModel()
+        vwt.theTargetName = vulWA.name()
+        for cName in vulWA.components():
+          vwt.theComponents.append(cName)
+        for taName in vulWA.templateAssets():
+          vwt.theTemplateAssets.append(taName)
+        for aName in vulWA.assets():
+          vwt.theAssets.append(aName)
+        vwt.theTreatmentRequirment = vulWA.requirement()
+        vwt.theThreatmentAsset = vulWA.asset()
+        vwt.theTreatmentEffect = vulWA.effectiveness()
+        vwt.theTreatmentRationale = vulWA.rationale()
+        walm.theVulnerabilityWeaknesses.append(vwt)
+      for pName,iScore in self.db_proxy.personasImpact(cvName,envName):
+        walm.thePersonaImpact.append(PersonaImpactModel(pName,iScore))
+      for goalName,obsName in self.db_proxy.candidateGoalObstacles(cvName,envName):
+        walm.theCandidateGoals.append(CandidateGoalObstacleModel(goalName,obsName))
+      return walm
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except Exception as ex:
+      print(ex)
+
+  def situate_component_view(self,cvName,envName):
+    acDict = {}
+    assetParametersList = []
+    for assetName,componentName in self.db_proxy.componentAssets(cvName):
+      assetParametersList.append(cairis.core.AssetParametersFactory.buildFromTemplate(assetName,[envName],self.db_proxy))
+      if assetName not in acDict:
+        acDict[assetName] = []
+      acDict[assetName].append(componentName)
+    self.db_proxy.situateComponentView(cvName,envName,acDict,assetParametersList,[],[])
+    self.db_proxy.conn.commit()

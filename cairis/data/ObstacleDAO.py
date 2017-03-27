@@ -270,15 +270,15 @@ class ObstacleDAO(CairisDAO):
         for subgoal_refinement in fake_prop['theSubGoalRefinements']:
           new_subgoal_refinements.append(tuple(subgoal_refinement))
 
-          new_prop = ObstacleEnvironmentProperties(
-                    environmentName=fake_prop['theEnvironmentName'],
-                    lbl=fake_prop['theLabel'],
-                    definition=fake_prop['theDefinition'],
-                    category=fake_prop['theCategory'],
-                    gRefs=new_goal_refinements,
-                    sgRefs=new_subgoal_refinements,
-                    concs=fake_prop['theConcerns'])
-          new_props.append(new_prop)
+        new_prop = ObstacleEnvironmentProperties(
+                   environmentName=fake_prop['theEnvironmentName'],
+                   lbl=fake_prop['theLabel'],
+                   definition=fake_prop['theDefinition'],
+                   category=fake_prop['theCategory'],
+                   gRefs=new_goal_refinements,
+                   sgRefs=new_subgoal_refinements,
+                   concs=fake_prop['theConcerns'])
+        new_props.append(new_prop)
     else:
       self.close()
       raise MissingParameterHTTPError(param_names=['real_props', 'fake_props'])

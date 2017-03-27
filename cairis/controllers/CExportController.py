@@ -69,3 +69,48 @@ class CExportFileAPI(Resource):
     resp.headers["Content-Type"] = 'application/xml'
     resp.headers["Content-Disposition"] = 'Attachment; filename=model.xml'
     return resp
+
+class CExportArchitecturalPatternAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Exports architectural pattern to XML file',
+    nickname='cexport-file-get',
+    parameters=[
+      {
+        "name": "architectural_pattern_name",
+        "description": "The architectural pattern name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'The provided file is not a valid XML file'
+      },
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': '''Some parameters are missing. Be sure 'file_contents' and 'type' are defined.'''
+      }
+    ]
+  )
+  # endregion
+  def get(self,architectural_pattern_name):
+    session_id = get_session_id(session, request)
+    dao = ExportDAO(session_id)
+    modelBuf = dao.architectural_pattern_export(architectural_pattern_name)
+    dao.close()
+    resp = make_response(modelBuf)
+    resp.headers["Content-Type"] = 'application/xml'
+    resp.headers["Content-Disposition"] = 'Attachment; filename=' + architectural_pattern_name + '.xml'
+    return resp

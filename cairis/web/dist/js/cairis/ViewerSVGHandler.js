@@ -20,14 +20,12 @@
 'use strict';
 
 $( document ).ajaxComplete(function() {
-//  $("svg > g > g .node > a ").on('click', function (event) {
   $("svg > g > g .node > g > a").on('click', function (event) {
     event.stopImmediatePropagation();
     event.preventDefault();
     var link = $(this).attr("xlink:href");
     
     if(link.indexOf("template_assets") > -1) {
-      forceOpenOptions();
       $.ajax({
         type: "GET",
         dataType: "json",
@@ -36,47 +34,22 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link.replace(" ","%20"),
         success: function (data) {
-        var dataArr = {};
-        dataArr["#theName"] = String(data.theName);
-        var theTableArr =[];
-
-        $.ajax({
-          type:"GET",
-          dataType: "json",
-          accept:"application/json",
-          data: {
-            session_id: String($.session.get('sessionID'))
-          },
-          crossDomain: true,
-          url: serverIP + "/api/template_assets/name/"+ data.theName,
-          success: function() {
-            fillOptionMenu("fastTemplates/AssetOptions.html", "#optionsContent", dataArr,false,true,function(){
-              $("#optionsHeaderGear").text("Asset properties");
-              $("#theDescription").val(data.theDescription);
-              $("#theSignificance").val(data.theSignificance);
-
-              $.each(data.theEnvironmentProperties, function (idx, env) {
-                if (window.assetEnvironment == env.theEnvironmentName) {
-                  var propValues = [];
-                  for (var i = 0; i < env.theProperties.length; i++) {
-                    if (env.theProperties[i].value != "None") {
-                      propValues.push("<tr><td>" + env.theProperties[i].name + "</td><td>" + env.theProperties[i].value + "</td></tr>"); 
-                    }
-                  }
-                  $("#propTable").find("tbody").append(propValues.join(' '));
-                }
-              });
-            });
-          }, 
-          error: function(xhr, textStatus, errorThrown) {
-            console.log(this.url);
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-          }
-        });
-      },
-      error: function (xhr, textStatus, errorThrown) {
+          fillOptionMenu("fastTemplates/TemplateAssetOptions.html", "#optionsContent", data,false,true,function(){
+            $("#optionsHeaderGear").text("Template Asset properties");
+            $('#templateAssetsForm').loadJSON(data,null);
+            var propValues = [];
+            for (var i = 0; i < data.theProperties.length; i++) {
+              if (data.theProperties[i].value != "None") {
+                propValues.push("<tr><td>" + data.theProperties[i].name + "</td><td>" + data.theProperties[i].value + "</td></tr>");
+              }
+            }
+            $("#propTable").find("tbody").append(propValues.join(' '));
+            forceOpenOptions();
+          });
+        },
+        error: function (xhr, textStatus, errorThrown) {
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -936,7 +909,7 @@ else if(link.indexOf("obstacles") > -1) {
         }
       });
     }
-else if(link.indexOf("usecases") > -1) {
+  else if(link.indexOf("usecases") > -1) {
       forceOpenOptions();
       $.ajax({
         type: "GET",

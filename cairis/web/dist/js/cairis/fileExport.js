@@ -44,3 +44,49 @@ $("#exportClick").click(function () {
     }
   });
 });
+
+$("#exportArchitecturalPatternClick").click(function () {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/component_view",
+    success: function (data) {
+      $("#chooseArchitecturalPatternSelect").empty();
+      $.each(data, function(i, item) {
+        $("#chooseArchitecturalPatternSelect").append('<option value="' + item + '">'  + item + '</option>');
+      });
+      $('#chooseArchitecturalPattern').modal('show');
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});
+
+$("#chooseArchitecturalPattern").on('click', '#chooseArchitecturalPatternButton',function(e) {
+  var apName = $('#chooseArchitecturalPatternSelect').val();
+  var exportUrl = serverIP + "/api/export/file/architectural_pattern/" + encodeURIComponent(apName);
+  $.ajax({
+    type: "GET",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: exportUrl,
+    success: function (data) {
+      window.location.assign(exportUrl);
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+    }
+  });
+});
+

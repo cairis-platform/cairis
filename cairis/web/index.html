@@ -11,6 +11,7 @@
   <script src="plugins/jquery-3.1.1/jquery-3.1.1.min.js"></script> 
   <script src="plugins/jquery-ui-1.12.1/jquery-ui.js"></script> 
   <script src="plugins/jquery-migrate/jquery-migrate-3.0.0.min.js"></script> 
+  <script src="plugins/trello/client.js?key=f8371ed97c21a7bab5774e45d014be3e"></script>
 
   <script src="bootstrap/js/bootstrap.min.js"></script> 
 
@@ -33,7 +34,7 @@
   <link href="plugins/d3/nv.d3.min.css" rel="stylesheet">
   <script src="plugins/d3/d3.min.js"></script>
   <script src="plugins/d3/nv.d3.min.js"></script>
-
+  <script src="https://api.trello.com/1/client.js?key=f8371ed97c21a7bab5774e45d014be3e"></script>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -65,8 +66,11 @@
               <li><a id="openClick" href="#">Open Database</a></li>
               <li><a id="deleteClick" href="#">Delete Database</a></li>
               <li><a id="newClick" href="#">New</a></li>
-              <li><a id="importClick" href="#">Import</a></li>
-              <li><a id="exportClick" href="#">Export</a></li>
+              <li><a id="importClick" href="#">Import Model</a></li>
+              <li><a id="fromTrello" href="#">Import from Trello</a></li>
+              <li><a id="exportClick" href="#">Export Model</a></li>
+              <li><a id="exportArchitecturalPatternClick" href="#">Export Architectural Pattern</a></li>
+              <li><a id="toTrello" href="#">Export to Trello</a></li>
               <li><a id="genDocClick" href="#">Documentation</a></li>
               <li><a id="projectClick" href="#">Properties</a></li>
             </ul>
@@ -483,6 +487,26 @@
         <div class="modal-footer">
           <div class="form-group col-md-2 col-md-offset-5">
             <button type="button" id="chooseDatabaseButton" class="btn btn-primary">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="chooseArchitecturalPattern" tabindex="-1" role="dialog" aria-labelledby="cap_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="chooseTitle">Choose architectural pattern</h4>
+        </div>
+        <div class="modal-body">
+          <select class="form-control" id="chooseArchitecturalPatternSelect">
+          </select>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="chooseArchitecturalPatternButton" class="btn btn-primary">Ok</button>
           </div>
         </div>
       </div>
@@ -945,7 +969,111 @@
       </div>
     </div>
   </div>
-
+  <div class="modal fade" id="toTrelloModal" tabindex="-1" role="dialog" aria-labelledby="tml" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Export to Trello</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="control-label" for="theBoard">Board</label>
+          <input type="text" class="form-control" id="theToBoard" name="theToBoard">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="ExportReferences">Export</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="modal fade" id="fromTrelloModal" tabindex="-1" role="dialog" aria-labelledby="tml" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Export to CAIRIS</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="control-label" for="theFromBoards">Board</label>
+          <select class="form-control" name="theFromBoards" id="theFromBoards"></select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="ExportLists">Export</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="modal fade" id="weaknessAnalysisDialog" tabindex="-1" role="dialog" aria-labelledby="wad_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="wadTitle">Weakness Analysis</h4>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <ul class="nav nav-tabs" id="theWeaknessAnalysisList" style="width: 45%;">
+              <li class="active"><a data-target="#threats" data-toggle="tab">Threats</a></li>
+              <li><a data-target="#vulnerabilities" data-toggle="tab">Vulnerabilities</a></li>
+              <li><a data-target="#personaimpact" data-toggle="tab">Persona Impact</a></li>
+              <li><a data-target="#obstacles" data-toggle="tab">Obstacles</a></li>
+            </ul>
+            <div class="tab-content">
+              <div id="threats" class="tab-pane active">
+                <table class="table table-responsive" id="theWeaknessAnalysisThreats" style="width:45%;">
+                  <thead>
+                    <tr><th>Target</th><th>Components</th><th>Asset</th></tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+              <div id="vulnerabilities" class="tab-pane">
+                <table class="table table-responsive" id="theWeaknessAnalysisVulnerabilities" style="width: 45%;">
+                  <thead>
+                    <tr><th>Target</th><th>Components</th><th>Asset</th></tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+              <div id="personaimpact" class="tab-pane">
+                <table class="table table-responsive" id="theWeaknessAnalysisPersonaImpact" style="width: 45%;">
+                  <thead>
+                    <tr><th>Persona</th><th>Impact</th></tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+              <div id="obstacles" class="tab-pane">
+                <table class="table table-responsive" id="theWeaknessAnalysisObstacles" style="width: 45%;">
+                  <thead>
+                    <tr><th>Obstacle</th><th>Mitigating Goal</th></tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="situateArchitecturalPatternButton" class="btn btn-primary">Situate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="loadingWrapper">
     <div class="divLoading">
@@ -971,7 +1099,7 @@
     LazyLoad.js(["dist/js/cairis/Cairis-UI.js","dist/js/cairis/buttonclicks.js", "dist/js/cairis/Cairis.js", "dist/js/cairis/readFile.js",
         "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/personas.js", "dist/js/cairis/assets.js", "dist/js/cairis/templateassets.js","dist/js/cairis/templaterequirements.js","dist/js/cairis/templategoals.js","dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js", "dist/js/cairis/tasks.js", "dist/js/cairis/domainproperties.js", "dist/js/cairis/obstacles.js", "dist/js/cairis/countermeasures.js", "dist/js/cairis/usecases.js","dist/js/cairis/vulnerabilities.js","dist/js/cairis/architecturalpatterns.js","dist/js/cairis/requirements.js",
         "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/taskcharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js","dist/js/cairis/environments.js","dist/js/cairis/valuetypes.js","dist/js/cairis/locations.js","dist/js/cairis/traceability.js","dist/js/cairis/chernoff.js","dist/js/cairis/conceptreferences.js",
-        "dist/js/cairis/SVGhandler.js","dist/js/objects/jsonDefaultObjects.js","dist/js/cairis/assetassociations.js"], function () {
+        "dist/js/cairis/SVGhandler.js","dist/js/objects/jsonDefaultObjects.js","dist/js/cairis/assetassociations.js","dist/js/cairis/trello.js"], function () {
 
       console.log("All Cairis JS loaded");
     });

@@ -194,7 +194,7 @@ $(document).on('click', 'td.deleteValueTypeButton', function (e) {
   e.preventDefault();
   var vtName = $(this).find('i').attr("value");
   var valueType = $.session.get("value_type");
-  deleteObject('value_type',vtName,function(vtName) {
+  deleteObject(valueType,vtName,function(vtName) {
     $.ajax({
       type: "DELETE",
       dataType: "json",

@@ -44,35 +44,34 @@ $(document).on("click", "#addNewResponse", function () {
               $("#editResponseOptionsform").addClass("newResponse");
               var select = $("#chooseRisk");
               $.session.set("response", JSON.stringify(jQuery.extend(true, {},responseDefault )));
-              select.empty();
-              $.each(risks, function (key, obj) {
-                select.append($('<option>', { value : key }).text(key));
-              });
-              var resp = JSON.parse($.session.get("response"));
-              resp.theRisk = $("#chooseRisk").val();
-              resp.theResponseType = responseType;
-              $.session.set("response", JSON.stringify(resp));
-              $("#chooseRisk").trigger('click');
 
-              $.session.set("responseKind",responseType);
-              switch (responseType){
-                case "Transfer":
-                  toggleResponse("#transferWindow");
-                  break;
-                case "Prevent":
-                case "Detect":
-                case "Deter":
-                case "React":
-                  toggleResponse("#mitigateWindow");
-                  break;
-                case "Accept":
-                  toggleResponse("#acceptWindow");
-                  break;
-                default :
-                  toggleResponse("#mitigateWindow");
-                  break;
-              }
-              $("#Properties").hide();
+              refreshDimensionSelector(select,'risk',undefined,function() {
+                var resp = JSON.parse($.session.get("response"));
+                resp.theRisk = $("#chooseRisk").val();
+                resp.theResponseType = responseType;
+                $.session.set("response", JSON.stringify(resp));
+                $("#chooseRisk").trigger('click');
+
+                $.session.set("responseKind",responseType);
+                switch (responseType){
+                  case "Transfer":
+                    toggleResponse("#transferWindow");
+                    break;
+                  case "Prevent":
+                  case "Detect":
+                  case "Deter":
+                  case "React":
+                    toggleResponse("#mitigateWindow");
+                    break;
+                  case "Accept":
+                    toggleResponse("#acceptWindow");
+                    break;
+                  default :
+                    toggleResponse("#mitigateWindow");
+                    break;
+                }
+                $("#Properties").hide();
+              });
             });
           }
         }

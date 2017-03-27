@@ -20,7 +20,7 @@
 'use strict';
 
 $("#assetMenuClick").click(function(){
-   fillAssetTable();
+  fillAssetTable();
 });
 
 function fillAssetTable(){
@@ -92,12 +92,6 @@ function createAssetsTable(data, callback){
       },
     }
   });
-
-
-
-
-
-
   callback();
 }
 
@@ -139,32 +133,9 @@ function viewAsset(assetName) {
           success: function (data) {
             $.session.set("AssetProperties", JSON.stringify(data));
             fillEditAssetsEnvironment();
-            $.ajax({
-              type: "GET",
-              dataType: "json",
-              accept: "application/json",
-              data: {
-                session_id: String($.session.get('sessionID'))
-              },
-              crossDomain: true,
-              url: serverIP + "/api/assets/types",
-              success: function (data) {
-                var typeSelect =  $('#theType');
-                $.each(data, function (index, type) {
-                  typeSelect
-                    .append($("<option></option>")
-                    .attr("value",type.theName)
-                    .text(type.theName));
-                });
-                $('#editAssetsOptionsform').validator('update');
-                $("#theEnvironmentDictionary").find("tbody").find(".assetEnvProperties:first").trigger('click');
-                $("#assetstabsID").show("fast");
-              },
-              error: function (xhr, textStatus, errorThrown) {
-                debugLogger(String(this.url));
-                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-              }
-            });
+            refreshDimensionSelector($('#theType'),'asset_type');
+            $('#editAssetsOptionsform').validator('update');
+            $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:first").trigger('click');
           },
           error: function (xhr, textStatus, errorThrown) {
             debugLogger(String(this.url));
@@ -193,7 +164,6 @@ mainContent.on('click','td.deleteAssetInterface',function() {
   $.session.set("Asset", JSON.stringify(asset));
 });
 
-
 var mainContent = $("#objectViewer");
 mainContent.on('click', ".removeAssetEnvironment", function () {
   var envi = $(this).next(".clickable-environments").text();
@@ -207,7 +177,7 @@ mainContent.on('click', ".removeAssetEnvironment", function () {
       row.remove();
       var UIenv = $("#theEnvironmentDictionary").find("tbody");
       if(jQuery(UIenv).has(".removeAssetEnvironment").length){
-        UIenv.find(".assetEnvProperties:first").trigger('click');
+        UIenv.find(".clickable-environments:first").trigger('click');
       }
       else {
         $("#assetstabsID").hide("fast");
@@ -259,6 +229,7 @@ mainContent.on('click', '.assetEnvironmentRow', function(event){
       $.each(assts[arrayID].theAssociations,function(idx,assoc) {
         appendAssetAssociation(assoc);
       });
+      $("#assetstabsID").show("fast");
     }
   });
 });
@@ -353,75 +324,41 @@ mainContent.on('dblclick', '.clickable-associations', function(){
   });
 });
 
-
-
-
 mainContent.on('click', '.addEnvironmentPlus',function(){
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/environments/all/names",
-    success: function (data) {
-      $("#comboboxDialogSelect").empty();
-      var none = true;
-      $.each(data, function(i, item) {
-        var found = false;
-        $(".clickable-environments  td").each(function() {
-          if(this.innerHTML.trim() == item){
-            found = true
-          }
-        });
-        if(!found) {
-          $("#comboboxDialogSelect").append("<option value=" + item + ">" + item + "</option>");
-          none = false;
-        }
-      });
-      if(!none) {
-        $("#comboboxDialog").dialog({
-          modal: true,
-          buttons: {
-            Ok: function () {
-              $(this).dialog("close");
-              var chosenText = $( "#comboboxDialogSelect").find("option:selected" ).text();
-              $("#theEnvironmentDictionary").find("tbody").append("<tr><td class='deleteAssetEnv'><i class='fa fa-minus'></i></td><td class='clickable-environments'>" + chosenText +"</td></tr>");
-              var sessionProps = $.session.get("AssetProperties");
-              if(! sessionProps) {
-                var Assetprops = [];
-                var newProp = jQuery.extend(true, {}, assetEnvironmentDefault);
-                newProp.theEnvironmentName = chosenText;
-                $.session.set("assetEnvironmentName", newProp.theEnvironmentName);
-                Assetprops.push(newProp);
-              } 
-              else {
-                var Assetprops = JSON.parse($.session.get("AssetProperties"));
-                var newProp = jQuery.extend(true, {}, assetEnvironmentDefault);
-                newProp.theEnvironmentName = chosenText;
-                $.session.set("assetEnvironmentName", newProp.theEnvironmentName);
-                Assetprops.push(newProp);
-              }
-              $.session.set("AssetProperties", JSON.stringify(Assetprops));
-              $("#theEnvironmentDictionary").find("tbody").find(".assetEnvProperties:first").trigger('click');
-              $("#assetstabsID").show("fast");
-            }
-          }
-        });
-        $(".comboboxD").css("visibility", "visible");
-      }
-      else {
-        alert("All environments are already added");
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+  var filterList = [];
+  $.each($('#theEnvironmentDictionary tbody tr td:nth-child(2)'),function(idx,row) {
+    filterList.push($(row).text());
   });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',undefined,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addAssetEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addAssetEnvironment() {
+  var chosenText = $("#chooseEnvironmentSelect").val();
+  $("#theEnvironmentDictionary").find("tbody").append("<tr><td class='deleteAssetEnv'><i class='fa fa-minus'></i></td><td class='clickable-environments assetEnvironmentRow'>" + chosenText +"</td></tr>");
+  var sessionProps = $.session.get("AssetProperties");
+  if(! sessionProps) {
+    var Assetprops = [];
+    var newProp = jQuery.extend(true, {}, assetEnvironmentDefault);
+    newProp.theEnvironmentName = chosenText;
+    $.session.set("assetEnvironmentName", newProp.theEnvironmentName);
+    Assetprops.push(newProp);
+  } 
+  else {
+    var Assetprops = JSON.parse($.session.get("AssetProperties"));
+    var newProp = jQuery.extend(true, {}, assetEnvironmentDefault);
+    newProp.theEnvironmentName = chosenText;
+    $.session.set("assetEnvironmentName", newProp.theEnvironmentName);
+    Assetprops.push(newProp);
+  }
+  $.session.set("AssetProperties", JSON.stringify(Assetprops));
+  $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:last").trigger('click');
+}
+
 
 mainContent.on("click", "#updateButtonAsset", function(){
   var allprops = JSON.parse($.session.get("AssetProperties"));
@@ -467,7 +404,7 @@ mainContent.on("click", "#updateButtonAsset", function(){
         $.session.set("AssetProperties", JSON.stringify(allprops))
         $("#editAssetsOptionsform").toggle();
         $("#editAssociationsWindow").toggle();
-        $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:first").trigger('click');
+        $("#theEnvironmentDictionary").find("tbody").find(".clickable-environments:first").trigger('click');
 
       }
     });
@@ -739,7 +676,7 @@ function fillEditAssetsEnvironment(){
       $.session.set("thePropObject", JSON.stringify(group));
     }
   });
-  $("#theEnvironmentDictionary").find(".assetEnvironmentRow:first").trigger('click');
+  $("#theEnvironmentDictionary").find(".clickable-environments:first").trigger('click');
 }
 
 function assetFormToJSON(data, newAsset){
@@ -994,6 +931,15 @@ mainContent.on('click','#addAssetInterface',function() {
   $('#addInterfaceDialog').removeAttr('data-selectedIndex');
   $("#addInterfaceDialog").attr('data-updateinterface',"updateAssetInterface");
   $('#addInterfaceDialog').modal('show');
+});
+
+mainContent.on('click','#isCritical', function() {
+  if ($("#isCritical").is(':checked')) {
+    $('#theCriticalRationale').prop("disabled",false); 
+  }
+  else {
+    $('#theCriticalRationale').prop("disabled",true); 
+  }
 });
 
 function updateAssetInterface() {
