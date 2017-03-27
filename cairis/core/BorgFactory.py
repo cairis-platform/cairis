@@ -198,7 +198,7 @@ def dInitialise():
     passwd = b.settings['test']['dbPasswd'],
     db = b.settings['test']['dbPasswd'])
 
-  if db_proxy.conn.open:
+  if db_proxy.conn is not None:
     db_proxy.close()
 
   b.settings['test']['dbProxy'] = db_proxy
