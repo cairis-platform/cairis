@@ -80,7 +80,7 @@ mainContent.on('click', '#theImages', function () {
   }
 });
 
-mainContent.on('click',".projectSettingsCancel", function (e) {
+mainContent.on('click',"#projectSettingsCancel", function (e) {
   e.preventDefault();
   projectSettingsToggler();
 });
