@@ -15,16 +15,19 @@
   </div><br/>
   <div class="right" style="width: 75%;">
     <div class="form-group">
-      <label for="theName" class="control-label">Attacker</label>
+      <label for="theName" class="control-label">Attacker
+      <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Attackers are human agents that launch attacks in the form of threats." id="theAttackerNameHelp"></i></label>
       <input class="optionsInput form-control" type="text" name="theName" id="theName" style="width: 100%;" data-error="Attacker name is required" required>
       <div class="help-block with-errors"></div>
     </div>
     <div>
-      <label for="theTags" class="control-label">Tags</label>
+      <label for="theTags" class="control-label">Tags
+      <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Keywords assigned to this attacker to aid searching." id="theAttackerTagHelp"></i></label>
       <input class="optionsInput form-control" type="text" value="" id="theTags" name="theTags" style="width: 100%;">
     </div>
     <div class="form-group" id="Description">
-      <label for="theDescription" class="control-label">Description</label>
+      <label for="theDescription" class="control-label">Description
+      <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Introduces the attacker in sufficient detail that the associated roles, capabilities, and motivations can be better understood." id="theAttackerDescriptionHelp"></i></label>
       <textarea rows="5" class="right form-control" name="theDescription" id="theDescription" style="width: 100%; margin-bottom: 15px;" data-error="Description is required" required></textarea>
       <div class="help-block with-errors"></div>
     </div>
@@ -32,11 +35,10 @@
   </div>
   </div>
 
-
   <div class="panel panel-default control-group inblock">
     <table class="left clickable-table" id="theAttackerEnvironments" style="width: 25%;">
       <thead>
-        <tr><th id="addAttackerEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
+        <tr><th id="addAttackerEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Attacker roles, motivations, capabilities might vary based on environment." id="addAttackerEnvironmentHelp"></i></th></tr>
       </thead>
       <tbody>
       </tbody>
@@ -45,18 +47,18 @@
       <div id="Properties" class="gearOptions clickable-table scrollableTable" >
         <div class="inblock">
           <table id="attackerRole" class="left" style="width: 50%">
-            <thead><tr><th id="addRoletoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Role</th></tr></thead>
+            <thead><tr><th id="addRoletoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Role <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="The role taken when attacking the system." id="attackerRoleHelp"></i></th></tr></thead>
             <tbody>
             </tbody>
           </table>
           <table id="attackerMotive" class="right" style="width: 50%">
-            <thead><tr><th id="addMotivetoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Motivations</th></tr></thead>
+            <thead><tr><th id="addMotivetoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Motivations <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="The motivation of an attacker to carry out an attack." id="attackerMotivationHelp"></i></th></tr></thead>
             <tbody>
             </tbody>
           </table>
         </div>
         <table id="attackerCapability">
-          <thead><tr><th id="addCapabilitytoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Capability</th><th>Value</th></tr></thead>
+          <thead><tr><th id="addCapabilitytoAttacker" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Capability <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="The capability to mount and sustain an attack at an effective level." id="attackerCapabilityHelp"></i></th><th>Value</th></tr></thead>
           <tbody>
           </tbody>
         </table>
