@@ -69,4 +69,34 @@
     <button type="submit" class="btn btn-secondary" id="CloseAttacker">Close</button>
   </div>
 </div>
+<div class="modal fade" id="attackerCapabilityDialog" tabindex="-1" role="dialog" aria-labelledby="cAtCD_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Attacker Capability</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theCapability" class="control-label">Capability</label>
+          <select class="optionsInput form-control" name="theCapability" id="theCapability" style="width: 100%;">
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theCapabilityValue" class="control-label">Value</label>
+          <select class="optionsInput form-control" name="theCapabilityValue" id="theCapabilityValue" style="width: 100%;">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddAttackerCapabilityButton" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </form>

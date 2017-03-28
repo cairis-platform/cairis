@@ -498,7 +498,7 @@ $(document).on('click','#chooseRisk', function(e) {
 });
 
 
-function putResponse(response, oldName, usePopup, callback){
+function putResponse(response, oldName, callback){
   var output = {};
   output.object = response;
   output.session_id = $.session.get('sessionID');
@@ -516,18 +516,14 @@ function putResponse(response, oldName, usePopup, callback){
     data: output,
     url: serverIP + "/api/responses/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
-      if(usePopup) {
-        showPopup(true);
-      }
+      showPopup(true);
       if(jQuery.isFunction(callback)){
         callback();
       }
     },
     error: function (xhr, textStatus, errorThrown) {
-      if(usePopup) {
-        var error = JSON.parse(xhr.responseText);
-        showPopup(false, String(error.message));
-      }
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
