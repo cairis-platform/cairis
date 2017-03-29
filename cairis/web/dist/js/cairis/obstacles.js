@@ -173,6 +173,8 @@ mainContent.on('click',".obstacle_deleteGoalGoal", function () {
   $.session.set("Obstacle", JSON.stringify(obstacle));
 });
 
+
+
 mainContent.on('click',".deleteObstacleEnvConcern", function () {
   var obstacle = JSON.parse($.session.get("Obstacle"));
   var envName = $.session.get("ObstacleEnvName");
@@ -251,9 +253,18 @@ function addObstacleEnvironment() {
   var obstacle = JSON.parse($.session.get("Obstacle"));
   $.session.set("ObstacleEnvName", text);
   obstacle.theEnvironmentProperties.push(environment);
+  clearObstacleEnvironmentPanel();
   $("#obstacleProperties").show("fast");
   $.session.set("Obstacle", JSON.stringify(obstacle));
 };
+
+function clearObstacleEnvironmentPanel() {
+  $('#theCategory').val('');
+  $('#theDefinition').val('');
+  $("#editObstaclesGoalsTable").find("tbody").empty();
+  $("#editObstaclesSubGoalsTable").find("tbody").empty();
+  $("#editObstaclesConcernTable").find("tbody").empty();
+}
 
 mainContent.on('click', ".deleteObstacleEnv", function () {
   var envi = $(this).next(".obstacleEnvProperties").text();
@@ -263,6 +274,7 @@ mainContent.on('click', ".deleteObstacleEnv", function () {
     if(env.theEnvironmentName == envi){
       obstacle.theEnvironmentProperties.splice( index ,1 );
       $.session.set("Obstacle", JSON.stringify(obstacle));
+      clearObstacleEnvironmentPanel();
       var UIenv =  $("#theObstacleEnvironments").find("tbody");
       if(jQuery(UIenv).has(".obstacleEnvProperties").length){
         UIenv.find(".obstacleEnvProperties:first").trigger('click');
@@ -384,6 +396,7 @@ mainContent.on('change', ".obstacleAutoUpdater" ,function() {
 
 $(document).on('click', '#addNewObstacle', function () {
   fillObstacleOptionMenu(null, function () {
+    clearObstacleEnvironmentPanel();
     $("#editObstacleOptionsForm").validator();
     $("#editObstacleOptionsForm").addClass('new');
     $("#obstacleProperties").hide();
@@ -487,6 +500,7 @@ function fillObstacleOptionMenu(data,callback){
       $.each(data.theTags, function (index, tag) {
         $("#theTags").append(tag + ", ");
       });
+      clearObstacleEnvironmentPanel();
       $.each(data.theEnvironmentProperties, function (index, prop) {
         appendObstacleEnvironment(prop.theEnvironmentName);
       });
@@ -505,36 +519,29 @@ function fillObstacleOptionMenu(data,callback){
 
 function fillObstacleEditSubGoal(theSettableValue){
   refreshDimensionSelector($('#obstacle_theSubGoalName'),'goal',$.session.get("ObstacleEnvName"),function() {
-    $("#obstacle_theSubGoalName option[value='All']").remove();
     if (typeof theSettableValue  !== "undefined"){
       $('#obstacle_theSubGoalName').val(theSettableValue);
     }
-  });
+  },['All']);
 }
 
 function fillObstacleEditGoal(theSettableValue){
   refreshDimensionSelector($('#obstacle_theGoalName'),'goal',$.session.get("ObstacleEnvName"),function() {
-    $("#obstacle_theGoalName option[value='All']").remove();
     if (typeof theSettableValue  !== "undefined"){
       $('#obstacle_theGoalName').val(theSettableValue);
     }
-  });
+  },['All']);
 }
 
 mainContent.on('click', '#obstacle_theGoalType', function () {
-  refreshDimensionSelector($('#obstacle_theGoalName'),$('#obstacle_theGoalType').val(),$.session.get("ObstacleEnvName"));
+  refreshDimensionSelector($('#obstacle_theGoalName'),$('#obstacle_theGoalType').val(),$.session.get("ObstacleEnvName"),undefined,['All']);
 });
 
 mainContent.on('click', '#obstacle_theSubgoalType', function () {
-  refreshDimensionSelector($('#obstacle_theSubGoalName'),$('#obstacle_theSubgoalType').val(),$.session.get("ObstacleEnvName"));
+  refreshDimensionSelector($('#obstacle_theSubGoalName'),$('#obstacle_theSubgoalType').val(),$.session.get("ObstacleEnvName"),undefined,['All']);
 });
 
 
-function emptyObstacleEnvTables(){
-  $("#editObstaclesGoalsTable").find("tbody").empty();
-  $("#editObstaclesSubGoals.Table").find("tbody").empty();
-  $("#editObstaclesConcernTable").find("tbody").empty();
-}
 
 function appendObstacleEnvironment(text){
   $("#theObstacleEnvironments").append("<tr><td class='deleteObstacleEnv'><i class='fa fa-minus'></i></td><td class='obstacleEnvProperties'>"+ text +"</td></tr>");

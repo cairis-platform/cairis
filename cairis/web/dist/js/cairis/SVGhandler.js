@@ -577,10 +577,11 @@ function handleNodeClick(event,objt) {
           $("#optionsHeaderGear").text("Obstacle properties");
           $.each(data.theEnvironmentProperties, function (idx, env) {
             if (window.assetEnvironment == env.theEnvironmentName) {
-              $('#theCategory').val(env.theCategory);
-              $('#theDefinition').val(env.theDefinition);
-              $('#theProbability').val(env.theProbabilty);
-              $('#theProbabilityRationale').val(env.theProbabiltyRationale);
+              $('#theObstacleNodeCategory').val(env.theCategory);
+              $('#theObstacleNodeOriginator').val(data.theOriginator);
+              $('#theObstacleNodeDefinition').val(env.theDefinition);
+              $('#theObstacleNodeProbability').val(env.theProbabilty);
+              $('#theObstacleNodeProbabilityRationale').val(env.theProbabiltyRationale);
               forceOpenOptions();
             } 
           });
