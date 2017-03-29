@@ -201,23 +201,27 @@ function addUseCaseActor() {
 };
 
 mainContent.on('click', '#addStepToUseCase', function () {
-  stepDialogBox(function (text) {
-    var usecase = JSON.parse($.session.get("UseCase"));
-    var theEnvName = $.session.get("usecaseEnvironmentName");
-    $.each(usecase.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        var s = {
-          "theStepText" : text,
-          "theSynopsis": "",
-          "theActor": "",
-          "theActorType" : "",
-          "theTags" : []};
-        env.theSteps.push(s);
-        appendUseCaseStep(text);
-      }
-    });
-    $.session.set("UseCase", JSON.stringify(usecase));
+  $('#useCaseStepDialog').modal('show');
+});
+
+mainContent.on('click',"#AddStepButton", function() {
+  var text = $('#theStep').val();
+  var usecase = JSON.parse($.session.get("UseCase"));
+  var theEnvName = $.session.get("usecaseEnvironmentName");
+  $.each(usecase.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      var s = {
+        "theStepText" : text,
+        "theSynopsis": "",
+        "theActor": "",
+        "theActorType" : "",
+        "theTags" : []};
+      env.theSteps.push(s);
+      appendUseCaseStep(text);
+      $('#useCaseStepDialog').modal('hide');
+    }
   });
+  $.session.set("UseCase", JSON.stringify(usecase));
 });
 
 mainContent.on('click', ".removeUseCaseActor", function () {
@@ -387,25 +391,6 @@ mainContent.on('click', '#CloseUseCase', function (e) {
   e.preventDefault();
   createUseCasesTable();
 });
-
-// Dialog for entering a use case step
-function stepDialogBox(callback){
-  var dialogwindow = $("#EnterUseCaseStep");
-  var select = dialogwindow.find("select");
-  dialogwindow.dialog({
-    modal: true,
-    buttons: {
-      Ok: function () {
-        var text =  select.find("option:selected" ).text();
-        if(jQuery.isFunction(callback)){
-          callback($("#theStep").val());
-        }
-        $(this).dialog("close");
-      }
-    }
-  });
-  $(".comboboxD").css("visibility", "visible");
-}
 
 function putUseCase(usecase, oldName, callback){
   var output = {};

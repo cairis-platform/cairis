@@ -689,21 +689,21 @@ function handleNodeClick(event,objt) {
           $.session.set("UseCase", JSON.stringify(data));
           $('#useCasesForm').loadJSON(data,null);
           $("#optionsHeaderGear").text("Use Case properties");
-          $("#theDescription").val(data.theDescription);
+          $("#theUseCaseNodeDescription").val(data.theDescription);
           $.each(data.theEnvironmentProperties, function (idx, env) {
             if (window.assetEnvironment == env.theEnvironmentName) {
-              $("#thePreCond").val(env.thePreCond);
-              $("#thePostCond").val(env.thePostCond);
+              $("#theUseCaseNodePreCond").val(env.thePreCond);
+              $("#theUseCaseNodePostCond").val(env.thePostCond);
               var dimValues = [];
               for (var i = 0; i < env.theSteps.length; i++) {
                 dimValues.push("<tr><td>" + String(i + 1) + "</td><td>" + env.theSteps[i].theStepText + "</td></tr>"); 
               }
-              $("#theSteps").find("tbody").append(dimValues.join(' '));
+              $("#theUseCaseNodeSteps").find("tbody").append(dimValues.join(' '));
               dimValues = [];
               for (var i = 0; i < data.theActors.length; i++) {
                 dimValues.push("<tr><td>" + data.theActors[i]+ "</td></tr>"); 
               }
-              $("#theActors").find("tbody").append(dimValues.join(' '));
+              $("#theUseCaseNodeActors").find("tbody").append(dimValues.join(' '));
               forceOpenOptions();
             }
           });
