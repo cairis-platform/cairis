@@ -399,7 +399,7 @@ class ObstacleModel(object):
     "theName": fields.String,
     "theTags": fields.List(fields.String),
     "theOriginator": fields.String,
-    "theEnvironmentProperties": fields.List(fields.Nested(GoalEnvironmentPropertiesModel.resource_fields)),
+    "theEnvironmentProperties": fields.List(fields.Nested(ObstacleEnvironmentPropertiesModel.resource_fields)),
     "theEnvironmentDictionary": fields.List
   }
   required = resource_fields.keys()

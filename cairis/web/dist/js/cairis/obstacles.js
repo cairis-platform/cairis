@@ -193,33 +193,67 @@ mainContent.on('click',".deleteObstacleEnvConcern", function () {
 });
 
 mainContent.on('click', '#obstacle_addSubGoaltoGoal', function () {
-  $("#obstacle_editGoalSubGoal").addClass("new");
-  toggleObstacleWindow("#obstacle_editGoalSubGoal");
+  $("#obstacle_editGoalSubGoal").attr('data-selectedIdx',undefined);
+  $("#obstacle_editGoalSubGoal").attr('data-currentObstacle',undefined);
+  $("#obstacle_editGoalSubGoal").modal('show');
+});
+
+$(document).on('shown.bs.modal','#obstacle_editGoalSubGoal',function() {
   fillObstacleEditSubGoal();
+  var currentObstacle = $('#obstacle_editGoalSubGoal').attr('data-currentObstacle');
+  if (currentObstacle != undefined) {
+    currentObstacle = JSON.parse(currentObstacle);
+    $("#obstacle_theSubgoalType").val(currentObstacle.type);
+    $("#obstacle_theRefinementSelect").val(currentObstacle.refinement);
+    $("#obstacle_theAlternate").val(currentObstacle.target);
+    $("#obstacle_theGoalSubGoalRationale").val(currentObstacle.rationale);
+  }
 });
 
 mainContent.on('click', '#obstacle_addGoaltoGoal', function () {
-  $("#obstacle_editGoalGoal").addClass("new");
-  toggleObstacleWindow("#obstacle_editGoalGoal");
-  fillObstacleEditGoal();
+  $("#obstacle_editGoalGoal").attr('data-selectedIdx',undefined);
+  $("#obstacle_editGoalGoal").attr('data-currentObstacle',undefined);
+  $("#obstacle_editGoalGoal").modal('show');
 });
 
-mainContent.on("click", "#addObstacleEnvironment", function () {
-  var hasEnv = [];
-  $(".obstacleEnvProperties").each(function (index, tag) {
-    hasEnv.push($(tag).text());
-  });
-  environmentDialogBox(hasEnv, function (text) {
-    appendObstacleEnvironment(text);
-    var environment =  jQuery.extend(true, {},obstacleEnvDefault );
-    environment.theEnvironmentName = text;
-    var obstacle = JSON.parse($.session.get("Obstacle"));
-    $.session.set("ObstacleEnvName", text);
-    obstacle.theEnvironmentProperties.push(environment);
-    $("#obstacleProperties").show("fast");
-    $.session.set("Obstacle", JSON.stringify(obstacle));
-  });
+$(document).on('shown.bs.modal','#obstacle_editGoalGoal',function() {
+  fillObstacleEditGoal();
+  var currentObstacle = $('#obstacle_editGoalGoal').attr('data-currentObstacle');
+  if (currentObstacle != undefined) {
+    currentObstacle = JSON.parse(currentObstacle);
+    $("#obstacle_theGoalType").val(currentObstacle.type);
+    $("#obstacle_theGoalRefinementSelect").val(currentObstacle.refinement);
+    $("#obstacle_theGoalAlternate").val(currentObstacle.target);
+    $("#obstacle_theGoalGoalRationale").val(currentObstacle.rationale);
+  }
 });
+
+
+
+mainContent.on("click", "#addObstacleEnvironment", function () {
+  var filterList = [];
+  $(".obstacleEnvProperties").each(function (index, tag) {
+    filterList.push($(tag).text());
+  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',undefined,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addObstacleEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
+});
+
+function addObstacleEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  appendObstacleEnvironment(text);
+  var environment =  jQuery.extend(true, {},obstacleEnvDefault );
+  environment.theEnvironmentName = text;
+  var obstacle = JSON.parse($.session.get("Obstacle"));
+  $.session.set("ObstacleEnvName", text);
+  obstacle.theEnvironmentProperties.push(environment);
+  $("#obstacleProperties").show("fast");
+  $.session.set("Obstacle", JSON.stringify(obstacle));
+};
 
 mainContent.on('click', ".deleteObstacleEnv", function () {
   var envi = $(this).next(".obstacleEnvProperties").text();
@@ -244,17 +278,20 @@ mainContent.on('click', ".deleteObstacleEnv", function () {
 mainContent.on('click', '#obstacle_updateGoalSubGoal', function () {
   var obstacle = JSON.parse($.session.get("Obstacle"));
   var envName = $.session.get("ObstacleEnvName");
-  if($("#obstacle_editGoalSubGoal").hasClass("new")){
-    $("#obstacle_editGoalSubGoal").removeClass("new");
+  var selectedIdx = $("#obstacle_editGoalSubGoal").attr('data-selectedIndex');
+  if(selectedIdx == undefined) {
     $.each(obstacle.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
         var array = [];
         array[1] = $("#obstacle_theSubgoalType").val();
-        array[0] = $("#theSubGoalName").val();
+        array[0] = $("#obstacle_theSubGoalName").val();
         array[2] = $("#obstacle_theRefinementSelect").val();
         array[3] = $("#obstacle_theAlternate").val();
         array[4] = $("#obstacle_theGoalSubGoalRationale").val();
         env.theSubGoalRefinements.push(array);
+        appendObstacleSubGoal(array);
+        $.session.set("Obstacle", JSON.stringify(obstacle));
+        $("#obstacle_editGoalSubGoal").modal('hide');
       }
     });
   } 
@@ -265,18 +302,68 @@ mainContent.on('click', '#obstacle_updateGoalSubGoal', function () {
         $.each(env.theSubGoalRefinements, function (index, arr) {
           if(arr[0] == oldName) {
             arr[1] = $("#obstacle_theSubgoalType").val();
-            arr[0] = $("#theSubGoalName").val();
+            arr[0] = $("#obstacle_theSubGoalName").val();
             arr[2] = $("#obstacle_theRefinementSelect").val();
             arr[3] = $("#obstacle_theAlternate").val();
             arr[4] = $("#obstacle_theGoalSubGoalRationale").val();
+            $.session.set("Obstacle", JSON.stringify(obstacle));
+            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(arr[0]);
+            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(arr[1]);
+            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(arr[2]);
+            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(arr[3]);
+            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(arr[4]);
+            $("#obstacle_editGoalSubGoal").modal('hide');
           }
         });
       }
     });
   }
-  $.session.set("Obstacle", JSON.stringify(obstacle));
-  fillObstacleOptionMenu(obstacle);
-  toggleObstacleWindow("#editObstacleOptionsForm");
+});
+
+
+mainContent.on('click', '#obstacle_updateGoalGoal', function () {
+  var obstacle = JSON.parse($.session.get("Obstacle"));
+  var envName = $.session.get("ObstacleEnvName");
+  var selectedIdx = $("#obstacle_editGoalGoal").attr('data-selectedIndex');
+  if(selectedIdx == undefined) {
+    $.each(obstacle.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == envName){
+        var array = [];
+        array[1] = $("#obstacle_theGoalType").val();
+        array[0] = $("#obstacle_theGoalName").val();
+        array[2] = $("#obstacle_theGoalRefinementSelect").val();
+        array[3] = $("#obstacle_theGoalAlternate").val();
+        array[4] = $("#obstacle_theGoalGoalRationale").val();
+        env.theGoalRefinements.push(array);
+        appendObstacleEnvGoals(array);
+        $.session.set("Obstacle", JSON.stringify(obstacle));
+        $("#obstacle_editGoalGoal").modal('hide');
+      }
+    });
+  } 
+  else {
+    var oldName = $.session.get("oldGoalName");
+    $.each(obstacle.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == envName){
+        $.each(env.theGoalRefinements, function (index, arr) {
+          if(arr[0] == oldName) {
+            arr[1] = $("#obstacle_theGoalType").val();
+            arr[0] = $("#obstacle_theGoalName").val();
+            arr[2] = $("#obstacle_theGoalRefinementSelect").val();
+            arr[3] = $("#obstacle_theGoalAlternate").val();
+            arr[4] = $("#obstacle_theGoalGoalRationale").val();
+            $.session.set("Obstacle", JSON.stringify(obstacle));
+            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(arr[0]);
+            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(arr[1]);
+            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(arr[2]);
+            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(arr[3]);
+            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(arr[4]);
+            $("#obstacle_editGoalGoal").modal('hide');
+          }
+        });
+      }
+    });
+  }
 });
 
 mainContent.on('change', ".obstacleAutoUpdater" ,function() {
@@ -322,7 +409,7 @@ mainContent.on('click', "#updateObstacleButton", function (e) {
     if($("#editObstacleOptionsForm").hasClass("new")){
       postObstacle(obstacle, function () {
         createEditObstaclesTable();
-        $("#editAttackerOptionsForm").removeClass("new")
+        $("#editObstacleOptionsForm").removeClass("new")
       });
     } 
     else {
@@ -334,74 +421,39 @@ mainContent.on('click', "#updateObstacleButton", function (e) {
 });
 
 mainContent.on('dblclick', '.obstacle_editGoalSubGoalRow', function () {
-  toggleObstacleWindow("#obstacle_editGoalSubGoal");
-  var name = $(this).find("td").eq(1).text();
-  fillObstacleEditSubGoal(name);
-  var type = $(this).find("td").eq(2).text();
-  var refinement = $(this).find("td").eq(3).text();
-  var target = $(this).find("td").eq(4).text();
-  var rationale = $(this).find("td").eq(5).text();
-  $.session.set("oldsubGoalName", name);
-
-  $("#obstacle_theSubgoalType").val(type);
-  $("#obstacle_theRefinementSelect").val(refinement);
-  $("#obstacle_theAlternate").val(target);
-  $("#obstacle_theGoalSubGoalRationale").val(rationale);
+  var refRow = $(this).closest('tr');
+  var currentObs = {}
+  currentObs.name = refRow.find("td").eq(1).text();
+  currentObs.type = refRow.find("td").eq(2).text();
+  currentObs.refinement = refRow.find("td").eq(3).text();
+  currentObs.target = refRow.find("td").eq(4).text();
+  currentObs.rationale = refRow.find("td").eq(5).text();
+  $.session.set("oldsubGoalName", currentObs.name);
+  $("#obstacle_editGoalSubGoal").attr('data-currentObstacle',JSON.stringify(currentObs));
+  $("#obstacle_editGoalSubGoal").attr('data-selectedIndex',refRow.index());
+  $("#obstacle_theSubgoalType").val(currentObs.type);
+  $("#obstacle_theRefinementSelect").val(currentObs.refinement);
+  $("#obstacle_theAlternate").val(currentObs.target);
+  $("#obstacle_theGoalSubGoalRationale").val(currentObs.rationale);
+  $("#obstacle_editGoalSubGoal").modal('show');
 });
 
 mainContent.on('dblclick', '.obstacle_editGoalGoalRow', function () {
-  toggleObstacleWindow("#obstacle_editGoalGoal");
-  var name = $(this).find("td").eq(1).text();
-  fillObstacleEditGoal(name);
-
-  var type = $(this).find("td").eq(2).text();
-  var refinement = $(this).find("td").eq(3).text();
-  var target = $(this).find("td").eq(4).text();
-  var rationale = $(this).find("td").eq(5).text();
-  $.session.set("oldGoalName", name);
-
-  $("#obstacle_theGoalType").val(type);
-  $("#obstacle_theGoalRefinementSelect").val(refinement);
-  $("#obstacle_theGoalAlternate").val(target);
-  $("#obstacle_theGoalGoalRationale").val(rationale);
-});
-
-mainContent.on('click',"#obstacle_updateGoalGoal", function () {
-  var obstacle = JSON.parse($.session.get("Obstacle"));
-  var envName = $.session.get("ObstacleEnvName");
-  if($("#obstacle_editGoalGoal").hasClass("new")) {
-    $("#obstacle_editGoalGoal").removeClass("new");
-    $.each(obstacle.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == envName){
-        var array = [];
-        array[1] = $("#obstacle_theGoalType").val();
-        array[0] = $("#obstacle_theGoalName").val();
-        array[2] = $("#obstacle_theGoalRefinementSelect").val();
-        array[3] = $("#obstacle_theGoalAlternate").val();
-        array[4] = $("#obstacle_theGoalGoalRationale").val();
-        env.theGoalRefinements.push(array);
-      }
-    });
-  }
-  else {
-    $.each(obstacle.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == envName){
-        var oldname = $.session.get("oldGoalName");
-        $.each(env.theGoalRefinements, function (index, ref) {
-          if(ref[0] == oldname){
-            ref[1] = $("#obstacle_theGoalType").val();
-            ref[0] = $("#obstacle_theGoalName").val();
-            ref[2] = $("#obstacle_theGoalRefinementSelect").val();
-            ref[3] = $("#obstacle_theGoalAlternate").val();
-            ref[4] = $("#obstacle_theGoalGoalRationale").val();
-          }
-        });
-      }
-    });
-  }
-  $.session.set("Obstacle", JSON.stringify(obstacle));
-  fillObstacleOptionMenu(obstacle);
-  toggleObstacleWindow("#editObstacleOptionsForm");
+  var refRow = $(this).closest('tr');
+  var currentObs = {}
+  currentObs.name = refRow.find("td").eq(1).text();
+  currentObs.type = refRow.find("td").eq(2).text();
+  currentObs.refinement = refRow.find("td").eq(3).text();
+  currentObs.target = refRow.find("td").eq(4).text();
+  currentObs.rationale = refRow.find("td").eq(5).text();
+  $.session.set("oldGoalName", currentObs.name);
+  $("#obstacle_editGoalGoal").attr('data-currentObstacle',JSON.stringify(currentObs));
+  $("#obstacle_editGoalGoal").attr('data-selectedIndex',refRow.index());
+  $("#obstacle_theGoalType").val(currentObs.type);
+  $("#obstacle_theGoalRefinementSelect").val(currentObs.refinement);
+  $("#obstacle_theGoalAlternate").val(currentObs.target);
+  $("#obstacle_theGoalGoalRationale").val(currentObs.rationale);
+  $("#obstacle_editGoalGoal").modal('show');
 });
 
 function viewObstacle(obsName){
@@ -452,55 +504,31 @@ function fillObstacleOptionMenu(data,callback){
 }
 
 function fillObstacleEditSubGoal(theSettableValue){
-  $("#theSubGoalName").empty();
-  var subname = $("#theSubGoalName");
-  getAllGoals(function (data) {
-    $.each(data, function (key, goals) {
-      subname.append($("<option></option>")
-        .attr("value", key)
-        .text(key));
-    });
-  });
-  getAllRequirements(function (data) {
-    $.each(data, function (key, req) {
-      subname.append($("<option></option>")
-        .attr("value", req.theLabel)
-        .text(req.theLabel));
-    });
+  refreshDimensionSelector($('#obstacle_theSubGoalName'),'goal',$.session.get("ObstacleEnvName"),function() {
+    $("#obstacle_theSubGoalName option[value='All']").remove();
     if (typeof theSettableValue  !== "undefined"){
-      subname.val(theSettableValue);
+      $('#obstacle_theSubGoalName').val(theSettableValue);
     }
   });
 }
 
 function fillObstacleEditGoal(theSettableValue){
-  var obstacle_theGoalName = $("#obstacle_theGoalName");
-  obstacle_theGoalName.empty();
-  getAllGoals(function (data) {
-    $.each(data, function (key, goal) {
-      obstacle_theGoalName.append($("<option></option>")
-        .attr("value", key)
-        .text(key));
-    });
-  });
-  getAllRequirements(function (data) {
-    $.each(data, function (key, req) {
-      theGoal.name.append($("<option></option>")
-        .attr("value", req.theLabel)
-        .text(req.theLabel));
-    });
+  refreshDimensionSelector($('#obstacle_theGoalName'),'goal',$.session.get("ObstacleEnvName"),function() {
+    $("#obstacle_theGoalName option[value='All']").remove();
     if (typeof theSettableValue  !== "undefined"){
-      theobstacle.same.val(theSettableValue);
+      $('#obstacle_theGoalName').val(theSettableValue);
     }
   });
 }
 
-function toggleObstaclewindow(window){
-  $("#editObstacleOptionsForm").hide();
-  $("#obstacle_editGoalSubGoal").hide();
-  $("#obstacle_editGoalGoal").hide();
-  $(window).show();
-}
+mainContent.on('click', '#obstacle_theGoalType', function () {
+  refreshDimensionSelector($('#obstacle_theGoalName'),$('#obstacle_theGoalType').val(),$.session.get("ObstacleEnvName"));
+});
+
+mainContent.on('click', '#obstacle_theSubgoalType', function () {
+  refreshDimensionSelector($('#obstacle_theSubGoalName'),$('#obstacle_theSubgoalType').val(),$.session.get("ObstacleEnvName"));
+});
+
 
 function emptyObstacleEnvTables(){
   $("#editObstaclesGoalsTable").find("tbody").empty();

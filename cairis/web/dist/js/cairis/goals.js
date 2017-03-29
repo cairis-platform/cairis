@@ -20,11 +20,11 @@
 'use strict';
 
 $("#goalsClick").click(function(){
-  createEditGoalsTable()
+  createEditGoalsTable();
 });
 
 $("#goalMenuClick").click(function(){
-  createEditGoalsTable()
+  createEditGoalsTable();
 });
 
 function createEditGoalsTable(){
@@ -202,23 +202,33 @@ mainContent.on('click',".deleteGoalSubGoal", function () {
 });
 
 mainContent.on('click',"#addConcerntoGoal", function () {
-  var hasAsset = [];
+  var filterList = [];
   $("#editgoalsConcernTable").find('tbody').find('.GoalConcernName').each(function (index, td) {
-     hasAsset.push($(td).text());
+     filterList.push($(td).text());
   });
-  var envName = $.session.get("GoalEnvName");
-  assetsInEnvDialogBox(envName, hasAsset, function (text) {
-    var goal = JSON.parse($.session.get("Goal"));
 
-    $.each(goal.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == envName){
-        env.theConcerns.push(text);
-      }
-    });
-    appendGoalConcern(text);
-    $.session.set("Goal", JSON.stringify(goal));
-  });
+  var envName = $.session.get("GoalEnvName");
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'asset',envName,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','concern');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addGoalConcern');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addGoalConcern() {
+  var text = $("#chooseEnvironmentSelect").val();
+  var goal = JSON.parse($.session.get("Goal"));
+  var envName = $.session.get("GoalEnvName");
+
+  $.each(goal.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == envName){
+      env.theConcerns.push(text);
+    }
+  });
+  appendGoalConcern(text);
+  $.session.set("Goal", JSON.stringify(goal));
+};
 
 mainContent.on('click',".deleteGoalGoal", function () {
   var goal = JSON.parse($.session.get("Goal"));
@@ -290,21 +300,29 @@ mainContent.on('click', '#addGoaltoGoal', function () {
 });
 
 mainContent.on("click", "#addGoalEnvironment", function () {
-  var hasEnv = [];
+  var filterList = [];
   $(".goalEnvProperties").each(function (index, tag) {
-    hasEnv.push($(tag).text());
+    filterList.push($(tag).text());
   });
-  environmentDialogBox(hasEnv, function (text) {
-    appendGoalEnvironment(text);
-    var environment =  jQuery.extend(true, {},goalEnvDefault );
-    environment.theEnvironmentName = text;
-    var goal = JSON.parse($.session.get("Goal"));
-    goal.theEnvironmentProperties.push(environment);
-    $("#goalProperties").show("fast");
-    $.session.set("GoalEnvName", text);
-    $.session.set("Goal", JSON.stringify(goal));
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',undefined,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addGoalEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addGoalEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  appendGoalEnvironment(text);
+  var environment =  jQuery.extend(true, {},goalEnvDefault );
+  environment.theEnvironmentName = text;
+  var goal = JSON.parse($.session.get("Goal"));
+  goal.theEnvironmentProperties.push(environment);
+  $("#goalProperties").show("fast");
+  $.session.set("GoalEnvName", text);
+  $.session.set("Goal", JSON.stringify(goal));
+};
 
 mainContent.on('click', ".deleteGoalEnv", function () {
   var envi = $(this).next(".goalEnvProperties").text();
@@ -389,7 +407,6 @@ mainContent.on('change', ".goalAutoUpdater" ,function() {
 
 $(document).on('click', '#addNewGoal', function () {
   fillGoalOptionMenu(null, function () {
-    $("#editGoalOptionsForm").validator();
     $("#updateGoalButton").text("Create");
     $("#editGoalOptionsForm").addClass('new');
     $("#goalProperties").hide();
@@ -488,8 +505,9 @@ mainContent.on('dblclick', '.editGoalConcernAssoc', function () {
   });
 });
 
-mainContent.on('click', '#goalCancelButton', function () {
-  toggleGoalWindow("#editGoalOptionsForm")
+mainContent.on('click', '#goalCancelButton', function (e) {
+  e.preventDefault();
+  toggleGoalWindow("#editGoalOptionsForm");
 });
 
 mainContent.on('click',"#updateGoalGoal", function () {
