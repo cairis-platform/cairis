@@ -165,40 +165,57 @@ mainContent.on("click", ".threatEnvironments", function () {
 });
 
 mainContent.on('click', '#addAssettoThreat', function () {
-  var hasAssets = [];
+  var filterList = [];
   $("#threatAssets").find(".threatAssets").each(function(index, asset){
-    hasAssets.push($(asset).text());
+    filterList.push($(asset).text());
   });
-  assetsDialogBox(hasAssets, function (text) {
-    var threat = JSON.parse($.session.get("theThreat"));
-    var theEnvName = $.session.get("threatEnvironmentName");
-    $.each(threat.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        env.theAssets.push(text);
-        $.session.set("theThreat", JSON.stringify(threat));
-        appendThreatAsset(text);
-      }
-    });
-  });
+  var theEnvName = $.session.get("threatEnvironmentName");
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'asset',theEnvName,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','asset');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addAssetToThreatEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
 
+function addAssetToThreatEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  var threat = JSON.parse($.session.get("theThreat"));
+  var theEnvName = $.session.get("threatEnvironmentName");
+  $.each(threat.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      env.theAssets.push(text);
+      $.session.set("theThreat", JSON.stringify(threat));
+      appendThreatAsset(text);
+    }
+  });
+};
+
 mainContent.on('click','#addAttackertoThreat', function () {
-  var hasAttackers = [];
+  var filterList = [];
   var theEnvName = $.session.get("threatEnvironmentName");
   $("#threatAttackers").find(".threatAttackers").each(function(index, attacker){
-    hasAttackers.push($(attacker).text());
+    filterList.push($(attacker).text());
   });
-  attackerDialogBox(hasAttackers, theEnvName, function (text) {
-    var threat = JSON.parse($.session.get("theThreat"));
-    $.each(threat.theEnvironmentProperties, function (index, env) {
-      if (env.theEnvironmentName == theEnvName) {
-        env.theAttackers.push(text);
-        $.session.set("theThreat", JSON.stringify(threat));
-        appendThreatAttacker(text);
-      }
-    });
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'attacker',theEnvName,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','attacker');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addAttackerToEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addAttackerToEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  var theEnvName = $.session.get("threatEnvironmentName");
+  var threat = JSON.parse($.session.get("theThreat"));
+  $.each(threat.theEnvironmentProperties, function (index, env) {
+    if (env.theEnvironmentName == theEnvName) {
+      env.theAttackers.push(text);
+      $.session.set("theThreat", JSON.stringify(threat));
+      appendThreatAttacker(text);
+    }
+  });
+};
 
 mainContent.on('change', '#theLikelihood', function () {
   var threat = JSON.parse($.session.get("theThreat"));
@@ -344,25 +361,33 @@ mainContent.on("click",".threatProperties", function () {
 });
 
 mainContent.on("click", "#addThreatEnv", function () {
-  var hasEnv = [];
+  var filterList = [];
   $(".threatEnvironments").each(function (index, tag) {
-    hasEnv.push($(tag).text());
+    filterList.push($(tag).text());
   });
-  environmentDialogBox(hasEnv, function (text) {
-    appendThreatEnvironment(text);
-    var environment =  jQuery.extend(true, {},threatEnvironmentDefault );
-    environment.theEnvironmentName = text;
-    var threat = JSON.parse($.session.get("theThreat"));
-    threat.theEnvironmentProperties.push(environment);
-    $.session.set("theThreat", JSON.stringify(threat));
-    $(document).find(".threatEnvironments").each(function () {
-      if($(this).text() == text){
-        $(this).trigger("click");
-        $("#Properties").show("fast");
-      }
-    });
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',undefined,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addThreatEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addThreatEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  appendThreatEnvironment(text);
+  var environment =  jQuery.extend(true, {},threatEnvironmentDefault );
+  environment.theEnvironmentName = text;
+  var threat = JSON.parse($.session.get("theThreat"));
+  threat.theEnvironmentProperties.push(environment);
+  $.session.set("theThreat", JSON.stringify(threat));
+  $(document).find(".threatEnvironments").each(function () {
+    if($(this).text() == text){
+      $(this).trigger("click");
+      $("#Properties").show("fast");
+    }
+  });
+};
 
 mainContent.on('click', '#UpdateThreat', function (e) {
   e.preventDefault();
