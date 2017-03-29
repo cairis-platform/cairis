@@ -541,8 +541,6 @@ mainContent.on('click', '#obstacle_theSubgoalType', function () {
   refreshDimensionSelector($('#obstacle_theSubGoalName'),$('#obstacle_theSubgoalType').val(),$.session.get("ObstacleEnvName"),undefined,['All']);
 });
 
-
-
 function appendObstacleEnvironment(text){
   $("#theObstacleEnvironments").append("<tr><td class='deleteObstacleEnv'><i class='fa fa-minus'></i></td><td class='obstacleEnvProperties'>"+ text +"</td></tr>");
 }

@@ -264,11 +264,12 @@ function handleNodeClick(event,objt) {
           $("#optionsHeaderGear").text("Goal properties");
           $.each(data.theEnvironmentProperties, function (idx, env) {
             if (window.assetEnvironment == env.theEnvironmentName) {
-              $("#theCategory").val(env.theCategory);
-              $("#theDefinition").val(env.theDefinition);
-              $("#theFitCriterion").val(env.theFitCriterion);
-              $("#thePriority").val(env.thePriority);
-              $("#theIssue").val(env.theIssue);
+              $("#theGoalNodeOriginator").val(data.theOriginator);
+              $("#theGoalNodeCategory").val(env.theCategory);
+              $("#theGoalNodeDefinition").val(env.theDefinition);
+              $("#theGoalNodeFitCriterion").val(env.theFitCriterion);
+              $("#theGoalNodePriority").val(env.thePriority);
+              $("#theGoalNodeIssue").val(env.theIssue);
               forceOpenOptions();
             }
           });

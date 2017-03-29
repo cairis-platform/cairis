@@ -597,15 +597,11 @@ function fillGoalOptionMenu(data,callback){
 }
 
 function fillGoalEditSubGoal(theSettableValue){
-  refreshDimensionSelector($('#theSubGoalName'),'goal',$.session.get("GoalEnvName"),function() {
-    $("#theSubGoalName option[value='All']").remove();
-  });
+  refreshDimensionSelector($('#theSubGoalName'),'goal',$.session.get("GoalEnvName"),undefined,['All']);
 }
 
 function fillGoalEditGoal(theSettableValue) {
-  refreshDimensionSelector($('#theGoalName'),'goal',$.session.get("GoalEnvName"),function() {
-    $("#theGoalName option[value='All']").remove();
-  });
+  refreshDimensionSelector($('#theGoalName'),'goal',$.session.get("GoalEnvName"),undefined,['All']); 
 }
 
 function toggleGoalWindow(window) {
@@ -757,6 +753,10 @@ function postGoal(goal, callback){
   });
 }
 
+mainContent.on('click', '#theGoalType', function () {
+  refreshDimensionSelector($('#theGoalName'),$('#theGoalType').val(),$.session.get("GoalEnvName"),undefined,['All']);
+});
+
 mainContent.on('click', '#theSubgoalType', function () {
-  refreshDimensionSelector($('#theSubGoalName'),$('#theSubgoalType').val(),$.session.get("GoalEnvName"));
+  refreshDimensionSelector($('#theSubGoalName'),$('#theSubgoalType').val(),$.session.get("GoalEnvName"),undefined,['All']);
 });
