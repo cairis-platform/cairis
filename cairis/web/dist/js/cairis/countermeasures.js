@@ -859,23 +859,31 @@ function countermeasureTaskDialogBox(currentTp,callback){
 
 
 mainContent.on('click', '#addRoleToCountermeasure', function () {
-  var hasRole = [];
-  $("#theRoles").find(".personaRole").each(function(index, role){
-    hasRole.push($(role).text());
+  var filterList = [];
+  $("#theRoles").find(".countermeasureRoles").each(function(index, role){
+    filterList.push($(role).text());
   });
-  roleDialogBox(hasRole, function (text) {
-    var cm = JSON.parse($.session.get("Countermeasure"));
-    var theEnvName = $.session.get("countermeasureEnvironmentName");
-    $.each(cm.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        env.theRoles.push(text);
-        $.session.set("Countermeasure", JSON.stringify(cm));
-        appendCountermeasureRole(text);
-        updateCountermeasureTasks(theEnvName,env.theRoles);
-      }
-    });
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'role',undefined,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','role');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addRoleToCountermeasure');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addRoleToCountermeasure(){
+  var text = $("#chooseEnvironmentSelect").val();
+  var cm = JSON.parse($.session.get("Countermeasure"));
+  var theEnvName = $.session.get("countermeasureEnvironmentName");
+  $.each(cm.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      env.theRoles.push(text);
+      $.session.set("Countermeasure", JSON.stringify(cm));
+      appendCountermeasureRole(text);
+      updateCountermeasureTasks(theEnvName,env.theRoles);
+    }
+  });
+};
 
 function updateCountermeasureTasks(envName,roleList) {
   $.ajax({

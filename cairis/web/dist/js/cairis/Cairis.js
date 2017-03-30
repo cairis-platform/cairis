@@ -796,60 +796,6 @@ function getDimensionsInEnvironment(dimName,envName,callback) {
   });
 }
 
-// Dialog for choosing a role
-function roleDialogBox(hasRole ,callback){
-  var dialogwindow = $("#ChooseRoleDialog");
-  var select = dialogwindow.find("select");
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/roles",
-    success: function (data) {
-      select.empty();
-      var none = true;
-      $.each(data, function(key, role) {
-        var found = false;
-        $.each(hasRole,function(index, text) {
-          if(text == key){
-            found = true
-          }
-        });
-        if(!found) {
-          select.append("<option value=" + key + ">" + key + "</option>");
-          none = false;
-        }
-      });
-      if(!none) {
-        dialogwindow.dialog({
-          modal: true,
-          buttons: {
-            Ok: function () {
-              var text =  select.find("option:selected" ).text();
-              if(jQuery.isFunction(callback)){
-                callback(text);
-              }
-              $(this).dialog("close");
-            }
-          }
-        });
-        $(".comboboxD").css("visibility", "visible");
-      }
-      else {
-        alert("All possible attackers are already added");
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
-}
-
 function refreshDimensionSelector(sBox,dimName,envName,callback,filterList) {
   var urlText = serverIP + "/api/dimensions/table/" + dimName;
   if (envName != undefined) {
@@ -1451,25 +1397,6 @@ function deleteObject(dimName,objtName,deleteFn) {
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-}
-
-function objectDependenciesDialogBox(callback){
-  var dialogwindow = $("#reportObjectDependencies");
-  var select = dialogwindow.find("select");
-  dialogwindow.dialog({
-    modal: true,
-    buttons: {
-      Ok: function () {
-        callback(true);
-        $(this).dialog("close");
-      },
-      Close: function () {
-        callback(false);
-        $(this).dialog("close");
-      }
-    }
-  });
-  $(".comboboxD").css("visibility", "visible");
 }
 
 function encodeQueryList(q,data) {
