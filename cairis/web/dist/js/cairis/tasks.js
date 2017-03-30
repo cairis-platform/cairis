@@ -347,25 +347,34 @@ mainContent.on('click', ".deleteTaskEnv", function () {
 });
 
 mainContent.on("click", "#addTaskEnv", function () {
-  var hasEnv = [];
+  var filterList = [];
   $(".taskEnvironment").each(function (index, tag) {
-    hasEnv.push($(tag).text());
+    filterList.push($(tag).text());
   });
-  environmentDialogBox(hasEnv, function (text) {
-    appendTaskEnvironment(text);
-    var environment =  jQuery.extend(true, {},taskEnvDefault );
-    environment.theEnvironmentName = text;
-    var task = JSON.parse($.session.get("Task"));
-    task.theEnvironmentProperties.push(environment);
-    $.session.set("Task", JSON.stringify(task));
-    $(document).find(".taskEnvironment").each(function () {
-      if($(this).text() == text){
-        $(this).trigger("click");
-        $("#tasktabsID").show("fast");
-      }
-    });
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',$.session.get('countermeasureEnvironmentName'),function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addTaskEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addTaskEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  appendTaskEnvironment(text);
+  var environment =  jQuery.extend(true, {},taskEnvDefault );
+  environment.theEnvironmentName = text;
+  var task = JSON.parse($.session.get("Task"));
+  task.theEnvironmentProperties.push(environment);
+  $.session.set("Task", JSON.stringify(task));
+  $(document).find(".taskEnvironment").each(function () {
+    if($(this).text() == text){
+      $(this).trigger("click");
+      $("#tasktabsID").show("fast");
+      $('#chooseEnvironment').modal('hide');
+    }
+  });
+};
 
 mainContent.on('click', '#UpdateTask', function (e) {
   e.preventDefault();

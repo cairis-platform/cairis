@@ -576,16 +576,6 @@
     <select class="form-control">
     </select>
   </div>
-  <div id="ChooseResponseDialog" title="Select response" style="display: none">
-    <select class="form-control">
-      <option id="Accept">Accept</option>
-      <option id="Transfer">Transfer</option>
-      <option id="Mitigate">Mitigate</option>
-    </select>
-  </div>
-  <div id="EnterUseCaseStep" title="Enter use case step" style="display: none">
-    <textarea id="theStep" style="width: 100%" class="form-control"></textarea>
-  </div>
   <div id="ChooseMotivationsDialog" title="Choose a motivation" style="display: none">
     <select class="form-control">
     </select>
@@ -1011,6 +1001,36 @@
     </div>
   </div>
   </div>
+
+  <div class="modal fade" id="chooseResponseDialog" tabindex="-1" role="dialog" aria-labelledby="crrd_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Choose Response</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theResponse" class="control-label">Response</label>
+          <select class="optionsInput form-control" name="theResponse" id="theResponse" style="width: 100%;">
+            <option id="Accept">Accept</option>
+            <option id="Transfer">Transfer</option>
+            <option id="Mitigate">Mitigate</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="SelectResponseButton" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
   <div class="modal fade" id="weaknessAnalysisDialog" tabindex="-1" role="dialog" aria-labelledby="wad_label">
     <div class="modal-dialog" role="document">
       <div class="modal-content">

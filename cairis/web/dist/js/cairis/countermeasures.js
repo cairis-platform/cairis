@@ -157,12 +157,12 @@ $(document).on("click", "#addNewCountermeasure", function () {
   });
 });
 
-mainContent.on("change", "#theCost", function() {
+mainContent.on("change", "#theCountermeasureCost", function() {
   var cm = JSON.parse($.session.get("Countermeasure"));
   var theEnvName = $.session.get("countermeasureEnvironmentName");
   $.each(cm.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
-      cm.theEnvironmentProperties[index].theCost = $("#theCost").val();
+      cm.theEnvironmentProperties[index].theCost = $("#theCountermeasureCost").val();
       $.session.set("Countermeasure", JSON.stringify(cm));
     }
   });
@@ -180,7 +180,7 @@ mainContent.on("click", ".countermeasuresEnvironments", function () {
   $("#thePersonas").find("tbody").empty();
   $.each(countermeasure.theEnvironmentProperties, function (index, env) {
     if(envName == env.theEnvironmentName){
-      $("#theCost").val(env.theCost);
+      $("#theCountermeasureCost").val(env.theCost);
       $.each(env.theRequirements, function (index,requirement) {
         appendCountermeasureRequirement(requirement);
       });
@@ -422,25 +422,35 @@ mainContent.on('click', '.countermeasureProperties', function() {
 });
 
 mainContent.on("click", "#addCountermeasureEnv", function () {
-  var hasEnv = [];
+  var filterList = [];
   $(".countermeasuresEnvironments").each(function (index, tag) {
-    hasEnv.push($(tag).text());
+    filterList.push($(tag).text());
   });
-  environmentDialogBox(hasEnv, function (text) {
-    appendCountermeasureEnvironment(text);
-    var environment =  jQuery.extend(true, {},countermeasureEnvDefault );
-    environment.theEnvironmentName = text;
-    var countermeasure = JSON.parse($.session.get("Countermeasure"));
-    countermeasure.theEnvironmentProperties.push(environment);
-    $.session.set("Countermeasure", JSON.stringify(countermeasure));
-    $(document).find(".countermeasuresEnvironments").each(function () {
-      if($(this).text() == text) {
-        $(this).trigger("click");
-        $("#Properties").show("fast");
-      }
-    });
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',$.session.get('countermeasureEnvironmentName'),function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addCountermeasureEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
+
 });
+
+function addCountermeasureEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  appendCountermeasureEnvironment(text);
+  var environment =  jQuery.extend(true, {},countermeasureEnvDefault );
+  environment.theEnvironmentName = text;
+  var countermeasure = JSON.parse($.session.get("Countermeasure"));
+  countermeasure.theEnvironmentProperties.push(environment);
+  $.session.set("Countermeasure", JSON.stringify(countermeasure));
+  $(document).find(".countermeasuresEnvironments").each(function () {
+    if($(this).text() == text) {
+      $(this).trigger("click");
+      $("#Properties").show("fast");
+      $('#chooseEnvironment').modal('hide');
+    }
+  });
+};
 
 mainContent.on('click', '#UpdateCountermeasure', function (e) {
   e.preventDefault();

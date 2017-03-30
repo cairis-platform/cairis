@@ -211,25 +211,34 @@ mainContent.on('click', ".deletePersonaEnv", function () {
 });
 
 mainContent.on("click", "#addPersonaEnv", function () {
-  var hasEnv = [];
+  var filterList = [];
   $(".personaEnvironment").each(function (index, tag) {
-    hasEnv.push($(tag).text());
+    filterList.push($(tag).text());
   });
-  environmentDialogBox(hasEnv, function (text) {
-    appendPersonaEnvironment(text);
-    var environment =  jQuery.extend(true, {},personaEnvDefault );
-    environment.theEnvironmentName = text;
-    var persona = JSON.parse($.session.get("Persona"));
-    persona.theEnvironmentProperties.push(environment);
-    $.session.set("Persona", JSON.stringify(persona));
-    $(document).find(".personaEnvironment").each(function () {
-      if($(this).text() == text){
-        $(this).trigger("click");
-        $("#Properties").show("fast");
-      }
-    });
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',$.session.get('countermeasureEnvironmentName'),function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addPersonaEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addPersonaEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  appendPersonaEnvironment(text);
+  var environment =  jQuery.extend(true, {},personaEnvDefault );
+  environment.theEnvironmentName = text;
+  var persona = JSON.parse($.session.get("Persona"));
+  persona.theEnvironmentProperties.push(environment);
+  $.session.set("Persona", JSON.stringify(persona));
+  $(document).find(".personaEnvironment").each(function () {
+    if($(this).text() == text){
+      $(this).trigger("click");
+      $("#Properties").show("fast");
+      $('#chooseEnvironment').modal('hide');
+    }
+  });
+};
 
 mainContent.on('click', '#addRoleToPersona', function () {
   var hasRole = [];

@@ -4421,7 +4421,7 @@ end
 create procedure riskDependents(in riskId int)
 begin
   declare responseId int;
-  declare responseName varchar(50);
+  declare responseName varchar(100);
   declare done int default 0;
   declare responseCursor cursor for select distinct id,name from response where risk_id = riskId;  
   declare continue handler for not found set done = 1;
@@ -4466,7 +4466,7 @@ end
 create procedure requirementDependents(in reqId int)
 begin
   declare cmId int;
-  declare cmName varchar(50);
+  declare cmName varchar(100);
   declare assetId int;
   declare assetName varchar(50);
   declare vulId int;
@@ -5371,7 +5371,7 @@ end
 create procedure taskDependents(in taskId int)
 begin
   declare cmId int;
-  declare cmName varchar(200);
+  declare cmName varchar(100);
   declare assetId int;
   declare assetName varchar(200);
   declare cmTasks int;
@@ -7440,7 +7440,7 @@ begin
   declare threatId int;
   declare vulId int;
   declare envId int;
-  declare responseName varchar(50);
+  declare responseName varchar(100);
   declare likelihoodName varchar(50);
   declare severityName varchar(50);
   declare threatLikelihood int;
@@ -10298,7 +10298,7 @@ begin
   declare effectivenessId int;
   declare initComments varchar(1000);
   declare workingComments varchar(1000);
-  declare cmName varchar(50);
+  declare cmName varchar(100);
   declare cmEffName varchar(50);
   declare envName varchar(50);
   declare currentEffName varchar(50);
@@ -12111,7 +12111,7 @@ begin
   declare riskCount int default 0;
   declare mcNarrative varchar(5000);
   declare responseId int;
-  declare responseName varchar(50);
+  declare responseName varchar(100);
   declare responseType varchar(50);
   declare responseCount int default 0;
   declare roleCost varchar(50);
@@ -12698,7 +12698,7 @@ begin
   declare reqFc varchar(255);
   declare reqOrig varchar(255);
   declare cmId int;
-  declare cmName varchar(50);
+  declare cmName varchar(100);
   declare cmDesc varchar(4000);
   declare cmType varchar(50);
   declare effValue varchar(50);
@@ -13716,7 +13716,7 @@ begin
   declare subGoalDim varchar(50);
   declare alternativeId int;
   declare altRationale varchar(1000);
-  declare cmName varchar(50);
+  declare cmName varchar(100);
   declare reqName varchar(50);
   declare responseName varchar(100);
   declare roleName varchar(50);
@@ -22833,7 +22833,7 @@ begin
   declare threatId int;
   declare vulId int;
   declare envId int;
-  declare responseName varchar(50);
+  declare responseName varchar(100);
   declare likelihoodName varchar(50);
   declare severityName varchar(50);
   declare threatLikelihood int;
