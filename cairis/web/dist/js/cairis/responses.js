@@ -385,14 +385,29 @@ mainContent.on('click', "#addRespTransferRole", function () {
   var resp = JSON.parse($.session.get("response"));
   var envName = $.session.get("responseEnvironment");
 
-  newRoleDialogbox(function (role) {
-    appendResponseTransferRole(role);
-    $.each(resp.theEnvironmentProperties["transfer"], function (index, env) {
-      if(env.theEnvironmentName == envName){
-        env.theRoles.push(role);
-      }
-    });
-    $.session.set("response", JSON.stringify(resp));
+  var filterList = [];
+  $(".roleName").each(function (index, tag) {
+    filterList.push($(tag).text());
+  });
+
+  refreshDimensionSelector($('#chooseRoleSelect'),'role',undefined,function(){
+    $('#chooseRoleCost').modal('show');
+  },filterList);
+});
+
+mainContent.on('click', '#chooseRoleCostButton', function() {
+  var role = {};
+  role.roleName = $('#chooseRoleSelect').val();
+  role.cost = $('#chooseRoleCostSelect').val();
+  appendResponseTransferRole(role);
+  var envName = $.session.get("responseEnvironment");
+  var resp = JSON.parse($.session.get("response"));
+  $.each(resp.theEnvironmentProperties["transfer"], function (index, env) {
+    if(env.theEnvironmentName == envName){
+      env.theRoles.push(role);
+      $.session.set("response", JSON.stringify(resp));
+      $('#chooseRoleCost').modal('hide');
+    }
   });
 });
 

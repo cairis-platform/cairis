@@ -235,22 +235,32 @@ function appendTaskConcern(concern) {
 }
 
 mainContent.on('click', '#addConcernToTask', function () {
-  var hasConcern = [];
+  var filterList = [];
   $("#theConcerns").find(".taskConcern").each(function(index, concern){
-    hasConcern.push($(concern).text());
+    filterList.push($(concern).text());
   });
-  assetsDialogBox(hasConcern, function (text) {
-    var task = JSON.parse($.session.get("Task"));
-    var theEnvName = $.session.get("taskEnvironmentName");
-    $.each(task.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        env.theAssets.push(text);
-        $.session.set("Task", JSON.stringify(task));
-        appendTaskConcern(text);
-      }
-    });
-  });
+
+  var envName = $.session.get("taskEnvironmentName");
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'asset',envName,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','concern');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addTaskConcern');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addTaskConcern() {
+  var text = $("#chooseEnvironmentSelect").val();
+  var task = JSON.parse($.session.get("Task"));
+  var theEnvName = $.session.get("taskEnvironmentName");
+  $.each(task.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      env.theAssets.push(text);
+      $.session.set("Task", JSON.stringify(task));
+      appendTaskConcern(text);
+    }
+  });
+};
 
 mainContent.on('click', ".removeTaskConcern", function () {
   var text = $(this).next(".taskConcern").text();

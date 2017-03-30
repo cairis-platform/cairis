@@ -224,10 +224,10 @@ function addGoalConcern() {
   $.each(goal.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == envName){
       env.theConcerns.push(text);
+      appendGoalConcern(text);
+      $.session.set("Goal", JSON.stringify(goal));
     }
   });
-  appendGoalConcern(text);
-  $.session.set("Goal", JSON.stringify(goal));
 };
 
 mainContent.on('click',".deleteGoalGoal", function () {
