@@ -156,10 +156,11 @@ function addMotivationToAttacker() {
   $.each(attacker.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
       env.theMotives.push(text);
+      appendAttackerMotive(text);
+      $.session.set("Attacker", JSON.stringify(attacker));
+      $('#chooseEnvironment').modal('hide');
     }
   });
-  appendAttackerMotive(text);
-  $.session.set("Attacker", JSON.stringify(attacker));
 };
 
 mainContent.on('click', "#addCapabilitytoAttacker", function () {
@@ -331,6 +332,7 @@ function addAttackerEnvironment() {
     if($(this).text() == text){
       $(this).trigger("click");
       $("#Properties").show("fast");
+      $('#chooseEnvironment').modal('hide');
     }
   });
 
@@ -359,6 +361,7 @@ function addRoleToAttacker() {
       env.theRoles.push(text);
       $.session.set("Attacker", JSON.stringify(attacker));
       appendAttackerRole(text);
+      $('#chooseEnvironment').modal('hide');
     }
   });
 }
