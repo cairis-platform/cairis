@@ -200,6 +200,11 @@ function addUseCaseActor() {
   appendUseCaseActor(text);
 };
 
+
+mainContent.on('shown.bs.modal','#useCaseStepDialog',function() {
+ $('#theStep').val('');
+});
+
 mainContent.on('click', '#addStepToUseCase', function () {
   $('#useCaseStepDialog').modal('show');
 });
