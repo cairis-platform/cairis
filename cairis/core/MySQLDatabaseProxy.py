@@ -322,10 +322,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       db = b.dbName
 
     try:
-      url='mysql+mysqldb://'+b.dbUser+':'+b.dbPasswd+'@'+b.dbHost+':'+str(b.dbPort)+'/'+b.dbName
-      dbEngine = create_engine(url)
-      session_factory = sessionmaker(bind=dbEngine)
-      self.conn = scoped_session(session_factory)
+      dbEngine = create_engine('mysql+mysqldb://'+b.dbUser+':'+b.dbPasswd+'@'+b.dbHost+':'+str(b.dbPort)+'/'+b.dbName)
+      self.conn = scoped_session(sessionmaker(bind=dbEngine))
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + msg
@@ -335,16 +333,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def reconnect(self,closeConn = True,session_id = None):
     b = Borg()
     try:
-      if (closeConn) : #and self.conn.connection().connection.open :
+      if (closeConn) and self.conn.connection().connection.open :
         self.conn.close()
       if b.runmode == 'desktop':
         self.conn = MySQLdb.connect(host=b.dbHost,port=b.dbPort,user=b.dbUser,passwd=b.dbPasswd,db=b.dbName)
       elif b.runmode == 'web':
         ses_settings = b.get_settings(session_id)
-        url='mysql+mysqldb://'+b.dbUser+':'+b.dbPasswd+'@'+b.dbHost+':'+str(b.dbPort)+'/'+b.dbName
-        dbEngine = create_engine(url)
-        session_factory = sessionmaker(bind=dbEngine)
-        self.conn = scoped_session(session_factory)
+        dbEngine = create_engine('mysql+mysqldb://'+ses_settings['dbUser']+':'+ses_settings['dbPasswd']+'@'+ses_settings['dbHost']+':'+str(ses_settings['dbPort'])+'/'+ses_settings['dbName'])
+        self.conn = scoped_session(sessionmaker(bind=dbEngine))
       else:
         raise RuntimeError('Run mode not recognized')
     except _mysql_exceptions.DatabaseError, e:
@@ -11579,19 +11575,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     db = dbName
 
     try:
-      #        ses_settings = b.get_settings(session_id)
-      #  url='mysql+mysqldb://'+b.dbUser+':'+b.dbPasswd+'@'+b.dbHost+':'+str(b.dbPort)+'/'+b.dbName
-      #  dbEngine = create_engine(url)
-      #  session_factory = sessionmaker(bind=dbEngine)
-      #  self.conn = scoped_session(session_factory)
-      dbEngine = create_engine('mysql+mysqldb://root:'+rPasswd+'@'+dbHost+':'+str(dbPort)+'/'+b.dbName)
+      dbEngine = create_engine('mysql+mysqldb://root:'+rPasswd+'@'+dbHost+':'+str(dbPort))
       self.conn = scoped_session(sessionmaker(bind=dbEngine))
-      #self.conn = MySQLdb.connect(host=dbHost,port=dbPort,user='root',passwd=rPasswd)
-      stmts = ['drop database if exists `' + db + '`',
-               'create database ' + db,
+      stmts = ['drop database if exists `' + dbName+ '`',
+               'create database ' + dbName,
                "grant all privileges on `%s`.* TO '%s'@'%s'" %(db,b.dbUser, b.dbHost),
-               'alter database ' + db + ' default character set utf8',
-               'alter database ' + db + ' default collate utf8_general_ci',
+               'alter database ' + dbName + ' default character set utf8',
+               'alter database ' + dbName + ' default collate utf8_general_ci',
                'flush tables',
                'flush privileges']
 
@@ -11603,7 +11593,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           raise DatabaseProxyException(exceptionText)
         curs.close()
       self.conn.close()
-      b.settings[session_id]['dbName'] = db
+      b.settings[session_id]['dbName'] = dbName
       self.clearDatabase(session_id)
       self.reconnect(True,session_id)
     except _mysql_exceptions.DatabaseError, e:
@@ -11624,9 +11614,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     dbPort = ses_settings['dbPort']
     dbName = ses_settings['dbName']
     dbPasswd = ses_settings['dbPasswd']
-    dbEngine = create_engine('mysql+mysqldb://'+dbUser+':'+dbPasswd+'@'+dbHost+':'+str(dbPort)+'/'+b.dbName)
+    dbEngine = create_engine('mysql+mysqldb://'+dbUser+':'+dbPasswd+'@'+dbHost+':'+str(dbPort))
     tmpConn = scoped_session(sessionmaker(bind=dbEngine))
-  #  tmpConn = MySQLdb.connect(host=dbHost,port=dbPort,user=dbUser,passwd=dbPasswd)
     curs = tmpConn.connection().connection.cursor()
     curs.execute('show databases')
     if (curs.rowcount == -1):
@@ -11652,9 +11641,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     rPasswd = ses_settings['rPasswd']
 
     try:
-      tmpConn = MySQLdb.connect(host=dbHost,port=dbPort,user='root',passwd=rPasswd)
+      dbEngine = create_engine('mysql+mysqldb://root'+':'+rPasswd+'@'+dbHost+':'+str(dbPort))
+      tmpConn = scoped_session(sessionmaker(bind=dbEngine))
       stmt = 'drop database if exists `' + dbName + '`'
-      curs = tmpConn.cursor()
+      curs = tmpConn.connection().connection.cursor()
       curs.execute(stmt)
       if (curs.rowcount == -1):
         exceptionText = 'Error running ' + stmt
