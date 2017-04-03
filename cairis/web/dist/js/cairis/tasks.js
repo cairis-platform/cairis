@@ -235,22 +235,32 @@ function appendTaskConcern(concern) {
 }
 
 mainContent.on('click', '#addConcernToTask', function () {
-  var hasConcern = [];
+  var filterList = [];
   $("#theConcerns").find(".taskConcern").each(function(index, concern){
-    hasConcern.push($(concern).text());
+    filterList.push($(concern).text());
   });
-  assetsDialogBox(hasConcern, function (text) {
-    var task = JSON.parse($.session.get("Task"));
-    var theEnvName = $.session.get("taskEnvironmentName");
-    $.each(task.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        env.theAssets.push(text);
-        $.session.set("Task", JSON.stringify(task));
-        appendTaskConcern(text);
-      }
-    });
-  });
+
+  var envName = $.session.get("taskEnvironmentName");
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'asset',envName,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','concern');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addTaskConcern');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addTaskConcern() {
+  var text = $("#chooseEnvironmentSelect").val();
+  var task = JSON.parse($.session.get("Task"));
+  var theEnvName = $.session.get("taskEnvironmentName");
+  $.each(task.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      env.theAssets.push(text);
+      $.session.set("Task", JSON.stringify(task));
+      appendTaskConcern(text);
+    }
+  });
+};
 
 mainContent.on('click', ".removeTaskConcern", function () {
   var text = $(this).next(".taskConcern").text();
@@ -347,25 +357,34 @@ mainContent.on('click', ".deleteTaskEnv", function () {
 });
 
 mainContent.on("click", "#addTaskEnv", function () {
-  var hasEnv = [];
+  var filterList = [];
   $(".taskEnvironment").each(function (index, tag) {
-    hasEnv.push($(tag).text());
+    filterList.push($(tag).text());
   });
-  environmentDialogBox(hasEnv, function (text) {
-    appendTaskEnvironment(text);
-    var environment =  jQuery.extend(true, {},taskEnvDefault );
-    environment.theEnvironmentName = text;
-    var task = JSON.parse($.session.get("Task"));
-    task.theEnvironmentProperties.push(environment);
-    $.session.set("Task", JSON.stringify(task));
-    $(document).find(".taskEnvironment").each(function () {
-      if($(this).text() == text){
-        $(this).trigger("click");
-        $("#tasktabsID").show("fast");
-      }
-    });
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',$.session.get('countermeasureEnvironmentName'),function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addTaskEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addTaskEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  appendTaskEnvironment(text);
+  var environment =  jQuery.extend(true, {},taskEnvDefault );
+  environment.theEnvironmentName = text;
+  var task = JSON.parse($.session.get("Task"));
+  task.theEnvironmentProperties.push(environment);
+  $.session.set("Task", JSON.stringify(task));
+  $(document).find(".taskEnvironment").each(function () {
+    if($(this).text() == text){
+      $(this).trigger("click");
+      $("#tasktabsID").show("fast");
+      $('#chooseEnvironment').modal('hide');
+    }
+  });
+};
 
 mainContent.on('click', '#UpdateTask', function (e) {
   e.preventDefault();
@@ -513,7 +532,7 @@ function taskPersonaDialogBox(hasPersona ,callback){
   });
 }
 
-function putTask(task, oldName, usePopup, callback){
+function putTask(task, oldName, callback){
   var output = {};
   output.object = task;
   output.session_id = $.session.get('sessionID');
@@ -531,18 +550,14 @@ function putTask(task, oldName, usePopup, callback){
     data: output,
     url: serverIP + "/api/tasks/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
-      if(usePopup) {
-        showPopup(true);
-      }
+      showPopup(true);
       if(jQuery.isFunction(callback)){
         callback();
       }
     },
     error: function (xhr, textStatus, errorThrown) {
-      if(usePopup) {
-        var error = JSON.parse(xhr.responseText);
-        showPopup(false, String(error.message));
-      }
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }

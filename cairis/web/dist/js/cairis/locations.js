@@ -486,7 +486,7 @@ $(document).on("click", "#addLocations", function () {
 });
 
 
-function putLocations(locs, oldName, usePopup, callback){
+function putLocations(locs, oldName, callback){
   var output = {};
   output.object = locs;
   output.session_id = $.session.get('sessionID');
@@ -504,18 +504,14 @@ function putLocations(locs, oldName, usePopup, callback){
     data: output,
     url: serverIP + "/api/locations/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
-      if(usePopup) {
-        showPopup(true);
-      }
+      showPopup(true);
       if(jQuery.isFunction(callback)){
         callback();
       }
     },
     error: function (xhr, textStatus, errorThrown) {
-      if(usePopup) {
-        var error = JSON.parse(xhr.responseText);
-        showPopup(false, String(error.message));
-      }
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }

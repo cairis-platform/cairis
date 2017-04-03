@@ -1139,7 +1139,7 @@ CREATE TABLE mitigate_point_type (
 ) ENGINE=INNODB;
 CREATE TABLE response ( 
   id INT NOT NULL,
-  name VARCHAR(50) NOT NULL,
+  name VARCHAR(100) NOT NULL,
   goal_category_type_id INT NOT NULL,
   risk_id INT NOT NULL,
   PRIMARY KEY(id),
@@ -1148,7 +1148,7 @@ CREATE TABLE response (
 ) ENGINE=INNODB;
 CREATE TABLE countermeasure ( 
   id INT NOT NULL,
-  name VARCHAR(50) NOT NULL,
+  name VARCHAR(100) NOT NULL,
   description VARCHAR(255) NOT NULL,
   countermeasure_type_id INT NOT NULL,
   PRIMARY KEY(id),

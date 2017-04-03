@@ -232,7 +232,7 @@ $(document).on("click", "#addNewValueType", function () {
   });
 });
 
-function putValueType(vt, oldName, usePopup, callback){
+function putValueType(vt, oldName, callback){
   var output = {};
   output.object = vt;
   output.session_id = $.session.get('sessionID');
@@ -251,18 +251,14 @@ function putValueType(vt, oldName, usePopup, callback){
     data: output,
     url: serverIP + "/api/value_types/type/" + valueType + "/environment/all/name/" + oldName.replace(" ", "%20").replace("/","%47") + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
-      if(usePopup) {
-        showPopup(true);
-      }
+      showPopup(true);
       if(jQuery.isFunction(callback)){
         callback();
       }
     },
     error: function (xhr, textStatus, errorThrown) {
-      if(usePopup) {
-        var error = JSON.parse(xhr.responseText);
-        showPopup(false, String(error.message));
-      }
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }

@@ -117,7 +117,6 @@ function viewUseCase(ucName) {
         $.each(data.theActors, function (index, actor) {
           appendUseCaseActor(actor);
         });
-        $("#theEnvironments").find(".usecaseEnvironment:first").trigger('click');
 
         if (data.theTags.length > 0) {
           var text = "";
@@ -157,6 +156,7 @@ mainContent.on("click",".usecaseEnvironment", function () {
       for (var i = 0; i < env.theSteps.length; i++) {
         appendUseCaseStep(env.theSteps[i].theStepText);
       }
+      $("#useCaseProperties").show("fast");
     }
   });
 });
@@ -180,36 +180,53 @@ function appendUseCaseActor(actor) {
 }
 
 mainContent.on('click', '#addActorToUseCase', function () {
-  var hasActor = [];
+  var filterList = [];
   $("#theActors").find(".usecaseActor").each(function(index, actor){
-    hasActor.push($(actor).text());
+    filterList.push($(actor).text());
   });
-  roleDialogBox(hasActor, function (text) {
-    var usecase = JSON.parse($.session.get("UseCase"));
-    usecase.theActors.push(text);
-    $.session.set("UseCase", JSON.stringify(usecase));
-    appendUseCaseActor(text);
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'role', undefined, function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','actor');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addUseCaseActor');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
+});
+
+function addUseCaseActor() {
+  var text = $("#chooseEnvironmentSelect").val();
+  var usecase = JSON.parse($.session.get("UseCase"));
+  usecase.theActors.push(text);
+  $.session.set("UseCase", JSON.stringify(usecase));
+  appendUseCaseActor(text);
+};
+
+
+mainContent.on('shown.bs.modal','#useCaseStepDialog',function() {
+ $('#theStep').val('');
 });
 
 mainContent.on('click', '#addStepToUseCase', function () {
-  stepDialogBox(function (text) {
-    var usecase = JSON.parse($.session.get("UseCase"));
-    var theEnvName = $.session.get("usecaseEnvironmentName");
-    $.each(usecase.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        var s = {
-          "theStepText" : text,
-          "theSynopsis": "",
-          "theActor": "",
-          "theActorType" : "",
-          "theTags" : []};
-        env.theSteps.push(s);
-        appendUseCaseStep(text);
-      }
-    });
-    $.session.set("UseCase", JSON.stringify(usecase));
+  $('#useCaseStepDialog').modal('show');
+});
+
+mainContent.on('click',"#AddStepButton", function() {
+  var text = $('#theStep').val();
+  var usecase = JSON.parse($.session.get("UseCase"));
+  var theEnvName = $.session.get("usecaseEnvironmentName");
+  $.each(usecase.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      var s = {
+        "theStepText" : text,
+        "theSynopsis": "",
+        "theActor": "",
+        "theActorType" : "",
+        "theTags" : []};
+      env.theSteps.push(s);
+      appendUseCaseStep(text);
+      $('#useCaseStepDialog').modal('hide');
+    }
   });
+  $.session.set("UseCase", JSON.stringify(usecase));
 });
 
 mainContent.on('click', ".removeUseCaseActor", function () {
@@ -249,43 +266,51 @@ mainContent.on('click', ".deleteUseCaseEnv", function () {
   $(this).closest("tr").remove();
   var usecase = JSON.parse($.session.get("UseCase"));
   $.each(usecase.theEnvironmentProperties, function (index, env) {
-    if(env.theEnvironmentName == env){
+    if(env.theEnvironmentName == envi){
       usecase.theEnvironmentProperties.splice( index ,1 );
       $.session.set("UseCase", JSON.stringify(usecase));
       clearUseCaseEnvInfo();
 
-      var UIenv = $("#theUseCaseEnvironments").find("tbody");
+      var UIenv = $("#theEnvironments").find("tbody");
       if(jQuery(UIenv).has(".usecaseEnvironment").length){
-        UIenv.find(".usecaseEnvironment:first").trigger('click');
-      }else{
-        $("#Properties").hide("fast");
+        UIenv.find(".usecaseEnvironment:last").trigger('click');
       }
-
+      else{
+        $("#useCaseProperties").hide("fast");
+      }
       return false;
     }
   });
 });
 
 mainContent.on("click", "#addUseCaseEnv", function () {
-  var hasEnv = [];
+  var filterList = [];
   $(".usecaseEnvironment").each(function (index, tag) {
-    hasEnv.push($(tag).text());
+    filterList.push($(tag).text());
   });
-  environmentDialogBox(hasEnv, function (text) {
-    appendUseCaseEnvironment(text);
-    var environment =  jQuery.extend(true, {},useCaseEnvDefault );
-    environment.theEnvironmentName = text;
-    var usecase = JSON.parse($.session.get("UseCase"));
-    usecase.theEnvironmentProperties.push(environment);
-    $.session.set("UseCase", JSON.stringify(usecase));
-    $(document).find(".usecaseEnvironment").each(function () {
-      if($(this).text() == text){
-        $(this).trigger("click");
-        $("#Properties").show("fast");
-      }
-    });
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',undefined,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addUseCaseEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addUseCaseEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  appendUseCaseEnvironment(text);
+  var environment =  jQuery.extend(true, {},useCaseEnvDefault );
+  environment.theEnvironmentName = text;
+  var usecase = JSON.parse($.session.get("UseCase"));
+  usecase.theEnvironmentProperties.push(environment);
+  $.session.set("UseCase", JSON.stringify(usecase));
+  $(document).find(".usecaseEnvironment").each(function () {
+    if($(this).text() == text){
+      $(this).trigger("click");
+      $("#useCaseProperties").show("fast");
+    }
+  });
+};
 
 mainContent.on('click', '#UpdateUseCase', function (e) {
   e.preventDefault();
@@ -362,7 +387,7 @@ $(document).on("click", "#addNewUseCase", function () {
     $('#editUseCaseOptionsForm').validator();
     $('#UpdateUseCase').text("Create");
     $("#editUseCaseOptionsForm").addClass("new");
-    $("#Properties").hide();
+    $("#useCaseProperties").hide();
     $.session.set("UseCase", JSON.stringify(jQuery.extend(true, {},useCaseDefault )));
   });
 });
@@ -372,26 +397,7 @@ mainContent.on('click', '#CloseUseCase', function (e) {
   createUseCasesTable();
 });
 
-// Dialog for entering a use case step
-function stepDialogBox(callback){
-  var dialogwindow = $("#EnterUseCaseStep");
-  var select = dialogwindow.find("select");
-  dialogwindow.dialog({
-    modal: true,
-    buttons: {
-      Ok: function () {
-        var text =  select.find("option:selected" ).text();
-        if(jQuery.isFunction(callback)){
-          callback($("#theStep").val());
-        }
-        $(this).dialog("close");
-      }
-    }
-  });
-  $(".comboboxD").css("visibility", "visible");
-}
-
-function putUseCase(usecase, oldName, usePopup, callback){
+function putUseCase(usecase, oldName, callback){
   var output = {};
   output.object = usecase;
   output.session_id = $.session.get('sessionID');
@@ -409,18 +415,14 @@ function putUseCase(usecase, oldName, usePopup, callback){
     data: output,
     url: serverIP + "/api/usecases/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
-      if(usePopup) {
-        showPopup(true);
-      }
+      showPopup(true);
       if(jQuery.isFunction(callback)){
         callback();
       }
     },
     error: function (xhr, textStatus, errorThrown) {
-      if(usePopup) {
-        var error = JSON.parse(xhr.responseText);
-        showPopup(false, String(error.message));
-      }
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }

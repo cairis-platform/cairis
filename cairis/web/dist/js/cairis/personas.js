@@ -211,43 +211,60 @@ mainContent.on('click', ".deletePersonaEnv", function () {
 });
 
 mainContent.on("click", "#addPersonaEnv", function () {
-  var hasEnv = [];
+  var filterList = [];
   $(".personaEnvironment").each(function (index, tag) {
-    hasEnv.push($(tag).text());
+    filterList.push($(tag).text());
   });
-  environmentDialogBox(hasEnv, function (text) {
-    appendPersonaEnvironment(text);
-    var environment =  jQuery.extend(true, {},personaEnvDefault );
-    environment.theEnvironmentName = text;
-    var persona = JSON.parse($.session.get("Persona"));
-    persona.theEnvironmentProperties.push(environment);
-    $.session.set("Persona", JSON.stringify(persona));
-    $(document).find(".personaEnvironment").each(function () {
-      if($(this).text() == text){
-        $(this).trigger("click");
-        $("#Properties").show("fast");
-      }
-    });
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',$.session.get('countermeasureEnvironmentName'),function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addPersonaEnvironment');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
 
+function addPersonaEnvironment() {
+  var text = $("#chooseEnvironmentSelect").val();
+  appendPersonaEnvironment(text);
+  var environment =  jQuery.extend(true, {},personaEnvDefault );
+  environment.theEnvironmentName = text;
+  var persona = JSON.parse($.session.get("Persona"));
+  persona.theEnvironmentProperties.push(environment);
+  $.session.set("Persona", JSON.stringify(persona));
+  $(document).find(".personaEnvironment").each(function () {
+    if($(this).text() == text){
+      $(this).trigger("click");
+      $("#Properties").show("fast");
+      $('#chooseEnvironment').modal('hide');
+    }
+  });
+};
+
 mainContent.on('click', '#addRoleToPersona', function () {
-  var hasRole = [];
+  var filterList = [];
   $("#personaRole").find(".personaRole").each(function(index, role){
-    hasRole.push($(role).text());
+    filterList.push($(role).text());
   });
-  roleDialogBox(hasRole, function (text) {
-    var persona = JSON.parse($.session.get("Persona"));
-    var theEnvName = $.session.get("personaEnvironmentName");
-    $.each(persona.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        env.theRoles.push(text);
-        $.session.set("Persona", JSON.stringify(persona));
-        appendPersonaRole(text);
-      }
-    });
-  });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'role',undefined,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','role');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addRoleToPersona');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
 });
+
+function addRoleToPersona(){
+  var text = $("#chooseEnvironmentSelect").val();
+  var persona = JSON.parse($.session.get("Persona"));
+  var theEnvName = $.session.get("personaEnvironmentName");
+  $.each(persona.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      env.theRoles.push(text);
+      $.session.set("Persona", JSON.stringify(persona));
+      appendPersonaRole(text);
+    }
+  });
+};
 
 mainContent.on('click', '#UpdatePersona', function (e) {
   $("#editPersonasOptionsForm").validator('validate');
@@ -451,7 +468,7 @@ function deletePersona(name, callback){
   });
 }
 
-function putPersona(persona, oldName, usePopup, callback){
+function putPersona(persona, oldName, callback){
   var output = {};
   output.object = persona;
   output.session_id = $.session.get('sessionID');
@@ -469,18 +486,14 @@ function putPersona(persona, oldName, usePopup, callback){
     data: output,
     url: serverIP + "/api/personas/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
-      if(usePopup) {
-        showPopup(true);
-      }
+      showPopup(true);
       if(jQuery.isFunction(callback)){
         callback();
       }
     },
     error: function (xhr, textStatus, errorThrown) {
-      if(usePopup) {
-        var error = JSON.parse(xhr.responseText);
-        showPopup(false, String(error.message));
-      }
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
