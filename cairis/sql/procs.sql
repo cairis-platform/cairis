@@ -3230,9 +3230,9 @@ create procedure useCaseStepExceptions(in ucId int, in envId int, in stepNo int)
 begin
   select usge.name, 'goal' dimension, g.name value, oct.name category, usge.description from usecase_step_goal_exception usge, goal g, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = g.id and usge.category_type_id = oct.id
   union
-  select usge.name, 'requirement' dimension, concat(a.short_code,'-',r.label) value, oct.name category, usge.description from usecase_step_requirement_exception usge, requirement r, asset_requirement ar, asset a, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id
+  select usge.name, 'requirement' dimension, r.name value, oct.name category, usge.description from usecase_step_requirement_exception usge, requirement r, asset_requirement ar, asset a, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id
   union
-  select usge.name, 'requirement' dimension, concat(e.short_code,'-',r.label) value, oct.name category, usge.description from usecase_step_requirement_exception usge, requirement r, environment_requirement er, environment e, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id;
+  select usge.name, 'requirement' dimension, r.name value, oct.name category, usge.description from usecase_step_requirement_exception usge, requirement r, environment_requirement er, environment e, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id;
 end
 //
 
@@ -3253,12 +3253,7 @@ begin
     select id into goalId from goal where name = dimName;
     insert into usecase_step_goal_exception(usecase_id,environment_id,step_no,name,goal_id,category_type_id,description) values (ucId,envId,stepNo,exName,goalId,catTypeId,excDesc);
   else
-    call requirementLabelComponents(dimName,shortCode,reqLabel);
-    select o.id into goalId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    if goalId is null
-    then
-      select o.id into goalId from requirement o, environment_requirement er, environment e where o.label = reqLabel and o.id = er.requirement_id and er.environment_id = e.id and e.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-    end if;
+    select o.id into goalId from requirement o where o.name = dimName and o.version = (select max(i.version) from requirement i where i.id = o.id);
     insert into usecase_step_requirement_exception(usecase_id,environment_id,step_no,name,goal_id,category_type_id,description) values (ucId,envId,stepNo,exName,goalId,catTypeId,excDesc);
   end if;
 end

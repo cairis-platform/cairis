@@ -155,6 +155,9 @@ mainContent.on("click",".usecaseEnvironment", function () {
       $('#thePostCond').val(env.thePostCond);
       for (var i = 0; i < env.theSteps.length; i++) {
         appendUseCaseStep(env.theSteps[i].theStepText);
+        $.each(env.theSteps[i].theExceptions,function(idx,exc){
+          appendUseCaseStepException(exc.theName);
+        });
       }
       $("#useCaseProperties").show("fast");
     }
@@ -165,6 +168,8 @@ function clearUseCaseEnvInfo(){
   $("#thePreCond").val('');
   $("#thePostCond").val('');
   $("#theSteps").find("tbody").empty();
+  $("#theExceptions").find("tbody").empty();
+  $("#theExceptions").hide();
 }
 
 function appendUseCaseEnvironment(environment){
@@ -172,7 +177,7 @@ function appendUseCaseEnvironment(environment){
 }
 
 function appendUseCaseStep(stepTxt) {
-  $("#theSteps").find("tbody").append("<tr><td class='removeUseCaseStep'><i class='fa fa-minus'></i></td><td class='usecaseStep'>" + stepTxt + "</td></tr>").animate('slow');
+  $("#theSteps").find("tbody").append('<tr class="clickable-row"><td class="removeUseCaseStep"><i class="fa fa-minus"></i></td><td class="usecaseStep">' + stepTxt + '</td></tr>').animate('slow');
 }
 
 function appendUseCaseActor(actor) {
@@ -459,4 +464,63 @@ function postUseCase(usecase, callback){
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
+}
+
+mainContent.on("click",".clickable-row", function () {
+  if($(this).hasClass('active')){
+    $(this).removeClass('active'); 
+    $("#theExceptions").hide();
+  } 
+  else {
+    $(this).addClass('active').siblings().removeClass('active');
+    $("#theExceptions").find("tbody").empty();
+    var stepIdx = $('#theSteps').find('.active').index();
+    var uc = JSON.parse($.session.get("UseCase"));
+    var envName = $.session.get('usecaseEnvironmentName');
+    $.each(uc.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == envName){
+        $.each(env.theSteps[stepIdx].theExceptions,function(idx,exc) {
+          appendUseCaseStepException(exc.theName);
+        });
+        $("#theExceptions").show();
+      }
+    });
+  }
+
+});
+
+mainContent.on('click','#addExceptionToStep',function() {
+  $('#useCaseStepExceptionDialog').modal('show');
+});
+
+mainContent.on('change','input:radio[name="theExceptionTypeRadio"]',function() {
+  var excType = $(this).parent().text().toLowerCase();
+  var envName = (excType == 'goal') ? $.session.get('usecaseEnvironmentName') : undefined;
+  refreshDimensionSelector($('#theExceptionTypeValues'),excType,envName,undefined,['All']);
+});
+
+mainContent.on('click',"#AddStepExceptionButton", function() {
+  var exc = {};
+  exc.theName = $('#theExceptionName').val();
+  exc.theDimensionType = $('input:radio[name="theExceptionTypeRadio"]:checked').parent().text().toLowerCase();
+  exc.theDimensionValue = $('#theExceptionTypeValues').val();
+  exc.theCategoryName = $('#theExceptionCategory').val();
+  exc.theDescription = $('#theExceptionDefinition').val();
+
+  var stepIdx = $('#theSteps').find('.active').index();
+
+  var uc = JSON.parse($.session.get("UseCase"));
+  var envName = $.session.get("usecaseEnvironmentName");
+  $.each(uc.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == envName){
+      env.theSteps[stepIdx].theExceptions.push(exc);
+      $.session.set("UseCase", JSON.stringify(uc));
+      appendUseCaseStepException(exc.theName);
+      $('#useCaseStepExceptionDialog').modal('hide');
+    }
+  });
+});
+
+function appendUseCaseStepException(excName) {
+  $("#theExceptions").find("tbody").append('<tr><td class="deleteUseCaseStepException"><i class="fa fa-minus"></i></td><td class="usecaseStepException">'+ excName +'</td></tr>');
 }

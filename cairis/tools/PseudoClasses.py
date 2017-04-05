@@ -600,6 +600,30 @@ class ValuedRole(object):
     self.cost = cost
 
 @swagger.model
+class ExceptionAttributes(object):
+  # region Swagger Doc
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theName': fields.String,
+    'theDimensionType': fields.String,
+    'theDimensionValue': fields.String,
+    'theCategoryName': fields.String,
+    'theDescription': fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field: { 'enum': [__name__+'.ExceptionAttribute'] }
+  }
+  # endregion
+  def __init__(self,excName,dimType,dimValue,catName,excDesc):
+    self.theName = excName
+    self.theDimensionType = dimType
+    self.theDimensionValue = dimValue
+    self.theCategoryName = catName
+    self.theDescription = excDesc
+
+@swagger.model
 class StepAttributes(object):
   # region Swagger Doc
   resource_fields = {
@@ -608,7 +632,8 @@ class StepAttributes(object):
     'theSynopsis': fields.String,
     'theActor': fields.String,
     'theActorType': fields.String,
-    'theTags': fields.List(fields.String)
+    'theTags': fields.List(fields.String),
+    'theExceptions': fields.List(fields.Nested(ExceptionAttributes.resource_fields)),
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)
@@ -616,13 +641,13 @@ class StepAttributes(object):
     obj_id_field: { 'enum': [__name__+'.StepsAttribute'] }
   }
   # endregion
-  def __init__(self,stepTxt,stepSyn,stepActor,stepActorType,stepTags):
-    self.theExceptions = {}
+  def __init__(self,stepTxt,stepSyn,stepActor,stepActorType,stepTags,stepExceptions):
     self.theStepText = stepTxt
     self.theSynopsis = stepSyn
     self.theActor = stepActor
     self.theActorType = stepActorType
     self.theTags = stepTags
+    self.theExceptions = stepExceptions
 
   def synopsis(self): return self.theSynopsis
   def actor(self): return self.theActor

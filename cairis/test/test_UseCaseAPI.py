@@ -24,7 +24,7 @@ from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentPropertie
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
 from cairis.mio.ModelImport import importModelFile, importUsabilityFile
-from cairis.tools.PseudoClasses import StepsAttributes, StepAttributes
+from cairis.tools.PseudoClasses import StepsAttributes, StepAttributes,ExceptionAttributes
 
 __author__ = 'Shamal Faily'
 
@@ -47,8 +47,9 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.existing_actors = ['Researcher']
     self.existing_precond = 'Test preconditions'
     self.existing_steps = []
-    self.existing_steps.append(StepAttributes('Researcher does something','','','',[]))
-    self.existing_steps.append(StepAttributes('System does something','','','',[]))
+    anException = ExceptionAttributes('anException','requirement','Anonymisation guidelines','Confidentiality Threat','anException description')
+    self.existing_steps.append(StepAttributes('Researcher does something','','','',[],[anException]))
+    self.existing_steps.append(StepAttributes('System does something','','','',[],[]))
     self.existing_postcond = 'Test postconditions'
     usecase_class = UseCase.__module__+'.'+UseCase.__name__
     # endregion

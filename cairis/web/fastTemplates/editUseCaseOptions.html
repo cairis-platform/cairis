@@ -58,11 +58,22 @@
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group" id="flow">
-        <table id="theSteps" style="width: 100%">
+        <table id="theSteps" class="table table-bordered" style="width: 100%">
           <thead>
             <tr>
               <th width="50px" id="addStepToUseCase"><i class="fa fa-plus"></i></th>
               <th>Step</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        </br>
+        <table id="theExceptions" class="clickable-table" style="width: 100%">
+          <thead>
+            <tr>
+              <th width="50px" id="addExceptionToStep"><i class="fa fa-plus"></i></th>
+              <th>Exceptions</th>
             </tr>
           </thead>
           <tbody>
@@ -102,7 +113,59 @@
     </div>
   </div>
   </div>
-
-
-
+  <div class="modal fade" id="useCaseStepExceptionDialog" tabindex="-1" role="dialog" aria-labelledby="ucsed_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Use Case Exception</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theExceptionName" class="control-label">Name</label>
+          <input class="form-control" type="text" name="theExceptionName" id="theExceptionName" data-error="Name is required" required>
+          <div class="help-block with-errors"></div>
+        </div>
+        </br>
+        <div class="form-group panel panel-default">
+          <div class="panel-heading">Type</div>
+          <div class="panel-body">
+            <label class="radio-inline control-label"><input type="radio" name="theExceptionTypeRadio" selected>Goal</label>
+            <label class="radio-inline control-label"><input type="radio" name="theExceptionTypeRadio">Requirement</label>
+            </br>
+            <select name="theExceptionTypeValues" class="form-control" id="theExceptionTypeValues"></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="theExceptionCategory" class="control-label">Category</label>
+          <select name="TheExceptionCategory" class="form-control" id="theExceptionCategory">
+            <option value="Confidentiality Threat">Confidentiality Threat</option>
+            <option value="Integrity Threat">Integrity Threat</option>
+            <option value="Availability Threat">Availability Threat</option>
+            <option value="Accountability Threat">Accountability Threat</option>
+            <option value="Anonymity Threat">Anonymity Threat</option>
+            <option value="Pseudonymity Threat">Pseudonmity Threat</option>
+            <option value="Unlinkability Threat">Unlinkability Threat</option>
+            <option value="Unobservability Threat">Unobservability Threat</option>
+            <option value="Vulnerability">Vulnerability</option>
+            <option value="Duration">Duration</option>
+            <option value="Frequency">Frequency</option>
+            <option value="Demands">Demands</option>
+            <option value="Goal Support">Goal Support</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theExceptionDefinition" class="control-label">Definition</label>
+          <textarea rows="5" id="theExceptionDefinition" class="form-control" style="width: 100%" data-error="Definition is required" required></textarea>
+          <div class="help-block with-errors"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddStepExceptionButton" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
 </form>
