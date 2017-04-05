@@ -257,3 +257,105 @@ class UseCaseByNameAPI(Resource):
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
+
+class UseCaseRequirementsByNameAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get requirements associated with usecase ',
+    nickname='usecase-requirements-by-name-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "usecase_name",
+        "description": "The use case name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      },
+      {
+        "code": httplib.CONFLICT,
+        "message": "Database conflict"
+      }
+
+    ]
+  )
+  # endregion
+  def get(self, usecase_name):
+    session_id = get_session_id(session, request)
+
+    dao = UseCaseDAO(session_id)
+    reqs = dao.get_usecase_requirements(usecase_name)
+    dao.close()
+
+    resp = make_response(json_serialize(reqs, session_id=session_id), httplib.OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
+class UseCaseGoalsByNameAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get goals associated with usecase ',
+    nickname='usecase-requirements-by-name-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "usecase_name",
+        "description": "The use case name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "environment_name",
+        "description": "The environment name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      },
+      {
+        "code": httplib.CONFLICT,
+        "message": "Database conflict"
+      }
+
+    ]
+  )
+  # endregion
+  def get(self, usecase_name,environment_name):
+    session_id = get_session_id(session, request)
+
+    dao = UseCaseDAO(session_id)
+    goals = dao.get_usecase_goals(usecase_name,environment_name)
+    dao.close()
+
+    resp = make_response(json_serialize(goals, session_id=session_id), httplib.OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp

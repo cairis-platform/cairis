@@ -142,6 +142,26 @@ class UseCaseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
+  def get_usecase_requirements(self, name):
+    try:
+      return self.db_proxy.getUseCaseRequirements(name)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def get_usecase_goals(self, goal_name,environment_name):
+    try:
+      return self.db_proxy.getUseCaseGoals(goal_name,environment_name)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    
   def check_existing_usecase(self, name):
     """
     :rtype: bool

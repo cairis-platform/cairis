@@ -377,6 +377,8 @@ api.add_resource(UploadController.UploadImageAPI, '/api/upload/image',endpoint='
 # Use Case routes
 api.add_resource(UseCaseController.UseCasesAPI, '/api/usecases',endpoint='usecases')
 api.add_resource(UseCaseController.UseCaseByNameAPI, '/api/usecases/name/<string:name>',endpoint='usecase')
+api.add_resource(UseCaseController.UseCaseRequirementsByNameAPI, '/api/usecases/name/<string:usecase_name>/requirements',endpoint='usecaserequirements')
+api.add_resource(UseCaseController.UseCaseGoalsByNameAPI, '/api/usecases/name/<string:usecase_name>/environment/<string:environment_name>/goals',endpoint='usecasegoals')
 
 # Value Type routes
 api.add_resource(ValueTypeController.ValueTypesAPI, '/api/value_types/type/<string:type_name>/environment/<string:environment_name>',endpoint='value_types')

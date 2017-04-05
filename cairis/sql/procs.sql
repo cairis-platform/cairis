@@ -865,6 +865,8 @@ drop procedure if exists delete_access_right;
 drop procedure if exists delete_protocol;
 drop procedure if exists delete_privilege;
 drop procedure if exists delete_surface_type;
+drop procedure if exists useCaseRequirements;
+drop procedure if exists useCaseGoals;
 
 delimiter //
 
@@ -23106,6 +23108,19 @@ begin
   else
     delete from surface_type;
   end if;
+end
+//
+
+create procedure useCaseRequirements(in ucName text)
+begin
+  select r.name from requirement r, usecase u, requirement_usecase ru where u.name = ucName and u.id = ru.usecase_id and ru.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id);
+end
+//
+
+
+create procedure useCaseGoals(in ucName text,in envName text)
+begin
+  select g.name from goal g, usecase u, goalusecase_goalassociation ga, reference_type rt, environment e where u.name = ucName and u.id = ga.subgoal_id and ga.ref_type_id = rt.id and rt.name in ('and','or','responsible','depend') and ga.environment_id = e.id and e.name = envName and ga.goal_id = g.id;
 end
 //
 

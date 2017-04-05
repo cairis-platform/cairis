@@ -20,6 +20,7 @@ import logging
 from urllib import quote
 import jsonpickle
 from cairis.core.UseCase import UseCase
+from cairis.core.Trace import Trace
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
@@ -74,6 +75,27 @@ class UseCaseAPITests(CairisDaemonTestCase):
     usecase = jsonpickle.decode(rv.data)
     self.assertIsNotNone(usecase, 'No results after deserialization')
     self.logger.info('[%s] UseCase: %s [%d]\n', method, usecase['theName'], usecase['theId'])
+
+  def test_get_usecase_requirements(self):
+    new_tr = Trace(
+      fObjt = 'requirement',
+      fName = 'Dataset policy',
+      tObjt = 'usecase',
+      tName = 'Test use case')
+    new_tr_dict = {
+      'session_id' : 'test',
+      'object': new_tr
+    }
+    rv = self.app.post('/api/traces', content_type='application/json', data=jsonpickle.encode(new_tr_dict))
+
+    method = 'test_get_requirements_by_usecase_name'
+    url = '/api/usecases/name/%s/requirements?session_id=test' % quote(self.existing_usecase_name)
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    reqs = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(reqs, 'No results after deserialization')
+    self.assertEqual(new_tr.theFromName,reqs[0]);
 
   def test_delete(self):
     method = 'test_delete'
