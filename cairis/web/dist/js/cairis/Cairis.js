@@ -838,6 +838,42 @@ function refreshDimensionSelector(sBox,dimName,envName,callback,filterList) {
   });
 }
 
+function refreshSpecificSelector(sBox,urlPrefix,callback,filterList) {
+  var urlText = serverIP + urlPrefix;
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: urlText,
+    success: function (data) {
+      data.sort();
+      sBox.empty();
+      if (filterList != undefined) {
+        data = data.filter(x => filterList.indexOf(x) < 0);
+      }
+      if (data.length == 0 && filterList != undefined) {
+        alert('All ' + dimName + 's have already been added.');
+      }
+      else {
+        $.each(data, function () {
+          sBox.append($("<option />").val(this).text(this));
+        });
+        if (callback != undefined) {
+          callback();
+        }
+      }
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
 function requirementsTable(dimName){
   refreshDimensionSelector($('#assetsbox'),'asset',undefined,function(){
     refreshDimensionSelector($('#environmentsbox'),'environment',undefined,function(){

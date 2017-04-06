@@ -495,8 +495,17 @@ mainContent.on('click','#addExceptionToStep',function() {
 
 mainContent.on('change','input:radio[name="theExceptionTypeRadio"]',function() {
   var excType = $(this).parent().text().toLowerCase();
-  var envName = (excType == 'goal') ? $.session.get('usecaseEnvironmentName') : undefined;
-  refreshDimensionSelector($('#theExceptionTypeValues'),excType,envName,undefined,['All']);
+  var uc = JSON.parse($.session.get("UseCase"));
+  var urlPrefix = '/api/usecases/name/' + encodeURIComponent(uc.theName);
+  if (excType == 'goal') {
+    var envName = $.session.get('usecaseEnvironmentName');
+    urlPrefix += '/environment/' + encodeURIComponent(envName) + '/goals'
+  }
+  else {
+    urlPrefix += '/requirements'
+
+  }
+  refreshSpecificSelector($('#theExceptionTypeValues'),urlPrefix);
 });
 
 mainContent.on('click',"#AddStepExceptionButton", function() {
