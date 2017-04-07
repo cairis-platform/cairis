@@ -11655,3 +11655,39 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error creating CAIRIS database ' + dbName + '(id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
+
+  def getUseCaseRequirements(self,ucName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call useCaseRequirements(%s)',[ucName])
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting requirements associated with use case ' + ucName
+        raise DatabaseProxyException(exceptionText) 
+      reqs = [] 
+      for row in curs.fetchall():
+        row = list(row)
+        reqs.append(row[0])
+      curs.close()
+      return reqs
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting requirements associated with use case ' + ucName + '  (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getUseCaseGoals(self,ucName,envName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call useCaseGoals(%s,%s)',[ucName,envName])
+      if (curs.rowcount == -1):
+        exceptionText = 'Error getting goals associated with use case ' + ucName
+        raise DatabaseProxyException(exceptionText) 
+      goals = [] 
+      for row in curs.fetchall():
+        row = list(row)
+        goals.append(row[0])
+      curs.close()
+      return goals
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting goals associated with use case ' + ucName + '  (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 

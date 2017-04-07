@@ -20,11 +20,12 @@ import logging
 from urllib import quote
 import jsonpickle
 from cairis.core.UseCase import UseCase
+from cairis.core.Trace import Trace
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
 from cairis.mio.ModelImport import importModelFile, importUsabilityFile
-from cairis.tools.PseudoClasses import StepsAttributes, StepAttributes
+from cairis.tools.PseudoClasses import StepsAttributes, StepAttributes,ExceptionAttributes
 
 __author__ = 'Shamal Faily'
 
@@ -47,8 +48,9 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.existing_actors = ['Researcher']
     self.existing_precond = 'Test preconditions'
     self.existing_steps = []
-    self.existing_steps.append(StepAttributes('Researcher does something','','','',[]))
-    self.existing_steps.append(StepAttributes('System does something','','','',[]))
+    anException = ExceptionAttributes('anException','requirement','Anonymisation guidelines','Confidentiality Threat','anException description')
+    self.existing_steps.append(StepAttributes('Researcher does something','','','',[],[anException]))
+    self.existing_steps.append(StepAttributes('System does something','','','',[],[]))
     self.existing_postcond = 'Test postconditions'
     usecase_class = UseCase.__module__+'.'+UseCase.__name__
     # endregion
@@ -73,6 +75,27 @@ class UseCaseAPITests(CairisDaemonTestCase):
     usecase = jsonpickle.decode(rv.data)
     self.assertIsNotNone(usecase, 'No results after deserialization')
     self.logger.info('[%s] UseCase: %s [%d]\n', method, usecase['theName'], usecase['theId'])
+
+  def test_get_usecase_requirements(self):
+    new_tr = Trace(
+      fObjt = 'requirement',
+      fName = 'Dataset policy',
+      tObjt = 'usecase',
+      tName = 'Test use case')
+    new_tr_dict = {
+      'session_id' : 'test',
+      'object': new_tr
+    }
+    rv = self.app.post('/api/traces', content_type='application/json', data=jsonpickle.encode(new_tr_dict))
+
+    method = 'test_get_requirements_by_usecase_name'
+    url = '/api/usecases/name/%s/requirements?session_id=test' % quote(self.existing_usecase_name)
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    reqs = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(reqs, 'No results after deserialization')
+    self.assertEqual(new_tr.theFromName,reqs[0]);
 
   def test_delete(self):
     method = 'test_delete'
