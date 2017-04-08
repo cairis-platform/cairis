@@ -283,7 +283,7 @@ mainContent.on('click', '.theAssetPropName', function(){
   $("#chooseSecurityProperty").modal('show');
 });
 
-mainContent.on('dblclick', '.clickable-associations', function(){
+mainContent.on('click', '.clickable-associations', function(){
   $.session.set("AssociationIndex",$(this).index());
   var row =  $(this).closest("tr");
   $("#editAssetsOptionsform").hide();
