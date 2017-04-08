@@ -180,11 +180,9 @@ function fillTaskEnvInfo(env) {
     appendTaskPersona(env.thePersonas[i]['thePersona'],window.reverseDurationLookup[env.thePersonas[i]['theDuration']],window.reverseFrequencyLookup[env.thePersonas[i]['theFrequency']],env.thePersonas[i]['theDemands'],env.thePersonas[i]['theGoalConflict']);
   }
 
-  for (var i = 0; i < env.theConcernAssociations.length; i++) {
-    var aCol = [];
-    $.each(env.theConcernAssociations[i], function(idx,val) { aCol.push(val); });
-    appendConcernAssociation(aCol[0]);
-  }
+  $.each(env.theConcernAssociations, function(idx,concAssoc) {
+    appendTaskConcernAssociation(concAssoc);
+  });
 }
 
 
@@ -394,8 +392,8 @@ mainContent.on('click', ".removeTaskPersona", function () {
   });
 });
 
-function appendConcernAssociation(assoc) {
-  $("#theConcernAssociations").find("tbody").append("<tr><td class='removeConcernAssociation'><i class='fa fa-minus'></i></td><td class='concernAssociation'>" +  assoc[0] + "</td><td>" + assoc[1] + "</td><td>" + assoc[2] + "</td><td>" + assoc[3] + "</td><td>" + assoc[4] + "</td></tr>").animate('slow'); 
+function appendTaskConcernAssociation(assoc) {
+  $("#theConcernAssociations").find("tbody").append("<tr><td class='removeConcernAssociation'><i class='fa fa-minus'></i></td><td class='concernAssociation'>" +  assoc.theSource + "</td><td>" + assoc.theSourceNry + "</td><td>" + assoc.theLinkVerb + "</td><td>" + assoc.theTargetNry + "</td><td>" + assoc.theTarget + "</td></tr>").animate('slow'); 
 }
 
 
@@ -602,3 +600,91 @@ function postTask(task, callback){
     }
   });
 }
+
+mainContent.on('click', '#addConcernAssociationToTask', function () {
+  $('#AddTaskConcernAssociationButton').text('Add');
+  $('#taskConcernAssociationsDialog').attr('data-selectedIndex',undefined);
+  refreshConcernSelectors();
+  $('#taskConcernAssociationsDialog').modal('show');
+});
+
+mainContent.on('click', '.concernAssociation', function () {
+  var caRow = $(this).closest("tr");
+  $('#AddTaskConcernAssociationButton').text('Edit');
+  $('#taskConcernAssociationsDialog').attr('data-selectedIndex',caRow.index());
+  refreshConcernSelectors();
+  $('#taskConcernAssociationsDialog').modal('show');
+});
+
+function refreshConcernSelectors() {
+  $("#theTaskConcernSource").empty();
+  $("#theTaskConcernTarget").empty();
+  var task = JSON.parse($.session.get("Task"));
+  var envName = $.session.get("taskEnvironmentName");
+  $.each(task.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == envName){
+      $.each(env.theAssets, function (idx2, conc) {
+        $("#theTaskConcernSource").append($("<option></option>").attr('value',conc).text(conc));
+        $("#theTaskConcernTarget").append($("<option></option>").attr('value',conc).text(conc));
+      });
+    }
+  });
+}
+
+mainContent.on('shown.bs.modal','#taskConcernAssociationsDialog',function() {
+  var selectedIdx = $('#taskConcernAssociationsDialog').attr('data-selectedIndex');
+  if (selectedIdx != undefined) {
+    var task = JSON.parse($.session.get("Task"));
+    var envName = $.session.get("taskEnvironmentName");
+    $.each(task.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == envName){
+        var concAssoc = env.theConcernAssociations[selectedIdx];
+        $('#theTaskConcernSource').val(concAssoc.theSource);
+        $('#theTaskConcernSourceNry').val(concAssoc.theSourceNry);
+        $('#theTaskConcernLinkVerb').val(concAssoc.theLinkVerb);
+        $('#theTaskConcernTargetNry').val(concAssoc.theTargetNry);
+        $('#theTaskConcernTarget').val(concAssoc.theTarget);
+      }
+    });
+  }
+  else {
+    $('#theTaskConcernSource').val('');
+    $('#theTaskConcernSourceNry').val('1');
+    $('#theTaskConcernLinkVerb').val('');
+    $('#theTaskConcernTargetNry').val('1');
+    $('#theTaskConcernTarget').val('');
+  }
+});
+
+mainContent.on('click', '#AddTaskConcernAssociationButton', function () {
+  var concAssoc = {};
+  concAssoc.theSource = $('#theTaskConcernSource').val();
+  concAssoc.theSourceNry = $('#theTaskConcernSourceNry').val();
+  concAssoc.theLinkVerb = $('#theTaskConcernLinkVerb').val();
+  concAssoc.theTargetNry = $('#theTaskConcernTargetNry').val();
+  concAssoc.theTarget = $('#theTaskConcernTarget').val();
+
+  var task = JSON.parse($.session.get("Task"));
+  var envName = $.session.get("taskEnvironmentName");
+  $.each(task.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == envName){
+      var selectedIdx = $('#taskConcernAssociationsDialog').attr('data-selectedIndex');
+      if (selectedIdx != undefined) {
+        env.theConcernAssociations[selectedIdx] = concAssoc;
+        $.session.set("Task", JSON.stringify(task));
+        $('#theConcernAssociations').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(concAssoc.theSource);
+        $('#theConcernAssociations').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(concAssoc.theSourceNry);
+        $('#theConcernAssociations').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(concAssoc.theLinkVerb);
+        $('#theConcernAssociations').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(concAssoc.theTargetNry);
+        $('#theConcernAssociations').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(concAssoc.theTarget);
+      }
+      else {
+        env.theConcernAssociations.push(concAssoc);
+        $.session.set("Task", JSON.stringify(task));
+        appendTaskConcernAssociation(concAssoc);
+      }
+      $('#taskConcernAssociationsDialog').modal('hide');
+    }
+  });
+
+});

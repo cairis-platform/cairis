@@ -27,7 +27,7 @@ from cairis.misc.KaosModel import KaosModel
 from cairis.misc.AssumptionTaskModel import AssumptionTaskModel as GraphicalAssumptionTaskModel
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-from cairis.tools.ModelDefinitions import TaskModel, TaskEnvironmentPropertiesModel
+from cairis.tools.ModelDefinitions import TaskModel, TaskEnvironmentPropertiesModel, TaskConcernAssociationModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 from cairis.tools.PseudoClasses import PersonaTaskCharacteristics
 
@@ -209,6 +209,10 @@ class TaskDAO(CairisDAO):
           for ptc in real_prop.personas():
             ptList.append(PersonaTaskCharacteristics(ptc[0],ptc[1],ptc[2],ptc[3],ptc[4])) 
           real_prop.thePersonas = ptList
+          gcaList = []
+          for gca in real_prop.concernAssociations():
+            gcaList.append(TaskConcernAssociationModel(gca[0],gca[1],gca[2],gca[3],gca[4])) 
+          real_prop.theConcernAssociations = gcaList
           new_props.append(real_prop)
     elif fake_props is not None:
       if len(fake_props) > 0:
@@ -218,6 +222,11 @@ class TaskDAO(CairisDAO):
           for ptc in fake_prop['thePersonas']:
             ptList.append([ptc['thePersona'],ptc['theDuration'],ptc['theFrequency'],ptc['theDemands'],ptc['theGoalConflict']]) 
           fake_prop['thePersonas'] = ptList
+          gcaList = []
+          for gca in fake_prop['theConcernAssociations']:
+            gcaList.append([gca['theSource'],gca['theSourceNry'],gca['theLinkVerb'],gca['theTarget'],gca['theTargetNry']]) 
+          fake_prop['theConcernAssociations'] = gcaList
+         
           
           new_prop = TaskEnvironmentProperties(
                        environmentName=fake_prop['theEnvironmentName'],
