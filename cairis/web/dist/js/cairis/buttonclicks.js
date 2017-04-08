@@ -475,68 +475,24 @@ $('#personaModelClick').click(function(){
 
 $('#locationsModelClick').click(function(){
   window.theVisualModel = 'locations';
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/dimensions/table/locations",
-    success: function (data) {
-      $("#comboboxDialogSelect").empty();
-      $.each(data, function(i, item) {
-        $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>");
-      });
-      $( "#comboboxDialog" ).dialog({
-        modal: true,
-        buttons: {
-          Ok: function() {
-            var locsName = $( "#comboboxDialogSelect").find("option:selected" ).text();
-            $( this ).dialog( "close" );
-            $.ajax({
-              type: "GET",
-              dataType: "json",
-              accept: "application/json",
-              data: {
-                session_id: String($.session.get('sessionID'))
-              },
-              crossDomain: true,
-              url: serverIP + "/api/dimensions/table/environment",
-              success: function (data) {
-                $("#comboboxDialogSelect").empty();
-                $.each(data, function(i, item) {
-                  $("#comboboxDialogSelect").append("<option value=" + item + ">"  + item + "</option>");
-                });
-                $( "#comboboxDialog" ).dialog({
-                  modal: true,
-                  buttons: {
-                    Ok: function() {
-                      var envName = $( "#comboboxDialogSelect").find("option:selected" ).text();
-                      $( this ).dialog( "close" );
-                      getLocationsView(locsName,envName);
-                    }
-                  }
-                });
-                $(".comboboxD").css("visibility","visible");
-              },
-              error: function (xhr, textStatus, errorThrown) {
-                debugLogger(String(this.url));
-                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-              }
-            });
-          }
-        }
-      });
-      $(".comboboxD").css("visibility","visible");
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+  $('#chooseLocationsEnvironmentDialog').modal('show');
+});
+
+$("#chooseLocationsEnvironmentDialog").on('shown.bs.modal', function() {
+  refreshDimensionSelector($('#chooseLEEnvironmentsSelector'),'environment',undefined,function() {
+    refreshDimensionSelector($('#chooseLELocationsSelector'),'locations');
   });
 });
+
+$("#chooseLocationsEnvironmentDialog").on('click', '#chooseLocationEnvironmentButton',function(e) {
+
+  var locsName = $('#chooseLELocationsSelector').val();
+  var envName = $('#chooseLEEnvironmentsSelector').val();
+  $('#chooseLocationsEnvironmentDialog').modal('hide');
+  getLocationsView(locsName,envName);
+});
+
+
 
 $("#newClick").click(function () {
   showLoading();
