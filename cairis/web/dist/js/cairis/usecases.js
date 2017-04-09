@@ -82,6 +82,8 @@ function createUseCasesTable(){
         }
       });
 
+
+
       activeElement("mainTable");
       sortTableByRow(0);
     },
@@ -155,6 +157,18 @@ mainContent.on("click",".usecaseEnvironment", function () {
       $('#thePostCond').val(env.thePostCond);
       for (var i = 0; i < env.theSteps.length; i++) {
         appendUseCaseStep(env.theSteps[i].theStepText);
+        $("#theExceptions").find("tbody").addClass('usecaseStepException-rows');
+        $('.usecaseStepException-rows').contextMenu({
+          selector: 'td',
+          items: {
+            "generate_obstacle": {
+              name: "Generate Obstacle",
+              callback: function(key, opt) {
+                generateObstacleFromException($(this).closest("tr").index());
+              }
+            }
+          }
+        });
         $.each(env.theSteps[i].theExceptions,function(idx,exc){
           appendUseCaseStepException(exc.theName);
         });
@@ -163,6 +177,45 @@ mainContent.on("click",".usecaseEnvironment", function () {
     }
   });
 });
+
+function generateObstacleFromException(exceptionIdx) {
+  var stepIdx = $('#theSteps').find('.active').index();
+  var uc = JSON.parse($.session.get("UseCase"));
+  var envName = $.session.get('usecaseEnvironmentName');
+  $.each(uc.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == envName){
+      var stepTxt = env.theSteps[stepIdx].theStepText;
+      var excTxt = env.theSteps[stepIdx].theExceptions[exceptionIdx].theName;
+
+      var output = {};
+      output.object = uc;
+      output.session_id = $.session.get('sessionID');
+      output = JSON.stringify(output);
+      debugLogger(output);
+
+      $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        accept: "application/json",
+        crossDomain: true,
+        processData: false,
+        origin: serverIP,
+        data: output,
+        url: serverIP + "/api/usecases/environment/" + encodeURIComponent(envName) + "/step/" + encodeURIComponent(stepTxt) + "/exception/" + encodeURIComponent(excTxt) + "/generate_obstacle?session_id=" + $.session.get('sessionID'),
+        success: function (data) {
+          showPopup(true);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
+          debugLogger(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
+  });
+}
 
 function clearUseCaseEnvInfo(){
   $("#thePreCond").val('');
@@ -582,7 +635,7 @@ mainContent.on('click',"#AddStepExceptionButton", function() {
 });
 
 function appendUseCaseStepException(excName) {
-  $("#theExceptions").find("tbody").append('<tr><td class="deleteUseCaseStepException"><i class="fa fa-minus"></i></td><td class="usecaseStepException">'+ excName +'</td></tr>');
+  $("#theExceptions").find("tbody").append('<tr class="usecaseStepException-row"><td class="deleteUseCaseStepException"><i class="fa fa-minus"></i></td><td class="usecaseStepException">'+ excName +'</td></tr>');
 }
 
 mainContent.on("click",".usecaseStepException", function () {
