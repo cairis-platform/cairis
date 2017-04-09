@@ -153,55 +153,26 @@ mainContent.on("keyup", "#rationale", function () {
 });
 
 mainContent.on("click", "#addEnvtoEnv", function () {
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/environments/all/names",
-    success: function (data) {
-      $("#comboboxDialogSelect").empty();
-      var none = true;
-      $.each(data, function(i, item) {
-        var found = false;
-        $("#overrideCombobox").find("option").each(function() {
-          if(this.innerHTML.trim() == item){
-            found = true
-          }
-        });
-        //if not found in environments
-        if(!found) {
-          $("#comboboxDialogSelect").append("<option value=" + item + ">" + item + "</option>");
-          none = false;
-        }
-      });
-      if(!none) {
-        $("#comboboxDialog").dialog({
-          modal: true,
-          buttons: {
-            Ok: function () {
-              var text =  $( "#comboboxDialogSelect").find("option:selected" ).text();
-              $("#envToEnvTable").append("<tr><td class='removeEnvinEnv'><i class='fa fa-minus'></i></td><td>"+ text +"</td></tr>");
-              $("#overrideCombobox").append("<option value='" + text + "'>" + text + "</option>");
-              $(this).dialog("close");
-            }
-          }
-        });
-        $(".comboboxD").css("visibility", "visible");
-      }
-      else {
-        alert("All environments are already added");
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
+
+  var filterList = [];
+  $("#envToEnvTable").find(".envInEnv").each(function(index, env){
+    filterList.push($(env).text());
   });
+
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment',undefined,function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','addEnvToEnv');
+    $('#chooseEnvironment').modal('show');
+  },filterList);
+
 });
+
+function addEnvToEnv() {
+  var text =  $("#chooseEnvironmentSelect").val();
+  $("#envToEnvTable").append("<tr><td class='removeEnvinEnv'><i class='fa fa-minus'></i></td><td class='envInEnv'>"+ text +"</td></tr>");
+  $("#overrideCombobox").append("<option value='" + text + "'>" + text + "</option>");
+  $('#chooseEnvironment').modal('hide');
+};
 
 mainContent.on('click', "#UpdateEnvironment", function (e) {
 
@@ -266,15 +237,14 @@ function fillupEnvironmentObject(env) {
     envInEnv.push($(this).next("td").text());
   });
   env.theEnvironments = envInEnv;
-  var theDupProp = $("input:radio[name ='duplication']:checked").val();
-  if(theDupProp == "" || theDupProp == undefined){
-    theDupProp = "None";
+  env.theDuplicateProperty = $("input:radio[name ='duplication']:checked").val();
+  if(env.theDuplicateProperty == "" || env.theDuplicateProperty == undefined){
+    env.theDuplicateProperty = "None";
+    env.theOverridingEnvironment = $('#overrideCombobox').val();
   }
 
   var theEnvinEnvArray = [];
-  env.theOverridingEnvironment = theDupProp;
   $("#overrideCombobox").find("option").each(function (index, option) {
-    //This is for adding env to env, but wait!! first need to remove them when presssed minus!
     theEnvinEnvArray.push($(option).text());
   });
   env.theEnvironments = theEnvinEnvArray;
