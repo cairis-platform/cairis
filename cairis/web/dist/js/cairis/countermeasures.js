@@ -330,7 +330,6 @@ mainContent.on('click', '#chooseTargetButton', function () {
       if (selectedIdx != undefined) {
         env.theTargets[selectedIdx] = target;
         $.session.set("Countermeasure", JSON.stringify(cm));
-
         $('#theTargets').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(target.theName);
         $('#theTargets').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(target.theEffectiveness);
         $('#theTargets').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(target.theRationale);
@@ -375,6 +374,8 @@ mainContent.on('click', '.removeCountermeasurePersona', function () {
 
 mainContent.on('click', '.countermeasurePersona', function () {
   var taskRow = $(this).closest("tr");
+  $('#EditCountermeasureTaskDialog').attr('data-selectedIndex',taskRow.index());
+
   var taskName = taskRow.find("td:eq(0)").text();
   var personaName = taskRow.find("td:eq(1)").text();
   var cm = JSON.parse($.session.get("Countermeasure"));
@@ -385,19 +386,50 @@ mainContent.on('click', '.countermeasurePersona', function () {
       var taskIdx = 0;
       $.each(env.thePersonas, function (idx, currentTp) {
         if ((currentTp.theTask == taskName) && (currentTp.thePersona = personaName)) {
-          countermeasureTaskDialogBox(currentTp, function(updTp) {
-            cm.theEnvironmentProperties[index].thePersonas[idx] = updTp;
-            $.session.set("Countermeasure", JSON.stringify(cm));
-            taskRow.find("td:eq(2)").text(updTp.theDuration);
-            taskRow.find("td:eq(3)").text(updTp.theFrequency);
-            taskRow.find("td:eq(4)").text(updTp.theDemands);
-            taskRow.find("td:eq(5)").text(updTp.theGoalConflict);
-          });
+          $('#EditCountermeasureTaskDialog').attr('data-currentTp',JSON.stringify(currentTp));
+          $('#EditCountermeasureTaskDialog').modal('show');
         }
       });
     }
   });
 });
+
+mainContent.on('shown.bs.modal','#EditCountermeasureTaskDialog',function() {
+  var currentTp = JSON.parse($('#EditCountermeasureTaskDialog').attr('data-currentTp'));
+  $("#theTask").val(currentTp.theTask);
+  $("#thePersona").val(currentTp.thePersona);
+  $("#theDuration").val(currentTp.theDuration);
+  $("#theFrequency").val(currentTp.theFrequency);
+  $("#theDemands").val(currentTp.theDemands);
+  $("#theGoalConflict").val(currentTp.theGoalConflict);
+});
+
+mainContent.on('click','#EditImpactedTaskButton',function() {
+  var updTp = {};
+  updTp.theTask =  $("#theTask").val();
+  updTp.thePersona =  $("#thePersona").val();
+  updTp.theDuration =  $("#theDuration").val();
+  updTp.theFrequency =  $("#theFrequency").val();
+  updTp.theDemands =  $("#theDemands").val();
+  updTp.theGoalConflict =  $("#theGoalConflict").val();
+
+
+  var cm = JSON.parse($.session.get("Countermeasure"));
+  var envName = $.session.get("countermeasureEnvironmentName");
+  $.each(cm.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == envName){
+      var selectedIdx = JSON.parse($('#EditCountermeasureTaskDialog').attr('data-selectedIndex'));
+      env.thePersonas[selectedIdx] = updTp;
+      $.session.set("Countermeasure", JSON.stringify(cm));
+      $('#thePersonas').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(updTp.theDuration);
+      $('#thePersonas').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(updTp.theFrequency);
+      $('#thePersonas').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(updTp.theDemands);
+      $('#thePersonas').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(updTp.theGoalConflict);
+      $('#EditCountermeasureTaskDialog').modal('hide');
+    }
+  });
+});
+
 
 function updateCountermeasurePropertyList() {
   resetSecurityPropertyList();
@@ -789,24 +821,11 @@ $(document).on("click", "#addTargetToCountermeasure", function () {
 
 function countermeasureTaskDialogBox(currentTp,callback){
   var dialogwindow = $("#EditCountermeasureTaskDialog");
-  $("#theTask").val(currentTp.theTask);
-  $("#thePersona").val(currentTp.thePersona);
-  $("#theDuration").val(currentTp.theDuration);
-  $("#theFrequency").val(currentTp.theFrequency);
-  $("#theDemands").val(currentTp.theDemands);
-  $("#theGoalConflict").val(currentTp.theGoalConflict);
 
   dialogwindow.dialog({
     modal: true,
     buttons: {
       Ok: function () {
-        var updTp = {};
-        updTp.theTask =  $("#theTask").val();
-        updTp.thePersona =  $("#thePersona").val();
-        updTp.theDuration =  $("#theDuration").val();
-        updTp.theFrequency =  $("#theFrequency").val();
-        updTp.theDemands =  $("#theDemands").val();
-        updTp.theGoalConflict =  $("#theGoalConflict").val();
         if(jQuery.isFunction(callback)){
           callback(updTp);
         }
