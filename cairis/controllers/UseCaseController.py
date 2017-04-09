@@ -359,3 +359,84 @@ class UseCaseGoalsByNameAPI(Resource):
     resp = make_response(json_serialize(goals, session_id=session_id), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
+
+
+class UseCaseExceptionAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Creates a new obstacle from use case exception',
+    nickname='usecase-exception-post',
+    parameters=[
+      {
+        "name": "body",
+        "description": "The serialized version of the exception",
+        "required": True,
+        "allowMultiple": False,
+        "type": UseCaseMessage.__name__,
+        "paramType": "body"
+      },
+      {
+        "name": "environment_name",
+        "description": "The environment name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "step_name",
+        "description": "The step name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "exception_name",
+        "description": "The exception name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'One or more attributes are missing'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': httplib.CONFLICT,
+        'message': 'A database error has occurred'
+      },
+      {
+        'code': ARMHTTPError.status_code,
+        'message': ARMHTTPError.status
+      }
+    ]
+  )
+  # endregion
+  def post(self,environment_name,step_name,exception_name):
+    session_id = get_session_id(session, request)
+
+    dao = UseCaseDAO(session_id)
+    uc = dao.from_json(request)
+    dao.generate_obstacle_from_usecase(uc,environment_name,step_name,exception_name)
+    dao.close()
+
+    resp_dict = {'message': 'Obstacle generated from exception'}
+    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp

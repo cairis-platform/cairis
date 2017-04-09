@@ -379,6 +379,7 @@ api.add_resource(UseCaseController.UseCasesAPI, '/api/usecases',endpoint='usecas
 api.add_resource(UseCaseController.UseCaseByNameAPI, '/api/usecases/name/<string:name>',endpoint='usecase')
 api.add_resource(UseCaseController.UseCaseRequirementsByNameAPI, '/api/usecases/name/<string:usecase_name>/requirements',endpoint='usecaserequirements')
 api.add_resource(UseCaseController.UseCaseGoalsByNameAPI, '/api/usecases/name/<string:usecase_name>/environment/<string:environment_name>/goals',endpoint='usecasegoals')
+api.add_resource(UseCaseController.UseCaseExceptionAPI, '/api/usecases/environment/<string:environment_name>/step/<string:step_name>/exception/<string:exception_name>/generate_obstacle',endpoint='usecasegenerateobstacle')
 
 # Value Type routes
 api.add_resource(ValueTypeController.ValueTypesAPI, '/api/value_types/type/<string:type_name>/environment/<string:environment_name>',endpoint='value_types')
