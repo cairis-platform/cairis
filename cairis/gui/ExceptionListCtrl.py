@@ -20,7 +20,7 @@ from cairis.core.armid import *
 from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from ExceptionDialog import ExceptionDialog
-import ObstacleFactory
+import cairis.core.ObstacleFactory
 
 __author__ = 'Shamal Faily'
 
@@ -98,7 +98,13 @@ class ExceptionListCtrl(wx.ListCtrl):
       self.SetStringItem(self.theSelectedIdx,0,updExc[0])
 
   def onGenerateObstacle(self,evt):
-    obsParameters = ObstacleFactory.build(self.theEnvironmentName,self.stepGrid.stepException(self.theLastSelection))
+    excDetails = self.stepGrid.stepException(self.theLastSelection)
+    obsName = excDetails[0]
+    excDim = excDetails[1]
+    excVal = excDetails[2]
+    excCat = excDetails[3]
+    excDef = excDetails[4]
+    obsParameters = cairis.core.ObstacleFactory.build(self.theEnvironmentName,obsName,excDim,excVal,excCat,excDef)
     b = Borg()
     obsId = b.dbProxy.addObstacle(obsParameters)
     obsDict = b.dbProxy.getObstacles(obsId)

@@ -20,60 +20,44 @@
 'use strict';
 
 $("#importClick").click(function () {
-  fileDialogbox(function (type) {
-    var fileType = $("#theImportModelType").val();
-    var object = {};
-    var json = {'urlenc_file_contents' : $.session.get('importModelContent'),'type': fileType};
-    object.object = json;
-    object.session_id = $.session.get('sessionID');
-    var objectoutput = JSON.stringify(object);
-
-    showLoading();
-    $.ajax({
-      type: "POST",
-      dataType: "json",
-      contentType:"application/json",
-      accept: "application/json",
-      crossDomain: true,
-      processData:false,
-      origin: serverIP,
-      data: objectoutput,
-      url: serverIP + "/api/import/text",
-      success: function (data) {
-        summaryTables();
-        showPopup(true);
-      },
-      complete: function() {
-        hideLoading();
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        var error = JSON.parse(xhr.responseText);
-        showPopup(false, String(error.message));
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-    });
-  });
+  $('#typeOfFileDialog').modal('show');
 });
 
-function fileDialogbox(callback){
-  var dialogwindow = $("#typeOfFile");
-  var select = dialogwindow.find("select");
-  dialogwindow.dialog({
-    modal: true,
-    buttons: {
-      Ok: function () {
-        var text =  select.find("option:selected" ).text();
-        if(jQuery.isFunction(callback)){
-          callback(text);
-          $("#importClick").trigger('click')
-        }
-        $(this).dialog("close");
-      }
+$("#typeOfFileDialog").on('click', '#importModelFileButton',function(e) {
+  var fileType = $("#theImportModelType").val();
+  var object = {};
+  var json = {'urlenc_file_contents' : $.session.get('importModelContent'),'type': fileType};
+  object.object = json;
+  object.session_id = $.session.get('sessionID');
+  var objectoutput = JSON.stringify(object);
+  $('#typeOfFileDialog').modal('hide');
+
+  showLoading();
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType:"application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData:false,
+    origin: serverIP,
+    data: objectoutput,
+    url: serverIP + "/api/import/text",
+    success: function (data) {
+      summaryTables();
+      showPopup(true);
+    },
+    complete: function() {
+      hideLoading();
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-  $(".comboboxD").css("visibility", "visible");
-}
+});
 
 var readImportFile = function(event) {
   var input = event.target;

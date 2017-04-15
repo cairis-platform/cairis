@@ -25,6 +25,7 @@ from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
 from cairis.mio.ModelImport import importModelFile
 from cairis.tools.PseudoClasses import PersonaTaskCharacteristics
+from cairis.tools.ModelDefinitions import TaskConcernAssociationModel
 
 __author__ = 'Shamal Faily'
 
@@ -45,7 +46,7 @@ class TaskAPITests(CairisDaemonTestCase):
     self.existing_direct_flag=False
     self.existing_personas=[PersonaTaskCharacteristics('Claire','Medium','Medium','Low','Medium')]
     self.existing_assets=['Clinical data','Portal','Client workstation']
-    self.existing_concern_associations=[]
+    self.existing_concern_associations=[TaskConcernAssociationModel('Portal','1','connects','Client workstation','1')]
     self.existing_narrative='Claire wants to analyse a data set, in relation to other data sets on NeuroGrid.  She anonymises her data to the extent that as much personalised data is removed as possible, but not to the extent that her analysis software will fail.  She then uploads this data, tagging this as available only to members of her exemplar.'
     self.existing_consequences='None'
     self.existing_benefits='None'

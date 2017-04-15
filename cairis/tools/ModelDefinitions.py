@@ -855,6 +855,26 @@ class PersonaModel(object):
     obj_id_field: gen_class_metadata(Persona)
   }
 
+class TaskConcernAssociationModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theSource': fields.String,
+    'theSourceNry': fields.String,
+    'theLinkVerb': fields.String,
+    'theTargetNry': fields.String,
+    'theTarget': fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+
+  def __init__(self,src,srcNry,linkVerb,targ,targNry):
+    self.theSource = src
+    self.theSourceNry = srcNry
+    self.theLinkVerb = linkVerb
+    self.theTargetNry = targNry
+    self.theTarget = targ
+    
+
 class TaskEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -864,7 +884,7 @@ class TaskEnvironmentPropertiesModel(object):
     'theNarrative': fields.String,
     'theConsequences': fields.String,
     'theBenefits': fields.String,
-    'theConcernAssociations': fields.List(fields.String),
+    'theConcernAssociations': fields.List(fields.Nested(TaskConcernAssociationModel.resource_fields)),
     'theCodes': fields.List(fields.String)
   }
   required = resource_fields.keys()

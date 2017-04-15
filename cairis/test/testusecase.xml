@@ -8,7 +8,11 @@
   <usecase_environment name="Psychosis">
     <preconditions>Test preconditions.</preconditions>
     <flow>
-      <step number="1" description="Researcher does something" />
+      <step number="1" description="Researcher does something">
+        <exception name="anException" type="Requirement" value="Anonymisation guidelines" category="Confidentiality_Threat" >
+          <definition>anException description</definition>
+        </exception>
+      </step>
       <step number="2" description="System does something" />
     </flow>
     <postconditions>Test postconditions</postconditions>

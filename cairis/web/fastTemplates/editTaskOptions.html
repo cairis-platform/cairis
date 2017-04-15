@@ -120,4 +120,107 @@
       <button type="submit" class="btn btn-secondary" id="CloseTask">Close</button>
     </div>
   </div>
+ <div class="modal fade" id="taskParticipantsDialog" tabindex="-1" role="dialog" aria-labelledby="tapd_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Participating Persona</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theTaskPersona" class="control-label">Persona</label>
+          <select name="TheTaskPersona" class="form-control" id="theTaskPersona"></select>
+        </div>
+        <div class="form-group">
+          <label for="theTaskDuration" class="control-label">Duration</label>
+          <select name="TheTaskDuration" class="form-control" id="theTaskDuration">
+            <option value="Low">Seconds</option>
+            <option value="Medium">Minutes</option>
+            <option value="High">Hours or Longer</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theTaskFrequency" class="control-label">Frequency</label>
+          <select name="TheTaskFrequency" class="form-control" id="theTaskFrequency">
+            <option value="Low">Hours or more</option>
+            <option value="Medium">Daily - Weekly</option>
+            <option value="High">Monthly or less</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theTaskDemands" class="control-label">Demands</label>
+          <select name="TheTaskDemands" class="form-control" id="theTaskDemands">
+            <option value="None">None</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theTaskGoalConflict" class="control-label">Goal Conflict</label>
+          <select name="TheTaskGoalConflict" class="form-control" id="theTaskGoalConflict">
+            <option value="None">None</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddTaskParticipantButton" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="taskConcernAssociationsDialog" tabindex="-1" role="dialog" aria-labelledby="tcad_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Task Concern Association</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theTaskConcernSource" class="control-label">Source</label>
+          <select class="optionsInput form-control" name="theTaskConcernSource" id="theTaskConcernSource" style="width: 100%;">
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theTaskConcernSourceNry" class="control-label">n</label>
+          <select class="optionsInput form-control" name="theTaskConcernSourceNry" id="theTaskConcernSourceNry" style="width: 100%;">
+            <option value="1">1</option>
+            <option value="*">*</option>
+            <option value="1..*">1..*</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theTaskConcernLinkVerb" class="control-label">Link Verb</label>
+          <input class="optionsInput form-control" type="text" name="theTaskConcernLinkVerb" id="theTaskConcernLinkVerb" data-error="Link verb is required" style="width: 100%;" required>
+          <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label for="theTaskConcernTargetNry" class="control-label">n</label>
+          <select class="optionsInput form-control" name="theTaskConcernTargetNry" id="theTaskConcernTargetNry" style="width: 100%;">
+            <option value="1">1</option>
+            <option value="*">*</option>
+            <option value="1..*">1..*</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theTaskConcernTarget" class="control-label">Target</label>
+          <select class="optionsInput form-control" name="theTaskConcernTarget" id="theTaskConcernTarget" style="width: 100%;">
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddTaskConcernAssociationButton" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
 </form>

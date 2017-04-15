@@ -35,7 +35,7 @@ class UseCaseAPITests(CairisDaemonTestCase):
   @classmethod
   def setUpClass(cls):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
-    importModelFile(os.environ['CAIRIS_SRC'] + '/test/testusecase.xml',0,'test')
+    importUsabilityFile(os.environ['CAIRIS_SRC'] + '/test/testusecase.xml','test')
   
   def setUp(self):
     # region Class fields
@@ -96,6 +96,26 @@ class UseCaseAPITests(CairisDaemonTestCase):
     reqs = jsonpickle.decode(rv.data)
     self.assertIsNotNone(reqs, 'No results after deserialization')
     self.assertEqual(new_tr.theFromName,reqs[0]);
+
+  def test_generate_obstacle_from_exception(self):
+    method = 'test_generate_obstacle_from_exception'
+    url = '/api/usecases/name/%s?session_id=test' % quote(self.existing_usecase_name)
+    rv = self.app.get(url)
+    uc = jsonpickle.decode(rv.data)
+    url = '/api/usecases/environment/Psychosis/step/' + quote('Researcher does something') + '/exception/anException/generate_obstacle?session_id=test' 
+    existing_uc_dict = {
+      'session_id': 'test',
+      'object': uc
+    }
+    rv = self.app.post(url, content_type='application/json', data=jsonpickle.encode(existing_uc_dict))
+    self.assertIsNotNone(rv.data, 'No response')
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(json_resp)
+    self.assertIsInstance(json_resp, dict)
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message in response')
+    self.logger.info('[%s] Message: %s', method, message)
+    self.assertGreater(message.find('generated from exception'), -1, 'The obstacle was not generated')
 
   def test_delete(self):
     method = 'test_delete'

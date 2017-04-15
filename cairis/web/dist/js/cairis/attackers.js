@@ -572,60 +572,6 @@ mainContent.on('click', '#CloseAttacker', function (e) {
   createAttackersTable();
 });
 
-function motivationDialogBox(hasMotive ,callback){
-  var dialogwindow = $("#ChooseMotivationsDialog");
-  var select = dialogwindow.find("select");
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/attackers/motivations",
-    success: function (data) {
-      select.empty();
-      var none = true;
-      $.each(data, function(index, motive) {
-        var found = false;
-        $.each(hasMotive,function(index, text) {
-          if(text == motive.theName){
-            found = true
-          }
-        });
-        //if not found in assets
-        if(!found) {
-          select.append("<option value=" + motive.theName + ">" + motive.theName + "</option>");
-          none = false;
-        }
-      });
-      if(!none) {
-        dialogwindow.dialog({
-          modal: true,
-          buttons: {
-            Ok: function () {
-              var text =  select.find("option:selected" ).text();
-              if(jQuery.isFunction(callback)){
-                callback(text);
-              }
-              $(this).dialog("close");
-            }
-          }
-        });
-        $(".comboboxD").css("visibility", "visible");
-      }
-      else {
-        alert("All possible attackers are already added");
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
-}
-
 function putAttacker(attacker, oldName, callback){
   var output = {};
   output.object = attacker;
