@@ -867,6 +867,7 @@ drop procedure if exists delete_privilege;
 drop procedure if exists delete_surface_type;
 drop procedure if exists useCaseRequirements;
 drop procedure if exists useCaseGoals;
+drop procedure if exists personaUsabilityScore;
 
 delimiter //
 
@@ -23121,6 +23122,14 @@ end
 create procedure useCaseGoals(in ucName text,in envName text)
 begin
   select g.name from goal g, usecase u, goalusecase_goalassociation ga, reference_type rt, environment e where u.name = ucName and u.id = ga.subgoal_id and ga.ref_type_id = rt.id and rt.name in ('and','or','responsible','depend') and ga.environment_id = e.id and e.name = envName and ga.goal_id = g.id;
+end
+//
+
+create procedure personaUsabilityScore(in envName text) 
+begin
+  declare environmentId int;
+  select id into environmentId from environment where name = envName limit 1;
+  select p.name,ifnull(avg((tp.duration_id + tp.frequency_id)/2) + avg(tp.demands_id) + avg(tp.goalsupport_id),1) from task_persona tp, persona p where tp.environment_id = environmentId and tp.persona_id = p.id group by p.name;
 end
 //
 

@@ -6404,7 +6404,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addExternalDocument(self,parameters):
     docId = self.newId()
-    docName = self.conn.escape_string(parameters.name().replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u2013", "-"))
+    docName = self.conn.escape_string(parameters.name().replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u2013", "-").replace(u"\u2022","*"))
     docVersion = parameters.version()
     docDate = self.conn.escape_string(parameters.date())
     docAuthors = self.conn.escape_string(parameters.authors())
@@ -6447,8 +6447,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addDocumentReference(self,parameters):
     refId = self.newId()
     refName = parameters.name()
+    refName = self.conn.escape_string(parameters.name().replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u2013", "-").replace(u"\u2022","*"))
     refName = self.conn.escape_string(parameters.name().replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u2013", "-"))
-    docName = self.conn.escape_string(parameters.document().replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u2013", "-"))
+    docName = self.conn.escape_string(parameters.document().replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u2013", "-").replace(u"\u2022","*"))
     cName = parameters.contributor()
     refExc = parameters.description()
     try:

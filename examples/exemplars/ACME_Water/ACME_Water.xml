@@ -1620,7 +1620,7 @@ Due to the lack of ACME ICT support for PC hardware at his site, Barry has learn
   <grounds type="document" reference="Many desktop short-cuts do not get used." />
   <grounds type="document" reference="Non-authorised applications cannot be run" />
 </persona_characteristic>
-<persona_characteristic persona="Rick" behavioural_variable="Motivations" modal_qualifier="" >
+<persona_characteristic persona="Rick" behavioural_variable="Motivations" modal_qualifier="Presumably" >
   <definition>Event logging helps efficiency</definition>
   <grounds type="document" reference="Experience contributes to asset management decisions." />
   <grounds type="document" reference="Trouble-shooting driven by known task problems." />
