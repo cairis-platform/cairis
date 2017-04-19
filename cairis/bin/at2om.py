@@ -27,6 +27,7 @@ __author__ = 'Shamal Faily'
 def dotToObstacleModel(graph,contextName,originatorName):
 
   goals = []
+  goalNames = set([])
   obstacles = []
   acs = {}
 
@@ -40,6 +41,7 @@ def dotToObstacleModel(graph,contextName,originatorName):
       nodeName = node.get_name()
       if (nodeName != 'node' and nodeName != 'edge'):
         goals.append(node.get_name())
+        goalNames.add(node.get_name())
     elif nodeShape == 'triangle':
       acs[node.get_name()] = node.get_label()
 
@@ -50,7 +52,7 @@ def dotToObstacleModel(graph,contextName,originatorName):
     xmlBuf += '  <goal name=' + g + ' originator="' + originatorName + '">\n    <goal_environment name="' + contextName + '" category="Maintain" priority="Medium">\n      <definition>' + g + '</definition>\n      <fit_criterion>TBC</fit_criterion>\n      <issue>None</issue>\n    </goal_environment>\n  </goal>\n'
 
   for o in obstacles:
-    xmlBuf += '  <obstacle name=' + o + ' originator="' + originatorName + '">\n    <obstacle_environment name="' + contextName + '" category="Threat">\n      <definition>' + g + '</definition>\n    </obstacle_environment>\n  </obstacle>\n'
+    xmlBuf += '  <obstacle name=' + o + ' originator="' + originatorName + '">\n    <obstacle_environment name="' + contextName + '" category="Threat">\n      <definition>' + o + '</definition>\n    </obstacle_environment>\n  </obstacle>\n'
 
   xmlBuf += '</goals>\n\n'
 
@@ -69,7 +71,10 @@ def dotToObstacleModel(graph,contextName,originatorName):
     elif toName in acs:
       fromAssocs.append((fromName,toName))
     else:
-      assocs.append('  <goal_association environment="' + contextName + '" goal_name=' + fromName + ' goal_dim="obstacle" ref_type="resolve" subgoal_name=' + toName + ' subgoal_dim="goal" alternative_id="0">\n    <rationale>None</rationale>\n  </goal_association>\n')
+      if fromName in goalNames:
+        assocs.append('  <goal_association environment="' + contextName + '" goal_name=' + fromName + ' goal_dim="goal" ref_type="obstruct" subgoal_name=' + toName + ' subgoal_dim="obstacle" alternative_id="0">\n    <rationale>None</rationale>\n  </goal_association>\n')
+      else:
+        assocs.append('  <goal_association environment="' + contextName + '" goal_name=' + fromName + ' goal_dim="obstacle" ref_type="resolve" subgoal_name=' + toName + ' subgoal_dim="goal" alternative_id="0">\n    <rationale>None</rationale>\n  </goal_association>\n')
 
   for fromName,toName in fromAssocs:
     for subGoalName in toAssocs[toName]: 
@@ -89,7 +94,7 @@ def main(args=None):
   parser.add_argument('--author',dest='originatorName',help='author/s')
   parser.add_argument('--out',dest='outFile',help='output file (CAIRIS format)')
   args = parser.parse_args()
-  dotInstance = pydot.graph_from_dot_file(dotFile)
+  dotInstance = pydot.graph_from_dot_file(args.dotFile)
   xmlBuf = dotToObstacleModel(dotInstance[0],args.contextName,args.originatorName)
   f = open(args.outFile,'w')
   f.write(xmlBuf)

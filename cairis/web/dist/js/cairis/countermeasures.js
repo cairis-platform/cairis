@@ -575,7 +575,9 @@ mainContent.on('click', '#UpdateCountermeasure', function (e) {
     var oldName = cm.theName;
     cm.theName = $("#theName").val();
     var tags = $("#theTags").text().split(", ");
-    cm.theTags = tags;
+    if(tags[0] != ""){
+      cm.theTags = tags;
+    }
     cm.theType = $("#theType option:selected").text();
 
     if($("#editCountermeasureOptionsForm").hasClass("new")){
