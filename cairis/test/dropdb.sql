@@ -18,6 +18,6 @@
 */
 
 DROP USER 'irisuser'@'localhost';
-DROP DATABASE IF EXISTS `cairis_default`;
+DROP DATABASE IF EXISTS arm;
 flush table;
 flush privileges;
