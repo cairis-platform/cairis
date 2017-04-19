@@ -23,14 +23,38 @@ $("#importClick").click(function () {
   $('#typeOfFileDialog').modal('show');
 });
 
+function getAttackTreeEnvironmentAndContributor() {
+  refreshDimensionSelector($('#theAttackTreeEnvironment'),'environment',undefined,function() {
+    $('#attackTreeImportDialog').modal('show');
+  });
+}
+
+$('#attackTreeImportDialog').on('click','#importAttackTreeButton',function(e) {
+  $('#attackTreeImportDialog').modal('hide');
+  var json = JSON.parse($.session.get('importParameters'));
+  json.environment = $('#theAttackTreeEnvironment').val();
+  json.contributor = $('#theAttackTreeContributor').val();
+  importModel(json);
+});
+
 $("#typeOfFileDialog").on('click', '#importModelFileButton',function(e) {
   var fileType = $("#theImportModelType").val();
-  var object = {};
   var json = {'urlenc_file_contents' : $.session.get('importModelContent'),'type': fileType};
+  $('#typeOfFileDialog').modal('hide');
+  if (fileType == 'Attack Tree (Dot)') {
+    $.session.set('importParameters',JSON.stringify(json));
+    getAttackTreeEnvironmentAndContributor();
+  }
+  else {
+    importModel(json);
+  }
+});
+
+function importModel(json) {
+  var object = {};
   object.object = json;
   object.session_id = $.session.get('sessionID');
   var objectoutput = JSON.stringify(object);
-  $('#typeOfFileDialog').modal('hide');
 
   showLoading();
   $.ajax({
@@ -57,7 +81,7 @@ $("#typeOfFileDialog").on('click', '#importModelFileButton',function(e) {
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
+}
 
 var readImportFile = function(event) {
   var input = event.target;
