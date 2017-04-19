@@ -83,7 +83,7 @@ class CImportTextAPI(Resource):
     file_contents = cimport_params['urlenc_file_contents']
     file_contents = unquote(file_contents)
     file_contents = file_contents.replace(u"\u2018", "'").replace(u"\u2019", "'")
-    modelType = cimport_params['type']
+    type = cimport_params['type']
 
     if file_contents.startswith('<?xml'):
       fd, abs_path = mkstemp(suffix='.xml')
@@ -94,7 +94,7 @@ class CImportTextAPI(Resource):
 
       try:
         dao = ImportDAO(session_id)
-        result = dao.file_import(abs_path, modelType, 1)
+        result = dao.file_import(abs_path, type, 1)
         dao.close()
       except DatabaseProxyException as ex:
         raise ARMHTTPError(ex)
@@ -109,7 +109,7 @@ class CImportTextAPI(Resource):
       resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
       resp.headers['Content-Type'] = 'application/json'
       return resp
-    elif modelType == 'Attack Tree (Dot)':
+    elif type == 'Attack Tree (Dot)':
       try:
         environment_name = cimport_params['environment']
         contributor_name = cimport_params['contributor']
@@ -163,7 +163,7 @@ class CImportFileAPI(Resource):
     ]
   )
   # endregion
-  def post(self, modelType):
+  def post(self, type):
     session_id = get_session_id(session, request)
     try:
       if not request.files:
@@ -184,7 +184,7 @@ class CImportFileAPI(Resource):
 
     try:
       dao = ImportDAO(session_id)
-      result = dao.file_import(abs_path, modelType, 1)
+      result = dao.file_import(abs_path, type, 1)
       dao.close()
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
