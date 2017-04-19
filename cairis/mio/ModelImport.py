@@ -162,6 +162,14 @@ def importRequirementsFile(importFile,session_id = None):
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
+def importRequirementsString(buf,session_id = None):
+  try:
+    handler = GoalsContentHandler(session_id = session_id)
+    xml.sax.parseString(buf,handler)
+    return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.countermeasures(),session_id = session_id)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
 def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParameterSet,cmParameterSet,session_id):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
@@ -434,6 +442,15 @@ def importAssociationsFile(importFile,session_id = None):
     return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations(),session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importAssociationsString(buf,session_id = None):
+  try:
+    handler = AssociationsContentHandler(session_id = session_id)
+    xml.sax.parseString(buf,handler)
+    return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations(),session_id = session_id)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
   
 def importAssociations(maParameterSet,gaParameterSet,depParameterSet,session_id):
   b = Borg()
@@ -739,6 +756,17 @@ def importModelFile(importFile,isOverwrite = 1,session_id = None):
     modelTxt += importAssociationsFile(importFile,session_id) + ' '
     modelTxt += importSynopsesFile(importFile,session_id)
     modelTxt += importMisusabilityFile(importFile,session_id)
+    return modelTxt
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importAttackTreeString(buf,session_id = None):
+  try:
+    b = Borg()
+    db_proxy = b.get_dbproxy(session_id)
+    modelTxt = ''
+    modelTxt += importRequirementsString(buf,session_id) + ' '
+    modelTxt += importAssociationsString(buf,session_id) + ' '
     return modelTxt
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
