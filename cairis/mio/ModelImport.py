@@ -38,7 +38,7 @@ from cairis.core.ARM import *
 
 __author__ = 'Shamal Faily'
 
-def importSecurityPatterns(importFile,session_id=None):
+def importSecurityPatternsFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
     handler = SecurityPatternContentHandler()
@@ -48,37 +48,40 @@ def importSecurityPatterns(importFile,session_id=None):
     taps = handler.assets()
     spps = handler.patterns()
     vts = handler.metricTypes()
-    noOfTaps = len(taps)
-    noOfSpps = len(spps)
-
-    b = Borg()
-    db_proxy = b.get_dbproxy(session_id)
-
-    msgStr = 'No patterns imported'
-    if (noOfTaps > 0):
-      tapId = 0;
-      db_proxy.deleteSecurityPattern(-1)
-      db_proxy.deleteTemplateAsset(-1)
-
-      for vt in vts:
-        db_proxy.addValueType(vt)
-
-      for tap in taps:
-        tap.setId(tapId)
-        db_proxy.addTemplateAsset(tap)
-        tapId += 1
-
-      if (noOfSpps > 0):
-        spId = 0;
-        db_proxy.deleteSecurityPattern(-1)
-        for sp in spps:
-          sp.setId(spId)
-          db_proxy.addSecurityPattern(sp)
-          spId += 1
-        msgStr =  'Imported ' + str(noOfTaps) + ' template assets and ' + str(noOfSpps) + ' security patterns'
-    return msgStr
+    return importSecurityPatterns(taps,spps,vts,session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importSecurityPatterns(taps,spps,vts,session_id=None):
+  noOfTaps = len(taps)
+  noOfSpps = len(spps)
+
+  b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
+
+  msgStr = 'No patterns imported'
+  if (noOfTaps > 0):
+    tapId = 0;
+    db_proxy.deleteSecurityPattern(-1)
+    db_proxy.deleteTemplateAsset(-1)
+
+    for vt in vts:
+      db_proxy.addValueType(vt)
+
+    for tap in taps:
+      tap.setId(tapId)
+      db_proxy.addTemplateAsset(tap)
+      tapId += 1
+
+    if (noOfSpps > 0):
+      spId = 0;
+      db_proxy.deleteSecurityPattern(-1)
+      for sp in spps:
+        sp.setId(spId)
+        db_proxy.addSecurityPattern(sp)
+        spId += 1
+      msgStr =  'Imported ' + str(noOfTaps) + ' template assets and ' + str(noOfSpps) + ' security patterns'
+  return msgStr
 
 def importAttackPattern(importFile,session_id = None):
   try:

@@ -5948,7 +5948,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addPatternRequirements(self,patternId,patternRequirements):
     for idx,reqData in enumerate(patternRequirements):
-      self.addTemplateRequirement(reqData)
+      if (self.nameExists(reqData.name(),'template_requirement')):
+        self.updateTemplateRequirement(reqData)
+      else:
+        self.addTemplateRequirement(reqData)
       self.addPatternRequirement(idx+1,patternId,reqData.name())
 
   def addPatternRequirement(self,reqLabel,patternId,reqName):
@@ -6185,6 +6188,25 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (objtCount > 0):
         exceptionText = dimName + ' ' + objtName + ' already exists.'
         raise ARMException(exceptionText) 
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error checking existence of ' + dimName + ' ' + objtName + ' (id:' + str(id) + ',message:' + msg + ')'
+
+  def nameExists(self,objtName,dimName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('call nameExists(%s,%s)',[objtName,dimName])
+      if (curs.rowcount == -1):
+        curs.close()
+        exceptionText = 'Error checking existence of ' + dimName + ' ' + objtName
+        raise DatabaseProxyException(exceptionText) 
+      row = curs.fetchone()
+      objtCount = row[0]
+      curs.close()
+      if (objtCount > 0):
+        return True
+      else:
+        return False
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error checking existence of ' + dimName + ' ' + objtName + ' (id:' + str(id) + ',message:' + msg + ')'

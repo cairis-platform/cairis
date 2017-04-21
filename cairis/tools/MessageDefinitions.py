@@ -441,6 +441,17 @@ class TraceMessage(DefaultMessage):
 )
 # endregion
 
+class SecurityPatternMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.SecurityPatternModel)
+  required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+  object=ModelDefinitions.SecurityPatternModel.__name__,
+)
+# endregion
+
 class TemplateRequirementMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TemplateRequirementModel)
   required = DefaultMessage.required
