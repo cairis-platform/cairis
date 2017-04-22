@@ -333,6 +333,7 @@ api.add_resource(RoleController.RoleEnvironmentPropertiesAPI, '/api/roles/name/<
 # Security pattern routes
 api.add_resource(SecurityPatternController.SecurityPatternsAPI, '/api/security_patterns', endpoint = 'securitypatterns')
 api.add_resource(SecurityPatternController.SecurityPatternByNameAPI, '/api/security_patterns/name/<string:name>', endpoint='securitypattern')
+api.add_resource(SecurityPatternController.SituateSecurityPatternAPI, '/api/security_patterns/name/<string:security_pattern_name>/environment/<string:environment_name>/situate', endpoint='situatesecuritypattern')
 
 # Summary routes
 api.add_resource(SummaryController.SummaryAPI, '/api/summary/dimension/<string:dimension_name>/environment/<string:environment_name>',endpoint='summary')

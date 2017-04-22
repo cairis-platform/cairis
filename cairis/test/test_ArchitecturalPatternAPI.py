@@ -58,7 +58,6 @@ def addAPDependentData(d):
 
 class ArchitecturalPatternAPITests(CairisDaemonTestCase):
 
-
   def setUp(self):
     # region Class fields
     importModelFile(os.environ['CAIRIS_SRC'] + '/test/webinos_presituate.xml',1,'test')

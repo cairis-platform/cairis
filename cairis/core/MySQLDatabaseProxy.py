@@ -6002,7 +6002,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addSituatedAssets(self,patternId,assetParametersList):
     for assetParameters in assetParametersList:
-      assetId = self.addAsset(assetParameters)
+      assetId = -1
+      if (self.nameExists(assetParameters.name(),'asset')):
+        assetId = self.getDimensionId(assetParameters.name(),'asset')
+      else:
+        assetId = self.addAsset(assetParameters)
       self.situatePatternAsset(patternId,assetId)
 
   def situatePatternAsset(self,patternId,assetId):

@@ -591,3 +591,13 @@ var locationsDefault = {
   "theDiagram" : "",
   "theLocations" : []
 };
+var securityPatternDefault = {
+  "__python_obj__": "SecurityPattern.SecurityPattern",
+  "theId" : -1,
+  "theName" : "",
+  "theContext" : "",
+  "theProblem" : "",
+  "theSolution" : "",
+  "theRequirements" : [],
+  "theConcernAssociations" : []
+};

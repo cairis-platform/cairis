@@ -23,6 +23,7 @@ from cairis.tools.ModelDefinitions import SecurityPatternStructureModel, Pattern
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 from cairis.core.SecurityPatternParameters import SecurityPatternParameters
 from cairis.core.TemplateRequirementParameters import TemplateRequirementParameters
+import cairis.core.AssetParametersFactory
 
 __author__ = 'Shamal Faily'
 
@@ -80,9 +81,9 @@ class SecurityPatternDAO(CairisDAO):
     sp['theRequirements'] = []
     for req in rsp.requirements():
       freq = {}
-      freq["theType"] = req[0]
-      freq["theName"] = req[1]
-      freq["theDescription"] = req[2]
+      freq["theName"] = req[0]
+      freq["theDescription"] = req[1]
+      freq["theType"] = req[2]
       freq["theRationale"] = req[3]
       freq["theFitCriterion"] = req[4]
       freq["theAsset"] = req[5]
@@ -157,3 +158,16 @@ class SecurityPatternDAO(CairisDAO):
       spAssocs.append((cs["theHeadAsset"],cs["theHeadAdornment"],cs["theHeadNry"],cs["theHeadRole"],cs["theTailRole"],cs["theTailNry"],cs["theTailAdornment"],cs["theTailAsset"]))
     spParams = SecurityPatternParameters(spName,spContext,spProb,spSol,spReqs,spAssocs)
     return spParams
+
+  def situate_security_pattern(self,spName,envName):
+    spId = self.db_proxy.getDimensionId(spName,'securitypattern')
+    patternStructure = self.db_proxy.patternStructure(spId)
+    assetSet = set([])
+    for assoc in patternStructure:
+      assetSet.add(assoc[0])
+      assetSet.add(assoc[7])
+    assetParametersList = []
+    for assetName in assetSet:
+      assetParametersList.append(cairis.core.AssetParametersFactory.buildFromTemplate(assetName,[envName],self.db_proxy))
+    self.db_proxy.addSituatedAssets(spId,assetParametersList)
+    self.db_proxy.conn.commit()

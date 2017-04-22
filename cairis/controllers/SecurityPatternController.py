@@ -274,3 +274,53 @@ class SecurityPatternByNameAPI(Resource):
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
+
+class SituateSecurityPatternAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Situate security pattern',
+    nickname='security-patterns-situate-post',
+    responseClass=str.__name__,
+    parameters=[
+      {
+        'name': 'session_id',
+        'description': 'The ID of the session to use',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      },
+      {
+        'name': 'security_pattern_name',
+        'description': 'The security pattern name',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      },
+      {
+        'name': 'environment_name',
+        'description': 'The environment name',
+        'required': True,
+        'allowMultiple': False,
+        'type': 'string',
+        'paramType': 'query'
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'The database connection was not properly setup'
+      },
+    ]
+  )
+  # endregion
+  def post(self,security_pattern_name,environment_name):
+    session_id = get_session_id(session, request)
+    dao = SecurityPatternDAO(session_id)
+    dao.situate_security_pattern(security_pattern_name,environment_name)
+    dao.close()
+    resp_dict = {'message': 'Security Pattern successfully situated'}
+    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp.contenttype = 'application/json'
+    return resp

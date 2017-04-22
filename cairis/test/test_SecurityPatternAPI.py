@@ -120,6 +120,18 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     msg = json_resp.get('message', None)
     self.assertEquals(msg, 'Security Pattern successfully updated')
 
+  def test_situate_security_pattern(self):
+    importSecurityPatternsFile(os.environ['CAIRIS_SRC'] + '/../examples/architecture/schumacher_patterns.xml','test')
+    url = '/api/security_patterns/name/Demilitarized%20Zone/environment/Psychosis/situate?session_id=test'
+    method = 'test_situate_security_pattern'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.post(url, content_type='application/json')
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    msg = json_resp.get('message', None)
+    self.assertEquals(msg, 'Security Pattern successfully situated')
+
   def prepare_json(self, sp):
     data_dict = {'session_id' : 'test','object' : sp}
     new_sp_body = jsonpickle.encode(data_dict, unpicklable=False)
