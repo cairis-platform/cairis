@@ -1,0 +1,11 @@
+{
+  "characteristic_synopses" : [
+    {
+      "theReference" : "Managers delegate security decisions",
+      "theSynopsis" : "Manager delegates",
+      "theDimension" : "goal",
+      "theActorType" : "persona",
+      "theActor" : "Claire"
+    }
+  ] 
+}
