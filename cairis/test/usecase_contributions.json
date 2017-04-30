@@ -1,0 +1,19 @@
+{
+   "characteristic_synopses": [
+    {
+      "theReference" : "Alice drives and is driven by her preferences",
+      "theSynopsis" : "Alice driven",
+      "theDimension" : "goal",
+      "theActorType" : "persona",
+      "theActor" : "Alice"
+    }
+  ],
+  "usecase_contributions": [
+    {
+      "theSource" : "Content Adaptation",
+      "theDestination" : "Alice driven",
+      "theMeansEnd" : "end",
+      "theContribution" : "SomePositive"
+    }
+  ] 
+}
