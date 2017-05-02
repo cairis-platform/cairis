@@ -32,6 +32,7 @@ from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import CImportMessage
 from cairis.tools.ModelDefinitions import CImportParams
 from cairis.tools.SessionValidator import validate_proxy, check_required_keys, get_session_id
+import codecs
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -87,7 +88,7 @@ class CImportTextAPI(Resource):
 
     if file_contents.startswith('<?xml'):
       fd, abs_path = mkstemp(suffix='.xml')
-      fs_temp = open(abs_path, 'w')
+      fs_temp = codecs.open(abs_path, 'w','utf-8')
       fs_temp.write(file_contents)
       fs_temp.close()
       fd_close(fd)
