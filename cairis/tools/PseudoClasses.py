@@ -20,11 +20,49 @@ import logging
 
 from flask_restful import fields
 from flask_restful_swagger import swagger
+from cairis.core.ReferenceSynopsis import ReferenceSynopsis
+from cairis.core.ReferenceContribution import ReferenceContribution
 
 __author__ = 'Robin Quetin, Shamal Faily'
 obj_id_field = '__python_obj__'
 def gen_class_metadata(class_ref):
   return {"enum": [class_ref.__module__+'.'+class_ref.__name__]}
+
+@swagger.model
+class CharacteristicReferenceSynopsis(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theSynopsis": fields.String,
+    "theDimension": fields.String,
+    "theActorType": fields.String,
+    "theActor": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(ReferenceSynopsis)
+  }
+  def __init__(self, rsName='', rsDim='', rsActorType='', rsActor=''):
+    self.theSynopsis = rsName
+    self.theDimension = rsDim
+    self.theActorType = rsActorType
+    self.theActor= rsActor
+
+@swagger.model
+class CharacteristicReferenceContribution(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theMeansEnd": fields.String,
+    "theContribution": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(ReferenceContribution)
+  }
+  def __init__(self, rcMe='', rcCont=''):
+    self.theMeansEnd = rcMe
+    self.theContribution = rcCont
 
 @swagger.model
 class CharacteristicReference(object):
@@ -33,7 +71,9 @@ class CharacteristicReference(object):
     'theReferenceName' : fields.String,
     'theCharacteristicType' : fields.String,
     'theReferenceDescription' : fields.String,
-    'theDimensionName' : fields.String
+    'theDimensionName' : fields.String,
+    'theReferenceSynopsis' : fields.Nested(CharacteristicReferenceSynopsis.resource_fields),
+    'theReferenceContribution' : fields.Nested(CharacteristicReferenceContribution.resource_fields)
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)
@@ -70,7 +110,7 @@ class CharacteristicReference(object):
       ]
     } 
   }
-  def __init__(self, refName=None, crTypeName='grounds', refDesc=None, dimName='document'):
+  def __init__(self, refName=None, crTypeName='grounds', refDesc=None, dimName='document',rSyn=None,rCont=None):
     """
     :type refName: str
     :type crTypeName: str
@@ -81,6 +121,8 @@ class CharacteristicReference(object):
     self.theCharacteristicType = crTypeName
     self.theReferenceDescription = refDesc
     self.theDimensionName = dimName
+    self.theReferenceSynopsis = rSyn
+    self.theReferenceContribution = rCont
 
 @swagger.model
 class Contributor(object):
@@ -707,3 +749,4 @@ class ObjectDependency(object):
   def __init__(self,dimension_name,object_name):
     self.theDimensionName = dimension_name
     self.theObjectName = object_name
+

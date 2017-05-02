@@ -104,10 +104,11 @@ class PersonaCharacteristicsAPI(Resource):
   #endregion
   def post(self):
     session_id = get_session_id(session, request)
-
     dao = PersonaCharacteristicDAO(session_id)
-    new_pc = dao.from_json(request)
+    new_pc,ps,rss,rcs = dao.from_json(request)
     dao.add_persona_characteristic(new_pc)
+    if (ps != None):
+      dao.assignIntentionalElements(ps,rss,rcs)
     dao.close()
 
     resp_dict = {'message': 'Persona Characteristic successfully added'}
@@ -193,8 +194,10 @@ class PersonaCharacteristicByNameAPI(Resource):
     session_id = get_session_id(session, request)
 
     dao = PersonaCharacteristicDAO(session_id)
-    upd_pc = dao.from_json(request)
+    upd_pc,ps,rss,rcs = dao.from_json(request)
     dao.update_persona_characteristic(upd_pc, name)
+    if (ps != None):
+      dao.assignIntentionalElements(ps,rss,rcs)
     dao.close()
 
     resp_dict = {'message': 'Persona Characteristic successfully updated'}

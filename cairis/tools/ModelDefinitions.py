@@ -68,7 +68,7 @@ from cairis.core.TemplateRequirement import TemplateRequirement
 from cairis.core.Location import Location
 from cairis.core.Locations import Locations
 from cairis.core.WeaknessTarget import WeaknessTarget
-from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, CharacteristicReference,ObjectDependency
+from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, CharacteristicReference,ObjectDependency,CharacteristicReferenceSynopsis
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -1062,7 +1062,6 @@ class ConceptReferenceModel(object):
     obj_id_field : gen_class_metadata(ConceptReference)
   }
 
-
 @swagger.model
 class PersonaCharacteristicModel(object):
   resource_fields = {
@@ -1071,6 +1070,7 @@ class PersonaCharacteristicModel(object):
     "theModQual": fields.String,
     "theVariable": fields.String,
     "theCharacteristic": fields.String,
+    "theCharacteristicSynopsis": fields.Nested(CharacteristicReferenceSynopsis.resource_fields),
     "theGrounds": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
     "theWarrant": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
     "theRebuttal": fields.List(fields.Nested(CharacteristicReference.resource_fields))

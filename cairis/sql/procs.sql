@@ -868,6 +868,8 @@ drop procedure if exists delete_surface_type;
 drop procedure if exists useCaseRequirements;
 drop procedure if exists useCaseGoals;
 drop procedure if exists personaUsabilityScore;
+drop function if exists synopsisId;
+drop function if exists hasReferenceContribution;
 
 delimiter //
 
@@ -10860,9 +10862,15 @@ begin
 
   if pcId != -1
   then
+    delete from document_reference_contribution where characteristic_id = pcId;
+    delete from requirement_reference_contribution where characteristic_id = pcId;
+    delete from usecase_pc_contribution where characteristic_id = pcId;
     delete from persona_characteristic_synopsis where characteristic_id = pcId;
     delete from persona_characteristic where id = pcId;
   else
+    delete from document_reference_contribution;
+    delete from requirement_reference_contribution;
+    delete from usecase_pc_contribution;
     delete from persona_characteristic_synopsis;
     delete from persona_characteristic;
   end if;
@@ -23136,6 +23144,46 @@ begin
   declare environmentId int;
   select id into environmentId from environment where name = envName limit 1;
   select p.name,ifnull(avg((tp.duration_id + tp.frequency_id)/2) + avg(tp.demands_id) + avg(tp.goalsupport_id),1) from task_persona tp, persona p where tp.environment_id = environmentId and tp.persona_id = p.id group by p.name;
+end
+//
+
+create function synopsisId(synName text)
+returns int
+deterministic
+begin
+  declare synId int;
+  select id into synId from synopsis where synopsis = synName limit 1;
+  if synId is null
+  then
+    return -1; 
+  else
+    return synId;
+  end if;
+end
+//
+
+create function hasReferenceContribution(rsName text, csName text)
+returns int
+deterministic
+begin
+  declare rsId int;
+  declare csId int;
+  declare rcCount int;
+
+  select id into rsId from synopsis where synopsis = rsName limit 1;
+  select id into csId from synopsis where synopsis = csName limit 1;
+  if rsId is null or csId is null
+  then
+    return 0;
+  else
+    select count(*) into rcCount from contribution where reference_id = rsId and characteristic_id = csId;
+    if rcCount > 0
+    then
+      return 1;
+    else
+      return 0;
+    end if;
+  end if;
 end
 //
 

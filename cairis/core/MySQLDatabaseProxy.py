@@ -353,9 +353,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call traceDimensions()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error building dimension lookup tables'
-        raise DatabaseProxyException(exceptionText) 
       for row in curs.fetchall():
         row = list(row)
         idLookup[row[0]] = row[1]
@@ -375,9 +372,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getRequirements(%s,%s)',[constraintId,isAsset])
-      if (curs.rowcount == -1):
-        exceptionText = 'Undefined error while loading the requirements environment'
-        raise DatabaseProxyException(exceptionText) 
       reqDict = {}
       for row in curs.fetchall():
         row = list(row)
@@ -405,9 +399,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getRequirement(%s)',[reqId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Undefined error while loading the requirements environment'
-        raise DatabaseProxyException(exceptionText) 
       reqDict = {}
       for row in curs.fetchall():
         row = list(row)
@@ -435,9 +426,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getRequirements(%s,%s)',[constraintId,isAsset])
-      if (curs.rowcount == -1):
-        exceptionText = 'Undefined error while loading the requirements environment'
-        raise DatabaseProxyException(exceptionText) 
       reqList = []
       for row in curs.fetchall():
         row = list(row)
@@ -466,9 +454,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       curs = self.conn.cursor()
       curs.execute('call newId()',[])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting last id'
-        raise DatabaseProxyException(exceptionText) 
       results = curs.fetchone()
       newId = results[0]
       curs.close()
@@ -482,9 +467,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addRequirement(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',[r.label(),r.id(), r.version(), r.name(),r.description(), r.rationale(), r.originator(), r.fitCriterion(), r.priority(),r.type(),assetName,isAsset])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error inserting new requirement ' + str(r.id())
-        raise DatabaseProxyException(exceptionText)
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -496,9 +478,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateRequirement(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',[r.label(),r.id(), r.version(), r.name(),r.description(), r.rationale(), r.originator(), r.fitCriterion(), r.priority(),r.type()])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating requirement ' + str(r.id())
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -519,9 +498,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addValueTension(%s,%s,%s,%s,%s)',[envId,spId,prId,tId,tRationale])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding value tension for environment id ' + str(envId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -536,15 +512,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addEnvironment(%s,%s,%s,%s)',[environmentId,environmentName,environmentShortCode,environmentDescription])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       if (len(parameters.environments()) > 0):
         for c in parameters.environments():
           curs.execute('call addCompositeEnvironment(%s,%s)',[environmentId,c])
-          if (curs.rowcount == -1):
-            exceptionText = 'Error associating environment ' + c + ' with composite environment ' + environmentName
-            raise DatabaseProxyException(exceptionText) 
         self.addCompositeEnvironmentProperties(environmentId,parameters.duplicateProperty(),parameters.overridingEnvironment())
 
       assetValues = parameters.assetValues()
@@ -564,9 +534,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addCompositeEnvironmentProperties(%s,%s,%s)',[environmentId,duplicateProperty,overridingEnvironment])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding duplicate properties for environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding duplicate properties for environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -576,9 +543,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call riskEnvironments(%s,%s)',[threatName,vulName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting environments associated with threat ' + threatName + ' and vulnerability ' + vulName
-        raise DatabaseProxyException(exceptionText) 
       environments = []
       for row in curs.fetchall():
         row = list(row)
@@ -594,9 +558,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call riskEnvironmentsByRisk(%s)',[riskName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting environments associated with risk ' + riskName 
-        raise DatabaseProxyException(exceptionText) 
       environments = []
       for row in curs.fetchall():
         row = list(row)
@@ -617,19 +578,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteEnvironmentComponents(%s)',[parameters.id()])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updateEnvironment(%s,%s,%s,%s)',[environmentId,environmentName,environmentShortCode,environmentDescription])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding updating environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       if (len(parameters.environments()) > 0):
         for c in parameters.environments():
           curs.execute('call addCompositeEnvironment(%s,%s)',[environmentId,c])
-          if (curs.rowcount == -1):
-            exceptionText = 'Error associating environment ' + c + ' with composite environment ' + environmentName
-            raise DatabaseProxyException(exceptionText) 
       if (len(parameters.duplicateProperty()) > 0):
         self.addCompositeEnvironmentProperties(environmentId,parameters.duplicateProperty(),parameters.overridingEnvironment())
       self.addValueTensions(environmentId,parameters.tensions())
@@ -648,9 +600,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getEnvironments(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining requirement environment list'
-        raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting environments (id:' + str(id) + ',message:' + msg + ')'
@@ -682,9 +631,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call compositeEnvironments(%s)',[environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining composite environments for environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       environments = []
       for row in curs.fetchall():
         row = list(row)
@@ -700,9 +646,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call compositeEnvironmentIds(%s)',[environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining composite environments for environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       environments = []
       for row in curs.fetchall():
         row = list(row)
@@ -718,15 +661,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call duplicateProperties(%s)',[environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining duplicate property for composite environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        row = curs.fetchone()
-        duplicateProperty = row[0] 
-        overridingEnvironment = row[1]
-        curs.close()   
-        return (duplicateProperty,overridingEnvironment) 
+      row = curs.fetchone()
+      duplicateProperty = row[0] 
+      overridingEnvironment = row[1]
+      curs.close()   
+      return (duplicateProperty,overridingEnvironment) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error environments associated with composite environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -736,10 +675,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getAttackers(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining attackers'
-        raise DatabaseProxyException(exceptionText) 
       attackers = {}
       attackerRows = []
       for row in curs.fetchall():
@@ -773,10 +708,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       sqlTxt = 'call ' + dimTable + '_environments(%s)'
       curs.execute(sqlTxt,[dimId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining getting environments for ' + dimTable + ' id ' + str(dimId)
-        raise DatabaseProxyException(exceptionText) 
       environments = []
       for row in curs.fetchall():
         row = list(row)
@@ -792,10 +723,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call attacker_motivation(%s,%s)',[attackerId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining attacker motives'
-        raise DatabaseProxyException(exceptionText) 
       motives = []
       for row in curs.fetchall():
         row = list(row)
@@ -811,10 +738,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select threat_likelihood(%s,%s)',[threatId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining likelihood for threat id ' + str(threatId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       lhood = row[0] 
       curs.close()
@@ -828,10 +751,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select vulnerability_severity(%s,%s)',[vulId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining severity for vulnerability id ' + str(vulId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       sev = row[0] 
       curs.close()
@@ -845,10 +764,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call attacker_capability(%s,%s)',[attackerId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining attacker capabilities'
-        raise DatabaseProxyException(exceptionText) 
       capabilities = []
       for row in curs.fetchall():
         row = list(row)
@@ -869,9 +784,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       tags = parameters.tags()
       curs = self.conn.cursor()
       curs.execute("call addAttacker(%s,%s,%s,%s)",[attackerId,attackerName,attackerDesc,attackerImage])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding attacker ' + attackerName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(attackerName,'attacker',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
@@ -892,9 +804,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       sqlTxt = 'call add_' + table + '_environment(%s,%s)'
       curs.execute(sqlTxt,[dimId,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating ' + table + ' id ' + str(dimId) + ' with environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -906,9 +815,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       for motive in motives:
         curs.execute('call addAttackerMotive(%s,%s,%s)',[attackerId,environmentName,motive])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating attacker id ' + str(attackerId) + ' with motive ' + motive
-          raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -920,9 +826,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       for name,value in capabilities:
         curs.execute('call addAttackerCapability(%s,%s,%s,%s)',[attackerId,environmentName,name,value])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating attacker id ' + str(attackerId) + ' with capabilities'
-          raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -933,10 +836,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteAttackerComponents(%s)',[parameters.id()])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating attacker ' + attackerName
-        raise DatabaseProxyException(exceptionText) 
-
       attackerId = parameters.id()
       attackerName = parameters.name()
       attackerDesc = parameters.description()
@@ -945,9 +844,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
       curs = self.conn.cursor()
       curs.execute("call updateAttacker(%s,%s,%s,%s)",[attackerId,attackerName,attackerDesc,attackerImage])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating attacker ' + attackerName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(attackerName,'attacker',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
@@ -970,9 +866,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       sqlTxt = 'call delete_' + tableName + '(%s)'
       curs.execute(sqlTxt,[objtId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting ' + tableName + ' id ' + str(objtId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.IntegrityError, e:
       id,msg = e
@@ -997,9 +890,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addAsset(%s,%s,%s,%s,%s,%s,%s,%s)',[assetId,assetName,shortCode,assetDesc.encode('utf-8'),assetSig.encode('utf-8'),assetType,assetCriticality,assetCriticalRationale])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new asset ' + assetName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(assetName,'asset',tags)
       self.addInterfaces(assetName,'asset',ifs)
       for cProperties in parameters.environmentProperties():
@@ -1029,15 +919,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteAssetComponents(%s)',[assetId])
- 
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating asset ' + assetName
-        raise DatabaseProxyException(exceptionText) 
-
       curs.execute('call updateAsset(%s,%s,%s,%s,%s,%s,%s,%s)',[assetId,assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating asset ' + assetName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(assetName,'asset',tags)
       self.addInterfaces(assetName,'asset',ifs)
       for cProperties in parameters.environmentProperties():
@@ -1057,9 +939,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute(sqlTxt,[taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error setting security properties for template asset id ' + str(taId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -1071,37 +950,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute(sqlTxt,[cProp,cRat,taId,C_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating confidentiality property for template asset id ' + str(taId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[iProp,iRat,taId,I_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating integrity property for template asset id ' + str(taId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[avProp,avRat,taId,AV_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating availability property for template asset id ' + str(taId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[acProp,acRat,taId,AC_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating accountability property for template asset id ' + str(taId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[anProp,anRat,taId,AN_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating anonymity property for template asset id ' + str(taId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[panProp,panRat,taId,PAN_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating pseudonymity property for template asset id ' + str(taId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[unlProp,unlRat,taId,UNL_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating unlinkability property for template asset id ' + str(taId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[unoProp,unoRat,taId,UNO_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating unobservability property for template asset id ' + str(taId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -1113,9 +968,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute(sqlTxt,[objtId,environmentName,securityProperties[C_PROPERTY],securityProperties[I_PROPERTY],securityProperties[AV_PROPERTY],securityProperties[AC_PROPERTY],securityProperties[AN_PROPERTY],securityProperties[PAN_PROPERTY],securityProperties[UNL_PROPERTY],securityProperties[UNO_PROPERTY],pRationale[C_PROPERTY],pRationale[I_PROPERTY],pRationale[AV_PROPERTY],pRationale[AC_PROPERTY],pRationale[AN_PROPERTY],pRationale[PAN_PROPERTY],pRationale[UNL_PROPERTY],pRationale[UNO_PROPERTY]])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error setting security properties for ' + dimTable + ' id ' + str(objtId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -1131,37 +983,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute(sqlTxt,[securityProperties[C_PROPERTY],pRationale[C_PROPERTY],objtId,C_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating confidentiality property for ' + dimTable + ' id ' + str(objtId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[securityProperties[I_PROPERTY],pRationale[I_PROPERTY],objtId,I_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating integrity property for ' + dimTable + ' id ' + str(objtId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[securityProperties[AV_PROPERTY],pRationale[AV_PROPERTY],objtId,AV_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating availability property for ' + dimTable + ' id ' + str(objtId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[securityProperties[AC_PROPERTY],pRationale[AC_PROPERTY],objtId,AC_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating accountability property for ' + dimTable + ' id ' + str(objtId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[securityProperties[AN_PROPERTY],pRationale[AN_PROPERTY],objtId,AN_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating anonymity property for ' + dimTable + ' id ' + str(objtId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[securityProperties[PAN_PROPERTY],pRationale[PAN_PROPERTY],objtId,PAN_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating pseudonymity property for ' + dimTable + ' id ' + str(objtId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[securityProperties[UNL_PROPERTY],pRationale[UNL_PROPERTY],objtId,UNL_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating unlinkability property for ' + dimTable + ' id ' + str(objtId)
-        raise DatabaseProxyException(exceptionText) 
       curs.execute(sqlTxt,[securityProperties[UNO_PROPERTY],pRationale[UNO_PROPERTY],objtId,UNO_PROPERTY])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating unobservability property for ' + dimTable + ' id ' + str(objtId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -1259,9 +1087,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getAssets(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining assets'
-        raise DatabaseProxyException(exceptionText) 
       assets = {}
       assetRows = []
       for row in curs.fetchall():
@@ -1298,9 +1123,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getThreats(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining threats'
-        raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting threats (id:' + str(id) + ',message:' + msg + ')'
@@ -1352,11 +1174,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         dimensionName = self.conn.escape_string(dimensionName)
         curs.execute('call dimensionId(%s,%s)',[dimensionName,dimensionTable])
 
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining '
-        exceptionText += dimensionTable + ' details'
-        raise DatabaseProxyException(exceptionText) 
-      elif (curs.rowcount == 0):
+      if (curs.rowcount == 0):
         exceptionText = 'No identifier associated with '
         exceptionText += dimensionTable + ' object ' + dimensionName
         raise DatabaseProxyException(exceptionText) 
@@ -1365,13 +1183,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       dimId = row[0]
       if (dimId == None and dimensionTable == 'requirement'):
         curs.execute('select requirementNameId(%s)',[dimensionName])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error obtaining '
-          exceptionText += dimensionTable + ' details'
-          raise DatabaseProxyException(exceptionText) 
-        else:
-          row = curs.fetchone()
-          dimId = row[0]
+        row = curs.fetchone()
+        dimId = row[0]
       curs.close()
       return dimId
     except _mysql_exceptions.DatabaseError, e:
@@ -1384,9 +1197,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getDimensions(%s,%s)',[dimensionTable,idConstraint])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining ' + dimensionTable + 's'
-        raise DatabaseProxyException(exceptionText) 
       dimensions = {}
       for row in curs.fetchall():
         row = list(row)
@@ -1416,9 +1226,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         curs.execute('call template_goalNames()')
       elif (dimensionTable == 'locations'):
         curs.execute('call locationsNames()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining ' + dimensionTable + 's'
-        raise DatabaseProxyException(exceptionText) 
       for row in curs.fetchall():
         row = list(row)
         dimensionName = str(row[0])
@@ -1437,9 +1244,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       sqlText = 'call nonCompositeEnvironmentNames()' 
       curs.execute(sqlText)
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining environments'
-        raise DatabaseProxyException(exceptionText) 
       for row in curs.fetchall():
         row = list(row)
         dimensionName = str(row[0])
@@ -1460,30 +1264,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute("call addThreat(%s,%s,%s,%s)",[threatId,threatName,threatType,threatMethod.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new threat ' + threatName
-        raise DatabaseProxyException(exceptionText) 
-
       self.addTags(threatName,'threat',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(threatId,'threat',environmentName)
         curs.execute("call addThreatLikelihood(%s,%s,%s)",[threatId,environmentName,cProperties.likelihood()])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error adding new threat ' + threatName + ' to environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
         self.addSecurityProperties('threat',threatId,environmentName,cProperties.properties(),cProperties.rationale())
 
         for assetName in cProperties.assets():
           curs.execute("call addAssetThreat(%s,%s,%s)",[threatId,environmentName,assetName])
-          if (curs.rowcount == -1):
-            exceptionText = 'Error adding new threat ' + threatName + ' to environment ' + environmentName
-            raise DatabaseProxyException(exceptionText) 
         for attacker in cProperties.attackers():
           curs.execute("call addThreatAttacker(%s,%s,%s)",[threatId,environmentName,attacker])
-          if (curs.rowcount == -1):
-            exceptionText = 'Error adding new threat ' + threatName + ' to environment ' + environmentName
-            raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return threatId
@@ -1503,34 +1294,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteThreatComponents(%s)',[threatId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating threat ' + threatName
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updateThreat(%s,%s,%s,%s)',[threatId,threatName,threatType,threatMethod.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating threat ' + threatName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(threatName,'threat',tags)
 
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(threatId,'threat',environmentName)
         curs.execute("call addThreatLikelihood(%s,%s,%s)",[threatId,environmentName,cProperties.likelihood()])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error adding new threat ' + threatName + ' to environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
         self.addSecurityProperties('threat',threatId,environmentName,cProperties.properties(),cProperties.rationale())
 
         for assetName in cProperties.assets():
           curs.execute("call addAssetThreat(%s,%s,%s)",[threatId,environmentName,assetName])
-          if (curs.rowcount == -1):
-            exceptionText = 'Error adding new threat ' + threatName + ' to environment ' + environmentName
-            raise DatabaseProxyException(exceptionText) 
         for attacker in cProperties.attackers():
           curs.execute("call addThreatAttacker(%s,%s,%s)",[threatId,environmentName,attacker])
-          if (curs.rowcount == -1):
-            exceptionText = 'Error adding new threat ' + threatName + ' to environment ' + environmentName
-            raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -1541,9 +1317,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getVulnerabilities(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining vulnerabilities'
-        raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting vulnerabilities (id:' + str(id) + ',message:' + msg + ')'
@@ -1586,9 +1359,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       vulId = self.newId()
       curs = self.conn.cursor()
       curs.execute('call addVulnerability(%s,%s,%s,%s)',[vulId,vulName,vulDesc.encode('utf-8'),vulType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new vulnerability ' + vulName
-        raise DatabaseProxyException(exceptionText) 
 
       self.addTags(vulName,'vulnerability',tags)
 
@@ -1596,14 +1366,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         environmentName = cProperties.name()
         self.addDimensionEnvironment(vulId,'vulnerability',environmentName)
         curs.execute("call addVulnerabilitySeverity(%s,%s,%s)",[vulId,environmentName,cProperties.severity()])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error adding new vulnerability ' + vulName + ' to environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
         for assetName in cProperties.assets():
           curs.execute("call addAssetVulnerability(%s,%s,%s)",[vulId,environmentName,assetName])
-          if (curs.rowcount == -1):
-            exceptionText = 'Error adding new threat ' + threatName + ' to environment ' + environmentName
-            raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return vulId
@@ -1622,26 +1386,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteVulnerabilityComponents(%s)',[vulId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating vulnerability ' + vulName
-        raise DatabaseProxyException(exceptionText)
       curs.execute('call updateVulnerability(%s,%s,%s,%s)',[vulId,vulName,vulDesc.encode('utf-8'),vulType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding updating vulnerability ' + vulName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(vulName,'vulnerability',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(vulId,'vulnerability',environmentName)
         curs.execute("call addVulnerabilitySeverity(%s,%s,%s)",[vulId,environmentName,cProperties.severity()])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error adding vulnerability ' + vulName + ' to environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
         for assetName in cProperties.assets():
           curs.execute("call addAssetVulnerability(%s,%s,%s)",[vulId,environmentName,assetName])
-          if (curs.rowcount == -1):
-            exceptionText = 'Error adding threat ' + threatName + ' to environment ' + environmentName
-            raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -1654,9 +1406,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       sqlTxt = 'call ' + dimTable + 'Properties (%s,%s)'
       curs.execute(sqlTxt,[objtId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting ' + dimTable + ' properties in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       properties = []
       row = curs.fetchone()
       properties =  array((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])).astype(int32) 
@@ -1673,9 +1422,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       sqlTxt = 'call template_assetProperties(%s)'
       curs.execute(sqlTxt,[taId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting template asset properties'
-        raise DatabaseProxyException(exceptionText) 
       properties = []
       rationale = []
       row = curs.fetchone()
@@ -1706,10 +1452,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getPersonas(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining personas'
-        raise DatabaseProxyException(exceptionText) 
-
       personaRows = []
       for row in curs.fetchall():
         row = list(row)
@@ -1754,17 +1496,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor() 
       sqlTxt = 'call ' + table + '_roles(%s,%s)'
       curs.execute(sqlTxt,[dimId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close() 
-        exceptionText = 'Error getting roles for ' + table + ' id ' + str(dimId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        roles = []
-        for row in curs.fetchall():
-          row = list(row)
-          roles.append(row[0])
-        curs.close() 
-        return roles
+      roles = []
+      for row in curs.fetchall():
+        row = list(row)
+        roles.append(row[0])
+      curs.close() 
+      return roles
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting roles for ' + table + ' id ' + str(personaId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -1774,17 +1511,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor() 
       curs.execute('call personaGoals(%s,%s)',[personaId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close() 
-        exceptionText = 'Error getting goals for persona id ' + str(personaId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        goals = []
-        for row in curs.fetchall():
-          row = list(row)
-          goals.append(row[0])
-        curs.close() 
-        return goals
+      goals = []
+      for row in curs.fetchall():
+        row = list(row)
+        goals.append(row[0])
+      curs.close() 
+      return goals
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting goals for persona id ' + str(personaId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -1794,17 +1526,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor() 
       curs.execute('call threat_attacker(%s,%s)',[threatId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close() 
-        exceptionText = 'Error getting attackers for threat id ' + str(threatId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        attackers = []
-        for row in curs.fetchall():
-          row = list(row)
-          attackers.append(row[0])
-        curs.close() 
-        return attackers
+      attackers = []
+      for row in curs.fetchall():
+        row = list(row)
+        attackers.append(row[0])
+      curs.close() 
+      return attackers
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting attackers for threat id ' + str(threatId) + ' in environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -1829,9 +1556,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
       curs = self.conn.cursor()
       curs.execute('call addPersona(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',[personaId,personaName,activities.encode('utf-8'),attitudes.encode('utf-8'),aptitudes.encode('utf-8'),motivations.encode('utf-8'),skills.encode('utf-8'),intrinsic.encode('utf-8'),contextual.encode('utf-8'),image,isAssumption,pType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new persona ' + personaName
-        raise DatabaseProxyException(exceptionText) 
       self.addPersonaCodes(personaName,codes)
       self.addTags(personaName,'persona',tags)
       for environmentProperties in parameters.environmentProperties():
@@ -1855,9 +1579,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for role in roles:
         sqlTxt = 'call add_' + table + '_role (%s,%s,%s)'
         curs.execute(sqlTxt,[personaId,environmentName,role]) 
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating role ' + role + ' with ' + table + ' id ' + str(personaId)
-          raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -1883,14 +1604,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deletePersonaComponents(%s)',[personaId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating persona ' + personaName
-        raise DatabaseProxyException(exceptionText) 
-
       curs.execute('call updatePersona(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',[personaId,personaName,activities.encode('utf-8'),attitudes.encode('utf-8'),aptitudes.encode('utf-8'),motivations.encode('utf-8'),skills.encode('utf-8'),intrinsic.encode('utf-8'),contextual.encode('utf-8'),image,isAssumption,pType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating persona ' + personaName
-        raise DatabaseProxyException(exceptionText) 
       self.addPersonaCodes(personaName,codes)
       self.addTags(personaName,'persona',tags)
       for environmentProperties in parameters.environmentProperties():
@@ -1915,10 +1629,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getTasks(%s)',[constraintId]);
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining tasks'
-        raise DatabaseProxyException(exceptionText) 
-
       tasks = {} 
       taskRows = []
       for row in curs.fetchall():
@@ -1959,9 +1669,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getMisuseCases(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining Misuse Cases'
-        raise DatabaseProxyException(exceptionText) 
       if (curs.rowcount == 0):
         return None
       else:
@@ -1992,10 +1699,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call riskMisuseCase(%s)',[riskId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining tasks'
-        raise DatabaseProxyException(exceptionText) 
-
       if (curs.rowcount == 0):
         return None
       else:
@@ -2024,15 +1727,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       curs.execute('select misuseCaseRisk(%s)',[mcId])
       rowCount = curs.rowcount
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error getting risk for misuse case id ' + str(mcId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        row = curs.fetchone()
-        riskName = row[0]
-        curs.close()
-        return riskName
+      row = curs.fetchone()
+      riskName = row[0]
+      curs.close()
+      return riskName
     except _mysql_exceptions.DatabaseError, e:
      id,msg = e
      exceptionText = 'MySQL error getting risk for misuse case id ' + str(mcId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -2046,10 +1744,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.execute('call taskPersonas(%s,%s)',[taskId,environmentId])
       rowCount = curs.rowcount
       personas = []
-      if (rowCount == -1):
-        exceptionText = 'Error obtaining task personas for environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
-      elif (rowCount > 0):
+      if (rowCount > 0):
         for row in curs.fetchall():
           row = list(row)
           personas.append((row[0],row[1],row[2],row[3],row[4]))
@@ -2066,10 +1761,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.execute('call taskAssets(%s,%s)',[taskId,environmentId])
       rowCount = curs.rowcount
       assets = []
-      if (rowCount == -1):
-        exceptionText = 'Error obtaining task assets for environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
-      elif (rowCount > 0):
+      if (rowCount > 0):
         for row in curs.fetchall():
           row = list(row)
           assets.append(row[0])
@@ -2091,9 +1783,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       taskId = self.newId()
       curs = self.conn.cursor()
       curs.execute('call addTask(%s,%s,%s,%s,%s,%s)',[taskId,taskName,taskShortCode,taskObjective,isAssumption,taskAuthor])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new task ' + taskName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(taskName,'task',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
@@ -2120,9 +1809,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       mcId = self.newId()
       curs = self.conn.cursor()
       curs.execute('call addMisuseCase(%s,%s)',[mcId,mcName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new task ' + scName
-        raise DatabaseProxyException(exceptionText) 
       self.addMisuseCaseRisk(mcId,parameters.risk())
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
@@ -2148,13 +1834,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteTaskComponents(%s)',[taskId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating task ' + taskName
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updateTask(%s,%s,%s,%s,%s,%s)',[taskId,taskName,taskShortCode,taskObjective,isAssumption,taskAuthor])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating task ' + taskName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(taskName,'task',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
@@ -2180,13 +1860,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteMisuseCaseComponents(%s)',[mcId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating misuse case ' + mcName
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updateMisuseCase(%s,%s)',[mcId,mcName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating misuse case ' + mcName
-        raise DatabaseProxyException(exceptionText) 
       self.addMisuseCaseRisk(mcId,parameters.risk())
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
@@ -2205,9 +1879,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       for persona,duration,frequency,demands,goalsupport in personas:
         curs.execute('call addTaskPersona(%s,%s,%s,%s,%s,%s,%s)',[taskId,persona,duration,frequency,demands,goalsupport,environmentName])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error adding task persona ' + persona + ' to environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error associating personas used in task ' + str(taskId) + ' with environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -2218,9 +1889,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       for asset in assets:
         curs.execute('call addTaskAsset(%s,%s,%s)',[taskId,asset,environmentName])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error adding task asset ' + asset + ' to environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error associating assets used in task ' + str(taskId) + ' with environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -2230,9 +1898,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addMisuseCaseRisk(%s,%s)',[mcId,riskName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating risk ' + mcName + ' with misuse case ' + str(mcId)
-        raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error associating risk ' + riskName + ' with misuse case id ' + str(mcId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -2257,9 +1922,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call traceDimensionList(%s,%s)',[dimId,isFrom])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting trace dimensions ' + str(vulId)
-        raise DatabaseProxyException(exceptionText) 
       dimensions = []
       for row in curs.fetchall():
         row = list(row)
@@ -2275,9 +1937,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getRisks(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining risks'
-        raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting risks (id:' + str(id) + ',message:' + msg + ')'
@@ -2313,9 +1972,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       inTxt = parameters.intent()
       curs = self.conn.cursor()
       curs.execute('call addRisk(%s,%s,%s,%s,%s)',[threatName,vulName,riskId,riskName,inTxt])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new risk ' + str(riskId)
-        raise DatabaseProxyException(exceptionText) 
       mc = parameters.misuseCase()
       mcParameters = MisuseCaseParameters(mc.name(),mc.environmentProperties(),mc.risk())
       self.addMisuseCase(mcParameters)
@@ -2338,9 +1994,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       inTxt = parameters.intent()
       curs = self.conn.cursor()
       curs.execute('call updateRisk(%s,%s,%s,%s,%s)',[threatName,vulName,riskId,riskName,inTxt])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating risk ' + str(riskId)
-        raise DatabaseProxyException(exceptionText) 
       mc = parameters.misuseCase()
       mcParameters = MisuseCaseParameters('Exploit ' + riskName,mc.environmentProperties(),riskName)
       mcParameters.setId(mc.id())
@@ -2365,9 +2018,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getResponses(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining responses'
-        raise DatabaseProxyException(exceptionText) 
 
       responses = {}
       responseRows = []
@@ -2417,9 +2067,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select responseCost(%s,%s)',[responseId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining cost associated with response id ' + str(responseId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       costName = row[0]
       curs.close()
@@ -2433,9 +2080,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select responseDescription(%s,%s)',[responseId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining description associated with response id ' + str(responseId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       respDesc = row[0]
       curs.close()
@@ -2449,9 +2093,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call responseRoles(%s,%s)',[responseId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining roles associated with response id ' + str(responseId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       roles = []
       for row in curs.fetchall():
         row = list(row)
@@ -2467,9 +2108,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select mitigationType(%s,%s)',[responseId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining mitigation type associated with response id ' + str(responseId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       mitType = row[0]
       curs.close()
@@ -2484,9 +2122,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call riskComponents(%s)',[riskName])  
-      if (curs.rowcount == -1):
-        exceptionText = 'Error geting components of risk ' + riskName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       threatName = row[0]
       vulName = row[1]
@@ -2506,9 +2141,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       respId = self.newId()
       curs = self.conn.cursor()
       curs.execute('call addResponse(%s,%s,%s,%s)',[respId,respName,respType,respRisk])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new response ' + mitName
-        raise DatabaseProxyException(exceptionText) 
 
       self.addTags(respName,'response',tags)
 
@@ -2542,9 +2174,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call add_response_mitigate(%s,%s,%s)',[responseId,environmentName,mitType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating mitigation type ' + mitType + ' with response ' + str(responseId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -2556,9 +2185,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addResponseCost(%s,%s,%s)',[responseId,costName,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating cost ' + costName + ' with response ' + str(responseId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -2569,9 +2195,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addResponseDescription(%s,%s,%s)',[responseId,descriptionText,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating description with response ' + str(responseId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -2583,9 +2206,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       for role,cost in roles:
         curs.execute('call addResponseRole(%s,%s,%s,%s,%s)',[responseId,role,cost,environmentName,respDesc])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating role ' + role + ' with response ' + str(responseId) + ' in environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -2601,14 +2221,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteResponseComponents(%s)',[respId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating response ' + respName
-        raise DatabaseProxyException(exceptionText) 
-
       curs.execute('call updateResponse(%s,%s,%s,%s)',[respId,respName,respType,respRisk])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding updating response ' + respName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(respName,'response',tags)
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
@@ -2638,9 +2251,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select mitigatePoint(%s,%s)',[responseId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting detection point for detection response id ' + str(mitId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       detectionPointName = row[0]
       curs.close()
@@ -2654,9 +2264,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call add_mitigate_point(%s,%s,%s)',[mitId,environmentName,detPoint])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating detection point ' + detPoint + ' for response id ' + str(mitId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close() 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -2667,9 +2274,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call add_reaction_detection_mechanism(%s,%s,%s)',[mitId,detMech,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating detection mechanism ' + detMech + ' with reaction id ' + str(mitId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close() 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -2680,9 +2284,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call detectionMechanisms(%s,%s)',[responseId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting detection mechanisms'
-        raise DatabaseProxyException(exceptionText) 
       detectionMechanisms = []
       for row in curs.fetchall():
         row = list(row)
@@ -2701,9 +2302,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call riskAnalysisModel(%s)',[environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting traceability links '
-        raise DatabaseProxyException(exceptionText) 
       traces = []
       for traceRow in curs.fetchall():
         traceRow = list(traceRow)
@@ -2730,9 +2328,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call viewRemovableTraces(%s)',[environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting removeable trace relations'
-        raise DatabaseProxyException(exceptionText) 
       traces = []
       for traceRow in curs.fetchall():
         traceRow = list(traceRow)
@@ -2754,9 +2349,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call allowableTraceDimension(%s,%s)',[fromId,toId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting allowable trace dimensions for from_id ' + str(fromId) + ' and to_id ' + str(toId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       isAllowable = row[0]
       curs.close()
@@ -2770,10 +2362,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call reportDependents(%s,%s)',[objtId,dimName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting dependencies for ' + dimName + ' id ' + str(objtId)
-        raise DatabaseProxyException(exceptionText) 
-      elif (curs.rowcount == 0):
+      if (curs.rowcount == 0):
         return []
       else:
         deps = []
@@ -2798,9 +2387,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call threat_asset(%s,%s)',[threatId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining getting assets associated with threat id ' + str(threatId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       assetNames  = []
       for row in curs.fetchall():
         row = list(row)
@@ -2816,9 +2402,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call vulnerability_asset(%s,%s)',[vulId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining getting assets associated with vulnerability id ' + str(vulId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       assetNames  = []
       for row in curs.fetchall():
         row = list(row)
@@ -2845,9 +2428,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         refTypeId = self.getDimensionId(contributionType,'reference_type')
         sqlText = 'insert into ' + traceTable + ' values(%s,%s,%s)'
         curs.execute(sqlText,[fromId,toId,refTypeId]) 
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding fromId ' + str(fromId) + ' and toId ' + str(toId) + ' to link table ' + traceTable
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -2863,10 +2443,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call riskRating(%s,%s,%s)',[thrName,vulName,environmentName])
-      if (curs.rowcount == -1):
-        riskName = thrName + '/' + vulName
-        exceptionText = 'MySQL error rating risk ' + riskName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       riskRating = row[0]
       curs.close()
@@ -2882,21 +2458,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call riskScore(%s,%s,%s,%s)',[threatName,vulName,environmentName,riskName])
-      if (curs.rowcount == -1):
-        riskName = threatName + '/' + vulName
-        exceptionText = 'MySQL error calculating score for risk ' + riskName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        scoreDetails = []
-        for row in curs.fetchall():
-          row = list(row)
-          riskResponse = row[0]
-          prmScore = row[1]
-          pomScore = row[2]
-          detailsBuf = row[3]
-          scoreDetails.append((riskResponse,prmScore,pomScore,detailsBuf))
-        curs.close()
-        return scoreDetails
+      scoreDetails = []
+      for row in curs.fetchall():
+        row = list(row)
+        riskResponse = row[0]
+        prmScore = row[1]
+        pomScore = row[2]
+        detailsBuf = row[3]
+        scoreDetails.append((riskResponse,prmScore,pomScore,detailsBuf))
+      curs.close()
+      return scoreDetails
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error calculating score for risk ' + riskName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -2918,9 +2489,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call targetNames(%s,%s)',[reqLabel,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting target names'
-        raise DatabaseProxyException(exceptionText) 
       targets = {}
       for row in curs.fetchall():
         row = list(row)
@@ -2941,9 +2509,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getRoles(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining roles'
-        raise DatabaseProxyException(exceptionText) 
       roles = {}
       roleRows = []
       for row in curs.fetchall():
@@ -2980,10 +2545,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addRole(%s,%s,%s,%s,%s)',[roleId,roleName,roleType,shortCode,roleDesc])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error adding new role ' + roleName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return roleId
@@ -3001,10 +2562,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateRole(%s,%s,%s,%s,%s)',[roleId,roleName,roleType,shortCode,roleDesc])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error updating role ' + roleName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return roleId
@@ -3021,11 +2578,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call roleResponses(%s,%s)',[roleId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining responses for role id ' + str(roleId) + ' in environment ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
-      elif (curs.rowcount == 0):
+      if (curs.rowcount == 0):
         curs.close()
         return []
       else:
@@ -3044,11 +2597,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call roleCountermeasures(%s,%s)',[roleId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining countermeasures for role id ' + str(roleId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
-      elif (curs.rowcount == 0):
+      if (curs.rowcount == 0):
         curs.close()
         return []
       else:
@@ -3066,9 +2615,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getCountermeasures(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining countermeasures'
-        raise DatabaseProxyException(exceptionText) 
       countermeasures = {}
       cmRows = []
       for row in curs.fetchall():
@@ -3103,9 +2649,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select countermeasureCost(%s,%s)',[cmId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining cost associated with countermeasure id ' + str(cmId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       costName = row[0]
       curs.close()
@@ -3119,9 +2662,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call countermeasureRequirements(%s,%s)',[cmId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining requirements associated with countermeasure id ' + str(cmId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       reqs = []
       for row in curs.fetchall():
         row = list(row)
@@ -3129,9 +2669,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
       curs = self.conn.cursor()
       curs.execute('call countermeasureTargets(%s,%s)',[cmId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining targets associated with countermeasure id ' + str(cmId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       targets = []
       for row in curs.fetchall():
         row = list(row)
@@ -3147,9 +2684,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call countermeasureRoles(%s,%s)',[cmId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining roles associated with countermeasure id ' + str(cmId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       roles = []
       for row in curs.fetchall():
         row = list(row)
@@ -3165,9 +2699,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call countermeasurePersonas(%s,%s)',[cmId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining task personas associated with countermeasure id ' + str(cmId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       personas = []
       for row in curs.fetchall():
         row = list(row)
@@ -3195,9 +2726,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addCountermeasure(%s,%s,%s,%s)',[cmId,cmName,cmDesc,cmType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new countermeasure ' + cmName
-        raise DatabaseProxyException(exceptionText) 
 
       self.addTags(cmName,'countermeasure',tags)
 
@@ -3228,13 +2756,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteCountermeasureComponents(%s)',[cmId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating response ' + respName
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updateCountermeasure(%s,%s,%s,%s)',[cmId,cmName,cmDesc,cmType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating countermeasure ' + cmName
-        raise DatabaseProxyException(exceptionText) 
 
       self.addTags(cmName,'countermeasure',tags)
 
@@ -3260,14 +2782,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       for reqLabel in reqs:
         curs.execute('call addCountermeasureRequirement(%s,%s,%s)',[cmId,reqLabel,environmentName])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating requirement ' + reqLabel + ' with countermeasure ' + str(cmId) + ' in environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
       for target in targets:
         curs.execute('call addCountermeasureTarget(%s,%s,%s,%s,%s)',[cmId,target.name(),target.effectiveness(),target.rationale(),environmentName])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating target ' + target.name() + ' with countermeasure ' + str(cmId) + ' in environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3279,14 +2795,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       for reqLabel in reqs:
         curs.execute('call updateCountermeasureRequirement(%s,%s,%s)',[cmId,reqLabel,environmentName])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating requirement ' + reqLabel + ' with countermeasure ' + str(cmId) + ' in environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
       for target in targets:
         curs.execute('call addCountermeasureTarget(%s,%s,%s,%s,%s)',[cmId,target.name(),target.effectiveness(),target.rationale(),environmentName])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating target ' + target.name() + ' with countermeasure ' + str(cmId) + ' in environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3314,9 +2824,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addRequirementRole(%s,%s,%s,%s,%s)',[associationId,cmName,roleName,reqName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating requirement ' + reqName + ' with role ' + roleName + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3328,9 +2835,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateRequirementRole(%s,%s,%s,%s,%s)',[associationId,cmName,roleName,reqName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating requirement ' + reqName + ' with role ' + roleName + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3341,9 +2845,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteRequirementRole(%s,%s,%s)',[roleName,reqName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error de-associating requirement ' + reqName + ' with role ' + roleName + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3354,9 +2855,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addCountermeasureCost(%s,%s,%s)',[cmId,costName,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating cost ' + costName + ' with response ' + str(cmId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3368,9 +2866,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       for role in roles:
         curs.execute('call addCountermeasureRole(%s,%s,%s)',[cmId,role,environmentName])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating role ' + role + ' with countermeasure ' + str(cmId) + ' in environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3382,9 +2877,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       for task,persona,duration,frequency,demands,goalSupport in personas:
         curs.execute('call addCountermeasurePersona(%s,%s,%s,%s,%s,%s,%s,%s)',[cmId,persona,task,duration,frequency,demands,goalSupport,environmentName])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating persona ' + persona + ' with countermeasure ' + str(cmId) + ' in environment ' + environmentName
-          raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3395,9 +2887,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select personaNarrative(%s,%s)',[scId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining narrative associated with persona id ' + str(scId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       desc = row[0]
       curs.close()
@@ -3411,9 +2900,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select personaDirect(%s,%s)',[scId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining direct flag associated with persona id ' + str(scId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       directFlag = row[0]
       directValue = 'False'
@@ -3430,9 +2916,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addPersonaNarrative(%s,%s,%s)',[stId,descriptionText,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating narrative with persona ' + str(stId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3443,9 +2926,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addPersonaDirect(%s,%s,%s)',[stId,directText,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating direct flag with persona ' + str(stId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3456,9 +2936,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select taskNarrative(%s,%s)',[scId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining narrative associated with task id ' + str(scId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       narrative = row[0]
       curs.close()
@@ -3472,9 +2949,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select taskConsequences(%s,%s)',[scId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining consequences associated with task id ' + str(scId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       consequences = row[0]
       curs.close()
@@ -3488,9 +2962,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select taskBenefits(%s,%s)',[scId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining benefits associated with task id ' + str(scId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       benefits = row[0]
       curs.close()
@@ -3504,9 +2975,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addTaskNarrative(%s,%s,%s,%s,%s)',[scId,narrativeText,cText,bText,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating narrative with task ' + str(scId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3517,9 +2985,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select misuseCaseNarrative(%s,%s)',[mcId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining narrative associated with misuse case id ' + str(mcId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       narrative = row[0]
       curs.close()
@@ -3533,9 +2998,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addMisuseCaseNarrative(%s,%s,%s)',[mcId,narrativeText,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating narrative with misuse case ' + str(mcId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3546,10 +3008,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call riskEnvironmentNames(%s)',[riskName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining getting environments associated with risk ' + riskName
-        raise DatabaseProxyException(exceptionText) 
       environments = []
       for row in curs.fetchall():
         row = list(row)
@@ -3565,10 +3023,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call threatVulnerabilityEnvironmentNames(%s,%s)',[threatName,vulName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining getting environments associated with threat ' + threatName + ' and vulnerability ' + vulName
-        raise DatabaseProxyException(exceptionText) 
       environments = []
       for row in curs.fetchall():
         row = list(row)
@@ -3584,9 +3038,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select taskDependencies(%s,%s)',[tId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining dependencies associated with task id ' + str(tId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       dependencies = row[0]
       curs.close()
@@ -3600,9 +3051,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addTaskDependencies(%s,%s,%s)',[tId,depsText,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating dependencies with task ' + str(tId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -3682,16 +3130,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call mitigatedRisks(%s)',[cmId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting risks mitigated by countermeasure id ' + str(cmId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        risks = []
-        for row in curs.fetchall():
-          row = list(row)
-          risks.append(row[0])
-        curs.close()
-        return risks
+      risks = []
+      for row in curs.fetchall():
+        row = list(row)
+        risks.append(row[0])
+      curs.close()
+      return risks
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting risks mitigated by countermeasure id ' + str(cmId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -3701,9 +3145,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call delete_trace(%s,%s,%s,%s)',[fromObjt,fromName,toObjt,toName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting trace relation: (' + fromObjt + ',' + fromName + ',' + toObjt + ',' + toName + ')'
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -3723,9 +3164,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addGoal(%s,%s,%s)',[goalId,goalName,goalOrig])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new goal ' + goalName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(goalName,'goal',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
@@ -3754,13 +3192,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteGoalComponents(%s)',[goalId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating goal ' + goalName
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updateGoal(%s,%s,%s)',[goalId,goalName,goalOrig])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating goal ' + goalName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(goalName,'goal',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
@@ -3784,9 +3216,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getGoals(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining goals'
-        raise DatabaseProxyException(exceptionText) 
       goals = {}
       goalRows = []
       for row in curs.fetchall():
@@ -3813,9 +3242,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getColouredGoals(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining goals'
-        raise DatabaseProxyException(exceptionText) 
       goals = {}
       goalRows = []
       for row in curs.fetchall():
@@ -3891,14 +3317,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select task_usability(%s,%s)',[taskName,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining usability score for task ' + taskName + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        row = curs.fetchone()
-        taskUsabilityScore = int(row[0])
-        curs.close()
-        return taskUsabilityScore
+      row = curs.fetchone()
+      taskUsabilityScore = int(row[0])
+      curs.close()
+      return taskUsabilityScore
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting task usability associated with environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -3908,14 +3330,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select usability_score(%s,%s)',[taskId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining task load for task id ' + str(taskId) + ' in environment ' + environmentId
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        row = curs.fetchone()
-        taskLoad = row[0]
-        curs.close()
-        return taskLoad
+      row = curs.fetchone()
+      taskLoad = row[0]
+      curs.close()
+      return taskLoad
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting task load with environment id ' + str(taskId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -3925,14 +3343,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select hindrance_score(%s,%s)',[taskId,environmentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining countermeasure load for task id ' + str(taskId) + ' in environment ' + environmentId
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        row = curs.fetchone()
-        taskLoad = row[0]
-        curs.close()
-        return taskLoad
+      row = curs.fetchone()
+      taskLoad = row[0]
+      curs.close()
+      return taskLoad
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting task countermeasure load with environment id ' + str(taskId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -3942,16 +3356,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call ' + dimension + 'Names(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining ' + dimension + 's for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        dims = []
-        for row in curs.fetchall():
-          row = list(row)
-          dims.append(row[0])
-        curs.close()
-        return dims
+      dims = []
+      for row in curs.fetchall():
+        row = list(row)
+        dims.append(row[0])
+      curs.close()
+      return dims
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting ' + dimension + 's associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -3991,16 +3401,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call goalModelElements(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining goal model elements for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        elements = []
-        for row in curs.fetchall():
-          row = list(row)
-          elements.append((row[0],row[1]))
-        curs.close()
-        return elements
+      elements = []
+      for row in curs.fetchall():
+        row = list(row)
+        elements.append((row[0],row[1]))
+      curs.close()
+      return elements
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting goal model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -4010,16 +3416,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call obstacleModelElements(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining obstacle model elements for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        elements = []
-        for row in curs.fetchall():
-          row = list(row)
-          elements.append((row[0],row[1]))
-        curs.close()
-        return elements
+      elements = []
+      for row in curs.fetchall():
+        row = list(row)
+        elements.append((row[0],row[1]))
+      curs.close()
+      return elements
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting obstacle model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -4029,16 +3431,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call responsibilityModelElements(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining responsibility model elements for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        elements = []
-        for row in curs.fetchall():
-          row = list(row)
-          elements.append((row[0],row[1]))
-        curs.close()
-        return elements
+      elements = []
+      for row in curs.fetchall():
+        row = list(row)
+        elements.append((row[0],row[1]))
+      curs.close()
+      return elements
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting responsibility model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -4048,16 +3446,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call taskModelElements(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining task model elements for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        elements = []
-        for row in curs.fetchall():
-          row = list(row)
-          elements.append((row[0],row[1]))
-        curs.close()
-        return elements
+      elements = []
+      for row in curs.fetchall():
+        row = list(row)
+        elements.append((row[0],row[1]))
+      curs.close()
+      return elements
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting task model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -4070,16 +3464,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         curs.execute('call concernlessClassModelElements(%s)',[envName])
       else:
         curs.execute('call classModelElements(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining class model elements for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        elements = []
-        for row in curs.fetchall():
-          row = list(row)
-          elements.append((row[0],row[1]))
-        curs.close()
-        return elements
+      elements = []
+      for row in curs.fetchall():
+        row = list(row)
+        elements.append((row[0],row[1]))
+      curs.close()
+      return elements
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting class model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -4106,9 +3496,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute(procName,[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining class associations'
-        raise DatabaseProxyException(exceptionText) 
       associations = {}
       for row in curs.fetchall():
         row = list(row)
@@ -4142,9 +3529,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute(procName,[assetName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining class associations'
-        raise DatabaseProxyException(exceptionText) 
       associations = {}
       for row in curs.fetchall():
         row = list(row)
@@ -4191,9 +3575,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addClassAssociation(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',[associationId,envName,headAsset,headType,headNav,headMult,headRole,tailRole,tailMult,tailNav,tailType,tailAsset])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new class association ' + envName + '/' + headAsset + '/' + tailAsset
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return associationId
@@ -4219,9 +3600,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateClassAssociation(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',[associationId,envName,headAsset,headType,headNav,headMult,headRole,tailRole,tailMult,tailNav,tailType,tailAsset])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating class association ' + envName + '/' + headAsset + '/' + tailAsset
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -4270,9 +3648,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute(procName,[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining goal associations'
-        raise DatabaseProxyException(exceptionText) 
       associations = {}
       for row in curs.fetchall():
         row = list(row)
@@ -4300,9 +3675,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call riskObstacleTree(%s,%s,0)',[riskName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining risk obstacle model'
-        raise DatabaseProxyException(exceptionText) 
       associations = {}
       for row in curs.fetchall():
         row = list(row)
@@ -4333,9 +3705,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         curs.execute(procName,[goalName,envName,topLevelGoals,caseFilter])
       else:
         curs.execute(procName,[goalName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining sub-goal associations'
-        raise DatabaseProxyException(exceptionText) 
       associations = {}
       for row in curs.fetchall():
         row = list(row)
@@ -4375,9 +3744,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addGoalAssociation(%s,%s,%s,%s,%s,%s,%s,%s,%s)',[associationId,envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new goal association ' + envName + '/' + goalName + '/' + subGoalName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return associationId
@@ -4399,9 +3765,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateGoalAssociation(%s,%s,%s,%s,%s,%s,%s,%s,%s)',[associationId,envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating goal association ' + envName + '/' + goalName + '/' + subGoalName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -4413,9 +3776,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call delete_goalassociation(%s,%s,%s)',[associationId,goalDimName,subGoalDimName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting goal association id ' + str(objtId)
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.IntegrityError, e:
@@ -4431,9 +3791,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addGoalDefinition(%s,%s,%s)',[goalId,environmentName,goalDef])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating goal id ' + str(goalId) + ' with definition:' + goalDef
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4444,9 +3801,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addGoalCategory(%s,%s,%s)',[goalId,environmentName,goalCat])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating goal id ' + str(goalId) + ' with category ' + goalCat
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4457,9 +3811,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addGoalPriority(%s,%s,%s)',[goalId,environmentName,goalPri])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating goal id ' + str(goalId) + ' with priority ' + goalPri
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4470,9 +3821,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addGoalFitCriterion(%s,%s,%s)',[goalId,environmentName,goalFC])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating goal id ' + str(goalId) + ' with fit criterion: ' + goalFC
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4483,9 +3831,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addGoalIssue(%s,%s,%s)',[goalId,environmentName,goalIssue])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating goal id ' + str(goalId) + ' with issue: ' + goalIssue
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4514,9 +3859,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addGoalConcernAssociation(%s,%s,%s,%s,%s,%s,%s)',[goalId,environmentName,source,sourceMultiplicity,link,target,targetMultiplicity])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating concern with goal id ' + str(goalId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4531,9 +3873,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addTaskConcernAssociation(%s,%s,%s,%s,%s,%s,%s)',[taskId,environmentName,source,sourceMultiplicity,link,target,targetMultiplicity])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating concern with task id ' + str(taskId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4570,10 +3909,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call add_obstacle_concern(%s,%s,%s)',[obsId,environmentName,concern])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error adding concern ' + concern + ' to obstacle id ' + str(obsId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4597,10 +3932,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call add_goal_concern(%s,%s,%s)',[goalId,environmentName,concern])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error adding concern ' + concern + ' to goal id ' + str(goalId) + ' in environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4616,10 +3947,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select goal_label(%s,%s)',[goalId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining label for goal id ' + str(goalId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       goalAttr = row[0] 
       curs.close()
@@ -4633,10 +3960,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select goal_definition(%s,%s)',[goalId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining definition for goal id ' + str(goalId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       goalAttr = row[0] 
       curs.close()
@@ -4650,10 +3973,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select goal_category(%s,%s)',[goalId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining category for goal id ' + str(goalId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       goalAttr = row[0] 
       curs.close()
@@ -4667,10 +3986,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select goal_priority(%s,%s)',[goalId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining priority for goal id ' + str(goalId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       goalAttr = row[0] 
       curs.close()
@@ -4684,10 +3999,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select goal_fitcriterion(%s,%s)',[goalId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining fit criterion for goal id ' + str(goalId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       goalAttr = row[0] 
       curs.close()
@@ -4701,10 +4012,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select goal_issue(%s,%s)',[goalId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining issue for goal id ' + str(goalId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       goalAttr = row[0] 
       curs.close()
@@ -4718,10 +4025,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call goalRefinements(%s,%s)',[goalId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining sub goal associations for goal id ' + str(goalId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       goalRefinements = []
       for row in curs.fetchall():
         row = list(row)
@@ -4737,10 +4040,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.close()
       curs = self.conn.cursor()
       curs.execute('call subGoalRefinements(%s,%s)',[goalId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining sub goal associations for goal id ' + str(goalId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       subGoalRefinements = []
       for row in curs.fetchall():
         row = list(row)
@@ -4764,10 +4063,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call assetAssociations(%s,%s)',[assetId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining sub goal associations for goal id ' + str(goalId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       associations = []
       for row in curs.fetchall():
         row = list(row)
@@ -4792,9 +4087,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getDomainProperties(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining domainProperties'
-        raise DatabaseProxyException(exceptionText) 
       dps = {}
       dpRows = []
       for row in curs.fetchall():
@@ -4827,10 +4119,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addDomainProperty(%s,%s,%s,%s,%s)',[dpId,dpName,dpDesc,dpType,dpOrig])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error adding new domain property ' + dpName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(dpName,'domainproperty',tags)
       self.conn.commit()
       curs.close()
@@ -4850,10 +4138,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateDomainProperty(%s,%s,%s,%s,%s)',[dpId,dpName,dpDesc,dpType,dpOrig])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error updating domain property ' + dpName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(dpName,'domainproperty',tags)
       self.conn.commit()
       curs.close()
@@ -4871,9 +4155,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getObstacles(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining obstacles'
-        raise DatabaseProxyException(exceptionText) 
       obstacles = {}
       obstacleRows = []
       for row in curs.fetchall():
@@ -4919,10 +4200,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select obstacle_definition(%s,%s)',[obsId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining definition for obstacle id ' + str(obsId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       obsDef = row[0] 
       curs.close()
@@ -4939,10 +4216,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call obstacle_probability(%s,%s)',[obsId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining probability for obstacle id ' + str(obsId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       obsAttr = row[0] 
       curs.close()
@@ -4957,10 +4230,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select obstacle_category(%s,%s)',[obsId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining category for obstacle id ' + str(obsId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       obsAttr = row[0] 
       curs.close()
@@ -4978,9 +4247,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addObstacle(%s,%s,%s)',[obsId,obsName,obsOrig])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new obstacle ' + obsName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(obsName,'obstacle',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
@@ -5005,13 +4271,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteObstacleComponents(%s)',[obsId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating obstacle ' + obsName
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updateObstacle(%s,%s,%s)',[obsId,obsName,obsOrig])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating obstacle ' + obsName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(obsName,'obstacle',tags)
       for environmentProperties in parameters.environmentProperties():
         environmentName = environmentProperties.name()
@@ -5031,9 +4291,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addObstacleDefinition(%s,%s,%s,%s,%s)',[obsId,environmentName,obsDef,obsProb,obsProbRat])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating obstacle id ' + str(obsId) + ' with definition:' + obsDef
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -5044,9 +4301,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addObstacleCategory(%s,%s,%s)',[obsId,environmentName,obsCat])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating obstacle id ' + str(obsId) + ' with category ' + obsCat
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -5061,36 +4315,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateProjectSettings(%s,%s,%s,%s,%s,%s,%s)',[projName,background.encode('utf-8'),goals.encode('utf-8'),scope.encode('utf-8'),richPicture,fontSize,fontName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating project settings'
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call deleteDictionary()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting project dictionary'
-        raise DatabaseProxyException(exceptionText) 
       for entry in definitions:
         curs.execute('call addDictionaryEntry(%s,%s)',[entry[0],entry[1].encode('utf-8')])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error adding entry (' + entry[0] + ',' + entry[1] + ')'
-          raise DatabaseProxyException(exceptionText) 
       curs.execute('call deleteContributors()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting project contributors'
-        raise DatabaseProxyException(exceptionText) 
       for entry in contributors:
         curs.execute('call addContributorEntry(%s,%s,%s,%s)',[entry[0],entry[1],entry[2],entry[3]])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error adding contributor'
-          raise DatabaseProxyException(exceptionText) 
       curs.execute('call deleteRevisions()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting project revisions'
-        raise DatabaseProxyException(exceptionText) 
       for entry in revisions:
         curs.execute('call addRevision(%s,%s,%s)',[entry[0],entry[1],entry[2]])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error adding revision'
-          raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -5102,9 +4335,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getProjectSettings()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting project settings'
-        raise DatabaseProxyException(exceptionText) 
       pSettings = {}
       for row in curs.fetchall():
         row = list(row)
@@ -5120,9 +4350,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getDictionary()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting project naming conventions'
-        raise DatabaseProxyException(exceptionText) 
       pDict = {}
       for row in curs.fetchall():
         row = list(row)
@@ -5138,9 +4365,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getContributors()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting project naming conventions'
-        raise DatabaseProxyException(exceptionText) 
       contributors = []
       for row in curs.fetchall():
         row = list(row)
@@ -5156,9 +4380,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getRevisions()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting project revisions'
-        raise DatabaseProxyException(exceptionText) 
       revisions = []
       for row in curs.fetchall():
         row = list(row)
@@ -5174,9 +4395,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getRequirementVersions(%s)',[reqId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting requirement versions'
-        raise DatabaseProxyException(exceptionText) 
       revisions = []
       for row in curs.fetchall():
         row = list(row)
@@ -5192,15 +4410,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select existingResponseGoal(%s)',[responseId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining goal associated with response id ' + str(responseId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        row = curs.fetchone()
-        row = list(row)
-        isExisting = int(row[0])
-        curs.close()
-        return isExisting
+      row = curs.fetchone()
+      row = list(row)
+      isExisting = int(row[0])
+      curs.close()
+      return isExisting
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting domains exposed by environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -5214,23 +4428,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         raise DatabaseProxyException(exceptionText) 
       curs = self.conn.cursor()
       curs.execute('call getCustomisableValues(%s,%s)',[dimName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining goal associated with response id ' + str(responseId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        values = []
-        for row in curs.fetchall():
-          row = list(row)
-          typeId = row[0]
-          typeName = row[1]
-          typeDesc = row[2]
-          typeValue = str(row[3])
-          typeRat = row[4]
-          parameters = ValueTypeParameters(typeName,typeDesc,dimName,envName,typeValue,typeRat)
-          objt = ObjectFactory.build(typeId,parameters)
-          values.append(objt)
-        curs.close()
-        return values
+      values = []
+      for row in curs.fetchall():
+        row = list(row)
+        typeId = row[0]
+        typeName = row[1]
+        typeDesc = row[2]
+        typeValue = str(row[3])
+        typeRat = row[4]
+        parameters = ValueTypeParameters(typeName,typeDesc,dimName,envName,typeValue,typeRat)
+        objt = ObjectFactory.build(typeId,parameters)
+        values.append(objt)
+      curs.close()
+      return values
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting customisable values for ' + dimName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -5277,9 +4487,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addValueType(%s,%s,%s,%s,%s,%s)',[valueTypeId,vtName,vtDesc,vtType,vtScore,vtRat])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding ' + vtType + ' ' + vtName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return valueTypeId
@@ -5299,9 +4506,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateValueType(%s,%s,%s,%s,%s,%s,%s)',[valueTypeId,vtName,vtDesc,vtType,envName,vtScore,vtRat])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating ' + vtType + ' ' + vtName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -5313,9 +4517,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call threatTypes(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting threat types'
-        raise DatabaseProxyException(exceptionText) 
       stats = {}
       for row in curs.fetchall():
         row = list(row)
@@ -5392,9 +4593,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getVulnerabilityDirectory(%s)',[vulName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting vulnerability directory'
-        raise DatabaseProxyException(exceptionText) 
       directoryList = []
       for row in curs.fetchall():
         row = list(row)
@@ -5415,9 +4613,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getThreatDirectory(%s)',[thrName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting threat directory'
-        raise DatabaseProxyException(exceptionText) 
       directoryList = []
       for row in curs.fetchall():
         row = list(row)
@@ -5433,9 +4628,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call reassociateAsset(%s,%s,%s)',[assetName,envName,reqId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error re-associating requirement id ' + str(reqId) + ' with asset ' + assetName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -5447,16 +4639,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call obstacleConcerns(%s,%s)',[obsId,envId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining concerns for obstacle id ' + str(obsId) + ' in environment id ' + str(envId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        assets = []
-        for row in curs.fetchall():
-          row = list(row)
-          assets.append(row[0])
-        curs.close()
-        return assets
+      assets = []
+      for row in curs.fetchall():
+        row = list(row)
+        assets.append(row[0])
+      curs.close()
+      return assets
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting concerns for obstacle id ' + str(obsId) + ' in environment id ' + str(envId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -5466,16 +4654,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call goalConcerns(%s,%s)',[goalId,envId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining concerns for goal id ' + str(goalId) + ' in environment id ' + str(envId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        concs = []
-        for row in curs.fetchall():
-          row = list(row)
-          concs.append(row[0])
-        curs.close()
-        return concs
+      concs = []
+      for row in curs.fetchall():
+        row = list(row)
+        concs.append(row[0])
+      curs.close()
+      return concs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting concerns for goal id ' + str(goalId) + ' in environment id ' + str(envId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -5485,16 +4669,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call goalConcernAssociations(%s,%s)',[goalId,envId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining concern associations for goal id ' + str(goalId) + ' in environment id ' + str(envId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        cas = []
-        for row in curs.fetchall():
-          row = list(row)
-          cas.append((row[0],row[1],row[2],row[3],row[4]))
-        curs.close()
-        return cas
+      cas = []
+      for row in curs.fetchall():
+        row = list(row)
+        cas.append((row[0],row[1],row[2],row[3],row[4]))
+      curs.close()
+      return cas
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting concern associations for goal id ' + str(goalId) + ' in environment id ' + str(envId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -5504,16 +4684,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call taskConcernAssociations(%s,%s)',[taskId,envId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining concern associations for task id ' + str(taskId) + ' in environment id ' + str(envId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        cas = []
-        for row in curs.fetchall():
-          row = list(row)
-          cas.append((row[0],row[1],row[2],row[3],row[4]))
-        curs.close()
-        return cas
+      cas = []
+      for row in curs.fetchall():
+        row = list(row)
+        cas.append((row[0],row[1],row[2],row[3],row[4]))
+      curs.close()
+      return cas
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting concern associations for task id ' + str(taskId) + ' in environment id ' + str(envId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -5523,9 +4699,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getDependencies(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining dependencies'
-        raise DatabaseProxyException(exceptionText) 
       dependencies = {}
       for row in curs.fetchall():
         row = list(row)
@@ -5558,9 +4731,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addDependency(%s,%s,%s,%s,%s,%s,%s)',[depId,envName,depender,dependee,dType,dependencyName,rationale])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new dependency ' + envName + '/' + depender + '/' + dependee
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return depId
@@ -5581,9 +4751,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateDependency(%s,%s,%s,%s,%s,%s,%s)',[depId,envName,depender,dependee,dType,dependencyName,rationale])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating dependency ' + envName + '/' + depender + '/' + dependee
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -5595,9 +4762,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call delete_dependency(%s,%s)',[depId,depType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting dependency id ' + str(depId)
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.IntegrityError, e:
@@ -5612,9 +4776,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call dependencyTable(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting dependency table for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
       depRows = []
       for row in curs.fetchall():
         row = list(row)
@@ -5644,10 +4805,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call associationDependencyCheck(%s,%s,%s)',[fromAsset,toAsset,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting association dependencies between ' + fromAsset + ' and ' + toAsset + ' in environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      elif (curs.rowcount == 0):
+      if (curs.rowcount == 0):
+        curs.close()
         return []
       else:
         deps = []
@@ -5665,10 +4824,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call associationTargetDependencyCheck(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',[assetProperties[0],assetProperties[1],assetProperties[2],assetProperties[3],assetProperties[4],assetProperties[5],assetProperties[6],assetProperties[7],toAsset,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting association dependencies between the current asset and ' + toAsset + ' in environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      elif (curs.rowcount == 0):
+      if (curs.rowcount == 0):
+        curs.close()
         return []
       else:
         deps = []
@@ -5712,9 +4869,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addTemplateAsset(%s,%s,%s,%s,%s,%s,%s,%s)',[assetId,assetName,shortCode,assetDesc,assetSig,assetType,surfaceType,accessRight])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new asset ' + assetName
-        raise DatabaseProxyException(exceptionText) 
 
       self.addTags(assetName,'template_asset',tags)
       self.addInterfaces(assetName,'template_asset',ifs)
@@ -5758,9 +4912,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateTemplateAsset(%s,%s,%s,%s,%s,%s,%s,%s)',[assetId,assetName,shortCode,assetDesc,assetSig,assetType,surfaceType,accessRight])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating template asset ' + assetName
-        raise DatabaseProxyException(exceptionText) 
       self.addTags(assetName,'template_asset',tags)
       self.addInterfaces(assetName,'template_asset',ifs)
       self.updateTemplateAssetProperties(assetId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat)
@@ -5776,9 +4927,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getTemplateAssets(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining template assets'
-        raise DatabaseProxyException(exceptionText) 
       templateAssets = {}
       vals = []
       for row in curs.fetchall():
@@ -5818,9 +4966,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getSecurityPatterns(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining security patterns'
-        raise DatabaseProxyException(exceptionText) 
       patterns = {}
       patternRows = []
       for row in curs.fetchall():
@@ -5848,10 +4993,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getSecurityPatternStructure(%s)',[patternId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining security pattern structure'
-        raise DatabaseProxyException(exceptionText) 
       pStruct = []
       for row in curs.fetchall():
         row = list(row)
@@ -5867,10 +5008,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getSecurityPatternRequirements(%s)',[patternId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining security pattern requirements'
-        raise DatabaseProxyException(exceptionText) 
       pStruct = []
       for row in curs.fetchall():
         row = list(row)
@@ -5901,9 +5038,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addSecurityPattern(%s,%s,%s,%s,%s)',[patternId,patternName,patternContext,patternProblem,patternSolution])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding security pattern ' + patternName
-        raise DatabaseProxyException(exceptionText) 
       self.addPatternStructure(patternId,patternStructure)
       self.addPatternRequirements(patternId,patternRequirements)
       self.conn.commit()
@@ -5925,13 +5059,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteSecurityPatternComponents(%s)',[patternId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating security pattern ' + patternName
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updateSecurityPattern(%s,%s,%s,%s,%s)',[patternId,patternName,patternContext,patternProblem,patternSolution])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating security pattern ' + patternName
-        raise DatabaseProxyException(exceptionText) 
       self.addPatternStructure(patternId,patternStructure)
       self.addPatternRequirements(patternId,patternRequirements)
       self.conn.commit()
@@ -5958,9 +5086,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addSecurityPatternRequirement(%s,%s,%s)',[reqLabel,patternId,reqName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding requirement to pattern id ' + str(patternId) 
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -5972,9 +5097,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addSecurityPatternStructure(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',[assocId,patternId,headAsset,headAdornment,headNry,headRole,tailRole,tailNry,tailAdornment,tailAsset])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding structure to pattern id ' + str(patternId) 
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -5985,10 +5107,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call securityPatternAssets(%s)',[patternId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining assets associated with pattern id ' + str(patternId)
-        raise DatabaseProxyException(exceptionText) 
       assets = []
       for row in curs.fetchall():
         row = list(row)
@@ -6013,10 +5131,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call situatePatternAsset(%s,%s)',[assetId,patternId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error situating asset id ' + str(assetId) 
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -6028,10 +5142,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select isCountermeasureAssetGenerated(%s)',[cmId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error checking assets associated with countermeasure id ' + str(cmId) 
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       isGenerated = row[0]
       curs.close()
@@ -6045,10 +5155,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select isCountermeasurePatternGenerated(%s)',[cmId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error checking patterns associated with countermeasure id ' + str(cmId) 
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       isGenerated = row[0]
       curs.close()
@@ -6072,10 +5178,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call exposedCountermeasure(%s,%s)',[envName,assetName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error get countermeasures exposed by ' + assetName 
-        raise DatabaseProxyException(exceptionText) 
       expCMs = []
       for row in curs.fetchall():
         row = list(row)
@@ -6095,10 +5197,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateCountermeasureEffectiveness(%s,%s,%s,%s,%s,%s)',[objtId,dimName,cmName,assetName,envName,cmEffectiveness])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error updating effectiveness of countermeasure ' + cmName 
-        raise DatabaseProxyException(exceptionText) 
       expCMs = []
       for row in curs.fetchall():
         row = list(row)
@@ -6114,10 +5212,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call countermeasurePatterns(%s)',[cmId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error getting patterns associated with countermeasure id ' + str(cmId)
-        raise DatabaseProxyException(exceptionText) 
       patterns = []
       for row in curs.fetchall():
         row = list(row)
@@ -6133,10 +5227,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteSituatedPattern(%s,%s)',[cmId,patternName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error deletint pattern ' + patternName + ' associated with countermeasure id ' + str(cmId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
       self.conn.commit()
     except _mysql_exceptions.DatabaseError, e:
@@ -6148,10 +5238,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call candidateCountermeasurePatterns(%s)',[cmId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error getting potential patterns associated with countermeasure id ' + str(cmId)
-        raise DatabaseProxyException(exceptionText) 
       patterns = []
       for row in curs.fetchall():
         row = list(row)
@@ -6167,10 +5253,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call associateCountermeasureToPattern(%s,%s)',[cmId,patternName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error associating countermeasure id ' + str(cmId) + ' with pattern ' + patternName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -6182,10 +5264,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call nameExists(%s,%s)',[objtName,dimName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error checking existence of ' + dimName + ' ' + objtName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       objtCount = row[0]
       curs.close()
@@ -6200,10 +5278,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call nameExists(%s,%s)',[objtName,dimName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error checking existence of ' + dimName + ' ' + objtName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       objtCount = row[0]
       curs.close()
@@ -6219,9 +5293,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getExternalDocuments(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining external documents'
-        raise DatabaseProxyException(exceptionText) 
       eDocs = {}
       for row in curs.fetchall():
         row = list(row)
@@ -6244,9 +5315,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getDocumentReferences(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining document references'
-        raise DatabaseProxyException(exceptionText) 
       dRefs = {}
       for row in curs.fetchall():
         row = list(row)
@@ -6268,9 +5336,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getDocumentReferencesByExternalDocument(%s)',[docName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining document references for external document ' + docName
-        raise DatabaseProxyException(exceptionText) 
       dRefs = {}
       for row in curs.fetchall():
         row = list(row)
@@ -6292,9 +5357,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getPersonaDocumentReferences(%s)',[personaName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining document references for persona ' + personaName
-        raise DatabaseProxyException(exceptionText) 
       dRefs = []
       for row in curs.fetchall():
         row = list(row)
@@ -6312,9 +5374,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getPersonaConceptReferences(%s)',[personaName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining document references for persona ' + personaName
-        raise DatabaseProxyException(exceptionText) 
       dRefs = []
       for row in curs.fetchall():
         row = list(row)
@@ -6333,9 +5392,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getPersonaExternalDocuments(%s)',[personaName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining external documents for persona ' + personaName
-        raise DatabaseProxyException(exceptionText) 
       edRefs = []
       for row in curs.fetchall():
         row = list(row)
@@ -6355,9 +5411,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getPersonaCharacteristics(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining persona characteristics'
-        raise DatabaseProxyException(exceptionText) 
       pChars = {}
       pcSumm = []
       for row in curs.fetchall():
@@ -6385,9 +5438,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call ' + spName + '(%s)',[pcId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining characteristic references'
-        raise DatabaseProxyException(exceptionText) 
       refDict = {}
       refDict['grounds'] = []
       refDict['warrant'] = []
@@ -6438,9 +5488,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addExternalDocument(%s,%s,%s,%s,%s,%s)',[docId,docName.encode('utf-8'),docVersion.encode('utf-8'),docDate.encode('utf-8'),docAuthors.encode('utf-8'),docDesc.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding external document ' + docName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return docId
@@ -6460,9 +5507,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateExternalDocument(%s,%s,%s,%s,%s,%s)',[docId,docName.encode('utf-8'),docVersion.encode('utf-8'),docDate.encode('utf-8'),docAuthors.encode('utf-8'),docDesc.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating external document ' + docName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -6481,9 +5525,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addDocumentReference(%s,%s,%s,%s,%s)',[refId,refName.encode('utf-8'),docName.encode('utf-8'),cName.encode('utf-8'),refExc.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding document reference ' + refName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return refId
@@ -6501,9 +5542,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateDocumentReference(%s,%s,%s,%s,%s)',[refId,refName.encode('utf-8'),docName.encode('utf-8'),cName.encode('utf-8'),refExc.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating document reference ' + refName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -6523,9 +5561,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addPersonaCharacteristic(%s,%s,%s,%s,%s)',[pcId,personaName,qualName,bVar,cDesc.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding persona characteristic ' + pDesc
-        raise DatabaseProxyException(exceptionText) 
 
       self.addPersonaCharacteristicReferences(pcId,grounds,warrant,rebuttal)
       self.conn.commit()
@@ -6548,13 +5583,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deletePersonaCharacteristicComponents(%s)',[pcId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating persona characteristic ' + cDesc
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updatePersonaCharacteristic(%s,%s,%s,%s,%s)',[pcId,personaName,qualName,bVar,cDesc.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating persona characteristic ' + cDesc
-        raise DatabaseProxyException(exceptionText) 
       self.addPersonaCharacteristicReferences(pcId,grounds,warrant,rebuttal)
       self.conn.commit()
       curs.close()
@@ -6567,9 +5596,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call personaBehaviouralCharacteristics(%s,%s)',[pName,bvName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining persona behavioural characteristics'
-        raise DatabaseProxyException(exceptionText) 
       pChars = {}
       pcSumm = []
       for row in curs.fetchall():
@@ -6594,9 +5620,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getConceptReferences(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining concept references'
-        raise DatabaseProxyException(exceptionText) 
       cRefs = {}
       for row in curs.fetchall():
         row = list(row)
@@ -6623,9 +5646,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addConceptReference(%s,%s,%s,%s,%s)',[refId,refName,dimName,objtName,cDesc.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding concept reference ' + refName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return refId
@@ -6643,9 +5663,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateConceptReference(%s,%s,%s,%s,%s)',[refId,refName,dimName,objtName,cDesc.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating concept reference ' + refName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return refId
@@ -6658,9 +5675,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call delete_concept_reference(%s,%s)',[refId,dimName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting concept reference id ' + str(refId)
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.IntegrityError, e:
@@ -6686,9 +5700,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addPersonaCharacteristicReference(%s,%s,%s,%s,%s)',[pcId,refName,crTypeName,refDesc.encode('utf-8'),dimName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding ' + crTypeName + ' ' + refName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -6699,9 +5710,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call referenceDescription(%s,%s)',[dimName,refName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding ' + dimName + ' ' + refName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       refDesc = row[0]
       curs.close()
@@ -6715,9 +5723,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call documentReferenceNames(%s)',[docName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting references for artifact ' + docName
-        raise DatabaseProxyException(exceptionText) 
       refNames = []
       for row in curs.fetchall():
         row = list(row)
@@ -6733,9 +5738,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call referenceUse(%s,%s)',[refName,dimName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting characteristics associated with ' + dimName + ' ' + refName
-        raise DatabaseProxyException(exceptionText) 
       refNames = []
       for row in curs.fetchall():
         row = list(row)
@@ -6753,9 +5755,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         curs.execute('call characteristicBacking(%s)',[pcId])
       else:
         curs.execute('call taskCharacteristicBacking(%s)',[pcId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting backing for characteristic id ' + str(pcId)
-        raise DatabaseProxyException(exceptionText) 
       backing = []
       for row in curs.fetchall():
         row = list(row)
@@ -6770,9 +5769,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call assumptionPersonaModel(%s,%s,%s)',[personaName,bvName,pcName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining assumption persona model'
-        raise DatabaseProxyException(exceptionText) 
       associations = []
       for row in curs.fetchall():
         row = list(row)
@@ -6814,24 +5810,18 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call get' + atName + '(%s)',[constraintName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining ' + atName + ':' + constraintName
-        curs.close()
-        raise DatabaseProxyException(exceptionText) 
-      else:
-# Reference could be used in multiple grounds, warrants, or backings,  so just enumerate the rows and return the results from the final row
-        groundsName = ''
-        dimName = ''
-        objtName = ''
-        refDesc = ''
-        for row in curs.fetchall():
-          row = list(row)
-          groundsName = row[0] 
-          dimName = row[1]
-          objtName = row[2]
-          refDesc = row[3]
-        curs.close()   
-        return (dimName,objtName,refDesc) 
+      groundsName = ''
+      dimName = ''
+      objtName = ''
+      refDesc = ''
+      for row in curs.fetchall():
+        row = list(row)
+        groundsName = row[0] 
+        dimName = row[1]
+        objtName = row[2]
+        refDesc = row[3]
+      curs.close()   
+      return (dimName,objtName,refDesc) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting ' + atName + ':' + constraintName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -6861,10 +5851,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       dimName = string.upper(dimName[0]) + dimName[1:]
       curs = self.conn.cursor()
       curs.execute('call add' + dimName + 'DirectoryEntry(%s,%s,%s,%s,%s)',[dLabel,dName,dDesc.encode('utf-8'),dTypeId,dRef])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding ' + dimName + ' directory entry ' + dLabel
-        curs.close()
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -6875,9 +5861,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       curs = self.conn.cursor()
       curs.execute('select lastRequirementLabel(%s)',[assetName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting last requirement label for asset ',assetName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       lastLabel = row[0]
       curs.close()
@@ -6891,9 +5874,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getUseCases(%s)',[constraintId]);
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining usecases'
-        raise DatabaseProxyException(exceptionText) 
 
       ucRows = []
       for row in curs.fetchall():
@@ -6930,9 +5910,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call useCaseRoles(%s)',[ucName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting actors associated with use case ' + ucName
-        raise DatabaseProxyException(exceptionText) 
       roles = []
       for row in curs.fetchall():
         row = list(row)
@@ -6947,9 +5924,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call useCaseConditions(%s,%s)',[ucId,envId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting conditions associated with use case id ' + str(ucId)
-        raise DatabaseProxyException(exceptionText) 
       cond = []
       row = curs.fetchone()
       preCond = row[0]
@@ -6964,9 +5938,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call useCaseSteps(%s,%s)',[ucId,envId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting steps associated with use case id ' + str(ucId)
-        raise DatabaseProxyException(exceptionText) 
       stepRows = []
       for row in curs.fetchall():
         row = list(row)
@@ -6995,9 +5966,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call useCaseStepExceptions(%s,%s,%s)',[ucId,envId,stepNo])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting step exceptions associated with use case id ' + str(ucId)
-        raise DatabaseProxyException(exceptionText) 
       excs = []
       for row in curs.fetchall():
         row = list(row)
@@ -7013,9 +5981,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call useCaseStepTags(%s,%s,%s)',[ucId,envId,stepNo])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting step tags associated with use case id ' + str(ucId)
-        raise DatabaseProxyException(exceptionText) 
       tags = []
       for row in curs.fetchall():
         row = list(row)
@@ -7037,9 +6002,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       ucId = self.newId()
       curs = self.conn.cursor()
       curs.execute('call addUseCase(%s,%s,%s,%s,%s)',[ucId,ucName,ucAuth,ucCode,ucDesc])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new use case ' + ucName
-        raise DatabaseProxyException(exceptionText) 
       for actor in ucActors:
         self.addUseCaseRole(ucId,actor)
       self.addTags(ucName,'usecase',tags)
@@ -7061,9 +6023,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addUseCaseRole(%s,%s)',[ucId,actor]) 
-      if (curs.rowcount == -1):
-        exceptionText = 'Error associating actor ' + actor + ' with use case id ' + str(ucId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -7074,9 +6033,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addUseCaseConditions(%s,%s,%s,%s)',[ucId,envName,preCond,postCond]) 
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding conditions to use case id ' + str(ucId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -7092,9 +6048,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addUseCaseStep(%s,%s,%s,%s,%s,%s,%s)',[ucId,envName,stepNo,step.text(),step.synopsis(),step.actor(),step.actorType()]) 
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding step: ' + step.text() + ' to use case id ' + str(ucId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
       for tag in step.tags():
         self.addUseCaseStepTag(ucId,envName,stepNo,tag)
@@ -7110,9 +6063,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addUseCaseStepTag(%s,%s,%s,%s)',[ucId,envName,stepNo,tag])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding tag ' + tag + ' to step ' + str(stepNo) + ' in use case id ' + str(ucId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -7123,9 +6073,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addUseCaseStepException(%s,%s,%s,%s,%s,%s,%s,%s)',[ucId,envName,stepNo,exName,dimType,dimName,catName,exDesc])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding step exception ' + exName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -7143,13 +6090,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteUseCaseComponents(%s)',[ucId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating use case ' + ucName
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updateUseCase(%s,%s,%s,%s,%s)',[ucId,ucName,ucAuth,ucCode,ucDesc])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating use case ' + ucName
-        raise DatabaseProxyException(exceptionText) 
       for actor in ucActors:
         self.addUseCaseRole(ucId,actor)
       self.addTags(ucName,'usecase',tags)
@@ -7173,9 +6114,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call riskModel(%s,%s)',[riskName,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting risk model'
-        raise DatabaseProxyException(exceptionText) 
       traces = []
       for traceRow in curs.fetchall():
         traceRow = list(traceRow)
@@ -7196,9 +6134,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select is_risk(%s)',[candidateRiskName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error checking if ' + candidateRiskName + ' is a risk'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       isRiskInd = row[0]
       curs.close()
@@ -7213,9 +6148,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call assumptionPersonaModel_textual(%s,%s)',[personaName,bvType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting ' + bvType + ' argumentation model for ' + personaName
-        raise DatabaseProxyException(exceptionText) 
       rows = []
       for row in curs.fetchall():
         listRow = list(row)
@@ -7231,9 +6163,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call riskAnalysisToXml(%s)',[includeHeader])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting risk analysis artifacts to XML'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       xmlBuf = row[0] 
       roleCount = row[1]
@@ -7255,9 +6184,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call goalsToXml(%s)',[includeHeader])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting goals to XML'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       xmlBuf = row[0] 
       dpCount = row[1]
@@ -7276,9 +6202,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call usabilityToXml(%s)',[includeHeader])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting usability data to XML'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       xmlBuf = row[0] 
       personaCount = row[1]
@@ -7298,9 +6221,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call misusabilityToXml(%s)',[includeHeader])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting usability data to XML'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       xmlBuf = row[0] 
       crCount = row[1]
@@ -7316,9 +6236,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call associationsToXml(%s)',[includeHeader])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting association data to XML'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       xmlBuf = row[0] 
       maCount = row[1]
@@ -7336,9 +6253,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call projectToXml(%s)',[includeHeader])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting project data to XML'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       xmlBuf = row[0] 
       curs.close()
@@ -7352,9 +6266,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call architecturalPatternToXml(%s)',[apName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting architectural pattern ' + apName + ' to XML'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       xmlBuf = row[0] 
       curs.close()
@@ -7368,9 +6279,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getTaskCharacteristics(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining task characteristics'
-        raise DatabaseProxyException(exceptionText) 
       tChars = {}
       tcSumm = []
       for row in curs.fetchall():
@@ -7404,9 +6312,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addTaskCharacteristic(%s,%s,%s,%s)',[tcId,taskName,qualName,cDesc])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding task characteristic ' + cDesc
-        raise DatabaseProxyException(exceptionText) 
       self.addTaskCharacteristicReferences(tcId,grounds,warrant,rebuttal)
       self.conn.commit()
       curs.close()
@@ -7431,9 +6336,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addTaskCharacteristicReference(%s,%s,%s,%s,%s)',[tcId,refName,crTypeName,refDesc,dimName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding ' + crTypeName + ' ' + refName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -7452,13 +6354,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteTaskCharacteristicComponents(%s)',[tcId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating task characteristic ' + cDesc
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updateTaskCharacteristic(%s,%s,%s,%s)',[tcId,taskName,qualName,cDesc])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating task characteristic ' + cDesc
-        raise DatabaseProxyException(exceptionText) 
       self.addTaskCharacteristicReferences(tcId,grounds,warrant,rebuttal)
       self.conn.commit()
       curs.close()
@@ -7475,9 +6371,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call assumptionTaskModel(%s,%s)',[taskName,tcName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining assumption task model'
-        raise DatabaseProxyException(exceptionText) 
       associations = []
       for row in curs.fetchall():
         row = list(row)
@@ -7499,9 +6392,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call taskSpecificCharacteristics(%s)',[tName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining task specific characteristics'
-        raise DatabaseProxyException(exceptionText) 
       tChars = {}
       tcSumm = []
       for row in curs.fetchall():
@@ -7526,9 +6416,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call goalsPrettyPrint(%s)',[categoryName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error pretty printing goals'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       buf = row[0] 
       curs.close()
@@ -7569,9 +6456,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       tagFlag = opts[24]
 
       curs.execute('call grepModel(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(inTxt,psFlag,envFlag,roleFlag,pcFlag,tcFlag,refFlag,pFlag,taskFlag,ucFlag,dpFlag,goalFlag,obsFlag,reqFlag,assetFlag,vulFlag,attackerFlag,thrFlag,riskFlag,respFlag,cmFlag,dirFlag,codeFlag,memoFlag,idFlag,tagFlag))
-      if (curs.rowcount == -1):
-        exceptionText = 'Error searching model'
-        raise DatabaseProxyException(exceptionText) 
       results = []
       for row in curs.fetchall():
         row = list(row)
@@ -7587,9 +6471,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getExternalDocumentReferences(%s)',[edName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining document references for external document ' + edName
-        raise DatabaseProxyException(exceptionText) 
       dRefs = []
       for row in curs.fetchall():
         row = list(row)
@@ -7607,9 +6488,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call dimensionNameByShortCode(%s)',[scName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining dimension associated with short code ' + scName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       dePair = (row[0],row[1])
       curs.close()
@@ -7623,9 +6501,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call misuseCaseRiskComponents(%s)',[mcName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining risk components associated with Misuse Case ' + mcName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       cPair = (row[0],row[1])
       curs.close()
@@ -7638,9 +6513,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call personaToXml(%s)',[pName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting persona to XML'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       xmlBuf = row[0] 
       edCount = row[1]
@@ -7657,9 +6529,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select defaultEnvironment()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining default environment'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       defaultEnv = row[0]
       curs.close()
@@ -7672,9 +6541,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call environmentTensions(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting value tensions for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
       vts = {}
       rowIdx = 0
       for row in curs.fetchall():
@@ -7704,9 +6570,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getReferenceSynopsis(%s)',[refName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting synopsis for reference ' + refName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       rsId = row[0]
       synName = row[1]
@@ -7725,9 +6588,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getReferenceContribution(%s,%s)',[refName,charName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting contribution for reference ' + refName + ' and characteristic ' + charName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       rsName = row[0]
       csName = row[1]
@@ -7749,9 +6609,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addReferenceContribution(%s,%s,%s,%s)',[rsName,csName,meName,contName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding contribution for reference synopsis ' + rsName + ' and contribution synopsis ' + csName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -7767,9 +6624,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateReferenceContribution(%s,%s,%s,%s)',[rsName,csName,meName,contName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating contribution for reference synopsis ' + rsName + ' and contribution synopsis ' + csName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -7787,9 +6641,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addReferenceSynopsis(%s,%s,%s,%s,%s,%s)',[rsId,refName,rsName,rsDim,atName,actorName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding synopsis ' + rsName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return rsId
@@ -7808,9 +6659,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateReferenceSynopsis(%s,%s,%s,%s,%s,%s)',[rsId,refName,rsName,rsDim,atName,actorName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating synopsis ' + rsName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -7827,9 +6675,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addCharacteristicSynopsis(%s,%s,%s,%s,%s)',[cName,csName,csDim,atName,actorName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding synopsis ' + csName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -7846,9 +6691,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateCharacteristicSynopsis(%s,%s,%s,%s,%s)',[cName,csName,csDim,atName,actorName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating synopsis ' + csName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -7860,9 +6702,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call referenceCharacteristic(%s)',[refName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting reference associated with characteristic ' + refName
-        raise DatabaseProxyException(exceptionText) 
       charNames = []
       for row in curs.fetchall():
         row = list(row)
@@ -7878,9 +6717,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getCharacteristicSynopsis(%s)',[cName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting synopsis for characteristic ' + cName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       synName = row[0]
       dimName = row[1]
@@ -7902,9 +6738,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select hasCharacteristicSynopsis(%s)',[charName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error finding synopsis for characteristic ' + charName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       hs = row[0]
       curs.close()
@@ -7918,9 +6751,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select hasReferenceSynopsis(%s)',[refName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error finding synopsis for reference ' + refName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       hs = row[0]
       curs.close()
@@ -7939,9 +6769,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addUseCaseSynopsis(%s,%s,%s,%s,%s)',[cName,csName,csDim,atName,actorName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding synopsis ' + csName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -7953,9 +6780,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getUseCaseContributions(%s)',[ucName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting contributions for use case ' + ucName
-        raise DatabaseProxyException(exceptionText) 
       ucs = {}
       for row in curs.fetchall():
         row = list(row)
@@ -7980,9 +6804,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addUseCaseContribution(%s,%s,%s,%s)',[ucName,csName,meName,contName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding contribution for use case ' + ucName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -7998,9 +6819,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateUseCaseContribution(%s,%s,%s,%s)',[ucName,csName,meName,contName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating contribution for use case ' + ucName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8013,9 +6831,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call pcToGrl("%s","%s",%s)',[pNames,tNames,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting persona and task to GRL'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       buf = row[0] 
       curs.close()
@@ -8028,9 +6843,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getEnvironmentGoals(%s,%s)',[goalName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining goals'
-        raise DatabaseProxyException(exceptionText) 
       goals = []
       goalRows = []
       for row in curs.fetchall():
@@ -8063,9 +6875,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateEnvironmentGoal(%s,%s,%s,%s,%s,%s,%s,%s,%s)',[g.id(),envName,g.name(),g.originator(),goalDef,goalCat,goalPri,goalFc,goalIssue])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating goal ' + str(g.id())
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8077,16 +6886,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call subGoalNames(%s,%s)',[goalName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining goals for environment ' + envName + ' and subgoal ' + goalName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        goals = ['']
-        for row in curs.fetchall():
-          row = list(row)
-          goals.append(row[0])
-        curs.close()
-        return goals
+      goals = ['']
+      for row in curs.fetchall():
+        row = list(row)
+        goals.append(row[0])
+      curs.close()
+      return goals
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting goals associated with environment ' + envName + ' and subgoal ' + goalName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -8096,16 +6901,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call dependentLabels(%s,%s)',[goalName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining dependent labels for ' + goalName + ' in environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        goals = []
-        for row in curs.fetchall():
-          row = list(row)
-          goals.append(row[0])
-        curs.close()
-        return goals
+      goals = []
+      for row in curs.fetchall():
+        row = list(row)
+        goals.append(row[0])
+      curs.close()
+      return goals
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting dependent labels for ' + goalName + ' in environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -8115,16 +6916,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call goalEnvironments(%s)',[goalName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining environments for goal ' + goalName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        envs = ['']
-        for row in curs.fetchall():
-          row = list(row)
-          envs.append(row[0])
-        curs.close()
-        return envs
+      envs = ['']
+      for row in curs.fetchall():
+        row = list(row)
+        envs.append(row[0])
+      curs.close()
+      return envs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting environments associated with goal ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -8134,16 +6931,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call obstacleEnvironments(%s)',[obsName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining environments for obstacle ' + obsName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        envs = ['']
-        for row in curs.fetchall():
-          row = list(row)
-          envs.append(row[0])
-        curs.close()
-        return envs
+      envs = ['']
+      for row in curs.fetchall():
+        row = list(row)
+        envs.append(row[0])
+      curs.close()
+      return envs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting environments associated with obstacle ' + obsName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -8153,16 +6946,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call subObstacleNames(%s,%s)',[obsName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining obstacles for environment ' + envName + ' and sub-obstacle ' + obsName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        obs = ['']
-        for row in curs.fetchall():
-          row = list(row)
-          obs.append(row[0])
-        curs.close()
-        return obs
+      obs = ['']
+      for row in curs.fetchall():
+        row = list(row)
+        obs.append(row[0])
+      curs.close()
+      return obs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting obstacles associated with environment ' + envName + ' and sub-obstacle ' + obsName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -8172,9 +6961,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getEnvironmentObstacles(%s,%s)',[obsName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining obstacles'
-        raise DatabaseProxyException(exceptionText) 
       obs = []
       obsRows = []
       for row in curs.fetchall():
@@ -8204,9 +6990,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateEnvironmentObstacle(%s,%s,%s,%s,%s,%s)',[o.id(),envName,o.name(),o.originator(),obsDef,obsCat])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating obstacle ' + str(g.id())
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8218,9 +7001,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call relabelGoals(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error relabelling goals'
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8232,9 +7012,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call relabelObstacles(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error relabelling obstacles'
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8246,10 +7023,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select obstacle_label(%s,%s)',[goalId,environmentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining label for obstacle id ' + str(goalId) + ' in environment id ' + str(environmentId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       goalAttr = row[0] 
       curs.close()
@@ -8263,9 +7036,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getEnvironmentGoals(%s,%s)',['',envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining labelled goals'
-        raise DatabaseProxyException(exceptionText) 
       goals = {}
       goalRows = []
       for row in curs.fetchall():
@@ -8293,9 +7063,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call redmineGoals(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining redmine goals'
-        raise DatabaseProxyException(exceptionText) 
       goals = {}
       goalRows = []
       for row in curs.fetchall():
@@ -8341,9 +7108,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call usecasesToRedmine()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting usecases to Redmine'
-        raise DatabaseProxyException(exceptionText) 
       ucs = []
       for row in curs.fetchall():
         row = list(row)
@@ -8359,9 +7123,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call redmineScenarios()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting scenarios to Redmine'
-        raise DatabaseProxyException(exceptionText) 
       scenarios = []
       for row in curs.fetchall():
         row = list(row)
@@ -8380,9 +7141,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call redmineArchitecture()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting architecture to Redmine'
-        raise DatabaseProxyException(exceptionText) 
       aps = []
       for row in curs.fetchall():
         row = list(row)
@@ -8401,9 +7159,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call redmineAttackPatterns()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting attack patterns Redmine'
-        raise DatabaseProxyException(exceptionText) 
       aps = []
       for row in curs.fetchall():
         row = list(row)
@@ -8423,9 +7178,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call tvTypesToXml(%s)',[includeHeader])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting threat and vulnerability types to XML'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       xmlBuf = row[0] 
       ttCount = row[1]
@@ -8441,9 +7193,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call domainValuesToXml(%s)',[includeHeader])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting domain values to XML'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       xmlBuf = row[0] 
       tvCount = row[1]
@@ -8496,9 +7245,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       else:
         curs.execute('call parameterisedConceptMapModel(%s,%s)',[envName,reqName])
 
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining concept map model'
-        raise DatabaseProxyException(exceptionText) 
       associations = {}
       for row in curs.fetchall():
         row = list(row)
@@ -8521,9 +7267,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select traceabilityScore(%s)',[reqName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining traceability score for ' + reqName
-        raise DatabaseProxyException(exceptionText) 
       results = curs.fetchone()
       scoreCode = results[0]
       curs.close()
@@ -8538,9 +7281,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select name,originator,priority,comments,description,environment_code,environment from redmine_requirement order by 1');
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting requirements'
-        raise DatabaseProxyException(exceptionText) 
       reqs = {}
       reqRows = []
       for row in curs.fetchall():
@@ -8573,9 +7313,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call requirementScenarios(%s)',[reqName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting scenarios associated with requirement ' + reqName
-        raise DatabaseProxyException(exceptionText) 
       scs = [] 
       for row in curs.fetchall():
         row = list(row)
@@ -8593,9 +7330,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call requirementUseCases(%s)',[reqName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting use cases associated with requirement ' + reqName
-        raise DatabaseProxyException(exceptionText) 
       ucs = [] 
       for row in curs.fetchall():
         row = list(row)
@@ -8613,9 +7347,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call requirementBacklog(%s)',[reqName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting backlog items associated with requirement ' + reqName
-        raise DatabaseProxyException(exceptionText) 
       bis = [] 
       for row in curs.fetchall():
         row = list(row)
@@ -8633,16 +7364,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call requirementNames(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining requirements for environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        reqs = []
-        for row in curs.fetchall():
-          row = list(row)
-          reqs.append(row[0])
-        curs.close()
-        return reqs
+      reqs = []
+      for row in curs.fetchall():
+        row = list(row)
+        reqs.append(row[0])
+      curs.close()
+      return reqs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting requirements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -8652,9 +7379,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addTag(%s,%s,%s)',[tagObjt,tagName,tagDim])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding tag ' + tagName + ' to ' + tagDim + ' ' + tagObjt
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -8665,9 +7389,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteTags(%s,%s)',[tagObjt,tagDim])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting tags from ' + tagDim + ' ' + tagObjt
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -8688,16 +7409,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getTags(%s,%s)',[dimObjt,dimName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting tags for ' + dimName + ' ' + dimObjt
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        tags = []
-        for row in curs.fetchall():
-          row = list(row)
-          tags.append(row[0])
-        curs.close()
-        return tags
+      tags = []
+      for row in curs.fetchall():
+        row = list(row)
+        tags.append(row[0])
+      curs.close()
+      return tags
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting tags for ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
@@ -8711,9 +7428,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentViewInterfaces(%s)',[cvName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting component view interfaces'
-        raise DatabaseProxyException(exceptionText) 
       interfaces = []
       for row in curs.fetchall():
         row = list(row)
@@ -8730,9 +7444,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentViewConnectors(%s)',[cvName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting component view connectors'
-        raise DatabaseProxyException(exceptionText) 
       connectors = []
       for row in curs.fetchall():
         row = list(row)
@@ -8748,9 +7459,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addComponentToView(%s,%s)',[cId,cvId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding component to view '
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8771,14 +7479,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addComponent(%s,%s,%s)',[componentId,componentName,componentDesc])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding component ' + componentName
-        raise DatabaseProxyException(exceptionText) 
       if cvId != -1:
         curs.execute('call addComponentToView(%s,%s)',[componentId,cvId])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error adding component ' + componentName + ' to view '
-          raise DatabaseProxyException(exceptionText) 
      
       for ifName,ifType,arName,pName in parameters.interfaces():
         self.addComponentInterface(componentId,ifName,ifType,arName,pName)
@@ -8805,23 +7507,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteComponentComponents(%s)',[componentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating component ' + componentName
-        raise DatabaseProxyException(exceptionText) 
       if (componentId != -1):
         curs.execute('call updateComponent(%s,%s,%s)',[componentId,componentName,componentDesc])
       else:
         componentId = self.newId()
         curs.execute('call addComponent(%s,%s,%s)',[componentId,componentName,componentDesc])
          
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating component ' + componentName
-        raise DatabaseProxyException(exceptionText) 
       if cvId != -1:
         curs.execute('call addComponentToView(%s,%s)',[componentId,cvId])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error adding component ' + componentName + ' to view '
-          raise DatabaseProxyException(exceptionText) 
      
       for ifName,ifType,arName,pName in parameters.interfaces():
         self.addComponentInterface(componentId,ifName,ifType,arName,pName)
@@ -8840,9 +7533,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addComponentInterface(%s,%s,%s,%s,%s)',[componentId,ifName,ifType,arName,pName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding interface ' + ifName + ' to  component ' + str(componentId)
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -8866,9 +7556,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addConnector(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',[connId,cvName,cName,fromName,fromRole,fromIf,toName,toIf,toRole,conAsset,pName,arName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding connector ' + cName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
       self.conn.commit()
     except _mysql_exceptions.DatabaseError, e:
@@ -8880,23 +7567,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getInterfaces(%s,%s)',[dimObjt,dimName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting interfaces for ' + dimName + ' ' + dimObjt
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        ifs = []
-        for row in curs.fetchall():
-          row = list(row)
-          ifName = row[0]
-          ifTypeId = row[1]
-          ifType = 'provided'
-          if (ifTypeId == 1):
-            ifType = 'required'
-          arName = row[2]
-          prName = row[3]
-          ifs.append((ifName,ifType,arName,prName))
-        curs.close()
-        return ifs
+      ifs = []
+      for row in curs.fetchall():
+        row = list(row)
+        ifName = row[0]
+        ifTypeId = row[1]
+        ifType = 'provided'
+        if (ifTypeId == 1):
+          ifType = 'required'
+        arName = row[2]
+        prName = row[3]
+        ifs.append((ifName,ifType,arName,prName))
+      curs.close()
+      return ifs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting interfaces for ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
@@ -8916,9 +7599,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteInterfaces(%s,%s)',[ifName,ifDim])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting interfaces from ' + ifDim + ' ' + ifName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -8929,9 +7609,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addInterface(%s,%s,%s,%s,%s,%s)',[ifObjt,ifName,ifType,arName,pName,ifDim])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding interface ' + ifName + ' to ' + ifDim + ' ' + ifObjt
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -8947,9 +7624,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addComponentStructure(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',[assocId,componentId,headAsset,headAdornment,headNav,headNry,headRole,tailRole,tailNry,tailNav,tailAdornment,tailAsset])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding structure to component id ' + str(componentId) 
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -8960,10 +7634,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getComponentStructure(%s)',[componentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining component structure'
-        raise DatabaseProxyException(exceptionText) 
       pStruct = []
       for row in curs.fetchall():
         row = list(row)
@@ -8983,9 +7653,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addComponentRequirement(%s,%s,%s)',[reqLabel,componentId,reqName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding requirement to component id ' + str(componentId) 
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -8996,9 +7663,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getComponentView(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining component models'
-        raise DatabaseProxyException(exceptionText) 
       cvs = {}
       cvRows = []
       for row in curs.fetchall():
@@ -9036,10 +7700,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getComponentRequirements(%s)',[componentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining component requirements'
-        raise DatabaseProxyException(exceptionText) 
       rows = []
       for row in curs.fetchall():
         row = list(row)
@@ -9055,9 +7715,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentInterfaces(%s)',[componentId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting component interfaces'
-        raise DatabaseProxyException(exceptionText) 
       interfaces = []
       for row in curs.fetchall():
         row = list(row)
@@ -9091,9 +7748,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addComponentView(%s,%s,%s)',[cvId,cvName,cvSyn])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding new component view ' + cvName
-        raise DatabaseProxyException(exceptionText) 
 
       for vtParameters in cvValueTypes:
         vtId = self.existingObject(vtParameters.name(),vtParameters.type())
@@ -9146,14 +7800,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteComponentViewComponents(%s)',[cvId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting components for component view ' + cvName
-        raise DatabaseProxyException(exceptionText) 
 
       curs.execute('call updateComponentView(%s,%s,%s)',[cvId,cvName,cvSyn])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating component view ' + cvName
-        raise DatabaseProxyException(exceptionText) 
 
       for taParameters in cvAssets:
         self.updateTemplateAsset(taParameters)
@@ -9179,9 +7827,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getComponents(%s)',[cvId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting components'
-        raise DatabaseProxyException(exceptionText) 
       components = []
       for row in curs.fetchall():
         row = list(row)
@@ -9200,9 +7845,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentViewWeaknesses(%s,%s)',[cvName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting weaknesses associated with the ' + cvName + ' component view'
-        raise DatabaseProxyException(exceptionText) 
       thrDict = {}
       vulDict = {}
       for row in curs.fetchall():
@@ -9242,9 +7884,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentAssets(%s,%s)',[cvName,reqName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting assets associated with the ' + cvName + ' component view'
-        raise DatabaseProxyException(exceptionText) 
       rows = []
       for row in curs.fetchall():
         row = list(row)
@@ -9260,9 +7899,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentGoalAssets(%s,%s)',[cvName,goalName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting assets associated with the ' + cvName + ' component view'
-        raise DatabaseProxyException(exceptionText) 
       rows = []
       for row in curs.fetchall():
         row = list(row)
@@ -9281,10 +7917,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (dimName == 'persona_characteristic' or dimName == 'task_characteristic'):
         existingSql = 'call existing_characteristic(%s,%s)'
       curs.execute(existingSql,[objtName,dimName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error checking the existence of ' + dimName + ' ' + objtName 
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       objtId = row[0]
       curs.close()
@@ -9321,10 +7953,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call situateComponentAsset(%s,%s)',[assetId,componentName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error situating asset id ' + str(assetId) 
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -9337,10 +7965,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs = self.conn.cursor()
       for componentName in target.components():
         curs.execute('call addComponentTarget(%s,%s,%s,%s,%s,%s)',[componentName,target.asset(),target.name(),target.effectiveness(),target.rationale(),envName])
-        if (curs.rowcount == -1):
-          curs.close()
-          exceptionText = 'Error targetting ' + target.name() + ' with components ' + ",".join(target.components())
-          raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -9352,10 +7976,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call assetComponents(%s,%s)',[assetName,envName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error getting component associated with asset ' + assetName 
-        raise DatabaseProxyException(exceptionText) 
       rows = []
       for row in curs.fetchall():
         if (row != None):
@@ -9378,8 +7998,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addTemplateRequirement(%s,%s,%s,%s,%s,%s,%s)',[reqId,reqName,reqAsset,reqType,reqDesc,reqRat,reqFC])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding template requirement ' + reqName
       self.conn.commit()
       curs.close()
       return reqId
@@ -9399,8 +8017,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateTemplateRequirement(%s,%s,%s,%s,%s,%s,%s)',[reqId,reqName,reqAsset,reqType,reqDesc,reqRat,reqFC])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating template requirement ' + reqName
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -9412,9 +8028,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getTemplateRequirements(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining template requirements'
-        raise DatabaseProxyException(exceptionText) 
       templateReqs = {}
       vals = []
       for row in curs.fetchall():
@@ -9444,10 +8057,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentViewRequirements(%s)',[cvName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining requirements for component view'
-        raise DatabaseProxyException(exceptionText) 
       rows = []
       for row in curs.fetchall():
         row = list(row)
@@ -9463,10 +8072,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentViewGoals(%s)',[cvName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining goals for component view'
-        raise DatabaseProxyException(exceptionText) 
       rows = []
       for row in curs.fetchall():
         row = list(row)
@@ -9482,10 +8087,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call situateComponentViewRequirements(%s)',[cvName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error situating requirements for component view' + cvName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -9497,9 +8098,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getAllComponents(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining assets'
-        raise DatabaseProxyException(exceptionText) 
       components = {}
       componentRows = []
       for row in curs.fetchall():
@@ -9530,9 +8128,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call personasImpact(%s,%s)',[cvName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting personas impact'
-        raise DatabaseProxyException(exceptionText) 
       pImpact = []
       for row in curs.fetchall():
         row = list(row)
@@ -9548,9 +8143,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call personaImpactRationale(%s,%s,%s)',[cvName,personaName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting personas impact'
-        raise DatabaseProxyException(exceptionText) 
       piRationale = {}
       for row in curs.fetchall():
         row = list(row)
@@ -9583,10 +8175,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.execute('call taskUseCases(%s)',[taskName])
       rowCount = curs.rowcount
       ucs = []
-      if (rowCount == -1):
-        exceptionText = 'Error obtaining use cases associated with task ' + taskName
-        raise DatabaseProxyException(exceptionText) 
-      elif (rowCount > 0):
+      if (rowCount > 0):
         for row in curs.fetchall():
           row = list(row)
           ucs.append(row[0])
@@ -9603,10 +8192,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.execute('call usecaseComponents(%s)',[ucName])
       rowCount = curs.rowcount
       coms = []
-      if (rowCount == -1):
-        exceptionText = 'Error obtaining components associated with use case ' + ucName
-        raise DatabaseProxyException(exceptionText) 
-      elif (rowCount > 0):
+      if (rowCount > 0):
         for row in curs.fetchall():
           row = list(row)
           coms.append(row[0])
@@ -9621,9 +8207,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call attackSurfaceMetric(%s)',[cvName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting attack surface metric for ' + cvName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       der_m = row[0]
       der_c = row[1]
@@ -9639,9 +8222,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentClassModel(%s)',[componentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining component class associations'
-        raise DatabaseProxyException(exceptionText) 
       associations = {}
       for row in curs.fetchall():
         row = list(row)
@@ -9675,9 +8255,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getInternalDocuments(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining internal documents'
-        raise DatabaseProxyException(exceptionText) 
       idObjts = {}
       rows = []
       for row in curs.fetchall():
@@ -9715,9 +8292,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addInternalDocument(%s,%s,%s,%s)',[docId,docName.encode('utf-8'),docDesc.encode('utf-8'),docContent.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding internal document ' + docName
-        raise DatabaseProxyException(exceptionText) 
       self.addDocumentCodes(docName,docCodes)
       self.addDocumentMemos(docName,docMemos)
       self.conn.commit()
@@ -9739,14 +8313,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteInternalDocumentComponents(%s)',[docId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error deleting components of ' + docName
-        raise DatabaseProxyException(exceptionText) 
 
       curs.execute('call updateInternalDocument(%s,%s,%s,%s)',[docId,docName.encode('utf-8'),docDesc.encode('utf-8'),docContent.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating internal document ' + docName
-        raise DatabaseProxyException(exceptionText) 
       self.addDocumentCodes(docName,docCodes)
       self.addDocumentMemos(docName,docMemos)
       self.conn.commit()
@@ -9760,9 +8328,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getCodes(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining codes'
-        raise DatabaseProxyException(exceptionText) 
       cObjts = {}
       for row in curs.fetchall():
         row = list(row)
@@ -9795,9 +8360,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addCode(%s,%s,%s,%s,%s,%s)',[codeId,codeName.encode('utf-8'),codeType,codeDesc.encode('utf-8'),incCriteria.encode('utf-8'),codeEg.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding code ' + codeName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return codeId
@@ -9817,9 +8379,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateCode(%s,%s,%s,%s,%s,%s)',[codeId,codeName.encode('utf-8'),codeType,codeDesc.encode('utf-8'),incCriteria.encode('utf-8'),codeEg.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating code ' + codeName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -9831,9 +8390,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call documentCodes(%s)',[docName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting codes for ' + docName
-        raise DatabaseProxyException(exceptionText) 
       codes = {}
       for row in curs.fetchall():
         row = list(row)
@@ -9857,9 +8413,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addDocumentCode(%s,%s,%s,%s,%s,%s)',[docName,docCode,startIdx,endIdx,codeLabel,codeSynopsis])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding code ' + docCode + ' to ' + docName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -9870,9 +8423,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call artifactCodes(%s,%s,%s)',[artName,artType,sectName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting codes for ' + artType + ' ' + artName
-        raise DatabaseProxyException(exceptionText) 
       codes = {}
       for row in curs.fetchall():
         row = list(row)
@@ -9912,9 +8462,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addArtifactCode(%s,%s,%s,%s,%s,%s)',[artName,artType,sectName,docCode,startIdx,endIdx])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding code ' + docCode + ' to ' + artType + ' ' + artName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -9943,9 +8490,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call artifactEnvironmentCodes(%s,%s,%s,%s)',[artName,envName,artType,sectName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting codes for ' + artType + ' ' + artName + ' in environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
       codes = {}
       for row in curs.fetchall():
         row = list(row)
@@ -9969,9 +8513,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addArtifactEnvironmentCode(%s,%s,%s,%s,%s,%s,%s)',[artName,envName,artType,sectName,docCode,startIdx,endIdx])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding code ' + docCode + ' to ' + artType + ' ' + artName + ' in environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -9982,9 +8523,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call artifactCodeNetwork(%s,%s,%s,%s)',[personaName,'persona',fromCode,toCode])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting code network for persona ' + personaName
-        raise DatabaseProxyException(exceptionText) 
       network = []
       for row in curs.fetchall():
         row = list(row)
@@ -10005,9 +8543,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addArtifactCodeNetwork(%s,%s,%s,%s,%s)',[personaName,'persona',fromName,toName,rshipType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding ' + rshipType + ' to ' + personaName + ' code network'
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -10019,9 +8554,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteArtifactCodeNetwork(%s,%s)',[personaName,'persona'])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating code network for ' + personaName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
       self.conn.commit()
       for fromName,toName,rshipType in rships:
@@ -10035,9 +8567,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getImpliedProcesses(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining implied processes'
-        raise DatabaseProxyException(exceptionText) 
 
       ipRows = []
       for row in curs.fetchall():
@@ -10067,9 +8596,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call impliedProcessNetwork(%s)',[ipName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining implied process network ' + ipName
-        raise DatabaseProxyException(exceptionText) 
       rows = []
       for row in curs.fetchall():
         row = list(row)
@@ -10098,9 +8624,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
       curs = self.conn.cursor()
       curs.execute('call addImpliedProcess(%s,%s,%s,%s,%s)',[ipId,ipName,ipDesc.encode('utf-8'),pName,ipSpec.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding implied process ' + ipName
-        raise DatabaseProxyException(exceptionText) 
       self.addImpliedProcessNetwork(ipId,pName,cNet)
       self.addImpliedProcessChannels(ipId,chs)
       self.conn.commit()
@@ -10123,14 +8646,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
       curs = self.conn.cursor()
       curs.execute('call deleteImpliedProcessComponents(%s)',[ipId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating implied process ' + ipName
-        raise DatabaseProxyException(exceptionText) 
 
       curs.execute('call updateImpliedProcess(%s,%s,%s,%s,%s)',[ipId,ipName,ipDesc.encode('utf-8'),pName,ipSpec.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating implied process ' + ipName
-        raise DatabaseProxyException(exceptionText) 
       self.addImpliedProcessNetwork(ipId,pName,cNet)
       self.addImpliedProcessChannels(ipId,chs)
       self.conn.commit()
@@ -10148,9 +8665,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addImpliedProcessNetworkRelationship(%s,%s,%s,%s,%s)',[ipId,personaName,fromName,toName,rType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating implied process '
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -10165,9 +8679,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addStepSynopsis(%s,%s,%s,%s,%s,%s)',[ucName,envName,stepNo,synName,aName,aType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding step synopsis ' + synName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -10178,9 +8689,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call directoryEntry(%s,%s)',[objtName,dType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting details for ' + objtName + ' from ' + dType + ' directory'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       eName = row[0]
       eDesc = row[1]
@@ -10196,9 +8704,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getTemplateGoals(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining template requirements'
-        raise DatabaseProxyException(exceptionText) 
       templateGoals = {}
       tgRows = []
       for row in curs.fetchall():
@@ -10230,10 +8735,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentViewGoals(%s)',[cvName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining goals for component view'
-        raise DatabaseProxyException(exceptionText) 
       rows = []
       for row in curs.fetchall():
         row = list(row)
@@ -10249,10 +8750,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call situateComponentViewGoals(%s,%s)',[cvName,envName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error situating goals for component view' + cvName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -10264,10 +8761,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call situateComponentViewGoalAssociations(%s,%s)',[cvName,envName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error situating goal associations for component view' + cvName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -10279,16 +8772,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call templateGoalConcerns(%s)',[tgId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining concerns for template goal id ' + str(tgId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        concs = []
-        for row in curs.fetchall():
-          row = list(row)
-          concs.append(row[0])
-        curs.close()
-        return concs
+      concs = []
+      for row in curs.fetchall():
+        row = list(row)
+        concs.append(row[0])
+      curs.close()
+      return concs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting concerns for template goal id ' + str(tgId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -10304,8 +8793,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addTemplateGoal(%s,%s,%s,%s)',[goalId,goalName,goalDef,goalRat])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding template goal ' + goalName
       self.addTemplateGoalConcerns(goalId,goalConcerns)
       self.addTemplateGoalResponsibilities(goalId,goalResponsibilities)
       self.conn.commit()
@@ -10326,12 +8813,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deleteTemplateGoalComponents(%s)',[goalId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating goal ' + goalName
-        raise DatabaseProxyException(exceptionText) 
       curs.execute('call updateTemplateGoal(%s,%s,%s,%s)',[goalId,goalName,goalDef,goalRat])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating template goal ' + reqName
       self.addTemplateGoalConcerns(goalId,goalConcerns)
       self.addTemplateGoalResponsibilities(goalId,goalResponsibilities)
       self.conn.commit()
@@ -10351,10 +8833,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call add_template_goal_concern(%s,%s)',[goalId,concern])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error adding template goal concern ' + concern
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -10365,10 +8843,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getComponentGoals(%s)',[componentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error obtaining component goals'
-        raise DatabaseProxyException(exceptionText) 
       rows = []
       for row in curs.fetchall():
         row = list(row)
@@ -10388,9 +8862,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addComponentGoal(%s,%s)',[componentId,goalName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding goal to component id ' + str(componentId) 
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -10405,9 +8876,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addComponentGoalAssociation(%s,%s,%s,%s,%s)',[componentId,goalName,subGoalName,refType,rationale])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding goal association to component id ' + str(componentId) 
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -10418,10 +8886,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentGoalAssociations(%s)',[componentId])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error getting component goal associations'
-        raise DatabaseProxyException(exceptionText) 
       assocs = []
       for row in curs.fetchall():
         row = list(row)
@@ -10437,10 +8901,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentAttackSurfaceMetric(%s)',[cName])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error getting attack surface for component ' + cName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       asValue = row[0]
       curs.close()
@@ -10454,9 +8914,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call componentGoalModel(%s)',[componentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining component class associations'
-        raise DatabaseProxyException(exceptionText) 
       associations = {}
       for row in curs.fetchall():
         row = list(row)
@@ -10511,10 +8968,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call add_template_goal_responsibility(%s,%s)',[goalId,resp])
-      if (curs.rowcount == -1):
-        curs.close()
-        exceptionText = 'Error adding template goal responsibility ' + resp
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -10525,16 +8978,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call templateGoalResponsibilities(%s)',[tgId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining responsibilities for template goal id ' + str(tgId)
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        concs = []
-        for row in curs.fetchall():
-          row = list(row)
-          concs.append(row[0])
-        curs.close()
-        return concs
+      concs = []
+      for row in curs.fetchall():
+        row = list(row)
+        concs.append(row[0])
+      curs.close()
+      return concs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting responsibilities for template goal id ' + str(tgId) + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -10544,9 +8993,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call importTemplateAssetIntoEnvironment(%s,%s)',[taName,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding importing asset ' + taName + ' into environment ' + environmentName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
       self.conn.commit()
     except _mysql_exceptions.DatabaseError, e:
@@ -10558,16 +9004,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call candidateGoalObstacles(%s,%s)',[cvName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting candidate obstacles associated with architetural pattern ' + cvName + ' and environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
-      else:
-        gos = []
-        for row in curs.fetchall():
-          row = list(row)
-          gos.append((row[0],row[1]))
-        curs.close()
-        return gos
+      gos = []
+      for row in curs.fetchall():
+        row = list(row)
+        gos.append((row[0],row[1]))
+      curs.close()
+      return gos
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting candidate obstacles associated with architectural pattern ' + cvName + ' and environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -10577,9 +9019,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select definition from template_goal where id = %s',[tgId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting definition for template goal id ' + str(tgId)
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       tgDef = row[0]
       curs.close()
@@ -10593,9 +9032,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call redmineArchitectureSummary(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting architecture summary to Redmine'
-        raise DatabaseProxyException(exceptionText) 
       aps = []
       for row in curs.fetchall():
         row = list(row)
@@ -10613,9 +9049,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call redmineAttackPatternsSummary(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting attack patterns summary to Redmine'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       buf = row[0]
       curs.close()
@@ -10629,9 +9062,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call processesToXml(%s)',[includeHeader])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting processes to XML'
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       xmlBuf = row[0] 
       idCount = row[1]
@@ -10675,9 +9105,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getMemos(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining memos'
-        raise DatabaseProxyException(exceptionText) 
       mObjts = {}
       for row in curs.fetchall():
         row = list(row)
@@ -10704,9 +9131,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addMemo(%s,%s,%s)',[memoId,memoName.encode('utf-8'),memoDesc.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding memo ' + memoName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
       return memoId
@@ -10722,9 +9146,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateMemo(%s,%s,%s)',[memoId,memoName.encode('utf-8'),memoDesc.encode('utf-8')])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating memo ' + memoName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -10736,9 +9157,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call documentMemos(%s)',[docName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting memos for ' + docName
-        raise DatabaseProxyException(exceptionText) 
       memos = {}
       for row in curs.fetchall():
         row = list(row)
@@ -10763,9 +9181,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addDocumentMemo(%s,%s,%s,%s,%s)',[docName,memoName,memoTxt,startIdx,endIdx])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding memo ' + memoName + ' to ' + docName
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -10776,9 +9191,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call impliedProcess(%s)',[procName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error exporting implied process ' + procName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       cspBuf = row[0] 
       curs.close()
@@ -10796,9 +9208,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addImpliedProcessChannel(%s,%s,%s)',[ipId,channelName,dataType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding implied process channel '
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -10809,9 +9218,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call impliedProcessChannels(%s)',[procName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting channels for implied process ' + procName
-        raise DatabaseProxyException(exceptionText) 
       chs = []
       for row in curs.fetchall():
         row = list(row)
@@ -10827,9 +9233,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getQuotations()')
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting quotations'
-        raise DatabaseProxyException(exceptionText) 
       qs = []
       for row in curs.fetchall():
         row = list(row)
@@ -10855,9 +9258,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if atName == 'internal_document':
         curs = self.conn.cursor()
         curs.execute('call updateDocumentCode(%s,%s,%s,%s,%s,%s,%s,%s)',[aName,codeName,oldStartIdx,oldEndIdx,startIdx,endIdx,synopsis,label])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating code ' + codeName + ' with ' + aName
-          raise DatabaseProxyException(exceptionText) 
         self.conn.commit()
         curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -10870,9 +9270,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if atName == 'internal_document':
         curs = self.conn.cursor()
         curs.execute('call deleteDocumentCode(%s,%s,%s,%s)',[aName,codeName,startIdx,endIdx])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error associating code ' + codeName + ' with ' + aName
-          raise DatabaseProxyException(exceptionText) 
         self.conn.commit()
         curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -10885,9 +9282,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if artType == 'internal_document':
         curs = self.conn.cursor()
         curs.execute('call artifactText(%s,%s)',[artType,artName])
-        if (curs.rowcount == -1):
-          exceptionText = 'Error getting content for ' + artType + ' ' + artName
-          raise DatabaseProxyException(exceptionText) 
         row = curs.fetchone()
         content = row[0]
         curs.close()
@@ -10903,9 +9297,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call impliedCharacteristic(%s,%s,%s,%s)',[pName,fromCode,toCode,rtName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       if row is None:
         curs.close()
@@ -10924,9 +9315,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call impliedCharacteristicElements(%s,%s,%s,%s,%s)',[pName,fromCode,toCode,rtName,isLhs])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting implied characteristic elements for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
-        raise DatabaseProxyException(exceptionText) 
       els = []
       for row in curs.fetchall():
         row = list(row)
@@ -10942,9 +9330,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call initialiseImpliedCharacteristic(%s,%s,%s,%s)',[pName,fromCode,toCode,rtName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -10966,9 +9351,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addImpliedCharacteristic(%s,%s,%s,%s,%s,%s,%s)',[pName,fromCode,toCode,rtName,charName,qualName,charType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
-        raise DatabaseProxyException(exceptionText) 
 
       for lblName,rtName in lhsCodes:
         self.addImpliedCharacteristicElement(charName,lblName,rtName)
@@ -11000,9 +9382,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateImpliedCharacteristic(%s,%s,%s,%s,%s,%s,%s)',[pName,fromCode,toCode,rtName,charName,qualName,charType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName 
-        raise DatabaseProxyException(exceptionText) 
 
       for lblName,rtName in lhsCodes:
         self.updateImpliedCharacteristicElement(charName,lblName,rtName)
@@ -11023,9 +9402,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateImpliedCharacteristicIntention(%s,%s,%s)',[charName,intName,intType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating intention for implied characteristic ' + charName 
-        raise DatabaseProxyException(exceptionText) 
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -11036,9 +9412,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addImpliedCharacteristicElement(%s,%s,%s)',[charName,lblName,rtName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding implied characteristic ' + charName + ' element ' + lblName + '/' + rtName
-        raise DatabaseProxyException(exceptionText) 
       curs.close() 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -11049,9 +9422,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateImpliedCharacteristicElement(%s,%s,%s)',[charName,lblName,rtName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating implied characteristic ' + charName + ' element ' + lblName 
-        raise DatabaseProxyException(exceptionText) 
       curs.close() 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -11062,9 +9432,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select codeCount(%s)',[codeName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting code count for ' + codeName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       cCount = row[0]
       curs.close()
@@ -11082,9 +9449,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addIntention(%s,%s,%s,%s)',[refName,refType,intentionName,intentionType])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding intention ' + intentionName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -11100,9 +9464,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addContribution(%s,%s,%s,%s)',[srcName,destName,meansEnd,valName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding contribution ' + srcName + '/' + destName
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -11114,9 +9475,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select impliedCharacteristicIntention(%s,%s,%s,%s,%s)',[synName,pName,fromCode,toCode,rtName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting intention for implied characteristic ' + synName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       itTuple = row[0]
       curs.close()
@@ -11130,9 +9488,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('select impliedCharacteristicElementIntention(%s,%s)',[ciName,elName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting intention for element ' + elName + ' for implied characteristic intention ' + ciName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       iceiDetails = row[0]
       curs.close()
@@ -11146,9 +9501,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call updateImpliedCharacteristicElementIntention(%s,%s,%s,%s,%s,%s)',[ciName,elName,intName,intDim,meName,contName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error updating intention for element ' + elName + ' for implied characteristic ' + ciName 
-        raise DatabaseProxyException(exceptionText) 
       self.conn.commit()
       curs.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -11160,9 +9512,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call deniedGoals(%s)',[codeName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting denied goals for code ' + codeName
-        raise DatabaseProxyException(exceptionText) 
       goals = []
       for row in curs.fetchall():
         row = list(row)
@@ -11183,9 +9532,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addLocations(%s,%s,%s)',[locsId,locsName,locDiagram])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding locations ' + locsName
-        raise DatabaseProxyException(exceptionText) 
    
       for location in locations:
         self.addLocation(locsId,location)
@@ -11214,9 +9560,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addLocation(%s,%s,%s)',[locsId,locId,locName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding location ' + locName
-        raise DatabaseProxyException(exceptionText) 
 
       for assetInstance in assetInstances:
         self.addAssetInstance(locId,assetInstance)
@@ -11235,9 +9578,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addAssetInstance(%s,%s,%s,%s)',[locId,instanceId,instanceName,assetName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding asset instance ' + instanceName
-        raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding asset instance ' + instanceName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -11251,9 +9591,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addPersonaInstance(%s,%s,%s,%s)',[locId,instanceId,instanceName,personaName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding persona instance ' + instanceName
-        raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding persona instance ' + instanceName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -11266,9 +9603,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call addLocationLink(%s,%s,%s)',[locsId,tailLoc,headLoc])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error adding link between locations ' + tailLoc + ' and ' + headLoc
-        raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding link between locations ' + tailLoc + ' and ' + headLoc + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -11278,9 +9612,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getLocations(%s)',[constraintId])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining locations'
-        raise DatabaseProxyException(exceptionText) 
       locationsDict = {}
       locsRows = []
       for row in curs.fetchall():
@@ -11313,9 +9644,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getLocationNames(%s)',[locsName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining locations'
-        raise DatabaseProxyException(exceptionText) 
       locationRows = []
       for row in curs.fetchall():
         row = list(row)
@@ -11332,9 +9660,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getLocationLinks(%s)',[locsName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining location links'
-        raise DatabaseProxyException(exceptionText) 
       linkDict = {}
       for row in curs.fetchall():
         row = list(row)
@@ -11360,9 +9685,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getAssetInstances(%s)',[locName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining asset instances for location ' + locName
-        raise DatabaseProxyException(exceptionText) 
       instanceRows = []
       for row in curs.fetchall():
         row = list(row)
@@ -11380,9 +9702,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call getPersonaInstances(%s)',[locName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error obtaining persona instances for location ' + locName
-        raise DatabaseProxyException(exceptionText) 
       instanceRows = []
       for row in curs.fetchall():
         row = list(row)
@@ -11404,9 +9723,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call locationsRiskModel(%s,%s)',[locationsName,environmentName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting locations risk model'
-        raise DatabaseProxyException(exceptionText) 
       traces = []
       for traceRow in curs.fetchall():
         traceRow = list(traceRow)
@@ -11470,9 +9786,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       curs = self.conn.cursor()
       curs.execute('call templateAssetMetrics(%s)',[taName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting metrics for template asset ' + taName
-        raise DatabaseProxyException(exceptionText) 
       row = curs.fetchone()
       stScore = row[0]
       curs.close()
@@ -11486,9 +9799,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       curs = self.conn.cursor()
       curs.execute('call riskAnalysisModelElements(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting elements for risk model in environment ' + envName
-        raise DatabaseProxyException(exceptionText) 
       elNames = []
       for elNameRow in curs.fetchall():
         elNameRow = list(elNameRow)
@@ -11504,9 +9814,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       curs = self.conn.cursor()
       curs.execute('call assetThreatRiskLevel(%s,%s)',[assetName,threatName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error calculating risk level for ' + assetName + ' and threat ' + threatName
-        raise DatabaseProxyException(exceptionText)
       results = curs.fetchone()
       riskLevel = results[0]
       curs.close()
@@ -11520,9 +9827,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       curs = self.conn.cursor()
       curs.execute('call assetRiskLevel(%s)',[assetName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error calculating risk level for ' + assetName
-        raise DatabaseProxyException(exceptionText)
       results = curs.fetchone()
       riskLevel = results[0]
       curs.close()
@@ -11536,9 +9840,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call ' + dimName + 'Summary(%s)',[envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error calculating ' + dimName + ' for environment ' + envName
-        raise DatabaseProxyException(exceptionText)
       sums = []
       for row in curs.fetchall():
         row = list(row)
@@ -11581,9 +9882,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for stmt in stmts:
         curs = self.conn.cursor()
         curs.execute(stmt)
-        if (curs.rowcount == -1):
-          exceptionText = 'Error running ' + stmt
-          raise DatabaseProxyException(exceptionText)
         curs.close()
       self.conn.close()
       b.settings[session_id]['dbName'] = dbName
@@ -11609,9 +9907,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     tmpConn = MySQLdb.connect(host=dbHost,port=dbPort,user=dbUser,passwd=dbPasswd)
     curs = tmpConn.cursor()
     curs.execute('show databases')
-    if (curs.rowcount == -1):
-      exceptionText = 'Error getting available databases'
-      raise DatabaseProxyException(exceptionText) 
 
     dbs = []
     restrictedDbs = ['information_schema','flaskdb','mysql','performance_schema',dbName]
@@ -11636,9 +9931,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       stmt = 'drop database if exists `' + dbName + '`'
       curs = tmpConn.cursor()
       curs.execute(stmt)
-      if (curs.rowcount == -1):
-        exceptionText = 'Error running ' + stmt
-        raise DatabaseProxyException(exceptionText)
       curs.close()
       tmpConn.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -11650,9 +9942,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call useCaseRequirements(%s)',[ucName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting requirements associated with use case ' + ucName
-        raise DatabaseProxyException(exceptionText) 
       reqs = [] 
       for row in curs.fetchall():
         row = list(row)
@@ -11668,9 +9957,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       curs = self.conn.cursor()
       curs.execute('call useCaseGoals(%s,%s)',[ucName,envName])
-      if (curs.rowcount == -1):
-        exceptionText = 'Error getting goals associated with use case ' + ucName
-        raise DatabaseProxyException(exceptionText) 
       goals = [] 
       for row in curs.fetchall():
         row = list(row)
@@ -11680,4 +9966,33 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting goals associated with use case ' + ucName + '  (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def synopsisId(self,synTxt):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('select synopsisId(%s)',[synTxt])
+      row = curs.fetchone()
+      synId = row[0]
+      curs.close()
+      return synId
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error finding synopsis id for text ' + synTxt + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def hasReferenceContribution(self,rsName,csName):
+    try:
+      curs = self.conn.cursor()
+      curs.execute('select hasReferenceContribution(%s,%s)',[rsName,csName])
+      row = curs.fetchone()
+      hasRC = row[0]
+      curs.close()
+      if (hasRC == 1): 
+        return True
+      else:
+        return False
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error finding reference contribution for  ' + rsName + '/' + csName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

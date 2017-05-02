@@ -52,7 +52,8 @@ class GoalDAO(CairisDAO):
 
   def get_goal_by_name(self, name, coloured=False, simplify=True):
     found_goal = None
-    goals = self.get_goals(coloured=coloured, simplify=False)
+    goalId = self.db_proxy.getDimensionId(name,'goal')
+    goals = self.get_goals(goalId,coloured=coloured, simplify=False)
 
     if goals is not None:
       found_goal = goals.get(name)

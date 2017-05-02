@@ -27,6 +27,7 @@ class ReferenceSynopsis:
     self.theActor = aName
 
   def id(self): return self.theId
+  def setId(self,newId): self.theId = newId
   def reference(self): return self.theReference
   def synopsis(self): return self.theSynopsis
   def dimension(self): return self.theDimension
