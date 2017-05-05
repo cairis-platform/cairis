@@ -169,7 +169,7 @@ def exportGRL(outFileName,personaNames,taskNames,envName,session_id = None):
   rFile = open(outFileName,'w')
   rFile.write(buf)
   rFile.close()
-  return 'Exported GRL for ' + pStr + ' in tasks ' + tStr + ' situated in environment ' + envName
+  return 'Exported GRL for ' + str(pStr) + ' in tasks ' + str(tStr) + ' situated in environment ' + envName
 
 def buildComponentModel(p,apName,graphName):
   from cairis.gui.componentxdot import ComponentXDotParser
