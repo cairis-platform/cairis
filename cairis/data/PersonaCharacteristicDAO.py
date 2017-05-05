@@ -178,9 +178,9 @@ class PersonaCharacteristicDAO(CairisDAO):
           pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
           if (ps != None):
             frs = pcr.theReferenceSynopsis
-            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs.theSynopsis,frs.theDimension,frs.theActorType,frs.theActor))
+            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
             frc = pcr.theReferenceContribution
-            rcs.append(ReferenceContribution(frs.theSynopsis,fcs.theSynopsis,frc.theMeansEnd,frc.theContribution))
+            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs.theSynopsis,frc['theMeansEnd'],frc['theContribution']))
         fake_pc.theGrounds = pcr_list
       if len(fake_pc.theWarrant) > 0:
         pcr_list = []
@@ -188,9 +188,9 @@ class PersonaCharacteristicDAO(CairisDAO):
           pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
           if (ps != None):
             frs = pcr.theReferenceSynopsis
-            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs.theSynopsis,frs.theDimension,frs.theActorType,frs.theActor))
+            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
             frc = pcr.theReferenceContribution
-            rcs.append(ReferenceContribution(frs.theSynopsis,fcs.theSynopsis,frc.theMeansEnd,frc.theContribution))
+            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs.theSynopsis,frc['theMeansEnd'],frc['theContribution']))
         fake_pc.theWarrant = pcr_list
       if len(fake_pc.theRebuttal) > 0:
         pcr_list = []
@@ -198,9 +198,9 @@ class PersonaCharacteristicDAO(CairisDAO):
           pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
           if (ps != None):
             frs = pcr.theReferenceSynopsis
-            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs.theSynopsis,frs.theDimension,frs.theActorType,frs.theActor))
+            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
             frc = pcr.theReferenceContribution
-            rcs.append(ReferenceContribution(frs.theSynopsis,fcs.theSynopsis,frc.theMeansEnd,frc.theContribution))
+            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs.theSynopsis,frc['theMeansEnd'],frc['theContribution']))
         fake_pc.theRebuttal = pcr_list
       return fake_pc,ps,rss,rcs
 

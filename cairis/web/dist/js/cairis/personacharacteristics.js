@@ -128,6 +128,9 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
             $.each(data.theBacking,function(idx,item) {
               appendBacking(item); 
             }); 
+
+            $('#theCharacteristicSynopsis').val(data.theCharacteristicSynopsis.theSynopsis);
+            $('#theCharacteristicSynopsisElementType').val(data.theCharacteristicSynopsis.theDimension);
           },
           error: function (xhr, textStatus, errorThrown) {
             debugLogger(String(this.url));
@@ -152,6 +155,8 @@ mainContent.on('click', '#UpdatePersonaCharacteristic', function (e) {
   pc.theVariable = $("#theVariable").val();
   pc.theModQual = $("#theModQual").val();
   pc.theCharacteristic = $("#theCharacteristic").val();
+  pc.theCharacteristicSynopsis.theSynopsis = $('#theCharacteristicSynopsis').val();
+  pc.theCharacteristicSynopsis.theDimension = $('#theCharacteristicSynopsisElementType').val();
 
   if($("#editPersonaCharacteristicOptionsForm").hasClass("new")){
     postPersonaCharacteristic(pc, function () {
@@ -311,14 +316,24 @@ function loadCharacteristicReference() {
   $('#theArtifactTypeDiv').hide();
   refreshDimensionSelector($('#theReferenceName'),'document_reference',undefined,function() {
     $('#theArtifactType').val('document');
+    var pc = JSON.parse($.session.get("PersonaCharacteristic"));
+    $('#theGWRContributionCharacteristic').val($('#theCharacteristicSynopsis').val());
     var cr = $("#editCharacteristicReference").data("currentcr");
     if (cr != undefined) {
       cr = JSON.parse(cr);
       $("#theReferenceName").val(cr.name);
       $("#theDescription").val(cr.description);
+      $('#theGWRSynopsis').val(cr.theSynopsis);
+      $('#theGWRElementType').val(cr.theDimension);
+      $('#theGWRMeansEnds').val(cr.theMeansEnd);
+      $('#theGWRContribution').val(cr.theContribution);
     }
     else {
       $("#theDescription").val('');
+      $('#theGWRSynopsis').val('');
+      $('#theGWRElementType').val('goal');
+      $('#theGWRMeansEnds').val('means');
+      $('#theGWRContribution').val('Help');
     }
   });
 };
@@ -340,7 +355,20 @@ function addCharacteristicReference(e) {
   item.theReferenceName = $("#theReferenceName").val();
   item.theReferenceDescription = $("#theDescription").val();
   item.theDimensionName = 'document';
+
   var pc = JSON.parse($.session.get("PersonaCharacteristic"));
+
+  var refSyn = {};
+  refSyn.theActor = pc.thePersonaName;
+  refSyn.theActorType = 'persona';
+  refSyn.theSynopsis = $('#theGWRSynopsis').val();
+  refSyn.theDimension = $('#theGWRElementType').val();
+  item.theReferenceSynopsis = refSyn;
+
+  var refCont = {};
+  refCont.theMeansEnd = $('#theGWRMeansEnds').val();
+  refCont.theContribution = $('#theGWRContribution').val();
+  item.theReferenceContribution = refCont;
 
   if (cr.tableId == '#theGrounds' && gwrItemPresent(pc.theGrounds,item.theReferenceName) == false) {
     item.theCharacteristicType = 'grounds';
@@ -373,6 +401,18 @@ function updateReferenceList(e) {
   $(cr.tableId).find("tbody").find('tr:eq(' + cr.index + ')').find('td:eq(2)').text(item.theReferenceDescription);
   item.theDimensionName = 'document';
   var pc = JSON.parse($.session.get("PersonaCharacteristic"));
+
+  var refSyn = {};
+  refSyn.theActor = pc.thePersonaName;
+  refSyn.theActorType = 'persona';
+  refSyn.theSynopsis = $('#theGWRSynopsis').val();
+  refSyn.theDimension = $('#theGWRElementType').val();
+  item.theReferenceSynopsis = refSyn;
+
+  var refCont = {};
+  refCont.theMeansEnd = $('#theGWRMeansEnds').val();
+  refCont.theContribution = $('#theGWRContribution').val();
+  item.theReferenceContribution = refCont;
 
   if (cr.tableId == '#theGrounds') {
     item.theCharacteristicType = 'grounds';
@@ -447,11 +487,21 @@ $("#editCharacteristicReference").on('click', '#saveCharacteristicReference',fun
 
 mainContent.on("click",".ground", function () {
   var propRow = $(this).closest("tr");
+  var pc = JSON.parse($.session.get("PersonaCharacteristic"));
+
   var cr = {};
-  cr.name = propRow.find("td:eq(1)").text();
-  cr.description = propRow.find("td:eq(2)").text();
   cr.index = propRow.index();
+  var currentCr = pc.theGrounds[cr.index]
+  cr.name = currentCr.theReferenceName
+  cr.description = currentCr.theReferenceDescription;
+  cr.theSynopsis = currentCr.theReferenceSynopsis.theSynopsis
+  cr.theDimension = currentCr.theReferenceSynopsis.theDimension;
+  cr.theMeansEnd = currentCr.theReferenceContribution.theMeansEnd;
+  cr.theContribution = currentCr.theReferenceContribution.theContribution;
+
   cr.tableId = "#theGrounds";
+
+
   $("#editCharacteristicReference").data("currentcr",JSON.stringify(cr));
   $("#editCharacteristicReference").data('loadcr',loadCharacteristicReference);
   $("#editCharacteristicReference").data("savecr",updateReferenceList);
@@ -459,10 +509,18 @@ mainContent.on("click",".ground", function () {
 });
 mainContent.on("click",".warrant", function () {
   var propRow = $(this).closest("tr");
+  var pc = JSON.parse($.session.get("PersonaCharacteristic"));
+
   var cr = {};
-  cr.name = propRow.find("td:eq(1)").text();
-  cr.description = propRow.find("td:eq(2)").text();
   cr.index = propRow.index();
+  var currentCr = pc.theGrounds[cr.index]
+  cr.name = currentCr.theReferenceName
+  cr.description = currentCr.theReferenceDescription;
+  cr.theSynopsis = currentCr.theReferenceSynopsis.theSynopsis
+  cr.theDimension = currentCr.theReferenceSynopsis.theDimension;
+  cr.theMeansEnd = currentCr.theReferenceContribution.theMeansEnd;
+  cr.theContribution = currentCr.theReferenceContribution.theContribution;
+
   cr.tableId = "#theWarrant";
   $("#editCharacteristicReference").data("currentcr",JSON.stringify(cr));
   $("#editCharacteristicReference").data('loadcr',loadCharacteristicReference);
@@ -471,10 +529,19 @@ mainContent.on("click",".warrant", function () {
 });
 mainContent.on("click",".rebuttal", function () {
   var propRow = $(this).closest("tr");
+  var pc = JSON.parse($.session.get("PersonaCharacteristic"));
   var cr = {};
-  cr.name = propRow.find("td:eq(1)").text();
-  cr.description = propRow.find("td:eq(2)").text();
+
+  var cr = {};
   cr.index = propRow.index();
+  var currentCr = pc.theGrounds[cr.index]
+  cr.name = currentCr.theReferenceName
+  cr.description = currentCr.theReferenceDescription;
+  cr.theSynopsis = currentCr.theReferenceSynopsis.theSynopsis
+  cr.theDimension = currentCr.theReferenceSynopsis.theDimension;
+  cr.theMeansEnd = currentCr.theReferenceContribution.theMeansEnd;
+  cr.theContribution = currentCr.theReferenceContribution.theContribution;
+
   cr.tableId = "#theRebuttal";
   $("#editCharacteristicReference").data("currentcr",JSON.stringify(cr));
   $("#editCharacteristicReference").data('loadcr',loadCharacteristicReference);

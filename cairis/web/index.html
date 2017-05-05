@@ -771,38 +771,83 @@
           <h4 class="modal-title">Edit Characteristic Reference</h4>
         </div>
         <div class="modal-body">
-          <div class="form-group" id="theArtifactTypeDiv">
-            <label for="theArtifactType" class="control-label">Artifact Type</label>
-            <select class="optionsInput form-control" name="theArtifactType" id="theArtifactType" style="width: 75%;" required>
-              <option value="document">Document</option>
-              <option value="asset">Asset</option>
-              <option value="attacker">Attacker</option>
-              <option value="countermeasure">Countermeasure</option>
-              <option value="domainproperty">Domain Property</option>
-              <option value="environment">Environment</option>
-              <option value="goal">Goal</option>
-              <option value="misusecase">Misuse Case</option>
-              <option value="obstacle">Obstacle</option>
-              <option value="persona">Persona</option>
-              <option value="requirement">Requirement</option>
-              <option value="response">Response</option>
-              <option value="risk">Risk</option>
-              <option value="role">Role</option>
-              <option value="task">Task</option>
-              <option value="threat">Threat</option>
-              <option value="usecase">Use Case</option>
-              <option value="vulnerability">Vulnerability</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="theReferenceName" class="control-label">Reference</label>
-            <select class="optionsInput form-control" style="width: 75%;" name="theReferenceName" id="theReferenceName">
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="theDescription" class="control-label">Description</label>
-            <textarea rows="5" class="optionsInput form-control" name="theDescription" id="theDescription" data-error="Description not provided" required> </textarea>
-            <div class="help-block with-errors"></div>
+          <div class="tabs">
+            <ul>
+              <li><a href="#reference">Reference</a></li>
+              <li><a href="#grl">GRL Elements</a></li>
+            </ul>
+            <div id="reference">
+              <div class="form-group" id="theArtifactTypeDiv">
+                <label for="theArtifactType" class="control-label">Artifact Type</label>
+                <select class="optionsInput form-control" name="theArtifactType" id="theArtifactType" style="width: 75%;" required>
+                  <option value="document">Document</option>
+                  <option value="asset">Asset</option>
+                  <option value="attacker">Attacker</option>
+                  <option value="countermeasure">Countermeasure</option>
+                  <option value="domainproperty">Domain Property</option>
+                  <option value="environment">Environment</option>
+                  <option value="goal">Goal</option>
+                  <option value="misusecase">Misuse Case</option>
+                  <option value="obstacle">Obstacle</option>
+                  <option value="persona">Persona</option>
+                  <option value="requirement">Requirement</option>
+                  <option value="response">Response</option>
+                  <option value="risk">Risk</option>
+                  <option value="role">Role</option>
+                  <option value="task">Task</option>
+                  <option value="threat">Threat</option>
+                  <option value="usecase">Use Case</option>
+                  <option value="vulnerability">Vulnerability</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="theReferenceName" class="control-label">Reference</label>
+                <select class="optionsInput form-control" style="width: 75%;" name="theReferenceName" id="theReferenceName">
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="theDescription" class="control-label">Description</label>
+                <textarea rows="5" class="optionsInput form-control" name="theDescription" id="theDescription" data-error="Description not provided" required> </textarea>
+                <div class="help-block with-errors"></div>
+              </div>
+            </div>
+            <div id="grl">
+              <div class="form-group">
+                <label for="theGWRContributionCharacteristic" class="control-label">Characteristic</label>
+                <input class="form-control" type="text" name="theGWRContributionCharacteristic" id="theGWRContributionCharacteristic" disabled>
+              </div>
+              <div class="form-group">
+                <label for="theGWRSynopsis" class="control-label">Synopsis</label>
+                <input class="form-control" type="text" name="theGWRSynopsis" id="theGWRSynopsis">
+              </div>
+              <div class="form-group">
+                <label for="theGWRElementType" class="control-label">Element Type</label>
+                <select class="form-control" name="theGWRElementType" id="theGWRElementType">
+                  <option value="goal">Goal</option>
+                  <option value="softgoal">Soft Goal</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="theGWRMeansEnds" class="control-label">Means/Ends</label>
+                <select class="form-control" name="theGWRMeansEnds" id="theGWRMeansEnds">
+                  <option value="means">Means</option>
+                  <option value="ends">Ends</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="theGWRContribution" class="control-label">Contribution</label>
+                <select class="form-control" name="theGWRContribution" id="theGWRContribution">
+                  <option value="Make">Make</option>
+                  <option value="SomePositive">SomePositive</option>
+                  <option value="Help">Help</option>
+                  <option value="Hurt">Hurt</option>
+                  <option value="SomeNegative">SomeNegative</option>
+                  <option value="Break">Break</option>
+                </select>
+              </div>
+
+            </div>
+
           </div>
         </div>
         <div class="modal-footer">

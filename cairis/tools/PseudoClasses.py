@@ -48,6 +48,13 @@ class CharacteristicReferenceSynopsis(object):
     self.theActorType = rsActorType
     self.theActor= rsActor
 
+  def __getitem__(self,varName):
+    if (varName == 'theSynopsis'): return self.theSynopsis
+    elif (varName == 'theDimension'): return self.theDimension
+    elif (varName == 'theActorType'): return self.theActorType
+    elif (varName == 'theActor'): return self.theActor
+    else: return None
+
 @swagger.model
 class CharacteristicReferenceContribution(object):
   resource_fields = {
@@ -63,6 +70,11 @@ class CharacteristicReferenceContribution(object):
   def __init__(self, rcMe='', rcCont=''):
     self.theMeansEnd = rcMe
     self.theContribution = rcCont
+
+  def __getitem__(self,varName):
+    if (varName == 'theMeansEnd'): return self.theMeansEnd
+    elif (varName == 'theContribution'): return self.theContribution
+    else: return None
 
 @swagger.model
 class CharacteristicReference(object):
