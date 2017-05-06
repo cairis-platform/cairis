@@ -13,7 +13,7 @@ CAIRIS web services can be installed on any platform that its open-source depend
 
 ### Docker Hub
 
-The easiest way of getting up and running with the web application is to download the CAIRIS container from [Docker hub](https://hub.docker.com/r/shamalfaily/cairis/).  This is built from the latest changes in github.
+The easiest way of getting up and running with the web application is to download the CAIRIS container from [Docker hub](https://hub.docker.com/r/shamalfaily/cairis/).  This is built from the latest changes in github, and uses [mod_wsgi-express](https://pypi.python.org/pypi/mod_wsgi) to deliver the CAIRIS web services.
 
 * Download and run the container:  
 {% highlight bash %}
@@ -73,11 +73,11 @@ source .bashrc
 
 * Starting cairisd
 
-Run `./cairisd.py runserver` (the script can be found in cairis/cairis/bin).  However, before doing this, you need to ensure CAIRIS has been installed to a location that the process running `cairisd` has write access to.  
+If you want to run the Flask development servier, run `./cairisd.py runserver` (the script can be found in cairis/cairis/bin).  However, before doing this, you need to ensure CAIRIS has been installed to a location that the process running `cairisd` has write access to. Alternatively, if you want to web services to be accessed via mod_wsgi-express run `mod_wsgi-express start-server cairis.wsgi`; cairis.wsgi can also be found in cairis/cairis/bin.
 
 * Use the application
 
-You can now point your browser to http://SERVERNAME:PORT_NUMBER, depending on where `cairisd` is installed, and what port it is listened to, e.g. http://myserver.org:7071.  Once you have authenticated, the application should load.
+You can now point your browser to http://SERVERNAME:PORT_NUMBER, depending on where `cairisd` is installed, and what port cairisd or mod_wsgi-express is listening to, e.g. http://myserver.org:7071.  Once you have authenticated, the application should load.
 
 ## Alternatively:
 
@@ -103,7 +103,7 @@ You can usually accept many of these defaults, you will however need to modify t
 
 ![fig:change_configure_cairis_db]({{ site.baseurl }}/images/change_configure_cairis_db.jpg)
 
-When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; 
+When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file;
 this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool.
 
 * Ensure the CAIRIS_CFG environment variable points to your CAIRIS configuration file, and is persistent, i.e.
@@ -134,11 +134,11 @@ Run the `add_cairis_user` script in cairis/cairis/bin (run `add_cairis_user --he
 
 * Starting cairisd
 
-Run `./cairisd.py runserver` (the script can be found in cairis/cairis/bin).  However, before doing this, you need to ensure CAIRIS has been installed to a location that the process running `cairisd` has write access to.  
+If you want to run the Flask development servier, run `./cairisd.py runserver` (the script can be found in cairis/cairis/bin).  However, before doing this, you need to ensure CAIRIS has been installed to a location that the process running `cairisd` has write access to. Alternatively, if you want to web services to be accessed via mod_wsgi-express run `mod_wsgi-express start-server cairis.wsgi`; cairis.wsgi can also be found in cairis/cairis/bin.
 
 * Use the application
 
-You can now point your browser to http://SERVERNAME:PORT_NUMBER, depending on where `cairisd` is installed, and what port it is listened to, e.g. http://myserver.org:7071.  Once you have authenticated, the application should load.
+You can now point your browser to http://SERVERNAME:PORT_NUMBER, depending on where `cairisd` is installed, and what port cairisd or mod_wsgi-express is listening to, e.g. http://myserver.org:7071.  Once you have authenticated, the application should load.
 
 ## Desktop application
 
