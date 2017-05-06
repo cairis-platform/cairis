@@ -101,10 +101,6 @@ class UseCaseTest(unittest.TestCase):
     b.dbProxy.deleteUseCase(ouc.id())
 
   def tearDown(self):
-    b = Borg()
-    b.dbProxy.deleteRole(self.theRoles[self.iRoles[0]["theName"]].id())
-    b.dbProxy.deleteEnvironment(self.theEnvironments[self.iEnvironments[0]["theName"]].id())
-    b.dbProxy.close()
     call([os.environ['CAIRIS_SRC'] + "/test/dropdb.sh"])
 
 if __name__ == '__main__':
