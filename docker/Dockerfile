@@ -13,6 +13,6 @@ RUN git clone https://github.com/failys/cairis /cairis
 COPY cairis.cnf /
 RUN service mysql start && /cairis/cairis/test/initdb.sh
 RUN service mysql start && ./cairis/cairis/bin/add_cairis_user.py test test
-EXPOSE 7071
+EXPOSE 8000
 COPY cmd.sh /
 CMD ["/cmd.sh"]
