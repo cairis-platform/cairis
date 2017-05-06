@@ -60,5 +60,3 @@ class Borg:
       return self.settings[session_id]
     else:
       return None
-
-
