@@ -15,10 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+import pydot
 from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.bin.cimport import file_import
+from cairis.bin.at2om import dotToObstacleModel
+from cairis.mio.ModelImport import importAttackTreeString
 
 __author__ = 'Shamal Faily'
 
@@ -31,6 +34,15 @@ class ImportDAO(CairisDAO):
   def file_import(self,importFile,mFormat,overwriteFlag):
     try:
       return file_import(importFile,mFormat,overwriteFlag,self.session_id)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def import_attack_tree(self,dotBuf,environment_name,contributor_name):
+    try:
+      dotInstance = pydot.graph_from_dot_data(dotBuf)
+      xmlBuf = dotToObstacleModel(dotInstance[0],environment_name,contributor_name)
+      return importAttackTreeString(xmlBuf,self.session_id)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

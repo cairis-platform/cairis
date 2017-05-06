@@ -486,15 +486,15 @@ Along this line, at the end of the exercise, participants remarked their appreci
 <quotation code="Context confusion" type="memo" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="5823" to_index="5984" />
 <quotation code="Emerging trust" type="memo" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="4478" to_index="4620" />
 <quotation code="Restrictions to indifference" type="memo" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="4018" to_index="4116" />
-<code_network persona="Jimmy" relationship_type="implies" from_code="concept reuse" to_code="restricted thinking" />
-<code_network persona="Jimmy" relationship_type="implies" from_code="restricted thinking" to_code="indifference" />
-<code_network persona="Jimmy" relationship_type="implies" from_code="need to know" to_code="emergent trust" />
-<code_network persona="Jimmy" relationship_type="implies" from_code="spacial possibilities" to_code="facilitating insecurity" />
-<code_network persona="Jimmy" relationship_type="implies" from_code="temporal possibilities" to_code="facilitating insecurity" />
-<code_network persona="Jimmy" relationship_type="implies" from_code="working context" to_code="policy confidence" />
-<code_network persona="Jimmy" relationship_type="implies" from_code="personal experiences" to_code="general concepts" />
-<code_network persona="Jimmy" relationship_type="conflict" from_code="structured process" to_code="context explosion" />
-<implied_process name="Thoughtful trust" persona="Jimmy" >
+<code_network persona="Tom" relationship_type="implies" from_code="concept reuse" to_code="restricted thinking" />
+<code_network persona="Tom" relationship_type="implies" from_code="restricted thinking" to_code="indifference" />
+<code_network persona="Tom" relationship_type="implies" from_code="need to know" to_code="emergent trust" />
+<code_network persona="Tom" relationship_type="implies" from_code="spacial possibilities" to_code="facilitating insecurity" />
+<code_network persona="Tom" relationship_type="implies" from_code="temporal possibilities" to_code="facilitating insecurity" />
+<code_network persona="Tom" relationship_type="implies" from_code="working context" to_code="policy confidence" />
+<code_network persona="Tom" relationship_type="implies" from_code="personal experiences" to_code="general concepts" />
+<code_network persona="Tom" relationship_type="conflict" from_code="structured process" to_code="context explosion" />
+<implied_process name="Thoughtful trust" persona="Tom" >
   <description>Developers thinking too much about what users need can lead them to place potentially unwarranted trust.</description>
   <relationship from_code="need to know" to_code="emergent trust" relationship_type="implies" />
   <specification>None</specification>

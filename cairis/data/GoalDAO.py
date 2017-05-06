@@ -52,7 +52,8 @@ class GoalDAO(CairisDAO):
 
   def get_goal_by_name(self, name, coloured=False, simplify=True):
     found_goal = None
-    goals = self.get_goals(coloured=coloured, simplify=False)
+    goalId = self.db_proxy.getDimensionId(name,'goal')
+    goals = self.get_goals(goalId,coloured=coloured, simplify=False)
 
     if goals is not None:
       found_goal = goals.get(name)
@@ -128,7 +129,7 @@ class GoalDAO(CairisDAO):
       ucFilter = 0
       if goal_name != '': goalFilter = 1
       if usecase_name != '': ucFilter = 1
-      associationDictionary = self.db_proxy.goalModel(environment_name,goal_name,goalFilter,ucFilter)
+      associationDictionary = self.db_proxy.goalModel(environment_name,goal_name,0,ucFilter)
       associations = KaosModel(associationDictionary.values(), environment_name, 'goal',goal_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
       dot_code = associations.graph()
       return dot_code

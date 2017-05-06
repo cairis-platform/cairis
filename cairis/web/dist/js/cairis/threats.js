@@ -401,7 +401,9 @@ mainContent.on('click', '#UpdateThreat', function (e) {
     threat.theThreatName = $("#theThreatName").val();
     threat.theMethod = $("#theMethod").val();
     var tags = $("#theTags").text().split(", ");
-    threat.theTags = tags;
+    if (tags[0] != "") {
+      threat.theTags = tags;
+    }
     threat.theType = $("#theType option:selected").text();
 
     if($("#editThreatOptionsform").hasClass("newThreat")){

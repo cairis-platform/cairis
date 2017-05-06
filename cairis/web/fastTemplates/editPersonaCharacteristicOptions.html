@@ -7,35 +7,57 @@
       <li><a href="#rebuttal">Rebuttal</a></li>
     </ul>
     <div id="general">
-      <div class="form-group">
-        <label for="thePersonaName" class="control-label">Persona</label>
-        <select class="form-control" id="thePersonaName" data-error="Persona is required" required>
-        </select>
-        <div class="help-block with-errors"></div>
-      </div>
-      <div class="form-group">
-        <label for="theVariable" class="control-label">Variable</label>
-        <select class="form-control" id="theVariable" data-error="Variable is required" required>
-          <option value="Activities">Activities</option>
-          <option value="Attitudes">Attitudes</option>
-          <option value="Aptitudes">Aptitudes</option>
-          <option value="Motivations">Motivations</option>
-          <option value="Skills">Skills</option>
-          <option value="Environment Narrative">Environment Narrative</option>
-          <option value="Intrinsic">Intrinsic</option>
-          <option value="Contextual">Contextual</option>
-        </select>
-        <div class="help-block with-errors"></div>
-      </div>
-      <div class="form-group">
-        <label for="theModQual" class="control-label">Modal Qualifier</label>
-        <input class="optionsInput personaCharacteristicUpdate form-control" type="text" name="theModQual" id="theModQual" style="width: 75%;" data-error="Modal Qualifier is required" required>
-        <div class="help-block with-errors"></div>
-      </div>
-      <div class="form-group">
-        <label for='theCharacteristic' class="control-label">Definition</label>
-        <textarea rows="15" class="form-control" name="theCharacteristic" id="theCharacteristic" style="width: 100%" data-error="Definition is required" required></textarea>
-        <div class="help-block with-errors"></div>
+      <div class="tabs">
+        <ul>
+          <li><a href="#characteristic">Characteristic</a></li>
+          <li><a href="#synopsis">GRL Elements</a></li>
+        </ul>
+        <div id="characteristic">
+          <div class="form-group">
+            <label for="thePersonaName" class="control-label">Persona</label>
+            <select class="form-control" id="thePersonaName" data-error="Persona is required" required>
+            </select>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="theVariable" class="control-label">Variable</label>
+            <select class="form-control" id="theVariable" data-error="Variable is required" required>
+              <option value="Activities">Activities</option>
+              <option value="Attitudes">Attitudes</option>
+              <option value="Aptitudes">Aptitudes</option>
+              <option value="Motivations">Motivations</option>
+              <option value="Skills">Skills</option>
+              <option value="Environment Narrative">Environment Narrative</option>
+              <option value="Intrinsic">Intrinsic</option>
+              <option value="Contextual">Contextual</option>
+            </select>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="theModQual" class="control-label">Modal Qualifier</label>
+            <input class="optionsInput personaCharacteristicUpdate form-control" type="text" name="theModQual" id="theModQual" style="width: 75%;" data-error="Modal Qualifier is required" required>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for='theCharacteristic' class="control-label">Definition</label>
+            <textarea rows="15" class="form-control" name="theCharacteristic" id="theCharacteristic" style="width: 100%" data-error="Definition is required" required></textarea>
+            <div class="help-block with-errors"></div>
+          </div>
+        </div>
+        <div id="synopsis">
+          <div class="form-group">
+            <label for="theCharacteristicSynopsis" class="control-label">Synopsis</label>
+            <input class="form-control" type="text" name="theCharacteristicSynopsis" id="theCharacteristicSynopsis">
+          </div>
+          <div class="form-group">
+            <label for="theCharacteristicSynopsisElementType" class="control-label">Element Type</label>
+            <select class="form-control" name="theCharacteristicSynopsisElementType" id="theCharacteristicSynopsisElementType">
+              <option value="goal">Goal</option>
+              <option value="softgoal">Soft Goal</option>
+              <option value="task">Task</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
     <div id="grounds">

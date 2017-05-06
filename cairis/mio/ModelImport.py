@@ -38,7 +38,7 @@ from cairis.core.ARM import *
 
 __author__ = 'Shamal Faily'
 
-def importSecurityPatterns(importFile,session_id=None):
+def importSecurityPatternsFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
     handler = SecurityPatternContentHandler()
@@ -48,37 +48,40 @@ def importSecurityPatterns(importFile,session_id=None):
     taps = handler.assets()
     spps = handler.patterns()
     vts = handler.metricTypes()
-    noOfTaps = len(taps)
-    noOfSpps = len(spps)
-
-    b = Borg()
-    db_proxy = b.get_dbproxy(session_id)
-
-    msgStr = 'No patterns imported'
-    if (noOfTaps > 0):
-      tapId = 0;
-      db_proxy.deleteSecurityPattern(-1)
-      db_proxy.deleteTemplateAsset(-1)
-
-      for vt in vts:
-        db_proxy.addValueType(vt)
-
-      for tap in taps:
-        tap.setId(tapId)
-        db_proxy.addTemplateAsset(tap)
-        tapId += 1
-
-      if (noOfSpps > 0):
-        spId = 0;
-        db_proxy.deleteSecurityPattern(-1)
-        for sp in spps:
-          sp.setId(spId)
-          db_proxy.addSecurityPattern(sp)
-          spId += 1
-        msgStr =  'Imported ' + str(noOfTaps) + ' template assets and ' + str(noOfSpps) + ' security patterns'
-    return msgStr
+    return importSecurityPatterns(taps,spps,vts,session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importSecurityPatterns(taps,spps,vts,session_id=None):
+  noOfTaps = len(taps)
+  noOfSpps = len(spps)
+
+  b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
+
+  msgStr = 'No patterns imported'
+  if (noOfTaps > 0):
+    tapId = 0;
+    db_proxy.deleteSecurityPattern(-1)
+    db_proxy.deleteTemplateAsset(-1)
+
+    for vt in vts:
+      db_proxy.addValueType(vt)
+
+    for tap in taps:
+      tap.setId(tapId)
+      db_proxy.addTemplateAsset(tap)
+      tapId += 1
+
+    if (noOfSpps > 0):
+      spId = 0;
+      db_proxy.deleteSecurityPattern(-1)
+      for sp in spps:
+        sp.setId(spId)
+        db_proxy.addSecurityPattern(sp)
+        spId += 1
+      msgStr =  'Imported ' + str(noOfTaps) + ' template assets and ' + str(noOfSpps) + ' security patterns'
+  return msgStr
 
 def importAttackPattern(importFile,session_id = None):
   try:
@@ -158,6 +161,14 @@ def importRequirementsFile(importFile,session_id = None):
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
+    return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.countermeasures(),session_id = session_id)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importRequirementsString(buf,session_id = None):
+  try:
+    handler = GoalsContentHandler(session_id = session_id)
+    xml.sax.parseString(buf,handler)
     return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.countermeasures(),session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
@@ -434,6 +445,15 @@ def importAssociationsFile(importFile,session_id = None):
     return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations(),session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importAssociationsString(buf,session_id = None):
+  try:
+    handler = AssociationsContentHandler(session_id = session_id)
+    xml.sax.parseString(buf,handler)
+    return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations(),session_id = session_id)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
   
 def importAssociations(maParameterSet,gaParameterSet,depParameterSet,session_id):
   b = Borg()
@@ -739,6 +759,17 @@ def importModelFile(importFile,isOverwrite = 1,session_id = None):
     modelTxt += importAssociationsFile(importFile,session_id) + ' '
     modelTxt += importSynopsesFile(importFile,session_id)
     modelTxt += importMisusabilityFile(importFile,session_id)
+    return modelTxt
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importAttackTreeString(buf,session_id = None):
+  try:
+    b = Borg()
+    db_proxy = b.get_dbproxy(session_id)
+    modelTxt = ''
+    modelTxt += importRequirementsString(buf,session_id) + ' '
+    modelTxt += importAssociationsString(buf,session_id) + ' '
     return modelTxt
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())

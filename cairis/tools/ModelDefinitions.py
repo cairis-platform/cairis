@@ -39,6 +39,7 @@ from cairis.core.PersonaEnvironmentProperties import PersonaEnvironmentPropertie
 from cairis.core.Requirement import Requirement
 from cairis.core.Risk import Risk
 from cairis.core.Role import Role
+from cairis.core.SecurityPattern import SecurityPattern
 from cairis.core.Target import Target
 from cairis.core.Task import Task
 from cairis.core.Trace import Trace
@@ -67,7 +68,7 @@ from cairis.core.TemplateRequirement import TemplateRequirement
 from cairis.core.Location import Location
 from cairis.core.Locations import Locations
 from cairis.core.WeaknessTarget import WeaknessTarget
-from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, CharacteristicReference,ObjectDependency
+from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, CharacteristicReference,ObjectDependency,CharacteristicReferenceSynopsis
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -1061,7 +1062,6 @@ class ConceptReferenceModel(object):
     obj_id_field : gen_class_metadata(ConceptReference)
   }
 
-
 @swagger.model
 class PersonaCharacteristicModel(object):
   resource_fields = {
@@ -1070,6 +1070,7 @@ class PersonaCharacteristicModel(object):
     "theModQual": fields.String,
     "theVariable": fields.String,
     "theCharacteristic": fields.String,
+    "theCharacteristicSynopsis": fields.Nested(CharacteristicReferenceSynopsis.resource_fields),
     "theGrounds": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
     "theWarrant": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
     "theRebuttal": fields.List(fields.Nested(CharacteristicReference.resource_fields))
@@ -1406,3 +1407,51 @@ class WeaknessAnalysisModel(object):
     self.theThreatWeaknesses = []
     self.thePersonaImpact = []
     self.theCandidateGoals = []
+
+@swagger.model
+class SecurityPatternStructureModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theHeadAsset": fields.String,
+    "theHeadAdornment": fields.String,
+    "theHeadNry": fields.String,
+    "theHeadRole": fields.String,
+    "theTailRole": fields.String,
+    "theTailNry": fields.String,
+    "theTailAdornment": fields.String,
+    "theTailAsset": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+
+
+@swagger.model
+class PatternRequirementModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theName": fields.String,
+    "theAsset": fields.String,
+    "theType": fields.String,
+    "theDescription": fields.String,
+    "theRationale": fields.String,
+    "theFitCriterion": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+
+@swagger.model
+class SecurityPatternModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theName": fields.String,
+    "theContext": fields.String,
+    "theProblem": fields.String,
+    "theSolution": fields.String,
+    "theRequirements": fields.List(fields.Nested(PatternRequirementModel.resource_fields)),
+    "theConcernAssociations" : fields.List(fields.Nested(SecurityPatternStructureModel.resource_fields))
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(SecurityPattern)
+  }

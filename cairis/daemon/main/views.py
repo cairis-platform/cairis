@@ -29,7 +29,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController
+    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -329,6 +329,11 @@ api.add_resource(RoleController.RolesAPI, '/api/roles',endpoint='roles')
 api.add_resource(RoleController.RolesByNameAPI, '/api/roles/name/<string:name>',endpoint='role')
 api.add_resource(RoleController.RolesByIdAPI, '/api/roles/id/<int:id>',endpoint='roles_id')
 api.add_resource(RoleController.RoleEnvironmentPropertiesAPI, '/api/roles/name/<string:name>/properties',endpoint='role_properties')
+
+# Security pattern routes
+api.add_resource(SecurityPatternController.SecurityPatternsAPI, '/api/security_patterns', endpoint = 'securitypatterns')
+api.add_resource(SecurityPatternController.SecurityPatternByNameAPI, '/api/security_patterns/name/<string:name>', endpoint='securitypattern')
+api.add_resource(SecurityPatternController.SituateSecurityPatternAPI, '/api/security_patterns/name/<string:security_pattern_name>/environment/<string:environment_name>/situate', endpoint='situatesecuritypattern')
 
 # Summary routes
 api.add_resource(SummaryController.SummaryAPI, '/api/summary/dimension/<string:dimension_name>/environment/<string:environment_name>',endpoint='summary')

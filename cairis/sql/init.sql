@@ -24,6 +24,7 @@ DROP VIEW IF EXISTS countermeasure_vulnerability_response_target;
 DROP VIEW IF EXISTS countermeasure_threat_response_target;
 DROP VIEW IF EXISTS redmine_requirement;
 DROP VIEW IF EXISTS synopsis;
+DROP VIEW IF EXISTS contribution;
 DROP VIEW IF EXISTS source_reference;
 DROP VIEW IF EXISTS environment_role;
 DROP VIEW IF EXISTS detection_mechanism;
@@ -3317,6 +3318,17 @@ CREATE VIEW synopsis as
   select characteristic_id,synopsis,'persona' synopsis_type from implied_characteristic_intention
   union
   select id,synopsis,'document' synopsis_type from implied_characteristic_element_intention;
+
+CREATE VIEW contribution as
+  select reference_id, characteristic_id, end_id, contribution_id from document_reference_contribution
+  union
+  select reference_id, characteristic_id, end_id, contribution_id from requirement_reference_contribution
+  union
+  select reference_id, usecase_id, end_id, contribution_id from usecase_dr_contribution
+  union
+  select usecase_id, characteristic_id, end_id, contribution_id from usecase_pc_contribution
+  union
+  select usecase_id, characteristic_id, end_id, contribution_id from usecase_tc_contribution;
 
 CREATE VIEW usecase_step_synopsis_actor as
   select uss.id,uss.usecase_id,uss.step_no,uss.environment_id,uss.synopsis,r.name actor,td.name actor_type from usecase_step_synopsis uss, role r, trace_dimension td where uss.actor_id = r.id and uss.actor_type_id = td.id

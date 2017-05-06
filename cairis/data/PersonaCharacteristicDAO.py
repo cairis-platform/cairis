@@ -17,6 +17,8 @@
 
 from cairis.core.ARM import *
 from cairis.core.PersonaCharacteristic import PersonaCharacteristic
+from cairis.core.ReferenceSynopsis import ReferenceSynopsis
+from cairis.core.ReferenceContribution import ReferenceContribution
 from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicParameters
 from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError, MalformedJSONHTTPError, ARMHTTPError, MissingParameterHTTPError, OverwriteNotAllowedHTTPError
 import cairis.core.armid
@@ -24,7 +26,7 @@ from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.ModelDefinitions import PersonaCharacteristicModel
 from cairis.tools.SessionValidator import check_required_keys
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-from cairis.tools.PseudoClasses import CharacteristicReference
+from cairis.tools.PseudoClasses import CharacteristicReference, CharacteristicReferenceSynopsis, CharacteristicReferenceContribution
 
 __author__ = 'Shamal Faily'
 
@@ -51,11 +53,15 @@ class PersonaCharacteristicDAO(CairisDAO):
     if simplify:
       for key, value in pcs.items():
         pcs[key] = self.convert_pcrs(real_pc=value) 
-
+        pName,bvName,pcDesc = key.split('/')
+        cs = self.db_proxy.getCharacteristicSynopsis(pcDesc)
+        crs = CharacteristicReferenceSynopsis(cs.synopsis(),cs.dimension(),cs.actorType(),cs.actor())
+        pcs[key].theCharacteristicSynopsis = crs
     return pcs
 
   def get_persona_characteristic(self, persona_characteristic_name):
-    pcs = self.get_persona_characteristics()
+    pcId = self.db_proxy.getDimensionId(persona_characteristic_name,'persona_characteristic')
+    pcs = self.get_persona_characteristics(pcId)
     if pcs is None or len(pcs) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('Persona characteristic')
@@ -121,10 +127,10 @@ class PersonaCharacteristicDAO(CairisDAO):
     json_dict['__python_obj__'] = PersonaCharacteristic.__module__+'.'+ PersonaCharacteristic.__name__
     pc = json_serialize(json_dict)
     pc = json_deserialize(pc)
-    pc = self.convert_pcrs(fake_pc=pc)
+    pc,ps,rss,rcs = self.convert_pcrs(fake_pc=pc)
 
     if isinstance(pc, PersonaCharacteristic):
-      return pc
+      return pc,ps,rss,rcs
     else:
       self.close()
       raise MalformedJSONHTTPError()
@@ -135,31 +141,87 @@ class PersonaCharacteristicDAO(CairisDAO):
       pcr_list = []
       if len(real_pc.theGrounds) > 0:
         for real_pcr in real_pc.theGrounds:
-          pcr_list.append(CharacteristicReference(real_pcr[0],'grounds',real_pcr[1],real_pcr[2]))
+          rs = self.db_proxy.getReferenceSynopsis(real_pcr[0])
+          crs = CharacteristicReferenceSynopsis(rs.synopsis(),rs.dimension(),rs.actorType(),rs.actor())
+          rc = self.db_proxy.getReferenceContribution(real_pc.theCharacteristic,rs.reference())
+          frc = CharacteristicReferenceContribution(rc.meansEnd(),rc.contribution())
+          pcr_list.append(CharacteristicReference(real_pcr[0],'grounds',real_pcr[1],real_pcr[2],crs,frc))
         real_pc.theGrounds = pcr_list
         pcr_list = []
         for real_pcr in real_pc.theWarrant:
-          pcr_list.append(CharacteristicReference(real_pcr[0],'warrant',real_pcr[1],real_pcr[2]))
+          rs = self.db_proxy.getReferenceSynopsis(real_pcr[0])
+          crs = CharacteristicReferenceSynopsis(rs.synopsis(),rs.dimension(),rs.actorType(),rs.actor())
+          rc = self.db_proxy.getReferenceContribution(real_pc.theCharacteristic,rs.reference())
+          frc = CharacteristicReferenceContribution(rc.meansEnd(),rc.contribution())
+          pcr_list.append(CharacteristicReference(real_pcr[0],'warrant',real_pcr[1],real_pcr[2],crs,frc))
         real_pc.theWarrant = pcr_list
         pcr_list = []
         for real_pcr in real_pc.theRebuttal:
-          pcr_list.append(CharacteristicReference(real_pcr[0],'rebuttal',real_pcr[1],real_pcr[2]))
+          rs = self.db_proxy.getReferenceSynopsis(real_pcr[0])
+          crs = CharacteristicReferenceSynopsis(rs.synopsis(),rs.dimension(),rs.actorType(),rs.actor())
+          rc = self.db_proxy.getReferenceContribution(real_pc.theCharacteristic,rs.reference())
+          frc = CharacteristicReferenceContribution(rc.meansEnd(),rc.contribution())
+          pcr_list.append(CharacteristicReference(real_pcr[0],'rebuttal',real_pcr[1],real_pcr[2],crs,frc))
         real_pc.theRebuttal = pcr_list
       return real_pc 
     elif fake_pc is not None:
       pcr_list = []
+      ps = None
+      fcs = fake_pc.theCharacteristicSynopsis
+      if (fcs.theSynopsis != ""):
+        ps = ReferenceSynopsis(-1,fake_pc.theCharacteristic,fcs.theSynopsis,fcs.theDimension,fcs.theActorType,fcs.theActor)
+      rss = []
+      rcs = []
+      
       if len(fake_pc.theGrounds) > 0:
         for pcr in fake_pc.theGrounds:
           pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
+          if (ps != None):
+            frs = pcr.theReferenceSynopsis
+            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
+            frc = pcr.theReferenceContribution
+            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs.theSynopsis,frc['theMeansEnd'],frc['theContribution']))
         fake_pc.theGrounds = pcr_list
       if len(fake_pc.theWarrant) > 0:
         pcr_list = []
         for pcr in fake_pc.theWarrant:
           pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
+          if (ps != None):
+            frs = pcr.theReferenceSynopsis
+            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
+            frc = pcr.theReferenceContribution
+            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs.theSynopsis,frc['theMeansEnd'],frc['theContribution']))
         fake_pc.theWarrant = pcr_list
       if len(fake_pc.theRebuttal) > 0:
         pcr_list = []
         for pcr in fake_pc.theRebuttal:
           pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
+          if (ps != None):
+            frs = pcr.theReferenceSynopsis
+            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
+            frc = pcr.theReferenceContribution
+            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs.theSynopsis,frc['theMeansEnd'],frc['theContribution']))
         fake_pc.theRebuttal = pcr_list
-      return fake_pc
+      return fake_pc,ps,rss,rcs
+
+  def assignIntentionalElements(self,pcSyn,rSyns,rConts):
+    psId = self.db_proxy.synopsisId(pcSyn.synopsis())
+    if (psId == -1 and pcSyn.synopsis() != ''):
+      self.db_proxy.addCharacteristicSynopsis(pcSyn)
+    elif (pcSyn.synopsis() != ''):
+      pcSyn.setId(psId)
+      self.db_proxy.updateCharacteristicSynopsis(pcSyn)
+
+    for rSyn in rSyns:
+      rsId = self.db_proxy.synopsisId(rSyn.synopsis())
+      if (rsId == -1 and rSyn.synopsis() != ''):
+        self.db_proxy.addReferenceSynopsis(rSyn)
+      elif (rSyn.synopsis() != ''):
+        rSyn.setId(psId)
+        self.db_proxy.updateReferenceSynopsis(rSyn)
+
+    for rCont in rConts:
+      if (self.db_proxy.hasReferenceContribution(rCont.source(),rCont.destination())):
+        self.db_proxy.updateReferenceContribution(rCont)
+      elif rCont.meansEnd() != '':
+        self.db_proxy.addReferenceContribution(rCont)

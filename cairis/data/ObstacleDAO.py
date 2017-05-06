@@ -48,8 +48,9 @@ class ObstacleDAO(CairisDAO):
     return obstacles
 
   def get_obstacle_by_name(self, name, simplify=True):
+    obsId = self.db_proxy.getDimensionId(name,'obstacle')
     found_obstacle = None
-    obstacles = self.get_obstacles(simplify=False)
+    obstacles = self.get_obstacles(obsId,simplify=False)
 
     if obstacles is not None:
       found_obstacle = obstacles.get(name)

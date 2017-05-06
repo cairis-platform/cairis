@@ -16,28 +16,31 @@
 #  under the License.
 
 import unittest
+import pydot
 import os
-from cairis.mio.ModelImport import importModelFile,importProcessesFile
+import logging
+from cairis.mio.ModelImport import importModelFile,importAttackTreeString
+from cairis.bin.at2om import dotToObstacleModel
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 
 __author__ = 'Shamal Faily'
 
 
-class CodeTests(unittest.TestCase):
+class AttackTreeToObstacleModelTests(unittest.TestCase):
 
   @classmethod
   def setUpClass(cls):
     cairis.core.BorgFactory.initialise()
-    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1)
+    importModelFile(os.environ['CAIRIS_SRC'] + '/test/webinos.xml',1)
 
   def setUp(self):
-    os.environ['OUTPUT_DIR'] = '/tmp'
+    pass
 
   def tearDown(self):
     pass
 
-  def testImportProcesses(self):
-    importProcessesFile(os.environ['CAIRIS_SRC'] + '/test/installCodes.xml',0)
-    importProcessesFile(os.environ['CAIRIS_SRC'] + '/test/coding.xml',0)
-    importProcessesFile(os.environ['CAIRIS_SRC'] + '/test/processes.xml',0)
+  def testxImportSpreadsheet(self):
+    dotInstance = pydot.graph_from_dot_file(os.environ['CAIRIS_SRC'] + '/test/Exploit_vsftpd_backdoor_graphviz.dot')
+    xmlBuf = dotToObstacleModel(dotInstance[0],'Complete','Anon')
+    importAttackTreeString(xmlBuf)

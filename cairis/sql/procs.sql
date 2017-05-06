@@ -867,6 +867,9 @@ drop procedure if exists delete_privilege;
 drop procedure if exists delete_surface_type;
 drop procedure if exists useCaseRequirements;
 drop procedure if exists useCaseGoals;
+drop procedure if exists personaUsabilityScore;
+drop function if exists synopsisId;
+drop function if exists hasReferenceContribution;
 
 delimiter //
 
@@ -8480,7 +8483,9 @@ begin
     union
     select 'goal',g.name from goal g, response_goal rg, environment_goal eg, response re, risk ri, obstaclethreat_goalassociation ot where eg.environment_id = environmentId and eg.environment_id = ot.environment_id and eg.goal_id = g.id and g.id = rg.goal_id and rg.response_id = re.id and re.risk_id = ri.id and ri.threat_id = ot.subgoal_id
     union
-    select 'goal',g.name from goal g, response_goal rg, environment_goal eg, response re, risk ri, obstaclevulnerability_goalassociation ov where eg.environment_id = environmentId and eg.goal_id = g.id and g.id = rg.goal_id and rg.response_id = re.id and re.risk_id = ri.id and ri.vulnerability_id = ov.subgoal_id and eg.environment_id = ov.environment_id
+    select 'goal',g.name from goal g, response_goal rg, response re, risk ri, obstaclethreat_goalassociation ot where rg.goal_id = g.id and rg.response_id = re.id and re.risk_id = ri.id and ri.threat_id = ot.subgoal_id and ot.environment_id = environmentId
+    union
+    select 'goal',g.name from goal g, response_goal rg, response re, risk ri, obstaclevulnerability_goalassociation ov where rg.goal_id = g.id and rg.response_id = re.id and re.risk_id = ri.id and ri.vulnerability_id = ov.subgoal_id and ov.environment_id = environmentId
     union
     select 'obstacle',o.name from obstacle o, environment_obstacle eo where eo.environment_id = environmentId and eo.obstacle_id = o.id
     union
@@ -8504,9 +8509,9 @@ begin
   else
     select 'goal',g.name from goal g, obstaclegoal_goalassociation og where og.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and og.subgoal_id = g.id
     union
-    select 'goal',g.name from goal g, response_goal rg, environment_goal eg, response re, risk ri, obstaclethreat_goalassociation ot where eg.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and eg.environment_id = ot.environment_id and eg.goal_id = g.id and g.id = rg.goal_id and rg.response_id = re.id and re.risk_id = ri.id and ri.threat_id = ot.subgoal_id
+    select 'goal',g.name from goal g, response_goal rg, response re, risk ri, obstaclethreat_goalassociation ot where rg.goal_id = g.id and rg.response_id = re.id and re.risk_id = ri.id and ri.threat_id = ot.subgoal_id and ot.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)
     union
-    select 'goal',g.name from goal g, response_goal rg, environment_goal eg, response re, risk ri, obstaclevulnerability_goalassociation ov where eg.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and eg.goal_id = g.id and g.id = rg.goal_id and rg.response_id = re.id and re.risk_id = ri.id and ri.vulnerability_id = ov.subgoal_id and eg.environment_id = ov.environment_id
+    select 'goal',g.name from goal g, response_goal rg, response re, risk ri, obstaclevulnerability_goalassociation ov where rg.goal_id = g.id and rg.response_id = re.id and re.risk_id = ri.id and ri.vulnerability_id = ov.subgoal_id and ov.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)
     union
     select 'requirement',concat(rm.short_code,'-',r.label) from requirementobstacle_goalassociation ro, requirement r, asset_requirement rmr, asset rm where ro.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ro.goal_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = rmr.requirement_id and rmr.asset_id = rm.id
     union
@@ -8558,7 +8563,7 @@ begin
     union
     select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclethreat_goalassociation ot, risk ri, response re, response_goal rg, environment_obstacle eo, environment_threat et, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where et.environment_id = environmentId and et.environment_id = eo.environment_id and eo.environment_id = er.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and et.environment_id = e.id and et.threat_id = ot.subgoal_id and et.environment_id = ot.environment_id and ot.goal_id = hg.id and ot.subgoal_id = ri.threat_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
     union
-    select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclevulnerability_goalassociation ov, risk ri, response re, response_goal rg, environment_obstacle eo, environment_vulnerability ev, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ev.environment_id = environmentId and ev.environment_id = eo.environment_id and eo.environment_id = er.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and ev.environment_id = e.id and ev.vulnerability_id = ov.subgoal_id and ev.environment_id = ov.environment_id and ov.goal_id = hg.id and ov.subgoal_id = ri.vulnerability_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
+    select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclevulnerability_goalassociation ov,risk ri, response re, response_goal rg, environment_obstacle eo, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ov.environment_id = environmentId and ov.environment_id = e.id and ov.environment_id = eo.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and ov.goal_id = hg.id and ov.subgoal_id = ri.vulnerability_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,concat(rm.short_code,'-',tg.label) subgoal_name,'requirement' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclerequirement_goalassociation ga, environment e, obstacle hg, reference_type rt, requirement tg, asset_requirement rmr, asset rm where ga.environment_id = environmentId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and tg.version = (select max(i.version) from requirement i where i.id = tg.id) and ga.environment_id = e.id and tg.id = rmr.requirement_id and rmr.asset_id = rm.id
     union
@@ -8586,7 +8591,7 @@ begin
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'usecase' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacleusecase_goalassociation ga, environment e, obstacle hg, reference_type rt, usecase tg where ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
-    select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclethreat_goalassociation ot, risk ri, response re, response_goal rg, environment_obstacle eo, environment_threat et, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where et.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and et.environment_id = eo.environment_id and eo.environment_id = er.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and et.environment_id = e.id and et.threat_id = ot.subgoal_id and et.environment_id = ot.subgoal_id and ot.goal_id = hg.id and ot.subgoal_id = ri.threat_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
+    select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclevulnerability_goalassociation ov,risk ri, response re, response_goal rg, environment_obstacle eo, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ov.environment_id in (select id from composite_environment where composite_environment_id = environmentId) and ov.environment_id = e.id and ov.environment_id = eo.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and ov.goal_id = hg.id and ov.subgoal_id = ri.vulnerability_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
     union
     select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclevulnerability_goalassociation ov, risk ri, response re, response_goal rg, environment_obstacle eo, environment_vulnerability ev, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ev.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ev.environment_id = eo.environment_id and eo.environment_id = er.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and ev.environment_id = e.id and ev.vulnerability_id = ov.subgoal_id and ev.environment_id = ov.environment_id and ov.goal_id = hg.id and ov.subgoal_id = ri.vulnerability_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
     union
@@ -10084,9 +10089,13 @@ create procedure deleteSecurityPatternComponents(in patternId int)
 begin
   if patternId = -1
   then
+    delete from securitypattern_asset_template_asset;
     delete from securitypattern_classassociation;
+    delete from securitypattern_template_requirement;
   else
+    delete from securitypattern_asset_template_asset where pattern_id = patternId;
     delete from securitypattern_classassociation where pattern_id = patternId;
+    delete from securitypattern_template_requirement where pattern_id = patternId;
   end if;
 end
 //
@@ -10853,9 +10862,15 @@ begin
 
   if pcId != -1
   then
+    delete from document_reference_contribution where characteristic_id = pcId;
+    delete from requirement_reference_contribution where characteristic_id = pcId;
+    delete from usecase_pc_contribution where characteristic_id = pcId;
     delete from persona_characteristic_synopsis where characteristic_id = pcId;
     delete from persona_characteristic where id = pcId;
   else
+    delete from document_reference_contribution;
+    delete from requirement_reference_contribution;
+    delete from usecase_pc_contribution;
     delete from persona_characteristic_synopsis;
     delete from persona_characteristic;
   end if;
@@ -23121,6 +23136,54 @@ end
 create procedure useCaseGoals(in ucName text,in envName text)
 begin
   select g.name from goal g, usecase u, goalusecase_goalassociation ga, reference_type rt, environment e where u.name = ucName and u.id = ga.subgoal_id and ga.ref_type_id = rt.id and rt.name in ('and','or','responsible','depend') and ga.environment_id = e.id and e.name = envName and ga.goal_id = g.id;
+end
+//
+
+create procedure personaUsabilityScore(in envName text) 
+begin
+  declare environmentId int;
+  select id into environmentId from environment where name = envName limit 1;
+  select p.name,ifnull(avg((tp.duration_id + tp.frequency_id)/2) + avg(tp.demands_id) + avg(tp.goalsupport_id),1) from task_persona tp, persona p where tp.environment_id = environmentId and tp.persona_id = p.id group by p.name;
+end
+//
+
+create function synopsisId(synName text)
+returns int
+deterministic
+begin
+  declare synId int;
+  select id into synId from synopsis where synopsis = synName limit 1;
+  if synId is null
+  then
+    return -1; 
+  else
+    return synId;
+  end if;
+end
+//
+
+create function hasReferenceContribution(rsName text, csName text)
+returns int
+deterministic
+begin
+  declare rsId int;
+  declare csId int;
+  declare rcCount int;
+
+  select id into rsId from synopsis where synopsis = rsName limit 1;
+  select id into csId from synopsis where synopsis = csName limit 1;
+  if rsId is null or csId is null
+  then
+    return 0;
+  else
+    select count(*) into rcCount from contribution where reference_id = rsId and characteristic_id = csId;
+    if rcCount > 0
+    then
+      return 1;
+    else
+      return 0;
+    end if;
+  end if;
 end
 //
 

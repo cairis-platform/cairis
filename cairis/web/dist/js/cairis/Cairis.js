@@ -1129,6 +1129,10 @@ function setTableHeader(activeTable){
       debugLogger("Is Architectural Patterns");
       thead = "<th width='50px' id='addNewArchitecturalPattern'><i class='fa fa-plus floatCenter'></i></th><th>Model</th><th>Interfaces DER</th><th>Channels DER</th><th>Untrusted Surface DES</th>";
       break;
+    case "SecurityPatterns":
+      debugLogger("Is Security Patterns");
+      thead = "<th width='50px' id='addNewSecurityPattern'><i class='fa fa-plus floatCenter'></i></th><th>Security Pattern</th>";
+      break;
     case "Locations":
       debugLogger("Is Locations");
       thead = "<th width='50px' id='addNewLocations'><i class='fa fa-plus floatCenter'></i></th><th>Locations</th>";

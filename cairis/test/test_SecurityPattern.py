@@ -18,7 +18,7 @@
 import unittest
 import os
 import logging
-from cairis.mio.ModelImport import importModelFile,importSecurityPatterns
+from cairis.mio.ModelImport import importModelFile,importSecurityPatternsFile
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 
@@ -31,7 +31,7 @@ class SecurityPatternTests(unittest.TestCase):
   def setUpClass(cls):
     cairis.core.BorgFactory.initialise()
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1)
-    importSecurityPatterns(os.environ['CAIRIS_SRC'] + '/../examples/architecture/schumacher_patterns.xml')
+    importSecurityPatternsFile(os.environ['CAIRIS_SRC'] + '/../examples/architecture/schumacher_patterns.xml')
 
   def setUp(self):
     pass

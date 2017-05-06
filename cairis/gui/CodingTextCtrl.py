@@ -89,7 +89,7 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
 
   def addCode(self,codeName):
     self.getTextSelection()
-    urlStyle = wx.richtext.TextAttrEx()
+    urlStyle = wx.richtext.RichTextAttr()
     urlStyle.SetTextColour(wx.BLUE)
     urlStyle.SetFontUnderlined(True)
     codeRef = str(self.theSelectionStart) + ',' + str(self.theSelectionEnd) + ',code'
@@ -99,7 +99,7 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
 
   def addMemo(self,memoName,memoTxt):
     self.getTextSelection()
-    urlStyle = wx.richtext.TextAttrEx()
+    urlStyle = wx.richtext.RichTextAttr()
     urlStyle.SetTextColour(wx.LIGHT_GREY)
     urlStyle.SetFontUnderlined(True)
     memoRef = str(self.theSelectionStart) + ',' + str(self.theSelectionEnd) + ',memo'
@@ -177,7 +177,7 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
     self.theCodes = codes
     for startIdx,endIdx in codes:
       codeName = self.theCodes[(startIdx,endIdx)] 
-      urlStyle = wx.richtext.TextAttrEx()
+      urlStyle = wx.richtext.RichTextAttr()
       urlStyle.SetTextColour(wx.BLUE)
       urlStyle.SetFontUnderlined(True)
       codeRef = str(startIdx) + ',' + str(endIdx)
@@ -189,7 +189,7 @@ class CodingTextCtrl(wx.richtext.RichTextCtrl):
     self.theMemos = memos
     for startIdx,endIdx in memos:
       memoName,memoTxt = self.theMemos[(startIdx,endIdx)] 
-      urlStyle = wx.richtext.TextAttrEx()
+      urlStyle = wx.richtext.RichTextAttr()
       urlStyle.SetTextColour(wx.LIGHT_GREY)
       urlStyle.SetFontUnderlined(True)
       codeRef = str(startIdx) + ',' + str(endIdx)

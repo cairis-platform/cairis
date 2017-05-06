@@ -32,6 +32,7 @@ from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import CImportMessage
 from cairis.tools.ModelDefinitions import CImportParams
 from cairis.tools.SessionValidator import validate_proxy, check_required_keys, get_session_id
+import codecs
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -87,7 +88,7 @@ class CImportTextAPI(Resource):
 
     if file_contents.startswith('<?xml'):
       fd, abs_path = mkstemp(suffix='.xml')
-      fs_temp = open(abs_path, 'w')
+      fs_temp = codecs.open(abs_path, 'w','utf-8')
       fs_temp.write(file_contents)
       fs_temp.close()
       fd_close(fd)
@@ -109,6 +110,21 @@ class CImportTextAPI(Resource):
       resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
       resp.headers['Content-Type'] = 'application/json'
       return resp
+    elif type == 'Attack Tree (Dot)':
+      try:
+        environment_name = cimport_params['environment']
+        contributor_name = cimport_params['contributor']
+        dao = ImportDAO(session_id)
+        result = dao.import_attack_tree(file_contents,environment_name,contributor_name)
+        dao.close()
+      except DatabaseProxyException as ex:
+        raise ARMHTTPError(ex)
+      except ARMException as ex:
+        raise ARMHTTPError(ex)
+      except Exception as ex:
+        raise CairisHTTPError(status_code=500,message=str(ex.message),status='Unknown error')
+    
+
     else:
       raise CairisHTTPError(status_code=httplib.BAD_REQUEST,message='The provided file is not a valid XML file',status='Invalid XML input')
 

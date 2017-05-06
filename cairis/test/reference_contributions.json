@@ -1,0 +1,28 @@
+{
+  "reference_synopses" : [
+    {
+      "theReference" : "Technical people develop enduser applications.",
+      "theSynopsis" : "Sysadmins develop",
+      "theDimension" : "goal",
+      "theActorType" : "persona",
+      "theActor" : "Tom"
+    }
+   ],
+   "characteristic_synopses": [
+    {
+      "theReference" : "Managers delegate security decisions",
+      "theSynopsis" : "Manager delegates",
+      "theDimension" : "goal",
+      "theActorType" : "persona",
+      "theActor" : "Claire"
+    }
+  ],
+  "reference_contributions": [
+    {
+      "theSource" : "Sysadmins develop",
+      "theDestination" : "Manager delegates",
+      "theMeansEnd" : "end",
+      "theContribution" : "Help"
+    }
+  ] 
+}

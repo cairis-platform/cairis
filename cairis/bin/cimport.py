@@ -47,12 +47,12 @@ def file_import(importFile,mFormat,overwriteFlag,session_id = None):
   if (os.access(importFile, os.R_OK)) == False:
     raise ARMException("Cannot access " + importFile)
 
-  from cairis.mio.ModelImport import importSecurityPatterns, importAttackPattern,importTVTypeFile,importDirectoryFile,importRequirementsFile, importRiskAnalysisFile, importUsabilityFile, importAssociationsFile, importProjectFile, importDomainValuesFile, importComponentViewFile, importSynopsesFile,importProcessesFile,importAssetsFile,importLocationsFile,importModelFile,importMisusabilityFile
+  from cairis.mio.ModelImport import importSecurityPatternsFile, importAttackPattern,importTVTypeFile,importDirectoryFile,importRequirementsFile, importRiskAnalysisFile, importUsabilityFile, importAssociationsFile, importProjectFile, importDomainValuesFile, importComponentViewFile, importSynopsesFile,importProcessesFile,importAssetsFile,importLocationsFile,importModelFile,importMisusabilityFile
 
   msgStr = ''
   if (mFormat == 'securitypattern' or mFormat == 'Security Pattern'):
-    msgStr += importSecurityPatterns(importFile,session_id = session_id)
-  if (mFormat == 'attackpattern' or mFormat == 'Attack Pattern'):
+    msgStr += importSecurityPatternsFile(importFile,session_id = session_id)
+  elif (mFormat == 'attackpattern' or mFormat == 'Attack Pattern'):
     msgStr += importAttackPattern(importFile,session_id)
   elif (mFormat == 'tvtypes' or mFormat == 'Threat and Vulnerability Types'):
     msgStr += importTVTypeFile(importFile,int(overwriteFlag),session_id)

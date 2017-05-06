@@ -436,13 +436,32 @@ var conceptReferenceDefault = {
   "theDescription" : ""
 };
 
+var referenceContributionDefault = {
+  "__python_obj__": "cairis.tools.PseudoClasses.CharacteristicReferenceContribution",
+  "theId" : -1,
+  "theMeansEnd" : "",
+  "theContribution" : ""
+};
+
+var referenceSynopsisDefault = {
+  "__python_obj__": "cairis.tools.PseudoClasses.CharacteristicReferenceSynopsis",
+  "theId" : -1,
+  "theActor" : "",
+  "theSynopsis" : "",
+  "theDimension" : "",
+  "theActorType" : ""
+};
+
 var characteristicReferenceDefault = {
   "__python_obj__": "cairis.tools.PseudoClasses.CharacteristicReference",
   "theReferenceName" : "",
   "theDimensionName" : "document",
   "theCharacteristicType" : "grounds",
-  "theReferenceDescription" : ""
+  "theReferenceDescription" : "",
+  "theReferenceSynopsis" : referenceSynopsisDefault,
+  "theReferenceContribution" : referenceContributionDefault
 };
+
 var personaCharacteristicDefault = {
   "__python_obj__": "PersonaCharacteristic.PersonaCharacteristic",
   "theId": -1,
@@ -450,6 +469,7 @@ var personaCharacteristicDefault = {
   "theModQual" : "",
   "theVariable" : "",
   "theCharacteristic" : "",
+  "theCharacteristicSynopsis" : referenceSynopsisDefault,
   "theGrounds" : [],
   "theWarrant" : [],
   "theRebuttal" : [],
@@ -590,4 +610,14 @@ var locationsDefault = {
   "theName" : "",
   "theDiagram" : "",
   "theLocations" : []
+};
+var securityPatternDefault = {
+  "__python_obj__": "SecurityPattern.SecurityPattern",
+  "theId" : -1,
+  "theName" : "",
+  "theContext" : "",
+  "theProblem" : "",
+  "theSolution" : "",
+  "theRequirements" : [],
+  "theConcernAssociations" : []
 };

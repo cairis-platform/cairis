@@ -626,7 +626,9 @@ mainContent.on('click', '#UpdateResponse', function (e) {
   else {
     resp.theName = $("#theResponseName").val();
     var arr = $("#theTags").val().split(", ")
-    resp.TheTags = arr;
+    if(arr[0] != "") {
+      resp.TheTags = arr;
+    }
     resp.theRisk = $("#chooseRisk").val();
     resp.theResponseType = respKind;
 

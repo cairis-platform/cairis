@@ -1,0 +1,11 @@
+{
+  "reference_synopses" : [
+    {
+      "theReference" : "Technical people develop enduser applications.",
+      "theSynopsis" : "Sysadmins develop",
+      "theDimension" : "goal",
+      "theActorType" : "persona",
+      "theActor" : "Tom"
+    }
+  ] 
+}

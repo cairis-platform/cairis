@@ -101,8 +101,34 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="theStep" class="control-label">Step</label>
-          <textarea rows="5" id="theStep" class="form-control" style="width: 100%" data-error="Step is required" required></textarea>
+          <div class="tabs">
+            <ul>
+              <li><a href="#step">Step</a></li>
+              <li><a href="#synopsis">Synopsis</a></li>
+            </ul>
+            <div id="step">
+              <div class="form-group">
+                <textarea rows="5" id="theStep" class="form-control" style="width: 100%" data-error="Step is required" required></textarea>
+              </div>
+            </div>
+            <div id="synopsis">
+              <div class="form-group">
+                <label for="theSynopsis" class="control-label">Synopsis</label>
+                <input class="form-control" type="text" name="theSynopsis" id="theSynopsis">
+              </div>
+              <div class="form-group">
+                <label for="theActorType" class="control-label">Actor Type</label>
+                <select class="form-control" name="theActorType" id="theActorType">
+                  <option value="asset">Asset</option>
+                  <option value="role">Role</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="theGRLActor" class="control-label">Actor</label>
+                <select class="form-control" name="theGRLActor" id="theGRLActor"></select>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="modal-footer">

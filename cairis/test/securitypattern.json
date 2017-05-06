@@ -1,0 +1,65 @@
+{
+  "access_rights" : [
+      {"theName" : "trusted",
+       "theValue" : "10",
+       "theDescription" : "Subject needs to be trusted to access resource.",
+       "theRationale" : "Subject needs to be trusted to access resource."},
+      {"theName" : "authenticated",
+       "theValue" : "5",
+       "theDescription" : "Subject needs to be explicitly authenticated to access resource.",
+       "theRationale" : "Subject needs to be explicitly authenticated to access resource."}
+  ],
+  "surface_types" : [
+      {"theName" : "JSON",
+       "theValue" : "10",
+       "theDescription" : "JavaScript Object Notation (JSON) representing data structures and algorithms.",
+       "theRationale" : "JavaScript Object Notation (JSON) representing data structures and algorithms."},
+      {"theName" : "Client application",
+       "theValue" : "10",
+       "theDescription" : "Untrusted client application or software component.",
+       "theRationale" : "Untrusted client application or software component."}
+  ],
+  "template_assets" : [
+    {"theName" : "Generic Message",
+     "theShortCode" : "GENM",
+     "theType" : "Information",
+     "theSurfaceType" : "JSON",
+     "theAccessRight" : "trusted",
+     "theDescription" : "Generic",
+     "theSignificance" : "Generic"},
+    {"theName" : "Linked Message",
+     "theShortCode" : "LGENM",
+     "theType" : "Information",
+     "theSurfaceType" : "JSON",
+     "theAccessRight" : "trusted",
+     "theDescription" : "Linked generic",
+     "theSignificance" : "Linked generic"}
+  ],
+  "security_patterns" : [
+    {"theName" : "TestPattern",
+     "theContext" : "some context",
+     "theProblem" : "some problem",
+     "theSolution" : "some solution",
+     "theRequirements" : [
+       {"theName" : "GMRequirement",
+        "theAsset": "Generic Message",
+        "theType" : "Functional",
+        "theDescription" : "Test description",
+        "theRationale": "No rationale",
+        "theFitCriterion": "No fit criterion"
+       }
+     ],
+     "theConcernAssociations" : [
+       {"theHeadAsset" : "Generic Message",
+        "theHeadAdornment" : "Association",
+        "theHeadNry" : "1",
+        "theHeadRole" : "",
+        "theTailRole" : "",
+        "theTailNry" : "1",
+        "theTailAdornment" : "Association",
+        "theTailAsset" : "Linked Message"
+       }
+     ]
+    }
+  ]
+}
