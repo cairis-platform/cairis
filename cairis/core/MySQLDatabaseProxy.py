@@ -336,7 +336,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (closeConn) and self.conn.connection().connection.open :
         self.conn.close()
       if b.runmode == 'desktop':
-        self.conn = MySQLdb.connect(host=b.dbHost,port=b.dbPort,user=b.dbUser,passwd=b.dbPasswd,db=b.dbName)
+        dbEngine = create_engine('mysql+mysqldb://'+b.dbUser+':'+b.dbPasswd+'@'+b.dbHost+':'+str(b.dbPort)+'/'+b.dbName)
+        self.conn = scoped_session(sessionmaker(bind=dbEngine))
       elif b.runmode == 'web':
         ses_settings = b.get_settings(session_id)
         dbEngine = create_engine('mysql+mysqldb://'+ses_settings['dbUser']+':'+ses_settings['dbPasswd']+'@'+ses_settings['dbHost']+':'+str(ses_settings['dbPort'])+'/'+ses_settings['dbName'])
