@@ -29,7 +29,7 @@ class CodeTests(unittest.TestCase):
   @classmethod
   def setUpClass(cls):
     cairis.core.BorgFactory.initialise()
-    importModelFile(os.environ['CAIRIS_SRC'] + '/test/webinos.xml',1)
+    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1)
 
   def setUp(self):
     os.environ['OUTPUT_DIR'] = '/tmp'

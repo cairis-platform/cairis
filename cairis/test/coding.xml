@@ -344,6 +344,6 @@ Along this line, at the end of the exercise, participants remarked their appreci
 <quotation code="structured process" type="code" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="670" to_index="670" />
 <quotation code="general concepts" type="code" artifact_type="internal_document" artifact_name="JimmyOxford" section="none" start_index="2826" to_index="3007" />
 <quotation code="general concepts" type="code" artifact_type="internal_document" artifact_name="JimmyAmbiesense" section="none" start_index="2001" to_index="2181" />
-<code_network persona="Jimmy" relationship_type="implies" from_code="concept reuse" to_code="restricted thinking" />
-<code_network persona="Jimmy" relationship_type="implies" from_code="restricted thinking" to_code="indifference" />
+<code_network persona="Tom" relationship_type="implies" from_code="concept reuse" to_code="restricted thinking" />
+<code_network persona="Tom" relationship_type="implies" from_code="restricted thinking" to_code="indifference" />
 </processes>
