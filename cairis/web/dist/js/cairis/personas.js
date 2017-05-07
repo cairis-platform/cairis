@@ -20,11 +20,13 @@
 'use strict';
 
 $("#personaMenuClick").click(function () {
-  createPersonasTable();
+  $('#menuBCClick').attr('dimension','persona');
+  refreshMenuBreadCrumb('persona');
 });
 
 $("#personaClick").click(function () {
-  createPersonasTable();
+  $('#menuBCClick').attr('dimension','persona');
+  refreshMenuBreadCrumb('persona');
 });
 
 
@@ -77,6 +79,7 @@ function createPersonasTable(){
 
 $(document).on('click', "td.persona-row", function () {
   var personaName = $(this).text();
+  refreshObjectBreadCrumb(personaName);
   viewPersona(personaName);
 });
 
@@ -303,19 +306,22 @@ mainContent.on('click', '#UpdatePersona', function (e) {
 
     if($("#editPersonasOptionsForm").hasClass("new")){
       postPersona(persona, function () {
-        createPersonasTable();
         $("#editPersonasOptionsForm").removeClass("new")
+        $('#menuBCClick').attr('dimension','persona');
+        refreshMenuBreadCrumb('persona');
       });
     } 
     else {
       putPersona(persona, oldName, function () {
-        createPersonasTable();
+        $('#menuBCClick').attr('dimension','persona');
+        refreshMenuBreadCrumb('persona');
       });
     }
   }
 });
 
 $(document).on("click", "#addNewPersona", function () {
+  refreshObjectBreadCrumb('New Persona');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editPersonasOptions.html", "#objectViewer", null, true, true, function () {
     $("#editPersonasOptionsForm").validator();
@@ -336,7 +342,8 @@ $(document).on("click", "#addNewPersona", function () {
 $(document).on('click', 'td.deletePersonaButton', function (e) {
   e.preventDefault();
   deletePersona($(this).find('i').attr("value"), function () {
-    createPersonasTable();
+    $('#menuBCClick').attr('dimension','persona');
+    refreshMenuBreadCrumb('persona');
   });
 });
 
@@ -440,7 +447,8 @@ function getPersonaTypes(callback){
 
 mainContent.on('click', '#ClosePersona', function (e) {
   e.preventDefault();
-  createPersonasTable();
+  $('#menuBCClick').attr('dimension','persona');
+  refreshMenuBreadCrumb('persona');
 });
 
 function deletePersona(name, callback){

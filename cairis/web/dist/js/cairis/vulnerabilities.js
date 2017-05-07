@@ -20,7 +20,8 @@
 'use strict';
 
 $("#vulnerabilityMenuClick").click(function(){
-   createVulnerabilityTable()
+  $('#menuBCClick').attr('dimension','vulnerability');
+  refreshMenuBreadCrumb('vulnerability');
 });
 
 function createVulnerabilityTable(){
@@ -74,6 +75,7 @@ function createVulnerabilityTable(){
 
 $(document).on('click', "td.vulnerability-rows",function(){
   var vulName = $(this).text();
+  refreshObjectBreadCrumb(vulName);
   viewVulnerability(vulName);
 });
 
@@ -121,6 +123,7 @@ function viewVulnerability(vulName) {
 };
 
 $("#mainTable").on("click", "#addNewVulnerability", function () {
+  refreshObjectBreadCrumb('New Vulnerability');
   activeElement("objectViewer");
   var vul = jQuery.extend(true, {}, vulnerabilityDefault);
   $.session.set("Vulnerability", JSON.stringify(vul));
@@ -244,12 +247,14 @@ mainContent.on('click', '#UpdateVulnerability', function (e) {
     });
     if($(this).hasClass("newVulnerability")){
       postVulnerability(theVul, function () {
-        createVulnerabilityTable();
+        $('#menuBCClick').attr('dimension','vulnerability');
+        refreshMenuBreadCrumb('vulnerability');
       });
     }
     else {
       putVulnerability(theVul, $.session.get("VulnerabilityName"), function () {
-        createVulnerabilityTable();
+        $('#menuBCClick').attr('dimension','vulnerability');
+        refreshMenuBreadCrumb('vulnerability');
       });
     }
   }
@@ -271,8 +276,9 @@ $(document).on('click','td.deleteVulnerabilityButton', function (event) {
       origin: serverIP,
       url: serverIP + "/api/vulnerabilities/name/" + vulName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createVulnerabilityTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','vulnerability');
+        refreshMenuBreadCrumb('vulnerability');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -312,7 +318,8 @@ function addVulnerabilityEnvironment() {
 
 mainContent.on('click', '#CloseVulnerability', function (e) {
   e.preventDefault();
-  createVulnerabilityTable();
+  $('#menuBCClick').attr('dimension','vulnerability');
+  refreshMenuBreadCrumb('vulnerability');
 });
 
 function putVulnerability(vuln, oldName, callback){

@@ -20,7 +20,8 @@
 'use strict';
 
 $("#locationsClick").click(function(){
-  createLocationsTable();
+  $('#menuBCClick').attr('dimension','location');
+  refreshMenuBreadCrumb('location');
 });
 
 function createLocationsTable(){
@@ -69,6 +70,7 @@ function createLocationsTable(){
 
 $(document).on('click', "td.locations-rows", function () {
   var name = $(this).text();
+  refreshObjectBreadCrumb(name);
   viewLocations(name);
 });
 
@@ -107,6 +109,7 @@ function appendLocation(loc) {
 };
 
 $(document).on("click", "#addNewLocations", function () {
+  refreshObjectBreadCrumb('New Locations');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editLocationsOptions.html", "#objectViewer", null, true, true, function () {
     $("#editLocationsOptionsForm").validator();
@@ -455,13 +458,15 @@ mainContent.on('click', '#UpdateLocations', function (e) {
 
   if($("#editLocationsOptionsForm").hasClass("new")){
     postLocations(locs, function () {
-      createLocationsTable();
+      $('#menuBCClick').attr('dimension','location');
+      refreshMenuBreadCrumb('location');
       $("#editLocationsOptionsForm").removeClass("new")
     });
   }
   else {
     putLocations(locs, oldName, function () {
-      createLocationsTable();
+      $('#menuBCClick').attr('dimension','location');
+      refreshMenuBreadCrumb('location');
     });
   }
 });
@@ -469,7 +474,8 @@ mainContent.on('click', '#UpdateLocations', function (e) {
 $(document).on('click', 'td.deleteLocationsButton', function (e) {
   e.preventDefault();
   deleteLocations($(this).find('i').attr("value"), function () {
-    createLocationsTable();
+    $('#menuBCClick').attr('dimension','location');
+    refreshMenuBreadCrumb('location');
   });
 });
 
@@ -577,6 +583,7 @@ function deleteLocations(name, callback){
 
 mainContent.on('click', '#CloseLocations', function (e) {
   e.preventDefault();
-  createLocationsTable();
+  $('#menuBCClick').attr('dimension','location');
+  refreshMenuBreadCrumb('location');
 });
 

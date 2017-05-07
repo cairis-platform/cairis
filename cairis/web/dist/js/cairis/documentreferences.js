@@ -20,7 +20,8 @@
 'use strict';
 
 $("#documentReferencesClick").click(function(){
-  createDocumentReferencesTable();
+  $('#menuBCClick').attr('dimension','document_reference');
+  refreshMenuBreadCrumb('document_reference');
 });
 
 function createDocumentReferencesTable(){
@@ -74,6 +75,7 @@ function createDocumentReferencesTable(){
 $(document).on('click', "td.documentreference-rows", function () {
   activeElement("objectViewer");
   var name = $(this).text();
+  refreshObjectBreadCrumb(name);
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -118,13 +120,15 @@ mainContent.on('click', '#UpdateDocumentReference', function (e) {
 
   if($("#editDocumentReferenceOptionsForm").hasClass("new")){
     postDocumentReference(dr, function () {
-      createDocumentReferencesTable();
       $("#editDocumentReferenceOptionsForm").removeClass("new")
+      $('#menuBCClick').attr('dimension','document_reference');
+      refreshMenuBreadCrumb('document_reference');
     });
   }
   else {
     putDocumentReference(dr, oldName, function () {
-      createDocumentReferencesTable();
+      $('#menuBCClick').attr('dimension','document_reference');
+      refreshMenuBreadCrumb('document_reference');
     });
   }
 });
@@ -132,11 +136,13 @@ mainContent.on('click', '#UpdateDocumentReference', function (e) {
 $(document).on('click', 'td.deleteDocumentReferenceButton', function (e) {
   e.preventDefault();
   deleteDocumentReference($(this).find('i').attr("value"), function () {
-    createDocumentReferencesTable();
+    $('#menuBCClick').attr('dimension','document_reference');
+    refreshMenuBreadCrumb('document_reference');
   });
 });
 
 $(document).on("click", "#addNewDocumentReference", function () {
+  refreshObjectBreadCrumb('New Document Reference');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#objectViewer", null, true, true, function () {
     $("#editDocumentReferenceOptionsForm").validator();
@@ -266,6 +272,7 @@ function getDocNames(callback){
 
 mainContent.on('click', '#CloseDocumentReference', function (e) {
   e.preventDefault();
-  createDocumentReferencesTable();
+  $('#menuBCClick').attr('dimension','document_reference');
+  refreshMenuBreadCrumb('document_reference');
 });
 

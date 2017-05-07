@@ -20,7 +20,8 @@
 'use strict';
 
 $("#useCaseClick").click(function () {
-  createUseCasesTable();
+  $('#menuBCClick').attr('dimension','use_case');
+  refreshMenuBreadCrumb('use_case');
 });
 
 function createUseCasesTable(){
@@ -96,6 +97,7 @@ function createUseCasesTable(){
 
 $(document).on('click', "td.usecase-row", function () {
   var ucName = $(this).text();
+  refreshObjectBreadCrumb(ucName);
   viewUseCase(ucName); 
 });
 
@@ -448,13 +450,15 @@ mainContent.on('click', '#UpdateUseCase', function (e) {
 
     if($("#editUseCaseOptionsForm").hasClass("new")){
       postUseCase(usecase, function () {
-        createUseCasesTable();
         $("#editUseCaseOptionsForm").removeClass("new")
+        $('#menuBCClick').attr('dimension','use_case');
+        refreshMenuBreadCrumb('use_case');
       });
     } 
     else {
       putUseCase(usecase, oldName, function () {
-        createUseCasesTable();
+        $('#menuBCClick').attr('dimension','use_case');
+        refreshMenuBreadCrumb('use_case');
       });
     }
   }
@@ -474,8 +478,9 @@ $(document).on('click', 'td.deleteUseCaseButton', function (e) {
       origin: serverIP,
       url: serverIP + "/api/usecases/name/" + ucName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createUseCasesTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','use_case');
+        refreshMenuBreadCrumb('use_case');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -488,6 +493,7 @@ $(document).on('click', 'td.deleteUseCaseButton', function (e) {
 });
 
 $(document).on("click", "#addNewUseCase", function () {
+  refreshObjectBreadCrumb('New Use Case');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#objectViewer", null, true, true, function () {
     $('#editUseCaseOptionsForm').validator();
@@ -500,7 +506,8 @@ $(document).on("click", "#addNewUseCase", function () {
 
 mainContent.on('click', '#CloseUseCase', function (e) {
   e.preventDefault();
-  createUseCasesTable();
+  $('#menuBCClick').attr('dimension','use_case');
+  refreshMenuBreadCrumb('use_case');
 });
 
 function putUseCase(usecase, oldName, callback){

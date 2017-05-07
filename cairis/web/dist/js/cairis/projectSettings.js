@@ -20,6 +20,12 @@
 'use strict';
 
 $("#projectClick").click(function () {
+  $('#menuBCClick').attr('dimension','properties');
+  refreshMenuBreadCrumb('properties');
+//  showProjectSettingsForm();
+});
+
+function showProjectSettingsForm() {
   activeElement("objectViewer");
   getProjectSettings(function (data) {
 
@@ -44,7 +50,7 @@ $("#projectClick").click(function () {
       $.session.set("ProjectRevision", currentRevision);
     }); 
   });
-});
+};
 
 function getProjectSettings(callback){
   $.ajax({

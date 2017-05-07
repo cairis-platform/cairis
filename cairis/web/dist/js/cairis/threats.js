@@ -20,7 +20,8 @@
 'use strict';
 
 $("#threatMenuClick").click(function () {
-  createThreatsTable();
+  $('#menuBCClick').attr('dimension','threat');
+  refreshMenuBreadCrumb('threat');
 });
 
 function createThreatsTable(){
@@ -74,6 +75,7 @@ function createThreatsTable(){
 var mainContent = $("#objectViewer");
 $(document).on('click', "td.threat-rows", function () {
   var thrName = $(this).text();
+  refreshObjectBreadCrumb(thrName);
   viewThreat(thrName);
 });
 
@@ -123,6 +125,7 @@ function viewThreat(thrName) {
 };
 
 $(document).on("click", "#addNewThreat", function () {
+  refreshObjectBreadCrumb('New Threat');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editThreatOptions.html", "#objectViewer", null, true, true, function () {
     $("#editThreatOptionsform").validator();
@@ -408,12 +411,14 @@ mainContent.on('click', '#UpdateThreat', function (e) {
 
     if($("#editThreatOptionsform").hasClass("newThreat")){
       postThreat(threat, function () {
-        createThreatsTable();
+        $('#menuBCClick').attr('dimension','threat');
+        refreshMenuBreadCrumb('threat');
       });
     } 
     else {
       putThreat(threat, oldName, function () {
-        createThreatsTable();
+        $('#menuBCClick').attr('dimension','threat');
+        refreshMenuBreadCrumb('threat');
       });
     }
   }
@@ -471,8 +476,9 @@ $(document).on('click', 'td.deleteThreatButton', function (e) {
       origin: serverIP,
       url: serverIP + "/api/threats/name/" + threatName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createThreatsTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','threat');
+        refreshMenuBreadCrumb('threat');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -549,7 +555,8 @@ function clearThreatEnvInfo(){
 
 mainContent.on('click', '#CloseThreat', function (e) {
   e.preventDefault();
-  createThreatsTable();
+  $('#menuBCClick').attr('dimension','threat');
+  refreshMenuBreadCrumb('threat');
 });
 
 function putThreat(threat, oldName, callback){

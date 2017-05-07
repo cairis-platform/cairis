@@ -20,7 +20,8 @@
 'use strict';
 
 $("#externalDocumentsClick").click(function(){
-  createExternalDocumentsTable();
+  $('#menuBCClick').attr('dimension','external_document');
+  refreshMenuBreadCrumb('external_document');
 });
 
 function createExternalDocumentsTable(){
@@ -74,6 +75,7 @@ function createExternalDocumentsTable(){
 $(document).on('click', "td.externaldocument-rows", function () {
   activeElement("objectViewer");
   var name = $(this).text();
+  refreshObjectBreadCrumb(name);
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -111,13 +113,15 @@ mainContent.on('click', '#UpdateExternalDocument', function (e) {
 
   if($("#editExternalDocumentOptionsForm").hasClass("new")){
     postExternalDocument(edoc, function () {
-      createExternalDocumentsTable();
       $("#editExternalDocumentOptionsForm").removeClass("new")
+      $('#menuBCClick').attr('dimension','external_document');
+      refreshMenuBreadCrumb('external_document');
     });
   }
   else {
     putExternalDocument(edoc, oldName, function () {
-      createExternalDocumentsTable();
+      $('#menuBCClick').attr('dimension','external_document');
+      refreshMenuBreadCrumb('external_document');
     });
   }
 });
@@ -125,11 +129,13 @@ mainContent.on('click', '#UpdateExternalDocument', function (e) {
 $(document).on('click', 'td.deleteExternalDocumentButton', function (e) {
   e.preventDefault();
   deleteExternalDocument($(this).find('i').attr("value"), function () {
-    createExternalDocumentsTable();
+    $('#menuBCClick').attr('dimension','external_document');
+    refreshMenuBreadCrumb('external_document');
   });
 });
 
 $(document).on("click", "#addNewExternalDocument", function () {
+  refreshObjectBreadCrumb('New External Document');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#objectViewer", null, true, true, function () {
     $("#editExternalDocumentOptionsForm").validator();
@@ -231,6 +237,7 @@ function deleteExternalDocument(name, callback){
 
 mainContent.on('click', '#CloseExternalDocument', function (e) {
   e.preventDefault();
-  createExternalDocumentsTable();
+  $('#menuBCClick').attr('dimension','external_document');
+  refreshMenuBreadCrumb('external_document');
 });
 

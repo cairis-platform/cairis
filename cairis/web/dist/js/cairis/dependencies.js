@@ -26,7 +26,8 @@ $('#editDependencyOptionsForm').validator().on('submit', function (e) {
 });
 
 $("#dependenciesClick").click(function(){
-   createDependenciesTable()
+  $('#menuBCClick').attr('dimension','dependency');
+  refreshMenuBreadCrumb('dependency');
 });
 
 // A function for filling the table with Dependencies
@@ -156,13 +157,15 @@ mainContent.on('click', '#UpdateDependency', function (e) {
 
   if($("#editDependencyOptionsForm").hasClass("new")){
     postDependency(dependency, function () {
-      createDependenciesTable();
       $("#editDependencyOptionsForm").removeClass("new")
+      $('#menuBCClick').attr('dimension','dependency');
+      refreshMenuBreadCrumb('dependency');
     });
   }  
   else {
     putDependency(dependency, oldEnvName, oldDepender, oldDependee,oldDependency,  function () {
-      createDependenciesTable();
+      $('#menuBCClick').attr('dimension','dependency');
+      refreshMenuBreadCrumb('dependency');
     });
   }
 });
@@ -237,13 +240,15 @@ $(document).on('click', 'td.deleteDependencyButton', function (e) {
   var dependencies = JSON.parse($.session.get("Dependencies"));
   var dependency = dependencies[$(this).index()];
   deleteDependency(dependency, function () {
-    createDependenciesTable();
+    $('#menuBCClick').attr('dimension','dependency');
+    refreshMenuBreadCrumb('dependency');
   });
 });
 
 mainContent.on('click', '#CloseDependency', function (e) {
   e.preventDefault();
-  createDependenciesTable();
+  $('#menuBCClick').attr('dimension','dependency');
+  refreshMenuBreadCrumb('dependency');
 });
 
 function deleteDependency(dependency, callback){

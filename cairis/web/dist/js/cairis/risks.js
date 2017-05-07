@@ -20,7 +20,8 @@
 'use strict';
 
 $("#riskMenuClick").click(function () {
-  createRisksTable();
+  $('#menuBCClick').attr('dimension','risk');
+  refreshMenuBreadCrumb('risk');
 });
 
 function createRisksTable(){
@@ -214,6 +215,7 @@ function toggleRiskWindows(){
 $(document).on('click', 'td.risk-rows', function () {
   activeElement("objectViewer");
   var name = $(this).text();
+  refreshObjectBreadCrumb(name);
   $.session.set("riskName", name);
   $.ajax({
     type: "GET",
@@ -261,6 +263,7 @@ $(document).on('click', 'td.risk-rows', function () {
 });
 
 $(document).on('click','#addNewRisk', function() {
+  refreshObjectBreadCrumb('New Risk');
   activeElement("objectViewer");
   $.session.set("Risk", JSON.stringify(jQuery.extend(true, {},riskDefault )));
   fillOptionMenu("fastTemplates/editRiskOptions.html", "#objectViewer", null, true, true, function () {
@@ -444,20 +447,23 @@ mainContent.on('click', '#UpdateRisk', function (e) {
 
   if($("#editRisksForm").hasClass("new")){
     postRisk(risk, function () {
-      createRisksTable();
       $("#editRisksForm").removeClass("new")
+      $('#menuBCClick').attr('dimension','risk');
+      refreshMenuBreadCrumb('risk');
     });
   }
   else {
     putRisk(risk, oldName, function () {
-      createRisksTable();
+      $('#menuBCClick').attr('dimension','risk');
+      refreshMenuBreadCrumb('risk');
     });
   }
 });
 
 mainContent.on('click', '#CloseRisk', function (e) {
   e.preventDefault();
-  createRisksTable();
+  $('#menuBCClick').attr('dimension','risk');
+  refreshMenuBreadCrumb('risk');
 });
  
 $(document).on('click', 'td.deleteRiskButton', function (e) {
@@ -474,8 +480,31 @@ $(document).on('click', 'td.deleteRiskButton', function (e) {
       origin: serverIP,
       url: serverIP + "/api/risks/name/" + riskName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createRisksTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','risk');
+        refreshMenuBreadCrumb('risk');
+      }
+    });
+  });
+});
+ 
+$(document).on('click', 'td.deleteRiskButton', function (e) {
+  e.preventDefault();
+  var riskName = $(this).find('i').attr("value");
+  deleteObject('risk', riskName, function (riskName) {
+    $.ajax({
+      type: "DELETE",
+      dataType: "json",
+      contentType: "application/json",
+      accept: "application/json",
+      crossDomain: true,
+      processData: false,
+      origin: serverIP,
+      url: serverIP + "/api/risks/name/" + riskName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      success: function (data) {
+        showPopup(true);
+        $('#menuBCClick').attr('dimension','risk');
+        refreshMenuBreadCrumb('risk');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
