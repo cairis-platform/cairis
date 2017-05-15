@@ -121,8 +121,10 @@ class UseCasesAPI(Resource):
     session_id = get_session_id(session, request)
 
     dao = UseCaseDAO(session_id)
-    new_usecase = dao.from_json(request)
+    new_usecase,ucContribs = dao.from_json(request)
     usecase_id = dao.add_usecase(new_usecase)
+    for rc in ucContribs:
+      dao.assign_usecase_contribution(rc)
     dao.close()
 
     resp_dict = {'message': 'UseCase successfully added', 'usecase_id': usecase_id}
@@ -203,9 +205,15 @@ class UseCaseByNameAPI(Resource):
     session_id = get_session_id(session, request)
 
     dao = UseCaseDAO(session_id)
-    req = dao.from_json(request)
-    dao.update_usecase(req, name=name)
+    uc,ucContribs = dao.from_json(request)
+    dao.update_usecase(uc, name=name)
+    if (len(ucContribs) > 0):
+      for rc in ucContribs:
+        dao.assign_usecase_contribution(rc)
+    else:
+      dao.remove_usecase_contributions(uc)
     dao.close()
+
 
     resp_dict = {'message': 'UseCase successfully updated'}
     resp = make_response(json_serialize(resp_dict), httplib.OK)
@@ -432,7 +440,7 @@ class UseCaseExceptionAPI(Resource):
     session_id = get_session_id(session, request)
 
     dao = UseCaseDAO(session_id)
-    uc = dao.from_json(request)
+    uc,ucContribs = dao.from_json(request)
     dao.generate_obstacle_from_usecase(uc,environment_name,step_name,exception_name)
     dao.close()
 

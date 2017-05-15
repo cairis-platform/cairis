@@ -132,6 +132,9 @@ function viewUseCase(ucName) {
           });
           $("#theTags").val(text);
         }
+        $.each(data.theReferenceContributions, function (index, refCont) {
+          appendUseCaseContribution(refCont);
+        });
 
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendUseCaseEnvironment(env.theEnvironmentName);
@@ -236,7 +239,7 @@ function appendUseCaseStep(stepTxt) {
 }
 
 function appendUseCaseActor(actor) {
-  $("#theActors").find("tbody").append("<tr><td class='removeActor'><i class='fa fa-minus'></i></td><td class='usecaseActor'>" + actor + "</td></tr>").animate('slow');
+  $("#theActors").find("tbody").append("<tr><td class='removeUseCaseActor'><i class='fa fa-minus'></i></td><td class='usecaseActor'>" + actor + "</td></tr>").animate('slow');
 }
 
 mainContent.on('click', '#addActorToUseCase', function () {
@@ -280,6 +283,10 @@ mainContent.on('click','td.usecaseStep',function() {
       var currentStep = env.theSteps[stepIdx];
       $('#theStep').val(currentStep.theStepText);
       $('#theSynopsis').val(currentStep.theSynopsis);
+      if (currentStep.theActorType == '') {
+        currentStep.theActorType = 'role';
+        currentStep.theActor = '';
+      }
       $('#theActorType').val(currentStep.theActorType);
       refreshDimensionSelector($('#theGRLActor'),$('#theActorType').val(),envName,function(){
         $('#theGRLActor').val(currentStep.theActor);
@@ -718,6 +725,70 @@ mainContent.on('click', ".deleteUseCaseStepException", function () {
       excRow.remove();
     }
   });
+});
 
+mainContent.on('change','#theGRLUCContributionTo',function() {
+  refreshDimensionSelector($('#theGRLBeneficiary'),$(this).val());
+});
 
+mainContent.on('click', '#addContributionToUseCase', function () {
+  $('#useCaseContributionDialog').attr('data-selectedIndex',undefined);
+  $('#theGRLUCContributionMeansEnd').val('means');
+  $('#theGRLUCContribution').val('SomePositive');
+  refreshDimensionSelector($('#theGRLBeneficiary'),'persona_characteristic_synopsis', undefined, function(){
+    $('#useCaseContributionDialog').modal('show');
+  });
+
+});
+
+$(document).on('click', "td.ucgrlcontribution-row", function () {
+  var ucContIdx = $(this).closest('tr').index();
+  $('#useCaseContributionDialog').attr('data-selectedIndex',ucContIdx);
+  var uc = JSON.parse($.session.get("UseCase"));
+  var refCont = uc.theReferenceContributions[ucContIdx];
+  $('#theGRLUCContributionMeansEnd').val(refCont.theReferenceContribution.theMeansEnd);
+  $('#theGRLUCContribution').val(refCont.theReferenceContribution.theContribution);
+  refreshDimensionSelector($('#theGRLBeneficiary'),'persona_characteristic_synopsis', undefined, function(){
+    $('#theGRLBeneficiary').val(refCont.theContributionTo);
+    $('#useCaseContributionDialog').modal('show');
+  });
+});
+
+mainContent.on('click', '#AddUCContributionButton', function () {
+  var refCont = {};
+  refCont.theContributionTo = $('#theGRLBeneficiary').val();
+  refCont.theReferenceContribution = {};
+  refCont.theReferenceContribution.theMeansEnd = $('#theGRLUCContributionMeansEnd').val();
+  refCont.theReferenceContribution.theContribution = $('#theGRLUCContribution').val();
+
+  var uc = JSON.parse($.session.get("UseCase"));
+
+  var selectedIdx = $('#useCaseContributionDialog').attr('data-selectedIndex');
+
+  if (selectedIdx != undefined) {
+    uc.theReferenceContributions[selectedIdx] = refCont;
+    $.session.set("UseCase", JSON.stringify(uc));
+    $('#theUCContributions').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(1)').text(refCont.theContributionTo);
+    $('#theUCContributions').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(2)').text(refCont.theReferenceContribution.theMeansEnd);
+    $('#theUCContributions').find("tbody").find('tr:eq(' + selectedIdx + ')').find('td:eq(3)').text(refCont.theReferenceContribution.theContribution);
+  }
+  else {
+    uc.theReferenceContributions.push(refCont);
+    $.session.set("UseCase", JSON.stringify(uc));
+    appendUseCaseContribution(refCont);
+  }
+  $('#useCaseContributionDialog').modal('hide');
+});
+
+function appendUseCaseContribution(refCont) {
+  $("#theUCContributions").find("tbody").append("<tr><td class='removeUseCaseContribution'><i class='fa fa-minus'></i></td><td class='ucgrlcontribution-row'>" + refCont.theContributionTo + "</td><td>" + refCont.theReferenceContribution.theMeansEnd + "</td><td>" + refCont.theReferenceContribution.theContribution + "</td></tr>").animate('slow');
+}
+
+mainContent.on('click', ".removeUseCaseContribution", function () {
+  var ucContRow = $(this).closest("tr");
+  var rowIdx = ucContRow.index();
+  ucContRow.remove();
+  var uc = JSON.parse($.session.get("UseCase"));
+  uc.theReferenceContributions.splice(rowIdx,1);
+  $.session.set("UseCase", JSON.stringify(uc));
 });
