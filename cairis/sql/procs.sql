@@ -20199,6 +20199,8 @@ begin
   declare andCursor cursor for select ga.subgoal_id from obstacleobstacle_goalassociation ga where ga.goal_id = obsId and ga.environment_id = envId and ga.ref_type_id = 0;
   declare orCursor cursor for select ga.subgoal_id from obstacleobstacle_goalassociation ga where ga.goal_id = obsId and ga.environment_id = envId and ga.ref_type_id = 1;
   declare continue handler for not found set done = 1;
+  SET max_sp_recursion_depth = 1;
+
 
   select count(subgoal_id) into andCount from obstacleobstacle_goalassociation where goal_id = obsId and environment_id = envId and ref_type_id = 0;
   if (andCount > 0)
