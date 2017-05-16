@@ -53,3 +53,10 @@ class CExportTests(CairisDaemonTestCase):
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
     self.assertIsNone(xml.sax.parseString(rv.data,ArchitecturalPatternContentHandler()))
+
+  def test_cexport_grl_get(self):
+    method = 'test_cexport_grl_get?session_id=test'
+    url = '/api/export/grl/task/Report Disorder/persona/Peter/environment/Complete?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
