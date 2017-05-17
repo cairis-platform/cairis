@@ -98,7 +98,7 @@ $("#exportGRLClick").click(function () {
       refreshDimensionSelector($('#theGRLExportPersona'),'persona',initEnvName,function() {
         $('#chooseGRLExportParameters').modal('show');
       });
-    });
+    },['All']);
   });
 });
 
@@ -106,7 +106,7 @@ $('#chooseGRLExportParameters').on('change','#theGRLExportEnvironment',function(
   var envName = $('#theGRLExportEnvironment').val();
   refreshDimensionSelector($('#theGRLExportTask'),'task',envName,function() {
     refreshDimensionSelector($('#theGRLExportPersona'),'persona',envName);
-  });
+  },['All']);
 });
 
 $("#chooseGRLExportParameters").on('click', '#grlExportButton',function(e) {
