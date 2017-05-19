@@ -99,41 +99,26 @@ function createDependenciesTable(){
 $(document).on('click', "td.dependency-rows", function(){
   activeElement("objectViewer");
   var dependencies = JSON.parse($.session.get("Dependencies"));
-  var dependency = dependencies[$(this).index()];
+  var dependency = dependencies[$(this).closest('tr').index()];
 
   fillOptionMenu("fastTemplates/editDependencyOptions.html","#objectViewer",null,true,true, function(){
     $('#editDependencyOptionsForm').validator();
     $('#UpdateDependency').text("Update");
-    $('#theRationale').val(dependency.theRationale);
-    var environmentSelect = $("#theEnvironmentName");
-    environmentSelect.empty()
-    getEnvironments(function (envs) {
-      $.each(envs, function (key,objt) {
-        environmentSelect.append($('<option>', { value : objt }).text(objt));
-      }); 
+    refreshDimensionSelector($('#theEnvironmentName'),'environment',undefined,function() {
+      $('#theEnvironmentName').val(dependency.theEnvironmentName);
+      refreshDimensionSelector($('#theDependerName'),'role',dependency.theEnvironmentName,function() {
+        $('#theDependerName').val(dependency.theDepender);
+        refreshDimensionSelector($('#theDependeeName'),'role',dependency.theEnvironmentName,function() {
+          $('#theDependeeName').val(dependency.theDependee);
+          $('#theDependencyType').val(dependency.theDependencyType);
+          refreshDimensionSelector($('#theDependencyName'),dependency.theDependencyType,undefined,function() {
+            $('#theRationale').val(dependency.theRationale);
+            $.session.set("Dependency", JSON.stringify(dependency));
+            $('#editDependencyOptionsForm').loadJSON(dependency, null);
+          },['All']);
+        });
+      });
     });
-    environmentSelect.val(dependency.theEnvironmentName);
-    var dependerSelect = $("#theDependerName");
-    var dependeeSelect = $("#theDependeeName");
-    dependerSelect.empty()
-    dependeeSelect.empty()
-    getRolesInEnvironment(dependency.theEnvironmentName,function (roles) {
-      $.each(roles, function (key,objt) {
-        dependerSelect.append('<option>' + objt + '</option>');
-        dependeeSelect.append('<option>' + objt + '</option>');
-      }); 
-    });
-    $('#theDependerName').val(dependency.theDepender);
-    $('#theDependeeName').val(dependency.theDependee);
-    $("#theDependencyType").val(dependency.theDependencyType);
-    $("#theDependencyName").empty();
-    getDimensionsInEnvironment(dependency.theDependencyType,dependency.theEnvironmentName,function (dims) {
-      $.each(dims, function (key,objt) {
-        $("#theDependencyName").append('<option>' + objt + '</option>');
-      }); 
-    });
-    $.session.set("Dependency", JSON.stringify(dependency));
-    $('#editDependencyOptionsForm').loadJSON(dependency, null);
   });
 });
 
@@ -203,34 +188,17 @@ $(document).on("click", "#addNewDependency", function () {
     $('#editDependencyOptionsForm').validator();
     $('#UpdateDependency').text("Create");
     $("#editDependencyOptionsForm").addClass("new");
-    $.session.set("Dependency", JSON.stringify(jQuery.extend(true, {},dependencyDefault )));
 
-    var environmentSelect = $("#theEnvironmentName");
-    environmentSelect.empty()
-    getEnvironments(function (envs) {
-      $.each(envs, function (key,objt) {
-        environmentSelect.append($('<option>', { value : objt }).text(objt));
-      }); 
-    });
-
-    var dependerSelect = $("#theDependerName");
-    var dependeeSelect = $("#theDependeeName");
-    dependerSelect.empty();
-    dependeeSelect.empty();
-    getRoles(function (roles) {
-      $.each(roles, function (key,objt) {
-        dependerSelect.append('<option>' + objt + '</option>');
-        dependeeSelect.append('<option>' + objt + '</option>');
-      }); 
-    });
-
-    var depType = $("#theDependencyType").val();
-    var envName = $("#theEnvironmentName").val();
-    $("#theDependencyName").empty();
-    getDimensionsInEnvironment(depType,envName,function (dims) {
-      $.each(dims, function (key,objt) {
-        $("#theDependencyName").append('<option>' + objt + '</option>');
-      }); 
+    refreshDimensionSelector($('#theEnvironmentName'),'environment',undefined,function() {
+      refreshDimensionSelector($('#theDependerName'),'role',$('#theEnvironmentName').val(),function() {
+        refreshDimensionSelector($('#theDependeeName'),'role',$('#theEnvironmentName').val(),function() {
+          refreshDimensionSelector($('#theDependencyName'),$('#theDependencyType').val(),undefined,function() {
+            $('#theRationale').val('');
+            $.session.set("Dependency", JSON.stringify(jQuery.extend(true, {},dependencyDefault )));
+            $('#editDependencyOptionsForm').loadJSON(dependency, null);
+          },['All']);
+        });
+      });
     });
   });
 });
