@@ -877,8 +877,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def deleteObject(self,objtId,tableName):
     try: 
       session = self.conn()
-      sqlTxt = 'call delete_' + tableName + '(:obj)' 
-      session.execute(sqlTxt, {'obj':objtId})
+      sqlTxt = 'call delete_' + tableName + '(%s)' %(objtId)
+      session.execute(sqlTxt)
       session.commit()
       session.close()
     except _mysql_exceptions.IntegrityError, e:
@@ -989,10 +989,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addSecurityProperties(self,dimTable,objtId,environmentName,securityProperties,pRationale):
-    sqlTxt = 'call add_' + dimTable + '_properties(%s,"%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s")' %(objtId,environmentName,securityProperties[C_PROPERTY],securityProperties[I_PROPERTY],securityProperties[AV_PROPERTY],securityProperties[AC_PROPERTY],securityProperties[AN_PROPERTY],securityProperties[PAN_PROPERTY],securityProperties[UNL_PROPERTY],securityProperties[UNO_PROPERTY],pRationale[C_PROPERTY],pRationale[I_PROPERTY],pRationale[AV_PROPERTY],pRationale[AC_PROPERTY],pRationale[AN_PROPERTY],pRationale[PAN_PROPERTY],pRationale[UNL_PROPERTY],pRationale[UNO_PROPERTY])
+    sqlTxt = 'call add_' + dimTable + '_properties(:a,:b,:c,:d,:e,:f,:g,:h,:i,:j,:k,:l,:m,:n,:o,:p,:q,:r)'
     try:
       session = self.conn()
-      session.execute(sqlTxt)
+      session.execute(sqlTxt,{'a':objtId,'b':environmentName,'c':securityProperties[C_PROPERTY],'d':securityProperties[I_PROPERTY],'e':securityProperties[AV_PROPERTY],'f':securityProperties[AC_PROPERTY],'g':securityProperties[AN_PROPERTY],'h':securityProperties[PAN_PROPERTY],'i':securityProperties[UNL_PROPERTY],'j':securityProperties[UNO_PROPERTY],'k':pRationale[C_PROPERTY],'l':pRationale[I_PROPERTY],'m':pRationale[AV_PROPERTY],'n':pRationale[AC_PROPERTY],'o':pRationale[AN_PROPERTY],'p':pRationale[PAN_PROPERTY],'q':pRationale[UNL_PROPERTY],'r':pRationale[UNO_PROPERTY]})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -1205,9 +1205,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'No identifier associated with '
         exceptionText += dimensionTable + ' object ' + dimensionName
         raise DatabaseProxyException(exceptionText) 
-
-      row = rs.fetchall()
-      dimId = row[0][0]
+      if (rs.fetchall is not None):
+        dimId = rs.fetchall()[0][0]
+      else:
+        dimId = None
       if (dimId == None and dimensionTable == 'requirement'):
         rs = session.execute('select requirementNameId(:name)',{'name':dimensionName})
         row = rs.fetchall()
@@ -1421,7 +1422,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for cProperties in parameters.environmentProperties():
         environmentName = cProperties.name()
         self.addDimensionEnvironment(vulId,'vulnerability',environmentName)
-        ssession.execute("call addVulnerabilitySeverity(:vId,:env,:severity)",{'vId':vulId,'env':environmentName,'severity':cProperties.severity()})
+        session.execute("call addVulnerabilitySeverity(:vId,:env,:severity)",{'vId':vulId,'env':environmentName,'severity':cProperties.severity()})
         for assetName in cProperties.assets():
           session.execute("call addAssetVulnerability(:vId,:env,:assName)",{'vId':vulId,'env':environmentName,'assName':assetName})
       session.commit()
@@ -1608,7 +1609,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       for role in roles:
         sqlTxt = 'call add_' + table + '_role (%s,"%s","%s")' %(personaId, environmentName,role)
-        rs = session.execute(sqlTxt) 
+        rs = session.execute(sqlTxt)
+      session.commit() 
       session.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -1775,7 +1777,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       rs = session.execute('call taskPersonas(:tId,:eId)',{'tId':taskId,'eId':environmentId})
       rowCount = rs.rowcount
       personas = []
-      if (fetchall > 0):
+      if (rowCount > 0):
         for row in rs.fetchall():
           row = list(row)
           personas.append((row[0],row[1],row[2],row[3],row[4]))
@@ -1792,7 +1794,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       rs = session.execute('call taskAssets(:tId,:eId)',{'tId':taskId,'eId':environmentId})
       rowCount = rs.rowcount
       assets = []
-      if (fetchall > 0):
+      if (rowCount > 0):
         for row in rs.fetchall():
           row = list(row)
           assets.append(row[0])
@@ -2376,6 +2378,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         fromObjt = traceRow[FROM_OBJT_COL]
         fromName = traceRow[FROM_ID_COL]
         toObjt = traceRow[TO_OBJT_COL]
+        print 'from: ', fromObjt, ' to: ',toObjt
         toName = traceRow[TO_ID_COL]
         if (fromObjt == 'task' and toObjt == 'asset'):
           continue
@@ -3667,20 +3670,20 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def goalModel(self,envName,goalName = '',topLevelGoals = 0,caseFilter = 0):
     if (goalName == ''):
-      return self.goalAssociations('call goalModel("%s")',envName)
+      return self.goalAssociations('call goalModel(:id)',envName)
     else:
       return self.goalTreeAssociations('call goalTree("%s","%s","%s","%s")',goalName,envName,topLevelGoals,caseFilter)
    
 
   def responsibilityModel(self,envName,roleName = ''):
     if (roleName == ''):
-      return self.goalAssociations('call responsibilityModel("%s")',envName)
+      return self.goalAssociations('call responsibilityModel(:id)',envName)
     else:
       return self.goalTreeAssociations('call subResponsibilityModel("%s","%s")',envName,roleName)
  
   def obstacleModel(self,envName,goalName = '',topLevelGoals = 0):
     if (goalName == ''):
-      return self.goalAssociations('call obstacleModel("%s")',envName)
+      return self.goalAssociations('call obstacleModel(:id)',envName)
     else:
       return self.goalTreeAssociations('call obstacleTree("%s","%s","%s","%s")',goalName,envName,topLevelGoals)
  
@@ -3688,7 +3691,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def taskModel(self,envName,taskName = '',mcFilter=False):
     if (taskName == ''):
-      return self.goalAssociations('call taskModel("%s")',envName)
+      return self.goalAssociations('call taskModel(:id)',envName)
     else:
       if (mcFilter == True):
         return self.goalTreeAssociations('call subMisuseCaseModel("%s","%s")',taskName,envName)
@@ -3696,12 +3699,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         return self.goalTreeAssociations('call subTaskModel("%s","%s")',taskName,envName)
 
   def getGoalAssociations(self,constraintId = ''):
-    return self.goalAssociations('call goalAssociationNames(%s)',constraintId)
+    return self.goalAssociations('call goalAssociationNames(:id)',constraintId)
 
   def goalAssociations(self,procName,constraintId = ''):
     try:
       session = self.conn()
-      rs = session.execute(procName %(constraintId))
+      rs = session.execute(procName,{'id':constraintId} )
       associations = {}
       for row in rs.fetchall():
         row = list(row)
@@ -3932,7 +3935,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addTaskConcernAssociation(self,taskId,environmentName,source,sourceMultiplicity,link,target,targetMultiplicity):
     try:
       session = self.conn()
-      session.execute('call addTaskConcernAssociation(:tId,:env,:src,:sMulti,:link,:trgt,:tMulti)',{'tId':taskId,'env':environmentName,'src':source,'sMulti':sourceMultiplicity,'link':link,'trgt':target,'tMutli':targetMultiplicity})
+      session.execute('call addTaskConcernAssociation(:tId,:env,:src,:sMulti,:link,:trgt,:tMulti)',{'tId':taskId,'env':environmentName,'src':source,'sMulti':sourceMultiplicity,'link':link,'trgt':target,'tMulti':targetMultiplicity})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -5706,8 +5709,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     refId = self.newId()
     refName = parameters.name()
     dimName = parameters.dimension()
+
+    print dimName
+
     objtName = parameters.objectName()
     cDesc = parameters.description()
+
     try:
       session = self.conn()
       session.execute('call addConceptReference(:rId,:rName,:dName,:obj,:cDesc)',{'rId':refId,'rName':refName,'dName':dimName,'obj':objtName,'cDesc':cDesc.encode('utf-8')})
@@ -6070,7 +6077,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       session.execute('call addUseCase(:id,:name,:auth,:code,:desc)',{'id':ucId,'name':ucName,'auth':ucAuth,'code':ucCode,'desc':ucDesc})
       session.commit()
-      sesion.close()
+      session.close()
       for actor in ucActors:
         self.addUseCaseRole(ucId,actor)
       self.addTags(ucName,'usecase',tags)
@@ -7448,12 +7455,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting requirements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addTag(self,tagObjt,tagName,tagDim):
+  def addTag(self,tagObjt,tagName,tagDim, session):
     try:
-      session = self.conn()
       session.execute('call addTag(:obj,:name,:dim)',{'obj':tagObjt,'name':tagName,'dim':tagDim})
-      session.commit()
-      session.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding tag ' + tagName + ' to ' + tagDim + ' ' + tagObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
@@ -7473,8 +7477,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addTags(self,dimObjt,dimName,tags):
     try:
       self.deleteTags(dimObjt,dimName)
+      session = self.conn()
       for tag in tags:
-        self.addTag(dimObjt,tag,dimName)
+        self.addTag(dimObjt,tag,dimName,session)
+      session.commit()
+      session.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error deleting tags from ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
@@ -7629,7 +7636,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
     try:
       session = self.conn()
-      session.execute('call addConnector(:connId,:cvName,:cName,:fName,fRole,fIf,tName,tIf,tRole,conAsset,pName,arName)',{'connId':connId,'cvName':cvName,'cName':cName,'fName':fromName,'fRole':fromRole,'fIf':fromIf,'tName':toName,'tIf':toIf,'tRole':toRole,'conAsset':conAsset,'pName':pName,'arName':arName})
+      session.execute('call addConnector(:connId,:cvName,:cName,:fName,:fRole,:fIf,:tName,:tIf,:tRole,:conAsset,:pName,:arName)',{'connId':connId,'cvName':cvName,'cName':cName,'fName':fromName,'fRole':fromRole,'fIf':fromIf,'tName':toName,'tIf':toIf,'tRole':toRole,'conAsset':conAsset,'pName':pName,'arName':arName})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8251,7 +8258,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       rs = session.execute('call taskUseCases(:task)',{'task':taskName})
       rowCount = rs.rowcount
       ucs = []
-      if (fetchall > 0):
+      if (rowCount > 0):
         for row in rs.fetchall():
           row = list(row)
           ucs.append(row[0])
@@ -8268,7 +8275,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       rs = session.execute('call usecaseComponents(:useCase)',{'useCase':ucName})
       rowCount = rs.rowcount
       coms = []
-      if (fetchall > 0):
+      if (rowCount > 0):
         for row in rs.fetchall():
           row = list(row)
           coms.append(row[0])
@@ -9679,7 +9686,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
     try:
       session = self.conn()
-      session.execute('call addPersonaInstance(:lId,:iId,:iName,:assName)',{'lId':locId,'iId':instanceId,'iName':instanceName,'pName':personaName})
+      session.execute('call addPersonaInstance(:lId,:iId,:iName,:pName)',{'lId':locId,'iId':instanceId,'iName':instanceName,'pName':personaName})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -9992,6 +9999,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.reconnect(True,session_id)
 
   def showDatabases(self,session_id):
+    b = Borg()
+    ses_settings = b.get_settings(session_id)
+    dbName = ses_settings['dbName']
     session = self.conn()
     rs = session.execute('show databases')
     dbs = []
