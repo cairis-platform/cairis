@@ -877,8 +877,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def deleteObject(self,objtId,tableName):
     try: 
       session = self.conn()
-      sqlTxt = 'call delete_' + tableName + '(%s)' %(objtId)
-      session.execute(sqlTxt)
+      sqlTxt = 'call delete_' + tableName + '(:obj)' 
+      session.execute(sqlTxt, {'obj':objtId})
       session.commit()
       session.close()
     except _mysql_exceptions.IntegrityError, e:
