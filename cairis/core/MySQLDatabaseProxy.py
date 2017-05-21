@@ -371,8 +371,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
     
   def close(self):
-    if self.conn.connection().connection.open:
-      self.conn.close()
+      self.conn.remove()
 
   def getRequirements(self,constraintId = '',isAsset = 1):
     try:
@@ -472,7 +471,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addRequirement(self,r,assetName,isAsset = True):
     try:
       session = self.conn()
-      session.execute('call updateRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type)',{'lbl':r.label(),'id':r.id(),'vers':r.version(),'name':r.name(),'desc':r.description(),'rationale':r.rationale(),'origin':r.originator(),'fCrit':r.fitCriterion(),'priority':r.priority(),'type':r.type()})
+      session.execute('call addRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type,:asName,:isAs)',{'lbl':r.label(),'id':r.id(),'vers':r.version(),'name':r.name(),'desc':r.description(),'rationale':r.rationale(),'origin':r.originator(),'fCrit':r.fitCriterion(),'priority':r.priority(),'type':r.type(),'asName':assetName,'isAs':isAsset})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -683,6 +682,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def getAttackers(self,constraintId = -1):
     try:
+      self.conn.remove()
       session = self.conn()
       rs = session.execute('call getAttackers(:id)',{'id':constraintId})
       attackers = {}
@@ -876,10 +876,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
   def deleteObject(self,objtId,tableName):
     try: 
-      session = self.conn()
-      sqlTxt = 'call delete_' + tableName + '(%s)' %(objtId)
-      session.execute(sqlTxt)
-      session.commit()
+      session = self.conn.connection().connection.cursor()
+      sqlTxt = 'call delete_' + tableName + '(%s)'
+      session.execute(sqlTxt,[objtId])
       session.close()
     except _mysql_exceptions.IntegrityError, e:
       id,msg = e
@@ -950,10 +949,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addTemplateAssetProperties(self,taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat):
-    sqlTxt = 'call add_template_asset_properties(%s,"%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s")' %(taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat)
+    sqlTxt = 'call add_template_asset_properties(:a,:b,:c,:d,:e,:f,:g,:h,:i,:j,:k,:l,:m,:n,:o,:p,:q)'
     try:
       session = self.conn()
-      session.execute(sqlTxt)
+      session.execute(sqlTxt, {'a':taId,'b':cProp,'c':iProp,'d':avProp,'e':acProp,'f':anProp,'g':panProp,'h':unlProp,'i':unoProp,'j':cRat,'k':iRat,'l':avRat,'m':acRat,'n':anRat,'o':panRat,'p':unlRat,'q':unoRat})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -1201,14 +1200,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         dimensionName = self.conn.connection().connection.escape_string(dimensionName)
         rs = session.execute('call dimensionId(:name,:table)',{'name':dimensionName,'table':dimensionTable})
 
-      if (rs.fetchall == 0):
+      if (rs.rowcount == 0):
         exceptionText = 'No identifier associated with '
         exceptionText += dimensionTable + ' object ' + dimensionName
         raise DatabaseProxyException(exceptionText) 
-      if (rs.fetchall is not None):
-        dimId = rs.fetchall()[0][0]
-      else:
-        dimId = None
+      
+      row = rs.fetchone()
+      dimId = row[0]
       if (dimId == None and dimensionTable == 'requirement'):
         rs = session.execute('select requirementNameId(:name)',{'name':dimensionName})
         row = rs.fetchall()
@@ -2378,7 +2376,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         fromObjt = traceRow[FROM_OBJT_COL]
         fromName = traceRow[FROM_ID_COL]
         toObjt = traceRow[TO_OBJT_COL]
-        print 'from: ', fromObjt, ' to: ',toObjt
         toName = traceRow[TO_ID_COL]
         if (fromObjt == 'task' and toObjt == 'asset'):
           continue
@@ -5709,9 +5706,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     refId = self.newId()
     refName = parameters.name()
     dimName = parameters.dimension()
-
-    print dimName
-
     objtName = parameters.objectName()
     cDesc = parameters.description()
 
@@ -6910,7 +6904,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def pcToGrl(self,pNames,tNames,envName):
     try:
       session = self.conn()
-      rs = session.execute('call pcToGrl(":pNames","%:tNames",:env)',{'pNames':pNames,'tNames':tNames,'env':envName})
+      rs = session.execute('call pcToGrl(:pNames,:tNames,:env)',{'pNames':pNames,'tNames':tNames,'env':envName})
       row = rs.fetchall()
       buf = row[0][0]
       session.close()
@@ -7477,7 +7471,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addTags(self,dimObjt,dimName,tags):
     try:
       self.deleteTags(dimObjt,dimName)
+      self.conn.remove()
       session = self.conn()
+      session.begin(subtransactions=True)
       for tag in tags:
         self.addTag(dimObjt,tag,dimName,session)
       session.commit()
