@@ -682,7 +682,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def getAttackers(self,constraintId = -1):
     try:
-      self.conn.remove()
       session = self.conn()
       rs = session.execute('call getAttackers(:id)',{'id':constraintId})
       attackers = {}
@@ -876,9 +875,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
   def deleteObject(self,objtId,tableName):
     try: 
-      session = self.conn.connection().connection.cursor()
-      sqlTxt = 'call delete_' + tableName + '(%s)'
-      session.execute(sqlTxt,[objtId])
+      session = self.conn()
+      sqlTxt = 'call delete_' + tableName + '(:obj)'
+      session.execute(sqlTxt,{'obj':objtId})
+      session.commit()
       session.close()
     except _mysql_exceptions.IntegrityError, e:
       id,msg = e
@@ -1700,7 +1700,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call getMisuseCases(:id)',{'id':constraintId})
-      if (rs.fetchall == 0):
+      if (rs.rowcount == 0):
         return None
       else:
         mcs = {}
@@ -1730,7 +1730,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call riskMisuseCase(:id)',{'id':riskId})
-      if (rs.fetchall == 0):
+      if (rs.rowcount == 0):
         return None
       else:
         row = rs.fetchall()
@@ -2404,7 +2404,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call reportDependents(:id,:name)',{'id':objtId,'name':dimName})
-      if (rs.fetchall == 0):
+      if (rs.rowcount == 0):
         return []
       else:
         deps = []
@@ -2478,8 +2478,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def deleteEnvironment(self,environmentId):
-    self.deleteObject(environmentId,'environment')
-    
+    try: 
+      curs = self.conn.connection().connection.cursor()
+      sqlTxt = 'call delete_environment(%s)'
+      curs.execute(sqlTxt,[environmentId])
+      curs.close()
+    except _mysql_exceptions.IntegrityError, e:
+      id,msg = e
+      exceptionText = 'Cannot remove environment due to dependent data (id:' + str(id) + ',message:' + msg + ').'
+      raise IntegrityException(exceptionText) 
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error deleting environments (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText)     
 
   def riskRating(self,thrName,vulName,environmentName):
     try:
@@ -2620,7 +2631,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call roleResponses(:rId,:eId)',{'rId':roleId,'eId':environmentId})
-      if (rs.fetchall == 0):
+      if (rs.rowcount == 0):
         session.close()
         return []
       else:
@@ -2639,7 +2650,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call roleCountermeasures(:rId,:eId)',{'rId':roleId,'eId':environmentId})
-      if (rs.fetchall == 0):
+      if (rs.rowcount == 0):
         session.close()
         return []
       else:
@@ -4869,7 +4880,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call associationDependencyCheck(:from,:to,:env)',{'from':fromAsset,'to':toAsset,'env':envName})
-      if (rs.fetchall == 0):
+      if (rs.rowcount == 0):
         session.close()
         return []
       else:
@@ -4888,7 +4899,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call associationTargetDependencyCheck(:a0,:a1,:a2,:a3,:a4,:a5,:a6,:a7,:to,:env)',{'a0':assetProperties[0],'a1':assetProperties[1],'a2':assetProperties[2],'a3':assetProperties[3],'a4':assetProperties[4],'a5':assetProperties[5],'a6':assetProperties[6],'a7':assetProperties[7],'to':toAsset,'env':envName})
-      if (rs.fetchall == 0):
+      if (rs.rowcount == 0):
         session.close()
         return []
       else:
@@ -6904,7 +6915,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def pcToGrl(self,pNames,tNames,envName):
     try:
       session = self.conn()
-      rs = session.execute('call pcToGrl(:pNames,:tNames,:env)',{'pNames':pNames,'tNames':tNames,'env':envName})
+      rs = session.execute('call pcToGrl(":pNames", ":tNames", :env)',{'pNames':pNames,'tNames':tNames,'env':envName})
       row = rs.fetchall()
       buf = row[0][0]
       session.close()
@@ -7449,9 +7460,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting requirements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addTag(self,tagObjt,tagName,tagDim, session):
+  def addTag(self,tagObjt,tagName,tagDim, curs):
     try:
-      session.execute('call addTag(:obj,:name,:dim)',{'obj':tagObjt,'name':tagName,'dim':tagDim})
+      curs.execute('call addTag(%s,%s,%s)',[tagObjt,tagName,tagDim])
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding tag ' + tagName + ' to ' + tagDim + ' ' + tagObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
@@ -7471,13 +7482,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addTags(self,dimObjt,dimName,tags):
     try:
       self.deleteTags(dimObjt,dimName)
-      self.conn.remove()
-      session = self.conn()
-      session.begin(subtransactions=True)
+      curs = self.conn.connection().connection.cursor()
       for tag in tags:
-        self.addTag(dimObjt,tag,dimName,session)
-      session.commit()
-      session.close()
+        self.addTag(dimObjt,tag,dimName, curs)
+      curs.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error deleting tags from ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
