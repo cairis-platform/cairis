@@ -20,7 +20,8 @@
 'use strict';
 
 $("#securityPatternsClick").click(function () {
-  createSecurityPatternsTable();
+  $('#menuBCClick').attr('dimension','security_pattern');
+  refreshMenuBreadCrumb('security_pattern');
 });
 
 function createSecurityPatternsTable(){
@@ -86,6 +87,7 @@ function createSecurityPatternsTable(){
 
 $(document).on('click', "td.securitypattern-rows", function () {
   var spName = $(this).text();
+  refreshObjectBreadCrumb(spName);
   viewSecurityPattern(spName);
 });
 
@@ -125,6 +127,7 @@ function viewSecurityPattern(spName) {
 };
 
 $(document).on("click", "#addNewSecurityPattern", function () {
+  refreshObjectBreadCrumb('New Security Pattern');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editSecurityPatternOptions.html", "#objectViewer", null, true, true, function () {
     $("#editSecurityPatternOptionsForm").validator();
@@ -151,7 +154,8 @@ mainContent.on("click","#UpdateSecurityPattern",function(e) {
     sp.theSolution = $('#theSolution').val();
     postSecurityPattern(sp,function() {
       $("#editSecurityPatternsOptionsForm").removeClass("new");
-      createSecurityPatternsTable();
+      $('#menuBCClick').attr('dimension','security_pattern');
+      refreshMenuBreadCrumb('security_pattern');
     });
   }
   else {
@@ -161,7 +165,8 @@ mainContent.on("click","#UpdateSecurityPattern",function(e) {
     sp.theProblem = $('#theProblem').val();
     sp.theSolution = $('#theSolution').val();
     putSecurityPattern(sp,oldName,function() {
-      createSecurityPatternsTable();
+      $('#menuBCClick').attr('dimension','security_pattern');
+      refreshMenuBreadCrumb('security_pattern');
     });
   }
 });
@@ -244,8 +249,9 @@ $(document).on('click', 'td.deleteSecurityPatternButton', function (e) {
       origin: serverIP,
       url: serverIP + "/api/security_patterns/name/" + encodeURIComponent(spName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createSecurityPatternsTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','security_pattern');
+        refreshMenuBreadCrumb('security_pattern');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -267,7 +273,8 @@ function appendPatternRequirement(preq) {
 
 mainContent.on('click', '#CloseSecurityPattern', function (e) {
   e.preventDefault();
-  createSecurityPatternsTable();
+  $('#menuBCClick').attr('dimension','security_pattern');
+  refreshMenuBreadCrumb('security_pattern');
 });
 
 mainContent.on('click','#addPatternStructure',function() {

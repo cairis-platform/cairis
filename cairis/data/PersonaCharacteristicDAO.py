@@ -221,7 +221,7 @@ class PersonaCharacteristicDAO(CairisDAO):
         self.db_proxy.updateReferenceSynopsis(rSyn)
 
     for rCont in rConts:
-      if (self.db_proxy.hasReferenceContribution(rCont.source(),rCont.destination())):
+      if (self.db_proxy.hasContribution('reference',rCont.source(),rCont.destination())):
         self.db_proxy.updateReferenceContribution(rCont)
       elif rCont.meansEnd() != '':
         self.db_proxy.addReferenceContribution(rCont)

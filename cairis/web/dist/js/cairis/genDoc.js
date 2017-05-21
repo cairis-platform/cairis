@@ -20,10 +20,16 @@
 'use strict';
 
 $("#genDocClick").click(function () {
+  $('#menuBCClick').attr('dimension','documentation');
+  refreshMenuBreadCrumb('documentation');
+//  showDocumentationForm();
+});
+
+function showDocumentationForm() {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editGenDocOptions.html", "#objectViewer", null, true, true, function () {
   });
-});
+}
 
 var mainContent = $("#objectViewer");
 mainContent.on('click',"#GenerateDocumentation", function (e) {

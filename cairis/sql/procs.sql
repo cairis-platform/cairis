@@ -870,6 +870,9 @@ drop procedure if exists useCaseGoals;
 drop procedure if exists personaUsabilityScore;
 drop function if exists synopsisId;
 drop function if exists hasReferenceContribution;
+drop function if exists hasUseCaseContribution;
+drop procedure if exists persona_characteristic_synopsisNames;
+drop procedure if exists removeUseCaseContributions;
 
 delimiter //
 
@@ -3466,6 +3469,7 @@ end
 
 create procedure delete_usecase(in ucId int)
 begin
+  call removeUseCaseContributions(ucId);
   call deleteUseCaseComponents(ucId);
   delete from goalusecase_goalassociation where subgoal_id = ucId;
   delete from requirement_usecase where usecase_id = ucId;
@@ -8072,12 +8076,18 @@ end
 create procedure getDimensions(in dimensionTable text, in constraintId int)
 begin
   declare dimSql varchar(4000);
+  declare nameCol varchar(11) default 'name';
 
+  if dimensionTable = 'persona_characteristic'
+  then
+    set nameCol = 'description';
+  end if;
+ 
   if constraintId = -1
   then
-    set dimSql = concat('select id, name from ',dimensionTable,' order by 2');
+    set dimSql = concat('select id, ',nameCol,' from ',dimensionTable,' order by 2');
   else
-    set dimSql = concat('select id, name from ',dimensionTable,' where id = ',constraintId,' order by 2');
+    set dimSql = concat('select id, ',nameCol,' from ',dimensionTable,' where id = ',constraintId,' order by 2');
   end if;
   set @sql = dimSql;
   prepare stmt from @sql;
@@ -23184,6 +23194,45 @@ begin
       return 0;
     end if;
   end if;
+end
+//
+
+create function hasUseCaseContribution(ucName text, csName text)
+returns int
+deterministic
+begin
+  declare ucId int;
+  declare csId int;
+  declare rcCount int;
+
+  select id into ucId from usecase where name = ucName limit 1;
+  select id into csId from synopsis where synopsis = csName limit 1;
+  if ucId is null or csId is null
+  then
+    return 0;
+  else
+    select count(*) into rcCount from contribution where reference_id = ucId and characteristic_id = csId;
+    if rcCount > 0
+    then
+      return 1;
+    else
+      return 0;
+    end if;
+  end if;
+end
+//
+
+create procedure persona_characteristic_synopsisNames() 
+begin
+  select synopsis from persona_characteristic_synopsis;
+end
+//
+
+create procedure removeUseCaseContributions(in ucId int)
+begin
+  delete from usecase_pc_contribution where usecase_id = ucId;
+  delete from usecase_tc_contribution where usecase_id = ucId;
+  delete from usecase_dr_contribution where usecase_id = ucId;
 end
 //
 

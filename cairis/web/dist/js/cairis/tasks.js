@@ -38,11 +38,13 @@ window.reverseFrequencyLookup['High'] = 'Monthly or less';
 
 
 $("#taskClick").click(function () {
-  createTasksTable();
+  $('#menuBCClick').attr('dimension','task');
+  refreshMenuBreadCrumb('task');
 });
 
 $("#taskMenuClick").click(function () {
-  createTasksTable();
+  $('#menuBCClick').attr('dimension','task');
+  refreshMenuBreadCrumb('task');
 });
 
 
@@ -118,6 +120,7 @@ function createTasksTable(){
 
 $(document).on('click', "td.task-row", function () {
   var taskName = $(this).text();
+  refreshObjectBreadCrumb(taskName);
   viewTask(taskName);
 });
 
@@ -481,13 +484,15 @@ mainContent.on('click', '#UpdateTask', function (e) {
 
     if($("#editTaskOptionsForm").hasClass("new")){
       postTask(task, function () {
-        createTasksTable();
         $("#editTaskOptionsForm").removeClass("new")
+        $('#menuBCClick').attr('dimension','task');
+        refreshMenuBreadCrumb('task');
       });
     } 
     else {
       putTask(task, oldName, function () {
-        createTasksTable();
+        $('#menuBCClick').attr('dimension','task');
+        refreshMenuBreadCrumb('task');
       });
     }
   }
@@ -507,8 +512,9 @@ $(document).on('click', 'td.deleteTaskButton', function (e) {
       origin: serverIP,
       url: serverIP + "/api/tasks/name/" + taskName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createTasksTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','task');
+        refreshMenuBreadCrumb('task');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -522,6 +528,7 @@ $(document).on('click', 'td.deleteTaskButton', function (e) {
 
 
 $(document).on("click", "#addNewTask", function () {
+  refreshObjectBreadCrumb('New Task');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editTaskOptions.html", "#objectViewer", null, true, true, function () {
     $("#editTaskOptionsForm").validator();
@@ -534,7 +541,8 @@ $(document).on("click", "#addNewTask", function () {
 
 mainContent.on('click', '#CloseTask', function (e) {
   e.preventDefault();
-  createTasksTable();
+  $('#menuBCClick').attr('dimension','task');
+  refreshMenuBreadCrumb('task');
 });
 
 function putTask(task, oldName, callback){

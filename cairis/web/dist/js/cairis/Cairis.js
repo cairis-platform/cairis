@@ -41,7 +41,8 @@ $(document).ready(function() {
       success: function(data, status, xhr) {
         debugLogger(data);
         $.session.set("sessionID", data.session_id);
-        summaryTables();
+        refreshHomeBreadCrumb();
+//        summaryTables();
         hideLoading();
       },
       error: function(data, status, xhr) {
@@ -308,6 +309,8 @@ $('#amassetsbox').change(function() {
 });
 
 function getAssetview(environment){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   window.assetEnvironment = environment;
   var assetName = $('#amassetsbox').val();
   assetName = assetName == "All" ? "all" : assetName;
@@ -331,6 +334,8 @@ function getAssetview(environment){
 }
 
 function getArchitecturalPatternView(apName){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   $('#aparchitecturalpatternsbox').val(apName);
   $.ajax({
     type:"GET",
@@ -408,6 +413,8 @@ $('#mmmisusabilitycasesbox').change(function() {
 
 
 function getGoalview(environment,goalName,ucName){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   window.assetEnvironment = environment;
   goalName = (goalName == undefined || goalName == 'All') ? "all" : goalName;
   ucName = (ucName == undefined || ucName == 'All') ? "all" : ucName;
@@ -431,6 +438,8 @@ function getGoalview(environment,goalName,ucName){
 }
 
 function getObstacleview(environment,obstacle){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   window.assetEnvironment = environment;
   obstacle = (obstacle == undefined || obstacle == 'All') ? "all" : obstacle;
 
@@ -453,6 +462,8 @@ function getObstacleview(environment,obstacle){
 }
 
 function getResponsibilityview(environment,role){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   window.assetEnvironment = environment;
   role = (role == undefined || role == 'All') ? "all" : role;
   $.ajax({
@@ -625,6 +636,8 @@ function replaceRequirementNodes(data,reqDict) {
 }
 
 function getRiskview(environment,dimName,objtName,modelLayout){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   window.assetEnvironment = environment;
   dimName = (dimName == undefined || dimName == 'All') ? 'all' : dimName;
   objtName = (objtName == undefined || objtName == 'All') ? 'all' : objtName;
@@ -654,6 +667,8 @@ function getRiskview(environment,dimName,objtName,modelLayout){
 }
 
 function getRequirementView(environment,reqName){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   window.assetEnvironment = environment;
   reqName = (reqName == undefined || reqName == 'All') ? 'all' : reqName;
   $.ajax({
@@ -679,6 +694,8 @@ function getRequirementView(environment,reqName){
 
 
 function getTaskview(environment,task,misusecase){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   window.assetEnvironment = environment;
   task = (task == undefined || task == 'All') ? "all" : task;
   misusecase = (misusecase == undefined || misusecase == 'All') ? "all" : misusecase;
@@ -702,6 +719,8 @@ function getTaskview(environment,task,misusecase){
 }
 
 function getPersonaView(pName,bvName,pcName){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   window.personaName = pName;
   $('#appersonasbox').val(pName);
   $.ajax({
@@ -723,6 +742,8 @@ function getPersonaView(pName,bvName,pcName){
 }
 
 function getLocationsView(locsName,envName){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   $.ajax({
     type:"GET",
     accept:"application/json",

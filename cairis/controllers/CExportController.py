@@ -114,3 +114,65 @@ class CExportArchitecturalPatternAPI(Resource):
     resp.headers["Content-Type"] = 'application/xml'
     resp.headers["Content-Disposition"] = 'Attachment; filename=' + architectural_pattern_name + '.xml'
     return resp
+
+
+class CExportGRLAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Exports GRL elements to GRL file',
+    nickname='cexport-file-get',
+    parameters=[
+      {
+        "name": "task_name",
+        "description": "The task name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "persona_name",
+        "description": "The persona name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "environment_name",
+        "description": "The environment name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': 'The provided file is not a valid XML file'
+      },
+      {
+        'code': httplib.BAD_REQUEST,
+        'message': '''Some parameters are missing. Be sure 'file_contents' and 'type' are defined.'''
+      }
+    ]
+  )
+  # endregion
+  def get(self,task_name,persona_name,environment_name):
+    session_id = get_session_id(session, request)
+    dao = ExportDAO(session_id)
+    modelBuf = dao.grl_export(task_name,persona_name,environment_name)
+    dao.close()
+    resp = make_response(modelBuf)
+    resp.headers["Content-Type"] = 'application/grl'
+    resp.headers["Content-Disposition"] = 'Attachment; filename=' + task_name + '.grl'
+    return resp

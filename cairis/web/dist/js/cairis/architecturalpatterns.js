@@ -20,11 +20,11 @@
 'use strict';
 
 $("#architecturalPatternsClick").click(function () {
-  createArchitecturalPatternsTable();
+  $('#menuBCClick').attr('dimension','architectural_pattern');
+  refreshMenuBreadCrumb('architectural_pattern');
 });
 
 function createArchitecturalPatternsTable(){
-
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -98,6 +98,7 @@ function createArchitecturalPatternsTable(){
 
 $(document).on('click', "td.architecturalpattern-rows", function () {
   var apName = $(this).text();
+  refreshObjectBreadCrumb(apName);
   viewArchitecturalPattern(apName);
 });
 
@@ -202,6 +203,7 @@ function viewComponentGoalModel(cName) {
 }
 
 $(document).on("click", "#addNewArchitecturalPattern", function () {
+  refreshObjectBreadCrumb('New Architectural Pattern');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editArchitecturalPatternOptions.html", "#objectViewer", null, true, true, function () {
     $("#editArchitecturalPatternOptionsForm").validator();
@@ -224,7 +226,8 @@ mainContent.on("click","#UpdateArchitecturalPattern",function(e) {
     ap.theSynopsis = $('#theSynopsis').val();
     postArchitecturalPattern(ap,function() {
       $("#editArchitecturalPatternsOptionsForm").removeClass("new");
-      createArchitecturalPatternsTable();
+      $('#menuBCClick').attr('dimension','architectural_pattern');
+      refreshMenuBreadCrumb('architectural_pattern');
     });
   }
   else {
@@ -232,7 +235,8 @@ mainContent.on("click","#UpdateArchitecturalPattern",function(e) {
     ap.theName = $('#theName').val();
     ap.theSynopsis = $('#theSynopsis').val();
     putArchitecturalPattern(ap,oldName,function() {
-      createArchitecturalPatternsTable();
+      $('#menuBCClick').attr('dimension','architectural_pattern');
+      refreshMenuBreadCrumb('architectural_pattern');
     });
   }
 });
@@ -315,8 +319,9 @@ $(document).on('click', 'td.deleteArchitecturalPatternButton', function (e) {
       origin: serverIP,
       url: serverIP + "/api/architectural_patterns/name/" + encodeURIComponent(apName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createArchitecturalPatternsTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','architectural_pattern');
+        refreshMenuBreadCrumb('architectural_pattern');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -651,7 +656,8 @@ mainContent.on("click","#CloseConnector",function() {
 
 mainContent.on('click', '#CloseArchitecturalPattern', function (e) {
   e.preventDefault();
-  createArchitecturalPatternsTable();
+  $('#menuBCClick').attr('dimension','architectural_pattern');
+  refreshMenuBreadCrumb('architectural_pattern');
 });
 
 

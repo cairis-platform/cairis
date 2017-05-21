@@ -25,11 +25,12 @@ from cairis.core.Step import Step
 from cairis.core.UseCaseParameters import UseCaseParameters
 from cairis.core.ValueType import ValueType
 from cairis.core.ValueTypeParameters import ValueTypeParameters
+from cairis.core.ReferenceContribution import ReferenceContribution
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-from cairis.tools.ModelDefinitions import UseCaseModel, UseCaseEnvironmentPropertiesModel
+from cairis.tools.ModelDefinitions import UseCaseModel, UseCaseEnvironmentPropertiesModel, UseCaseContributionModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
-from cairis.tools.PseudoClasses import StepAttributes, StepsAttributes,ExceptionAttributes
+from cairis.tools.PseudoClasses import StepAttributes, StepsAttributes, ExceptionAttributes, CharacteristicReferenceContribution
 import cairis.core.ObstacleFactory
 
 __author__ = 'Shamal Faily'
@@ -51,6 +52,17 @@ class UseCaseDAO(CairisDAO):
     """
     try:
       usecases = self.db_proxy.getUseCases(constraint_id)
+      if simplify:
+        for key, value in usecases.items():
+          uc = self.simplify(value)
+          uc.theReferenceContributions = []
+          contribs = self.db_proxy.getUseCaseContributions(uc.name())
+          for rsName in contribs: 
+            rrc,rsType = contribs[rsName]
+            frc = CharacteristicReferenceContribution(rrc.meansEnd(),rrc.contribution())
+            uc.theReferenceContributions.append(UseCaseContributionModel(rsName,frc))
+          usecases[key] = uc
+      return usecases
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -58,11 +70,6 @@ class UseCaseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    if simplify:
-      for key, value in usecases.items():
-        usecases[key] = self.simplify(value)
-
-    return usecases
 
   def get_usecase_by_name(self, name, simplify=True):
     """
@@ -203,11 +210,16 @@ class UseCaseDAO(CairisDAO):
     usecase = json_serialize(json_dict)
     usecase = json_deserialize(usecase)
     usecase.theEnvironmentProperties = usecase_props
+     
     if not isinstance(usecase, UseCase):
       self.close()
       raise MalformedJSONHTTPError(data=request.get_data())
     else:
-      return usecase
+      frcs = json_dict['theReferenceContributions']
+      refContribs = []
+      for frc in frcs:
+        refContribs.append(ReferenceContribution(usecase.theName,frc['theContributionTo'],frc['theReferenceContribution']['theMeansEnd'],frc['theReferenceContribution']['theContribution']))
+      return usecase,refContribs
 
   def simplify(self, obj):
     assert isinstance(obj, UseCase)
@@ -271,3 +283,20 @@ class UseCaseDAO(CairisDAO):
                 excDef = excDetails[4]
                 obsParameters = cairis.core.ObstacleFactory.build(environment_name,obsName,excDim,excVal,excCat,excDef)
                 self.db_proxy.addObstacle(obsParameters)
+
+  def assign_usecase_contribution(self,rc):
+    if (self.db_proxy.hasContribution('usecase',rc.source(),rc.destination())):
+      self.db_proxy.updateUseCaseContribution(rc)
+    else:
+      self.db_proxy.addUseCaseContribution(rc)
+
+  def remove_usecase_contributions(self,uc):
+    try:
+      ucId = self.db_proxy.getDimensionId(uc.theName,'usecase')
+      self.db_proxy.removeUseCaseContributions(ucId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)

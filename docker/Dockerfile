@@ -9,6 +9,8 @@ ENV CAIRIS_SRC=/cairis/cairis
 ENV CAIRIS_CFG=cairis.cnf
 ENV PYTHONPATH=/cairis
 RUN mkdir /images
+RUN chown www-data /images
+RUN chgrp www-data /images
 RUN git clone https://github.com/failys/cairis /cairis
 COPY cairis.cnf /
 RUN service mysql start && /cairis/cairis/test/initdb.sh

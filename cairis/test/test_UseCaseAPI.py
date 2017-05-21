@@ -25,7 +25,9 @@ from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentPropertie
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
 from cairis.mio.ModelImport import importModelFile, importUsabilityFile
+from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.PseudoClasses import StepsAttributes, StepAttributes,ExceptionAttributes
+from cairis.tools.ModelDefinitions import UseCaseContributionModel
 
 __author__ = 'Shamal Faily'
 
@@ -119,6 +121,12 @@ class UseCaseAPITests(CairisDaemonTestCase):
 
   def test_delete(self):
     method = 'test_delete'
+
+    rv = self.app.get('/api/persona_characteristics/name/Managers%20delegate%20security%20decisions?session_id=test')
+    pc = jsonpickle.decode(rv.data)
+    pc['theCharacteristicSynopsis'] = {"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceSynopsis", "theActor" : "Claire", "theActorType" : "persona", "theSynopsis" : "Security delegated", "theDimension" : "goal"}
+    pcDict = {'session_id' : 'test','object' : pc}
+    rv = self.app.put('/api/persona_characteristics/name/Managers%20delegate%20security%20decisions?session_id=test', content_type='application/json', data=jsonpickle.encode(pcDict))
     url = '/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name())
     new_usecase_body = self.prepare_json()
 
@@ -135,9 +143,21 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(message, 'No message in response')
     self.logger.info('[%s] Message: %s\n', method, message)
 
-
   def test_post(self):
     method = 'test_post'
+
+    rv = self.app.get('/api/persona_characteristics/name/Managers%20delegate%20security%20decisions?session_id=test')
+    pc = jsonpickle.decode(rv.data)
+    pc['theCharacteristicSynopsis'] = {"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceSynopsis", "theActor" : "Claire", "theActorType" : "persona", "theSynopsis" : "Security delegated", "theDimension" : "goal"}
+    pcDict = {'session_id' : 'test','object' : pc}
+    rv = self.app.put('/api/persona_characteristics/name/Managers%20delegate%20security%20decisions?session_id=test', content_type='application/json', data=jsonpickle.encode(pcDict))
+    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    json_resp = json_deserialize(rv.data)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    ackMsg = json_resp.get('message', None)
+    self.assertEqual(ackMsg, 'Persona Characteristic successfully updated')
+
+
     url = '/api/usecases'
     self.logger.info('[%s] URL: %s', method, url)
     new_usecase_body = self.prepare_json()
@@ -152,6 +172,8 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.assertGreater(env_id, 0, 'Invalid usecase ID returned [%d]' % env_id)
     self.logger.info('[%s] UseCase ID: %d\n', method, env_id)
     rv = self.app.delete('/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name()))
+
+
 
   def test_put(self):
     method = 'test_put'
@@ -210,6 +232,7 @@ class UseCaseAPITests(CairisDaemonTestCase):
       tags=[],
       cProps=[]
     )
+    new_usecase.theReferenceContributions = [UseCaseContributionModel('Security delegated',{'theMeansEnd':'means','theContribution':'SomePositive'})]
     new_usecase.theEnvironmentProperties = new_usecase_props
     new_usecase.theEnvironmentDictionary = {}
     delattr(new_usecase, 'theEnvironmentDictionary')

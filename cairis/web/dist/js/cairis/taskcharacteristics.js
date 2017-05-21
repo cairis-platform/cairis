@@ -20,7 +20,8 @@
 'use strict';
 
 $("#taskCharacteristicsClick").click(function(){
-  createTaskCharacteristicsTable();
+  $('#menuBCClick').attr('dimension','task_characteristic');
+  refreshMenuBreadCrumb('task_characteristic');
 });
 
 function createTaskCharacteristicsTable(){
@@ -74,6 +75,7 @@ function createTaskCharacteristicsTable(){
 $(document).on('click', "td.taskcharacteristic-rows", function () {
   activeElement("objectViewer");
   var name = $(this).closest("tr").find("td:eq(2)").text();
+  refreshObjectBreadCrumb(name);
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -149,13 +151,15 @@ mainContent.on('click', '#UpdateTaskCharacteristic', function (e) {
 
   if($("#editTaskCharacteristicOptionsForm").hasClass("new")){
     postTaskCharacteristic(tc, function () {
-      createTaskCharacteristicsTable();
       $("#editTaskCharacteristicOptionsForm").removeClass("new")
+      $('#menuBCClick').attr('dimension','task_characteristic');
+      refreshMenuBreadCrumb('task_characteristic');
     });
   }
   else {
     putTaskCharacteristic(tc, oldName, function () {
-      createTaskCharacteristicsTable();
+      $('#menuBCClick').attr('dimension','task_characteristic');
+      refreshMenuBreadCrumb('task_characteristic');
     });
   }
 });
@@ -164,7 +168,8 @@ $(document).on('click', 'td.deleteTaskCharacteristicButton', function (e) {
   e.preventDefault();
   var tName = $(this).closest('tr').find('td:eq(2)').text();
   deleteTaskCharacteristic(tName, function () {
-    createTaskCharacteristicsTable();
+    $('#menuBCClick').attr('dimension','task_characteristic');
+    refreshMenuBreadCrumb('task_characteristic');
   });
 });
 
@@ -290,7 +295,8 @@ function deleteTaskCharacteristic(name, callback){
 
 mainContent.on('click', '#CloseTaskCharacteristic', function (e) {
   e.preventDefault();
-  createTaskCharacteristicsTable();
+  $('#menuBCClick').attr('dimension','task_characteristic');
+  refreshMenuBreadCrumb('task_characteristic');
 });
 
 function appendTaskGWR(tableId,gwrType,item) {

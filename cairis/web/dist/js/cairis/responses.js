@@ -20,7 +20,8 @@
 'use strict';
 
 $("#responseMenuClick").click(function () {
-  createResponsesTable();
+  $('#menuBCClick').attr('dimension','response');
+  refreshMenuBreadCrumb('response');
 });
 
 $(document).on("click", "#addNewResponse", function () {
@@ -39,6 +40,7 @@ $(document).on('click', "#SelectResponseButton", function () {
 
   var responseType = $("#theResponse").val();
   $("#chooseResponseDialog" ).modal('hide');
+  refreshObjectBreadCrumb('New Response');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
     $("#editResponseOptionsform").validator();
@@ -79,11 +81,12 @@ $(document).on('click', "#SelectResponseButton", function () {
 
 
 $(document).on('click', "td.response-rows", function () {
-  var roleName = $(this).text();
-  viewResponse(roleName);
+  var responseName = $(this).text();
+  refreshObjectBreadCrumb(responseName);
+  viewResponse(responseName);
 });
 
-function viewResponse(roleName) {
+function viewResponse(responseName) {
   activeElement("objectViewer");
   $.ajax({
     type: "GET",
@@ -93,7 +96,7 @@ function viewResponse(roleName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/responses/name/" + roleName,
+    url: serverIP + "/api/responses/name/" + encodeURIComponent(responseName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
         $("#editResponseOptionsform").validator();
@@ -510,7 +513,8 @@ function appendResponseTransferRole(role){
 
 mainContent.on('click', '#CloseResponse', function (e) {
   e.preventDefault();
-  createResponsesTable();
+  $('#menuBCClick').attr('dimension','response');
+  refreshMenuBreadCrumb('response');
 });
 
 $(document).on('click', 'td.deleteResponseButton', function (e) {
@@ -527,8 +531,9 @@ $(document).on('click', 'td.deleteResponseButton', function (e) {
       origin: serverIP,
       url: serverIP + "/api/responses/name/" + respName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createResponsesTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','response');
+        refreshMenuBreadCrumb('response');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -634,13 +639,15 @@ mainContent.on('click', '#UpdateResponse', function (e) {
 
     if($("#editResponseOptionsform").hasClass("newResponse")){
       postResponse(resp, function () {
-        createResponsesTable();
         $("#editResponseOptionsform").removeClass("newResponse")
+        $('#menuBCClick').attr('dimension','response');
+        refreshMenuBreadCrumb('response');
       });
     }
     else {
       putResponse(resp, $.session.get("ResponseName"), function () {
-        createResponsesTable();
+        $('#menuBCClick').attr('dimension','response');
+        refreshMenuBreadCrumb('response');
       });
     }
   }

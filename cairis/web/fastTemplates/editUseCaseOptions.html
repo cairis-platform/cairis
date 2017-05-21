@@ -5,6 +5,7 @@
       <li><a href="#summary">Summary</a></li>
       <li><a href="#description">Description</a></li>
       <li><a href="#actors">Actors</a></li>
+      <li><a href="#grlcontribution">GRL Contribution</a></li>
     </ul>
     <div id="summary">
       <div class="form-group">
@@ -27,7 +28,7 @@
         <div class="help-block with-errors"></div>
     </div>   
     <div class="form-group" id="actors">
-      <table id="theActors" class="right" style="width: 100%">
+      <table id="theActors" class="right clickable-table" style="width: 100%">
         <thead>
           <tr>
             <th width="50px" id="addActorToUseCase"> <i class="fa fa-plus"></i></th><th>Actor</th>
@@ -37,6 +38,17 @@
         </tbody>
       </table>
     </div>   
+    <div class="form-group" id="grlcontribution">
+      <table id="theUCContributions" class="right clickable-table" style="width: 100%">
+        <thead>
+          <tr>
+            <th width="50px" id="addContributionToUseCase"> <i class="fa fa-plus"></i></th><th>Synopsis</th><th>Means/End</th><th>Contribution</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="inblock form-group">
     <table class="left clickable-table" id="theEnvironments" style="width: 25%;">
@@ -92,6 +104,48 @@
       <button type="submit" class="btn btn-secondary" id="CloseUseCase">Close</button>
     </div>
   </div>
+
+  <div class="modal fade" id="useCaseContributionDialog" tabindex="-1" role="dialog" aria-labelledby="uccd_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Use Case Contribution</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for='theGRLBeneficiary' class="control-label">Contribution to</label>
+          <select class="form-control" name="theGRLBeneficiary" id="theGRLBeneficiary">
+          </select>
+        </div>
+        <div class="form-group">
+          <label for='theGRLUCContributionMeansEnd' class="control-label">Means / End</label>
+          <select class="form-control" name="theGRLUCContributionMeansEnd" id="theGRLUCContributionMeansEnd">
+            <option value="means">Means</option>
+            <option value="end">End</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theGRLUCContribution" class="control-label">Contribution</label>
+          <select class="form-control" name="theGRLUCContribution" id="theGRLUCContribution">
+            <option value="Make">Make</option>
+            <option value="SomePositive">SomePositive</option>
+            <option value="Help">Help</option>
+            <option value="Hurt">Hurt</option>
+            <option value="SomeNegative">SomeNegative</option>
+            <option value="Break">Break</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddUCContributionButton" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
   <div class="modal fade" id="useCaseStepDialog" tabindex="-1" role="dialog" aria-labelledby="ucsd_label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -120,7 +174,7 @@
                 <label for="theActorType" class="control-label">Actor Type</label>
                 <select class="form-control" name="theActorType" id="theActorType">
                   <option value="asset">Asset</option>
-                  <option value="role">Role</option>
+                  <option value="component">Component</option>
                 </select>
               </div>
               <div class="form-group">
