@@ -8614,7 +8614,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def personaCodeNetwork(self,personaName,fromCode='',toCode=''):
     try:
       session = self.conn()
-      rs = session.execute('call artifactCodeNetwork(:pers,persona,:fCode,:tCode)',{'pers':personaName,'fCode':fromCode,'tCode':toCode})
+      rs = session.execute('call artifactCodeNetwork(:pers,:a,:fCode,:tCode)',{'pers':personaName,'a':'persona','fCode':fromCode,'tCode':toCode})
       network = []
       for row in rs.fetchall():
         row = list(row)
@@ -8634,7 +8634,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addCodeRelationship(self,personaName,fromName,toName,rshipType):
     try:
       session = self.conn()
-      session.execute('call addArtifactCodeNetwork(:pers,persona,:fName,:tName,:type)',{'pers':personaName,'fName':fromName,'tName':toName,'type':rshipType})
+      session.execute('call addArtifactCodeNetwork(:pers,:a,:fName,:tName,:type)',{'pers':personaName,'a':'persona','fName':fromName,'tName':toName,'type':rshipType})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
