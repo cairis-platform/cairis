@@ -1242,13 +1242,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       dimensions = []
       session = self.conn()
       if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement' and dimensionTable != 'template_goal' and dimensionTable != 'locations' and dimensionTable != 'persona_characteristic_synopsis'):
-<<<<<<< HEAD
         sqlText = 'call ' + dimensionTable + 'Names(:env)' 
         rs = session.execute(sqlText,{'env':currentEnvironment})
-=======
-        sqlText = 'call ' + dimensionTable + 'Names(%s)' 
-        rs = session.execute(sqlText %(currentEnvironment))
->>>>>>> origin/correct-sessions
       elif (dimensionTable == 'template_asset'):
         rs = session.execute('call template_assetNames()')
       elif (dimensionTable == 'template_requirement'):
