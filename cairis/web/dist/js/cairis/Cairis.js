@@ -762,60 +762,6 @@ function getLocationsView(locsName,envName){
   });
 }
 
-function getAssetsInEnvironment(envName,callback) {
-  getDimensionsInEnvironment('asset',envName,callback);
-}
-
-
-function getEnvironments(callback) {
-  getDimensions('environment',callback);
-}
-
-function getDimensions(dimName,callback) {
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/dimensions/table/" + dimName,
-    success: function (data) {
-      if(jQuery.isFunction(callback)){
-        callback(data);
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      return null;
-    }
-  });
-}
-
-function getDimensionsInEnvironment(dimName,envName,callback) {
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/dimensions/table/" + dimName + "/environment/" + envName,
-    success: function (data) {
-      if(jQuery.isFunction(callback)){
-        callback(data);
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      return null;
-    }
-  });
-}
 
 function refreshDimensionSelector(sBox,dimName,envName,callback,filterList) {
   var urlText = serverIP + "/api/dimensions/table/" + dimName;
@@ -1056,7 +1002,7 @@ function setTableHeader(activeTable){
       break;
     case "Obstacles":
       debugLogger("Is Obstacle");
-      thead = "<th width='50px'></th><th>Obstacle</th><th>Definition</th><th>Category</th><th>Originator</th>";
+      thead = "<th width='50px'></th><th>Obstacle</th><th>Definition</th><th>Originator</th>";
       break;
     case "EditGoals":
       debugLogger("Is EditGoals");
@@ -1064,7 +1010,7 @@ function setTableHeader(activeTable){
       break;
     case "EditObstacles":
       debugLogger("Is EditObstacles");
-      thead = "<th width='50px' id='addNewObstacle'><i class='fa fa-plus floatCenter'></i></th><th>Obstacle</th><th>Originator</th><th>Status</th>";
+      thead = "<th width='50px' id='addNewObstacle'><i class='fa fa-plus floatCenter'></i></th><th>Obstacle</th><th>Originator</th>";
       break;
     case "Assets":
       debugLogger("Is Asset");
