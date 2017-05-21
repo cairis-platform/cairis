@@ -949,10 +949,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addTemplateAssetProperties(self,taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat):
-    sqlTxt = 'call add_template_asset_properties(:a,:b,:c,:d,:e,:f,:g,:h,:i,:j,:k,:l,:m,:n,:o,:p,:q)'
+    sqlTxt = 'call add_template_asset_properties(:ta,:cPr,:iPr,:avPr,:acPr,:anPr,:panPr,:unlPr,:unoPr,:cRa,:iRa,:avRa,:acRa,:anRa,:panRa,:unlRa,:unoRa)'
     try:
       session = self.conn()
-      session.execute(sqlTxt, {'a':taId,'b':cProp,'c':iProp,'d':avProp,'e':acProp,'f':anProp,'g':panProp,'h':unlProp,'i':unoProp,'j':cRat,'k':iRat,'l':avRat,'m':acRat,'n':anRat,'o':panRat,'p':unlRat,'q':unoRat})
+      session.execute(sqlTxt, {'ta':taId,'cPr':cProp,'iPr':iProp,'avPr':avProp,'acPr':acProp,'anPr':anProp,'panPr':panProp,'unlPr':unlProp,'unoPr':unoProp,'cRa':cRat,'iRa':iRat,'avRa':avRat,'acRa':acRat,'anRa':anRat,'panRa':panRat,'unlRa':unlRat,'unoRa':unoRat})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -988,10 +988,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addSecurityProperties(self,dimTable,objtId,environmentName,securityProperties,pRationale):
-    sqlTxt = 'call add_' + dimTable + '_properties(:a,:b,:c,:d,:e,:f,:g,:h,:i,:j,:k,:l,:m,:n,:o,:p,:q,:r)'
+    sqlTxt = 'call add_' + dimTable + '_properties(:obj,:env,:cPr,:iPr,:avPr,:acPr,:anPr,:panPr,:unlPr,:unoPr,:cRa,:iRa,:avRa,:acRa,:anRa,:panRa,:unlRa,:unoRa)'
     try:
       session = self.conn()
-      session.execute(sqlTxt,{'a':objtId,'b':environmentName,'c':securityProperties[C_PROPERTY],'d':securityProperties[I_PROPERTY],'e':securityProperties[AV_PROPERTY],'f':securityProperties[AC_PROPERTY],'g':securityProperties[AN_PROPERTY],'h':securityProperties[PAN_PROPERTY],'i':securityProperties[UNL_PROPERTY],'j':securityProperties[UNO_PROPERTY],'k':pRationale[C_PROPERTY],'l':pRationale[I_PROPERTY],'m':pRationale[AV_PROPERTY],'n':pRationale[AC_PROPERTY],'o':pRationale[AN_PROPERTY],'p':pRationale[PAN_PROPERTY],'q':pRationale[UNL_PROPERTY],'r':pRationale[UNO_PROPERTY]})
+      session.execute(sqlTxt,{'obj':objtId,'env':environmentName,'cPr':securityProperties[C_PROPERTY],'iPr':securityProperties[I_PROPERTY],'avPr':securityProperties[AV_PROPERTY],'acPr':securityProperties[AC_PROPERTY],'anPr':securityProperties[AN_PROPERTY],'panPr':securityProperties[PAN_PROPERTY],'unlPr':securityProperties[UNL_PROPERTY],'unoPr':securityProperties[UNO_PROPERTY],'cRa':pRationale[C_PROPERTY],'iRa':pRationale[I_PROPERTY],'avRa':pRationale[AV_PROPERTY],'acRa':pRationale[AC_PROPERTY],'anRa':pRationale[AN_PROPERTY],'panRa':pRationale[PAN_PROPERTY],'unlRa':pRationale[UNL_PROPERTY],'unoRa':pRationale[UNO_PROPERTY]})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -8614,7 +8614,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def personaCodeNetwork(self,personaName,fromCode='',toCode=''):
     try:
       session = self.conn()
-      rs = session.execute('call artifactCodeNetwork(:pers,:a,:fCode,:tCode)',{'pers':personaName,'a':'persona','fCode':fromCode,'tCode':toCode})
+      rs = session.execute('call artifactCodeNetwork(:pers,persona,:fCode,:tCode)',{'pers':personaName,'fCode':fromCode,'tCode':toCode})
       network = []
       for row in rs.fetchall():
         row = list(row)
@@ -8634,7 +8634,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addCodeRelationship(self,personaName,fromName,toName,rshipType):
     try:
       session = self.conn()
-      session.execute('call addArtifactCodeNetwork(:pers,:a,:fName,:tName,:type)',{'pers':personaName,'a':'persona','fName':fromName,'tName':toName,'type':rshipType})
+      session.execute('call addArtifactCodeNetwork(:pers,persona,:fName,:tName,:type)',{'pers':personaName,'fName':fromName,'tName':toName,'type':rshipType})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
