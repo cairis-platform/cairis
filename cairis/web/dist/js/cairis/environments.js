@@ -23,6 +23,7 @@
 $(document).on('click', "td.environment-rows",function(){
   activeElement("objectViewer");
   var name = $(this).text();
+  refreshObjectBreadCrumb(name);
   $.session.set("EnvironmentName", name);
 
   $.ajax({
@@ -88,8 +89,9 @@ $(document).on('click', "td.deleteEnvironmentButton",function(e){
       origin: serverIP,
       url: serverIP + "/api/environments/name/" + envName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createEnvironmentsTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','environment');
+        refreshMenuBreadCrumb('environment');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -106,11 +108,13 @@ $(document).on('click', "td.deleteEnvironmentButton",function(e){
 
 
 $("#environmentsClick").click(function () {
-  createEnvironmentsTable();
+  $('#menuBCClick').attr('dimension','environment');
+  refreshMenuBreadCrumb('environment');
 });
 
 $("#environmentMenuClick").click(function () {
-  createEnvironmentsTable();
+  $('#menuBCClick').attr('dimension','environment');
+  refreshMenuBreadCrumb('environment');
 });
 
 var mainContent = $("#objectViewer");
@@ -183,19 +187,22 @@ mainContent.on('click', "#UpdateEnvironment", function (e) {
   if($("#editEnvironmentOptionsform").hasClass("newEnvironment")){
     $("#editEnvironmentOptionsform").removeClass("newEnvironment");
     postEnvironment(env, function () {
-      createEnvironmentsTable();
+      $('#menuBCClick').attr('dimension','environment');
+      refreshMenuBreadCrumb('environment');
     });
   }
   else {
     var oldName = env.theName;
     putEnvironment(env, oldName, function () {
-      createEnvironmentsTable();
+      $('#menuBCClick').attr('dimension','environment');
+      refreshMenuBreadCrumb('environment');
     });
   }
 });
 
 
 $("#mainTable").on("click", "#addNewEnvironment", function () {
+  refreshObjectBreadCrumb('New Environment');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editEnvironmentOptions.html", "#objectViewer", null, true, true, function () {
     $("#editEnvironmentOptionsform").validator();
@@ -277,7 +284,8 @@ function createEnvironmentsTable(){
 
 mainContent.on('click', '#CloseEnvironment', function (e) {
   e.preventDefault();
-  createEnvironmentsTable();
+  $('#menuBCClick').attr('dimension','environment');
+  refreshMenuBreadCrumb('environment');
 });
 
 function fillEnvironmentsTable(data, callback){

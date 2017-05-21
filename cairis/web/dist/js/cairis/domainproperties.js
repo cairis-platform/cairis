@@ -20,11 +20,13 @@
 'use strict';
 
 $("#domainPropertyClick").click(function () {
-  createDomainPropertiesTable();
+  $('#menuBCClick').attr('dimension','domain_property');
+  refreshMenuBreadCrumb('domain_property');
 });
 
 $("#domainPropertyMenuClick").click(function () {
-  createDomainPropertiesTable();
+  $('#menuBCClick').attr('dimension','domain_property');
+  refreshMenuBreadCrumb('domain_property');
 });
 
 
@@ -78,6 +80,7 @@ function createDomainPropertiesTable(){
 
 $(document).on('click', "td.domainproperty-row", function () {
   var dpName = $(this).text();
+  refreshObjectBreadCrumb(dpName);
   viewDomainProperty(dpName);
 });
 
@@ -134,13 +137,15 @@ mainContent.on('click', '#UpdateDomainProperty', function (e) {
 
   if($("#editDomainPropertyOptionsForm").hasClass("new")){
     postDomainProperty(dp, function () {
-      createDomainPropertiesTable();
       $("#editDomainPropertyOptionsForm").removeClass("new")
+      $('#menuBCClick').attr('dimension','domain_property');
+      refreshMenuBreadCrumb('domain_property');
     });
   } 
   else {
     putDomainProperty(dp, oldName, function () {
-      createDomainPropertiesTable();
+      $('#menuBCClick').attr('dimension','domain_property');
+      refreshMenuBreadCrumb('domain_property');
     });
   }
 });
@@ -159,8 +164,9 @@ $(document).on('click', 'td.deleteDomainPropertyButton', function (e) {
       origin: serverIP,
       url: serverIP + "/api/domainproperties/name/" + dpName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createDomainPropertiesTable();
+        $('#menuBCClick').attr('dimension','domain_property');
         showPopup(true);
+        refreshMenuBreadCrumb('domain_property');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -176,6 +182,7 @@ $(document).on('click', 'td.deleteDomainPropertyButton', function (e) {
 
 
 $(document).on("click", "#addNewDomainProperty", function () {
+  refreshObjectBreadCrumb('New Domain Property');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#objectViewer", null, true, true, function () {
     $("#editDomainPropertyOptionsForm").validator();
@@ -252,6 +259,7 @@ function postDomainProperty(dp, callback){
 
 mainContent.on('click', '#CloseDomainProperty', function (e) {
   e.preventDefault();
-  createDomainPropertiesTable();
+  $('#menuBCClick').attr('dimension','domain_property');
+  refreshMenuBreadCrumb('domain_property');
 });
 

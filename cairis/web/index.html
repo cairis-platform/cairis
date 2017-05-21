@@ -55,7 +55,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span> 
         </button>
-        <a class="navbar-brand" id="homeClick" href="#" role="button"><span class="glyphicon glyphicon-home"></span> CAIRIS</a>
+        <a class="navbar-brand" id="homeClick" href="#" role="button"><span class="glyphicon glyphicon-home"></span> CAIRIS</a> 
       </div>
       <div id="navbar" class="left navbar-collapse collapse">
         <ul class="nav navbar-nav">
@@ -70,6 +70,7 @@
               <li><a id="fromTrello" href="#">Import from Trello</a></li>
               <li><a id="exportClick" href="#">Export Model</a></li>
               <li><a id="exportArchitecturalPatternClick" href="#">Export Architectural Pattern</a></li>
+              <li><a id="exportGRLClick" href="#">Export GRL</a></li>
               <li><a id="toTrello" href="#">Export to Trello</a></li>
               <li><a id="genDocClick" href="#">Documentation</a></li>
               <li><a id="projectClick" href="#">Properties</a></li>
@@ -174,6 +175,15 @@
       </div>
     </div>
   </nav>
+
+  <!-- Breadcrumbs -->
+  <div>
+    <div id="BC" class="btn-group btn-breadcrumb" style="display:none">
+      <a id="homeBCClick" href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+      <a id="menuBCClick" href="#" class="btn btn-default">Snippets</a>
+      <a id="objtBCClick" href="#" class="btn btn-default">Breadcrumbs</a>
+    </div>
+  </div>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -609,6 +619,40 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="chooseGRLExportParameters" tabindex="-1" role="dialog" aria-labelledby="cgep_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="chooseTitle">Export GRL</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="theGRLExportEnvironment" class="control-label">Environment</label>
+            <select class="form-control" id="theGRLExportEnvironment">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="theGRLExportTask" class="control-label">Task</label>
+            <select class="form-control" id="theGRLExportTask">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="theGRLExportPersona" class="control-label">Persona</label>
+            <select class="form-control" id="theGRLExportPersona">
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="grlExportButton" class="btn btn-primary">Export</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <div class="modal fade" id="createDatabase" tabindex="-1" role="dialog" aria-labelledby="crd_label">
     <div class="modal-dialog" role="document">

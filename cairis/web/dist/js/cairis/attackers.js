@@ -20,7 +20,8 @@
 'use strict';
 
 $("#attackerMenuClick").click(function () {
-  createAttackersTable();
+  $('#menuBCClick').attr('dimension','attacker');
+  refreshMenuBreadCrumb('attacker');
 });
 
 function createAttackersTable(){
@@ -72,6 +73,7 @@ function createAttackersTable(){
 
 $(document).on('click', "td.attacker-rows", function () {
   var attackerName = $(this).text();
+  refreshObjectBreadCrumb(attackerName);
   viewAttacker(attackerName);
 });
 
@@ -383,19 +385,22 @@ mainContent.on('click', '#UpdateAttacker', function (e) {
     }
     if($("#editAttackerOptionsForm").hasClass("new")){
       postAttacker(attacker, function () {
-        createAttackersTable();
         $("#editAttackerOptionsForm").removeClass("new")
+        $('#menuBCClick').attr('dimension','attacker');
+        refreshMenuBreadCrumb('attacker');
       });
     } 
     else {
       putAttacker(attacker, oldName, function () {
-        createAttackersTable();
+        $('#menuBCClick').attr('dimension','attacker');
+        refreshMenuBreadCrumb('attacker');
       });
     }
   }
 });
 
 $(document).on("click", "#addNewAttacker", function () {
+  refreshObjectBreadCrumb('New Attacker');
   activeElement("objectViewer"); 
   fillOptionMenu("fastTemplates/editAttackerOptions.html", "#objectViewer", null, true, true, function () {
     $("#editAttackerOptionsForm").validator();
@@ -474,8 +479,9 @@ $(document).on('click', 'td.deleteAttackerButton', function (e) {
       origin: serverIP,
       url: serverIP + "/api/attackers/name/" + attackerName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createAttackersTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','attacker');
+        refreshMenuBreadCrumb('attacker');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -569,7 +575,8 @@ function clearAttackerEnvInfo(){
 
 mainContent.on('click', '#CloseAttacker', function (e) {
   e.preventDefault();
-  createAttackersTable();
+  $('#menuBCClick').attr('dimension','attacker');
+  refreshMenuBreadCrumb('attacker');
 });
 
 function putAttacker(attacker, oldName, callback){

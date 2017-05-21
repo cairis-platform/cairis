@@ -241,6 +241,7 @@ var useCaseDefault = {
   "theObjective": "",
   "theActors": [],
   "theDescription": "",
+  "theReferenceContributions" : [],
   "theEnvironmentProperties": []
 };
 

@@ -30,7 +30,10 @@ class DimensionDAO(CairisDAO):
 
   def getDimensions(self,table,id):
     try:
-      return self.db_proxy.getDimensions(table,id).keys()
+      if (table == 'persona_characteristic_synopsis'):
+        return self.getDimensionNames(table,'')
+      else: 
+        return self.db_proxy.getDimensions(table,id).keys()
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

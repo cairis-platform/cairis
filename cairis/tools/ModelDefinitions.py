@@ -68,7 +68,7 @@ from cairis.core.TemplateRequirement import TemplateRequirement
 from cairis.core.Location import Location
 from cairis.core.Locations import Locations
 from cairis.core.WeaknessTarget import WeaknessTarget
-from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, CharacteristicReference,ObjectDependency,CharacteristicReferenceSynopsis
+from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, CharacteristicReference,ObjectDependency,CharacteristicReferenceSynopsis,CharacteristicReferenceContribution
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -934,6 +934,26 @@ class UseCaseEnvironmentPropertiesModel(object):
   theEnvironmentProperties=UseCaseEnvironmentPropertiesModel.__name__
 )
 
+class UseCaseContributionModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theContributionTo': fields.String,
+    'theReferenceContribution': fields.Nested(CharacteristicReferenceContribution.resource_fields)
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+
+  def __init__(self,contTo,rc):
+    self.theContributionTo = contTo
+    self.theReferenceContribution = rc
+
+  def __getitem__(self,varName):
+    if (varName == 'theContributionTo'): return self.theContributionTo
+    elif (varName == 'theReferenceContribution'): return self.theReferenceContribution
+    else: return None
+
+
+
 class UseCaseModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -945,6 +965,7 @@ class UseCaseModel(object):
     'theCode': fields.String,
     'theActors': fields.List(fields.String),
     'theDescription': fields.String,
+    'theReferenceContributions': fields.List(fields.Nested(UseCaseContributionModel.resource_fields)),
     'theEnvironmentProperties': fields.List(fields.Nested(UseCaseEnvironmentPropertiesModel.resource_fields))
   }
   required = resource_fields.keys()

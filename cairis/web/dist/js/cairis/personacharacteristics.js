@@ -20,7 +20,8 @@
 'use strict';
 
 $("#personaCharacteristicsClick").click(function(){
-  createPersonaCharacteristicsTable();
+  $('#menuBCClick').attr('dimension','persona_characteristic');
+  refreshMenuBreadCrumb('persona_characteristic');
 });
 
 function createPersonaCharacteristicsTable(){
@@ -78,6 +79,7 @@ function createPersonaCharacteristicsTable(){
 $(document).on('click', "td.personacharacteristic-rows", function () {
   activeElement("objectViewer");
   var name = $(this).closest("tr").find("td:eq(3)").text();
+  refreshObjectBreadCrumb(name);
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -160,13 +162,15 @@ mainContent.on('click', '#UpdatePersonaCharacteristic', function (e) {
 
   if($("#editPersonaCharacteristicOptionsForm").hasClass("new")){
     postPersonaCharacteristic(pc, function () {
-      createPersonaCharacteristicsTable();
       $("#editPersonaCharacteristicOptionsForm").removeClass("new")
+      $('#menuBCClick').attr('dimension','persona_characteristic');
+      refreshMenuBreadCrumb('persona_characteristic');
     });
   }
   else {
     putPersonaCharacteristic(pc, oldName, function () {
-      createPersonaCharacteristicsTable();
+      $('#menuBCClick').attr('dimension','persona_characteristic');
+      refreshMenuBreadCrumb('persona_characteristic');
     });
   }
 });
@@ -175,11 +179,13 @@ $(document).on('click', 'td.deletePersonaCharacteristicButton', function (e) {
   e.preventDefault();
   var pName = $(this).closest('tr').find('td:eq(3)').text();
   deletePersonaCharacteristic(pName, function () {
-    createPersonaCharacteristicsTable();
+    $('#menuBCClick').attr('dimension','persona_characteristic');
+    refreshMenuBreadCrumb('persona_characteristic');
   });
 });
 
 $(document).on("click", "#addNewPersonaCharacteristic", function () {
+  refreshObjectBreadCrumb('New Persona Characteristic');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editPersonaCharacteristicOptions.html", "#objectViewer", null, true, true, function () {
     $.ajax({
@@ -301,7 +307,8 @@ function deletePersonaCharacteristic(name, callback){
 
 mainContent.on('click', '#ClosePersonaCharacteristic', function (e) {
   e.preventDefault();
-  createPersonaCharacteristicsTable();
+  $('#menuBCClick').attr('dimension','persona_characteristic');
+  refreshMenuBreadCrumb('persona_characteristic');
 });
 
 function appendGWR(tableId,gwrType,item) {

@@ -20,11 +20,13 @@
 'use strict';
 
 $("#countermeasuresClick").click(function () {
-  createCountermeasuresTable();
+  $('#menuBCClick').attr('dimension','countermeasure');
+  refreshMenuBreadCrumb('countermeasure');
 });
 
 $("#countermeasureMenuClick").click(function () {
-  createCountermeasuresTable();
+  $('#menuBCClick').attr('dimension','countermeasure');
+  refreshMenuBreadCrumb('countermeasure');
 });
 
 
@@ -93,6 +95,7 @@ function createCountermeasuresTable(){
 var mainContent = $("#objectViewer");
 $(document).on('click', "td.countermeasure-row", function () {
   var cmName = $(this).text();
+  refreshObjectBreadCrumb(cmName);
   viewCountermeasure(cmName);
 });
 
@@ -144,6 +147,7 @@ $(document).on("click", "#addNewCountermeasure", function () {
       $('#noRisksModal').modal('show');
     }
     else {
+      refreshObjectBreadCrumb('New Countermeasure');
       activeElement("objectViewer");
       fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
         $("#addPropertyDiv").hide();
@@ -583,12 +587,14 @@ mainContent.on('click', '#UpdateCountermeasure', function (e) {
     if($("#editCountermeasureOptionsForm").hasClass("new")){
       postCountermeasure(cm, function () {
         $("#editCountermeasureOptionsForm").removeClass("new");
-        createCountermeasuresTable();
+        $('#menuBCClick').attr('dimension','countermeasure');
+        refreshMenuBreadCrumb('countermeasure');
       });
     } 
     else {
       putCountermeasure(cm, oldName, function () {
-        createCountermeasuresTable();
+        $('#menuBCClick').attr('dimension','countermeasure');
+        refreshMenuBreadCrumb('countermeasure');
       });
     }
   }
@@ -688,7 +694,8 @@ function clearCountermeasureEnvInfo(){
 
 mainContent.on('click', '#CloseCountermeasure', function (e) {
   e.preventDefault();
-  createCountermeasuresTable();
+  $('#menuBCClick').attr('dimension','countermeasure');
+  refreshMenuBreadCrumb('countermeasure');
 });
 
 $(document).on('click', 'td.deleteCountermeasureButton', function (e) {
@@ -705,8 +712,9 @@ $(document).on('click', 'td.deleteCountermeasureButton', function (e) {
       origin: serverIP,
       url: serverIP + "/api/countermeasures/name/" + cmName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createCountermeasuresTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','countermeasure');
+        refreshMenuBreadCrumb('countermeasure');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);

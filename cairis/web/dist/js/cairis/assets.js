@@ -20,7 +20,8 @@
 'use strict';
 
 $("#assetMenuClick").click(function(){
-  fillAssetTable();
+  $('#menuBCClick').attr('dimension','asset');
+  refreshMenuBreadCrumb('asset');
 });
 
 function fillAssetTable(){
@@ -97,6 +98,7 @@ function createAssetsTable(data, callback){
 
 $(document).on('click', "td.asset-row", function(){
   var assetName = $(this).attr('value');
+  refreshObjectBreadCrumb(assetName);
   viewAsset(assetName);
 });
 
@@ -457,6 +459,7 @@ mainContent.on("click",".deleteProperty", function(){
 });
 
 $(document).on('click', "#addNewAsset",function(){
+  refreshObjectBreadCrumb('New Asset');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editAssetsOptions.html","#objectViewer",null,true,true,function(){
     $.ajax({
@@ -647,14 +650,15 @@ mainContent.on('click', '#UpdateAsset',function(e){
     else{
       putAssetForm($("#editAssetsOptionsform"));
     }
-    fillAssetTable();
-
+    $('#menuBCClick').attr('dimension','asset');
+    refreshMenuBreadCrumb('asset');
   }
 });
 
 mainContent.on('click', '#CloseAsset', function (e) {
   e.preventDefault();
-  fillAssetTable();
+  $('#menuBCClick').attr('dimension','asset');
+  refreshMenuBreadCrumb('asset');
 });
 
 function fillEditAssetsEnvironment(){

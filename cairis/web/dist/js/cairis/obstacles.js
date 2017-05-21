@@ -20,11 +20,13 @@
 'use strict';
 
 $("#obstaclesClick").click(function(){
-  createEditObstaclesTable();
+  $('#menuBCClick').attr('dimension','obstacle');
+  refreshMenuBreadCrumb('obstacle');
 });
 
 $("#obstacleMenuClick").click(function(){
-  createEditObstaclesTable();
+  $('#menuBCClick').attr('dimension','obstacle');
+  refreshMenuBreadCrumb('obstacle');
 });
 
 function createEditObstaclesTable(){
@@ -91,6 +93,7 @@ function createEditObstaclesTable(){
 
 $(document).on('click', "td.obstacle-rows",function() {
   var obsName = $(this).text();
+  refreshObjectBreadCrumb(obsName);
   viewObstacle(obsName);
 });
 
@@ -405,6 +408,7 @@ mainContent.on('change', ".obstacleAutoUpdater" ,function() {
 });
 
 $(document).on('click', '#addNewObstacle', function () {
+  refreshObjectBreadCrumb('New Obstacle');
   fillObstacleOptionMenu(null, function () {
     clearObstacleEnvironmentPanel();
     $("#editObstacleOptionsForm").validator();
@@ -431,13 +435,15 @@ mainContent.on('click', "#updateObstacleButton", function (e) {
     }
     if($("#editObstacleOptionsForm").hasClass("new")){
       postObstacle(obstacle, function () {
-        createEditObstaclesTable();
         $("#editObstacleOptionsForm").removeClass("new")
+        $('#menuBCClick').attr('dimension','obstacle');
+        refreshMenuBreadCrumb('obstacle');
       });
     } 
     else {
       putObstacle(obstacle, oldName, function () {
-        createEditObstaclesTable();
+        $('#menuBCClick').attr('dimension','obstacle');
+        refreshMenuBreadCrumb('obstacle');
       });
     }
   }
@@ -566,7 +572,8 @@ function appendObstacleConcern(concern){
 
 mainContent.on('click', '#closeObstacleButton', function (e) {
   e.preventDefault();
-  createEditObstaclesTable();
+  $('#menuBCClick').attr('dimension','obstacle');
+  refreshMenuBreadCrumb('obstacle');
 });
 
 $(document).on('click', "td.deleteObstacleButton", function (e) {
@@ -583,8 +590,9 @@ $(document).on('click', "td.deleteObstacleButton", function (e) {
       origin: serverIP,
       url: serverIP + "/api/obstacles/name/" + obsName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createEditObstaclesTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','obstacle');
+        refreshMenuBreadCrumb('obstacle');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);

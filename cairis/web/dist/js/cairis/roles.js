@@ -20,7 +20,8 @@
 'use strict';
 
 $("#roleMenuClick").click(function () {
-  fillRolesTable();
+  $('#menuBCClick').attr('dimension','role');
+  refreshMenuBreadCrumb('role');
 });
 
 function fillRolesTable(){
@@ -71,6 +72,7 @@ function fillRolesTable(){
 
 $(document).on('click', "td.role-rows", function(){
   var roleName = $(this).text();
+  refreshObjectBreadCrumb(roleName);
   viewRole(roleName);
 });
 
@@ -139,7 +141,8 @@ mainContent.on('click','#UpdateRole', function (event) {
     }
     else {
       postRole(theRoleObject, function () {
-        fillRolesTable();
+        $('#menuBCClick').attr('dimension','role');
+        refreshMenuBreadCrumb('role');
       });
     }
   } 
@@ -155,7 +158,8 @@ mainContent.on('click','#UpdateRole', function (event) {
     }
     else {
       updateRole(theRoleObject, oldname, function () {
-        fillRolesTable();
+        $('#menuBCClick').attr('dimension','role');
+        refreshMenuBreadCrumb('role');
       });
     }
   }
@@ -176,8 +180,9 @@ $(document).on('click',"td.deleteRoleButton",function(event){
       data: roleName,
       url: serverIP + "/api/roles/name/" + roleName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        fillRolesTable();
         showPopup(true);
+        $('#menuBCClick').attr('dimension','role');
+        refreshMenuBreadCrumb('role');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -218,6 +223,7 @@ mainContent.on("click", '.roleEnvironmentClick', function () {
 });
 
 $(document).on('click', '#addNewRole', function () {
+  refreshObjectBreadCrumb('New Role');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
     $("#editRoleOptionsform").validator();
@@ -229,7 +235,8 @@ $(document).on('click', '#addNewRole', function () {
 
 mainContent.on('click', '#CloseRole', function (e) {
   e.preventDefault();
-  fillRolesTable();
+  $('#menuBCClick').attr('dimension','role');
+  refreshMenuBreadCrumb('role');
 });
 
 function updateRole(role, oldName, callback){

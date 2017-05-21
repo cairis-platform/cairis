@@ -71,6 +71,7 @@ $("#exportArchitecturalPatternClick").click(function () {
 
 $("#chooseArchitecturalPattern").on('click', '#chooseArchitecturalPatternButton',function(e) {
   var apName = $('#chooseArchitecturalPatternSelect').val();
+  $('#chooseArchitecturalPattern').modal('hide');
   var exportUrl = serverIP + "/api/export/file/architectural_pattern/" + encodeURIComponent(apName);
   $.ajax({
     type: "GET",
@@ -90,3 +91,44 @@ $("#chooseArchitecturalPattern").on('click', '#chooseArchitecturalPatternButton'
   });
 });
 
+$("#exportGRLClick").click(function () {
+  refreshDimensionSelector($('#theGRLExportEnvironment'),'environment',undefined,function() {
+    var initEnvName = $('#theGRLExportEnvironment').val();
+    refreshDimensionSelector($('#theGRLExportTask'),'task',initEnvName,function() {
+      refreshDimensionSelector($('#theGRLExportPersona'),'persona',initEnvName,function() {
+        $('#chooseGRLExportParameters').modal('show');
+      });
+    },['All']);
+  });
+});
+
+$('#chooseGRLExportParameters').on('change','#theGRLExportEnvironment',function() {
+  var envName = $('#theGRLExportEnvironment').val();
+  refreshDimensionSelector($('#theGRLExportTask'),'task',envName,function() {
+    refreshDimensionSelector($('#theGRLExportPersona'),'persona',envName);
+  },['All']);
+});
+
+$("#chooseGRLExportParameters").on('click', '#grlExportButton',function(e) {
+  var taskName = $('#theGRLExportTask').val();
+  var personaName = $('#theGRLExportPersona').val();
+  var envName = $('#theGRLExportEnvironment').val();
+  $('#chooseGRLExportParameters').modal('hide');
+  var exportUrl = serverIP + "/api/export/file/grl/task/" + encodeURIComponent(taskName) + "/persona/" + encodeURIComponent(personaName) + "/environment/" + encodeURIComponent(envName);
+  $.ajax({
+    type: "GET",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: exportUrl,
+    success: function (data) {
+      window.location.assign(exportUrl);
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+    }
+  });
+});

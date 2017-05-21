@@ -20,11 +20,13 @@
 'use strict';
 
 $("#goalsClick").click(function(){
-  createEditGoalsTable();
+  $('#menuBCClick').attr('dimension','goal');
+  refreshMenuBreadCrumb('goal');
 });
 
 $("#goalMenuClick").click(function(){
-  createEditGoalsTable();
+  $('#menuBCClick').attr('dimension','goal');
+  refreshMenuBreadCrumb('goal');
 });
 
 function createEditGoalsTable(){
@@ -94,6 +96,7 @@ function createEditGoalsTable(){
 
 $(document).on('click', "td.goal-rows", function(){
   var goalName = $(this).text();
+  refreshObjectBreadCrumb(goalName);
   viewGoal(goalName);
 });
 
@@ -406,6 +409,7 @@ mainContent.on('change', ".goalAutoUpdater" ,function() {
 });
 
 $(document).on('click', '#addNewGoal', function () {
+  refreshObjectBreadCrumb('New Goal');
   fillGoalOptionMenu(null, function () {
     $("#updateGoalButton").text("Create");
     $("#editGoalOptionsForm").addClass('new');
@@ -431,13 +435,15 @@ mainContent.on('click', "#updateGoalButton", function (e) {
     }
     if($("#editGoalOptionsForm").hasClass("new")){
       postGoal(goal, function () {
-        createEditGoalsTable();
         $("#editGoalOptionsForm").removeClass("new")
+        $('#menuBCClick').attr('dimension','goal');
+        refreshMenuBreadCrumb('goal');
       });
     } 
     else {
       putGoal(goal, oldName, function () {
-        createEditGoalsTable();
+        $('#menuBCClick').attr('dimension','goal');
+        refreshMenuBreadCrumb('goal');
       });
     }
   }
@@ -637,7 +643,8 @@ function appendGoalConcernAssoc(assoc){
 
 mainContent.on('click', '#closeGoalButton', function (e) {
   e.preventDefault();
-  createEditGoalsTable();
+  $('#menuBCClick').attr('dimension','goal');
+  refreshMenuBreadCrumb('goal');
 });
 
 function getAllgoals(callback) {
@@ -677,8 +684,9 @@ $(document).on('click', "td.deleteGoalButton", function (e) {
       origin: serverIP,
       url: serverIP + "/api/goals/name/" + goalName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        createEditGoalsTable();
+        $('#menuBCClick').attr('dimension','goal');
         showPopup(true);
+        refreshMenuBreadCrumb('goal');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);

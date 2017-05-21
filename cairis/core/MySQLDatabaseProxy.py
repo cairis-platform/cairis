@@ -1241,9 +1241,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       dimensions = []
       session = self.conn()
-      if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement' and dimensionTable != 'template_goal' and dimensionTable != 'locations'):
-        sqlText = 'call ' + dimensionTable + 'Names("%s")' 
-        rs = session.execute(sqlText %(currentEnvironment))
+      if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement' and dimensionTable != 'template_goal' and dimensionTable != 'locations' and dimensionTable != 'persona_characteristic_synopsis'):
+        sqlText = 'call ' + dimensionTable + 'Names(:env)' 
+        rs = session.execute(sqlText,{'env':currentEnvironment})
       elif (dimensionTable == 'template_asset'):
         rs = session.execute('call template_assetNames()')
       elif (dimensionTable == 'template_requirement'):
@@ -1252,6 +1252,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         rs = session.execute('call template_goalNames()')
       elif (dimensionTable == 'locations'):
         rs = session.execute('call locationsNames()')
+      elif (dimensionTable == 'persona_characteristic_synopsis'):
+        rs = session.execute('call persona_characteristic_synopsisNames()')
       for row in rs.fetchall():
         row = list(row)
         dimensionName = str(row[0])
@@ -10081,10 +10083,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error finding synopsis id for text ' + synTxt + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def hasReferenceContribution(self,rsName,csName):
+  def hasContribution(self,contType,rsName,csName):
     try:
       session = self.conn()
-      rs = session.execute('select hasReferenceContribution(:rsName,:csName)',{'rsName':rsName,'csName':csName})
+      sqlTxt = 'hasReferenceContribution'
+      if contType == 'usecase':
+        sqlTxt = 'hasUseCaseContribution'
+      rs = session.execute('select ' + sqlTxt + '(:rName,:cName)',{'rName':rsName,'cName':csName})
       row = rs.fetchall()
       hasRC = row[0][0]
       session.close()
@@ -10095,4 +10100,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error finding reference contribution for  ' + rsName + '/' + csName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def removeUseCaseContributions(self,ucId):
+    try: 
+      session = self.conn()
+      session.execute('call removeUseCaseContributions(%s)',[ucId])
+      session.commit()
+      session.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error removing use case contribution (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 

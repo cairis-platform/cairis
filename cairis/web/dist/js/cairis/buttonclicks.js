@@ -100,7 +100,8 @@ function removeReq(reqName) {
 }
 
 $("#requirementsClick").click(function(){
-  requirementsTable();
+  $('#menuBCClick').attr('dimension','requirement');
+  refreshMenuBreadCrumb('requirement');
 });
 
 //Just for debugLogger
@@ -151,6 +152,8 @@ $('#assetModelClick').click(function(){
 });
 
 function viewAssetModel() {
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   var envName = $('#chooseEnvironment').attr('data-chosenDimension');
   refreshDimensionSelector($('#amenvironmentsbox'),'environment',undefined,function() {
     refreshDimensionSelector($('#amassetsbox'),'asset',envName,function() {
@@ -190,6 +193,8 @@ $('#architecturalPatternModelClick').click(function(){
 });
 
 $('#misusabilityModelClick').click(function(){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   window.theVisualModel = 'misusability';
   $.ajax({
     type: "GET",

@@ -47,3 +47,10 @@ class ExportDAO(CairisDAO):
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+  def grl_export(self,taskName,personaName,envName):
+    try:
+      return self.db_proxy.pcToGrl(personaName,taskName,envName);
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
