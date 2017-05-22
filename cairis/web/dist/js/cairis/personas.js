@@ -93,20 +93,16 @@ function viewPersona(personaName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/personas/name/" + personaName.replace(" ", "%20"),
+    url: serverIP + "/api/personas/name/" + encodeURIComponent(personaName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editPersonasOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdatePersona").text("Update");
         $.session.set("Persona", JSON.stringify(data));
         $('#editPersonasOptionsForm').loadJSON(data, null);
 
-
-        getPersonaTypes(function createTypes(types) {
-          $.each(types, function (pType,index) {
-            $('#thePersonaType').append($("<option></option>").attr("value", pType).text(pType));
-          });
+        refreshDimensionSelector($('#thePersonaType'),'persona_type',undefined,function() {
           $("#thePersonaType").val(data.thePersonaType);
-        });
+        },['All']);
 
         if (data.theTags.length > 0) {
           var text = "";
@@ -329,12 +325,7 @@ $(document).on("click", "#addNewPersona", function () {
     $("#editPersonasOptionsForm").addClass("new");
     $("#Properties").hide();
     $.session.set("Persona", JSON.stringify(jQuery.extend(true, {},personaDefault )));
-
-    getPersonaTypes(function createTypes(types) {
-      $.each(types, function (pType,index) {
-        $('#thePersonaType').append($("<option></option>").attr("value", pType).text(pType));
-      });
-    });
+    refreshDimensionSelector($('#thePersonaType'),'persona_type',undefined,undefined,['All']);
   });
 });
 
@@ -423,28 +414,6 @@ function clearPersonaEnvInfo(){
   $("#theNarrative").val('');
 }
 
-function getPersonaTypes(callback){
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/personas/types",
-    success: function (data) {
-      if(jQuery.isFunction(callback)){
-        callback(data);
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
-}
-
 mainContent.on('click', '#ClosePersona', function (e) {
   e.preventDefault();
   $('#menuBCClick').attr('dimension','persona');
@@ -460,7 +429,7 @@ function deletePersona(name, callback){
     crossDomain: true,
     processData: false,
     origin: serverIP,
-    url: serverIP + "/api/personas/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/personas/name/" + encodeURIComponent(name) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -492,7 +461,7 @@ function putPersona(persona, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/personas/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/personas/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
