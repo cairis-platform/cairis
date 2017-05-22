@@ -86,27 +86,8 @@ $('#environmentsbox').change(function() {
     }
   }
   else if (window.theVisualModel == 'asset') {
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID')),
-      },
-      crossDomain: true,
-      url: serverIP + "/api/assets/environment/" + selection.replace(" ","%20") + "/names",
-      success: function (data) {
-        $('#amassetsbox').empty();
-        $('#amassetsbox').append($('<option>', {value: 'All', text: 'All'},'</option>'));
-        $.each(data, function (index, item) {
-          $('#amassetsbox').append($('<option>', {value: item, text: item},'</option>'));
-        });
-        $('#amassetsbox').change();
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
+    refreshDimensionSelector($('#amassetsbox'),'asset',selection,function(){
+      $('#amassetsbox').change();
     });
   }
 });
