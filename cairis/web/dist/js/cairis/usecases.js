@@ -284,7 +284,7 @@ mainContent.on('click','td.usecaseStep',function() {
       $('#theStep').val(currentStep.theStepText);
       $('#theSynopsis').val(currentStep.theSynopsis);
       if (currentStep.theActorType == '') {
-        currentStep.theActorType = 'role';
+        currentStep.theActorType = 'asset';
         currentStep.theActor = '';
       }
       $('#theActorType').val(currentStep.theActorType);
