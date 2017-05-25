@@ -52,6 +52,7 @@ from Responsibility import Responsibility
 from ClassAssociation import ClassAssociation
 from GoalAssociation import GoalAssociation
 from Dependency import Dependency
+from DataFlow import DataFlow
 from AttackerParameters import AttackerParameters
 from PersonaParameters import PersonaParameters
 from GoalParameters import GoalParameters
@@ -97,6 +98,7 @@ from ImpliedProcess import ImpliedProcess
 from ImpliedProcessParameters import ImpliedProcessParameters
 from Locations import Locations
 from LocationsParameters import LocationsParameters
+from DataFlowParameters import DataFlowParameters
 
 __author__ = 'Shamal Faily'
 
@@ -177,5 +179,7 @@ def build(objtId,p):
     return ImpliedProcess(objtId,p.name(),p.description(),p.persona(),p.network(),p.specification(),p.channels())
   if (p.__class__.__name__ == 'LocationsParameters'):
     return Locations(objtId,p.name(),p.diagram(),p.locations(),p.links())
+  if (p.__class__.__name__ == 'DataFlowParameters'):
+    return DataFlow(p.name(),p.environment(),p.fromName(),p.fromType(),p.toName(),p.toType(),p.assets())
   else:
     raise UnknownParameterClass(str(objtId))

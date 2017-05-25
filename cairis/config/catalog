@@ -161,5 +161,13 @@
        systemId="http://cairis.org/dtd/locations.dtd"  
        uri="locations.dtd"/>
 
+    <public 
+       publicId="-//CAIRIS//DTD DATAFLOW  1.0//EN"  
+       uri="dataflow.dtd"/>
+
+    <system
+       systemId="http://cairis.org/dtd/dataflow.dtd"  
+       uri="dataflow.dtd"/>
+
   </group>
 </catalog>

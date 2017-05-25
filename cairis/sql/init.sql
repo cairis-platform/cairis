@@ -20,6 +20,7 @@
 drop function if exists internalDocumentQuotationString;
 drop function if exists personaQuotationString;
 
+DROP VIEW IF EXISTS dataflows;
 DROP VIEW IF EXISTS countermeasure_vulnerability_response_target;
 DROP VIEW IF EXISTS countermeasure_threat_response_target;
 DROP VIEW IF EXISTS redmine_requirement;
@@ -46,6 +47,13 @@ DROP VIEW IF EXISTS misusability_case;
 DROP VIEW IF EXISTS usecase_step_synopsis_actor;
 DROP VIEW IF EXISTS quotation;
 
+DROP TABLE IF EXISTS dataflow_process_process;
+DROP TABLE IF EXISTS dataflow_entity_process;
+DROP TABLE IF EXISTS dataflow_process_entity;
+DROP TABLE IF EXISTS dataflow_process_datastore;
+DROP TABLE IF EXISTS dataflow_datastore_process;
+DROP TABLE IF EXISTS dataflow_asset;
+DROP TABLE IF EXISTS dataflow;
 DROP TABLE IF EXISTS persona_instance;
 DROP TABLE IF EXISTS asset_instance;
 DROP TABLE IF EXISTS location_link;
@@ -3240,6 +3248,71 @@ CREATE TABLE persona_instance (
   FOREIGN KEY(location_id) REFERENCES location(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE dataflow (
+  id INT NOT NULL,
+  environment_id INT NOT NULL,
+  name VARCHAR(255),
+  PRIMARY KEY(id,environment_id,name),
+  FOREIGN KEY(environment_id) REFERENCES environment(id)
+) ENGINE=INNODB;
+
+CREATE TABLE dataflow_asset (
+  dataflow_id INT NOT NULL,
+  asset_id INT NOT NULL,
+  PRIMARY KEY(dataflow_id,asset_id),
+  FOREIGN KEY(asset_id) REFERENCES asset(id)
+) ENGINE=INNODB;
+
+CREATE TABLE dataflow_process_process (
+  dataflow_id INT NOT NULL,
+  from_id INT NOT NULL,
+  to_id INT NOT NULL,
+  PRIMARY KEY(dataflow_id,from_id,to_id),
+  FOREIGN KEY(dataflow_id) REFERENCES dataflow(id),
+  FOREIGN KEY(from_id) REFERENCES usecase(id),
+  FOREIGN KEY(to_id) REFERENCES usecase(id)
+) ENGINE=INNODB;
+
+create TABLE dataflow_entity_process (
+  dataflow_id INT NOT NULL,
+  from_id INT NOT NULL,
+  to_id INT NOT NULL,
+  PRIMARY KEY(dataflow_id,from_id,to_id),
+  FOREIGN KEY(dataflow_id) REFERENCES dataflow(id),
+  FOREIGN KEY(from_id) REFERENCES asset(id),
+  FOREIGN KEY(to_id) REFERENCES usecase(id)
+) ENGINE=INNODB;
+
+create TABLE dataflow_process_entity (
+  dataflow_id INT NOT NULL,
+  from_id INT NOT NULL,
+  to_id INT NOT NULL,
+  PRIMARY KEY(dataflow_id,from_id,to_id),
+  FOREIGN KEY(dataflow_id) REFERENCES dataflow(id),
+  FOREIGN KEY(from_id) REFERENCES usecase(id),
+  FOREIGN KEY(to_id) REFERENCES asset(id)
+) ENGINE=INNODB;
+
+create TABLE dataflow_process_datastore (
+  dataflow_id INT NOT NULL,
+  from_id INT NOT NULL,
+  to_id INT NOT NULL,
+  PRIMARY KEY(dataflow_id,from_id,to_id),
+  FOREIGN KEY(dataflow_id) REFERENCES dataflow(id),
+  FOREIGN KEY(from_id) REFERENCES usecase(id),
+  FOREIGN KEY(to_id) REFERENCES asset(id)
+) ENGINE=INNODB;
+
+create TABLE dataflow_datastore_process (
+  dataflow_id INT NOT NULL,
+  from_id INT NOT NULL,
+  to_id INT NOT NULL,
+  PRIMARY KEY(dataflow_id,from_id,to_id),
+  FOREIGN KEY(dataflow_id) REFERENCES dataflow(id),
+  FOREIGN KEY(from_id) REFERENCES asset(id),
+  FOREIGN KEY(to_id) REFERENCES usecase(id)
+) ENGINE=INNODB;
+
 delimiter //
 
 create function internalDocumentQuotationString(idName text, startIdx int, endIdx int) 
@@ -3294,6 +3367,18 @@ end
 //
 
 delimiter ; 
+
+CREATE VIEW dataflows as
+  select d.name dataflow, e.name environment,fp.name from_name,'process' from_type,tp.name to_name,'process' to_type from dataflow d, dataflow_process_process dpp, usecase fp, usecase tp, environment e where d.id = dpp.dataflow_id and d.environment_id = e.id and dpp.from_id = fp.id and dpp.to_id = tp.id
+  union
+  select d.name dataflow, e.name environment, fe.name from_name, 'entity' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_entity_process dep, asset fe, usecase tp, environment e where d.id = dep.dataflow_id and d.environment_id = e.id and dep.from_id = fe.id and dep.to_id = tp.id
+  union
+  select d.name dataflow, e.name environment, fp.name from_name, 'process' from_type, te.name to_name, 'entity' to_type from dataflow d, dataflow_process_entity dpe, usecase fp, asset te, environment e where d.id = dpe.dataflow_id and d.environment_id = e.id and dpe.from_id = fp.id and dpe.to_id = te.id
+  union
+  select d.name dataflow, e.name environment, fd.name from_name, 'datastore' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_datastore_process ddp, asset fd, usecase tp, environment e where d.id = ddp.dataflow_id and d.environment_id = e.id and ddp.from_id = fd.id and ddp.to_id = tp.id
+  union
+  select d.name dataflow, e.name environment, fp.name from_name, 'process' from_type, td.name to_name, 'datastore' to_type from dataflow d, dataflow_process_datastore dpd, usecase fp, asset td, environment e where d.id = dpd.dataflow_id and d.environment_id = e.id and dpd.from_id = fp.id and dpd.to_id = td.id;
+
 
 CREATE VIEW countermeasure_vulnerability_response_target as 
   select distinct cvt.countermeasure_id,re.id response_id,cvt.vulnerability_id,cvt.environment_id from countermeasure_vulnerability_target cvt, environment_vulnerability ev, risk ri,response re where cvt.vulnerability_id = ev.vulnerability_id and cvt.environment_id = ev.environment_id and ev.vulnerability_id = ri.vulnerability_id and ri.id = re.risk_id;

@@ -1,0 +1,93 @@
+{
+  "roles" : [
+    {"theName" : "Data Consumer",
+     "theType" : "Stakeholder",
+     "theShortCode" : "DCON",
+     "theDescription" : "Uses NeuroGrid data"
+    }
+  ],
+  "environments" : [
+    {"theName" : "Psychosis",
+     "theShortCode" : "PSY",
+     "theDescription" : "The Psychosis exemplar"}
+  ],
+  "assets" : [
+     {"theName" : "Credentials",
+     "theShortCode" : "CD",
+     "theDescription" : "None",
+     "theSignificance" : "AuthN credentials",
+     "theType" : "Information",
+     "theEnvironmentProperties" :
+      [
+        ["Psychosis",
+         [2,0,0,0,0,0,0,0],
+         ["Researchers gave credentials some measure of seriousness","None","None","None","None","None","None","None"]
+        ]
+      ]
+    },
+    {"theName" : "Portal",
+     "theShortCode" : "CD",
+     "theDescription" : "None",
+     "theSignificance" : "NG Front End",
+     "theType" : "Systems",
+     "theEnvironmentProperties" :
+      [
+        ["Psychosis",
+         [0,0,2,0,0,0,0,0],
+         ["None","None","Non-access gets in the way of work","None","None","None","None","None"]
+        ]
+      ]
+    },
+    {"theName" : "Authorised Researcher",
+     "theShortCode" : "AR",
+     "theDescription" : "None",
+     "theSignificance" : "Authorised to NG",
+     "theType" : "People",
+     "theEnvironmentProperties" :
+      [
+        ["Psychosis",
+         [0,0,2,0,0,0,0,0],
+         ["None","None","Foster availability is key to NG take-up","None","None","None","None","None"]
+        ]
+      ]
+    },
+    {"theName" : "Session",
+     "theShortCode" : "SES",
+     "theDescription" : "None",
+     "theSignificance" : "Authorised session",
+     "theType" : "Information",
+     "theEnvironmentProperties" :
+      [
+        ["Psychosis",
+         [3,2,2,0,0,0,0,0],
+         ["Must be kept secret","Tampering might break access control rules or availability","Accessibility issues affects access to NG","None","None","None","None","None"]
+        ]
+      ]
+    }
+  ],
+  "use_cases" : [
+    {"theName" : "Authenticate Researcher",
+     "theAuthor" : "SF",
+     "theDescription" : "Verify researcher identity",
+     "theActor" : "Data Consumer",
+     "theCode" : "UC-1", 
+     "theEnvironments" : [
+       {"theName" : "Psychosis",
+        "thePreconditions" : "Researcher holds credentials",
+        "theFlow" : [
+          {"theStepNo" : "1", "theDescription" : "Researcher presents credentials"},
+          {"theStepNo" : "2", "theDescription" : "System returns session"}
+        ],
+         "thePostconditions" : "Researcher app has session"}
+      ]}
+  ],
+  "dataflows" : [
+    {"theName" : "authenticate",
+     "theEnvironmentName" : "Psychosis",
+     "theFromName" : "Authorised Researcher",
+     "theFromType" : "entity",
+     "theToName" : "Authenticate Researcher",
+     "theToType" : "process",
+     "theAssets" : ["Credentials"]}
+  ]
+}
