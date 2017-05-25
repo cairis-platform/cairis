@@ -121,6 +121,12 @@ class DataFlowTest(unittest.TestCase):
     b = Borg()
     self.assertEqual(b.dbProxy.dataflowsToXml()[1],1)
 
+  def testDataFlowDiagram(self):
+    importDataflowsFile(os.environ['CAIRIS_SRC'] + '/test/testdataflow.xml')
+    b = Borg()
+    dfs = b.dbProxy.dataFlowDiagram('Psychosis','')
+    self.assertEqual(len(dfs),1)
+
   def tearDown(self):
     b = Borg()
     b.dbProxy.deleteDataFlow(self.dfJson['theName'],self.dfJson['theEnvironmentName'])

@@ -5284,6 +5284,20 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error checking existence of ' + dimName + ' ' + objtName + ' (id:' + str(id) + ',message:' + msg + ')'
 
+  def nameCheckEnvironment(self,objtName,envName,dimName):
+    try:
+      curs = self.conn.connection().connection.cursor()
+      curs.execute('call nameEnvironmentExists(%s,%s,%s)',[objtName,envName,dimName])
+      row = curs.fetchone()
+      objtCount = row[0]
+      curs.close()
+      if (objtCount > 0):
+        exceptionText = dimName + ' ' + objtName + ' in environment ' + envName + ' already exists.'
+        raise ARMException(exceptionText) 
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error checking existence of ' + dimName + ' ' + objtName + ' in environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+
   def nameExists(self,objtName,dimName):
     try:
       curs = self.conn.connection().connection.cursor()
@@ -10139,6 +10153,20 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.execute('call deleteDataFlow(%s,%s)',[dfName,envName])
       curs.close()
       self.conn.commit()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error deleting dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+
+  def dataFlowDiagram(self,envName,filterElement = ''):
+    try:
+      curs = self.conn.connection().connection.cursor()
+      curs.execute('call dataFlowDiagram(%s,%s)',[envName,filterElement])
+      dfs = []
+      for row in curs.fetchall():
+        row = list(row)
+        dfs.append((row[0],row[1],row[2],row[3],row[4]))
+      curs.close()
+      return dfs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error deleting dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'

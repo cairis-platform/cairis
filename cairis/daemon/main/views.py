@@ -29,7 +29,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController
+    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -190,6 +190,10 @@ api.add_resource(CountermeasureController.GenerateAssetAPI, '/api/countermeasure
 api.add_resource(CountermeasureController.TargetsAPI, '/api/countermeasures/targets/environment/<string:environment>',endpoint='targets')
 api.add_resource(CountermeasureController.CountermeasureTasksAPI, '/api/countermeasures/tasks/environment/<string:environment>',endpoint='countermeasuretasks')
 
+# Dataflow routes
+api.add_resource(DataFlowController.DataFlowsAPI, '/api/dataflows',endpoint='dataflows')
+api.add_resource(DataFlowController.DataFlowByNameAPI, '/api/dataflows/name/<string:dataflow_name>/environment/<string:environment_name>',endpoint='dataflow')
+api.add_resource(DataFlowController.DataFlowDiagramAPI, '/api/dataflows/diagram/environment/<string:environment_name>/filter/<string:filter_element>',endpoint='dataflowdiagram')
 
 # Dependency routes
 api.add_resource(DependencyController.DependenciesAPI, '/api/dependencies',endpoint='dependencies')

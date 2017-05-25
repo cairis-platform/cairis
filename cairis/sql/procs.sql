@@ -463,6 +463,7 @@ drop procedure if exists exploitingRiskElementCountermeasures;
 drop procedure if exists candidateCountermeasurePatterns;
 drop procedure if exists associateCountermeasureToPattern;
 drop procedure if exists nameExists;
+drop procedure if exists nameEnvironmentExists;
 drop procedure if exists addExternalDocument;
 drop procedure if exists updateExternalDocument;
 drop procedure if exists getExternalDocuments;
@@ -882,6 +883,7 @@ drop procedure if exists deleteDataFlow;
 drop procedure if exists getDataFlows;
 drop procedure if exists getDataFlowAssets;
 drop procedure if exists dataflowsToXml;
+drop procedure if exists dataFlowDiagram;
 
 delimiter //
 
@@ -23476,5 +23478,38 @@ begin
 end
 //
 
+create procedure dataFlowDiagram(in envName text,in filterElement text)
+begin
+
+  if filterElement != ''
+  then
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_name = filterElement
+    union
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and to_name = filterElement
+    union
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and dataflow = filterElement;
+  else
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName;
+
+  end if;
+end
+//
+
+create procedure nameEnvironmentExists(in objtName text, in envName text, in dimName text)
+begin
+  declare objtCount int;
+  declare envId int;
+  declare ncSql varchar(4000);
+
+  select id into envId from environment where name = envName limit 1;
+  set ncSql = concat('select count(id) into @objtCount from ',dimName,' where name = "',objtName,'" and environment_id = ',envId,' limit 1');
+  set @sql = ncSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set objtCount = @objtCount;
+  select objtCount;
+end
+//
 
 delimiter ;
