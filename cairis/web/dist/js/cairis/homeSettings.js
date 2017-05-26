@@ -85,6 +85,11 @@ function refreshMenuBreadCrumb(dimName) {
     $('#menuBCClick').show();
     createDependenciesTable();
   }
+  else if (dimName == 'dataflow') {
+    $('#menuBCClick').text('Dataflows');
+    $('#menuBCClick').show();
+    createDataflowsTable();
+  }
   else if (dimName == 'architectural_pattern') {
     $('#menuBCClick').text('Architectural Patterns');
     $('#menuBCClick').show();

@@ -23,12 +23,21 @@ $( document ).ajaxComplete(function() {
   $("svg > g > g .node > g > a").on('click', function (event) {
     handleNodeClick(event,$(this));
   });
+
+  $("svg > g > g .edge > g > a").on('click', function (event) {
+    handleNodeClick(event,$(this));
+  });
 });
 
 $( document ).ajaxComplete(function() {
   $("svg > g > g .node > a").on('click', function (event) {
     handleNodeClick(event,$(this));
   });
+
+  $("svg > g > g .edge > a").on('click', function (event) {
+    handleNodeClick(event,$(this));
+  });
+
 });
 
 function handleNodeClick(event,objt) {
@@ -86,6 +95,34 @@ function handleNodeClick(event,objt) {
       }
     });
   } 
+  if(link.indexOf("dataflows") > -1) {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + link.replace(" ", "%20"),
+      success: function (data) {
+        fillOptionMenu("fastTemplates/DataflowOptions.html", "#optionsContent", data,false,true,function(){
+          $.session.set("Dataflow", JSON.stringify(data));
+          $('#dataflowForm').loadJSON(data,null);
+          $.each(data.theAssets,function(idx,dfAsset) {
+            $("#theAssets").find("tbody").append("<tr><td>" + dfAsset + "</td></tr>");
+          });
+          $("#optionsHeaderGear").text("Dataflow properties");
+          forceOpenOptions();
+        });
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        console.log(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+
+  }
   else if(link.indexOf("personas") > -1) {
     $.ajax({
       type: "GET",

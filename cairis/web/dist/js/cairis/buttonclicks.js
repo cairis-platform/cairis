@@ -163,6 +163,43 @@ function viewAssetModel() {
   });
 }
 
+
+$('#dataflowDiagramClick').click(function(){
+  window.theVisualModel = 'dataflow';
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/environments/all/names",
+    success: function (data) {
+      $("#chooseEnvironmentSelect").empty();
+      $.each(data, function(i, item) {
+        $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');
+      });
+      $('#chooseEnvironment').attr('data-chooseDimension',"environment");
+      $('#chooseEnvironment').attr('data-applyEnvironmentSelection',"viewDataFlowDiagram");
+      $('#chooseEnvironment').modal('show');
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  })
+});
+
+
+function viewDataFlowDiagram() {
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
+  var envName = $('#chooseEnvironment').attr('data-chosenDimension');
+  getDataFlowDiagram(envName);
+}
+
+
 $('#architecturalPatternModelClick').click(function(){
   window.theVisualModel = 'architectural_pattern';
   $.ajax({

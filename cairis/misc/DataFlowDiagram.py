@@ -22,8 +22,9 @@ from cairis.core.Borg import Borg
 from cairis.core.ARM import *
 
 class DataFlowDiagram:
-  def __init__(self,associations, font_name=None, font_size=None):
+  def __init__(self,associations, envName,font_name=None, font_size=None):
     self.theAssociations = associations
+    self.theEnvironmentName = envName
     self.fontName = font_name
     self.fontSize = font_size
 
@@ -54,8 +55,8 @@ class DataFlowDiagram:
       self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
 
     elif (dimName == 'datastore'):
-      dsLbl = '<<TABLE SIDES="TB" CELLBORDER="0"><TR><TD>' + objtName + '</TD></TR></TABLE>'
-      self.theGraph.add_node(pydot.Node(dsLbl,shape='rectangle',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      dsLbl = '<<TABLE SIDES="TB" CELLBORDER="0"><TR><TD>' + objtName + '</TD></TR></TABLE>>'
+      self.theGraph.add_node(pydot.Node(objtName,label=dsLbl,shape='plaintext',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     else:
       raise UnknownNodeType(dimName)
 
@@ -79,7 +80,8 @@ class DataFlowDiagram:
           nodeNameSet.add(toName)
 
         if ((fromName,toName) not in edgeSet):
-          df = pydot.Edge(fromName,toName,dir='forward',arrowhead='veetee',weight='1')
+          objtUrl = 'dataflow#' + dfName + '#' + self.theEnvironmentName
+          df = pydot.Edge(fromName,toName,dir='forward',label=dfName,arrowhead='vee',weight='1',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
           self.theGraph.add_edge(df)
       return self.layout()
     except DatabaseProxyException, errTxt:

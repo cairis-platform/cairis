@@ -224,6 +224,9 @@ drop procedure if exists detection_mechanismNames;
 drop procedure if exists delete_requirement;
 drop procedure if exists detectionMechanisms;
 drop procedure if exists assetNames;
+drop procedure if exists entityNames;
+drop procedure if exists datastoreNames;
+drop procedure if exists processNames;
 drop procedure if exists classAssociationNames;
 drop procedure if exists goalAssociationNames;
 drop procedure if exists threatNames;
@@ -4351,6 +4354,45 @@ begin
 end
 //
 
+create procedure entityNames(in environmentName text)
+begin
+  declare environmentId int;
+  if environmentName = ''
+  then
+    select name from entity order by 1;
+  else
+    select id into environmentId from environment where name = environmentName limit 1;
+    select a.name from entity a, environment_asset ca where ca.environment_id = environmentId and ca.asset_id = a.id order by 1;
+  end if;
+end
+//
+
+create procedure datastoreNames(in environmentName text)
+begin
+  declare environmentId int;
+  if environmentName = ''
+  then
+    select name from datastore order by 1;
+  else
+    select id into environmentId from environment where name = environmentName limit 1;
+    select a.name from datastore a, environment_asset ca where ca.environment_id = environmentId and ca.asset_id = a.id order by 1;
+  end if;
+end
+//
+
+create procedure processNames(in environmentName text)
+begin
+  declare environmentId int;
+  if environmentName = ''
+  then
+    select name from usecase order by 1;
+  else
+    select id into environmentId from environment where name = environmentName limit 1;
+    select u.name from usecase u, environment_usecase eu where eu.environment_id = environmentId and eu.usecase_id = u.id order by 1;
+  end if;
+end
+//
+
 create procedure threatNames(in environmentName text)
 begin
   declare environmentId int;
@@ -8103,6 +8145,11 @@ begin
   if dimensionTable = 'persona_characteristic'
   then
     set nameCol = 'description';
+  end if;
+
+  if dimensionTable = 'process'
+  then
+    set dimensionTable = 'usecase';
   end if;
  
   if constraintId = -1

@@ -168,7 +168,7 @@ class DataFlowDAO(CairisDAO):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       dfdRows = self.db_proxy.dataFlowDiagram(environment_name,filter_element)
-      associations = DataFlowDiagram(dfdRows,font_name=fontName, font_size=fontSize)
+      associations = DataFlowDiagram(dfdRows,environment_name,font_name=fontName, font_size=fontSize)
       dot_code = associations.graph()
       if not dot_code:
         raise ObjectNotFoundHTTPError('The data flow diagram')

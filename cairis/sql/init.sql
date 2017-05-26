@@ -20,6 +20,8 @@
 drop function if exists internalDocumentQuotationString;
 drop function if exists personaQuotationString;
 
+DROP VIEW IF EXISTS entity;
+DROP VIEW IF EXISTS datastore;
 DROP VIEW IF EXISTS dataflows;
 DROP VIEW IF EXISTS countermeasure_vulnerability_response_target;
 DROP VIEW IF EXISTS countermeasure_threat_response_target;
@@ -3367,6 +3369,12 @@ end
 //
 
 delimiter ; 
+
+CREATE VIEW entity as
+  select id,name,short_code,description,significance,asset_type_id,is_critical,critical_rationale from asset where asset_type_id in (1,3,4);
+
+CREATE VIEW datastore as
+  select id,name,short_code,description,significance,asset_type_id,is_critical,critical_rationale from asset where asset_type_id = 0;
 
 CREATE VIEW dataflows as
   select d.name dataflow, e.name environment,fp.name from_name,'process' from_type,tp.name to_name,'process' to_type from dataflow d, dataflow_process_process dpp, usecase fp, usecase tp, environment e where d.id = dpp.dataflow_id and d.environment_id = e.id and dpp.from_id = fp.id and dpp.to_id = tp.id

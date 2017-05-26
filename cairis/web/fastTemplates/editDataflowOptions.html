@@ -1,0 +1,55 @@
+<form role="form" id="editDataflowOptionsForm" xmlns="http://www.w3.org/1999/html" >
+  <div class="form-group">
+    <input class="optionsInput form-control" type="text" name="theDataflowName" id="theDataflowName" data-error="Dataflow name is required" required>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="form-group">
+    <label for="theDataflowEnvironmentName" class="control-label">Environment</label>
+    <select name="theDataflowEnvironmentName" class="optionsInput form-control" id="theDataflowEnvironmentName" name="theDataflowEnvironmentName" data-error="Environment name is required" required>
+    </select>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="form-group">
+    <label>From Type</label>
+    <select class="form-control" name="theDataflowFromType" id="theDataflowFromType">
+      <option value="entity" selected>Entity</option>
+      <option value="datastore">Datastore</option>
+      <option value="process">Process</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Name</label>
+    <select class="form-control" name="theDataflowFromName" id="theDataflowFromName">
+    </select>
+  </div>
+  <div class="form-group">
+    <label>To Type</label>
+    <select class="form-control" name="theDataflowToType" id="theDataflowToType">
+      <option value="entity">entity</option>
+      <option value="datastore">Datastore</option>
+      <option value="process" selected>Process</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Name</label>
+    <select class="form-control" name="theDataflowToName" id="theDataflowToName">
+    </select>
+  </div>
+  <div class="form-group" id="assets">
+    <table id="theDataflowAssets" class="right clickable-table" style="width: 100%">
+      <thead>
+        <tr>
+          <th width="50px" id="addAssetToDataflow"> <i class="fa fa-plus"></i></th><th>Asset</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-2 col-md-offset-5 footer">
+      <button type="submit" class="btn btn-primary" id="UpdateDataflow">Update</button>
+      <button type="submit" class="btn btn-secondary" id="CloseDataflow">Close</button>
+    </div>
+  </div>
+</form>

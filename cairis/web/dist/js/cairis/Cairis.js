@@ -333,6 +333,28 @@ function getAssetview(environment){
   });
 }
 
+function getDataFlowDiagram(environment){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
+  window.assetEnvironment = environment;
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dataflows/diagram/environment/" + encodeURIComponent(environment) + "/filter/None",
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
 function getArchitecturalPatternView(apName){
   $('#menuBCClick').attr('dimension','model');
   refreshMenuBreadCrumb('model');
@@ -1073,6 +1095,10 @@ function setTableHeader(activeTable){
     case "Dependency":
       debugLogger("Is Dependency");
       thead = "<th width='50px' id='addNewDependency'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Depender</th><th>Dependee</th><th>Noun</th><th>Dependency</th>";
+      break;
+    case "Dataflows":
+      debugLogger("Is Dataflows");
+      thead = "<th width='50px' id='addNewDataflow'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Name</th><th>From</th><th>Type</th><th>To</th><th>Type</th>";
       break;
     case "ExternalDocuments":
       debugLogger("Is External Documents");
