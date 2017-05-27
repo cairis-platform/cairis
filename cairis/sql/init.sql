@@ -20,6 +20,7 @@
 drop function if exists internalDocumentQuotationString;
 drop function if exists personaQuotationString;
 
+DROP VIEW IF EXISTS dfd_filter;
 DROP VIEW IF EXISTS entity;
 DROP VIEW IF EXISTS datastore;
 DROP VIEW IF EXISTS dataflows;
@@ -3369,6 +3370,13 @@ end
 //
 
 delimiter ; 
+
+CREATE VIEW dfd_filter as
+  select id,name,'entity' dimension from asset where asset_type_id in (1,3,4)
+  union
+  select id,name,'datastore' dimension from asset where asset_type_id = 0
+  union
+  select id,name,'usecase' dimension from usecase;
 
 CREATE VIEW entity as
   select id,name,short_code,description,significance,asset_type_id,is_critical,critical_rationale from asset where asset_type_id in (1,3,4);

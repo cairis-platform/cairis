@@ -227,6 +227,7 @@ drop procedure if exists assetNames;
 drop procedure if exists entityNames;
 drop procedure if exists datastoreNames;
 drop procedure if exists processNames;
+drop procedure if exists dfd_filterNames;
 drop procedure if exists classAssociationNames;
 drop procedure if exists goalAssociationNames;
 drop procedure if exists threatNames;
@@ -4389,6 +4390,25 @@ begin
   else
     select id into environmentId from environment where name = environmentName limit 1;
     select u.name from usecase u, environment_usecase eu where eu.environment_id = environmentId and eu.usecase_id = u.id order by 1;
+  end if;
+end
+//
+
+create procedure dfd_filterNames(in envName text)
+begin
+  if envName != ''
+  then
+    select dataflow from dataflows where environment = envName
+    union
+    select from_name from dataflows where environment = envName
+    union
+    select to_name from dataflows where environment = envName;
+  else
+    select dataflow from dataflows
+    union
+    select from_name from dataflows
+    union
+    select to_name from dataflows;
   end if;
 end
 //
@@ -23537,7 +23557,6 @@ begin
     select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and dataflow = filterElement;
   else
     select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName;
-
   end if;
 end
 //

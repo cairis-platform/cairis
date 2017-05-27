@@ -142,6 +142,20 @@ $('#apcharacteristicbox').change(function() {
   getPersonaView(pName,bvName,selection);
 });
 
+$('#dfdenvironmentbox').change(function() {
+  var envName = $(this).find('option:selected').text();
+  refreshDimensionSelector($('#dfdfilterbox'),'dfd_filter',envName,function() {
+    $('#dfdfilterbox').val('All');
+    getDataFlowDiagram(envName,'All');
+  });
+});
+
+$('#dfdfilterbox').change(function() {
+  var filter = $(this).find('option:selected').text();
+  var envName = $('#dfdenvironmentbox').val();
+  getDataFlowDiagram(envName,filter);
+});
+
 function appendPersonaCharacteristics(pName,bvName,pcName) {
 
   $.ajax({
@@ -333,10 +347,13 @@ function getAssetview(environment){
   });
 }
 
-function getDataFlowDiagram(environment){
+function getDataFlowDiagram(environment,filter){
   $('#menuBCClick').attr('dimension','model');
   refreshMenuBreadCrumb('model');
   window.assetEnvironment = environment;
+  if (filter == 'All') {
+    filter = 'None';
+  }
   $.ajax({
     type:"GET",
     accept:"application/json",
@@ -344,7 +361,7 @@ function getDataFlowDiagram(environment){
       session_id: String($.session.get('sessionID')),
     },
     crossDomain: true,
-    url: serverIP + "/api/dataflows/diagram/environment/" + encodeURIComponent(environment) + "/filter/None",
+    url: serverIP + "/api/dataflows/diagram/environment/" + encodeURIComponent(environment) + "/filter/" + encodeURIComponent(filter),
     success: function(data){
       fillSvgViewer(data);
     },
@@ -802,7 +819,7 @@ function refreshDimensionSelector(sBox,dimName,envName,callback,filterList) {
     success: function (data) {
       data.sort();
       sBox.empty();
-      if ((dimName == 'asset' && filterList == undefined) || (dimName == 'goal' && filterList == undefined) || (dimName == 'obstacle' && filterList == undefined) || (dimName == 'task' && filterList == undefined) || (dimName == 'usecase' && filterList == undefined) || (dimName == 'misusecase' && filterList == undefined) || (dimName == 'requirement' && filterList == undefined)) {
+      if ((dimName == 'asset' && filterList == undefined) || (dimName == 'goal' && filterList == undefined) || (dimName == 'obstacle' && filterList == undefined) || (dimName == 'task' && filterList == undefined) || (dimName == 'usecase' && filterList == undefined) || (dimName == 'misusecase' && filterList == undefined) || (dimName == 'requirement' && filterList == undefined) || (dimName == 'dfd_filter' && filterList == undefined)) {
         sBox.append("<option>All</option>");
       }
       if (filterList != undefined) {
@@ -921,6 +938,7 @@ function activeElement(elementid){
     $("#filterconceptmapmodelcontent").hide();
     $("#filterarchitecturalpatternmodelcontent").hide();
     $("#filtermisusabilitymodelcontent").hide();
+    $("#filterdfdcontent").hide();
     $("#rightnavGear").hide();
 
     if (elementid == 'svgViewer') {
@@ -959,6 +977,9 @@ function activeElement(elementid){
     else if (window.theVisualModel == 'misusability') {
       $("#filtermisusabilitymodelcontent").show();
     }
+    else if (window.theVisualModel == 'dataflow') {
+      $("#filterdfdcontent").show();
+    }
   }
   if(elementid != "svgViewer"){
     $("#svgViewer").hide();
@@ -975,6 +996,7 @@ function activeElement(elementid){
     $("#filterconceptmapmodelcontent").hide();
     $("#filterarchitecturalpatternmodelcontent").hide();
     $("#filtermisusabilitymodelcontent").hide();
+    $("#filterdfdcontent").hide();
     $("#rightnavGear").hide();
   }
 

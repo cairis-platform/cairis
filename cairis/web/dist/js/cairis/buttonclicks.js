@@ -196,7 +196,14 @@ function viewDataFlowDiagram() {
   $('#menuBCClick').attr('dimension','model');
   refreshMenuBreadCrumb('model');
   var envName = $('#chooseEnvironment').attr('data-chosenDimension');
-  getDataFlowDiagram(envName);
+
+  refreshDimensionSelector($('#dfdenvironmentbox'),'environment',undefined,function() {
+    $('#dfdenvironmentbox').val(envName);
+    refreshDimensionSelector($('#dfdfilterbox'),'dfd_filter',envName,function() {
+      $('#dfdfilterbox').val('All');
+      getDataFlowDiagram(envName,'None');
+    });
+  });
 }
 
 
