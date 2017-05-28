@@ -5501,11 +5501,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def nameCheckEnvironment(self,objtName,envName,dimName):
     try:
-      curs = self.conn.connection().connection.cursor()
-      curs.execute('call nameEnvironmentExists(%s,%s,%s)',[objtName,envName,dimName])
-      row = curs.fetchone()
+      session = self.conn()
+      rs = session.execute('call nameEnvironmentExists(:obj,:env,:dim)',{'obj':objtName,'env':envName,'dim':dimName})
+      row = rs.fetchone()
       objtCount = row[0]
-      curs.close()
+      rs.close()
+      session.close()
       if (objtCount > 0):
         exceptionText = dimName + ' ' + objtName + ' in environment ' + envName + ' already exists.'
         raise ARMException(exceptionText) 
@@ -6535,12 +6536,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def dataflowsToXml(self,includeHeader=True):
     try:
-      curs = self.conn.connection().connection.cursor()
-      curs.execute('call dataflowsToXml(%s)',[includeHeader])
-      row = curs.fetchone()
+      session = self.conn()
+      rs = session.execute('call dataflowsToXml(:inc)',{'inc':includeHeader})
+      row = rs.fetchone()
       xmlBuf = row[0] 
       dfCount = row[1]
-      curs.close()
+      rs.close()
+      session.close()
       return (xmlBuf,dfCount)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -10442,11 +10444,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def getDataFlows(self,dfName='',envName=''):
     try:
-      curs = self.conn.connection().connection.cursor()
-      curs.execute('call getDataFlows(%s,%s)',[dfName,envName])
+      session = self.conn()
+      rs = session.execute('call getDataFlows(:df,:env)',{'df':dfName,'env':envName})
       dataFlows = {}
       dfRows = []
-      for row in curs.fetchall():
+      for row in rs.fetchall():
         row = list(row)
         dfName = row[0]
         envName = row[1]
@@ -10455,13 +10457,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         toName = row[4]
         toType = row[5]
         dfRows.append((dfName,envName,fromName,fromType,toName,toType))
-      curs.close()
+      rs.close()
+      session.close()
       for dfName,envName,fromName,fromType,toName,toType in dfRows:
         dfAssets = self.getDataFlowAssets(dfName,envName)
         parameters = DataFlowParameters(dfName,envName,fromName,fromType,toName,toType,dfAssets)
         df = ObjectFactory.build(-1,parameters)
         dataFlows[dfName + '/' + envName] = df
-      curs.close()
       return dataFlows
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -10470,13 +10472,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def getDataFlowAssets(self,dfName,envName):
     try:
-      curs = self.conn.connection().connection.cursor()
-      curs.execute('call getDataFlowAssets(%s,%s)',[dfName,envName])
+      session = self.conn()
+      rs = session.execute('call getDataFlowAssets(:df,:env)',{'df':dfName,'env':envName})
       assetRows = []
-      for row in curs.fetchall():
+      for row in rs.fetchall():
         row = list(row)
         assetRows.append(row[0])
-      curs.close()
+      rs.close()
+      session.close()
       return assetRows
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -10492,22 +10495,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     toType = parameters.toType()
     dfAssets = parameters.assets()
     try:
-      curs = self.conn.connection().connection.cursor()
-      curs.execute('call addDataFlow(%s,%s,%s,%s,%s,%s)',[dfName,envName,fromName,fromType,toName,toType])
+      session = self.conn()
+      session.execute('call addDataFlow(:df,:env,:fName,:fType,:tName,:tType)',{'df':dfName,'env':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType})
+      session.commit()
       for dfAsset in dfAssets:
-        self.addDataFlowAsset(dfName,envName,dfAsset)
-      curs.close()
-      self.conn.commit()
+        self.addDataFlowAsset(dfName,envName,dfAsset, session)
+      session.commit()
+      session.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding dataflow ' + parameters.name() + '/' + parameters.environment() + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def addDataFlowAsset(self,dfName,envName,dfAsset):
+  def addDataFlowAsset(self,dfName,envName,dfAsset, session):
     try:
-      curs = self.conn.connection().connection.cursor()
-      curs.execute('call addDataFlowAsset(%s,%s,%s)',[dfName,envName,dfAsset])
-      curs.close()
+      session.execute('call addDataFlowAsset(:df,:env,:ass)',{'df':dfName,'env':envName,'ass':dfAsset})
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding asset ' + dfAsset + ' to dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -10522,13 +10524,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     toType = parameters.toType()
     dfAssets = parameters.assets()
     try:
-      curs = self.conn.connection().connection.cursor()
-      curs.execute('call deleteDataFlowAssets(%s,%s)',[oldDfName,oldEnvName])
-      curs.execute('call updateDataFlow(%s,%s,%s,%s,%s,%s,%s,%s)',[oldDfName,dfName,oldEnvName,envName,fromName,fromType,toName,toType])
+      session = self.conn()
+      session.execute('call deleteDataFlowAssets(:df,:env)',{'df':oldDfName,'env':oldEnvName})
+      session.execute('call updateDataFlow(:oDf,:nDf,:oEnv,:nEnv,:fName,:fType,:tName,:tType)',{'oDf':oldDfName,'nDf':dfName,'oEnv':oldEnvName,'nEnv':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType})
+      session.commit
       for dfAsset in dfAssets:
-        self.addDataFlowAsset(dfName,envName,dfAsset)
-      curs.close()
-      self.conn.commit()
+        self.addDataFlowAsset(dfName,envName,dfAsset,session)
+      session.commit()
+      session.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error updating dataflow ' + oldDfName + '/' + oldEnvName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -10536,23 +10539,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def deleteDataFlow(self,dfName,envName):
     try:
-      curs = self.conn.connection().connection.cursor()
-      curs.execute('call deleteDataFlow(%s,%s)',[dfName,envName])
-      curs.close()
-      self.conn.commit()
+      session = self.conn()
+      session.execute('call deleteDataFlow(:df,:env)',{'df':dfName,'env':envName})
+      session.commit()
+      session.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error deleting dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
 
   def dataFlowDiagram(self,envName,filterElement = ''):
     try:
-      curs = self.conn.connection().connection.cursor()
-      curs.execute('call dataFlowDiagram(%s,%s)',[envName,filterElement])
+      session = self.conn()
+      rs = session.execute('call dataFlowDiagram(:env,:fe)',{'env':envName,'fe':filterElement})
       dfs = []
-      for row in curs.fetchall():
+      for row in rs.fetchall():
         row = list(row)
         dfs.append((row[0],row[1],row[2],row[3],row[4]))
-      curs.close()
+      rs.close()
+      session.close()
       return dfs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
