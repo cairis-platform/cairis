@@ -363,6 +363,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         row = list(row)
         idLookup[row[0]] = row[1]
         nameLookup[row[1]] = row[0]
+      rs.close()
       session.close()
       return (idLookup, nameLookup)
     except _mysql_exceptions.DatabaseError, e:
@@ -393,6 +394,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         reqDomain = row[ASSET_COL]
         r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
         reqDict[reqDesc] = r
+      rs.close()
       session.close()
       return reqDict
     except _mysql_exceptions.DatabaseError, e:
@@ -420,6 +422,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         reqDomain = row[ASSET_COL]
         r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
         reqDict[reqDesc] = r
+      rs.close()
       session.close()
       return reqDict
     except _mysql_exceptions.DatabaseError, e:
@@ -447,6 +450,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         reqVersion = row[VERSION_COL]
         r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
         reqList.append(r)
+      rs.close()
       session.close()
       return reqList
     except _mysql_exceptions.DatabaseError, e:
@@ -459,8 +463,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       session = self.conn()
       rs = session.execute('call newId()')
-      results = rs.fetchall()
-      newId = results[0][0]
+      results = rs.fetchone()
+      newId = results[0]
+      rs.close()
       session.close()
       return newId
     except _mysql_exceptions.DatabaseError, e:
@@ -556,6 +561,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         environments.append(row[0])
+      rs.close()
       session.close()
       return environments
     except _mysql_exceptions.DatabaseError, e:
@@ -571,6 +577,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         environments.append(row[0])
+      rs.close()
       session.close()
       return environments
     except _mysql_exceptions.DatabaseError, e:
@@ -623,6 +630,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       environmentShortCode = row[ENVIRONMENTSHORTCODE_COL]
       environmentDesc = row[ENVIRONMENTDESC_COL]
       envRows.append((environmentId,environmentName,environmentShortCode,environmentDesc))
+    rs.close()
     session.close()
     for environmentId,environmentName,environmentShortCode,environmentDesc in envRows:
       cc = self.compositeEnvironments(environmentId)
@@ -644,6 +652,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         environments.append(row[0])
+      rs.close()
       session.close()
       return environments
     except _mysql_exceptions.DatabaseError, e:
@@ -659,6 +668,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         environments.append(row[0])
+      rs.close()
       session.close()
       return environments
     except _mysql_exceptions.DatabaseError, e:
@@ -670,9 +680,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call duplicateProperties(:id)',{'id':environmentId})
-      row = rs.fetchall()
-      duplicateProperty = row[0][0] 
-      overridingEnvironment = row[0][1]
+      row = rs.fetchone()
+      duplicateProperty = row[0] 
+      overridingEnvironment = row[1]
+      rs.close()
       session.close()   
       return (duplicateProperty,overridingEnvironment) 
     except _mysql_exceptions.DatabaseError, e:
@@ -693,6 +704,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         attackerDesc = row[ATTACKERS_DESCRIPTION_COL]
         attackerImage = row[ATTACKERS_IMAGE_COL]
         attackerRows.append((attackerId,attackerName,attackerDesc,attackerImage))
+      rs.close()
       session.close()
       for attackerId,attackerName,attackerDesc,attackerImage in attackerRows:
         tags = self.getTags(attackerName,'attacker')
@@ -721,6 +733,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         environments.append((row[0],row[1]))
+      rs.close()
       session.close()
       return environments
     except _mysql_exceptions.DatabaseError, e:
@@ -736,6 +749,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         motives.append(row[0])
+      rs.close()
       session.close()
       return motives
     except _mysql_exceptions.DatabaseError, e:
@@ -747,8 +761,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select threat_likelihood(:tId,:eId)',{'tId':threatId,'eId':environmentId})
-      row = rs.fetchall()
-      lhood = row[0][0] 
+      row = rs.fetchone()
+      lhood = row[0]
+      rs.close() 
       session.close()
       return lhood
     except _mysql_exceptions.DatabaseError, e:
@@ -760,8 +775,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select vulnerability_severity(:vId,:eId)',{'vId':vulId,'eId':environmentId})
-      row = rs.fetchall()
-      sev = row[0][0]
+      row = rs.fetchone()
+      sev = row[0]
+      rs.close()
       session.close()
       return sev
     except _mysql_exceptions.DatabaseError, e:
@@ -777,6 +793,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         capabilities.append((row[0],row[1]))
+      rs.close()
       session.close()
       return capabilities
     except _mysql_exceptions.DatabaseError, e:
@@ -792,7 +809,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       attackerImage = parameters.image()
       tags = parameters.tags()
       session = self.conn()
-      rs = session.execute("call addAttacker(:id,:name,:desc,:image)",{'id':attackerId,'name':attackerName,'desc':attackerDesc,'image':attackerImage})
+      session.execute("call addAttacker(:id,:name,:desc,:image)",{'id':attackerId,'name':attackerName,'desc':attackerDesc,'image':attackerImage})
       session.commit()
       session.close()
       self.addTags(attackerName,'attacker',tags)
@@ -1126,6 +1143,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         assetCriticality = row[ASSETS_CRITICAL_COL]
         assetCriticalRationale = row[ASSETS_CRITICALRATIONALE_COL]
         assetRows.append((assetName,assetId,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale))
+      rs.close()
       session.close()
       for assetName,assetId,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale in assetRows:
         tags = self.getTags(assetName,'asset')
@@ -1163,6 +1181,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       threatType = row[THREAT_TYPE_COL]
       thrMethod = row[THREAT_METHOD_COL]
       threatRows.append((threatId,threatName,threatType,thrMethod))
+    rs.close()
     session.close()
     for threatId,threatName,threatType,thrMethod in threatRows: 
       tags = self.getTags(threatName,'threat')
@@ -1203,14 +1222,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (rs.rowcount == 0):
         exceptionText = 'No identifier associated with '
         exceptionText += dimensionTable + ' object ' + dimensionName
-        raise DatabaseProxyException(exceptionText) 
-      
-      row = rs.fetchone()
+        raise DatabaseProxyException(exceptionText)
+
+      row = rs.fetchone() 
       dimId = row[0]
       if (dimId == None and dimensionTable == 'requirement'):
         rs = session.execute('select requirementNameId(:name)',{'name':dimensionName})
-        row = rs.fetchall()
-        dimId = row[0][0]
+        row = rs.fetchone()
+        dimId = row[0]
+      rs.close()
       session.close()
       return dimId
     except _mysql_exceptions.DatabaseError, e:
@@ -1229,6 +1249,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         dimensionName = row[DIM_NAME_COL]
         dimensionId = row[DIM_ID_COL]
         dimensions[dimensionName] = dimensionId
+      rs.close()
       session.close()
       return dimensions
     except _mysql_exceptions.DatabaseError, e:
@@ -1258,6 +1279,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         row = list(row)
         dimensionName = str(row[0])
         dimensions.append(dimensionName)
+      rs.close()
       session.close()
       return dimensions
     except _mysql_exceptions.DatabaseError, e:
@@ -1276,6 +1298,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         row = list(row)
         dimensionName = str(row[0])
         dimensions.append(dimensionName)
+      rs.close()
       session.close()
       return dimensions
     except _mysql_exceptions.DatabaseError, e:
@@ -1362,6 +1385,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       vulnerabilityDescription = row[VULNERABILITIES_DESCRIPTION_COL]
       vulnerabilityType = row[VULNERABILITIES_TYPE_COL]
       vulRows.append((vulnerabilityId,vulnerabilityName,vulnerabilityDescription,vulnerabilityType))
+    rs.close()
     session.close()
 
     for vulnerabilityId,vulnerabilityName,vulnerabilityDescription,vulnerabilityType in vulRows:
@@ -1438,9 +1462,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       sqlTxt = 'call ' + dimTable + 'Properties (%s,%s)' %(objtId,environmentId)
       rs = session.execute(sqlTxt)
       properties = []
-      row = rs.fetchall()
-      properties =  array((row[0][0],row[0][1],row[0][2],row[0][3],row[0][4],row[0][5],row[0][6],row[0][7])).astype(int32) 
-      pRationale =  [row[0][8],row[0][9],row[0][10],row[0][11],row[0][12],row[0][13],row[0][14],row[0][15]]
+      row = rs.fetchone()
+      properties =  array((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])).astype(int32) 
+      pRationale =  [row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15]]
+      rs.close()
       session.close()
       return (properties,pRationale)
     except _mysql_exceptions.DatabaseError, e:
@@ -1455,23 +1480,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       rs = session.execute(sqlTxt)
       properties = []
       rationale = []
-      row = rs.fetchall()
-      properties.append(row[0][0])
-      properties.append(row[0][1])
-      properties.append(row[0][2])
-      properties.append(row[0][3])
-      properties.append(row[0][4])
-      properties.append(row[0][5])
-      properties.append(row[0][6])
-      properties.append(row[0][7])
-      rationale.append(row[0][8])
-      rationale.append(row[0][9])
-      rationale.append(row[0][10])
-      rationale.append(row[0][11])
-      rationale.append(row[0][12])
-      rationale.append(row[0][13])
-      rationale.append(row[0][14])
-      rationale.append(row[0][15])
+      row = rs.fetchone()
+      properties.append(row[0])
+      properties.append(row[1])
+      properties.append(row[2])
+      properties.append(row[3])
+      properties.append(row[4])
+      properties.append(row[5])
+      properties.append(row[6])
+      properties.append(row[7])
+      rationale.append(row[8])
+      rationale.append(row[9])
+      rationale.append(row[10])
+      rationale.append(row[11])
+      rationale.append(row[12])
+      rationale.append(row[13])
+      rationale.append(row[14])
+      rationale.append(row[15])
+      rs.close()
       session.close()
       return (properties,rationale)
     except _mysql_exceptions.DatabaseError, e:
@@ -1499,6 +1525,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         isAssumption = row[PERSONAS_ASSUMPTION_COL]
         pType = row[PERSONAS_TYPE_COL]
         personaRows.append((personaId,personaName,activities,attitudes,aptitudes,motivations,skills,intrinsic,contextual,image,isAssumption,pType))
+      rs.close()
       session.close()
 
       personas = {}
@@ -1531,6 +1558,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         roles.append(row[0])
+      rs.close()
       session.close() 
       return roles
     except _mysql_exceptions.DatabaseError, e:
@@ -1546,6 +1574,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         goals.append(row[0])
+      rs.close()
       session.close() 
       return goals
     except _mysql_exceptions.DatabaseError, e:
@@ -1561,7 +1590,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         attackers.append(row[0])
-        session.close() 
+      rs.close()
+      session.close() 
       return attackers
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -1609,7 +1639,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       for role in roles:
         sqlTxt = 'call add_' + table + '_role (%s,"%s","%s")' %(personaId, environmentName,role)
-        rs = session.execute(sqlTxt)
+        session.execute(sqlTxt)
       session.commit() 
       session.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -1673,6 +1703,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         isAssumption = row[TASKS_ASSUMPTION_COL]
         taskAuthor = row[TASKS_AUTHOR_COL]
         taskRows.append((taskId,taskName,taskShortCode,taskObjective,isAssumption,taskAuthor))
+      rs.close()
       session.close()
 
       for taskId,taskName,taskShortCode,taskObjective,isAssumption,taskAuthor in taskRows:
@@ -1703,6 +1734,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       rs = session.execute('call getMisuseCases(:id)',{'id':constraintId})
       if (rs.rowcount == 0):
+        rs.close()
+        session.close()
         return None
       else:
         mcs = {}
@@ -1711,6 +1744,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           mcId = row[MISUSECASES_ID_COL]
           mcName = row[MISUSECASES_NAME_COL]
           mcRows.append((mcId,mcName))
+        rs.close()
         session.close()
         for mcId,mcName in mcRows:
           risk = self.misuseCaseRisk(mcId)
@@ -1733,11 +1767,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       rs = session.execute('call riskMisuseCase(:id)',{'id':riskId})
       if (rs.rowcount == 0):
+      	rs.close()
+      	session.close()
         return None
       else:
-        row = rs.fetchall()
-        mcId = row[0][MISUSECASES_ID_COL]
-        mcName = row[0][MISUSECASES_NAME_COL]
+        row = rs.fetchone()
+        mcId = row[MISUSECASES_ID_COL]
+        mcName = row[MISUSECASES_NAME_COL]
+        rs.close()
         session.close()
         risk = self.misuseCaseRisk(mcId)
         environmentProperties = []
@@ -1760,8 +1797,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       rs = session.execute('select misuseCaseRisk(:id)',{'id':mcId})
       rowCount = rs.rowcount
-      row = rs.fetchall()
-      riskName = row[0][0]
+      row = rs.fetchone()
+      riskName = row[0]
+      rs.close()
       session.close()
       return riskName
     except _mysql_exceptions.DatabaseError, e:
@@ -1781,6 +1819,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         for row in rs.fetchall():
           row = list(row)
           personas.append((row[0],row[1],row[2],row[3],row[4]))
+      rs.close()
       session.close()
       return personas 
     except _mysql_exceptions.DatabaseError, e:
@@ -1798,6 +1837,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         for row in rs.fetchall():
           row = list(row)
           assets.append(row[0])
+      rs.close()
       session.close()
       return assets 
     except _mysql_exceptions.DatabaseError, e:
@@ -1965,6 +2005,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         dimensions.append(row[0])
+      rs.close()
       session.close()
       return dimensions 
     except _mysql_exceptions.DatabaseError, e:
@@ -1989,6 +2030,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       threatName = row[RISKS_THREATNAME_COL]
       vulName = row[RISKS_VULNAME_COL]
       parameterList.append((riskId,riskName,threatName,vulName))
+    rs.close()
     session.close()
 
     for parameters in parameterList:
@@ -2067,6 +2109,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         respType = row[RESPONSES_MITTYPE_COL]
         respRisk = row[RESPONSES_RISK_COL]
         responseRows.append((respId,respName,respType,respRisk))
+      rs.close()
       session.close()
       for respId,respName,respType,respRisk in responseRows:
         tags = self.getTags(respName,'response')
@@ -2106,8 +2149,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select responseCost(:rId,:eId)',{'rId':responseId,'eId':environmentId})
-      row = rs.fetchall()
-      costName = row[0][0]
+      row = rs.fetchone()
+      costName = row[0]
+      rs.close()
       session.close()
       return costName
     except _mysql_exceptions.DatabaseError, e:
@@ -2119,8 +2163,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select responseDescription(:rId,:eId)',{'rId':responseId,'eId':environmentId})
-      row = rs.fetchall()
-      respDesc = row[0][0]
+      row = rs.fetchone()
+      respDesc = row[0]
+      rs.close()
       session.close()
       return respDesc
     except _mysql_exceptions.DatabaseError, e:
@@ -2136,6 +2181,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         roles.append((row[0],row[1]))
+      rs.close()
       session.close()
       return roles
     except _mysql_exceptions.DatabaseError, e:
@@ -2147,8 +2193,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select mitigationType(:rId,:eId)',{'rId':responseId,'eId':environmentId})
-      row = rs.fetchall()
-      mitType = row[0][0]
+      row = rs.fetchone()
+      mitType = row[0]
+      rs.close()
       session.close()
       return mitType
     except _mysql_exceptions.DatabaseError, e:
@@ -2161,9 +2208,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call riskComponents(:rId)',{'rId':riskName})  
-      row = rs.fetchall()
-      threatName = row[0][0]
-      vulName = row[0][1]
+      row = rs.fetchone()
+      threatName = row[0]
+      vulName = row[1]
+      rs.close()
       session.close()
       return [threatName,vulName]
     except _mysql_exceptions.DatabaseError, e:
@@ -2293,8 +2341,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select mitigatePoint(:rId,:eId)',{'rId':responseId,'eId':environmentId})
-      row = rs.fetchall()
-      detectionPointName = row[0][0]
+      row = rs.fetchone()
+      detectionPointName = row[0]
+      rs.close()
       session.close()
       return detectionPointName
     except _mysql_exceptions.DatabaseError, e:
@@ -2332,6 +2381,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         detectionMechanisms.append(row[0])
+      rs.close()
       session.close()
       return detectionMechanisms
     except _mysql_exceptions.DatabaseError, e:
@@ -2361,6 +2411,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
             continue
         parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
         traces.append(ObjectFactory.build(-1,parameters))
+      rs.close()
       session.close() 
       return traces
     except _mysql_exceptions.DatabaseError, e:
@@ -2382,6 +2433,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         if (fromObjt == 'task' and toObjt == 'asset'):
           continue
         traces.append((fromObjt,fromName,toObjt,toName))
+      rs.close()
       session.close() 
       return traces
     except _mysql_exceptions.DatabaseError, e:
@@ -2393,8 +2445,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call allowableTraceDimension(:frm,:to)',{'frm':fromId,'to':toId})
-      row = rs.fetchall()
-      isAllowable = row[0][0]
+      row = rs.fetchone()
+      isAllowable = row[0]
+      rs.close()
       session.close()
       return isAllowable
     except _mysql_exceptions.DatabaseError, e:
@@ -2407,12 +2460,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       rs = session.execute('call reportDependents(:id,:name)',{'id':objtId,'name':dimName})
       if (rs.rowcount == 0):
+      	rs.close()
+      	session.close()
         return []
       else:
         deps = []
         for row in rs.fetchall():
           row = list(row)
           deps.append((row[0],row[1],row[2]))
+        rs.close()
         session.close()
         return deps
     except _mysql_exceptions.DatabaseError, e:
@@ -2435,6 +2491,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         assetNames.append(row[0])
+      rs.close()
       session.close()
       return assetNames
     except _mysql_exceptions.DatabaseError, e:
@@ -2450,6 +2507,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         assetNames.append(row[0])
+      rs.close()
       session.close()
       return assetNames
     except _mysql_exceptions.DatabaseError, e:
@@ -2498,8 +2556,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call riskRating(:thr,:vuln,:env)',{'thr':thrName,'vuln':vulName,'env':environmentName})
-      row = rs.fetchall()
-      riskRating = row[0][0]
+      row = rs.fetchone()
+      riskRating = row[0]
+      rs.close()
       session.close()
       return riskRating
     except _mysql_exceptions.DatabaseError, e:
@@ -2521,6 +2580,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         pomScore = row[2]
         detailsBuf = row[3]
         scoreDetails.append((riskResponse,prmScore,pomScore,detailsBuf))
+      rs.close()
       session.close()
       return scoreDetails
     except _mysql_exceptions.DatabaseError, e:
@@ -2553,6 +2613,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           targets[targetName].add(responseName)
         else:
           targets[targetName] = set([responseName])
+      rs.close()
       session.close() 
       return targets
     except _mysql_exceptions.DatabaseError, e:
@@ -2574,6 +2635,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         shortCode = row[3]
         roleDescription = row[4]
         roleRows.append((roleId,roleName,roleType,shortCode,roleDescription))
+      rs.close()
       session.close() 
       for roleId,roleName,roleType,shortCode,roleDescription in roleRows:
         environmentProperties = []
@@ -2634,6 +2696,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       rs = session.execute('call roleResponses(:rId,:eId)',{'rId':roleId,'eId':environmentId})
       if (rs.rowcount == 0):
+      	rs.close()
         session.close()
         return []
       else:
@@ -2641,6 +2704,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         for row in rs.fetchall():
           row = list(row)
           responsibilities.append((row[0],row[1]))
+        rs.close()
         session.close()
         return responsibilities
     except _mysql_exceptions.DatabaseError, e:
@@ -2653,6 +2717,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       rs = session.execute('call roleCountermeasures(:rId,:eId)',{'rId':roleId,'eId':environmentId})
       if (rs.rowcount == 0):
+      	rs.close()
         session.close()
         return []
       else:
@@ -2660,6 +2725,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         for row in rs.fetchall():
           row = list(row)
           responsibilities.append(row[0])
+        rs.close()
         session.close()
         return responsibilities
     except _mysql_exceptions.DatabaseError, e:
@@ -2679,6 +2745,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         cmDesc = row[COUNTERMEASURES_DESCRIPTION_COL]
         cmType = row[COUNTERMEASURES_TYPE_COL]
         cmRows.append((cmId,cmName,cmDesc,cmType))
+      rs.close()
       session.close()
       for cmId,cmName,cmDesc,cmType in cmRows:
         tags = self.getTags(cmName,'countermeasure')
@@ -2704,8 +2771,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select countermeasureCost(:cmId,:envId)',{'cmId':cmId,'envId':environmentId})
-      row = rs.fetchall()
-      costName = row[0][0]
+      row = rs.fetchone()
+      costName = row[0]
+      rs.close()
       session.close()
       return costName
     except _mysql_exceptions.DatabaseError, e:
@@ -2721,13 +2789,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         reqs.append(row[0])
-      session.close()
-      session = self.conn()
+      rs.close()
       rs = session.execute('call countermeasureTargets(:cmId,:envId)',{'cmId':cmId,'envId':environmentId})
       targets = []
       for row in rs.fetchall():
         row = list(row)
         targets.append(Target(row[0],row[1],row[2]))
+      rs.close()
       session.close()
       return (reqs,targets)
     except _mysql_exceptions.DatabaseError, e:
@@ -2743,6 +2811,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         roles.append(row[0])
+      rs.close()
       session.close()
       return roles
     except _mysql_exceptions.DatabaseError, e:
@@ -2764,6 +2833,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         demands = row[4]
         goalSupport = row[5]
         personas.append((taskName,personaName,duration,frequency,demands,goalSupport))
+      rs.close()
       session.close()
       return personas
     except _mysql_exceptions.DatabaseError, e:
@@ -2949,8 +3019,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select personaNarrative(:scId,:env)',{'scId':scId,'env':environmentId})
-      row = rs.fetchall()
-      desc = row[0][0]
+      row = rs.fetchone()
+      desc = row[0]
+      rs.close()
       session.close()
       return desc
     except _mysql_exceptions.DatabaseError, e:
@@ -2962,11 +3033,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select personaDirect(:scId,:env)',{'scId':scId,'env':environmentId})
-      row = rs.fetchall()
-      directFlag = row[0][0]
+      row = rs.fetchone()
+      directFlag = row[0]
       directValue = 'False'
       if (directFlag == 1):
         directValue = 'True'
+      rs.close()
       session.close()
       return directValue
     except _mysql_exceptions.DatabaseError, e:
@@ -3000,8 +3072,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select taskNarrative(:scId,:env)',{'scId':scId,'env':environmentId})
-      row = rs.fetchall()
-      narrative = row[0][0]
+      row = rs.fetchone()
+      narrative = row[0]
+      rs.close()
       session.close()
       return narrative
     except _mysql_exceptions.DatabaseError, e:
@@ -3013,8 +3086,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select taskConsequences(:scId,:env)',{'scId':scId,'env':environmentId})
-      row = rs.fetchall()
-      consequences = row[0][0]
+      row = rs.fetchone()
+      consequences = row[0]
+      rs.close()
       session.close()
       return consequences
     except _mysql_exceptions.DatabaseError, e:
@@ -3026,8 +3100,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select taskBenefits(:scId,:env)',{'scId':scId,'env':environmentId})
-      row = rs.fetchall()
-      benefits = row[0][0]
+      row = rs.fetchone()
+      benefits = row[0]
+      rs.close()
       session.close()
       return benefits
     except _mysql_exceptions.DatabaseError, e:
@@ -3050,8 +3125,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select misuseCaseNarrative(:mcId,:env)',{'mcId':mcId,'env':environmentId})
-      row = rs.fetchall()
-      narrative = row[0][0]
+      row = rs.fetchone()
+      narrative = row[0]
+      rs.close()
       session.close()
       return narrative
     except _mysql_exceptions.DatabaseError, e:
@@ -3078,6 +3154,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         environments.append(row[0])
+      rs.close()
       session.close()
       return environments
     except _mysql_exceptions.DatabaseError, e:
@@ -3093,6 +3170,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         environments.append(row[0])
+      rs.close()
       session.close()
       return environments
     except _mysql_exceptions.DatabaseError, e:
@@ -3104,8 +3182,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select taskDependencies(:tId,:eId)',{'tId':tId,'eId':environmentId})
-      row = rs.fetchall()
-      dependencies = row[0][0]
+      row = rs.fetchone()
+      dependencies = row[0]
+      rs.close()
       session.close()
       return dependencies
     except _mysql_exceptions.DatabaseError, e:
@@ -3132,8 +3211,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error getting id for requirement label ' + reqLabel
         raise DatabaseProxyException(exceptionText) 
       else:
-        row = rs.fetchall()
-        reqId = row[0][0]
+        row = rs.fetchone()
+        reqId = row[0]
+        rs.close()
         session.close()
         return reqId
     except _mysql_exceptions.DatabaseError, e:
@@ -3149,8 +3229,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error getting id for requirement name ' + reqName
         raise DatabaseProxyException(exceptionText) 
       else:
-        row = rs.fetchall()
-        reqLabel = row[0][0]
+        row = rs.fetchone()
+        reqLabel = row[0]
+        rs.close()
         session.close()
         return reqLabel
     except _mysql_exceptions.DatabaseError, e:
@@ -3166,8 +3247,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error getting id for requirement label for id ' + str(reqId)
         raise DatabaseProxyException(exceptionText) 
       else:
-        row = rs.fetchall()
-        reqLabel = row[0][0]
+        row = rs.fetchone()
+        reqLabel = row[0]
+        rs.close()
         session.close()
         return reqLabel
     except _mysql_exceptions.DatabaseError, e:
@@ -3184,8 +3266,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         exceptionText = 'Error getting id for requirement name ' + reqName
         raise DatabaseProxyException(exceptionText) 
       else:
-        row = rs.fetchall()
-        reqId = row[0][0]
+        row = rs.fetchone()
+        reqId = row[0]
+        rs.close()
         session.close()
         return reqId
     except _mysql_exceptions.DatabaseError, e:
@@ -3201,6 +3284,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         risks.append(row[0])
+      rs.close()
       session.close()
       return risks
     except _mysql_exceptions.DatabaseError, e:
@@ -3291,6 +3375,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         goalName = row[GOALS_NAME_COL]
         goalOrig = row[GOALS_ORIGINATOR_COL]
         goalRows.append((goalId,goalName,goalOrig))
+      rs.close()
       session.close()
 
       for goalId,goalName,goalOrig in goalRows:
@@ -3318,6 +3403,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         goalOrig = row[GOALS_ORIGINATOR_COL]
         goalColour = row[GOALS_COLOUR_COL]
         goalRows.append((goalId,goalName,goalOrig,goalColour))
+      rs.close()
       session.close()
 
       for goalId,goalName,goalOrig,goalColour in goalRows:
@@ -3370,6 +3456,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           taskName = row[0]
           personaName = row[1]
           tpSet.add((taskName,personaName))
+      	rs.close()
       session.close()
       tpDict = {}
       for taskName,personaName in tpSet:
@@ -3384,8 +3471,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select task_usability(:task,:env)',{'task':taskName,'env':environmentName})
-      row = rs.fetchall()
-      taskUsabilityScore = int(row[0][0])
+      row = rs.fetchone()
+      taskUsabilityScore = int(row[0])
+      rs.close()
       session.close()
       return taskUsabilityScore
     except _mysql_exceptions.DatabaseError, e:
@@ -3397,8 +3485,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select usability_score(:tId,:eId)',{'tId':taskId,'eId':environmentId})
-      row = rs.fetchall()
-      taskLoad = row[0][0]
+      row = rs.fetchone()
+      taskLoad = row[0]
+      rs.close()
       session.close()
       return taskLoad
     except _mysql_exceptions.DatabaseError, e:
@@ -3410,8 +3499,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select hindrance_score(:tId,:eId)',{'tId':taskId,'eId':environmentId})
-      row = rs.fetchall()
-      taskLoad = row[0][0]
+      row = rs.fetchone()
+      taskLoad = row[0]
+      rs.close()
       session.close()
       return taskLoad
     except _mysql_exceptions.DatabaseError, e:
@@ -3427,6 +3517,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         dims.append(row[0])
+      rs.close()
       session.close()
       return dims
     except _mysql_exceptions.DatabaseError, e:
@@ -3472,6 +3563,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         elements.append((row[0],row[1]))
+      rs.close()
       session.close()
       return elements
     except _mysql_exceptions.DatabaseError, e:
@@ -3487,6 +3579,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         elements.append((row[0],row[1]))
+      rs.close()
       session.close()
       return elements
     except _mysql_exceptions.DatabaseError, e:
@@ -3517,6 +3610,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         elements.append((row[0],row[1]))
+      rs.close()
       session.close()
       return elements
     except _mysql_exceptions.DatabaseError, e:
@@ -3535,6 +3629,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         elements.append((row[0],row[1]))
+      rs.close()
       session.close()
       return elements
     except _mysql_exceptions.DatabaseError, e:
@@ -3585,6 +3680,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         association = ObjectFactory.build(associationId,parameters)
         asLabel = envName + '/' + headName + '/' + tailName
         associations[asLabel] = association
+      rs.close()
       session.close()
       return associations
     except _mysql_exceptions.DatabaseError, e:
@@ -3618,6 +3714,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         association = ObjectFactory.build(associationId,parameters)
         asLabel = envName + '/' + headName + '/' + tailName
         associations[asLabel] = association
+      rs.close()
       session.close()
       return associations
     except _mysql_exceptions.DatabaseError, e:
@@ -3731,6 +3828,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         association = ObjectFactory.build(associationId,parameters)
         asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
         associations[asLabel] = association
+      rs.close()
       session.close()
       return associations
     except _mysql_exceptions.DatabaseError, e:
@@ -3758,6 +3856,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         association = ObjectFactory.build(associationId,parameters)
         asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
         associations[asLabel] = association
+      rs.close()
       session.close()
       return associations
     except _mysql_exceptions.DatabaseError, e:
@@ -3788,6 +3887,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         association = ObjectFactory.build(associationId,parameters)
         asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
         associations[asLabel] = association
+      rs.close()
       session.close()
       return associations
     except _mysql_exceptions.DatabaseError, e:
@@ -4023,8 +4123,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select goal_label(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchall()
-      goalAttr = row[0][0] 
+      row = rs.fetchone()
+      goalAttr = row[0] 
+      rs.close()
       session.close()
       return goalAttr
     except _mysql_exceptions.DatabaseError, e:
@@ -4036,8 +4137,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select goal_definition(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchall()
-      goalAttr = row[0][0] 
+      row = rs.fetchone()
+      goalAttr = row[0] 
+      rs.close()
       session.close()
       return goalAttr
     except _mysql_exceptions.DatabaseError, e:
@@ -4049,8 +4151,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select goal_category(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchall()
-      goalAttr = row[0][0] 
+      row = rs.fetchone()
+      goalAttr = row[0] 
+      rs.close()
       session.close()
       return goalAttr
     except _mysql_exceptions.DatabaseError, e:
@@ -4062,8 +4165,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select goal_priority(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchall()
-      goalAttr = row[0][0] 
+      row = rs.fetchone()
+      goalAttr = row[0] 
+      rs.close()
       session.close()
       return goalAttr
     except _mysql_exceptions.DatabaseError, e:
@@ -4075,8 +4179,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select goal_fitcriterion(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchall()
-      goalAttr = row[0][0] 
+      row = rs.fetchone()
+      goalAttr = row[0] 
+      rs.close()
       session.close()
       return goalAttr
     except _mysql_exceptions.DatabaseError, e:
@@ -4088,8 +4193,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select goal_issue(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchall()
-      goalAttr = row[0][0] 
+      row = rs.fetchone()
+      goalAttr = row[0] 
+      rs.close()
       session.close()
       return goalAttr
     except _mysql_exceptions.DatabaseError, e:
@@ -4113,8 +4219,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         if (alternativeId == 1):
           altName = 'Yes'
         goalRefinements.append((goalName,goalDimName,aType,altName,rationale))
-      session.close()
-      session = self.conn()
+      rs.close()
       rs = session.execute('call subGoalRefinements(:gId,:eId)',{'gId':goalId,'eId':environmentId})
       subGoalRefinements = []
       for row in rs.fetchall():
@@ -4128,6 +4233,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         if (alternativeId == 1):
           altName = 'Yes'
         subGoalRefinements.append((goalName,goalDimName,aType,altName,rationale))
+      rs.close()
       session.close()
       return goalRefinements,subGoalRefinements 
     except _mysql_exceptions.DatabaseError, e:
@@ -4152,6 +4258,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         tailType = row[CLASSASSOCIATIONS_TAILTYPE_COL]
         tailName = row[CLASSASSOCIATIONS_TAIL_COL]
         associations.append((headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailName))
+      rs.close()
       session.close()
       return associations
     except _mysql_exceptions.DatabaseError, e:
@@ -4173,6 +4280,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         dpType = row[3]
         dpOrig = row[4]
         dpRows.append((dpId,dpName,dpDesc,dpType,dpOrig))
+      rs.close()
       session.close() 
       for dpId,dpName,dpDesc,dpType,dpOrig in dpRows:
         tags = self.getTags(dpName,'domainproperty')
@@ -4239,6 +4347,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         obsName = row[OBSTACLES_NAME_COL]
         obsOrig = row[OBSTACLES_ORIG_COL]
         obstacleRows.append((obsId,obsName,obsOrig))
+      rs.close()
       session.close()
 
       for obsId,obsName,obsOrig in obstacleRows:
@@ -4276,8 +4385,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select obstacle_definition(:oId,:eId)',{'oId':obsId,'eId':environmentId})
-      row = rs.fetchall()
-      obsDef = row[0][0] 
+      row = rs.fetchone()
+      obsDef = row[0] 
+      rs.close()
       session.close()
 
       obsProb = self.obstacleProbability(obsId,environmentId)
@@ -4292,8 +4402,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call obstacle_probability(:oId,:eId)',{'oId':obsId,'eId':environmentId})
-      row = rs.fetchall()
-      obsAttr = row[0][0]
+      row = rs.fetchone()
+      obsAttr = row[0]
+      rs.close()
       session.close()
       return obsAttr
     except _mysql_exceptions.DatabaseError, e:
@@ -4306,8 +4417,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select obstacle_category(:oId,:eId)',{'oId':obsId,'eId':environmentId})
-      row = rs.fetchall()
-      obsAttr = row[0][0]
+      row = rs.fetchone()
+      obsAttr = row[0]
+      rs.close()
       session.close()
       return obsAttr
     except _mysql_exceptions.DatabaseError, e:
@@ -4417,6 +4529,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         pSettings[row[0]] = row[1]
+      rs.close()
       session.close()
       return pSettings
     except _mysql_exceptions.DatabaseError, e:
@@ -4432,6 +4545,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         pDict[row[0]] = row[1]
+      rs.close()
       session.close()
       return pDict
     except _mysql_exceptions.DatabaseError, e:
@@ -4447,6 +4561,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         contributors.append((row[0],row[1],row[2],row[3]))
+      rs.close()
       session.close()
       return contributors
     except _mysql_exceptions.DatabaseError, e:
@@ -4462,6 +4577,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         revisions.append((row[0],row[1],row[2]))
+      rs.close()
       session.close()
       return revisions
     except _mysql_exceptions.DatabaseError, e:
@@ -4477,6 +4593,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         revisions.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9]))
+      rs.close()
       session.close()
       return revisions
     except _mysql_exceptions.DatabaseError, e:
@@ -4488,8 +4605,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select existingResponseGoal(:id)',{'id':responseId})
-      row = rs.fetchall()
-      isExisting = int(row[0][0])
+      row = rs.fetchone()
+      isExisting = int(row[0])
+      rs.close()
       session.close()
       return isExisting
     except _mysql_exceptions.DatabaseError, e:
@@ -4516,6 +4634,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         parameters = ValueTypeParameters(typeName,typeDesc,dimName,envName,typeValue,typeRat)
         objt = ObjectFactory.build(typeId,parameters)
         values.append(objt)
+      rs.close()
       session.close()
       return values
     except _mysql_exceptions.DatabaseError, e:
@@ -4598,7 +4717,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         stats[row[0]] = row[1]
-        session.close()
+      rs.close()
+      session.close()
       return stats
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4679,6 +4799,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         vType = row[3]
         vRef = row[4]
         directoryList.append((vLabel,vName,vDesc,vType,vRef))
+      rs.close()
       session.close()
       return directoryList
     except _mysql_exceptions.DatabaseError, e:
@@ -4694,6 +4815,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         directoryList.append((row[0],row[1],row[2],row[3],row[4]))
+      rs.close()
       session.close()
       return directoryList
     except _mysql_exceptions.DatabaseError, e:
@@ -4720,6 +4842,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         assets.append(row[0])
+      rs.close()
       session.close()
       return assets
     except _mysql_exceptions.DatabaseError, e:
@@ -4735,6 +4858,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         concs.append(row[0])
+      rs.close()
       session.close()
       return concs
     except _mysql_exceptions.DatabaseError, e:
@@ -4750,6 +4874,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         cas.append((row[0],row[1],row[2],row[3],row[4]))
+      rs.close()
       session.close()
       return cas
     except _mysql_exceptions.DatabaseError, e:
@@ -4765,6 +4890,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         cas.append((row[0],row[1],row[2],row[3],row[4]))
+      rs.close()
       session.close()
       return cas
     except _mysql_exceptions.DatabaseError, e:
@@ -4790,6 +4916,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         dependency = ObjectFactory.build(depId,parameters)
         dLabel = envName + '/' + depender + '/' + dependee + '/' + dependencyName
         dependencies[dLabel] = dependency
+      rs.close()
       session.close()
       return dependencies
     except _mysql_exceptions.DatabaseError, e:
@@ -4862,6 +4989,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         dependency = row[3]
         rationale = row[4]
         depRows.append((depender,dependee,depType,dependency,rationale))
+      rs.close()
       session.close()
       return depRows
     except _mysql_exceptions.DatabaseError, e:
@@ -4883,6 +5011,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       rs = session.execute('call associationDependencyCheck(:from,:to,:env)',{'from':fromAsset,'to':toAsset,'env':envName})
       if (rs.rowcount == 0):
+        rs.close()
         session.close()
         return []
       else:
@@ -4890,6 +5019,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         for row in rs.fetchall():
           row = list(row)
           deps.append(row[0])
+        rs.close()
         session.close()
         return deps
     except _mysql_exceptions.DatabaseError, e:
@@ -4902,6 +5032,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       rs = session.execute('call associationTargetDependencyCheck(:a0,:a1,:a2,:a3,:a4,:a5,:a6,:a7,:to,:env)',{'a0':assetProperties[0],'a1':assetProperties[1],'a2':assetProperties[2],'a3':assetProperties[3],'a4':assetProperties[4],'a5':assetProperties[5],'a6':assetProperties[6],'a7':assetProperties[7],'to':toAsset,'env':envName})
       if (rs.rowcount == 0):
+        rs.close()
         session.close()
         return []
       else:
@@ -4909,6 +5040,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         for row in rs.fetchall():
           row = list(row)
           deps.append(row[0])
+        rs.close()
         session.close()
         return deps
     except _mysql_exceptions.DatabaseError, e:
@@ -5016,6 +5148,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         surfaceType = row[6]
         accessRight = row[7]
         vals.append((assetName,shortCode,assetId,assetDesc,assetType,surfaceType,accessRight))
+      rs.close()
       session.close()
       for assetName,shortCode,assetId,assetDesc,assetType,surfaceType,accessRight in vals:
         ifs = self.getInterfaces(assetName,'template_asset')
@@ -5052,6 +5185,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         patternProblem = row[SECURITYPATTERN_PROBLEM_COL]
         patternSolution = row[SECURITYPATTERN_SOLUTION_COL]
         patternRows.append((patternId,patternName,patternContext,patternProblem,patternSolution))
+      rs.close()
       session.close()
       for patternId,patternName,patternContext,patternProblem,patternSolution in patternRows:
         patternStructure = self.patternStructure(patternId)
@@ -5073,6 +5207,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         pStruct.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
+      rs.close()
       session.close()
       return pStruct
     except _mysql_exceptions.DatabaseError, e:
@@ -5094,6 +5229,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         reqFc = row[4]
         reqAsset = row[5]
         pStruct.append((reqName,reqDesc,reqType,reqRationale,reqFc,reqAsset))
+      rs.close()
       session.close()
       return pStruct
     except _mysql_exceptions.DatabaseError, e:
@@ -5189,6 +5325,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         assets.append(row[0])
+      rs.close()
       session.close()
       return assets
     except _mysql_exceptions.DatabaseError, e:
@@ -5220,8 +5357,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select isCountermeasureAssetGenerated(:cm)',{'cm':cmId})
-      row = rs.fetchall()
-      isGenerated = row[0][0]
+      row = rs.fetchone()
+      isGenerated = row[0]
+      rs.close()
       session.close()
       return isGenerated
     except _mysql_exceptions.DatabaseError, e:
@@ -5233,8 +5371,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select isCountermeasurePatternGenerated(:cm)',{'cm':cmId})
-      row = rs.fetchall()
-      isGenerated = row[0][0]
+      row = rs.fetchone()
+      isGenerated = row[0]
+      rs.close()
       session.close()
       return isGenerated
     except _mysql_exceptions.DatabaseError, e:
@@ -5260,6 +5399,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         expCMs.append((envName,row[0],assetName,row[1]))
+      rs.close()
       session.close()
       return expCMs
     except _mysql_exceptions.DatabaseError, e:
@@ -5280,6 +5420,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         expCMs.append((envName,row[0],assetName,row[1]))
+      rs.close()
       session.close()
       return expCMs
     except _mysql_exceptions.DatabaseError, e:
@@ -5295,6 +5436,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         patterns.append(row[0])
+      rs.close()
       session.close()
       return patterns
     except _mysql_exceptions.DatabaseError, e:
@@ -5321,6 +5463,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         patterns.append(row[0])
+      rs.close()
       session.close()
       return patterns
     except _mysql_exceptions.DatabaseError, e:
@@ -5343,8 +5486,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName})
-      row = rs.fetchall()
-      objtCount = row[0][0]
+      row = rs.fetchone()
+      objtCount = row[0]
+      rs.close()
       session.close()
       if (objtCount > 0):
         exceptionText = dimName + ' ' + objtName + ' already exists.'
@@ -5357,8 +5501,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName})
-      row = rs.fetchall()
-      objtCount = row[0][0]
+      row = rs.fetchone()
+      objtCount = row[0]
+      rs.close()
       session.close()
       if (objtCount > 0):
         return True
@@ -5384,6 +5529,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         parameters = ExternalDocumentParameters(docName,docVersion,docPubDate,docAuthors,docDesc)
         eDoc = ObjectFactory.build(docId,parameters)
         eDocs[docName] = eDoc
+      session.close()
+      rs.close()
       return eDocs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -5405,6 +5552,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         parameters = DocumentReferenceParameters(refName,docName,cName,excerpt)
         dRef = ObjectFactory.build(refId,parameters)
         dRefs[refName] = dRef
+      rs.close()
+      session.close()
       return dRefs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -5426,6 +5575,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         parameters = DocumentReferenceParameters(refName,docName,cName,excerpt)
         dRef = ObjectFactory.build(refId,parameters)
         dRefs[refName] = dRef
+      rs.close()
+      session.close()
       return dRefs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -5443,6 +5594,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         docName = row[1]
         excerpt = row[2]
         dRefs.append((refName,docName,excerpt))
+      rs.close()
+      session.close()
       return dRefs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -5461,6 +5614,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         cName = row[2]
         excerpt = row[3]
         dRefs.append((refName,cType,cName,excerpt))
+      rs.close()
+      session.close()
       return dRefs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -5480,6 +5635,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         docDate = row[3]
         docDesc = row[4]
         edRefs.append((docName,docVer,docAuthors,docDate,docDesc))
+      rs.close()
+      session.close()
       return edRefs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -5500,8 +5657,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         qualName = row[PERSONACHARACTERISTIC_QUAL_COL]
         pcDesc = row[PERSONACHARACTERISTIC_PDESC_COL]
         pcSumm.append((pcId,pName,bvName,qualName,pcDesc))
+      rs.close()
       session.close()
-
       for pcId,pName,bvName,qualName,pcDesc in pcSumm:
         grounds,warrant,backing,rebuttal = self.characteristicReferences(pcId,'characteristicReferences')
         parameters = PersonaCharacteristicParameters(pName,qualName,bvName,pcDesc,grounds,warrant,backing,rebuttal)
@@ -5528,6 +5685,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         refDesc = row[REFERENCE_DESC_COL]
         dimName = row[REFERENCE_DIM_COL]
         refDict[typeName].append((refName,refDesc,dimName))
+      rs.close()
       session.close()        
       refDict['grounds'].sort()
       refDict['warrant'].sort()
@@ -5682,6 +5840,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         qualName = row[1]
         pcDesc = row[2]
         pcSumm.append((pcId,pName,bvName,qualName,pcDesc))
+      rs.close()
       session.close()
       for pcId,pName,bvName,qualName,pcDesc in pcSumm:
         grounds,warrant,backing,rebuttal = self.characteristicReferences(pcId,'characteristicReferences')
@@ -5709,6 +5868,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         parameters = ConceptReferenceParameters(refName,dimName,objtName,cDesc)
         cRef = ObjectFactory.build(refId,parameters)
         cRefs[refName] = cRef
+      rs.close()
+      session.close()
       return cRefs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -5790,8 +5951,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call referenceDescription(:dim,:ref)',{'dim':dimName,'ref':refName})
-      row = rs.fetchall()
-      refDesc = row[0][0]
+      row = rs.fetchone()
+      refDesc = row[0]
+      rs.close()
       session.close()
       return refDesc
     except _mysql_exceptions.DatabaseError, e:
@@ -5807,6 +5969,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         refNames.append(row[0])
+      rs.close()
       session.close()
       return refNames
     except _mysql_exceptions.DatabaseError, e:
@@ -5822,6 +5985,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         refNames.append((row[0],row[1],row[2]))
+      rs.close()
       session.close()
       return refNames
     except _mysql_exceptions.DatabaseError, e:
@@ -5839,6 +6003,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         backing.append((row[0],row[1]))
+      rs.close()
       session.close()
       return backing
     except _mysql_exceptions.DatabaseError, e:
@@ -5860,6 +6025,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         bvNameOut = row[5]
         pcNameOut = row[6]
         associations.append((fromName,fromDim,toName,toDim,personaNameOut,bvNameOut,pcNameOut))
+      rs.close()
       session.close()
       return associations
     except _mysql_exceptions.DatabaseError, e:
@@ -5900,6 +6066,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         dimName = row[1]
         objtName = row[2]
         refDesc = row[3]
+      rs.close()
       session.close()   
       return (dimName,objtName,refDesc) 
     except _mysql_exceptions.DatabaseError, e:
@@ -5942,8 +6109,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       session = self.conn()
       rs = session.execute('select lastRequirementLabel(:ass)',{'ass':assetName})
-      row = rs.fetchall()
-      lastLabel = row[0][0]
+      row = rs.fetchone()
+      lastLabel = row[0]
+      rs.close()
       session.close()
       return lastLabel
     except _mysql_exceptions.DatabaseError, e:
@@ -5965,6 +6133,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         ucCode = row[3]
         ucDesc = row[4]
         ucRows.append((ucId,ucName,ucAuth,ucCode,ucDesc))
+      rs.close()
       session.close()
 
       ucs = {} 
@@ -5995,6 +6164,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         roles.append(row[0])
+      rs.close()
       session.close()
       return roles
     except _mysql_exceptions.DatabaseError, e:
@@ -6006,9 +6176,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = self.conn()
       rs = session.execute('call useCaseConditions(:uc,:env)',{'uc':ucId,'env':envId})
       cond = []
-      row = rs.fetchall()
-      preCond = row[0][0]
-      postCond = row[0][1]
+      row = rs.fetchone()
+      preCond = row[0]
+      postCond = row[1]
+      rs.close()
       session.close()
       return (preCond,postCond)
     except _mysql_exceptions.DatabaseError, e:
@@ -6023,6 +6194,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         stepRows.append((row[1],row[2],row[3],row[4]))
+      rs.close()
       session.close()
       steps = Steps()
  
@@ -6051,6 +6223,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         excs.append((row[0],row[1],row[2],row[3],row[4]))
+      rs.close()
       session.close()
       return excs
     except _mysql_exceptions.DatabaseError, e:
@@ -6066,6 +6239,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         tags.append(row[0])
+      rs.close()
       session.close()
       return tags
     except _mysql_exceptions.DatabaseError, e:
@@ -6209,6 +6383,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         toName = traceRow[TO_ID_COL]
         parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
         traces.append(ObjectFactory.build(-1,parameters))
+      rs.close()
       session.close() 
       return traces
     except _mysql_exceptions.DatabaseError, e:
@@ -6220,8 +6395,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select is_risk(:cand)',{'cand':candidateRiskName})
-      row = rs.fetchall()
-      isRiskInd = row[0][0]
+      row = rs.fetchone()
+      isRiskInd = row[0]
+      rs.close()
       session.close()
       return isRiskInd
     except _mysql_exceptions.DatabaseError, e:
@@ -6238,6 +6414,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         listRow = list(row)
         rows.append((row[0],row[1],row[2]))
+      rs.close()
       session.close() 
       return rows
     except _mysql_exceptions.DatabaseError, e:
@@ -6249,16 +6426,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call riskAnalysisToXml(:head)',{'head':includeHeader})
-      row = rs.fetchall()
-      xmlBuf = row[0][0] 
-      roleCount = row[0][1]
-      assetCount = row[0][2]
-      vulCount = row[0][3]
-      attackerCount = row[0][4]
-      threatCount = row[0][5]
-      riskCount = row[0][6]
-      responseCount = row[0][7]
-      rshipCount = row[0][8]
+      row = rs.fetchone()
+      xmlBuf = row[0] 
+      roleCount = row[1]
+      assetCount = row[2]
+      vulCount = row[3]
+      attackerCount = row[4]
+      threatCount = row[5]
+      riskCount = row[6]
+      responseCount = row[7]
+      rshipCount = row[8]
+      rs.close()
       session.close()
       return (xmlBuf,roleCount,assetCount,vulCount,attackerCount,threatCount,riskCount,responseCount,rshipCount)
     except _mysql_exceptions.DatabaseError, e:
@@ -6270,13 +6448,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call goalsToXml(:head)',{'head':includeHeader})
-      row = rs.fetchall()
-      xmlBuf = row[0][0] 
-      dpCount = row[0][1]
-      goalCount = row[0][2]
-      obsCount = row[0][3]
-      reqCount = row[0][4]
-      cmCount = row[0][5]
+      row = rs.fetchone()
+      xmlBuf = row[0] 
+      dpCount = row[1]
+      goalCount = row[2]
+      obsCount = row[3]
+      reqCount = row[4]
+      cmCount = row[5]
+      rs.close()
       session.close()
       return (xmlBuf,dpCount,goalCount,obsCount,reqCount,cmCount)
     except _mysql_exceptions.DatabaseError, e:
@@ -6288,14 +6467,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call usabilityToXml(:head)',{'head':includeHeader})
-      row = rs.fetchall()
-      xmlBuf = row[0][0] 
-      personaCount = row[0][1]
-      edCount = row[0][2]
-      drCount = row[0][3]
-      pcCount = row[0][4]
-      taskCount = row[0][5]
-      ucCount = row[0][6]
+      row = rs.fetchone()
+      xmlBuf = row[0] 
+      personaCount = row[1]
+      edCount = row[2]
+      drCount = row[3]
+      pcCount = row[4]
+      taskCount = row[5]
+      ucCount = row[6]
+      rs.close()
       session.close()
       return (xmlBuf,personaCount,edCount,drCount,pcCount,taskCount,ucCount)
     except _mysql_exceptions.DatabaseError, e:
@@ -6307,10 +6487,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call misusabilityToXml(:head)',{'head':includeHeader})
-      row = rs.fetchall()
-      xmlBuf = row[0][0] 
-      crCount = row[0][1]
-      tcCount = row[0][2]
+      row = rs.fetchone()
+      xmlBuf = row[0] 
+      crCount = row[1]
+      tcCount = row[2]
+      rs.close()
       session.close()
       return (xmlBuf,crCount,tcCount)
     except _mysql_exceptions.DatabaseError, e:
@@ -6322,12 +6503,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call associationsToXml(:head)',{'head':includeHeader})
-      row = rs.fetchall()
-      xmlBuf = row[0][0] 
-      maCount = row[0][1]
-      gaCount = row[0][2]
-      rrCount = row[0][3]
-      depCount = row[0][4]
+      row = rs.fetchone()
+      xmlBuf = row[0] 
+      maCount = row[1]
+      gaCount = row[2]
+      rrCount = row[3]
+      depCount = row[4]
+      rs.close()
       session.close()
       return (xmlBuf,maCount,gaCount,rrCount,depCount)
     except _mysql_exceptions.DatabaseError, e:
@@ -6339,8 +6521,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call projectToXml(:head)',{'head':includeHeader})
-      row = rs.fetchall()
-      xmlBuf = row[0][0] 
+      row = rs.fetchone()
+      xmlBuf = row[0] 
+      rs.close()
       session.close()
       return xmlBuf
     except _mysql_exceptions.DatabaseError, e:
@@ -6352,8 +6535,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call architecturalPatternToXml(:name)',{'name':apName})
-      row = rs.fetchall()
-      xmlBuf = row[0][0] 
+      row = rs.fetchone()
+      xmlBuf = row[0] 
+      rs.close()
       session.close()
       return xmlBuf
     except _mysql_exceptions.DatabaseError, e:
@@ -6374,6 +6558,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         qualName = row[TASKCHARACTERISTIC_QUAL_COL]
         tcDesc = row[TASKCHARACTERISTIC_TDESC_COL]
         tcSumm.append((tcId,tName,qualName,tcDesc))
+      rs.close()
       session.close()
 
       for tcId,tName,qualName,tcDesc in tcSumm:
@@ -6468,6 +6653,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         taskNameOut = row[4]
         tcNameOut = row[5]
         associations.append((fromName,fromDim,toName,toDim,taskNameOut,tcNameOut))
+      rs.close()
       session.close()
       return associations
     except _mysql_exceptions.DatabaseError, e:
@@ -6487,6 +6673,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         qualName = row[1]
         tcDesc = row[2]
         tcSumm.append((tcId,tName,qualName,tcDesc))
+      rs.close()
       session.close()
       for tcId,tName,qualName,tcDesc in tcSumm:
         grounds,warrant,backing,rebuttal = self.characteristicReferences(tcId,'taskCharacteristicReferences')
@@ -6503,8 +6690,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call goalsPrettyPrint(:category)',{'category':categoryName})
-      row = rs.fetchall()
-      buf = row[0][0] 
+      row = rs.fetchone()
+      buf = row[0] 
+      rs.close()
       session.close()
       return buf
     except _mysql_exceptions.DatabaseError, e:
@@ -6547,6 +6735,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         results.append((row[0],row[1],row[2]))
+      rs.close()
       session.close()
       return results
     except _mysql_exceptions.DatabaseError, e:
@@ -6565,6 +6754,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         docName = row[1]
         excerpt = row[2]
         dRefs.append((refName,docName,excerpt))
+      rs.close()
+      session.close()
       return dRefs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -6575,8 +6766,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call dimensionNameByShortCode(:shortCode)',{'shortCode':scName})
-      row = rs.fetchall()
-      dePair = (row[0][0],row[0][1])
+      row = rs.fetchone()
+      dePair = (row[0],row[1])
+      rs.close()
       session.close()
       return dePair
     except _mysql_exceptions.DatabaseError, e:
@@ -6588,8 +6780,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call misuseCaseRiskComponents(:misuse)',{'misuse':mcName})
-      row = rs.fetchall()
-      cPair = (row[0][0],row[0][1])
+      row = rs.fetchone()
+      cPair = (row[0],row[1])
+      rs.close()
       session.close()
       return cPair
     except _mysql_exceptions.DatabaseError, e:
@@ -6600,11 +6793,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call personaToXml(:persona)',{'persona':pName})
-      row = rs.fetchall()
-      xmlBuf = row[0][0] 
-      edCount = row[0][1]
-      drCount = row[0][2]
-      pcCount = row[0][3]
+      row = rs.fetchone()
+      xmlBuf = row[0] 
+      edCount = row[1]
+      drCount = row[2]
+      pcCount = row[3]
+      rs.close()
       session.close()
       return (xmlBuf,edCount,drCount,pcCount)
     except _mysql_exceptions.DatabaseError, e:
@@ -6616,8 +6810,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select defaultEnvironment()')
-      row = rs.fetchall()
-      defaultEnv = row[0][0]
+      row = rs.fetchone()
+      defaultEnv = row[0]
+      rs.close()
       session.close()
       return defaultEnv
     except _mysql_exceptions.DatabaseError, e:
@@ -6645,6 +6840,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         unoValue,unoRationale = unoTR.split('#')
         vts[(rowIdx,7)] = (int(unoValue),unoRationale)
         rowIdx += 1
+      rs.close()
       session.close()
       return vts
     except _mysql_exceptions.DatabaseError, e:
@@ -6657,14 +6853,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call getReferenceSynopsis(:ref)',{'ref':refName})
-      row = rs.fetchall()
-      rsId = row[0][0]
-      synName = row[0][1]
-      dimName = row[0][2]
-      aType = row[0][3]
-      aName = row[0][4]
+      row = rs.fetchone()
+      rsId = row[0]
+      synName = row[1]
+      dimName = row[2]
+      aType = row[3]
+      aName = row[4]
+      rs.close()
+      session.close()
       rs = ReferenceSynopsis(rsId,refName,synName,dimName,aType,aName)
-      session.close() 
       return rs 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -6675,13 +6872,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call getReferenceContribution(:ref,:char)',{'ref':refName,'char':charName})
-      row = rs.fetchall()
-      rsName = row[0][0]
-      csName = row[0][1]
-      me = row[0][2]
-      cont = row[0][3]
+      row = rs.fetchone()
+      rsName = row[0]
+      csName = row[1]
+      me = row[2]
+      cont = row[3]
+      rs.close()
+      session.close()
       rc = ReferenceContribution(rsName,csName,me,cont)
-      session.close() 
       return rc
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -6793,6 +6991,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         charNames.append(row[0])
+      rs.close()
       session.close()
       return charNames
     except _mysql_exceptions.DatabaseError, e:
@@ -6804,17 +7003,18 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call getCharacteristicSynopsis(:characteristic)',{'characteristic':cName})
-      row = rs.fetchall()
-      synName = row[0][0]
-      dimName = row[0][1]
-      aType = row[0][2]
-      aName = row[0][3]
+      row = rs.fetchone()
+      synName = row[0]
+      dimName = row[1]
+      aType = row[2]
+      aName = row[3]
       if synName == '':
         synId = -1
       else:
         synId = 0
+      rs.close()
+      session.close()
       rs = ReferenceSynopsis(synId,cName,synName,dimName,aType,aName)
-      session.close() 
       return rs 
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -6825,8 +7025,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select hasCharacteristicSynopsis(:characteristic)',{'characteristic':charName})
-      row = rs.fetchall()
-      hs = row[0][0]
+      row = rs.fetchone()
+      hs = row[0]
+      rs.close()
       session.close()
       return hs
     except _mysql_exceptions.DatabaseError, e:
@@ -6838,8 +7039,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select hasReferenceSynopsis(:ref)',{'ref':refName})
-      row = rs.fetchall()
-      hs = row[0][0]
+      row = rs.fetchone()
+      hs = row[0]
+      rs.close()
       session.close()
       return hs
     except _mysql_exceptions.DatabaseError, e:
@@ -6876,6 +7078,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         rType = row[3]
         rc = ReferenceContribution(ucName,rsName,me,cont)
         ucs[rsName] = (rc,rType) 
+      rs.close()
       session.close() 
       return ucs
     except _mysql_exceptions.DatabaseError, e:
@@ -6918,8 +7121,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call pcToGrl(":pNames", ":tNames", :env)',{'pNames':pNames,'tNames':tNames,'env':envName})
-      row = rs.fetchall()
-      buf = row[0][0]
+      row = rs.fetchone()
+      buf = row[0]
+      rs.close()
       session.close()
       return buf
     except _mysql_exceptions.DatabaseError, e:
@@ -6938,8 +7142,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         goalName = row[GOALS_NAME_COL]
         goalOrig = row[GOALS_ORIGINATOR_COL]
         goalRows.append((goalId,goalName,goalOrig))
+      rs.close()
       session.close()
-
       for goalId,goalName,goalOrig in goalRows:
         environmentProperties = self.goalEnvironmentProperties(goalId)
         parameters = GoalParameters(goalName,goalOrig,[],self.goalEnvironmentProperties(goalId))
@@ -6977,6 +7181,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         goals.append(row[0])
+      rs.close()
       session.close()
       return goals
     except _mysql_exceptions.DatabaseError, e:
@@ -6992,6 +7197,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         goals.append(row[0])
+      rs.close()
       session.close()
       return goals
     except _mysql_exceptions.DatabaseError, e:
@@ -7007,6 +7213,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         envs.append(row[0])
+      rs.close()
       session.close()
       return envs
     except _mysql_exceptions.DatabaseError, e:
@@ -7022,6 +7229,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         envs.append(row[0])
+      rs.close()
       session.close()
       return envs
     except _mysql_exceptions.DatabaseError, e:
@@ -7037,6 +7245,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         obs.append(row[0])
+      rs.close()
       session.close()
       return obs
     except _mysql_exceptions.DatabaseError, e:
@@ -7056,8 +7265,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         obsName = row[GOALS_NAME_COL]
         obsOrig = row[GOALS_ORIGINATOR_COL]
         obsRows.append((obsId,obsName,obsOrig))
+      rs.close()
       session.close()
-
       for obsId,obsName,obsOrig in obsRows:
         environmentProperties = self.obstacleEnvironmentProperties(obsId)
         parameters = ObstacleParameters(obsName,obsOrig,self.obstacleEnvironmentProperties(obsId))
@@ -7110,8 +7319,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select obstacle_label(:goal,:env)',{'goal':goalId,'env':environmentId})
-      row = rs.fetchall()
-      goalAttr = row[0][0] 
+      row = rs.fetchone()
+      goalAttr = row[0] 
+      rs.close()
       session.close()
       return goalAttr
     except _mysql_exceptions.DatabaseError, e:
@@ -7131,6 +7341,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         goalName = row[GOALS_NAME_COL]
         goalOrig = row[GOALS_ORIGINATOR_COL]
         goalRows.append((goalId,goalName,goalOrig))
+      rs.close()
       session.close()
       for goalId,goalName,goalOrig in goalRows:
         environmentProperties = self.goalEnvironmentProperties(goalId)
@@ -7165,6 +7376,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         goalFC = row[8]
         goalIssue = row[9]
         goalRows.append((goalId,envId,goalLabel,goalName,goalOrig,goalDef,goalCat,goalPri,goalFC,goalIssue))
+      rs.close()
       session.close()
       for goalId,envId,goalLabel,goalName,goalOrig,goalDef,goalCat,goalPri,goalFC,goalIssue in goalRows:
         goalRefinements,subGoalRefinements = self.goalRefinements(goalId,envId)
@@ -7199,6 +7411,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         ucs.append((row[0],row[1],row[2],row[3]))
+      rs.close()
       session.close()
       return ucs
     except _mysql_exceptions.DatabaseError, e:
@@ -7217,6 +7430,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         sEnv = row[1]
         sTxt = row[2]
         scenarios.append((row[0],row[1],row[2]))
+      rs.close()
       session.close()
       return scenarios
     except _mysql_exceptions.DatabaseError, e:
@@ -7235,6 +7449,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         aType = row[1]
         aTxt = row[2]
         aps.append((row[0],row[1],row[2]))
+      rs.close()
       session.close()
       return aps
     except _mysql_exceptions.DatabaseError, e:
@@ -7254,6 +7469,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         cType = row[2]
         aTxt = row[3]
         aps.append((row[0],row[1],row[2],row[3]))
+      rs.close()
       session.close()
       return aps
     except _mysql_exceptions.DatabaseError, e:
@@ -7265,10 +7481,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call tvTypesToXml(:head)',{'head':includeHeader})
-      row = rs.fetchall()
-      xmlBuf = row[0][0] 
-      ttCount = row[0][1]
-      vtCount = row[0][2]
+      row = rs.fetchone()
+      xmlBuf = row[0] 
+      ttCount = row[1]
+      vtCount = row[2]
+      rs.close()
       session.close()
       return (xmlBuf,ttCount,vtCount)
     except _mysql_exceptions.DatabaseError, e:
@@ -7280,13 +7497,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call domainValuesToXml(:head)',{'head':includeHeader})
-      row = rs.fetchall()
-      xmlBuf = row[0][0] 
-      tvCount = row[0][1]
-      rvCount = row[0][2]
-      cvCount = row[0][3]
-      svCount = row[0][4]
-      lvCount = row[0][5]
+      row = rs.fetchone()
+      xmlBuf = row[0] 
+      tvCount = row[1]
+      rvCount = row[2]
+      cvCount = row[3]
+      svCount = row[4]
+      lvCount = row[5]
+      rs.close()
       session.close()
       return (xmlBuf,tvCount,rvCount,cvCount,svCount,lvCount)
     except _mysql_exceptions.DatabaseError, e:
@@ -7343,6 +7561,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         cmLabel = fromName + '#' + toName + '#' + lbl
         assoc = ConceptMapAssociationParameters(fromName,toName,lbl,fromEnv,toEnv)
         associations[cmLabel] = assoc
+      rs.close()
       session.close()
       return associations
     except _mysql_exceptions.DatabaseError, e:
@@ -7354,8 +7573,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select traceabilityScore(:req)',{'req':reqName})
-      results = rs.fetchall()
-      scoreCode = results[0][0]
+      results = rs.fetchone()
+      scoreCode = results[0]
+      rs.close()
       session.close()
       return scoreCode
     except _mysql_exceptions.DatabaseError, e:
@@ -7380,6 +7600,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         reqEnvCode = row[5]
         reqEnv = row[6]
         reqRows.append((reqName,reqOriginator,reqPriority,reqComments,reqDesc,reqEnvCode,reqEnv))
+      rs.close()
       session.close()
 
       priorityLookup = {1:'High',2:'Medium',3:'Low'}
@@ -7404,6 +7625,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         scs.append(row[0])
+      rs.close()
       session.close()
       if len(scs) == 0:
         scs.append('None')
@@ -7421,6 +7643,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         ucs.append(row[0])
+      rs.close()
       session.close()
       if len(ucs) == 0:
         ucs.append('None')
@@ -7438,6 +7661,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         bis.append(row[0])
+      rs.close()
       session.close()
       if len(bis) == 0:
         bis.append('None')
@@ -7455,6 +7679,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         reqs.append(row[0])
+      rs.close()
       session.close()
       return reqs
     except _mysql_exceptions.DatabaseError, e:
@@ -7501,6 +7726,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         tags.append(row[0])
+      rs.close()
       session.close()
       return tags
     except _mysql_exceptions.DatabaseError, e:
@@ -7520,6 +7746,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         interfaces.append((row[0],row[1],row[2]))
+      rs.close()
       session.close()
       connectors = self.componentViewConnectors(cvName)
       return (interfaces,connectors)
@@ -7536,6 +7763,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         connectors.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9]))
+      rs.close()
       session.close()
       return connectors
     except _mysql_exceptions.DatabaseError, e:
@@ -7665,6 +7893,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         arName = row[2]
         prName = row[3]
         ifs.append((ifName,ifType,arName,prName))
+      rs.close()
       session.close()
       return ifs
     except _mysql_exceptions.DatabaseError, e:
@@ -7728,6 +7957,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         pStruct.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9]))
+      rs.close()
       session.close()
       return pStruct
     except _mysql_exceptions.DatabaseError, e:
@@ -7762,6 +7992,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         cvName = row[1]
         cvSyn = row[2]
         cvRows.append((cvId,cvName,cvSyn))
+      rs.close()
       session.close()
 
       for cvId,cvName,cvSyn in cvRows:
@@ -7795,6 +8026,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         rows.append(row[0])
+      rs.close()
       session.close()
       return rows
     except _mysql_exceptions.DatabaseError, e:
@@ -7817,6 +8049,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         arName = row[3]
         pName = row[4]
         interfaces.append((ifName,ifTypeName,arName,pName))
+      rs.close()
       session.close()
       return interfaces
     except _mysql_exceptions.DatabaseError, e:
@@ -7923,6 +8156,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         cName = row[1]
         cDesc = row[2]
         components.append((cId,cName,cDesc))
+      rs.close()
       session.close()
       return components
     except _mysql_exceptions.DatabaseError, e:
@@ -7962,6 +8196,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           t.addAsset(aName)
           t.addComponent(cName)
           vulDict[targetName] = t
+      rs.close()
       session.close()
       return (thrDict,vulDict)
     except _mysql_exceptions.DatabaseError, e:
@@ -7977,6 +8212,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         rows.append((row[0],row[1]))
+      rs.close()
       session.close()   
       return rows
     except _mysql_exceptions.DatabaseError, e:
@@ -7992,6 +8228,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         rows.append((row[0],row[1]))
+      rs.close()
       session.close()   
       return rows
     except _mysql_exceptions.DatabaseError, e:
@@ -8006,8 +8243,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (dimName == 'persona_characteristic' or dimName == 'task_characteristic'):
         existingSql = 'call existing_characteristic("%s","%s")' %(objtName, dimName)
       rs = session.execute(existingSql)
-      row = rs.fetchall()
-      objtId = row[0][0]
+      row = rs.fetchone()
+      objtId = row[0]
+      rs.close()
       session.close()
       return objtId
     except _mysql_exceptions.DatabaseError, e:
@@ -8069,6 +8307,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         if (row != None):
           rows.append(row[0])
+      rs.close()
       session.close()
       return rows
     except _mysql_exceptions.DatabaseError, e:
@@ -8131,6 +8370,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         parameters = TemplateRequirementParameters(reqName,assetName,reqType,reqDesc,reqRat,reqFC)
         templateReq = ObjectFactory.build(reqId,parameters)
         templateReqs[reqName] = templateReq
+      rs.close()
       session.close()
       return templateReqs
     except _mysql_exceptions.DatabaseError, e:
@@ -8150,6 +8390,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         rows.append(row[0])
+      rs.close()
       session.close()
       return rows
     except _mysql_exceptions.DatabaseError, e:
@@ -8165,6 +8406,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         rows.append(row[0])
+      rs.close()
       session.close()
       return rows
     except _mysql_exceptions.DatabaseError, e:
@@ -8195,8 +8437,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         componentName = row[1]
         componentDesc = row[2]
         componentRows.append((componentId,componentName,componentDesc))
+      rs.close()
       session.close()
-
       for componentId,componentName,componentDesc in componentRows:
         componentInterfaces = self.componentInterfaces(componentId)
         componentStructure = self.componentStructure(componentId)
@@ -8221,6 +8463,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         pImpact.append((row[0],str(row[1])))
+      rs.close()
       session.close()
       return pImpact
     except _mysql_exceptions.DatabaseError, e:
@@ -8241,8 +8484,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         pdLabel = row[3]
         gcLabel = row[4]
         piRationale[taskName] = [durLabel,freqLabel,pdLabel,gcLabel]
+      rs.close()
       session.close()
-     
       for taskName in piRationale:
         ucDict = {}
         taskUseCases = self.taskUseCases(taskName)
@@ -8268,6 +8511,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         for row in rs.fetchall():
           row = list(row)
           ucs.append(row[0])
+      rs.close()
       session.close()
       return ucs 
     except _mysql_exceptions.DatabaseError, e:
@@ -8285,6 +8529,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         for row in rs.fetchall():
           row = list(row)
           coms.append(row[0])
+      rs.close()
       session.close()
       return coms 
     except _mysql_exceptions.DatabaseError, e:
@@ -8296,10 +8541,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call attackSurfaceMetric(:cv)',{'cv':cvName})
-      row = rs.fetchall()
-      der_m = row[0][0]
-      der_c = row[0][1]
-      der_i = row[0][2]
+      row = rs.fetchone()
+      der_m = row[0]
+      der_c = row[1]
+      der_i = row[2]
+      rs.close()
       session.close()
       return (der_m,der_c,der_i)
     except _mysql_exceptions.DatabaseError, e:
@@ -8333,6 +8579,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         association = ObjectFactory.build(associationId,parameters)
         asLabel = envName + '/' + headName + '/' + tailName
         associations[asLabel] = association
+      rs.close()
       session.close()
       return associations
     except _mysql_exceptions.DatabaseError, e:
@@ -8353,8 +8600,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         docDesc = row[2]
         docContent = row[3]
         rows.append((docId,docName,docDesc,docContent))
+      rs.close()
       session.close()
-
       for docId,docName,docDesc,docContent in rows:
         docCodes = self.documentCodes(docName)
         docMemos = self.documentMemos(docName)
@@ -8429,6 +8676,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         parameters = CodeParameters(codeName,codeType,codeDesc,incCriteria,codeEg)
         cObjt = ObjectFactory.build(codeId,parameters)
         cObjts[codeName] = cObjt
+      rs.close()
+      session.close()
       return cObjts
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -8486,6 +8735,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         startIdx = int(row[1])
         endIdx = int(row[2])
         codes[(startIdx,endIdx)] = codeName
+      rs.close()
       session.close()
       return codes
     except _mysql_exceptions.DatabaseError, e:
@@ -8520,6 +8770,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         startIdx = int(row[1])
         endIdx = int(row[2])
         codes[(startIdx,endIdx)] = codeName
+      rs.close()
       session.close()
       return codes
     except _mysql_exceptions.DatabaseError, e:
@@ -8588,6 +8839,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         startIdx = int(row[1])
         endIdx = int(row[2])
         codes[(startIdx,endIdx)] = codeName
+      rs.close()
       session.close()
       return codes
     except _mysql_exceptions.DatabaseError, e:
@@ -8624,6 +8876,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         toType = row[3]
         rType = row[4]
         network.append((fromCode,fromType,toCode,toType,rType))
+      rs.close()
       session.close()
       return network
     except _mysql_exceptions.DatabaseError, e:
@@ -8669,6 +8922,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         pName = row[3]
         ipSpec = row[4]
         ipRows.append((ipId,ipName,ipDesc,pName,ipSpec))
+      rs.close()
       session.close()
 
       ips = {}
@@ -8697,6 +8951,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         toType = row[3]
         rType = row[4]
         rows.append((fromName,fromType,toName,toType,rType))
+      rs.close()
       session.close()
       return rows
     except _mysql_exceptions.DatabaseError, e:
@@ -8783,10 +9038,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call directoryEntry(:obj,:dir)',{'obj':objtName,'dir':dType})
-      row = rs.fetchall()
-      eName = row[0][0]
-      eDesc = row[0][1]
-      eType = row[0][2]
+      row = rs.fetchone()
+      eName = row[0]
+      eDesc = row[1]
+      eType = row[2]
+      rs.close()
       session.close()
       return (eName,eDesc,eType)
     except _mysql_exceptions.DatabaseError, e:
@@ -8807,6 +9063,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         tgDef = row[2]
         tgRat = row[3]
         tgRows.append((tgId,tgName,tgDef,tgRat))
+      rs.close()
       session.close()
       for tgId,tgName,tgDef,tgRat in tgRows:
         tgConcerns = self.templateGoalConcerns(tgId)
@@ -8833,6 +9090,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         rows.append(row[0])
+      rs.close()
       session.close()
       return rows
     except _mysql_exceptions.DatabaseError, e:
@@ -8870,6 +9128,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         concs.append(row[0])
+      rs.close()
       session.close()
       return concs
     except _mysql_exceptions.DatabaseError, e:
@@ -8942,6 +9201,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         rows.append(row[0])
+      rs.close()
       session.close()
       return rows
     except _mysql_exceptions.DatabaseError, e:
@@ -8987,6 +9247,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         assocs.append((row[0],row[1],row[2],row[3]))
+      rs.close()
       session.close()
       return assocs
     except _mysql_exceptions.DatabaseError, e:
@@ -8998,8 +9259,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call componentAttackSurfaceMetric(:comp)',{'comp':cName})
-      row = rs.fetchall()
-      asValue = row[0][0]
+      row = rs.fetchone()
+      asValue = row[0]
+      rs.close()
       session.close()
       return asValue
     except _mysql_exceptions.DatabaseError, e:
@@ -9027,6 +9289,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         association = ObjectFactory.build(associationId,parameters)
         asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
         associations[asLabel] = association
+      rs.close()
       session.close()
       return associations
     except _mysql_exceptions.DatabaseError, e:
@@ -9050,7 +9313,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addComponentRequirements(componentId,requirements)
       self.addComponentGoals(componentId,goals)
       self.addComponentAssociations(componentId,assocs)
-      session.commit()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error merging component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -9080,6 +9342,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         concs.append(row[0])
+      rs.close()
       session.close()
       return concs
     except _mysql_exceptions.DatabaseError, e:
@@ -9106,6 +9369,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         gos.append((row[0],row[1]))
+      rs.close()
       session.close()
       return gos
     except _mysql_exceptions.DatabaseError, e:
@@ -9117,8 +9381,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select definition from template_goal where id =:tg',{'tg':tgId})
-      row = rs.fetchall()
-      tgDef = row[0][0]
+      row = rs.fetchone()
+      tgDef = row[0]
+      rs.close()
       session.close()
       return tgDef
     except _mysql_exceptions.DatabaseError, e:
@@ -9136,6 +9401,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         aName = row[0]
         aTxt = row[1]
         aps.append((row[0],row[1]))
+      rs.close()
       session.close()
       return aps
     except _mysql_exceptions.DatabaseError, e:
@@ -9147,8 +9413,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call redmineAttackPatternsSummary(:env)',{'env':envName})
-      row = rs.fetchall()
-      buf = row[0][0]
+      row = rs.fetchone()
+      buf = row[0]
+      rs.close()
       session.close()
       return buf
     except _mysql_exceptions.DatabaseError, e:
@@ -9160,15 +9427,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call processesToXml(:head)',{'head':includeHeader})
-      row = rs.fetchall()
-      xmlBuf = row[0][0] 
-      idCount = row[0][1]
-      codeCount = row[0][2]
-      memoCount = row[0][3]
-      qCount = row[0][4]
-      pcnCount = row[0][5]
-      icCount = row[0][6]
-      ipnCount = row[0][7]
+      row = rs.fetchone()
+      xmlBuf = row[0] 
+      idCount = row[1]
+      codeCount = row[2]
+      memoCount = row[3]
+      qCount = row[4]
+      pcnCount = row[5]
+      icCount = row[6]
+      ipnCount = row[7]
+      rs.close()
       session.close()
       return (xmlBuf,idCount,codeCount,memoCount,qCount,pcnCount,icCount,ipnCount)
     except _mysql_exceptions.DatabaseError, e:
@@ -9212,6 +9480,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         parameters = MemoParameters(memoName,memoDesc)
         mObjt = ObjectFactory.build(memoId,parameters)
         mObjts[memoName] = mObjt
+      rs.close()
+      session.close()
       return mObjts
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -9263,6 +9533,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         startIdx = int(row[2])
         endIdx = int(row[3])
         memos[(startIdx,endIdx)] = (memoName,memoTxt)
+      rs.close()
       session.close()
       return memos
     except _mysql_exceptions.DatabaseError, e:
@@ -9289,8 +9560,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call impliedProcess(:proc)',{'proc':procName})
-      row = rs.fetchall()
-      cspBuf = row[0][0] 
+      row = rs.fetchone()
+      cspBuf = row[0] 
+      rs.close()
       session.close()
       return cspBuf
     except _mysql_exceptions.DatabaseError, e:
@@ -9321,6 +9593,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         chs.append((row[0],row[1]))
+      rs.close()
       session.close()
       return chs
     except _mysql_exceptions.DatabaseError, e:
@@ -9345,6 +9618,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         synopsis = row[7]
         label = row[8]
         qs.append((code,aType,aName,sectName,quote,startIdx,endIdx,synopsis,label))
+      rs.close()
       session.close()
       return qs
     except _mysql_exceptions.DatabaseError, e:
@@ -9381,8 +9655,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if artType == 'internal_document':
         session = self.conn()
         rs = session.execute('call artifactText(:type,:name)',{'type':artType,'name':artName})
-        row = rs.fetchall()
-        content = row[0][0]
+        row = rs.fetchone()
+        content = row[0]
+        rs.close()
         session.close()
         return content 
       else: 
@@ -9396,13 +9671,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call impliedCharacteristic(:pName,:fCode,:tCode,:rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName})
-      row = rs.fetchall()
+      row = rs.fetchone()
       if row is None:
+        rs.close()
         session.close()
         raise NoImpliedCharacteristic(pName,fromCode,toCode,rtName)
-      charName = row[0][0]
-      qualName = row[0][1]
-      varName = row[0][2]
+      charName = row[0]
+      qualName = row[1]
+      varName = row[2]
+      rs.close()
       session.close()
       return (charName,qualName,varName)
     except _mysql_exceptions.DatabaseError, e:
@@ -9418,6 +9695,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         els.append((row[0],row[1]))
+      rs.close()
       session.close()
       return els
     except _mysql_exceptions.DatabaseError, e:
@@ -9428,7 +9706,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def initialiseImpliedCharacteristic(self,pName,fromCode,toCode,rtName):
     try:
       session = self.conn()
-      rs = session.execute('call initialiseImpliedCharacteristic(pName,fCode,tCode,rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName})
+      session.execute('call initialiseImpliedCharacteristic(pName,fCode,tCode,rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
@@ -9532,8 +9810,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select codeCount(:code)',{'code':codeName})
-      row = rs.fetchall()
-      cCount = row[0][0]
+      row = rs.fetchone()
+      cCount = row[0]
+      rs.close()
       session.close()
       return cCount
     except _mysql_exceptions.DatabaseError, e:
@@ -9575,8 +9854,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select impliedCharacteristicIntention(:syn,:pName,:fCode,:tCode,:rt)',{'syn':synName,'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName})
-      row = rs.fetchall()
-      itTuple = row[0][0]
+      row = rs.fetchone()
+      itTuple = row[0]
+      rs.close()
       session.close()
       return itTuple.split('#')
     except _mysql_exceptions.DatabaseError, e:
@@ -9588,8 +9868,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select impliedCharacteristicElementIntention(:ci,:el)',{'ci':ciName,'el':elName})
-      row = rs.fetchall()
-      iceiDetails = row[0][0]
+      row = rs.fetchone()
+      iceiDetails = row[0]
+      rs.close()
       session.close()
       return iceiDetails.split('#')
     except _mysql_exceptions.DatabaseError, e:
@@ -9616,6 +9897,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         goals.append(row[0])
+      rs.close()
       session.close()
       return goals
     except _mysql_exceptions.DatabaseError, e:
@@ -9726,6 +10008,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         locsName = row[1] 
         locsDia = row[2] 
         locsRows.append((locsId,locsName,locsDia))
+      rs.close()
       session.close()
       for locsId,locsName,locsDia in locsRows:
         locNames = self.getLocationNames(locsName)
@@ -9755,6 +10038,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         row = list(row)
         locName = row[0]
         locationRows.append(locName)
+      rs.close()
       session.close()
       return locationRows
     except _mysql_exceptions.DatabaseError, e:
@@ -9780,6 +10064,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
           linkDict[headLoc].append(tailLoc)
         else:
           linkDict[headLoc] = [tailLoc]
+      rs.close()
       session.close()
       return linkDict
     except _mysql_exceptions.DatabaseError, e:
@@ -9797,6 +10082,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         instanceName = row[0]
         assetName = row[1]
         instanceRows.append((instanceName,assetName))
+      rs.close()
       session.close()
       return instanceRows
     except _mysql_exceptions.DatabaseError, e:
@@ -9814,6 +10100,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         instanceName = row[0]
         personaName = row[1]
         instanceRows.append((instanceName,personaName))
+      rs.close()
       session.close()
       return instanceRows
     except _mysql_exceptions.DatabaseError, e:
@@ -9838,6 +10125,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         toName = traceRow[TO_ID_COL]
         parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
         traces.append(ObjectFactory.build(-1,parameters))
+      rs.close()
       session.close() 
       return traces
     except _mysql_exceptions.DatabaseError, e:
@@ -9892,8 +10180,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       session = self.conn()
       rs = session.execute('call templateAssetMetrics(:ta)',{'ta':taName})
-      row = rs.fetchall()
-      stScore = row[0][0]
+      row = rs.fetchone()
+      stScore = row[0]
+      rs.close()
       session.close()
       return stScore
     except _mysql_exceptions.DatabaseError, e:
@@ -9909,6 +10198,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for elNameRow in rs.fetchall():
         elNameRow = list(elNameRow)
         elNames.append(elNameRow[1])
+      rs.close()
       session.close() 
       return elNames
     except _mysql_exceptions.DatabaseError, e:
@@ -9920,8 +10210,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       session = self.conn()
       rs = session.execute('call assetThreatRiskLevel(:ass,:thr)',{'ass':assetName,'thr':threatName})
-      results = rs.fetchall()
-      riskLevel = results[0][0]
+      results = rs.fetchone()
+      riskLevel = results[0]
+      rs.close()
       session.close()
       return riskLevel
     except _mysql_exceptions.DatabaseError, e:
@@ -9933,8 +10224,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try: 
       session = self.conn()
       rs = session.execute('call assetRiskLevel(:ass)',{'ass':assetName})
-      results = rs.fetchall()
-      riskLevel = results[0][0]
+      results = rs.fetchone()
+      riskLevel = results[0]
+      rs.close()
       session.close()
       return riskLevel
     except _mysql_exceptions.DatabaseError, e:
@@ -9950,6 +10242,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         sums.append((row[0],row[1]))
+      rs.close()
       session.close()
       return sums
     except _mysql_exceptions.DatabaseError, e:
@@ -9985,11 +10278,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
                'alter database ' + dbName + ' default collate utf8_general_ci',
                'flush tables',
                'flush privileges']
-
+      
+      session = self.conn()
       for stmt in stmts:
-        session = self.conn()
         session.execute(stmt)
-        session.close()
+      session.close()
       self.conn.close()
       b.settings[session_id]['dbName'] = dbName
       self.clearDatabase(session_id)
@@ -10034,7 +10327,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session = tmpConn()
       session.execute(stmt)
       session.close()
-      tmpConn.close()
+      tmpConn.remove()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error creating CAIRIS database ' + dbName + '(id:' + str(id) + ',message:' + msg
@@ -10048,6 +10341,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         reqs.append(row[0])
+      rs.close()
       session.close()
       return reqs
     except _mysql_exceptions.DatabaseError, e:
@@ -10063,6 +10357,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for row in rs.fetchall():
         row = list(row)
         goals.append(row[0])
+      rs.close()
       session.close()
       return goals
     except _mysql_exceptions.DatabaseError, e:
@@ -10074,8 +10369,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('select synopsisId(:syn)',{'syn':synTxt})
-      row = rs.fetchall()
-      synId = row[0][0]
+      row = rs.fetchone()
+      synId = row[0]
+      rs.close()
       session.close()
       return synId
     except _mysql_exceptions.DatabaseError, e:
@@ -10090,8 +10386,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if contType == 'usecase':
         sqlTxt = 'hasUseCaseContribution'
       rs = session.execute('select ' + sqlTxt + '(:rName,:cName)',{'rName':rsName,'cName':csName})
-      row = rs.fetchall()
-      hasRC = row[0][0]
+      row = rs.fetchone()
+      hasRC = row[0]
+      rs.close()
       session.close()
       if (hasRC == 1): 
         return True
