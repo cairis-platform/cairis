@@ -25,7 +25,7 @@ __author__ = 'Shamal Faily'
 def main(args=None):
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Import')
   parser.add_argument('modelFile',help='model file to import')
-  parser.add_argument('--type',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, misusability, project, domainvalues, architecturalpattern, associations, synopses, processes, assets, locations or all')
+  parser.add_argument('--type',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, misusability, project, domainvalues, architecturalpattern, associations, synopses, processes, assets, locations, dataflows or all')
   parser.add_argument('--overwrite',dest='isOverwrite',help='Where appropriate, overwrite an existing CAIRIS model with this model')
   parser.add_argument('--image_dir',dest='imageDir',help='Where appropriate, directory for model images (overwrites default_image_dir value in cairis.cnf)')
   args = parser.parse_args() 
@@ -47,7 +47,7 @@ def file_import(importFile,mFormat,overwriteFlag,session_id = None):
   if (os.access(importFile, os.R_OK)) == False:
     raise ARMException("Cannot access " + importFile)
 
-  from cairis.mio.ModelImport import importSecurityPatternsFile, importAttackPattern,importTVTypeFile,importDirectoryFile,importRequirementsFile, importRiskAnalysisFile, importUsabilityFile, importAssociationsFile, importProjectFile, importDomainValuesFile, importComponentViewFile, importSynopsesFile,importProcessesFile,importAssetsFile,importLocationsFile,importModelFile,importMisusabilityFile
+  from cairis.mio.ModelImport import importSecurityPatternsFile, importAttackPattern,importTVTypeFile,importDirectoryFile,importRequirementsFile, importRiskAnalysisFile, importUsabilityFile, importAssociationsFile, importProjectFile, importDomainValuesFile, importComponentViewFile, importSynopsesFile,importProcessesFile,importAssetsFile,importLocationsFile,importModelFile,importMisusabilityFile,importDataflowsFile
 
   msgStr = ''
   if (mFormat == 'securitypattern' or mFormat == 'Security Pattern'):
@@ -82,6 +82,8 @@ def file_import(importFile,mFormat,overwriteFlag,session_id = None):
     msgStr += importAssetsFile(importFile,session_id)
   elif (mFormat == 'locations' or mFormat == 'Locations'):
     msgStr += importLocationsFile(importFile,session_id)
+  elif (mFormat == 'dataflows' or mFormat == 'Dataflows'):
+    msgStr += importDataflowsFile(importFile,session_id)
   elif (mFormat == 'all' or mFormat == 'Model'):
     msgStr += importModelFile(importFile,int(overwriteFlag),session_id)
   else:

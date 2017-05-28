@@ -35,7 +35,8 @@ class ExportDAO(CairisDAO):
       xmlBuf+= self.db_proxy.riskAnalysisToXml(0)[0] + '\n\n'
       xmlBuf+= self.db_proxy.usabilityToXml(0)[0] + '\n\n'
       xmlBuf+= self.db_proxy.goalsToXml(0)[0] + '\n\n'
-      xmlBuf+= self.db_proxy.associationsToXml(0)[0] + '\n\n</cairis_model>'
+      xmlBuf+= self.db_proxy.associationsToXml(0)[0] + '\n\n'
+      xmlBuf+= self.db_proxy.dataflowsToXml(0)[0] + '\n\n</cairis_model>'
       return xmlBuf
     except DatabaseProxyException as ex:
       self.close()

@@ -68,6 +68,7 @@ from cairis.core.TemplateRequirement import TemplateRequirement
 from cairis.core.Location import Location
 from cairis.core.Locations import Locations
 from cairis.core.WeaknessTarget import WeaknessTarget
+from cairis.core.DataFlow import DataFlow
 from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, CharacteristicReference,ObjectDependency,CharacteristicReferenceSynopsis,CharacteristicReferenceContribution
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -1475,4 +1476,22 @@ class SecurityPatternModel(object):
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field : gen_class_metadata(SecurityPattern)
+  }
+
+@swagger.model
+class DataFlowModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theName": fields.String,
+    "theEnvironmentName": fields.String,
+    "theFromName": fields.String,
+    "theFromType": fields.String,
+    "theToName": fields.String,
+    "theToType": fields.String,
+    "theAssets": fields.List(fields.String)
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(DataFlow)
   }

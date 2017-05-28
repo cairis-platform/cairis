@@ -58,17 +58,6 @@ function createEditObstaclesTable(){
         textToInsert[i++] = item.theOriginator;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="Status">';
-        if(item.theColour == 'black'){
-          textToInsert[i++] = "Check";
-        }
-        else if(item.theColour == 'red'){
-          textToInsert[i++] = "To refine";
-        }
-        else {
-          textToInsert[i++] = "OK";
-        }
-
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '<td name="theId"  style="display:none;">';

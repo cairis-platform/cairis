@@ -452,6 +452,18 @@ class SecurityPatternMessage(DefaultMessage):
 )
 # endregion
 
+class DataFlowMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.DataFlowModel)
+  required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+  object=ModelDefinitions.DataFlowModel.__name__,
+)
+# endregion
+
+
 class TemplateRequirementMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TemplateRequirementModel)
   required = DefaultMessage.required

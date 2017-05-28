@@ -19,7 +19,7 @@
 
 <!-- DTD for CAIRIS XML model file -->
 
-<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis?,riskanalysis?,usability?,goals?,associations?,synopses?,misusability?)>
+<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis?,riskanalysis?,usability?,goals?,associations?,synopses?,misusability?,dataflows?)>
 
 <!ELEMENT tvtypes (vulnerability_type+,threat_type+)>
 <!ELEMENT vulnerability_type (description)>
@@ -421,3 +421,15 @@
 <!ELEMENT task_characteristic (definition,grounds+,warrant*,rebuttal*)>
 <!ATTLIST task_characteristic task CDATA #REQUIRED>
 <!ATTLIST task_characteristic modal_qualifier CDATA #REQUIRED>
+
+<!ELEMENT dataflows (dataflow*)>
+<!ELEMENT dataflow (dataflow_asset+)>
+<!ATTLIST dataflow name CDATA #REQUIRED>
+<!ATTLIST dataflow environment CDATA #REQUIRED>
+<!ATTLIST dataflow from_name CDATA #REQUIRED>
+<!ATTLIST dataflow from_type (entity | process | datastore) #REQUIRED>
+<!ATTLIST dataflow to_name CDATA #REQUIRED>
+<!ATTLIST dataflow to_type (entity | process | datastore) #REQUIRED>
+
+<!ELEMENT dataflow_asset EMPTY>
+<!ATTLIST dataflow_asset name CDATA #REQUIRED>

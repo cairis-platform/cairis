@@ -109,6 +109,7 @@
               <li><a id="environmentMenuClick" href="#">Environments</a></li>
               <li><a id="personaMenuClick" href="#">Personas</a></li>
               <li><a id="taskMenuClick" href="#">Tasks</a></li>
+              <li><a id="dataflowsMenuClick" href="#">Data Flows</a></li>
               <li><a id="externalDocumentsClick" href="#">External Documents</a></li>
               <li><a id="documentReferencesClick" href="#">Document References</a></li>
               <li><a id="conceptReferencesClick" href="#">Concept References</a></li>
@@ -122,6 +123,7 @@
             <ul class="dropdown-menu">
               <li><a id="architecturalPatternModelClick" href="#">Architectural Pattern</a></li>
               <li><a id="assetModelClick" href="#">Asset</a></li>
+              <li><a id="dataflowDiagramClick" href="#">Data Flow</a></li>
               <li><a id="goalModelClick" href="#">Goal</a></li>
               <li><a id="locationsModelClick" href="#">Locations</a></li>
               <li><a id="misusabilityModelClick" href="#">Misusability</a></li>
@@ -405,6 +407,20 @@
           <select class="topCombobox form-control" id="mmtaskcharacteristicsbox" ></select>
         </div>
       </div>
+      <div id="filterdfdcontent" class="extraContent row form-group" style="display:none">
+        <div class="col-md-2">
+          <label class="topCombobox control-label" for="dfdenvironmentbox">Environment</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="dfdenvironmentbox" ></select>
+        </div>
+        <div class="col-md-2">
+          <label class="topCombobox control-label" for="dfdfilterbox">Filter</label>
+        </div>
+        <div class="col-md-2">
+          <select class="topCombobox form-control" id="dfdfilterbox" ></select>
+        </div>
+      </div>
 
     </section>
     <!-- Main content -->
@@ -534,6 +550,7 @@
               <option>Assets</option>
               <option>Processes</option>
               <option>Locations</option>
+              <option>Dataflows</option>
               <option>Attack Tree (Dot)</option>
             </select>
           </div>
@@ -1131,7 +1148,7 @@
   <script>
     LazyLoad.js(["dist/js/cairis/Cairis-UI.js","dist/js/cairis/buttonclicks.js", "dist/js/cairis/Cairis.js", "dist/js/cairis/readFile.js",
         "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/personas.js", "dist/js/cairis/assets.js", "dist/js/cairis/templateassets.js","dist/js/cairis/templaterequirements.js","dist/js/cairis/templategoals.js","dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js", "dist/js/cairis/tasks.js", "dist/js/cairis/domainproperties.js", "dist/js/cairis/obstacles.js", "dist/js/cairis/countermeasures.js", "dist/js/cairis/usecases.js","dist/js/cairis/vulnerabilities.js","dist/js/cairis/architecturalpatterns.js","dist/js/cairis/requirements.js",
-        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/taskcharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js","dist/js/cairis/environments.js","dist/js/cairis/valuetypes.js","dist/js/cairis/locations.js","dist/js/cairis/traceability.js","dist/js/cairis/chernoff.js","dist/js/cairis/conceptreferences.js","dist/js/cairis/securitypatterns.js",
+        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/taskcharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js","dist/js/cairis/environments.js","dist/js/cairis/valuetypes.js","dist/js/cairis/locations.js","dist/js/cairis/traceability.js","dist/js/cairis/chernoff.js","dist/js/cairis/conceptreferences.js","dist/js/cairis/securitypatterns.js","dist/js/cairis/dataflows.js",
         "dist/js/cairis/SVGhandler.js","dist/js/objects/jsonDefaultObjects.js","dist/js/cairis/assetassociations.js","dist/js/cairis/trello.js"], function () {
 
       console.log("All Cairis JS loaded");

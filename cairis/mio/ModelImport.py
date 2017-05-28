@@ -32,6 +32,7 @@ from SynopsesContentHandler import SynopsesContentHandler
 from TemplateAssetsContentHandler import TemplateAssetsContentHandler
 from ProcessesContentHandler import ProcessesContentHandler
 from LocationsContentHandler import LocationsContentHandler
+from DataflowsContentHandler import DataflowsContentHandler
 from cairis.core.Borg import Borg
 import xml.sax
 from cairis.core.ARM import *
@@ -743,6 +744,29 @@ def importLocations(locations,session_id):
   msgStr = 'Imported ' + locations.name()
   return msgStr
 
+def importDataflowsFile(importFile,session_id = None):
+  try: 
+    parser = xml.sax.make_parser()
+    handler = DataflowsContentHandler()
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    dfs = handler.dataflows()
+    return importDataflows(dfs,session_id)
+  except xml.sax.SAXException, e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importDataflows(dataflows,session_id):
+  b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
+  for df in dataflows:
+    db_proxy.addDataFlow(df)
+  noOfDataflows = len(dataflows)
+  msgStr = 'Imported ' +str( noOfDataflows) + ' dataflow'
+  if (noOfDataflows != 1):
+    msgStr += 's'
+  return msgStr
+
 def importModelFile(importFile,isOverwrite = 1,session_id = None):
   try:
     b = Borg()
@@ -757,8 +781,9 @@ def importModelFile(importFile,isOverwrite = 1,session_id = None):
     modelTxt += importUsabilityFile(importFile,session_id) + ' '
     modelTxt += importRequirementsFile(importFile,session_id) + ' '
     modelTxt += importAssociationsFile(importFile,session_id) + ' '
-    modelTxt += importSynopsesFile(importFile,session_id)
-    modelTxt += importMisusabilityFile(importFile,session_id)
+    modelTxt += importSynopsesFile(importFile,session_id) + ' '
+    modelTxt += importMisusabilityFile(importFile,session_id) + ' '
+    modelTxt += importDataflowsFile(importFile,session_id)
     return modelTxt
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())

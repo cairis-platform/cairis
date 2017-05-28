@@ -224,6 +224,10 @@ drop procedure if exists detection_mechanismNames;
 drop procedure if exists delete_requirement;
 drop procedure if exists detectionMechanisms;
 drop procedure if exists assetNames;
+drop procedure if exists entityNames;
+drop procedure if exists datastoreNames;
+drop procedure if exists processNames;
+drop procedure if exists dfd_filterNames;
 drop procedure if exists classAssociationNames;
 drop procedure if exists goalAssociationNames;
 drop procedure if exists threatNames;
@@ -463,6 +467,7 @@ drop procedure if exists exploitingRiskElementCountermeasures;
 drop procedure if exists candidateCountermeasurePatterns;
 drop procedure if exists associateCountermeasureToPattern;
 drop procedure if exists nameExists;
+drop procedure if exists nameEnvironmentExists;
 drop procedure if exists addExternalDocument;
 drop procedure if exists updateExternalDocument;
 drop procedure if exists getExternalDocuments;
@@ -873,6 +878,16 @@ drop function if exists hasReferenceContribution;
 drop function if exists hasUseCaseContribution;
 drop procedure if exists persona_characteristic_synopsisNames;
 drop procedure if exists removeUseCaseContributions;
+drop procedure if exists addDataFlow;
+drop procedure if exists updateDataFlow;
+drop procedure if exists addDataFlowAsset;
+drop procedure if exists deleteDataFlowAssets;
+drop procedure if exists delete_dataflow;
+drop procedure if exists deleteDataFlow;
+drop procedure if exists getDataFlows;
+drop procedure if exists getDataFlowAssets;
+drop procedure if exists dataflowsToXml;
+drop procedure if exists dataFlowDiagram;
 
 delimiter //
 
@@ -2411,6 +2426,11 @@ begin
   delete from component_asset_template_asset where asset_id = assetId;
   delete from vulnerability_asset_countermeasure_effect where asset_id = assetId;
   delete from threat_asset_countermeasure_effect where asset_id = assetId;
+  delete from dataflow_asset where asset_id = assetId;
+  delete from dataflow_entity_process where from_id = assetId;
+  delete from dataflow_process_entity where to_id = assetId;
+  delete from dataflow_process_datastore where to_id = assetId;
+  delete from dataflow_datastore_process where from_id = assetId;
   delete from asset_tag where asset_id = assetId;
   delete from asset_reference where asset_id = assetId;
   delete from asset where id = assetId;
@@ -3471,6 +3491,12 @@ create procedure delete_usecase(in ucId int)
 begin
   call removeUseCaseContributions(ucId);
   call deleteUseCaseComponents(ucId);
+  delete from dataflow_process_process where from_id = ucId;
+  delete from dataflow_process_process where to_id = ucId;
+  delete from dataflow_entity_process where to_id = ucId;
+  delete from dataflow_process_entity where from_id = ucId;
+  delete from dataflow_process_datastore where from_id = ucId;
+  delete from dataflow_datastore_process where to_id = ucId;
   delete from goalusecase_goalassociation where subgoal_id = ucId;
   delete from requirement_usecase where usecase_id = ucId;
   delete from obstacleusecase_goalassociation where subgoal_id = ucId;
@@ -4325,6 +4351,64 @@ begin
   else
     select id into environmentId from environment where name = environmentName limit 1;
     select a.name from asset a, environment_asset ca where ca.environment_id = environmentId and ca.asset_id = a.id order by 1;
+  end if;
+end
+//
+
+create procedure entityNames(in environmentName text)
+begin
+  declare environmentId int;
+  if environmentName = ''
+  then
+    select name from entity order by 1;
+  else
+    select id into environmentId from environment where name = environmentName limit 1;
+    select a.name from entity a, environment_asset ca where ca.environment_id = environmentId and ca.asset_id = a.id order by 1;
+  end if;
+end
+//
+
+create procedure datastoreNames(in environmentName text)
+begin
+  declare environmentId int;
+  if environmentName = ''
+  then
+    select name from datastore order by 1;
+  else
+    select id into environmentId from environment where name = environmentName limit 1;
+    select a.name from datastore a, environment_asset ca where ca.environment_id = environmentId and ca.asset_id = a.id order by 1;
+  end if;
+end
+//
+
+create procedure processNames(in environmentName text)
+begin
+  declare environmentId int;
+  if environmentName = ''
+  then
+    select name from usecase order by 1;
+  else
+    select id into environmentId from environment where name = environmentName limit 1;
+    select u.name from usecase u, environment_usecase eu where eu.environment_id = environmentId and eu.usecase_id = u.id order by 1;
+  end if;
+end
+//
+
+create procedure dfd_filterNames(in envName text)
+begin
+  if envName != ''
+  then
+    select dataflow from dataflows where environment = envName
+    union
+    select from_name from dataflows where environment = envName
+    union
+    select to_name from dataflows where environment = envName;
+  else
+    select dataflow from dataflows
+    union
+    select from_name from dataflows
+    union
+    select to_name from dataflows;
   end if;
 end
 //
@@ -8081,6 +8165,11 @@ begin
   if dimensionTable = 'persona_characteristic'
   then
     set nameCol = 'description';
+  end if;
+
+  if dimensionTable = 'process'
+  then
+    set dimensionTable = 'usecase';
   end if;
  
   if constraintId = -1
@@ -23233,6 +23322,259 @@ begin
   delete from usecase_pc_contribution where usecase_id = ucId;
   delete from usecase_tc_contribution where usecase_id = ucId;
   delete from usecase_dr_contribution where usecase_id = ucId;
+end
+//
+
+create procedure addDataFlow(in dfName text, in envName text, in fromName text, in fromType text, in toName text, in toType text)
+begin
+  declare dfId int;
+  declare envId int;
+  declare fromId int;
+  declare toId int;
+
+  call newId2(dfId);
+
+  select id into envId from environment where name = envName limit 1;
+  insert into dataflow(id,environment_id,name) values(dfId,envId,dfName);
+
+  if fromType = 'process' and toType = 'process'
+  then
+    select id into fromId from usecase where name = fromName limit 1;
+    select id into toId from usecase where name = toName limit 1;
+    insert into dataflow_process_process(dataflow_id,from_id,to_id) values(dfId,fromId,toId);
+  elseif fromType = 'entity' and toType = 'process'
+  then
+    select id into fromId from asset where name = fromName limit 1;
+    select id into toId from usecase where name = toName limit 1;
+    insert into dataflow_entity_process(dataflow_id,from_id,to_id) values(dfId,fromId,toId);
+  elseif fromType = 'process' and toType = 'entity'
+  then
+    select id into fromId from usecase where name = fromName limit 1;
+    select id into toId from asset where name = toName limit 1;
+    insert into dataflow_process_entity(dataflow_id,from_id,to_id) values(dfId,fromId,toId);
+  elseif fromType = 'datastore' and toType = 'process'
+  then
+    select id into fromId from asset where name = fromName limit 1;
+    select id into toId from usecase where name = toName limit 1;
+    insert into dataflow_datastore_process(dataflow_id,from_id,to_id) values(dfId,fromId,toId);
+  elseif fromType = 'process' and toType = 'datastore'
+  then
+    select id into fromId from usecase where name = fromName limit 1;
+    select id into toId from asset where name = toName limit 1;
+    insert into dataflow_process_datastore(dataflow_id,from_id,to_id) values(dfId,fromId,toId);
+  end if; 
+
+
+end
+//
+
+create procedure updateDataFlow(in oldDfName text, in newDfName text, in oldEnvName text, in newEnvName text, in fromName text, in fromType text, in toName text, in toType text)
+begin
+  declare dfId int;
+  declare oldEnvId int;
+  declare envId int;
+  declare fromId int;
+  declare toId int;
+
+  select id into oldEnvId from environment where name = oldEnvName limit 1;
+  select id into envId from environment where name = newEnvName limit 1;
+
+  select id into dfId from dataflow where name = oldDfName and environment_id = oldEnvId limit 1;
+
+  update dataflow set environment_id = envId, name = newDfName where id = dfId;
+
+  if fromType = 'process' and toType = 'process'
+  then
+    select id into fromId from usecase where name = fromName limit 1;
+    select id into toId from usecase where name = toName limit 1;
+    update dataflow_process_process set from_id = fromId, to_id = toId where dataflow_id = dfId;
+  elseif fromType = 'entity' and toType = 'process'
+  then
+    select id into fromId from asset where name = fromName limit 1;
+    select id into toId from usecase where name = toName limit 1;
+    update dataflow_entity_process set from_id = fromId, to_id = toId where dataflow_id = dfId;
+  elseif fromType = 'process' and toType = 'entity'
+  then
+    select id into fromId from usecase where name = fromName limit 1;
+    select id into toId from asset where name = toName limit 1;
+    update dataflow_process_entity set from_id = fromId, to_id = toId where dataflow_id = dfId;
+  elseif fromType = 'datastore' and toType = 'process'
+  then
+    select id into fromId from asset where name = fromName limit 1;
+    select id into toId from usecase where name = toName limit 1;
+    update dataflow_datastore_process set from_id = fromId, to_id = toId where dataflow_id = dfId;
+  elseif fromType = 'process' and toType = 'datastore'
+  then
+    select id into fromId from usecase where name = fromName limit 1;
+    select id into toId from asset where name = toName limit 1;
+    update dataflow_process_datastore set from_id = fromId, to_id = toId where dataflow_id = dfId;
+  end if; 
+
+end
+//
+
+create procedure addDataFlowAsset(in dfName text, in envName text, in assetName text)
+begin
+  declare dfId int;
+  declare envId int;
+  declare assetId int;
+
+  select id into envId from environment where name = envName limit 1;
+  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+  select id into assetId from asset where name = assetName limit 1;
+
+  insert into dataflow_asset(dataflow_id,asset_id) values (dfId,assetId);
+end
+//
+
+create procedure deleteDataFlowAssets(in dfName text, in envName text)
+begin
+  declare dfId int;
+  declare envId int;
+
+  select id into envId from environment where name = envName limit 1;
+  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+  delete from dataflow_asset where dataflow_id = dfId;
+end
+//
+
+create procedure delete_dataflow(in dfId int)
+begin
+  delete from dataflow_asset where dataflow_id = dfId;
+  delete from dataflow_process_process where dataflow_id = dfId;
+  delete from dataflow_entity_process where dataflow_id = dfId;
+  delete from dataflow_process_entity where dataflow_id = dfId;
+  delete from dataflow_datastore_process where dataflow_id = dfId;
+  delete from dataflow_process_datastore where dataflow_id = dfId;
+  delete from dataflow where id = dfId;
+end
+//
+
+create procedure deleteDataFlow(in dfName text, in envName text)
+begin
+  declare dfId int;
+  declare envId int;
+
+  select id into envId from environment where name = envName limit 1;
+  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+  call delete_dataflow(dfId);
+end
+//
+
+create procedure getDataFlows(in dfName text, in envName text)
+begin
+  declare dfId int;
+  declare envId int;
+
+  if dfName != '' and envName != ''
+  then
+    select id into envId from environment where name = envName limit 1;
+    select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+    select dataflow, environment, from_name, from_type, to_name, to_type from dataflows where dataflow=dfName and environment = envName;
+  else
+    select dataflow, environment, from_name, from_type, to_name, to_type from dataflows;
+  end if;
+end
+//
+
+create procedure getDataFlowAssets(in dfName text, in envName text)
+begin
+  declare dfId int;
+  declare envId int;
+
+  select id into envId from environment where name = envName limit 1;
+  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+
+  select a.name from dataflow_asset da, asset a where da.dataflow_id = dfId and da.asset_id = a.id order by 1;
+
+end
+//
+create procedure dataflowsToXml(in includeHeader int)
+begin
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE dataflows PUBLIC "-//CAIRIS//DTD DATAFLOW 1.0//EN" "http://cairis.org/dtd/dataflow.dtd">\n\n<dataflows>\n';
+  declare done int default 0;
+  declare dfName varchar(50);
+  declare envName varchar (200);
+  declare fromName varchar (200);
+  declare fromType varchar (9);
+  declare toName varchar (200);
+  declare toType varchar (9);
+  declare assetName varchar (50);
+  declare dfId int;
+  declare envId int;
+  declare dfCount int default 0;
+  declare dfCursor cursor for select dataflow, environment, from_name, from_type, to_name, to_type from dataflows;
+  declare dfAssetCursor cursor for select a.name from asset a, dataflow_asset da where da.dataflow_id = dfId and da.asset_id = a.id;
+  declare continue handler for not found set done = 1;
+
+  if includeHeader = 0
+  then
+    set buf = '<dataflows>\n';
+  end if;
+
+  open dfCursor;
+  df_loop: loop
+    fetch dfCursor into dfName, envName, fromName, fromType, toName, toType;
+    if done = 1
+    then
+      leave df_loop;
+    end if;
+
+    set buf = concat(buf,'  <dataflow name=\"',dfName,'\" environment=\"',envName,'\" from_name=\"',fromName,'\" from_type=\"',fromType,'\" to_name=\"',toName,'\" to_type=\"',toType,'\">\n');
+    select id into envId from environment where name = envName;
+    select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+
+    open dfAssetCursor;
+    dfAsset_loop: loop
+      fetch dfAssetCursor into assetName;
+      if done = 1
+      then 
+        leave dfAsset_loop;
+      end if;
+      set buf = concat(buf,'    <dataflow_asset name=\"',assetName,'\" />\n');
+    end loop dfAsset_loop;
+    close dfAssetCursor;
+    set done = 0;
+
+    set buf = concat(buf,'  </dataflow>\n');
+    set dfCount = dfCount + 1;
+  end loop df_loop;
+  close dfCursor;
+  set buf = concat(buf,'</dataflows>');
+  select buf,dfCount;
+end
+//
+
+create procedure dataFlowDiagram(in envName text,in filterElement text)
+begin
+
+  if filterElement != ''
+  then
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_name = filterElement
+    union
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and to_name = filterElement
+    union
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and dataflow = filterElement;
+  else
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName;
+  end if;
+end
+//
+
+create procedure nameEnvironmentExists(in objtName text, in envName text, in dimName text)
+begin
+  declare objtCount int;
+  declare envId int;
+  declare ncSql varchar(4000);
+
+  select id into envId from environment where name = envName limit 1;
+  set ncSql = concat('select count(id) into @objtCount from ',dimName,' where name = "',objtName,'" and environment_id = ',envId,' limit 1');
+  set @sql = ncSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set objtCount = @objtCount;
+  select objtCount;
 end
 //
 

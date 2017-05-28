@@ -146,7 +146,7 @@ mainContent.on('click', '#UpdateDependency', function (e) {
       $('#menuBCClick').attr('dimension','dependency');
       refreshMenuBreadCrumb('dependency');
     });
-  }  
+  }
   else {
     putDependency(dependency, oldEnvName, oldDepender, oldDependee,oldDependency,  function () {
       $('#menuBCClick').attr('dimension','dependency');
@@ -157,16 +157,16 @@ mainContent.on('click', '#UpdateDependency', function (e) {
 
 mainContent.on('change',"#theEnvironmentName", function() {
   var envName = $(this).find('option:selected').text();
+  var currentDepender = $('#theDependerName').val();
+  var currentDependee = $('#theDependeeName').val();
+  var currentDependency = $('#theDependencyName').val();
 
-  var dependerSelect = $("#theDependerName");
-  var dependeeSelect = $("#theDependeeName");
-  dependerSelect.empty();
-  dependeeSelect.empty();
-  getRolesInEnvironment(envName,function (roles) {
-    $.each(roles, function (key,objt) {
-      dependerSelect.append('<option>' + objt + '</option>');
-      dependeeSelect.append('<option>' + objt + '</option>');
-    }); 
+  refreshDimensionSelector($('#theDependerName'),'role',envName,function() {
+    $('#theDependerName').val(currentDepender);
+    refreshDimensionSelector($('#theDependeeName'),'role',envName,function() {
+      $('#theDependeeName').val(currentDependee);
+      refreshDimensionSelector($('#theDependencyName'),$('#theDependencyType').val(),envName,undefined,['All']);
+    });
   });
 });
 
@@ -174,12 +174,7 @@ mainContent.on('change',"#theEnvironmentName", function() {
 mainContent.on('change',"#theDependencyType", function() {
   var depType = $(this).find('option:selected').text();
   var envName = $("#theEnvironmentName").val();
-  $("#theDependencyName").empty();
-  getDimensionsInEnvironment(depType,envName,function (dims) {
-    $.each(dims, function (key,objt) {
-      $("#theDependencyName").append('<option>' + objt + '</option>');
-    }); 
-  });
+  refreshDimensionSelector($('#theDependencyName'),depType,envName,undefined,['All']);
 });
 
 $(document).on("click", "#addNewDependency", function () {
@@ -307,12 +302,3 @@ function postDependency(dependency, callback){
     }
   });
 }
-
-function getRoles(callback) {
-  getDimensions('role',callback);
-}
-
-function getRolesInEnvironment(envName,callback) {
-  getDimensionsInEnvironment('role',envName,callback);
-}
-

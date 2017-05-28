@@ -142,6 +142,20 @@ $('#apcharacteristicbox').change(function() {
   getPersonaView(pName,bvName,selection);
 });
 
+$('#dfdenvironmentbox').change(function() {
+  var envName = $(this).find('option:selected').text();
+  refreshDimensionSelector($('#dfdfilterbox'),'dfd_filter',envName,function() {
+    $('#dfdfilterbox').val('All');
+    getDataFlowDiagram(envName,'All');
+  });
+});
+
+$('#dfdfilterbox').change(function() {
+  var filter = $(this).find('option:selected').text();
+  var envName = $('#dfdenvironmentbox').val();
+  getDataFlowDiagram(envName,filter);
+});
+
 function appendPersonaCharacteristics(pName,bvName,pcName) {
 
   $.ajax({
@@ -323,6 +337,31 @@ function getAssetview(environment){
     },
     crossDomain: true,
     url: serverIP + "/api/assets/model/environment/" + encodeURIComponent(environment) + "/asset/" + encodeURIComponent(assetName),
+    success: function(data){
+      fillSvgViewer(data);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+function getDataFlowDiagram(environment,filter){
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
+  window.assetEnvironment = environment;
+  if (filter == 'All') {
+    filter = 'None';
+  }
+  $.ajax({
+    type:"GET",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID')),
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dataflows/diagram/environment/" + encodeURIComponent(environment) + "/filter/" + encodeURIComponent(filter),
     success: function(data){
       fillSvgViewer(data);
     },
@@ -762,60 +801,6 @@ function getLocationsView(locsName,envName){
   });
 }
 
-function getAssetsInEnvironment(envName,callback) {
-  getDimensionsInEnvironment('asset',envName,callback);
-}
-
-
-function getEnvironments(callback) {
-  getDimensions('environment',callback);
-}
-
-function getDimensions(dimName,callback) {
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/dimensions/table/" + dimName,
-    success: function (data) {
-      if(jQuery.isFunction(callback)){
-        callback(data);
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      return null;
-    }
-  });
-}
-
-function getDimensionsInEnvironment(dimName,envName,callback) {
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/dimensions/table/" + dimName + "/environment/" + envName,
-    success: function (data) {
-      if(jQuery.isFunction(callback)){
-        callback(data);
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      return null;
-    }
-  });
-}
 
 function refreshDimensionSelector(sBox,dimName,envName,callback,filterList) {
   var urlText = serverIP + "/api/dimensions/table/" + dimName;
@@ -834,14 +819,16 @@ function refreshDimensionSelector(sBox,dimName,envName,callback,filterList) {
     success: function (data) {
       data.sort();
       sBox.empty();
-      if ((dimName == 'asset' && filterList == undefined) || (dimName == 'goal' && filterList == undefined) || (dimName == 'obstacle' && filterList == undefined) || (dimName == 'task' && filterList == undefined) || (dimName == 'usecase' && filterList == undefined) || (dimName == 'misusecase' && filterList == undefined) || (dimName == 'requirement' && filterList == undefined)) {
+      if ((dimName == 'asset' && filterList == undefined) || (dimName == 'goal' && filterList == undefined) || (dimName == 'obstacle' && filterList == undefined) || (dimName == 'task' && filterList == undefined) || (dimName == 'usecase' && filterList == undefined) || (dimName == 'misusecase' && filterList == undefined) || (dimName == 'requirement' && filterList == undefined) || (dimName == 'dfd_filter' && filterList == undefined)) {
         sBox.append("<option>All</option>");
       }
       if (filterList != undefined) {
         data = data.filter(x => filterList.indexOf(x) < 0);
       }
       if (data.length == 0 && filterList != undefined) {
-        alert('All ' + dimName + 's have already been added.');
+        if (callback != undefined) {
+          callback();
+        }
       }
       else {
         $.each(data, function () {
@@ -951,6 +938,7 @@ function activeElement(elementid){
     $("#filterconceptmapmodelcontent").hide();
     $("#filterarchitecturalpatternmodelcontent").hide();
     $("#filtermisusabilitymodelcontent").hide();
+    $("#filterdfdcontent").hide();
     $("#rightnavGear").hide();
 
     if (elementid == 'svgViewer') {
@@ -989,6 +977,9 @@ function activeElement(elementid){
     else if (window.theVisualModel == 'misusability') {
       $("#filtermisusabilitymodelcontent").show();
     }
+    else if (window.theVisualModel == 'dataflow') {
+      $("#filterdfdcontent").show();
+    }
   }
   if(elementid != "svgViewer"){
     $("#svgViewer").hide();
@@ -1005,6 +996,7 @@ function activeElement(elementid){
     $("#filterconceptmapmodelcontent").hide();
     $("#filterarchitecturalpatternmodelcontent").hide();
     $("#filtermisusabilitymodelcontent").hide();
+    $("#filterdfdcontent").hide();
     $("#rightnavGear").hide();
   }
 
@@ -1056,7 +1048,7 @@ function setTableHeader(activeTable){
       break;
     case "Obstacles":
       debugLogger("Is Obstacle");
-      thead = "<th width='50px'></th><th>Obstacle</th><th>Definition</th><th>Category</th><th>Originator</th>";
+      thead = "<th width='50px'></th><th>Obstacle</th><th>Definition</th><th>Originator</th>";
       break;
     case "EditGoals":
       debugLogger("Is EditGoals");
@@ -1064,7 +1056,7 @@ function setTableHeader(activeTable){
       break;
     case "EditObstacles":
       debugLogger("Is EditObstacles");
-      thead = "<th width='50px' id='addNewObstacle'><i class='fa fa-plus floatCenter'></i></th><th>Obstacle</th><th>Originator</th><th>Status</th>";
+      thead = "<th width='50px' id='addNewObstacle'><i class='fa fa-plus floatCenter'></i></th><th>Obstacle</th><th>Originator</th>";
       break;
     case "Assets":
       debugLogger("Is Asset");
@@ -1125,6 +1117,10 @@ function setTableHeader(activeTable){
     case "Dependency":
       debugLogger("Is Dependency");
       thead = "<th width='50px' id='addNewDependency'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Depender</th><th>Dependee</th><th>Noun</th><th>Dependency</th>";
+      break;
+    case "Dataflows":
+      debugLogger("Is Dataflows");
+      thead = "<th width='50px' id='addNewDataflow'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Name</th><th>From</th><th>Type</th><th>To</th><th>Type</th>";
       break;
     case "ExternalDocuments":
       debugLogger("Is External Documents");

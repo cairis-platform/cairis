@@ -35,7 +35,8 @@ function createEditGoalsTable(){
     dataType: "json",
     accept: "application/json",
     data: {
-      session_id: String($.session.get('sessionID'))
+      session_id: String($.session.get('sessionID')),
+      coloured: '1'
     },
     crfossDomain: true,
     url: serverIP + "/api/goals",

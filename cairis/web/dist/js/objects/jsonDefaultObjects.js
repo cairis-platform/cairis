@@ -622,3 +622,13 @@ var securityPatternDefault = {
   "theRequirements" : [],
   "theConcernAssociations" : []
 };
+var dataflowDefault = {
+  "__python_obj__": "DataFlow.DataFlow",
+  "theName" : "",
+  "theEnvironmentName" : "",
+  "theFromName" : "",
+  "theFromType" : "",
+  "theToName" : "",
+  "theToType" : "",
+  "theAssets" : []
+};

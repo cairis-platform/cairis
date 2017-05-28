@@ -102,6 +102,8 @@ from ImpliedProcessParameters import ImpliedProcessParameters
 from Location import Location
 from Locations import Locations
 from LocationsParameters import LocationsParameters
+from DataFlow import DataFlow
+from DataFlowParameters import DataFlowParameters
 import string
 import os
 from numpy import *
@@ -5497,6 +5499,20 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error checking existence of ' + dimName + ' ' + objtName + ' (id:' + str(id) + ',message:' + msg + ')'
 
+  def nameCheckEnvironment(self,objtName,envName,dimName):
+    try:
+      curs = self.conn.connection().connection.cursor()
+      curs.execute('call nameEnvironmentExists(%s,%s,%s)',[objtName,envName,dimName])
+      row = curs.fetchone()
+      objtCount = row[0]
+      curs.close()
+      if (objtCount > 0):
+        exceptionText = dimName + ' ' + objtName + ' in environment ' + envName + ' already exists.'
+        raise ARMException(exceptionText) 
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error checking existence of ' + dimName + ' ' + objtName + ' in environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+
   def nameExists(self,objtName,dimName):
     try:
       session = self.conn()
@@ -6515,6 +6531,20 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error exporting association data to XML (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def dataflowsToXml(self,includeHeader=True):
+    try:
+      curs = self.conn.connection().connection.cursor()
+      curs.execute('call dataflowsToXml(%s)',[includeHeader])
+      row = curs.fetchone()
+      xmlBuf = row[0] 
+      dfCount = row[1]
+      curs.close()
+      return (xmlBuf,dfCount)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error exporting dataflow data to XML (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def projectToXml(self,includeHeader=True):
@@ -10409,3 +10439,121 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error removing use case contribution (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+
+  def getDataFlows(self,dfName='',envName=''):
+    try:
+      curs = self.conn.connection().connection.cursor()
+      curs.execute('call getDataFlows(%s,%s)',[dfName,envName])
+      dataFlows = {}
+      dfRows = []
+      for row in curs.fetchall():
+        row = list(row)
+        dfName = row[0]
+        envName = row[1]
+        fromName = row[2]
+        fromType = row[3]
+        toName = row[4]
+        toType = row[5]
+        dfRows.append((dfName,envName,fromName,fromType,toName,toType))
+      curs.close()
+      for dfName,envName,fromName,fromType,toName,toType in dfRows:
+        dfAssets = self.getDataFlowAssets(dfName,envName)
+        parameters = DataFlowParameters(dfName,envName,fromName,fromType,toName,toType,dfAssets)
+        df = ObjectFactory.build(-1,parameters)
+        dataFlows[dfName + '/' + envName] = df
+      curs.close()
+      return dataFlows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting data flows (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def getDataFlowAssets(self,dfName,envName):
+    try:
+      curs = self.conn.connection().connection.cursor()
+      curs.execute('call getDataFlowAssets(%s,%s)',[dfName,envName])
+      assetRows = []
+      for row in curs.fetchall():
+        row = list(row)
+        assetRows.append(row[0])
+      curs.close()
+      return assetRows
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error getting assets for dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addDataFlow(self,parameters):
+    dfName = parameters.name()
+    envName = parameters.environment()
+    fromName = parameters.fromName()
+    fromType = parameters.fromType()
+    toName = parameters.toName()
+    toType = parameters.toType()
+    dfAssets = parameters.assets()
+    try:
+      curs = self.conn.connection().connection.cursor()
+      curs.execute('call addDataFlow(%s,%s,%s,%s,%s,%s)',[dfName,envName,fromName,fromType,toName,toType])
+      for dfAsset in dfAssets:
+        self.addDataFlowAsset(dfName,envName,dfAsset)
+      curs.close()
+      self.conn.commit()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding dataflow ' + parameters.name() + '/' + parameters.environment() + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def addDataFlowAsset(self,dfName,envName,dfAsset):
+    try:
+      curs = self.conn.connection().connection.cursor()
+      curs.execute('call addDataFlowAsset(%s,%s,%s)',[dfName,envName,dfAsset])
+      curs.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error adding asset ' + dfAsset + ' to dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def updateDataFlow(self,oldDfName,oldEnvName,parameters):
+    dfName = parameters.name()
+    envName = parameters.environment()
+    fromName = parameters.fromName()
+    fromType = parameters.fromType()
+    toName = parameters.toName()
+    toType = parameters.toType()
+    dfAssets = parameters.assets()
+    try:
+      curs = self.conn.connection().connection.cursor()
+      curs.execute('call deleteDataFlowAssets(%s,%s)',[oldDfName,oldEnvName])
+      curs.execute('call updateDataFlow(%s,%s,%s,%s,%s,%s,%s,%s)',[oldDfName,dfName,oldEnvName,envName,fromName,fromType,toName,toType])
+      for dfAsset in dfAssets:
+        self.addDataFlowAsset(dfName,envName,dfAsset)
+      curs.close()
+      self.conn.commit()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error updating dataflow ' + oldDfName + '/' + oldEnvName + ' (id:' + str(id) + ',message:' + msg + ')'
+      raise DatabaseProxyException(exceptionText) 
+
+  def deleteDataFlow(self,dfName,envName):
+    try:
+      curs = self.conn.connection().connection.cursor()
+      curs.execute('call deleteDataFlow(%s,%s)',[dfName,envName])
+      curs.close()
+      self.conn.commit()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error deleting dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+
+  def dataFlowDiagram(self,envName,filterElement = ''):
+    try:
+      curs = self.conn.connection().connection.cursor()
+      curs.execute('call dataFlowDiagram(%s,%s)',[envName,filterElement])
+      dfs = []
+      for row in curs.fetchall():
+        row = list(row)
+        dfs.append((row[0],row[1],row[2],row[3],row[4]))
+      curs.close()
+      return dfs
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error deleting dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
