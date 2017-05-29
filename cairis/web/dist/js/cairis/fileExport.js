@@ -20,7 +20,7 @@
 'use strict';
 
 $("#exportClick").click(function () {
-  var exportUrl =  serverIP + "/api/export/file?filename=model.xml"; 
+  var exportUrl =  serverIP + "/api/export/file"; 
   showLoading();
   $.ajax({
     type: "GET",

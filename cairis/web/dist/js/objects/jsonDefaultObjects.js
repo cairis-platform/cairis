@@ -627,8 +627,8 @@ var dataflowDefault = {
   "theName" : "",
   "theEnvironmentName" : "",
   "theFromName" : "",
-  "theFromType" : "",
+  "theFromType" : "entity",
   "theToName" : "",
-  "theToType" : "",
+  "theToType" : "process",
   "theAssets" : []
 };

@@ -23382,32 +23382,37 @@ begin
   select id into dfId from dataflow where name = oldDfName and environment_id = oldEnvId limit 1;
 
   update dataflow set environment_id = envId, name = newDfName where id = dfId;
+  delete from dataflow_process_process where dataflow_id = dfId;
+  delete from dataflow_entity_process where dataflow_id = dfId;
+  delete from dataflow_process_entity where dataflow_id = dfId;
+  delete from dataflow_datastore_process where dataflow_id = dfId;
+  delete from dataflow_process_datastore where dataflow_id = dfId;
 
   if fromType = 'process' and toType = 'process'
   then
     select id into fromId from usecase where name = fromName limit 1;
     select id into toId from usecase where name = toName limit 1;
-    update dataflow_process_process set from_id = fromId, to_id = toId where dataflow_id = dfId;
+    insert into dataflow_process_process(dataflow_id,from_id,to_id) values(dfId,fromId,toId);
   elseif fromType = 'entity' and toType = 'process'
   then
     select id into fromId from asset where name = fromName limit 1;
     select id into toId from usecase where name = toName limit 1;
-    update dataflow_entity_process set from_id = fromId, to_id = toId where dataflow_id = dfId;
+    insert into dataflow_entity_process(dataflow_id,from_id,to_id) values(dfId,fromId,toId);
   elseif fromType = 'process' and toType = 'entity'
   then
     select id into fromId from usecase where name = fromName limit 1;
     select id into toId from asset where name = toName limit 1;
-    update dataflow_process_entity set from_id = fromId, to_id = toId where dataflow_id = dfId;
+    insert into dataflow_process_entity(dataflow_id,from_id,to_id) values(dfId,fromId,toId);
   elseif fromType = 'datastore' and toType = 'process'
   then
     select id into fromId from asset where name = fromName limit 1;
     select id into toId from usecase where name = toName limit 1;
-    update dataflow_datastore_process set from_id = fromId, to_id = toId where dataflow_id = dfId;
+    insert into dataflow_datastore_process(dataflow_id,from_id,to_id) values(dfId,fromId,toId);
   elseif fromType = 'process' and toType = 'datastore'
   then
     select id into fromId from usecase where name = fromName limit 1;
     select id into toId from asset where name = toName limit 1;
-    update dataflow_process_datastore set from_id = fromId, to_id = toId where dataflow_id = dfId;
+    insert into dataflow_process_datastore(dataflow_id,from_id,to_id) values(dfId,fromId,toId);
   end if; 
 
 end

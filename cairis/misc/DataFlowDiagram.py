@@ -81,7 +81,8 @@ class DataFlowDiagram:
 
         if ((fromName,toName) not in edgeSet):
           objtUrl = 'dataflow#' + dfName + '#' + self.theEnvironmentName
-          df = pydot.Edge(fromName,toName,dir='forward',label=dfName,arrowhead='vee',weight='1',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
+#          df = pydot.Edge(fromName,toName,dir='forward',label=dfName,arrowhead='vee',weight='1',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
+          df = pydot.Edge(fromName,toName,dir='forward',label=dfName,arrowhead='vee',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
           self.theGraph.add_edge(df)
       return self.layout()
     except DatabaseProxyException, errTxt:
