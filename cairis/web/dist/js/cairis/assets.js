@@ -191,13 +191,16 @@ mainContent.on('click', ".removeAssetEnvironment", function () {
   });
 });
 
-mainContent.on('click', ".removeAssetAssociation", function () {
+mainContent.on('click', ".removeAssetAssociation", function (e) {
+  e.preventDefault();
   var envName = $.session.get("assetEnvironmentName");
-  $(this).closest("tr").remove();
+  var assocRow = $(this).closest('tr');
+  var rowIdx = assocRow.index();
+  assocRow.remove();
   var asset = JSON.parse($.session.get("AssetProperties"));
   $.each(asset, function (index, env) {
     if(env.theEnvironmentName == envName){
-      env.theAssociations.splice( index ,1 );
+      env.theAssociations.splice( rowIdx ,1 );
       $.session.set("AssetProperties", JSON.stringify(asset));
       return false;
     }
@@ -285,46 +288,22 @@ mainContent.on('click', '.theAssetPropName', function(){
   $("#chooseSecurityProperty").modal('show');
 });
 
-mainContent.on('click', '.clickable-associations', function(){
+mainContent.on('click', '.clickable-association', function(){
   $.session.set("AssociationIndex",$(this).index());
   var row =  $(this).closest("tr");
   $("#editAssetsOptionsform").hide();
   $("#editAssociationsWindow").show(function() {
-    $("#headNav").val(row.find("#hNav").text());
-    $("#headAdorn").val(row.find("#hAdorn").text());
-    $("#headNry").val(row.find("#hNry").text());
-    $("#headRole").val(row.find("#hRole").text());
-    $("#tailRole").val(row.find("#tRole").text());
-    $("#tailNry").val(row.find("#tNry").text());
-    $("#tailAdorn").val(row.find("#tAdorn").text());
-    $("#tailNav").val(row.find("#tNav").text());
-
-    var envName = $.session.get("assetEnvironmentName");
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      contentType: "application/json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
-      crossDomain: true,
-      url: serverIP + "/api/assets/environment/" + envName.replace(' ',"%20") + "/names",
-      success: function (data) {
-        var tailAssetBox = $("#tailAsset");
-        tailAssetBox.empty()
-        $.each(data, function(idx,assetName) {
-          tailAssetBox.append('<option value="' + assetName + '">' + assetName + '</option>');
-        });
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        var error = JSON.parse(xhr.responseText);
-        showPopup(false, String(error.message));
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-    });
-    $("#tailAsset").val(row.find("#tAsset").text());
+    refreshDimensionSelector($('#tailAsset'),'asset', $.session.get('assetEnvironmentName'), function(){
+      $("#headNav").val(row.find("#hNav").text());
+      $("#headAdorn").val(row.find("#hAdorn").text());
+      $("#headNry").val(row.find("#hNry").text());
+      $("#headRole").val(row.find("#hRole").text());
+      $("#tailRole").val(row.find("#tRole").text());
+      $("#tailNry").val(row.find("#tNry").text());
+      $("#tailAdorn").val(row.find("#tAdorn").text());
+      $("#tailNav").val(row.find("#tNav").text());
+      $("#tailAsset").val(row.find("#tAsset").text());
+    },['All']);
   });
 });
 
@@ -422,7 +401,7 @@ function appendAssetAssociation(assoc) {
 }
 
 function assocToTr(assoc) {
-  return "<tr class='clickable-associations'><td class='removeAssetAssociation'><i class='fa fa-minus'></i></td><td class='assetAssociation' id='hNav'>" + assoc[0] + "</td><td id='hAdorn'>" + assoc[1] + "</td><td id='hNry'>" + assoc[2] + "</td><td id='hRole'>" + assoc[3] + "</td><td id='tRole'>" + assoc[4] + "</td><td id='tNry'>" + assoc[5] + "</td><td id='tAdorn'>" + assoc[6] + "</td><td id='tNav'>" + assoc[7] + "</td><td id='tAsset'>" + assoc[8] + "</td></tr>";
+  return "<tr><td class='removeAssetAssociation'><i class='fa fa-minus'></i></td><td class='assetAssociation' id='hNav'>" + assoc[0] + "</td><td class='clickable-association' id='hAdorn'>" + assoc[1] + "</td><td class='clickable-association' id='hNry'>" + assoc[2] + "</td><td class='clickable-association' id='hRole'>" + assoc[3] + "</td><td class='clickable-association' id='tRole'>" + assoc[4] + "</td><td class='clickable-association' id='tNry'>" + assoc[5] + "</td><td class='clickable-association' id='tAdorn'>" + assoc[6] + "</td><td class='clickable-association' id='tNav'>" + assoc[7] + "</td><td class='clickable-association' id='tAsset'>" + assoc[8] + "</td></tr>";
 }
 
 mainContent.on('click', '.removeEnvironment', function () {
