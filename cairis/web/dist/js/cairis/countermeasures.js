@@ -233,54 +233,55 @@ mainContent.on('click', '.removeCountermeasureTarget', function () {
   });
 });
 
-mainContent.on('shown.bs.modal','#ChooseTargetDialog',function() {
+mainContent.on('shown.bs.modal','#ChooseTargetDialog',function(e) {
+  e.preventDefault();
   var envName = $.session.get("countermeasureEnvironmentName");
   var reqParams = '';
   var cm = JSON.parse($.session.get("Countermeasure"));
   $.each(cm.theEnvironmentProperties, function(index,env) {
     if (env.theEnvironmentName = envName) {
       reqParams = encodeQueryList('requirement',env.theRequirements);
-    }
-  });
 
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/countermeasures/targets/environment/" + encodeURIComponent(envName) + '?' + reqParams,
-    success: function (data) {
-      $('#chooseCountermeasureTargetSelect').empty();
-      data.sort();
-      var filterList = $('#ChooseTargetDialog').attr('data-filterList');
-      data = data.filter(x => filterList.indexOf(x) < 0);
-      if (data.length == 0) {
-        alert('No targets available to add.');
-      }
-      else {
-        $.each(data, function () {
-          $('#chooseCountermeasureTargetSelect').append($("<option />").val(this).text(this));
-        });
-        var unparsedTarget = $('#ChooseTargetDialog').attr('data-currentTarget');
-        if (unparsedTarget != undefined) {
-          var target = JSON.parse(unparsedTarget);
-          $('#chooseCountermeasureTargetSelect').val(target.theName);
-          $('#chooseTargetEffectivenessSelect').val(target.theEffectiveness);
-          $('#enterRationale').val(target.theRationale);
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + "/api/countermeasures/targets/environment/" + encodeURIComponent(envName) + '?' + reqParams,
+        success: function (data) {
+          $('#chooseCountermeasureTargetSelect').empty();
+          data.sort();
+          var filterList = $('#ChooseTargetDialog').attr('data-filterList');
+          data = data.filter(x => filterList.indexOf(x) < 0);
+          if (data.length == 0) {
+            alert('No targets available to add.');
+          }
+          else {
+            $.each(data, function () {
+              $('#chooseCountermeasureTargetSelect').append($("<option />").val(this).text(this));
+            });
+            var unparsedTarget = $('#ChooseTargetDialog').attr('data-currentTarget');
+            if (unparsedTarget != undefined) {
+              var target = JSON.parse(unparsedTarget);
+              $('#chooseCountermeasureTargetSelect').val(target.theName);
+              $('#chooseTargetEffectivenessSelect').val(target.theEffectiveness);
+              $('#enterRationale').val(target.theRationale);
+            }
+            else {
+              $('#chooseCountermeasureTargetSelect').val('');
+              $('#chooseTargetEffectivenessSelect').val('None');
+              $('#enterRationale').val('');
+            }
+          }
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          debugLogger(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
-        else {
-          $('#chooseCountermeasureTargetSelect').val('');
-          $('#chooseTargetEffectivenessSelect').val('None');
-          $('#enterRationale').val('');
-        }
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      });
     }
   });
 });
@@ -816,8 +817,8 @@ function addRequirementToCountermeasure() {
   });
 };
 
-$(document).on("click", "#addTargetToCountermeasure", function () {
-
+$(document).on("click", "#addTargetToCountermeasure", function (e) {
+  e.preventDefault();
   var filterList = [];
   $("#theTargets").find(".countermeasureTargets").each(function(index, req){
     filterList.push($(req).text());
@@ -828,24 +829,6 @@ $(document).on("click", "#addTargetToCountermeasure", function () {
   $('#ChooseTargetDialog').attr('data-currentTarget',undefined);
   $('#ChooseTargetDialog').modal('show');
 });
-
-function countermeasureTaskDialogBox(currentTp,callback){
-  var dialogwindow = $("#EditCountermeasureTaskDialog");
-
-  dialogwindow.dialog({
-    modal: true,
-    buttons: {
-      Ok: function () {
-        if(jQuery.isFunction(callback)){
-          callback(updTp);
-        }
-        $(this).dialog("close");
-      }
-    }
-  });
-  $("#EditCountermeasureTaskDialog").show();
-}
-
 
 mainContent.on('click', '#addRoleToCountermeasure', function () {
   var filterList = [];

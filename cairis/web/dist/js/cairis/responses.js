@@ -177,7 +177,8 @@ mainContent.on('click', ".deleteTransferRole", function () {
   $.session.set("response", JSON.stringify(resp));
 });
 
-mainContent.on('shown.bs.modal',$("#chooseRiskEnvironment"), function() {
+
+mainContent.on('click', "#addRespEnv", function () {
   $('#chooseRiskEnvironmentTitle').text('Choose the response environment');
   var riskName = $("#chooseRisk").val();
   var urlText = serverIP + "/api/environments/risk/" + encodeURIComponent(riskName) + "/names";
@@ -202,17 +203,13 @@ mainContent.on('shown.bs.modal',$("#chooseRiskEnvironment"), function() {
       $.each(data, function () {
         $('#chooseRiskEnvironmentSelect').append($("<option />").val(this).text(this));
       });
+      $('#chooseRiskEnvironment').modal('show');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-});
-
-
-mainContent.on('click', "#addRespEnv", function () {
-  $('#chooseRiskEnvironment').modal('show');
 });
 
 mainContent.on('click', '#chooseRiskEnvironmentButton', function() {
