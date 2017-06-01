@@ -42,7 +42,7 @@ class RequirementAPITests(CairisDaemonTestCase):
     self.requirement_class = Requirement.__module__+'.'+Requirement.__name__
     self.new_requirement = Requirement(
       id=-1,
-      label='TE-1',
+      label='1',
       name='Test requirement',
       description='This is a test description',
       priority='1',
