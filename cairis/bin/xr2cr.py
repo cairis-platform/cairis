@@ -34,7 +34,7 @@ def main(args=None):
 
 def convertRequirementSpreadsheet(ssName,modelFile):
   wb = load_workbook(ssName)
-  if (len(wb.get_sheet_names()) > 1):
+  if (len(wb.sheetnames) > 1):
     raise ARMException('No more than one sheet expected')
   ws = wb.active
 
