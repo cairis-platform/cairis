@@ -96,6 +96,7 @@ class RequirementTest(unittest.TestCase):
     uireq.update('name','revised name')
     uireq.incrementVersion()
 
+    uireq.theLabel = int(uireq.theLabel.split('-')[1])
     b.dbProxy.updateRequirement(uireq)
     uoreqs = b.dbProxy.getRequirements()
     uoreq = uoreqs['revised description']
