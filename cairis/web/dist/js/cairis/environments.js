@@ -293,7 +293,16 @@ function fillEnvironmentsTable(data, callback){
   var textToInsert = [];
   var i = 0;
 
-  $.each(data, function(count, item) {
+  var keys = [];
+  for (key in data) {
+    keys.push(key);
+  }
+  keys.sort();
+
+  for (var ki = 0; ki < keys.length; ki++) {
+    var key = keys[ki];
+    var item = data[key];
+
     textToInsert[i++] = "<tr>";
     textToInsert[i++] = '<td class="deleteEnvironmentButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
     textToInsert[i++] = '<td class="environment-rows" name="theName">';
@@ -303,7 +312,7 @@ function fillEnvironmentsTable(data, callback){
     textToInsert[i++] = '<td name="theType">';
     textToInsert[i++] = item.theDescription;
     textToInsert[i++] = '</td></tr>';
-  });
+  }
   theTable.append(textToInsert.join(''));
   $.contextMenu('destroy',$('.requirement-rows'));
   theTable.css("visibility","visible");

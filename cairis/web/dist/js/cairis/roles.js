@@ -40,7 +40,17 @@ function fillRolesTable(){
       $.session.set("allRoles", JSON.stringify(json));
       var i = 0;
       var textToInsert = [];
-      $.each(json, function (key, value) {
+
+      var keys = [];
+      for (key in json) {
+        keys.push(key);
+      }
+      keys.sort();
+
+      for (var ki = 0; ki < keys.length; ki++) {
+        var key = keys[ki];
+        var value = json[key];
+
         textToInsert[i++] = "<tr>";
         textToInsert[i++] = '<td class="deleteRoleButton"><i class="fa fa-minus" value="' + value.theName + '"></i></td>';
         textToInsert[i++] = '<td class="role-rows" name="theName">';
@@ -55,7 +65,7 @@ function fillRolesTable(){
         textToInsert[i++] = value.theType;
         textToInsert[i++] = '</td>';
         textToInsert[i++] = '</tr>';
-      });
+      }
       $("#mainTable").append(textToInsert.join(''));
       $(".theTable").css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));

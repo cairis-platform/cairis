@@ -41,7 +41,16 @@ function createArchitecturalPatternsTable(){
       var textToInsert = [];
       var i = 0;
 
-      $.each(data, function(key, item) {
+      var keys = [];
+      for (key in data) {
+        keys.push(key);
+      }
+      keys.sort();
+
+      for (var ki = 0; ki < keys.length; ki++) {
+        var key = keys[ki];
+        var item = data[key];
+
         textToInsert[i++] = "<tr>";
         textToInsert[i++] = '<td class="deleteArchitecturalPatternButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
         textToInsert[i++] = '<td class="architecturalpattern-rows" name="theName">';
@@ -61,7 +70,7 @@ function createArchitecturalPatternsTable(){
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '</tr>';
-      });
+      }
 
       theTable.append(textToInsert.join(''));
       theTable.css("visibility","visible");
