@@ -3581,9 +3581,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
 
   def getClassAssociations(self,constraintId = ''):
-    return self.classAssociations('call classAssociationNames(%s)',constraintId)
+    return self.classAssociations('call classAssociationNames("%s")',constraintId)
 
-  def classAssociations(self,procName,constraintId = ''):
+  def classAssociations(self,procName,constraintId = 'Psychosis'):
     try:
       session = self.conn()
       rs = session.execute(procName %(constraintId))
