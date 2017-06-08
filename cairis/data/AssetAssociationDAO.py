@@ -16,14 +16,13 @@
 #  under the License.
 
 from cairis.core.ARM import *
-from cairis.core.ClassAssociation import ClassAssociation
+from cairis.daemon.CairisHTTPError import ARMHTTPError, ObjectNotFoundHTTPError, MalformedJSONHTTPError
 from cairis.core.ClassAssociationParameters import ClassAssociationParameters
-from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError, MalformedJSONHTTPError, ARMHTTPError, MissingParameterHTTPError, OverwriteNotAllowedHTTPError
-import cairis.core.armid
 from cairis.data.CairisDAO import CairisDAO
-from cairis.tools.ModelDefinitions import AssetAssociationModel
+from cairis.core.ClassAssociation import ClassAssociation
+from cairis.tools.JsonConverter import json_deserialize, json_serialize
+from cairis.tools.ModelDefinitions import ClassAssociationModel
 from cairis.tools.SessionValidator import check_required_keys
-from cairis.tools.JsonConverter import json_serialize, json_deserialize
 
 __author__ = 'Shamal Faily'
 
@@ -32,21 +31,64 @@ class AssetAssociationDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_asset_association(self, environment_name, head_name, tail_name):
-    assocs = self.db_proxy.classModel(environment_name)
-    if assocs is None or len(assocs) < 1:
+  def get_asset_associations(self, constraint_id=''):
+    """
+    :rtype : dict[str, ClassAssociation]
+    """
+    try:
+      dependencies = self.db_proxy.getClassAssociations(constraint_id)
+    except DatabaseProxyException as ex:
       self.close()
-      raise ObjectNotFoundHTTPError('Asset Associations')
-    for key in assocs:
-      envName,headName,tailName = key.split('/')
-      if (envName == environment_name) and (((headName == head_name) and (tailName == tail_name)) or ((headName == tail_name) and (tailName == head_name))):
-        assoc = assocs[key]
-        return assoc 
-    self.close()
-    raise ObjectNotFoundHTTPError('The provided asset association parameters')
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError
 
-  def add_asset_association(self, assoc):
-    assocParams = ClassAssociationParameters(
+    return dependencies
+
+  def get_class_association(self, environment, head_name, tail_name):
+    """
+    :type environment: str
+    :type head_name: str
+    :type tail_name: str
+    :rtype : [ClassAssociation]
+    """
+    args = [environment, head_name, tail_name]
+    if not 'all' in args:
+      return [self.get_class_association_by_name('/'.join(args))]
+    else:
+      assocs = self.get_class_associations()
+      found_assocs = []
+
+      for key in assocs:
+        parts = key.split('/')
+        if environment != 'all' and parts[0] != environment:
+          continue
+        if head_name != 'all' and parts[1] != head_name:
+          continue
+        if tail_name != 'all' and parts[2] != tail_name:
+          continue
+
+        found_assocs.append(assocs[key])
+
+      return found_assocs
+
+
+  def get_class_association_by_name(self, assoc_name):
+    """
+    :rtype : ClassAssociation
+    """
+    assocs = self.get_class_associations()
+
+    found_assoc = assocs.get(assoc_name, None)
+
+    if not found_assoc:
+      raise ObjectNotFoundHTTPError('The provided asset association name')
+    return found_assoc
+
+  def add_class_association(self, assoc):
+
+    params = ClassAssociationParameters(
       envName=assoc.theEnvironmentName,
       headName=assoc.theHeadAsset,
       headDim=assoc.theHeadDim,
@@ -59,20 +101,39 @@ class AssetAssociationDAO(CairisDAO):
       tailType=assoc.theTailType,
       tailNav=assoc.theTailNavigation,
       tailDim=assoc.theTailDim,
-      tailName=assoc.theTailAsset,
-      rationale=assoc.theRationale)
+      tailName=assoc.theTailName,
+      rationale=.assoc.theRationale
+    )
+
     try:
-      self.db_proxy.addClassAssociation(assocParams)
+      self.db_proxy.addClassAssociation(params)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
+  def delete_class_associations(self, environment, head_name,tail_name):
+    found_dependencies = self.get_dependency(environment, head_name, tail_name)
 
-  def update_asset_association(self,assoc):
-    old_assoc = self.get_asset_association(assoc.theEnvironmentName,assoc.theHeadAsset,assoc.theTailAsset)
-    id = old_assoc.theId
-    
-    assocParams = ClassAssociationParameters(
+    try:
+      for found_dependency in found_dependencies:
+        self.db_proxy.deleteClassAssociation(
+          found_dependency.theId
+        )
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def update_class_association(self, environment, head_name, tail_name):
+    assoc_name = '/'.join([environment, head_name, tail_name])
+    found_assoc = self.get_class_association_by_name(assoc_name)
+
+    params = ClassAssociationParameters(
       envName=assoc.theEnvironmentName,
       headName=assoc.theHeadAsset,
       headDim=assoc.theHeadDim,
@@ -85,38 +146,27 @@ class AssetAssociationDAO(CairisDAO):
       tailType=assoc.theTailType,
       tailNav=assoc.theTailNavigation,
       tailDim=assoc.theTailDim,
-      tailName=assoc.theTailAsset,
-      rationale=assoc.theRationale)
-    assocParams.setId(id)
+      tailName=assoc.theTailName,
+      rationale=.assoc.theRationale
+    )
+    params.setId(found_assoc.theId)
+
     try:
-      self.db_proxy.updateClassAssociation(assocParams)
+      self.db_proxy.updateClassAssociation(params)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_asset_association(self, environment_name, head_name, tail_name):
-    assoc = self.get_asset_association(environment_name,head_name,tail_name)
-    try:
-      self.db_proxy.deleteClassAssociation(assoc.theId)
-    except ARMException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
-
-  def from_json(self, request, to_props=False):
-    json = request.get_json(silent=True)
-    if json is False or json is None:
-      self.close()
-      raise MalformedJSONHTTPError(data=request.get_data())
-
-    json_dict = json['object']
-    check_required_keys(json_dict, AssetAssociationModel.required)
+  def from_json(self, request):
+    json_dict = super(ClassAssociationDAO, self).from_json(request)
+    check_required_keys(json_dict, ClassAssociationModel.required)
     json_dict['__python_obj__'] = ClassAssociation.__module__+'.'+ClassAssociation.__name__
-    assoc = json_serialize(json_dict)
-    assoc = json_deserialize(assoc)
-
-    if isinstance(assoc, ClassAssociation):
-      return assoc
+    dependency = json_deserialize(json_dict)
+    if isinstance(dependency, ClassAssociation):
+      return dependency
     else:
       self.close()
-      raise MalformedJSONHTTPError()
-
+      raise MalformedJSONHTTPError(json_serialize(json_dict))
