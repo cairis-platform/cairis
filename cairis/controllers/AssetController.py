@@ -67,11 +67,9 @@ class AssetsAPI(Resource):
   def get(self):
     constraint_id = request.args.get('constraint_id', -1)
     session_id = get_session_id(session, request)
-
     dao = AssetDAO(session_id)
     assets = dao.get_assets(constraint_id=constraint_id)
     dao.close()
-
     resp = make_response(json_serialize(assets, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp
@@ -925,11 +923,9 @@ class AssetAssociationByNameAPI(Resource):
   # endregion
   def get(self,environment_name,head_name,tail_name):
     session_id = get_session_id(session, request)
-
     dao = AssetAssociationDAO(session_id)
     assoc = dao.get_asset_association(environment_name,head_name,tail_name)
     dao.close()
-
     resp = make_response(json_serialize(assoc, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp
@@ -1000,6 +996,40 @@ class AssetAssociationByNameAPI(Resource):
     return resp
 
 class AssetAssociationAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get asset associations',
+    responseClass=AssetAssociationModel.__name__,
+    nickname='assets-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": httplib.BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self):
+    session_id = get_session_id(session, request)
+
+    dao = AssetAssociationDAO(session_id)
+    assocs = dao.get_asset_associations()
+    dao.close()
+    resp = make_response(json_serialize(assocs, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
+    return resp
+
+
   # region Swagger Doc
   @swagger.operation(
     notes='Creates a new asset association',

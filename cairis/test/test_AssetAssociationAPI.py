@@ -59,6 +59,19 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
       'object': self.new_assoc
     }
 
+  def test_get_all(self):
+    method = 'test_get_asset_associations'
+    url = '/api/assets/association?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    assocs = jsonpickle.decode(rv.data)
+    self.assertIsNotNone(assocs, 'No results after deserialization')
+    assoc = assocs[assocs.keys()[0]]
+    self.assertEqual(assoc['theEnvironmentName'],'Core Technology')
+    self.assertEqual(assoc['theHeadAsset'],'Data node')
+    self.assertEqual(assoc['theTailAsset'],'Delegation token')
+
   def test_get(self):
     method = 'test_asset_association'
     url = '/api/assets/association/environment/Psychosis/head/Client%20workstation/tail/Web-browser?session_id=test'

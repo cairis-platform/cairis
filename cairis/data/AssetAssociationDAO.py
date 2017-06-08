@@ -45,6 +45,13 @@ class AssetAssociationDAO(CairisDAO):
     self.close()
     raise ObjectNotFoundHTTPError('The provided asset association parameters')
 
+  def get_asset_associations(self):
+    try:
+      return self.db_proxy.getClassAssociations()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
   def add_asset_association(self, assoc):
     assocParams = ClassAssociationParameters(
       envName=assoc.theEnvironmentName,
