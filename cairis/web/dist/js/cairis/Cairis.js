@@ -1118,6 +1118,10 @@ function setTableHeader(activeTable){
       debugLogger("Is Dependency");
       thead = "<th width='50px' id='addNewDependency'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Depender</th><th>Dependee</th><th>Noun</th><th>Dependency</th>";
       break;
+    case "AssetAssociation":
+      debugLogger("Is Asset Association");
+      thead = "<th width='50px' id='addNewAssetAssociation'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Head</th><th>Nav</th><th>Type</th><th>Nry</th><th>Role</th><th>Role</th><th>Nry</th><th>Type</th><th>Nav</th><th>Tail</th>";
+      break;
     case "Dataflows":
       debugLogger("Is Dataflows");
       thead = "<th width='50px' id='addNewDataflow'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Name</th><th>From</th><th>Type</th><th>To</th><th>Type</th>";

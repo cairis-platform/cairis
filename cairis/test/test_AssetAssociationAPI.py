@@ -96,7 +96,10 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
     method = 'test_put'
 
     self.new_assoc_dict['object'].theTailNavigation = '1'
-    rv = self.app.put('/api/assets/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
+    oldEnvName = self.new_assoc_dict['object'].theEnvironmentName
+    oldHeadName = self.new_assoc_dict['object'].theHeadAsset
+    oldTailName = self.new_assoc_dict['object'].theTailAsset
+    rv = self.app.put('/api/assets/association/environment/' + oldEnvName + '/head/' + oldHeadName + '/tail/' + oldTailName, content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     json_resp = json_deserialize(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
@@ -105,7 +108,6 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
 
   def test_delete(self):
     method = 'test_delete'
-
     rv = self.app.post('/api/assets/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     json_resp = json_deserialize(rv.data)

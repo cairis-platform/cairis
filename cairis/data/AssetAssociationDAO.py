@@ -75,8 +75,8 @@ class AssetAssociationDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def update_asset_association(self,assoc):
-    old_assoc = self.get_asset_association(assoc.theEnvironmentName,assoc.theHeadAsset,assoc.theTailAsset)
+  def update_asset_association(self,oldEnvName,oldHeadAsset,oldTailAsset,assoc):
+    old_assoc = self.get_asset_association(oldEnvName,oldHeadAsset,oldTailAsset)
     id = old_assoc.theId
     
     assocParams = ClassAssociationParameters(

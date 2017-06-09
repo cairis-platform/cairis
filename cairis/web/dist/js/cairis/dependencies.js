@@ -201,7 +201,10 @@ $(document).on("click", "#addNewDependency", function () {
 $(document).on('click', 'td.deleteDependencyButton', function (e) {
   e.preventDefault();
   var dependencies = JSON.parse($.session.get("Dependencies"));
-  var dependency = dependencies[$(this).index()];
+
+  var depRow = $(this).closest('tr');
+  var rowIdx = depRow.index();
+  var dependency = dependencies[rowIdx];
   deleteDependency(dependency, function () {
     $('#menuBCClick').attr('dimension','dependency');
     refreshMenuBreadCrumb('dependency');

@@ -175,6 +175,11 @@ function refreshMenuBreadCrumb(dimName) {
     $('#menuBCClick').show();
     createLocationsTable();
   }
+  else if (dimName == 'assetassociation') {
+    $('#menuBCClick').text('Asset Associations');
+    $('#menuBCClick').show();
+    createAssetAssociationsTable();
+  }
   else if (dimName == 'model') {
     $('#menuBCClick').hide();
   }
