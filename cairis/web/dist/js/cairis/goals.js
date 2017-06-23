@@ -647,7 +647,7 @@ function appendGoalConcernAssoc(assoc){
   $("#editgoalsConcernassociationsTable").append('<tr class="editGoalConcernAssoc"><td class="deleteGoalEnvConcernAssoc"><i class="fa fa-minus"></i></td><td class="assocName">'+assoc[0]+'</td><td class="assocN1">'+assoc[1]+'</td><td class="assocLink">'+assoc[2]+'</td><td class="assocN2">'+assoc[4]+'</td><td class="assocTarget">'+assoc[3]+'</td></tr>');
 }
 
-mainContent.on('click', '#closeGoalButton', function (e) {
+mainContent.on('click', '#goalCancelButton', function (e) {
   e.preventDefault();
   $('#menuBCClick').attr('dimension','goal');
   refreshMenuBreadCrumb('goal');
