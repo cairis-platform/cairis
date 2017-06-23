@@ -20,8 +20,10 @@
 'use strict';
 
 $("#countermeasuresClick").click(function () {
-  $('#menuBCClick').attr('dimension','countermeasure');
-  refreshMenuBreadCrumb('countermeasure');
+  validateClick('countermeasure',function() {
+    $('#menuBCClick').attr('dimension','countermeasure');
+    refreshMenuBreadCrumb('countermeasure');
+  });
 });
 
 $("#countermeasureMenuClick").click(function () {

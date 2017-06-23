@@ -20,8 +20,10 @@
 'use strict';
 
 $("#dataflowsMenuClick").click(function(){
-  $('#menuBCClick').attr('dimension','dataflow');
-  refreshMenuBreadCrumb('dataflow');
+  validateClick('dataflow',function() {
+    $('#menuBCClick').attr('dimension','dataflow');
+    refreshMenuBreadCrumb('dataflow');
+  });
 });
 
 function createDataflowsTable(){

@@ -20,8 +20,10 @@
 'use strict';
 
 $("#useCaseClick").click(function () {
-  $('#menuBCClick').attr('dimension','use_case');
-  refreshMenuBreadCrumb('use_case');
+  validateClick('usecase',function() {
+    $('#menuBCClick').attr('dimension','use_case');
+    refreshMenuBreadCrumb('use_case');
+  });
 });
 
 function createUseCasesTable(){

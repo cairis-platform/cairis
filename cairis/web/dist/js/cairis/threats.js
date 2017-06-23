@@ -20,8 +20,10 @@
 'use strict';
 
 $("#threatMenuClick").click(function () {
-  $('#menuBCClick').attr('dimension','threat');
-  refreshMenuBreadCrumb('threat');
+  validateClick('threat',function() {
+    $('#menuBCClick').attr('dimension','threat');
+    refreshMenuBreadCrumb('threat');
+  });
 });
 
 function createThreatsTable(){

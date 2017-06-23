@@ -100,8 +100,10 @@ function removeReq(reqName) {
 }
 
 $("#requirementsClick").click(function(){
-  $('#menuBCClick').attr('dimension','requirement');
-  refreshMenuBreadCrumb('requirement');
+  validateClick('requirement',function() {
+    $('#menuBCClick').attr('dimension','requirement');
+    refreshMenuBreadCrumb('requirement');
+  });
 });
 
 //Just for debugLogger

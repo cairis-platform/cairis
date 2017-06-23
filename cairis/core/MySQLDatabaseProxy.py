@@ -532,6 +532,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         session.commit()
         session.close()        
         self.addCompositeEnvironmentProperties(environmentId,parameters.duplicateProperty(),parameters.overridingEnvironment())
+      session.commit()
+      session.close()        
 
       assetValues = parameters.assetValues()
       if (assetValues != None):

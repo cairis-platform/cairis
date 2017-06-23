@@ -20,8 +20,10 @@
 'use strict';
 
 $("#vulnerabilityMenuClick").click(function(){
-  $('#menuBCClick').attr('dimension','vulnerability');
-  refreshMenuBreadCrumb('vulnerability');
+  validateClick('vulnerability',function() {
+    $('#menuBCClick').attr('dimension','vulnerability');
+    refreshMenuBreadCrumb('vulnerability');
+  });
 });
 
 function createVulnerabilityTable(){

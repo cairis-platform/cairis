@@ -20,8 +20,10 @@
 'use strict';
 
 $("#responseMenuClick").click(function () {
-  $('#menuBCClick').attr('dimension','response');
-  refreshMenuBreadCrumb('response');
+  validateClick('response',function() {
+    $('#menuBCClick').attr('dimension','response');
+    refreshMenuBreadCrumb('response');
+  });
 });
 
 $(document).on("click", "#addNewResponse", function () {

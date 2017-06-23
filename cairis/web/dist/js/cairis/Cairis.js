@@ -1787,3 +1787,62 @@ function getNoOfRisks(callback) {
     }
   });
 }
+
+function validateClick(dimension,callback) {
+  if (['requirement','goal','obstacle','usecase','environment','dependency','asset','attacker','persona','dataflow','location','traceability'].indexOf(dimension) > -1) {
+    dimensionCheck('environment',callback);
+  }
+  else if (dimension == 'vulnerability') {
+    dimensionCheck('environment',function() {
+      dimensionCheck('asset',callback);
+    });
+  }
+  else if (dimension == 'threat') {
+    dimensionCheck('environment',function() {
+      dimensionCheck('attacker',function() {
+        dimensionCheck('asset',callback);
+      });
+    });
+  }
+  else if (dimension == 'risk') {
+    dimensionCheck('threat',function() {
+      dimensionCheck('vulnerability',callback);
+    });
+  }
+  else if (dimension == 'response') {
+    dimensionCheck('risk',callback);
+  }
+  else if (dimension == 'countermeasure') {
+    dimensionCheck('response',callback);
+  }
+  else if (dimension == 'task') {
+    dimensionCheck('persona',callback);
+  }
+}
+
+function dimensionCheck(dimensionName,callback) {
+  $.ajax({
+    type:"GET",
+    dataType: "json",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/dimensions/table/" + dimensionName,
+    success: function(data) {
+      if (data.length > 0) {
+        if (callback != undefined) {
+          callback();
+        }
+      }
+      else {
+        alert("You must defined at least one " + dimensionName + " first.");
+      }
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}

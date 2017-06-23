@@ -19,14 +19,11 @@
 
 'use strict';
 
-$("#goalsClick").click(function(){
-  $('#menuBCClick').attr('dimension','goal');
-  refreshMenuBreadCrumb('goal');
-});
-
 $("#goalMenuClick").click(function(){
-  $('#menuBCClick').attr('dimension','goal');
-  refreshMenuBreadCrumb('goal');
+  validateClick('goal',function() {
+    $('#menuBCClick').attr('dimension','goal');
+    refreshMenuBreadCrumb('goal');
+  });
 });
 
 function createEditGoalsTable(){

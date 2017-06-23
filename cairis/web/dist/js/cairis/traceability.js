@@ -20,32 +20,34 @@
 'use strict';
 
 $("#traceabilityClick").click(function(){
-  activeElement("objectViewer");
-  $('#filtercontent').hide();
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/dimensions/table/environment",
-    success: function (envs) {
-      fillOptionMenu("fastTemplates/editTraceabilityOptions.html", "#objectViewer", null, true, true, function () {
-        $('#theEnvironmentName option').remove();
-        $.each(envs, function(idx,env) {
-          $('#theEnvironmentName').append($("<option></option>").attr("value",env).text(env));
+  validateClick('traceability',function() {
+    activeElement("objectViewer");
+    $('#filtercontent').hide();
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      accept: "application/json",
+      data: {
+        session_id: String($.session.get('sessionID'))
+      },
+      crossDomain: true,
+      url: serverIP + "/api/dimensions/table/environment",
+      success: function (envs) {
+        fillOptionMenu("fastTemplates/editTraceabilityOptions.html", "#objectViewer", null, true, true, function () {
+          $('#theEnvironmentName option').remove();
+          $.each(envs, function(idx,env) {
+            $('#theEnvironmentName').append($("<option></option>").attr("value",env).text(env));
+          });
         });
-      });
-      $('#theEnvironmentName').val(envs[0]);
-      $('#theEnvironmentName').trigger('change');
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  })
+        $('#theEnvironmentName').val(envs[0]);
+        $('#theEnvironmentName').trigger('change');
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        debugLogger(String(this.url));
+        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+      }
+    });
+  });
 });
 
 var mainContent = $('#objectViewer');

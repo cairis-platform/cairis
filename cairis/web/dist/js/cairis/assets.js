@@ -20,8 +20,10 @@
 'use strict';
 
 $("#assetMenuClick").click(function(){
-  $('#menuBCClick').attr('dimension','asset');
-  refreshMenuBreadCrumb('asset');
+  validateClick('asset',function() {
+    $('#menuBCClick').attr('dimension','asset');
+    refreshMenuBreadCrumb('asset');
+  });
 });
 
 function fillAssetTable(){

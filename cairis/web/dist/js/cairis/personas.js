@@ -20,8 +20,10 @@
 'use strict';
 
 $("#personaMenuClick").click(function () {
-  $('#menuBCClick').attr('dimension','persona');
-  refreshMenuBreadCrumb('persona');
+  validateClick('persona',function() {
+    $('#menuBCClick').attr('dimension','persona');
+    refreshMenuBreadCrumb('persona');
+  });
 });
 
 $("#personaClick").click(function () {

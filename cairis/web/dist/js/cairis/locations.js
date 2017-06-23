@@ -20,8 +20,10 @@
 'use strict';
 
 $("#locationsClick").click(function(){
-  $('#menuBCClick').attr('dimension','location');
-  refreshMenuBreadCrumb('location');
+  validateClick('location',function() {
+    $('#menuBCClick').attr('dimension','location');
+    refreshMenuBreadCrumb('location');
+  });
 });
 
 function createLocationsTable(){

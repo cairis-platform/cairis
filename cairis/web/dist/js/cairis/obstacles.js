@@ -19,14 +19,12 @@
 
 'use strict';
 
-$("#obstaclesClick").click(function(){
-  $('#menuBCClick').attr('dimension','obstacle');
-  refreshMenuBreadCrumb('obstacle');
-});
 
 $("#obstacleMenuClick").click(function(){
-  $('#menuBCClick').attr('dimension','obstacle');
-  refreshMenuBreadCrumb('obstacle');
+  validateClick('obstacle',function() {
+    $('#menuBCClick').attr('dimension','obstacle');
+    refreshMenuBreadCrumb('obstacle');
+  });
 });
 
 function createEditObstaclesTable(){

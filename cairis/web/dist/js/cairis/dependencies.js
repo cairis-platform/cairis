@@ -26,8 +26,11 @@ $('#editDependencyOptionsForm').validator().on('submit', function (e) {
 });
 
 $("#dependenciesClick").click(function(){
-  $('#menuBCClick').attr('dimension','dependency');
-  refreshMenuBreadCrumb('dependency');
+  validateClick('dependency',function() {
+    $('#menuBCClick').attr('dimension','dependency');
+    refreshMenuBreadCrumb('dependency');
+  });
+
 });
 
 // A function for filling the table with Dependencies

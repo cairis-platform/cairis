@@ -20,8 +20,10 @@
 'use strict';
 
 $("#riskMenuClick").click(function () {
-  $('#menuBCClick').attr('dimension','risk');
-  refreshMenuBreadCrumb('risk');
+  validateClick('risk',function() {
+    $('#menuBCClick').attr('dimension','risk');
+    refreshMenuBreadCrumb('risk');
+  });
 });
 
 function createRisksTable(){

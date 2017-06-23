@@ -111,7 +111,6 @@ class EnvironmentsAPI(Resource):
   #endregion
   def post(self):
     session_id = get_session_id(session, request)
-
     dao = EnvironmentDAO(session_id)
     new_environment = dao.from_json(request)
     new_environment_id = dao.add_environment(new_environment)

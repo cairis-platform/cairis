@@ -20,8 +20,10 @@
 'use strict';
 
 $("#attackerMenuClick").click(function () {
-  $('#menuBCClick').attr('dimension','attacker');
-  refreshMenuBreadCrumb('attacker');
+  validateClick('attacker',function() {
+    $('#menuBCClick').attr('dimension','attacker');
+    refreshMenuBreadCrumb('attacker');
+  });
 });
 
 function createAttackersTable(){
