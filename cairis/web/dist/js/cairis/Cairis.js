@@ -1837,7 +1837,7 @@ function dimensionCheck(dimensionName,callback) {
         }
       }
       else {
-        alert("You must defined at least one " + dimensionName + " first.");
+        alert("You must define at least one " + dimensionName + " first.");
       }
     },
     error: function(xhr, textStatus, errorThrown) {
