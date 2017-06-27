@@ -768,9 +768,21 @@ function postGoal(goal, callback){
 }
 
 mainContent.on('click', '#theGoalType', function () {
-  refreshDimensionSelector($('#theGoalName'),$('#theGoalType').val(),$.session.get("GoalEnvName"),undefined,['All']);
+  var dimName = $('#theGoalType').val();
+  if (dimName == 'role' || dimName == 'requirement') {
+    refreshDimensionSelector($('#theGoalName'),dimName,undefined,undefined,['All']);
+  }
+  else {
+    refreshDimensionSelector($('#theGoalName'),dimName,$.session.get("GoalEnvName"),undefined,['All']);
+  }
 });
 
 mainContent.on('click', '#theSubgoalType', function () {
-  refreshDimensionSelector($('#theSubGoalName'),$('#theSubgoalType').val(),$.session.get("GoalEnvName"),undefined,['All']);
+  var dimName = $('#theSubgoalType').val();
+  if (dimName == 'role' || dimName == 'requirement') {
+    refreshDimensionSelector($('#theSubGoalName'),dimName,undefined,undefined,['All']);
+  }
+  else {
+    refreshDimensionSelector($('#theSubGoalName'),dimName,$.session.get("GoalEnvName"),undefined,['All']);
+  }
 });
