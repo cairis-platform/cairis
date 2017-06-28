@@ -164,15 +164,21 @@ mainContent.on('dblclick', '.editNamingConvention', function () {
 });
 
 mainContent.on("click", "#updateProjectButton", function (e) {
-    e.preventDefault();
-    var settings =  JSON.parse($.session.get("ProjectSettings"));
-    settings.projectName = $("#projectName").val();
-    settings.projectBackground = $("#projectBackground").val();
-    settings.projectGoals = $("#projectGoals").val();
-    settings.projectScope = $("#projectScope").val();
-    putProjectSettings(settings);
-    forceCloseOptions();
-    $.session.set("ProjectSettings", JSON.stringify(settings));
+  e.preventDefault();
+  var settings =  JSON.parse($.session.get("ProjectSettings"));
+  settings.projectName = $("#projectName").val();
+  settings.projectBackground = $("#projectBackground").val();
+  settings.projectGoals = $("#projectGoals").val();
+  settings.projectScope = $("#projectScope").val();
+  putProjectSettings(settings);
+  forceCloseOptions();
+  $.session.set("ProjectSettings", JSON.stringify(settings));
+  refreshHomeBreadCrumb();
+});
+
+mainContent.on("click", "#closeProjectButton", function (e) {
+  e.preventDefault();
+  refreshHomeBreadCrumb();
 });
 
 mainContent.on('click', "#updateContributor", function () {
