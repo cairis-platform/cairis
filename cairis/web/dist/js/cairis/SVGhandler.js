@@ -397,6 +397,7 @@ function handleNodeClick(event,objt) {
                   $("#theResponses").find("tbody").empty();
                   $.each(data, function (index, resp) {
                     $("#theResponses").find("tbody").append('<tr></td><td>'+resp.responseName+'</td><td>'+ resp.unmitScore +'</td><td>'+ resp.mitScore +'</td></tr>');
+                    $('#theRiskDetail').val(resp.details);
                   });
                   forceOpenOptions();
                 },

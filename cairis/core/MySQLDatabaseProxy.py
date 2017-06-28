@@ -3951,7 +3951,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       alternativeId = 0
       if (altName == 'Yes'):
         alternativeId = 1
-      parameters = GoalAssociationParameters(environmentName,goal,'goal',refinement,goalName,'goal',alternativeId,rationale)
+      parameters = GoalAssociationParameters(environmentName,goal,goalDim,refinement,goalName,'goal',alternativeId,rationale)
       self.addGoalAssociation(parameters) 
 
   def addGoalConcernAssociations(self,goalId,environmentName,associations):
