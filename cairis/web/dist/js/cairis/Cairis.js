@@ -1789,18 +1789,27 @@ function getNoOfRisks(callback) {
 }
 
 function validateClick(dimension,callback) {
-  if (['requirement','goal','obstacle','usecase','environment','dependency','asset','attacker','persona','dataflow','location','traceability'].indexOf(dimension) > -1) {
+  if (['requirement','goal','obstacle','usecase','environment','dependency','asset','persona','dataflow','location','traceability'].indexOf(dimension) > -1) {
     dimensionCheck('environment',callback);
   }
+  else if (dimension == 'attacker') {
+    dimensionCheck('role',function() {
+      dimensionCheck('environment',callback);
+    });
+  }
   else if (dimension == 'vulnerability') {
-    dimensionCheck('environment',function() {
-      dimensionCheck('asset',callback);
+    dimensionCheck('vulnerability_type',function() {
+      dimensionCheck('environment',function() {
+        dimensionCheck('asset',callback);
+      });
     });
   }
   else if (dimension == 'threat') {
-    dimensionCheck('environment',function() {
-      dimensionCheck('attacker',function() {
-        dimensionCheck('asset',callback);
+    dimensionCheck('threat_type',function() {
+      dimensionCheck('environment',function() {
+        dimensionCheck('attacker',function() {
+          dimensionCheck('asset',callback);
+        });
       });
     });
   }
@@ -1837,7 +1846,7 @@ function dimensionCheck(dimensionName,callback) {
         }
       }
       else {
-        alert("You must define at least one " + dimensionName + " first.");
+        alert("You must define or import at least one " + dimensionName + " first.");
       }
     },
     error: function(xhr, textStatus, errorThrown) {
