@@ -67,6 +67,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.theObstacles = []
     self.theRequirements = []
     self.theCountermeasures = []
+    self.theReferenceLabelDictionary = {}
 
     self.resetDomainPropertyAttributes()
     self.resetGoalAttributes()
@@ -211,12 +212,17 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theConcernAssociations.append((attrs['source_name'],a2s(attrs['source_nry']),attrs['link_name'],attrs['target_name'],a2s(attrs['target_nry'])))
     elif name == 'requirement':
       self.theReference = attrs['reference']
+      if (self.theReference in self.theReferenceLabelDictionary):
+        self.theReferenceLabelDictionary[self.theReference] += 1
+      else:
+        self.theReferenceLabelDictionary[self.theReference] = 1
+      self.theLabel = self.theReferenceLabelDictionary[self.theReference]
+
       try:
         self.theName = attrs['name']
       except KeyError:
         self.theName = ''
       self.theReferenceType = attrs['reference_type']
-      self.theLabel = attrs['label']
       self.theType = u2s(attrs['type'])
       self.thePriority = attrs['priority']
     elif name == 'countermeasure':
