@@ -51,21 +51,21 @@ class ConceptMapModel:
   def size(self):
     return len(self.theAssociations)
 
-  def buildNode(self,objtName,envName):
+  def buildNode(self,objtName):
     objtUrl = 'requirement#' + objtName
-    envLabel = envName.replace(' ','_')
-    if envName not in self.theClusters:
-      self.theClusters[envName] = pydot.Cluster(envLabel,label=str(envName))
     reqObjt = self.dbProxy.dimensionObject(objtName,'requirement')
+    refName = reqObjt.asset()
+    refLabel = refName.replace(' ','_')
+    if refName not in self.theClusters:
+      self.theClusters[refName] = pydot.Cluster(refLabel,label=str(refName))
     tScore = self.dbProxy.traceabilityScore(objtName)
     fontColour = 'black'
     if (reqObjt.priority() == 1):
       if tScore != 3: fontColour = 1
-
     n = pydot.Node(objtName,color=str(tScore),margin=0,fontcolor=str(fontColour),fontsize='5',URL=objtUrl)
     if (self.cfSet == False):
       n.obj_dict['attributes']['style'] = '"rounded,filled"'
-    self.theClusters[envName].add_node(n)
+    self.theClusters[refName].add_node(n)
 
   def layout(self,renderer = 'dot'):
     self.theGraph.write_xdot(self.theGraphName,prog=renderer)
@@ -79,7 +79,7 @@ class ConceptMapModel:
     if self.theConceptName == '':
       reqNodes = self.dbProxy.getDimensionNames('requirement',self.theEnvironmentName)
       for nodeName in reqNodes:
-        self.buildNode(nodeName,self.theEnvironmentName)
+        self.buildNode(nodeName)
         self.conceptNameSet.add(nodeName)
     
     for association in self.theAssociations:
@@ -89,10 +89,10 @@ class ConceptMapModel:
       fromEnv = association.fromEnvironment()
       toEnv = association.toEnvironment()
       if (fromName not in self.conceptNameSet):
-        self.buildNode(fromName,fromEnv)
+        self.buildNode(fromName)
         self.conceptNameSet.add(fromName)
       if (toName not in self.conceptNameSet):
-        self.buildNode(toName,toEnv)
+        self.buildNode(toName)
         self.conceptNameSet.add(fromName)
 
       conceptTriple = (fromName,toName,lbl)
