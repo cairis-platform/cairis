@@ -91,7 +91,7 @@ class EnvironmentModel:
     if (dimName == 'persona'):
       self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'tag'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='note',style='filled',pencolor='black',color='yellow',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='note',style='filled',margin=0,pencolor='black',color='yellow',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'attacker'):
       self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelAttacker.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'asset'):
@@ -99,15 +99,15 @@ class EnvironmentModel:
       borderColour = 'black'
       if (assetObjt.critical()):
         borderColour = 'red'
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,width='0',height='0',margin='0',style='filled',fillcolor='white',label=arrayToAssetSecurityPropertiesTable(assetObjt.securityProperties(self.theEnvironmentName),objtName)))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',color=borderColour,margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,width='0',height='0',style='filled',fillcolor='white',label=arrayToAssetSecurityPropertiesTable(assetObjt.securityProperties(self.theEnvironmentName),objtName)))
     elif (dimName == 'threat'):
       thrObjt = self.dbProxy.dimensionObject(objtName,'threat')
       thrLhood = thrObjt.likelihood(self.theEnvironmentName,self.theEnvironmentObject.duplicateProperty(),self.theEnvironmentObject.overridingEnvironment())
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',colorscheme='orrd5',color='black',fillcolor=threatLikelihoodColourCode(thrLhood),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,label=arrayToThreatSecurityPropertiesTable(thrObjt.securityProperties(self.theEnvironmentName),objtName)))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',margin=0,colorscheme='orrd5',color='black',fillcolor=threatLikelihoodColourCode(thrLhood),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,label=arrayToThreatSecurityPropertiesTable(thrObjt.securityProperties(self.theEnvironmentName),objtName)))
     elif (dimName == 'vulnerability'):
       vulObjt = self.dbProxy.dimensionObject(objtName,'vulnerability')
       vulSev = vulObjt.severity(self.theEnvironmentName,self.theEnvironmentObject.duplicateProperty(),self.theEnvironmentObject.overridingEnvironment())
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',colorscheme='orrd4',color='black',fillcolor=vulnerabilitySeverityColourCode(vulSev),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',margin=0,colorscheme='orrd4',color='black',fillcolor=vulnerabilitySeverityColourCode(vulSev),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'risk'):
       riskObjt = self.dbProxy.dimensionObject(objtName,'risk')
       riskScores = self.dbProxy.riskScore(riskObjt.threat(),riskObjt.vulnerability(),self.theEnvironmentName,objtName)
@@ -116,35 +116,35 @@ class EnvironmentModel:
         currentScore = riskScore[2]
         if (currentScore > highestScore):
           highestScore = currentScore
-      self.theGraph.add_node(pydot.Node(objtName,shape='diamond',style='filled',color='black',fillcolor=threatColourCode(highestScore),fontcolor=riskTextColourCode(highestScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='diamond',style='filled',margin=0,color='black',fillcolor=threatColourCode(highestScore),fontcolor=riskTextColourCode(highestScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'response'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='note',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='note',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'countermeasure'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='component',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='component',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'component'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='component',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='component',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'requirement'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='circle',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='circle',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'goal'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'obstacle'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',skew='-1',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,skew='-1',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'role'):
       self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelRole.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'responsibility'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='doubleoctagon',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='doubleoctagon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'environment'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='doublecircle',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='doublecircle',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'domainproperty'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='house',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='house',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'inconsistency'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task'):
       taskScore = self.dbProxy.taskUsabilityScore(objtName,self.theEnvironmentName)
-      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',style='filled',color=usabilityColourCode(taskScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,style='filled',color=usabilityColourCode(taskScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
 
     elif (dimName == 'misusecase'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',fontname=self.fontName,fontsize=self.fontSize,style='filled',color='black',fontcolor='white',URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,fontname=self.fontName,fontsize=self.fontSize,style='filled',color='black',fontcolor='white',URL=objtUrl))
     else: 
       raise UnknownNodeType(dimName)
 

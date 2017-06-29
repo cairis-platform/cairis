@@ -50,13 +50,13 @@ class DataFlowDiagram:
 
     if (dimName == 'process'):
 
-      self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',style='rounded',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',margin=0,style='rounded',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'entity'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
 
     elif (dimName == 'datastore'):
       dsLbl = '<<TABLE SIDES="TB" CELLBORDER="0"><TR><TD>' + objtName + '</TD></TR></TABLE>>'
-      self.theGraph.add_node(pydot.Node(objtName,label=dsLbl,shape='plaintext',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,label=dsLbl,shape='plaintext',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     else:
       raise UnknownNodeType(dimName)
 

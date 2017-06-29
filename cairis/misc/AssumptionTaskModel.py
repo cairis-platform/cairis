@@ -46,21 +46,21 @@ class AssumptionTaskModel:
   def buildNode(self,dimName,objtName):
     objtUrl = dimName + '#' + str(objtName)
     if (dimName == 'task'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'domainproperty'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='house',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='house',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task_characteristic'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,style='filled',fillcolor='green',fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='green',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'rebuttal'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,style='filled',fillcolor='red',fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='red',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'qualifier'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',fontname=self.fontName,style='dashed',fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',margin=0,fontname=self.fontName,style='dashed',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'warrant'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,style='filled',fillcolor='darkslategray3',fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='darkslategray3',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'backing'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,style='filled',fillcolor='gray95',fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='gray95',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'grounds'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     else: 
       self.theGraph.add_node(pydot.Node(objtName,shape='point',fontname=self.fontName,label='',fontsize=self.fontSize))
 

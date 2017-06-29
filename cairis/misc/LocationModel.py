@@ -60,12 +60,12 @@ class LocationModel:
       for inst in assetInstances:
         instName = inst[0]
         assetName = inst[1] 
-        locCluster.add_node(pydot.Node(instName,URL='asset#' + assetName))
+        locCluster.add_node(pydot.Node(instName,URL='asset#' + assetName,margin=0))
 
       for persona in personaInstances:
         instName = persona[0]
         personaName = persona[1] 
-        locCluster.add_node(pydot.Node(instName,shape='circle',URL='persona#' + personaName))
+        locCluster.add_node(pydot.Node(instName,shape='circle',margin=0,URL='persona#' + personaName))
       self.theGraph.add_subgraph(locCluster)
 
     for edges in self.theLocs.links():
@@ -89,7 +89,7 @@ class LocationModel:
           currentScore = riskScore[2]
           if (currentScore > highestScore):
             highestScore = currentScore
-        self.theGraph.add_node(pydot.Node(riskName,shape='diamond',style='filled',color=threatColourCode(highestScore),fontcolor=riskTextColourCode(highestScore),fontname=self.fontName,fontsize=self.fontSize,URL='risk#'+riskName))
+        self.theGraph.add_node(pydot.Node(riskName,shape='diamond',margin=0,style='filled',color=threatColourCode(highestScore),fontcolor=riskTextColourCode(highestScore),fontname=self.fontName,fontsize=self.fontSize,URL='risk#'+riskName))
 
     for edges in edgeList:
       self.theGraph.add_edge(pydot.Edge(edges[0],'point_' + edges[1]))

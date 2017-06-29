@@ -57,23 +57,23 @@ class KaosModel:
     objtUrl = dimName + '#' + objtName
     b = Borg()
     if (dimName == 'goal'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'obstacle'):
       obsId = self.dbProxy.getDimensionId(objtName,'obstacle')
       envId = self.dbProxy.getDimensionId(self.theEnvironmentName,'environment')
-      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',skew='-0.4',style='filled',pencolor='black',colorscheme='ylorrd9',fillcolor=obstacleColourCode(self.dbProxy.obstacleProbability(obsId,envId)),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,skew='-0.4',style='filled',pencolor='black',colorscheme='ylorrd9',fillcolor=obstacleColourCode(self.dbProxy.obstacleProbability(obsId,envId)),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'domainproperty'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='house',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='house',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'requirement'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'countermeasure'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='hexagon',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='hexagon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif ((dimName == 'role') and (self.theKaosModel != 'task')):
-      self.theGraph.add_node(pydot.Node(objtName,shape='hexagon',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='hexagon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif ((dimName == 'role') and (self.theKaosModel == 'task')):
       self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'usecase'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task'):
       objt = self.dbProxy.dimensionObject(objtName,'task')
       if (objt.assumption() == True):
@@ -81,7 +81,7 @@ class KaosModel:
       else:
         objtLabel = objtName
       taskScore = self.dbProxy.taskUsabilityScore(objtName,self.theEnvironmentName)
-      self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='ellipse',style='filled',color=usabilityColourCode(taskScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='ellipse',margin=0,style='filled',color=usabilityColourCode(taskScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'misusecase'):
       ellipseColour = 'black'
       if (self.theKaosModel == 'task'):
@@ -94,7 +94,7 @@ class KaosModel:
           if (currentScore > highestScore):
             highestScore = currentScore
         ellipseColour = threatColourCode(highestScore)
-      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',style='filled',color=ellipseColour,fontcolor='white',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,style='filled',color=ellipseColour,fontcolor='white',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'persona'):
       objt = self.dbProxy.dimensionObject(objtName,'persona')
       if (objt.assumption() == True):
@@ -105,14 +105,14 @@ class KaosModel:
     elif (dimName == 'attacker'):
       self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelAttacker.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'response'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='note',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='note',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'asset'):
       fontColour = 'black'
       nodeColour = 'black'
       if (self.theKaosModel == 'task'):
         fontColour = 'blue'
         nodeColour = 'blue'
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',fontname=self.fontName,fontsize=self.fontSize,fontcolor=fontColour,color=nodeColour,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,fontsize=self.fontSize,fontcolor=fontColour,color=nodeColour,URL=objtUrl))
     else:
       raise UnknownNodeType(dimName)
 

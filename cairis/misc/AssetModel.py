@@ -60,9 +60,9 @@ class AssetModel:
       else:
         self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'goalconcern' or dimName == 'taskconcern'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='note',fontname=self.fontName,fontsize=self.fontSize,fontcolor='blue',color='blue',URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='note',margin=0,fontname=self.fontName,fontsize=self.fontSize,fontcolor='blue',color='blue',URL=objtUrl))
     elif (dimName == 'obstacleconcern'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='note',fontname=self.fontName,fontsize=self.fontSize,fontcolor='red',color='red',URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='note',margin=0,fontname=self.fontName,fontsize=self.fontSize,fontcolor='red',color='red',URL=objtUrl))
     else:
       assetObjt = self.dbProxy.dimensionObject(objtName,dimName)
       borderColour = 'black'
@@ -70,14 +70,9 @@ class AssetModel:
         borderColour = 'red'
       if (dimName == 'template_asset' and self.isComponentAssetModel):
         stScore = self.dbProxy.templateAssetMetrics(objtName)
-        assetNode = pydot.Node(objtName,shape='record',style='filled',fillcolor=surfaceTypeColourCode(stScore),fontcolor=surfaceTypeTextColourCode(stScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
-
-
-
-
-
+        assetNode = pydot.Node(objtName,shape='record',style='filled',margin=0,fillcolor=surfaceTypeColourCode(stScore),fontcolor=surfaceTypeTextColourCode(stScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
       else:
-        assetNode = pydot.Node(objtName,shape='record',color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
+        assetNode = pydot.Node(objtName,shape='record',margin=0,color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
       self.theGraph.add_node(assetNode)
     self.nodeList.add(objtName)
 
@@ -182,7 +177,7 @@ class AssetModel:
         if (assocRationale != ''):
           objtUrl = 'comment#' + assocRationale
           if (assocRationale not in self.nodeList):
-            self.theGraph.add_node(pydot.Node(assocRationale,shape='note',fontsize=fontSize,fontcolor='blue',color='blue',URL=objtUrl))
+            self.theGraph.add_node(pydot.Node(assocRationale,shape='note',margin=0,fontsize=fontSize,fontcolor='blue',color='blue',URL=objtUrl))
           if ((assocRationale,headName) not in edgeList):
             edge1 = pydot.Edge(assocRationale,headObjt,dir='none',fontsize=fontSize,color='blue',URL=objtUrl)
             self.theGraph.add_edge(edge1)

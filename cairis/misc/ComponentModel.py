@@ -75,7 +75,7 @@ class ComponentModel:
     if componentName not in self.theComponentNames:
       self.theComponentNames.add(componentName)
       componentLabel = "<<component>>\\n" + componentName
-      self.theGraph.add_node(pydot.Node(componentName,label=componentLabel,fillcolor=resolveColour(self.dbProxy.componentAttackSurface(componentName)),URL=componentUrl))
+      self.theGraph.add_node(pydot.Node(componentName,label=componentLabel,margin=0,fillcolor=resolveColour(self.dbProxy.componentAttackSurface(componentName)),URL=componentUrl))
 
   def buildConnector(self,cnName,fromName,toName,protocolName,arName):
     fromObjtName = fromName
