@@ -80,7 +80,7 @@ function handleNodeClick(event,objt) {
               var propValues = [];
               for (var i = 0; i < env.theProperties.length; i++) {
                 if (env.theProperties[i].value != "None") {
-                  propValues.push("<tr><td>" + env.theProperties[i].name + "</td><td>" + env.theProperties[i].value + "</td></tr>"); 
+                  propValues.push("<tr><td>" + env.theProperties[i].name + "</td><td>" + env.theProperties[i].value + "</td><td>" + env.theProperties[i].rationale + "</td></tr>"); 
                 }
               }
               $("#propTable").find("tbody").append(propValues.join(' '));
