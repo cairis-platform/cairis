@@ -169,7 +169,7 @@ class RequirementAPITests(CairisDaemonTestCase):
     self.logger.info('')
 
   def test_concept_map_model(self):
-    url = '/api/requirements?environment=%s' % quote('Core Technology')
+    url = '/api/requirements?environment=%s' % quote('Psychosis')
     reqBody1 = self.new_requirement_dict
     reqBody1['object'].theLabel='1'
     reqBody1['object'].theName='OneRequirement'
@@ -196,7 +196,7 @@ class RequirementAPITests(CairisDaemonTestCase):
     traceDict = {'session_id' : 'test', 'object' : aTrace} 
     rv = self.app.post('/api/traces', content_type='application/json', data=jsonpickle.encode(traceDict))
 
-    url = '/api/requirements/model/environment/Core%20Technology/requirement/all?session_id=test'
+    url = '/api/requirements/model/environment/Psychosis/requirement/all?session_id=test'
     method = 'test_concept_map_model'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url, content_type='application/json')
