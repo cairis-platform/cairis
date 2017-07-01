@@ -148,11 +148,12 @@ mainContent.on('click', '.deleteGoalEnvConcernAssoc', function () {
       $.each(env.theConcernAssociations, function (ix, assoc) {
         if(assoc[0] == theAssoc){
           env.theConcernAssociations.splice(ix,1)
+          $.session.set("Goal", JSON.stringify(goal));
+          return;
         }
       });
     }
   });
-  $.session.set("Goal", JSON.stringify(goal));
 });
 
 mainContent.on('click', '#updateGoalConcernAss', function () {
@@ -202,12 +203,13 @@ mainContent.on('click',".deleteGoalSubGoal", function () {
     if(env.theEnvironmentName == envName){
       $.each(env.theSubGoalRefinements, function (ix, subgoal) {
         if(subgoal[0] == subGoalName){
-          env.theSubGoalRefinements.splice(ix,1)
+          env.theSubGoalRefinements.splice(ix,1);
+          $.session.set("Goal", JSON.stringify(goal));
+          return;
         }
       });
     }
   });
-  $.session.set("Goal", JSON.stringify(goal));
 });
 
 mainContent.on('click',"#addConcerntoGoal", function () {
@@ -250,12 +252,13 @@ mainContent.on('click',".deleteGoalGoal", function () {
         if(typeof thegoal != "undefined"){
           if(thegoal[0] == subGoalName){
             env.theGoalRefinements.splice(ix,1)
+            $.session.set("Goal", JSON.stringify(goal));
+            return;
           }
         }
       });
     }
   });
-  $.session.set("Goal", JSON.stringify(goal));
 });
 
 //deleteGoalEnvConcern
@@ -270,12 +273,13 @@ mainContent.on('click',".deleteGoalEnvConcern", function () {
         if(typeof thecon != "undefined"){
           if(thecon == name){
             env.theConcerns.splice(ix,1)
+            $.session.set("Goal", JSON.stringify(goal));
+            return;
           }
         }
       });
     }
   });
-  $.session.set("Goal", JSON.stringify(goal));
 });
 
 mainContent.on('click', '#addConcernAssociationstoGoal', function () {

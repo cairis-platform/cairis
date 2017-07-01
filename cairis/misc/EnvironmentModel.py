@@ -128,7 +128,7 @@ class EnvironmentModel:
     elif (dimName == 'goal'):
       self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'obstacle'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,skew='-1',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,skew='-0.4',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'role'):
       self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelRole.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'responsibility'):

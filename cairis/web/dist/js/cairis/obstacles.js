@@ -128,11 +128,12 @@ mainContent.on('click',".obstacle_deleteGoalSubGoal", function () {
       $.each(env.theSubGoalRefinements, function (ix, subobstacle) {
         if(subobstacle[0] == subGoalName){
           env.theSubGoalRefinements.splice(ix,1)
+          $.session.set("Obstacle", JSON.stringify(obstacle));
+          return;
         }
       });
     }
   });
-  $.session.set("Obstacle", JSON.stringify(obstacle));
 });
 
 mainContent.on('click',"#addConcerntoObstacle", function () {
@@ -174,12 +175,13 @@ mainContent.on('click',".obstacle_deleteGoalGoal", function () {
         if(typeof theobstacle != "undefined"){
           if(theobstacle[0] == subGoalName){
             env.theGoalRefinements.splice(ix,1)
+            $.session.set("Obstacle", JSON.stringify(obstacle));
+            return;
           }
         }
       });
     }
   });
-  $.session.set("Obstacle", JSON.stringify(obstacle));
 });
 
 
@@ -195,12 +197,13 @@ mainContent.on('click',".deleteObstacleEnvConcern", function () {
         if(typeof thecon != "undefined"){
           if(thecon == name){
             env.theConcerns.splice(ix,1)
+            $.session.set("Obstacle", JSON.stringify(obstacle));
+            return;
           }
         }
       });
     }
   });
-  $.session.set("Obstacle", JSON.stringify(obstacle));
 });
 
 mainContent.on('click', '#obstacle_addSubGoaltoGoal', function () {
