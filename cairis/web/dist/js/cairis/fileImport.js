@@ -68,8 +68,8 @@ function importModel(json) {
     data: objectoutput,
     url: serverIP + "/api/import/text",
     success: function (data) {
-      summaryTables();
       showPopup(true);
+      refreshHomeBreadCrumb();
     },
     complete: function() {
       hideLoading();

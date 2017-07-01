@@ -548,7 +548,7 @@ $("#chooseLocationsEnvironmentDialog").on('click', '#chooseLocationEnvironmentBu
 $("#newClick").click(function () {
   showLoading();
   postNewProject(function () {
-    summaryTables();
+    refreshHomeBreadCrumb();
   });
 });
 

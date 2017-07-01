@@ -42,7 +42,6 @@ $(document).ready(function() {
         debugLogger(data);
         $.session.set("sessionID", data.session_id);
         refreshHomeBreadCrumb();
-//        summaryTables();
         hideLoading();
       },
       error: function(data, status, xhr) {

@@ -184,7 +184,7 @@ class KaosModel:
             elif (associationType == 'conflict'):
               objtUrl = 'linkconflict#' + goalEnv + '/' + goalName + '/' + subGoalName + '/' + goalDimName + '/' + subGoalDimName
               b = Borg()
-              self.theGraph.add_node(pydot.Node(refNodeName,shapefile=b.staticDir + '/assets/modelConflict.png',label='',height='.2',width='.2',URL=objtUrl,peripheries='0'))
+              self.theGraph.add_node(pydot.Node(refNodeName,shapefile=b.staticDir + '/assets/modelConflict.png',margin=0,label='',height='.1',width='.1',URL=objtUrl,peripheries='0'))
               assocDirection = 'none'
               arrowHead = 'none'
             goalEdge = pydot.Edge(refNodeName,goalName,dir=assocDirection,arrowhead=arrowHead,weight='1')

@@ -548,7 +548,7 @@ $("#createDatabase").on('click', '#createDatabaseButton',function(e) {
     url: serverIP + "/api/settings/database/" + encodeURIComponent(dbName)  + "/create",
     success: function (data) {
       $('#createDatabase').modal('hide');
-      summaryTables();
+      refreshHomeBreadCrumb();
       hideLoading();
       showPopup(true);
     },
@@ -582,7 +582,7 @@ $("#chooseDatabase").on('click', '#chooseDatabaseButton',function(e) {
     url: urlTxt,
     success: function (data) {
       $('#chooseDatabase').modal('hide');
-      summaryTables();
+      refreshHomeBreadCrumb();
       hideLoading();
       showPopup(true);
     },
