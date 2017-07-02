@@ -9688,7 +9688,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
    
     try:
       session = self.conn()
-      session.execute('call addImpliedCharacteristic(:pName,:fCode,tCode,rt,char,qual,cType)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName,'char':charName,'qual':qualName,'cType':charType})
+      session.execute('call addImpliedCharacteristic(:pName,:fCode,:tCode,:rt,:pChar,:qual,:cType)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName,'pChar':charName,'qual':qualName,'cType':charType})
       session.commit()
       session.close()
       for lblName,rtName in lhsCodes:

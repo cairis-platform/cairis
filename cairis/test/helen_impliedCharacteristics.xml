@@ -1,0 +1,785 @@
+<?xml version="1.0"?>
+<!DOCTYPE processes PUBLIC "-//CAIRIS//DTD PROCESSES 1.0//EN" "http://cairis.org/dtd/processes.dtd">
+
+<processes>
+<internal_document name="HelenFokus">
+  <description>Helen focus group at Fokus</description>
+  <content>h5. Helen Focus Group 3
+
+
+h6.  Session background
+
+The focus group interview was held at Fraunhofer-Institute for Open Communication Systems (FOKUS) on Thursday 4th August between 1100 and 1300, and was based around Helen persona. The interview was run with 3 participants:
+
+* a student of Technsiche Universität Berlin, master degree in computer science, father of one child 1 month old
+* a software developer, father of two children, the first one 5 years old and the second one 4 months old
+* a research associate, father of two children, the first one 2 years old and the second one 1 month old
+
+Each participant was recruited directly by the session organiser.
+
+h6. Results
+
+h7. Object clustering
+
+
+This phase started with an introduction  by the facilitator. He presented some helpful hints regarding ICT aspects of such a home entertainment system. The participants started to cluster concepts for devices, data that is processed by the system, applications and features as well as commercial applications like an entertainment or media store. Without this introduction about ICT aspects participants had some difficulties to start brainstorming and thinking about potential concepts. One discussion point was how such a system should support telephone features because it is already supported by the embedded operating system of the car. However the system is fully integrated and connected via 4G therefore the participants decided that the system supports a feature set for calls and messaging. Summing up the participants identified various applications around audio, video, games, web and shopping based on device features like smartphone, display, camera, 4G, navigation, storage and input facilities. 
+
+h7. Subject clustering
+
+
+The subject clustering was started with a brainstorming session about subject clusters. Participants had written down various subjects which can interact with the system. Afterwards subjects were sorted by relevance. Facilitator and participants decided to use children, home sharing server (HSS) and content provider as relevant subjects for the next step. Participants thought that this is a good mixture between persons who can interact with the system and software systems. It is noted that the home sharing server is to be understood as media library in the household of the end user.
+
+Subject cluster children
+
+
+The first cluster were children and their user behavior regarding limited access to applications, content and devices. Participants argued that the access to shopping features like booking, app store, marketplaces and download sites should be restricted. With the background that they offer paid and for children restricted content.  Furthermore features like navigation, telephone and emergency call should be reserved for parents. On the other hand children should have the possibility to play games and interact with friends via chat or instant messaging.
+
+Subject cluster HSS
+
+
+The home sharing server (HSS) is located in household of the end user and is connected via 4G with the home entertainment system in the car. To stream content between this two systems it is necessary that both have full access to each other including devices like display, camera, smartphone and human interfaces. Based on the idea of a media library as the HSS participants discussed that the access to navigation app, traffic data, emergency call, telephone features and location data should be restricted.
+
+Subject cluster content provider
+
+
+Content providers were reflected as last cluster in the subject clustering phase. Participants came to the conclusion that content providers doesn't have access to private data on devices like chat, video conferences and calls. Furthermore control data for navigation and emergency systems should be not accessible by 3rd party services. From the perspective of providers participants argued that content providers are the owner of content therefore they have full control concerning merchadising, presentation, cost models, access on devices, human interface device support and advertisement.
+
+h7. Context clustering
+
+
+The participants introduced car sharing as concept in the context cluserting phase. In this concept the car will be lent to other persons which implies not that they are friends or family members. With the advantage that the concept has more restrictions for the potential diver of such a shared car. Furthermore the concept takles current debates regarding urban mobility.
+
+Context cluster content provider
+
+
+Regarding re-clustering for content provider participants came to similar results. Private content is restricted for content providers also in the case if a car will be lent. This include a cloud-based user management system which supports several user profiles on the home entertainment system. The user will be detected via an authorization facility.
+
+Context cluster HSS
+
+
+For HSS the decision was very simple. The HSS is connected with a user profile therefore an external 3rd party user has no access to the entire media library including HSS features.
+
+Context cluster children
+
+
+In the case of children participants find the same situation as during subject clustering. The access to devices and content is restricted for children. Participants couldn't find any differences if the car will be lent to another family. Based on the background that the family has an user account for the cloud-based home entertainment system.
+
+h6. Discussion
+
+In comparison to the Clara focus group participants were obviously more motivated during three phases of clustering. In restrospect participants had problems to find the right starting point at the beginning of object clustering. Missing ideas and imagination were the main problems. The facilitator introduced object clustering via helpful hints. With the disadvantage that he introduced alrady known concepts like information flow, devices, applications, features, etc. 
+
+For object clustering participants identified various applications around audio, video, games, web and shopping based on device features like smartphone, display, camera, 4G, navigation, storage and input facilities. Concepts like children, home sharing system (HSS) as external service and content provider were introduced. In the case of context clustering participants couldn't identify significant differences in comparison to the subject clustering.</content>
+</internal_document>
+<internal_document name="HelenOxford">
+  <description>Helen focus group at Oxford</description>
+  <content>h5. Helen Focus Group 1
+
+h6.  Session background
+
+The session was held at Oxford on Thursday, 21st July between 1030 and 1240, and was based around the *Helen* persona.  
+
+The session was run with 3 participants.  Each participant was a researcher at the University of Oxford and also the father of one or more young (pre-teen) children.  Each participant was recruited directly by the session organiser.
+
+
+h6. Results
+
+h7. Object clustering
+
+
+
+From the outset, it was clear that the different participants brought different expectations as parents; the ages of each participants child/children varied slightly, and one of the participants had multiple children.  Nonetheless, it was interesting to see how, during the brain-storming for concepts, concepts were elicited based on personal anecdotes.  For example, one participant highlighted said he wanted the system to foster the sense that his daughters were in control of the entertainment system, even though they weren't.
+
+As this stage progressed, the potential capabilities of both the system and webinos led to "scope creep" in two senses.  In the first sense, the participants began to imagine how other children or other people might envisage the system.  Even though the scenario was explicitly about a family trip, occasionally participants generalised discussions around a concept by stating "if you are going on holiday..."  In the second sense, the scope of the system considered was expanded to consider interfaces to other systems.  The example one participant suggested was an interface to a webinos-powered home surveillance system, which would allow the passengers to check-up on their pets while on the move.
+
+h7. Subject clustering
+
+The following subjects were elicited during the initial brainstorming at the beginning of this stage: children, grandparents, cousins, uncles and aunts, school teachers, GPs, friends, and classmates.   Of these initial subjects, children, grandparents, and classmates were analysed.  Cousins and uncles/aunts were not considered because the participants could not come up with a consensus of how the model for these stakeholders might be different from grand-parents.  Following this discussion, school teachers and GPs were dropped as concepts, and it was decided to consider classmates as the participants felt these issues were also the same for non-school friends.
+
+
+Although there were slight variations in permissiveness with respect to participants and their children, there was a general consensus about what their children should be allowed access to.  However, while clusters began to form around the allowed section of the board, concepts which were disallowed tended to be bunched to one side.  It was only after explicit intervention that the participants came up with rather generic categories for disallowed concepts.  
+
+At this stage it was also noted that grouping concepts into categories led to the elicitation of new concepts.   Some of these were concepts which intersected with other categories; in these cases, the same concept was added to each different category.  Other concepts, when added, led to a discussion about the concepts location, and whether the category itself should be allowed or disallowed.  For example, when the social networking category was identified within the allowed section, one participant said that a "Facebook" concept was missing.  However, another participant said that the children were too young to use Facebook; this led to a discussion about whether it should be assumed that children are going to be 3 or 4 forever.
+
+A general "interface" category formed at this stage; concepts under this category would remain unchanged for both the other subject affinity diagrams and during context affinity diagramming.   
+
+
+Shortly after moving onto considering the grandparents subject, one of the participants swapped the green and red post-it notes signifying the allowed and disallowed parts of the white-board respectively.  This swap was proposed because, it was argued, with the exception of one or two concepts, all other concepts should be disallowed for grand-parents.  As the participants spent more time looking at this subject, more concepts and categories moved from dis-allowed to allowed (and vice-versa) although, in one or two cases after subsequent discussion, some concepts were moved back to their originating part of the board.  For example, one participant argued that buying applications should be dis-allowed for grandparents as this was something that parents should do.  However, another participant argued that grandparents can buy applications, but parents can chose whether the application should be allowed to be installed or not.  Consequently, this concept was moved back to the allowed category.
+  
+
+As indicated at the start of this section, much of the initial discussion revolved around the similarities between class-mates, friends, and cousins.  However, even when settling on class mates as a subject, there was still debate about how this should be interpreted.  For example, choosing where to situate the "Work on homework" concept led to a discussion about how classmates are interpreted.   From the resulting discussion, it was apparent that the participants may been viewing this subject from their own perspective as ex-school children, rather than that of classmates of their own children.
+
+During this stage, two other observations were made which were common across the subject affinity diagramming exercise.  First, when moving concepts between allowed and dis-allowed areas, it was common for the entire category to move rather than a single concept.  Second, a lot of discussion around concepts occurred because it wasn't clear to participants whether concepts related to data or processes.  For example, when choosing how shared content should be situated, there was some debate about whether this concept referred to data or shared running applications.  Consequently, an additional concept was added to acknowledge this distinction.
+
+
+h7. Context clustering
+
+
+As for subject clustering, this stage began with a discussion about some of the subtle variations between contexts.  The contexts that were initially elicited were a typical family trip, a hired car, loan of one's car, giving a lift to friends, car sharing, a multiple-car journey.
+
+As the typical family trip context had been implicitly explored in previous stage, participants originally agreed to explore the car sharing context.  However, after exploring the context in more detail, nuances in the context, subjects, and objects meant that the group found agreeing any consensus difficult.  As a result, it was agreed to instead explore a context where friends took their respective families on a multi-car journey, even though this context was not without its nuances.  For example, there was uncertainty about whether the friends of children in each car should be allowed to engage in multi-player games with children in another car.
+
+It was noted that much of the discussion in this stage appeared to be centred around the context of the car, rather than the in-car entertainment system.  This was apparent from the initial discussions which established a shared understanding of the context itself.  During this discussion, the whiteboard was useful for sketching ideas related to this context.
+
+h6. Discussion
+
+During the de-brief session, participants agreed that context was an ever-present part of the exercise, even though it was only explicitly applied in the final stage of the session.  In particular, exploring the finer detail of a particular context led to equally fine grained exploration of the subjects and objects within in.  This often led to misinterpretations about objects, subjects, or contexts being surfaced when objects were moved from either the allowed or dis-allowed sections of the board, or vice-versa.
+
+h7.  Orthogonal subject groups
+
+The initial discussion during the elicitation of subjects in the subject clustering stage indicated that the value placed by participants in different family groups does not map simply to authority levels from a security policy perspective.  As such, the subjects could, theoretically, be grouped orthogonally to those used to control data access.
+
+h7.  Ad-hoc concept elicitation
+
+Subject clustering demonstrated that lots of concepts arise on-the-fly.  Policy management tools that categorise objects should support a facility for allowing the ad-hoc entry of previously undefined objects.
+
+h7. Exclusive allow/dis-allow focus
+
+The subject clustering exercise also showed that, any one time, participants tend to focus on either allowed or dis-allowed subjects.  Context switching from one to other tends to occur only when categories are moved and, when this occurs, this precipitates thinking about categories across both allowed and dis-allowed areas.
+
+h7. Support material for policies
+
+The use of the white-board to elucidate the elements of the context suggests that supplemental material might be useful for explaining a policy context's rationale to others.  An example of this sort of material might be an explanatory diagram.
+
+h7. Scope creep 
+
+An unfortunate corollary of brain-storming is that ideas can be identified which can lead to thinking beyond the scope of a designed system.  As the exercise progressed through the stages, this problem became increasingly obviously, culminating in problems exploring the initially selected context in the context clustering stage.  As striking a balance is difficult to do without stifling the ideation process, it would be useful to explore whether better matching participants with the problem scenario might mitigate this problem.</content>
+</internal_document>
+<internal_document name="HelenPolito">
+  <description>Helen focus group at Polito</description>
+  <content>h5. Helen Focus Group 2
+
+h6.  Session background
+
+The session was held at Polito on Tuesday 26th July between 1900 and 2100, and was based around Helen persona.
+The session was run with 3 participants:
+* a physicist, father two children, the first one 4 years old and the second one 1 year old
+* a software designer, father of two children, the first one 3 years old and the second one 2 months old
+* a LAN designer, father of two children, the first one 2 years old and the second one 2 months old
+
+Each participant was recruited directly by the session organiser.
+
+
+h6. Results
+
+h7. Object clustering
+
+Despite opening recommendations, participants preferred to start thinking to clusters, and then tried to fill them. Their first idea was to use an "inside car" and an "outside car" cluster. However this surfaced the problem of online contents or services which can be used inside the car but are hosted outside. Consequently they put aside these clusters and distinguished between data storage and use.
+Thinking to the problem of user observability and data aggregation when using a content or a service, they discerned between user request and user behaviour. They introduced the wanted and unwanted observer and this led them to the "agents" cluster, bringing forward some work of the subject clustering step.
+Participants introduced the concept of user profile: a subset of user data, selected by the user himself, used to decide which data to show to agents. The user may have a different profile for each agent.
+Participants thought to "reliability problems" as a broad concept, encompassing device reliability and agent reliability.
+At this step participants generalized contents and services considering them the same.
+
+h7. Subject clustering
+
+Participants took the "family and friends" and the "service provider" elements form the agent cluster of the previous step. Then they split "family and friends" among "parent", "child" whereas relatives and friends are generalized as "trustworthy person"
+They introduced many missing concepts as communications, multimedia, and on-line shopping. Participants thought to the possibility to locate children via device (e.g. mobile) georeference if they lose them at a stopover, and for the children the possibility to locate parents.
+The LAN designer would preferred a matrix or grid scheme, while the software designer would like best the possibility to define access rules for each object (something like an access control list). This prove that there is no a mechanism better then another, but the choice is influenced by user habit and experience.
+
+Thinking to the "trustworthy person" subject, participants extended their profile idea, including access control rules. The car owner/in-car system admin, can set up a profile customising user permissions.
+
+h7. Context clustering
+
+
+Participants focused on looking for new subjects who can access the car, more than contexts.
+They decided that the "family" context is the one covering the previous work, so everything in this context is unmodified.
+!{width:500px}context3_helen_polito.png!
+Then participants thought to subjects whom the car owner can give a ride, from a friend (trustworthy person) to a hitchhiker. They decided to collapse this in the "family and guest" context, because they think to have (or build themselves) a different profile for each category. In this step the profile idea is extended further up to encompass the idea of user account. I.e. the in-car system admin can create a profile for a guest, and then the guest can authenticate himself and access to a subset of the in-car system.
+Finally they introduced the "stranger" context, thinking to people without a user profile, e.g. a mechanic. Participants first idea was to deny any access, then thinking to the possibility to call emergency numbers using other people mobile, they decided to allow access to public services and public data.
+Participants thought to contexts as sets of subjects, and in their idea contexts can be hierarchically sorted based on privacy level. For example they may have a high level context with relatives as subjects and where there is the minimum level of privacy, an intermediate level context, with family and friends and higher level of privacy, and a low level context with strangers and the maximum level of privacy.
+The profile should help them to decide how much information disclose at which context level.
+
+h6. Discussion
+
+They seemed non exactly focused with their current step. They introduced subjects in object clustering step, and then spent most time thinking to objects in subject clustering step and to other subjects in context clustering step.
+
+In the object clustering step they introduced a generalization considering contents and services as a single object. In the subject clustering step they became aware of the trust transfer problem and split contents and services in new objects.
+
+In the subject clustering step they introduced the "trustworthy person". This is not a real role but an entity defined by a property (the property to be trusted, and then to have more access rights then an untrusted person) and this can lead to ambiguity.
+
+In the context clustering step they were a bit tired and spent time to look for an easier way to do the exercise, probably because them did not comply with time limits at any step.
+
+The LAN designer and the software designer face security-related problems in their daily work.</content>
+</internal_document>
+
+<code name="access switching" type="context">
+  <description>Switching access for categories or groups of categories</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="consensual thinking" type="context">
+  <description>Forming a consensus when thinkin about topics.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="context confusion" type="context">
+  <description>Confused by the setting of some activity.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="disallowed disinterest" type="context">
+  <description>Lack of interest associated with categories that are easy to perceive as being denied for different subjects.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="family interaction" type="context">
+  <description>Interactions between family members and other family members, and/or technology.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="family rules" type="context">
+  <description>Rules and norms within a family unit.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="introduced technique" type="context">
+  <description>Technique devised to make sense of access control decisions.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="leading concepts" type="context">
+  <description>Concepts which naturally stimulate thinking about subjects, contexts, and other concepts.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="people-driven" type="context">
+  <description>Motivated by thinking about people.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="personal security" type="context">
+  <description>Thinking and perceptions around individual or family security.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="preferential context" type="context">
+  <description>The context that comes most naturally when working with concepts.</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="problem surfacing" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="subject interpretation" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="system model" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+<code name="untrusted subject" type="context">
+  <description>None</description>
+  <inclusion_criteria>None</inclusion_criteria>
+  <example>None</example>
+</code>
+
+<quotation code="problem surfacing" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="801" to_index="914">
+  <label>Context-specific data</label>
+  <synopsis>Thinking about physical contexts provides insights about data which might be relevant in one context but not another.</synopsis>
+</quotation>
+<quotation code="problem surfacing" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="1165" to_index="1314">
+  <label>Attack-driven thinking</label>
+  <synopsis>Thinking of attackers brings forward thinking about who should access what data.</synopsis>
+</quotation>
+<quotation code="personal security" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="8045" to_index="8179">
+  <label>value-authority mismatch</label>
+  <synopsis>There is a mismatch between authority levels and human values.</synopsis>
+</quotation>
+<quotation code="personal security" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="1007" to_index="1163">
+  <label>Clarifying security</label>
+  <synopsis>Thinking about security clarifies non security concepts.</synopsis>
+</quotation>
+<quotation code="personal security" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="4829" to_index="4923">
+  <label>Trust motivation</label>
+  <synopsis>Trust problems motivate a rethink of access control issues.</synopsis>
+</quotation>
+<quotation code="leading concepts" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="3236" to_index="3387">
+  <label>Leading broad concept</label>
+  <synopsis>Thinking of broadly controlled data access stimulates thinking about fine-grained items.</synopsis>
+</quotation>
+<quotation code="leading concepts" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="604" to_index="718">
+  <label>Groups before items</label>
+  <synopsis>Think of groups of items before items.</synopsis>
+</quotation>
+<quotation code="system model" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="1411" to_index="1679">
+  <label>Expanded scope interfaces</label>
+  <synopsis>Expanding system scope leads to thinking about system interfaces.</synopsis>
+</quotation>
+<quotation code="system model" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="916" to_index="1006">
+  <label>Discarding previous categories</label>
+  <synopsis>Prepared to discard previous categories to better tackle problems.</synopsis>
+</quotation>
+<quotation code="system model" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="3925" to_index="4337">
+  <label>Structured context</label>
+  <synopsis>Context willl be structured in ways to better think about security and privacy.</synopsis>
+</quotation>
+<quotation code="system model" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="4682" to_index="4796">
+  <label>Elicitation generalisation</label>
+  <synopsis>Objects are generalised while being elicited.</synopsis>
+</quotation>
+<quotation code="family interaction" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="748" to_index="977">
+  <label>Anecdotal based decisions</label>
+  <synopsis>Anecdotes drive innovation and thinking about access control.</synopsis>
+</quotation>
+<quotation code="family interaction" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="1119" to_index="1388">
+  <label>Hypothesising access</label>
+  <synopsis>Hypothesising to imagine how others will access a system.</synopsis>
+</quotation>
+<quotation code="family interaction" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="6675" to_index="6840">
+  <label>Good enough scenario</label>
+  <synopsis>A good enough scenario will be used to imagine access control</synopsis>
+</quotation>
+<quotation code="family interaction" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="2101" to_index="2285">
+  <label>Personal loss stimulation</label>
+  <synopsis>Personal loss stimulates thinking about interaction.</synopsis>
+</quotation>
+<quotation code="family interaction" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="3724" to_index="3924">
+  <label>Deny strange</label>
+  <synopsis>Strange concepts will be initially denied data access.</synopsis>
+</quotation>
+<quotation code="introduced technique" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="8933" to_index="9106">
+  <label>Rationale explanation tools</label>
+  <synopsis>Tools for explaining rationale are useful.</synopsis>
+</quotation>
+<quotation code="introduced technique" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="1316" to_index="1465">
+  <label>Abstraction tool</label>
+  <synopsis>Abstractions are created to think about access control</synopsis>
+</quotation>
+<quotation code="introduced technique" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="2287" to_index="2604">
+  <label>Habit-based tools</label>
+  <synopsis>Habits and experience influence preferred tools for thinking about access control.</synopsis>
+</quotation>
+<quotation code="introduced technique" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="2606" to_index="2723">
+  <label>Extensible abstractions</label>
+  <synopsis>Abstractions are extensible re: access control rules.</synopsis>
+</quotation>
+<quotation code="introduced technique" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="4926" to_index="5181">
+  <label>trustworthy role</label>
+  <synopsis>A trustworthy role abstraction is used to compare/contract access control with an untrustworthy role.</synopsis>
+</quotation>
+<quotation code="people-driven" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="5218" to_index="5334">
+  <label>Experience-driven perspective</label>
+  <synopsis>Experiences as past subjects drive thinking about data access.</synopsis>
+</quotation>
+<quotation code="people-driven" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="2838" to_index="2929">
+  <label>Interaction over context</label>
+  <synopsis>Subjects that interact spring to mind more than subjects in contexts</synopsis>
+</quotation>
+<quotation code="people-driven" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="2931" to_index="3052">
+  <label>Reuse by label</label>
+  <synopsis>Current contexts are generalised by previous contexts if the label is appropriate.</synopsis>
+</quotation>
+<quotation code="untrusted subject" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="3221" to_index="3372">
+  <label>New untrustworthy abstractions</label>
+  <synopsis>New abstractions are created for thinking about untrustworthy subjects.</synopsis>
+</quotation>
+<quotation code="untrusted subject" type="code" artifact_type="internal_document" artifact_name="HelenPolito" section="none" start_index="3618" to_index="3723">
+  <label>Stranger context</label>
+  <synopsis>Stranger contexts used for thinking about strangers.</synopsis>
+</quotation>
+<quotation code="consensual thinking" type="code" artifact_type="internal_document" artifact_name="HelenFokus" section="none" start_index="3568" to_index="3713">
+  <label>Private data uncertainty</label>
+  <synopsis>Unsure where content private data held by content providers.</synopsis>
+  <intention name="Identify private data source" type="goal"/>
+</quotation>
+<quotation code="consensual thinking" type="code" artifact_type="internal_document" artifact_name="HelenFokus" section="none" start_index="3825" to_index="4079">
+  <label>Content access control</label>
+  <synopsis>Content providers have full control over all aspects of content control.</synopsis>
+  <intention name="Determine content provider trust" type="goal"/>
+</quotation>
+<quotation code="consensual thinking" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="1988" to_index="2170">
+  <label>Distant family access</label>
+  <synopsis>Difficult to differentiate access control for distant family members</synopsis>
+  <intention name="Differentiate family member access" type="goal"/>
+</quotation>
+<quotation code="consensual thinking" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="2480" to_index="2563">
+  <label>Children opinions</label>
+  <synopsis>Strong opinions about what children should be allowed access to.</synopsis>
+  <intention name="Determine child access" type="goal"/>
+</quotation>
+<quotation code="requested" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="3400" to_index="3473">
+  <label>Modest variations</label>
+  <synopsis>Permission variations for children are modest.</synopsis>
+  <intention name="Modify child access" type="goal" />
+</quotation>
+<quotation code="consensual thinking" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="3474" to_index="3578">
+  <label>Growing child access</label>
+  <synopsis>Challenging thinking about how child access should evolve</synopsis>
+  <intention name="Project future access" type="goal"/>
+</quotation>
+<quotation code="consensual thinking" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="4560" to_index="4713">
+  <label>Discussion refinement</label>
+  <synopsis>Discussion leads to more refined access control models.</synopsis>
+  <intention name="Refine access decision" type="goal"/>
+</quotation>
+<quotation code="consensual thinking" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="5976" to_index="6039">
+  <label>Uncertainty-driven elicitation</label>
+  <synopsis>Conceptual uncertainty leads to thinking about new things to access control</synopsis>
+  <intention name="Broaden access decision" type="softgoal"/>
+</quotation>
+<quotation code="family rules" type="code" artifact_type="internal_document" artifact_name="HelenFokus" section="none" start_index="2478" to_index="2613">
+  <label>Child shopping restrictions</label>
+  <synopsis>Shopping features restricted for children.</synopsis>
+  <intention name="Restrict child functionality" type="goal"/>
+</quotation>
+<quotation code="family rules" type="code" artifact_type="internal_document" artifact_name="HelenFokus" section="none" start_index="2693" to_index="2791">
+  <label>Parental comms restriction</label>
+  <synopsis>Communication features restricted to parents.</synopsis>
+</quotation>
+<quotation code="family rules" type="code" artifact_type="internal_document" artifact_name="HelenFokus" section="none" start_index="2793" to_index="2917">
+  <label>Friend interaction allowed</label>
+  <synopsis>Children are allowed to access features that allow interaction with their friends.</synopsis>
+  <intention name="Facilitate friend access" type="task"/>
+</quotation>
+<quotation code="family rules" type="code" artifact_type="internal_document" artifact_name="HelenFokus" section="none" start_index="5193" to_index="5254">
+  <label>Child content restrictions</label>
+  <synopsis>Devices and content is restricted for children.</synopsis>
+  <intention name="Restrict child content" type="goal"/>
+</quotation>
+<quotation code="family rules" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="3399" to_index="3472">
+  <label>Age factor</label>
+  <synopsis>Age of children a factor in deciding whether access should be granted.</synopsis>
+  <intention name="Map age to allowable access" type="goal"/>
+</quotation>
+<quotation code="family rules" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="4417" to_index="4548">
+  <label>Family-based refinement</label>
+  <synopsis>Access control is refined based on family relationship.</synopsis>
+  <intention name="Map relationship to allowable access" type="goal"/>
+</quotation>
+<quotation code="disallowed disinterest" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="2645" to_index="2835">
+  <label>Deny disinterest</label>
+  <synopsis>Need to forced to think about obviously disallowed concepts.</synopsis>
+</quotation>
+<quotation code="disallowed disinterest" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="3581" to_index="3774">
+  <label>Invariant generalisations</label>
+  <synopsis>General data items are unchanged across different contexts.</synopsis>
+</quotation>
+<quotation code="access switching" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="3777" to_index="4131">
+  <label>Data batching</label>
+  <synopsis>Multiple items of data are batched when thinking what people can and cannot access.</synopsis>
+</quotation>
+<quotation code="access switching" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="5517" to_index="5653">
+  <label>Access transfer</label>
+  <synopsis>All concepts in a transferred category are allowed or disallowed.</synopsis>
+</quotation>
+<quotation code="access switching" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="8570" to_index="8702">
+  <label>People-driven access</label>
+  <synopsis>Focus on what data items people can and cannot access, rather than vice versa.</synopsis>
+</quotation>
+<quotation code="access switching" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="8705" to_index="8895">
+  <label>Context-driven</label>
+  <synopsis>Thinking about access control is stimulated by thinking of different contexts.</synopsis>
+</quotation>
+<quotation code="subject interpretation" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="4133" to_index="4273">
+  <label>Excessive subject thought</label>
+  <synopsis>The more people are considered, the more likely it is that data that was allowed becomes dis-allowed, and vice-versa.</synopsis>
+</quotation>
+<quotation code="subject interpretation" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="4947" to_index="5054">
+  <label>Non-definitive subjects</label>
+  <synopsis>Categories for people are not definitive, and still open to debate.</synopsis>
+</quotation>
+<quotation code="subject interpretation" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="7585" to_index="7714">
+  <label>Fine grained context/data</label>
+  <synopsis>Fine-grained contexts lead to fine grained data items.</synopsis>
+</quotation>
+<quotation code="subject interpretation" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="7716" to_index="7906">
+  <label>Previously set interpretations</label>
+  <synopsis>Allowing previously disallowed data leads to interpretation problems, and vice-versa.</synopsis>
+</quotation>
+<quotation code="context confusion" type="code" artifact_type="internal_document" artifact_name="HelenFokus" section="none" start_index="5256" to_index="5340">
+  <label>Distinguishing context differences</label>
+  <synopsis>Cannot distinguish between the contexts of others.</synopsis>
+</quotation>
+<quotation code="context confusion" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="5664" to_index="5959">
+  <label>Uncertain context elements</label>
+  <synopsis>Confusion about the elements of uncertain contexts.</synopsis>
+</quotation>
+<quotation code="context confusion" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="6555" to_index="6660">
+  <label>Nuanced context problems</label>
+  <synopsis>Difficult making decisions about nuanced contexts.</synopsis>
+</quotation>
+<quotation code="preferential context" type="code" artifact_type="internal_document" artifact_name="HelenFokus" section="none" start_index="1830" to_index="1911">
+  <label>Interactive bias</label>
+  <synopsis>Interactive concepts are easier to perceive that those that are non-interactive.</synopsis>
+</quotation>
+<quotation code="preferential context" type="code" artifact_type="internal_document" artifact_name="HelenFokus" section="none" start_index="2099" to_index="2218">
+  <label>Human-technology interaction</label>
+  <synopsis>Interactivity considered in terms of people as well as technology.</synopsis>
+</quotation>
+<quotation code="preferential context" type="code" artifact_type="internal_document" artifact_name="HelenFokus" section="none" start_index="3256" to_index="3450">
+  <label>System de-scoping</label>
+  <synopsis>De-scoping the system helps think about its interactive elements.</synopsis>
+</quotation>
+<quotation code="preferential context" type="code" artifact_type="internal_document" artifact_name="HelenOxford" section="none" start_index="7009" to_index="7161">
+  <label>De-scoping discussion</label>
+  <synopsis>De-scoping facilitates broader system discussion.</synopsis>
+</quotation>
+
+<code_network persona="Helen" relationship_type="implies" from_code="consensual thinking" to_code="requested">
+  <implied_characteristic name="Family permissions are more variable for distant relatives" qualifier="Maybe" type="Contextual">
+    <intention name="Modify family member access" type="goal" />
+    <from_label name="Children opinions" reference_type="grounds">
+      <contribution means_end="means" value="SomePositive" />
+    </from_label>
+    <from_label name="Content access control" reference_type="grounds">
+      <contribution means_end="means" value="SomePositive" />
+    </from_label>
+    <from_label name="Discussion refinement" reference_type="grounds">
+      <contribution means_end="end" value="Help" />
+    </from_label>
+    <from_label name="Distant family access" reference_type="grounds">
+      <contribution means_end="means" value="Make" />
+    </from_label>
+    <from_label name="Growing child access" reference_type="grounds">
+      <contribution means_end="means" value="SomePositive" />
+    </from_label>
+    <from_label name="Private data uncertainty" reference_type="warrant">
+      <contribution means_end="means" value="SomePositive" />
+    </from_label>
+    <from_label name="Uncertainty-driven elicitation" reference_type="warrant">
+      <contribution means_end="end" value="Make" />
+    </from_label>
+    <to_label name="Modest variations" reference_type="grounds">
+      <contribution means_end="means" value="SomePositive" />
+    </to_label>
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="associated" from_code="consensual thinking" to_code="family rules">
+  <implied_characteristic name="Personal opinion strongly influences what family members can access" qualifier="Probably" type="Intrinsic">
+    <intention name="Determine family member access" type="goal" />
+    <from_label name="Children opinions" reference_type="grounds" >
+      <contribution means_end="end" value="Make" />
+    </from_label>
+    <from_label name="Content access control" reference_type="warrant">
+      <contribution means_end="means" value="Help" />
+    </from_label>
+    <from_label name="Discussion refinement" reference_type="grounds">
+      <contribution means_end="end" value="SomePositive" />
+    </from_label>
+    <from_label name="Distant family access" reference_type="grounds">
+      <contribution means_end="means" value="Make" />
+    </from_label>
+    <from_label name="Growing child access" reference_type="grounds">
+      <contribution means_end="means" value="Make" />
+    </from_label>
+    <from_label name="Private data uncertainty" reference_type="warrant">
+      <contribution means_end="means" value="Help" />
+    </from_label>
+    <from_label name="Uncertainty-driven elicitation" reference_type="warrant">
+      <contribution means_end="end" value="SomePositive" />
+    </from_label>
+    <to_label name="Age factor" reference_type="grounds">
+      <contribution means_end="means" value="Help" />
+    </to_label>
+    <to_label name="Child content restrictions" reference_type="grounds">
+      <contribution means_end="end" value="SomePositive" />
+    </to_label>
+    <to_label name="Child shopping restrictions" reference_type="grounds">
+      <contribution means_end="end" value="SomePositive" />
+    </to_label>
+    <to_label name="Family-based refinement" reference_type="warrant">
+      <contribution means_end="means" value="Help" />
+    </to_label>
+    <to_label name="Friend interaction allowed" reference_type="grounds">
+      <contribution means_end="end" value="Help" />
+    </to_label>
+    <to_label name="Parental comms restriction" reference_type="grounds"/>
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="associated" from_code="system model" to_code="disallowed disinterest">
+  <implied_characteristic name="Focusing on systems in context marginalises thinking about technical topics" qualifier="Probably" type="Intrinsic">
+    <from_label name="Discarding previous categories" reference_type="grounds" />
+    <from_label name="Elicitation generalisation" reference_type="grounds" />
+    <from_label name="Expanded scope interfaces" reference_type="grounds" />
+    <from_label name="Structured context" reference_type="grounds" />
+    <to_label name="Deny disinterest" reference_type="grounds" />
+    <to_label name="Invariant generalisations" reference_type="grounds" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="associated" from_code="system model" to_code="preferential context">
+  <implied_characteristic name="Easier to think about interactive access when focusing on specifics" qualifier="Perhaps" type="Contextual">
+    <from_label name="Discarding previous categories" reference_type="grounds" />
+    <from_label name="Elicitation generalisation" reference_type="grounds" />
+    <from_label name="Expanded scope interfaces" reference_type="grounds" />
+    <from_label name="Structured context" reference_type="warrant" />
+    <to_label name="De-scoping discussion" reference_type="grounds" />
+    <to_label name="Human-technology interaction" reference_type="warrant" />
+    <to_label name="Interactive bias" reference_type="warrant" />
+    <to_label name="System de-scoping" reference_type="grounds" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="implies" from_code="leading concepts" to_code="problem surfacing">
+  <implied_characteristic name="Thinks broadly about personal threats in context" qualifier="Possibly" type="Intrinsic">
+    <from_label name="Groups before items" reference_type="warrant" />
+    <from_label name="Leading broad concept" reference_type="warrant" />
+    <to_label name="Attack-driven thinking" reference_type="grounds" />
+    <to_label name="Context-specific data" reference_type="grounds" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="implies" from_code="introduced technique" to_code="problem surfacing">
+  <implied_characteristic name="Imagines techniques and abstractions for exploring problems" qualifier="Likely" type="Contextual">
+    <from_label name="Abstraction tool" reference_type="grounds" />
+    <from_label name="Extensible abstractions" reference_type="grounds" />
+    <from_label name="Habit-based tools" reference_type="grounds" />
+    <from_label name="Rationale explanation tools" reference_type="grounds" />
+    <from_label name="trustworthy role" reference_type="grounds" />
+    <to_label name="Attack-driven thinking" reference_type="warrant" />
+    <to_label name="Context-specific data" reference_type="warrant" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="implies" from_code="problem surfacing" to_code="personal security">
+  <implied_characteristic name="Thinking about what strangers should not access helps make sense of data access" qualifier="Probably" type="Contextual">
+    <from_label name="Attack-driven thinking" reference_type="grounds" />
+    <from_label name="Context-specific data" reference_type="grounds" />
+    <to_label name="Clarifying security" reference_type="grounds" />
+    <to_label name="Trust motivation" reference_type="warrant" />
+    <to_label name="value-authority mismatch" reference_type="warrant" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="implies" from_code="people-driven" to_code="subject interpretation">
+  <implied_characteristic name="Interactive elements are easier to access control" qualifier="Likely" type="Contextual">
+    <from_label name="Experience-driven perspective" reference_type="grounds" />
+    <from_label name="Interaction over context" reference_type="grounds" />
+    <from_label name="Reuse by label" reference_type="grounds" />
+    <to_label name="Excessive subject thought" reference_type="grounds" />
+    <to_label name="Fine grained context/data" reference_type="warrant" />
+    <to_label name="Non-definitive subjects" reference_type="warrant" />
+    <to_label name="Previously set interpretations" reference_type="grounds" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="implies" from_code="subject interpretation" to_code="personal security">
+  <implied_characteristic name="Spending more time on security helps conceptualise it" qualifier="Possibly" type="Intrinsic">
+    <from_label name="Excessive subject thought" reference_type="grounds" />
+    <from_label name="Fine grained context/data" reference_type="grounds" />
+    <from_label name="Non-definitive subjects" reference_type="grounds" />
+    <from_label name="Previously set interpretations" reference_type="grounds" />
+    <to_label name="Clarifying security" reference_type="warrant" />
+    <to_label name="Trust motivation" reference_type="warrant" />
+    <to_label name="value-authority mismatch" reference_type="grounds" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="implies" from_code="subject interpretation" to_code="access switching">
+  <implied_characteristic name="Thinking too deeply about access problems can lead to spurious thinking" qualifier="Maybe" type="Intrinsic">
+    <from_label name="Excessive subject thought" reference_type="warrant" />
+    <from_label name="Fine grained context/data" reference_type="warrant" />
+    <from_label name="Non-definitive subjects" reference_type="grounds" />
+    <from_label name="Previously set interpretations" reference_type="grounds" />
+    <to_label name="Access transfer" reference_type="grounds" />
+    <to_label name="Context-driven" reference_type="grounds" />
+    <to_label name="Data batching" reference_type="grounds" />
+    <to_label name="People-driven access" reference_type="warrant" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="implies" from_code="family interaction" to_code="untrusted subject">
+  <implied_characteristic name="Thinking of kids using the system leads to ways a stranger might get in the way" qualifier="Possibly" type="Intrinsic">
+    <from_label name="Anecdotal based decisions" reference_type="grounds" />
+    <from_label name="Deny strange" reference_type="warrant" />
+    <from_label name="Good enough scenario" reference_type="grounds" />
+    <from_label name="Hypothesising access" reference_type="grounds" />
+    <from_label name="Personal loss stimulation" reference_type="warrant" />
+    <to_label name="New untrustworthy abstractions" reference_type="grounds" />
+    <to_label name="Stranger context" reference_type="warrant" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="implies" from_code="family interaction" to_code="preferential context">
+  <implied_characteristic name="Thinking too much about the family can limit thinking about system security" qualifier="Maybe" type="Intrinsic">
+    <from_label name="Anecdotal based decisions" reference_type="grounds" />
+    <from_label name="Deny strange" reference_type="grounds" />
+    <from_label name="Good enough scenario" reference_type="grounds" />
+    <from_label name="Hypothesising access" reference_type="grounds" />
+    <from_label name="Personal loss stimulation" reference_type="grounds" />
+    <to_label name="De-scoping discussion" reference_type="warrant" />
+    <to_label name="Human-technology interaction" reference_type="rebuttal" />
+    <to_label name="Interactive bias" reference_type="warrant" />
+    <to_label name="System de-scoping" reference_type="warrant" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="implies" from_code="family rules" to_code="family interaction">
+  <implied_characteristic name="Families promote innovation for making personal security better" qualifier="Possibly" type="Contextual">
+    <from_label name="Age factor" reference_type="warrant" />
+    <from_label name="Child content restrictions" reference_type="warrant" />
+    <from_label name="Child shopping restrictions" reference_type="warrant" />
+    <from_label name="Family-based refinement" reference_type="warrant" />
+    <from_label name="Friend interaction allowed" reference_type="warrant" />
+    <from_label name="Parental comms restriction" reference_type="warrant" />
+    <to_label name="Anecdotal based decisions" reference_type="grounds" />
+    <to_label name="Deny strange" reference_type="grounds" />
+    <to_label name="Good enough scenario" reference_type="grounds" />
+    <to_label name="Hypothesising access" reference_type="grounds" />
+    <to_label name="Personal loss stimulation" reference_type="grounds" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="implies" from_code="system model" to_code="personal security">
+  <implied_characteristic name="Focusing on aspects of the system both clarifies and confuses when thinking about security" qualifier="Perhaps" type="Intrinsic">
+    <from_label name="Discarding previous categories" reference_type="grounds" />
+    <from_label name="Elicitation generalisation" reference_type="grounds" />
+    <from_label name="Expanded scope interfaces" reference_type="grounds" />
+    <from_label name="Structured context" reference_type="grounds" />
+    <to_label name="Clarifying security" reference_type="grounds" />
+    <to_label name="Trust motivation" reference_type="grounds" />
+    <to_label name="value-authority mismatch" reference_type="grounds" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="conflict" from_code="context confusion" to_code="consensual thinking">
+  <implied_characteristic name="Contextual nuances can cause confused thinking about family access" qualifier="Possibly" type="Contextual">
+    <from_label name="Distinguishing context differences" reference_type="grounds" />
+    <from_label name="Nuanced context problems" reference_type="grounds" />
+    <from_label name="Uncertain context elements" reference_type="grounds" />
+    <to_label name="Children opinions" reference_type="rebuttal" />
+    <to_label name="Content access control" reference_type="grounds" />
+    <to_label name="Discussion refinement" reference_type="grounds" />
+    <to_label name="Distant family access" reference_type="warrant" />
+    <to_label name="Growing child access" reference_type="grounds" />
+    <to_label name="Private data uncertainty" reference_type="grounds" />
+    <to_label name="Uncertainty-driven elicitation" reference_type="grounds" />
+  </implied_characteristic>
+</code_network>
+<code_network persona="Helen" relationship_type="conflict" from_code="family rules" to_code="personal security">
+  <implied_characteristic name="Thinking about family members clouds rather than clarifies security thinking" qualifier="Possibly" type="Contextual">
+    <from_label name="Age factor" reference_type="grounds" />
+    <from_label name="Child content restrictions" reference_type="grounds" />
+    <from_label name="Child shopping restrictions" reference_type="grounds" />
+    <from_label name="Family-based refinement" reference_type="grounds" />
+    <from_label name="Friend interaction allowed" reference_type="grounds" />
+    <from_label name="Parental comms restriction" reference_type="grounds" />
+    <to_label name="Clarifying security" reference_type="warrant" />
+    <to_label name="Trust motivation" reference_type="warrant" />
+    <to_label name="value-authority mismatch" reference_type="warrant" />
+  </implied_characteristic>
+</code_network>
+
+<implied_process name="Family access decisions" persona="Helen" >
+  <description>Helen appears to have a propensity to drop/ignore steps if she is making access control decisions for multiple family members at the same time.</description>
+  <relationship from_code="consensual thinking" to_code="requested" relationship_type="implies" />
+  <relationship from_code="consensual thinking" to_code="family rules" relationship_type="associated" />
+  <channel name="pick" data_type="User.App.Device" />
+  <channel name="requested" data_type="User.App.Device.Permission" />
+  <channel name="run" data_type="User.App.Device.Permission" />
+  <channel name="res" data_type="User.App.Device.Result" />
+  <channel name="verify" data_type="User.App.Device.Response" />
+  <specification>HELEN = let
+  SELECT = ERICS_TABLET |~| PETERS_TV |~| HELENS_LAPTOP
+
+  ERICS_TABLET = ( [] a : App @ ( pick.helen.a.ericsTablet ->
+                                ( ( verify.helen.a.ericsTablet.yes -> requested.helen.a.ericsTablet?p ->
+                                    run.helen.a.ericsTablet.tooLittle -> res.helen.a.ericsTablet?r -> SELECT ) []
+                                ( verify.helen.a.ericsTablet.no -> SELECT ) ) ) )
+
+  PETERS_TV = ( [] a : App @ ( pick.helen.a.petersTV ->
+                                ( ( verify.helen.a.petersTV.yes -> requested.helen.a.petersTV?p ->
+                                    run.helen.a.petersTV.justRight -> res.helen.a.petersTV?r -> SELECT ) []
+                                ( verify.helen.a.petersTV.no -> SELECT ) ) ) )
+
+  HELENS_LAPTOP = ( [] a : App @ ( pick.helen.a.helensLaptop ->
+                                ( ( verify.helen.a.helensLaptop.yes -> requested.helen.a.helensLaptop?p ->
+                                    run.helen.a.helensLaptop.p -> res.helen.a.helensLaptop?r -> SELECT ) []
+                                ( verify.helen.a.helensLaptop.no -> SELECT ) ) ) )
+within
+  SELECT</specification>
+</implied_process>
+
+</processes>
