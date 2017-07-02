@@ -18,7 +18,7 @@
 __author__ = 'Shamal Faily'
 
 class Requirement:
-  def __init__(self,id,label,name='',description='',priority='1',rationale='',fitCriterion='',originator='',type='Functional',asset='',version=-1):
+  def __init__(self, id, label, name='', description='', priority='1', rationale='', fitCriterion='', originator='', type='Functional', asset='', version=-1):
     self.theId = id
     if (version == -1):
       self.theVersion = 1

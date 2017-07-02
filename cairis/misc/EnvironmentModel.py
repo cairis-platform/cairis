@@ -23,6 +23,7 @@ from cairis.core.colourcodes import threatColourCode
 from cairis.core.colourcodes import threatLikelihoodColourCode
 from cairis.core.colourcodes import vulnerabilitySeverityColourCode
 from cairis.core.colourcodes import usabilityColourCode
+from cairis.core.colourcodes import obstacleColourCode
 from cairis.core.colourcodes import riskTextColourCode
 
 USECASE_TYPE = 0
@@ -99,7 +100,7 @@ class EnvironmentModel:
       borderColour = 'black'
       if (assetObjt.critical()):
         borderColour = 'red'
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',color=borderColour,margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,width='0',height='0',style='filled',fillcolor='white',label=arrayToAssetSecurityPropertiesTable(assetObjt.securityProperties(self.theEnvironmentName),objtName)))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',color=borderColour,margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,width='0',height='0',style='filled',pencolor='black',fillcolor='white',label=arrayToAssetSecurityPropertiesTable(assetObjt.securityProperties(self.theEnvironmentName),objtName)))
     elif (dimName == 'threat'):
       thrObjt = self.dbProxy.dimensionObject(objtName,'threat')
       thrLhood = thrObjt.likelihood(self.theEnvironmentName,self.theEnvironmentObject.duplicateProperty(),self.theEnvironmentObject.overridingEnvironment())
@@ -128,7 +129,9 @@ class EnvironmentModel:
     elif (dimName == 'goal'):
       self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'obstacle'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,skew='-0.4',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      obsId = self.dbProxy.getDimensionId(objtName,'obstacle')
+      envId = self.dbProxy.getDimensionId(self.theEnvironmentName,'environment')
+      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,skew='-0.4',style='filled',pencolor='black',colorscheme='ylorrd9',fillcolor=obstacleColourCode(self.dbProxy.obstacleProbability(obsId,envId)),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'role'):
       self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelRole.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'responsibility'):
@@ -141,7 +144,7 @@ class EnvironmentModel:
       self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task'):
       taskScore = self.dbProxy.taskUsabilityScore(objtName,self.theEnvironmentName)
-      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,style='filled',color=usabilityColourCode(taskScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,style='filled',color=usabilityColourCode(taskScore),pencolor='black',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
 
     elif (dimName == 'misusecase'):
       self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,fontname=self.fontName,fontsize=self.fontSize,style='filled',color='black',fontcolor='white',URL=objtUrl))

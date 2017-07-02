@@ -43,3 +43,5 @@ class ObstacleEnvironmentProperties(EnvironmentProperties):
 
   def setDefinition(self,v): self.theDefinition = v
   def setCategory(self,v): self.theCategory = v
+  def setProbability(self,p): self.theProbability = p
+  def setProbabilityRationale(self,r): self.theProbabilityRationale = r
