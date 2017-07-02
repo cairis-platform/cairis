@@ -19,7 +19,6 @@ import unittest
 import os
 from cairis.mio.ModelImport import importModelFile, importProcessesFile
 import cairis.core.BorgFactory
-from cairis.core.Borg import Borg
 
 __author__ = 'Shamal Faily'
 
