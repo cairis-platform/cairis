@@ -315,9 +315,13 @@
 <!ELEMENT obstacle (tag*,obstacle_environment+)>
 <!ATTLIST obstacle name CDATA #REQUIRED>
 <!ATTLIST obstacle originator CDATA #REQUIRED>
-<!ELEMENT obstacle_environment (definition,concern*)>
+<!ELEMENT obstacle_environment (definition,concern*,probability?)>
 <!ATTLIST obstacle_environment name CDATA #REQUIRED>
 <!ATTLIST obstacle_environment category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat ) #REQUIRED>
+<!ELEMENT probability (rationale)>
+<!ATTLIST probability value CDATA #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
+
 
 <!ELEMENT requirement (description,rationale,fit_criterion,originator)>
 <!ATTLIST requirement reference CDATA #REQUIRED>

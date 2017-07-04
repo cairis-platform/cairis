@@ -135,6 +135,12 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.theCategory = ''
     self.theDescription = ''
     self.theConcerns = []
+    self.resetProbabilityElements()
+
+  def resetProbabilityElements(self):
+    self.theProbability = 0.0
+    self.inRationale = 0
+    self.theRationale = ''
 
   def resetRequirementAttributes(self):
     self.inDescription = 0
@@ -206,6 +212,11 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     elif name == 'obstacle_environment':
       self.theEnvironmentName = attrs['name']
       self.theCategory = u2s(attrs['category'])
+    elif name == 'probability':
+      self.theProbability = attrs['value']
+    elif name == 'rationale':
+      self.inRationale = 1
+      self.theRationale = ''
     elif name == 'concern':
       self.theConcerns.append(attrs['name'])
     elif name == 'concern_association':
@@ -289,6 +300,8 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.resetGoalEnvironmentAttributes()
     elif name == 'obstacle_environment':
       p = ObstacleEnvironmentProperties(self.theEnvironmentName,'',self.theDescription,self.theCategory,[],[],self.theConcerns)
+      p.theProbability = self.theProbability
+      p.theProbabilityRationale = self.theRationale
       self.theEnvironmentProperties.append(p)
       self.resetObstacleEnvironmentAttributes()
     elif name == 'goal':

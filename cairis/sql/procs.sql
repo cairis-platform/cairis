@@ -12837,6 +12837,8 @@ begin
   declare unlRationale varchar(4000);
   declare unoRationale varchar(4000);
   declare cmRationale varchar(4000);
+  declare probRationale varchar(4000);
+  declare obsProb float;
   declare trName varchar(50);
 
   declare goalCount int default 0;
@@ -12980,6 +12982,9 @@ begin
       close obsConcernCursor;
       set done = 0;
 
+      select probability into obsProb from obstacle_definition where obstacle_id = obsId and environment_id = envId;
+      select rationale into probRationale from obstacle_definition where obstacle_id = obsId and environment_id = envId;
+      set buf = concat(buf,'    <probability value=\"',obsProb,'\" >\n      <rationale>',probRationale,'</rationale>\n    </probability>\n');
       set buf = concat(buf,'  </obstacle_environment>\n');
     end loop obsEnv_loop;
     close obsEnvCursor;
