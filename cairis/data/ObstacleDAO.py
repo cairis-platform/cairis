@@ -279,6 +279,8 @@ class ObstacleDAO(CairisDAO):
                    gRefs=new_goal_refinements,
                    sgRefs=new_subgoal_refinements,
                    concs=fake_prop['theConcerns'])
+        new_prop.theProbability = fake_prop['theProbability']
+        new_prop.theProbabilityRationale = fake_prop['theProbabilityRationale']
         new_props.append(new_prop)
     else:
       self.close()

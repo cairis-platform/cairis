@@ -4321,8 +4321,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       rs.close()
       session.close()
 
-      obsProb = self.obstacleProbability(obsId,environmentId)
-      obsProbRat = ''
+      obsProb,obsProbRat = self.obstacleProbability(obsId,environmentId)
       return (obsDef,obsProb,obsProbRat)
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -4335,9 +4334,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       rs = session.execute('call obstacle_probability(:oId,:eId)',{'oId':obsId,'eId':environmentId})
       row = rs.fetchone()
       obsAttr = row[0]
+      obsRationale = row[1]
       rs.close()
       session.close()
-      return obsAttr
+      return obsAttr,obsRationale
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error getting probability for obstacle id ' + str(obsId) + ' (id:' + str(id) + ',message:' + msg + ')'

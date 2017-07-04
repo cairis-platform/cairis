@@ -24,6 +24,7 @@
     <div id="obstacleProperties" class="tabs right" style="width: 75%;">
       <ul>
         <li><a href="#Definition">Definition</a></li>
+        <li><a href="#Probability">Probability</a></li>
         <li><a href="#Goals">Goals</a></li>
         <li><a href="#Sub-Goals">Sub-Goals</a></li>
         <li><a href="#Concerns">Concerns</a></li>
@@ -55,6 +56,17 @@
         <div class="form-group">
           <label for="theDefinition" class="control-label">Definition</label>
           <textarea rows="15" id="theDefinition"  class="obstacleAutoUpdater form-control" name="theDefinition" data-error="Definition is required" required></textarea>
+          <div class="help-block with-errors"></div>
+        </div>
+      </div>
+      <div id="Probability">
+        <div class="form-group">
+          <label for="theProbability" class="control-label">Value</label> 
+          <input id="theProbability" class="obstacleAutoUpdater form-control" type="text" name="theProbability">
+        </div>
+        <div class="form-group">
+          <label for="theProbabilityRationale" class="control-label">Rationale</label>
+          <textarea rows="7" id="theProbabilityRationale"  class="obstacleAutoUpdater form-control" name="theProbabilityRationale" data-error="Rationale is required" required></textarea>
           <div class="help-block with-errors"></div>
         </div>
       </div>

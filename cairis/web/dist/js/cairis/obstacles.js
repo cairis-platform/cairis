@@ -104,6 +104,8 @@ mainContent.on('click', ".obstacleEnvProperties", function () {
     if(env.theEnvironmentName == name){
       $("#theDefinition").val(env.theDefinition);
       $("#theCategory").val(env.theCategory);
+      $("#theProbability").val(env.theProbability);
+      $("#theProbabilityRationale").val(env.theProbabilityRationale);
 
       $.each(env.theGoalRefinements, function (index, obstacle) {
         appendObstacleEnvGoals(obstacle);
@@ -400,6 +402,8 @@ mainContent.on('change', ".obstacleAutoUpdater" ,function() {
     if(env.theEnvironmentName == envName){
       env.theDefinition = $('#theDefinition').val();
       env.theCategory = $('#theCategory').val();
+      env.theProbability = $('#theProbability').val();
+      env.theProbabilityRationale = $('#theProbabilityRationale').val();
       obstacle.theEnvironmentProperties[index] = env;
       $.session.set("Obstacle", JSON.stringify(obstacle));
     }

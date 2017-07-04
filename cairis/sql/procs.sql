@@ -12983,7 +12983,7 @@ begin
       set done = 0;
 
       select probability into obsProb from obstacle_definition where obstacle_id = obsId and environment_id = envId;
-      select rationale into probRationale from obstacle_definition where obstacle_id = obsId and environment_id = envId;
+      select ifnull(rationale,'None') into probRationale from obstacle_definition where obstacle_id = obsId and environment_id = envId;
       set buf = concat(buf,'    <probability value=\"',obsProb,'\" >\n      <rationale>',probRationale,'</rationale>\n    </probability>\n');
       set buf = concat(buf,'  </obstacle_environment>\n');
     end loop obsEnv_loop;
@@ -20318,7 +20318,7 @@ begin
 end
 //
 
-create procedure obstacleProbability(in obsId int,in envId int, out workingProbability float)
+create procedure obstacleProbability(in obsId int,in envId int, out workingProbability float, out workingRationale text)
 begin
   declare done int default 0;
   declare leafObsId int;
@@ -20343,7 +20343,7 @@ begin
       then
         leave and_loop;
       end if;
-      call obstacleProbability(leafObsId,envId,calcObsProb);
+      call obstacleProbability(leafObsId,envId,calcObsProb,workingRationale);
       set andProb = andProb * calcObsProb;
     end loop and_loop;
     close andCursor;
@@ -20360,7 +20360,7 @@ begin
       then
         leave or_loop;
       end if;
-      call obstacleProbability(leafObsId,envId,calcObsProb);
+      call obstacleProbability(leafObsId,envId,calcObsProb,workingRationale);
       set orProb = orProb + calcObsProb;
     end loop or_loop;
     close orCursor;
@@ -20369,6 +20369,7 @@ begin
   if (andCount = 0 and orCount = 0)
   then
     select probability into workingProbability from obstacle_definition where obstacle_id = obsId and environment_id = envId;
+    select ifnull(rationale,'None') into workingRationale from obstacle_definition where obstacle_id = obsId and environment_id = envId;
   else
     select probability into leafObsProb from obstacle_definition where obstacle_id = obsId and environment_id = envId;
     set workingProbability = andProb + orProb;
@@ -20383,9 +20384,10 @@ end
 create procedure obstacle_probability(in obsId int, in envId int)
 begin
   declare obsProb float;
+  declare obsRationale varchar(4000) default 'None';
 
-  call obstacleProbability(obsId,envId,obsProb);
-  select obsProb;
+  call obstacleProbability(obsId,envId,obsProb,obsRationale);
+  select obsProb,obsRationale;
 end
 //
 
@@ -20397,13 +20399,14 @@ begin
   declare obsName varchar(100);
   declare goalName varchar(255);
   declare obsProb float default 0.0;
+  declare obsRationale varchar(4000) default 'None';
   declare done int default 0;
   declare tgCursor cursor for select tg.name from template_goal tg, component_template_goal ctg, component_view_component cvc where cvc.component_view_id = cvId and cvc.component_id = ctg.component_id and ctg.template_goal_id = tg.id;
   declare obsCursor cursor for select distinct o.id,o.name from obstacle o, obstacle_concern oc, template_goal_responsibility tgr, role gr, obstaclerole_goalassociation ga, role obr, asset a, template_goal_concern tgc, template_asset ta, template_goal tg where tg.name = goalName and tg.id = tgc.template_goal_id and tgc.template_asset_id = ta.id and ta.name = a.name and a.id = oc.asset_id and oc.environment_id = envId and oc.obstacle_id = o.id and oc.obstacle_id = ga.goal_id and oc.environment_id = ga.environment_id and ga.subgoal_id = obr.id and obr.name = gr.name and gr.id = obr.id and obr.id = tgr.role_id and tgr.template_goal_id = tg.id;
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_goalobstacle;
-  create temporary table temp_goalobstacle (goal_name varchar(255), obstacle_name varchar(100), probability float);
+  create temporary table temp_goalobstacle (goal_name varchar(255), obstacle_name varchar(100), probability float, rationale varchar(4000));
 
   select id into cvId from component_view where name = cvName;
   select id into envId from environment where name = envName;
@@ -20426,8 +20429,8 @@ begin
         leave obs_loop;
       end if;
       set obsProb = 0.0;
-      call obstacleProbability(obsId,envId,obsProb);
-      insert into temp_goalobstacle(goal_name,obstacle_name,probability) values (goalName,obsName,obsProb);
+      call obstacleProbability(obsId,envId,obsProb,obsRationale);
+      insert into temp_goalobstacle(goal_name,obstacle_name,probability,rationale) values (goalName,obsName,obsProb,obsRationale);
     end loop obs_loop; 
     close obsCursor;
 

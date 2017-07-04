@@ -619,8 +619,8 @@ function handleNodeClick(event,objt) {
               $('#theObstacleNodeCategory').val(env.theCategory);
               $('#theObstacleNodeOriginator').val(data.theOriginator);
               $('#theObstacleNodeDefinition').val(env.theDefinition);
-              $('#theObstacleNodeProbability').val(env.theProbabilty);
-              $('#theObstacleNodeProbabilityRationale').val(env.theProbabiltyRationale);
+              $('#theObstacleNodeProbability').val(env.theProbability);
+              $('#theObstacleNodeProbabilityRationale').val(env.theProbabilityRationale);
               forceOpenOptions();
             } 
           });
