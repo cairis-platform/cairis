@@ -96,12 +96,12 @@ via the Options/Asset values menu.
 Adding, updating, and deleting an asset
 ---------------------------------------
 
-.. figure:: AssetDialog.png
-   :alt: Asset Dialog
+.. figure:: AssetForm.jpg
+   :alt: Asset form
 
 
--  Click on the Asset toolbar button to open the Assets dialog box, and
-   click on the Add button to open the Asset dialog box.
+-  Select the Risks/Assets menu button to open the assets table, and
+   click on the Add button to open a new asset form.
 
 -  Enter the name of the environment, a short code, description, and
    significance. The short-code is used to prefix requirement ids
@@ -114,17 +114,15 @@ Adding, updating, and deleting an asset
    maximised until the mitigations render the likelihood of the threat
    or the severity of the vulnerability inert.
 
--  Right click on the environment window to bring up the environment
-   speed menu. Select the add option and, from the Add environment
-   window, select an environment to situate the asset in. This will add
+-  Click on the Add button in the asset table, and select an environment to situate the asset in. This will add
    the new environment to the environment list.
 
 -  After ensuring the environment is selected in the environment window,
    add the security properties to this asset for this environment.
-   Security properties are added by selecting the Properties tab, right
-   clicking on the properties list and selecting Add to open the Add
-   Security Properties window. From this window, a security property and
-   its value can be added.
+   Security properties are added by clicking on the Add button in the properties table
+   to open the Choose security property dialog. From this window, a security property, its value
+   its value rationale can be added.
+
 
 -  Click on the Create button to add the new asset.
 
@@ -132,7 +130,12 @@ Adding, updating, and deleting an asset
    the Assets dialog box, making the necessary changes, and clicking on
    the Update button.
 
--  To delete an asset, select the asset to delete in the Assets dialog
+-  You can also add associations between other assets from the environment Associations tab.
+   You can add a new association by clicking on the Add button in the association table to open the association form.
+   From this form, you can add details about the nature of the association between the asset you're working on and another [tail] asset.
+  Once you click on Update, the association will be added to your working object, but won't be committed until you click on the Update/Create button.
+
+-  To delete an asset, select the asset to delete in the assets table
    box, and select the Delete button. If any artifacts are dependent on
    this asset then a dialog box stating these dependencies are
    displayed. The user has the option of selecting Yes to remove the
