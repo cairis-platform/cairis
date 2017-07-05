@@ -153,7 +153,7 @@ mainContent.on('click', '.removeProjectNamingConvertion', function () {
   $.session.set("ProjectSettings", JSON.stringify(settings));
 });
 
-mainContent.on('dblclick', '.editNamingConvention', function () {
+mainContent.on('click', '.editNamingConvention', function () {
   var row = $(this);
   var key = row.find(".namingConvention").text();
   var val = row.find(".theNameingDef").text();
