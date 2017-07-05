@@ -23,6 +23,8 @@ from cairis.core.colourcodes import threatColourCode
 from cairis.core.colourcodes import threatLikelihoodColourCode
 from cairis.core.colourcodes import vulnerabilitySeverityColourCode
 from cairis.core.colourcodes import usabilityColourCode
+from cairis.core.colourcodes import usabilityTextColourCode
+from cairis.core.colourcodes import probabilityTextColourCode
 from cairis.core.colourcodes import obstacleColourCode
 from cairis.core.colourcodes import riskTextColourCode
 
@@ -131,7 +133,8 @@ class EnvironmentModel:
     elif (dimName == 'obstacle'):
       obsId = self.dbProxy.getDimensionId(objtName,'obstacle')
       envId = self.dbProxy.getDimensionId(self.theEnvironmentName,'environment')
-      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,skew='-0.4',style='filled',pencolor='black',colorscheme='ylorrd9',fillcolor=obstacleColourCode(self.dbProxy.obstacleProbability(obsId,envId)),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      obsProb,obsRationale = self.dbProxy.obstacleProbability(obsId,envId)
+      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,skew='-0.4',style='filled',pencolor='black',colorscheme='ylorrd9',fillcolor=obstacleColourCode(obsProb),fontname=self.fontName,fontsize=self.fontSize,fontcolor=probabilityTextColourCode(obsProb),URL=objtUrl))
     elif (dimName == 'role'):
       self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelRole.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'responsibility'):
@@ -144,7 +147,7 @@ class EnvironmentModel:
       self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task'):
       taskScore = self.dbProxy.taskUsabilityScore(objtName,self.theEnvironmentName)
-      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,style='filled',color=usabilityColourCode(taskScore),pencolor='black',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,style='filled',color=usabilityColourCode(taskScore),pencolor='black',fontname=self.fontName,fontsize=self.fontSize,fontcolor=usabilityTextColourCode(taskScore),URL=objtUrl))
 
     elif (dimName == 'misusecase'):
       self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,fontname=self.fontName,fontsize=self.fontSize,style='filled',color='black',fontcolor='white',URL=objtUrl))

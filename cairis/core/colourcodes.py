@@ -90,6 +90,10 @@ def usabilityTextColourCode(valueId):
   if (valueId >= 7): return 'white'
   else: return 'black'
 
+def probabilityTextColourCode(valueId):
+  if (valueId >= 0.5): return 'white'
+  else: return 'black'
+
 def surfaceTypeColourCode(valueId):
   if (valueId == 9): return '359 1 .5'
   elif (valueId > 9): return '359 1 .5'

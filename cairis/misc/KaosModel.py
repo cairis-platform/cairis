@@ -21,6 +21,8 @@ import pydot
 from cairis.core.Borg import Borg
 from cairis.core.ARM import *
 from cairis.core.colourcodes import usabilityColourCode
+from cairis.core.colourcodes import usabilityTextColourCode
+from cairis.core.colourcodes import probabilityTextColourCode
 from cairis.core.colourcodes import threatColourCode
 from cairis.core.colourcodes import obstacleColourCode
 
@@ -62,7 +64,7 @@ class KaosModel:
       obsId = self.dbProxy.getDimensionId(objtName,'obstacle')
       envId = self.dbProxy.getDimensionId(self.theEnvironmentName,'environment')
       obsProb,obsRationale = self.dbProxy.obstacleProbability(obsId,envId)
-      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,skew='-0.4',style='filled',pencolor='black',colorscheme='ylorrd9',fillcolor=obstacleColourCode(obsProb),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,skew='-0.4',style='filled',pencolor='black',colorscheme='ylorrd9',fillcolor=obstacleColourCode(obsProb),fontname=self.fontName,fontsize=self.fontSize,fontcolor=probabilityTextColourCode(obsProb),URL=objtUrl))
     elif (dimName == 'domainproperty'):
       self.theGraph.add_node(pydot.Node(objtName,shape='house',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'requirement'):
@@ -82,7 +84,7 @@ class KaosModel:
       else:
         objtLabel = objtName
       taskScore = self.dbProxy.taskUsabilityScore(objtName,self.theEnvironmentName)
-      self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='ellipse',margin=0,style='filled',color=usabilityColourCode(taskScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='ellipse',margin=0,style='filled',color=usabilityColourCode(taskScore),fontname=self.fontName,fontsize=self.fontSize,fontcolor=usabilityTextColourCode(taskScore),URL=objtUrl))
     elif (dimName == 'misusecase'):
       ellipseColour = 'black'
       if (self.theKaosModel == 'task'):
