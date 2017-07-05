@@ -592,3 +592,11 @@ $("#chooseDatabase").on('click', '#chooseDatabaseButton',function(e) {
     }
   });
 });
+
+function updateProjectImage(imageFile, actualDir) {
+  var settings =  JSON.parse($.session.get("ProjectSettings"));
+  settings.richPicture = imageFile;
+  $("#theImages").attr("src", actualDir);
+  rescaleImage($("#theImages"),300);
+  $.session.set("ProjectSettings", JSON.stringify(settings));
+}
