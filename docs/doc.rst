@@ -156,8 +156,8 @@ associations have been defined between goals and assets and/or
 associations then zooming into the model will display these concerns;
 the concerns are displayed as blue comment elements.
 
-.. figure:: AddAssetAssociation.png
-   :alt: Add Asset Association Dialog
+.. figure:: AddAssetAssociation.jpg
+   :alt: Add Asset Association form
 
 Adding an asset association
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -217,31 +217,28 @@ for. Attackers are human agents the system should not be designed for.
 Adding, updating, and deleting a role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: RoleDialog.png
-   :alt: Role Dialog
+.. figure:: RoleDialog.jpgg
+   :alt: Role form
 
 
--  Click on the Role toolbar button to open the Roles dialog box, and
-   click on the Add button to open the Role dialog box.
+-  Select the Risk/Roles menu to open the Roles table, and click on the Add button to open the Role form.
 
 -  Enter a role name and description, and select the role type.
 
--  Click on the Update button to Add the new role to the CAIRIS
+-  Click on the Create button to Add the new role to the CAIRIS
    database.
 
 -  As responses and countermeasures are assigned to roles, the Role
-   dialog is automatically updated to reflect these new dependencies.
+   form is automatically updated to reflect these new dependencies.
    These dependencies can not be modified from the Role dialog.
 
--  Existing roles can be modified by double clicking on the role in the
-   Roles dialog box, making the necessary changes, and clicking on the
+-  Existing roles can be modified by clicking on the role in the
+   roles table, making the necessary changes, and clicking on the
    Update button.
 
--  To delete a role, select the role to delete in the Roles dialog box,
-   and select the Delete button. If any artifacts are dependent on this
-   role then a dialog box stating these dependencies are displayed. The
-   user has the option of selecting Yes to remove the role dependencies
-   and the role itself, or No to cancel the deletion.
+-  To delete a role, select the role to delete in the roles table,
+   If any artifacts are dependent on this role then a dialog box stating these dependencies are displayed.
+   The user has the option of selecting Yes to remove the role dependencies and the role itself, or No to cancel the deletion.
 
 Responsibility modelling
 ~~~~~~~~~~~~~~~~~~~~~~~~
