@@ -211,7 +211,7 @@ mainContent.on('click', "#updateContributor", function () {
   $.session.set("ProjectSettings", JSON.stringify(settings));
 });
 
-mainContent.on('dblclick','.editContributor', function () {
+mainContent.on('click','.editContributor', function () {
   var row = $(this).closest("tr");
   projectSettingsToggler("#editContributorWindow");
   var name = row.find(".projectContributor").text();
