@@ -2,17 +2,16 @@ Creating a new project
 ======================
 
 The first stage of the design process involves establishing the scope of
-subsequent analysis. CAIRIS supports this exercise by using the Project
-Settings notebook.
+subsequent analysis. CAIRIS supports this exercise by using the Properties form.
 
-Update project settings
+Update project properties
 -----------------------
 
-.. figure:: projectSettings.png
-   :alt: Project Settings notebook
+.. figure:: projectSettings.jpg
+   :alt: Project Settings form
 
 
--  Click on the Project Settings button to open the Project Settings
+-  Select the System/Properties menu to open the Project Settings
    notebook. By default, the notebook will open in the Background page.
    Enter the project name and background in this page.
 
@@ -23,24 +22,20 @@ Update project settings
    specified.
 
 -  If a rich picture or context diagram has been agreed, click on the
-   Rich Picture tab and, by right clicking on the page to bring up the
-   Load Image option from the speed menu, select a rich picture to
-   import. Please note that the image itself is NOT imported into the
-   database, only the file path to the picture.
+   Rich Picture tab, and click on the image (or avatar if not not rich picture has been defined) to
+   import.
 
 -  Names or terms that the readership of the specification may be
    unfamiliar with can be added to the project on an on-going basis. To
-   add a term, click on the Naming Conventions tab, right click on the
-   name page, and select Add from the speed menu. This opens a window
-   which allows a name and a definition to be added to the naming
+   add a term, click on the Naming Conventions tab, and click on the Add symbol
+   This opens a form which allows a name and a definition to be added to the naming
    convention list. To modify an existing entry, double click on the try
    and make the required modifications. Entries can also be deleted from
    the right-click speed menu.
 
 -  Clicking on the Contributors tab opens the Contributors page. To add
-   a contributor, right click on the page and select Add from the speed
-   menu to open the Add Contributor dialog box. Contributors can be
-   either a participant, facilitator, or scribe; these reflect the roles
+   a contributor, click on the Add symbol to open the Add Contributor form.
+   Contributors can be either a participant, facilitator, or scribe; these reflect the roles
    that people take in participatory workshops.
 
 Environments
@@ -57,12 +52,12 @@ how potential users reason about their context of use.
 Adding a new environment
 ------------------------
 
-.. figure:: EnvironmentDialog.png
-   :alt: Environment Dialog
+.. figure:: EnvironmentForm.jpg
+   :alt: Environment form
 
--  Click on the Environment toolbar button to open the Environments
-   dialog box, and click on the Add button to open the Environment
-   dialog box.
+-  Select the UX/Environments menu to open the Environments
+   form, and click on the Add button to open the new Environment
+   form.
 
 -  Enter the name of the environment, a short code, and a description.
    The short-code is used to prefix requirement ids associated with an
@@ -82,34 +77,6 @@ Adding a new environment
    override radio button is selected, then CAIRIS will ensure that the
    artifact properties are used for the overriding environment.
 
-On-the-fly environment creation
--------------------------------
-
-.. figure:: NewEnvironmentDialog.png
-   :alt: New Environment Dialog
-
-Most artifacts in CAIRIS are situated in one or more environments. When
-creating or updating an artifact, it is usually possible to create a new
-environment on the fly by right-clicking on the environment list box in
-the artifact dialog and selecting the New button. This opens the New
-Environment dialog box. In this dialog, an environment name, short code
-and description can be entered. When the create button is selected, a
-new environment is added to the CAIRIS database, and added to the
-environment list for the artifact.
-
-Environmental attribute inheritence
------------------------------------
-
-An artifact may be situated in one or more environments, but the
-differences between these environments may be slight. To reflect this,
-it is possible for an artifact to inherit properties from another
-environment. To do this, right-click on the artifact's environment list
-box and select the Inherit Environment option. When prompted, select the
-environment to inherit from, followed by the environment to situated the
-artifact in. In most cases, the properties of the inherited environment
-will be duplicated in this newly situated environment. In the case of
-goals and obstacles, only the immediate refinement associations are
-retained when inheriting properties from an environment.
 
 Assets
 ======
@@ -1501,5 +1468,3 @@ based on the output options selected.
 
 .. figure:: GenerateDocumentationDialog.png
    :alt: Generate Documentation Dialog
-
-
