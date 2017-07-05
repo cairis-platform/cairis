@@ -215,7 +215,6 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.theType = attrs['type']
       self.theImage = attrs['image']
       if self.theImage != "" and os.path.isfile(self.theImage) == False:
-        b = Borg()
         self.theImage = self.theImage
       if (attrs['assumption_persona'] == 'TRUE'):
         self.isAssumptionPersona = True

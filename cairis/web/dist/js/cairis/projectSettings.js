@@ -153,7 +153,7 @@ mainContent.on('click', '.removeProjectNamingConvertion', function () {
   $.session.set("ProjectSettings", JSON.stringify(settings));
 });
 
-mainContent.on('dblclick', '.editNamingConvention', function () {
+mainContent.on('click', '.editNamingConvention', function () {
   var row = $(this);
   var key = row.find(".namingConvention").text();
   var val = row.find(".theNameingDef").text();
@@ -211,7 +211,7 @@ mainContent.on('click', "#updateContributor", function () {
   $.session.set("ProjectSettings", JSON.stringify(settings));
 });
 
-mainContent.on('dblclick','.editContributor', function () {
+mainContent.on('click','.editContributor', function () {
   var row = $(this).closest("tr");
   projectSettingsToggler("#editContributorWindow");
   var name = row.find(".projectContributor").text();
@@ -592,3 +592,11 @@ $("#chooseDatabase").on('click', '#chooseDatabaseButton',function(e) {
     }
   });
 });
+
+function updateProjectImage(imageFile, actualDir) {
+  var settings =  JSON.parse($.session.get("ProjectSettings"));
+  settings.richPicture = imageFile;
+  $("#theImages").attr("src", actualDir);
+  rescaleImage($("#theImages"),300);
+  $.session.set("ProjectSettings", JSON.stringify(settings));
+}
