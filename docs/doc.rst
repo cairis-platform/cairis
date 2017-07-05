@@ -130,11 +130,6 @@ Adding, updating, and deleting an asset
    the Assets dialog box, making the necessary changes, and clicking on
    the Update button.
 
--  You can also add associations between other assets from the environment Associations tab.
-   You can add a new association by clicking on the Add button in the association table to open the association form.
-   From this form, you can add details about the nature of the association between the asset you're working on and another [tail] asset.
-  Once you click on Update, the association will be added to your working object, but won't be committed until you click on the Update/Create button.
-
 -  To delete an asset, select the asset to delete in the assets table
    box, and select the Delete button. If any artifacts are dependent on
    this asset then a dialog box stating these dependencies are
@@ -167,12 +162,10 @@ the concerns are displayed as blue comment elements.
 Adding an asset association
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  If creating or updating an asset, an association between that asset
-   and another asset can be made by clicking on the Associations tab in
-   the Asset Dialog and, from the right-click speed menu, selecting Add
-   to open the Add Asset Dialog.
+-  You can add an association between assets by selecting the Risk/Asset Association menu, and
+   clicking on the Add button in the association table.
 
--  From the Add Asset Dialog, set the adornments for the head and tail
+-  In the association form which is opened., set the adornments for the head and tail
    end of the association. Possible adornment options are Inheritence,
    Association, Aggregation, and Composition; the semantics for these
    adornments are based on UML.
@@ -184,39 +177,27 @@ Adding an asset association
 -  Optional role names can also be set at the head or tail end of the
    association.
 
--  Select the Create (or Edit if modifying an existing association) will
-   add the association to the Asset Dialog. The association will not be
-   adde to the database until the asset itself is created or modified.
+-  Select the Create (or Update if modifying an existing association) will
+   add the association to the CAIRIS model.
 
--  Asset associations can also be added by selecting the Asset
-   Associations tool-bar button. Clicking this button opens the Asset
-   Associations dialog, where new associations can be created or
-   existing associations can be modified or removed. The dialog for
-   modifying associations is identical to the Asset Association dialog,
-   with the addition of a combo box for selecting the environment to
-   situate the association in.
-
-.. figure:: AssetInconsistency.png
-   :alt: Asset Inconsistency warning
-
-
--  If an asset is associated with an asset with one or more security
-   properties of a lower value, then an Asset Inconsistency dialog is
-   displayed, warning about the details of the inconsistency.
+- You can also add associations between other assets from the environment Associations tab within the Asset form.
+  You can add a new association by clicking on the Add button in the association table to open the association form.
+  From this form, you can add details about the nature of the association between the asset you're working on and another [tail] asset.
+  Once you click on Update, the association will be added to your working object, but won't be committed to the model until you click on the Update/Create button.
 
 Viewing Asset models
 ~~~~~~~~~~~~~~~~~~~~
 
-Asset models can be viewed by clicking on the Asset Model toolbar
-button, and selecting the environment to view the environment for.
+Asset models can be viewed by selecting the Models/Asset menu, and selecting the environment to view the environment for.
 
-.. figure:: AssetModel.png
+.. figure:: AssetModel.jpg
    :alt: Asset Model
 
 By changing the environment name in the environment combo box, the asset
-model for a different environment can be viewed. The layout of the model
-can also be replaced by selecting a layout option in the Layout combo
-box at the foot of the model viewer window.
+model for a different environment can be viewed.  The model can be filtered by selecting an asset.
+This will display on the asset, and the other asset model elements immediately associated with it.
+By default, concern associations are hidden.  These are UML comment nodes that indicate elements from other CAIRIS models associated with asset.
+These concerns can be shown by changing the Hide Concerns combo box value to Yes.
 
 By clicking on a model element, information about that artifact can be
 viewed.
