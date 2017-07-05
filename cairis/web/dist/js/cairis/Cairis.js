@@ -818,7 +818,7 @@ function refreshDimensionSelector(sBox,dimName,envName,callback,filterList) {
     success: function (data) {
       data.sort();
       sBox.empty();
-      if ((dimName == 'asset' && filterList == undefined) || (dimName == 'goal' && filterList == undefined) || (dimName == 'obstacle' && filterList == undefined) || (dimName == 'task' && filterList == undefined) || (dimName == 'usecase' && filterList == undefined) || (dimName == 'misusecase' && filterList == undefined) || (dimName == 'requirement' && filterList == undefined) || (dimName == 'dfd_filter' && filterList == undefined)) {
+      if ((dimName == 'asset' && filterList == undefined) || (dimName == 'goal' && filterList == undefined) || (dimName == 'obstacle' && filterList == undefined) || (dimName == 'task' && filterList == undefined) || (dimName == 'usecase' && filterList == undefined) || (dimName == 'misusecase' && filterList == undefined) || (dimName == 'requirement' && filterList == undefined) || (dimName == 'dfd_filter' && filterList == undefined) || (dimName == 'role' && filterList == undefined)) {
         sBox.append("<option>All</option>");
       }
       if (filterList != undefined) {

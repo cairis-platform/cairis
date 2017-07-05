@@ -193,7 +193,6 @@ $(document).on("click", "#addNewDependency", function () {
           refreshDimensionSelector($('#theDependencyName'),$('#theDependencyType').val(),undefined,function() {
             $('#theRationale').val('');
             $.session.set("Dependency", JSON.stringify(jQuery.extend(true, {},dependencyDefault )));
-            $('#editDependencyOptionsForm').loadJSON(dependency, null);
           },['All']);
         });
       });
