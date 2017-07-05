@@ -217,7 +217,7 @@ for. Attackers are human agents the system should not be designed for.
 Adding, updating, and deleting a role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: RoleDialog.jpgg
+.. figure:: RoleForm.jpg
    :alt: Role form
 
 
