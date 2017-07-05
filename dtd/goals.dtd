@@ -68,7 +68,6 @@
 <!ATTLIST requirement label CDATA #REQUIRED>
 <!ATTLIST requirement type (Functional | Data | Look_and_Feel | Usability | Performance | Operational | Maintainability | Portability | Security | Cultural_and_Political | Legal) #REQUIRED>
 <!ATTLIST requirement priority (1 | 2 | 3) #REQUIRED>
-<!ELEMENT rationale (#PCDATA)>
 <!ELEMENT originator (#PCDATA)>
 
 <!ELEMENT countermeasure (tag*,description,countermeasure_environment+)>
