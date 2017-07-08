@@ -243,20 +243,16 @@ Adding, updating, and deleting a role
 Responsibility modelling
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Responsibility models can be viewed by clicking on the View
-Responsibility Model toolbar button, and selecting the environment to
+Responsibility models can be viewed by selecting the Models/Responsibility
+menu option and selecting the environment to
 view the environment for.
 
-.. figure:: ResponsibilityModel.png
+.. figure:: ResponsibilityModel.jpg
    :alt: Responsibility Model
 
 By changing the environment name in the environment combo box, the
-responsibility model for a different environment can be viewed. The
-layout of the model can also be replaced by selecting a layout option in
-the Layout combo box at the foot of the model viewer window.
-
-By clicking on a model element, information about that artifact can be
-viewed.
+responsibility model for a different environment can be viewed.
+By clicking on a model element, information about that artifact can be viewed.
 
 Personas
 --------
