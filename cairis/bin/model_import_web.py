@@ -25,13 +25,24 @@ import argparse
 from urllib import quote
 import sys
 
-def importModel(url,modelFile):
+def importModel(url,dbName,modelFile):
+
+  newDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/create?session_id=test')
+  if not newDbResp.ok:
+    exceptionTxt = 'Cannot create database ' + dbName + ': ' + newDbResp.text
+    raise Exception(exceptionTxt)
+
+  openDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/open?session_id=test')
+  if not newDbResp.ok:
+    exceptionTxt = 'Cannot open database ' + dbName + ': ' + newDbResp.text
+    raise Exception(exceptionTxt)
+
   buf = open(modelFile,'rb').read()
   import_json = {'session_id' : 'test','object' : {'urlenc_file_contents':buf,'type':'all'}}
   hdrs = {'Content-type': 'application/json'}
-  resp = requests.post(url + '/api/import/text',data=json.dumps(import_json),headers=hdrs);
-  if not resp.ok:
-    exceptionTxt = 'Cannot import ' + modelFile + ': ' + resp.text
+  importResp = requests.post(url + '/api/import/text',data=json.dumps(import_json),headers=hdrs);
+  if not importResp.ok:
+    exceptionTxt = 'Cannot import ' + modelFile + ': ' + importResp.text
     raise Exception(exceptionTxt)
 
 def importModelRichPicture(url,imgDir,imgFile):
@@ -69,7 +80,9 @@ def objectsWithImages(url,dimName):
 def updateObjectImage(url,dimName,imgDir,objt):
   objtName = objt['theName']
   objtGlob = glob.glob(imgDir + '/' + objtName + '.*')
-  if len(objtGlob) != 1:
+  if len(objtGlob) == 0:
+    return
+  elif len(objtGlob) > 1:
     exceptionTxt = 'Error uploading image for ' + objtName + ': expecting just 1 file for ' + objtName + ', but found ' + str(objtGlob) + '.'
     raise Exception(exceptionTxt)
   imgFile = objtGlob[0]
@@ -93,11 +106,12 @@ def main(args=None):
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - CAIRIS model import (using APIs)')
   parser.add_argument('modelFile',help='model file to import')
   parser.add_argument('--url',dest='url',help='URL for CAIRIS server')
+  parser.add_argument('--database',dest='dbName',help='New database name')
   parser.add_argument('--image_dir',dest='imageDir',help='Directory for model images')
   parser.add_argument('--rich_pic',dest='rpImage',help='Rich picture image file')
   args = parser.parse_args() 
 
-  importModel(args.url,args.modelFile)
+  importModel(args.url,args.dbName,args.modelFile)
   importModelRichPicture(args.url,args.imageDir,args.rpImage)
   personaObjts = objectsWithImages(args.url,'persona')
   for pName in personaObjts.keys():
