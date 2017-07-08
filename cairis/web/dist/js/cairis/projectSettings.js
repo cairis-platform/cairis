@@ -33,7 +33,7 @@ function showProjectSettingsForm() {
       var image = $("#theImages");
       $('#ProjectsProperties').loadJSON(data, null);
       image.attr("src", getImagedir(data.richPicture));
-      rescaleImage(image,350);
+      rescaleImage(image,700);
       $("#projectBackground").height( $("#projectBackground")[0].scrollHeight );
       //definitions
       $.each(data.definitions, function (key, def) {
