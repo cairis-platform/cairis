@@ -67,6 +67,7 @@
 
 The sensitivity of this clinical data and its distributed nature drives the need to find secure and effective ways of accessing and managing it.</background>
   <strategic_goals>The high-level goal which needs to be satisfied is the secure processing of clinical data.  This involves securely uploading clinical data to NeuroGrid, which is then analysed before aggregated results can be downloaded.</strategic_goals>
+  <rich_picture image="NeuroGridContext.jpg"/>
   <scope>The scope of this study is restricted to the upload and download of data to and from NeuroGrid.</scope>
   <naming_conventions>
     <entry name="CA Certificate" >
