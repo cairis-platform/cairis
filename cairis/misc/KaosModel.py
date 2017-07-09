@@ -158,12 +158,8 @@ class KaosModel:
           edgeSet.add((subGoalName,goalName))
       elif (associationType == 'depend'):
         if ((subGoalName,goalName) not in edgeSet):
-          objtUrl = 'depend#' + goalEnv + '/' + goalName + '/' + subGoalName
-          self.theGraph.add_node(pydot.Node(objtUrl,shape='trapezium',style='rounded',orientation='270',label=' ',height='.2',width='.2',URL=objtUrl))
-          edge1 = pydot.Edge(goalName,objtUrl,dir='forward',arrowhead='vee',weight='1')
-          self.theGraph.add_edge(edge1)
-          edge2 = pydot.Edge(objtUrl,subGoalName,dir='forward',arrowhead='vee',weight='1')
-          self.theGraph.add_edge(edge2)
+          goalEdge = pydot.Edge(subGoalName,goalName,dir='forward',arrowhead='curve',weight='1')
+          self.theGraph.add_edge(goalEdge)
           edgeSet.add((subGoalName,goalName))
       else:
         refNodeName = goalName + '#' + associationType
