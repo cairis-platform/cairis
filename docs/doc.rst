@@ -103,7 +103,7 @@ Adding, updating, and deleting an asset
 -  Select the Risks/Assets menu button to open the assets table, and
    click on the Add button to open a new asset form.
 
--  Enter the name of the environment, a short code, description, and
+-  Enter the name of the asset, a short code, description, and
    significance. The short-code is used to prefix requirement ids
    associated with an environment.
 
@@ -122,7 +122,6 @@ Adding, updating, and deleting an asset
    Security properties are added by clicking on the Add button in the properties table
    to open the Choose security property dialog. From this window, a security property, its value
    its value rationale can be added.
-
 
 -  Click on the Create button to add the new asset.
 
@@ -243,20 +242,16 @@ Adding, updating, and deleting a role
 Responsibility modelling
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Responsibility models can be viewed by clicking on the View
-Responsibility Model toolbar button, and selecting the environment to
+Responsibility models can be viewed by selecting the Models/Responsibility
+menu option and selecting the environment to
 view the environment for.
 
-.. figure:: ResponsibilityModel.png
+.. figure:: ResponsibilityModel.jpg
    :alt: Responsibility Model
 
 By changing the environment name in the environment combo box, the
-responsibility model for a different environment can be viewed. The
-layout of the model can also be replaced by selecting a layout option in
-the Layout combo box at the foot of the model viewer window.
-
-By clicking on a model element, information about that artifact can be
-viewed.
+responsibility model for a different environment can be viewed.
+By clicking on a model element, information about that artifact can be viewed.
 
 Personas
 --------
@@ -269,12 +264,12 @@ thoughts or concerns provide insight into potential usability problems.
 Adding, updating, or deleting a persona
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: PersonaDialog.png
-   :alt: Persona Dialog
+.. figure:: PersonaForm.jpg
+   :alt: Persona form
 
 
--  Click on the Persona toolbar button to open the Personas dialog box,
-   and click on the Add button to open the Persona dialog box.
+-  Select the UX/Personas menu to open the table of personas,
+   and click on the Add button to open the new Persona form.
 
 -  Enter a persona name and select the persona type.
 
@@ -299,26 +294,26 @@ Adding, updating, or deleting a persona
 -  Click on the Skills tab and enter the persona's skill-set, with
    respect to the problem domain the system will be situated in.
 
+-  Click on the Contextual Trust tab, and enter information about aspects of this
+   persona with an impact on contextual trust warranting properties.
+
+-  Click on the Contextual Trust tab, and enter information about aspects of this
+   persona with an impact on intrinsic trust warranting properties.
+
 -  If you have decided to personalise the persona with a picture, this
-   can be added by right clicking on photo box next to the persona
-   properties notebook, to bring up the Load Image option from the speed
-   menu, and selecting Load Image. Please note that the image itself is
-   NOT imported into the database, only the file path to the picture.
+   can be added by clicking on avatar box next to the persona
+   properties notebook, to select an image to associated with the persona.
 
--  If you have decided to personalise your persona with a picture, this
-   can be added by right clicking on the photo
-
--  Right click on the environment window to bring up the environment
-   speed menu. Select the add option and, from the Add environment
-   window, select an environment to situate the persona in. This will
-   add the new environment to the environment list.
+-  Click on the Environment table, and choose and environment to situate the persona in.
+   This will add the new environment to the environment list, and open up a new folder for
+   information about persona roles, and an environment specific narrative.
 
 -  After ensuring the environment is selected in the environment window,
-   click on the Summary tab. Select the Direct/Indirect Persona
+   click on the Roles tab. Select the Direct Persona
    check-box if the persona is a direct stakeholder with respect to the
    system being defined, and add roles fulfilled by the persona in the
-   Roles list-box. These roles can be added or deleted by right clicking
-   on the roles box to bring up the speed menu.
+   Roles list-box. These roles can be added by clicking on the add button in the role table,
+   or deleted by clicking on the button next to the role to be removed.
 
 -  Click on the Narrative tab and enter a narrative describing the
    persona's relationship with the problem domain or prospective system
@@ -327,12 +322,12 @@ Adding, updating, or deleting a persona
 
 -  Click on the Create button to add the new persona.
 
--  Existing personas can be modified by double clicking on the persona
-   in the Personas dialog box, making the necessary changes, and
+-  Existing personas can be modified by clicking on the persona
+   in the Personas table, making the necessary changes, and
    clicking on the Update button.
 
--  To delete a persona, select the persona to delete in the Personas
-   dialog box, and select the Delete button. If any artifacts are
+-  To delete a persona, click on the delete button next to persona to be removed
+   in the personas table. If any artifacts are
    dependent on this persona then a dialog box stating these
    dependencies are displayed. The user has the option of selecting Yes
    to remove the persona dependencies and the persona itself, or No to
