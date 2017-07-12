@@ -49,6 +49,13 @@ An approach for eliciting and visualising differences between trust expectations
 
 Illustrates how CAIRIS can help devise scenarios that describe how design decisions lead to usability problems subsequently leading to misuse.
 
+### [Design as Code: Facilitating Collaboration between Usability and Security Engineers using CAIRIS](http://www.shamalfaily.com/wp-content/papercite-data/pdf/faia17.pdf)
+
+![faia17Image]({{ site.baseurl }}/images/faia17Image.pdf)
+
+Shows how the CAIRIS web app and its models act as a vehicle for collaboration between usability and security engineers.
+
+
 ## Case Studies using CAIRIS
 
 ### [Towards tool-support for Usable Secure Requirements Engineering with CAIRIS](http://www.shamalfaily.com/wp-content/papercite-data/pdf/fafl103.pdf)
@@ -81,6 +88,7 @@ Using CAIRIS to support the use of concept mapping to both make sense of and imp
 ![flfs15Image]({{ site.baseurl }}/images/flfs15Image.pdf)
 
 A three-year study where CAIRIS supported the application of security and usability techniques in a research and development project.
+
 
 ### [Engaging stakeholders during late stage security design with assumption personas](http://www.shamalfaily.com/wp-content/papercite-data/pdf/fail15.pdf)
 
