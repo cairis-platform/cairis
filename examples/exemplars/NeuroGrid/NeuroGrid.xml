@@ -1772,8 +1772,8 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
     <task_concern asset="Portal" />
     <task_concern asset="Client workstation" />
     <narrative>Claire wants to analyse a data set, in relation to other data sets on NeuroGrid.  She anonymises her data to the extent that as much personalised data is removed as possible, but not to the extent that her analysis software will fail.  She then uploads this data, tagging this as available only to members of her exemplar.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
   <task_environment name="Stroke" >
     <dependencies>Tom's workstation is properly set-up to access the NeuroGrid portal.  Tom has permission to upload data.</dependencies>
@@ -1782,8 +1782,8 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
     <task_concern asset="Portal" />
     <task_concern asset="Client workstation" />
     <narrative>Tom wants to analyse a data set, in relation to other data sets on NeuroGrid.  He anonymises his data using the anonymisation guidelines within his exemplar, before creating an archive of the data-set to upload.  He then uploads this data, tagging this as available only to members of his clinical exemplar.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
 </task>
 <task name="Download data" author="Shamal Faily" code="DD" assumption_task="FALSE" >
@@ -1796,8 +1796,8 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
     <task_concern asset="Web-browser" />
     <task_concern asset="Client workstation" />
     <narrative>After NeuroGrid finishes executing a workflow, checks are run on the data to ensure that the results have been anonymised.  When these checks indicate that the results have been sanitised, a message is sent to Claire, the workflow submitter, that the workflow results are available for download.  On receiving this message, Claire logs into NeuroGrid and downloads the results to her personal area.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
   <task_environment name="Stroke" >
     <dependencies>Permission to login to NeuroGrid.  Permission to download data. Acknowledgement has been sent that results are available for download.</dependencies>
@@ -1807,8 +1807,8 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
     <task_concern asset="Web-browser" />
     <task_concern asset="Client workstation" />
     <narrative>After NeuroGrid finishes executing a workflow, a message is sent to Tom, the workflow submitter, that the workflow results are available for download.  On receiving this message, Tom logs into NeuroGrid and downloads the results to his personal area.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
 </task>
 <task name="Issue User Certificate" author="Shamal Faily" code="IUC" assumption_task="FALSE" >
@@ -1820,8 +1820,8 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
     <task_concern asset="Access Control Policy" />
     <task_concern asset="Personal certificate" />
     <narrative>Matt receives an email request from a prospective user asking for access to NeuroGrid.  Shortly after receiving this email, Matt begins the process of verifying the user's identity.  This involves speaking to user to ascertain whethe the email sender and the person been spoken to are one and the same.  During this conversation, Matt establishes who the user's sponsor is and telephones him/her to also verify their identity.  While speaking to the sponsor, Matt asks for information about what this user should have access to be emailed to him, together with the telephone number of the user.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
 </task>
 </usability>
