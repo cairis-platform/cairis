@@ -109,7 +109,6 @@ $(document).on('click', "td.taskcharacteristic-rows", function () {
             $.each(tNames, function (index,tName) {
               taskSelect.append($("<option></option>").attr("value",tName).text(tName));
             });
-            $("#editTaskCharacteristicOptionsForm").validator();
             $("#UpdateTaskCharacteristic").text("Update");
             $.session.set("TaskCharacteristic", JSON.stringify(data));
             taskSelect.val(data.theTaskName);
@@ -133,6 +132,7 @@ $(document).on('click', "td.taskcharacteristic-rows", function () {
             $.each(data.theBacking,function(idx,item) {
               appendTaskBacking(item); 
             }); 
+            $("#editTaskCharacteristicOptionsForm").validator('update');
           },
           error: function (xhr, textStatus, errorThrown) {
             debugLogger(String(this.url));

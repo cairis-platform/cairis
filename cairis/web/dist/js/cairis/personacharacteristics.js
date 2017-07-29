@@ -114,7 +114,6 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
             $.each(pNames, function (index,pName) {
               personaSelect.append($("<option></option>").attr("value",pName).text(pName));
             });
-            $("#editPersonaCharacteristicOptionsForm").validator();
             $("#UpdatePersonaCharacteristic").text("Update");
             $.session.set("PersonaCharacteristic", JSON.stringify(data));
             personaSelect.val(data.thePersonaName);
@@ -142,6 +141,7 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
 
             $('#theCharacteristicSynopsis').val(data.theCharacteristicSynopsis.theSynopsis);
             $('#theCharacteristicSynopsisElementType').val(data.theCharacteristicSynopsis.theDimension);
+            $("#editPersonaCharacteristicOptionsForm").validator('update');
           },
           error: function (xhr, textStatus, errorThrown) {
             debugLogger(String(this.url));
