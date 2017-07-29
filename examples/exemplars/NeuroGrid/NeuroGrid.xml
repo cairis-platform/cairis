@@ -561,7 +561,7 @@ As security is a topical subject in the media, Carol has been able to secure som
   </attacker_environment>
 </attacker>
 <threat name="Social engineering" type="Insider/Manipulation">
-  <method></method>
+  <method>Manipulate and exploit trust</method>
   <threat_environment name="Psychosis" likelihood="Occasional" >
     <threat_attacker name="Carol" />
     <threatened_asset name="User certificate" />
@@ -581,7 +581,7 @@ As security is a topical subject in the media, Carol has been able to secure som
   </threat_environment>
 </threat>
 <threat name="Replay attack" type="Electronic/Hacking">
-  <method></method>
+  <method>Replay attack</method>
   <threat_environment name="Core Technology" likelihood="Occasional" >
     <threat_attacker name="Mallory" />
     <threatened_asset name="Data node" />
@@ -597,7 +597,7 @@ As security is a topical subject in the media, Carol has been able to secure som
   </threat_environment>
 </threat>
 <threat name="Trojan Horse" type="Electronic/Malware">
-  <method></method>
+  <method>Trojan Horse</method>
   <threat_environment name="Psychosis" likelihood="Occasional" >
     <threat_attacker name="Mallory" />
     <threatened_asset name="User certificate" />
@@ -646,7 +646,7 @@ As security is a topical subject in the media, Carol has been able to secure som
   </threat_environment>
 </threat>
 <threat name="DOS" type="Electronic/DoS and DDoS">
-  <method></method>
+  <method>DOS</method>
   <threat_environment name="Core Technology" likelihood="Occasional" >
     <threat_attacker name="Trudy" />
     <threatened_asset name="Client workstation" />
@@ -657,7 +657,7 @@ As security is a topical subject in the media, Carol has been able to secure som
   </threat_environment>
 </threat>
 <threat name="Meta-data modification" type="Electronic/Hacking">
-  <method></method>
+  <method>Meta-data modification</method>
   <threat_environment name="Core Technology" likelihood="Remote" >
     <threat_attacker name="Mallory" />
     <threatened_asset name="Grid meta-data" />
@@ -670,7 +670,7 @@ As security is a topical subject in the media, Carol has been able to secure som
   </threat_environment>
 </threat>
 <threat name="Clinical data modification" type="Electronic/Hacking">
-  <method></method>
+  <method>Clinical data modification</method>
   <threat_environment name="Stroke" likelihood="Improbable" >
     <threat_attacker name="Yves" />
     <threatened_asset name="Clinical data" />
