@@ -99,10 +99,10 @@ function viewRole(roleName) {
     url: serverIP + "/api/roles/name/" + roleName.replace(" ", "%20"),
     success: function (json) {
       fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editRoleOptionsform").validator();
         $("#UpdateRole").text("Update");
         $.session.set("RoleObject", JSON.stringify(json));
         $("#editRoleOptionsform").loadJSON(json, null);
+        $("#editRoleOptionsform").validator('update');
         $.ajax({
           type: "GET",
           dataType: "json",
