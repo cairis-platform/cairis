@@ -750,7 +750,7 @@ Yves persuades Sally to run a workflow for him because he is a hurry and still d
 <response risk="Replay-based resource exploit" type="Transfer" >
   <transfer_environment name="Core Technology">
     <response_role name="Certificate Authority" cost="Low" />
-    <rationale></rationale>
+    <rationale>None</rationale>
   </transfer_environment>
 </response>
 <asset_association environment="Psychosis"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Portal" />
