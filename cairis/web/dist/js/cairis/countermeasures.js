@@ -122,26 +122,21 @@ function viewCountermeasure(cmName) {
     url: serverIP + "/api/countermeasures/name/" + cmName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
-        $("#addPropertyDiv").hide();
-        $("#editCountermeasureOptionsForm").validator();
-        $("#UpdateCountermeasure").text("Update");
-
         $.session.set("Countermeasure", JSON.stringify(data));
-        var fillerJSON = data;
+        $("#UpdateCountermeasure").text("Update");
         var tags = data.theTags;
-        fillerJSON.theTags = [];
         var text = "";
         $.each(tags, function (index, type) {
           text += type + ", ";
         });
         $("#theTags").val(text);
 
-        $('#editCountermeasureOptionsForm').loadJSON(fillerJSON, null);
+        $('#editCountermeasureOptionsForm').loadJSON(data, null);
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendCountermeasureEnvironment(env.theEnvironmentName)
         });
+        $("#editCountermeasureOptionsForm").validator('update');
         $("#theEnvironments").find(".countermeasuresEnvironments:first").trigger('click');
-
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -160,7 +155,6 @@ $(document).on("click", "#addNewCountermeasure", function () {
       refreshObjectBreadCrumb('New Countermeasure');
       activeElement("objectViewer");
       fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
-        $("#addPropertyDiv").hide();
         $("#editCountermeasureOptionsForm").validator();
         $("#UpdateCountermeasure").text("Create");
         $("#editCountermeasureOptionsForm").addClass("new");
@@ -670,7 +664,6 @@ function fillCountermeasurePropProperties(extra){
 }
 function toggleCountermeasureOptions(){
   $("#editCountermeasureOptionsform").toggle();
-  $("#addPropertyDiv").toggle();
 }
 function appendCountermeasureEnvironment(environment){
   $("#theEnvironments").find("tbody").append('<tr><td class="deleteCountermeasureEnv"><i class="fa fa-minus"></i></td><td class="countermeasuresEnvironments">'+environment+'</td></tr>');
