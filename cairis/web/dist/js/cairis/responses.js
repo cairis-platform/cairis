@@ -45,7 +45,6 @@ $(document).on('click', "#SelectResponseButton", function () {
   refreshObjectBreadCrumb('New Response');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
-    $("#editResponseOptionsform").validator();
     $("#UpdateResponse").text("Create");
     $("#editResponseOptionsform").addClass("newResponse");
     var select = $("#chooseRisk");
@@ -58,6 +57,7 @@ $(document).on('click', "#SelectResponseButton", function () {
       $.session.set("response", JSON.stringify(resp));
       $("#chooseRisk").trigger('click');
       $.session.set("responseKind",responseType);
+      $("#editResponseOptionsform").validator('update');
       switch (responseType){
         case "Transfer":
           toggleResponse("#transferWindow");
@@ -101,7 +101,6 @@ function viewResponse(responseName) {
     url: serverIP + "/api/responses/name/" + encodeURIComponent(responseName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editResponseOptionsform").validator();
         $("#UpdateResponse").text("Update");
         var tags = data.theTags;
         $("#theResponseName").val(data.theName);
@@ -151,6 +150,7 @@ function viewResponse(responseName) {
             toggleResponse("#mitigateWindow");
             break;
         }
+        $("#editResponseOptionsform").validator('update');
         $("#theRespEnvironments").find(".responseEnvironment:first").trigger('click');
       });
     },
