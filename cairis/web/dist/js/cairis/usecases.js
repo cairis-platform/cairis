@@ -125,7 +125,6 @@ function viewUseCase(ucName) {
     url: serverIP + "/api/usecases/name/" + ucName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#objectViewer", null, true, true, function () {
-        $('#editUseCaseOptionsForm').validator();
         $('#UpdateUseCase').text("Update");
         $.session.set("UseCase", JSON.stringify(data));
         $('#editUseCaseOptionsForm').loadJSON(data, null);
@@ -151,6 +150,7 @@ function viewUseCase(ucName) {
           appendUseCaseEnvironment(env.theEnvironmentName);
         });
         $("#theEnvironments").find(".usecaseEnvironment:first").trigger('click');
+        $('#editUseCaseOptionsForm').validator('update');
       });
     },
     error: function (xhr, textStatus, errorThrown) {
