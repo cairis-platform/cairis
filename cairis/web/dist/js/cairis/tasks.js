@@ -146,7 +146,6 @@ function viewTask(taskName) {
     url: serverIP + "/api/tasks/name/" + taskName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editTaskOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editTaskOptionsForm").validator();
         $("#UpdateTask").text("Update");
         $.session.set("Task", JSON.stringify(data));
         $('#editTaskOptionsForm').loadJSON(data, null);
@@ -166,6 +165,7 @@ function viewTask(taskName) {
           appendTaskEnvironment(env.theEnvironmentName);
         });
         fillTaskEnvInfo(data.theEnvironmentProperties[0]);
+        $("#editTaskOptionsForm").validator('update');
         $('#tasktabsID').show('fast');
         $.session.set("taskEnvironmentName", data.theEnvironmentProperties[0].theEnvironmentName);
       });
