@@ -129,7 +129,6 @@ function viewPersona(personaName) {
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendPersonaEnvironment(env.theEnvironmentName);
         });
-        $("#editPersonasOptionsForm").validator('update');
         $("#thePersonaEnvironments").find(".personaEnvironment:first").trigger('click');
         $("#theImage").attr("src",getImagedir(data.theImage));
         rescaleImage($("#theImage"),300);
@@ -147,6 +146,7 @@ function viewPersona(personaName) {
             }
           }
         });
+        $("#editPersonasOptionsForm").validator('update');
       });
     },
     error: function (xhr, textStatus, errorThrown) {
