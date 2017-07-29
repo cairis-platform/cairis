@@ -158,7 +158,7 @@ The development of a structure for trial image metadata, based on a careful desc
   <description>Responsible for day-to-day administration of NeuroGrid, including authorisation of access requests.</description>
 </role>
 <asset name="Clinical data" short_code="CD" type="Information" is_critical="0">
-  <description></description>
+  <description>Clinical data</description>
   <significance>Unanonymised and in the wrong hands, this data can be very damaging.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="confidentiality" value="High">
@@ -178,7 +178,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="User certificate" short_code="UC" type="Information" is_critical="0">
-  <description>TBC</description>
+  <description>User certificate</description>
   <significance>Necessary to access the NeuroGrid portal.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="confidentiality" value="Medium">
@@ -210,7 +210,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="Access Control Policy" short_code="AC" type="Information" is_critical="0">
-  <description></description>
+  <description>Access Control Policy</description>
   <significance>This decides who can access what in NeuroGrid.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="integrity" value="High">
@@ -233,7 +233,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="Analysis data" short_code="AD" type="Information" is_critical="0">
-  <description></description>
+  <description>Analysis data</description>
   <significance>If this data has not been properly sanitised before or after analysis, then confidentiality could be endangered.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="confidentiality" value="Medium">
@@ -250,7 +250,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="Guest Certificate" short_code="GC" type="Information" is_critical="0">
-  <description></description>
+  <description>Guest Certificate</description>
   <significance>Many users have not registered for NeuroGrid but have access to Guest Certificates</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="availability" value="Low">
@@ -264,7 +264,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="Delegation token" short_code="DT" type="Information" is_critical="0">
-  <description></description>
+  <description>Delegation token</description>
   <significance>None known</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Core Technology" property="integrity" value="Medium">
@@ -278,7 +278,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="WebDav folder" short_code="WD" type="Information" is_critical="0">
-  <description></description>
+  <description>WebDev folder</description>
   <significance>Accessing WebDav folders allows access to process NeuroGrid data</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="availability" value="Medium">
@@ -292,7 +292,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="Grid meta-data" short_code="GM" type="Information" is_critical="0">
-  <description></description>
+  <description>Grid meta-data</description>
   <significance>Meta-data used to control aspects of the NeuroGrid infrastructure.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Stroke" property="confidentiality" value="Low">
@@ -309,7 +309,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="CA Certificate" short_code="CA" type="Information" is_critical="0">
-  <description></description>
+  <description>CA Certificate</description>
   <significance>Obtaining this allows NeuroGrid meta-data to be modified</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Core Technology" property="accountability" value="High">
@@ -317,7 +317,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="Personal certificate" short_code="PC" type="Information" is_critical="0">
-  <description></description>
+  <description>Personal certificate</description>
   <significance>Allows access to analysis data</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="confidentiality" value="High">
@@ -331,7 +331,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="Portal" short_code="P" type="Systems" is_critical="0">
-  <description></description>
+  <description>Portal</description>
   <significance>Unavailability of the portal is synonymous with unavailability of NeuroGrid for many users.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="availability" value="High">
@@ -345,7 +345,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="Web-browser" short_code="WB" type="Software" is_critical="0">
-  <description></description>
+  <description>Web-browser</description>
   <significance>Most tasks performed by the user involve this asset.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="integrity" value="Medium">
@@ -362,7 +362,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="Workflow" short_code="WF" type="Software" is_critical="0">
-  <description></description>
+  <description>Workflow</description>
   <significance>Workflows can tie up system resources and are exposed to sensitive data when running.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="integrity" value="High">
@@ -382,7 +382,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="Client workstation" short_code="CW" type="Hardware" is_critical="0">
-  <description></description>
+  <description>Client workstation</description>
   <significance>Certain software and data files need to be installed on this machine to access NeuroGrid.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="confidentiality" value="Low">
@@ -399,7 +399,7 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
 </asset>
 <asset name="Data node" short_code="DN" type="Hardware" is_critical="0">
-  <description></description>
+  <description>Data node</description>
   <significance>Obtaining physical or virtual access to these machines can compromise the data it holds.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="availability" value="Medium">
