@@ -2011,7 +2011,7 @@ Standard 7.12(yyy)</issue>
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Secure access control.</definition>
     <fit_criterion>None</fit_criterion>
-    <issue></issue>
+    <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Warranted Access" originator="Anon">
