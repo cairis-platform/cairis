@@ -37,7 +37,6 @@ $(document).on('click', "td.environment-rows",function(){
     url: serverIP + "/api/environments/name/" + name.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editEnvironmentOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editEnvironmentOptionsform").validator();
         $("#UpdateEnvironment").text("Update");
         $.session.set("editableEnvironment", JSON.stringify(data));
         $('#editEnvironmentOptionsform').loadJSON(data, null);
@@ -66,6 +65,7 @@ $(document).on('click', "td.environment-rows",function(){
             $("#MaximiseID").prop('checked', false);
             break;
         }
+        $("#editEnvironmentOptionsform").validator('update');
       });
     },
     error: function (xhr, textStatus, errorThrown) {
