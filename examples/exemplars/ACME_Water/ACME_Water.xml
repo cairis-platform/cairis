@@ -1899,8 +1899,8 @@ Standard 7.12(yyy)</issue>
 <goal name="Firewall administration monitoring" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="Low" >
     <definition>Firewall administration activities shall be monitored.</definition>
-    <fit_criterion></fit_criterion>
-    <issue></issue>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
   </goal_environment>
 </goal>
 <goal name="Identifiable connections" originator="Anon">
@@ -1937,7 +1937,7 @@ Standard 7.12(yyy)</issue>
 <goal name="Secure changes" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Changes or additions to SCADA, Telemetry and Control Systems shall be secure.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue></issue>
   </goal_environment>
 </goal>
@@ -1967,7 +1967,7 @@ Standard 7.12(yyy)</issue>
 <goal name="Secure Remote Access" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Secure Remote access</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.6</issue>
   </goal_environment>
 </goal>
@@ -1989,7 +1989,7 @@ Standard 7.12(yyy)</issue>
 <goal name="Third party requests" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>All third party requests for remote access to SCADA, Telemetry, and Control Systems shall be reviewed using the ACME Health Check Process</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.6(rr)</issue>
   </goal_environment>
 </goal>
@@ -2003,14 +2003,14 @@ Standard 7.12(yyy)</issue>
 <goal name="Internet access" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Internet access from SCADA, Telemetry and Control Systems shall be disabled.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.7(uu)</issue>
   </goal_environment>
 </goal>
 <goal name="Access Control" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Secure access control.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue></issue>
   </goal_environment>
 </goal>
@@ -2043,7 +2043,7 @@ Standard 7.8(zz)</issue>
 <goal name="User Id Least privilege" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>User id access shall be based on least privilege.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.8(aaa)</issue>
   </goal_environment>
 </goal>
@@ -2073,7 +2073,7 @@ Standard 7.8(zz)</issue>
 <goal name="Secure Operating Systems" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Secure OS</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue></issue>
   </goal_environment>
 </goal>
@@ -2105,7 +2105,7 @@ Standard 7.10(mmm)</issue>
 <goal name="Standard build" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="Medium" >
     <definition>All SCADA, Telemetry, and Control Systems operating systems shall be installed from a standard ACME build image.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.1 (l)</issue>
   </goal_environment>
 </goal>
@@ -2127,7 +2127,7 @@ Standard 7.10(mmm)</issue>
 <goal name="Secure Roles" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>The security responsibilities of ACME employees, partners, and contractors responsible for installing, configuring, implementing, and operating ICT infrastructure supporting SCADA, Telemetry, and Control Systems shall be specified and be specified and communicated to all relevant parties.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 5(a)</issue>
   </goal_environment>
 </goal>
@@ -2148,35 +2148,35 @@ Standard 7.10(mmm)</issue>
 <goal name="Secure wifi" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Wireless systems shall be securely deployed.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.5</issue>
   </goal_environment>
 </goal>
 <goal name="Wifi encryption" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Wireless networking traffic shall be encrypted encompassing WPA or WPA2 level security.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.5(jj)</issue>
   </goal_environment>
 </goal>
 <goal name="SSID broadcast" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>The SSID of a wireless network shall not be broadcast.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.5(kk)</issue>
   </goal_environment>
 </goal>
 <goal name="MAC address filtering" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="Medium" >
     <definition>MAC address filtering shall be applied to authorised wireless access points to disallow unauthorised network connections.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.5(ll)</issue>
   </goal_environment>
 </goal>
 <goal name="Active Directory wifi control" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Access control to wifi devices shall be managed through Active Directory.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.5(mm)</issue>
   </goal_environment>
 </goal>
@@ -2203,7 +2203,7 @@ Standard 7.10(mmm)</issue>
 <goal name="Email routing" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Email from SCADA, Telemetry and Control Systems shall be routed through the corporate e-mail System.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.7 (vv)</issue>
   </goal_environment>
 </goal>
@@ -2233,7 +2233,7 @@ Standard 7.10(mmm)</issue>
 <goal name="Password mixed characters" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="Medium" >
     <definition>Passwords shall contain a mixture of upper, lower, and alphanumeric characters.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.9(ggg)</issue>
   </goal_environment>
 </goal>
@@ -2248,21 +2248,21 @@ Standard 7.10(mmm)</issue>
 <goal name="Password storage" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Passwords shall not be written down.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.9 (jjj)</issue>
   </goal_environment>
 </goal>
 <goal name="Inbuilt security" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>All inbuilt security features shall be reviewed and, where appropriate, enabled.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.10(nnn)</issue>
   </goal_environment>
 </goal>
 <goal name="Critical Vendor patches" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="Medium" >
     <definition>Critical Vendor Patches shall be installed within their recommended timescales.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.11(ppp)</issue>
   </goal_environment>
 </goal>
@@ -2309,14 +2309,14 @@ Standard 7.11(vvv)</issue>
 <goal name="Scanned media" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="Medium" >
     <definition>All removeable media shall be scanned prior to insertion into target systems.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.11(www)</issue>
   </goal_environment>
 </goal>
 <goal name="Malware data scanning" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="Low" >
     <definition>All data shall be scanned for Malware</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.11(xxx)</issue>
   </goal_environment>
 </goal>
@@ -2330,35 +2330,35 @@ Standard 7.11(vvv)</issue>
 <goal name="Critical area logging" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Access to secure critical areas and systems shall be logged.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.12(aaaa)</issue>
   </goal_environment>
 </goal>
 <goal name="Log file size" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="Medium" >
     <definition>Log file sizes shall be set to a minimum of 500 MB.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.12(bbbb)</issue>
   </goal_environment>
 </goal>
 <goal name="Log file overwrite" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="Medium" >
     <definition>Log files shall be set to overwrite.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.12(cccc)</issue>
   </goal_environment>
 </goal>
 <goal name="Secure backup" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>SCADA, Telemetry, and Control System software and configuration data shall be backed-up to ensure swift recovery.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.13(dddd)</issue>
   </goal_environment>
 </goal>
 <goal name="Backup media" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>SCADA, Telemetry, and Control System software shall be copied to removable media.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.13(eeee)</issue>
   </goal_environment>
 </goal>
@@ -2372,77 +2372,77 @@ Standard 7.11(vvv)</issue>
 <goal name="Offsite backup" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Backups shall be stored offsite to ensure their availability in the event of a localised disaster.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.14(gggg)</issue>
   </goal_environment>
 </goal>
 <goal name="Backup hardware" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Hardware used to restore backups shall be retained to ensure the availability of data.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.13(iiii)</issue>
   </goal_environment>
 </goal>
 <goal name="Backup transmission" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Backups shall be transported / transmitted securely.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.13(hhhh)</issue>
   </goal_environment>
 </goal>
 <goal name="Backup storage" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Backups shall be stored in a fireproof safe.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.13(hhhh)</issue>
   </goal_environment>
 </goal>
 <goal name="Backup logs" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Security, System, and Application event logs shall be included in the backup activity.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.13(jjjj)</issue>
   </goal_environment>
 </goal>
 <goal name="Application program backup" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>PLC and SCADA application programs shall be stored in the central software repository.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.14(kkkk)</issue>
   </goal_environment>
 </goal>
 <goal name="Compliance audit" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Regular audits shall be carried out to ensure the ACME Information Security Policy is being followed.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.14</issue>
   </goal_environment>
 </goal>
 <goal name="Acceptable Use Policy" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>All users shall have read and signed the Acceptable Use Policy (AUP) and Code of Conduct (CoCo) forms.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.14(mmmm)</issue>
   </goal_environment>
 </goal>
 <goal name="Remote connection audit" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Regular audits shall be carried out ensuring that no unauthorised remote access connections exist.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.14(nnnn)</issue>
   </goal_environment>
 </goal>
 <goal name="Asset Inventory" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>All systems and components shall be documented to ensure an up-to-date Asset Inventory is maintained.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.14(oooo)</issue>
   </goal_environment>
 </goal>
 <goal name="Build data" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>All build and configuration details shall be documented.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.14(pppp)</issue>
   </goal_environment>
 </goal>
@@ -2463,7 +2463,7 @@ Standard 7.11(vvv)</issue>
 <goal name="Secure site" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>SCADA, Telemetry, and Control Systems shall be physically protected from malicious attack, unauthorised access, and theft.</definition>
-    <fit_criterion></fit_criterion>
+    <fit_criterion>None</fit_criterion>
     <issue>Standard 7.15(tttt)</issue>
   </goal_environment>
 </goal>
