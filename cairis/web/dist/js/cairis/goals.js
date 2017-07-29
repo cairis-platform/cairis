@@ -135,7 +135,6 @@ mainContent.on('click', ".goalEnvProperties", function () {
       });
     }
   });
-  $("#editGoalOptionsForm").validator('update');
 });
 
 mainContent.on('click', '.deleteGoalEnvConcernAssoc', function () {
@@ -599,8 +598,8 @@ function fillGoalOptionMenu(data,callback){
       $.each(data.theEnvironmentProperties, function (index, prop) {
         appendGoalEnvironment(prop.theEnvironmentName);
       });
-      $("#editGoalOptionsForm").validator('update');
       $("#theGoalEnvironments").find(".goalEnvProperties:first").trigger('click');
+      $("#editGoalOptionsForm").validator('update');
     }
     else {
       var goal =  jQuery.extend(true, {},goalDefault );

@@ -304,8 +304,8 @@ var obstacleEnvDefault =     {
   "theGoalRefinements": [],
   "theSubGoalRefinements": [],
   "theConcerns": [],
-  "theProbability": "",
-  "theProbabilityRationale": "",
+  "theProbability": "0",
+  "theProbabilityRationale": "None",
   "theEnvironmentName": ""
 };
 var obstacleDefault = {

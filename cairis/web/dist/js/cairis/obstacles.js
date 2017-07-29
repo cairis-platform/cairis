@@ -523,8 +523,8 @@ function fillObstacleOptionMenu(data,callback){
       $.each(data.theEnvironmentProperties, function (index, prop) {
         appendObstacleEnvironment(prop.theEnvironmentName);
       });
-      $("#editObstacleOptionsForm").validator('update');
       $("#theObstacleEnvironments").find(".obstacleEnvProperties:first").trigger('click');
+      $("#editObstacleOptionsForm").validator('update');
     }
     else {
       var obstacle =  jQuery.extend(true, {},obstacleDefault );
