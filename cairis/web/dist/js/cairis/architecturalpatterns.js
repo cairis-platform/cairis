@@ -124,7 +124,6 @@ function viewArchitecturalPattern(apName) {
     url: serverIP + "/api/architectural_patterns/name/" + apName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editArchitecturalPatternOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editArchitecturalPatternOptionsForm").validator();
         $("#UpdateArchitecturalPattern").text("Update");
         $.session.set("ArchitecturalPattern", JSON.stringify(data));
         $("#theName").val(data.theName);
@@ -136,6 +135,7 @@ function viewArchitecturalPattern(apName) {
         $.each(data.theConnectors,function(idx,connector) {
           appendConnector(connector);
         });
+        $("#editArchitecturalPatternOptionsForm").validator('update');
 
         $("#theComponents").find("tbody").removeClass();
         $("#theComponents").find("tbody").addClass('component-rows');
