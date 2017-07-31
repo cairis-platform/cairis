@@ -1144,58 +1144,30 @@ countermeasure helps or hinders the properties of associated tasks.
 Adding, updating, and deleting a countermeasure
 -----------------------------------------------
 
-.. figure:: CountermeasureDialogSecurity.png
-   :alt: Countermeasure Dialog: Security Page
+.. figure:: CountermeasureFormSecurity.png
+   :alt: Countermeasure form: Security Page
 
-.. figure:: CountermeasureDialogUsability.png
-   :alt: Countermeasure Dialog: Usability Page
+.. figure:: CountermeasureFormUsability.png
+   :alt: Countermeasure form: Usability Page
 
 
--  Click on the Countermeasure toolbar button to open the
-   Countermeasures dialog box, and click on the Add button to open the
-   Countermeasure dialog box.
+-  Select the Risk/Countermeasures menu to open the Countermeasures form, and click on the Add button to open the Countermeasure form.
 
--  Enter the countermeasure name and description, and select the
-   countermeasure type. A countermeasure may be one of the following
-   type: Information, Systems, Software, Hardware, or People.
+-  Enter the countermeasure name and description, and select the countermeasure type. A countermeasure may be one of the following type: Information, Systems, Software, Hardware, or People.
 
--  Right click on the environment window to bring up the environment
-   speed menu. Select the add option and, from the Add environment
-   window, select an environment to situate the countermeasure in. This
-   will add the new environment to the environment list.
+-  Click on the Add button in the environment table, and select an environment to situate the countermeasure in. This will add the new environment to the environment list.
 
--  After ensuring the environment is selected in the environment window,
-   select the countermeasure cost
+-  Select the countermeasure cost to indicate the general cost of implementing the countermeasure within the selected environment.
 
--  Click on the Security tab to display the security page. Right click
-   in the Requirements box, and select add from the speed menu to add
-   the requirement (or requirements) this countermeasure refines.
-   Following this, right click on the Target list and select add to
-   select the countermeasure's target/s, together with the
-   countermeasure's effectiveness. Finally, add the security properties
-   fostered by this countermeasure via the security properties box at
-   the bottom of the page.
+-  Click on the Security tab to display the security page. Click on the Add button above the Requirements table, and select the requirement (or requirements) this countermeasure refines. Following this, click on the Add button above the Targets table to select the countermeasure's target/s, together with the countermeasure's effectiveness. Finally, add the security properties fostered by this countermeasure via the security properties box at the bottom of the page.
 
--  Click on the Usability tab to display the usability page. Right click
-   on the Roles box, and select add from the speed menu to add the roles
-   associated with this countermeasure. Any tasks associated with these
-   roles are automatically populated in the Task box at the bottom of
-   the page, together with the person/s carrying out the task. If the
-   countermeasure helps or hinders a task, double click on the task and
-   modify the task's attributes accordingly.
+-  Click on the Usability tab to display the usability page. Click on the Add button above the Roles table, and select the roles associated with this countermeasure. Any tasks associated with these roles are automatically populated in the Task box at the bottom of the page, together with the person/s carrying out the task. If the countermeasure helps or hinders a task, double click on the task and modify the task's attributes accordingly.
 
 -  Click on the Create button to add the new countermeasure.
 
--  Existing countermeasures can be modified by double clicking on the
-   countermeasure in the Countermeasures dialog box, making the
-   necessary changes, and clicking on the Update button.
+-  Existing countermeasures can be modified by clicking on the countermeasure in the Countermeasures table, making the necessary changes, and clicking on the Update button.
 
--  To delete a countermeasure, select the countermeasure to delete in
-   the Countermeasures dialog box, and select the Delete button. If any
-   artifacts are dependent on this countermeasure then a dialog box
-   stating these dependencies are displayed. The user has the option of
-   selecting Yes to remove the countermeasure dependencies and the
-   countermeasure itself, or No to cancel the deletion.
+-  To delete a countermeasure, click the Delete button next to the countermeasure to be removed in the Countermeasures table. If any artifacts are dependent on this countermeasure then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the countermeasure dependencies and the countermeasure itself, or No to cancel the deletion.
 
 Generating countermeasure assets and security patterns
 ------------------------------------------------------
@@ -1215,11 +1187,7 @@ asset. To do this, select Situate Pattern from the speed menu, select
 the security patten, followed by the countermeasure environments to
 situate the pattern assets in.
 
-Security Patterns can be imported into the tool by using the
-Import/Import Security Patterns option, and selecting the XML based
-patterns catalogue to import. An example catalogue file, schumacher.xml,
-which incorporates a number of patterns from the Security Patterns text
-book by Schumacher et al is included in the cairis/sql directory.
+Security Patterns can be imported into the tool by selecting the System/Import Model menu option and, when selecting the XML model file to be imported, selecting Security Pattern option. An example catalogue file, schumacher_patterns.xml, which incorporates a number of patterns from the Security Patterns text book by Schumacher et al is included in the cairis/examples/architecture directory.
 
 Associating countermeasures with pre-existing patterns
 ------------------------------------------------------
@@ -1231,10 +1199,10 @@ option. However, a list of possible security patterns to choose from
 will only be displayed if the components of the security pattern are
 present in ALL of the environments the countermeasure is situated for.
 
-Weaking the effectiveness of countermeasures
+Weakening the effectiveness of countermeasures
 --------------------------------------------
 
-Countermeasures mitigate risks by targetting its risk elements, i.e. its
+Countermeasures mitigate risks by targeting its risk elements, i.e. its
 threats or vulnerabilities. However, when one or more assets are
 generated from these countermeasures, several factors may weaken the
 effect of the countermeasure.
@@ -1260,7 +1228,7 @@ new countermeasure which targets the weakening threat or vulnerability.
 If this is carried out, the detail associated with the risk score in the
 Risk Dialog box will indicate cases where, although the effectiveness
 score for the countermeasure holds, this is by virtue of a
-countermeasure targetting the weakening threat or vulnerability.
+countermeasure targeting the weakening threat or vulnerability.
 
 Countermeasures cannot, however, be simply defined on the fly. They
 arise as the result of rational risk analysis, so risks need to be
@@ -1270,11 +1238,8 @@ Generating Documentation
 ========================
 
 The current contents of the CAIRIS database can be generated as a
-requirements specification by selecting the Generate Documentation
-toolbar button. After the sections to be included are selected in the
-Generate Documentation dialog box, the target directory is prompted,
-following which the specification is generated as HTML, RTF, or PDF,
-based on the output options selected.
+requirements specification by selecting the System/Documentation
+menu.  After choosing to generate requirements or persona documentation, and the output type (PDF or RTF), clicking on Generate will generate and download the specification document.
 
-.. figure:: GenerateDocumentationDialog.png
-   :alt: Generate Documentation Dialog
+.. figure:: GenerateDocumentationForm.jpg
+   :alt: Generate Documentation form
