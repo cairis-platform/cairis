@@ -396,7 +396,7 @@ Adding, updating, or deleting a task
 
 -  Enter a task name, and the objective of carrying out the task.
 
--  Click on the Add button in the asset table, and select an environment to situate the asset in. This will add the new environment to the environment list.
+-  Click on the Add button in the environment table, and select an environment to situate the task in. This will add the new environment to the environment list.
 
 -  In the Dependencies folder, enter any dependencies needing to hold before this task can take place.
 
@@ -500,11 +500,11 @@ a vulnerability or a threat, and contribute to risk analysis.
 Adding, updating, and deleting a goal
 -------------------------------------
 
-.. figure:: GoalsDialog.png
-   :alt: Goals Dialog
+.. figure:: GoalsTable.jpg
+   :alt: Goals table
 
 
--  Click on the Goal toolbar button to open the Goals dialog box. As
+-  Click on the Requirements/Goals button to open the Goals table. As
    the above figure illustrates, next to goal name is the current
    *status* for the goal. If a goal is defined as OK, then this goal is
    refined by a requirement, or by one or more goals. Goals with the
@@ -512,42 +512,39 @@ Adding, updating, and deleting a goal
    with the status *Check* have been refined by one or more obstacle,
    and these should be examined to find a root threat or vulnerability.
 
-.. figure:: GoalDialog.png
-   :alt: Goal Dialog
+.. figure:: GoalForm.jpg
+   :alt: Goal form
 
--  Click on the Add button to open the Goal dialog box, and enter the
+-  Click on the Add button to open the Goal form, and enter the
    name of the goal.
 
--  Right click on the environment window to bring up the environment
-   speed menu. Select the add option and, from the Add environment
-   window, select an environment to situate the goal in. This will add
-   the new environment to the environment list.
+-  Click on the Add button in the environment table, and select an environment to situate the goal in. This will add the new environment to the environment list.
 
 -  In the Definition page, enter the goal definition, and select the
    goal category and priority. Possible goal categories are: Achieve,
    Maintain, Avoid, Improve, Increase, Maximise, and Minimise. Possible
    priority values are Low, Medium, and High.
 
--  Click on the Fit Criterion tab, and enter the criteria which must
+-  Click on the Fit Criterion folder, and enter the criteria which must
    hold for the goal to be satisfied.
 
 -  Click on the Issue tab and enter any issues or comments relating to
    this goal.
 
-.. figure:: AddGoalRefinement.png
-   :alt: Add Goal Refinement Dialog
+.. figure:: AddGoalRefinement.jpg
+   :alt: Add Goal Refinement form
 
 
 -  If this goal refines a parent goal, click on the Goals tab,
-   right-click on Goal refinement list, and select Add to open the Add
-   Goal Refinement Dialog. In this dialog, select the Goal from the Type
+   click on Add button in the goals table to to open the Add
+   Goal Refinement form. In this form, select the Goal from the Type
    combo box, and select the Sub-goal, refinement type, and an Alternate
    value. Possible refinement types are: and, or, conflict, responsible,
    obstruct, and resolve. The alternative value (Yes or No) indicates
    whether or not this goal affords a goal-tree for an alternate
    possibility for satisfying the parent goal. It is also possible to
    enter a rationale for this goal refinement in the refinement text
-   book. Clicking on Add will add the refinement association to memory,
+   book. Clicking on Update will add the refinement association to memory,
    but this will not be committed to the database until the goal is
    added or updated.
 
@@ -560,7 +557,7 @@ Adding, updating, and deleting a goal
    or modification via the Goal Associations tool-bar button.
 
 -  If any aspect of the goal concerns one or more assets, then these can
-   be added by clicking on the Concerns add and adding the asset/s to
+   be added by clicking on the Concerns folder and adding the asset/s to
    the concern list. Adding an asset concern causes a concern comment to
    be associated to the asset in the asset model. If the goal concerns
    an association between assets, the association can be added by
@@ -571,11 +568,11 @@ Adding, updating, and deleting a goal
 
 -  Click on the Create button to add the new goal.
 
--  Existing goals can be modified by double clicking on the goal in the
-   Goals dialog box, making the necessary changes, and clicking on the
+-  Existing goals can be modified by clicking on the goal name in the
+   Goals table, making the necessary changes, and clicking on the
    Update button.
 
--  To delete a goal, select the goal to delete in the Goals dialog box,
+-  To delete a goal, select the goal to delete in the Goals table,
    and select the Delete button. If any artifacts are dependent on this
    goal then a dialog box stating these dependencies are displayed. The
    user has the option of selecting Yes to remove the goal dependencies
