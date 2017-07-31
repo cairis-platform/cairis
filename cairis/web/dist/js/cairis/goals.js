@@ -458,7 +458,7 @@ mainContent.on('click', "#updateGoalButton", function (e) {
   }
 });
 
-mainContent.on('dblclick', '.editGoalSubGoalRow', function () {
+mainContent.on('click', '.editGoalSubGoalRow', function () {
   toggleGoalWindow("#editgoalSubGoal");
   var name = $(this).find("td").eq(1).text();
   fillGoalEditSubGoal(name);
@@ -474,7 +474,7 @@ mainContent.on('dblclick', '.editGoalSubGoalRow', function () {
   $("#theGoalSubGoalRationale").val(rationale);
 });
 
-mainContent.on('dblclick', '.editGoalGoalRow', function () {
+mainContent.on('click', '.editGoalGoalRow', function () {
   toggleGoalWindow("#editGoalGoal");
   var name = $(this).find("td").eq(1).text();
   fillGoalEditGoal(name);
@@ -492,7 +492,7 @@ mainContent.on('dblclick', '.editGoalGoalRow', function () {
 });
 
 //editGoalConcernAssoc
-mainContent.on('dblclick', '.editGoalConcernAssoc', function () {
+mainContent.on('click', '.editGoalConcernAssoc', function () {
   var envName = $.session.get("GoalEnvName");
   var tr = $(this);
   getAllAssetsInEnv(envName, function (data) {

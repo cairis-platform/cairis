@@ -24,6 +24,7 @@ from cairis.core.colourcodes import usabilityColourCode
 from cairis.core.colourcodes import usabilityTextColourCode
 from cairis.core.colourcodes import probabilityTextColourCode
 from cairis.core.colourcodes import threatColourCode
+from cairis.core.colourcodes import riskTextColourCode
 from cairis.core.colourcodes import obstacleColourCode
 
 
@@ -97,7 +98,7 @@ class KaosModel:
           if (currentScore > highestScore):
             highestScore = currentScore
         ellipseColour = threatColourCode(highestScore)
-      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,style='filled',color=ellipseColour,fontcolor='white',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,style='filled',color=ellipseColour,fontcolor=riskTextColourCode(highestScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'persona'):
       objt = self.dbProxy.dimensionObject(objtName,'persona')
       if (objt.assumption() == True):

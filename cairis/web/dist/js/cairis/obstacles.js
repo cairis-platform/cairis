@@ -452,7 +452,7 @@ mainContent.on('click', "#updateObstacleButton", function (e) {
   }
 });
 
-mainContent.on('dblclick', '.obstacle_editGoalSubGoalRow', function () {
+mainContent.on('click', '.obstacle_editGoalSubGoalRow', function () {
   var refRow = $(this).closest('tr');
   var currentObs = {}
   currentObs.name = refRow.find("td").eq(1).text();
@@ -470,7 +470,7 @@ mainContent.on('dblclick', '.obstacle_editGoalSubGoalRow', function () {
   $("#obstacle_editGoalSubGoal").modal('show');
 });
 
-mainContent.on('dblclick', '.obstacle_editGoalGoalRow', function () {
+mainContent.on('click', '.obstacle_editGoalGoalRow', function () {
   var refRow = $(this).closest('tr');
   var currentObs = {}
   currentObs.name = refRow.find("td").eq(1).text();
