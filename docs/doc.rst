@@ -994,12 +994,12 @@ mitigate it.
 Adding, updating, and deleting a risk
 -------------------------------------
 
-.. figure:: RiskDialog.png
-   :alt: Risk Dialog
+.. figure:: RiskForm.jpg
+   :alt: Risk form
 
 
--  Click on the Risk toolbar button to open the Risks dialog box, and
-   click on the Add button to open the Risk dialog box.
+-  Select the Risk/Risks menu to open the Risks table, and
+   click on the Add button to open the Risk dialog form.
 
 -  Enter a risk name and select a threat and vulnerability from the
    respective combo boxes. A risk is valid only if the threat and
@@ -1014,11 +1014,11 @@ Adding, updating, and deleting a risk
    defined. To do this, click on the Create Misuse Case button to open
    the Misuse Case Dialog.
 
-.. figure:: MisuseCaseDialog.png
-   :alt: Misuse Case Dialog
+.. figure:: MisuseCaseForm.jpg
+   :alt: Misuse Case form
 
 
--  Most of the fields in the Misuse Case dialog have already been
+-  Most of the fields in the Misuse Case form have already been
    completed based on the risk analysis carried out up to this point.
    Click on the Narrative tab and enter a scenario which describes how
    the attacker realises the associated risk, i.e. carries out the
@@ -1027,26 +1027,22 @@ Adding, updating, and deleting a risk
    Summary tab.
 
 -  Click on the Create button to create the Misuse Case and close the
-   Misuse Case Dialog. Following this, click Create add the new risk.
+   Misuse Case form. Following this, click Create add the new risk.
 
--  Existing risks can be modified by double clicking on the risk in the
-   Risks dialog box, making the necessary changes, and clicking on the
+-  Existing risks can be modified by clicking on the risk in the
+   Risks table, making the necessary changes, and clicking on the
    Update button.
 
--  To delete a risk, select the risk to delete in the Risks dialog box,
-   and select the Delete button. If any artifacts are dependent on this
-   risk then a dialog box stating these dependencies are displayed. The
-   user has the option of selecting Yes to remove the risk dependencies
-   and the risk itself, or No to cancel the deletion.
+-  To delete a risk, click the Delete button next to the risk to be removed in the Risks table. If any artifacts are dependent on this risk then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the risk dependencies and the risk itself, or No to cancel the deletion.
 
 Risk Analysis model
 -------------------
 
-Risk Analysis models can be viewed by clicking on the Risk Analysis
-Model toolbar button, and selecting the environment to view the
+Risk Analysis models can be viewed by clicking on the Model/Risks
+Model menu, and selecting the environment to view the
 environment for.
 
-.. figure:: RiskAnalysisModel.png
+.. figure:: RiskAnalysisModel.jpg
    :alt: Risk Analysis Model
 
 By changing the environment name in the environment combo box, the risk
