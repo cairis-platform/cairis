@@ -656,18 +656,14 @@ goals.
 Adding, updating, and deleting requirements
 -------------------------------------------
 
-Requirements are added and edited using the Requirements Editor in the
-main CAIRIS window. Each requirement is associated with an asset, or an
+Requirements are added and edited using the Requirements Editor, which is accessible by selecting the Requirements/Requirements menu option. Each requirement is associated with an asset, or an
 environment. Requirements associated with assets may specify the asset,
 constrain the asset, or reference it in some way. Requirements
 associated with an environment are considered transient, and remain
 associated with an environment only until appropriate assets are
 identified.
 
--  To add a requirement, press enter on an existing requirement, or
-   click on the Add Requirement toolbar button. In both cases, a new
-   requirement will appear beneath the row where the cursor is currently
-   set.
+-  To add a requirement, select the asset or environment to associate the requirement with, and click on the Add button.  A new requirement will appear at the foot of the requirements table.
 
 -  Enter the requirement description, rationale, fit criterion, and
    originator in the appropriate cells, select the priority (1,2, 3),
@@ -675,45 +671,23 @@ identified.
    Performance, Operational, Maintainability, Portability, Security,
    Cultural and Political, and Legal).
 
--  When the attributes have been entered, click on the Commit latest
-   changes toolbar button to commit these requirement additions to the
-   database.
+-  When the attributes have been entered, press Enter to commit the requirement to the database.
 
--  The order of requirements in the editor can be modified by left
-   clicking on the row label and, while holding down the left mouse
-   button, moving the row label to the appropriate position. When the
-   mouse button is released, the requirement labels are re-ordered
-   accordingly.
 
 -  By changing the asset in the Assets combo box, or the Environment in
    the Environments combo box, the editor will be reloaded with the
-   requirement associated with the selected asset or environment. Please
-   note, the Commit latest changes toolbar button should be clicked
-   before changing the selected asset or environment, otherwise any
-   in-situ requirement changes will be lost.
+   requirement associated with the selected asset or environment.
 
--  A requirement can be deleting by moving the cursor to the row to be
-   deleted, and clicking the Delete Requirements toolbar button.
-   Deleting a requirement also has the effect of re-ordering the
+-  A requirement can be deleting by right clicking on any cell in the row to be removed, and selecting Remove from the speed menu. Deleting a requirement also has the effect of re-ordering the
    requirement labels.
 
-Requirement history
--------------------
-
-Every time a requirement is modified, a new version of the requirement
-is created. To view the requirement history, right click on the
-requirement to view the Requirement History dialog. This dialog contains
-the details of each version of the requirement stored in the database.
 
 Searching requirement text
 --------------------------
 
-It is possible to search for a requirement with a particular text
-string, by selecting the Requirement Management/Find menu option, to
-open the Find Requirement dialog. This Find dialog is very similar to
-the Find dialog found in many WYSIWYG applications. This search function
-only works for requirements which are currently loaded in the
-Requirements editor.
+It is possible to search for a requirement or any other model object with a particular text
+string from the Search box in the menu bar. This Find dialog is very similar to
+the Find dialog found in many WYSIWYG applications.
 
 Requirements traceability
 -------------------------
@@ -723,15 +697,6 @@ refinement association but, requirements may also contribute to
 vulnerabilities (as well as tasks), or be supported by assets or misuse
 cases. Consequently, requirements can be manually traced to these
 artifacts in the same manner as tasks.
-
-Requirement association
------------------------
-
-A requirement associated to an environment can be associated with an
-asset, or a requirement associated with an asset can be associated with
-another asset. To re-associate a requirement, right click on the
-requirement, select Asset re-association, and select the asset to
-re-associate the requirement with.
 
 Security Patterns
 =================
@@ -772,8 +737,8 @@ environments themselves need to be first created.
 Create a template asset
 -----------------------
 
-.. figure:: TemplateAssetDialog.png
-   :alt: Template Pattern Dialog
+.. figure:: TemplateAssetForm.jpg
+   :alt: Template Asset form
 
 Template assets can be best described as context-free assets. When they
 are created, template assets do not form part of analysis unless they
