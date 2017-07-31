@@ -381,71 +381,44 @@ Tasks
 =====
 
 Tasks model the work carried out by one or more personas. This work is
-described in environemnt-specific narrative scenarios, which illustrate
+described in environment-specific narrative scenarios, which illustrate
 how the system is used to augment the work activity.
 
 Adding, updating, or deleting a task
 ------------------------------------
 
-.. figure:: TaskDialog.png
+.. figure:: TaskDialog.jpg
    :alt: Task Dialog
 
 
--  Click on the Task toolbar button to open the Tasks dialog box, and
-   click on the Add button to open the Task dialog box.
+-  Click on the UX/Tasks button to open the Tasks table, and
+   click on the Add button to open the Task form.
 
 -  Enter a task name, and the objective of carrying out the task.
 
--  If the task is not derived from empirical data, then select the
-   Asssumption Task check-box. Ticking this box has the effect of
-   pre-fixing the task name with an << assumption >> stereotype in any
-   models where the task is present.
+-  Click on the Add button in the asset table, and select an environment to situate the asset in. This will add the new environment to the environment list.
 
--  Right click on the environment window to bring up the environment
-   speed menu. Select the add option and, from the Add environment
-   window, select an environment to situate the persona in. This will
-   add the new environment to the environment list.
+-  In the Dependencies folder, enter any dependencies needing to hold before this task can take place.
 
--  After ensuring the environment is selected in the environment window,
-   click on the Summary tab. In the Summary page, enter any dependencies
-   needing to hold before this task can take place.
+-  In the Narrative folder, enter the task scenario. This narrative should describe how the persona (or personas) carry out the task to achieve the pre-defined objective.
 
-.. figure:: AddTaskPersona.png
-   :alt: Add Task Persona Dialog
+-  In the Consequences folder, enter any consequences (positive or negative) associated with this task.
+
+-  In the Benefits folder, enter the value that completing this task will bring.
+
+.. figure:: AddTaskPersona.jpg
+   :alt: Participating Persona form
 
 
--  Right click on the persona list box and select Add from the speed
-   menu to associate a persona with this task. In the Add Task Persona
-   dialog box, select the person, the task duration (seconds, minutes,
-   hours or longer), frequency (hourly or more, daily-weekly, monthly or
-   less),demands (none, low, medium, high), and goal conflict (none,
-   low, medium, high). The values for low, medium, and high should be
-   agreed with participants before hand.
+-  In the Participants folder, click on the Add button to associate a persona with this task. In the Participating Persona form, select the person, the task duration (seconds, minutes, hours or longer), frequency (hourly or more, daily-weekly, monthly or less),demands (none, low, medium, high), and goal conflict (none, low, medium, high). The values for low, medium, and high should be agreed with participants before hand.
 
--  If any aspect of the task concerns one or more assets, then these can
-   be added to the concern list. Adding an asset concern causes a
-   concern comment to be associated to the asset in the asset model. If
-   the task concerns an association between assets, the association can
-   be added by clicking on the Concern Association tab and adding the
-   source and target assets and association multiplicity to the concern
-   association list. In the asset model, this association is displayed
-   and a concern comment is associated to each asset in the association.
-
--  Right click on the Narrative tab and enter the task scenario in the
-   text box. This narrative should describe how the persona (or
-   personas) carry out the task to achieve the pre-defined objective.
+-  If any aspect of the task concerns one or more assets, then these can be added to the concern list. Adding an asset concern causes a concern comment to be associated to the asset in the asset model. If the task concerns an association between assets, the association can be added by clicking on the Concern Association tab and adding the source and target assets and association multiplicity to the concern association list. In the asset model, this association is displayed and a concern comment is associated to each asset in the association.
 
 -  Click on the Create button to add the new task.
 
--  Existing tasks can be modified by double clicking on the task in the
-   Tasks dialog box, making the necessary changes, and clicking on the
-   Update button.
+-  Existing tasks can be modified by clicking on the task in the Tasks table, making the necessary changes, and clicking on the Update button.
 
--  To delete a task, select the task to delete in the Tasks dialog box,
-   and select the Delete button. If any artifacts are dependent on this
-   task then a dialog box stating these dependencies are displayed. The
-   user has the option of selecting Yes to remove the task dependencies
-   and the task itself, or No to cancel the deletion.
+-  To delete a task, select the task to delete in the Tasks dialog box, and click the Delete button. If any artifacts are dependent on this task then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the task dependencies and the task itself, or No to cancel the deletion.
 
 Task traceability
 -----------------
