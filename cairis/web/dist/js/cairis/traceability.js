@@ -21,6 +21,7 @@
 
 $("#traceabilityClick").click(function(){
   validateClick('traceability',function() {
+    refreshMenuBreadCrumb('traceability');
     activeElement("objectViewer");
     $('#filtercontent').hide();
     $.ajax({
@@ -34,13 +35,11 @@ $("#traceabilityClick").click(function(){
       url: serverIP + "/api/dimensions/table/environment",
       success: function (envs) {
         fillOptionMenu("fastTemplates/editTraceabilityOptions.html", "#objectViewer", null, true, true, function () {
-          $('#theEnvironmentName option').remove();
-          $.each(envs, function(idx,env) {
-            $('#theEnvironmentName').append($("<option></option>").attr("value",env).text(env));
-          });
+          refreshDimensionSelector($('#theTraceabilityEnvironmentName'),'environment',undefined,function() {
+            $('#theTraceabilityEnvironmentName').val(envs[0]);
+            $('#theTraceabilityEnvironmentName').trigger('change');
+          },['All']);
         });
-        $('#theEnvironmentName').val(envs[0]);
-        $('#theEnvironmentName').trigger('change');
       },
       error: function (xhr, textStatus, errorThrown) {
         debugLogger(String(this.url));
@@ -51,8 +50,8 @@ $("#traceabilityClick").click(function(){
 });
 
 var mainContent = $('#objectViewer');
-mainContent.on("change",'#theEnvironmentName',function() {
-  var envName = $('#theEnvironmentName').val();
+mainContent.on("change",'#theTraceabilityEnvironmentName',function() {
+  var envName = $('#theTraceabilityEnvironmentName').val();
   $.ajax({
     type: "GET",
     dataType: "json",

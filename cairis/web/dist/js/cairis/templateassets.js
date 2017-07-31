@@ -24,7 +24,8 @@ var valueLabels = ['None','Low','Medium','High'];
 var reverseValue = {'None':0,'Low':1,'Medium':2,'High':3};
 
 $("#templateAssetsClick").click(function(){
-   createTemplateAssetTable();
+  $('#menuBCClick').attr('dimension','template_asset');
+  refreshMenuBreadCrumb('template_asset');
 });
 
 function createTemplateAssetTable(){
@@ -85,6 +86,7 @@ function fillTemplateAssetsTable(data, callback){
 
 $(document).on('click', "td.template-asset-rows", function(){
   var taName = $(this).attr('value');
+  refreshObjectBreadCrumb(taName);
   viewTemplateAsset(taName);
 });
 
@@ -104,81 +106,27 @@ function viewTemplateAsset(assetName) {
     url: serverIP + "/api/template_assets/name/" + encodeURIComponent(assetName),
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editTemplateAssetOptions.html","#objectViewer",null,true,true, function(){
-        $.ajax({
-          type: "GET",
-          dataType: "json",
-          accept: "application/json",
-          data: {
-            session_id: String($.session.get('sessionID'))
-          },
-          crossDomain: true,
-          url: serverIP + "/api/assets/types",
-          success: function (data) {
-            var typeSelect =  $('#theType');
-            $.each(data, function (index, type) {
-              typeSelect.append($("<option></option>").attr("value",type.theName).text(type.theName));
-            });
-
-            $.ajax({
-              type: "GET",
-              dataType: "json",
-              accept: "application/json",
-              data: {
-                session_id: String($.session.get('sessionID'))
-              },
-              crossDomain: true,
-              url: serverIP + "/api/dimensions/table/surface_type",
-              success: function (surfaceTypes) {
-                $("#theTemplateAssetSurfaceType option").remove();
-                $.each(surfaceTypes,function(idx,surfaceType) {
-                  $('#theTemplateAssetSurfaceType').append($("<option></option>").attr("value",surfaceType).text(surfaceType));
-                });
-                $('#theTemplateAssetSurfaceType').val(newdata.theSurfaceType);
-              },
-              error: function (xhr, textStatus, errorThrown) {
-                debugLogger(String(this.url));
-                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-              }
-            });
-            $.ajax({
-              type: "GET",
-              dataType: "json",
-              accept: "application/json",
-              data: {
-                session_id: String($.session.get('sessionID'))
-              },
-              crossDomain: true,
-              url: serverIP + "/api/dimensions/table/access_right",
-              success: function (accessRights) {
-                $("#theTemplateAssetAccessRight option").remove();
-                $.each(accessRights,function(idx,accessRight) {
-                  $('#theTemplateAssetAccessRight').append($("<option></option>").attr("value",accessRight).text(accessRight));
-                });
-                $('#theTemplateAssetAcccessRight').val(newdata.theAccessRight);
-              },
-              error: function (xhr, textStatus, errorThrown) {
-                debugLogger(String(this.url));
-                debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-              }
-            });
-          },
-          error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-          }
-        });
-        $('#editTemplateAssetOptionsform').validator();
-        $.session.set("TemplateAsset", JSON.stringify(newdata));
-        $.each(newdata.theInterfaces,function(idx,aInt) {
-          appendTemplateAssetInterface(aInt);
-        });
-        $.each(newdata.theProperties,function(idx,taProp) {
-          if (taProp > 0) {
-            appendTemplateSecurityProperty(propertyLabels[idx],valueLabels[taProp],newdata.theRationale[idx]);
-          }
-        });
-       
-        $('#editTemplateAssetOptionsform').loadJSON(newdata,null);
+        refreshDimensionSelector($('#theType'),'asset_type',undefined,function(){
+          $('#theType').val(newdata.theType);
+          refreshDimensionSelector($('#theTemplateAssetSurfaceType'),'surface_type',undefined,function(){
+            $('#theTemplateAssetSurfaceType').val(newdata.theSurfaceType);
+            refreshDimensionSelector($('#theTemplateAssetAccessRight'),'access_right',undefined,function(){
+              $('#theTemplateAssetAcccessRight').val(newdata.theAccessRight);
+              $('#editTemplateAssetOptionsform').validator('update');
+              $.session.set("TemplateAsset", JSON.stringify(newdata));
+              $.each(newdata.theInterfaces,function(idx,aInt) {
+                appendTemplateAssetInterface(aInt);
+              });
+              $.each(newdata.theProperties,function(idx,taProp) {
+                if (taProp > 0) {
+                  appendTemplateSecurityProperty(propertyLabels[idx],valueLabels[taProp],newdata.theRationale[idx]);
+                }
+              });
+              $('#editTemplateAssetOptionsform').validator('update');
+              $('#editTemplateAssetOptionsform').loadJSON(newdata,null);
+            },['All']);
+          },['All']);
+        },['All']);
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -260,74 +208,20 @@ mainContent.on("click",".deleteTemplateProperty", function(){
 });
 
 $(document).on('click', "#addNewTemplateAsset",function(){
+  refreshObjectBreadCrumb('New Template Asset');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editTemplateAssetOptions.html","#objectViewer",null,true,true,function(){
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
-      crossDomain: true,
-      url: serverIP + "/api/assets/types",
-      success: function (data) {
-        $('#editTemplateAssetOptionsform').validator();
-        $("#UpdateTemplateAsset").text("Create");
-        var typeSelect =  $('#theType');
-        $.each(data, function (index, type) {
-          typeSelect.append($("<option></option>").attr("value",type.name).text(type.theName));
-        });
-        $.ajax({
-          type: "GET",
-          dataType: "json",
-          accept: "application/json",
-          data: {
-            session_id: String($.session.get('sessionID'))
-          },
-          crossDomain: true,
-          url: serverIP + "/api/dimensions/table/surface_type",
-          success: function (surfaceTypes) {
-            $("#theTemplateAssetSurfaceType option").remove();
-            $.each(surfaceTypes,function(idx,surfaceType) {
-              $('#theTemplateAssetSurfaceType').append($("<option></option>").attr("value",surfaceType).text(surfaceType));
-            });
-            $('#theTemplateAssetSurfaceType').val('');
-          },
-          error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-          }
-        });
-        $.ajax({
-          type: "GET",
-          dataType: "json",
-          accept: "application/json",
-          data: {
-            session_id: String($.session.get('sessionID'))
-          },
-          crossDomain: true,
-          url: serverIP + "/api/dimensions/table/access_right",
-          success: function (accessRights) {
-            $("#theTemplateAssetAccessRight option").remove();
-            $.each(accessRights,function(idx,accessRight) {
-              $('#theTemplateAssetAccessRight').append($("<option></option>").attr("value",accessRight).text(accessRight));
-            });
-            $('#theTemplateAssetAcccessRight').val('');
-          },
-          error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-          }
-        });
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        debugLogger(String(this.url));
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      }
-    });
-    $.session.set("TemplateAsset", JSON.stringify(jQuery.extend(true, {},templateAssetDefault )));
-    $("#editAssetsOptionsform").addClass("new");
+    $('#editTemplateAssetOptionsform').validator();
+    $("#UpdateTemplateAsset").text("Create");
+
+    refreshDimensionSelector($('#theType'),'asset_type',undefined,function(){
+      refreshDimensionSelector($('#theTemplateAssetSurfaceType'),'surface_type',undefined,function(){
+        refreshDimensionSelector($('#theTemplateAssetAccessRight'),'access_right',undefined,function() {
+          $.session.set("TemplateAsset", JSON.stringify(jQuery.extend(true, {},templateAssetDefault )));
+          $("#editTemplateAssetOptionsform").addClass("new");
+        },['All']);
+      },['All']);
+    },['All']);
   });
 });
 
@@ -455,6 +349,8 @@ function templateAssetFormToJSON(data){
   json["theShortCode"] = $(data).find('#theShortCode').val();
   json["theDescription"] = $(data).find('#theDescription').val();
   json["theSignificance"] = $(data).find('#theSignificance').val();
+  json["theSurfaceType"] = $(data).find('#theTemplateAssetSurfaceType').val();
+  json["theAccessRight"] = $(data).find('#theTemplateAssetAccessRight').val();
   json.theType =  $(data).find( "#theType option:selected" ).text().trim();
 
 

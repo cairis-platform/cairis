@@ -15,20 +15,40 @@
        "theDescription" : "JavaScript Object Notation (JSON) representing data structures and algorithms.",
        "theRationale" : "JavaScript Object Notation (JSON) representing data structures and algorithms."}
   ],
+  "privileges" : [
+    {"theName": "privileged",
+     "theDescription" : "Subject operates at a privileged level of operation",
+     "theValue" : "10",
+     "theRationale" : "Subject operates at a privileged level of operation"}
+  ],
   "template_assets" : [
-      {"theName" : "Application Data",
-       "theShortCode" : "APPDATA",
-       "theType" : "Information",
-       "theSurfaceType" : "JSON",
-       "theAccessRight" : "trusted",
-       "theDescription" : "Application data",
-       "theSignificance" : "Application data"},
-      {"theName" : "Context Object",
-       "theShortCode" : "CTXOBJT",
-       "theType" : "Information",
-       "theSurfaceType" : "JSON",
-       "theAccessRight" : "authenticated",
-       "theDescription" : "Structured contextual information",
-       "theSignificance" : "Can be customised by applications"}
+    {"theName" : "Application Data",
+     "theShortCode" : "APPDATA",
+     "theType" : "Information",
+     "theSurfaceType" : "JSON",
+     "theAccessRight" : "trusted",
+     "theDescription" : "Application data",
+     "theSignificance" : "Application data",
+     "theInterfaces" : [
+       {"theInterfaceName" : "anInterface",
+        "theInterfaceType" : "provided",
+        "theAccessRight" : "trusted",
+        "thePrivilege" : "privileged"
+       }
+     ]},
+    {"theName" : "Context Object",
+     "theShortCode" : "CTXOBJT",
+     "theType" : "Information",
+     "theSurfaceType" : "JSON",
+     "theAccessRight" : "authenticated",
+     "theDescription" : "Structured contextual information",
+     "theSignificance" : "Can be customised by applications",
+     "theInterfaces" : [
+       {"theInterfaceName" : "anInterface",
+        "theInterfaceType" : "provided",
+        "theAccessRight" : "trusted",
+        "thePrivilege" : "privileged"
+       }
+     ]}
   ]
 }

@@ -39,15 +39,19 @@ class TemplateAssetTest(unittest.TestCase):
     iar1 = ValueTypeParameters(self.iAccessRights[0]["theName"], self.iAccessRights[0]["theDescription"], 'access_right','',self.iAccessRights[0]["theValue"],self.iAccessRights[0]["theRationale"])
     self.iSurfaceTypes = d['surface_type']
     ist1 = ValueTypeParameters(self.iSurfaceTypes[0]["theName"], self.iSurfaceTypes[0]["theDescription"], 'surface_type','',self.iSurfaceTypes[0]["theValue"],self.iSurfaceTypes[0]["theRationale"])
+    self.iPrivileges = d['privileges']
+    ist1 = ValueTypeParameters(self.iSurfaceTypes[0]["theName"], self.iSurfaceTypes[0]["theDescription"], 'surface_type','',self.iSurfaceTypes[0]["theValue"],self.iSurfaceTypes[0]["theRationale"])
+    ipr1 = ValueTypeParameters(self.iPrivileges[0]["theName"], self.iPrivileges[0]["theDescription"], 'privilege','',self.iPrivileges[0]["theValue"],self.iPrivileges[0]["theRationale"])
     b = Borg()
     b.dbProxy.addValueType(iar1)
     b.dbProxy.addValueType(ist1)
+    b.dbProxy.addValueType(ipr1)
     self.iTemplateAssets = d['template_assets']
 
   def testTemplateAsset(self):
     spValues = [0,0,0,0,0,0,0,0]
     spRat = ['None','None','None','None','None','None','None','None']
-    iTap = TemplateAssetParameters(self.iTemplateAssets[0]["theName"], self.iTemplateAssets[0]["theShortCode"], self.iTemplateAssets[0]["theDescription"], self.iTemplateAssets[0]["theSignificance"],self.iTemplateAssets[0]["theType"],self.iTemplateAssets[0]["theSurfaceType"],self.iTemplateAssets[0]["theAccessRight"],spValues,spRat,[],[])
+    iTap = TemplateAssetParameters(self.iTemplateAssets[0]["theName"], self.iTemplateAssets[0]["theShortCode"], self.iTemplateAssets[0]["theDescription"], self.iTemplateAssets[0]["theSignificance"],self.iTemplateAssets[0]["theType"],self.iTemplateAssets[0]["theSurfaceType"],self.iTemplateAssets[0]["theAccessRight"],spValues,spRat,[],[("anInterface","provided","trusted","privileged")])
     b = Borg()
     b.dbProxy.addTemplateAsset(iTap)
     oTaps = b.dbProxy.getTemplateAssets()

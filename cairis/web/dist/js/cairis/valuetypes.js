@@ -24,55 +24,63 @@ $("#assetValuesClick").click(function () {
 });
 
 $("#assetTypesClick").click(function () {
-  createValueTypesTable('asset_type');
+  $('#menuBCClick').attr('dimension','asset_type');
+  refreshMenuBreadCrumb('asset_type');
 });
 
 $("#accessRightsClick").click(function () {
-  createValueTypesTable('access_right');
+  $('#menuBCClick').attr('dimension','access_right');
+  refreshMenuBreadCrumb('access_right');
 });
 
 $("#protocolsClick").click(function () {
-  createValueTypesTable('protocol');
+  $('#menuBCClick').attr('dimension','protocol');
+  refreshMenuBreadCrumb('protocol');
 });
 
 $("#privilegesClick").click(function () {
-  createValueTypesTable('privilege');
+  $('#menuBCClick').attr('dimension','privilege');
+  refreshMenuBreadCrumb('privilege');
 });
 
 $("#surfaceTypesClick").click(function () {
-  createValueTypesTable('surface_type');
+  $('#menuBCClick').attr('dimension','surface_type');
+  refreshMenuBreadCrumb('surface_type');
 });
 
 $("#vulnerabilityTypesClick").click(function () {
-  createValueTypesTable('vulnerability_type');
+  $('#menuBCClick').attr('dimension','vulnerability_type');
+  refreshMenuBreadCrumb('vulnerability_type');
 });
 
 $("#vulnerabilitySeveritiesClick").click(function () {
-  createValueTypesTable('severity');
+  $('#menuBCClick').attr('dimension','severity');
+  refreshMenuBreadCrumb('severity');
 });
 
 $("#capabilitiesClick").click(function () {
-  createValueTypesTable('capability');
+  $('#menuBCClick').attr('dimension','capability');
+  refreshMenuBreadCrumb('capability');
 });
 
 $("#motivationsClick").click(function () {
-  createValueTypesTable('motivation');
+  $('#menuBCClick').attr('dimension','motivation');
+  refreshMenuBreadCrumb('motivation');
 });
 
 $("#threatTypesClick").click(function () {
-  createValueTypesTable('threat_type');
+  $('#menuBCClick').attr('dimension','threat_type');
+  refreshMenuBreadCrumb('threat_type');
 });
 
 $("#threatLikelihoodsClick").click(function () {
-  createValueTypesTable('likelihood');
+  $('#menuBCClick').attr('dimension','likelihood');
+  refreshMenuBreadCrumb('likelihood');
 });
 
 $("#threatValuesClick").click(function () {
-  createValueTypesTable('threat_value');
-});
-
-$("#riskValuesClick").click(function () {
-  createValueTypesTable('risk_value');
+  $('#menuBCClick').attr('dimension','threat_value');
+  refreshMenuBreadCrumb('threat_value');
 });
 
 
@@ -137,6 +145,7 @@ function createValueTypesTable(valueType){
 $(document).on('click', "td.valuetype-rows", function () {
   activeElement("objectViewer");
   var name = $(this).text();
+  refreshObjectBreadCrumb(name);
   var valueType = $.session.get("value_type");
   $.ajax({
     type: "GET",
@@ -228,8 +237,50 @@ $(document).on('click', 'td.deleteValueTypeButton', function (e) {
 });
 
 $(document).on("click", "#addNewValueType", function () {
-  activeElement("objectViewer");
   var valueType = $.session.get("value_type");
+  var vtLabel = "Value Type";
+  switch (valueType) {
+    case "asset_type":
+      vtLabel = "Asset Type";
+      break;
+    case "access_right":
+      vtLabel = "Access Right";
+      break;
+    case "protocol":
+      vtLabel = "Protocol";
+      break;
+    case "privilege":
+      vtLabel = "Privilege";
+      break;
+    case "surface_type":
+      vtLabel = "Surface Type";
+      break;
+    case "vulnerability_type":
+      vtLabel = "Vulnerability Type";
+      break;
+    case "severity":
+      vtLabel = "Severity";
+      break;
+    case "capability":
+      vtLabel = "Capability";
+      break;
+    case "motivation":
+      vtLabel = "Motivation";
+      break;
+    case "threat_type":
+      vtLabel = "Threat Type";
+      break;
+    case "likelihood":
+      vtLabel = "Likelihood";
+      break;
+    case "threat_value":
+      vtLabel = "Threat Value";
+     break;
+  }
+  
+
+  refreshObjectBreadCrumb('New ' + vtLabel);
+  activeElement("objectViewer");
   var formObjt = "editValueTypeOptions";
   if (valueType == 'access_right' || valueType == 'protocol' || valueType == 'privilege' || valueType == 'surface_type') {
     formObjt = "editScoredValueTypeOptions";

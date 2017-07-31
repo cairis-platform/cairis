@@ -151,7 +151,6 @@ class TemplateAssetDAO(CairisDAO):
   def simplify(self, ta):
     assert isinstance(ta, TemplateAsset)
     ta.theInterfaces = self.convert_ifs(real_ifs=ta.theInterfaces)
-    ta.theProperties = self.convert_props(real_props=ta.theProperties,rationales=ta.theRationale)
     return ta
 
   def convert_ifs(self, real_ifs=None, fake_ifs=None):

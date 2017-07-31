@@ -20,7 +20,8 @@
 'use strict';
 
 $("#templateGoalsClick").click(function(){
-   createTemplateGoalsTable();
+  $('#menuBCClick').attr('dimension','template_goal');
+  refreshMenuBreadCrumb('template_goal');
 });
 
 function createTemplateGoalsTable(){
@@ -78,6 +79,7 @@ function fillTemplateGoalsTable(data, callback){
 
 $(document).on('click', "td.template-goal-rows", function(){
   var tgName = $(this).attr('value');
+  refreshObjectBreadCrumb(tgName);
   viewTemplateGoal(tgName);
 });
 

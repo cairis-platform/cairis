@@ -40,17 +40,21 @@ def addTestData():
   iAccessRights = d['access_rights']
   iSurfaceTypes = d['surface_type']
   iTemplateAssets = d['template_assets']
+  iPrivileges = d['privileges']
   cairis.core.BorgFactory.initialise()
   b = Borg()
   iar1 = ValueTypeParameters(iAccessRights[0]["theName"], iAccessRights[0]["theDescription"], 'access_right','',iAccessRights[0]["theValue"],iAccessRights[0]["theRationale"])
   iar2 = ValueTypeParameters(iAccessRights[1]["theName"], iAccessRights[1]["theDescription"], 'access_right','',iAccessRights[1]["theValue"],iAccessRights[1]["theRationale"])
   ist1 = ValueTypeParameters(iSurfaceTypes[0]["theName"], iSurfaceTypes[0]["theDescription"], 'surface_type','',iSurfaceTypes[0]["theValue"],iSurfaceTypes[0]["theRationale"])
+  ipr1 = ValueTypeParameters(iPrivileges[0]["theName"], iPrivileges[0]["theDescription"], 'privilege','',iPrivileges[0]["theValue"],iPrivileges[0]["theRationale"])
   b.dbProxy.addValueType(iar1)
   b.dbProxy.addValueType(iar2)
   b.dbProxy.addValueType(ist1)
+  b.dbProxy.addValueType(ipr1)
   spValues = [0,0,0,0,0,0,0,0]
   srValues = ['None','None','None','None','None','None','None','None']
-  iTap = TemplateAssetParameters(iTemplateAssets[0]["theName"], iTemplateAssets[0]["theShortCode"], iTemplateAssets[0]["theDescription"], iTemplateAssets[0]["theSignificance"],iTemplateAssets[0]["theType"],iTemplateAssets[0]["theSurfaceType"],iTemplateAssets[0]["theAccessRight"],spValues,srValues,[],[])
+  ifs = iTemplateAssets[0]
+  iTap = TemplateAssetParameters(iTemplateAssets[0]["theName"], iTemplateAssets[0]["theShortCode"], iTemplateAssets[0]["theDescription"], iTemplateAssets[0]["theSignificance"],iTemplateAssets[0]["theType"],iTemplateAssets[0]["theSurfaceType"],iTemplateAssets[0]["theAccessRight"],spValues,srValues,[],[('anInterface','provided','trusted','privileged')])
   b.dbProxy.addTemplateAsset(iTap)
 
 class TemplateAssetAPITests(CairisDaemonTestCase):
@@ -68,7 +72,7 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     spValues = [0,0,0,0,0,0,0,0]
     srValues = ['None','None','None','None','None','None','None','None']
     iTemplateAssets = d['template_assets']
-    self.new_ta = TemplateAsset(-1,iTemplateAssets[1]["theName"], iTemplateAssets[1]["theShortCode"], iTemplateAssets[1]["theDescription"], iTemplateAssets[1]["theSignificance"],iTemplateAssets[1]["theType"],iTemplateAssets[1]["theSurfaceType"],iTemplateAssets[1]["theAccessRight"],spValues,srValues,[],[])
+    self.new_ta = TemplateAsset(-1,iTemplateAssets[1]["theName"], iTemplateAssets[1]["theShortCode"], iTemplateAssets[1]["theDescription"], iTemplateAssets[1]["theSignificance"],iTemplateAssets[1]["theType"],iTemplateAssets[1]["theSurfaceType"],iTemplateAssets[1]["theAccessRight"],spValues,srValues,[],iTemplateAssets[1]["theInterfaces"])
     self.new_ta_dict = {
       'session_id' : 'test',
       'object': self.new_ta

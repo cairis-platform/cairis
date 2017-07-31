@@ -20,7 +20,8 @@
 'use strict';
 
 $("#templateRequirementsClick").click(function(){
-   createTemplateRequirementsTable();
+  $('#menuBCClick').attr('dimension','template_requirement');
+  refreshMenuBreadCrumb('template_requirement');
 });
 
 function createTemplateRequirementsTable(){
@@ -78,6 +79,7 @@ function fillTemplateRequirementsTable(data, callback){
 
 $(document).on('click', "td.template-requirement-rows", function(){
   var trName = $(this).attr('value');
+  refreshObjectBreadCrumb(trName);
   viewTemplateRequirement(trName);
 });
 

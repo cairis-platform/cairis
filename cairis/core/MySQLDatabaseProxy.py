@@ -7886,7 +7886,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addInterface(self,ifObjt,ifName,ifType,arName,pName,ifDim):
     try:
       session = self.conn()
-      session.execute('call addInterface(:iObj,:iName,:iType,:aName,:pName,:iDim)',{'iObj':ifObjt,'iName':ifName,'iType':ifType,'aName':arName,'pName':pName,'iDim':ifDim})
+      session.execute('call addInterface(:ifObj,:ifName,:ifType,:arName,:pName,:ifDim)',{'ifObj':ifObjt,'ifName':ifName,'ifType':ifType,'arName':arName,'pName':pName,'ifDim':ifDim})
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:

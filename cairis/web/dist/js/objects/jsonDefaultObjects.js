@@ -111,6 +111,7 @@ var templateAssetDefault = {
   "theSurfaceType": "",
   "theAccessRight": "",
   "theProperties": [ConfidentialitySecurityAttribute,IntegritySecurityAttribute,AvailabilitySecurityAttribute,AccountabilitySecurityAttribute,AnonymitySecurityAttribute,PseudonymitySecurityAttribute,UnlinkabilitySecurityAttribute,UnobservabilitySecurityAttribute],
+  "theRationale" : ["None","None","None","None","None","None","None","None"],
   "theTags": [],
   "theInterfaces": []
 };

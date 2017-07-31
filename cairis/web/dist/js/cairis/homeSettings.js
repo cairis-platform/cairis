@@ -180,8 +180,87 @@ function refreshMenuBreadCrumb(dimName) {
     $('#menuBCClick').show();
     createAssetAssociationsTable();
   }
+  else if (dimName == 'asset_type') {
+    $('#menuBCClick').text('Asset Types');
+    $('#menuBCClick').show();
+    createValueTypesTable('asset_type');
+  }
+  else if (dimName == 'access_right') {
+    $('#menuBCClick').text('Access Rights');
+    $('#menuBCClick').show();
+    createValueTypesTable('access_right');
+  }
+  else if (dimName == 'protocol') {
+    $('#menuBCClick').text('Protocols');
+    $('#menuBCClick').show();
+    createValueTypesTable('protocol');
+  }
+  else if (dimName == 'privilege') {
+    $('#menuBCClick').text('Privileges');
+    $('#menuBCClick').show();
+    createValueTypesTable('privilege');
+  }
+  else if (dimName == 'surface_type') {
+    $('#menuBCClick').text('Surface Types');
+    $('#menuBCClick').show();
+    createValueTypesTable('surface_type');
+  }
+  else if (dimName == 'vulnerability_type') {
+    $('#menuBCClick').text('Vulnerability Types');
+    $('#menuBCClick').show();
+    createValueTypesTable('vulnerability_type');
+  }
+  else if (dimName == 'severity') {
+    $('#menuBCClick').text('Severity');
+    $('#menuBCClick').show();
+    createValueTypesTable('severity');
+  }
+  else if (dimName == 'capability') {
+    $('#menuBCClick').text('Capabilities');
+    $('#menuBCClick').show();
+    createValueTypesTable('capability');
+  }
+  else if (dimName == 'motivation') {
+    $('#menuBCClick').text('Motivations');
+    $('#menuBCClick').show();
+    createValueTypesTable('motivation');
+  }
+  else if (dimName == 'threat_type') {
+    $('#menuBCClick').text('Threat Types');
+    $('#menuBCClick').show();
+    createValueTypesTable('threat_type');
+  }
+  else if (dimName == 'likelihood') {
+    $('#menuBCClick').text('Likelihoods');
+    $('#menuBCClick').show();
+    createValueTypesTable('likelihood');
+  }
+  else if (dimName == 'threat_value') {
+    $('#menuBCClick').text('Threat Values');
+    $('#menuBCClick').show();
+    createValueTypesTable('threat_value');
+  }
+  else if (dimName == 'template_asset') {
+    $('#menuBCClick').text('Template Assets');
+    $('#menuBCClick').show();
+    createTemplateAssetTable();
+  }
+  else if (dimName == 'template_goal') {
+    $('#menuBCClick').text('Template Goals');
+    $('#menuBCClick').show();
+    createTemplateGoalsTable();
+  }
+  else if (dimName == 'template_requirement') {
+    $('#menuBCClick').text('Template Requirements');
+    $('#menuBCClick').show();
+    createTemplateRequirementsTable();
+  }
   else if (dimName == 'model') {
     $('#menuBCClick').hide();
+  }
+  else if (dimName == 'traceability') {
+    $('#menuBCClick').text('Traceability');
+    $('#menuBCClick').show();
   }
 }
 
