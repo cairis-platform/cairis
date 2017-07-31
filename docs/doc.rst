@@ -842,7 +842,7 @@ Create a vulnerability
    :alt: Vulnerability form
 
 
--  Select the Risks/Vulnerabilities menu to open the Vulnerabilities table.
+-  Select the Risk/Vulnerabilities menu to open the Vulnerabilities table.
 
 -  Click on the Add button to open the Vulnerability form.
 
@@ -850,7 +850,6 @@ Create a vulnerability
    vulnerability type from the combo box.
 
 -  Click on the Add button in the environment table, and select an environment to situate the vulnerability in. This will add the new environment to the environment list.
-
 
 -  Select the vulnerability's severity for this environment, and add exposed assets by clicking on the Add button in the assets table, and selecting one or more assets from the selected environment.
 
@@ -882,7 +881,7 @@ Attackers
 =========
 
 Attackers launch attacks in the form of threats. Attackers are similar
-to personas in that fulfil one or more roles, and can be personalised
+to personas in that they fulfill one or more roles, and can be personalised
 with additional information.
 
 Certain capabilities and motivations may be associated with attackers.
@@ -893,46 +892,37 @@ Options/Capabilities or Options/Motivations menu options.
 Adding, updating, and deleting an attacker
 ------------------------------------------
 
-.. figure:: AttackerDialog.png
-   :alt: Attacker Dialog
+.. figure:: AttackerForm.jpg
+   :alt: Attacker form
 
 
--  Click on the Attacker toolbar button to open the Attackers dialog
-   box, and click on the Add button to open the Attacker dialog box.
+-  Select the Risk/Attackers toolbar menu to open the Attackers table, and click on the Add button to open the Attacker form.
 
 -  Enter the attacker name, and a description for the attacker.
 
 -  If you have decided to personalise the attacker with a picture, this
-   can be added by right clicking on photo box next to the attacker
-   description, to bring up the Load Image option from the speed menu,
-   and selecting Load Image. Please note that the image itself is NOT
+   can be added by clicking on avatar silhouette next to the attacker
+   description, and selecting a image to represent the attacker. Please note that the image itself is NOT
    imported into the database, only the file path to the picture.
 
--  Right click on the environment window to bring up the environment
-   speed menu. Select the add option and, from the Add environment
-   window, select an environment to situate the attacker in. This will
-   add the new environment to the environment list.
+-  Click on the Add button in the environment table, and select an environment to situate the attacker in. This will add the new environment to the environment list.
 
--  After ensuring the environment is selected in the environment window,
-   right-click on the Roles list, and select Add from the speed menu to
-   associate one or more roles to the attacker.
 
--  Right-click on the Motive and Capability boxes and select Add to add
+-
+
+-  Click on the Add button on the Roles table to associate one or more roles to the attacker.
+
+-  Click on the Add button on the Motivation and Capability tables to add
    one or more motive and capability values. For the capabilty, a value
    of Low, Medium, or High also needs to be selected.
 
 -  Click on the Create button to add the new attacker.
 
--  Existing attackers can be modified by double clicking on the attacker
-   in the Attackers dialog box, making the necessary changes, and
+-  Existing attackers can be modified by clicking on the attacker
+   in the Attackers table, making the necessary changes, and
    clicking on the Update button.
 
--  To delete an attacker, select the attacker to delete in the Attackers
-   dialog box, and select the Delete button. If any artifacts are
-   dependent on this attacker then a dialog box stating these
-   dependencies are displayed. The user has the option of selecting Yes
-   to remove the attacker dependencies and the attacker itself, or No to
-   cancel the deletion.
+-  To delete an attacker, click on the Delete button next to the attacker to be removed in the Attackers table. attacker to delete in the Attackers.  If any artifacts are dependent on this attacker then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the attacker dependencies and the attacker itself, or No to cancel the deletion.
 
 Threats
 =======
