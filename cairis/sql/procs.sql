@@ -888,6 +888,12 @@ drop procedure if exists getDataFlows;
 drop procedure if exists getDataFlowAssets;
 drop procedure if exists dataflowsToXml;
 drop procedure if exists dataFlowDiagram;
+drop procedure if exists addTrustBoundary;
+drop procedure if exists getTrustBoundaries;
+drop procedure if exists getTrustBoundaryComponents;
+drop procedure if exists deleteTrustBoundaryComponents;
+drop procedure if exists delete_trust_boundary;
+drop procedure if exists addToTrustBoundary;
 
 delimiter //
 
@@ -2433,6 +2439,7 @@ begin
   delete from dataflow_datastore_process where from_id = assetId;
   delete from asset_tag where asset_id = assetId;
   delete from asset_reference where asset_id = assetId;
+  delete from trust_boundary_asset where asset_id = assetId;
   delete from asset where id = assetId;
 end
 //
@@ -3503,6 +3510,7 @@ begin
   delete from usecase_reference where usecase_id = ucId;
   delete from component_usecase where usecase_id = ucId;
   delete from usecase_tag where usecase_id = ucId;
+  delete from trust_boundary_usecase where usecase_id = ucId;
   delete from usecase where id = ucId;
 end
 //
@@ -18424,7 +18432,6 @@ begin
   end if;
 
   set addIfSql = concat('insert into ',ifDim,'_interface (',ifDim,'_id, interface_id,required_id,access_right_id,privilege_id) values(',dimId,',',ifId,',',reqId,',',arId,',',privId,')');
-  select addIfSql;
   set @sql = addIfSql;
   prepare stmt from @sql;
   execute stmt;
@@ -23616,6 +23623,64 @@ begin
   deallocate prepare stmt;
   set objtCount = @objtCount;
   select objtCount;
+end
+//
+
+create procedure addTrustBoundary(in tbId int, in tbName text, in tbDesc text)
+begin
+  insert into trust_boundary(id,name,description) values (tbId,tbName,tbDesc);
+end
+//
+
+create procedure getTrustBoundaries(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select id,name,description from trust_boundary;
+  else
+    select id,name,description from trust_boundary where id = constraintId;
+  end if;
+end
+//
+
+create procedure getTrustBoundaryComponents(in tbId int, in envName text)
+begin
+  declare envId int;
+  select id into envId from environment where name = envName;
+  select 'process',uc.name from trust_boundary_usecase tbc, usecase uc where tbc.trust_boundary_id = tbId and tbc.environment_id = envId and tbc.usecase_id = uc.id
+  union
+  select 'datastore',a.name from trust_boundary_asset tba, asset a where tba.trust_boundary_id = tbId and tba.environment_id = envId and tba.asset_id = a.id;
+end
+//
+
+create procedure deleteTrustBoundaryComponents(in tbId int)
+begin
+  delete from trust_boundary_usecase where trust_boundary_id = tbId;
+  delete from trust_boundary_asset where trust_boundary_id = tbId;
+end
+//
+
+create procedure delete_trust_boundary(in tbId int)
+begin
+  call deleteTrustBoundaryComponents(tbId);
+  delete from trust_boundary where id = tbId;
+end
+//
+
+create procedure addToTrustBoundary(in tbId int, in envName text, in objtName text)
+begin
+  declare envId int;
+  declare objtId int;
+  select id into envId from environment where name = envName;
+ 
+  select id into objtId from asset where name = objtName limit 1;
+  if objtId is not null
+  then
+    insert into trust_boundary_asset(trust_boundary_id,environment_id,asset_id) value (tbId,envId,objtId);
+  else
+    select id into objtId from usecase where name = objtName limit 1;
+    insert into trust_boundary_asset(trust_boundary_id,environment_id,usecase_id) value (tbId,envId,objtId);
+  end if;
 end
 //
 

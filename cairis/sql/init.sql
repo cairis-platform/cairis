@@ -37,6 +37,7 @@ DROP VIEW IF EXISTS documentconcept_reference;
 DROP VIEW IF EXISTS assumption_persona_model;
 DROP VIEW IF EXISTS assumption_task_model;
 DROP VIEW IF EXISTS environment_risk;
+DROP VIEW IF EXISTS environment_trust_boundary;
 DROP VIEW IF EXISTS concept_map;
 DROP VIEW IF EXISTS component_interfaces;
 DROP VIEW IF EXISTS connectors;
@@ -49,6 +50,9 @@ DROP VIEW IF EXISTS misusability_case;
 DROP VIEW IF EXISTS usecase_step_synopsis_actor;
 DROP VIEW IF EXISTS quotation;
 
+DROP TABLE IF EXISTS trust_boundary_usecase;
+DROP TABLE IF EXISTS trust_boundary_asset;
+DROP TABLE IF EXISTS trust_boundary;
 DROP TABLE IF EXISTS dataflow_process_process;
 DROP TABLE IF EXISTS dataflow_entity_process;
 DROP TABLE IF EXISTS dataflow_process_entity;
@@ -3315,6 +3319,33 @@ create TABLE dataflow_datastore_process (
   FOREIGN KEY(to_id) REFERENCES usecase(id)
 ) ENGINE=INNODB;
 
+create TABLE trust_boundary (
+  id INT NOT NULL,
+  name VARCHAR(50), 
+  description VARCHAR(4000), 
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+create TABLE trust_boundary_usecase (
+  trust_boundary_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  usecase_id INT NOT NULL,
+  PRIMARY KEY(trust_boundary_id,environment_id,usecase_id),
+  FOREIGN KEY(trust_boundary_id) REFERENCES trust_boundary(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id),
+  FOREIGN KEY(usecase_id) REFERENCES usecase(id)
+) ENGINE=INNODB;
+
+create TABLE trust_boundary_asset (
+  trust_boundary_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  asset_id INT NOT NULL,
+  PRIMARY KEY(trust_boundary_id,environment_id,asset_id),
+  FOREIGN KEY(trust_boundary_id) REFERENCES trust_boundary(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id),
+  FOREIGN KEY(asset_id) REFERENCES asset(id)
+) ENGINE=INNODB;
+
 delimiter //
 
 create function internalDocumentQuotationString(idName text, startIdx int, endIdx int) 
@@ -3435,6 +3466,11 @@ CREATE VIEW environment_risk as
   select r.id,et.environment_id from risk r, environment_threat et, environment_vulnerability ev where r.threat_id = et.threat_id and et.environment_id = ev.environment_id and ev.vulnerability_id = r.vulnerability_id
   union 
   select r.id,ev.environment_id from risk r, environment_vulnerability ev, environment_threat et where r.vulnerability_id = ev.vulnerability_id and ev.environment_id = et.environment_id and et.threat_id = r.threat_id;
+
+CREATE VIEW environment_trust_boundary as
+  select distinct environment_id, trust_boundary_id from trust_boundary_asset
+  union
+  select distinct environment_id, trust_boundary_id from trust_boundary_usecase;
 
 CREATE VIEW environment_role as
   select distinct environment_id, subgoal_id role_id from responserole_goalassociation
