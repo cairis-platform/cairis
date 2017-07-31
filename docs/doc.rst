@@ -423,34 +423,24 @@ Adding, updating, or deleting a task
 Task traceability
 -----------------
 
-.. figure:: TraceabilityEditor.png
+.. figure:: TraceabilityEditor.jpg
    :alt: Traceability Editor
 
-Tasks can be manually traced to certain artifacts via the Tasks dialog.
-A task may contribute to an asset or a vulnerability, or be supported by
-requirement. To add a traceability link, right click on the task name,
-and select Supported By or Contributes to. This opens the Traceability
-Editor. From this editor, select the object on the right hand side of
-the editor to trace to and click the Add button to add this link.
+Tasks can be manually traced to certain artifacts via the Tasks table.
+A task may contribute to a vulnerability, or be supported by a requirement or use case. To add a traceability link, right click on the task name, and select Supported By or Contributes to. This opens the Traceability Editor. From this editor, select the object on the right hand side of the editor to trace to and click the Add button to add this link.
 
-Manual traceability links can be removed by selecting the
-View/Traceability menu option, to open the Traceability Relations
-dialog. In this dialog box, manual traceability relations be removed
-from specific environments.
+Manual traceability links can be removed by selecting the Options/Traceability menu option, to open the Traceability Relations form. In this form, manual traceability relations be removed from specific environments.
 
 Visualising tasks
 -----------------
 
-Task models can be viewed by clicking on the Task Model toolbar button,
-and selecting the environment to view the environment for.
+Task models can be viewed by selecting the Models/Task menu, and selecting the environment to view the environment for.
 
-.. figure:: TaskModel.png
+.. figure:: TaskModel.jpg
    :alt: Task Model
 
 By changing the environment name in the environment combo box, the task
-model for a different environment can be viewed. The layout of the model
-can also be replaced by selecting a layout option in the Layout combo
-box at the foot of the model viewer window.
+model for a different environment can be viewed. The model can also be filtered by task or misuse case name.
 
 By clicking on a model element, information about that artifact can be
 viewed.
@@ -464,21 +454,21 @@ Domain Properties may be either hypothesis or invariants.
 Adding, updating, and deleting a domain property
 ------------------------------------------------
 
-.. figure:: DomainPropertyDialog.png
-   :alt: Domain Property Dialog
+.. figure:: DomainPropertyForm.jpg
+   :alt: Domain Property form
 
 
--  Click on the Domain Properties toolbar button to open the Domain
-   Properties dialog box, and click on the Add button to open the Domain
-   Property dialog box.
+-  Click on the Requirements/Domain Properties menu to open the Domain
+   Properties table, and click on the Add button to open the Domain
+   Property form.
 
 -  Enter a domain property name, description, and select the type of
    domain property from the type combo box.
 
 -  Click on the Create button to add the new domain property.
 
--  Existing domain properties can be modified by double clicking on the
-   domain property in the Domain Properties dialog box, making the
+-  Existing domain properties can be modified by clicking on the
+   domain property name in the Domain Properties table, making the
    necessary changes, and clicking on the Update button.
 
 Goals, Requirements, and Obstacles
