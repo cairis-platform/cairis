@@ -838,40 +838,29 @@ exploitation.
 Create a vulnerability
 ----------------------
 
-.. figure:: VulnerabilityDialog.png
-   :alt: Vulnerability Dialog
+.. figure:: VulnerabilityForm.jpg
+   :alt: Vulnerability form
 
 
--  Click on the Vulnerability toolbar button to open the Vulnerabilities
-   dialog box.
+-  Select the Risks/Vulnerabilities menu to open the Vulnerabilities table.
 
--  Click on the Add button to open the Create Vulnerability dialog box.
+-  Click on the Add button to open the Vulnerability form.
 
 -  Enter the vulnerability name and description, and select the
    vulnerability type from the combo box.
 
--  Right click on the environment window to bring up the environment
-   speed menu. Select the add option and, from the Add environment
-   window, select an environment to situate the vulnerability in. This
-   will add the new environment to the environment list.
+-  Click on the Add button in the environment table, and select an environment to situate the vulnerability in. This will add the new environment to the environment list.
 
--  After ensuring the environment is selected in the environment window,
-   select the vulnerability's severity for this environment, and add
-   exposed assets by right clicking on the asset box and selecting one
-   or more assets from the selected environment.
+
+-  Select the vulnerability's severity for this environment, and add exposed assets by clicking on the Add button in the assets table, and selecting one or more assets from the selected environment.
 
 -  Click on the Create button to add the new vulnerability.
 
--  Existing vulnerabilities can be modified by double clicking on the
-   vulnerability in the Vulnerabilities dialog box, making the necessary
+-  Existing vulnerabilities can be modified by clicking on the
+   vulnerability in the Vulnerabilities table box, making the necessary
    changes, and clicking on the Update button.
 
--  To delete an vulnerability, select the vulnerability to delete in the
-   Vulnerabilities dialog box, and select the Delete button. If any
-   artifacts are dependent on this vulnerability then a dialog box
-   stating these dependencies are displayed. The user has the option of
-   selecting Yes to remove the vulnerability dependencies and the
-   vulnerability itself, or No to cancel the deletion.
+-  To delete an vulnerability, click on the delete button next to the vulnerability to be deleted in the Vulnerabilities table. If any artifacts are dependent on this vulnerability then a dialog box stating these dependencies are displayed. The user has the option of electing Yes to remove the vulnerability dependencies and the vulnerability itself, or No to cancel the deletion.
 
 Importing a vulnerability
 -------------------------
