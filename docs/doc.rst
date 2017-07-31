@@ -765,13 +765,13 @@ the specification being developed.
 Create a security pattern
 -------------------------
 
-.. figure:: SecurityPatternDialog.png
-   :alt: Security Pattern Dialog
+.. figure:: SecurityPatternForm.jpg
+   :alt: Security Pattern form
 
 
--  Select the Options/Security Patterns menu option to open the Security
-   Patterns dialog box, and click on the Add button to open the Security
-   Pattern dialog box.
+-  Select the Risks/Security Patterns menu option to open the Security
+   Patterns table, and click on the Add button to open the Security
+   Pattern dialog form.
 
 -  Enter the security pattern name, and, in the Context page, type in a
    description the security pattern is relevant for.
@@ -782,14 +782,10 @@ Create a security pattern
 -  Click on the solution page, and type in the intrinsics of how the
    security pattern solves the pre-defined problem.
 
--  Click on the Structure page, and right-click on the association list
-   control to add associations between template assets; these
-   associations form the collaborative structure for the pattern. The
-   procedure for entering associations is based on that used for
-   associating assets.
+-  Click on the Structure page, and the Add button in the associations table to add associations between template assets; these associations form the collaborative structure for the pattern. The procedure for entering associations is based on that used for associating assets.
 
--  Click on the Requirements page, and right-click on the requirements
-   list control to add requirements needing to be satisfied to realise
+-  Click on the Requirements page, and the Add button in the requirements
+   table to add requirements needing to be satisfied to realise
    the pattern. The cells in the Add Pattern Requirement dialog are a
    sub-set of those found in the CAIRIS requirements editor.
 
@@ -799,8 +795,8 @@ Create a security pattern
    security pattern in the Security Patterns dialog box, making the
    necessary changes, and clicking on the Update button.
 
--  To delete a security pattern, select the pattern to delete in the
-   Security Patterns dialog box, and select the Delete button.
+-  To delete a security pattern, click on the Delete button besides pattern to delete in the
+   Security Patterns table.
 
 Situate a security pattern
 --------------------------
