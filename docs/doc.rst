@@ -581,16 +581,14 @@ Adding, updating, and deleting a goal
 Goal Modelling
 --------------
 
-Goal models can be viewed by clicking on the Goal Model toolbar button,
+Goal models can be viewed by clicking on the Models/Goal menu option,
 and selecting the environment to view the environment for.
 
-.. figure:: GoalModel.png
+.. figure:: GoalModel.jpg
    :alt: Goal Model
 
 By changing the environment name in the environment combo box, the goal
-model for a different environment can be viewed. The layout of the model
-can also be replaced by selecting a layout option in the Layout combo
-box at the foot of the model viewer window.
+model for a different environment can be viewed.
 
 By clicking on a model element, information about that artifact can be
 viewed.
@@ -600,16 +598,6 @@ selected goal to be displayed as the root goal. Consequently, goals are
 only displayed if they are direct or indirect leafs of the filtered
 goal.
 
-Goals can also be refined from the goal model, albeit only for the
-environment being modified. To refine a goal, right-click on the goal in
-the model viewer, and select And-Goal, or Or-Goal based on the
-refinement desired. An simplified version of the Add Goal dialog box is
-displayed and, when all the necessary information has been added, a new
-goal will be added to the database, complete with the desired
-refinement. Please note, the model view needs to be refreshed to view
-the goal. Goals may only be refined to other goals in the model viewer;
-for anything more elaborate, the usual goal refinement association
-procedure needs to be followed.
 
 Adding, updating, and deleting an obstacle
 ------------------------------------------
