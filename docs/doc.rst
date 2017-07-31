@@ -602,23 +602,21 @@ goal.
 Adding, updating, and deleting an obstacle
 ------------------------------------------
 
-.. figure:: ObstacleDialog.png
-   :alt: Obstacle Dialog
+.. figure:: ObstacleForm.jpg
+   :alt: Obstacle form
 
 
--  Click on the Obstacle toolbar button to open the Obstacles dialog
-   box, and click on the Add button to open the Obstacle dialog box.
+-  Click on the Requirements/Obstacle menu to open the Obstacles table
+   box, and click on the Add button to open the Obstacle dform.
 
--  Enter the name of the obstacle, and right click on the environment
-   window to bring up the environment speed menu. Select the add option
-   and, from the Add environment window, select an environment to
-   situate the obstacle in. This will add the new environment to the
-   environment list.
+-  Enter the name of the obstacle, and click on the Add button in the environment table, and select an environment to situate the obstacle in. This will add the new environment to the environment list.
 
 -  In the Definition page, enter the obstacle definition, and select the
    obstacle category. Possible obstacle categories are: Confidentiality
    Threat, Integrity Threat, Availability Threat, Accountability Threat,
    Vulnerability, Duration, Frequency, Demands, and Goal Support.
+
+-  In the Probability page, enter a double-precision probability value (if known), together with a rationale statement justifying the value.
 
 -  Like goals, obstacle refinements can be added via the Goals and
    Sub-Goals tabs.
@@ -630,12 +628,12 @@ Adding, updating, and deleting an obstacle
 
 -  Click on the Create button to add the new obstacle.
 
--  Existing obstacles can be modified by double clicking on the obstacle
-   in the Obstacles dialog box, making the necessary changes, and
+-  Existing obstacles can be modified by selecting the obstacle
+   in the Obstacles table, making the necessary changes, and
    clicking on the Update button.
 
 -  To delete an obstacle , select the obstacle to delete in the
-   Obstacles dialog box, and select the Delete button. If any artifacts
+   Obstacles table, and select the Delete button. If any artifacts
    are dependent on this obstacle then a dialog box stating these
    dependencies are displayed. The user has the option of selecting Yes
    to remove the obstacle dependencies and the obstacle itself, or No to
@@ -644,10 +642,10 @@ Adding, updating, and deleting an obstacle
 Obstacle Modelling
 ------------------
 
-Obstacle models can be viewed by clicking on the Obstacle Model toolbar
+Obstacle models can be viewed by clicking on the Models/Obstacle menu
 button, and selecting the environment to view the environment for.
 
-.. figure:: ObstacleModel.png
+.. figure:: ObstacleModel.jpg
    :alt: Obstacle Model
 
 In many ways, the obstacle model is very similar to the goal model. The
