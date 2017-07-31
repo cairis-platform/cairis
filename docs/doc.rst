@@ -907,13 +907,10 @@ Adding, updating, and deleting an attacker
 
 -  Click on the Add button in the environment table, and select an environment to situate the attacker in. This will add the new environment to the environment list.
 
-
--
-
 -  Click on the Add button on the Roles table to associate one or more roles to the attacker.
 
 -  Click on the Add button on the Motivation and Capability tables to add
-   one or more motive and capability values. For the capabilty, a value
+   one or more motive and capability values. For the capability, a value
    of Low, Medium, or High also needs to be selected.
 
 -  Click on the Create button to add the new attacker.
@@ -940,49 +937,33 @@ created by selecting the Options/Threat Types menu option.
 Adding, updating, and deleting a threat
 ---------------------------------------
 
-.. figure:: ThreatDialog.png
-   :alt: Threat Dialog
+.. figure:: ThreatForm.jpg
+   :alt: Threat form
 
 
--  Click on the Threat toolbar button to open the Threats dialog box,
-   and click on the Add button to open the Threat dialog box.
+-  Select the Risks/Threats menu to open the Threats table,
+   and click on the Add button to open the Threat form.
 
 -  Enter the threat name, the method taken by an attacker to release the
    threat, and select the threat type.
 
--  Right click on the environment window to bring up the environment
-   speed menu. Select the add option and, from the Add environment
-   window, select an environment to situate the threat in. This will add
-   the new environment to the environment list.
+-  Click on the Add button in the environment table, and select an environment to situate the threat in. This will add the new environment to the environment list.
 
--  After ensuring the environment is selected in the environment window,
-   select the threat's likelihood for this environment
+-  Select the threat's likelihood for this environment
 
--  Associate attackers with this threat by right clicking on the
-   attacker box, selecting Add from the speed menu, and selecting one or
-   more attackers associated with the environment.
+-  Associate attackers with this threat by clicking on the Add button above the Attacker table, and selecting one or more attackers specific to the environment.
 
--  Add threatened assets by right clicking on the asset box, selecting
-   Add from the speed menu, and selecting one or more assets from the
-   selected environment.
+-  Add threatened assets by clicking on the Add button above the Assets table, and selecting one or more assets specific to the environment.
 
--  Add the security properties to this threat by right clicking on the
-   properties list, and selecting Add from the speed menu to open the
-   Add Security Properties window. From this window, a security property
-   and its value can be added.
+-  Add the security properties to this threat by clicking on the Add button above the properties table, and selecting a security property, value, and rationale.
 
 -  Click on the Create button to add the new threat.
 
--  Existing threats can be modified by double clicking on the threat in
-   the Threats dialog box, making the necessary changes, and clicking on
+-  Existing threats can be modified by clicking on the threat in
+   the Threats table, making the necessary changes, and clicking on
    the Update button.
 
--  To delete a threat, select the threat to delete in the Threats dialog
-   box, and select the Delete button. If any artifacts are dependent on
-   this attacker then a dialog box stating these dependencies are
-   displayed. The user has the option of selecting Yes to remove the
-   threat dependencies and the threat itself, or No to cancel the
-   deletion.
+-  To delete a threat, click on the Delete button threat next to the threat to be removed in the Threats table.  If any artifacts are dependent on this attacker then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the threat dependencies and the threat itself, or No to cancel the deletion.
 
 Importing threats
 -----------------
