@@ -463,6 +463,17 @@ class DataFlowMessage(DefaultMessage):
 )
 # endregion
 
+class DirectoryMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.DirectoryModel)
+  required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+  object=ModelDefinitions.DirectoryModel.__name__,
+)
+# endregion
+
 
 class TemplateRequirementMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TemplateRequirementModel)

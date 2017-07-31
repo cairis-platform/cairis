@@ -29,7 +29,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController
+    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController, DirectoryController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -202,6 +202,10 @@ api.add_resource(DependencyController.DependencyByNameAPI, '/api/dependencies/en
 # DimensionController
 api.add_resource(DimensionController.DimensionsAPI, '/api/dimensions/table/<string:table>',endpoint='dimensions')
 api.add_resource(DimensionController.DimensionNamesAPI, '/api/dimensions/table/<string:table>/environment/<string:environment>',endpoint='dimension')
+
+# DirectoryController
+api.add_resource(DirectoryController.ThreatDirectoryAPI, '/api/directory/threat/<string:entry_name>',endpoint='threatdirectory')
+api.add_resource(DirectoryController.VulnerabilityDirectoryAPI, '/api/directory/vulnerability/<string:entry_name>',endpoint='vulnerabilitydirectory')
 
 # Document Reference routes
 api.add_resource(DocumentReferenceController.DocumentReferencesAPI, '/api/document_references',endpoint='document_references')

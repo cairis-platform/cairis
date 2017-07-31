@@ -26,6 +26,7 @@ from cairis.core.AttackerEnvironmentProperties import AttackerEnvironmentPropert
 from cairis.core.ClassAssociation import ClassAssociation
 from cairis.core.GoalAssociation import GoalAssociation
 from cairis.core.Dependency import Dependency
+from cairis.core.Directory import Directory
 from cairis.core.Goal import Goal
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
 from cairis.core.Obstacle import Obstacle
@@ -1494,4 +1495,20 @@ class DataFlowModel(object):
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field : gen_class_metadata(DataFlow)
+  }
+
+@swagger.model
+class DirectoryModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theLabel": fields.String,
+    "theName": fields.String,
+    "theDescription": fields.String,
+    "theType": fields.String,
+    "theReference": fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(Directory)
   }
