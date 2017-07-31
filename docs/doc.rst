@@ -1083,23 +1083,15 @@ derived from a detective response.
 Adding, updating, and deleting a response
 -----------------------------------------
 
-.. figure:: ResponseDialog.png
-   :alt: Response Dialog
+.. figure:: ResponseForm.jpg
+   :alt: Response form
 
 
--  Click on the Response toolbar button to open the Responses dialog
-   box, and click on the Add button. Select the response to take from
-   the available options presented.
+-  Select the Risk/Responses toolbar menu to open the Responses table, and click on the Add button. Select the response to take from the available options presented.
 
 -  Select the risk to associate this response with.
 
--  Right click on the environment window to bring up the environment
-   speed menu. Select the add option and, from the Add environment
-   window, select an environment to situate the response in. This will
-   add the new environment to the environment list.
-
--  After ensuring the environment is selected in the environment window,
-   select the response type.
+-  Click on the Add button in the environment table, and select an environment to situate the threat in. This will add the new environment to the environment list.
 
 -  When the risk name and response type is selected, the response name
    is automatically generated.
@@ -1111,28 +1103,19 @@ Adding, updating, and deleting a response
 -  If a Detect response is selected, select the Detection Point (Before,
    Medium, or After).
 
--  If a React response is selected, right click on Detection Mechanism
-   box, select Add from the speed menu, and select a detection mechanism
-   asset.
+-  If a React response is selected, Click on the Add button above the Detection Mechanism table, and select a detection mechanism asset.
 
 -  Click on the Create button to add the new response.
 
--  Existing responses can be modified by double clicking on the response
-   in the Responses dialog box, making the necessary changes, and
-   clicking on the Update button.
+-  Existing responses can be modified by clicking on the response in the Responses table, making the necessary changes, and clicking on the Update button.
 
--  To delete a response, select the response to delete in the Responses
-   dialog box, and select the Delete button. If any artifacts are
-   dependent on this response then a dialog box stating these
-   dependencies are displayed. The user has the option of selecting Yes
-   to remove the response dependencies and the response itself, or No to
-   cancel the deletion.
+-  To delete a response, click the Delete button next to the response to be removed in the Responses table. If any artifacts are dependent on this response then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the response dependencies and the response itself, or No to cancel the deletion.
 
 Generating goals
 ----------------
 
 A goal can be generated from a response by right clicking on the
-response name in the Responses dialog box, and selecting Generate Goal
+response name in the Responses table, and selecting Generate Goal
 from the speed menu. This causes a goal to be generated in each of the
 environments the response is situated in. The goal name corresponds to
 the name of the response.
