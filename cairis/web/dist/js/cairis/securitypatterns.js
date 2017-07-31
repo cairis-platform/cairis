@@ -113,7 +113,6 @@ function viewSecurityPattern(spName) {
     url: serverIP + "/api/security_patterns/name/" + encodeURIComponent(spName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editSecurityPatternOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editSecurityPatternOptionsForm").validator();
         $("#UpdateSecurityPattern").text("Update");
         $.session.set("SecurityPattern", JSON.stringify(data));
         $("#theName").val(data.theName);
@@ -127,6 +126,7 @@ function viewSecurityPattern(spName) {
           appendPatternStructure(ca);
         });
       });
+      $("#editSecurityPatternOptionsForm").validator('update');
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
