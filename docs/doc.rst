@@ -336,42 +336,29 @@ Adding, updating, or deleting a persona
 Recording persona assumptions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: APModel.png
+.. figure:: APModel.jpg
    :alt: Assumption Persona model
 
 
--  From the Options/External Document directory, click on the Add button
-   and add information about the source of any assumptions external to
+-  Select the UX/External Documents menu, and click on the Add button
+   to add information about the source of any assumptions external to
    CAIRIS. An example of such an *External Document* might be an
    interview transcript. Alternatively, if assumptions are purely based
    on your own thoughts and feelings then an External Document can be
    created to make this explicit.
 
--  Open up the Persona dialog for the persona you want to add a
-   characteristic to, and right click in the behavioural variable folder
-   (e.g. Activities) you wish to add a Characteristic to.
+-  Select the UX/Document References menu, and click on the Add button.
+   Enter a name that summarises the assumption made, and select
+   Select the external document from the Document combobox box to indicate the document that the assumption is taken from, and enter details of the person who elicited the assumption in the Contributor text box.  Finally, in the Excerpt box, enter the extract of text from the external document from which the assumption is based.
 
--  From the Persona Characteristics dialog box, click on Add to add a
-   new characteristic.
+-  From the Persona Characteristics dialog box, click on Add to add a new characteristic.
 
--  From the General folder, add a description of the characteristic and
-   a *Model Qualifier*; this word describes your confidence in the
-   validity of the characteristic. Possible qualifiers might include
-   *always*, *usually*, or *perhaps*.
+
+-  From the General folder, click on the Characteristic tab, and select the Persona and behavioural variable that this characteristic will be associated with.  Enter a description of the characteristic and a *Model Qualifier*; this word describes your confidence in the validity of the characteristic. Possible qualifiers might include *always*, *usually*, or *perhaps*.
 
 -  Click on the Grounds tab to open the list of Grounds for this
    characteristic. The grounds are evidence which support the validity
-   of the characteristic. Right click in the Reference box, and select
-   Add to add a Document Reference. Select the concept type for this
-   evidence and the name of a pre-exising concept or document reference
-   for this grounds. If one doesn't already exist, then select any
-   artifact and, from the Reference combo box, select [New artifact
-   reference] (for a document reference) or [New concept reference] (for
-   a reference to an existing model object. In both cases, a dialogue
-   box will appear allowing you to enter a short description of the
-   grounds proposition, together with more detailed rationale. Clicking
-   on Ok will add the new document or concept reference, and add this to
-   the grounds list.
+   of the characteristic. Click on the Add button to add a new Document Reference. Select the document reference, and a short description of the grounds proposition. Clicking Save will add the new document reference to the grounds list.
 
 -  Click on the Warrant tab to open the list of Warrants for this
    characteristic. The warrants are inference rules which links the
@@ -387,77 +374,51 @@ Recording persona assumptions
 
 -  Existing characteristics can be modified by double clicking on the
    characteristics in the Persona Characteristic dialog box, making the
-   necessary changes, and clicking on the Edit button.
+   necessary changes, and clicking on the Update button.
+
 
 Tasks
 =====
 
 Tasks model the work carried out by one or more personas. This work is
-described in environemnt-specific narrative scenarios, which illustrate
+described in environment-specific narrative scenarios, which illustrate
 how the system is used to augment the work activity.
 
 Adding, updating, or deleting a task
 ------------------------------------
 
-.. figure:: TaskDialog.png
+.. figure:: TaskDialog.jpg
    :alt: Task Dialog
 
 
--  Click on the Task toolbar button to open the Tasks dialog box, and
-   click on the Add button to open the Task dialog box.
+-  Click on the UX/Tasks button to open the Tasks table, and
+   click on the Add button to open the Task form.
 
 -  Enter a task name, and the objective of carrying out the task.
 
--  If the task is not derived from empirical data, then select the
-   Asssumption Task check-box. Ticking this box has the effect of
-   pre-fixing the task name with an << assumption >> stereotype in any
-   models where the task is present.
+-  Click on the Add button in the asset table, and select an environment to situate the asset in. This will add the new environment to the environment list.
 
--  Right click on the environment window to bring up the environment
-   speed menu. Select the add option and, from the Add environment
-   window, select an environment to situate the persona in. This will
-   add the new environment to the environment list.
+-  In the Dependencies folder, enter any dependencies needing to hold before this task can take place.
 
--  After ensuring the environment is selected in the environment window,
-   click on the Summary tab. In the Summary page, enter any dependencies
-   needing to hold before this task can take place.
+-  In the Narrative folder, enter the task scenario. This narrative should describe how the persona (or personas) carry out the task to achieve the pre-defined objective.
 
-.. figure:: AddTaskPersona.png
-   :alt: Add Task Persona Dialog
+-  In the Consequences folder, enter any consequences (positive or negative) associated with this task.
+
+-  In the Benefits folder, enter the value that completing this task will bring.
+
+.. figure:: AddTaskPersona.jpg
+   :alt: Participating Persona form
 
 
--  Right click on the persona list box and select Add from the speed
-   menu to associate a persona with this task. In the Add Task Persona
-   dialog box, select the person, the task duration (seconds, minutes,
-   hours or longer), frequency (hourly or more, daily-weekly, monthly or
-   less),demands (none, low, medium, high), and goal conflict (none,
-   low, medium, high). The values for low, medium, and high should be
-   agreed with participants before hand.
+-  In the Participants folder, click on the Add button to associate a persona with this task. In the Participating Persona form, select the person, the task duration (seconds, minutes, hours or longer), frequency (hourly or more, daily-weekly, monthly or less),demands (none, low, medium, high), and goal conflict (none, low, medium, high). The values for low, medium, and high should be agreed with participants before hand.
 
--  If any aspect of the task concerns one or more assets, then these can
-   be added to the concern list. Adding an asset concern causes a
-   concern comment to be associated to the asset in the asset model. If
-   the task concerns an association between assets, the association can
-   be added by clicking on the Concern Association tab and adding the
-   source and target assets and association multiplicity to the concern
-   association list. In the asset model, this association is displayed
-   and a concern comment is associated to each asset in the association.
-
--  Right click on the Narrative tab and enter the task scenario in the
-   text box. This narrative should describe how the persona (or
-   personas) carry out the task to achieve the pre-defined objective.
+-  If any aspect of the task concerns one or more assets, then these can be added to the concern list. Adding an asset concern causes a concern comment to be associated to the asset in the asset model. If the task concerns an association between assets, the association can be added by clicking on the Concern Association tab and adding the source and target assets and association multiplicity to the concern association list. In the asset model, this association is displayed and a concern comment is associated to each asset in the association.
 
 -  Click on the Create button to add the new task.
 
--  Existing tasks can be modified by double clicking on the task in the
-   Tasks dialog box, making the necessary changes, and clicking on the
-   Update button.
+-  Existing tasks can be modified by clicking on the task in the Tasks table, making the necessary changes, and clicking on the Update button.
 
--  To delete a task, select the task to delete in the Tasks dialog box,
-   and select the Delete button. If any artifacts are dependent on this
-   task then a dialog box stating these dependencies are displayed. The
-   user has the option of selecting Yes to remove the task dependencies
-   and the task itself, or No to cancel the deletion.
+-  To delete a task, select the task to delete in the Tasks dialog box, and click the Delete button. If any artifacts are dependent on this task then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the task dependencies and the task itself, or No to cancel the deletion.
 
 Task traceability
 -----------------
