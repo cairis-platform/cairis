@@ -336,42 +336,29 @@ Adding, updating, or deleting a persona
 Recording persona assumptions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: APModel.png
+.. figure:: APModel.jpg
    :alt: Assumption Persona model
 
 
--  From the Options/External Document directory, click on the Add button
-   and add information about the source of any assumptions external to
+-  Select the UX/External Documents menu, and click on the Add button
+   to add information about the source of any assumptions external to
    CAIRIS. An example of such an *External Document* might be an
    interview transcript. Alternatively, if assumptions are purely based
    on your own thoughts and feelings then an External Document can be
    created to make this explicit.
 
--  Open up the Persona dialog for the persona you want to add a
-   characteristic to, and right click in the behavioural variable folder
-   (e.g. Activities) you wish to add a Characteristic to.
+-  Select the UX/Document References menu, and click on the Add button.
+   Enter a name that summarises the assumption made, and select
+   Select the external document from the Document combobox box to indicate the document that the assumption is taken from, and enter details of the person who elicited the assumption in the Contributor text box.  Finally, in the Excerpt box, enter the extract of text from the external document from which the assumption is based.
 
--  From the Persona Characteristics dialog box, click on Add to add a
-   new characteristic.
+-  From the Persona Characteristics dialog box, click on Add to add a new characteristic.
 
--  From the General folder, add a description of the characteristic and
-   a *Model Qualifier*; this word describes your confidence in the
-   validity of the characteristic. Possible qualifiers might include
-   *always*, *usually*, or *perhaps*.
+
+-  From the General folder, click on the Characteristic tab, and select the Persona and behavioural variable that this characteristic will be associated with.  Enter a description of the characteristic and a *Model Qualifier*; this word describes your confidence in the validity of the characteristic. Possible qualifiers might include *always*, *usually*, or *perhaps*.
 
 -  Click on the Grounds tab to open the list of Grounds for this
    characteristic. The grounds are evidence which support the validity
-   of the characteristic. Right click in the Reference box, and select
-   Add to add a Document Reference. Select the concept type for this
-   evidence and the name of a pre-exising concept or document reference
-   for this grounds. If one doesn't already exist, then select any
-   artifact and, from the Reference combo box, select [New artifact
-   reference] (for a document reference) or [New concept reference] (for
-   a reference to an existing model object. In both cases, a dialogue
-   box will appear allowing you to enter a short description of the
-   grounds proposition, together with more detailed rationale. Clicking
-   on Ok will add the new document or concept reference, and add this to
-   the grounds list.
+   of the characteristic. Click on the Add button to add a new Document Reference. Select the document reference, and a short description of the grounds proposition. Clicking Save will add the new document reference to the grounds list.
 
 -  Click on the Warrant tab to open the list of Warrants for this
    characteristic. The warrants are inference rules which links the
@@ -387,7 +374,8 @@ Recording persona assumptions
 
 -  Existing characteristics can be modified by double clicking on the
    characteristics in the Persona Characteristic dialog box, making the
-   necessary changes, and clicking on the Edit button.
+   necessary changes, and clicking on the Update button.
+
 
 Tasks
 =====
