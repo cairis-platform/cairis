@@ -801,27 +801,9 @@ Create a security pattern
 Situate a security pattern
 --------------------------
 
-.. figure:: SituatePatternDialog.png
-   :alt: Situate Pattern Dialog
+-  To introduce a security pattern into the working project, select the Risks/Security Patterns menu, right-click on the pattern to be situated, and select the Situate Pattern option from the speed menu.
 
-
--  To introduce a security pattern into the working project, open the
-   Security Patterns dialog box, right-click on the pattern, and select
-   the Situate Pattern option from the speed menu. This opens the
-   Situate Pattern Dialog box.
-
--  For each collaborating asset, click on the check boxes that you wish
-   to situate each asset in. It may be that not all assets in the
-   pattern are relevant for all contexts of use. Therefore, all the
-   pattern structure is retained in the project, the pattern structure
-   displayed in each environment is based only on the assets situated.
-   For example, for the Packet Filter Pattern, an end-user context of
-   use may only be concerned with the client workstation asset and the
-   firewall. A system administrator may be concerned about most of the
-   pattern structure, but may be less concerned about interactions with
-   external hosts.
-
--  Click on the Create button to situate the pattern.
+-  Select the environment to situate the environment in, and click on Ok to situate the pattern.
 
 Template assets will be instantiated as assets, and situate in the
 stipulated assets. Requirements associated with the pattern, will be
