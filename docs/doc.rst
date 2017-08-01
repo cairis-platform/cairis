@@ -861,20 +861,16 @@ Create a vulnerability
 
 -  To delete an vulnerability, click on the delete button next to the vulnerability to be deleted in the Vulnerabilities table. If any artifacts are dependent on this vulnerability then a dialog box stating these dependencies are displayed. The user has the option of electing Yes to remove the vulnerability dependencies and the vulnerability itself, or No to cancel the deletion.
 
-Importing a vulnerability
--------------------------
+Introducing a template vulnerability
+------------------------------------
 
-.. figure:: ImportVulnerabilityDialog.png
+.. figure:: ImportVulnerabilityDialog.jpg
    :alt: Import Vulnerability
 
-The CAIRIS database is pre-loaded with a database of template
-vulnerabilities based on the Common Criteria. To import one of these,
-select Import from the Vulnerabilities dialog to open the Import
-Vulnerability dialog. When a vulnerability is selected, the
-Vulnerability dialog is opened, and pre-populated with information from
-the template.
+Libraries of of template vulnerabilities can be imported into the CAIRIS database and introduced to the current CAIRIS model.  Examples of such libraries in cairis/examples/directories. To import one of these,
+select Introduce from the top of Vulnerabilities table to open the Introduce from vulnerability directory dialog. When a vulnerability is selected, the Vulnerability form is opened, and pre-populated with information from the directory entry.
 
-.. figure:: ImportedVulnerabilityDialog.png
+.. figure:: ImportedVulnerabilityForm.jpg
    :alt: Imported Vulnerability
 
 Attackers
