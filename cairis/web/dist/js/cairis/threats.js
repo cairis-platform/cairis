@@ -104,12 +104,9 @@ function viewThreat(thrName) {
       activeElement("objectViewer");
       fillOptionMenu("fastTemplates/editThreatOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateThreat").text("Update");
-        getThreatTypes(function createTypes(types) {
-          $.each(types, function (index, type) {
-            $('#theType').append($("<option></option>").attr("value",type.theName).text(type.theName));
-          });
+        refreshDimensionSelector($('#theType'),'threat_type',undefined,function(){
           $("#theType").val(data.theType);
-        });
+        },['All']);
         $.session.set("theThreat", JSON.stringify(data));
         var fillerJSON = data;
         var tags = data.theTags;
@@ -142,14 +139,32 @@ $(document).on("click", "#addNewThreat", function () {
     $("#editThreatOptionsform").validator();
     $("#UpdateThreat").text("Create");
     $("#editThreatOptionsform").addClass("newThreat");
-    getThreatTypes(function createTypes(types) {
-      $.each(types, function (index, type) {
-        $('#theType').append($("<option></option>").attr("value",type.theName).text(type.theName));
-      });
+    refreshDimensionSelector($('#theType'),'threat_type',undefined,function() {
       $("#Properties").hide();
-    });
+    },['All']);
     $.session.set("theThreat", JSON.stringify(jQuery.extend(true, {},threatDefault )));
   });
+});
+
+function viewIntroducedThreat(dirEntry) {
+  refreshObjectBreadCrumb(dirEntry.theLabel);
+  activeElement("objectViewer");
+  fillOptionMenu("fastTemplates/editThreatOptions.html", "#objectViewer", null, true, true, function () {
+    $("#UpdateThreat").text("Create");
+    $("#editThreatOptionsform").addClass("newThreat");
+    refreshDimensionSelector($('#theType'),'threat_type',undefined,function() {
+      $("#Properties").hide();
+    },['All']);
+    $.session.set("theThreat", JSON.stringify(jQuery.extend(true, {},threatDefault )));
+    $('#theThreatName').val(dirEntry.theLabel);
+    $('#theType').val(dirEntry.theType); 
+    $('#theMethod').val(dirEntry.theName + ': ' + dirEntry.theDescription + "\nReference: " + dirEntry.theReference); 
+    $("#editThreatOptionsform").validator('update');
+  });
+}
+
+$(document).on("click","#introduceThreatDirectoryEntry", function() {
+  showDirectoryEntries('threat');
 });
 
 mainContent.on("click", ".threatEnvironments", function () {
@@ -518,28 +533,6 @@ function fillThreatPropProperties(extra){
   if(typeof extra !== undefined && extra !=""){
     propBox.append($("<option></option>").text(extra).val(extra));
   }
-}
-
-function getThreatTypes(callback){
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/threats/types",
-    success: function (data) {
-      if(jQuery.isFunction(callback)){
-        callback(data);
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
 }
 
 function appendThreatEnvironment(environment){

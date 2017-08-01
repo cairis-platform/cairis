@@ -147,6 +147,27 @@ $("#mainTable").on("click", "#addNewVulnerability", function () {
   });
 });
 
+$(document).on("click","#introduceVulnerabilityDirectoryEntry", function() {
+  showDirectoryEntries('vulnerability');
+});
+
+function viewIntroducedVulnerability(dirEntry) {
+  refreshObjectBreadCrumb(dirEntry.theLabel);
+  activeElement("objectViewer");
+  var vul = jQuery.extend(true, {}, vulnerabilityDefault);
+  $.session.set("Vulnerability", JSON.stringify(vul));
+  fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
+    refreshDimensionSelector($('#theVulnerabilityType'),'vulnerability_type');
+    $("#UpdateVulnerability").text("Create");
+    $("#UpdateVulnerability").addClass("newVulnerability");
+    $("#vulnerabilitiestabsID").hide();
+    $('#theVulnerabilityName').val(dirEntry.theLabel);
+    $('#theVulnerabilityType').val(dirEntry.theType);
+    $('#theVulnerabilityDescription').val(dirEntry.theName + ': ' + dirEntry.theDescription + "\nReference: " + dirEntry.theReference);
+    $("#editVulnerabilityOptionsform").validator('update');
+  });
+}
+
 var mainContent = $("#objectViewer");
 mainContent.on('click', '.deleteVulEnv', function () {
   var propName = $(this).next("td").text();

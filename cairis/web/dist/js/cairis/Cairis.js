@@ -1075,11 +1075,11 @@ function setTableHeader(activeTable){
       break;
     case "Vulnerability":
       debugLogger("Is Vulnerability");
-      thead = "<th width='50px' id='addNewVulnerability'><i class='fa fa-plus floatCenter'></i></th><th>Vulnerability</th><th>Type</th>";
+      thead = "<th width='50px' id='addNewVulnerability'><i class='fa fa-plus floatCenter'></i></th><th>Vulnerability</th><th>Type</th><th width='100px' id='introduceVulnerabilityDirectoryEntry'><i class='fa fa-plus-square'></i> Introduce</th>";
       break;
     case "Threats":
       debugLogger("Is Threat");
-      thead = "<th width='50px' id='addNewThreat'><i class='fa fa-plus floatCenter'></i></th><th>Threat</th><th>Type</th>";
+      thead = "<th width='50px' id='addNewThreat'><i class='fa fa-plus floatCenter'></i></th><th>Threat</th><th>Type</th><th width='100px' id='introduceThreatDirectoryEntry'><i class='fa fa-plus-square'></i> Introduce</th>";
       break;
     case "Attackers":
       debugLogger("Is Attacker");
@@ -1765,6 +1765,69 @@ $("#chooseEnvironment").on('click', '#chooseEnvironmentButton',function(e) {
     cmd($('#chooseEnvironmentSelect').val());
   }
   $('#chooseEnvironment').modal('hide');
+});
+
+function showDirectoryEntries(dirDim) {
+  $.ajax({
+    type:"GET",
+    dataType: "json",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/directory/" + dirDim + "/all",
+    success: function(data) {
+      if (data.length <= 0) {
+        alert("No " + dirDim + " directory entries found.");
+      }
+      else {
+        $('#showDirectoryDialogTitle').attr('data-chooseDimension',dirDim);
+        $('#directoryTable').find('tbody').empty();
+        $.each(data, function(idx,dEntry) {
+          $("#directoryTable").find("tbody").append('<tr class="directoryEntry"><td>'+ dEntry.theLabel +'</td><td>' + dEntry.theName + '</td><td>' + dEntry.theType + '</td></tr>');
+        });
+        $('#showDirectoryDialog').modal('show');
+      }
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+$("#showDirectoryDialog").on('shown.bs.modal', function() {
+  var dirDim = $('#showDirectoryDialogTitle').attr('data-chooseDimension');
+  $('#showDirectoryDialogTitle').text('Introduce from ' + dirDim + ' directory');
+});
+
+$("#showDirectoryDialog").on('click', '.directoryEntry',function(e) {
+  var entryName = $(this).find("td:eq(1)").text();
+  var dirDim = $('#showDirectoryDialogTitle').attr('data-chooseDimension');
+  $.ajax({
+    type:"GET",
+    dataType: "json",
+    accept:"application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + "/api/directory/" + dirDim + "/" + encodeURIComponent(entryName),
+    success: function(data) {
+      $('#showDirectoryDialog').modal('hide');
+      if (dirDim == 'threat') {
+        viewIntroducedThreat(data[0]);
+      }
+      else {
+        viewIntroducedVulnerability(data[0]);
+      }
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 });
 
 function getNoOfRisks(callback) {
