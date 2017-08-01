@@ -894,6 +894,7 @@ drop procedure if exists getTrustBoundaryComponents;
 drop procedure if exists deleteTrustBoundaryComponents;
 drop procedure if exists delete_trust_boundary;
 drop procedure if exists addToTrustBoundary;
+drop procedure if exists relabelRequirements;
 
 delimiter //
 
@@ -23680,6 +23681,48 @@ begin
   else
     select id into objtId from usecase where name = objtName limit 1;
     insert into trust_boundary_asset(trust_boundary_id,environment_id,usecase_id) value (tbId,envId,objtId);
+  end if;
+end
+//
+
+create procedure relabelRequirements(in reqReference text)
+begin
+  declare refId int;
+  declare reqId int;
+  declare newLabel int default 1;
+  declare oldLabel int;
+  declare done int default 0;
+  declare assetReqCursor cursor for select o.label, o.id from requirement o, asset_requirement ar where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.id = ar.requirement_id and ar.asset_id = refId order by o.label;
+  declare envReqCursor cursor for select o.label, o.id from requirement o, environment_requirement er where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.id = er.requirement_id and er.environment_id = refId order by o.label;
+  declare continue handler for not found set done = 1;
+
+
+  select id into refId from asset where name = reqReference limit 1;
+  if refId is null
+  then
+    select id into refId from environment where name = reqReference limit 1;
+    open envReqCursor;
+    er_loop: loop
+      fetch envReqCursor into oldLabel,reqId;
+      if done = 1
+      then
+        leave er_loop;
+      end if;
+      update requirement set label = newLabel where id = reqId;
+    end loop er_loop;
+    close envReqCursor;
+  else
+    open assetReqCursor;
+    ar_loop: loop
+      fetch assetReqCursor into oldLabel,reqId;
+      if done = 1
+      then
+        leave ar_loop;
+      end if;
+      update requirement set label = newLabel where id = reqId;
+      set newLabel = newLabel + 1;
+    end loop ar_loop;
+    close assetReqCursor;
   end if;
 end
 //

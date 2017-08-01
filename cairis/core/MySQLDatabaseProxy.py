@@ -10490,3 +10490,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error deleting dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+
+  def relabelRequirements(self,reqReference):
+    try:
+      session = self.conn()
+      session.execute('call relabelRequirements(:reqReference)',{'reqReference':reqReference})
+      session.commit()
+      session.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error relabing requirements associated with ' + reqReference + ' (id:' + str(id) + ',message:' + msg + ')'
+

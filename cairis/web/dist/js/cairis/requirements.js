@@ -22,6 +22,10 @@
 // For the assetsbox, if filter is selected
 $('#assetsbox').change(function() {
   var selection = $(this).find('option:selected').text();
+  updateAssetRequirementsTable(selection);
+});
+
+function updateAssetRequirementsTable(selection) {
   if (window.theVisualModel == 'None') {
     debugLogger("Selection: " + selection);
     // Clearing the environmentsbox
@@ -53,11 +57,14 @@ $('#assetsbox').change(function() {
     debugLogger("Selection: " + selection);
     getAssetview($('#amenvironmentsbox').val());
   }
-});
-
+}
 
 $('#environmentsbox').change(function() {
   var selection = $(this).find('option:selected').text();
+  updateEnvironmentRequirementsTable(selection);
+});
+
+function updateEnvironmentRequirementsTable(selection) {
   if (window.theVisualModel == 'None') {
     $('#assetsbox').prop('selectedIndex', -1);
 
@@ -90,7 +97,7 @@ $('#environmentsbox').change(function() {
       $('#amassetsbox').change();
     });
   }
-});
+}
 
 // A function for filling the table with requirements
 function createRequirementsTable(data){

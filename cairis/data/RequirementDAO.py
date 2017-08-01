@@ -143,7 +143,9 @@ class RequirementDAO(CairisDAO):
       self.close()
       raise ObjectNotFoundHTTPError('The provided requirement')
 
+    reqReference = req.asset()
     self.db_proxy.deleteRequirement(req.theId)
+    self.db_proxy.relabelRequirements(reqReference)
 
   def update_requirement(self, requirement, name=None, req_id=-1):
     old_requirement = None

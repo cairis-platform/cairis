@@ -86,8 +86,15 @@ function removeReq(reqName) {
       url: ursl,
       success: function (data) {
         $("tr").eq(getActiveindex()).detach();
+        var refName = $('#assetsbox').val()
+        if (refName != null) {
+          updateAssetRequirementsTable(refName);
+        }
+        else {
+          updateEnvironmentRequirementsTable(refName);
+        }
         showPopup(true);
-        sortTableByRow(0);
+//        sortTableByRow(0);
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
