@@ -1144,10 +1144,10 @@ countermeasure helps or hinders the properties of associated tasks.
 Adding, updating, and deleting a countermeasure
 -----------------------------------------------
 
-.. figure:: CountermeasureFormSecurity.png
+.. figure:: CountermeasureFormSecurity.jpg
    :alt: Countermeasure form: Security Page
 
-.. figure:: CountermeasureFormUsability.png
+.. figure:: CountermeasureFormUsability.jpg
    :alt: Countermeasure form: Usability Page
 
 
