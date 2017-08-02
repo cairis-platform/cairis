@@ -1,9 +1,9 @@
-dbhost = localhost
+dbhost = cairis-mysql
 dbport = 3306
-dbuser = irisuser
-dbpasswd = 
+dbuser = cairisuser
+dbpasswd = cairisuser
 dbname = cairis_default
-auth_dbhost = localhost
+auth_dbhost = cairis-mysql
 auth_dbuser = flaskuser
 auth_dbpasswd = flaskuser
 auth_dbname = flaskdb

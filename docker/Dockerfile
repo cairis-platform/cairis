@@ -1,6 +1,6 @@
 FROM debian:wheezy
 MAINTAINER Shamal Faily <sfaily@bournemouth.ac.uk>
-RUN apt-get update && apt-get install -y python-dev build-essential mysql-server mysql-client graphviz python-pip python-numpy git libmysqlclient-dev docbook python-apt dblatex texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev libxslt1-dev apache2-threaded-dev poppler-utils
+RUN apt-get update && apt-get install -y python-dev build-essential mysql-client graphviz python-pip python-numpy git libmysqlclient-dev docbook python-apt dblatex texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev libxslt1-dev apache2-threaded-dev poppler-utils
 COPY requirements.txt /
 COPY wsgi_requirements.txt /
 RUN pip install -r requirements.txt
@@ -14,7 +14,5 @@ RUN chgrp www-data /images
 RUN git clone https://github.com/failys/cairis /cairis
 COPY cairis.cnf /
 COPY setupDb.sh /
-RUN ./setupDb.sh
 EXPOSE 8000
-COPY cmd.sh /
-CMD ["./cmd.sh"]
+CMD ["./setupDb.sh"]
