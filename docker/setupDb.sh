@@ -2,7 +2,7 @@
 set -x
 mysql -h cairis-mysql --user=root --password='my-secret-pw' < $CAIRIS_SRC/test/createdb.sql
 mysql -h cairis-mysql --user=cairisuser --password='cairisuser' --database=cairis_default < $CAIRIS_SRC/sql/init.sql
-mysql -h cairit-mysql --user=cairisuser --password='cairisuser' --database=cairis_default < $CAIRIS_SRC/sql/procs.sql
+mysql -h cairis-mysql --user=cairisuser --password='cairisuser' --database=cairis_default < $CAIRIS_SRC/sql/procs.sql
 /cairis/cairis/bin/add_cairis_user.py test test
 mysql -h cairis-mysql --user=root --password=my-secret-pw <<!
 set global max_sp_recursion_depth = 255;
