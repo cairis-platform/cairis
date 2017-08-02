@@ -13,8 +13,8 @@ RUN chown www-data /images
 RUN chgrp www-data /images
 RUN git clone https://github.com/failys/cairis /cairis
 COPY cairis.cnf /
-RUN service mysql start && /cairis/cairis/test/initdb.sh
-RUN service mysql start && ./cairis/cairis/bin/add_cairis_user.py test test
+COPY setupDb.sh /
+RUN ./setupDb.sh
 EXPOSE 8000
 COPY cmd.sh /
-CMD ["/cmd.sh"]
+CMD ["./cmd.sh"]
