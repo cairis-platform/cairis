@@ -1,8 +1,8 @@
 dbhost = 127.0.0.1
 dbport = 3306
-dbuser = irisuser
-dbpasswd = 
-dbname = arm
+dbuser = cairisuser
+dbpasswd = cairisuser
+dbname = cairis_default
 tmp_dir = /tmp
 root = /home/cairisuser/cairis/cairis
 default_image_dir = .
