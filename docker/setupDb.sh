@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 service mysql start
 /cairis/cairis/test/initdb.sh
 /cairis/cairis/bin/add_cairis_user.py test test
