@@ -39,7 +39,7 @@ $('#attackTreeImportDialog').on('click','#importAttackTreeButton',function(e) {
 
 $("#typeOfFileDialog").on('click', '#importModelFileButton',function(e) {
   var fileType = $("#theImportModelType").val();
-  var json = {'urlenc_file_contents' : $.session.get('importModelContent'),'type': fileType};
+  var json = {'urlenc_file_contents' : $.session.get('importModelContent'),'overwrite' : 1, 'type': fileType};
   $('#typeOfFileDialog').modal('hide');
   if (fileType == 'Attack Tree (Dot)') {
     $.session.set('importParameters',JSON.stringify(json));

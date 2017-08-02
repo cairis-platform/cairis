@@ -43,6 +43,7 @@ class CImportTests(CairisDaemonTestCase):
             'session_id': 'test',
             'object': {
                 'urlenc_file_contents': urlenc_file_contents,
+                'overwrite' : 1,
                 'type': 'all'
             }
         }

@@ -75,7 +75,6 @@ class CImportTextAPI(Resource):
   def post(self):
     session_id = get_session_id(session, request)
     json_dict = request.get_json(silent=True)
-
     if json_dict is False or json_dict is None:
       raise MalformedJSONHTTPError(data=request.get_data())
 
@@ -84,6 +83,7 @@ class CImportTextAPI(Resource):
     file_contents = cimport_params['urlenc_file_contents']
     file_contents = unquote(file_contents)
     file_contents = file_contents.replace(u"\u2018", "'").replace(u"\u2019", "'")
+    overwrite = cimport_params['overwrite']
     type = cimport_params['type']
 
     if file_contents.startswith('<?xml'):
@@ -95,7 +95,7 @@ class CImportTextAPI(Resource):
 
       try:
         dao = ImportDAO(session_id)
-        result = dao.file_import(abs_path, type, 1)
+        result = dao.file_import(abs_path, type, overwrite)
         dao.close()
       except DatabaseProxyException as ex:
         raise ARMHTTPError(ex)

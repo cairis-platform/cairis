@@ -33,12 +33,12 @@ def importModel(url,dbName,modelFile):
     raise Exception(exceptionTxt)
 
   openDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/open?session_id=test')
-  if not newDbResp.ok:
-    exceptionTxt = 'Cannot open database ' + dbName + ': ' + newDbResp.text
+  if not openDbResp.ok:
+    exceptionTxt = 'Cannot open database ' + dbName + ': ' + openDbResp.text
     raise Exception(exceptionTxt)
 
   buf = open(modelFile,'rb').read()
-  import_json = {'session_id' : 'test','object' : {'urlenc_file_contents':buf,'type':'all'}}
+  import_json = {'session_id' : 'test','object' : {'urlenc_file_contents':buf,'overwrite': 1,'type':'all'}}
   hdrs = {'Content-type': 'application/json'}
   importResp = requests.post(url + '/api/import/text',data=json.dumps(import_json),headers=hdrs);
   if not importResp.ok:
