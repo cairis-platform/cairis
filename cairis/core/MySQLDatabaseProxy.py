@@ -325,7 +325,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       db = b.dbName
 
     try:
-      dbEngine = create_engine('mysql+mysqldb://'+b.dbUser+':'+b.dbPasswd+'@'+b.dbHost+':'+str(b.dbPort)+'/'+b.dbName)
+      dbEngine = create_engine('mysql+mysqldb://'+user+':'+passwd+'@'+host+':'+str(port)+'/'+db)
       self.conn = scoped_session(sessionmaker(bind=dbEngine))
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -374,7 +374,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
     
   def close(self):
-      self.conn.remove()
+    self.conn.remove()
 
   def getRequirements(self,constraintId = '',isAsset = 1):
     try:

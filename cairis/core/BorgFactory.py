@@ -196,7 +196,7 @@ def dInitialise():
     port = b.settings['test']['dbPort'],
     user = b.settings['test']['dbUser'],
     passwd = b.settings['test']['dbPasswd'],
-    db = b.settings['test']['dbPasswd'])
+    db = b.settings['test']['dbName'])
 
   if db_proxy.conn is not None:
     db_proxy.close()
