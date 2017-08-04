@@ -3,6 +3,7 @@ dbport = 3306
 dbuser = cairisuser
 dbpasswd = cairisuser
 dbname = cairis_default
+rpasswd = my-secret-pw
 auth_dbhost = cairis-mysql
 auth_dbuser = flaskuser
 auth_dbpasswd = flaskuser
