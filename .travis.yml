@@ -26,7 +26,7 @@ addons:
     - libxslt1-dev
 
 env:
-- PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog
+- PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog $CAIRIS_CFG_DIR=./travisConfig
 
 install:
 - pip install -r requirements.txt

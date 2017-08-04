@@ -37,7 +37,7 @@ __author__ = 'Shamal Faily'
 class AttackerTest(unittest.TestCase):
 
   def setUp(self):
-    call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
+    call([os.environ['CAIRIS_CFG_DIR'] + "/test/initdb.sh"])
     cairis.core.BorgFactory.initialise()
     f = open(os.environ['CAIRIS_SRC'] + '/test/attackers.json')
     d = json.load(f)
@@ -111,7 +111,7 @@ class AttackerTest(unittest.TestCase):
     b.dbProxy.deleteRole(self.oRoles[self.irp.name()].id())
     b.dbProxy.deleteEnvironment(self.oenvs[self.iep.name()].id())
     b.dbProxy.close()
-    call([os.environ['CAIRIS_SRC'] + "/test/dropdb.sh"])
+    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
 
 if __name__ == '__main__':
   unittest.main()

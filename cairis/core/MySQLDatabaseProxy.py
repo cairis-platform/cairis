@@ -10234,7 +10234,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.conn = scoped_session(sessionmaker(bind=dbEngine))
       stmts = ['drop database if exists `' + dbName + '`',
                'create database ' + dbName,
-               "grant all privileges on `%s`.* TO '%s'@'%s'" %(dbName,b.dbUser, b.dbHost),
+               "grant all privileges on `%s`.* TO '%s'@'%s' identified by '%s'" %(dbName,dbUser,dbHost,dbPasswd),
                'alter database ' + dbName + ' default character set utf8',
                'alter database ' + dbName + ' default collate utf8_general_ci',
                'flush tables',

@@ -36,7 +36,7 @@ __author__ = 'Rachel Larcombe, Shamal Faily'
 class ObstacleTest(unittest.TestCase):
 
   def setUp(self):
-    call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
+    call([os.environ['CAIRIS_CFG_DIR'] + "/initdb.sh"])
     cairis.core.BorgFactory.initialise()
     f = open(os.environ['CAIRIS_SRC'] + '/test/obstacles.json')
     d = json.load(f)
@@ -79,7 +79,7 @@ class ObstacleTest(unittest.TestCase):
     
     b.dbProxy.deleteEnvironment(self.oenvs[self.iep1.name()].id())
     b.dbProxy.close()
-    call([os.environ['CAIRIS_SRC'] + "/test/dropdb.sh"])
+    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
 
 if __name__ == '__main__':
   unittest.main()

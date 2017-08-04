@@ -34,7 +34,7 @@ __author__ = 'Shamal Faily'
 class UseCaseTest(unittest.TestCase):
 
   def setUp(self):
-    call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
+    call([os.environ['CAIRIS_CFG_DIR'] + "/initdb.sh"])
     cairis.core.BorgFactory.initialise()
     f = open(os.environ['CAIRIS_SRC'] + '/test/usecases.json')
     d = json.load(f)
@@ -101,7 +101,7 @@ class UseCaseTest(unittest.TestCase):
     b.dbProxy.deleteUseCase(ouc.id())
 
   def tearDown(self):
-    call([os.environ['CAIRIS_SRC'] + "/test/dropdb.sh"])
+    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
 
 if __name__ == '__main__':
   unittest.main()

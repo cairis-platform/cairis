@@ -17,6 +17,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-mysql --user=root < $CAIRIS_SRC/test/createdb.sql
-mysql --user=cairisuser --database=cairis_default < $CAIRIS_SRC/sql/init.sql
-mysql --user=cairisuser --database=cairis_default < $CAIRIS_SRC/sql/procs.sql
+mysql --user=root < $CAIRIS_CFG_DIR/createdb.sql
+mysql --user=cairisuser --password=cairisuser --database=cairis_default < $CAIRIS_SRC/sql/init.sql
+mysql --user=cairisuser --password=cairisuser --database=cairis_default < $CAIRIS_SRC/sql/procs.sql

@@ -17,4 +17,6 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-mysql --user=root --password='' < $CAIRIS_SRC/test/dropdb.sql
+mysql --user=root < $CAIRIS_SRC/sql/createdb.sql
+mysql --user=cairisuser --database=cairis_default < $CAIRIS_SRC/sql/init.sql
+mysql --user=cairisuser --database=cairis_default < $CAIRIS_SRC/sql/procs.sql

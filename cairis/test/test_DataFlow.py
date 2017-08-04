@@ -39,7 +39,7 @@ class DataFlowTest(unittest.TestCase):
 
   @classmethod
   def setUpClass(cls):
-    call([os.environ['CAIRIS_SRC'] + "/test/initdb.sh"])
+    call([os.environ['CAIRIS_CFG_DIR'] + "/initdb.sh"])
     cairis.core.BorgFactory.initialise()
 
     f = open(os.environ['CAIRIS_SRC'] + '/test/dataflow.json')

@@ -1,3 +1,5 @@
+#!/bin/bash
+ 
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
 #  distributed with this work for additional information
@@ -15,15 +17,4 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from time import sleep
-import unittest
-import os
-from subprocess import call
-from cairis.daemon import create_app
-
-class CairisDaemonTestCase(unittest.TestCase):
-  call([os.environ['CAIRIS_CFG_DIR'] + "/initdb.sh"])
-  app = create_app()
-  app.config['TESTING'] = True
-  app = app.test_client()
-  sleep(1)
+mysql --user=root --password='' < $CAIRIS_SRC/sql/dropdb.sql
