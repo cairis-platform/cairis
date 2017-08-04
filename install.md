@@ -15,18 +15,14 @@ CAIRIS web services can be installed on any platform that its open-source depend
 
 The easiest way of getting up and running with the web application is to download the CAIRIS container from [Docker hub](https://hub.docker.com/r/shamalfaily/cairis/).  This is built from the latest changes in github, and uses [mod_wsgi-express](https://pypi.python.org/pypi/mod_wsgi) to deliver the CAIRIS web services.
 
-* Download and run the container:  
+* Download and run the container, and its linked mysql container:  
 {% highlight bash %}
-$ docker run -d -P --net=bridge shamalfaily/cairis
+$ sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.5
+$ sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
 {% endhighlight %}
 
-* Obtain the port the container is running on:
-{% highlight bash %}
-$ docker port $(docker ps -aq)
-7071/tcp -> 0.0.0.0:32769
-{% endhighlight %}
 
-* From the web browser of your choice, connect to the CAIRIS URL and access port, e.g. http://localhost:32769
+* From the web browser of your choice, connect to the CAIRIS URL, e.g. http://localhost
 When asked for credentials, provide test/test
 
 * If you want to interact with a pre-existing CAIRIS model, you can find some examples on the CAIRIS github, repository, e.g. [NeuroGrid](https://github.com/failys/cairis/blob/master/examples/exemplars/NeuroGrid/NeuroGrid.xml). You can import this from the System/Import menu, selecting type 'Model', and the model file to import. Allow a minute or two for this import to complete.
