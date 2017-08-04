@@ -37,7 +37,7 @@ __author__ = 'Shamal Faily'
 class AttackerTest(unittest.TestCase):
 
   def setUp(self):
-    call([os.environ['CAIRIS_CFG_DIR'] + "/test/initdb.sh"])
+    call([os.environ['CAIRIS_CFG_DIR'] + "/initdb.sh"])
     cairis.core.BorgFactory.initialise()
     f = open(os.environ['CAIRIS_SRC'] + '/test/attackers.json')
     d = json.load(f)
