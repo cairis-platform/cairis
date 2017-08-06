@@ -104,13 +104,13 @@ function createRequirementsTable(data){
   var tre;
   var theTable = $(".theTable");
   $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
-  var textToInsert = [];
   var  originator, rationale, fitCriterion, type = "";
 
   var theRows = [];
   var i = 0;
   var j = 0;
   $.each(data, function(count, item) {
+    var textToInsert = [];
     textToInsert[i++] = '<tr><td name="theLabel">';
     textToInsert[i++] = item.theLabel;
     textToInsert[i++] = '<'+'/td>';
@@ -123,8 +123,11 @@ function createRequirementsTable(data){
     textToInsert[i++] = item.theDescription;
     textToInsert[i++] = '</td>';
 
-    textToInsert[i++] = '<td name="thePriority"  contenteditable=true>';
-    textToInsert[i++] = item.thePriority;
+    textToInsert[i++] = "<td name='thePriority' class='reqCombo' contenteditable=true>";
+    textToInsert[i++] = "<select class='form-control'>";
+    textToInsert[i++] = "<option value='1'>1</option>";
+    textToInsert[i++] = "<option value='2'>2</option>";
+    textToInsert[i++] = "<option value='3'>3</option></select>";
     textToInsert[i++] = '</td>';
 
     textToInsert[i++] = '<td name="theId"  style="display:none;">';
@@ -150,7 +153,21 @@ function createRequirementsTable(data){
             fitCriterion = '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
             break;
           case "type":
-            type = '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
+            type = "<td name=" + key + " contenteditable=true class='reqCombo'>";
+            type +="<select class='form-control'>";
+            type += "<option value='Functional'>Functional</option>";
+            type += "<option value='Data'>Data</option>";
+            type += "<option value='Look and Feel'>Look and Feel</option>";
+            type += "<option value='Usability'>Usability</option>";
+            type += "<option value='Performance'>Performance</option>";
+            type += "<option value='Operational'>Operational</option>";
+            type += "<option value='Maintainability'>Maintainability</option>";
+            type += "<option value='Portability'>Portability</option>";
+            type += "<option value='Security'>Security</option>";
+            type += "<option value='Cultural and Political'>Cultural and Political</option>";
+            type += "<option value='Legal'>Legal</option>";
+            type += "<option value='Privacy'>Privacy</option></select>";
+            type += '</td>';
             break;
         }
       }
@@ -160,10 +177,10 @@ function createRequirementsTable(data){
     textToInsert[i++] = originator;
     textToInsert[i++] = type;
     textToInsert[i++] = '</tr>';
+    theTable.append(textToInsert.join(''));
+    theTable.find('tbody').find('tr').last().find('td:eq(3)').find('.form-control').val(item.thePriority);
+    theTable.find('tbody').find('tr').last().find('td:eq(9)').find('.form-control').val(datas['type']);
   });
-
-  theTable.append(textToInsert.join(''));
-
   theTable.css("visibility","visible");
 
   $("#mainTable").find("tbody").removeClass();
@@ -202,6 +219,12 @@ function createRequirementsTable(data){
   }); 
 }
 
+$("#mainTable").on('change',".reqCombo",function(e){
+  e.preventDefault();
+  var row = $(this).closest('tr');
+  updateRequirement(row);
+});
+
 function updateRequirement(row){
   if ($(row).attr('class') != undefined) {
     var clazz = $(row).attr('class');
@@ -223,8 +246,14 @@ function reqRowtoJSON(row){
 
   $.each(row[0].children, function (i, v) {
     name =  $(v).attr("name");
-    if(name != "originator" && name != "rationale" && name != "type" && name != "fitCriterion"){
+    if(name != "originator" && name != "rationale" && name != "type" && name != "fitCriterion" && name != "thePriority"){
       json[name] =  v.innerHTML;
+    }
+    else if (name == 'thePriority') {
+      json[name] = row.find('td:eq(3)').find('.form-control').val();
+    }
+    else if (name == 'type') {
+      json.attrs[name] = row.find('td:eq(9)').find('.form-control').val();
     }
     else{
       json.attrs[name] = v.innerHTML;

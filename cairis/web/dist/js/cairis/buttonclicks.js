@@ -45,13 +45,13 @@ function addReq() {
                '<td name="theLabel">' + num + '</td>' +
                '<td name="theName" contenteditable="true"></td>'+
                '<td name="theDescription" contenteditable="true"></td>'+
-               '<td name="thePriority" contenteditable="true">1</td>'+
+               "<td name='thePriority' class='reqCombo' contenteditable='true'><select class='form-control'><option value='1' selected>1</option><option value='2'>2</option value='3'><option>3</option></select></td>'"+
                '<td name="theId" style="display:none;"></td>'+
                '<td name="theVersion" style="display:none;"></td>'+
                '<td name="rationale" contenteditable="true">None</td>'+
                '<td name="fitCriterion" contenteditable="true">None</td>'+
                '<td name="originator" contenteditable="true"></td>'+
-               '<td name="type" contenteditable="true">Functional</td>'+
+               "<td name='type' class='reqCombo' contenteditable='true'><select class='form-control'><option value='Functional' selected>Functional</option><option value='Data'>Data</option><option value='Look and Feel'>Look and Feel</option><option value='Usability'>Usability</option><option value='Performance'>Performance</option><option value='Operational'>Operational</option><option value='Operational'>Operational</option><option value='Maintainability'>Maintainability</option><option value='Portability'>Portability</option><option value='Security'>Security</option><option value='Cultural and Political'>Cultural and Political</option><option value='Legal'>Legal</option><option value='Privacy'>Privacy</option></select></td>"+
                '</tr>';
     $("#mainTable").append(template);
     sortTableByRow(0);

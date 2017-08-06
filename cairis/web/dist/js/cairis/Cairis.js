@@ -897,6 +897,7 @@ function requirementsTable(dimName){
           setTableHeader("Requirements");
           createRequirementsTable(data);
           activeElement("reqTable");
+          $('#assetsbox').change();
           $(".topCombobox").css("visibility", "visible");
           $('#environmentsbox').css("visibility", "visible");
           $(".loadingWrapper").fadeOut(500);
@@ -906,8 +907,8 @@ function requirementsTable(dimName){
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
       });
-    });
-  });
+    },['All']);
+  },['All']);
 }
 
 function summaryTables() {
