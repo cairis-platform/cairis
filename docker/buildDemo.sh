@@ -1,0 +1,25 @@
+#!/bin/sh
+set -x
+
+export REPOS_DIR=/tmp
+export CAIRIS_REPO=$REPOS_DIR/cairis
+export WEBINOS_DESIGN_DATA_REPO=$REPOS_DIR/webinos-design-data
+
+sudo pip install --upgrade pydot certifi openpyxl requests jsonpickle argparse urllib uno
+
+rm -rf $CAIRIS_REPO
+rm -rf $WEBINOS_DESIGN_DATA_REPO
+
+git clone http://github.com/failys/cairis $CAIRIS_REPO
+git clone http://github.com/webinos/webinos-design-data $WEBINOS_DESIGN_DATA_REPO
+
+sudo docker stop CAIRIS
+sudo docker stop cairis-mysql
+sudo docker rm $(sudo docker ps -aq)
+sudo docker rmi $(sudo docker images -q)
+sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.5
+sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
+sleep 60
+$CAIRIS_REPO/cairis/bin/model_import_web.py --url http://localhost --database ACME_Water --image_dir $CAIRIS_REPO/examples/exemplars/ACME_Water --rich_pic stcsContext.jpg $CAIRIS_REPO/examples/exemplars/ACME_Water/ACME_Water.xml
+$CAIRIS_REPO/cairis/bin/model_import_web.py --url http://localhost --database NeuroGrid --image_dir $CAIRIS_REPO/examples/exemplars/NeuroGrid --rich_pic NeuroGridContext.jpg $CAIRIS_REPO/examples/exemplars/NeuroGrid/NeuroGrid.xml
+$WEBINOS_DESIGN_DATA_REPO/scripts/regenerate_webservices.sh
