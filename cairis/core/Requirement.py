@@ -90,4 +90,4 @@ class Requirement:
     return self.theId
 
   def asString(self):
-    return 'id:' + str(self.theId) + ', label:' + str(self.theLabel) + ', name: ' + self.theName + ', description:' + self.theDescription + ', priority:' + str(self.thePriority) + ', rationale:' + self.attrs['rationale'] + ', fit criterion:' + self.attrs['fitCriterion'] + ', originator:' + self.attrs['originator'] + ',type:' + self.attrs['type'] + ',domain:' + self.attrs['domain'] + ',version:' + str(self.theVersion)
+    return 'id:' + str(self.theId) + ', label:' + str(self.theLabel) + ', name: ' + self.theName + ', description:' + self.theDescription + ', priority:' + str(self.thePriority) + ', rationale:' + self.attrs['rationale'] + ', fit criterion:' + self.attrs['fitCriterion'] + ', originator:' + self.attrs['originator'] + ',type:' + self.attrs['type'] + ',version:' + str(self.theVersion)

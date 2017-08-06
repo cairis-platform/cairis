@@ -71,7 +71,7 @@ class RequirementAPITests(CairisDaemonTestCase):
     self.assertGreater(len(requirements_dict), 0, 'No requirements in the dictionary')
     requirements = requirements_dict.values()
     self.logger.info('[%s] Requirements found: %d', method, len(requirements))
-    self.logger.info('[%s] First requirement: %s [%d]\n', method, requirements[0]['theName'], requirements[0]['theId'])
+    self.logger.info('[%s] First requirement: %s [%d]\n', method, requirements[0]['theName'])
 
   def test_post(self):
     method = 'test_post'
@@ -81,11 +81,8 @@ class RequirementAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    req_id = json_resp.get('requirement_id', None)
-    self.assertIsNotNone(req_id, 'No requirement ID returned')
-    self.logger.info('[%s] Requirement ID: %d', method, req_id)
 
-    rv = self.app.get('/api/requirements/shortcode/%d?session_id=test' % req_id, self.new_requirement.label())
+    rv = self.app.get('/api/requirements/shortcode/%d?session_id=test' % int(self.new_requirement.label()))
     requirement = jsonpickle.decode(rv.data)
     self.logger.info('[%s] Requirement: %s [%d]\n', method, self.new_requirement.name(), self.new_requirement.label())
 
@@ -98,7 +95,7 @@ class RequirementAPITests(CairisDaemonTestCase):
     requirements = jsonpickle.decode(rv.data)
     self.assertIsNotNone(requirements, 'No results after deserialization')
     self.assertGreater(len(requirements), 0, 'No requirements found for this environment')
-    self.logger.info('[%s] Requirement: %s [%d]\n', method, requirements[0]['theName'], requirements[0]['theId'])
+    self.logger.info('[%s] Requirement: %s [%d]\n', method, requirements[0]['theName'])
 
   def test_get_environment_name(self):
     method = 'test_environment_get_name'
@@ -109,7 +106,7 @@ class RequirementAPITests(CairisDaemonTestCase):
     requirements = jsonpickle.decode(rv.data)
     self.assertIsNotNone(requirements, 'No results after deserialization')
     if len(requirements) > 0:
-      self.logger.info('[%s] Requirement: %s [%d]\n', method, requirements[0]['theName'], requirements[0]['theId'])
+      self.logger.info('[%s] Requirement: %s [%d]\n', method, requirements[0]['theName'])
 
   def test_x_put(self):
     method = 'test_x_put'
@@ -124,7 +121,6 @@ class RequirementAPITests(CairisDaemonTestCase):
 
     upd_requirement = self.new_requirement
     upd_requirement.theName = 'Test2'
-    upd_requirement.theId = requirement['theId']
     upd_requirement_dict = self.new_requirement_dict
     upd_requirement_dict['object'] = upd_requirement
     upd_requirement_body = jsonpickle.encode(upd_requirement_dict)
@@ -143,30 +139,7 @@ class RequirementAPITests(CairisDaemonTestCase):
     requirements = jsonpickle.decode(rv.data)
     requirement = requirements.get(upd_requirement.theDescription, None)
     self.assertIsNotNone(requirement, 'Requirement not updated as expected')
-    self.logger.info('[%s] Requirement: %s [%d]\n', method, requirement['theName'], requirement['theId'])
-
-  def test_z_delete_id(self):
-    method = 'test_delete_id'
-    rv = self.app.get('/api/requirements?session_id=test')
-    requirements_dict = jsonpickle.decode(rv.data)
-    to_delete_reqs = [
-      requirements_dict.get(self.new_requirement.theDescription, None)
-    ]
-
-    for to_delete_req in to_delete_reqs:
-      if to_delete_req is not None:
-        self.to_delete_ids.append(to_delete_req['theLabel'])
-
-    for req_id in self.to_delete_ids:
-      url = '/api/requirements/name/%s?session_id=test' % req_id
-      self.logger.info('[%s] URL: %s', method, url)
-      rv = self.app.delete(url)
-      self.logger.debug('[%s] Response data: %s', method, rv.data)
-      json_resp = jsonpickle.decode(rv.data)
-      self.assertIsNotNone(json_resp, 'No results after deserialization')
-      message = json_resp.get('message', None)
-      self.assertIsNotNone(message, 'No message returned')
-    self.logger.info('')
+    self.logger.info('[%s] Requirement: %s [%d]\n', method, requirement['theName'])
 
   def test_concept_map_model(self):
     url = '/api/requirements?environment=%s' % quote('Psychosis')
@@ -178,8 +151,6 @@ class RequirementAPITests(CairisDaemonTestCase):
     rv = self.app.post(url, content_type='application/json', data=jsonpickle.encode(reqBody1))
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    req_id = json_resp.get('requirement_id', None)
-    self.assertIsNotNone(req_id, 'No requirement ID returned')
 
     reqBody2 = self.new_requirement_dict
     reqBody2['object'].theLabel='2'
@@ -189,8 +160,6 @@ class RequirementAPITests(CairisDaemonTestCase):
     rv = self.app.post(url, content_type='application/json', data=jsonpickle.encode(reqBody2))
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    req_id = json_resp.get('requirement_id', None)
-    self.assertIsNotNone(req_id, 'No requirement ID returned')
 
     aTrace = Trace(fObjt = 'requirement',fName ='OneRequirement',tObjt = 'requirement', tName = 'AnotherRequirement')
     traceDict = {'session_id' : 'test', 'object' : aTrace} 

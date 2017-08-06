@@ -884,12 +884,13 @@ function refreshSpecificSelector(sBox,urlPrefix,callback,filterList) {
 function requirementsTable(dimName){
   refreshDimensionSelector($('#assetsbox'),'asset',undefined,function(){
     refreshDimensionSelector($('#environmentsbox'),'environment',undefined,function(){
+      var assetName = $('#assetsbox').val();
       $.ajax({
         type:"GET",
         dataType: "json",
         accept:"application/json",
         crossDomain: true,
-        url: serverIP + "/api/requirements",
+        url: serverIP + "/api/requirements/asset/" + encodeURIComponent(assetName),
         data: {session_id: String($.session.get('sessionID')),
           ordered: "1"
         },

@@ -152,63 +152,15 @@ class RequirementsAPI(Resource):
     session_id = get_session_id(session, request)
     asset_name = request.args.get('asset', None)
     environment_name = request.args.get('environment', None)
-
     dao = RequirementDAO(session_id)
     new_req = dao.from_json(request)
-    req_id = dao.add_requirement(new_req, asset_name=asset_name, environment_name=environment_name)
+    dao.add_requirement(new_req, asset_name=asset_name, environment_name=environment_name)
     dao.close()
 
-    resp_dict = {'message': 'Requirement successfully added', 'requirement_id': req_id}
+    resp_dict = {'message': 'Requirement successfully added'}
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.contenttype = 'application/json'
     return resp
-
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates a requirement',
-    nickname='requirement-update-put',
-    parameters=[
-      {
-        'name': 'body',
-        "description": "The new updated requirement",
-        "required": True,
-        "allowMultiple": False,
-        'type': RequirementMessage.__name__,
-        'paramType': 'body'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': ObjectNotFoundHTTPError.status_code,
-        'message': ObjectNotFoundHTTPError.status
-      },
-      {
-        'code': MalformedJSONHTTPError.status_code,
-        'message': MalformedJSONHTTPError.status
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      },
-      {
-        'code': MissingParameterHTTPError.status_code,
-        'message': MissingParameterHTTPError.status
-      }
-    ]
-  )
-  # endregion
-  def put(self):
-    session_id = get_session_id(session, request)
-    dao = RequirementDAO(session_id)
-    req = dao.from_json(request)
-    dao.update_requirement(req, req_id=req.theId)
-    dao.close()
-
-    resp_dict = {'message': 'Requirement successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
 
 class RequirementsByAssetAPI(Resource):
   # region Swagger Doc
@@ -409,6 +361,52 @@ class RequirementByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Requirement successfully deleted'}
+    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
+  # region Swagger Docs
+  @swagger.operation(
+    notes='Updates a requirement',
+    nickname='requirement-update-put',
+    parameters=[
+      {
+        'name': 'body',
+        "description": "The new updated requirement",
+        "required": True,
+        "allowMultiple": False,
+        'type': RequirementMessage.__name__,
+        'paramType': 'body'
+      }
+    ],
+    responseMessages=[
+      {
+        'code': ObjectNotFoundHTTPError.status_code,
+        'message': ObjectNotFoundHTTPError.status
+      },
+      {
+        'code': MalformedJSONHTTPError.status_code,
+        'message': MalformedJSONHTTPError.status
+      },
+      {
+        'code': ARMHTTPError.status_code,
+        'message': ARMHTTPError.status
+      },
+      {
+        'code': MissingParameterHTTPError.status_code,
+        'message': MissingParameterHTTPError.status
+      }
+    ]
+  )
+  # endregion
+  def put(self,name):
+    session_id = get_session_id(session, request)
+    dao = RequirementDAO(session_id)
+    req = dao.from_json(request)
+    dao.update_requirement(req, name=name)
+    dao.close()
+
+    resp_dict = {'message': 'Requirement successfully updated'}
     resp = make_response(json_serialize(resp_dict), httplib.OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

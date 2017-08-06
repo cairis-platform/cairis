@@ -130,14 +130,6 @@ function createRequirementsTable(data){
     textToInsert[i++] = "<option value='3'>3</option></select>";
     textToInsert[i++] = '</td>';
 
-    textToInsert[i++] = '<td name="theId"  style="display:none;">';
-    textToInsert[i++] = item.theId;
-    textToInsert[i++] = '</td>';
-
-    textToInsert[i++] = '<td name="theVersion"  style="display:none;">';
-    textToInsert[i++] = item.theVersion;
-    textToInsert[i++] = '</td>';
-
     var datas = eval(item.attrs);
     for (var key in datas) {
       if (datas.hasOwnProperty(key)) {
@@ -179,7 +171,8 @@ function createRequirementsTable(data){
     textToInsert[i++] = '</tr>';
     theTable.append(textToInsert.join(''));
     theTable.find('tbody').find('tr').last().find('td:eq(3)').find('.form-control').val(item.thePriority);
-    theTable.find('tbody').find('tr').last().find('td:eq(9)').find('.form-control').val(datas['type']);
+    theTable.find('tbody').find('tr').last().find('td:eq(7)').find('.form-control').val(datas['type']);
+    theTable.find('tbody').find('tr').last().attr('data-name',item.theName);
   });
   theTable.css("visibility","visible");
 
@@ -226,16 +219,21 @@ $("#mainTable").on('change',".reqCombo",function(e){
 });
 
 function updateRequirement(row){
-  if ($(row).attr('class') != undefined) {
-    var clazz = $(row).attr('class');
-    $(clazz).removeClass(clazz);
+  var reqName = $(row).find('td:eq(1)').text();
+  if (reqName.length <= 0) {
+    alert("Requirement name cannot be empty");
+    return;
+  }
+  var clazz = $(row).attr('class');
+  if (clazz != undefined) {
+    $(row).removeAttr('class');
     var arr = clazz.split(':');
     var whatKind = arr[0];
     var vall = arr[1];
     postRequirementRow(row,whatKind,vall);
   }
   else{
-    putRequirementRow(row)
+    putRequirementRow(row,$(row).attr('data-name'));
   }
 }
 
@@ -253,16 +251,21 @@ function reqRowtoJSON(row){
       json[name] = row.find('td:eq(3)').find('.form-control').val();
     }
     else if (name == 'type') {
-      json.attrs[name] = row.find('td:eq(9)').find('.form-control').val();
+      json.attrs[name] = row.find('td:eq(7)').find('.form-control').val();
     }
     else{
       json.attrs[name] = v.innerHTML;
     }
   });
+  var reqDomain = $('#assetsbox').val();
+  if (reqDomain == null) {
+    reqDomain = $('#environmentsbox').val();
+  } 
+  json.attrs['asset'] = reqDomain;
   return json
 }
 
-function putRequirementRow(row){
+function putRequirementRow(row,oldName){
   var json = reqRowtoJSON(row);
   var object = {};
   object.object = json;
@@ -275,7 +278,7 @@ function putRequirementRow(row){
     accept: "application/json",
     data: objectoutput,
     crossDomain: true,
-    url: serverIP + "/api/requirements" ,
+    url: serverIP + "/api/requirements/name/" + oldName.replace(' ',"%20"),
     success: function (data) {
       showPopup(true);
     },
@@ -311,6 +314,7 @@ function postRequirementRow(row,whatKind,value){
     crossDomain: true,
     url: ursl,
     success: function (data) {
+      $(row).attr('data-name',json['theName']);
       showPopup(true);
     },
     error: function (xhr, textStatus, errorThrown) {

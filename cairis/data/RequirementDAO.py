@@ -44,26 +44,6 @@ class RequirementDAO(CairisDAO):
 
     return requirements
 
-  def get_requirement_by_id(self, req_id):
-    found_requirement = None
-    try:
-      requirements = self.db_proxy.getRequirements()
-    except DatabaseProxyException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
-
-    idx = 0
-    while found_requirement is None and idx < len(requirements):
-      if requirements.values()[idx].theId == int(req_id):
-        found_requirement = requirements.values()[idx]
-      idx += 1
-
-    if found_requirement is None:
-      self.close()
-      raise ObjectNotFoundHTTPError('The provided requirement ID')
-
-    return found_requirement
-
   def get_requirement_by_name(self, name):
     found_requirement = None
     try:
@@ -111,6 +91,7 @@ class RequirementDAO(CairisDAO):
 
     new_id = self.db_proxy.newId()
     requirement.theId = new_id
+    requirement.theVersion = 1
 
     if asset_name is not None:
       try:
@@ -130,11 +111,9 @@ class RequirementDAO(CairisDAO):
 
     return new_id
 
-  def delete_requirement(self, name=None, req_id=None):
+  def delete_requirement(self, name=None):
     if name is not None:
       req = self.get_requirement_by_name(name)
-    elif req_id is not None:
-      req = self.get_requirement_by_id(req_id)
     else:
       self.close()
       raise MissingParameterHTTPError(param_names=['id'])
@@ -147,12 +126,10 @@ class RequirementDAO(CairisDAO):
     self.db_proxy.deleteRequirement(req.theId)
     self.db_proxy.relabelRequirements(reqReference)
 
-  def update_requirement(self, requirement, name=None, req_id=-1):
+  def update_requirement(self, requirement, name=None):
     old_requirement = None
     if name is not None:
       old_requirement = self.get_requirement_by_name(name)
-    elif req_id > -1:
-      old_requirement = self.get_requirement_by_id(req_id=req_id)
     else:
       self.close()
       raise MissingParameterHTTPError(param_names=['theId'])
@@ -160,6 +137,7 @@ class RequirementDAO(CairisDAO):
     if old_requirement is not None:
       try:
         requirement.theVersion = old_requirement.theVersion
+        requirement.theId = old_requirement.theId
         requirement.incrementVersion()
         self.db_proxy.updateRequirement(requirement)
       except DatabaseProxyException as ex:

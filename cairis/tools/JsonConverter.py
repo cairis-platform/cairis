@@ -32,7 +32,7 @@ from cairis.core.RiskParameters import RiskParameters
 from ModelDefinitions import AssetEnvironmentPropertiesModel, SecurityAttribute
 
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 conv_terms = {
   'py/object': '__python_obj__',
@@ -137,9 +137,7 @@ def deserialize_goal(dict):
   return goal
 
 def deserialize_requirement(dict):
-  req = Requirement(id=dict['theId'], label=dict['theLabel'], name=dict['theName'], description=dict['theDescription'], priority=dict['thePriority'], version=dict['theVersion'])
-  req.attrs = dict['attrs']
-  req.dirtyAttrs = set(dict['dirtyAttrs'])
+  req = Requirement(id=-1, label=dict['theLabel'], name=dict['theName'], description=dict['theDescription'], priority=dict['thePriority'], rationale=dict['attrs']['rationale'], fitCriterion=dict['attrs']['fitCriterion'],originator=dict['attrs']['originator'],type=dict['attrs']['type'],asset=dict['attrs']['asset'],version=-1)
   return req
 
 def deserialize_misuse(dict):

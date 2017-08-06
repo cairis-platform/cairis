@@ -492,13 +492,11 @@ class RequirementAttributesModel(object):
 class RequirementModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    "theId": fields.Integer,
     "attrs": fields.Nested(RequirementAttributesModel.resource_fields),
     "theName": fields.String,
     "theLabel": fields.String,
     "theDescription": fields.String,
-    "thePriority": fields.Integer,
-    "theVersion": fields.Integer
+    "thePriority": fields.Integer
   }
   required = resource_fields.keys()
   required.remove(obj_id_field)
