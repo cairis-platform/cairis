@@ -19,9 +19,6 @@ sleep 60
 $CAIRIS_REPO/cairis/bin/model_import_web.py --url http://localhost --database NeuroGrid --image_dir $CAIRIS_REPO/examples/exemplars/NeuroGrid --rich_pic NeuroGridContext.jpg $CAIRIS_REPO/examples/exemplars/NeuroGrid/NeuroGrid.xml
 $CAIRIS_REPO/cairis/bin/model_import_web.py --url http://localhost --database ACME_Water --image_dir $CAIRIS_REPO/examples/exemplars/ACME_Water --rich_pic stcsContext.jpg $CAIRIS_REPO/examples/exemplars/ACME_Water/ACME_Water.xml
 
-# Point the test session to NeuroGrid by default
-curl -X POST http://localhost/api/settings/database/NeuroGrid/open?session_id=test
-
 # Uncomment below lines if you want to add webinos to the live demo
 #rm -rf $WEBINOS_DESIGN_DATA_REPO
 #export WEBINOS_DESIGN_DATA_REPO=$REPOS_DIR/webinos-design-data
