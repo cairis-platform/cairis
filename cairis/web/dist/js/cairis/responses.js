@@ -118,40 +118,37 @@ function viewResponse(responseName) {
         $.each(data.theEnvironmentProperties[data.theResponseType.toLocaleLowerCase()], function (index, env) {
           appendResponseEnvironment(env.theEnvironmentName);
         });
-        var select = $("#chooseRisk");
-        select.empty();
-        getRisks(function (risks) {
-          $.each(risks, function (key, obj) {
-            select.append($('<option>', { value : key }).text(key));
-          });
-          select.val(data.theRisk);
-        });
 
-        switch (data.theResponseType){
-          case "Transfer":
-            toggleResponse("#transferWindow");
-            break;
-          case "Prevent":
-            toggleResponse("#mitigateWindow");
-            break;
-          case "Deter":
-            toggleResponse("#mitigateWindow");
-            break;
-          case "Detect":
-            toggleResponse("#mitigateWindow");
-            break;
-          case "React":
-            toggleResponse("#mitigateWindow");
-            break;
-          case "Accept":
-            toggleResponse("#acceptWindow");
-            break;
-          default :
-            toggleResponse("#mitigateWindow");
-            break;
-        }
-        $("#editResponseOptionsform").validator('update');
-        $("#theRespEnvironments").find(".responseEnvironment:first").trigger('click');
+        refreshDimensionSelector($('#chooseRisk'),'risk',undefined,function(){
+          $('#chooseRisk').val(data.theRisk);
+          switch (data.theResponseType){
+            case "Transfer":
+              toggleResponse("#transferWindow");
+              break;
+            case "Prevent":
+              toggleResponse("#mitigateWindow");
+              break;
+            case "Deter":
+              toggleResponse("#mitigateWindow");
+              break;
+            case "Detect":
+              toggleResponse("#mitigateWindow");
+              break;
+            case "React":
+              toggleResponse("#mitigateWindow");
+              break;
+            case "Accept":
+              toggleResponse("#acceptWindow");
+              break;
+            default :
+              toggleResponse("#mitigateWindow");
+              break;
+          }
+          $("#editResponseOptionsform").validator('update');
+          $("#theRespEnvironments").find(".responseEnvironment:first").trigger('click');
+        },['All']);
+
+
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -284,11 +281,18 @@ mainContent.on('click', ".responseEnvironment", function () {
       $.each(resp.theEnvironmentProperties["mitigate"], function (index, obj) {
         if(obj.theEnvironmentName == environmentName) {
           if (obj.theType == "Detect") {
-            $("#theDetectionPoint").prop('disabled', false);
+            $('#theDetectionDimensionLabel').text('Detection Point');
+            $('#theDetectionDimension').empty();
+            $('#theDetectionDimension').append("<option value='Before'>Before</option><option value='At'>At</option><option value='After'>After</option></select>");
+            $("#theDetectionDimension").prop('disabled', false);
+          }
+          else if (obj.theType == 'React') {
+            $('#theDetectionDimensionLabel').text('Detection Mechanism');
+            refreshDimensionSelector($('#theDetectionDimension'),'detection_mechanism',$.session.get('responseEnvironment'),undefined,['All']);
           }
           else {
-            $("#theDetectionPoint").prop('disabled', true);
-            $("#theDetectionPoint").val(" ");
+            $("#theDetectionDimension").prop('disabled', true);
+            $("#theDetectionDimension").val(" ");
           }
           $("#respMitigateType").val(obj.theType);
         }
@@ -341,11 +345,19 @@ mainContent.on('change', "#respMitigateType", function () {
     var type =  $.session.get("responseKind");
     var envName = $.session.get("responseEnvironment");
     if(newType == "detect"){
-      $("#theDetectionPoint").prop('disabled',false);
+      $('#theDetectionDimensionLabel').text('Detection Point');
+      $('#theDetectionDimension').empty();
+      $('#theDetectionDimension').append("<option value='Before'>Before</option><option value='At'>At</option><option value='After'>After</option></select>");
+      $("#theDetectionDimension").prop('disabled',false);
+    }
+    else if (newType == 'react') {
+      $('#theDetectionDimensionLabel').text('Detection Mechanism');
+      refreshDimensionSelector($('#theDetectionDimension'),'detection_mechanism',$.session.get('responseEnvironment'),undefined,['All']);
     }
     else{
-      $("#theDetectionPoint").prop('disabled',true);
-      $("#theDetectionPoint").val(" ");
+      $('#theDetectionDimensionLabel').text('Detection Point');
+      $("#theDetectionDimension").prop('disabled',true);
+      $("#theDetectionDimension").val(" ");
     }
     $.each(resp.theEnvironmentProperties[type.toLowerCase()], function (index, env) {
       if(env.theEnvironmentName == envName){
@@ -356,7 +368,8 @@ mainContent.on('change', "#respMitigateType", function () {
   }
 });
 
-mainContent.on('change', "#theDetectionPoint", function () {
+mainContent.on('change', "#theDetectionDimension", function () {
+
   var value = $(this).val();
   var resp = JSON.parse($.session.get("response"));
   var type =  $.session.get("responseKind");
@@ -364,7 +377,12 @@ mainContent.on('change', "#theDetectionPoint", function () {
   if(value != " "){
     $.each(resp.theEnvironmentProperties[type.toLowerCase()], function (index, env) {
       if(env.theEnvironmentName == envName){
-        env.theDetectionPoint = newType;
+        if ($('#respMitigateType') == 'Detect') {
+          env.theDetectionPoint = value;
+        }
+        else {
+          env.theDetectionMechanisms = [value];
+        }
       }
     });
   }
@@ -418,6 +436,7 @@ function toggleResponse(window){
   $("#acceptWindow").hide();
   $("#transferWindow").hide();
   $(window).show();
+
 }
 
 function createResponsesTable(){
@@ -659,27 +678,3 @@ mainContent.on('click', '#UpdateResponse', function (e) {
     }
   }
 });
-
-function getRisks(callback){
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crossDomain: true,
-    url: serverIP + "/api/risks",
-    success: function (data) {
-      if(jQuery.isFunction(callback)){
-        callback(data);
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-      return null;
-    }
-  });
-}
-

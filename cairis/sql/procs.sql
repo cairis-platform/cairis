@@ -8171,21 +8171,26 @@ begin
   declare dimSql varchar(4000);
   declare nameCol varchar(11) default 'name';
 
-  if dimensionTable = 'persona_characteristic'
+  if dimensionTable = 'detection_mechanism'
   then
-    set nameCol = 'description';
-  end if;
-
-  if dimensionTable = 'process'
-  then
-    set dimensionTable = 'usecase';
-  end if;
- 
-  if constraintId = -1
-  then
-    set dimSql = concat('select id, ',nameCol,' from ',dimensionTable,' order by 2');
+    set dimSql = 'select dm.asset_id, a.name from detection_mechanism dm, asset a where dm.asset_id = a.id order by 2';
   else
-    set dimSql = concat('select id, ',nameCol,' from ',dimensionTable,' where id = ',constraintId,' order by 2');
+    if dimensionTable = 'persona_characteristic'
+    then
+      set nameCol = 'description';
+    end if;
+
+    if dimensionTable = 'process'
+    then
+      set dimensionTable = 'usecase';
+    end if;
+ 
+    if constraintId = -1
+    then
+      set dimSql = concat('select id, ',nameCol,' from ',dimensionTable,' order by 2');
+    else
+      set dimSql = concat('select id, ',nameCol,' from ',dimensionTable,' where id = ',constraintId,' order by 2');
+    end if;
   end if;
   set @sql = dimSql;
   prepare stmt from @sql;
