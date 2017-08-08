@@ -5317,7 +5317,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def useCaseSteps(self,ucId,envId):
     stepRows = self.responseList('call useCaseSteps(:uc,:env)',{'uc':ucId,'env':envId},'MySQL error getting steps associated with use case id ' + str(ucId))
-    steps = []
+    steps = Steps()
     for pos,stepDetails in enumerate(stepRows):
       stepTxt = stepDetails[0]
       stepSyn = stepDetails[1]
