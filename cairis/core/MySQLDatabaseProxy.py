@@ -9441,50 +9441,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getUseCaseRequirements(self,ucName):
-    try:
-      session = self.conn()
-      rs = session.execute('call useCaseRequirements(:uc)',{'uc':ucName})
-      reqs = [] 
-      for row in rs.fetchall():
-        row = list(row)
-        reqs.append(row[0])
-      rs.close()
-      session.close()
-      return reqs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting requirements associated with use case ' + ucName + '  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call useCaseRequirements(:uc)',{'uc':ucName},'MySQL error getting requirements associated with use case ' + ucName)
 
   def getUseCaseGoals(self,ucName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call useCaseGoals(:uc,:env)',{'uc':ucName,'env':envName})
-      goals = [] 
-      for row in rs.fetchall():
-        row = list(row)
-        goals.append(row[0])
-      rs.close()
-      session.close()
-      return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goals associated with use case ' + ucName + '  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call useCaseGoals(:uc,:env)',{'uc':ucName,'env':envName},'MySQL error getting goals associated with use case ' + ucName)
 
   def synopsisId(self,synTxt):
-    try:
-      session = self.conn()
-      rs = session.execute('select synopsisId(:syn)',{'syn':synTxt})
-      row = rs.fetchone()
-      synId = row[0]
-      rs.close()
-      session.close()
-      return synId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error finding synopsis id for text ' + synTxt + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select synopsisId(:syn)',{'syn':synTxt},'MySQL error finding synopsis id for text ' + synTxt)[0]
 
   def hasContribution(self,contType,rsName,csName):
     try:
@@ -9518,48 +9481,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getDataFlows(self,dfName='',envName=''):
-    try:
-      session = self.conn()
-      rs = session.execute('call getDataFlows(:df,:env)',{'df':dfName,'env':envName})
-      dataFlows = {}
-      dfRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        dfName = row[0]
-        envName = row[1]
-        fromName = row[2]
-        fromType = row[3]
-        toName = row[4]
-        toType = row[5]
-        dfRows.append((dfName,envName,fromName,fromType,toName,toType))
-      rs.close()
-      session.close()
-      for dfName,envName,fromName,fromType,toName,toType in dfRows:
-        dfAssets = self.getDataFlowAssets(dfName,envName)
-        parameters = DataFlowParameters(dfName,envName,fromName,fromType,toName,toType,dfAssets)
-        df = ObjectFactory.build(-1,parameters)
-        dataFlows[dfName + '/' + envName] = df
-      return dataFlows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting data flows (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    dfRows = self.responseList('call getDataFlows(:df,:env)',{'df':dfName,'env':envName},'MySQL error getting data flows')
+    dataFlows = {}
+    for dfName,envName,fromName,fromType,toName,toType in dfRows:
+      dfAssets = self.getDataFlowAssets(dfName,envName)
+      parameters = DataFlowParameters(dfName,envName,fromName,fromType,toName,toType,dfAssets)
+      df = ObjectFactory.build(-1,parameters)
+      dataFlows[dfName + '/' + envName] = df
+    return dataFlows
 
   def getDataFlowAssets(self,dfName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getDataFlowAssets(:df,:env)',{'df':dfName,'env':envName})
-      assetRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        assetRows.append(row[0])
-      rs.close()
-      session.close()
-      return assetRows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting assets for dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getDataFlowAssets(:df,:env)',{'df':dfName,'env':envName},'MySQL error getting assets for data flow ' + dfName)
 
   def addDataFlow(self,parameters):
     dfName = parameters.name()
@@ -9623,19 +9555,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error deleting dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
 
   def dataFlowDiagram(self,envName,filterElement = ''):
-    try:
-      session = self.conn()
-      rs = session.execute('call dataFlowDiagram(:env,:fe)',{'env':envName,'fe':filterElement})
-      dfs = []
-      for row in rs.fetchall():
-        row = list(row)
-        dfs.append((row[0],row[1],row[2],row[3],row[4]))
-      rs.close()
-      session.close()
-      return dfs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error deleting dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('call dataFlowDiagram(:env,:fe)',{'env':envName,'fe':filterElement},'MySQL error getting data flow diagram')
 
   def relabelRequirements(self,reqReference):
     try:
