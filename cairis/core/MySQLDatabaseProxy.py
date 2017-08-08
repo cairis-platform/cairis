@@ -124,11 +124,6 @@ VERSION_COL = 8
 TYPE_COL = 9
 ASSET_COL = 10
 
-ENVIRONMENTID_COL = 0
-ENVIRONMENTNAME_COL = 1
-ENVIRONMENTSHORTCODE_COL = 2
-ENVIRONMENTDESC_COL = 3
-
 ASSETS_ID_COL = 0
 ASSETS_NAME_COL = 1
 ASSETS_SHORTCODE_COL = 2
@@ -179,54 +174,6 @@ DEPENDENCIES_DEPENDEE_COL = 3
 DEPENDENCIES_DTYPE_COL = 4
 DEPENDENCIES_DEPENDENCY_COL = 5
 DEPENDENCIES_RATIONALE_COL = 6
-
-DIM_ID_COL = 0
-DIM_NAME_COL = 1
-
-HIGH_VALUE = 3
-MEDIUM_VALUE = 2
-LOW_VALUE = 1
-
-TASK_USECASE_TYPE = 0
-TASK_MISUSECASE_TYPE = 1
-TASK_VALUTASK_TYPE = 2
-
-INCONSISTENCIES_ID_COL = 0
-INCONSISTENCIES_PROPERTY_COL = 1
-INCONSISTENCIES_FROMASSET_COL = 2
-INCONSISTENCIES_FROMVALUE_COL = 3
-INCONSISTENCIES_TOASSET_COL = 4
-INCONSISTENCIES_TOVALUE_COL = 5
-
-DETECTION_TYPE_ID = 2
-REACTION_TYPE_ID = 3
-
-FROM_OBJT_COL = 0
-FROM_ID_COL = 1
-TO_OBJT_COL = 2
-TO_ID_COL = 3
-
-CONCEPTREFERENCE_ID_COL = 0
-CONCEPTREFERENCE_NAME_COL = 1
-CONCEPTREFERENCE_DIMNAME_COL = 2
-CONCEPTREFERENCE_OBJTNAME_COL = 3
-CONCEPTREFERENCE_DESCRIPTION_COL = 4
-
-PERSONACHARACTERISTIC_ID_COL = 0
-PERSONACHARACTERISTIC_PERSONANAME_COL = 1
-PERSONACHARACTERISTIC_BVAR_COL = 2
-PERSONACHARACTERISTIC_QUAL_COL = 3
-PERSONACHARACTERISTIC_PDESC_COL = 4
-
-TASKCHARACTERISTIC_ID_COL = 0
-TASKCHARACTERISTIC_TASKNAME_COL = 1
-TASKCHARACTERISTIC_QUAL_COL = 2
-TASKCHARACTERISTIC_TDESC_COL = 3
-
-REFERENCE_NAME_COL = 0
-REFERENCE_TYPE_COL = 1
-REFERENCE_DESC_COL = 2
-REFERENCE_DIM_COL = 3
 
 collectedIds = set([])
 
@@ -1007,23 +954,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getDimensions(self,dimensionTable,idConstraint=-1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getDimensions(:dimensionTable, :idConstraint)',{'dimensionTable':dimensionTable,'idConstraint':idConstraint})
-      dimensions = {}
-      for row in rs.fetchall():
-        row = list(row)
-        dimensionName = row[DIM_NAME_COL]
-        dimensionId = row[DIM_ID_COL]
-        dimensions[dimensionName] = dimensionId
-      rs.close()
-      session.close()
-      return dimensions
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting '
-      exceptionText += dimensionTable + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    dimRows = self.responseList('call getDimensions(:dimensionTable, :idConstraint)',{'dimensionTable':dimensionTable,'idConstraint':idConstraint},'MySQL error getting ' + dimensionTable)
+    dimensions = {}
+    for dimensionName,dimensionId in dimRows:
+      dimensions[dimensionName] = dimensionId
+    return dimensions
 
   def getDimensionNames(self,dimensionTable,currentEnvironment = ''):
     try:
@@ -1865,10 +1800,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       traces = []
       for traceRow in rs.fetchall():
         traceRow = list(traceRow)
-        fromObjt = traceRow[FROM_OBJT_COL]
-        fromName = traceRow[FROM_ID_COL]
-        toObjt = traceRow[TO_OBJT_COL]
-        toName = traceRow[TO_ID_COL]
+        fromObjt = traceRow[0]
+        fromName = traceRow[1]
+        toObjt = traceRow[2]
+        toName = traceRow[3]
         if (dimensionName != ''):
           if (fromObjt != dimensionName) and (toObjt != dimensionName):
             continue
@@ -1892,10 +1827,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       traces = []
       for traceRow in rs.fetchall():
         traceRow = list(traceRow)
-        fromObjt = traceRow[FROM_OBJT_COL]
-        fromName = traceRow[FROM_ID_COL]
-        toObjt = traceRow[TO_OBJT_COL]
-        toName = traceRow[TO_ID_COL]
+        fromObjt = traceRow[0]
+        fromName = traceRow[1]
+        toObjt = traceRow[2]
+        toName = traceRow[3]
         if (fromObjt == 'task' and toObjt == 'asset'):
           continue
         traces.append((fromObjt,fromName,toObjt,toName))
@@ -4716,10 +4651,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       refDict['rebuttal'] = []
       for row in rs.fetchall():
         row = list(row)
-        refName = row[REFERENCE_NAME_COL]
-        typeName = row[REFERENCE_TYPE_COL]
-        refDesc = row[REFERENCE_DESC_COL]
-        dimName = row[REFERENCE_DIM_COL]
+        refName = row[0]
+        typeName = row[1]
+        refDesc = row[2]
+        dimName = row[3]
         refDict[typeName].append((refName,refDesc,dimName))
       rs.close()
       session.close()        
@@ -4889,27 +4824,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getConceptReferences(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getConceptReferences(:const)',{'const':constraintId})
-      cRefs = {}
-      for row in rs.fetchall():
-        row = list(row)
-        refId = row[CONCEPTREFERENCE_ID_COL]
-        refName = row[CONCEPTREFERENCE_NAME_COL]
-        dimName = row[CONCEPTREFERENCE_DIMNAME_COL]
-        objtName = row[CONCEPTREFERENCE_OBJTNAME_COL]
-        cDesc = row[CONCEPTREFERENCE_DESCRIPTION_COL]
-        parameters = ConceptReferenceParameters(refName,dimName,objtName,cDesc)
-        cRef = ObjectFactory.build(refId,parameters)
-        cRefs[refName] = cRef
-      rs.close()
-      session.close()
-      return cRefs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting concept references (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    crRows = self.responseList('call getConceptReferences(:id)',{'id':constraintId},'MySQL error getting concept references')
+    cRefs = {}
+    for refId,refName,dimName,objtName,cDesc in crRows:
+      parameters = ConceptReferenceParameters(refName,dimName,objtName,cDesc)
+      cRef = ObjectFactory.build(refId,parameters)
+      cRefs[refName] = cRef
+    return cRefs
 
   def addConceptReference(self,parameters):
     refId = self.newId()
@@ -5332,10 +5253,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       traces = []
       for traceRow in rs.fetchall():
         traceRow = list(traceRow)
-        fromObjt = traceRow[FROM_OBJT_COL]
-        fromName = traceRow[FROM_ID_COL]
-        toObjt = traceRow[TO_OBJT_COL]
-        toName = traceRow[TO_ID_COL]
+        fromObjt = traceRow[0]
+        fromName = traceRow[1]
+        toObjt = traceRow[2]
+        toName = traceRow[3]
         parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
         traces.append(ObjectFactory.build(-1,parameters))
       rs.close()
@@ -5516,31 +5437,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getTaskCharacteristics(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getTaskCharacteristics(:const)',{'const':constraintId})
-      tChars = {}
-      tcSumm = []
-      for row in rs.fetchall():
-        row = list(row)
-        tcId = row[TASKCHARACTERISTIC_ID_COL]
-        tName = row[TASKCHARACTERISTIC_TASKNAME_COL]
-        qualName = row[TASKCHARACTERISTIC_QUAL_COL]
-        tcDesc = row[TASKCHARACTERISTIC_TDESC_COL]
-        tcSumm.append((tcId,tName,qualName,tcDesc))
-      rs.close()
-      session.close()
-
-      for tcId,tName,qualName,tcDesc in tcSumm:
-        grounds,warrant,backing,rebuttal = self.characteristicReferences(tcId,'taskCharacteristicReferences')
-        parameters = TaskCharacteristicParameters(tName,qualName,tcDesc,grounds,warrant,backing,rebuttal)
-        tChar = ObjectFactory.build(tcId,parameters)
-        tChars[tName + '/' + tcDesc] = tChar
-      return tChars
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting task characteristics (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText)
+    tcSumm = self.responseList('call getTaskCharacteristics(:id)',{'id':constraintId},'MySQL error getting task characteristics')
+    tChars = {}
+    for tcId,tName,qualName,tcDesc in tcSumm:
+      grounds,warrant,backing,rebuttal = self.characteristicReferences(tcId,'taskCharacteristicReferences')
+      parameters = TaskCharacteristicParameters(tName,qualName,tcDesc,grounds,warrant,backing,rebuttal)
+      tChar = ObjectFactory.build(tcId,parameters)
+      tChars[tName + '/' + tcDesc] = tChar
+    return tChars
 
   def addTaskCharacteristic(self,parameters):
     tcId = self.newId()
@@ -9006,10 +8910,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       traces = []
       for traceRow in rs.fetchall():
         traceRow = list(traceRow)
-        fromObjt = traceRow[FROM_OBJT_COL]
-        fromName = traceRow[FROM_ID_COL]
-        toObjt = traceRow[TO_OBJT_COL]
-        toName = traceRow[TO_ID_COL]
+        fromObjt = traceRow[0]
+        fromName = traceRow[1]
+        toObjt = traceRow[2]
+        toName = traceRow[3]
         parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
         traces.append(ObjectFactory.build(-1,parameters))
       rs.close()
