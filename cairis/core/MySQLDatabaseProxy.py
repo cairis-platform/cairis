@@ -850,41 +850,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
 
   def getAssets(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getAssets(:id)',{'id':constraintId})
-      assets = {}
-      assetRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        assetId = row[ASSETS_ID_COL]
-        assetName = row[ASSETS_NAME_COL]
-        shortCode = row[ASSETS_SHORTCODE_COL]
-        assetDesc = row[ASSETS_DESCRIPTION_COL]
-        assetSig = row[ASSETS_SIGNIFICANCE_COL]
-        assetType = row[ASSETS_TYPE_COL]
-        assetCriticality = row[ASSETS_CRITICAL_COL]
-        assetCriticalRationale = row[ASSETS_CRITICALRATIONALE_COL]
-        assetRows.append((assetName,assetId,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale))
-      rs.close()
-      session.close()
-      for assetName,assetId,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale in assetRows:
-        tags = self.getTags(assetName,'asset')
-        ifs = self.getInterfaces(assetName,'asset')
-        environmentProperties = []
-        for environmentId,environmentName in self.dimensionEnvironments(assetId,'asset'):
-          syProperties,pRationale = self.relatedProperties('asset',assetId,environmentId)
-          assetAssociations = self.assetAssociations(assetId,environmentId)
-          properties = AssetEnvironmentProperties(environmentName,syProperties,pRationale,assetAssociations)
-          environmentProperties.append(properties) 
-        parameters = AssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,tags,ifs,environmentProperties)
-        asset = ObjectFactory.build(assetId,parameters)
-        assets[assetName] = asset
-      return assets
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting assets (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    assetRows = self.responseList('call getAssets(:id)',{'id':constraintId},'MySQL error getting assets')
+    assets = {}
+    for assetId,assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale in assetRows:
+      tags = self.getTags(assetName,'asset')
+      ifs = self.getInterfaces(assetName,'asset')
+      environmentProperties = []
+      for environmentId,environmentName in self.dimensionEnvironments(assetId,'asset'):
+        syProperties,pRationale = self.relatedProperties('asset',assetId,environmentId)
+        assetAssociations = self.assetAssociations(assetId,environmentId)
+        properties = AssetEnvironmentProperties(environmentName,syProperties,pRationale,assetAssociations)
+        environmentProperties.append(properties) 
+      parameters = AssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale,tags,ifs,environmentProperties)
+      asset = ObjectFactory.build(assetId,parameters)
+      assets[assetName] = asset
+    return assets
 
 
   def getThreats(self,constraintId = -1):
