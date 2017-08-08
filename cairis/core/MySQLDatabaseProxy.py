@@ -206,28 +206,6 @@ FROM_ID_COL = 1
 TO_OBJT_COL = 2
 TO_ID_COL = 3
 
-GOALS_ID_COL = 0
-GOALS_NAME_COL = 1
-GOALS_ORIGINATOR_COL = 2
-GOALS_COLOUR_COL = 3
-
-OBSTACLES_ID_COL = 0
-OBSTACLES_NAME_COL = 1
-OBSTACLES_ORIG_COL = 2
-
-SECURITYPATTERN_ID_COL = 0
-SECURITYPATTERN_NAME_COL = 1
-SECURITYPATTERN_CONTEXT_COL = 2
-SECURITYPATTERN_PROBLEM_COL = 3
-SECURITYPATTERN_SOLUTION_COL = 4
-
-EXTERNALDOCUMENT_ID_COL = 0
-EXTERNALDOCUMENT_NAME_COL = 1
-EXTERNALDOCUMENT_VERSION_COL = 2
-EXTERNALDOCUMENT_PUBDATE_COL = 3
-EXTERNALDOCUMENT_AUTHORS_COL = 4
-EXTERNALDOCUMENT_DESCRIPTION_COL = 5
-
 CONCEPTREFERENCE_ID_COL = 0
 CONCEPTREFERENCE_NAME_COL = 1
 CONCEPTREFERENCE_DIMNAME_COL = 2
@@ -2600,60 +2578,27 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getGoals(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getGoals(:id)',{'id':constraintId})
-      goals = {}
-      goalRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        goalId = row[GOALS_ID_COL]
-        goalName = row[GOALS_NAME_COL]
-        goalOrig = row[GOALS_ORIGINATOR_COL]
-        goalRows.append((goalId,goalName,goalOrig))
-      rs.close()
-      session.close()
-
-      for goalId,goalName,goalOrig in goalRows:
-        tags = self.getTags(goalName,'goal')
-        environmentProperties = self.goalEnvironmentProperties(goalId)
-        parameters = GoalParameters(goalName,goalOrig,tags,self.goalEnvironmentProperties(goalId))
-        goal = ObjectFactory.build(goalId,parameters)
-        goals[goalName] = goal
-      return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goals (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    goalRows = self.responseList('call getGoals(:id)',{'id':constraintId},'MySQL error getting goals')
+    goals = {}
+    for goalId,goalName,goalOrig in goalRows:
+      tags = self.getTags(goalName,'goal')
+      environmentProperties = self.goalEnvironmentProperties(goalId)
+      parameters = GoalParameters(goalName,goalOrig,tags,self.goalEnvironmentProperties(goalId))
+      goal = ObjectFactory.build(goalId,parameters)
+      goals[goalName] = goal
+    return goals
 
   def getColouredGoals(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getColouredGoals(:id)',{'id':constraintId})
-      goals = {}
-      goalRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        goalId = row[GOALS_ID_COL]
-        goalName = row[GOALS_NAME_COL]
-        goalOrig = row[GOALS_ORIGINATOR_COL]
-        goalColour = row[GOALS_COLOUR_COL]
-        goalRows.append((goalId,goalName,goalOrig,goalColour))
-      rs.close()
-      session.close()
-
-      for goalId,goalName,goalOrig,goalColour in goalRows:
-        tags = self.getTags(goalName,'goal')
-        environmentProperties = self.goalEnvironmentProperties(goalId)
-        parameters = GoalParameters(goalName,goalOrig,tags,self.goalEnvironmentProperties(goalId))
-        goal = ObjectFactory.build(goalId,parameters)
-        goal.setColour(goalColour)
-        goals[goalName] = goal
-      return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goals (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    goalRows = self.responseList('call getColouredGoals(:id)',{'id':constraintId},'MySQL error getting coloured goals')
+    goals = {}
+    for goalId,goalName,goalOrig,goalColour in goalRows:
+      tags = self.getTags(goalName,'goal')
+      environmentProperties = self.goalEnvironmentProperties(goalId)
+      parameters = GoalParameters(goalName,goalOrig,tags,self.goalEnvironmentProperties(goalId))
+      goal = ObjectFactory.build(goalId,parameters)
+      goal.setColour(goalColour)
+      goals[goalName] = goal
+    return goals
 
 
   def goalEnvironmentProperties(self,goalId):
@@ -3555,31 +3500,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
 
   def getObstacles(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getObstacles(:const)',{'const':constraintId})
-      obstacles = {}
-      obstacleRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        obsId = row[OBSTACLES_ID_COL]
-        obsName = row[OBSTACLES_NAME_COL]
-        obsOrig = row[OBSTACLES_ORIG_COL]
-        obstacleRows.append((obsId,obsName,obsOrig))
-      rs.close()
-      session.close()
-
-      for obsId,obsName,obsOrig in obstacleRows:
-        tags = self.getTags(obsName,'obstacle')
-        environmentProperties = self.obstacleEnvironmentProperties(obsId)
-        parameters = ObstacleParameters(obsName,obsOrig,tags,environmentProperties)
-        obstacle = ObjectFactory.build(obsId,parameters)
-        obstacles[obsName] = obstacle
-      return obstacles
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting obstacles (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    obstacleRows = self.responseList('call getObstacles(:id)',{'id':constraintId},'MySQL error getting obstacles')
+    obstacles = {}
+    for obsId,obsName,obsOrig in obstacleRows:
+      tags = self.getTags(obsName,'obstacle')
+      environmentProperties = self.obstacleEnvironmentProperties(obsId)
+      parameters = ObstacleParameters(obsName,obsOrig,tags,environmentProperties)
+      obstacle = ObjectFactory.build(obsId,parameters)
+      obstacles[obsName] = obstacle
+    return obstacles
 
   def obstacleEnvironmentProperties(self,obsId):
     try:
@@ -4391,32 +4320,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
 
   def getSecurityPatterns(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getSecurityPatterns(:const)',{'const':constraintId})
-      patterns = {}
-      patternRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        patternId = row[SECURITYPATTERN_ID_COL]
-        patternName = row[SECURITYPATTERN_NAME_COL]
-        patternContext = row[SECURITYPATTERN_CONTEXT_COL]
-        patternProblem = row[SECURITYPATTERN_PROBLEM_COL]
-        patternSolution = row[SECURITYPATTERN_SOLUTION_COL]
-        patternRows.append((patternId,patternName,patternContext,patternProblem,patternSolution))
-      rs.close()
-      session.close()
-      for patternId,patternName,patternContext,patternProblem,patternSolution in patternRows:
-        patternStructure = self.patternStructure(patternId)
-        patternReqs = self.patternRequirements(patternId)
-        parameters = SecurityPatternParameters(patternName,patternContext,patternProblem,patternSolution,patternReqs,patternStructure)
-        pattern = ObjectFactory.build(patternId,parameters)
-        patterns[patternName] = pattern
-      return patterns
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting security patterns (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    patternRows = self.responseList('call getSecurityPatterns(:id)',{'id':constraintId},'MySQL error getting security patterns')
+    patterns = {}
+    for patternId,patternName,patternContext,patternProblem,patternSolution in patternRows:
+      patternStructure = self.patternStructure(patternId)
+      patternReqs = self.patternRequirements(patternId)
+      parameters = SecurityPatternParameters(patternName,patternContext,patternProblem,patternSolution,patternReqs,patternStructure)
+      pattern = ObjectFactory.build(patternId,parameters)
+      patterns[patternName] = pattern
+    return patterns
 
   def patternStructure(self,patternId):
     try:
@@ -4748,28 +4660,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error checking existence of ' + dimName + ' ' + objtName + ' (id:' + str(id) + ',message:' + msg + ')'
 
   def getExternalDocuments(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getExternalDocuments(:const)',{'const':constraintId})
-      eDocs = {}
-      for row in rs.fetchall():
-        row = list(row)
-        docId = row[EXTERNALDOCUMENT_ID_COL]
-        docName = row[EXTERNALDOCUMENT_NAME_COL]
-        docVersion = row[EXTERNALDOCUMENT_VERSION_COL]
-        docPubDate = row[EXTERNALDOCUMENT_PUBDATE_COL]
-        docAuthors = row[EXTERNALDOCUMENT_AUTHORS_COL]
-        docDesc = row[EXTERNALDOCUMENT_DESCRIPTION_COL]
-        parameters = ExternalDocumentParameters(docName,docVersion,docPubDate,docAuthors,docDesc)
-        eDoc = ObjectFactory.build(docId,parameters)
-        eDocs[docName] = eDoc
-      session.close()
-      rs.close()
-      return eDocs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting external documents (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    edRows = self.responseList('call getExternalDocuments(:id)',{'id':constraintId},'MySQL error getting external documents')
+    eDocs = {}
+
+    for docId,docName,docVersion,docPubDate,docAuthors,docDesc in edRows:
+      parameters = ExternalDocumentParameters(docName,docVersion,docPubDate,docAuthors,docDesc)
+      eDoc = ObjectFactory.build(docId,parameters)
+      eDocs[docName] = eDoc
+    return eDocs
 
   def getDocumentReferences(self,constraintId = -1):
     drRows = self.responseList('call getDocumentReferences(:id)',{'id':constraintId},'MySQL error getting document references')
@@ -6203,29 +6101,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL exporting persona and task to GRL (id:' + str(id) + ',message:' + msg + ')'
 
   def getEnvironmentGoals(self,goalName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getEnvironmentGoals(:goal,:env)',{'goal':goalName,'env':envName})
-      goals = []
-      goalRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        goalId = row[GOALS_ID_COL]
-        goalName = row[GOALS_NAME_COL]
-        goalOrig = row[GOALS_ORIGINATOR_COL]
-        goalRows.append((goalId,goalName,goalOrig))
-      rs.close()
-      session.close()
-      for goalId,goalName,goalOrig in goalRows:
-        environmentProperties = self.goalEnvironmentProperties(goalId)
-        parameters = GoalParameters(goalName,goalOrig,[],self.goalEnvironmentProperties(goalId))
-        goal = ObjectFactory.build(goalId,parameters)
-        goals.append(goal)
-      return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goals (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    goalRows = self.responseList('call getEnvironmentGoals(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting goals')
+    oals = []
+    for goalId,goalName,goalOrig in goalRows:
+      environmentProperties = self.goalEnvironmentProperties(goalId)
+      parameters = GoalParameters(goalName,goalOrig,[],self.goalEnvironmentProperties(goalId))
+      goal = ObjectFactory.build(goalId,parameters)
+      goals.append(goal)
+    return goals
 
   def updateEnvironmentGoal(self,g,envName):
     envProps = g.environmentProperty(envName)
@@ -6326,29 +6209,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getEnvironmentObstacles(self,obsName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getEnvironmentObstacles(:obs,:env)',{'obs':obsName,'env':envName})
-      obs = []
-      obsRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        obsId = row[GOALS_ID_COL]
-        obsName = row[GOALS_NAME_COL]
-        obsOrig = row[GOALS_ORIGINATOR_COL]
-        obsRows.append((obsId,obsName,obsOrig))
-      rs.close()
-      session.close()
-      for obsId,obsName,obsOrig in obsRows:
-        environmentProperties = self.obstacleEnvironmentProperties(obsId)
-        parameters = ObstacleParameters(obsName,obsOrig,self.obstacleEnvironmentProperties(obsId))
-        obstacle = ObjectFactory.build(obsId,parameters)
-        obs.append(obstacle)
-      return obs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting obstacles (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    obsRows = self.responseList('call getEnvironmentObstacles(:obs,:env)',{'obs':obsName,'env':envName},'MySQL error getting obstacles')
+    obs = []
+    for obsId,obsName,obsOrig in obsRows:
+      environmentProperties = self.obstacleEnvironmentProperties(obsId)
+      parameters = ObstacleParameters(obsName,obsOrig,self.obstacleEnvironmentProperties(obsId))
+      obstacle = ObjectFactory.build(obsId,parameters)
+      obs.append(obstacle)
+    return obs
 
   def updateEnvironmentObstacle(self,o,envName):
     envProps = o.environmentProperty(envName)
@@ -6402,78 +6270,41 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getLabelledGoals(self,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getEnvironmentGoals(:g,:env)',{'g':'','env':envName})
-      goals = {}
-      goalRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        goalId = row[GOALS_ID_COL]
-        goalName = row[GOALS_NAME_COL]
-        goalOrig = row[GOALS_ORIGINATOR_COL]
-        goalRows.append((goalId,goalName,goalOrig))
-      rs.close()
-      session.close()
-      for goalId,goalName,goalOrig in goalRows:
-        environmentProperties = self.goalEnvironmentProperties(goalId)
-        parameters = GoalParameters(goalName,goalOrig,[],self.goalEnvironmentProperties(goalId))
-        g = ObjectFactory.build(goalId,parameters)
-        lbl = g.label(envName)
-        goals[lbl] = g
-      lbls = goals.keys()
-      lbls.sort(key=lambda x: [int(y) for y in x.split('.')])
-      return lbls,goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting labelled goals  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    goalRows = self.responseList('call getEnvironmentGoals(:goal,:env)',{'goal':'','env':envName},'MySQL error getting labelled goals')
+    goals = {}
+    for goalId,goalName,goalOrig in goalRows:
+      environmentProperties = self.goalEnvironmentProperties(goalId)
+      parameters = GoalParameters(goalName,goalOrig,[],self.goalEnvironmentProperties(goalId))
+      g = ObjectFactory.build(goalId,parameters)
+      lbl = g.label(envName)
+      goals[lbl] = g
+    lbls = goals.keys()
+    lbls.sort(key=lambda x: [int(y) for y in x.split('.')])
+    return lbls,goals
 
   def redmineGoals(self,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call redmineGoals(:env)',{'env':envName})
-      goals = {}
-      goalRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        goalId = row[0]
-        envId = row[1]
-        goalLabel = row[2]
-        goalName = row[3]
-        goalOrig = row[4]
-        goalDef = row[5]
-        goalCat = row[6]
-        goalPri = row[7]
-        goalFC = row[8]
-        goalIssue = row[9]
-        goalRows.append((goalId,envId,goalLabel,goalName,goalOrig,goalDef,goalCat,goalPri,goalFC,goalIssue))
-      rs.close()
-      session.close()
-      for goalId,envId,goalLabel,goalName,goalOrig,goalDef,goalCat,goalPri,goalFC,goalIssue in goalRows:
-        goalRefinements,subGoalRefinements = self.goalRefinements(goalId,envId)
-        concerns = self.goalConcerns(goalId,envId)
-        concernAssociations = self.goalConcernAssociations(goalId,envId)
-        ep = GoalEnvironmentProperties(envName,goalLabel,goalDef,'Maintain',goalPri,goalFC,goalIssue,goalRefinements,subGoalRefinements,concerns,concernAssociations)
-        parameters = GoalParameters(goalName,goalOrig,[],[ep])
-        g = ObjectFactory.build(goalId,parameters)
-        lbl = g.label(envName)
-        goals[lbl] = g
-      lbls = goals.keys()
-      if (len(lbls) > 0):
-        shortCode = lbls[0].split('-')[0]
-        lblNos = []
-        for lbl in lbls:
-          lblNos.append(lbl.split('-')[1])
-        lblNos.sort(key=lambda x: [int(y) for y in x.split('.')])
-        lbls = []
-        for ln in lblNos:
-          lbls.append(shortCode + '-' + ln) 
-      return lbls,goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting redmine goals  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    goalRows = self.responseList('call redmineGoals(:env)',{'env':envName},'MySQL error getting redmine goals')
+    goals = {}
+    for goalId,envId,goalLabel,goalName,goalOrig,goalDef,goalCat,goalPri,goalFC,goalIssue in goalRows:
+      goalRefinements,subGoalRefinements = self.goalRefinements(goalId,envId)
+      concerns = self.goalConcerns(goalId,envId)
+      concernAssociations = self.goalConcernAssociations(goalId,envId)
+      ep = GoalEnvironmentProperties(envName,goalLabel,goalDef,'Maintain',goalPri,goalFC,goalIssue,goalRefinements,subGoalRefinements,concerns,concernAssociations)
+      parameters = GoalParameters(goalName,goalOrig,[],[ep])
+      g = ObjectFactory.build(goalId,parameters)
+      lbl = g.label(envName)
+      goals[lbl] = g
+    lbls = goals.keys()
+    if (len(lbls) > 0):
+      shortCode = lbls[0].split('-')[0]
+      lblNos = []
+      for lbl in lbls:
+        lblNos.append(lbl.split('-')[1])
+      lblNos.sort(key=lambda x: [int(y) for y in x.split('.')])
+      lbls = []
+      for ln in lblNos:
+        lbls.append(shortCode + '-' + ln) 
+    return lbls,goals
 
   def redmineUseCases(self):
     try:
