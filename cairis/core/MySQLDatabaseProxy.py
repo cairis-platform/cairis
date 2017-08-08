@@ -1985,11 +1985,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText)     
 
   def riskRating(self,thrName,vulName,environmentName):
-    return self.responseList('call riskRating(:thr,:vul,:env)',{'thr':thrName,'vuln':vulName,'env':environmentName},'MySQL error rating risk associated with threat/vulnerability/environment ' + thrName + '/' + vulName + '/' + environmentName)
+    return self.responseList('call riskRating(:thr,:vuln,:env)',{'thr':thrName,'vuln':vulName,'env':environmentName},'MySQL error rating risk associated with threat/vulnerability/environment ' + thrName + '/' + vulName + '/' + environmentName)[0]
 
 
   def riskScore(self,threatName,vulName,environmentName,riskName = ''):
-    return self.responseList('call riskScore(:thr,:vul,:env,:risk)',{'thr':threatName,'vuln':vulName,'env':environmentName,'risk':riskName},'MySQL error rating risk associated with risk ' + riskName)
+    return self.responseList('call riskScore(:threat,:vuln,:env,:risk)',{'threat':threatName,'vuln':vulName,'env':environmentName,'risk':riskName},'MySQL error rating risk associated with risk ' + riskName)
 
   def targetNames(self,reqList,envName):
     targetDict = {}
@@ -3503,7 +3503,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getDomainProperties(self,constraintId = -1):
-    dpRows = self.responseList('call getResponses(:id)',{'id':constraintId},'MySQL error getting domain properties')
+    dpRows = self.responseList('call getDomainProperties(:id)',{'id':constraintId},'MySQL error getting domain properties')
     dps = {}
     for dpId,dpName,dpDesc,dpType,dpOrig in dpRows:
       tags = self.getTags(dpName,'domainproperty')
@@ -5309,14 +5309,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         ucs[ucName] = uc
     return ucs
 
-  def useCaseRoles(self,ucName):
-    return self.responseList('call useCaseRoles(:name)',{'name':ucName},'MySQL error getting actors associated with use case ' + ucName)
+  def useCaseRoles(self,ucId):
+    return self.responseList('call useCaseRoles(:id)',{'id':ucId},'MySQL error getting actors associated with use case id ' + str(ucId))
 
   def useCaseConditions(self,ucId,envId):
-    return self.responseList('call useCaseConditions(:uc,:env)',{'uc':ucId,'env':envId},'MySQL error getting conditions associated with use case id ' + str(ucId))
+    return self.responseList('call useCaseConditions(:uc,:env)',{'uc':ucId,'env':envId},'MySQL error getting conditions associated with use case id ' + str(ucId))[0]
 
   def useCaseSteps(self,ucId,envId):
     stepRows = self.responseList('call useCaseSteps(:uc,:env)',{'uc':ucId,'env':envId},'MySQL error getting steps associated with use case id ' + str(ucId))
+    steps = []
     for pos,stepDetails in enumerate(stepRows):
       stepTxt = stepDetails[0]
       stepSyn = stepDetails[1]
