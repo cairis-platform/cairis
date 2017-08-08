@@ -293,9 +293,9 @@ class CountermeasureDAO(CairisDAO):
           real_prop.theProperties = new_attrs
           new_targets = []
           for idx in range(0, len(real_prop.theTargets)):
-            tName = real_prop.theTargets[idx].name()
-            tEff = real_prop.theTargets[idx].effectiveness()
-            tRat = real_prop.theTargets[idx].rationale()
+            tName = real_prop.theTargets[idx][0]
+            tEff = real_prop.theTargets[idx][1]
+            tRat = real_prop.theTargets[idx][2]
             new_targets.append(CountermeasureTarget(tName,tEff,tRat))
           real_prop.theTargets = new_targets
           new_props.append(real_prop)

@@ -228,12 +228,6 @@ EXTERNALDOCUMENT_PUBDATE_COL = 3
 EXTERNALDOCUMENT_AUTHORS_COL = 4
 EXTERNALDOCUMENT_DESCRIPTION_COL = 5
 
-DOCUMENTREFERENCE_ID_COL = 0
-DOCUMENTREFERENCE_NAME_COL = 1
-DOCUMENTREFERENCE_DOCNAME_COL = 2
-DOCUMENTREFERENCE_CNAME_COL = 3
-DOCUMENTREFERENCE_EXCERPT_COL = 4
-
 CONCEPTREFERENCE_ID_COL = 0
 CONCEPTREFERENCE_NAME_COL = 1
 CONCEPTREFERENCE_DIMNAME_COL = 2
@@ -911,8 +905,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       objts = self.getRoles(constraintId)
     elif (dimensionTable == 'domainproperty'):
       objts = self.getDomainProperties(constraintId)
-    elif (dimensionTable == 'domain'):
-      objts = self.getDomains(constraintId)
     elif (dimensionTable == 'document_reference'):
       objts = self.getDocumentReferences(constraintId)
     elif (dimensionTable == 'concept_reference'):
@@ -1678,7 +1670,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def deleteMisuseCase(self,mcId):
     self.deleteObject(mcId,'misusecase')
     
-
   def getResponses(self,constraintId = -1):
     responseRows = self.responseList('call getResponses(:id)',{'id':constraintId},'MySQL error getting responses')
     responses = {}
@@ -1994,11 +1985,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText)     
 
   def riskRating(self,thrName,vulName,environmentName):
-    return self.responseList('call riskRating(:thr,:vul,:env)',{'thr':thrName,'vuln':vulName,'env':environmentName},'MySQL error rating risk associated with threat/vulnerability/environment ' + thrName + '/' + vulName + '/' + envName)
+    return self.responseList('call riskRating(:thr,:vul,:env)',{'thr':thrName,'vuln':vulName,'env':environmentName},'MySQL error rating risk associated with threat/vulnerability/environment ' + thrName + '/' + vulName + '/' + environmentName)
 
 
   def riskScore(self,threatName,vulName,environmentName,riskName = ''):
-    return self.responseList('call riskScore(:thr,:vul,:env,:risk)',{'thr':thrName,'vuln':vulName,'env':environmentName,'risk':riskName},'MySQL error rating risk associated with risk ' + riskName)
+    return self.responseList('call riskScore(:thr,:vul,:env,:risk)',{'thr':threatName,'vuln':vulName,'env':environmentName,'risk':riskName},'MySQL error rating risk associated with risk ' + riskName)
 
   def targetNames(self,reqList,envName):
     targetDict = {}
@@ -3512,31 +3503,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getDomainProperties(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getDomainProperties(:const)',{'const':constraintId})
-      dps = {}
-      dpRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        dpId = row[0]
-        dpName = row[1]
-        dpDesc = row[2]
-        dpType = row[3]
-        dpOrig = row[4]
-        dpRows.append((dpId,dpName,dpDesc,dpType,dpOrig))
-      rs.close()
-      session.close() 
-      for dpId,dpName,dpDesc,dpType,dpOrig in dpRows:
-        tags = self.getTags(dpName,'domainproperty')
-        parameters = DomainPropertyParameters(dpName,dpDesc,dpType,dpOrig,tags)
-        dp = ObjectFactory.build(dpId,parameters)
-        dps[dpName] = dp
-      return dps
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting domain properties (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    dpRows = self.responseList('call getResponses(:id)',{'id':constraintId},'MySQL error getting domain properties')
+    dps = {}
+    for dpId,dpName,dpDesc,dpType,dpOrig in dpRows:
+      tags = self.getTags(dpName,'domainproperty')
+      parameters = DomainPropertyParameters(dpName,dpDesc,dpType,dpOrig,tags)
+      dp = ObjectFactory.build(dpId,parameters)
+      dps[dpName] = dp
+    return dps
 
   def addDomainProperty(self,parameters):
     dpId = self.newId()
@@ -4798,89 +4772,28 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getDocumentReferences(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getDocumentReferences(:const)',{'const':constraintId})
-      dRefs = {}
-      for row in rs.fetchall():
-        row = list(row)
-        refId = row[DOCUMENTREFERENCE_ID_COL]
-        refName = row[DOCUMENTREFERENCE_NAME_COL]
-        docName = row[DOCUMENTREFERENCE_DOCNAME_COL]
-        cName = row[DOCUMENTREFERENCE_CNAME_COL]
-        excerpt = row[DOCUMENTREFERENCE_EXCERPT_COL]
-        parameters = DocumentReferenceParameters(refName,docName,cName,excerpt)
-        dRef = ObjectFactory.build(refId,parameters)
-        dRefs[refName] = dRef
-      rs.close()
-      session.close()
-      return dRefs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting document references (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    drRows = self.responseList('call getDocumentReferences(:id)',{'id':constraintId},'MySQL error getting document references')
+    dRefs = {}
+    for refId,refName,docName,cName,excerpt in drRows:
+      parameters = DocumentReferenceParameters(refName,docName,cName,excerpt)
+      dRef = ObjectFactory.build(refId,parameters)
+      dRefs[refName] = dRef
+    return dRefs
 
   def getExternalDocumentReferences(self,docName = ''):
-    try:
-      session = self.conn()
-      rs = session.execute('call getDocumentReferencesByExternalDocument(:doc)',{'doc':docName})
-      dRefs = {}
-      for row in rs.fetchall():
-        row = list(row)
-        refId = row[DOCUMENTREFERENCE_ID_COL]
-        refName = row[DOCUMENTREFERENCE_NAME_COL]
-        docName = row[DOCUMENTREFERENCE_DOCNAME_COL]
-        cName = row[DOCUMENTREFERENCE_CNAME_COL]
-        excerpt = row[DOCUMENTREFERENCE_EXCERPT_COL]
-        parameters = DocumentReferenceParameters(refName,docName,cName,excerpt)
-        dRef = ObjectFactory.build(refId,parameters)
-        dRefs[refName] = dRef
-      rs.close()
-      session.close()
-      return dRefs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting document references for external document ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    drRows = self.responseList('call getDocumentReferencesByExternalDocument(:doc)',{'doc':docName},'MySQL error getting document references for external document ' + docName)
+    dRefs = {}
+    for refId,refName,docName,cName,excerpt in drRows:
+      parameters = DocumentReferenceParameters(refName,docName,cName,excerpt)
+      dRef = ObjectFactory.build(refId,parameters)
+      dRefs[refName] = dRef
+    return dRefs
 
   def getPersonaDocumentReferences(self,personaName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getPersonaDocumentReferences(:pers)',{'pers':personaName})
-      dRefs = []
-      for row in rs.fetchall():
-        row = list(row)
-        refName = row[0]
-        docName = row[1]
-        excerpt = row[2]
-        dRefs.append((refName,docName,excerpt))
-      rs.close()
-      session.close()
-      return dRefs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting document references for persona ' + personaName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getPersonaDocumentReferences(:pers)',{'pers':personaName},'MySQL error getting document references for persona ' + personaName)
 
   def getPersonaConceptReferences(self,personaName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getPersonaConceptReferences(:pers)',{'pers':personaName})
-      dRefs = []
-      for row in rs.fetchall():
-        row = list(row)
-        refName = row[0]
-        cType = row[1]
-        cName = row[2]
-        excerpt = row[3]
-        dRefs.append((refName,cType,cName,excerpt))
-      rs.close()
-      session.close()
-      return dRefs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting document references for persona ' + personaName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getPersonaConceptReferences(:pers)',{'pers':personaName},'MySQL error getting concept references for persona ' + personaName)
 
   def getPersonaExternalDocuments(self,personaName):
     try:
@@ -5380,131 +5293,50 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getUseCases(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getUseCases(:const)',{'const':constraintId});
-
-      ucRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        ucId = row[0]
-        ucName = row[1]
-        ucAuth = row[2]
-        ucCode = row[3]
-        ucDesc = row[4]
-        ucRows.append((ucId,ucName,ucAuth,ucCode,ucDesc))
-      rs.close()
-      session.close()
-
-      ucs = {} 
-
-      for ucId,ucName,ucAuth,ucCode,ucDesc in ucRows:
-        ucRoles = self.useCaseRoles(ucId)
-        tags = self.getTags(ucName,'usecase')
-        environmentProperties = []
-        for environmentId,environmentName in self.dimensionEnvironments(ucId,'usecase'):
-          preConds,postConds = self.useCaseConditions(ucId,environmentId)
-          ucSteps = self.useCaseSteps(ucId,environmentId)
-          properties = UseCaseEnvironmentProperties(environmentName,preConds,ucSteps,postConds)
-          environmentProperties.append(properties)
-          parameters = UseCaseParameters(ucName,ucAuth,ucCode,ucRoles,ucDesc,tags,environmentProperties)
-          uc = ObjectFactory.build(ucId,parameters)
-          ucs[ucName] = uc
-      return ucs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting tasks (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    ucRows = self.responseList('call getUseCases(:id)',{'id':constraintId},'MySQL error getting use cases')
+    ucs = {} 
+    for ucId,ucName,ucAuth,ucCode,ucDesc in ucRows:
+      ucRoles = self.useCaseRoles(ucId)
+      tags = self.getTags(ucName,'usecase')
+      environmentProperties = []
+      for environmentId,environmentName in self.dimensionEnvironments(ucId,'usecase'):
+        preConds,postConds = self.useCaseConditions(ucId,environmentId)
+        ucSteps = self.useCaseSteps(ucId,environmentId)
+        properties = UseCaseEnvironmentProperties(environmentName,preConds,ucSteps,postConds)
+        environmentProperties.append(properties)
+        parameters = UseCaseParameters(ucName,ucAuth,ucCode,ucRoles,ucDesc,tags,environmentProperties)
+        uc = ObjectFactory.build(ucId,parameters)
+        ucs[ucName] = uc
+    return ucs
 
   def useCaseRoles(self,ucName):
-    try:
-      session = self.conn()
-      rs = session.execute('call useCaseRoles(:name)',{'name':ucName})
-      roles = []
-      for row in rs.fetchall():
-        row = list(row)
-        roles.append(row[0])
-      rs.close()
-      session.close()
-      return roles
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting actors associated with use case ' + ucName +  ' (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('call useCaseRoles(:name)',{'name':ucName},'MySQL error getting actors associated with use case ' + ucName)
 
   def useCaseConditions(self,ucId,envId):
-    try:
-      session = self.conn()
-      rs = session.execute('call useCaseConditions(:uc,:env)',{'uc':ucId,'env':envId})
-      cond = []
-      row = rs.fetchone()
-      preCond = row[0]
-      postCond = row[1]
-      rs.close()
-      session.close()
-      return (preCond,postCond)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting conditions associated with use case id ' + str(ucId) +  ' (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('call useCaseConditions(:uc,:env)',{'uc':ucId,'env':envId},'MySQL error getting conditions associated with use case id ' + str(ucId))
 
   def useCaseSteps(self,ucId,envId):
-    try:
-      session = self.conn()
-      rs = session.execute('call useCaseSteps(:uc,:env)',{'uc':ucId,'env':envId})
-      stepRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        stepRows.append((row[1],row[2],row[3],row[4]))
-      rs.close()
-      session.close()
-      steps = Steps()
- 
-      for pos,stepDetails in enumerate(stepRows):
-        stepTxt = stepDetails[0]
-        stepSyn = stepDetails[1]
-        stepActor = stepDetails[2]
-        stepActorType = stepDetails[3]
-        stepNo = pos + 1  
-        excs = self.useCaseStepExceptions(ucId,envId,stepNo) 
-        tags = self.useCaseStepTags(ucId,envId,stepNo) 
-        step = Step(stepTxt,stepSyn,stepActor,stepActorType,tags)
-        for exc in excs:
-          step.addException(exc)
-        steps.append(step)
-      return steps
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting steps associated with use case id ' + str(ucId) +  ' (id:' + str(id) + ',message:' + msg + ')'
+    stepRows = self.responseList('call useCaseSteps(:uc,:env)',{'uc':ucId,'env':envId},'MySQL error getting steps associated with use case id ' + str(ucId))
+    for pos,stepDetails in enumerate(stepRows):
+      stepTxt = stepDetails[0]
+      stepSyn = stepDetails[1]
+      stepActor = stepDetails[2]
+      stepActorType = stepDetails[3]
+      stepNo = pos + 1  
+      excs = self.useCaseStepExceptions(ucId,envId,stepNo) 
+      tags = self.useCaseStepTags(ucId,envId,stepNo) 
+      step = Step(stepTxt,stepSyn,stepActor,stepActorType,tags)
+      for exc in excs:
+        step.addException(exc)
+      steps.append(step)
+    return steps
 
   def useCaseStepExceptions(self,ucId,envId,stepNo):
-    try:
-      session = self.conn()
-      rs = session.execute('call useCaseStepExceptions(:uc,:env,:step)',{'uc':ucId,'env':envId,'step':stepNo})
-      excs = []
-      for row in rs.fetchall():
-        row = list(row)
-        excs.append((row[0],row[1],row[2],row[3],row[4]))
-      rs.close()
-      session.close()
-      return excs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting step exceptions associated with use case id ' + str(ucId) +  ' (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('call useCaseStepExceptions(:uc,:env,:step)',{'uc':ucId,'env':envId,'step':stepNo},'MySQL error getting exceptions associated with use case id ' + str(ucId))
 
 
   def useCaseStepTags(self,ucId,envId,stepNo):
-    try:
-      session = self.conn()
-      rs = session.execute('call useCaseStepTags(:uc,:env,:step)',{'uc':ucId,'env':envId,'step':stepNo})
-      tags = []
-      for row in rs.fetchall():
-        row = list(row)
-        tags.append(row[0])
-      rs.close()
-      session.close()
-      return tags
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting step tags associated with use case id ' + str(ucId) +  ' (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('call useCaseStepTags(:uc,:env,:step)',{'uc':ucId,'env':envId,'step':stepNo},'MySQL error getting tags associated with use case id ' + str(ucId))
 
   def addUseCase(self,parameters):
     ucName = parameters.name()
