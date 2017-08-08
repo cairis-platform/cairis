@@ -74,7 +74,6 @@ drop procedure if exists add_asset_environment;
 drop procedure if exists add_vulnerability_environment;
 drop procedure if exists attacker_roles;
 drop procedure if exists persona_roles;
-drop procedure if exists personaGoals;
 drop procedure if exists attacker_capability;
 drop procedure if exists attacker_motivation;
 drop procedure if exists getAttackers;

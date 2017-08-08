@@ -664,22 +664,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error environments associated with composite environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def compositeEnvironmentIds(self,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('call compositeEnvironmentIds(:id)',{'id':environmentId})
-      environments = []
-      for row in rs.fetchall():
-        row = list(row)
-        environments.append(row[0])
-      rs.close()
-      session.close()
-      return environments
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error environments associated with composite environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
   def duplicateProperties(self,environmentId):
     try:
       session = self.conn()
@@ -1018,29 +1002,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error adding security properties for ' + dimTable + ' id ' + str(objtId) + ' in environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
-  def updateSecurityProperties(self,dimTable,objtId,securityProperties,pRationale):
-    sqlTxt = ''
-    if (dimTable == 'threat'):
-      sqlTxt += 'update threat_property set property_value_id=%s, property_rationale="%s" where environment_id = ' + str(self.environmentId) + ' and threat_id = %s and property_id = %s'
-    else:
-      sqlTxt += 'update ' + dimTable + '_property set property_value_id=%s, property_rationale="%s" where ' + dimTable + '_id = %s and property_id = %s'
-    try:
-      session = self.conn()
-      session.execute(sqlTxt %(securityProperties[C_PROPERTY],pRationale[C_PROPERTY],objtId,C_PROPERTY))
-      session.execute(sqlTxt %(securityProperties[C_PROPERTY],pRationale[C_PROPERTY],objtId,C_PROPERTY))
-      session.execute(sqlTxt %(securityProperties[I_PROPERTY],pRationale[I_PROPERTY],objtId,I_PROPERTY))
-      session.execute(sqlTxt %(securityProperties[AV_PROPERTY],pRationale[AV_PROPERTY],objtId,AV_PROPERTY))
-      session.execute(sqlTxt %(securityProperties[AN_PROPERTY],pRationale[AN_PROPERTY],objtId,AN_PROPERTY))
-      session.execute(sqlTxt %(securityProperties[PAN_PROPERTY],pRationale[PAN_PROPERTY],objtId,PAN_PROPERTY))
-      session.execute(sqlTxt %(securityProperties[PAN_PROPERTY],pRationale[PAN_PROPERTY],objtId,PAN_PROPERTY))
-      session.execute(sqlTxt %(securityProperties[UNO_PROPERTY],pRationale[UNO_PROPERTY],objtId,UNO_PROPERTY))
-      
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating security properties for ' + dimTable + ' id ' + str(objtId) +  ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def deleteAsset(self,assetId):
@@ -1570,22 +1531,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error getting roles for ' + table + ' id ' + str(personaId) + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
-  def personaGoals(self,personaId,environmentId):
-    try:
-      session = self.conn() 
-      rs = session.execute('call personaGoals(:pId,:eId)',{'pId':personaId,'eId':environmentId})
-      goals = []
-      for row in rs.fetchall():
-        row = list(row)
-        goals.append(row[0])
-      rs.close()
-      session.close() 
-      return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goals for persona id ' + str(personaId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
   def threatAttackers(self,threatId,environmentId):
     try:
       session = self.conn() 
@@ -1737,29 +1682,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session = self.conn()
       rs = session.execute('call getMisuseCases(:id)',{'id':constraintId})
-      if (rs.rowcount == 0):
-        rs.close()
-        session.close()
-        return None
-      else:
-        mcs = {}
-        mcRows = []
-        for row in rs.fetchall():
-          mcId = row[MISUSECASES_ID_COL]
-          mcName = row[MISUSECASES_NAME_COL]
-          mcRows.append((mcId,mcName))
-        rs.close()
-        session.close()
-        for mcId,mcName in mcRows:
-          risk = self.misuseCaseRisk(mcId)
-          environmentProperties = []
-          for environmentId,environmentName in self.dimensionEnvironments(mcId,'misusecase'):
-            narrative = self.misuseCaseNarrative(mcId,environmentId)
-            properties = MisuseCaseEnvironmentProperties(environmentName,narrative)
-            environmentProperties.append(properties)
-          parameters = MisuseCaseParameters(mcName,environmentProperties,risk)
-          mc = ObjectFactory.build(mcId,parameters)
-          mcs[mcName] = mc
+      mcs = {}
+      mcRows = []
+      for row in rs.fetchall():
+        mcId = row[MISUSECASES_ID_COL]
+        mcName = row[MISUSECASES_NAME_COL]
+        mcRows.append((mcId,mcName))
+      rs.close()
+      session.close()
+      for mcId,mcName in mcRows:
+        risk = self.misuseCaseRisk(mcId)
+        environmentProperties = []
+        for environmentId,environmentName in self.dimensionEnvironments(mcId,'misusecase'):
+          narrative = self.misuseCaseNarrative(mcId,environmentId)
+          properties = MisuseCaseEnvironmentProperties(environmentName,narrative)
+          environmentProperties.append(properties)
+        parameters = MisuseCaseParameters(mcName,environmentProperties,risk)
+        mc = ObjectFactory.build(mcId,parameters)
+        mcs[mcName] = mc
       return mcs
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
