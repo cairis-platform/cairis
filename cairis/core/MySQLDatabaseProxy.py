@@ -4796,52 +4796,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call getPersonaConceptReferences(:pers)',{'pers':personaName},'MySQL error getting concept references for persona ' + personaName)
 
   def getPersonaExternalDocuments(self,personaName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getPersonaExternalDocuments(:pers)',{'pers':personaName})
-      edRefs = []
-      for row in rs.fetchall():
-        row = list(row)
-        docName = row[0]
-        docVer = row[1]
-        docAuthors = row[2]
-        docDate = row[3]
-        docDesc = row[4]
-        edRefs.append((docName,docVer,docAuthors,docDate,docDesc))
-      rs.close()
-      session.close()
-      return edRefs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting external documents for persona ' + personaName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getPersonaExternalDocuments(:pers)',{'pers':personaName},'MySQL error getting external documents for persona ' + personaName)
 
   def getPersonaCharacteristics(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getPersonaCharacteristics(:const)',{'const':constraintId})
-      pChars = {}
-      pcSumm = []
-      for row in rs.fetchall():
-        row = list(row)
-        pcId = row[PERSONACHARACTERISTIC_ID_COL]
-        pName = row[PERSONACHARACTERISTIC_PERSONANAME_COL]
-        bvName = row[PERSONACHARACTERISTIC_BVAR_COL]
-        qualName = row[PERSONACHARACTERISTIC_QUAL_COL]
-        pcDesc = row[PERSONACHARACTERISTIC_PDESC_COL]
-        pcSumm.append((pcId,pName,bvName,qualName,pcDesc))
-      rs.close()
-      session.close()
-      for pcId,pName,bvName,qualName,pcDesc in pcSumm:
-        grounds,warrant,backing,rebuttal = self.characteristicReferences(pcId,'characteristicReferences')
-        parameters = PersonaCharacteristicParameters(pName,qualName,bvName,pcDesc,grounds,warrant,backing,rebuttal)
-        pChar = ObjectFactory.build(pcId,parameters)
-        pChars[pName + '/' + bvName + '/' + pcDesc] = pChar
-      return pChars
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting persona characteristics (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText)
+    pcSumm = self.responseList('call getPersonaCharacteristics(:id)',{'id':constraintId},'MySQL error getting persona characteristics')
+    pChars = {}
+    for pcId,pName,bvName,qualName,pcDesc in pcSumm:
+      grounds,warrant,backing,rebuttal = self.characteristicReferences(pcId,'characteristicReferences')
+      parameters = PersonaCharacteristicParameters(pName,qualName,bvName,pcDesc,grounds,warrant,backing,rebuttal)
+      pChar = ObjectFactory.build(pcId,parameters)
+      pChars[pName + '/' + bvName + '/' + pcDesc] = pChar
+    return pChars
 
   def characteristicReferences(self,pcId,spName):
     try:
@@ -4869,7 +4834,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for backing,concept in pcBacking:
         backingList.append(backing)
       backingList.sort()
-
       return (refDict['grounds'],refDict['warrant'],backingList,refDict['rebuttal'])
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
@@ -7696,31 +7660,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getInternalDocuments(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getInternalDocuments(:const)',{'const':constraintId})
-      idObjts = {}
-      rows = []
-      for row in rs.fetchall():
-        row = list(row)
-        docId = row[0]
-        docName = row[1]
-        docDesc = row[2]
-        docContent = row[3]
-        rows.append((docId,docName,docDesc,docContent))
-      rs.close()
-      session.close()
-      for docId,docName,docDesc,docContent in rows:
-        docCodes = self.documentCodes(docName)
-        docMemos = self.documentMemos(docName)
-        parameters = InternalDocumentParameters(docName,docDesc,docContent,docCodes,docMemos)
-        idObjt = ObjectFactory.build(docId,parameters)
-        idObjts[docName] = idObjt
-      return idObjts
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting internal documents (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call getInternalDocuments(:id)',{'id':constraintId},'MySQL error getting internal documents')
+    idObjts = {}
+    for docId,docName,docDesc,docContent in rows:
+      docCodes = self.documentCodes(docName)
+      docMemos = self.documentMemos(docName)
+      parameters = InternalDocumentParameters(docName,docDesc,docContent,docCodes,docMemos)
+      idObjt = ObjectFactory.build(docId,parameters)
+      idObjts[docName] = idObjt
+    return idObjts
 
   def deleteInternalDocument(self,docId = -1):
     self.deleteObject(docId,'internal_document')

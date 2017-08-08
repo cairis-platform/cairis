@@ -16,15 +16,18 @@ sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql
 sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
 sleep 60
 
+
+# Make sure the requests and argparse packages are installed before running model_import_web.py or web_cimport.py.
 $CAIRIS_REPO/cairis/bin/model_import_web.py --url http://localhost --database NeuroGrid --image_dir $CAIRIS_REPO/examples/exemplars/NeuroGrid --rich_pic NeuroGridContext.jpg $CAIRIS_REPO/examples/exemplars/NeuroGrid/NeuroGrid.xml
 $CAIRIS_REPO/cairis/bin/model_import_web.py --url http://localhost --database ACME_Water --image_dir $CAIRIS_REPO/examples/exemplars/ACME_Water --rich_pic stcsContext.jpg $CAIRIS_REPO/examples/exemplars/ACME_Water/ACME_Water.xml
+$CAIRIS_REPO/cairis/bin/web_cimport.py --url http://localhost --database ACME_Water --type locations $CAIRIS_REPO/examples/exemplars/PooleWWTW.xml
 
 # Uncomment below lines if you want to add webinos to the live demo
 #rm -rf $WEBINOS_DESIGN_DATA_REPO
 #export WEBINOS_DESIGN_DATA_REPO=$REPOS_DIR/webinos-design-data
 #git clone http://github.com/webinos/webinos-design-data $WEBINOS_DESIGN_DATA_REPO
 
-# The regeneration script uses Python converts spreadsheets and dot files to CAIRIS, but you need to install some pre-requisite packages.  These install fine on Linux, but are problematic to install on Mac OS X.  I haven't tested the scripts on Windows
+# The regeneration script converts spreadsheets and dot files to CAIRIS models, but you need to install some pre-requisite packages first.  These install fine on Linux, but are problematic to install on Mac OS X.  I haven't tested this script on Windows.
 # sudo pip install --upgrade pydot certifi openpyxl requests jsonpickle argparse urllib uno
 
 #$WEBINOS_DESIGN_DATA_REPO/scripts/regenerate_webservices.sh
