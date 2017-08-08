@@ -167,13 +167,6 @@ GOALASSOCIATIONS_SUBGOALDIM_COL = 6
 GOALASSOCIATIONS_ALTERNATIVE_COL = 7
 GOALASSOCIATIONS_RATIONALE_COL = 8
 
-DEPENDENCIES_ID_COL = 0
-DEPENDENCIES_ENV_COL = 1
-DEPENDENCIES_DEPENDER_COL = 2
-DEPENDENCIES_DEPENDEE_COL = 3
-DEPENDENCIES_DTYPE_COL = 4
-DEPENDENCIES_DEPENDENCY_COL = 5
-DEPENDENCIES_RATIONALE_COL = 6
 
 collectedIds = set([])
 
@@ -3982,30 +3975,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getDependencies(self,constraintId = ''):
-    try:
-      session = self.conn()
-      rs = session.execute('call getDependencies(:const)',{'const':constraintId})
-      dependencies = {}
-      for row in rs.fetchall():
-        row = list(row)
-        depId = row[DEPENDENCIES_ID_COL]
-        envName = row[DEPENDENCIES_ENV_COL]
-        depender = row[DEPENDENCIES_DEPENDER_COL]
-        dependee = row[DEPENDENCIES_DEPENDEE_COL]
-        dType = row[DEPENDENCIES_DTYPE_COL]
-        dependencyName = row[DEPENDENCIES_DEPENDENCY_COL]
-        rationale = row[DEPENDENCIES_RATIONALE_COL]
-        parameters = DependencyParameters(envName,depender,dependee,dType,dependencyName,rationale)
-        dependency = ObjectFactory.build(depId,parameters)
-        dLabel = envName + '/' + depender + '/' + dependee + '/' + dependencyName
-        dependencies[dLabel] = dependency
-      rs.close()
-      session.close()
-      return dependencies
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting dependencies (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    depRows = self.responseList('call getDependencies(:id)',{'id':constraintId},'MySQL error getting dependencies')
+    dependencies = {}
+    for depId,envName,depender,dependee,dType,dependencyName,rationale in depRows:
+      parameters = DependencyParameters(envName,depender,dependee,dType,dependencyName,rationale)
+      dependency = ObjectFactory.build(depId,parameters)
+      dLabel = envName + '/' + depender + '/' + dependee + '/' + dependencyName
+      dependencies[dLabel] = dependency
+    return dependencies
 
   def addDependency(self,parameters):
     depId = self.newId()
