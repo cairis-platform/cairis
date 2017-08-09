@@ -888,12 +888,14 @@ drop procedure if exists getDataFlowAssets;
 drop procedure if exists dataflowsToXml;
 drop procedure if exists dataFlowDiagram;
 drop procedure if exists addTrustBoundary;
+drop procedure if exists updateTrustBoundary;
 drop procedure if exists getTrustBoundaries;
-drop procedure if exists getTrustBoundaryComponents;
+drop procedure if exists trustBoundaryComponents;
 drop procedure if exists deleteTrustBoundaryComponents;
 drop procedure if exists delete_trust_boundary;
-drop procedure if exists addToTrustBoundary;
+drop procedure if exists addTrustBoundaryComponent;
 drop procedure if exists relabelRequirements;
+drop procedure if exists trust_boundary_environments;
 
 delimiter //
 
@@ -23636,6 +23638,12 @@ begin
 end
 //
 
+create procedure updateTrustBoundary(in tbId int, in tbName text, in tbDesc text)
+begin
+  update trust_boundary set name = tbName, description = tbDesc where id = tbId;
+end
+//
+
 create procedure getTrustBoundaries(in constraintId int)
 begin
   if constraintId = -1
@@ -23647,10 +23655,8 @@ begin
 end
 //
 
-create procedure getTrustBoundaryComponents(in tbId int, in envName text)
+create procedure trustBoundaryComponents(in tbId int, in envId int)
 begin
-  declare envId int;
-  select id into envId from environment where name = envName;
   select 'process',uc.name from trust_boundary_usecase tbc, usecase uc where tbc.trust_boundary_id = tbId and tbc.environment_id = envId and tbc.usecase_id = uc.id
   union
   select 'datastore',a.name from trust_boundary_asset tba, asset a where tba.trust_boundary_id = tbId and tba.environment_id = envId and tba.asset_id = a.id;
@@ -23671,7 +23677,7 @@ begin
 end
 //
 
-create procedure addToTrustBoundary(in tbId int, in envName text, in objtName text)
+create procedure addTrustBoundaryComponent(in tbId int, in envName text, in objtName text)
 begin
   declare envId int;
   declare objtId int;
@@ -23683,7 +23689,7 @@ begin
     insert into trust_boundary_asset(trust_boundary_id,environment_id,asset_id) value (tbId,envId,objtId);
   else
     select id into objtId from usecase where name = objtName limit 1;
-    insert into trust_boundary_asset(trust_boundary_id,environment_id,usecase_id) value (tbId,envId,objtId);
+    insert into trust_boundary_usecase(trust_boundary_id,environment_id,usecase_id) value (tbId,envId,objtId);
   end if;
 end
 //
@@ -23727,6 +23733,12 @@ begin
     end loop ar_loop;
     close assetReqCursor;
   end if;
+end
+//
+
+create procedure trust_boundary_environments(in tbId int)
+begin
+  select et.environment_id,e.name from environment_trust_boundary et,environment e where et.trust_boundary_id = tbId and et.environment_id = e.id;
 end
 //
 

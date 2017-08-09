@@ -44,6 +44,7 @@ from cairis.core.SecurityPattern import SecurityPattern
 from cairis.core.Target import Target
 from cairis.core.Task import Task
 from cairis.core.Trace import Trace
+from cairis.core.TrustBoundary import TrustBoundary
 from cairis.core.UseCase import UseCase
 from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
@@ -1510,4 +1511,50 @@ class DirectoryModel(object):
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field : gen_class_metadata(Directory)
+  }
+
+@swagger.model
+class TrustBoundaryComponent(object):
+  # region Swagger Doc
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theName': fields.String,
+    'theType': fields.String
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  # endregion
+
+  def __init__(self,n,t):
+    self.theName = n 
+    self.theType = t
+
+  def name(self): return self.theName
+  def type(self): return self.theType
+
+class TrustBoundaryEnvironmentModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theName': fields.String,
+    'theComponents': fields.List(fields.Nested(TrustBoundaryComponent.resource_fields)),
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+
+  def __init__(self,n,c):
+    self.theName = n
+    self.theComponents = c
+
+@swagger.model
+class TrustBoundaryModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theName': fields.String,
+    'theDescription': fields.String,
+    'theEnvironmentProperties': fields.List(fields.Nested(TrustBoundaryEnvironmentModel.resource_fields))
+  }
+  required = resource_fields.keys()
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field: gen_class_metadata(TrustBoundary)
   }

@@ -104,6 +104,7 @@ from Locations import Locations
 from LocationsParameters import LocationsParameters
 from DataFlow import DataFlow
 from DataFlowParameters import DataFlowParameters
+from TrustBoundary import TrustBoundary
 import string
 import os
 from numpy import *
@@ -626,6 +627,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       objts = self.getReferenceContributions(constraintId)
     elif (dimensionTable == 'persona_implied_process'):
       objts = self.getImpliedProcesses(constraintId)
+    elif (dimensionTable == 'trust_boundary'):
+      objts = self.getTrustBoundaries(constraintId)
 
     return (objts.values())[0]
 
@@ -8636,3 +8639,36 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       id,msg = e
       exceptionText = 'MySQL error relabing requirements associated with ' + reqReference + ' (id:' + str(id) + ',message:' + msg + ')'
 
+  def getTrustBoundaries(self,constraintId = -1):
+    tbRows = self.responseList('call getTrustBoundaries(:id)',{'id':constraintId},'MySQL error getting trust boundaries')
+    tbs = {} 
+    for tbId,tbName,tbDesc in tbRows:
+      environmentProperties = {}
+      for environmentId,environmentName in self.dimensionEnvironments(tbId,'trust_boundary'):
+        environmentProperties[environmentName] = self.trustBoundaryComponents(tbId,environmentId)
+      tbs[tbName] = TrustBoundary(tbId,tbName,tbDesc,environmentProperties)
+    return tbs
+
+  def trustBoundaryComponents(self,tbId, envId):
+    return self.responseList('call trustBoundaryComponents(:tbId,:envId)',{'tbId':tbId,'envId':envId},'MySQL error getting trust boundary components for trust boundary id ' + str(tbId))
+
+  def addTrustBoundary(self,tb):
+    tbId = self.newId()
+    self.updateDatabase("call addTrustBoundary(:id,:name,:desc)",{'id':tbId,'name':tb.name(),'desc':tb.description()},'MySQL error adding trust boundary ' + str(tbId))
+    for environmentName in tb.environmentProperties().keys():
+      for tbComponentType,tbComponent in tb.environmentProperties()[environmentName]:
+        self.addTrustBoundaryComponent(tbId,environmentName,tbComponent)
+
+  def addTrustBoundaryComponent(self,tbId,envName,tbComponent):
+    self.updateDatabase('call addTrustBoundaryComponent(:id,:environment,:component)',{'id':tbId,'environment':envName,'component':tbComponent},'MySQL error adding trust boundary component ' + tbComponent + ' to trust boundary id ' + str(tbId))
+
+
+  def updateTrustBoundary(self,tb):
+    self.updateDatabase('call deleteTrustBoundaryComponents(:id)',{'id':tb.id()},'MySQL error deleting trust boundary components for ' + tb.name())
+    self.updateDatabase("call updateTrustBoundary(:id,:name,:desc)",{'id':tb.id(),'name':tb.name(),'desc':tb.description()},'MySQL error adding trust boundary ' + tb.name())
+    for environmentName in tb.environmentProperties().keys():
+      for tbComponentType,tbComponent in tb.environmentProperties()[environmentName]:
+        self.addTrustBoundaryComponent(tb.id(),environmentName,tbComponent)
+
+  def deleteTrustBoundary(self,tbId):
+    self.deleteObject(tbId,'trust_boundary')

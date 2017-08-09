@@ -29,7 +29,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController, DirectoryController
+    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController, DirectoryController,TrustBoundaryController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -384,6 +384,10 @@ api.add_resource(TraceController.TracesAPI, '/api/traces',endpoint='traces')
 api.add_resource(TraceController.TraceByEnvironmentAPI, '/api/traces/environment/<string:environment_name>',endpoint='traces_environment')
 api.add_resource(TraceController.TraceDimensionsAPI, '/api/traces/dimensions/<string:dimension_name>/is_from/<string:is_from>',endpoint='trace_dimensions')
 api.add_resource(TraceController.TraceByNameAPI, '/api/traces/from_type/<string:from_object>/from_name/<string:from_name>/to_type/<string:to_object>/to_name/<string:to_name>',endpoint='traces_name')
+
+# Trust Boundary routes
+api.add_resource(TrustBoundaryController.TrustBoundariesAPI, '/api/trust_boundaries',endpoint='trustboundaries')
+api.add_resource(TrustBoundaryController.TrustBoundaryByNameAPI, '/api/trust_boundaries/name/<string:trust_boundary_name>',endpoint='trustboundary')
 
 # Upload controller
 api.add_resource(UploadController.UploadImageAPI, '/api/upload/image',endpoint='upload')

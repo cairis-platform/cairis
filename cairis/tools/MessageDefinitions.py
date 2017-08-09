@@ -474,6 +474,17 @@ class DirectoryMessage(DefaultMessage):
 )
 # endregion
 
+class TrustBoundaryMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.TrustBoundaryModel)
+  required = DefaultMessage.required
+
+# region Swagger Doc
+@swagger.model
+@swagger.nested(
+  object=ModelDefinitions.TrustBoundaryModel.__name__,
+)
+# endregion
+
 
 class TemplateRequirementMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TemplateRequirementModel)

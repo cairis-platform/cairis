@@ -1,0 +1,12 @@
+{
+  "trust_boundaries" : [
+    {"theName" : "Shibboleth",
+     "theDescription" : "Identity Provider",
+     "theEnvironmentProperties" : [
+       {"theName" : "Psychosis",
+        "theComponents" :[{"theName": "Authenticate Researcher","theType" : "process"}]
+       }
+     ]
+    }
+  ]
+}
