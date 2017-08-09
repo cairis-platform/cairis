@@ -157,22 +157,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
     
   def buildDimensionLookup(self):
+    dimRows = self.responseList('call traceDimensions()',{},'MySQL error building trace dimension lookup tables')
     idLookup  = {}
     nameLookup = {}
-    try:
-      session = self.conn()
-      rs = session.execute('call traceDimensions()')
-      for row in rs.fetchall():
-        row = list(row)
-        idLookup[row[0]] = row[1]
-        nameLookup[row[1]] = row[0]
-      rs.close()
-      session.close()
-      return (idLookup, nameLookup)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error building dimension lookup tables (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    for dimId,dimName in dimRows:
+      idLookup[dimId] = dimName
+      nameLookup[dimName] = dimId
+    return (idLookup, nameLookup)
     
   def close(self):
     self.conn.remove()
@@ -205,27 +196,22 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def newId(self):
     return self.responseList('call newId()',{},'MySQL error getting new identifier')[0]
 
-  def addRequirement(self,r,assetName,isAsset = True):
+  def updateDatabase(self,callTxt,argDict,errorTxt):
     try:
       session = self.conn()
-      session.execute('call addRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type,:asName,:isAs)',{'lbl':r.label(),'id':r.id(),'vers':r.version(),'name':r.name(),'desc':r.description(),'rationale':r.rationale(),'origin':r.originator(),'fCrit':r.fitCriterion(),'priority':r.priority(),'type':r.type(),'asName':assetName,'isAs':isAsset})
+      session.execute(callTxt,argDict)
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
-      exceptionText = 'MySQL adding new requirement ' + str(r.id()) + '(id:' + str(id) + ',message:' + msg
+      exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
 
+  def addRequirement(self,r,assetName,isAsset = True):
+    self.updateDatabase('call addRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type,:asName,:isAs)',{'lbl':r.label(),'id':r.id(),'vers':r.version(),'name':r.name(),'desc':r.description(),'rationale':r.rationale(),'origin':r.originator(),'fCrit':r.fitCriterion(),'priority':r.priority(),'type':r.type(),'asName':assetName,'isAs':isAsset},'MySQL error adding new requirement ' + str(r.id()))
+
   def updateRequirement(self,r):
-    try:
-      session = self.conn()
-      session.execute('call updateRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type)',{'lbl':r.label(),'id':r.id(),'vers':r.version(),'name':r.name(),'desc':r.description(),'rationale':r.rationale(),'origin':r.originator(),'fCrit':r.fitCriterion(),'priority':r.priority(),'type':r.type()})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL updating requirement ' + str(r.id()) + '(id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type)',{'lbl':r.label(),'id':r.id(),'vers':r.version(),'name':r.name(),'desc':r.description(),'rationale':r.rationale(),'origin':r.originator(),'fCrit':r.fitCriterion(),'priority':r.priority(),'type':r.type()},'MySQL error updating requirement ' + str(r.id()))
 
   def addValueTensions(self,envId,tensions):
     for vtKey in tensions:
@@ -237,15 +223,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addValueTension(envId,spValue,prValue,vtValue,vtRationale)
 
   def addValueTension(self,envId,spId,prId,tId,tRationale):
-    try:
-      session = self.conn()
-      session.execute('call addValueTension(:env,:sp,:pr,:tId,:rationale)',{'env':envId,'sp':spId,'pr':prId,'tId':tId,'rationale':tRationale})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL adding value tension for environment id ' + str(envId) + '(id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addValueTension(:env,:sp,:pr,:tId,:rationale)',{'env':envId,'sp':spId,'pr':prId,'tId':tId,'rationale':tRationale},'MySQL error adding value tension for environment id ' + str(envId))
 
   def addEnvironment(self,parameters):
     environmentId = self.newId()
@@ -277,47 +255,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addCompositeEnvironmentProperties(self,environmentId,duplicateProperty,overridingEnvironment):
-    try:
-      session = self.conn()
-      session.execute('call addCompositeEnvironmentProperties(:id,:dp,:oe)',{'id':environmentId,'dp':duplicateProperty,'oe':overridingEnvironment})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding duplicate properties for environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addCompositeEnvironmentProperties(:id,:dp,:oe)',{'id':environmentId,'dp':duplicateProperty,'oe':overridingEnvironment},'MySQL error adding duplicate properties for environment id ' + str(environmentId))
 
   def riskEnvironments(self,threatName,vulName):
-    try:
-      session = self.conn()
-      rs = session.execute('call riskEnvironments(:threat,:vul)',{'threat':threatName,'vul':vulName})
-      environments = []
-      for row in rs.fetchall():
-        row = list(row)
-        environments.append(row[0])
-      rs.close()
-      session.close()
-      return environments
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting environments associated with threat ' + threatName + ' and vulnerability ' + vulName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call riskEnvironments(:threat,:vul)',{'threat':threatName,'vul':vulName},'MySQL error getting environments associated with threat ' + threatName + ' and vulnerability ' + vulName)
 
   def riskEnvironmentsByRisk(self,riskName):
-    try:
-      session = self.conn()
-      rs = session.execute('call riskEnvironmentsByRisk(:risk)',{'risk':riskName})
-      environments = []
-      for row in rs.fetchall():
-        row = list(row)
-        environments.append(row[0])
-      rs.close()
-      session.close()
-      return environments
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting environments associated with risk ' + riskName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call riskEnvironmentsByRisk(:risk)',{'risk':riskName},'MySQL error getting environments associated with risk ' + riskName)
 
   def updateEnvironment(self,parameters):
     environmentId = parameters.id()
@@ -1637,53 +1581,27 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     if (dimensionName == 'risk' and objectName !='') or (objectName != '' and self.isRisk(objectName)):
       return self.riskModel(environmentName,objectName)
 
-    try:
-      session = self.conn()
-      rs = session.execute('call riskAnalysisModel(:env)',{'env':environmentName})
-      traces = []
-      for traceRow in rs.fetchall():
-        traceRow = list(traceRow)
-        fromObjt = traceRow[0]
-        fromName = traceRow[1]
-        toObjt = traceRow[2]
-        toName = traceRow[3]
-        if (dimensionName != ''):
-          if (fromObjt != dimensionName) and (toObjt != dimensionName):
-            continue
-        if (objectName != ''):
-          if (fromName != objectName) and (toName != objectName):
-            continue
-        parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
-        traces.append(ObjectFactory.build(-1,parameters))
-      rs.close()
-      session.close() 
-      return traces
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting risk analysis model (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    traceRows = self.responseList('call riskAnalysisModel(:env)',{'env':environmentName},'MySQL error getting risk analysis model')
+    traces = []
+    for fromObjt,fromName,toObjt,toName in traceRows:
+      if (dimensionName != ''):
+        if (fromObjt != dimensionName) and (toObjt != dimensionName):
+          continue
+      if (objectName != ''):
+        if (fromName != objectName) and (toName != objectName):
+          continue
+      parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
+      traces.append(ObjectFactory.build(-1,parameters))
+    return traces
 
   def removableTraces(self,environmentName):
-    try:
-      session = self.conn()
-      rs = session.execute('call viewRemovableTraces(:env)',{'env':environmentName})
-      traces = []
-      for traceRow in rs.fetchall():
-        traceRow = list(traceRow)
-        fromObjt = traceRow[0]
-        fromName = traceRow[1]
-        toObjt = traceRow[2]
-        toName = traceRow[3]
-        if (fromObjt == 'task' and toObjt == 'asset'):
-          continue
-        traces.append((fromObjt,fromName,toObjt,toName))
-      rs.close()
-      session.close() 
-      return traces
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting removeable trace relations (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    traceRows = self.responseList('call viewRemovableTraces(:env)',{'env':environmentName},'MySQL error getting removable trace relations')
+    traces = []
+    for fromObjt,fromName,toObjt,toName in traceRows:
+      if (fromObjt == 'task' and toObjt == 'asset'):
+        continue
+      traces.append((fromObjt,fromName,toObjt,toName))
+    return traces
 
   def allowableTraceDimension(self,fromId,toId):
     return self.responseList('call allowableTraceDimension(:frm,:to)',{'frm':fromId,'to':toId},'MySQL error getting allowable trace dimensions for from_id ' + str(fromId) + ' and to_id ' + str(toId))[0]
@@ -1834,45 +1752,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
 
   def roleResponsibilities(self,roleId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('call roleResponses(:rId,:eId)',{'rId':roleId,'eId':environmentId})
-      if (rs.rowcount == 0):
-      	rs.close()
-        session.close()
-        return []
-      else:
-        responsibilities = []
-        for row in rs.fetchall():
-          row = list(row)
-          responsibilities.append((row[0],row[1]))
-        rs.close()
-        session.close()
-        return responsibilities
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting responses for role id ' + str(roleId) + 'in environment ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call roleResponses(:rId,:eId)',{'rId':roleId,'eId':environment},'MySQL error getting responses for role id ' + str(roleId) + ' in environment ' + str(environmentId))
 
   def roleCountermeasures(self,roleId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('call roleCountermeasures(:rId,:eId)',{'rId':roleId,'eId':environmentId})
-      if (rs.rowcount == 0):
-      	rs.close()
-        session.close()
-        return []
-      else:
-        responsibilities = []
-        for row in rs.fetchall():
-          row = list(row)
-          responsibilities.append(row[0])
-        rs.close()
-        session.close()
-        return responsibilities
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting countermeasures for role id ' + str(roleId) + ' in environment ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('call roleCountermeasures(:rId,:eId)',{'rId':roleId,'eId':environment},'MySQL error getting countermeasures for role id ' + str(roleId) + ' in environment ' + str(environmentId))
 
   def getCountermeasures(self,constraintId = -1):
     cmRows = self.responseList('call getCountermeasures(:id)',{'id':constraintId},'MySQL error getting countermeasures')
@@ -2081,35 +1964,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText)
 
   def personaNarrative(self,scId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select personaNarrative(:scId,:env)',{'scId':scId,'env':environmentId})
-      row = rs.fetchone()
-      desc = row[0]
-      rs.close()
-      session.close()
-      return desc
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting narrative associated with persona id ' + str(scId) + ' in environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select personaNarrative(:scId,:env)',{'scId':scId,'env':environmentId},'MySQL error getting narrative for persona id ' + str(scId) + ' in environment ' + str(environmentId))[0]
 
   def personaDirect(self,scId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select personaDirect(:scId,:env)',{'scId':scId,'env':environmentId})
-      row = rs.fetchone()
-      directFlag = row[0]
-      directValue = 'False'
-      if (directFlag == 1):
-        directValue = 'True'
-      rs.close()
-      session.close()
-      return directValue
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting directFlag associated with persona id ' + str(scId) + ' in environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select personaDirect(:scId,:env)',{'scId':scId,'env':environmentId},'MySQL error getting directFlag for persona id ' + str(scId) + ' in environment ' + str(environmentId))[0]
 
   def addPersonaNarrative(self,stId,environmentName,descriptionText):
     try:
@@ -2134,46 +1992,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText)
 
   def taskNarrative(self,scId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select taskNarrative(:scId,:env)',{'scId':scId,'env':environmentId})
-      row = rs.fetchone()
-      narrative = row[0]
-      rs.close()
-      session.close()
-      return narrative
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting narrative associated with task id ' + str(scId) + ' in environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select taskNarrative(:scId,:env)',{'scId':scId,'env':environmentId},'MySQL error getting narrative for task id ' + str(scId) + ' in environment ' + str(environmentId))[0]
 
   def taskConsequences(self,scId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select taskConsequences(:scId,:env)',{'scId':scId,'env':environmentId})
-      row = rs.fetchone()
-      consequences = row[0]
-      rs.close()
-      session.close()
-      return consequences
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting consequences associated with task id ' + str(scId) + ' in environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select taskConsequences(:scId,:env)',{'scId':scId,'env':environmentId},'MySQL error getting consequences for task id ' + str(scId) + ' in environment ' + str(environmentId))[0]
 
   def taskBenefits(self,scId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select taskBenefits(:scId,:env)',{'scId':scId,'env':environmentId})
-      row = rs.fetchone()
-      benefits = row[0]
-      rs.close()
-      session.close()
-      return benefits
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting benefits associated with task id ' + str(scId) + ' in environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select taskBenefits(:scId,:env)',{'scId':scId,'env':environmentId},'MySQL error getting benefits for task id ' + str(scId) + ' in environment ' + str(environmentId))[0]
 
   def addTaskNarrative(self,scId,narrativeText,cText,bText,environmentName):
     try:
@@ -2187,18 +2012,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText)
 
   def misuseCaseNarrative(self,mcId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select misuseCaseNarrative(:mcId,:env)',{'mcId':mcId,'env':environmentId})
-      row = rs.fetchone()
-      narrative = row[0]
-      rs.close()
-      session.close()
-      return narrative
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting narrative associated with misuse case id ' + str(mcId) + ' in environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select misuseCaseNarrative(:mcId,:env)',{'mcId':mcId,'env':environmentId},'MySQL error getting narrative for misusecase id ' + str(mcId) + ' in environment ' + str(environmentId))[0]
 
   def addMisuseCaseNarrative(self,mcId,narrativeText,environmentName):
     try:
@@ -2212,50 +2026,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText)
 
   def riskEnvironmentNames(self,riskName):
-    try:
-      session = self.conn()
-      rs = session.execute('call riskEnvironmentNames(:risk)',{'risk':riskName})
-      environments = []
-      for row in rs.fetchall():
-        row = list(row)
-        environments.append(row[0])
-      rs.close()
-      session.close()
-      return environments
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting environments associated with risk ' + riskName + ' id ' + str(dimId) +  ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call riskEnvironmentNames(:risk)',{'risk':riskName},'MySQL error getting environments associated with risk ' + riskName)
 
   def threatVulnerabilityEnvironmentNames(self,threatName,vulName):
-    try:
-      session = self.conn()
-      rs = session.execute('call threatVulnerabilityEnvironmentNames(:threat,:vuln)',{'threat':threatName,'vuln':vulName})
-      environments = []
-      for row in rs.fetchall():
-        row = list(row)
-        environments.append(row[0])
-      rs.close()
-      session.close()
-      return environments
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting environments associated with threat ' + threatName  + ' and vulnerability ' + vulName + ' id ' + str(dimId) +  ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call threatVulnerabilityEnvironmentNames(:threat,:vuln)',{'threat':threatName,'vuln':vulName},'MySQL error getting environments associated with threat ' + threatName + ' and vulnerability ' + vulName);
 
   def taskDependencies(self,tId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select taskDependencies(:tId,:eId)',{'tId':tId,'eId':environmentId})
-      row = rs.fetchone()
-      dependencies = row[0]
-      rs.close()
-      session.close()
-      return dependencies
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting dependencies associated with task id ' + str(tId) + ' in environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select taskDependencies(:tId,:eId)',{'tId':tId,'eId':environmentId},'MySQL error getting dependencies for task id ' + str(tId) + ' in environment ' + str(environmentId))[0]
 
   def addTaskDependencies(self,tId,depsText,environmentName):
     try:
@@ -2269,20 +2046,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText)
 
   def mitigatedRisks(self,cmId):
-    try:
-      session = self.conn()
-      rs = session.execute('call mitigatedRisks(:id)',{'id':cmId})
-      risks = []
-      for row in rs.fetchall():
-        row = list(row)
-        risks.append(row[0])
-      rs.close()
-      session.close()
-      return risks
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting risks mitigated by countermeasure id ' + str(cmId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText)
+    return self.responseList('call mitigatedRisks(:id)',{'id':cmId},'MySQL error getting risks mitigated by countermeasure id ' + str(cmId))
 
   def deleteTrace(self,fromObjt,fromName,toObjt,toName):
     try:
