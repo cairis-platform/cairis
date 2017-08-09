@@ -1934,7 +1934,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('select personaNarrative(:scId,:env)',{'scId':scId,'env':environmentId},'MySQL error getting narrative for persona id ' + str(scId) + ' in environment ' + str(environmentId))[0]
 
   def personaDirect(self,scId,environmentId):
-    return self.responseList('select personaDirect(:scId,:env)',{'scId':scId,'env':environmentId},'MySQL error getting directFlag for persona id ' + str(scId) + ' in environment ' + str(environmentId))[0]
+    directFlag = self.responseList('select personaDirect(:scId,:env)',{'scId':scId,'env':environmentId},'MySQL error getting directFlag for persona id ' + str(scId) + ' in environment ' + str(environmentId))[0]
+    directValue = 'False'
+    if (directFlag == 1):
+      directValue = 'True'
+    return directValue
+   
 
   def addPersonaNarrative(self,stId,environmentName,descriptionText):
     try:
