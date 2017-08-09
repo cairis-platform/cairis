@@ -112,64 +112,6 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 __author__ = 'Shamal Faily, Robin Quetin, Nathan Jenkins'
 
-LABEL_COL = 0
-ID_COL = 1
-NAME_COL = 2
-DESCRIPTION_COL = 3
-PRIORITY_COL = 4
-RATIONALE_COL = 5
-FITCRITERION_COL = 6
-ORIGINATOR_COL = 7
-VERSION_COL = 8
-TYPE_COL = 9
-ASSET_COL = 10
-
-ASSETS_ID_COL = 0
-ASSETS_NAME_COL = 1
-ASSETS_SHORTCODE_COL = 2
-ASSETS_DESCRIPTION_COL = 3
-ASSETS_SIGNIFICANCE_COL = 4
-ASSETS_TYPE_COL = 5
-ASSETS_CRITICAL_COL = 6
-ASSETS_CRITICALRATIONALE_COL = 7
-TEMPLATEASSETS_CPROPERTY_COL = 8
-TEMPLATEASSETS_IPROPERTY_COL = 9
-TEMPLATEASSETS_AVPROPERTY_COL = 10
-TEMPLATEASSETS_ACPROPERTY_COL = 11
-TEMPLATEASSETS_ANPROPERTY_COL = 12
-TEMPLATEASSETS_PANPROPERTY_COL = 13
-TEMPLATEASSETS_UNLPROPERTY_COL = 14
-TEMPLATEASSETS_UNOPROPERTY_COL = 15
-
-CLASSASSOCIATIONS_ID_COL = 0
-CLASSASSOCIATIONS_ENV_COL = 1
-CLASSASSOCIATIONS_HEAD_COL = 2
-CLASSASSOCIATIONS_HEADDIM_COL = 3
-CLASSASSOCIATIONS_HEADNAV_COL = 4
-CLASSASSOCIATIONS_HEADTYPE_COL = 5
-CLASSASSOCIATIONS_HEADMULT_COL = 6
-CLASSASSOCIATIONS_HEADROLE_COL = 7
-CLASSASSOCIATIONS_TAILROLE_COL = 8
-CLASSASSOCIATIONS_TAILMULT_COL = 9
-CLASSASSOCIATIONS_TAILTYPE_COL = 10
-CLASSASSOCIATIONS_TAILNAV_COL = 11
-CLASSASSOCIATIONS_TAILDIM_COL = 12
-CLASSASSOCIATIONS_TAIL_COL = 13
-CLASSASSOCIATIONS_RATIONALE_COL =14
-
-GOALASSOCIATIONS_ID_COL = 0
-GOALASSOCIATIONS_ENV_COL = 1
-GOALASSOCIATIONS_GOAL_COL = 2
-GOALASSOCIATIONS_GOALDIM_COL = 3
-GOALASSOCIATIONS_TYPE_COL = 4
-GOALASSOCIATIONS_SUBGOAL_COL = 5
-GOALASSOCIATIONS_SUBGOALDIM_COL = 6
-GOALASSOCIATIONS_ALTERNATIVE_COL = 7
-GOALASSOCIATIONS_RATIONALE_COL = 8
-
-
-collectedIds = set([])
-
 class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def __init__(self, host=None, port=None, user=None, passwd=None, db=None):
     DatabaseProxy.DatabaseProxy.__init__(self)
@@ -235,106 +177,29 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def close(self):
     self.conn.remove()
 
-
   def getRequirements(self,constraintId = '',isAsset = 1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getRequirements(:constId,:isAs)',{'constId':constraintId,'isAs':isAsset})
-      reqDict = {}
-      for row in rs.fetchall():
-        row = list(row)
-        reqId = row[ID_COL]
-        reqLabel = row[LABEL_COL]
-        reqName = row[NAME_COL]
-        reqDesc = row[DESCRIPTION_COL]
-        priority = row[PRIORITY_COL]
-        rationale = row[RATIONALE_COL]
-        fitCriterion = row[FITCRITERION_COL]
-        originator = row[ORIGINATOR_COL]
-        reqType = row[TYPE_COL]
-        reqVersion = row[VERSION_COL]
-        reqDomain = row[ASSET_COL]
-        r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
-        reqDict[reqDesc] = r
-      rs.close()
-      session.close()
-      return reqDict
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error loading requirements (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    reqRows = self.responseList('call getRequirements(:id,:isAs)',{'id':constraintId,'isAs':isAsset},'MySQL error getting requirements')
+    reqDict = {}
+    for reqLabel, reqId, reqName, reqDesc, priority, rationale, fitCriterion, originator, reqVersion, reqType, reqDomain in reqRows:
+      r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
+      reqDict[reqDesc] = r
+    return reqDict
 
   def getRequirement(self,reqId):
-    try:
-      session = self.conn()
-      rs = session.execute('call getRequirement(:reqId)',{'reqId':reqId})
-      reqDict = {}
-      for row in rs.fetchall():
-        row = list(row)
-        reqId = row[ID_COL]
-        reqLabel = row[LABEL_COL]
-        reqName = row[NAME_COL]
-        reqDesc = row[DESCRIPTION_COL]
-        priority = row[PRIORITY_COL]
-        rationale = row[RATIONALE_COL]
-        fitCriterion = row[FITCRITERION_COL]
-        originator = row[ORIGINATOR_COL]
-        reqType = row[TYPE_COL]
-        reqVersion = row[VERSION_COL]
-        reqDomain = row[ASSET_COL]
-        r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
-        reqDict[reqDesc] = r
-      rs.close()
-      session.close()
-      return reqDict
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting requirement ' + reqId + ' (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    reqRows = self.responseList('call getRequirement(:id)',{'id':reqId},'MySQL error getting requirement')
+    reqDict = {}
+    for reqLabel, reqId, reqName, reqDesc, priority, rationale, fitCriterion, originator, reqVersion, reqType, reqDomain in reqRows:
+      r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
+      reqDict[reqDesc] = r
+    return reqDict
 
   def getOrderedRequirements(self,constraintId = '',isAsset = True):
-    try:
-      session = self.conn()
-      rs = session.execute('call getRequirements(:constId,:isAs)',{'constId':constraintId,'isAs':isAsset})
-      reqList = []
-      for row in rs.fetchall():
-        row = list(row)
-        reqId = row[ID_COL]
-        reqLabel = row[LABEL_COL]
-        reqName = row[NAME_COL]
-        reqDesc = row[DESCRIPTION_COL]
-        priority = row[PRIORITY_COL]
-        rationale = row[RATIONALE_COL]
-        fitCriterion = row[FITCRITERION_COL]
-        originator = row[ORIGINATOR_COL]
-        reqType = row[TYPE_COL]
-        reqDomain = row[ASSET_COL]
-        reqVersion = row[VERSION_COL]
-        r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
-        reqList.append(r)
-      rs.close()
-      session.close()
-      return reqList
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error loading requirements (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
-  
-  
+    return self.getRequirements(constraintId,isAsset)
+
+    
   def newId(self):
-    try: 
-      session = self.conn()
-      rs = session.execute('call newId()')
-      results = rs.fetchone()
-      newId = results[0]
-      rs.close()
-      session.close()
-      return newId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting new identifier (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
-  
+    return self.responseList('call newId()',{},'MySQL error getting new identifier')[0]
+
   def addRequirement(self,r,assetName,isAsset = True):
     try:
       session = self.conn()
@@ -2730,86 +2595,39 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def classModel(self,envName,asName = '',hideConcerns = False):
     if (hideConcerns == True):
       if (asName == ''):
-        return self.classAssociations('call concernlessClassModel("%s")',envName)
+        return self.classAssociations('call concernlessClassModel(:id)',envName)
       else:
-        return self.classTreeAssociations('call concernlessClassTree("%s","%s")',asName,envName)
+        return self.classTreeAssociations('call concernlessClassTree(:id1,:id2)',asName,envName)
     else:
       if (asName == ''):
-        return self.classAssociations('call classModel("%s")',envName)
+        return self.classAssociations('call classModel(:id)',envName)
       else:
-        return self.classTreeAssociations('call classTree("%s","%s")',asName,envName)
+        return self.classTreeAssociations('call classTree(:id1,:id2)',asName,envName)
 
 
   def getClassAssociations(self,constraintId = ''):
-    return self.classAssociations('call classAssociationNames("%s")',constraintId)
+    return self.classAssociations('call classAssociationNames(:id)',constraintId)
+
 
   def classAssociations(self,procName,constraintId = ''):
-    try:
-      session = self.conn()
-      rs = session.execute(procName %(constraintId))
-      associations = {}
-      for row in rs.fetchall():
-        row = list(row)
-        associationId = row[CLASSASSOCIATIONS_ID_COL]
-        envName = row[CLASSASSOCIATIONS_ENV_COL]
-        headName = row[CLASSASSOCIATIONS_HEAD_COL]
-        headDim  = row[CLASSASSOCIATIONS_HEADDIM_COL]
-        headNav =  row[CLASSASSOCIATIONS_HEADNAV_COL]
-        headType = row[CLASSASSOCIATIONS_HEADTYPE_COL]
-        headMult = row[CLASSASSOCIATIONS_HEADMULT_COL]
-        headRole = row[CLASSASSOCIATIONS_HEADROLE_COL]
-        tailRole = row[CLASSASSOCIATIONS_TAILROLE_COL]
-        tailMult = row[CLASSASSOCIATIONS_TAILMULT_COL]
-        tailType = row[CLASSASSOCIATIONS_TAILTYPE_COL]
-        tailNav =  row[CLASSASSOCIATIONS_TAILNAV_COL]
-        tailDim  = row[CLASSASSOCIATIONS_TAILDIM_COL]
-        tailName = row[CLASSASSOCIATIONS_TAIL_COL]
-        rationale = row[CLASSASSOCIATIONS_RATIONALE_COL]
-        parameters = ClassAssociationParameters(envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale)
-        association = ObjectFactory.build(associationId,parameters)
-        asLabel = envName + '/' + headName + '/' + tailName
-        associations[asLabel] = association
-      rs.close()
-      session.close()
-      return associations
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting class associations (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList(procName,{'id':constraintId},'MySQL error getting class associations')
+    associations = {}
+    for associationId,envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale in rows:
+      parameters = ClassAssociationParameters(envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale)
+      association = ObjectFactory.build(associationId,parameters)
+      asLabel = envName + '/' + headName + '/' + tailName
+      associations[asLabel] = association
+    return associations
 
   def classTreeAssociations(self,procName,assetName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute(procName %(assetName,envName))
-      associations = {}
-      for row in rs.fetchall():
-        row = list(row)
-        associationId = row[CLASSASSOCIATIONS_ID_COL]
-        envName = row[CLASSASSOCIATIONS_ENV_COL]
-        headName = row[CLASSASSOCIATIONS_HEAD_COL]
-        headDim  = row[CLASSASSOCIATIONS_HEADDIM_COL]
-        headNav =  row[CLASSASSOCIATIONS_HEADNAV_COL]
-        headType = row[CLASSASSOCIATIONS_HEADTYPE_COL]
-        headMult = row[CLASSASSOCIATIONS_HEADMULT_COL]
-        headRole = row[CLASSASSOCIATIONS_HEADROLE_COL]
-        tailRole = row[CLASSASSOCIATIONS_TAILROLE_COL]
-        tailMult = row[CLASSASSOCIATIONS_TAILMULT_COL]
-        tailType = row[CLASSASSOCIATIONS_TAILTYPE_COL]
-        tailNav =  row[CLASSASSOCIATIONS_TAILNAV_COL]
-        tailDim  = row[CLASSASSOCIATIONS_TAILDIM_COL]
-        tailName = row[CLASSASSOCIATIONS_TAIL_COL]
-        rationale = row[CLASSASSOCIATIONS_RATIONALE_COL]
-        parameters = ClassAssociationParameters(envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale)
-        association = ObjectFactory.build(associationId,parameters)
-        asLabel = envName + '/' + headName + '/' + tailName
-        associations[asLabel] = association
-      rs.close()
-      session.close()
-      return associations
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting class associations (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList(procName,{'id1':assetName,'id2':envName},'MySQL error getting class associations')
+    associations = {}
+    for associationId,envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale in rows:
+      parameters = ClassAssociationParameters(envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale)
+      association = ObjectFactory.build(associationId,parameters)
+      asLabel = envName + '/' + headName + '/' + tailName
+      associations[asLabel] = association
+    return associations
 
   def addClassAssociation(self,parameters):
     associationId = self.newId()
@@ -2868,20 +2686,20 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     if (goalName == ''):
       return self.goalAssociations('call goalModel(:id)',envName)
     else:
-      return self.goalTreeAssociations('call goalTree("%s","%s","%s","%s")',goalName,envName,topLevelGoals,caseFilter)
+      return self.goalTreeAssociations('call goalTree(":id1",":id2",":id3",":id4")',goalName,envName,topLevelGoals,caseFilter)
    
 
   def responsibilityModel(self,envName,roleName = ''):
     if (roleName == ''):
       return self.goalAssociations('call responsibilityModel(:id)',envName)
     else:
-      return self.goalTreeAssociations('call subResponsibilityModel("%s","%s")',envName,roleName)
+      return self.goalTreeAssociations('call subResponsibilityModel(":id1",":id2")',envName,roleName)
  
   def obstacleModel(self,envName,goalName = '',topLevelGoals = 0):
     if (goalName == ''):
       return self.goalAssociations('call obstacleModel(:id)',envName)
     else:
-      return self.goalTreeAssociations('call obstacleTree("%s","%s","%s","%s")',goalName,envName,topLevelGoals)
+      return self.goalTreeAssociations('call obstacleTree(":id1",":id2",":id3",":id4")',goalName,envName,topLevelGoals)
  
 
 
@@ -2890,100 +2708,47 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       return self.goalAssociations('call taskModel(:id)',envName)
     else:
       if (mcFilter == True):
-        return self.goalTreeAssociations('call subMisuseCaseModel("%s","%s")',taskName,envName)
+        return self.goalTreeAssociations('call subMisuseCaseModel(:id1,:id2)',taskName,envName)
       else:
-        return self.goalTreeAssociations('call subTaskModel("%s","%s")',taskName,envName)
+        return self.goalTreeAssociations('call subTaskModel(:id1,:id2)',taskName,envName)
 
   def getGoalAssociations(self,constraintId = ''):
     return self.goalAssociations('call goalAssociationNames(:id)',constraintId)
 
   def goalAssociations(self,procName,constraintId = ''):
-    try:
-      session = self.conn()
-      rs = session.execute(procName,{'id':constraintId} )
-      associations = {}
-      for row in rs.fetchall():
-        row = list(row)
-        associationId = row[GOALASSOCIATIONS_ID_COL]
-        envName = row[GOALASSOCIATIONS_ENV_COL]
-        goalName = row[GOALASSOCIATIONS_GOAL_COL]
-        goalDimName = row[GOALASSOCIATIONS_GOALDIM_COL]
-        aType = row[GOALASSOCIATIONS_TYPE_COL]
-        subGoalName = row[GOALASSOCIATIONS_SUBGOAL_COL]
-        subGoalDimName = row[GOALASSOCIATIONS_SUBGOALDIM_COL]
-        alternativeId = row[GOALASSOCIATIONS_ALTERNATIVE_COL]
-        rationale = row[GOALASSOCIATIONS_RATIONALE_COL]
-        parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
-        association = ObjectFactory.build(associationId,parameters)
-        asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
-        associations[asLabel] = association
-      rs.close()
-      session.close()
-      return associations
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goal associations (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList(procName,{'id':constraintId},'MySQL error getting goal associations')
+    associations = {}
+    for associationId,envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
+      parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
+      association = ObjectFactory.build(associationId,parameters)
+      asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
+      associations[asLabel] = association
+    return associations
 
   def riskObstacleModel(self,riskName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call riskObstacleTree(:risk,:env,0)',{'risk':riskName,'env':envName})
-      associations = {}
-      for row in rs.fetchall():
-        row = list(row)
-        associationId = row[GOALASSOCIATIONS_ID_COL]
-        envName = row[GOALASSOCIATIONS_ENV_COL]
-        goalName = row[GOALASSOCIATIONS_GOAL_COL]
-        goalDimName = row[GOALASSOCIATIONS_GOALDIM_COL]
-        aType = row[GOALASSOCIATIONS_TYPE_COL]
-        subGoalName = row[GOALASSOCIATIONS_SUBGOAL_COL]
-        subGoalDimName = row[GOALASSOCIATIONS_SUBGOALDIM_COL]
-        alternativeId = row[GOALASSOCIATIONS_ALTERNATIVE_COL]
-        rationale = row[GOALASSOCIATIONS_RATIONALE_COL]
-        parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
-        association = ObjectFactory.build(associationId,parameters)
-        asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
-        associations[asLabel] = association
-      rs.close()
-      session.close()
-      return associations
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting risk obstacle model (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call riskObstacleTree(:risk,:env,0)',{'risk':riskName,'env':envName},'MySQL error getting risk obstacle model')
+    associations = {}
+    for associationId,envName,goalDim,goalName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
+      parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
+      association = ObjectFactory.build(associationId,parameters)
+      asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
+      associations[asLabel] = association
+    return associations
+
 
   def goalTreeAssociations(self,procName,goalName,envName,topLevelGoals = 0,caseFilter = 0):
-    try:
-      session = self.conn()
-      if (procName == 'call goalTree("%s","%s","%s","%s")') or (procName == 'call obstacleTree("%s","%s","%s","%s")'):
-        rs = session.execute(procName %(goalName,envName,topLevelGoals,caseFilter))
-      else:
-        rs = session.execute(procName %(goalName,envName))
-      associations = {}
-      for row in rs.fetchall():
-        row = list(row)
-        associationId = row[GOALASSOCIATIONS_ID_COL]
-        envName = row[GOALASSOCIATIONS_ENV_COL]
-        goalName = row[GOALASSOCIATIONS_GOAL_COL]
-        goalDimName = row[GOALASSOCIATIONS_GOALDIM_COL]
-        aType = row[GOALASSOCIATIONS_TYPE_COL]
-        subGoalName = row[GOALASSOCIATIONS_SUBGOAL_COL]
-        subGoalDimName = row[GOALASSOCIATIONS_SUBGOALDIM_COL]
-        alternativeId = row[GOALASSOCIATIONS_ALTERNATIVE_COL]
-        rationale = row[GOALASSOCIATIONS_RATIONALE_COL]
-        parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
-        association = ObjectFactory.build(associationId,parameters)
-        asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
-        associations[asLabel] = association
-      rs.close()
-      session.close()
-      return associations
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting sub-goal associations (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
+    rows = []
+    if (procName == 'call goalTree(":id1",":id2",":id3",":id4")') or (procName == 'call obstacleTree(":id1",":id2",":id3",":id4")'):
+      rows = self.responseList(procName,{'id1':goalName,'id2':envName,'id3':topLevelGoals,'id4':caseFilter},'MySQL error getting goal tree associations')
+    else:
+      rows = self.responseList(procName,{'id1':goalName,'id2':envName},'MySQL error getting goal tree associations')
+    associations = {}
+    for associationId,envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
+      parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
+      association = ObjectFactory.build(associationId,parameters)
+      asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
+      associations[asLabel] = association
+    return associations
 
   def addGoalAssociation(self,parameters):
     associationId = self.newId()
@@ -3293,67 +3058,28 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def goalRefinements(self,goalId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('call goalRefinements(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      goalRefinements = []
-      for row in rs.fetchall():
-        row = list(row)
-        goalName = row[GOALASSOCIATIONS_GOAL_COL]
-        aType = row[GOALASSOCIATIONS_TYPE_COL]
-        goalDimName = row[GOALASSOCIATIONS_GOALDIM_COL]
-        alternativeId = row[GOALASSOCIATIONS_ALTERNATIVE_COL]
-        rationale = row[GOALASSOCIATIONS_RATIONALE_COL]
-        altName = 'No'
-        if (alternativeId == 1):
-          altName = 'Yes'
-        goalRefinements.append((goalName,goalDimName,aType,altName,rationale))
-      rs.close()
-      rs = session.execute('call subGoalRefinements(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      subGoalRefinements = []
-      for row in rs.fetchall():
-        row = list(row)
-        goalName = row[GOALASSOCIATIONS_SUBGOAL_COL]
-        aType = row[GOALASSOCIATIONS_TYPE_COL]
-        goalDimName = row[GOALASSOCIATIONS_SUBGOALDIM_COL]
-        alternativeId = row[GOALASSOCIATIONS_ALTERNATIVE_COL]
-        rationale = row[GOALASSOCIATIONS_RATIONALE_COL]
-        altName = 'No'
-        if (alternativeId == 1):
-          altName = 'Yes'
-        subGoalRefinements.append((goalName,goalDimName,aType,altName,rationale))
-      rs.close()
-      session.close()
-      return goalRefinements,subGoalRefinements 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting sub goal associations for goal id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call goalRefinements(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal refinements')
+    goalRefinements = []
+    for associationId,envName,goalDim,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
+      altName = 'No'
+      if (alternativeId == 1):
+        altName = 'Yes'
+      goalRefinements.append((goalName,goalDimName,aType,altName,rationale))
+    rows = self.responseList('call subGoalRefinements(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal refinements')
+    subGoalRefinements = []
+    for associationId,envName,goalDim,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
+      altName = 'No'
+      if (alternativeId == 1):
+        altName = 'Yes'
+      subGoalRefinements.append((goalName,goalDimName,aType,altName,rationale))
+    return goalRefinements,subGoalRefinements 
 
   def assetAssociations(self,assetId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('call assetAssociations(:aId,:eId)',{'aId':assetId,'eId':environmentId})
-      associations = []
-      for row in rs.fetchall():
-        row = list(row)
-        headType = row[CLASSASSOCIATIONS_HEADTYPE_COL]
-        headNav = row[CLASSASSOCIATIONS_HEADNAV_COL]
-        headMult = row[CLASSASSOCIATIONS_HEADMULT_COL]
-        headRole = row[CLASSASSOCIATIONS_HEADROLE_COL]
-        tailRole = row[CLASSASSOCIATIONS_TAILROLE_COL]
-        tailMult = row[CLASSASSOCIATIONS_TAILMULT_COL]
-        tailNav = row[CLASSASSOCIATIONS_TAILNAV_COL]
-        tailType = row[CLASSASSOCIATIONS_TAILTYPE_COL]
-        tailName = row[CLASSASSOCIATIONS_TAIL_COL]
-        associations.append((headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailName))
-      rs.close()
-      session.close()
-      return associations
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting associations for asset id ' + str(assetId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call assetAssociations(:aId,:eId)',{'aId':assetId,'eId':environmentId},'MySQL error getting asset associations')
+    associations = []
+    for associationId,envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale in rows:
+      associations.append((headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailName))
+    return associations
 
   def getDomainProperties(self,constraintId = -1):
     dpRows = self.responseList('call getDomainProperties(:id)',{'id':constraintId},'MySQL error getting domain properties')
@@ -4172,36 +3898,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getTemplateAssets(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getTemplateAssets(:const)',{'const':constraintId})
-      templateAssets = {}
-      vals = []
-      for row in rs.fetchall():
-        row = list(row)
-        assetName = row[ASSETS_NAME_COL]
-        shortCode = row[ASSETS_SHORTCODE_COL]
-        assetId = row[ASSETS_ID_COL]
-        assetDesc = row[ASSETS_DESCRIPTION_COL]
-        assetSig = row[ASSETS_SIGNIFICANCE_COL]
-        assetType = row[ASSETS_TYPE_COL]
-        surfaceType = row[6]
-        accessRight = row[7]
-        vals.append((assetName,shortCode,assetId,assetDesc,assetType,surfaceType,accessRight))
-      rs.close()
-      session.close()
-      for assetName,shortCode,assetId,assetDesc,assetType,surfaceType,accessRight in vals:
-        ifs = self.getInterfaces(assetName,'template_asset')
-        tags = self.getTags(assetName,'template_asset')
-        taProps,taRat = self.templateAssetProperties(assetId)
-        parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,surfaceType,accessRight,taProps,taRat,tags,ifs)
-        templateAsset = ObjectFactory.build(assetId,parameters)
-        templateAssets[assetName] = templateAsset
-      return templateAssets
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting template assets (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    vals = self.responseList('call getTemplateAssets(:id)',{'id':constraintId},'MySQL error getting template assets')
+    templateAssets = {}
+    for assetId,assetName,shortCode,assetDesc,assetSig,assetType,surfaceType,accessRight in vals:
+      ifs = self.getInterfaces(assetName,'template_asset')
+      tags = self.getTags(assetName,'template_asset')
+      taProps,taRat = self.templateAssetProperties(assetId)
+      parameters = TemplateAssetParameters(assetName,shortCode,assetDesc,assetSig,assetType,surfaceType,accessRight,taProps,taRat,tags,ifs)
+      templateAsset = ObjectFactory.build(assetId,parameters)
+      templateAssets[assetName] = templateAsset
+    return templateAssets
 
   def deleteTemplateAsset(self,assetId):
     self.deleteObject(assetId,'template_asset')
@@ -8018,32 +7724,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def componentGoalModel(self,componentName):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentGoalModel(:comp)',{'comp':componentName})
-      associations = {}
-      for row in rs.fetchall():
-        row = list(row)
-        associationId = row[GOALASSOCIATIONS_ID_COL]
-        envName = row[GOALASSOCIATIONS_ENV_COL]
-        goalName = row[GOALASSOCIATIONS_GOAL_COL]
-        goalDimName = row[GOALASSOCIATIONS_GOALDIM_COL]
-        aType = row[GOALASSOCIATIONS_TYPE_COL]
-        subGoalName = row[GOALASSOCIATIONS_SUBGOAL_COL]
-        subGoalDimName = row[GOALASSOCIATIONS_SUBGOALDIM_COL]
-        alternativeId = row[GOALASSOCIATIONS_ALTERNATIVE_COL]
-        rationale = row[GOALASSOCIATIONS_RATIONALE_COL]
-        parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
-        association = ObjectFactory.build(associationId,parameters)
-        asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
-        associations[asLabel] = association
-      rs.close()
-      session.close()
-      return associations
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goal associations (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call componentGoalModel(:comp)',{'comp':componentName},'MySQL error getting component goal model')
+    associations = {}
+    for associationId,envName,goalDim,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
+      parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
+      association = ObjectFactory.build(associationId,parameters)
+      asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
+      associations[asLabel] = association
+    return associations
 
   def mergeComponent(self,parameters):
     componentId = parameters.id()
