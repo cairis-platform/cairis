@@ -65,7 +65,9 @@ class LocationModel:
       for persona in personaInstances:
         instName = persona[0]
         personaName = persona[1] 
-        locCluster.add_node(pydot.Node(instName,shape='circle',margin=0,URL='persona#' + personaName))
+#        locCluster.add_node(pydot.Node(instName,shape='circle',margin=0,URL='persona#' + personaName))
+        locCluster.add_node(pydot.Node(objtName,label=objtName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL='persona#' + personaName,peripheries='0'))
+
       self.theGraph.add_subgraph(locCluster)
 
     for edges in self.theLocs.links():

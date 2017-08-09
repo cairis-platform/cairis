@@ -794,7 +794,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def getDimensions(self,dimensionTable,idConstraint=-1):
     dimRows = self.responseList('call getDimensions(:dimensionTable, :idConstraint)',{'dimensionTable':dimensionTable,'idConstraint':idConstraint},'MySQL error getting ' + dimensionTable)
     dimensions = {}
-    for dimensionName,dimensionId in dimRows:
+    for dimensionId,dimensionName in dimRows:
       dimensions[dimensionName] = dimensionId
     return dimensions
 
