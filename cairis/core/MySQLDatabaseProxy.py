@@ -1719,10 +1719,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
 
   def roleResponsibilities(self,roleId,environmentId):
-    return self.responseList('call roleResponses(:rId,:eId)',{'rId':roleId,'eId':environment},'MySQL error getting responses for role id ' + str(roleId) + ' in environment ' + str(environmentId))
+    return self.responseList('call roleResponses(:rId,:eId)',{'rId':roleId,'eId':environmentId},'MySQL error getting responses for role id ' + str(roleId) + ' in environment ' + str(environmentId))
 
   def roleCountermeasures(self,roleId,environmentId):
-    return self.responseList('call roleCountermeasures(:rId,:eId)',{'rId':roleId,'eId':environment},'MySQL error getting countermeasures for role id ' + str(roleId) + ' in environment ' + str(environmentId))
+    return self.responseList('call roleCountermeasures(:rId,:eId)',{'rId':roleId,'eId':environmentId},'MySQL error getting countermeasures for role id ' + str(roleId) + ' in environment ' + str(environmentId))
 
   def getCountermeasures(self,constraintId = -1):
     cmRows = self.responseList('call getCountermeasures(:id)',{'id':constraintId},'MySQL error getting countermeasures')
