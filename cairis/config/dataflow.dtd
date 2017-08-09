@@ -19,7 +19,7 @@
 
 <!-- DTD for CAIRIS dataflows -->
 
-<!ELEMENT dataflows (dataflow*)>
+<!ELEMENT dataflows (dataflow*,trust_boundary*)>
 
 <!ELEMENT dataflow (dataflow_asset+)>
 <!ATTLIST dataflow name CDATA #REQUIRED>
@@ -31,3 +31,10 @@
 
 <!ELEMENT dataflow_asset EMPTY>
 <!ATTLIST dataflow_asset name CDATA #REQUIRED>
+
+<!ELEMENT trust_boundary (description,trust_boundary_environment+)>
+<!ATTLIST trust_boundary name CDATA #REQUIRED>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT trust_boundary_environment (trust_boundary_component+)>
+<!ELEMENT trust_boundary_component EMPTY>
+<!ATTLIST trust_boundary_component name CDATA #REQUIRED>
