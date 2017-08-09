@@ -346,7 +346,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.deleteObject(r,'requirement')
     
   def responseList(self,callTxt,argDict,errorTxt):
-    print callTxt
     try:
       session = self.conn()
       rs = session.execute(callTxt,argDict)
