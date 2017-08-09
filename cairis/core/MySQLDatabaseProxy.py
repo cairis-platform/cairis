@@ -363,64 +363,31 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call attacker_capability(:aId,:eId)',{'aId':attackerId,'eId':environmentId},'MySQL error getting capabilities for attacker id ' + str(attackerId) + ' in environment id ' + str(environmentId))
 
   def addAttacker(self,parameters):
-    try:
-      attackerId = self.newId()
-      attackerName = parameters.name()
-      attackerDesc = parameters.description()
-      attackerImage = parameters.image()
-      tags = parameters.tags()
-      session = self.conn()
-      session.execute("call addAttacker(:id,:name,:desc,:image)",{'id':attackerId,'name':attackerName,'desc':attackerDesc,'image':attackerImage})
-      session.commit()
-      session.close()
-      self.addTags(attackerName,'attacker',tags)
-      for environmentProperties in parameters.environmentProperties():
-        environmentName = environmentProperties.name()
-        self.addDimensionEnvironment(attackerId,'attacker',environmentName)
-        self.addAttackerMotives(attackerId,environmentName,environmentProperties.motives())
-        self.addAttackerCapabilities(attackerId,environmentName,environmentProperties.capabilities())
-        self.addDimensionRoles(attackerId,'attacker',environmentName,environmentProperties.roles())
-      return attackerId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding attacker ' + str(attackerId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    attackerId = self.newId()
+    attackerName = parameters.name()
+    attackerDesc = parameters.description()
+    attackerImage = parameters.image()
+    tags = parameters.tags()
+    self.updateDatabase("call addAttacker(:id,:name,:desc,:image)",{'id':attackerId,'name':attackerName,'desc':attackerDesc,'image':attackerImage},'MySQL error adding attacker ' + str(attackerId))
+    self.addTags(attackerName,'attacker',tags)
+    for environmentProperties in parameters.environmentProperties():
+      environmentName = environmentProperties.name()
+      self.addDimensionEnvironment(attackerId,'attacker',environmentName)
+      self.addAttackerMotives(attackerId,environmentName,environmentProperties.motives())
+      self.addAttackerCapabilities(attackerId,environmentName,environmentProperties.capabilities())
+      self.addDimensionRoles(attackerId,'attacker',environmentName,environmentProperties.roles())
+    return attackerId
 
   def addDimensionEnvironment(self,dimId,table,environmentName):
-    try:
-      session = self.conn()
-      sqlTxt = 'call add_' + table + '_environment(%s,"%s")' %(dimId,environmentName)
-      session.execute(sqlTxt)
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating ' + table + ' id ' + str(dimId) + ' with environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call add_' + table + '_environment(:id,:name)',{'id':dimId,'name':environmentName},'MySQL error associating ' + table + ' id ' + str(dimId) + ' with environment ' + environmentName)
 
   def addAttackerMotives(self,attackerId,environmentName,motives):
-    try:
-      session = self.conn()
-      for motive in motives:
-        session.execute('call addAttackerMotive(:aId,:envName,:motive)',{'aId':attackerId,'envName':environmentName,'motive':motive})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating attacker id ' + str(attackerId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    for motive in motives:
+      self.updateDatabase('call addAttackerMotive(:aId,:envName,:motive)',{'aId':attackerId,'envName':environmentName,'motive':motive},'MySQL error updating motivates for attacker id ' + str(attackerId))
 
   def addAttackerCapabilities(self,attackerId,environmentName,capabilities):
-    try:
-      session = self.conn()
-      for name,value in capabilities:
-        session.execute('call addAttackerCapability(:aId,:envName,:name,:value)',{'aId':attackerId,'envName':environmentName,'name':name,'value':value})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating attacker id ' + str(attackerId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    for name,value in capabilities:
+      self.updateDatabase('call addAttackerCapability(:aId,:envName,:name,:value)',{'aId':attackerId,'envName':environmentName,'name':name,'value':value},'MySQL error updating attacker capabilities for attacker id ' + str(attackerId))
   
   def updateAttacker(self,parameters):
     try:
