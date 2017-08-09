@@ -194,7 +194,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return reqDict
 
   def getOrderedRequirements(self,constraintId = '',isAsset = True):
-    return self.getRequirements(constraintId,isAsset)
+    reqRows = self.responseList('call getRequirements(:id,:isAs)',{'id':constraintId,'isAs':isAsset},'MySQL error getting requirements')
+    reqList = []
+    for reqLabel, reqId, reqName, reqDesc, priority, rationale, fitCriterion, originator, reqVersion, reqType, reqDomain in reqRows:
+      r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
+      reqList.append(r)
+    return reqList
 
     
   def newId(self):
@@ -341,6 +346,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.deleteObject(r,'requirement')
     
   def responseList(self,callTxt,argDict,errorTxt):
+    print callTxt
     try:
       session = self.conn()
       rs = session.execute(callTxt,argDict)
@@ -3060,14 +3066,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def goalRefinements(self,goalId,environmentId):
     rows = self.responseList('call goalRefinements(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal refinements')
     goalRefinements = []
-    for associationId,envName,goalDim,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
+    for associationId,envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
       altName = 'No'
       if (alternativeId == 1):
         altName = 'Yes'
       goalRefinements.append((goalName,goalDimName,aType,altName,rationale))
     rows = self.responseList('call subGoalRefinements(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal refinements')
     subGoalRefinements = []
-    for associationId,envName,goalDim,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
+    for associationId,envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
       altName = 'No'
       if (alternativeId == 1):
         altName = 'Yes'
@@ -3077,7 +3083,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def assetAssociations(self,assetId,environmentId):
     rows = self.responseList('call assetAssociations(:aId,:eId)',{'aId':assetId,'eId':environmentId},'MySQL error getting asset associations')
     associations = []
-    for associationId,envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale in rows:
+    for associationId,envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName in rows:
       associations.append((headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailName))
     return associations
 
@@ -7726,7 +7732,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def componentGoalModel(self,componentName):
     rows = self.responseList('call componentGoalModel(:comp)',{'comp':componentName},'MySQL error getting component goal model')
     associations = {}
-    for associationId,envName,goalDim,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
+    for associationId,envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
       parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
       association = ObjectFactory.build(associationId,parameters)
       asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
