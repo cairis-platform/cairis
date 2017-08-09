@@ -50,13 +50,14 @@ class LocationModel:
 
   def graph(self):
 
+    b = Borg()
     for location in self.theLocs.locations():
       locName = location.name()
       assetInstances = location.assetInstances()
       personaInstances = location.personaInstances()
 
-      locCluster = pydot.Cluster(locName,label=locName,URL='location#' + locName)
-      locCluster.add_node(pydot.Node('point_' + locName,label='',shape="none",fontcolor="white",URL='location#' + locName))
+      locCluster = pydot.Cluster(locName,label=locName)
+      locCluster.add_node(pydot.Node('point_' + locName,label='',shape="none",fontcolor="white"))
       for inst in assetInstances:
         instName = inst[0]
         assetName = inst[1] 
@@ -66,7 +67,7 @@ class LocationModel:
         instName = persona[0]
         personaName = persona[1] 
 #        locCluster.add_node(pydot.Node(instName,shape='circle',margin=0,URL='persona#' + personaName))
-        locCluster.add_node(pydot.Node(objtName,label=objtName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL='persona#' + personaName,peripheries='0'))
+        locCluster.add_node(pydot.Node(instName,label=instName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL='persona#' + personaName,peripheries='0'))
 
       self.theGraph.add_subgraph(locCluster)
 

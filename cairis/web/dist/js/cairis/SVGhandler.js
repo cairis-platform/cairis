@@ -60,6 +60,9 @@ function handleNodeClick(event,objt) {
   else if (self.theVisualModel == 'task') {
     window.assetEnvironment = $('#tmenvironmentsbox').val();
   }
+  else if (self.theVisualModel == 'locations') {
+    window.assetEnvironment = $('#chooseLEEnvironmentsSelector').val();
+  }
 
   if(link.indexOf("assets") > -1) {
     $.ajax({
