@@ -3010,20 +3010,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def threatTypes(self,envName = ''):
-    try:
-      session = self.conn()
-      rs = session.execute('call threatTypes(:env)',{'env':envName})
-      stats = {}
-      for row in rs.fetchall():
-        row = list(row)
-        stats[row[0]] = row[1]
-      rs.close()
-      session.close()
-      return stats
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting threat statistics (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call threatTypes(:env)',{'env':envName},'MySQL error getting threat types')
+    stats = {}
+    for key,value in rows:
+      stats[row[0]] = row[1]
+    return stats
 
   def inheritedAssetProperties(self,assetId,environmentName):
     environmentId = self.getDimensionId(environmentName,'environment')
@@ -3087,41 +3078,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return ObstacleEnvironmentProperties(environmentName,'',obsDef,obsType,goalRefinements,subGoalRefinements)
 
   def getVulnerabilityDirectory(self,vulName = ''):
-    try:
-      session = self.conn()
-      rs = session.execute('call getVulnerabilityDirectory(:vuln)',{'vuln':vulName})
-      directoryList = []
-      for row in rs.fetchall():
-        row = list(row)
-        vLabel = row[0]
-        vName = row[1]
-        vDesc = row[2]
-        vType = row[3]
-        vRef = row[4]
-        directoryList.append((vLabel,vName,vDesc,vType,vRef))
-      rs.close()
-      session.close()
-      return directoryList
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting vulnerability directory (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getVulnerabilityDirectory(:vuln)',{'vuln':vulName},'MySQL error getting vulnerability directory')
 
   def getThreatDirectory(self,thrName = ''):
-    try:
-      session = self.conn()
-      rs = session.execute('call getThreatDirectory(:threat)',{'threat':thrName})
-      directoryList = []
-      for row in rs.fetchall():
-        row = list(row)
-        directoryList.append((row[0],row[1],row[2],row[3],row[4]))
-      rs.close()
-      session.close()
-      return directoryList
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting threat directory (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getThreatDirectory(:threat)',{'threat':thrName},'MySQL error getting threat directory')
 
   def reassociateAsset(self,assetName,envName,reqId):
     try:
@@ -3135,68 +3095,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def obstacleConcerns(self,obsId,envId):
-    try:
-      session = self.conn()
-      rs = session.execute('call obstacleConcerns(:obs,:env)',{'obs':obsId,'env':envId})
-      assets = []
-      for row in rs.fetchall():
-        row = list(row)
-        assets.append(row[0])
-      rs.close()
-      session.close()
-      return assets
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting concerns for obstacle id ' + str(obsId) + ' in environment id ' + str(envId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call obstacleConcerns(:obs,:env)',{'obs':obsId,'env':envId},'MySQL error getting obstacle concerns')
 
   def goalConcerns(self,goalId,envId):
-    try:
-      session = self.conn()
-      rs = session.execute('call goalConcerns(:goal,:env)',{'goal':goalId,'env':envId})
-      concs = []
-      for row in rs.fetchall():
-        row = list(row)
-        concs.append(row[0])
-      rs.close()
-      session.close()
-      return concs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting concerns for goal id ' + str(goalId) + ' in environment id ' + str(envId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call goalConcerns(:goal,:env)',{'goal':goalId,'env':envId},'MySQL error getting goal concerns')
 
   def goalConcernAssociations(self,goalId,envId):
-    try:
-      session = self.conn()
-      rs = session.execute('call goalConcernAssociations(:goal,:env)',{'goal':goalId,'env':envId})
-      cas = []
-      for row in rs.fetchall():
-        row = list(row)
-        cas.append((row[0],row[1],row[2],row[3],row[4]))
-      rs.close()
-      session.close()
-      return cas
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting concern associations for goal id ' + str(goalId) + ' in environment id ' + str(envId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call goalConcernAssociations(:goal,:env)',{'goal':goalId,'env':envId},'MySQL error getting goal concern associations')
 
   def taskConcernAssociations(self,taskId,envId):
-    try:
-      session = self.conn()
-      rs = session.execute('call taskConcernAssociations(:task,:env)',{'task':taskId,'env':envId})
-      cas = []
-      for row in rs.fetchall():
-        row = list(row)
-        cas.append((row[0],row[1],row[2],row[3],row[4]))
-      rs.close()
-      session.close()
-      return cas
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting concern associations for task id ' + str(taskId) + ' in environment id ' + str(envId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call taskConcernAssociations(:task,:env)',{'task':taskId,'env':envId},'MySQL error getting task concern associations')
 
   def getDependencies(self,constraintId = ''):
     depRows = self.responseList('call getDependencies(:id)',{'id':constraintId},'MySQL error getting dependencies')
@@ -3261,24 +3169,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       exceptionText = 'MySQL error deleting dependency id ' + str(depId) + ' (id:' + str(id) + ',message:' + msg + ')'
 
   def getDependencyTable(self,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call dependencyTable(:env)',{'env':envName})
-      depRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        depender = row[0]
-        dependee = row[1]
-        depType = row[2]
-        dependency = row[3]
-        rationale = row[4]
-        depRows.append((depender,dependee,depType,dependency,rationale))
-      rs.close()
-      session.close()
-      return depRows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error building dependency table for environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('call dependencyTable(:env)',{'env':envName},'MySQL error getting dependency table')
 
   def getDependencyTables(self):
     envs = self.getEnvironmentNames()
