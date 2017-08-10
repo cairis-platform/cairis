@@ -49,7 +49,6 @@ class LocationModel:
     return open(self.theGraphName).read()
 
   def graph(self):
-
     b = Borg()
     for location in self.theLocs.locations():
       locName = location.name()

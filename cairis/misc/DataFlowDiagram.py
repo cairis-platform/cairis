@@ -22,11 +22,12 @@ from cairis.core.Borg import Borg
 from cairis.core.ARM import *
 
 class DataFlowDiagram:
-  def __init__(self,associations, envName,font_name=None, font_size=None):
+  def __init__(self,associations, envName,db_proxy=None,font_name=None, font_size=None):
     self.theAssociations = associations
     self.theEnvironmentName = envName
     self.fontName = font_name
     self.fontSize = font_size
+    self.dbProxy = db_proxy
 
     b = Borg()
 
@@ -37,11 +38,16 @@ class DataFlowDiagram:
     self.theGraph = pydot.Dot()
     self.theGraph.set_graph_defaults(rankdir='LR')
     self.theGraphName = b.tmpDir + '/' + 'dfd.dot'
+    self.theClusters = {}
+    self.tbDict = {}
 
   def size(self):
     return len(self.theAssociations)
 
   def buildNode(self,dimName,objtName):
+    targetGraph = self.theGraph
+    if objtName in self.tbDict:
+      targetGraph = self.theClusters[self.tbDict[objtName]]
     
     if (dimName == 'process'):
       objtUrl = 'usecase#' + objtName
@@ -50,16 +56,15 @@ class DataFlowDiagram:
 
     if (dimName == 'process'):
 
-      self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',margin=0,style='rounded',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      targetGraph.add_node(pydot.Node(objtName,shape='rectangle',margin=0,style='rounded',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'entity'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      targetGraph.add_node(pydot.Node(objtName,shape='rectangle',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
 
     elif (dimName == 'datastore'):
       dsLbl = '<<TABLE SIDES="TB" CELLBORDER="0"><TR><TD>' + objtName + '</TD></TR></TABLE>>'
-      self.theGraph.add_node(pydot.Node(objtName,label=dsLbl,shape='plaintext',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      targetGraph.add_node(pydot.Node(objtName,label=dsLbl,shape='plaintext',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     else:
       raise UnknownNodeType(dimName)
-
 
   def layout(self,renderer = 'dot'):
     self.theGraph.write_xdot(self.theGraphName,prog=renderer)
@@ -69,6 +74,15 @@ class DataFlowDiagram:
     try:
       nodeNameSet = set([])
       edgeSet = set([])
+
+      tbs = self.dbProxy.getTrustBoundaries()
+      for tbName in tbs:
+        c = pydot.Cluster(tbName,label=str(tbName),style='dashed',fontname=self.fontName,fontsize=self.fontSize)
+        self.theClusters[tbName] = c
+        self.theGraph.add_subgraph(c)
+        for tbType,tbComponent in tbs[tbName].environmentProperties()[self.theEnvironmentName]:
+          self.tbDict[tbComponent] = tbName
+
       for dfName,fromName,fromType,toName,toType in self.theAssociations:
 
         if (fromName not in nodeNameSet):

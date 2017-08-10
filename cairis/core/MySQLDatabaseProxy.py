@@ -4509,10 +4509,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     stepRows = self.responseList('call useCaseSteps(:uc,:env)',{'uc':ucId,'env':envId},'MySQL error getting steps associated with use case id ' + str(ucId))
     steps = Steps()
     for pos,stepDetails in enumerate(stepRows):
-      stepTxt = stepDetails[0]
-      stepSyn = stepDetails[1]
-      stepActor = stepDetails[2]
-      stepActorType = stepDetails[3]
+      stepTxt = stepDetails[1]
+      stepSyn = stepDetails[2]
+      stepActor = stepDetails[3]
+      stepActorType = stepDetails[4]
       stepNo = pos + 1  
       excs = self.useCaseStepExceptions(ucId,envId,stepNo) 
       tags = self.useCaseStepTags(ucId,envId,stepNo) 
