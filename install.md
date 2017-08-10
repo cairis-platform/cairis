@@ -83,16 +83,6 @@ You can now point your browser to http://SERVERNAME:PORT_NUMBER, depending on wh
 $ ./quick_setup.py
 {% endhighlight %}
 
-
-
-## Alternatively:
-
-* Run the CAIRIS database initialisation script (which can be found in cairis/cairis/bin).  When you run this script, you should get the below form.
-
-{% highlight bash %}
-$ ./configure_cairis_db.py
-{% endhighlight %}
-
 ![fig:configure_cairis_db]({{ site.baseurl }}/images/configure_cairis_db.jpg)
 
 You can usually accept many of these defaults, you will however need to modify the location of the root directory and the static directory to reflect the location of the CAIRIS files. For example if you cloned the repository to the root directory you would change the root and static directories to look like the below.
