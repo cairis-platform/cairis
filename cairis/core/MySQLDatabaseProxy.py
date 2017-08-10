@@ -2909,7 +2909,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     for key,value in rows:
       pSettings[key] = value
     return pSettings
-      raise DatabaseProxyException(exceptionText) 
   
   def getDictionary(self):
     rows = self.responseList('call getDictionary()',{},'MySQL error getting dictionary')
