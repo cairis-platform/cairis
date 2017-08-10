@@ -3456,20 +3456,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def patternAssets(self,patternId):
-    try:
-      session = self.conn()
-      rs = session.execute('call securityPatternAssets(:pat)',{'pat':patternId})
-      assets = []
-      for row in rs.fetchall():
-        row = list(row)
-        assets.append(row[0])
-      rs.close()
-      session.close()
-      return assets
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting assets associated with pattern id ' + str(patternId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call securityPatternAssets(:pat)',{'pat':patternId},'MySQL error getting pattern assets')
 
   def addSituatedAssets(self,patternId,assetParametersList):
     for assetParameters in assetParametersList:
@@ -3492,32 +3479,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def isCountermeasureAssetGenerated(self,cmId):
-    try:
-      session = self.conn()
-      rs = session.execute('select isCountermeasureAssetGenerated(:cm)',{'cm':cmId})
-      row = rs.fetchone()
-      isGenerated = row[0]
-      rs.close()
-      session.close()
-      return isGenerated
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error checking assets associated with countermeasure id ' + str(cmId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select isCountermeasureAssetGenerated(:cm)',{'cm':cmId},'MySQL error checking assets associated with countermeasure')[0]
 
   def isCountermeasurePatternGenerated(self,cmId):
-    try:
-      session = self.conn()
-      rs = session.execute('select isCountermeasurePatternGenerated(:cm)',{'cm':cmId})
-      row = rs.fetchone()
-      isGenerated = row[0]
-      rs.close()
-      session.close()
-      return isGenerated
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error checking patterns associated with countermeasure id ' + str(cmId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select isCountermeasurePatternGenerated(:cm)',{'cm':cmId},'MySQL error checking patterns associated with countermeasure')[0]
+
 
   def exposedCountermeasures(self,parameters):
     objtId = parameters.id()
@@ -3530,20 +3496,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return expCMs
 
   def exposedCountermeasure(self,envName,assetName):
-    try:
-      session = self.conn()
-      rs = session.execute('call exposedCountermeasure(:env,:ass)',{'env':envName,'ass':assetName})
-      expCMs = []
-      for row in rs.fetchall():
-        row = list(row)
-        expCMs.append((envName,row[0],assetName,row[1]))
-      rs.close()
-      session.close()
-      return expCMs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting countermeasures exposed by ' + assetName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call exposedCountermeasure(:env,:ass)',{'env':envName,'ass':assetName},'MySQL error checking countermeasures exposed by ' + assetName)
+    expCMs = []
+    for r1, r2 in rows:
+      expCMs.append((envName,r1,assetName,r2))
+    return expCMs
   
   def updateCountermeasuresEffectiveness(self,objtId,dimName,expCMs):
     for envName,cmName,assetName,cmEffectiveness in expCMs:
@@ -3567,20 +3524,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def countermeasurePatterns(self,cmId):
-    try:
-      session = self.conn()
-      rs = session.execute('call countermeasurePatterns(:cm)',{'cm':cmId})
-      patterns = []
-      for row in rs.fetchall():
-        row = list(row)
-        patterns.append(row[0])
-      rs.close()
-      session.close()
-      return patterns
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting patterns associated with countermeasure id ' + str(cmId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call countermeasurePatterns(:cm)',{'cm':cmId},'MySQL error getting patterns associated with countermeasure')
 
   def deleteSituatedPattern(self,cmId,patternName):
     try:
@@ -3976,49 +3920,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def referenceDescription(self,dimName,refName):
-    try:
-      session = self.conn()
-      rs = session.execute('call referenceDescription(:dim,:ref)',{'dim':dimName,'ref':refName})
-      row = rs.fetchone()
-      refDesc = row[0]
-      rs.close()
-      session.close()
-      return refDesc
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding ' + crTypeName + ' ' + refName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call referenceDescription(:dim,:ref)',{'dim':dimName,'ref':refName},'MySQL error getting reference description')[0]
   
   def documentReferenceNames(self,docName):
-    try:
-      session = self.conn()
-      rs = session.execute('call documentReferenceNames(:doc)',{'doc':docName})
-      refNames = []
-      for row in rs.fetchall():
-        row = list(row)
-        refNames.append(row[0])
-      rs.close()
-      session.close()
-      return refNames
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting references for artifact ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call documentReferenceNames(:doc)',{'doc':docName},'MySQL error getting document reference names')
 
   def referenceUse(self,refName,dimName):
-    try:
-      session = self.conn()
-      rs = session.execute('call referenceUse(:ref,:dim)',{'ref':refName,'dim':dimName})
-      refNames = []
-      for row in rs.fetchall():
-        row = list(row)
-        refNames.append((row[0],row[1],row[2]))
-      rs.close()
-      session.close()
-      return refNames
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting characteristics associated with ' + dimName + ' ' + refName +  ' (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('call referenceUse(:ref,:dim)',{'ref':refName,'dim':dimName},'MySQL error getting reference use')
 
   def characteristicBacking(self,pcId,spName):
     try:
@@ -4134,18 +4042,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def lastRequirementLabel(self,assetName):
-    try: 
-      session = self.conn()
-      rs = session.execute('select lastRequirementLabel(:ass)',{'ass':assetName})
-      row = rs.fetchone()
-      lastLabel = row[0]
-      rs.close()
-      session.close()
-      return lastLabel
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting last requirement label for asset ' + assetName + ' (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select lastRequirementLabel(:ass)',{'ass':assetName},'MySQL error getting last requirement label')[0]
 
   def getUseCases(self,constraintId = -1):
     ucRows = self.responseList('call getUseCases(:id)',{'id':constraintId},'MySQL error getting use cases')
