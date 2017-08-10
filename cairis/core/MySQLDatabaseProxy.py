@@ -718,34 +718,20 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return dimensions
 
   def getDimensionNames(self,dimensionTable,currentEnvironment = ''):
-    try:
-      dimensions = []
-      session = self.conn()
-      if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement' and dimensionTable != 'template_goal' and dimensionTable != 'locations' and dimensionTable != 'persona_characteristic_synopsis'):
-        sqlText = 'call ' + dimensionTable + 'Names(:env)' 
-        rs = session.execute(sqlText,{'env':currentEnvironment})
-      elif (dimensionTable == 'template_asset'):
-        rs = session.execute('call template_assetNames()')
-      elif (dimensionTable == 'template_requirement'):
-        rs = session.execute('call template_requirementNames()')
-      elif (dimensionTable == 'template_goal'):
-        rs = session.execute('call template_goalNames()')
-      elif (dimensionTable == 'locations'):
-        rs = session.execute('call locationsNames()')
-      elif (dimensionTable == 'persona_characteristic_synopsis'):
-        rs = session.execute('call persona_characteristic_synopsisNames()')
-      for row in rs.fetchall():
-        row = list(row)
-        dimensionName = str(row[0])
-        dimensions.append(dimensionName)
-      rs.close()
-      session.close()
-      return dimensions
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting '
-      exceptionText += dimensionTable + 's (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement' and dimensionTable != 'template_goal' and dimensionTable != 'locations' and dimensionTable != 'persona_characteristic_synopsis'):
+      callTxt = 'call ' + dimensionTable + 'Names(:env)' 
+      argDict = {'env':currentEnvironment}
+      return self.responseList(callTxt,argDict,'MySQL error getting ' + dimensionTable + 's')
+    elif (dimensionTable == 'template_asset'):
+      return self.responseList('call template_assetNames()',{},'MySQL error getting ' + dimensionTable + 's')
+    elif (dimensionTable == 'template_requirement'):
+      return self.responseList('call template_requirementNames()',{},'MySQL error getting ' + dimensionTable + 's')
+    elif (dimensionTable == 'template_goal'):
+      return self.responseList('call template_goalNames()',{},'MySQL error getting ' + dimensionTable + 's')
+    elif (dimensionTable == 'locations'):
+      return self.responseList('call locationsNames()',{},'MySQL error getting ' + dimensionTable + 's')
+    elif (dimensionTable == 'persona_characteristic_synopsis'):
+      return self.responseList('call persona_characteristic_synopsisNames()',{},'MySQL error getting ' + dimensionTable + 's')
 
   def getEnvironmentNames(self):
     return self.responseList('call nonCompositeEnvironmentNames()',{},'MySQL error getting environments')
@@ -1648,25 +1634,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return targetDict
 
   def reqTargetNames(self,reqLabel,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call targetNames(:req,:env)',{'req':reqLabel,'env':envName})
-      targets = {}
-      for row in rs.fetchall():
-        row = list(row)
-        targetName = row[0]
-        responseName = row[1]
-        if (targetName in targets):
-          targets[targetName].add(responseName)
-        else:
-          targets[targetName] = set([responseName])
-      rs.close()
-      session.close() 
-      return targets
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting target names (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call targetNames(:req,:env)',{'req':reqLabel,'env':envName},'MySQL error getting target names')
+    targets = {}
+    for targetName,responseName in rows:
+      if (targetName in targets):
+        targets[targetName].add(responseName)
+      else:
+        targets[targetName] = set([responseName])
+    return targets
 
   def getRoles(self,constraintId = -1):
     roleRows = self.responseList('call getRoles(:id)',{'id':constraintId},'MySQL error getting roles')
@@ -2144,84 +2119,27 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
 
   def roleTasks(self,environmentName,roles):
-    try:
-      session = self.conn()
-      tpSet = set([])
-      for role in roles:
-        rs = session.execute('call countermeasureTaskPersonas(:role,:env)',{'role':role,'env':environmentName})
-        for row in rs.fetchall():
-          row = list(row)
-          taskName = row[0]
-          personaName = row[1]
-          tpSet.add((taskName,personaName))
-      	rs.close()
-      session.close()
-      tpDict = {}
-      for taskName,personaName in tpSet:
-        tpDict[(taskName,personaName)] = ['None','None','None','None']
-      return tpDict
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting tasks associated with environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    tpSet = set([])
+    for role in roles:
+      rows = self.responseList('call countermeasureTaskPersonas(:role,:env)',{'role':role,'env':environmentName},'MySQL error getting role tasks')
+      for taskName,personaName in rows:
+        tpSet.add((taskName,personaName))
+    tpDict = {}
+    for taskName,personaName in tpSet:
+      tpDict[(taskName,personaName)] = ['None','None','None','None']
+    return tpDict
 
   def taskUsabilityScore(self,taskName,environmentName):
-    try:
-      session = self.conn()
-      rs = session.execute('select task_usability(:task,:env)',{'task':taskName,'env':environmentName})
-      row = rs.fetchone()
-      taskUsabilityScore = int(row[0])
-      rs.close()
-      session.close()
-      return taskUsabilityScore
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting task usability associated with environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return int(self.responseList('select task_usability(:task,:env)',{'task':taskName,'env':environmentName},'MySQL error getting task usability')[0])
 
   def taskLoad(self,taskId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select usability_score(:tId,:eId)',{'tId':taskId,'eId':environmentId})
-      row = rs.fetchone()
-      taskLoad = row[0]
-      rs.close()
-      session.close()
-      return taskLoad
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting task load with environment id ' + str(taskId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select usability_score(:tId,:eId)',{'tId':taskId,'eId':environmentId},'MySQL error getting task load')[0]
 
   def countermeasureLoad(self,taskId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select hindrance_score(:tId,:eId)',{'tId':taskId,'eId':environmentId})
-      row = rs.fetchone()
-      taskLoad = row[0]
-      rs.close()
-      session.close()
-      return taskLoad
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting task countermeasure load with environment id ' + str(taskId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select hindrance_score(:tId,:eId)',{'tId':taskId,'eId':environmentId},'MySQL error getting task countermeasure load')[0]
 
   def environmentDimensions(self,dimension,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call ' + dimension + 'Names(:env)',{'env':envName})
-      dims = []
-      for row in rs.fetchall():
-        row = list(row)
-        dims.append(row[0])
-      rs.close()
-      session.close()
-      return dims
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting ' + dimension + 's associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call ' + dimension + 'Names(:env)',{'env':envName},'MySQL error getting ' + dimension + 's associated with environment ' + envName)
 
   def environmentAssets(self,envName):
     return self.environmentDimensions('asset',envName)
@@ -2254,87 +2172,25 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.environmentDimensions('misusecase',envName)
 
   def goalModelElements(self,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call goalModelElements(:env)',{'env':envName})
-      elements = []
-      for row in rs.fetchall():
-        row = list(row)
-        elements.append((row[0],row[1]))
-      rs.close()
-      session.close()
-      return elements
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goal model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call goalModelElements(:env)',{'env':envName},'MySQL error getting goal model elements')
 
   def obstacleModelElements(self,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call obstacleModelElements(:env)',{'env':envName})
-      elements = []
-      for row in rs.fetchall():
-        row = list(row)
-        elements.append((row[0],row[1]))
-      rs.close()
-      session.close()
-      return elements
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting obstacle model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call obstacleModelElements(:env)',{'env':envName},'MySQL error getting obstacle model elements')
 
   def responsibilityModelElements(self,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call responsibilityModelElements(:env)',{'env':envName})
-      elements = []
-      for row in rs.fetchall():
-        row = list(row)
-        elements.append((row[0],row[1]))
-      session.close()
-      return elements
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting responsibility model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call responsibilityModelElements(:env)',{'env':envName},'MySQL error getting responsibility model elements')
 
   def taskModelElements(self,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call taskModelElements(:env)',{'env':envName})
-      elements = []
-      for row in rs.fetchall():
-        row = list(row)
-        elements.append((row[0],row[1]))
-      rs.close()
-      session.close()
-      return elements
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting task model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call taskModelElements(:env)',{'env':envName},'MySQL error getting task model elements')
 
   def classModelElements(self,envName,hideConcerns = False):
-    try:
-      session = self.conn()
-      if (hideConcerns == True):
-        rs = session.execute('call concernlessClassModelElements(:env)',{'env':envName})
-      else:
-        rs = session.execute('call classModelElements(:env)',{'env':envName})
-      elements = []
-      for row in rs.fetchall():
-        row = list(row)
-        elements.append((row[0],row[1]))
-      rs.close()
-      session.close()
-      return elements
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting class model elements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
+    callTxt = ''
+    argDict = {'env':envName}
+    if (hideConcerns == True):
+      callTxt = 'call concernlessClassModelElements(:env)'
+    else:
+      callTxt = 'call classModelElements(:env)'
+    return self.responseList(callTxt,argDict,'MySQL error getting class model elements')
 
   def classModel(self,envName,asName = '',hideConcerns = False):
     if (hideConcerns == True):
@@ -3048,125 +2904,44 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getProjectSettings(self):
-    try:
-      session = self.conn()
-      rs = session.execute('call getProjectSettings()')
-      pSettings = {}
-      for row in rs.fetchall():
-        row = list(row)
-        pSettings[row[0]] = row[1]
-      rs.close()
-      session.close()
-      return pSettings
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting project settings (id:' + str(id) + ',message:' + msg + ')'
+    rows = self.responseList('call getProjectSettings()',{},'MySQL error getting project settings')
+    pSettings = {}
+    for key,value in rows:
+      pSettings[key] = value
+    return pSettings
       raise DatabaseProxyException(exceptionText) 
   
   def getDictionary(self):
-    try:
-      session = self.conn()
-      rs = session.execute('call getDictionary()')
-      pDict = {}
-      for row in rs.fetchall():
-        row = list(row)
-        pDict[row[0]] = row[1]
-      rs.close()
-      session.close()
-      return pDict
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting naming conventions (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call getDictionary()',{},'MySQL error getting dictionary')
+    pDict = {}
+    for key,value in rows:
+      pDict[key] = value
+    return pDict
 
   def getContributors(self):
-    try:
-      session = self.conn()
-      rs = session.execute('call getContributors()')
-      contributors = []
-      for row in rs.fetchall():
-        row = list(row)
-        contributors.append((row[0],row[1],row[2],row[3]))
-      rs.close()
-      session.close()
-      return contributors
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting naming conventions (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getContributors()',{},'MySQL error getting contributors')
 
   def getRevisions(self):
-    try:
-      session = self.conn()
-      rs = session.execute('call getRevisions()')
-      revisions = []
-      for row in rs.fetchall():
-        row = list(row)
-        revisions.append((row[0],row[1],row[2]))
-      rs.close()
-      session.close()
-      return revisions
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting revisions (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getRevisions()',{},'MySQL error getting revisions')
 
   def getRequirementVersions(self,reqId):
-    try:
-      session = self.conn()
-      rs = session.execute('call getRequirementVersions(:id)',{'id':reqId})
-      revisions = []
-      for row in rs.fetchall():
-        row = list(row)
-        revisions.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9]))
-      rs.close()
-      session.close()
-      return revisions
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting requirement versions (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getRequirementVersions(:id)',{'id':reqId},'MySQL error getting requirement versions')
 
   def existingResponseGoal(self,responseId):
-    try:
-      session = self.conn()
-      rs = session.execute('select existingResponseGoal(:id)',{'id':responseId})
-      row = rs.fetchone()
-      isExisting = int(row[0])
-      rs.close()
-      session.close()
-      return isExisting
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting domains exposed by environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return int(self.responseList('select existingResponseGoal(:id)',{'id':responseId},'MySQL error getting existing response goal')[0])
 
   def getValueTypes(self,dimName,envName = ''):
-    try:
-      customisableValues = set(['asset_value','threat_value','risk_class','countermeasure_value','capability','motivation','asset_type','threat_type','vulnerability_type','severity','likelihood','access_right','protocol','privilege','surface_type'])
-      if (dimName not in customisableValues):
-        exceptionText = 'Values for ' + dimName + ' are not customisable.'
-        raise DatabaseProxyException(exceptionText) 
-      session = self.conn()
-      rs = session.execute('call getCustomisableValues(:dim,:env)',{'dim':dimName,'env':envName})
-      values = []
-      for row in rs.fetchall():
-        row = list(row)
-        typeId = row[0]
-        typeName = row[1]
-        typeDesc = row[2]
-        typeValue = str(row[3])
-        typeRat = row[4]
-        parameters = ValueTypeParameters(typeName,typeDesc,dimName,envName,typeValue,typeRat)
-        objt = ObjectFactory.build(typeId,parameters)
-        values.append(objt)
-      rs.close()
-      session.close()
-      return values
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting customisable values for ' + dimName + ' (id:' + str(id) + ',message:' + msg + ')'
+    customisableValues = set(['asset_value','threat_value','risk_class','countermeasure_value','capability','motivation','asset_type','threat_type','vulnerability_type','severity','likelihood','access_right','protocol','privilege','surface_type'])
+    if (dimName not in customisableValues):
+      exceptionText = 'Values for ' + dimName + ' are not customisable.'
       raise DatabaseProxyException(exceptionText) 
+    values = []
+    rows = self.responseList('call getCustomisableValues(:dim,:env)',{'dim':dimName,'env':envName},'MySQL error getting customisable values')
+    for typeId,typeName,typeDesc,typeValue,typeRat in rows:
+      parameters = ValueTypeParameters(typeName,typeDesc,dimName,envName,typeValue,typeRat)
+      objt = ObjectFactory.build(typeId,parameters)
+      values.append(objt)
+    return values
 
   def deleteCapability(self,objtId):
     self.deleteValueType(objtId,'capability')
