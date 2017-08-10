@@ -23554,10 +23554,22 @@ begin
   declare toName varchar (200);
   declare toType varchar (9);
   declare assetName varchar (50);
+  declare compName varchar (200);
+  declare compType varchar (20);
+  declare tbName varchar(50);
+  declare tbDesc varchar(4000);
   declare dfId int;
+  declare tbId int;
   declare envId int;
   declare dfCount int default 0;
+  declare tbCount int default 0;
   declare dfCursor cursor for select dataflow, environment, from_name, from_type, to_name, to_type from dataflows;
+  declare tbCursor cursor for select id,name,description from trust_boundary;
+  declare tbEnvCursor cursor for select distinct environment_id from environment_trust_boundary where trust_boundary_id = tbId;
+  declare tbCompCursor cursor for
+    select uc.name,'process' from trust_boundary_usecase tbu, usecase uc where tbu.usecase_id = uc.id and trust_boundary_id = tbId and environment_id = envId
+    union
+    select a.name,'datastore' from trust_boundary_asset tba, asset a where tba.asset_id = a.id and trust_boundary_id = tbId and environment_id = envId;
   declare dfAssetCursor cursor for select a.name from asset a, dataflow_asset da where da.dataflow_id = dfId and da.asset_id = a.id;
   declare continue handler for not found set done = 1;
 
@@ -23594,6 +23606,45 @@ begin
     set dfCount = dfCount + 1;
   end loop df_loop;
   close dfCursor;
+  set done = 0;
+
+  open tbCursor;
+  tb_loop: loop
+    fetch tbCursor into tbId, tbName, tbDesc;
+    if done = 1
+    then
+      leave tb_loop;
+    end if;
+    set buf = concat(buf,'  <trust_boundary name=\"',tbName,'\">\n    <description>',tbDesc,'</description>\n');
+    open tbEnvCursor;
+    tbEnv_loop: loop
+      fetch tbEnvCursor into envId;
+      if done = 1
+      then 
+        leave tbEnv_loop;
+      end if;
+      select name into envName from environment where id = envId;
+      set buf = concat(buf,'    <trust_boundary_environment name=\"',envName,'\">\n');
+
+      open tbCompCursor;
+      tbComp_loop: loop
+        fetch tbCompCursor into compName, compType;
+        if done = 1
+        then
+          leave tbComp_loop;
+        end if;
+        set buf = concat(buf,'      <trust_boundary_component name=\"',compName,'\" type=\"',compType,'\" />\n');
+      end loop tbComp_loop;
+      close tbCompCursor;
+      set done = 0;
+      set buf = concat(buf,'    </trust_boundary_environment>\n');
+    end loop tbEnv_loop;
+    close tbEnvCursor;
+    set done = 0;
+    set buf = concat(buf,'  </trust_boundary>\n');
+    set tbCount = tbCount + 1;
+  end loop tb_loop;
+  close tbCursor;
   set buf = concat(buf,'</dataflows>');
   select buf,dfCount;
 end

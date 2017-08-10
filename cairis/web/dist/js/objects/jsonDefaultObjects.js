@@ -633,3 +633,9 @@ var dataflowDefault = {
   "theToType" : "process",
   "theAssets" : []
 };
+var trustBoundaryDefault = {
+  "__python_obj__": "TrustBoundary.TrustBoundary",
+  "theName" : "",
+  "theDescription" : "",
+  "theEnvironmentProperties" : []
+};

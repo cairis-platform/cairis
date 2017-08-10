@@ -348,7 +348,6 @@ function addAttackerEnvironment() {
       $('#chooseEnvironment').modal('hide');
     }
   });
-
 }
 
 mainContent.on('click', '#addRoletoAttacker', function () {

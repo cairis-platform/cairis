@@ -1127,6 +1127,10 @@ function setTableHeader(activeTable){
       debugLogger("Is Dataflows");
       thead = "<th width='50px' id='addNewDataflow'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Name</th><th>From</th><th>Type</th><th>To</th><th>Type</th>";
       break;
+    case "TrustBoundaries":
+      debugLogger("Is TrustBoundaries");
+      thead = "<th width='50px' id='addNewTrustBoundary'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Description</th>";
+      break;
     case "ExternalDocuments":
       debugLogger("Is External Documents");
       thead = "<th width='50px' id='addNewExternalDocument'><i class='fa fa-plus floatCenter'></i></th><th>External Document</th><th>Description</th>";
@@ -1890,6 +1894,11 @@ function validateClick(dimension,callback) {
   }
   else if (dimension == 'task') {
     dimensionCheck('persona',callback);
+  }
+  else if (dimension == 'trust_boundary') {
+    dimensionCheck('environment',function() {
+      dimensionCheck('usecase',callback);
+    });
   }
 }
 

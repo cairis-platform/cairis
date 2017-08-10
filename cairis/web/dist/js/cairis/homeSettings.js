@@ -90,6 +90,11 @@ function refreshMenuBreadCrumb(dimName) {
     $('#menuBCClick').show();
     createDataflowsTable();
   }
+  else if (dimName == 'trust_boundary') {
+    $('#menuBCClick').text('Trust Boundaries');
+    $('#menuBCClick').show();
+    createTrustBoundariesTable();
+  }
   else if (dimName == 'architectural_pattern') {
     $('#menuBCClick').text('Architectural Patterns');
     $('#menuBCClick').show();
