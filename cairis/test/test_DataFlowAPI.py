@@ -58,7 +58,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.assertIsInstance(dataflows, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(dataflows), 0, 'No dataflows in the dictionary')
     self.logger.info('[%s] DataFlows found: %d', method, len(dataflows))
-    dataflow = dataflows.values()[0]
+    dataflow = dataflows.values()[1]
     self.assertEqual(dataflow['theName'],self.existing_dataflow_name)
     self.assertEqual(dataflow['theEnvironmentName'],self.existing_environment_name)
     self.assertEqual(dataflow['theFromName'],self.existing_from_name)

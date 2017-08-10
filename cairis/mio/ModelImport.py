@@ -752,7 +752,10 @@ def importDataflowsFile(importFile,session_id = None):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     dfs = handler.dataflows()
-    return importDataflows(dfs,session_id)
+    tbs = handler.trustBoundaries()
+    buf = importDataflows(dfs,session_id)
+    buf += importTrustBoundaries(tbs,session_id)
+    return buf
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
@@ -765,6 +768,20 @@ def importDataflows(dataflows,session_id):
   msgStr = 'Imported ' +str( noOfDataflows) + ' dataflow'
   if (noOfDataflows != 1):
     msgStr += 's'
+  msgStr += '. '
+  return msgStr
+
+def importTrustBoundaries(tbs,session_id):
+  b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
+  for tb in tbs:
+    db_proxy.addTrustBoundary(tb)
+  noOfTrustBoundaries = len(tbs)
+  msgStr = 'Imported ' +str( noOfTrustBoundaries) + ' trust boundar'
+  if (noOfTrustBoundaries != 1):
+    msgStr += 'ies'
+  else:
+    msgStr += 'y'
   return msgStr
 
 def importModelFile(importFile,isOverwrite = 1,session_id = None):

@@ -59,7 +59,6 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
 
   def test_get_all(self):
     method = 'test_get_all'
-    rv = self.app.post('/api/trust_boundaries?session_id=test', content_type='application/json', data=self.prepare_json())
     rv = self.app.get('/api/trust_boundaries?session_id=test')
     tbs = jsonpickle.decode(rv.data)
     self.assertIsNotNone(tbs, 'No results after deserialization')
@@ -67,11 +66,10 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
     self.assertGreater(len(tbs), 0, 'No trust_boundaries in the dictionary')
     self.logger.info('[%s] TrustBoundaries found: %d', method, len(tbs))
     tb = tbs.values()[0]
-    self.assertEqual(tb['theName'],'Shibboleth')
-    self.assertEqual(tb['theDescription'],'Identity Provider')
-    self.assertEqual(tb['theEnvironmentProperties'][0]['theComponents'][0]['theName'],'Authenticate Researcher')
-    self.assertEqual(tb['theEnvironmentProperties'][0]['theComponents'][0]['theType'],'process')
-    rv = self.app.delete('/api/trust_boundaries/name/Shibboleth?session_id=test')
+    self.assertEqual(tb['theName'],'local')
+    self.assertEqual(tb['theDescription'],'Local IT support')
+    self.assertEqual(tb['theEnvironmentProperties'][0]['theComponents'][0]['theName'],'Credentials Store')
+    self.assertEqual(tb['theEnvironmentProperties'][0]['theComponents'][0]['theType'],'datastore')
 
   def test_get_by_name(self):
     method = 'test_get_by_name'

@@ -221,6 +221,14 @@ The development of a structure for trial image metadata, based on a careful desc
 <role name="Sysadmin" type="Stakeholder" short_code="SYSADMIN" >
   <description>Responsible for day-to-day administration of NeuroGrid, including authorisation of access requests.</description>
 </role>
+<asset name="Credentials Store" short_code="DAS" type="Systems" is_critical="0">
+  <description>TBC</description>
+  <significance>TBC</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Psychosis" property="confidentiality" value="High">
+    <rationale>TBC</rationale>
+  </security_property>
+</asset>
 <asset name="Clinical data" short_code="CD" type="Information" is_critical="0">
   <description></description>
   <significance>Unanonymised and in the wrong hands, this data can be very damaging.</significance>
@@ -2974,6 +2982,15 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <dataflow name="authenticate" environment="Psychosis" from_name="Authorised Researcher" from_type="entity" to_name="Authenticate Researcher" to_type="process">
     <dataflow_asset name="Credentials" />
   </dataflow>
+  <dataflow name="verify" environment="Psychosis" from_name="Authenticate Researcher" from_type="process" to_name="Credentials Store" to_type="datastore">
+    <dataflow_asset name="Credentials" />
+  </dataflow>
+  <trust_boundary name="local">
+    <description>Local IT support</description>
+    <trust_boundary_environment name="Psychosis">
+      <trust_boundary_component name="Credentials Store" type="datastore" />
+    </trust_boundary_environment>
+  </trust_boundary>
 </dataflows>
 
 </cairis_model>
