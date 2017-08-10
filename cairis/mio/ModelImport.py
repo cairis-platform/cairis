@@ -782,6 +782,7 @@ def importTrustBoundaries(tbs,session_id):
     msgStr += 'ies'
   else:
     msgStr += 'y'
+  msgStr += '.'
   return msgStr
 
 def importModelFile(importFile,isOverwrite = 1,session_id = None):

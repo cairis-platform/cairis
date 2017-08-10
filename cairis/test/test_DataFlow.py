@@ -114,7 +114,7 @@ class DataFlowTest(unittest.TestCase):
     self.assertEqual(idfp.assets(),odf.assets())
 
   def testImportDataflows(self):
-    self.assertEqual(importDataflowsFile(os.environ['CAIRIS_SRC'] + '/test/testdataflow.xml'),'Imported 1 dataflow')
+    self.assertEqual(importDataflowsFile(os.environ['CAIRIS_SRC'] + '/test/testdataflow.xml'),'Imported 1 dataflow. Imported 0 trust boundaries.')
 
   def testExportDataflows(self):
     importDataflowsFile(os.environ['CAIRIS_SRC'] + '/test/testdataflow.xml')
