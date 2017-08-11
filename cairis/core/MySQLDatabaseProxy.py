@@ -3338,42 +3338,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return patterns
 
   def patternStructure(self,patternId):
-    try:
-      session = self.conn()
-      rs = session.execute('call getSecurityPatternStructure(:pat)',{'pat':patternId})
-      pStruct = []
-      for row in rs.fetchall():
-        row = list(row)
-        pStruct.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
-      rs.close()
-      session.close()
-      return pStruct
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting structure for pattern id ' + str(patternId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getSecurityPatternStructure(:pat)',{'pat':patternId},'MySQL error getting pattern structure')
 
   def patternRequirements(self,patternId):
-    try:
-      session = self.conn()
-      rs = session.execute('call getSecurityPatternRequirements(:pat)',{'pat':patternId})
-      pStruct = []
-      for row in rs.fetchall():
-        row = list(row)
-        reqType = row[0]
-        reqName = row[1]
-        reqDesc = row[2]
-        reqRationale = row[3]
-        reqFc = row[4]
-        reqAsset = row[5]
-        pStruct.append((reqName,reqDesc,reqType,reqRationale,reqFc,reqAsset))
-      rs.close()
-      session.close()
-      return pStruct
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting requirements for pattern id ' + str(patternId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getSecurityPatternRequirements(:pat)',{'pat':patternId},'MySQL error getting pattern requirements')
 
   def addSecurityPattern(self,parameters):
     patternId = parameters.id()
@@ -3538,20 +3506,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def candidateCountermeasurePatterns(self,cmId):
-    try:
-      session = self.conn()
-      rs = session.execute('call candidateCountermeasurePatterns(:cm)',{'cm':cmId})
-      patterns = []
-      for row in rs.fetchall():
-        row = list(row)
-        patterns.append(row[0])
-      rs.close()
-      session.close()
-      return patterns
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting potential patterns associated with countermeasure id ' + str(cmId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call candidateCountermeasurePatterns(:cm)',{'cm':cmId},'MySQL error getting candidate countermeasure patterns')
 
   def associateCountermeasureToPattern(self,cmId,patternName):
     try:
@@ -3565,19 +3520,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def nameCheck(self,objtName,dimName):
-    try:
-      session = self.conn()
-      rs = session.execute('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName})
-      row = rs.fetchone()
-      objtCount = row[0]
-      rs.close()
-      session.close()
-      if (objtCount > 0):
-        exceptionText = dimName + ' ' + objtName + ' already exists.'
-        raise ARMException(exceptionText) 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error checking existence of ' + dimName + ' ' + objtName + ' (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
 
   def nameCheckEnvironment(self,objtName,envName,dimName):
     try:
