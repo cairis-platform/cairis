@@ -3182,46 +3182,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return deps
 
   def reportAssociationDependencies(self,fromAsset,toAsset,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call associationDependencyCheck(:from,:to,:env)',{'from':fromAsset,'to':toAsset,'env':envName})
-      if (rs.rowcount == 0):
-        rs.close()
-        session.close()
-        return []
-      else:
-        deps = []
-        for row in rs.fetchall():
-          row = list(row)
-          deps.append(row[0])
-        rs.close()
-        session.close()
-        return deps
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting association dependencies between ' + fromAsset + ' and ' + toAsset + ' in environment ' + envName + ' id ' + str(objtId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call associationDependencyCheck(:from,:to,:env)',{'from':fromAsset,'to':toAsset,'env':envName},'MySQL error reporting association dependencies')
 
   def reportAssociationTargetDependencies(self,assetProperties,toAsset,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call associationTargetDependencyCheck(:a0,:a1,:a2,:a3,:a4,:a5,:a6,:a7,:to,:env)',{'a0':assetProperties[0],'a1':assetProperties[1],'a2':assetProperties[2],'a3':assetProperties[3],'a4':assetProperties[4],'a5':assetProperties[5],'a6':assetProperties[6],'a7':assetProperties[7],'to':toAsset,'env':envName})
-      if (rs.rowcount == 0):
-        rs.close()
-        session.close()
-        return []
-      else:
-        deps = []
-        for row in rs.fetchall():
-          row = list(row)
-          deps.append(row[0])
-        rs.close()
-        session.close()
-        return deps
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting association dependencies between the current asset and ' + toAsset + ' in environment ' + envName + ' id ' + str(objtId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call associationTargetDependencyCheck(:a0,:a1,:a2,:a3,:a4,:a5,:a6,:a7,:to,:env)',{'a0':assetProperties[0],'a1':assetProperties[1],'a2':assetProperties[2],'a3':assetProperties[3],'a4':assetProperties[4],'a5':assetProperties[5],'a6':assetProperties[6],'a7':assetProperties[7],'to':toAsset,'env':envName},'MySQL error reporting association target dependencies')
 
   def addTemplateAsset(self,parameters):
     assetId = self.newId()
@@ -3605,36 +3569,22 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return pChars
 
   def characteristicReferences(self,pcId,spName):
-    try:
-      session = self.conn()
-      rs = session.execute('call ' + spName + '(:pc)',{'pc':pcId})
-      refDict = {}
-      refDict['grounds'] = []
-      refDict['warrant'] = []
-      refDict['rebuttal'] = []
-      for row in rs.fetchall():
-        row = list(row)
-        refName = row[0]
-        typeName = row[1]
-        refDesc = row[2]
-        dimName = row[3]
-        refDict[typeName].append((refName,refDesc,dimName))
-      rs.close()
-      session.close()        
-      refDict['grounds'].sort()
-      refDict['warrant'].sort()
-      refDict['rebuttal'].sort()
-
-      pcBacking = self.characteristicBacking(pcId,spName)
-      backingList = []
-      for backing,concept in pcBacking:
-        backingList.append(backing)
-      backingList.sort()
-      return (refDict['grounds'],refDict['warrant'],backingList,refDict['rebuttal'])
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting persona characteristic references (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call ' + spName + '(:pc)',{'pc':pcId},'MySQL error getting characteristic references')
+    refDict = {}
+    refDict['grounds'] = []
+    refDict['warrant'] = []
+    refDict['rebuttal'] = []
+    for refName,typeName,refDesc,dimName in rows:
+      refDict[typeName].append((refName,refDesc,dimName))
+    refDict['grounds'].sort()
+    refDict['warrant'].sort()
+    refDict['rebuttal'].sort()
+    pcBacking = self.characteristicBacking(pcId,spName)
+    backingList = []
+    for backing,concept in pcBacking:
+      backingList.append(backing)
+    backingList.sort()
+    return (refDict['grounds'],refDict['warrant'],backingList,refDict['rebuttal'])
 
   def deleteExternalDocument(self,docId = -1):
     self.deleteObject(docId,'external_document')
@@ -3762,29 +3712,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getPersonaBehaviouralCharacteristics(self,pName,bvName):
-    try:
-      session = self.conn()
-      rs = session.execute('call personaBehaviouralCharacteristics(:pName,:bvName)',{'pName':pName,'bvName':bvName})
-      pChars = {}
-      pcSumm = []
-      for row in rs.fetchall():
-        row = list(row)
-        pcId = row[0]
-        qualName = row[1]
-        pcDesc = row[2]
-        pcSumm.append((pcId,pName,bvName,qualName,pcDesc))
-      rs.close()
-      session.close()
-      for pcId,pName,bvName,qualName,pcDesc in pcSumm:
-        grounds,warrant,backing,rebuttal = self.characteristicReferences(pcId,'characteristicReferences')
-        parameters = PersonaCharacteristicParameters(pName,qualName,bvName,pcDesc,grounds,warrant,backing,rebuttal)
-        pChar = ObjectFactory.build(pcId,parameters)
-        pChars[pName + '/' + bvName + '/' + pcDesc] = pChar
-      return pChars
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting persona behavioural characteristics (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call personaBehaviouralCharacteristics(:pName,:bvName)',{'pName':pName,'bvName':bvName},'MySQL error getting persona behavioural characteristics')
+    pChars = {}
+    pcSumm = []
+    for pcId, qualName, pcDesc in rows:
+      pcSumm.append((pcId,pName,bvName,qualName,pcDesc))
+    for pcId,pName,bvName,qualName,pcDesc in pcSumm:
+      grounds,warrant,backing,rebuttal = self.characteristicReferences(pcId,'characteristicReferences')
+      parameters = PersonaCharacteristicParameters(pName,qualName,bvName,pcDesc,grounds,warrant,backing,rebuttal)
+      pChar = ObjectFactory.build(pcId,parameters)
+      pChars[pName + '/' + bvName + '/' + pcDesc] = pChar
+    return pChars
 
   def getConceptReferences(self,constraintId = -1):
     crRows = self.responseList('call getConceptReferences(:id)',{'id':constraintId},'MySQL error getting concept references')
@@ -3876,45 +3814,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call referenceUse(:ref,:dim)',{'ref':refName,'dim':dimName},'MySQL error getting reference use')
 
   def characteristicBacking(self,pcId,spName):
-    try:
-      session = self.conn()
-      if (spName == 'characteristicReferences'):
-        rs = session.execute('call characteristicBacking(:pc)',{'pc':pcId})
-      else:
-        rs = session.execute('call taskCharacteristicBacking(:pc)',{'pc':pcId})
-      backing = []
-      for row in rs.fetchall():
-        row = list(row)
-        backing.append((row[0],row[1]))
-      rs.close()
-      session.close()
-      return backing
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting backing for characteristic ' + str(pcId) +  ' (id:' + str(id) + ',message:' + msg + ')'
+    argDict = {'pc':pcId}
+    if (spName == 'characteristicReferences'):
+      callTxt = 'call characteristicBacking(:pc)'
+    else:
+      callTxt = 'call taskCharacteristicBacking(:pc)'
+    return self.responseList(callTxt,argDict,'MySQL error getting characteristic backing')
 
   def assumptionPersonaModel(self,personaName = '',bvName = '',pcName = ''):
-    try:
-      session = self.conn()
-      rs = session.execute('call assumptionPersonaModel(:pers,:bv,:pc)',{'pers':personaName,'bv':bvName,'pc':pcName})
-      associations = []
-      for row in rs.fetchall():
-        row = list(row)
-        fromName = row[0]
-        fromDim = row[1]
-        toName = row[2]
-        toDim = row[3]
-        personaNameOut = row[4]
-        bvNameOut = row[5]
-        pcNameOut = row[6]
-        associations.append((fromName,fromDim,toName,toDim,personaNameOut,bvNameOut,pcNameOut))
-      rs.close()
-      session.close()
-      return associations
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting assumption persona model (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call assumptionPersonaModel(:pers,:bv,:pc)',{'pers':personaName,'bv':bvName,'pc':pcName},'MySQL error getting assumption persona model')
 
   def getGrounds(self,constraintName):
     return self.getArgReference('Grounds',constraintName)
@@ -4163,194 +4071,42 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
 
   def riskModel(self,environmentName,riskName):
-    try:
-      session = self.conn()
-      rs = session.execute('call riskModel(:risk,:env)',{'risk':riskName,'env':environmentName})
-      traces = []
-      for traceRow in rs.fetchall():
-        traceRow = list(traceRow)
-        fromObjt = traceRow[0]
-        fromName = traceRow[1]
-        toObjt = traceRow[2]
-        toName = traceRow[3]
-        parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
-        traces.append(ObjectFactory.build(-1,parameters))
-      rs.close()
-      session.close() 
-      return traces
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting risk model (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call riskModel(:risk,:env)',{'risk':riskName,'env':environmentName},'MySQL error getting risk model')
+    traces = []
+    for fromObjt,fromName,toObjt,toName in rows:
+      parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
+      traces.append(ObjectFactory.build(-1,parameters))
+    return traces
 
   def isRisk(self,candidateRiskName):
-    try:
-      session = self.conn()
-      rs = session.execute('select is_risk(:cand)',{'cand':candidateRiskName})
-      row = rs.fetchone()
-      isRiskInd = row[0]
-      rs.close()
-      session.close()
-      return isRiskInd
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error checking if ' + candateRiskName + 'is a risk (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
-        
+    return self.responseList('select is_risk(:cand)',{'cand':candidateRiskName},'MySQL error checking candidate risk')[0]
 
   def textualArgumentationModel(self,personaName,bvType):
-    try:
-      session = self.conn()
-      rs = session.execute('call assumptionPersonaModel_textual(:pers,:type)',{'pers':personaName,'type':bvType})
-      rows = []
-      for row in rs.fetchall():
-        listRow = list(row)
-        rows.append((row[0],row[1],row[2]))
-      rs.close()
-      session.close() 
-      return rows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting ' + bvType + ' argumentation model for ' + personaName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call assumptionPersonaModel_textual(:pers,:type)',{'pers':personaName,'type':bvType},'MySQL error getting textual argumentation model')
 
   def riskAnalysisToXml(self,includeHeader=True):
-    try:
-      session = self.conn()
-      rs = session.execute('call riskAnalysisToXml(:head)',{'head':includeHeader})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      roleCount = row[1]
-      assetCount = row[2]
-      vulCount = row[3]
-      attackerCount = row[4]
-      threatCount = row[5]
-      riskCount = row[6]
-      responseCount = row[7]
-      rshipCount = row[8]
-      rs.close()
-      session.close()
-      return (xmlBuf,roleCount,assetCount,vulCount,attackerCount,threatCount,riskCount,responseCount,rshipCount)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL exporting risk analysis artifacts to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call riskAnalysisToXml(:head)',{'head':includeHeader},'MySQL error exporting risk analysis artifacts to XML')[0]
 
   def goalsToXml(self,includeHeader=True):
-    try:
-      session = self.conn()
-      rs = session.execute('call goalsToXml(:head)',{'head':includeHeader})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      dpCount = row[1]
-      goalCount = row[2]
-      obsCount = row[3]
-      reqCount = row[4]
-      cmCount = row[5]
-      rs.close()
-      session.close()
-      return (xmlBuf,dpCount,goalCount,obsCount,reqCount,cmCount)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL exporting goals to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call goalsToXml(:head)',{'head':includeHeader},'MySQL error exporting goals to XML')[0]
 
   def usabilityToXml(self,includeHeader=True):
-    try:
-      session = self.conn()
-      rs = session.execute('call usabilityToXml(:head)',{'head':includeHeader})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      personaCount = row[1]
-      edCount = row[2]
-      drCount = row[3]
-      pcCount = row[4]
-      taskCount = row[5]
-      ucCount = row[6]
-      rs.close()
-      session.close()
-      return (xmlBuf,personaCount,edCount,drCount,pcCount,taskCount,ucCount)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL usability data to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call usabilityToXml(:head)',{'head':includeHeader},'MySQL error exporting usability data to XML')[0]
 
   def misusabilityToXml(self,includeHeader=True):
-    try:
-      session = self.conn()
-      rs = session.execute('call misusabilityToXml(:head)',{'head':includeHeader})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      crCount = row[1]
-      tcCount = row[2]
-      rs.close()
-      session.close()
-      return (xmlBuf,crCount,tcCount)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL misusability data to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call misusabilityToXml(:head)',{'head':includeHeader},'MySQL error exporting misusability data to XML')[0]
 
   def associationsToXml(self,includeHeader=True):
-    try:
-      session = self.conn()
-      rs = session.execute('call associationsToXml(:head)',{'head':includeHeader})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      maCount = row[1]
-      gaCount = row[2]
-      rrCount = row[3]
-      depCount = row[4]
-      rs.close()
-      session.close()
-      return (xmlBuf,maCount,gaCount,rrCount,depCount)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error exporting association data to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call associationsToXml(:head)',{'head':includeHeader},'MySQL error exporting association data to XML')[0]
 
   def dataflowsToXml(self,includeHeader=True):
-    try:
-      session = self.conn()
-      rs = session.execute('call dataflowsToXml(:inc)',{'inc':includeHeader})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      dfCount = row[1]
-      rs.close()
-      session.close()
-      return (xmlBuf,dfCount)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error exporting dataflow data to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call dataflowsToXml(:head)',{'head':includeHeader},'MySQL error exporting dataflow data to XML')[0]
 
   def projectToXml(self,includeHeader=True):
-    try:
-      session = self.conn()
-      rs = session.execute('call projectToXml(:head)',{'head':includeHeader})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      rs.close()
-      session.close()
-      return xmlBuf
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error exporting project data to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call projectToXml(:head)',{'head':includeHeader},'MySQL error exporting project data to XML')[0]
 
   def architecturalPatternToXml(self,apName):
-    try:
-      session = self.conn()
-      rs = session.execute('call architecturalPatternToXml(:name)',{'name':apName})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      rs.close()
-      session.close()
-      return xmlBuf
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error exporting architectural pattern ' + apName + ' to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call architecturalPatternToXml(:name)',{'name':apName},'MySQL error exporting architectural pattern to XML')[0]
 
   def getTaskCharacteristics(self,constraintId = -1):
     tcSumm = self.responseList('call getTaskCharacteristics(:id)',{'id':constraintId},'MySQL error getting task characteristics')
@@ -4430,26 +4186,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
 
   def assumptionTaskModel(self,taskName = '',tcName = ''):
-    try:
-      session = self.conn()
-      rs = session.execute('call assumptionTaskModel(:task,:tc)',{'task':taskName,'tc':tcName})
-      associations = []
-      for row in rs.fetchall():
-        row = list(row)
-        fromName = row[0]
-        fromDim = row[1]
-        toName = row[2]
-        toDim = row[3]
-        taskNameOut = row[4]
-        tcNameOut = row[5]
-        associations.append((fromName,fromDim,toName,toDim,taskNameOut,tcNameOut))
-      rs.close()
-      session.close()
-      return associations
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting assumption task model (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call assumptionTaskModel(:task,:tc)',{'task':taskName,'tc':tcName},'MySQL error getting assumption task model')
 
   def getTaskSpecificCharacteristics(self,tName):
     try:
