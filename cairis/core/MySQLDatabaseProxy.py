@@ -3520,7 +3520,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def nameCheck(self,objtName,dimName):
-    return self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
+    objtCount = self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
+    if (objtCount > 0):
+      exceptionText = dimName + ' ' + objtName + ' already exists.'
+      raise ARMException(exceptionText) 
+   
 
   def nameCheckEnvironment(self,objtName,envName,dimName):
     try:
