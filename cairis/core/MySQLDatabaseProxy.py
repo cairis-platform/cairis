@@ -7802,25 +7802,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
 
   def locationsRiskModel(self,locationsName,environmentName):
-    try:
-      session = self.conn()
-      rs = session.execute('call locationsRiskModel(:locs,:env)',{'locs':locationsName,'env':environmentName})
-      traces = []
-      for traceRow in rs.fetchall():
-        traceRow = list(traceRow)
-        fromObjt = traceRow[0]
-        fromName = traceRow[1]
-        toObjt = traceRow[2]
-        toName = traceRow[3]
-        parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
-        traces.append(ObjectFactory.build(-1,parameters))
-      rs.close()
-      session.close() 
-      return traces
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting location risk model (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    traceRows = self.responseList('call locationsRiskModel(:locs,:env)',{'locs':locationsName,'env':environmentName},'MySQL error getting location risk model')
+    traces = []
+    for fromObjt,fromName,toObjt,toName in traceRows:
+      parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
+      traces.append(ObjectFactory.build(-1,parameters))
+    return traces
 
   def prepareDatabase(self):
     try:
@@ -7866,18 +7853,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText)
 
   def templateAssetMetrics(self,taName):
-    try: 
-      session = self.conn()
-      rs = session.execute('call templateAssetMetrics(:ta)',{'ta':taName})
-      row = rs.fetchone()
-      stScore = row[0]
-      rs.close()
-      session.close()
-      return stScore
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting metrics for template asset ' + taName + ' (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call templateAssetMetrics(:ta)',{'ta':taName},'MySQL error getting template asset metrics')[0]
 
   def riskModelElements(self,envName):
     try: 
@@ -7896,48 +7872,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def assetThreatRiskLevel(self,assetName,threatName):
-    try: 
-      session = self.conn()
-      rs = session.execute('call assetThreatRiskLevel(:ass,:thr)',{'ass':assetName,'thr':threatName})
-      results = rs.fetchone()
-      riskLevel = results[0]
-      rs.close()
-      session.close()
-      return riskLevel
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error calculating risk level for ' + assetName + ' and threat ' + threatName + ' (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call assetThreatRiskLevel(:ass,:thr)',{'ass':assetName,'thr':threatName},'MySQL error getting asset threat risk level')[0]
 
   def assetRiskLevel(self,assetName):
-    try: 
-      session = self.conn()
-      rs = session.execute('call assetRiskLevel(:ass)',{'ass':assetName})
-      results = rs.fetchone()
-      riskLevel = results[0]
-      rs.close()
-      session.close()
-      return riskLevel
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error calculating risk level for ' + assetName + ' (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call assetRiskLevel(:ass)',{'ass':assetName},'MySQL error getting asset risk level')[0]
 
   def dimensionSummary(self,dimName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call ' + dimName + 'Summary(:name)',{'name':envName})
-      sums = []
-      for row in rs.fetchall():
-        row = list(row)
-        sums.append((row[0],row[1]))
-      rs.close()
-      session.close()
-      return sums
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error calculating ' + dimName + ' summary for environment ' + envName + ' (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call ' + dimName + 'Summary(:name)',{'name':envName},'MySQL error getting ' + dimName + ' summary for environment ' + envName)
 
   def createDatabase(self,dbName,session_id):
     if self.conn is not None:
