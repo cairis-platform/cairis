@@ -3439,21 +3439,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.updateCountermeasureEffectiveness(objtId,dimName,cmName,assetName,envName,cmEffectiveness) 
 
   def updateCountermeasureEffectiveness(self,objtId,dimName,cmName,assetName,envName,cmEffectiveness):
-    try:
-      session = self.conn()
-      rs = session.execute('call updateCountermeasureEffectiveness(:obj,:dim,:cm,:ass,:env,:cmEff)',{'obj':objtId,'dim':dimName,'cm':cmName,'ass':assetName,'env':envName,'cmEff':cmEffectiveness})
-      session.commit()
-      expCMs = []
-      for row in rs.fetchall():
-        row = list(row)
-        expCMs.append((envName,row[0],assetName,row[1]))
-      rs.close()
-      session.close()
-      return expCMs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating effectiveness of countermeasure ' + cmName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateCountermeasureEffectiveness(:obj,:dim,:cm,:ass,:env,:cmEff)',{'obj':objtId,'dim':dimName,'cm':cmName,'ass':assetName,'env':envName,'cmEff':cmEffectiveness},'MySQL error updating effectiveness of countermeasure ' + cmName)
 
   def countermeasurePatterns(self,cmId):
     return self.responseList('call countermeasurePatterns(:cm)',{'cm':cmId},'MySQL error getting patterns associated with countermeasure')
@@ -4412,20 +4398,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def referenceCharacteristic(self,refName):
-    try:
-      session = self.conn()
-      rs = session.execute('call referenceCharacteristic(:ref)',{'ref':refName})
-      charNames = []
-      for row in rs.fetchall():
-        row = list(row)
-        charNames.append(row[0])
-      rs.close()
-      session.close()
-      return charNames
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting characteristic associated with reference ' + refName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call referenceCharacteristic(:ref)',{'ref':refName},'MySQL error getting characteristics associated with reference ' + refName)
 
   def getCharacteristicSynopsis(self,cName):
     try:
@@ -4603,20 +4576,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def dependentLabels(self,goalName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call dependentLabels(:goal,:env)',{'goal':goalName,'env':envName})
-      goals = []
-      for row in rs.fetchall():
-        row = list(row)
-        goals.append(row[0])
-      rs.close()
-      session.close()
-      return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting dependent labels for ' + goalName + ' in environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call dependentLabels(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting dependent labels')
 
   def goalEnvironments(self,goalName):
     try:
@@ -4765,113 +4725,23 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return lbls,goals
 
   def redmineUseCases(self):
-    try:
-      session = self.conn()
-      rs = session.execute('call usecasesToRedmine()')
-      ucs = []
-      for row in rs.fetchall():
-        row = list(row)
-        ucs.append((row[0],row[1],row[2],row[3]))
-      rs.close()
-      session.close()
-      return ucs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL exporting usecases to Redmine (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call usecasesToRedmine()',{},'MySQL exporting usecases to Redmine')
 
   def redmineScenarios(self):
-    try:
-      session = self.conn()
-      rs = session.execute('call redmineScenarios()')
-      scenarios = []
-      for row in rs.fetchall():
-        row = list(row)
-        sName = row[0]
-        sEnv = row[1]
-        sTxt = row[2]
-        scenarios.append((row[0],row[1],row[2]))
-      rs.close()
-      session.close()
-      return scenarios
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL exporting scenarios to Redmine (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call redmineScenarios()',{},'MySQL exporting scenarios to Redmine')
+
 
   def redmineArchitecture(self):
-    try:
-      session = self.conn()
-      rs = session.execute('call redmineArchitecture()')
-      aps = []
-      for row in rs.fetchall():
-        row = list(row)
-        aName = row[0]
-        aType = row[1]
-        aTxt = row[2]
-        aps.append((row[0],row[1],row[2]))
-      rs.close()
-      session.close()
-      return aps
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL exporting architecture to Redmine (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call redmineArchitecture()',{},'MySQL exporting architecture to Redmine')
 
   def redmineAttackPatterns(self):
-    try:
-      session = self.conn()
-      rs = session.execute('call redmineAttackPatterns()')
-      aps = []
-      for row in rs.fetchall():
-        row = list(row)
-        aName = row[0]
-        envName = row[1]
-        cType = row[2]
-        aTxt = row[3]
-        aps.append((row[0],row[1],row[2],row[3]))
-      rs.close()
-      session.close()
-      return aps
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL exporting attack patterns to Redmine (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call redmineAttackPatterns()',{},'MySQL exporting attack patterns to Redmine')
 
   def tvTypesToXml(self,includeHeader=True):
-    try:
-      session = self.conn()
-      rs = session.execute('call tvTypesToXml(:head)',{'head':includeHeader})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      ttCount = row[1]
-      vtCount = row[2]
-      rs.close()
-      session.close()
-      return (xmlBuf,ttCount,vtCount)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL exporting threat and vulnerability types to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call tvTypesToXml(:head)',{'head':includeHeader},'MySQL error exporting threat and vulnerability types to XML')[0]
 
   def domainValuesToXml(self,includeHeader=True):
-    try:
-      session = self.conn()
-      rs = session.execute('call domainValuesToXml(:head)',{'head':includeHeader})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      tvCount = row[1]
-      rvCount = row[2]
-      cvCount = row[3]
-      svCount = row[4]
-      lvCount = row[5]
-      rs.close()
-      session.close()
-      return (xmlBuf,tvCount,rvCount,cvCount,svCount,lvCount)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL exporting domain values to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call domainValuesToXml(:head)',{'head':includeHeader},'MySQL error exporting domain values to XML')[0]
 
   def clearDatabase(self,session_id = None):
     b = Borg()
@@ -5033,20 +4903,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def environmentRequirements(self,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call requirementNames(:env)',{'env':envName})
-      reqs = []
-      for row in rs.fetchall():
-        row = list(row)
-        reqs.append(row[0])
-      rs.close()
-      session.close()
-      return reqs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting requirements associated with environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call requirementNames(:env)',{'env':envName},'MySQL error getting requirements associated with environment ' + envName)
 
   def addTag(self,tagObjt,tagName,tagDim, curs):
     try:
@@ -5080,69 +4937,23 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getTags(self,dimObjt,dimName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getTags(:obj,:name)',{'obj':dimObjt,'name':dimName})
-      tags = []
-      for row in rs.fetchall():
-        row = list(row)
-        tags.append(row[0])
-      rs.close()
-      session.close()
-      return tags
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting tags for ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getTags(:obj,:name)',{'obj':dimObjt,'name':dimName},'MySQL error getting tags')
 
   def deleteTag(self,tagId):
     self.deleteObject(tagId,'tag')
     
 
   def componentView(self,cvName):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentViewInterfaces(:cv)',{'cv':cvName})
-      interfaces = []
-      for row in rs.fetchall():
-        row = list(row)
-        interfaces.append((row[0],row[1],row[2]))
-      rs.close()
-      session.close()
-      connectors = self.componentViewConnectors(cvName)
-      return (interfaces,connectors)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting component view (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    interfaces = self.responseList('call componentViewInterfaces(:cv)',{'cv':cvName},'MySQL error getting component view interfaces')
+    connectors = self.componentViewConnectors(cvName)
+    return (interfaces,connectors)
+
 
   def componentViewConnectors(self,cvName):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentViewConnectors(:cv)',{'cv':cvName})
-      connectors = []
-      for row in rs.fetchall():
-        row = list(row)
-        connectors.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9]))
-      rs.close()
-      session.close()
-      return connectors
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting connectors for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call componentViewConnectors(:cv)',{'cv':cvName},'MySQL error getting component view connectors')
 
   def addComponentToView(self,cId,cvId):
-    try:
-      session = self.conn()
-      session.execute('call addComponentToView(:cId,:cvId)',{'cId':cId,'cvId':cvId})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding component to view (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
+    self.updateDatabase('call addComponentToView(:cId,:cvId)',{'cId':cId,'cvId':cvId},'MySQL error adding component to view')
 
   def addComponent(self,parameters,cvId = -1):
     componentId = self.newId()
@@ -5311,20 +5122,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def componentStructure(self,componentId):
-    try:
-      session = self.conn()
-      rs = session.execute('call getComponentStructure(:comp)',{'comp':componentId})
-      pStruct = []
-      for row in rs.fetchall():
-        row = list(row)
-        pStruct.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9]))
-      rs.close()
-      session.close()
-      return pStruct
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting structure for component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getComponentStructure(:comp)',{'comp':componentId},'MySQL error getting structure for component')
 
   def addComponentRequirements(self,componentId,componentRequirements):
     for idx,reqName in enumerate(componentRequirements):
@@ -5342,58 +5140,29 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getComponentViews(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getComponentView(:cons)',{'cons':constraintId})
-      cvs = {}
-      cvRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        cvId = row[0]
-        cvName = row[1]
-        cvSyn = row[2]
-        cvRows.append((cvId,cvName,cvSyn))
-      rs.close()
-      session.close()
-
-      for cvId,cvName,cvSyn in cvRows:
-        viewComponents = self.componentViewComponents(cvId)
-        components = []
-        for componentId,componentName,componentDesc in viewComponents:
-          componentInterfaces = self.componentInterfaces(componentId)
-          componentStructure = self.componentStructure(componentId)
-          componentReqs = self.componentRequirements(componentId)
-          componentGoals = self.componentGoals(componentId)
-          goalAssocs = self.componentGoalAssociations(componentId)
-          comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs,componentGoals,goalAssocs)
-          comParameters.setId(componentId)
-          components.append(comParameters)
-        connectors = self.componentViewConnectors(cvName)
-        asm = self.attackSurfaceMetric(cvName)
-        parameters = ComponentViewParameters(cvName,cvSyn,[],[],[],[],[],components,connectors,asm)
-        cv = ObjectFactory.build(cvId,parameters)
-        cvs[cvName] = cv
-      return cvs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting components (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    cvRows = self.responseList('call getComponentView(:cons)',{'cons':constraintId},'MySQL error getting component view')
+    cvs = {}
+    for cvId,cvName,cvSyn in cvRows:
+      viewComponents = self.componentViewComponents(cvId)
+      components = []
+      for componentId,componentName,componentDesc in viewComponents:
+        componentInterfaces = self.componentInterfaces(componentId)
+        componentStructure = self.componentStructure(componentId)
+        componentReqs = self.componentRequirements(componentId)
+        componentGoals = self.componentGoals(componentId)
+        goalAssocs = self.componentGoalAssociations(componentId)
+        comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs,componentGoals,goalAssocs)
+        comParameters.setId(componentId)
+        components.append(comParameters)
+      connectors = self.componentViewConnectors(cvName)
+      asm = self.attackSurfaceMetric(cvName)
+      parameters = ComponentViewParameters(cvName,cvSyn,[],[],[],[],[],components,connectors,asm)
+      cv = ObjectFactory.build(cvId,parameters)
+      cvs[cvName] = cv
+    return cvs
 
   def componentRequirements(self,componentId):
-    try:
-      session = self.conn()
-      rs = session.execute('call getComponentRequirements(:comp)',{'comp':componentId})
-      rows = []
-      for row in rs.fetchall():
-        row = list(row)
-        rows.append(row[0])
-      rs.close()
-      session.close()
-      return rows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting requirements for component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getComponentRequirements(:comp)',{'comp':componentId},'MySQL error getting component requirements')
 
   def componentInterfaces(self,componentId):
     try:
@@ -5507,23 +5276,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
 
   def componentViewComponents(self,cvId):
-    try:
-      session = self.conn()
-      rs = session.execute('call getComponents(:id)',{'id':cvId})
-      components = []
-      for row in rs.fetchall():
-        row = list(row)
-        cId = row[0]
-        cName = row[1]
-        cDesc = row[2]
-        components.append((cId,cName,cDesc))
-      rs.close()
-      session.close()
-      return components
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting components (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getComponents(:id)',{'id':cvId},'MySQL error getting components')
 
   def componentViewWeaknesses(self,cvName,envName):
     try:
@@ -5566,36 +5319,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def componentAssets(self,cvName,reqName = ''):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentAssets(:cv,:req)',{'cv':cvName,'req':reqName})
-      rows = []
-      for row in rs.fetchall():
-        row = list(row)
-        rows.append((row[0],row[1]))
-      rs.close()
-      session.close()   
-      return rows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting assets associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call componentAssets(:cv,:req)',{'cv':cvName,'req':reqName},'MySQL error getting component assets')
 
   def componentGoalAssets(self,cvName,goalName = ''):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentGoalAssets(:cv,:goal)',{'cv':cvName,'goal':goalName})
-      rows = []
-      for row in rs.fetchall():
-        row = list(row)
-        rows.append((row[0],row[1]))
-      rs.close()
-      session.close()   
-      return rows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting assets associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call componentGoalAssets(:cv,:goal)',{'cv':cvName,'goal':goalName},'MySQL error getting component goal assets')
 
   def existingObject(self,objtName,dimName):
     try:
