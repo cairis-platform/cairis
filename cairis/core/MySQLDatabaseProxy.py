@@ -4189,29 +4189,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call assumptionTaskModel(:task,:tc)',{'task':taskName,'tc':tcName},'MySQL error getting assumption task model')
 
   def getTaskSpecificCharacteristics(self,tName):
-    try:
-      session = self.conn()
-      rs = session.execute('call taskSpecificCharacteristics(:task)',{'task':tName})
-      tChars = {}
-      tcSumm = []
-      for row in rs.fetchall():
-        row = list(row)
-        tcId = row[0]
-        qualName = row[1]
-        tcDesc = row[2]
-        tcSumm.append((tcId,tName,qualName,tcDesc))
-      rs.close()
-      session.close()
-      for tcId,tName,qualName,tcDesc in tcSumm:
-        grounds,warrant,backing,rebuttal = self.characteristicReferences(tcId,'taskCharacteristicReferences')
-        parameters = TaskCharacteristicParameters(tName,qualName,tcDesc,grounds,warrant,backing,rebuttal)
-        tChar = ObjectFactory.build(tcId,parameters)
-        tChars[tName + '/' + tcDesc] = tChar
-      return tChars
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting task specific characteristics (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call taskSpecificCharacteristics(:task)',{'task':tName},'MySQL error getting task specific characteristics')
+    tChars = {}
+    tcSumm = []
+    for tcId,qualName,tcDesc in rows:
+      tcSumm.append((tcId,tName,qualName,tcDesc))
+    for tcId,tName,qualName,tcDesc in tcSumm:
+      grounds,warrant,backing,rebuttal = self.characteristicReferences(tcId,'taskCharacteristicReferences')
+      parameters = TaskCharacteristicParameters(tName,qualName,tcDesc,grounds,warrant,backing,rebuttal)
+      tChar = ObjectFactory.build(tcId,parameters)
+      tChars[tName + '/' + tcDesc] = tChar
+    return tChars
 
   def prettyPrintGoals(self,categoryName):
     try:
@@ -4228,152 +4216,65 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def searchModel(self,inTxt,opts):
-    try:
-      session = self.conn()
-
-      psFlag = opts[0]
-      envFlag = opts[1]
-      roleFlag = opts[2]
-      pcFlag = opts[3]
-      tcFlag = opts[4]
-      refFlag = opts[5]
-      pFlag = opts[6]
-      taskFlag = opts[7]
-      ucFlag = opts[8]
-      dpFlag = opts[9]
-      goalFlag = opts[10]
-      obsFlag = opts[11]
-      reqFlag = opts[12]
-      assetFlag = opts[13]
-      vulFlag = opts[14]
-      attackerFlag = opts[15]
-      thrFlag = opts[16]
-      riskFlag = opts[17]
-      respFlag = opts[18]
-      cmFlag = opts[19]
-      dirFlag = opts[20]
-      codeFlag = opts[21]
-      memoFlag = opts[22]
-      idFlag = opts[23]
-      tagFlag = opts[24]
-
-      rs = session.execute('call grepModel(:in,:ps,:env,:role,:pc,:tc,:ref,:p,:task,:uc,:dp,:goal,:obs,:req,:asset,:vul,:attacker,:thr,:risk,:resp,:cm,:dir,:code,:memo,:id,:tag)',{'in':inTxt,'ps':psFlag,'env':envFlag,'role':roleFlag,'pc':pcFlag,'tc':tcFlag,'ref':refFlag,'p':pFlag,'task':taskFlag,'uc':ucFlag,'dp':dpFlag,'goal':goalFlag,'obs':obsFlag,'req':reqFlag,'asset':assetFlag,'vul':vulFlag,'attacker':attackerFlag,'thr':thrFlag,'risk':riskFlag,'resp':respFlag,'cm':cmFlag,'dir':dirFlag,'code':codeFlag,'memo':memoFlag,'id':idFlag,'tag':tagFlag})
-      results = []
-      for row in rs.fetchall():
-        row = list(row)
-        results.append((row[0],row[1],row[2]))
-      rs.close()
-      session.close()
-      return results
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error searching model (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    argDict = {
+    'in': inTxt,
+    'ps': opts[0],
+    'env': opts[1],
+    'role': opts[2],
+    'pc': opts[3],
+    'tc': opts[4],
+    'ref': opts[5],
+    'p': opts[6],
+    'task': opts[7],
+    'uc': opts[8],
+    'dp': opts[9],
+    'goal': opts[10],
+    'obs': opts[11],
+    'req': opts[12],
+    'asset': opts[13],
+    'vul': opts[14],
+    'attacker': opts[15],
+    'thr': opts[16],
+    'risk': opts[17],
+    'resp': opts[18],
+    'cm': opts[19],
+    'dir':opts[20],
+    'code': opts[21],
+    'memo': opts[22],
+    'id': opts[23],
+    'tag': opts[24]}
+    return self.responseList('call grepModel(:in,:ps,:env,:role,:pc,:tc,:ref,:p,:task,:uc,:dp,:goal,:obs,:req,:asset,:vul,:attacker,:thr,:risk,:resp,:cm,:dir,:code,:memo,:id,:tag)',argDict,'MySQL error searching model')
 
   def getExternalDocumentReferencesByExternalDocument(self,edName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getExternalDocumentReferences(:name)',{'name':edName})
-      dRefs = []
-      for row in rs.fetchall():
-        row = list(row)
-        refName = row[0]
-        docName = row[1]
-        excerpt = row[2]
-        dRefs.append((refName,docName,excerpt))
-      rs.close()
-      session.close()
-      return dRefs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting document references for external document ' + edName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getExternalDocumentReferences(:name)',{'name':edName},'MySQL error external document references')
 
   def dimensionNameByShortCode(self,scName):
-    try:
-      session = self.conn()
-      rs = session.execute('call dimensionNameByShortCode(:shortCode)',{'shortCode':scName})
-      row = rs.fetchone()
-      dePair = (row[0],row[1])
-      rs.close()
-      session.close()
-      return dePair
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error obtaining dimension associated with short code ' + scName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call dimensionNameByShortCode(:shortCode)',{'shortCode':scName},'MySQL error calling dimension name by short code')
 
   def misuseCaseRiskComponents(self,mcName):
-    try:
-      session = self.conn()
-      rs = session.execute('call misuseCaseRiskComponents(:misuse)',{'misuse':mcName})
-      row = rs.fetchone()
-      cPair = (row[0],row[1])
-      rs.close()
-      session.close()
-      return cPair
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error obtaining risk components associated with Misuse Case ' + mcName + ' (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('call misuseCaseRiskComponents(:misuse)',{'misuse':mcName},'MySQL error getting risk components associated with misuse case ' + mcName)
 
   def personaToXml(self,pName):
-    try:
-      session = self.conn()
-      rs = session.execute('call personaToXml(:persona)',{'persona':pName})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      edCount = row[1]
-      drCount = row[2]
-      pcCount = row[3]
-      rs.close()
-      session.close()
-      return (xmlBuf,edCount,drCount,pcCount)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error exporting persona to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call personaToXml(:persona)',{'persona':pName},'MySQL error exporting persona to XML')[0]
 
   def defaultEnvironment(self):
-    try:
-      session = self.conn()
-      rs = session.execute('select defaultEnvironment()')
-      row = rs.fetchone()
-      defaultEnv = row[0]
-      rs.close()
-      session.close()
-      return defaultEnv
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error obtaining default environment (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('select defaultEnvironment()',{},'MySQL error obtaining default environment')[0]
 
   def environmentTensions(self,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call environmentTensions(:env)',{'env':envName})
-      vts = {}
-      rowIdx = 0
-      for row in rs.fetchall():
-        row = list(row)
-        anTR = row[0]
-        anValue,anRationale = anTR.split('#')
-        vts[(rowIdx,4)] = (int(anValue),anRationale)
-        panTR = row[1]
-        panValue,panRationale = panTR.split('#')
-        vts[(rowIdx,5)] = (int(panValue),panRationale)
-        unlTR = row[2]
-        unlValue,unlRationale = unlTR.split('#')
-        vts[(rowIdx,6)] = (int(unlValue),unlRationale)
-        unoTR = row[3]
-        unoValue,unoRationale = unoTR.split('#')
-        vts[(rowIdx,7)] = (int(unoValue),unoRationale)
-        rowIdx += 1
-      rs.close()
-      session.close()
-      return vts
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting value tensions for environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call environmentTensions(:env)',{'env':envName},'MySQL error getting environment tensions')
+    vts = {}
+    rowIdx = 0
+    for anTR, panTR, unlTR, unoTR in rows:
+      anValue,anRationale = anTR.split('#')
+      vts[(rowIdx,4)] = (int(anValue),anRationale)
+      panValue,panRationale = panTR.split('#')
+      vts[(rowIdx,5)] = (int(panValue),panRationale)
+      unlValue,unlRationale = unlTR.split('#')
+      vts[(rowIdx,6)] = (int(unlValue),unlRationale)
+      unoValue,unoRationale = unoTR.split('#')
+      vts[(rowIdx,7)] = (int(unoValue),unoRationale)
+      rowIdx += 1
+    return vts
 
 
   def getReferenceSynopsis(self,refName):
