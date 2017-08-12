@@ -4252,7 +4252,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call dimensionNameByShortCode(:shortCode)',{'shortCode':scName},'MySQL error calling dimension name by short code')
 
   def misuseCaseRiskComponents(self,mcName):
-    return self.responseList('call misuseCaseRiskComponents(:misuse)',{'misuse':mcName},'MySQL error getting risk components associated with misuse case ' + mcName)
+    return self.responseList('call misuseCaseRiskComponents(:misuse)',{'misuse':mcName},'MySQL error getting risk components associated with misuse case ' + mcName)[0]
 
   def personaToXml(self,pName):
     return self.responseList('call personaToXml(:persona)',{'persona':pName},'MySQL error exporting persona to XML')[0]
