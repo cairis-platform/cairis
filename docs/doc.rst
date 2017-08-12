@@ -201,6 +201,8 @@ These concerns can be shown by changing the Hide Concerns combo box value to Yes
 By clicking on a model element, information about that artifact can be
 viewed.
 
+CAIRIS models are rendered in the web browser as SVG.  Although CAIRIS doesn't have any explicit functionality for printing models, you can use the `SVG Crowbar <http://nytimes.github.io/svg-crowbar/>`_ bookmarklet to download an SVG file based on any given graphical model.  This model can either be directly used, or edited using an appropriate SVG vector graphics editor, e.g. `Inkscape <https://inkscape.org>`_.
+
 Roles & Personas
 ================
 
@@ -252,6 +254,8 @@ view the environment for.
 By changing the environment name in the environment combo box, the
 responsibility model for a different environment can be viewed.
 By clicking on a model element, information about that artifact can be viewed.
+
+For details on how to print models as SVG files, see the `Viewing Asset models`_ section.
 
 Personas
 --------
@@ -445,6 +449,9 @@ model for a different environment can be viewed. The model can also be filtered 
 By clicking on a model element, information about that artifact can be
 viewed.
 
+For details on how to print models as SVG files, see the `Viewing Asset models`_ section.
+
+
 Domain Properties
 =================
 
@@ -598,6 +605,8 @@ selected goal to be displayed as the root goal. Consequently, goals are
 only displayed if they are direct or indirect leafs of the filtered
 goal.
 
+For details on how to print models as SVG files, see the `Viewing Asset models`_ section.
+
 
 Adding, updating, and deleting an obstacle
 ------------------------------------------
@@ -652,6 +661,9 @@ In many ways, the obstacle model is very similar to the goal model. The
 main differences are goal filtering is not possible, only the obstacle
 tree is displayed, and obstacles refine to obstacles, as opposed to
 goals.
+
+For details on how to print models as SVG files, see the `Viewing Asset models`_ section.
+
 
 Adding, updating, and deleting requirements
 -------------------------------------------
@@ -1037,6 +1049,8 @@ artifact type. Filtering by type displays only the artifacts of the
 filtered type, and its directly associated assets. Filtering by artifact
 name displays only the filtered artifact, and its directly associated
 artifacts.
+
+For details on how to print models as SVG files, see the `Viewing Asset models`_ section.
 
 Risk Responses
 ==============
