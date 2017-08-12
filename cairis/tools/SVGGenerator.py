@@ -17,6 +17,7 @@
 
 import os
 from re import sub as substitute
+import base64
 from subprocess import check_output as cmd
 from tempfile import mkstemp as make_tempfile
 from xml.dom import minidom
@@ -72,6 +73,7 @@ class SVGGenerator(object):
         is_node = False
 
       line = correctHref(line, model_type)
+      line = embedImage(line)
 
       lines[i] = line
 
@@ -82,6 +84,27 @@ class SVGGenerator(object):
     svg_output = prettifySVG(svg_text)
 
     return svg_output
+
+def embedImage(line):
+
+  if (line.find('<image') == 0):
+    linkName = ''
+    if (line.find('modelActor.png') >= 0):
+      linkName = "/assets/modelActor.png"
+    elif (line.find('modelAttacker.png') >= 0):
+      linkName = "/assets/modelAttacker.png"
+    elif (line.find('modelConflict.png') >= 0):
+      linkName = "/assets/modelConflict.png"
+    elif (line.find('modelRole.png') >= 0):
+      linkName = "/assets/modelRole.png"
+    else:
+      raise Exception("No relevant image link found")
+    b = Borg()
+    with open(b.staticDir + linkName, "rb") as image_file:
+      encoded_string = base64.b64encode(image_file.read())
+      line = line.replace(linkName,'data:image/png;base64,' + encoded_string)
+  return line
+
 
 def correctHref(line, model_type):
   href_exists = -1
