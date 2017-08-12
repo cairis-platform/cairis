@@ -203,9 +203,6 @@ viewed.
 
 CAIRIS models are rendered in the web browser as SVG.  Although CAIRIS doesn't have any explicit functionality for printing models, you can use the `SVG Crowbar <http://nytimes.github.io/svg-crowbar/>`_ bookmarklet to download an SVG file based on any given graphical model.  This model can either be directly used, or edited using an appropriate SVG vector graphics editor, e.g. `Inkscape <https://inkscape.org>`_.
 
-
-SVG Crowbar
-
 Roles & Personas
 ================
 
