@@ -74,6 +74,7 @@ class SVGGenerator(object):
 
       line = correctHref(line, model_type)
       line = embedImage(line)
+      line = correctTableLabel(line)
 
       lines[i] = line
 
@@ -103,6 +104,15 @@ def embedImage(line):
     with open(b.staticDir + linkName, "rb") as image_file:
       encoded_string = base64.b64encode(image_file.read())
       line = line.replace(linkName,'data:image/png;base64,' + encoded_string)
+  return line
+
+def correctTableLabel(line):
+  idx = line.find('&lt;TABLE')
+  if (idx > 0):
+    urlSegment = '/api/assets/name/'
+#    objtName = line[line.find(urlSegment) + len(urlSegment) : line.find('xlink:title') -2]
+    objtName = ''
+    line = line[:idx] + objtName + '">'
   return line
 
 
