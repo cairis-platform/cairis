@@ -313,8 +313,8 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.inDescription = 1
       self.theDescription = ''
     elif (name =='definition'):
-      self.inDescription = 1
-      self.theDescription = ''
+      self.inDefinition = 1
+      self.theDefinition = ''
     elif name == 'fit_criterion':
       self.inFitCriterion = 1
       self.theFitCriterion = ''
@@ -339,6 +339,8 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
   def characters(self,data):
     if self.inDescription:
       self.theDescription += data
+    if self.inDefinition:
+      self.theDefinition += data
     elif self.inFitCriterion:
       self.theFitCriterion += data
     elif self.inIssue:
@@ -420,7 +422,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     elif (name == 'description'):
       self.inDescription = 0
     elif (name =='definition'):
-      self.inDescription = 0
+      self.inDefinition = 0
     elif name == 'fit_criterion':
       self.inFitCriterion = 0
     elif name == 'issue':
