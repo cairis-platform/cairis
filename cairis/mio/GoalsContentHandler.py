@@ -129,13 +129,13 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.resetObstacleEnvironmentAttributes()
 
   def resetGoalEnvironmentAttributes(self):
-    self.inDescription = 0
+    self.inDefinition = 0
     self.inFitCriterion = 0
     self.inIssue = 0
     self.theEnvironmentName = ''
     self.theCategory = ''
     self.thePriority = ''
-    self.theDescription = ''
+    self.theDefinition = ''
     self.theConcerns = []
     self.theConcernAssociations = []
 
@@ -361,7 +361,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theDomainProperties.append(p)
       self.resetDomainPropertyAttributes()
     elif name == 'goal_environment':
-      p = GoalEnvironmentProperties(self.theEnvironmentName,'',self.theDescription,self.theCategory,self.thePriority,self.theFitCriterion,self.theIssue,[],[],self.theConcerns,self.theConcernAssociations)
+      p = GoalEnvironmentProperties(self.theEnvironmentName,'',self.theDefinition,self.theCategory,self.thePriority,self.theFitCriterion,self.theIssue,[],[],self.theConcerns,self.theConcernAssociations)
       self.theEnvironmentProperties.append(p)
       self.resetGoalEnvironmentAttributes()
     elif name == 'obstacle_environment':
