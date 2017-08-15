@@ -3200,6 +3200,10 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Active Directory software deployment" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
+<goal_association environment="Day"  goal_name="Active Directory software deployment" goal_dim="goal" ref_type="and" subgoal_name="Modify Telemetry Software" subgoal_dim="usecase" alternative_id="0" >
+  <rationale>None</rationale>
+</goal_association>
+
 <goal_association environment="Day"  goal_name="Control testing" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
