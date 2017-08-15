@@ -19,7 +19,7 @@
 
 <!-- DTD for CAIRIS usability export file -->
 
-<!ELEMENT usability (persona*,external_document*,document_reference*,concept_reference*,persona_characteristic*,task_characteristic*,task*,usecase*)>
+<!ELEMENT usability (persona*,external_document*,document_reference*,concept_reference*,persona_characteristic*,task_characteristic*,task*)>
 
 <!ELEMENT tag EMPTY>
 <!ATTLIST tag name CDATA #REQUIRED>
