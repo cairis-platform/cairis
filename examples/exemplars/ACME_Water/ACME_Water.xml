@@ -1797,25 +1797,6 @@ Finally, Barry checks that Rick is happy with the work carried out.  Barry then 
     <benefits></benefits>
   </task_environment>
 </task>
-<usecase name="Modify Telemetry Software" author="Anon" code="MTS">
-<description>Modify telemetry software</description>
-<actor name="Instrument Technician" />
-<usecase_environment name="Day">
-  <preconditions>Software repository online.  Alarm mechanisms online.  Instrument technician authenticated with outstation.  Instrument technician authenticated with telemetry network.  Modified software on laptop and outstation.</preconditions>
-  <flow>
-    <step number="1" description="Instrument Technician requests verification of software change"/>
-    <step number="2" description="System sends software change alarm to Telemetry Network"/>
-    <step number="3" description="System displays modified software changes to Instrument Technician"/>
-    <step number="4" description="Instrument Technician submits software modification report to the system.">
-      <exception name="Unavailable software repository" type="Goal" value="Active Directory software deployment" category="Availability_Threat">
-        <definition>Active Directory is unavailable.</definition>
-      </exception>
-    </step>
-    <step number="5" description="System acknowledges software modification."/>
-  </flow>
-  <postconditions>Modified software alarm received by telemetry network.  Modified software on software repository.  Software modification report on software repository.</postconditions>
-</usecase_environment>
-</usecase>
 </usability>
 
 <goals>
@@ -2710,6 +2691,25 @@ Standard 7.11(vvv)</issue>
     <definition>Firewall rules fail to identify the characteristics of an intentional attack.</definition>
   </obstacle_environment>
 </obstacle>
+<usecase name="Modify Telemetry Software" author="Anon" code="MTS">
+<description>Modify telemetry software</description>
+<actor name="Instrument Technician" />
+<usecase_environment name="Day">
+  <preconditions>Software repository online.  Alarm mechanisms online.  Instrument technician authenticated with outstation.  Instrument technician authenticated with telemetry network.  Modified software on laptop and outstation.</preconditions>
+  <flow>
+    <step number="1" description="Instrument Technician requests verification of software change"/>
+    <step number="2" description="System sends software change alarm to Telemetry Network"/>
+    <step number="3" description="System displays modified software changes to Instrument Technician"/>
+    <step number="4" description="Instrument Technician submits software modification report to the system.">
+      <exception name="Unavailable software repository" type="Goal" value="Active Directory software deployment" category="Availability_Threat">
+        <definition>Active Directory is unavailable.</definition>
+      </exception>
+    </step>
+    <step number="5" description="System acknowledges software modification."/>
+  </flow>
+  <postconditions>Modified software alarm received by telemetry network.  Modified software on software repository.  Software modification report on software repository.</postconditions>
+</usecase_environment>
+</usecase>
 </goals>
 
 <associations>
