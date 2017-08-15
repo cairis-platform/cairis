@@ -267,27 +267,7 @@
 <!ATTLIST task_concern_association target_nry (1 | a | 1..a) #REQUIRED>
 <!ATTLIST task_concern_association target_name CDATA #REQUIRED>
 
-<!ELEMENT usecase (tag*,description,actor+,usecase_environment+)>
-<!ATTLIST usecase name CDATA #REQUIRED>
-<!ATTLIST usecase author CDATA #REQUIRED>
-<!ATTLIST usecase code CDATA #REQUIRED>
-<!ELEMENT actor EMPTY>
-<!ATTLIST actor name CDATA #REQUIRED>
-<!ELEMENT usecase_environment (preconditions,flow,postconditions)>
-<!ATTLIST usecase_environment name CDATA #REQUIRED>
-<!ELEMENT preconditions (#PCDATA)>
-<!ELEMENT flow (step+)>
-<!ELEMENT step (exception*)>
-<!ATTLIST step number CDATA #REQUIRED>
-<!ATTLIST step description CDATA #REQUIRED>
-<!ELEMENT exception (definition)>
-<!ATTLIST exception name CDATA #REQUIRED>
-<!ATTLIST exception type (Goal | Requirement) #REQUIRED>
-<!ATTLIST exception value CDATA #REQUIRED>
-<!ATTLIST exception category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat ) #REQUIRED>
-<!ELEMENT postconditions (#PCDATA)>
-
-<!ELEMENT goals (domainproperty*, goal*,obstacle*,requirement*,countermeasure*)>
+<!ELEMENT goals (domainproperty*, goal*,obstacle*,requirement*,usecase*,countermeasure*)>
 
 <!ELEMENT domainproperty (tag*,definition)>
 <!ATTLIST domainproperty name CDATA #REQUIRED>
@@ -329,6 +309,26 @@
 <!ATTLIST requirement type (Functional | Data | Look_and_Feel | Usability | Performance | Operational | Maintainability | Portability | Security | Cultural_and_Political | Legal) #REQUIRED>
 <!ATTLIST requirement priority (1 | 2 | 3) #REQUIRED>
 <!ELEMENT originator (#PCDATA)>
+
+<!ELEMENT usecase (tag*,description,actor+,usecase_environment+)>
+<!ATTLIST usecase name CDATA #REQUIRED>
+<!ATTLIST usecase author CDATA #REQUIRED>
+<!ATTLIST usecase code CDATA #REQUIRED>
+<!ELEMENT actor EMPTY>
+<!ATTLIST actor name CDATA #REQUIRED>
+<!ELEMENT usecase_environment (preconditions,flow,postconditions)>
+<!ATTLIST usecase_environment name CDATA #REQUIRED>
+<!ELEMENT preconditions (#PCDATA)>
+<!ELEMENT flow (step+)>
+<!ELEMENT step (exception*)>
+<!ATTLIST step number CDATA #REQUIRED>
+<!ATTLIST step description CDATA #REQUIRED>
+<!ELEMENT exception (definition)>
+<!ATTLIST exception name CDATA #REQUIRED>
+<!ATTLIST exception type (Goal | Requirement) #REQUIRED>
+<!ATTLIST exception value CDATA #REQUIRED>
+<!ATTLIST exception category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat ) #REQUIRED>
+<!ELEMENT postconditions (#PCDATA)>
 
 <!ELEMENT countermeasure (tag*,description,countermeasure_environment+)>
 <!ATTLIST countermeasure name CDATA #REQUIRED>
