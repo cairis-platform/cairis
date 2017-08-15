@@ -2293,7 +2293,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     if (roleName == ''):
       return self.goalAssociations('call responsibilityModel(:id)',envName)
     else:
-      return self.goalTreeAssociations('call subResponsibilityModel(":id1",":id2")',envName,roleName)
+      return self.goalTreeAssociations('call subResponsibilityModel(:id1,:id2)',envName,roleName)
  
   def obstacleModel(self,envName,goalName = '',topLevelGoals = 0):
     if (goalName == ''):
