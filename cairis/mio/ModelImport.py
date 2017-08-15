@@ -97,7 +97,7 @@ def importAttackPattern(importFile,session_id = None):
     threat = handler.threat()
     risk = handler.risk()
     raTxt = importRiskAnalysis([],assets,[vulnerability],attackers,[threat],[risk],[],[],session_id)
-    obsTxt = importRequirements([],[],handler.obstacles(),[],[],session_id)
+    obsTxt = importRequirements([],[],handler.obstacles(),[],[],[],session_id)
     assocTxt = importAssociations([],handler.obstacleAssociations(),[],session_id)
     return obsTxt + assocTxt + raTxt
   except xml.sax.SAXException, e:

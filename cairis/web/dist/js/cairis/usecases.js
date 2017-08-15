@@ -634,7 +634,6 @@ mainContent.on('shown.bs.modal','#useCaseStepExceptionDialog',function() {
         $('#theExceptionCategory').val(currentExc.theCategoryName);
         if (currentExc.theDimensionType == 'goal') {
           $($('#theExceptionTypeGoalRadioLabel').children()[0]).prop('checked','checked')
-
         }
         else {
           $($('#theExceptionTypeRequirementRadioLabel').children()[0]).prop('checked','checked')
@@ -667,7 +666,6 @@ function refreshExceptionTypeValues(excType,excTypeValue) {
   }
   else {
     urlPrefix += '/requirements'
-
   }
   refreshSpecificSelector($('#theExceptionTypeValues'),urlPrefix,function() {
     if (excTypeValue != undefined) {
