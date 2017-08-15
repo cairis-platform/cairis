@@ -170,7 +170,7 @@ def importRequirementsString(buf,session_id = None):
   try:
     handler = GoalsContentHandler(session_id = session_id)
     xml.sax.parseString(buf,handler)
-    return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.countermeasures(),session_id = session_id)
+    return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.usecases(),handler.countermeasures(),session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
