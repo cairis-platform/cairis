@@ -24,10 +24,6 @@ from cairis.core.DocumentReferenceParameters import DocumentReferenceParameters
 from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicParameters
 from cairis.core.TaskParameters import TaskParameters
 from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
-from cairis.core.UseCaseParameters import UseCaseParameters
-from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
-from cairis.core.Steps import Steps
-from cairis.core.Step import Step
 from cairis.core.Borg import Borg
 
 __author__ = 'Shamal Faily'
@@ -72,14 +68,13 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     self.theDocumentReferences = []
     self.thePersonaCharacteristics = []
     self.theTasks = []
-    self.theUseCases = []
     b = Borg()
     self.configDir = b.configDir
     self.resetPersonaAttributes()
     self.resetDocumentReferenceAttributes()
     self.resetPersonaCharacteristicAttributes()
+    self.resetExternalDocumentAttributes()
     self.resetTaskAttributes()
-    self.resetUseCaseAttributes()
 
   def resolveEntity(self,publicId,systemId):
     return systemId
@@ -98,9 +93,6 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
 
   def tasks(self):
     return self.theTasks
-
-  def usecases(self):
-    return self.theUseCases
 
   def resetPersonaAttributes(self):
     self.inActivities = 0
@@ -181,33 +173,6 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     self.theConcerns = []
     self.theConcernAssociations = []
 
-  def resetUseCaseAttributes(self):
-    self.theName = ''
-    self.theTags = []
-    self.theAuthor = ''
-    self.theCode = ''
-    self.inDescription = 0
-    self.theDescription = ''
-    self.theActors = []
-    self.theEnvironmentProperties = []
-    self.resetUseCaseEnvironmentAttributes()
-
-  def resetUseCaseEnvironmentAttributes(self):
-    self.theEnvironmentName = ''    
-    self.inPreconditions = 0
-    self.thePreconditions = ''
-    self.inPostconditions = 0
-    self.thePostconditions = ''
-    self.theSteps = Steps()
-    self.theCurrentStep = None
-    self.theCurrentStepNo = 0
-    self.theExcName = ''
-    self.theExcType = ''
-    self.theExcValue = ''
-    self.theExcCat = ''
-    self.inDefinition = 0
-    self.theDefinition = ''
-
   def startElement(self,name,attrs):
     self.currentElementName = name
     if name == 'persona':
@@ -269,22 +234,6 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.theConcerns.append(attrs['asset'])
     elif name == 'task_concern_association':
       self.theConcernAssociations.append((attrs['source_name'],a2s(attrs['source_nry']),attrs['link_name'],attrs['target_name'],a2s(attrs['target_nry'])))
-    elif name == 'usecase':
-      self.theName = attrs['name']
-      self.theAuthor = attrs['author']
-      self.theCode = attrs['code']
-    elif name == 'actor':
-      self.theActors.append(attrs['name'])
-    elif name == 'usecase_environment':
-      self.theEnvironmentName = attrs['name']
-    elif name == 'step':
-      self.theCurrentStepNo = attrs['number']
-      self.theCurrentStep = Step(attrs['description'])
-    elif name == 'exception':
-      self.theExcName = attrs['name']
-      self.theExcType = attrs['type']
-      self.theExcValue = attrs['value']
-      self.theExcCat = u2s(attrs['category'])
     elif name == 'activities':
       self.inActivities = 1
       self.theActivities = ''
@@ -330,12 +279,6 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     elif name == 'objective':
       self.inObjective = 1
       self.theObjective = ''
-    elif name == 'preconditions':
-      self.inPreconditions = 1
-      self.thePreconditions = ''
-    elif name == 'postconditions':
-      self.inPostconditions = 1
-      self.thePostconditions = ''
     elif name == 'tag':
       self.theTags.append(attrs['name'])
 
@@ -368,10 +311,6 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.theDependencies += data
     elif self.inObjective:
       self.theObjective += data
-    elif self.inPreconditions:
-      self.thePreconditions += data
-    elif self.inPostconditions:
-      self.thePostconditions += data
     elif self.inNarrative:
       self.theNarrative += data
 
@@ -404,20 +343,6 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       p = TaskEnvironmentProperties(self.theEnvironmentName,self.theDependencies,self.theTaskPersonas,self.theConcerns,self.theConcernAssociations,self.theNarrative,self.theConsequences,self.theBenefits,{'narrative':{},'consequences':{},'benefits':{}})
       self.theEnvironmentProperties.append(p)
       self.resetTaskEnvironmentAttributes()
-    elif name == 'exception':
-      self.theCurrentStep.addException((self.theExcName,self.theExcType,self.theExcValue,self.theExcCat,self.theDefinition))
-    elif name == 'step':
-      self.theCurrentStep.setTags(self.theTags)
-      self.theSteps.append(self.theCurrentStep)
-      self.theCurrentStep = None
-    elif name == 'usecase_environment':
-      p = UseCaseEnvironmentProperties(self.theEnvironmentName,self.thePreconditions,self.theSteps,self.thePostconditions)
-      self.theEnvironmentProperties.append(p)
-      self.resetUseCaseEnvironmentAttributes()
-    elif name == 'usecase':
-      p = UseCaseParameters(self.theName,self.theAuthor,self.theCode,self.theActors,self.theDescription,self.theTags,self.theEnvironmentProperties)
-      self.theUseCases.append(p)
-      self.resetUseCaseAttributes()
     elif name == 'activities':
       self.inActivities = 0
     elif name == 'attitudes':
@@ -444,12 +369,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.inDependencies = 0
     elif name == 'objective':
       self.inObjective = 0
-    elif name == 'preconditions':
-      self.inPreconditions = 0
-    elif name == 'postconditions':
-      self.inPostconditions = 0
     elif name == 'benefits':
       self.inBenefits = 0
     elif name == 'consequences':
       self.inConsequences = 0
-

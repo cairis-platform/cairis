@@ -162,7 +162,7 @@ def importRequirementsFile(importFile,session_id = None):
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
-    return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.countermeasures(),session_id = session_id)
+    return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.usecases(),handler.countermeasures(),session_id = session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
@@ -174,7 +174,7 @@ def importRequirementsString(buf,session_id = None):
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParameterSet,cmParameterSet,session_id):
+def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParameterSet,ucParameterSet,cmParameterSet,session_id):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
   dpCount = 0
@@ -219,6 +219,16 @@ def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParame
       db_proxy.updateRequirement(req)
     reqCount += 1
 
+  ucCount = 0
+  for ucParameters in ucParameterSet:
+    objtId = db_proxy.existingObject(ucParameters.name(),'usecase')
+    if objtId == -1:
+      db_proxy.addUseCase(ucParameters)
+    else:
+      ucParameters.setId(objtId)
+      db_proxy.updateUseCase(ucParameters)
+    ucCount += 1
+
   cmCount = 0
   for cmParameters in cmParameterSet:
     objtId = db_proxy.existingObject(cmParameters.name(),'countermeasure')
@@ -228,7 +238,7 @@ def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParame
       cmParameters.setId(objtId)
       db_proxy.updateCountermeasure(cmParameters)
     cmCount += 1
-  msgStr = 'Imported ' + str(dpCount) + ' domain properties, ' + str(goalCount) + ' goals, ' + str(obsCount) + ' obstacles, ' + str(reqCount) + ' requirements, and ' + str(cmCount) + ' countermeasures.'
+  msgStr = 'Imported ' + str(dpCount) + ' domain properties, ' + str(goalCount) + ' goals, ' + str(obsCount) + ' obstacles, ' + str(reqCount) + ' requirements, ' + str(ucCount) + 'use cases, and ' + str(cmCount) + ' countermeasures.'
   return msgStr
 
 def importRiskAnalysisFile(importFile,session_id = None):
@@ -331,12 +341,12 @@ def importUsabilityFile(importFile,session_id = None):
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
-    return importUsability(handler.personas(),handler.externalDocuments(),handler.documentReferences(),handler.personaCharacteristics(),handler.tasks(),handler.usecases(),session_id=session_id)
+    return importUsability(handler.personas(),handler.externalDocuments(),handler.documentReferences(),handler.personaCharacteristics(),handler.tasks(),session_id=session_id)
   except xml.sax.SAXException, e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 
-def importUsability(personaParameterSet,edParameterSet,drParameterSet,pcParameterSet,taskParameterSet,ucParameterSet,session_id):
+def importUsability(personaParameterSet,edParameterSet,drParameterSet,pcParameterSet,taskParameterSet,session_id):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
   personaCount = 0
@@ -379,23 +389,13 @@ def importUsability(personaParameterSet,edParameterSet,drParameterSet,pcParamete
       db_proxy.updateTask(taskParameters)
     taskCount += 1
 
-  ucCount = 0
-  for ucParameters in ucParameterSet:
-    objtId = db_proxy.existingObject(ucParameters.name(),'usecase')
-    if objtId == -1:
-      db_proxy.addUseCase(ucParameters)
-    else:
-      ucParameters.setId(objtId)
-      db_proxy.updateUseCase(ucParameters)
-    ucCount += 1
-
 
   pcCount = 0
   for pcParameters in pcParameterSet:
     db_proxy.addPersonaCharacteristic(pcParameters)
     pcCount += 1
 
-  msgStr = 'Imported ' + str(personaCount) + ' personas, ' + str(edCount) + ' external documents, ' + str(drCount) + ' document references, ' + str(pcCount) + ' persona characteristics, ' + str(taskCount) + ' tasks, and ' + str(ucCount) + ' use cases.'
+  msgStr = 'Imported ' + str(personaCount) + ' personas, ' + str(edCount) + ' external documents, ' + str(drCount) + ' document references, ' + str(pcCount) + ' persona characteristics, ' + str(taskCount) + ' tasks.'
   return msgStr
 
 

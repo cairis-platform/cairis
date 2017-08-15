@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">
+<!DOCTYPE goals PUBLIC "-//CAIRIS//DTD GOALS 1.0//EN" "http://cairis.org/dtd/goals.dtd">
 
-<usability>
+<goals>
 <usecase name="Test use case" author="Shamal Faily" code="TUC-1">
   <description>A test description</description>
   <actor name="Researcher" />
@@ -18,5 +18,4 @@
     <postconditions>Test postconditions</postconditions>
   </usecase_environment>
 </usecase>
-</usability>
-
+</goals>

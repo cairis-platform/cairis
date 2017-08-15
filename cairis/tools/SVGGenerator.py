@@ -87,7 +87,6 @@ class SVGGenerator(object):
     return svg_output
 
 def embedImage(line):
-
   if (line.find('<image') == 0):
     linkName = ''
     if (line.find('modelActor.png') >= 0):
@@ -110,7 +109,6 @@ def correctTableLabel(line):
   idx = line.find('&lt;TABLE')
   if (idx > 0):
     urlSegment = '/api/assets/name/'
-#    objtName = line[line.find(urlSegment) + len(urlSegment) : line.find('xlink:title') -2]
     objtName = ''
     line = line[:idx] + objtName + '">'
   return line

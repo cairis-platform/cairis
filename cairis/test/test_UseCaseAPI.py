@@ -24,7 +24,7 @@ from cairis.core.Trace import Trace
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
-from cairis.mio.ModelImport import importModelFile, importUsabilityFile
+from cairis.mio.ModelImport import importModelFile, importRequirementsFile
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.PseudoClasses import StepsAttributes, StepAttributes,ExceptionAttributes
 from cairis.tools.ModelDefinitions import UseCaseContributionModel
@@ -37,7 +37,7 @@ class UseCaseAPITests(CairisDaemonTestCase):
   @classmethod
   def setUpClass(cls):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
-    importUsabilityFile(os.environ['CAIRIS_SRC'] + '/test/testusecase.xml','test')
+    importRequirementsFile(os.environ['CAIRIS_SRC'] + '/test/testusecase.xml','test')
   
   def setUp(self):
     # region Class fields

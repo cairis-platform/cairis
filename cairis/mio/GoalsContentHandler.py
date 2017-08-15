@@ -25,6 +25,10 @@ from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
 from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
 from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
 from cairis.core.Target import Target
+from cairis.core.UseCaseParameters import UseCaseParameters
+from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
+from cairis.core.Steps import Steps
+from cairis.core.Step import Step
 import cairis.core.RequirementFactory
 from cairis.core.Borg import Borg
 
@@ -66,6 +70,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.theGoals = []
     self.theObstacles = []
     self.theRequirements = []
+    self.theUseCases = []
     self.theCountermeasures = []
     self.theReferenceLabelDictionary = {}
 
@@ -74,6 +79,8 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.resetObstacleAttributes()
     self.resetRequirementAttributes()
     self.resetGoalAttributes()
+    self.resetUseCaseAttributes()
+    self.resetUseCaseEnvironmentAttributes()
     self.resetCountermeasureAttributes()
 
   def resolveEntity(self,publicId,systemId):
@@ -93,6 +100,9 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
 
   def requirements(self):
     return self.theRequirements
+
+  def usecases(self):
+    return self.theUseCases
 
   def countermeasures(self):
     return self.theCountermeasures
@@ -157,6 +167,33 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.theRationale = 0
     self.theFitCriterion = 0
     self.theOriginator = 0
+
+  def resetUseCaseAttributes(self):
+    self.theName = ''
+    self.theTags = []
+    self.theAuthor = ''
+    self.theCode = ''
+    self.inDescription = 0
+    self.theDescription = ''
+    self.theActors = []
+    self.theEnvironmentProperties = []
+    self.resetUseCaseEnvironmentAttributes()
+
+  def resetUseCaseEnvironmentAttributes(self):
+    self.theEnvironmentName = ''    
+    self.inPreconditions = 0
+    self.thePreconditions = ''
+    self.inPostconditions = 0
+    self.thePostconditions = ''
+    self.theSteps = Steps()
+    self.theCurrentStep = None
+    self.theCurrentStepNo = 0
+    self.theExcName = ''
+    self.theExcType = ''
+    self.theExcValue = ''
+    self.theExcCat = ''
+    self.inDefinition = 0
+    self.theDefinition = ''
 
   def resetCountermeasureAttributes(self):
     self.theName = ''
@@ -236,6 +273,22 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theReferenceType = attrs['reference_type']
       self.theType = u2s(attrs['type'])
       self.thePriority = attrs['priority']
+    elif name == 'usecase':
+      self.theName = attrs['name']
+      self.theAuthor = attrs['author']
+      self.theCode = attrs['code']
+    elif name == 'actor':
+      self.theActors.append(attrs['name'])
+    elif name == 'usecase_environment':
+      self.theEnvironmentName = attrs['name']
+    elif name == 'step':
+      self.theCurrentStepNo = attrs['number']
+      self.theCurrentStep = Step(attrs['description'])
+    elif name == 'exception':
+      self.theExcName = attrs['name']
+      self.theExcType = attrs['type']
+      self.theExcValue = attrs['value']
+      self.theExcCat = u2s(attrs['category'])
     elif name == 'countermeasure':
       self.theName = attrs['name']
       self.theType = attrs['type']
@@ -274,6 +327,12 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     elif name == 'originator':
       self.inOriginator = 1
       self.theOriginator = ''
+    elif name == 'preconditions':
+      self.inPreconditions = 1
+      self.thePreconditions = ''
+    elif name == 'postconditions':
+      self.inPostconditions = 1
+      self.thePostconditions = ''
     elif name == 'tag':
       self.theTags.append(attrs['name'])
 
@@ -288,6 +347,11 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theRationale += data
     elif self.inOriginator:
       self.theOriginator += data
+    elif self.inPreconditions:
+      self.thePreconditions += data
+    elif self.inPostconditions:
+      self.thePostconditions += data
+
 
   def endElement(self,name):
     if name == 'domainproperty':
@@ -317,6 +381,20 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       r = cairis.core.RequirementFactory.build(reqId,self.theLabel,self.theName,self.theDescription,self.thePriority,self.theRationale,self.theFitCriterion,self.theOriginator,self.theType,self.theReference)
       self.theRequirements.append((r,self.theReference,self.theReferenceType))
       self.resetRequirementAttributes()
+    elif name == 'exception':
+      self.theCurrentStep.addException((self.theExcName,self.theExcType,self.theExcValue,self.theExcCat,self.theDefinition))
+    elif name == 'step':
+      self.theCurrentStep.setTags(self.theTags)
+      self.theSteps.append(self.theCurrentStep)
+      self.theCurrentStep = None
+    elif name == 'usecase_environment':
+      p = UseCaseEnvironmentProperties(self.theEnvironmentName,self.thePreconditions,self.theSteps,self.thePostconditions)
+      self.theEnvironmentProperties.append(p)
+      self.resetUseCaseEnvironmentAttributes()
+    elif name == 'usecase':
+      p = UseCaseParameters(self.theName,self.theAuthor,self.theCode,self.theActors,self.theDescription,self.theTags,self.theEnvironmentProperties)
+      self.theUseCases.append(p)
+      self.resetUseCaseAttributes()
     elif name == 'countermeasure':
       p = CountermeasureParameters(self.theName,self.theDescription,self.theType,self.theTags,self.theEnvironmentProperties)
       self.theCountermeasures.append(p)
@@ -351,3 +429,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.inRationale = 0
     elif name == 'originator':
       self.inOriginator = 0
+    elif name == 'preconditions':
+      self.inPreconditions = 0
+    elif name == 'postconditions':
+      self.inPostconditions = 0
