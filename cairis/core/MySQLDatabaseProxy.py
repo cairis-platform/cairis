@@ -5252,20 +5252,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def assetComponents(self,assetName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call assetComponents(:ass,:env)',{'ass':assetName,'env':envName})
-      rows = []
-      for row in rs.fetchall():
-        if (row != None):
-          rows.append(row[0])
-      rs.close()
-      session.close()
-      return rows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting component associated with asset ' + assetName  + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call assetComponents(:ass,:env)',{'ass':assetName,'env':envName},'MySQL error getting asset components')
 
   def addTemplateRequirement(self,parameters):
     reqId = self.newId()
@@ -5305,66 +5292,23 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getTemplateRequirements(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getTemplateRequirements(:const)',{'const':constraintId})
-      templateReqs = {}
-      vals = []
-      for row in rs.fetchall():
-        row = list(row)
-        reqId = row[0]
-        reqName = row[1]
-        assetName = row[2]
-        reqType = row[3]
-        reqDesc = row[4]
-        reqRat = row[5]
-        reqFC = row[6]
-        parameters = TemplateRequirementParameters(reqName,assetName,reqType,reqDesc,reqRat,reqFC)
-        templateReq = ObjectFactory.build(reqId,parameters)
-        templateReqs[reqName] = templateReq
-      rs.close()
-      session.close()
-      return templateReqs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting template requirements (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call getTemplateRequirements(:const)',{'const':constraintId},'MySQL error getting template requirements')
+    templateReqs = {}
+    for reqId,reqName,assetName,reqType,reqDesc,reqRat,reqFC in rows:
+      parameters = TemplateRequirementParameters(reqName,assetName,reqType,reqDesc,reqRat,reqFC)
+      templateReq = ObjectFactory.build(reqId,parameters)
+      templateReqs[reqName] = templateReq
+    return templateReqs
 
   def deleteTemplateRequirement(self,reqId):
     self.deleteObject(reqId,'template_requirement')
     
 
   def componentViewRequirements(self,cvName):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentViewRequirements(:cv)',{'cv':cvName})
-      rows = []
-      for row in rs.fetchall():
-        row = list(row)
-        rows.append(row[0])
-      rs.close()
-      session.close()
-      return rows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting requirements for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call componentViewRequirements(:cv)',{'cv':cvName},'MySQL error getting component view requirements')
 
   def componentViewGoals(self,cvName):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentViewGoals(:cv)',{'cv':cvName})
-      rows = []
-      for row in rs.fetchall():
-        row = list(row)
-        rows.append(row[0])
-      rs.close()
-      session.close()
-      return rows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goals for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call componentViewGoals(:cv)',{'cv':cvName},'MySQL error getting component view goals')
 
   def situateComponentViewRequirements(self,cvName):
     try:
@@ -5378,50 +5322,26 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getComponents(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getAllComponents(:const)',{'const':constraintId})
-      components = {}
-      componentRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        componentId = row[0]
-        componentName = row[1]
-        componentDesc = row[2]
-        componentRows.append((componentId,componentName,componentDesc))
-      rs.close()
-      session.close()
-      for componentId,componentName,componentDesc in componentRows:
-        componentInterfaces = self.componentInterfaces(componentId)
-        componentStructure = self.componentStructure(componentId)
-        componentReqs = self.componentRequirements(componentId)
-        componentGoals = self.componentGoals(componentId)
-        assocs = self.componentGoalAssociations(componentId)
-        comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs,componentGoals,assocs)
-        comParameters.setId(componentId)
-        component = ObjectFactory.build(componentId,comParameters)
-        components[componentName] = component
-      return components
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting components (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    componentRows = self.responseList('call getAllComponents(:const)',{'const':constraintId},'MySQL error getting components')
+    components = {}
+    for componentId,componentName,componentDesc in componentRows:
+      componentInterfaces = self.componentInterfaces(componentId)
+      componentStructure = self.componentStructure(componentId)
+      componentReqs = self.componentRequirements(componentId)
+      componentGoals = self.componentGoals(componentId)
+      assocs = self.componentGoalAssociations(componentId)
+      comParameters = ComponentParameters(componentName,componentDesc,componentInterfaces,componentStructure,componentReqs,componentGoals,assocs)
+      comParameters.setId(componentId)
+      component = ObjectFactory.build(componentId,comParameters)
+      components[componentName] = component
+    return components
 
   def personasImpact(self,cvName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call personasImpact(:cv,:env)',{'cv':cvName,'env':envName})
-      pImpact = []
-      for row in rs.fetchall():
-        row = list(row)
-        pImpact.append((row[0],str(row[1])))
-      rs.close()
-      session.close()
-      return pImpact
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting personas impact (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call personasImpact(:cv,:env)',{'cv':cvName,'env':envName},'MySQL error getting personas impact')
+    pImpact = []
+    for c1,c2 in rows:
+      pImpact.append((c1,str(c2)))
+    return pImpact
 
   def personaImpactRationale(self,cvName,personaName,envName):
     try:
@@ -5454,56 +5374,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def taskUseCases(self,taskName):
-    try:
-      session = self.conn()
-      rs = session.execute('call taskUseCases(:task)',{'task':taskName})
-      rowCount = rs.rowcount
-      ucs = []
-      if (rowCount > 0):
-        for row in rs.fetchall():
-          row = list(row)
-          ucs.append(row[0])
-      rs.close()
-      session.close()
-      return ucs 
-    except _mysql_exceptions.DatabaseError, e:
-     id,msg = e
-     exceptionText = 'MySQL error getting use cases associated with task ' + taskName + ' (id:' + str(id) + ',message:' + msg + ')'
-     raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call taskUseCases(:task)',{'task':taskName},'MySQL error getting task use cases')
 
   def usecaseComponents(self,ucName):
-    try:
-      session = self.conn()
-      rs = session.execute('call usecaseComponents(:useCase)',{'useCase':ucName})
-      rowCount = rs.rowcount
-      coms = []
-      if (rowCount > 0):
-        for row in rs.fetchall():
-          row = list(row)
-          coms.append(row[0])
-      rs.close()
-      session.close()
-      return coms 
-    except _mysql_exceptions.DatabaseError, e:
-     id,msg = e
-     exceptionText = 'MySQL error getting components associated with use case ' + ucName + ' (id:' + str(id) + ',message:' + msg + ')'
-     raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call usecaseComponents(:useCase)',{'useCase':ucName},'MySQL error getting use case components')
 
   def attackSurfaceMetric(self,cvName):
-    try:
-      session = self.conn()
-      rs = session.execute('call attackSurfaceMetric(:cv)',{'cv':cvName})
-      row = rs.fetchone()
-      der_m = row[0]
-      der_c = row[1]
-      der_i = row[2]
-      rs.close()
-      session.close()
-      return (der_m,der_c,der_i)
-    except _mysql_exceptions.DatabaseError, e:
-     id,msg = e
-     exceptionText = 'MySQL error getting attack surface metric for ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
-     raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call attackSurfaceMetric(:cv)',{'cv':cvName},'MySQL error getting attack surface metrics')[0]
 
   def componentAssetModel(self,componentName):
     try:
