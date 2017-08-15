@@ -2286,7 +2286,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     if (goalName == ''):
       return self.goalAssociations('call goalModel(:id)',envName)
     else:
-      return self.goalTreeAssociations('call goalTree(":id1",":id2",":id3",":id4")',goalName,envName,topLevelGoals,caseFilter)
+      return self.goalTreeAssociations('call goalTree(:id1,:id2,:id3,:id4)',goalName,envName,topLevelGoals,caseFilter)
    
 
   def responsibilityModel(self,envName,roleName = ''):
@@ -2299,7 +2299,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     if (goalName == ''):
       return self.goalAssociations('call obstacleModel(:id)',envName)
     else:
-      return self.goalTreeAssociations('call obstacleTree(":id1",":id2",":id3",":id4")',goalName,envName,topLevelGoals)
+      return self.goalTreeAssociations('call obstacleTree(:id1,:id2,:id3,:id4)',goalName,envName,topLevelGoals)
  
 
 
@@ -2338,7 +2338,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def goalTreeAssociations(self,procName,goalName,envName,topLevelGoals = 0,caseFilter = 0):
     rows = []
-    if (procName == 'call goalTree(":id1",":id2",":id3",":id4")') or (procName == 'call obstacleTree(":id1",":id2",":id3",":id4")'):
+    if (procName == 'call goalTree(:id1,:id2,:id3,:id4)') or (procName == 'call obstacleTree(:id1,:id2,:id3,:id4)'):
       rows = self.responseList(procName,{'id1':goalName,'id2':envName,'id3':topLevelGoals,'id4':caseFilter},'MySQL error getting goal tree associations')
     else:
       rows = self.responseList(procName,{'id1':goalName,'id2':envName},'MySQL error getting goal tree associations')
@@ -2671,7 +2671,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       altName = 'No'
       if (alternativeId == 1):
         altName = 'Yes'
-      subGoalRefinements.append((goalName,goalDimName,aType,altName,rationale))
+      subGoalRefinements.append((subGoalName,subGoalDimName,aType,altName,rationale))
     return goalRefinements,subGoalRefinements 
 
   def assetAssociations(self,assetId,environmentId):
