@@ -3830,6 +3830,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
 
   def getArgReference(self,atName,constraintName):
+    rows = self.responseList('call getUseCases(:id)',{'id':constraintId},'MySQL error getting use cases')
+
     try:
       session = self.conn()
       rs = session.execute('call get' + atName + '(:const)',{'const':constraintName})
@@ -4467,25 +4469,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getUseCaseContributions(self,ucName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getUseCaseContributions(:useCase)',{'useCase':ucName})
-      ucs = {}
-      for row in rs.fetchall():
-        row = list(row)
-        rsName = row[0]
-        me = row[1]
-        cont = row[2]
-        rType = row[3]
-        rc = ReferenceContribution(ucName,rsName,me,cont)
-        ucs[rsName] = (rc,rType) 
-      rs.close()
-      session.close() 
-      return ucs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting contributions for use case ' + ucName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call getUseCaseContributions(:useCase)',{'useCase':ucName},'MySQL error getting use case contributions')
+    ucs = {}
+    for rsName,me,cont,rType in rows:
+      rc = ReferenceContribution(ucName,rsName,me,cont)
+      ucs[rsName] = (rc,rType) 
+    return ucs
 
   def addUseCaseContribution(self,rc):
     ucName = rc.source()
@@ -4560,71 +4549,27 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
  
   def getSubGoalNames(self,goalName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call subGoalNames(:goal,:env)',{'goal':goalName,'env':envName})
-      goals = ['']
-      for row in rs.fetchall():
-        row = list(row)
-        goals.append(row[0])
-      rs.close()
-      session.close()
-      return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goals associated with environment ' + envName + ' and subgoal ' + goalName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = ['']
+    rows += self.responseList('call subGoalNames(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting sub goal names')
+    return rows
 
   def dependentLabels(self,goalName,envName):
     return self.responseList('call dependentLabels(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting dependent labels')
 
   def goalEnvironments(self,goalName):
-    try:
-      session = self.conn()
-      rs = session.execute('call goalEnvironments(:goal)',{'goal':goalName})
-      envs = ['']
-      for row in rs.fetchall():
-        row = list(row)
-        envs.append(row[0])
-      rs.close()
-      session.close()
-      return envs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting environments associated with goal ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = ['']
+    rows += self.responseList('call goalEnvironments(:goal)',{'goal':goalName},'MySQL error getting goal environments')
+    return rows
 
   def obstacleEnvironments(self,obsName):
-    try:
-      session = self.conn()
-      rs = session.execute('call obstacleEnvironments(:obs)',{'obs':obsName})
-      envs = ['']
-      for row in rs.fetchall():
-        row = list(row)
-        envs.append(row[0])
-      rs.close()
-      session.close()
-      return envs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting environments associated with obstacle ' + obsName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = ['']
+    rows += self.responseList('call obstacleEnvironments(:obs)',{'obs':obsName},'MySQL error getting obstacle environments')
+    return rows
 
   def getSubObstacleNames(self,obsName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call subObstacleNames(:obs,:env)',{'obs':obsName,'env':envName})
-      obs = ['']
-      for row in rs.fetchall():
-        row = list(row)
-        obs.append(row[0])
-      rs.close()
-      session.close()
-      return obs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting obstacles associated with environment ' + envName + ' and sub-obstacle ' + obsName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = ['']
+    rows += self.responseList('call subObstacleNames(:obs,:env)',{'obs':obsName,'env':envName},'MySQL error getting sub obstacle names')
+    return rows
 
   def getEnvironmentObstacles(self,obsName,envName):
     obsRows = self.responseList('call getEnvironmentObstacles(:obs,:env)',{'obs':obsName,'env':envName},'MySQL error getting obstacles')
@@ -4774,133 +4719,52 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
 
   def conceptMapModel(self,envName,reqName = ''):
-    try:
-      session = self.conn()
-      if reqName == '':
-        rs = session.execute('call conceptMapModel(:env)',{'env':envName})
-      else:
-        rs = session.execute('call parameterisedConceptMapModel(:env,:req)',{'env':envName,'req':reqName})
-
-      associations = {}
-      for row in rs.fetchall():
-        row = list(row)
-        fromName = row[0]
-        toName = row[1]
-        lbl = row[2]
-        fromEnv = row[3]
-        toEnv = row[4]
-        cmLabel = fromName + '#' + toName + '#' + lbl
-        assoc = ConceptMapAssociationParameters(fromName,toName,lbl,fromEnv,toEnv)
-        associations[cmLabel] = assoc
-      rs.close()
-      session.close()
-      return associations
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting concept map model (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    callTxt = 'call parameterisedConceptMapModel(:env,:req)'
+    argDict = {'env':envName,'req':reqName}
+    if reqName == '':
+      callTxt = 'call conceptMapModel(:env)'
+      argDict = {'env':envName}
+    rows = self.responseList(callTxt,argDict,'MySQL error getting concept map model')
+    associations = {}
+    for fromName,toName,lbl,fromEnv,toEnv in rows:
+      assoc = ConceptMapAssociationParameters(fromName,toName,lbl,fromEnv,toEnv)
+      associations[cmLabel] = assoc
+    return associations
 
   def traceabilityScore(self,reqName):
-    try:
-      session = self.conn()
-      rs = session.execute('select traceabilityScore(:req)',{'req':reqName})
-      results = rs.fetchone()
-      scoreCode = results[0]
-      rs.close()
-      session.close()
-      return scoreCode
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting traceability score for ' + reqName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-   
+    return self.responseList('select traceabilityScore(:req)',{'req':reqName},'MySQL error getting traceability score')[0]
+
 
   def getRedmineRequirements(self):
-    try:
-      session = self.conn()
-      rs = session.execute('select name,originator,priority,comments,description,environment_code,environment from redmine_requirement order by 1');
-      reqs = {}
-      reqRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        reqName = row[0]
-        reqOriginator = row[1]
-        reqPriority = row[2]
-        reqComments = row[3]
-        reqDesc = row[4]
-        reqEnvCode = row[5]
-        reqEnv = row[6]
-        reqRows.append((reqName,reqOriginator,reqPriority,reqComments,reqDesc,reqEnvCode,reqEnv))
-      rs.close()
-      session.close()
-
-      priorityLookup = {1:'High',2:'Medium',3:'Low'}
-      for reqName,reqOriginator,reqPriority,reqComments,reqDesc,reqEnvCode,reqEnv in reqRows:
-        reqScs = self.getRequirementScenarios(reqName)
-        reqUcs = self.getRequirementUseCases(reqName)
-        reqBis = self.getRequirementBacklog(reqName)
-        if reqEnv not in reqs:
-          reqs[reqEnv] = []
-        reqs[reqEnv].append((reqName,reqOriginator,priorityLookup[reqPriority],reqComments,reqDesc,reqEnvCode,reqScs,reqUcs,reqBis))
-      return reqs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting requirements  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    reqRows = self.responseList('select name,originator,priority,comments,description,environment_code,environment from redmine_requirement order by 1',{},'MySQL error getting redmine requirements');
+    reqs = {}
+    priorityLookup = {1:'High',2:'Medium',3:'Low'}
+    for reqName,reqOriginator,reqPriority,reqComments,reqDesc,reqEnvCode,reqEnv in reqRows:
+      reqScs = self.getRequirementScenarios(reqName)
+      reqUcs = self.getRequirementUseCases(reqName)
+      reqBis = self.getRequirementBacklog(reqName)
+      if reqEnv not in reqs:
+        reqs[reqEnv] = []
+      reqs[reqEnv].append((reqName,reqOriginator,priorityLookup[reqPriority],reqComments,reqDesc,reqEnvCode,reqScs,reqUcs,reqBis))
+    return reqs
 
   def getRequirementScenarios(self,reqName):
-    try:
-      session = self.conn()
-      rs = session.execute('call requirementScenarios(:req)',{'req':reqName})
-      scs = [] 
-      for row in rs.fetchall():
-        row = list(row)
-        scs.append(row[0])
-      rs.close()
-      session.close()
-      if len(scs) == 0:
-        scs.append('None')
-      return scs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting scenarios associated with requirement ' + reqName + '  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    scs = self.responseList('call requirementScenarios(:req)',{'req':reqName},'MySQL error getting redmine scenarios');
+    if len(scs) == 0:
+      scs.append('None')
+    return scs
 
   def getRequirementUseCases(self,reqName):
-    try:
-      session = self.conn()
-      rs = session.execute('call requirementUseCases(:req)',{'req':reqName})
-      ucs = [] 
-      for row in rs.fetchall():
-        row = list(row)
-        ucs.append(row[0])
-      rs.close()
-      session.close()
-      if len(ucs) == 0:
-        ucs.append('None')
-      return ucs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting use cases associated with requirement ' + reqName + '  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    ucs = self.responseList('call requirementUseCases(:req)',{'req':reqName},'MySQL error getting redmine use cases');
+    if len(ucs) == 0:
+      ucs.append('None')
+    return ucs
 
   def getRequirementBacklog(self,reqName):
-    try:
-      session = self.conn()
-      rs = session.execute('call requirementBacklog(:req)',{'req':reqName})
-      bis = [] 
-      for row in rs.fetchall():
-        row = list(row)
-        bis.append(row[0])
-      rs.close()
-      session.close()
-      if len(bis) == 0:
-        bis.append('None')
-      return bis
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting backlog items associated with requirement ' + reqName + '  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    bis = self.responseList('call requirementBacklog(:req)',{'req':reqName},'MySQL error getting backlog items');
+    if len(bis) == 0:
+      bis.append('None')
+    return bis
 
   def environmentRequirements(self,envName):
     return self.responseList('call requirementNames(:env)',{'env':envName},'MySQL error getting requirements associated with environment ' + envName)
