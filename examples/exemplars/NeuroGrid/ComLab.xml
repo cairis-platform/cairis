@@ -2,13 +2,13 @@
 <!DOCTYPE locations PUBLIC "-//CAIRIS//DTD LOCATIONS  1.0//EN" "http://cairis.org/dtd/locations.dtd">
 
 <locations name="Computing Laboratory" diagram="None">
-  <location name="Open Plan Area">
+  <location name="OpenPlanArea">
     <asset_instance name="WS-1" asset="Client workstation" />
     <asset_instance name="David UC" asset="User certificate" />
     <persona_instance name="David" persona="Claire" />
     <link name="Atrium" />
   </location>
   <location name="Atrium">
-    <link name="Open Plan Area" />
+    <link name="OpenPlanArea" />
   </location>
 </locations>
