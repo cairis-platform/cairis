@@ -3830,8 +3830,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
 
   def getArgReference(self,atName,constraintName):
-    rows = self.responseList('call getUseCases(:id)',{'id':constraintId},'MySQL error getting use cases')
-
     try:
       session = self.conn()
       rs = session.execute('call get' + atName + '(:const)',{'const':constraintName})
@@ -4726,7 +4724,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       argDict = {'env':envName}
     rows = self.responseList(callTxt,argDict,'MySQL error getting concept map model')
     associations = {}
+
     for fromName,toName,lbl,fromEnv,toEnv in rows:
+      cmLabel = fromName + '#' + toName + '#' + lbl
       assoc = ConceptMapAssociationParameters(fromName,toName,lbl,fromEnv,toEnv)
       associations[cmLabel] = assoc
     return associations
