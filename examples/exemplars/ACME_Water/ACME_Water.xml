@@ -270,6 +270,9 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
 <role name="Service Desk" type="Stakeholder" short_code="SERV_DESK" >
   <description>Service Desk staff acting as first-line support for any ICT problems.</description>
 </role>
+<role name="Machine" type="Stakeholder" short_code="MACH" >
+  <description>System hardware</description>
+</role>
 <asset name="ICT credentials" short_code="IC" type="Information" is_critical="0">
   <description>ACME ICT login credentials.  Based on WMS pay number.</description>
   <significance>Obtaining some or all of ICT credentials may allow an unauthorised person to logically impersonate an authorised principal</significance>
@@ -507,12 +510,103 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
   <significance>May give rise to unauthorised outgoing or incoming network connections.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="integrity" value="Medium">
-    <rationale></rationale>
+    <rationale>Tampering may lead to subversive changes.</rationale>
   </security_property>
   <security_property environment="Day" property="availability" value="High">
-    <rationale></rationale>
+    <rationale>Several tasks on legacy systems rely on modem communications.</rationale>
   </security_property>
 </asset>
+<asset name="PLC Event" short_code="PLCE" type="Information" is_critical="0">
+  <description>Event message indicating some PLC anomaly.</description>
+  <significance>Needs to be attended to by plant operators when raised. If not send, received, or inappropriately suppressed, hazards may arise.</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Day" property="integrity" value="Medium">
+    <rationale>Spoofed or tampered PLC events may lead to false or negative positives.</rationale>
+  </security_property>
+  <security_property environment="Day" property="availability" value="High">
+    <rationale>Indicates potential hazards</rationale>
+  </security_property>
+  <security_property environment="Night" property="integrity" value="Medium">
+    <rationale>Spoofed or tampered PLC events may lead to false or negative positives.</rationale>
+  </security_property>
+  <security_property environment="Night" property="availability" value="High">
+    <rationale>Indicates potential hazards</rationale>
+  </security_property>
+</asset>
+<asset name="Suppress Event" short_code="SUPE" type="Information" is_critical="0">
+  <description>Event message indicating an operator has overriden an alarm</description>
+  <significance>If alarms are inappropriately suppressed, hazards may arise.</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Day" property="integrity" value="Medium">
+    <rationale>Spoofed or tampered failure events may lead to false or negative positives.</rationale>
+  </security_property>
+  <security_property environment="Day" property="availability" value="Medium">
+    <rationale>Indicates false positives which, if not suppressed, can disrupt operations</rationale>
+  </security_property>
+  <security_property environment="Night" property="integrity" value="Medium">
+    <rationale>Spoofed or tampered failure events may lead to false or negative positives.</rationale>
+  </security_property>
+  <security_property environment="Night" property="availability" value="Medium">
+    <rationale>Indicates false positives which, if not suppressed, can disrupt operations</rationale>
+  </security_property>
+</asset>
+<asset name="Works Diary" short_code="WODI" type="Information" is_critical="0">
+  <description>Diary of everything notable during each shift.</description>
+  <significance>Audit trail for how anomalous operations handled.</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Day" property="integrity" value="Medium">
+    <rationale>Tampering could compromise accountability</rationale>
+  </security_property>
+  <security_property environment="Night" property="integrity" value="Medium">
+    <rationale>Tampering could compromise accountability</rationale>
+  </security_property>
+  <security_property environment="Day" property="accountability" value="Medium">
+    <rationale>Important to know who updated diary in the event of an incident.</rationale>
+  </security_property>
+  <security_property environment="Night" property="accountability" value="Medium">
+    <rationale>Important to know who updated diary in the event of an incident.</rationale>
+  </security_property>
+</asset>
+<asset name="Diary Entry" short_code="DIAE" type="Information" is_critical="0">
+  <description>Entry logged by plant operator to works diary</description>
+  <significance>Audit trail for how anomalous operations handled.</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Day" property="accountability" value="Medium">
+    <rationale>Important to know who updated diary in the event of an incident.</rationale>
+  </security_property>
+  <security_property environment="Night" property="accountability" value="Medium">
+    <rationale>Important to know who updated diary in the event of an incident.</rationale>
+  </security_property>
+</asset>
+<asset name="PLC" short_code="PLC" type="Systems" is_critical="0">
+  <description>Programmable Logic Controller.</description>
+  <significance>Compromising PLCs can compromise connected assets, and other assets associated with it.</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Day" property="integrity" value="High">
+    <rationale>Tampering impacts monitoring of water quality.</rationale>
+  </security_property>
+  <security_property environment="Day" property="availability" value="High">
+    <rationale>Controls machinery</rationale>
+  </security_property>
+  <security_property environment="Night" property="integrity" value="High">
+    <rationale>Tampering impacts monitoring of water quality.</rationale>
+  </security_property>
+  <security_property environment="Night" property="availability" value="High">
+    <rationale>Controls machinery</rationale>
+  </security_property>
+</asset>
+<asset name="Plant Staff" short_code="PLST" type="People" is_critical="0">
+  <description>Plant staff</description>
+  <significance>Intangible assets</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Day" property="availability" value="High">
+    <rationale>Operations contingent on human staff</rationale>
+  </security_property>
+  <security_property environment="Night" property="availability" value="Medium">
+    <rationale>Operations contingent on human staff</rationale>
+  </security_property>
+</asset>
+
 <vulnerability name="Ubiquitous identity and knowledge" type="Design">
   <description>The user id component of ICT access credentials are multi-use, and this knowledge is commonly known and, occasionally, shared.</description>
   <vulnerability_environment name="Day" severity="Marginal">
@@ -2709,9 +2803,97 @@ Standard 7.11(vvv)</issue>
   </flow>
   <postconditions>Modified software alarm received by telemetry network.  Modified software on software repository.  Software modification report on software repository.</postconditions>
 </usecase_environment>
+<usecase_environment name="Night">
+  <preconditions>Alarm mechanisms online.  Instrument technician authenticated with outstation.  Modified software on laptop and outstation.</preconditions>
+  <flow>
+    <step number="1" description="Instrument Technician requests verification of software change"/>
+    <step number="2" description="System sends software change alarm to Telemetry Network"/>
+    <step number="3" description="System displays modified software changes to Instrument Technician"/>
+  </flow>
+  <postconditions>Modified software alarm received by telemetry network.</postconditions>
+</usecase_environment>
+</usecase>
+<usecase name="Raise Alarm" author="Anon" code="RA" >
+  <description>Raise alarm from equipment</description>
+  <actor name="Machine" />
+  <usecase_environment name="Day" >
+    <preconditions>Alarm mechanisms online. Machine in anomalous state.</preconditions>
+    <flow>
+      <step number="1" description="Machine submits alarm to telemetry network." />
+      <step number="2" description="System acknowledges alarm submission." />
+    </flow>
+    <postconditions>Software alarm received by telemetry network</postconditions>
+  </usecase_environment>
+  <usecase_environment name="Night" >
+    <preconditions>Alarm mechanisms online. Machine in anomalous state.</preconditions>
+    <flow>
+      <step number="1" description="Machine submits alarm to telemetry network." />
+      <step number="2" description="System acknowledges alarm submission." />
+    </flow>
+    <postconditions>Software alarm received by telemetry network</postconditions>
+  </usecase_environment>
+</usecase>
+<usecase name="Log Event" author="Anon" code="LE" >
+  <description>Anomalous event logged.</description>
+  <actor name="Plant Operator" />
+  <usecase_environment name="Day" >
+    <preconditions>Alarm raised.</preconditions>
+    <flow>
+      <step number="1" description="Plant operator enters details of notable event." />
+      <step number="1" description="System acknowledges log entry." />
+    </flow>
+    <postconditions>Notable event logged.</postconditions>
+  </usecase_environment>
+  <usecase_environment name="Night" >
+    <preconditions>Alarm raised.</preconditions>
+    <flow>
+      <step number="1" description="Plant operator enters details of notable event." />
+      <step number="1" description="System acknowledges log entry." />
+    </flow>
+    <postconditions>Notable event logged.</postconditions>
+  </usecase_environment>
+</usecase>
+<usecase name="Authenticate with ICT services" author="Anon" code="ANICT" >
+  <description>tbc</description>
+  <actor name="Plant Operator" />
+  <usecase_environment name="Day" >
+    <preconditions>Plant Operator not authenticated with ICT services</preconditions>
+    <flow>
+      <step number="1" description="Plant operator enters credentials." />
+      <step number="2" description="System verifies credentials." />
+    </flow>
+    <postconditions>Plant Operator authenticated with ICT services</postconditions>
+  </usecase_environment>
+  <usecase_environment name="Night" >
+    <preconditions>Plant Operator not authenticated with ICT services</preconditions>
+    <flow>
+      <step number="1" description="Plant operator enters credentials." />
+      <step number="2" description="System verifies credentials." />
+    </flow>
+    <postconditions>Plant Operator authenticated with ICT services</postconditions>
+  </usecase_environment>
+</usecase>
+<usecase name="Suppress Alarm" author="Anon" code="SA" >
+  <description>suppress raised alarm</description>
+  <actor name="Plant Operator" />
+  <usecase_environment name="Day" >
+    <preconditions>Audible alarm raised.</preconditions>
+    <flow>
+      <step number="1" description="Plant operator sends suppress request." />
+      <step number="2" description="System silences audio and visual alarms." />
+    </flow>
+    <postconditions>Audible alarm silenced.</postconditions>
+  </usecase_environment>
+  <usecase_environment name="Night" >
+    <preconditions>Audible alarm raised.</preconditions>
+    <flow>
+      <step number="1" description="Plant operator sends suppress request." />
+      <step number="2" description="System silences audio and visual alarms." />
+    </flow>
+    <postconditions>Audible alarm silenced.</postconditions>
+  </usecase_environment>
 </usecase>
 </goals>
-
 <associations>
 <manual_association from_name="Detect War-dialing attack" from_dim="response" to_name="DetectWar-dialing attack" to_dim="goal" />
 <goal_association environment="Day"  goal_name="Active Directory Network Services" goal_dim="goal" ref_type="and" subgoal_name="Active Directory wifi control" subgoal_dim="goal" alternative_id="0" >
@@ -3343,5 +3525,34 @@ Standard 7.11(vvv)</issue>
   <rationale>Goal relies on service desk staff being switch-on enough to check logs, and pro-active enough to contact the ACME information security team.</rationale>
 </dependency>
 </associations>
-
+<dataflows>
+  <dataflow name="failure event" environment="Day" from_name="PLC" from_type="entity" to_name="Raise Alarm" to_type="process">
+    <dataflow_asset name="PLC Event" />
+  </dataflow>
+  <dataflow name="manual alarm override" environment="Day" from_name="Plant Staff" from_type="entity" to_name="Suppress Alarm" to_type="process">
+    <dataflow_asset name="Suppress Event" />
+  </dataflow>
+  <dataflow name="anomaly notes" environment="Day" from_name="Plant Staff" from_type="entity" to_name="Log Event" to_type="process">
+    <dataflow_asset name="Diary Entry" />
+  </dataflow>
+  <dataflow name="alarm notification" environment="Day" from_name="Raise alarm" from_type="process" to_name="SCADA Workstation" to_type="datastore">
+    <dataflow_asset name="PLC Event" />
+  </dataflow>
+  <dataflow name="diary entry" environment="Day" from_name="Log Event" from_type="process" to_name="Works Diary" to_type="datastore">
+    <dataflow_asset name="Diary Entry" />
+  </dataflow>
+  <dataflow name="alarm override" environment="Day" from_name="Suppress Alarm" from_type="process" to_name="SCADA Workstation" to_type="datastore">
+    <dataflow_asset name="Suppress Event" />
+  </dataflow>
+  <trust_boundary name="Operations">
+    <description>All processes and objects associated with plant operations is considered trustworthy.</description> 
+    <trust_boundary_environment name="Day">
+      <trust_boundary_component name="Raise Alarm" type="process" />
+      <trust_boundary_component name="Suppress Alarm" type="process" />
+      <trust_boundary_component name="Log Event" type="process" />
+      <trust_boundary_component name="SCADA Workstation" type="datastore" />
+      <trust_boundary_component name="Works Diary" type="datastore" />
+    </trust_boundary_environment>
+  </trust_boundary>
+</dataflows>
 </cairis_model>
