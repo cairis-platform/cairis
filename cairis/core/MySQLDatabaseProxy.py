@@ -495,16 +495,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addTemplateAssetProperties(self,taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat):
-    sqlTxt = 'call add_template_asset_properties(:ta,:cPr,:iPr,:avPr,:acPr,:anPr,:panPr,:unlPr,:unoPr,:cRa,:iRa,:avRa,:acRa,:anRa,:panRa,:unlRa,:unoRa)'
-    try:
-      session = self.conn()
-      session.execute(sqlTxt, {'ta':taId,'cPr':cProp,'iPr':iProp,'avPr':avProp,'acPr':acProp,'anPr':anProp,'panPr':panProp,'unlPr':unlProp,'unoPr':unoProp,'cRa':cRat,'iRa':iRat,'avRa':avRat,'acRa':acRat,'anRa':anRat,'panRa':panRat,'unlRa':unlRat,'unoRa':unoRat})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding security properties for template asset id ' + str(taId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    callTxt = 'call add_template_asset_properties(:ta,:cPr,:iPr,:avPr,:acPr,:anPr,:panPr,:unlPr,:unoPr,:cRa,:iRa,:avRa,:acRa,:anRa,:panRa,:unlRa,:unoRa)'
+    self.updateDatabase(callTxt, {'ta':taId,'cPr':cProp,'iPr':iProp,'avPr':avProp,'acPr':acProp,'anPr':anProp,'panPr':panProp,'unlPr':unlProp,'unoPr':unoProp,'cRa':cRat,'iRa':iRat,'avRa':avRat,'acRa':acRat,'anRa':anRat,'panRa':panRat,'unlRa':unlRat,'unoRa':unoRat},'MySQL error adding security properties to template asset')
 
   def updateTemplateAssetProperties(self,taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat):
     sqlTxt = 'update template_asset_property set property_value_id=%s, property_rationale="%s" where template_asset_id = %s and property_id = %s' 
@@ -1140,22 +1132,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addMisuseCase(self,parameters):
     mcName = parameters.name()
-    try:
-      mcId = self.newId()
-      session = self.conn()
-      session.execute('call addMisuseCase(:id,:name)',{'id':mcId,'name':mcName})
-      session.commit()
-      session.close()
-      self.addMisuseCaseRisk(mcId,parameters.risk())
-      for cProperties in parameters.environmentProperties():
-        environmentName = cProperties.name()
-        self.addDimensionEnvironment(mcId,'misusecase',environmentName)
-        self.addMisuseCaseNarrative(mcId,cProperties.narrative().encode('utf-8'),environmentName)
-      return mcId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding misuse case ' + mcName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    mcId = self.newId()
+    self.updateDatabase('call addMisuseCase(:id,:name)',{'id':mcId,'name':mcName},'MySQL error adding misuse case ' + mcName)
+    self.addMisuseCaseRisk(mcId,parameters.risk())
+    for cProperties in parameters.environmentProperties():
+      environmentName = cProperties.name()
+      self.addDimensionEnvironment(mcId,'misusecase',environmentName)
+      self.addMisuseCaseNarrative(mcId,cProperties.narrative().encode('utf-8'),environmentName)
+    return mcId
 
 
   def updateTask(self,parameters):
@@ -1234,15 +1218,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addMisuseCaseRisk(self,mcId,riskName):
-    try:
-      session = self.conn()
-      session.execute('call addMisuseCaseRisk(:id,:risk)',{'id':mcId,'risk':riskName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating risk ' + riskName + ' with misuse case id ' + str(mcId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addMisuseCaseRisk(:id,:risk)',{'id':mcId,'risk':riskName},'MySQL error associating risk with misuse case')
 
   def deleteTask(self,taskId):
     self.deleteObject(taskId,'task')
@@ -1276,48 +1252,32 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
 
   def addRisk(self,parameters):
-    try:
-      threatName = parameters.threat()
-      vulName = parameters.vulnerability()
-      tags = parameters.tags()
-      riskId = self.newId()
-      riskName = parameters.name()
-      inTxt = parameters.intent()
-      session = self.conn()
-      session.execute('call addRisk(:threat,:vuln,:rId,:risk,:txt)',{'threat':threatName,'vuln':vulName,'rId':riskId,'risk':riskName,'txt':inTxt})
-      session.commit()
-      session.close()
-      mc = parameters.misuseCase()
-      mcParameters = MisuseCaseParameters(mc.name(),mc.environmentProperties(),mc.risk())
-      self.addMisuseCase(mcParameters)
-      self.addTags(riskName,'risk',tags)
-      return riskId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding risk (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    threatName = parameters.threat()
+    vulName = parameters.vulnerability()
+    tags = parameters.tags()
+    riskId = self.newId()
+    riskName = parameters.name()
+    inTxt = parameters.intent()
+    self.updateDatabase('call addRisk(:threat,:vuln,:rId,:risk,:txt)',{'threat':threatName,'vuln':vulName,'rId':riskId,'risk':riskName,'txt':inTxt},'MySQL error adding risk')
+    mc = parameters.misuseCase()
+    mcParameters = MisuseCaseParameters(mc.name(),mc.environmentProperties(),mc.risk())
+    self.addMisuseCase(mcParameters)
+    self.addTags(riskName,'risk',tags)
+    return riskId
 
   def updateRisk(self,parameters):
-    try:
-      riskId = parameters.id()
-      threatName = parameters.threat()
-      vulName = parameters.vulnerability()
-      tags = parameters.tags()
-      riskName = parameters.name()
-      inTxt = parameters.intent()
-      session = self.conn()
-      session.execute('call updateRisk(:threat,:vuln,:rId,:risk,:txt)',{'threat':threatName,'vuln':vulName,'rId':riskId,'risk':riskName,'txt':inTxt})
-      session.commit()
-      session.close()
-      mc = parameters.misuseCase()
-      mcParameters = MisuseCaseParameters('Exploit ' + riskName,mc.environmentProperties(),riskName)
-      mcParameters.setId(mc.id())
-      self.updateMisuseCase(mcParameters)
-      self.addTags(riskName,'risk',tags)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating risk ' + riskId + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    riskId = parameters.id()
+    threatName = parameters.threat()
+    vulName = parameters.vulnerability()
+    tags = parameters.tags()
+    riskName = parameters.name()
+    inTxt = parameters.intent()
+    self.updateDatabase('call updateRisk(:threat,:vuln,:rId,:risk,:txt)',{'threat':threatName,'vuln':vulName,'rId':riskId,'risk':riskName,'txt':inTxt},'MySQL error updating risk')
+    mc = parameters.misuseCase()
+    mcParameters = MisuseCaseParameters('Exploit ' + riskName,mc.environmentProperties(),riskName)
+    mcParameters.setId(mc.id())
+    self.updateMisuseCase(mcParameters)
+    self.addTags(riskName,'risk',tags)
 
   def deleteRisk(self,riskId):
     self.deleteObject(riskId,'risk')
@@ -1388,75 +1348,39 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addResponse(self,parameters):
-    try:
-      respName = parameters.name()
-      respRisk = parameters.risk()
-      respType = parameters.responseType()
-      tags = parameters.tags()
-      respId = self.newId()
-      session = self.conn()
-      session.execute('call addResponse(:id,:name,:type,:risk)',{'id':respId,'name':respName,'type':respType,'risk':respRisk})
-      session.commit()
-      session.close()
-      self.addTags(respName,'response',tags)
-
-      for cProperties in parameters.environmentProperties():
-        environmentName = cProperties.name()
-        self.addDimensionEnvironment(respId,'response',environmentName)
-        if (respType == 'Accept'):
-          self.addResponseCost(respId,cProperties.cost(),environmentName)
-          self.addResponseDescription(respId,cProperties.description(),environmentName)
-        elif (respType == 'Transfer'):
-          self.addResponseDescription(respId,cProperties.description(),environmentName)
-          self.addResponseRoles(respId,cProperties.roles(),environmentName,cProperties.description())
-        else:
-          mitType = cProperties.type()
-          self.addMitigationType(respId,mitType,environmentName)
-          if (mitType == 'Detect'):    
-            self.addDetectionPoint(respId,cProperties.detectionPoint(),environmentName)
-          elif (mitType == 'React'):
-           for detMech in cProperties.detectionMechanisms():
-             self.addReactionDetectionMechanism(respId,detMech,environmentName)
-
-      return respId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding response (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText)
+    respName = parameters.name()
+    respRisk = parameters.risk()
+    respType = parameters.responseType()
+    tags = parameters.tags()
+    respId = self.newId()
+    self.updateDatabase('call addResponse(:id,:name,:type,:risk)',{'id':respId,'name':respName,'type':respType,'risk':respRisk},'MySQL error adding response')
+    self.addTags(respName,'response',tags)
+    for cProperties in parameters.environmentProperties():
+      environmentName = cProperties.name()
+      self.addDimensionEnvironment(respId,'response',environmentName)
+      if (respType == 'Accept'):
+        self.addResponseCost(respId,cProperties.cost(),environmentName)
+        self.addResponseDescription(respId,cProperties.description(),environmentName)
+      elif (respType == 'Transfer'):
+        self.addResponseDescription(respId,cProperties.description(),environmentName)
+        self.addResponseRoles(respId,cProperties.roles(),environmentName,cProperties.description())
+      else:
+        mitType = cProperties.type()
+        self.addMitigationType(respId,mitType,environmentName)
+        if (mitType == 'Detect'):    
+          self.addDetectionPoint(respId,cProperties.detectionPoint(),environmentName)
+        elif (mitType == 'React'):
+         for detMech in cProperties.detectionMechanisms():
+           self.addReactionDetectionMechanism(respId,detMech,environmentName)
+    return respId
 
   def addMitigationType(self,responseId,mitType,environmentName):
-    try:
-      session = self.conn()
-      session.execute('call add_response_mitigate(:rId,:env,:type)',{'rId':responseId,'env':environmentName,'type':mitType})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating mitigation type ' + mitType + ' with response ' + str(responseId) + ' in environment ' + environmentName + ' response (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText)
-
+    self.updateDatabase('call add_response_mitigate(:rId,:env,:type)',{'rId':responseId,'env':environmentName,'type':mitType},'MySQL error adding mitigation type')
 
   def addResponseCost(self,responseId,costName,environmentName):
-    try:
-      session = self.conn()
-      session.execute('call addResponseCost(:rId,:name,:env)',{'rId':responseId,'name':costName,'env':environmentName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating cost ' + costName + ' with response ' + str(responseId) + ' in environment ' + environmentName + ' response (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText)
-
+    self.updateDatabase('call addResponseCost(:rId,:name,:env)',{'rId':responseId,'name':costName,'env':environmentName},'MySQL error adding response cost')
   def addResponseDescription(self,responseId,descriptionText,environmentName):
-    try:
-      session = self.conn()
-      session.execute('call addResponseDescription(:id,:desc,:env)',{'id':responseId,'desc':descriptionText,'env':environmentName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating description with response ' + str(responseId) + ' in environment ' + environmentName + ' response (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText)
+    self.updateDatabase('call addResponseDescription(:id,:desc,:env)',{'id':responseId,'desc':descriptionText,'env':environmentName},'MySQL error adding response description')
 
   def addResponseRoles(self,responseId,roles,environmentName,respDesc):
     try:
@@ -1509,26 +1433,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('select mitigatePoint(:rId,:eId)',{'rId':responseId,'eId':environmentId},'MySQL error getting detection point for detection response id ' + str(responseId))[0]
 
   def addDetectionPoint(self,mitId,detPoint,environmentName):
-    try:
-      session = self.conn()
-      session.execute('call add_mitigate_point(:id,:env,:point)',{'id':mitId,'env':environmentName,'point':detPoint})
-      session.commit()
-      session.close() 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating detection point ' + detPoint + ' for response id ' + str(mitId) + 'in environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
+    self.updateDatabase('call add_mitigate_point(:id,:env,:point)',{'id':mitId,'env':environmentName,'point':detPoint},'MySQL error adding detection point')
   def addReactionDetectionMechanism(self,mitId,detMech,environmentName):
-    try:
-      session = self.conn()
-      session.execute('call add_reaction_detection_mechanism(:id,:methc,:env)',{'id':mitId,'metch':detMech,'env':environmentName})
-      session.commit()
-      session.close() 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating detection mechanism ' + detMech + ' with reaction id ' + str(mitId) + 'in environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call add_reaction_detection_mechanism(:id,:methc,:env)',{'id':mitId,'metch':detMech,'env':environmentName},'MySQL error adding reaction detection mechanism')
 
   def detectionMechanisms(self,responseId,environmentId):
     return self.responseList('call detectionMechanisms(:rId,:eId)',{'rId':responseId,'eId':environmentId},'MySQL error getting detection mechanisms for detection response id ' + str(responseId))
