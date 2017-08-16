@@ -2362,30 +2362,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addGoalConcernAssociation(goalId,environmentName,source,sourceMultiplicity,link,target,targetMultiplicity) 
 
   def addGoalConcernAssociation(self,goalId,environmentName,source,sourceMultiplicity,link,target,targetMultiplicity):
-    try:
-      session = self.conn()
-      session.execute('call addGoalConcernAssociation(:gId,:env,:src,:sMulti,:link,:trgt,:tMulti)',{'gId':goalId,'env':environmentName,'src':source,'sMulti':sourceMultiplicity,'linl':link,'trgt':target,'tMulti':targetMultiplicity})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating concern with goal id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addGoalConcernAssociation(:gId,:env,:src,:sMulti,:link,:trgt,:tMulti)',{'gId':goalId,'env':environmentName,'src':source,'sMulti':sourceMultiplicity,'linl':link,'trgt':target,'tMulti':targetMultiplicity},'MySQL error adding goal concern association')
 
   def addTaskConcernAssociations(self,taskId,environmentName,associations):
     for source,sourceMultiplicity,link,target,targetMultiplicity in associations:
       self.addTaskConcernAssociation(taskId,environmentName,source,sourceMultiplicity,link,target,targetMultiplicity) 
 
   def addTaskConcernAssociation(self,taskId,environmentName,source,sourceMultiplicity,link,target,targetMultiplicity):
-    try:
-      session = self.conn()
-      session.execute('call addTaskConcernAssociation(:tId,:env,:src,:sMulti,:link,:trgt,:tMulti)',{'tId':taskId,'env':environmentName,'src':source,'sMulti':sourceMultiplicity,'link':link,'trgt':target,'tMulti':targetMultiplicity})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating concern with task id ' + str(taskId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addTaskConcernAssociation(:tId,:env,:src,:sMulti,:link,:trgt,:tMulti)',{'tId':taskId,'env':environmentName,'src':source,'sMulti':sourceMultiplicity,'link':link,'trgt':target,'tMulti':targetMultiplicity},'MySQL error adding task concern association')
 
   def addObstacleRefinements(self,goalId,goalName,environmentName,goalAssociations,subGoalAssociations):
     for goal,goalDim,refinement,altName,rationale in subGoalAssociations:
@@ -2414,15 +2398,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addObstacleConcern(obsId,environmentName,concern)
 
   def addObstacleConcern(self,obsId,environmentName,concern):
-    try:
-      session = self.conn()
-      session.execute('call add_obstacle_concern(:oId,:env,:conc)',{'oId':obsId,'env':environmentName,'conc':concern})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding concern ' + concern + ' to obstacle id ' + str(obsId) + ' in environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call add_obstacle_concern(:oId,:env,:conc)',{'oId':obsId,'env':environmentName,'conc':concern},'MySQL error adding obstacle concern')
 
   def addGoalConcerns(self,obsId,environmentName,concerns):
     for concern in concerns:
@@ -2463,46 +2439,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('select goal_category(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal category')[0]
 
   def goalPriority(self,goalId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select goal_priority(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchone()
-      goalAttr = row[0] 
-      rs.close()
-      session.close()
-      return goalAttr
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting priority for goal id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select goal_priority(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal priority')[0]
 
   def goalFitCriterion(self,goalId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select goal_fitcriterion(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchone()
-      goalAttr = row[0] 
-      rs.close()
-      session.close()
-      return goalAttr
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting fit criterion for goal id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select goal_fitcriterion(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal fit criterion')[0]
 
   def goalIssue(self,goalId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select goal_issue(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchone()
-      goalAttr = row[0] 
-      rs.close()
-      session.close()
-      return goalAttr
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting issue for goal id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select goal_issue(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal issue')[0]
 
   def goalRefinements(self,goalId,environmentId):
     rows = self.responseList('call goalRefinements(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal refinements')
@@ -2545,17 +2488,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     dpType = parameters.type()
     dpOrig = parameters.originator()
     tags = parameters.tags()
-    try:
-      session = self.conn()
-      session.execute('call addDomainProperty(:id,:name,:desc,:type,:orig)',{'id':dpId,'name':dpName,'desc':dpDesc,'type':dpType,'orig':dpOrig})
-      session.commit()
-      session.close()
-      self.addTags(dpName,'domainproperty',tags)
-      return dpId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding domain property ' + dpName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addDomainProperty(:id,:name,:desc,:type,:orig)',{'id':dpId,'name':dpName,'desc':dpDesc,'type':dpType,'orig':dpOrig},'MySQL error adding domain property')
+    self.addTags(dpName,'domainproperty',tags)
+    return dpId
 
   def updateDomainProperty(self,parameters):
     dpId = parameters.id()
@@ -2564,17 +2499,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     dpType = parameters.type()
     dpOrig = parameters.originator()
     tags = parameters.tags()
-    try:
-      session = self.conn()
-      session.execute('call updateDomainProperty(:id,:name,:desc,:type,:orig)',{'id':dpId,'name':dpName,'desc':dpDesc,'type':dpType,'orig':dpOrig})
-      session.commit()
-      session.close()
-      self.addTags(dpName,'domainproperty',tags)
-      return dpId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating domain property ' + dpName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateDomainProperty(:id,:name,:desc,:type,:orig)',{'id':dpId,'name':dpName,'desc':dpDesc,'type':dpType,'orig':dpOrig},'MySQL error updating domain property')
+    self.addTags(dpName,'domainproperty',tags)
+    return dpId
 
   def deleteDomainProperty(self,dpId):
     self.deleteObject(dpId,'domainproperty')
@@ -2592,93 +2519,48 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return obstacles
 
   def obstacleEnvironmentProperties(self,obsId):
-    try:
-      environmentProperties = []
-      for environmentId,environmentName in self.dimensionEnvironments(obsId,'obstacle'):
-        obsLabel = self.obstacleLabel(obsId,environmentId)
-        obsDef,obsProb,obsProbRat = self.obstacleDefinition(obsId,environmentId)
-        obsType = self.obstacleCategory(obsId,environmentId)
-        goalRefinements,subGoalRefinements = self.goalRefinements(obsId,environmentId)
-        concerns = self.obstacleConcerns(obsId,environmentId)
-        properties = ObstacleEnvironmentProperties(environmentName,obsLabel,obsDef,obsType,goalRefinements,subGoalRefinements,concerns)
-        properties.theProbability = obsProb
-        properties.theProbabilityRationale = obsProbRat
-        environmentProperties.append(properties) 
-      return environmentProperties
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting environmental properties for obstacle id ' + str(obsId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    environmentProperties = []
+    for environmentId,environmentName in self.dimensionEnvironments(obsId,'obstacle'):
+      obsLabel = self.obstacleLabel(obsId,environmentId)
+      obsDef,obsProb,obsProbRat = self.obstacleDefinition(obsId,environmentId)
+      obsType = self.obstacleCategory(obsId,environmentId)
+      goalRefinements,subGoalRefinements = self.goalRefinements(obsId,environmentId)
+      concerns = self.obstacleConcerns(obsId,environmentId)
+      properties = ObstacleEnvironmentProperties(environmentName,obsLabel,obsDef,obsType,goalRefinements,subGoalRefinements,concerns)
+      properties.theProbability = obsProb
+      properties.theProbabilityRationale = obsProbRat
+      environmentProperties.append(properties) 
+    return environmentProperties
 
   def obstacleDefinition(self,obsId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select obstacle_definition(:oId,:eId)',{'oId':obsId,'eId':environmentId})
-      row = rs.fetchone()
-      obsDef = row[0] 
-      rs.close()
-      session.close()
-
-      obsProb,obsProbRat = self.obstacleProbability(obsId,environmentId)
-      return (obsDef,obsProb,obsProbRat)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting definition for obstacle id ' + str(obsId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    obsDef = self.responseList('select obstacle_definition(:oId,:eId)',{'oId':obsId,'eId':environmentId},'MySQL error getting obstacle definition')[0]
+    obsProb,obsProbRat = self.obstacleProbability(obsId,environmentId)
+    return (obsDef,obsProb,obsProbRat)
 
   def obstacleProbability(self,obsId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('call obstacle_probability(:oId,:eId)',{'oId':obsId,'eId':environmentId})
-      row = rs.fetchone()
-      obsAttr = row[0]
-      obsRationale = row[1]
-      rs.close()
-      session.close()
-      return obsAttr,obsRationale
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting probability for obstacle id ' + str(obsId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
+    row = self.responseList('call obstacle_probability(:oId,:eId)',{'oId':obsId,'eId':environmentId},'MySQL error getting obstacle probability')[0]
+    obsAttr = row[0]
+    obsRationale = row[1]
+    return obsAttr,obsRationale
 
   def obstacleCategory(self,obsId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select obstacle_category(:oId,:eId)',{'oId':obsId,'eId':environmentId})
-      row = rs.fetchone()
-      obsAttr = row[0]
-      rs.close()
-      session.close()
-      return obsAttr
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting category for obstacle id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select obstacle_category(:oId,:eId)',{'oId':obsId,'eId':environmentId},'MySQL error getting obstacle category')[0]
 
   def addObstacle(self,parameters):
     obsId = self.newId()
     obsName = parameters.name().encode('utf-8')
     obsOrig = parameters.originator().encode('utf-8')
     tags = parameters.tags()
-    try:
-      session = self.conn()
-      session.execute('call addObstacle(:id,:name,:orig)',{'id':obsId,'name':obsName,'orig':obsOrig})
-      session.commit()
-      session.close()
-      self.addTags(obsName,'obstacle',tags)
-      for environmentProperties in parameters.environmentProperties():
-        environmentName = environmentProperties.name()
-        self.addDimensionEnvironment(obsId,'obstacle',environmentName)
-        self.addObstacleDefinition(obsId,environmentName,environmentProperties.definition(),environmentProperties.probability(),environmentProperties.probabilityRationale())
-        self.addObstacleCategory(obsId,environmentName,environmentProperties.category())
-        self.addObstacleRefinements(obsId,obsName,environmentName,environmentProperties.goalRefinements(),environmentProperties.subGoalRefinements())
-        self.addObstacleConcerns(obsId,environmentName,environmentProperties.concerns())
-      return obsId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding obstacle ' + obsName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addObstacle(:id,:name,:orig)',{'id':obsId,'name':obsName,'orig':obsOrig},'MySQL error adding obstacle')
+    self.addTags(obsName,'obstacle',tags)
+    for environmentProperties in parameters.environmentProperties():
+      environmentName = environmentProperties.name()
+      self.addDimensionEnvironment(obsId,'obstacle',environmentName)
+      self.addObstacleDefinition(obsId,environmentName,environmentProperties.definition(),environmentProperties.probability(),environmentProperties.probabilityRationale())
+      self.addObstacleCategory(obsId,environmentName,environmentProperties.category())
+      self.addObstacleRefinements(obsId,obsName,environmentName,environmentProperties.goalRefinements(),environmentProperties.subGoalRefinements())
+      self.addObstacleConcerns(obsId,environmentName,environmentProperties.concerns())
+    return obsId
 
   def updateObstacle(self,parameters):
     obsId = parameters.id()
@@ -2705,26 +2587,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addObstacleDefinition(self,obsId,environmentName,obsDef,obsProb,obsProbRat):
-    try:
-      session = self.conn()
-      session.execute('call addObstacleDefinition(:id,:env,:def,:prob,:probRat)',{'id':obsId,'env':environmentName,'def':obsDef,'prob':obsProb,'probRat':obsProbRat})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating details with obstacle id ' + str(obsId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addObstacleDefinition(:id,:env,:def,:prob,:probRat)',{'id':obsId,'env':environmentName,'def':obsDef,'prob':obsProb,'probRat':obsProbRat},'MySQL error adding obstacle definition')
 
   def addObstacleCategory(self,obsId,environmentName,obsCat):
-    try:
-      session = self.conn()
-      session.execute('call addObstacleCategory(:obs,:env,:cat)',{'obs':obsId,'env':environmentName,'cat':obsCat})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating details with obstacle id ' + str(obsId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addObstacleCategory(:obs,:env,:cat)',{'obs':obsId,'env':environmentName,'cat':obsCat},'MySQL error adding obstacle category')
 
   def deleteObstacle(self,obsId):
     self.deleteObject(obsId,'obstacle')
@@ -2807,8 +2673,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def deleteValueType(self,objtId,value_type):
     self.deleteObject(objtId,value_type)
     
-
-
   def addValueType(self,parameters):
     if (parameters.id() != -1):
       valueTypeId = parameters.id()
@@ -2826,17 +2690,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     if ((vtType == 'asset_value') or (vtType == 'threat_value') or (vtType == 'risk_class') or (vtType == 'countermeasure_value')):
       exceptionText = 'Cannot add ' + vtType + 's'
       raise DatabaseProxyException(exceptionText) 
-
-    try:
-      session = self.conn()
-      session.execute('call addValueType(:id,:name,:desc,:type,:score,:rat)',{'id':valueTypeId,'name':vtName,'desc':vtDesc,'type':vtType,'score':vtScore,'rat':vtRat})
-      session.commit()
-      session.close()
-      return valueTypeId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding ' + vtType + ' ' + vtName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addValueType(:id,:name,:desc,:type,:score,:rat)',{'id':valueTypeId,'name':vtName,'desc':vtDesc,'type':vtType,'score':vtScore,'rat':vtRat},'MySQL error adding value type')
+    return valueTypeId
 
   def updateValueType(self,parameters):
     valueTypeId = parameters.id()
@@ -2846,15 +2701,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     envName = parameters.environment()
     vtScore = parameters.score()
     vtRat = parameters.rationale()
-    try:
-      session = self.conn()
-      session.execute('call updateValueType(:id,:name,:desc,:type,:env,:score,:rat)',{'id':valueTypeId,'name':vtName,'desc':vtDesc,'type':vtType,'env':envName,'score':vtScore,'rat':vtRat})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating ' + vtType + ' ' + vtName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateValueType(:id,:name,:desc,:type,:env,:score,:rat)',{'id':valueTypeId,'name':vtName,'desc':vtDesc,'type':vtType,'env':envName,'score':vtScore,'rat':vtRat},'MySQL error updating value type')
 
   def threatTypes(self,envName = ''):
     rows = self.responseList('call threatTypes(:env)',{'env':envName},'MySQL error getting threat types')
@@ -2931,15 +2778,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call getThreatDirectory(:threat)',{'threat':thrName},'MySQL error getting threat directory')
 
   def reassociateAsset(self,assetName,envName,reqId):
-    try:
-      session = self.conn()
-      session.execute('call reassociateAsset(:ass,:env,:req)',{'ass':assetName,'env':envName,'req':reqId})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error re-associating requirement id ' + str(reqId) + ' with asset ' + assetName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call reassociateAsset(:ass,:env,:req)',{'ass':assetName,'env':envName,'req':reqId},'MySQL error reassociating asset')
 
   def obstacleConcerns(self,obsId,envId):
     return self.responseList('call obstacleConcerns(:obs,:env)',{'obs':obsId,'env':envId},'MySQL error getting obstacle concerns')
@@ -2971,17 +2810,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     dType = parameters.dependencyType()
     dependencyName = parameters.dependency()
     rationale = parameters.rationale()
-    try:
-      session = self.conn()
-      session.execute('call addDependency(:id,:env,:depender,:dependee,:type,:name,:rationale)',{'id':depId,'env':envName,'depender':depender,'dependee':dependee,'type':dType,'name':dependencyName,'rationale':rationale})
-      session.commit()
-      session.close()
-      return depId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding new dependency ' + envName + '/' + depender + '/' + dependee + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
+    self.updateDatabase('call addDependency(:id,:env,:depender,:dependee,:type,:name,:rationale)',{'id':depId,'env':envName,'depender':depender,'dependee':dependee,'type':dType,'name':dependencyName,'rationale':rationale},'MySQL error adding dependency')
+    return depId
 
   def updateDependency(self,parameters):
     depId = parameters.id()
@@ -2991,29 +2821,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     dType = parameters.dependencyType()
     dependencyName = parameters.dependency()
     rationale = parameters.rationale()
-    try:
-      session = self.conn()
-      session.execute('call updateDependency(:id,:env,:depender,:dependee,:type,:name,:rationale)',{'id':depId,'env':envName,'depender':depender,'dependee':dependee,'type':dType,'name':dependencyName,'rationale':rationale})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating dependency ' + envName + '/' + depender + '/' + dependee + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateDependency(:id,:env,:depender,:dependee,:type,:name,:rationale)',{'id':depId,'env':envName,'depender':depender,'dependee':dependee,'type':dType,'name':dependencyName,'rationale':rationale},'MySQL error updating dependency')
 
   def deleteDependency(self,depId,depType):
-    try:
-      session = self.conn()
-      session.execute('call delete_dependency(:id,:type)',{'id':depId,'type':depType})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.IntegrityError, e:
-      id,msg = e
-      exceptionText = 'Cannot remove dependency due to dependent data.  Check the responsibility model for further information  (id:' + str(id) + ',message:' + msg + ')'
-      raise IntegrityException(exceptionText) 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error deleting dependency id ' + str(depId) + ' (id:' + str(id) + ',message:' + msg + ')'
+    self.updateDatabase('call delete_dependency(:id,:type)',{'id':depId,'type':depType},'MySQL error deleting dependency')
 
   def getDependencyTable(self,envName):
     return self.responseList('call dependencyTable(:env)',{'env':envName},'MySQL error getting dependency table')
@@ -3061,19 +2872,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     unoRat = parameters.unobservabilityRationale()
     tags = parameters.tags()
     ifs = parameters.interfaces()
-    try:
-      session = self.conn()
-      session.execute('call addTemplateAsset(:id,:name,:shortCode,:desc,:sig,:type,:surfType,:rights)',{'id':assetId,'name':assetName,'shortCode':shortCode,'desc':assetDesc,'sig':assetSig,'type':assetType,'surfType':surfaceType,'rights':accessRight})
-      session.commit()
-      session.close()
-      self.addTags(assetName,'template_asset',tags)
-      self.addInterfaces(assetName,'template_asset',ifs)
-      self.addTemplateAssetProperties(assetId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat)
-      return assetId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding template asset ' + assetName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addTemplateAsset(:id,:name,:shortCode,:desc,:sig,:type,:surfType,:rights)',{'id':assetId,'name':assetName,'shortCode':shortCode,'desc':assetDesc,'sig':assetSig,'type':assetType,'surfType':surfaceType,'rights':accessRight},'MySQL error adding template asset')
+    self.addTags(assetName,'template_asset',tags)
+    self.addInterfaces(assetName,'template_asset',ifs)
+    self.addTemplateAssetProperties(assetId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat)
+    return assetId
 
   def updateTemplateAsset(self,parameters):
     assetId = parameters.id()
@@ -3103,19 +2906,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     ifs = parameters.interfaces()
     tags = parameters.tags()
 
-    try:
-      session = self.conn()
-      session.execute('call updateTemplateAsset(:id,:name,:shortCode,:desc,:sig,:type,:surfType,:rights)',{'id':assetId,'name':assetName,'shortCode':shortCode,'desc':assetDesc,'sig':assetSig,'type':assetType,'surfType':surfaceType,'rights':accessRight})
-      session.commit()
-      session.close()      
-      self.addTags(assetName,'template_asset',tags)
-      self.addInterfaces(assetName,'template_asset',ifs)
-      self.updateTemplateAssetProperties(assetId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat)
-      return assetId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating template asset ' + assetName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateTemplateAsset(:id,:name,:shortCode,:desc,:sig,:type,:surfType,:rights)',{'id':assetId,'name':assetName,'shortCode':shortCode,'desc':assetDesc,'sig':assetSig,'type':assetType,'surfType':surfaceType,'rights':accessRight},'MySQL error updating template asset')
+    self.addTags(assetName,'template_asset',tags)
+    self.addInterfaces(assetName,'template_asset',ifs)
+    self.updateTemplateAssetProperties(assetId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat)
+    return assetId
 
   def getTemplateAssets(self,constraintId = -1):
     vals = self.responseList('call getTemplateAssets(:id)',{'id':constraintId},'MySQL error getting template assets')
@@ -3164,18 +2959,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     patternSolution = parameters.solution()
     patternStructure = parameters.associations()
     patternRequirements = parameters.requirements()
-    try:
-      session = self.conn()
-      session.execute('call addSecurityPattern(:id,:name,:cont,:prob,:sol)',{'id':patternId,'name':patternName,'cont':patternContext,'prob':patternProblem,'sol':patternSolution})
-      session.commit()
-      session.close()
-      self.addPatternStructure(patternId,patternStructure)
-      self.addPatternRequirements(patternId,patternRequirements)
-      return patternId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding security pattern ' + patternName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addSecurityPattern(:id,:name,:cont,:prob,:sol)',{'id':patternId,'name':patternName,'cont':patternContext,'prob':patternProblem,'sol':patternSolution},'MySQL error adding security pattern')
+    self.addPatternStructure(patternId,patternStructure)
+    self.addPatternRequirements(patternId,patternRequirements)
+    return patternId
 
   def updateSecurityPattern(self,parameters):
     patternId = parameters.id()
@@ -3212,27 +2999,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addPatternRequirement(idx+1,patternId,reqData.name())
 
   def addPatternRequirement(self,reqLabel,patternId,reqName):
-    try:
-      session = self.conn()
-      session.execute('call addSecurityPatternRequirement(:reqLbl,:pat,:req)',{'reqLbl':reqLabel,'pat':patternId,'req':reqName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding requirement to pattern id ' + str(patternId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addSecurityPatternRequirement(:reqLbl,:pat,:req)',{'reqLbl':reqLabel,'pat':patternId,'req':reqName},'MySQL error adding pattern requirement')
 
   def addPatternAssetAssociation(self,patternId,headAsset,headAdornment,headNry,headRole,tailRole,tailNry,tailAdornment,tailAsset):
     assocId = self.newId()
-    try:
-      session = self.conn()
-      session.execute('call addSecurityPatternStructure(:ass,:pat,:hAss,:hAd,:hNry,:hRole,:tRole,:tNry,:tAd,:tAss)',{'ass':assocId,'pat':patternId,'hAss':headAsset,'hAd':headAdornment,'hNry':headNry,'hRole':headRole,'tRole':tailRole,'tNry':tailNry,'tAd':tailAdornment,'tAss':tailAsset})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding structure to pattern id ' + str(patternId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addSecurityPatternStructure(:ass,:pat,:hAss,:hAd,:hNry,:hRole,:tRole,:tNry,:tAd,:tAss)',{'ass':assocId,'pat':patternId,'hAss':headAsset,'hAd':headAdornment,'hNry':headNry,'hRole':headRole,'tRole':tailRole,'tNry':tailNry,'tAd':tailAdornment,'tAss':tailAsset},'MySQL adding pattern asset association')
 
   def patternAssets(self,patternId):
     return self.responseList('call securityPatternAssets(:pat)',{'pat':patternId},'MySQL error getting pattern assets')
@@ -3247,15 +3018,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.situatePatternAsset(patternId,assetId)
 
   def situatePatternAsset(self,patternId,assetId):
-    try:
-      session = self.conn()
-      session.execute('call situatePatternAsset(:ass,:pat)',{'ass':assetId,'pat':patternId})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error situating asset id ' + str(assetId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call situatePatternAsset(:ass,:pat)',{'ass':assetId,'pat':patternId},'MySQL error situating pattern asset')
 
   def isCountermeasureAssetGenerated(self,cmId):
     return self.responseList('select isCountermeasureAssetGenerated(:cm)',{'cm':cmId},'MySQL error checking assets associated with countermeasure')[0]
@@ -3292,29 +3055,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call countermeasurePatterns(:cm)',{'cm':cmId},'MySQL error getting patterns associated with countermeasure')
 
   def deleteSituatedPattern(self,cmId,patternName):
-    try:
-      session = self.conn()
-      session.execute('call deleteSituatedPattern(:cm,:pat)',{'cm':cmId,'pat':patternName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error deleting pattern ' + patternName  + ' associated with countermeasure id ' + str(cmId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call deleteSituatedPattern(:cm,:pat)',{'cm':cmId,'pat':patternName},'MySQL deleting situated pattern')
 
   def candidateCountermeasurePatterns(self,cmId):
     return self.responseList('call candidateCountermeasurePatterns(:cm)',{'cm':cmId},'MySQL error getting candidate countermeasure patterns')
 
   def associateCountermeasureToPattern(self,cmId,patternName):
-    try:
-      session = self.conn()
-      session.execute('call associateCountermeasureToPattern(:cm,:pat)',{'cm':cmId,'pat':patternName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating countermeasure id ' + str(cmId) + 'with pattern ' + patternName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call associateCountermeasureToPattern(:cm,:pat)',{'cm':cmId,'pat':patternName},'MySQL error associating countermeasure to pattern')
 
   def nameCheck(self,objtName,dimName):
     objtCount = self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
@@ -3324,35 +3071,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
    
 
   def nameCheckEnvironment(self,objtName,envName,dimName):
-    try:
-      session = self.conn()
-      rs = session.execute('call nameEnvironmentExists(:obj,:env,:dim)',{'obj':objtName,'env':envName,'dim':dimName})
-      row = rs.fetchone()
-      objtCount = row[0]
-      rs.close()
-      session.close()
-      if (objtCount > 0):
-        exceptionText = dimName + ' ' + objtName + ' in environment ' + envName + ' already exists.'
-        raise ARMException(exceptionText) 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error checking existence of ' + dimName + ' ' + objtName + ' in environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+    objtCount = self.responseList('call nameEnvironmentExists(:obj,:env,:dim)',{'obj':objtName,'env':envName,'dim':dimName},'MySQL error naming checking in environment')[0]
+    if (objtCount > 0):
+      exceptionText = dimName + ' ' + objtName + ' in environment ' + envName + ' already exists.'
+      raise ARMException(exceptionText) 
 
   def nameExists(self,objtName,dimName):
-    try:
-      session = self.conn()
-      rs = session.execute('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName})
-      row = rs.fetchone()
-      objtCount = row[0]
-      rs.close()
-      session.close()
-      if (objtCount > 0):
-        return True
-      else:
-        return False
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error checking existence of ' + dimName + ' ' + objtName + ' (id:' + str(id) + ',message:' + msg + ')'
+    objtCount = self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking name exists')[0]
+    if (objtCount > 0):
+      return True
+    else:
+      return False
 
   def getExternalDocuments(self,constraintId = -1):
     edRows = self.responseList('call getExternalDocuments(:id)',{'id':constraintId},'MySQL error getting external documents')
@@ -3438,16 +3167,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docDate = self.conn.connection().connection.escape_string(parameters.date())
     docAuthors = self.conn.connection().connection.escape_string(parameters.authors())
     docDesc = self.conn.connection().connection.escape_string(parameters.description())
-    try:
-      session = self.conn()
-      session.execute('call addExternalDocument(:id,:name,:vers,:date,:auth,:desc)',{'id':docId,'name':docName.encode('utf-8'),'vers':docVersion.encode('utf-8'),'date':docDate.encode('utf-8'),'auth':docAuthors.encode('utf-8'),'desc':docDesc.encode('utf-8')})
-      session.commit()
-      session.close()
-      return docId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding external document ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addExternalDocument(:id,:name,:vers,:date,:auth,:desc)',{'id':docId,'name':docName.encode('utf-8'),'vers':docVersion.encode('utf-8'),'date':docDate.encode('utf-8'),'auth':docAuthors.encode('utf-8'),'desc':docDesc.encode('utf-8')},'MySQL error adding external document')
+    return docId
 
 
   def updateExternalDocument(self,parameters):
@@ -3457,15 +3178,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docDate = self.conn.connection().connection.escape_string(parameters.date())
     docAuthors = self.conn.connection().connection.escape_string(parameters.authors())
     docDesc = self.conn.connection().connection.escape_string(parameters.description())
-    try:
-      session = self.conn()
-      session.execute('call updateExternalDocument(:id,:name,:vers,:date,:auth,:desc)',{'id':docId,'name':docName.encode('utf-8'),'vers':docVersion.encode('utf-8'),'date':docDate.encode('utf-8'),'auth':docAuthors.encode('utf-8'),'desc':docDesc.encode('utf-8')})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating external document ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateExternalDocument(:id,:name,:vers,:date,:auth,:desc)',{'id':docId,'name':docName.encode('utf-8'),'vers':docVersion.encode('utf-8'),'date':docDate.encode('utf-8'),'auth':docAuthors.encode('utf-8'),'desc':docDesc.encode('utf-8')},'MySQL error updating external document')
 
   def addDocumentReference(self,parameters):
     refId = self.newId()
@@ -3475,16 +3188,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docName = self.conn.connection().connection.escape_string(parameters.document().replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u2013", "-").replace(u"\u2022","*"))
     cName = parameters.contributor()
     refExc = parameters.description()
-    try:
-      session = self.conn()
-      session.execute('call addDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName.encode('utf-8'),'dName':docName.encode('utf-8'),'cName':cName.encode('utf-8'),'rExec':refExc.encode('utf-8')})
-      session.commit()
-      session.close()
-      return refId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding document reference ' + refName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName.encode('utf-8'),'dName':docName.encode('utf-8'),'cName':cName.encode('utf-8'),'rExec':refExc.encode('utf-8')},'MySQL error adding document reference')
+    return refId
 
   def updateDocumentReference(self,parameters):
     refId = parameters.id()
@@ -3492,15 +3197,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docName = parameters.document()
     cName = parameters.contributor()
     refExc = parameters.description()
-    try:
-      session = self.conn()
-      session.execute('call updateDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName.encode('utf-8'),'dName':docName.encode('utf-8'),'cName':cName.encode('utf-8'),'rExec':refExc.encode('utf-8')})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating document reference ' + refName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName.encode('utf-8'),'dName':docName.encode('utf-8'),'cName':cName.encode('utf-8'),'rExec':refExc.encode('utf-8')},'MySQL error updating document reference')
 
   def addPersonaCharacteristic(self,parameters):
     pcId = self.newId()
@@ -3511,17 +3208,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     grounds = parameters.grounds()
     warrant = parameters.warrant() 
     rebuttal = parameters.rebuttal()
-    try:
-      session = self.conn()
-      session.execute('call addPersonaCharacteristic(:pc,:pers,:qual,:bVar,:cDesc)',{'pc':pcId,'pers':personaName,'qual':qualName,'bVar':bVar,'cDesc':cDesc.encode('utf-8')})
-      session.commit()
-      session.close()
-      self.addPersonaCharacteristicReferences(pcId,grounds,warrant,rebuttal)
-      return pcId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding persona characteristic ' + cDesc + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addPersonaCharacteristic(:pc,:pers,:qual,:bVar,:cDesc)',{'pc':pcId,'pers':personaName,'qual':qualName,'bVar':bVar,'cDesc':cDesc.encode('utf-8')},'MySQL error adding persona characteristic')
+    self.addPersonaCharacteristicReferences(pcId,grounds,warrant,rebuttal)
+    return pcId
 
   def updatePersonaCharacteristic(self,parameters):
     pcId = parameters.id()
@@ -3572,17 +3261,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     dimName = parameters.dimension()
     objtName = parameters.objectName()
     cDesc = parameters.description()
-
-    try:
-      session = self.conn()
-      session.execute('call addConceptReference(:rId,:rName,:dName,:obj,:cDesc)',{'rId':refId,'rName':refName,'dName':dimName,'obj':objtName,'cDesc':cDesc.encode('utf-8')})
-      session.commit()
-      session.close()
-      return refId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding concept reference ' + refName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addConceptReference(:rId,:rName,:dName,:obj,:cDesc)',{'rId':refId,'rName':refName,'dName':dimName,'obj':objtName,'cDesc':cDesc.encode('utf-8')},'MySQL error adding concept reference')
+    return refId
 
   def updateConceptReference(self,parameters):
     refId = parameters.id()
@@ -3590,30 +3270,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     dimName = parameters.dimension()
     objtName = parameters.objectName()
     cDesc = parameters.description()
-    try:
-      session = self.conn()
-      session.execute('call updateConceptReference(:rId,:rName,:dName,:obj,:cDesc)',{'rId':refId,'rName':refName,'dName':dimName,'obj':objtName,'cDesc':cDesc.encode('utf-8')})
-      session.commit()
-      session.close()
-      return refId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating concept reference ' + refName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateConceptReference(:rId,:rName,:dName,:obj,:cDesc)',{'rId':refId,'rName':refName,'dName':dimName,'obj':objtName,'cDesc':cDesc.encode('utf-8')},'MySQL error updating concept reference')
+    return refId
 
   def deleteConceptReference(self,refId,dimName):
-    try:
-      session = self.conn()
-      session.execute('call delete_concept_reference(:ref,:dim)',{'ref':refId,'dim':dimName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.IntegrityError, e:
-      id,msg = e
-      exceptionText = 'Cannot remove concept reference due to dependent data.  (id:' + str(id) + ',message:' + msg + ')'
-      raise IntegrityException(exceptionText) 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error deleting concept reference (id:' + str(id) + ',message:' + msg + ')'
+    self.updateDatabase('call delete_concept_reference(:ref,:dim)',{'ref':refId,'dim':dimName},'MySQL error deleting concept reference')
 
   def addPersonaCharacteristicReferences(self,pcId,grounds,warrant,rebuttal):
     for g,desc,dim in grounds:
@@ -3627,15 +3288,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
 
   def addPersonaCharacteristicReference(self,pcId,refName,crTypeName,refDesc,dimName):
-    try:
-      session = self.conn()
-      session.execute('call addPersonaCharacteristicReference(:pc,:ref,:cr,:refD,:dim)',{'pc':pcId,'ref':refName,'cr':crTypeName,'refD':refDesc.encode('utf-8'),'dim':dimName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding ' + crTypeName + ' ' + refName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addPersonaCharacteristicReference(:pc,:ref,:cr,:refD,:dim)',{'pc':pcId,'ref':refName,'cr':crTypeName,'refD':refDesc.encode('utf-8'),'dim':dimName},'MySQL error adding persona characteristic reference')
 
   def referenceDescription(self,dimName,refName):
     return self.responseList('call referenceDescription(:dim,:ref)',{'dim':dimName,'ref':refName},'MySQL error getting reference description')[0]
