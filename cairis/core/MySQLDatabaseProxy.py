@@ -871,6 +871,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def templateAssetProperties(self,taId):
     row = self.responseList('call template_assetProperties(:id)',{'id':taId},'MySQL error getting template asset properties')[0]
+    properties = []
+    rationale = []
     properties.append(row[0])
     properties.append(row[1])
     properties.append(row[2])
@@ -4760,27 +4762,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getInterfaces(self,dimObjt,dimName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getInterfaces(:obj,:name)',{'obj':dimObjt,'name':dimName})
-      ifs = []
-      for row in rs.fetchall():
-        row = list(row)
-        ifName = row[0]
-        ifTypeId = row[1]
-        ifType = 'provided'
-        if (ifTypeId == 1):
-          ifType = 'required'
-        arName = row[2]
-        prName = row[3]
-        ifs.append((ifName,ifType,arName,prName))
-      rs.close()
-      session.close()
-      return ifs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting interfaces for ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call getInterfaces(:obj,:name)',{'obj':dimObjt,'name':dimName},'MySQL error getting interfaces')
+    ifs = []
+    for ifName,ifTypeId,arName,prName in rows:
+      ifType = 'provided'
+      if (ifTypeId == 1):
+        ifType = 'required'
+      ifs.append((ifName,ifType,arName,prName))
+    return ifs
 
   def addInterfaces(self,dimObjt,dimName,ifs):
     try:
@@ -4793,26 +4782,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def deleteInterfaces(self,ifName,ifDim):
-    try:
-      session = self.conn()
-      session.execute('call deleteInterfaces(:name,:dim)',{'name':ifName,'dim':ifDim})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error deleting interfaces from ' + ifDim + ' ' + ifName +  ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call deleteInterfaces(:name,:dim)',{'name':ifName,'dim':ifDim},'MySQL error deleting interfaces')
 
   def addInterface(self,ifObjt,ifName,ifType,arName,pName,ifDim):
-    try:
-      session = self.conn()
-      session.execute('call addInterface(:ifObj,:ifName,:ifType,:arName,:pName,:ifDim)',{'ifObj':ifObjt,'ifName':ifName,'ifType':ifType,'arName':arName,'pName':pName,'ifDim':ifDim})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding interface ' + ifName + ' to ' + ifDim + ' ' + ifObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addInterface(:ifObj,:ifName,:ifType,:arName,:pName,:ifDim)',{'ifObj':ifObjt,'ifName':ifName,'ifType':ifType,'arName':arName,'pName':pName,'ifDim':ifDim},'MySQL error adding interface')
 
   def addComponentStructure(self,componentId,componentStructure):
     for headAsset,headAdornment,headNav,headNry,headRole,tailRole,tailNry,tailNav,tailAdornment,tailAsset in componentStructure:
@@ -4820,15 +4793,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addComponentAssetAssociation(self,componentId,headAsset,headAdornment,headNav,headNry,headRole,tailRole,tailNry,tailNav,tailAdornment,tailAsset):
     assocId = self.newId()
-    try:
-      session = self.conn()
-      session.execute('call addComponentStructure(:aId,:cId,:hAss,:hAd,:hNav,:hNry,:hRole,:tRole,:tNry,:tNav,:tAd,:tAss)',{'aId':assocId,'cId':componentId,'hAss':headAsset,'hAd':headAdornment,'hNav':headNav,'hNry':headNry,'hRole':headRole,'tRole':tailRole,'tNry':tailNry,'tNav':tailNav,'tAd':tailAdornment,'tAss':tailAsset})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding structure to component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addComponentStructure(:aId,:cId,:hAss,:hAd,:hNav,:hNry,:hRole,:tRole,:tNry,:tNav,:tAd,:tAss)',{'aId':assocId,'cId':componentId,'hAss':headAsset,'hAd':headAdornment,'hNav':headNav,'hNry':headNry,'hRole':headRole,'tRole':tailRole,'tNry':tailNry,'tNav':tailNav,'tAd':tailAdornment,'tAss':tailAsset},'MySQL error adding component asset association')
 
   def componentStructure(self,componentId):
     return self.responseList('call getComponentStructure(:comp)',{'comp':componentId},'MySQL error getting structure for component')
@@ -4838,15 +4803,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addComponentRequirement(idx+1,componentId,reqName)
 
   def addComponentRequirement(self,reqLabel,componentId,reqName):
-    try:
-      session = self.conn()
-      session.execute('call addComponentRequirement(:reqLbl,:comp,:req)',{'reqLbl':reqLabel,'comp':componentId,'req':reqName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding requirement to component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addComponentRequirement(:reqLbl,:comp,:req)',{'reqLbl':reqLabel,'comp':componentId,'req':reqName},'MySQL error adding component requirement')
 
   def getComponentViews(self,constraintId = -1):
     cvRows = self.responseList('call getComponentView(:cons)',{'cons':constraintId},'MySQL error getting component view')
@@ -4874,27 +4831,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call getComponentRequirements(:comp)',{'comp':componentId},'MySQL error getting component requirements')
 
   def componentInterfaces(self,componentId):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentInterfaces(:comp)',{'comp':componentId})
-      interfaces = []
-      for row in rs.fetchall():
-        row = list(row)
-        ifName = row[1]
-        ifType = row[2]
-        ifTypeName = 'provided'
-        if ifType == 1:
-          ifTypeName = 'required'
-        arName = row[3]
-        pName = row[4]
-        interfaces.append((ifName,ifTypeName,arName,pName))
-      rs.close()
-      session.close()
-      return interfaces
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting component interfaces (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call componentInterfaces(:comp)',{'comp':componentId},'MySQL error getting component interfaces')
+    ifs = []
+    for compName,ifName,ifTypeId,arName,prName in rows:
+      ifType = 'provided'
+      if (ifTypeId == 1):
+        ifType = 'required'
+      ifs.append((ifName,ifType,arName,prName))
+    return ifs
 
   def addComponentView(self,parameters):
     cvId = self.newId()
