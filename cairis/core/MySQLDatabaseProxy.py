@@ -4585,44 +4585,30 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call getComponents(:id)',{'id':cvId},'MySQL error getting components')
 
   def componentViewWeaknesses(self,cvName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentViewWeaknesses(:cv,:env)',{'cv':cvName,'env':envName})
-      thrDict = {}
-      vulDict = {}
-      for row in rs.fetchall():
-        row = list(row)
-        cName = row[0]
-        taName = row[1]
-        aName = row[2]
-        targetName = row[3]
-        targetType = row[4]
-        t = None
-        if targetType == 'threat':
-          if targetName not in thrDict:
-            t = WeaknessTarget(targetName)
-          else:
-            t = thrDict[targetName]
-          t.addTemplateAsset(taName)
-          t.addAsset(aName)
-          t.addComponent(cName)
-          thrDict[targetName] = t
+    rows = self.responseList('call componentViewWeaknesses(:cv,:env)',{'cv':cvName,'env':envName},'MySQL error getting component view weaknesses')
+    thrDict = {}
+    vulDict = {}
+    for cName,taName,aName,targetName,targetType in rows:
+      t = None
+      if targetType == 'threat':
+        if targetName not in thrDict:
+          t = WeaknessTarget(targetName)
         else:
-          if targetName not in vulDict:
-            t = WeaknessTarget(targetName)
-          else:
-            t = vulDict[targetName]
-          t.addTemplateAsset(taName)
-          t.addAsset(aName)
-          t.addComponent(cName)
-          vulDict[targetName] = t
-      rs.close()
-      session.close()
-      return (thrDict,vulDict)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting weaknesses associated with the ' + cvName + ' component view (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+          t = thrDict[targetName]
+        t.addTemplateAsset(taName)
+        t.addAsset(aName)
+        t.addComponent(cName)
+        thrDict[targetName] = t
+      else:
+        if targetName not in vulDict:
+          t = WeaknessTarget(targetName)
+        else:
+          t = vulDict[targetName]
+        t.addTemplateAsset(taName)
+        t.addAsset(aName)
+        t.addComponent(cName)
+        vulDict[targetName] = t
+    return (thrDict,vulDict)
 
   def componentAssets(self,cvName,reqName = ''):
     return self.responseList('call componentAssets(:cv,:req)',{'cv':cvName,'req':reqName},'MySQL error getting component assets')
@@ -4786,34 +4772,20 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return pImpact
 
   def personaImpactRationale(self,cvName,personaName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call personaImpactRationale(:cv,:pers,:env)',{'cv':cvName,'pers':personaName,'env':envName})
-      piRationale = {}
-      for row in rs.fetchall():
-        row = list(row)
-        taskName = row[0] 
-        durLabel = row[1]
-        freqLabel = row[2]
-        pdLabel = row[3]
-        gcLabel = row[4]
-        piRationale[taskName] = [durLabel,freqLabel,pdLabel,gcLabel]
-      rs.close()
-      session.close()
-      for taskName in piRationale:
-        ucDict = {}
-        taskUseCases = self.taskUseCases(taskName)
-        for ucName in taskUseCases:
-          ucComs = self.usecaseComponents(ucName) 
-          ucDict[ucName] = []
-          for componentName in ucComs:
-            ucDict[ucName].append(componentName)
-        piRationale[taskName].append(ucDict) 
-      return piRationale
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting rationale for persona impact (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call personaImpactRationale(:cv,:pers,:env)',{'cv':cvName,'pers':personaName,'env':envName},'MySQL error getting persona impact rationale')
+    piRationale = {}
+    for taskName, durLabel, freqLabel, pdLabel, gcLabel in rows:
+      piRationale[taskName] = [durLabel,freqLabel,pdLabel,gcLabel]
+    for taskName in piRationale:
+      ucDict = {}
+      taskUseCases = self.taskUseCases(taskName)
+      for ucName in taskUseCases:
+        ucComs = self.usecaseComponents(ucName) 
+        ucDict[ucName] = []
+        for componentName in ucComs:
+          ucDict[ucName].append(componentName)
+      piRationale[taskName].append(ucDict) 
+    return piRationale
 
   def taskUseCases(self,taskName):
     return self.responseList('call taskUseCases(:task)',{'task':taskName},'MySQL error getting task use cases')
@@ -4825,38 +4797,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call attackSurfaceMetric(:cv)',{'cv':cvName},'MySQL error getting attack surface metrics')[0]
 
   def componentAssetModel(self,componentName):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentClassModel(:comp)',{'comp':componentName})
-      associations = {}
-      for row in rs.fetchall():
-        row = list(row)
-        associationId = -1
-        envName = ''
-        headName = row[0]
-        headDim  = 'template_asset'
-        headNav =  row[2]
-        headType = row[1]
-        headMult = row[3]
-        headRole = row[4]
-        tailRole = row[5]
-        tailMult = row[6]
-        tailType = row[8]
-        tailNav =  row[7]
-        tailDim  = 'template_asset'
-        tailName = row[9]
-        rationale = ''
-        parameters = ClassAssociationParameters(envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale)
-        association = ObjectFactory.build(associationId,parameters)
-        asLabel = envName + '/' + headName + '/' + tailName
-        associations[asLabel] = association
-      rs.close()
-      session.close()
-      return associations
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting component class associations (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call componentClassModel(:comp)',{'comp':componentName},'MySQL error getting component asset model')
+    associations = {}
+    for headName,headType,headNav,headMult,headRole,tailRole,tailMult,tailNav,tailType,tailName in rows:
+      associationId = -1
+      envName = ''
+      headDim  = 'template_asset'
+      tailDim  = 'template_asset'
+      rationale = ''
+      parameters = ClassAssociationParameters(envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale)
+      association = ObjectFactory.build(associationId,parameters)
+      asLabel = envName + '/' + headName + '/' + tailName
+      associations[asLabel] = association
+    return associations
 
   def getInternalDocuments(self,constraintId = -1):
     rows = self.responseList('call getInternalDocuments(:id)',{'id':constraintId},'MySQL error getting internal documents')
@@ -4916,28 +4869,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getCodes(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getCodes(:const)',{'const':constraintId})
-      cObjts = {}
-      for row in rs.fetchall():
-        row = list(row)
-        codeId = row[0]
-        codeName = row[1]
-        codeType = row[2]
-        codeDesc = row[3]
-        incCriteria = row[4]
-        codeEg = row[5]
-        parameters = CodeParameters(codeName,codeType,codeDesc,incCriteria,codeEg)
-        cObjt = ObjectFactory.build(codeId,parameters)
-        cObjts[codeName] = cObjt
-      rs.close()
-      session.close()
-      return cObjts
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting codes (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call getCodes(:const)',{'const':constraintId},'MySQL error getting code')
+    cObjts = {}
+    for codeId,codeName,codeType,codeDesc,incCriteria,codeEg in rows:
+      parameters = CodeParameters(codeName,codeType,codeDesc,incCriteria,codeEg)
+      cObjt = ObjectFactory.build(codeId,parameters)
+      cObjts[codeName] = cObjt
+    return cObjts
 
   def deleteCode(self,codeId = -1):
     self.deleteObject(codeId,'code')
@@ -4950,16 +4888,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     codeDesc = parameters.description()
     incCriteria = parameters.inclusionCriteria()
     codeEg  = parameters.example()
-    try:
-      session = self.conn()
-      session.execute('call addCode(:id,:name,:type,:desc,:crit,:eg)',{'id':codeId,'name':codeName.encode('utf-8'),'type':codeType,'desc':codeDesc.encode('utf-8'),'crit':incCriteria.encode('utf-8'),'eg':codeEg.encode('utf-8')})
-      session.commit()
-      session.close()
-      return codeId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding code ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addCode(:id,:name,:type,:desc,:crit,:eg)',{'id':codeId,'name':codeName.encode('utf-8'),'type':codeType,'desc':codeDesc.encode('utf-8'),'crit':incCriteria.encode('utf-8'),'eg':codeEg.encode('utf-8')},'MySQL error adding code')
+    return codeId
 
 
   def updateCode(self,parameters):
@@ -4969,34 +4899,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     codeDesc = parameters.description()
     incCriteria = parameters.inclusionCriteria()
     codeEg  = parameters.example()
-    try:
-      session = self.conn()
-      session.execute('call updateCode(:id,:name,:type,:desc,:crit,:eg)',{'id':codeId,'name':codeName.encode('utf-8'),'type':codeType,'desc':codeDesc.encode('utf-8'),'crit':incCriteria.encode('utf-8'),'eg':codeEg.encode('utf-8')})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating code ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateCode(:id,:name,:type,:desc,:crit,:eg)',{'id':codeId,'name':codeName.encode('utf-8'),'type':codeType,'desc':codeDesc.encode('utf-8'),'crit':incCriteria.encode('utf-8'),'eg':codeEg.encode('utf-8')},'MySQL error updating code')
 
   def documentCodes(self,docName):
-    try:
-      session = self.conn()
-      rs = session.execute('call documentCodes(:name)',{'name':docName})
-      codes = {}
-      for row in rs.fetchall():
-        row = list(row)
-        codeName = row[0]
-        startIdx = int(row[1])
-        endIdx = int(row[2])
-        codes[(startIdx,endIdx)] = codeName
-      rs.close()
-      session.close()
-      return codes
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting codes for ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call documentCodes(:name)',{'name':docName},'MySQL error getting document code')
+    codes = {}
+    for codeName,startIdx,endIdx in rows:
+      startIdx = int(startIdx)
+      endIdx = int(endIdx)
+      codes[(startIdx,endIdx)] = codeName
+    return codes
   
   def addDocumentCodes(self,docName,docCodes):
     for (startIdx,endIdx) in docCodes:
@@ -5004,34 +4916,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addDocumentCode(docName,docCode,startIdx,endIdx)
 
   def addDocumentCode(self,docName,docCode,startIdx,endIdx,codeLabel='',codeSynopsis=''):
-    try:
-      session = self.conn()
-      session.execute('call addDocumentCode(:name,:code,:sIdx,:eIdx,:lbl,:syn)',{'name':docName,'code':docCode,'sIdx':startIdx,'eIdx':endIdx,'lbl':codeLabel,'syn':codeSynopsis})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding code ' + docCode + ' to '  + docName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addDocumentCode(:name,:code,:sIdx,:eIdx,:lbl,:syn)',{'name':docName,'code':docCode,'sIdx':startIdx,'eIdx':endIdx,'lbl':codeLabel,'syn':codeSynopsis},'MySQL error adding document code')
 
   def artifactCodes(self,artName,artType,sectName):
-    try:
-      session = self.conn()
-      rs = session.execute('call artifactCodes(:art,:type,:sect)',{'art':artName,'type':artType,'sect':sectName})
-      codes = {}
-      for row in rs.fetchall():
-        row = list(row)
-        codeName = row[0]
-        startIdx = int(row[1])
-        endIdx = int(row[2])
-        codes[(startIdx,endIdx)] = codeName
-      rs.close()
-      session.close()
-      return codes
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting codes for ' + artType + ' ' + artName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call artifactCodes(:art,:type,:sect)',{'art':artName,'type':artType,'sect':sectName},'MySQL error getting artifact codes')
+    codes = {}
+    for codeName,startIdx,endIdx in rows:
+      startIdx = int(startIdx)
+      endIdx = int(endIdx)
+      codes[(startIdx,endIdx)] = codeName
+    return codes
 
   def addPersonaCodes(self,pName,codes):
     if len(codes) > 0:
@@ -5055,15 +4949,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addArtifactCode(artName,artType,sectName,docCode,startIdx,endIdx)
 
   def addArtifactCode(self,artName,artType,sectName,docCode,startIdx,endIdx):
-    try:
-      session = self.conn()
-      session.execute('call addArtifactCode(:art,:type,:sect,:code,:sIdx,:eIdx)',{'art':artName,'type':artType,'sect':sectName,'code':docCode,'sIdx':startIdx,'eIdx':endIdx})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding code ' + docCode + ' to '  + artType + ' ' + artName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addArtifactCode(:art,:type,:sect,:code,:sIdx,:eIdx)',{'art':artName,'type':artType,'sect':sectName,'code':docCode,'sIdx':startIdx,'eIdx':endIdx},'MySQL error adding artifact code')
 
   def personaCodes(self,pName):
     codeBook = {}
@@ -5108,133 +4994,45 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addArtifactEnvironmentCode(artName,envName,artType,sectName,docCode,startIdx,endIdx)
 
   def addArtifactEnvironmentCode(self,artName,envName,artType,sectName,docCode,startIdx,endIdx):
-    try:
-      session = self.conn()
-      session.execute('call addArtifactEnvironmentCode(:art,:env,:type,:sect,:code,:sIdx,:eIdx)',{'art':artName,'env':envName,'type':artType,'sect':sectName,'code':docCode,'sIdx':startIdx,'eIdx':endIdx})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding code ' + docCode + ' to '  + artType + ' ' + artName + ' in environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updataDatabase('call addArtifactEnvironmentCode(:art,:env,:type,:sect,:code,:sIdx,:eIdx)',{'art':artName,'env':envName,'type':artType,'sect':sectName,'code':docCode,'sIdx':startIdx,'eIdx':endIdx},'MySQL error adding artifact environment code')
 
   def personaCodeNetwork(self,personaName,fromCode='',toCode=''):
-    try:
-      session = self.conn()
-      rs = session.execute('call artifactCodeNetwork(:pers,:a,:fCode,:tCode)',{'pers':personaName,'a':'persona','fCode':fromCode,'tCode':toCode})
-      network = []
-      for row in rs.fetchall():
-        row = list(row)
-        fromCode = row[0]
-        fromType = row[1]
-        toCode = row[2]
-        toType = row[3]
-        rType = row[4]
-        network.append((fromCode,fromType,toCode,toType,rType))
-      rs.close()
-      session.close()
-      return network
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting code network for persona ' + personaName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call artifactCodeNetwork(:pers,:a,:fCode,:tCode)',{'pers':personaName,'a':'persona','fCode':fromCode,'tCode':toCode},'MySQL error getting persona code network')
 
   def addCodeRelationship(self,personaName,fromName,toName,rshipType):
-    try:
-      session = self.conn()
-      session.execute('call addArtifactCodeNetwork(:pers,:a,:fName,:tName,:type)',{'pers':personaName,'a':'persona','fName':fromName,'tName':toName,'type':rshipType})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding ' + rshipType + ' to ' + personaName + ' code network (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addArtifactCodeNetwork(:pers,:a,:fName,:tName,:type)',{'pers':personaName,'a':'persona','fName':fromName,'tName':toName,'type':rshipType},'MySQL error adding code relationship')
 
   def updateCodeNetwork(self,personaName,rships):
-    try:
-      session = self.conn()
-      session.execute('call deleteArtifactCodeNetwork(:pers,:a)',{'pers':personaName,'a':'persona'})
-      session.commit()
-      session.close()
-      for fromName,toName,rshipType in rships:
-        self.addCodeRelationship(personaName,fromName,toName,rshipType)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating code network for ' + ' personaName (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call deleteArtifactCodeNetwork(:pers,:a)',{'pers':personaName,'a':'persona'},'MySQL error deleting artifact code network')
+    for fromName,toName,rshipType in rships:
+      self.addCodeRelationship(personaName,fromName,toName,rshipType)
 
   def getImpliedProcesses(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getImpliedProcesses(:const)',{'const':constraintId})
-
-      ipRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        ipId = row[0]
-        ipName = row[1]
-        ipDesc = row[2]
-        pName = row[3]
-        ipSpec = row[4]
-        ipRows.append((ipId,ipName,ipDesc,pName,ipSpec))
-      rs.close()
-      session.close()
-
-      ips = {}
-      for ipId,ipName,ipDesc,pName,ipSpec in ipRows:
-        ipNet = self.impliedProcessNetwork(ipName)
-        chs = self.impliedProcessChannels(ipName)
-        parameters = ImpliedProcessParameters(ipName,ipDesc,pName,ipNet,ipSpec,chs)
-        ip = ObjectFactory.build(ipId,parameters)
-        ips[ipName] = ip
-      return ips
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting implied processes (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    ipRows = self.responseList('call getImpliedProcesses(:const)',{'const':constraintId},'MySQL error getting implied processes')
+    ips = {}
+    for ipId,ipName,ipDesc,pName,ipSpec in ipRows:
+      ipNet = self.impliedProcessNetwork(ipName)
+      chs = self.impliedProcessChannels(ipName)
+      parameters = ImpliedProcessParameters(ipName,ipDesc,pName,ipNet,ipSpec,chs)
+      ip = ObjectFactory.build(ipId,parameters)
+      ips[ipName] = ip
+    return ips
 
   def impliedProcessNetwork(self,ipName):
-    try:
-      session = self.conn()
-      rs = session.execute('call impliedProcessNetwork(:name)',{'name':ipName})
-      rows = []
-      for row in rs.fetchall():
-        row = list(row)
-        fromName = row[0]
-        fromType = row[1]
-        toName = row[2]
-        toType = row[3]
-        rType = row[4]
-        rows.append((fromName,fromType,toName,toType,rType))
-      rs.close()
-      session.close()
-      return rows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting implied process network ' + ipName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call impliedProcessNetwork(:name)',{'name':ipName},'MySQL error getting implied process network')
 
   def addImpliedProcess(self,parameters):
-    try:
-      ipId = self.newId()
-      ipName = parameters.name()
-      ipDesc = parameters.description()
-      pName = parameters.persona()
-      cNet = parameters.network()
-      ipSpec = parameters.specification()
-      chs = parameters.channels()
-
-      session = self.conn()
-      session.execute('call addImpliedProcess(:id,:name,:desc,:proc,:spec)',{'id':ipId,'name':ipName,'desc':ipDesc.encode('utf-8'),'proc':pName,'spec':ipSpec.encode('utf-8')})
-      session.commit()
-      session.close()
-      self.addImpliedProcessNetwork(ipId,pName,cNet)
-      self.addImpliedProcessChannels(ipId,chs)
-      return ipId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding implied process ' + ipName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    ipId = self.newId()
+    ipName = parameters.name()
+    ipDesc = parameters.description()
+    pName = parameters.persona()
+    cNet = parameters.network()
+    ipSpec = parameters.specification()
+    chs = parameters.channels()
+    self.updateDatabase('call addImpliedProcess(:id,:name,:desc,:proc,:spec)',{'id':ipId,'name':ipName,'desc':ipDesc.encode('utf-8'),'proc':pName,'spec':ipSpec.encode('utf-8')},'MySQL error adding implied process')
+    self.addImpliedProcessNetwork(ipId,pName,cNet)
+    self.addImpliedProcessChannels(ipId,chs)
+    return ipId
 
   def updateImpliedProcess(self,parameters):
     try:
@@ -5264,30 +5062,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addImpliedProcessNetworkRelationship(ipId,personaName,fromName,toName,rType)
 
   def addImpliedProcessNetworkRelationship(self,ipId,personaName,fromName,toName,rType):
-    try:
-      session = self.conn()
-      session.execute('call addImpliedProcessNetworkRelationship(:id,:pers,:fName,:tName,:type)',{'id':ipId,'pers':personaName,'fName':fromName,'tName':toName,'type':rType})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating implied process  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addImpliedProcessNetworkRelationship(:id,:pers,:fName,:tName,:type)',{'id':ipId,'pers':personaName,'fName':fromName,'tName':toName,'type':rType},'MySQL error adding implied process network relationship')
 
   def deleteImpliedProcess(self,ipId):
     self.deleteObject(ipId,'persona_implied_process')
     
-
   def addStepSynopsis(self,ucName,envName,stepNo,synName,aType,aName):
-    try:
-      session = self.conn()
-      session.execute('call addStepSynopsis(:uc,:env,:step,:syn,:aName,:aType)',{'uc':ucName,'env':envName,'step':stepNo,'syn':synName,'aName':aName,'aType':aType})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding step synopsis ' + synName + '  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addStepSynopsis(:uc,:env,:step,:syn,:aName,:aType)',{'uc':ucName,'env':envName,'step':stepNo,'syn':synName,'aName':aName,'aType':aType},'MySQL error adding step synopsis')
 
   def directoryEntry(self,objtName,dType):
     try:
