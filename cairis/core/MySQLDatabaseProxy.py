@@ -6390,31 +6390,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def impliedCharacteristicElements(self,pName,fromCode,toCode,rtName,isLhs):
-    try:
-      session = self.conn()
-      rs = session.execute('call impliedCharacteristicElements(:pName,:fCode,:tCode,:rt,:lhs)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName,'lhs':isLhs})
-      els = []
-      for row in rs.fetchall():
-        row = list(row)
-        els.append((row[0],row[1]))
-      rs.close()
-      session.close()
-      return els
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting implied characteristic elements for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call impliedCharacteristicElements(:pName,:fCode,:tCode,:rt,:lhs)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName,'lhs':isLhs},'MySQL error getting implied characteristic elements')
 
   def initialiseImpliedCharacteristic(self,pName,fromCode,toCode,rtName):
-    try:
-      session = self.conn()
-      session.execute('call initialiseImpliedCharacteristic(pName,fCode,tCode,rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call initialiseImpliedCharacteristic(pName,fCode,tCode,rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName},'MySQL error initialising implied characteristic')
 
   def addImpliedCharacteristic(self,parameters):
     pName = parameters.persona()
@@ -6427,21 +6406,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     rhsCodes = parameters.rhsCodes()
     charType = parameters.characteristicType()
    
-    try:
-      session = self.conn()
-      session.execute('call addImpliedCharacteristic(:pName,:fCode,:tCode,:rt,:pChar,:qual,:cType)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName,'pChar':charName,'qual':qualName,'cType':charType})
-      session.commit()
-      session.close()
-      for lblName,rtName in lhsCodes:
-        self.addImpliedCharacteristicElement(charName,lblName,rtName)
-
-      for lblName,rtName in rhsCodes:
-        self.addImpliedCharacteristicElement(charName,lblName,rtName)
-
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding implied characteristic ' + charName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addImpliedCharacteristic(:pName,:fCode,:tCode,:rt,:pChar,:qual,:cType)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName,'pChar':charName,'qual':qualName,'cType':charType},'MySQL error adding implied characteristic')
+    for lblName,rtName in lhsCodes:
+      self.addImpliedCharacteristicElement(charName,lblName,rtName)
+    for lblName,rtName in rhsCodes:
+      self.addImpliedCharacteristicElement(charName,lblName,rtName)
 
 
   def updateImpliedCharacteristic(self,parameters):
@@ -6457,155 +6426,50 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     intName = parameters.intention()
     intType = parameters.intentionType()
    
-    try:
-      session = self.conn()
-      session.execute('call updateImpliedCharacteristic(:pName,:fCode,:tCode,:rt,:char,:qual,:cType)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName,'char':charName,'qual':qualName,'cType':charType})
-      session.commit()
-      session.close()
-      for lblName,rtName in lhsCodes:
-        self.updateImpliedCharacteristicElement(charName,lblName,rtName)
-
-      for lblName,rtName in rhsCodes:
-        self.updateImpliedCharacteristicElement(charName,lblName,rtName)
-
-      self.updateImpliedCharacteristicIntention(charName,intName,intType)
-
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating implied characteristic ' + charName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateImpliedCharacteristic(:pName,:fCode,:tCode,:rt,:char,:qual,:cType)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName,'char':charName,'qual':qualName,'cType':charType},'MySQL error updating implied characteristic')
+    for lblName,rtName in lhsCodes:
+      self.updateImpliedCharacteristicElement(charName,lblName,rtName)
+    for lblName,rtName in rhsCodes:
+      self.updateImpliedCharacteristicElement(charName,lblName,rtName)
+    self.updateImpliedCharacteristicIntention(charName,intName,intType)
 
   def updateImpliedCharacteristicIntention(self,charName,intName,intType):
-    try:
-      session = self.conn()
-      session.execute('call updateImpliedCharacteristicIntention(:char,:int,:type)',{'char':charName,'int':intName,'type':intType})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating intention for implied characteristic ' + charName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateImpliedCharacteristicIntention(:char,:int,:type)',{'char':charName,'int':intName,'type':intType},'MySQL error updating implied characteristic intention')
 
   def addImpliedCharacteristicElement(self,charName,lblName,rtName):
-    try:
-      session = self.conn()
-      session.execute('call addImpliedCharacteristicElement(:char,:lbl,:rt)',{'char':charName,'lbl':lblName,'rt':rtName})
-      session.commit()
-      session.close() 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding implied characteristic ' + charName + ' element ' + lblName + '/' + rtName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addImpliedCharacteristicElement(:char,:lbl,:rt)',{'char':charName,'lbl':lblName,'rt':rtName},'MySQL error adding implied characteristic element')
 
   def updateImpliedCharacteristicElement(self,charName,lblName,rtName):
-    try:
-      session = self.conn()
-      session.execute('call updateImpliedCharacteristicElement(:char,:lbl,:rt)',{'char':charName,'lbl':lblName,'rt':rtName})
-      session.commit()
-      session.close() 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating implied characteristic ' + charName + ' element ' + lblName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateImpliedCharacteristicElement(:char,:lbl,:rt)',{'char':charName,'lbl':lblName,'rt':rtName},'MySQL error updating implied characteristic element')
 
   def codeCount(self,codeName):
-    try:
-      session = self.conn()
-      rs = session.execute('select codeCount(:code)',{'code':codeName})
-      row = rs.fetchone()
-      cCount = row[0]
-      rs.close()
-      session.close()
-      return cCount
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting code count for ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select codeCount(:code)',{'code':codeName},'MySQL error getting code count')[0]
 
   def addIntention(self,intention):
     refName = intention[0]
     refType = intention[1]
     intentionName = intention[2]
     intentionType = intention[3]
-    try:
-      session = self.conn()
-      session.execute('call addIntention(:ref,:rType,:int,:iType)',{'ref':refName,'rType':refType,'int':intentionName,'iType':intentionType})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding intention ' + intentionName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addIntention(:ref,:rType,:int,:iType)',{'ref':refName,'rType':refType,'int':intentionName,'iType':intentionType},'MySQL error adding intention')
 
   def addContribution(self,contribution):
     srcName = contribution[0]
     destName = contribution[1]
     meansEnd = contribution[2]
     valName = contribution[3]
-    try:
-      session = self.conn()
-      session.execute('call addContribution(:src,:dest,:means,:val)',{'src':srcName,'dest':destName,'means':meansEnd,'val':valName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding contribution ' + srcName + '/' + destName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addContribution(:src,:dest,:means,:val)',{'src':srcName,'dest':destName,'means':meansEnd,'val':valName},'MySQL error adding contribution')
 
   def impliedCharacteristicIntention(self,synName,pName,fromCode,toCode,rtName):
-    try:
-      session = self.conn()
-      rs = session.execute('select impliedCharacteristicIntention(:syn,:pName,:fCode,:tCode,:rt)',{'syn':synName,'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName})
-      row = rs.fetchone()
-      itTuple = row[0]
-      rs.close()
-      session.close()
-      return itTuple.split('#')
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting intention for implied characteristic ' + synName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseLis('select impliedCharacteristicIntention(:syn,:pName,:fCode,:tCode,:rt)',{'syn':synName,'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName},'MySQL error getting implied characteristic intention')[0].split('#')
 
   def impliedCharacteristicElementIntention(self,ciName,elName):
-    try:
-      session = self.conn()
-      rs = session.execute('select impliedCharacteristicElementIntention(:ci,:el)',{'ci':ciName,'el':elName})
-      row = rs.fetchone()
-      iceiDetails = row[0]
-      rs.close()
-      session.close()
-      return iceiDetails.split('#')
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting intention for element ' + elName + ' for implied characteristic intention ' + ciName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select impliedCharacteristicElementIntention(:ci,:el)',{'ci':ciName,'el':elName},'MySQL error getting implied characteristic element intention')[0].split('#')
 
   def updateImpliedCharacteristicElementIntention(self,ciName,elName,intName,intDim,meName,contName):
-    try:
-      session = self.conn()
-      session.execute('call updateImpliedCharacteristicElementIntention(:ci,:el,:int,:dim,:me,:cont)',{'ci':ciName,'el':elName,'int':intName,'dim':intDim,'me':meName,'cont':contName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating intention for element ' + elName + ' for implied characteristic ' + ciName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateImpliedCharacteristicElementIntention(:ci,:el,:int,:dim,:me,:cont)',{'ci':ciName,'el':elName,'int':intName,'dim':intDim,'me':meName,'cont':contName},'MySQL error updating intention for element ' + elName + ' for implied characteristic ' + ciName)
 
   def deniedGoals(self,codeName):
-    try:
-      session = self.conn()
-      rs = session.execute('call deniedGoals(:code)',{'code':codeName})
-      goals = []
-      for row in rs.fetchall():
-        row = list(row)
-        goals.append(row[0])
-      rs.close()
-      session.close()
-      return goals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting denied goals for code ' + codeName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call deniedGoals(:code)',{'code':codeName},'MySQL error getting denied goals')
 
   def addLocations(self,parameters):
     locsId = self.newId()
@@ -6613,20 +6477,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     locDiagram = parameters.diagram()
     locations = parameters.locations()
     links = parameters.links()
-    try:
-      session = self.conn()
-      session.execute('call addLocations(:id,:name,:diag)',{'id':locsId,'name':locsName,'diag':locDiagram})
-      session.commit()
-      session.close()
-      for location in locations:
-        self.addLocation(locsId,location)
-      for link in links:
-        self.addLocationLink(locsId,link)
-      return locsId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding locations ' + locsName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addLocations(:id,:name,:diag)',{'id':locsId,'name':locsName,'diag':locDiagram},'MySQL error adding locations')
+    for location in locations:
+      self.addLocation(locsId,location)
+    for link in links:
+      self.addLocationLink(locsId,link)
+    return locsId
 
   def updateLocations(self,parameters):
     locsId = parameters.id()
@@ -6639,114 +6495,49 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     locName = location.name()
     assetInstances = location.assetInstances()
     personaInstances = location.personaInstances()
-
-    try:
-      session = self.conn()
-      session.execute('call addLocation(:locsId,:locId,:locName)',{'locsId':locsId,'locId':locId,'locName':locName})
-      session.commit()
-      session.close()
-      for assetInstance in assetInstances:
-        self.addAssetInstance(locId,assetInstance)
-      for personaInstance in personaInstances:
-        self.addPersonaInstance(locId,personaInstance)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding location ' + locName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addLocation(:locsId,:locId,:locName)',{'locsId':locsId,'locId':locId,'locName':locName},'MySQL error adding location')
+    for assetInstance in assetInstances:
+      self.addAssetInstance(locId,assetInstance)
+    for personaInstance in personaInstances:
+      self.addPersonaInstance(locId,personaInstance)
 
   def addAssetInstance(self,locId,assetInstance):
     instanceId = self.newId()
     instanceName = assetInstance[0]
     assetName = assetInstance[1]
-
-    try:
-      session = self.conn()
-      session.execute('call addAssetInstance(:lId,:iId,:iName,:assName)',{'lId':locId,'iId':instanceId,'iName':instanceName,'assName':assetName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding asset instance ' + instanceName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addAssetInstance(:lId,:iId,:iName,:assName)',{'lId':locId,'iId':instanceId,'iName':instanceName,'assName':assetName},'MySQL error adding asset instance')
 
   def addPersonaInstance(self,locId,personaInstance):
     instanceId = self.newId()
     instanceName = personaInstance[0]
     personaName = personaInstance[1]
-
-    try:
-      session = self.conn()
-      session.execute('call addPersonaInstance(:lId,:iId,:iName,:pName)',{'lId':locId,'iId':instanceId,'iName':instanceName,'pName':personaName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding persona instance ' + instanceName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
+    self.updateDatabase('call addPersonaInstance(:lId,:iId,:iName,:pName)',{'lId':locId,'iId':instanceId,'iName':instanceName,'pName':personaName},'MySQL error adding persona instance')
 
   def addLocationLink(self,locsId,link):
     tailLoc = link[0]
     headLoc = link[1]
-    try:
-      session = self.conn()
-      session.execute('call addLocationLink(:lId,:tLoc,:hLoc)',{'lId':locsId,'tLoc':tailLoc,'hLoc':headLoc})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding link between locations ' + tailLoc + ' and ' + headLoc + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addLocationLink(:lId,:tLoc,:hLoc)',{'lId':locsId,'tLoc':tailLoc,'hLoc':headLoc},'MySQL error adding location link')
 
   def getLocations(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getLocations(:const)',{'const':constraintId})
-      locationsDict = {}
-      locsRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        locsId = row[0]
-        locsName = row[1] 
-        locsDia = row[2] 
-        locsRows.append((locsId,locsName,locsDia))
-      rs.close()
-      session.close()
-      for locsId,locsName,locsDia in locsRows:
-        locNames = self.getLocationNames(locsName)
-        linkDict = self.getLocationLinks(locsName)
-        locs = []
-        for locName in locNames:
-          assetInstances = self.getAssetInstances(locName)
-          personaInstances = self.getPersonaInstances(locName)
-          locLinks = linkDict[locName]
-          loc = Location(-1,locName,assetInstances,personaInstances,locLinks)
-          locs.append(loc)
-        p = LocationsParameters(locsName,locsDia,locs)
-        locations = ObjectFactory.build(locsId,p)
-        locationsDict[locsName] = locations
-      return locationsDict
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error obtaining locations (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    locsRows = self.responseList('call getLocations(:const)',{'const':constraintId},'MySQL error getting locations')
+    locationsDict = {}
+    for locsId,locsName,locsDia in locsRows:
+      locNames = self.getLocationNames(locsName)
+      linkDict = self.getLocationLinks(locsName)
+      locs = []
+      for locName in locNames:
+        assetInstances = self.getAssetInstances(locName)
+        personaInstances = self.getPersonaInstances(locName)
+        locLinks = linkDict[locName]
+        loc = Location(-1,locName,assetInstances,personaInstances,locLinks)
+        locs.append(loc)
+      p = LocationsParameters(locsName,locsDia,locs)
+      locations = ObjectFactory.build(locsId,p)
+      locationsDict[locsName] = locations
+    return locationsDict
 
   def getLocationNames(self,locsName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getLocationNames(:locs)',{'locs':locsName})
-      locationRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        locName = row[0]
-        locationRows.append(locName)
-      rs.close()
-      session.close()
-      return locationRows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting location names (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getLocationNames(:locs)',{'locs':locsName},'MySQL error getting location names')
 
   def getLocationLinks(self,locsName):
     try:
@@ -7005,15 +6796,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def removeUseCaseContributions(self,ucId):
-    try: 
-      session = self.conn()
-      session.execute('call removeUseCaseContributions(%s)',[ucId])
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error removing use case contribution (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call removeUseCaseContributions(:id)',{'id':ucId},'MySQL error removing use case contribution')
 
   def getDataFlows(self,dfName='',envName=''):
     dfRows = self.responseList('call getDataFlows(:df,:env)',{'df':dfName,'env':envName},'MySQL error getting data flows')
@@ -7080,27 +6863,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def deleteDataFlow(self,dfName,envName):
-    try:
-      session = self.conn()
-      session.execute('call deleteDataFlow(:df,:env)',{'df':dfName,'env':envName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error deleting dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
+    self.updateDatabase('call deleteDataFlow(:df,:env)',{'df':dfName,'env':envName},'MySQL Error deleting data flow')
 
   def dataFlowDiagram(self,envName,filterElement = ''):
     return self.responseList('call dataFlowDiagram(:env,:fe)',{'env':envName,'fe':filterElement},'MySQL error getting data flow diagram')
 
   def relabelRequirements(self,reqReference):
-    try:
-      session = self.conn()
-      session.execute('call relabelRequirements(:reqReference)',{'reqReference':reqReference})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error relabing requirements associated with ' + reqReference + ' (id:' + str(id) + ',message:' + msg + ')'
+    self.updateDatabase('call relabelRequirements(:reqReference)',{'reqReference':reqReference},'MySQL error relabelling requirements')
 
   def getTrustBoundaries(self,constraintId = -1):
     tbRows = self.responseList('call getTrustBoundaries(:id)',{'id':constraintId},'MySQL error getting trust boundaries')
