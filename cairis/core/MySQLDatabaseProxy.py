@@ -861,53 +861,33 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def relatedProperties(self,dimTable,objtId,environmentId):
-    try:
-      session = self.conn()
-      sqlTxt = 'call ' + dimTable + 'Properties (%s,%s)' %(objtId,environmentId)
-      rs = session.execute(sqlTxt)
-      properties = []
-      row = rs.fetchone()
-      properties =  array((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])).astype(int32) 
-      pRationale =  [row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15]]
-      rs.close()
-      session.close()
-      return (properties,pRationale)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting ' + dimTable + ' properties in environment id ' + str(environmentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    callTxt = 'call ' + dimTable + 'Properties (:objtId,:envId)'
+    argDict = {'objtId':objtId,'envId':environmentId}
+    row = self.responseList(callTxt,argDict,'MySQL error getting related properties')[0]
+    properties = []
+    properties =  array((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])).astype(int32) 
+    pRationale =  [row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15]]
+    return (properties,pRationale)
 
   def templateAssetProperties(self,taId):
-    try:
-      session = self.conn()
-      sqlTxt = 'call template_assetProperties(%s)' %(taId)
-      rs = session.execute(sqlTxt)
-      properties = []
-      rationale = []
-      row = rs.fetchone()
-      properties.append(row[0])
-      properties.append(row[1])
-      properties.append(row[2])
-      properties.append(row[3])
-      properties.append(row[4])
-      properties.append(row[5])
-      properties.append(row[6])
-      properties.append(row[7])
-      rationale.append(row[8])
-      rationale.append(row[9])
-      rationale.append(row[10])
-      rationale.append(row[11])
-      rationale.append(row[12])
-      rationale.append(row[13])
-      rationale.append(row[14])
-      rationale.append(row[15])
-      rs.close()
-      session.close()
-      return (properties,rationale)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting template asset properties  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    row = self.responseList('call template_assetProperties(:id)',{'id':taId},'MySQL error getting template asset properties')[0]
+    properties.append(row[0])
+    properties.append(row[1])
+    properties.append(row[2])
+    properties.append(row[3])
+    properties.append(row[4])
+    properties.append(row[5])
+    properties.append(row[6])
+    properties.append(row[7])
+    rationale.append(row[8])
+    rationale.append(row[9])
+    rationale.append(row[10])
+    rationale.append(row[11])
+    rationale.append(row[12])
+    rationale.append(row[13])
+    rationale.append(row[14])
+    rationale.append(row[15])
+    return (properties,rationale)
 
   def getPersonas(self,constraintId = -1):
     personaRows = self.responseList('call getPersonas(:id)',{'id':constraintId},'MySQL error getting personas')
@@ -1333,19 +1313,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
 
   def riskComponents(self,riskName):
-    try:
-      session = self.conn()
-      rs = session.execute('call riskComponents(:rId)',{'rId':riskName})  
-      row = rs.fetchone()
-      threatName = row[0]
-      vulName = row[1]
-      rs.close()
-      session.close()
-      return [threatName,vulName]
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting components of risk ' + riskName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    row = self.responseList('call riskComponents(:rId)',{'rId':riskName},'MySQL error getting risk components')[0]
+    threatName = row[0]
+    vulName = row[1]
+    return [threatName,vulName]
 
   def addResponse(self,parameters):
     respName = parameters.name()
@@ -2481,46 +2452,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addClassAssociation(parameters) 
 
   def goalLabel(self,goalId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select goal_label(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchone()
-      goalAttr = row[0] 
-      rs.close()
-      session.close()
-      return goalAttr
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting label for goal id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select goal_label(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal label')[0]
 
   def goalDefinition(self,goalId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select goal_definition(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchone()
-      goalAttr = row[0] 
-      rs.close()
-      session.close()
-      return goalAttr
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting definition for goal id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select goal_definition(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal definition')[0]
 
   def goalCategory(self,goalId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select goal_category(:gId,:eId)',{'gId':goalId,'eId':environmentId})
-      row = rs.fetchone()
-      goalAttr = row[0] 
-      rs.close()
-      session.close()
-      return goalAttr
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting category for goal id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select goal_category(:gId,:eId)',{'gId':goalId,'eId':environmentId},'MySQL error getting goal category')[0]
 
   def goalPriority(self,goalId,environmentId):
     try:
