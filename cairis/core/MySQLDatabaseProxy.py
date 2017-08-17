@@ -3837,15 +3837,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def addComponentInterface(self,componentId,ifName,ifType,arName,pName):
-    try:
-      session = self.conn()
-      session.execute('call addComponentInterface(:compId,:ifName,:ifType,:arName,:pName)',{'compId':componentId,'ifName':ifName,'ifType':ifType,'arName':arName,'pName':pName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding interface ' + ifName + ' to component ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addComponentInterface(:compId,:ifName,:ifType,:arName,:pName)',{'compId':componentId,'ifName':ifName,'ifType':ifType,'arName':arName,'pName':pName},'MySQL error adding component interface')
 
   def addConnector(self,parameters):
     connId = self.newId()
@@ -4704,24 +4696,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       return ''
 
   def impliedCharacteristic(self,pName,fromCode,toCode,rtName):
-    try:
-      session = self.conn()
-      rs = session.execute('call impliedCharacteristic(:pName,:fCode,:tCode,:rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName})
-      row = rs.fetchone()
-      if row is None:
-        rs.close()
-        session.close()
-        raise NoImpliedCharacteristic(pName,fromCode,toCode,rtName)
-      charName = row[0]
-      qualName = row[1]
-      varName = row[2]
-      rs.close()
-      session.close()
-      return (charName,qualName,varName)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting implied characteristic for ' + pName + '/' + fromCode + '/' + toCode + '/' + rtName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    row = self.responseList('call impliedCharacteristic(:pName,:fCode,:tCode,:rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName},'MySQL error getting implied characteristic')[0]
+    if (len(row) == 0):
+      raise NoImpliedCharacteristic(pName,fromCode,toCode,rtName)
+    return row
 
   def impliedCharacteristicElements(self,pName,fromCode,toCode,rtName,isLhs):
     return self.responseList('call impliedCharacteristicElements(:pName,:fCode,:tCode,:rt,:lhs)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName,'lhs':isLhs},'MySQL error getting implied characteristic elements')
@@ -5071,24 +5049,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('select synopsisId(:syn)',{'syn':synTxt},'MySQL error finding synopsis id for text ' + synTxt)[0]
 
   def hasContribution(self,contType,rsName,csName):
-    try:
-      session = self.conn()
-      sqlTxt = 'hasReferenceContribution'
-      if contType == 'usecase':
-        sqlTxt = 'hasUseCaseContribution'
-      rs = session.execute('select ' + sqlTxt + '(:rName,:cName)',{'rName':rsName,'cName':csName})
-      row = rs.fetchone()
-      hasRC = row[0]
-      rs.close()
-      session.close()
-      if (hasRC == 1): 
-        return True
-      else:
-        return False
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error finding reference contribution for  ' + rsName + '/' + csName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    sqlTxt = 'hasReferenceContribution'
+    if contType == 'usecase':
+      sqlTxt = 'hasUseCaseContribution'
+    hasRC = self.responseList('select ' + sqlTxt + '(:rName,:cName)',{'rName':rsName,'cName':csName},'MySQL error checking contribution')[0]
+    if (hasRC == 1): 
+      return True
+    else:
+      return False
 
   def removeUseCaseContributions(self,ucId):
     self.updateDatabase('call removeUseCaseContributions(:id)',{'id':ucId},'MySQL error removing use case contribution')
