@@ -4970,23 +4970,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return codeBook
 
   def artifactEnvironmentCodes(self,artName,envName,artType,sectName):
-    try:
-      session = self.conn()
-      rs = session.execute('call artifactEnvironmentCodes(:art,:env,:type,:sect)',{'art':artName,'env':envName,'type':artType,'sect':sectName})
-      codes = {}
-      for row in rs.fetchall():
-        row = list(row)
-        codeName = row[0]
-        startIdx = int(row[1])
-        endIdx = int(row[2])
-        codes[(startIdx,endIdx)] = codeName
-      rs.close()
-      session.close()
-      return codes
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting codes for ' + artType + ' ' + artName + ' in environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call artifactEnvironmentCodes(:art,:env,:type,:sect)',{'art':artName,'env':envName,'type':artType,'sect':sectName},'MySQL error getting artifact environment codes')
+    codes = {}
+    for codeName,startIdx,endIdx in rows:
+      startIdx = int(startIdx)
+      endIdx = int(envIdx)
+      codes[(startIdx,endIdx)] = codeName
+    return codes
 
   def addArtifactEnvironmentCodes(self,artName,envName,artType,sectName,docCodes):
     for (startIdx,endIdx) in docCodes:
@@ -5087,90 +5077,31 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def getTemplateGoals(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getTemplateGoals(:const)',{'const':constraintId})
-      templateGoals = {}
-      tgRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        tgId = row[0]
-        tgName = row[1]
-        tgDef = row[2]
-        tgRat = row[3]
-        tgRows.append((tgId,tgName,tgDef,tgRat))
-      rs.close()
-      session.close()
-      for tgId,tgName,tgDef,tgRat in tgRows:
-        tgConcerns = self.templateGoalConcerns(tgId)
-        tgResps = self.templateGoalResponsibilities(tgId)
-        parameters = TemplateGoalParameters(tgName,tgDef,tgRat,tgConcerns,tgResps)
-        templateGoal = ObjectFactory.build(tgId,parameters)
-        templateGoals[tgName] = templateGoal
-      session.close()
-      return templateGoals
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting template goals (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    tgRows = self.responseList('call getTemplateGoals(:const)',{'const':constraintId},'MySQL error getting template goals')
+    templateGoals = {}
+    for tgId,tgName,tgDef,tgRat in tgRows:
+      tgConcerns = self.templateGoalConcerns(tgId)
+      tgResps = self.templateGoalResponsibilities(tgId)
+      parameters = TemplateGoalParameters(tgName,tgDef,tgRat,tgConcerns,tgResps)
+      templateGoal = ObjectFactory.build(tgId,parameters)
+      templateGoals[tgName] = templateGoal
+    return templateGoals
 
   def deleteTemplateGoal(self,tgId):
     self.deleteObject(tgId,'template_goal')
     
 
   def componentViewGoals(self,cvName):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentViewGoals(:cv)',{'cv':cvName})
-      rows = []
-      for row in rs.fetchall():
-        row = list(row)
-        rows.append(row[0])
-      rs.close()
-      session.close()
-      return rows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goals for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call componentViewGoals(:cv)',{'cv':cvName},'MySQL error getting component view goals')
 
   def situateComponentViewGoals(self,cvName,envName):
-    try:
-      session = self.conn()
-      session.execute('call situateComponentViewGoals(:cv,:env)',{'cv':cvName,'env':envName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error situating goals for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call situateComponentViewGoals(:cv,:env)',{'cv':cvName,'env':envName},'MySQL error situating component view goals')
 
   def situateComponentViewGoalAssociations(self,cvName,envName):
-    try:
-      session = self.conn()
-      session.execute('call situateComponentViewGoalAssociations(:cv,:env)',{'cv':cvName,'env':envName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error situating goal associations for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call situateComponentViewGoalAssociations(:cv,:env)',{'cv':cvName,'env':envName},'MySQL error situating component view goal associations')
 
   def templateGoalConcerns(self,tgId):
-    try:
-      session = self.conn()
-      rs = session.execute('call templateGoalConcerns(:tg)',{'tg':tgId})
-      concs = []
-      for row in rs.fetchall():
-        row = list(row)
-        concs.append(row[0])
-      rs.close()
-      session.close()
-      return concs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting concerns for template goal id ' + str(tgId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call templateGoalConcerns(:tg)',{'tg':tgId},'MySQL error getting template goal concerns')
 
   def addTemplateGoal(self,parameters):
     goalId = self.newId()
@@ -5179,18 +5110,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     goalRat = parameters.rationale()
     goalConcerns = parameters.concerns()
     goalResponsibilities = parameters.responsibilities()
-    try:
-      session = self.conn()
-      session.execute('call addTemplateGoal(:id,:name,:def,:rat)',{'id':goalId,'name':goalName,'def':goalDef,'rat':goalRat})
-      session.commit()
-      session.close()
-      self.addTemplateGoalConcerns(goalId,goalConcerns)
-      self.addTemplateGoalResponsibilities(goalId,goalResponsibilities)
-      return goalId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding template goal ' + goalName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addTemplateGoal(:id,:name,:def,:rat)',{'id':goalId,'name':goalName,'def':goalDef,'rat':goalRat},'MySQL error adding template goal')
+    self.addTemplateGoalConcerns(goalId,goalConcerns)
+    self.addTemplateGoalResponsibilities(goalId,goalResponsibilities)
+    return goalId
 
   def updateTemplateGoal(self,parameters):
     goalId = parameters.id()
@@ -5219,91 +5142,30 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         self.addTemplateGoalConcern(goalId,concern)
 
   def addTemplateGoalConcern(self,goalId,concern):
-    try:
-      session = self.conn()
-      session.execute('call add_template_goal_concern(:id,:con)',{'id':goalId,'con':concern})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding template goal concern ' + concern + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call add_template_goal_concern(:id,:con)',{'id':goalId,'con':concern},'MySQL error adding template goal concern')
 
   def componentGoals(self,componentId):
-    try:
-      session = self.conn()
-      rs = session.execute('call getComponentGoals(:comp)',{'comp':componentId})
-      rows = []
-      for row in rs.fetchall():
-        row = list(row)
-        rows.append(row[0])
-      rs.close()
-      session.close()
-      return rows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting goals for component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call getComponentGoals(:comp)',{'comp':componentId},'MySQL error getting component goals')
 
   def addComponentGoals(self,componentId,componentGoals):
     for idx,goalName in enumerate(componentGoals):
       self.addComponentGoal(componentId,goalName)
 
   def addComponentGoal(self,componentId,goalName):
-    try:
-      session = self.conn()
-      session.execute('call addComponentGoal(:comp,:goal)',{'comp':componentId,'goal':goalName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding goal to component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addComponentGoal(:comp,:goal)',{'comp':componentId,'goal':goalName},'MySQL error adding component goal')
 
   def addComponentAssociations(self,componentId,assocs):
     for idx,assoc in enumerate(assocs):
       self.addComponentGoalAssociation(componentId,assoc[0],assoc[1],assoc[2],assoc[3])
 
   def addComponentGoalAssociation(self,componentId,goalName,subGoalName,refType,rationale):
-    try:
-      session = self.conn()
-      session.execute('call addComponentGoalAssociation(:comp,:goal,:sGoal,:ref,:rationale)',{'comp':componentId,'goal':goalName,'sGoal':subGoalName,'ref':refType,'rationale':rationale})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding goal association to component id ' + str(componentId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addComponentGoalAssociation(:comp,:goal,:sGoal,:ref,:rationale)',{'comp':componentId,'goal':goalName,'sGoal':subGoalName,'ref':refType,'rationale':rationale},'MySQL error adding component goal association')
 
   def componentGoalAssociations(self,componentId):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentGoalAssociations(:comp)',{'comp':componentId})
-      assocs = []
-      for row in rs.fetchall():
-        row = list(row)
-        assocs.append((row[0],row[1],row[2],row[3]))
-      rs.close()
-      session.close()
-      return assocs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting component goal associations (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call componentGoalAssociations(:comp)',{'comp':componentId},'MySQL error getting component goal associations')
 
   def componentAttackSurface(self,cName):
-    try:
-      session = self.conn()
-      rs = session.execute('call componentAttackSurfaceMetric(:comp)',{'comp':cName})
-      row = rs.fetchone()
-      asValue = row[0]
-      rs.close()
-      session.close()
-      return asValue
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting attack surface for component ' + cName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call componentAttackSurfaceMetric(:comp)',{'comp':cName},'MySQL error getting component attack surface metric')[0]
 
   def componentGoalModel(self,componentName):
     rows = self.responseList('call componentGoalModel(:comp)',{'comp':componentName},'MySQL error getting component goal model')
@@ -5323,18 +5185,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     requirements = parameters.requirements()
     goals = parameters.goals()
     assocs = parameters.associations()
-
-    try:
-      for ifName,ifType,arName,pName in parameters.interfaces():
-        self.addComponentInterface(componentId,ifName,ifType,arName,pName)
-      self.addComponentStructure(componentId,structure)
-      self.addComponentRequirements(componentId,requirements)
-      self.addComponentGoals(componentId,goals)
-      self.addComponentAssociations(componentId,assocs)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error merging component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    for ifName,ifType,arName,pName in parameters.interfaces():
+      self.addComponentInterface(componentId,ifName,ifType,arName,pName)
+    self.addComponentStructure(componentId,structure)
+    self.addComponentRequirements(componentId,requirements)
+    self.addComponentGoals(componentId,goals)
+    self.addComponentAssociations(componentId,assocs)
 
   def addTemplateGoalResponsibilities(self,goalId,resps):
     for resp in resps:
@@ -5342,125 +5198,28 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         self.addTemplateGoalResponsibility(goalId,resp)
 
   def addTemplateGoalResponsibility(self,goalId,resp):
-    try:
-      session = self.conn()
-      session.execute('call add_template_goal_responsibility(:goal,:resp)',{'goal':goalId,'resp':resp})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding template goal responsibility ' + resp + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call add_template_goal_responsibility(:goal,:resp)',{'goal':goalId,'resp':resp},'MySQL error adding template goal responsibility')
 
   def templateGoalResponsibilities(self,tgId):
-    try:
-      session = self.conn()
-      rs = session.execute('call templateGoalResponsibilities(:tg)',{'tg':tgId})
-      concs = []
-      for row in rs.fetchall():
-        row = list(row)
-        concs.append(row[0])
-      rs.close()
-      session.close()
-      return concs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting responsibilities for template goal id ' + str(tgId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call templateGoalResponsibilities(:tg)',{'tg':tgId},'MySQL error getting template goal responsibilities')
 
   def importTemplateAsset(self,taName,environmentName):
-    try:
-      session = self.conn()
-      session.execute('call importTemplateAssetIntoEnvironment(:ta,:env)',{'ta':taName,'env':environmentName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error importing asset ' + taName + ' into environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call importTemplateAssetIntoEnvironment(:ta,:env)',{'ta':taName,'env':environmentName},'MySQL error importing template asset')
 
   def candidateGoalObstacles(self,cvName,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call candidateGoalObstacles(:cv,:env)',{'cv':cvName,'env':envName})
-      gos = []
-      for row in rs.fetchall():
-        row = list(row)
-        gos.append((row[0],row[1]))
-      rs.close()
-      session.close()
-      return gos
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting candidate obstacles associated with architectural pattern ' + cvName + ' and environment ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call candidateGoalObstacles(:cv,:env)',{'cv':cvName,'env':envName},'MySQL error getting candidate goal obstacles')
 
   def templateGoalDefinition(self,tgId):
-    try:
-      session = self.conn()
-      rs = session.execute('select definition from template_goal where id =:tg',{'tg':tgId})
-      row = rs.fetchone()
-      tgDef = row[0]
-      rs.close()
-      session.close()
-      return tgDef
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting definition for template goal id ' + str(tgId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select definition from template_goal where id =:tg',{'tg':tgId},'MySQL error getting template goal definition')[0]
 
   def redmineArchitectureSummary(self,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call redmineArchitectureSummary(:env)',{'env':envName})
-      aps = []
-      for row in rs.fetchall():
-        row = list(row)
-        aName = row[0]
-        aTxt = row[1]
-        aps.append((row[0],row[1]))
-      rs.close()
-      session.close()
-      return aps
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error exporting architecture summary to Redmine (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call redmineArchitectureSummary(:env)',{'env':envName},'MySQL error getting redmine architecture summary')
 
   def redmineAttackPatternsSummary(self,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call redmineAttackPatternsSummary(:env)',{'env':envName})
-      row = rs.fetchone()
-      buf = row[0]
-      rs.close()
-      session.close()
-      return buf
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error exporting attack patterns summary to Redmine (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call redmineAttackPatternsSummary(:env)',{'env':envName},'MySQL error getting redmine attack patterns summary')[0]
 
   def processesToXml(self,includeHeader=True):
-    try:
-      session = self.conn()
-      rs = session.execute('call processesToXml(:head)',{'head':includeHeader})
-      row = rs.fetchone()
-      xmlBuf = row[0] 
-      idCount = row[1]
-      codeCount = row[2]
-      memoCount = row[3]
-      qCount = row[4]
-      pcnCount = row[5]
-      icCount = row[6]
-      ipnCount = row[7]
-      rs.close()
-      session.close()
-      return (xmlBuf,idCount,codeCount,memoCount,qCount,pcnCount,icCount,ipnCount)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error exporting processes to XML (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call processesToXml(:head)',{'head':includeHeader},'MySQL error exporting processes to XML')[0]
 
   def addQuotation(self,quotation):
     qType = quotation[0]
@@ -5486,25 +5245,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         self.addArtifactEnvironmentCode(artName,envName,artType,sectName,cmName,startIdx,endIdx)
 
   def getMemos(self,constraintId = -1):
-    try:
-      session = self.conn()
-      rs = session.execute('call getMemos(:const)',{'const':constraintId})
-      mObjts = {}
-      for row in rs.fetchall():
-        row = list(row)
-        memoId = row[0]
-        memoName = row[1]
-        memoDesc = row[2]
-        parameters = MemoParameters(memoName,memoDesc)
-        mObjt = ObjectFactory.build(memoId,parameters)
-        mObjts[memoName] = mObjt
-      rs.close()
-      session.close()
-      return mObjts
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting memos (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call getMemos(:const)',{'const':constraintId},'MySQL error getting memos')
+    mObjts = {}
+    for memoId,memoName,memoDesc in rows:
+      parameters = MemoParameters(memoName,memoDesc)
+      mObjt = ObjectFactory.build(memoId,parameters)
+      mObjts[memoName] = mObjt
+    return mObjts
 
   def deleteMemo(self,memoId = -1):
     self.deleteObject(memoId,'memo')
@@ -5514,50 +5261,23 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     memoId = self.newId()
     memoName = parameters.name()
     memoDesc = parameters.description()
-    try:
-      session = self.conn()
-      session.execute('call addMemo(:id,:name,:desc)',{'id':memoId,'name':memoName.encode('utf-8'),'desc':memoDesc.encode('utf-8')})
-      session.commit()
-      session.close()
-      return memoId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding memo ' + memoName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addMemo(:id,:name,:desc)',{'id':memoId,'name':memoName.encode('utf-8'),'desc':memoDesc.encode('utf-8')},'MySQL error adding memo')
+    return memoId
 
   def updateMemo(self,parameters):
     memoId = parameters.id()
     memoName = parameters.name()
     memoDesc = parameters.description()
-    try:
-      session = self.conn()
-      session.execute('call updateMemo(:id,:name,:desc)',{'id':memoId,'name':memoName.encode('utf-8'),'desc':memoDesc.encode('utf-8')})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating memo ' + memoName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateMemo(:id,:name,:desc)',{'id':memoId,'name':memoName.encode('utf-8'),'desc':memoDesc.encode('utf-8')},'MySQL error updating memo')
 
   def documentMemos(self,docName):
-    try:
-      session = self.conn()
-      rs = session.execute('call documentMemos(:doc)',{'doc':docName})
-      memos = {}
-      for row in rs.fetchall():
-        row = list(row)
-        memoName = row[0]
-        memoTxt = row[1]
-        startIdx = int(row[2])
-        endIdx = int(row[3])
-        memos[(startIdx,endIdx)] = (memoName,memoTxt)
-      rs.close()
-      session.close()
-      return memos
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting codes for ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call documentMemos(:doc)',{'doc':docName},'MySQL error getting document memo')
+    memos = {}
+    for memoName,memoTxt,startIdx,endIdx in rows:
+      startIdx = int(startIdx)
+      endIdx = int(endIdx)
+      memos[(startIdx,endIdx)] = (memoName,memoTxt)
+    return memos
 
   def addDocumentMemos(self,docName,docMemos):
     for (startIdx,endIdx) in docMemos:
@@ -5565,125 +5285,37 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addDocumentMemo(docName,memoName,memoTxt,startIdx,endIdx)
 
   def addDocumentMemo(self,docName,memoName,memoTxt,startIdx,endIdx):
-    try:
-      session = self.conn()
-      session.execute('call addDocumentMemo(:doc,:mem,:txt,:sIdx,:eIdx)',{'doc':docName,'mem':memoName,'txt':memoTxt,'sIdx':startIdx,'eIdx':endIdx})
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding memo ' + memoName + ' to '  + docName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addDocumentMemo(:doc,:mem,:txt,:sIdx,:eIdx)',{'doc':docName,'mem':memoName,'txt':memoTxt,'sIdx':startIdx,'eIdx':endIdx},'MySQL error adding document memo')
 
   def impliedProcess(self,procName):
-    try:
-      session = self.conn()
-      rs = session.execute('call impliedProcess(:proc)',{'proc':procName})
-      row = rs.fetchone()
-      cspBuf = row[0] 
-      rs.close()
-      session.close()
-      return cspBuf
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error exporting implied process ' + procName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call impliedProcess(:proc)',{'proc':procName},'MySQL error getting implied process')[0]
 
   def addImpliedProcessChannels(self,ipId,channels):
     for channelName,dataType in channels:
       self.addImpliedProcessChannel(ipId,channelName,dataType)
 
   def addImpliedProcessChannel(self,ipId,channelName,dataType):
-    try:
-      session = self.conn()
-      session.execute('call addImpliedProcessChannel(:id,:chan,:type)',{'id':ipId,'chan':channelName,'type':dataType})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding implied process channel ' + channelName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addImpliedProcessChannel(:id,:chan,:type)',{'id':ipId,'chan':channelName,'type':dataType},'MySQL error adding implied process channel')
 
   def impliedProcessChannels(self,procName):
-    try:
-      session = self.conn()
-      rs = session.execute('call impliedProcessChannels(:proc)',{'proc':procName})
-      chs = []
-      for row in rs.fetchall():
-        row = list(row)
-        chs.append((row[0],row[1]))
-      rs.close()
-      session.close()
-      return chs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting channels for implied process ' + procName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call impliedProcessChannels(:proc)',{'proc':procName},'MySQL error getting implied process channels')
 
   def getQuotations(self):
-    try:
-      session = self.conn()
-      rs = session.execute('call getQuotations()')
-      qs = []
-      for row in rs.fetchall():
-        row = list(row)
-        code = row[0] 
-        aType = row[1]
-        aName = row[2]
-        sectName = row[3]
-        startIdx = row[4]
-        endIdx = row[5]
-        quote = row[6]
-        synopsis = row[7]
-        label = row[8]
-        qs.append((code,aType,aName,sectName,quote,startIdx,endIdx,synopsis,label))
-      rs.close()
-      session.close()
-      return qs
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting quotations (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responsList('call getQuotations()',{},'MySQL error getting quotations')
 
   def updateQuotation(self,codeName,atName,aName,oldStartIdx,oldEndIdx,startIdx,endIdx,synopsis,label):
-    try:
-      if atName == 'internal_document':
-        session = self.conn()
-        session.execute('call updateDocumentCode(:aName,:code,:oSIdx,:oEIdx,:sIdx,:eIdx,:syn,:lbl)',{'aName':aName,'code':codeName,'oSIdx':oldStartIdx,'oEIdx':oldEndIdx,'sIdx':startIdx,'eIdx':endIdx,'syn':synopsis,'lbl':label})
-        session.commit()
-        session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating code ' + codeName + ' with '  + aName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    if atName == 'internal_document':
+      self.updateDatabase('call updateDocumentCode(:aName,:code,:oSIdx,:oEIdx,:sIdx,:eIdx,:syn,:lbl)',{'aName':aName,'code':codeName,'oSIdx':oldStartIdx,'oEIdx':oldEndIdx,'sIdx':startIdx,'eIdx':endIdx,'syn':synopsis,'lbl':label},'MySQL error updating quotation')
 
   def deleteQuotation(self,codeName,atName,aName,startIdx,endIdx):
-    try:
-      if atName == 'internal_document':
-        session = self.conn()
-        session.execute('call deleteDocumentCode(:aName,:code,:sIdx,:eIdx)',{'aName':aName,'code':codeName,'sIdx':startIdx,'eIdx':endIdx})
-        session.commit()
-        session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error associating code ' + codeName + ' with '  + aName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    if atName == 'internal_document':
+      self.updateDatabase('call deleteDocumentCode(:aName,:code,:sIdx,:eIdx)',{'aName':aName,'code':codeName,'sIdx':startIdx,'eIdx':endIdx},'MySQL error deleting quotation')
 
   def artifactText(self,artType,artName):
-    try:
-      if artType == 'internal_document':
-        session = self.conn()
-        rs = session.execute('call artifactText(:type,:name)',{'type':artType,'name':artName})
-        row = rs.fetchone()
-        content = row[0]
-        rs.close()
-        session.close()
-        return content 
-      else: 
-        return ''
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting context for ' + artType + ' ' + artName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    if artType == 'internal_document':
+      return self.responseList('call artifactText(:type,:name)',{'type':artType,'name':artName},'MySQL error getting artifact text')[0]
+    else: 
+      return ''
 
   def impliedCharacteristic(self,pName,fromCode,toCode,rtName):
     try:
@@ -5882,40 +5514,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exception)
 
   def getAssetInstances(self,locName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getAssetInstances(:locs)',{'locs':locName})
-      instanceRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        instanceName = row[0]
-        assetName = row[1]
-        instanceRows.append((instanceName,assetName))
-      rs.close()
-      session.close()
-      return instanceRows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting asset instances for location ' + locName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exception)
+    return self.responseList('call getAssetInstances(:locs)',{'locs':locName},'MySQL error getting asset instances')
 
   def getPersonaInstances(self,locName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getPersonaInstances(:locs)',{'locs':locName})
-      instanceRows = []
-      for row in rs.fetchall():
-        row = list(row)
-        instanceName = row[0]
-        personaName = row[1]
-        instanceRows.append((instanceName,personaName))
-      rs.close()
-      session.close()
-      return instanceRows
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting persona instances for location ' + locName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exception)
+    return self.responseList('call getPersonaInstances(:locs)',{'locs':locName},'MySQL error getting persona instances')
 
   def deleteLocations(self,locsId):
     self.deleteObject(locsId,'locations')
@@ -5976,20 +5578,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call templateAssetMetrics(:ta)',{'ta':taName},'MySQL error getting template asset metrics')[0]
 
   def riskModelElements(self,envName):
-    try: 
-      session = self.conn()
-      rs = session.execute('call riskAnalysisModelElements(:env)',{'env':envName})
-      elNames = []
-      for elNameRow in rs.fetchall():
-        elNameRow = list(elNameRow)
-        elNames.append(elNameRow[1])
-      rs.close()
-      session.close() 
-      return elNames
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting elements for risk model in environment ' + envName + ' (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    rows = self.responseList('call riskAnalysisModelElements(:env)',{'env':envName},'MySQL error getting risk analysis model elements')
+    elNames = []
+    for c0,c1 in rows:
+      elNames.append(c1)
+    return elNames
 
   def assetThreatRiskLevel(self,assetName,threatName):
     return self.responseList('call assetThreatRiskLevel(:ass,:thr)',{'ass':assetName,'thr':threatName},'MySQL error getting asset threat risk level')[0]
