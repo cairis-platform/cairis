@@ -420,20 +420,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.deleteObject(attackerId,'attacker')
     
   def deleteObject(self,objtId,tableName):
-    try: 
-      session = self.conn()
-      sqlTxt = 'call delete_' + tableName + '(:obj)'
-      session.execute(sqlTxt,{'obj':objtId})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.IntegrityError, e:
-      id,msg = e
-      exceptionText = 'Cannot remove ' + tableName + ' due to dependent data (id:' + str(id) + ',message:' + msg + ').'
-      raise IntegrityException(exceptionText) 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error deleting ' + tableName + 's (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    sqlTxt = 'call delete_' + tableName + '(:obj)'
+    self.updateDatabase(sqlTxt,{'obj':objtId},'MySQL error deleting ' + tableName + 's')
 
   def addAsset(self,parameters):
     assetId = self.newId()
@@ -3554,44 +3542,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     csName = rc.destination()
     meName = rc.meansEnd()
     contName = rc.contribution()
-    try:
-      session = self.conn()
-      session.execute('call addUseCaseContribution(:useCase,:csName,:meName,:cont)',{'useCase':ucName,'csName':csName,'meName':meName,'cont':contName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding contribution for use case ' + ucName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addUseCaseContribution(:useCase,:csName,:meName,:cont)',{'useCase':ucName,'csName':csName,'meName':meName,'cont':contName},'MySQL error adding use case contribution')
 
   def updateUseCaseContribution(self,rc):
     ucName = rc.source()
     csName = rc.destination()
     meName = rc.meansEnd()
     contName = rc.contribution()
-    try:
-      session = self.conn()
-      session.execute('call updateUseCaseContribution(:useCase,:csName,:meName,:cont)',{'useCase':ucName,'csName':csName,'meName':meName,'cont':contName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating contribution for use case ' + ucName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
+    self.updateDatabase('call updateUseCaseContribution(:useCase,:csName,:meName,:cont)',{'useCase':ucName,'csName':csName,'meName':meName,'cont':contName},'MySQL error updating use case contribution')
 
   def pcToGrl(self,pNames,tNames,envName):
-    try:
-      session = self.conn()
-      rs = session.execute('call pcToGrl(":pNames", ":tNames", :env)',{'pNames':pNames,'tNames':tNames,'env':envName})
-      row = rs.fetchone()
-      buf = row[0]
-      rs.close()
-      session.close()
-      return buf
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL exporting persona and task to GRL (id:' + str(id) + ',message:' + msg + ')'
+    return self.responseList('call pcToGrl(":pNames", ":tNames", :env)',{'pNames':pNames,'tNames':tNames,'env':envName},'MySQL error exporting to GRL')[0]
 
   def getEnvironmentGoals(self,goalName,envName):
     goalRows = self.responseList('call getEnvironmentGoals(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting goals')
@@ -3611,15 +3572,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     goalFc = envProps.fitCriterion()
     goalIssue = envProps.issue()
     
-    try:
-      session = self.conn()
-      session.execute('call updateEnvironmentGoal(:id,:env,:name,:orig,:def,:cat,:pri,:fc,:issue)',{'id':g.id(),'env':envName,'name':g.name(),'orig':g.originator(),'def':goalDef,'cat':goalCat,'pri':goalPri,'fc':goalFc,'issue':goalIssue})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL adding updating goal ' + str(g.id()) + '(id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateEnvironmentGoal(:id,:env,:name,:orig,:def,:cat,:pri,:fc,:issue)',{'id':g.id(),'env':envName,'name':g.name(),'orig':g.originator(),'def':goalDef,'cat':goalCat,'pri':goalPri,'fc':goalFc,'issue':goalIssue},'MySQL error updating environment goal')
  
   def getSubGoalNames(self,goalName,envName):
     rows = ['']
@@ -3658,52 +3611,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     envProps = o.environmentProperty(envName)
     obsDef = envProps.definition()
     obsCat = envProps.category()
-    
-    try:
-      session = self.conn()
-      session.execute('call updateEnvironmentObstacle(:id,:env,:name,:orig,:def,:cat)',{'id':o.id(),'env':envName,'name':o.name(),'orig':o.originator(),'def':obsDef,'cat':obsCat})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL adding updating obstacle ' + str(o.id()) + '(id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateEnvironmentObstacle(:id,:env,:name,:orig,:def,:cat)',{'id':o.id(),'env':envName,'name':o.name(),'orig':o.originator(),'def':obsDef,'cat':obsCat},'MySQL error updating environment obstacle')
 
   def relabelGoals(self,envName):
-    try:
-      session = self.conn()
-      session.execute('call relabelGoals(:env)',{'env':envName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting labelled goals (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call relabelGoals(:env)',{'env':envName},'MySQL error relabelling goals')
 
   def relabelObstacles(self,envName):
-    try:
-      session = self.conn()
-      session.execute('call relabelObstacles(:env)',{'env':envName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting labelled obstacles (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call relabelObstacles(:env)',{'env':envName},'MySQL error relabelling obstacles')
 
   def obstacleLabel(self,goalId,environmentId):
-    try:
-      session = self.conn()
-      rs = session.execute('select obstacle_label(:goal,:env)',{'goal':goalId,'env':environmentId})
-      row = rs.fetchone()
-      goalAttr = row[0] 
-      rs.close()
-      session.close()
-      return goalAttr
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting label for obstacle id ' + str(goalId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('select obstacle_label(:goal,:env)',{'goal':goalId,'env':environmentId},'MySQL error getting obstacle label')[0]
 
   def getLabelledGoals(self,envName):
     goalRows = self.responseList('call getEnvironmentGoals(:goal,:env)',{'goal':'','env':envName},'MySQL error getting labelled goals')
@@ -3853,15 +3770,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def deleteTags(self,tagObjt,tagDim):
-    try:
-      session = self.conn()
-      session.execute('call deleteTags(:obj,:dim)',{'obj':tagObjt,'dim':tagDim})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error deleting tags from ' + tagDim + ' ' + tagObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call deleteTags(:obj,:dim)',{'obj':tagObjt,'dim':tagDim},'MySQL error deleting tags')
 
   def addTags(self,dimObjt,dimName,tags):
     try:
@@ -3978,16 +3887,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     conAsset = parameters.asset()
     pName = parameters.protocol()
     arName = parameters.accessRight()
-
-    try:
-      session = self.conn()
-      session.execute('call addConnector(:connId,:cvName,:cName,:fName,:fRole,:fIf,:tName,:tIf,:tRole,:conAsset,:pName,:arName)',{'connId':connId,'cvName':cvName,'cName':cName,'fName':fromName,'fRole':fromRole,'fIf':fromIf,'tName':toName,'tIf':toIf,'tRole':toRole,'conAsset':conAsset,'pName':pName,'arName':arName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding connector ' + cName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addConnector(:connId,:cvName,:cName,:fName,:fRole,:fIf,:tName,:tIf,:tRole,:conAsset,:pName,:arName)',{'connId':connId,'cvName':cvName,'cName':cName,'fName':fromName,'fRole':fromRole,'fIf':fromIf,'tName':toName,'tIf':toIf,'tRole':toRole,'conAsset':conAsset,'pName':pName,'arName':arName},'MySQL error adding connector')
 
   def getInterfaces(self,dimObjt,dimName):
     rows = self.responseList('call getInterfaces(:obj,:name)',{'obj':dimObjt,'name':dimName},'MySQL error getting interfaces')
@@ -4080,47 +3980,39 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     cvComs = parameters.components()
     cvCons = parameters.connectors()
 
-    try:
-      session = self.conn()
-      session.execute('call addComponentView(:id,:name,:syn)',{'id':cvId,'name':cvName,'syn':cvSyn})
-      session.commit()
-      session.close()
-      for vtParameters in cvValueTypes:
-        vtId = self.existingObject(vtParameters.name(),vtParameters.type())
-        if vtId == -1:
-          self.addValueType(vtParameters)
-      for rParameters in cvRoles:
-        rId = self.existingObject(rParameters.name(),'role')
-        if rId == -1:
-          self.addRole(rParameters)
-      for taParameters in cvAssets:
-        taId = self.existingObject(taParameters.name(),'template_asset')
-        if taId == -1:
-          self.addTemplateAsset(taParameters)
-      for trParameters in cvReqs:
-        trId = self.existingObject(trParameters.name(),'template_requirement')
-        if trId == -1:
-          self.addTemplateRequirement(trParameters)
-      for tgParameters in cvGoals:
-        tgId = self.existingObject(tgParameters.name(),'template_goal')
-        if tgId == -1:
-          self.addTemplateGoal(tgParameters)
-      for comParameters in cvComs:
-        cId = self.existingObject(comParameters.name(),'component')
-        if cId == -1:
-          self.addComponent(comParameters,cvId)
-        else:
-          comParameters.setId(cId)
-          self.addComponentToView(cId,cvId)
-          self.mergeComponent(comParameters)
+    self.updateDatabase('call addComponentView(:id,:name,:syn)',{'id':cvId,'name':cvName,'syn':cvSyn},'MySQL error adding component view')
+    for vtParameters in cvValueTypes:
+      vtId = self.existingObject(vtParameters.name(),vtParameters.type())
+      if vtId == -1:
+        self.addValueType(vtParameters)
+    for rParameters in cvRoles:
+      rId = self.existingObject(rParameters.name(),'role')
+      if rId == -1:
+        self.addRole(rParameters)
+    for taParameters in cvAssets:
+      taId = self.existingObject(taParameters.name(),'template_asset')
+      if taId == -1:
+        self.addTemplateAsset(taParameters)
+    for trParameters in cvReqs:
+      trId = self.existingObject(trParameters.name(),'template_requirement')
+      if trId == -1:
+        self.addTemplateRequirement(trParameters)
+    for tgParameters in cvGoals:
+      tgId = self.existingObject(tgParameters.name(),'template_goal')
+      if tgId == -1:
+        self.addTemplateGoal(tgParameters)
+    for comParameters in cvComs:
+      cId = self.existingObject(comParameters.name(),'component')
+      if cId == -1:
+        self.addComponent(comParameters,cvId)
+      else:
+        comParameters.setId(cId)
+        self.addComponentToView(cId,cvId)
+        self.mergeComponent(comParameters)
 
-      for conParameters in cvCons:
-        self.addConnector(conParameters)
-      return cvId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding component view (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    for conParameters in cvCons:
+      self.addConnector(conParameters)
+    return cvId
 
   def updateComponentView(self,parameters):
     cvId = parameters.id()
@@ -4232,15 +4124,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       raise DatabaseProxyException(exceptionText) 
 
   def situateComponentAsset(self,componentName,assetId):
-    try:
-      session = self.conn()
-      session.execute('call situateComponentAsset(:ass,:comp)',{'ass':assetId,'comp':componentName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error situating asset id ' + str(assetId) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call situateComponentAsset(:ass,:comp)',{'ass':assetId,'comp':componentName},'MySQL error situating component asset')
 
   def addComponentViewTargets(self,target,envName):
     try:
@@ -4265,16 +4149,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     reqDesc = parameters.description()
     reqRat = parameters.rationale()
     reqFC = parameters.fitCriterion()
-    try:
-      session = self.conn()
-      session.execute('call addTemplateRequirement(:id,:name,:asset,:type,:desc,:rat,:fc)',{'id':reqId,'name':reqName,'asset':reqAsset,'type':reqType,'desc':reqDesc,'rat':reqRat,'fc':reqFC})
-      session.commit()
-      session.close()
-      return reqId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding template requirement ' + reqName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addTemplateRequirement(:id,:name,:asset,:type,:desc,:rat,:fc)',{'id':reqId,'name':reqName,'asset':reqAsset,'type':reqType,'desc':reqDesc,'rat':reqRat,'fc':reqFC},'MySQL error adding template requirement')
+    return reqId
 
   def updateTemplateRequirement(self,parameters):
     reqId = parameters.id()
@@ -4284,15 +4160,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     reqDesc = parameters.description()
     reqRat = parameters.rationale()
     reqFC = parameters.fitCriterion()
-    try:
-      session = self.conn()
-      session.execute('call updateTemplateRequirement(:id,:name,:asset,:type,:desc,:rat,:fc)',{'id':reqId,'name':reqName,'asset':reqAsset,'type':reqType,'desc':reqDesc,'rat':reqRat,'fc':reqFC})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating template requirement ' + reqName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call updateTemplateRequirement(:id,:name,:asset,:type,:desc,:rat,:fc)',{'id':reqId,'name':reqName,'asset':reqAsset,'type':reqType,'desc':reqDesc,'rat':reqRat,'fc':reqFC},'MySQL error updating template requirement')
 
   def getTemplateRequirements(self,constraintId = -1):
     rows = self.responseList('call getTemplateRequirements(:const)',{'const':constraintId},'MySQL error getting template requirements')
@@ -4314,15 +4182,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call componentViewGoals(:cv)',{'cv':cvName},'MySQL error getting component view goals')
 
   def situateComponentViewRequirements(self,cvName):
-    try:
-      session = self.conn()
-      session.execute('call situateComponentViewRequirements(:cv)',{'cv':cvName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error situating requirements for component view ' + cvName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call situateComponentViewRequirements(:cv)',{'cv':cvName},'MySQL error situating component view requirements')
 
   def getComponents(self,constraintId = -1):
     componentRows = self.responseList('call getAllComponents(:const)',{'const':constraintId},'MySQL error getting components')
@@ -4408,19 +4268,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docContent = parameters.content()
     docCodes = parameters.codes()
     docMemos = parameters.memos()
-    try:
-      session = self.conn()
-      session.execute('call addInternalDocument(:id,:name,:desc,:cont)',{'id':docId,'name':docName.encode('utf-8'),'desc':docDesc.encode('utf-8'),'cont':docContent.encode('utf-8')})
-      session.commit()
-      session.close()
-      self.addDocumentCodes(docName,docCodes)
-      self.addDocumentMemos(docName,docMemos)
-      return docId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding internal document ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
+    self.updateDatabase('call addInternalDocument(:id,:name,:desc,:cont)',{'id':docId,'name':docName.encode('utf-8'),'desc':docDesc.encode('utf-8'),'cont':docContent.encode('utf-8')},'MySQL error adding internal document')
+    self.addDocumentCodes(docName,docCodes)
+    self.addDocumentMemos(docName,docMemos)
+    return docId
 
   def updateInternalDocument(self,parameters):
     docId = parameters.id()
@@ -5303,26 +5154,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     toName = parameters.toName()
     toType = parameters.toType()
     dfAssets = parameters.assets()
-    try:
-      session = self.conn()
-      session.execute('call addDataFlow(:df,:env,:fName,:fType,:tName,:tType)',{'df':dfName,'env':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType})
-      session.commit()
-      for dfAsset in dfAssets:
-        self.addDataFlowAsset(dfName,envName,dfAsset, session)
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding dataflow ' + parameters.name() + '/' + parameters.environment() + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase('call addDataFlow(:df,:env,:fName,:fType,:tName,:tType)',{'df':dfName,'env':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error adding data flow')
+    for dfAsset in dfAssets:
+      self.addDataFlowAsset(dfName,envName,dfAsset)
 
-  def addDataFlowAsset(self,dfName,envName,dfAsset, session):
-    try:
-      session.execute('call addDataFlowAsset(:df,:env,:ass)',{'df':dfName,'env':envName,'ass':dfAsset})
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding asset ' + dfAsset + ' to dataflow ' + dfName + '/' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+  def addDataFlowAsset(self,dfName,envName,dfAsset):
+    self.updateDatabase('call addDataFlowAsset(:df,:env,:ass)',{'df':dfName,'env':envName,'ass':dfAsset},'MySQL error adding data flow asset')
 
   def updateDataFlow(self,oldDfName,oldEnvName,parameters):
     dfName = parameters.name()
@@ -5338,7 +5175,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session.execute('call updateDataFlow(:oDf,:nDf,:oEnv,:nEnv,:fName,:fType,:tName,:tType)',{'oDf':oldDfName,'nDf':dfName,'oEnv':oldEnvName,'nEnv':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType})
       session.commit
       for dfAsset in dfAssets:
-        self.addDataFlowAsset(dfName,envName,dfAsset,session)
+        self.addDataFlowAsset(dfName,envName,dfAsset)
       session.commit()
       session.close()
     except _mysql_exceptions.DatabaseError, e:
