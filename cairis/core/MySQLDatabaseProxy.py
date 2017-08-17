@@ -3405,41 +3405,23 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
 
   def getReferenceSynopsis(self,refName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getReferenceSynopsis(:ref)',{'ref':refName})
-      row = rs.fetchone()
-      rsId = row[0]
-      synName = row[1]
-      dimName = row[2]
-      aType = row[3]
-      aName = row[4]
-      rs.close()
-      session.close()
-      rs = ReferenceSynopsis(rsId,refName,synName,dimName,aType,aName)
-      return rs 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting synopsis for reference ' + refName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    row = self.responseList('call getReferenceSynopsis(:ref)',{'ref':refName},'MySQL error getting response synopsis')[0]
+    rsId = row[0]
+    synName = row[1]
+    dimName = row[2]
+    aType = row[3]
+    aName = row[4]
+    rs = ReferenceSynopsis(rsId,refName,synName,dimName,aType,aName)
+    return rs 
 
   def getReferenceContribution(self,charName,refName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getReferenceContribution(:ref,:char)',{'ref':refName,'char':charName})
-      row = rs.fetchone()
-      rsName = row[0]
-      csName = row[1]
-      me = row[2]
-      cont = row[3]
-      rs.close()
-      session.close()
-      rc = ReferenceContribution(rsName,csName,me,cont)
-      return rc
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting contribution for reference ' + refName + ' and characteristic ' + charName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    row = self.responseList('call getReferenceContribution(:ref,:char)',{'ref':refName,'char':charName},'MySQL error getting reference contribution')[0]
+    rsName = row[0]
+    csName = row[1]
+    me = row[2]
+    cont = row[3]
+    rc = ReferenceContribution(rsName,csName,me,cont)
+    return rc
 
   def addReferenceContribution(self,rc):
     rsName = rc.source()
@@ -3494,26 +3476,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call referenceCharacteristic(:ref)',{'ref':refName},'MySQL error getting characteristics associated with reference ' + refName)
 
   def getCharacteristicSynopsis(self,cName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getCharacteristicSynopsis(:characteristic)',{'characteristic':cName})
-      row = rs.fetchone()
-      synName = row[0]
-      dimName = row[1]
-      aType = row[2]
-      aName = row[3]
-      if synName == '':
-        synId = -1
-      else:
-        synId = 0
-      rs.close()
-      session.close()
-      rs = ReferenceSynopsis(synId,cName,synName,dimName,aType,aName)
-      return rs 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting synopsis for characteristic ' + cName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    row = self.responseList('call getCharacteristicSynopsis(:characteristic)',{'characteristic':cName},'MySQL error getting characteristic synopsis')[0]
+    synName = row[0]
+    dimName = row[1]
+    aType = row[2]
+    aName = row[3]
+    if synName == '':
+      synId = -1
+    else:
+      synId = 0
+    rs = ReferenceSynopsis(synId,cName,synName,dimName,aType,aName)
+    return rs 
 
   def hasCharacteristicSynopsis(self,charName):
     return self.responseList('select hasCharacteristicSynopsis(:characteristic)',{'characteristic':charName},'MySQL error finding characteristic synopsis')[0]
@@ -4487,20 +4460,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.updateDatabase('call addStepSynopsis(:uc,:env,:step,:syn,:aName,:aType)',{'uc':ucName,'env':envName,'step':stepNo,'syn':synName,'aName':aName,'aType':aType},'MySQL error adding step synopsis')
 
   def directoryEntry(self,objtName,dType):
-    try:
-      session = self.conn()
-      rs = session.execute('call directoryEntry(:obj,:dir)',{'obj':objtName,'dir':dType})
-      row = rs.fetchone()
-      eName = row[0]
-      eDesc = row[1]
-      eType = row[2]
-      rs.close()
-      session.close()
-      return (eName,eDesc,eType)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting details for ' + objtName + ' from ' + dType + ' directory  (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    return self.responseList('call directoryEntry(:obj,:dir)',{'obj':objtName,'dir':dType},'MySQL error getting directory entry')[0]
 
   def getTemplateGoals(self,constraintId = -1):
     tgRows = self.responseList('call getTemplateGoals(:const)',{'const':constraintId},'MySQL error getting template goals')
