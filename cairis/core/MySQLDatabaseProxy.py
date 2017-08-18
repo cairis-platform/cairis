@@ -443,23 +443,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     assetCriticalRationale = parameters.criticalRationale()
     tags = parameters.tags()
     ifs = parameters.interfaces()
-    try:
-      session = self.conn()
-      session.execute('call deleteAssetComponents(:id)',{'id':assetId})
-      session.execute('call updateAsset(:id,:name,:shortCode,:desc,:sig,:type,:crit,:rationale)',{'id':assetId,'name':assetName,'shortCode':shortCode,'desc':assetDesc,'sig':assetSig,'type':assetType,'crit':assetCriticality,'rationale':assetCriticalRationale})
-      session.commit()
-      session.close()
-      self.addTags(assetName,'asset',tags)
-      self.addInterfaces(assetName,'asset',ifs)
-      for cProperties in parameters.environmentProperties():
-        environmentName = cProperties.name()
-        self.addDimensionEnvironment(assetId,'asset',environmentName)
-        self.addAssetAssociations(assetId,assetName,environmentName,cProperties.associations())
-        self.addSecurityProperties('asset',assetId,environmentName,cProperties.properties(),cProperties.rationale())
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating asset ' + assetName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deleteAssetComponents(:id)',{'id':assetId},'MySQL error deleting asset components',None,False)
+    self.updateDatabase('call updateAsset(:id,:name,:shortCode,:desc,:sig,:type,:crit,:rationale)',{'id':assetId,'name':assetName,'shortCode':shortCode,'desc':assetDesc,'sig':assetSig,'type':assetType,'crit':assetCriticality,'rationale':assetCriticalRationale},'MySQL error updating asset',session)
+    self.addTags(assetName,'asset',tags)
+    self.addInterfaces(assetName,'asset',ifs)
+    for cProperties in parameters.environmentProperties():
+      environmentName = cProperties.name()
+      self.addDimensionEnvironment(assetId,'asset',environmentName)
+      self.addAssetAssociations(assetId,assetName,environmentName,cProperties.associations())
+      self.addSecurityProperties('asset',assetId,environmentName,cProperties.properties(),cProperties.rationale())
 
   def addTemplateAssetProperties(self,taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat):
     callTxt = 'call add_template_asset_properties(:ta,:cPr,:iPr,:avPr,:acPr,:anPr,:panPr,:unlPr,:unoPr,:cRa,:iRa,:avRa,:acRa,:anRa,:panRa,:unlRa,:unoRa)'
