@@ -4985,16 +4985,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     b = Borg()
     ses_settings = b.get_settings(session_id)
     dbName = ses_settings['dbName']
-    session = self.conn()
-    rows = session.execute('show databases')
-    dbs = []
+    rows = self.responseList('show databases',{},'MySQL error showing databases')
     restrictedDbs = ['information_schema','flaskdb','mysql','performance_schema',dbName]
-    for row in rs.fetchall():
-      row = list(row)
-      dbName = row[0]
+    dbs = []
+    for dbName in rows:
       if (dbName not in restrictedDbs):
-        dbs.append(row[0])
-    session.close()
+        dbs.append(dbName)
     return dbs
 
   def deleteDatabase(self,dbName,session_id):
