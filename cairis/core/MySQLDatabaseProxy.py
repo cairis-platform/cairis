@@ -197,12 +197,26 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def newId(self):
     return self.responseList('call newId()',{},'MySQL error getting new identifier')[0]
 
-  def updateDatabase(self,callTxt,argDict,errorTxt):
+  def commitDatabase(self,session):
     try:
-      session = self.conn()
-      session.execute(callTxt,argDict)
       session.commit()
       session.close()
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg
+      raise DatabaseProxyException(exceptionText) 
+
+  def updateDatabase(self,callTxt,argDict,errorTxt,session = None,doCommit = True):
+    try:
+      if (session == None):
+        session = self.conn()
+      session.execute(callTxt,argDict)
+      if (doCommit):
+        session.commit()
+        session.close()
+        return None
+      else:
+        return session
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg
@@ -231,32 +245,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     environmentName = parameters.name()
     environmentShortCode = parameters.shortCode()
     environmentDescription = parameters.description()
-    try:
-      session = self.conn()
-      sql = 'call addEnvironment(%s,"%s","%s","%s")'%(environmentId,environmentName,environmentShortCode,environmentDescription)
-      session.execute(sql)
-      if (len(parameters.environments()) > 0):
-        for c in parameters.environments():
-          session.execute('call addCompositeEnvironment(:id,:c)',{'id':environmentId,'c':c})
-        session.commit()
-        session.close()        
-        self.addCompositeEnvironmentProperties(environmentId,parameters.duplicateProperty(),parameters.overridingEnvironment())
-      session.commit()
-      session.close()        
-
+    session = self.updateDatabase('call addEnvironment(:id,:name,:sc,:desc)',{'id':environmentId,'name':environmentName,'sc':environmentShortCode,'desc':environmentDescription},'MySQL error adding environment',None,False)
+    if (len(parameters.environments()) > 0):
+      for c in parameters.environments():
+        self.updateDatabase('call addCompositeEnvironment(:id,:c)',{'id':environmentId,'c':c},'MySQL error adding composite environment',session,False)
+      self.addCompositeEnvironmentProperties(environmentId,parameters.duplicateProperty(),parameters.overridingEnvironment(),session)
+      self.commitDatabase(session)
       assetValues = parameters.assetValues()
       if (assetValues != None):
         for v in assetValues:
           self.updateValueType(v)
-
       self.addValueTensions(environmentId,parameters.tensions())
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.commitDatabase(session)
 
-  def addCompositeEnvironmentProperties(self,environmentId,duplicateProperty,overridingEnvironment):
-    self.updateDatabase('call addCompositeEnvironmentProperties(:id,:dp,:oe)',{'id':environmentId,'dp':duplicateProperty,'oe':overridingEnvironment},'MySQL error adding duplicate properties for environment id ' + str(environmentId))
+  def addCompositeEnvironmentProperties(self,environmentId,duplicateProperty,overridingEnvironment,session = None):
+    self.updateDatabase('call addCompositeEnvironmentProperties(:id,:dp,:oe)',{'id':environmentId,'dp':duplicateProperty,'oe':overridingEnvironment},'MySQL error adding duplicate properties for environment id ' + str(environmentId),session,False)
 
   def riskEnvironments(self,threatName,vulName):
     return self.responseList('call riskEnvironments(:threat,:vul)',{'threat':threatName,'vul':vulName},'MySQL error getting environments associated with threat ' + threatName + ' and vulnerability ' + vulName)
@@ -270,22 +273,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     environmentShortCode = parameters.shortCode()
     environmentDescription = parameters.description()
 
-    try:
-      session = self.conn()
-      session.execute('call deleteEnvironmentComponents(:id)',{'id':parameters.id()})
-      session.execute('call updateEnvironment(:id,:name,:shortCode,:desc)',{'id':environmentId,'name':environmentName,'shortCode':environmentShortCode,'desc':environmentDescription})
-      if (len(parameters.environments()) > 0):
-        for c in parameters.environments():
-          session.execute('call addCompositeEnvironment(:id,:c)',{'id':environmentId,'c':c})
-      session.commit()
-      session.close()
-      if (len(parameters.duplicateProperty()) > 0):
-        self.addCompositeEnvironmentProperties(environmentId,parameters.duplicateProperty(),parameters.overridingEnvironment())
-      self.addValueTensions(environmentId,parameters.tensions())
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating environment ' + environmentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deleteEnvironmentComponents(:id)',{'id':parameters.id()},'MySQL error deleting environment components',None,False)
+    self.updateDatabase('call updateEnvironment(:id,:name,:shortCode,:desc)',{'id':environmentId,'name':environmentName,'shortCode':environmentShortCode,'desc':environmentDescription},'MySQL error updating environment',session,False)
+    if (len(parameters.environments()) > 0):
+      for c in parameters.environments():
+        self.updateDatabase('call addCompositeEnvironment(:id,:c)',{'id':environmentId,'c':c},'MySQL error adding composite environment',session,False)
+    self.commitDatabase(session)
+    if (len(parameters.duplicateProperty()) > 0):
+      self.addCompositeEnvironmentProperties(environmentId,parameters.duplicateProperty(),parameters.overridingEnvironment())
+    self.addValueTensions(environmentId,parameters.tensions())
+    self.commitDatabase(session)
 
   def deleteRequirement(self,r):
     self.deleteObject(r,'requirement')
@@ -391,30 +388,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.updateDatabase('call addAttackerCapability(:aId,:envName,:name,:value)',{'aId':attackerId,'envName':environmentName,'name':name,'value':value},'MySQL error updating attacker capabilities for attacker id ' + str(attackerId))
   
   def updateAttacker(self,parameters):
-    try:
-      session = self.conn()
-      session.execute('call deleteAttackerComponents(:id)',{'id':parameters.id()})
-      attackerId = parameters.id()
-      attackerName = parameters.name()
-      attackerDesc = parameters.description()
-      attackerImage = parameters.image()
-      tags = parameters.tags()
+    session = self.updateDatabase('call deleteAttackerComponents(:id)',{'id':parameters.id()},'MySQL error deleting attacker components',None,False)
+    attackerId = parameters.id()
+    attackerName = parameters.name()
+    attackerDesc = parameters.description()
+    attackerImage = parameters.image()
+    tags = parameters.tags()
 
-      session = self.conn()
-      session.execute("call updateAttacker(:id,:name,:desc,:image)",{'id':attackerId,'name':attackerName,'desc':attackerDesc,'image':attackerImage})
-      session.commit()
-      session.close()
-      self.addTags(attackerName,'attacker',tags)
-      for environmentProperties in parameters.environmentProperties():
-        environmentName = environmentProperties.name()
-        self.addDimensionEnvironment(attackerId,'attacker',environmentName)
-        self.addAttackerMotives(attackerId,environmentName,environmentProperties.motives())
-        self.addAttackerCapabilities(attackerId,environmentName,environmentProperties.capabilities())
-        self.addDimensionRoles(attackerId,'attacker',environmentName,environmentProperties.roles())
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating attacker id ' + str(parameters.id()) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.updateDatabase("call updateAttacker(:id,:name,:desc,:image)",{'id':attackerId,'name':attackerName,'desc':attackerDesc,'image':attackerImage},'MySQL error updating attacker',session)
+    self.addTags(attackerName,'attacker',tags)
+    for environmentProperties in parameters.environmentProperties():
+      environmentName = environmentProperties.name()
+      self.addDimensionEnvironment(attackerId,'attacker',environmentName)
+      self.addAttackerMotives(attackerId,environmentName,environmentProperties.motives())
+      self.addAttackerCapabilities(attackerId,environmentName,environmentProperties.capabilities())
+      self.addDimensionRoles(attackerId,'attacker',environmentName,environmentProperties.roles())
 
   def deleteAttacker(self,attackerId):
     self.deleteObject(attackerId,'attacker')
@@ -4049,21 +4037,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call componentGoalAssets(:cv,:goal)',{'cv':cvName,'goal':goalName},'MySQL error getting component goal assets')
 
   def existingObject(self,objtName,dimName):
-    try:
-      session = self.conn()
-      existingSql = 'call existing_object("%s","%s")' %(objtName, dimName)
-      if (dimName == 'persona_characteristic' or dimName == 'task_characteristic'):
-        existingSql = 'call existing_characteristic("%s","%s")' %(objtName, dimName)
-      rs = session.execute(existingSql)
-      row = rs.fetchone()
-      objtId = row[0]
-      rs.close()
-      session.close()
-      return objtId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error checking the existence of ' + dimName + ' ' + objtName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    argDict = {'objt':objtName,'dim':dimName}
+    callTxt = 'call existing_object(:objt,:dim)'
+    if (dimName == 'persona_characteristic' or dimName == 'task_characteristic'):
+      callTxt = 'call existing_characteristic(:objt,:dim)'
+    return self.responseList(callTxt,argDict,'MySQL error checking existence of object')[0]
 
 
   def situateComponentView(self,cvName,envName,acDict,assetParametersList,targets,obstructParameters):
@@ -5008,7 +4986,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     ses_settings = b.get_settings(session_id)
     dbName = ses_settings['dbName']
     session = self.conn()
-    rs = session.execute('show databases')
+    rows = session.execute('show databases')
     dbs = []
     restrictedDbs = ['information_schema','flaskdb','mysql','performance_schema',dbName]
     for row in rs.fetchall():
