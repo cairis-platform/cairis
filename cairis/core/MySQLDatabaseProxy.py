@@ -3571,29 +3571,22 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     goals = parameters.goals()
     assocs = parameters.associations()
 
-    try:
-      session = self.conn()
-      session.execute('call deleteComponentComponents(:comp)',{'comp':componentId})
-      if (componentId != -1):
-        session.execute('call updateComponent(:id,:name,:desc)',{'id':componentId,'name':componentName,'desc':componentDesc})
-      else:
-        componentId = self.newId()
-        session.execute('call addComponent(:id,:name,:desc)',{'id':componentId,'name':componentName,'desc':componentDesc})
-      session.commit()   
-      if cvId != -1:
-        session.execute('call addComponentToView(:compId,:cvId)',{'compId':componentId,'cvId':cvId})
-      session.commit()
-      session.close()
-      for ifName,ifType,arName,pName in parameters.interfaces():
-        self.addComponentInterface(componentId,ifName,ifType,arName,pName)
-      self.addComponentStructure(componentId,structure)
-      self.addComponentRequirements(componentId,requirements)
-      self.addComponentGoals(componentId,goals)
-      self.addComponentAssociations(componentId,assocs)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding component ' + componentName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deleteComponentComponents(:comp)',{'comp':componentId},'MySQL error deleting component components',None,False)
+    if (componentId != -1):
+      self.updateDatabase('call updateComponent(:id,:name,:desc)',{'id':componentId,'name':componentName,'desc':componentDesc},'MySQL error updating component',session)
+    else:
+      componentId = self.newId()
+      self.updateDatabase('call addComponent(:id,:name,:desc)',{'id':componentId,'name':componentName,'desc':componentDesc},'MySQL error adding component',session,False)
+
+    if cvId != -1:
+      self.updateDatabase('call addComponentToView(:compId,:cvId)',{'compId':componentId,'cvId':cvId},'MySQL error adding component to view',session,False)
+    self.commitDatabase(session)
+    for ifName,ifType,arName,pName in parameters.interfaces():
+      self.addComponentInterface(componentId,ifName,ifType,arName,pName)
+    self.addComponentStructure(componentId,structure)
+    self.addComponentRequirements(componentId,requirements)
+    self.addComponentGoals(componentId,goals)
+    self.addComponentAssociations(componentId,assocs)
 
   def addComponentInterface(self,componentId,ifName,ifType,arName,pName):
     self.updateDatabase('call addComponentInterface(:compId,:ifName,:ifType,:arName,:pName)',{'compId':componentId,'ifName':ifName,'ifType':ifType,'arName':arName,'pName':pName},'MySQL error adding component interface')
@@ -3831,16 +3824,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.updateDatabase('call situateComponentAsset(:ass,:comp)',{'ass':assetId,'comp':componentName},'MySQL error situating component asset')
 
   def addComponentViewTargets(self,target,envName):
-    try:
-      session = self.conn()
-      for componentName in target.components():
-        session.execute('call addComponentTarget(:comp,:asset,:name,:effectiveness,:rationale,:env)',{'comp':componentName,'asset':target.asset(),'name':target.name(),'effectiveness':target.effectiveness(),'rationale':target.rationale(),'env':envName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error targetting  ' + target.name() + ' with components ' + ",".join(target.components()) + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.conn()
+    for componentName in target.components():
+      self.updateDatabase('call addComponentTarget(:comp,:asset,:name,:effectiveness,:rationale,:env)',{'comp':componentName,'asset':target.asset(),'name':target.name(),'effectiveness':target.effectiveness(),'rationale':target.rationale(),'env':envName},'MySQL error adding component target',session,False)
+    self.commitDatabase(session)
 
   def assetComponents(self,assetName,envName):
     return self.responseList('call assetComponents(:ass,:env)',{'ass':assetName,'env':envName},'MySQL error getting asset components')
@@ -3984,19 +3971,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docContent = parameters.content()
     docCodes = parameters.codes()
     docMemos = parameters.memos()
-    try:
-      session = self.conn()
-      session.execute('call deleteInternalDocumentComponents(:id)',{'id':docId})
-
-      session.execute('call updateInternalDocument(:id,:name,:desc,:cont)',{'id':docId,'name':docName.encode('utf-8'),'desc':docDesc.encode('utf-8'),'cont':docContent.encode('utf-8')})
-      session.commit()
-      session.close()
-      self.addDocumentCodes(docName,docCodes)
-      self.addDocumentMemos(docName,docMemos)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating internal document ' + docName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deleteInternalDocumentComponents(:id)',{'id':docId},'MySQL error deleting internal document components',None,False)
+    self.updateDatabase('call updateInternalDocument(:id,:name,:desc,:cont)',{'id':docId,'name':docName.encode('utf-8'),'desc':docDesc.encode('utf-8'),'cont':docContent.encode('utf-8')},'MySQL error updating internal document',session)
+    self.addDocumentCodes(docName,docCodes)
+    self.addDocumentMemos(docName,docMemos)
 
   def getCodes(self,constraintId = -1):
     rows = self.responseList('call getCodes(:const)',{'const':constraintId},'MySQL error getting code')
@@ -4155,27 +4133,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return ipId
 
   def updateImpliedProcess(self,parameters):
-    try:
-      ipId = parameters.id()
-      ipName = parameters.name()
-      ipDesc = parameters.description()
-      pName = parameters.persona()
-      cNet = parameters.network()
-      ipSpec = parameters.specification()
-      chs = parameters.channels()
-
-      session = self.conn()
-      session.execute('call deleteImpliedProcessComponents(:id)',{'id':ipId})
-
-      session.execute('call updateImpliedProcess(:id,:name,:desc,:proc,:spec)',{'id':ipId,'name':ipName,'desc':ipDesc.encode('utf-8'),'proc':pName,'spec':ipSpec.encode('utf-8')})
-      session.commit()
-      session.close()
-      self.addImpliedProcessNetwork(ipId,pName,cNet)
-      self.addImpliedProcessChannels(ipId,chs)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating implied process ' + ipName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    ipId = parameters.id()
+    ipName = parameters.name()
+    ipDesc = parameters.description()
+    pName = parameters.persona()
+    cNet = parameters.network()
+    ipSpec = parameters.specification()
+    chs = parameters.channels()
+    session = self.updateDatabase('call deleteImpliedProcessComponents(:id)',{'id':ipId},'MySQL error deleting implied process components',None,False)
+    self.updateDatabase('call updateImpliedProcess(:id,:name,:desc,:proc,:spec)',{'id':ipId,'name':ipName,'desc':ipDesc.encode('utf-8'),'proc':pName,'spec':ipSpec.encode('utf-8')},'MySQL error updating implied process',session)
+    self.addImpliedProcessNetwork(ipId,pName,cNet)
+    self.addImpliedProcessChannels(ipId,chs)
 
   def addImpliedProcessNetwork(self,ipId,personaName,cNet):
     for fromName,fromType,toName,toType,rType in cNet:
@@ -4239,18 +4207,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     goalRat = parameters.rationale()
     goalConcerns = parameters.concerns()
     goalResponsibilities = parameters.responsibilities()
-    try:
-      session = self.conn()
-      session.execute('call deleteTemplateGoalComponents(:id)',{'id':goalId})
-      session.execute('call updateTemplateGoal(:id,:name,:def,:rat)',{'id':goalId,'name':goalName,'def':goalDef,'rat':goalRat})
-      session.commit()
-      session.close()
-      self.addTemplateGoalConcerns(goalId,goalConcerns)
-      self.addTemplateGoalResponsibilities(goalId,goalResponsibilities)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating template goal ' + goalName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deleteTemplateGoalComponents(:id)',{'id':goalId},'MySQL error deleting template goal components',None,False)
+    self.updateDatabase('call updateTemplateGoal(:id,:name,:def,:rat)',{'id':goalId,'name':goalName,'def':goalDef,'rat':goalRat},'MySQL error updating template goals',session)
+    self.addTemplateGoalConcerns(goalId,goalConcerns)
+    self.addTemplateGoalResponsibilities(goalId,goalResponsibilities)
 
 
   def addTemplateGoalConcerns(self,goalId,concerns):
@@ -4821,19 +4781,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     toName = parameters.toName()
     toType = parameters.toType()
     dfAssets = parameters.assets()
-    try:
-      session = self.conn()
-      session.execute('call deleteDataFlowAssets(:df,:env)',{'df':oldDfName,'env':oldEnvName})
-      session.execute('call updateDataFlow(:oDf,:nDf,:oEnv,:nEnv,:fName,:fType,:tName,:tType)',{'oDf':oldDfName,'nDf':dfName,'oEnv':oldEnvName,'nEnv':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType})
-      session.commit
-      for dfAsset in dfAssets:
-        self.addDataFlowAsset(dfName,envName,dfAsset)
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating dataflow ' + oldDfName + '/' + oldEnvName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deleteDataFlowAssets(:df,:env)',{'df':oldDfName,'env':oldEnvName},'MySQL error deleting data flow assets',None,False)
+    self.updateDatabase('call updateDataFlow(:oDf,:nDf,:oEnv,:nEnv,:fName,:fType,:tName,:tType)',{'oDf':oldDfName,'nDf':dfName,'oEnv':oldEnvName,'nEnv':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error updating data flow',session)
+    for dfAsset in dfAssets:
+      self.addDataFlowAsset(dfName,envName,dfAsset)
 
   def deleteDataFlow(self,dfName,envName):
     self.updateDatabase('call deleteDataFlow(:df,:env)',{'df':dfName,'env':envName},'MySQL Error deleting data flow')
