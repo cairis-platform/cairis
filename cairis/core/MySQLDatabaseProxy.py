@@ -458,31 +458,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.updateDatabase(callTxt, {'ta':taId,'cPr':cProp,'iPr':iProp,'avPr':avProp,'acPr':acProp,'anPr':anProp,'panPr':panProp,'unlPr':unlProp,'unoPr':unoProp,'cRa':cRat,'iRa':iRat,'avRa':avRat,'acRa':acRat,'anRa':anRat,'panRa':panRat,'unlRa':unlRat,'unoRa':unoRat},'MySQL error adding security properties to template asset')
 
   def updateTemplateAssetProperties(self,taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat):
-    sqlTxt = 'update template_asset_property set property_value_id=%s, property_rationale="%s" where template_asset_id = %s and property_id = %s' 
-    try:
-      session = self.conn()
-      stmt = sqlTxt %(cProp,cRat,taId,C_PROPERTY)
-      session.execute(stmt)
-      stmt = sqlTxt %(iProp,iRat,taId,I_PROPERTY) 
-      session.execute(stmt)
-      stmt = sqlTxt %(avProp,avRat,taId,AV_PROPERTY) 
-      session.execute(stmt)
-      stmt = sqlTxt %(acProp,acRat,taId,AC_PROPERTY) 
-      session.execute(stmt)
-      stmt = sqlTxt %(anProp,anRat,taId,AN_PROPERTY) 
-      session.execute(stmt)
-      stmt = sqlTxt %(panProp,panRat,taId,PAN_PROPERTY) 
-      session.execute(stmt)
-      stmt = sqlTxt %(unlProp,unlRat,taId,UNL_PROPERTY) 
-      session.execute(stmt)      
-      stmt = sqlTxt %(unoProp,unoRat,taId,UNO_PROPERTY) 
-      session.execute(stmt)
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating security properties for template asset id ' + str(taId) +  ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    callTxt = 'update template_asset_property set property_value_id=:v, property_rationale=":r" where template_asset_id = :a and property_id = :p' 
+    argDict = {'v':cProp,'r':cRat,'a':taId,'p':C_PROPERTY}
+    session = self.updateDatabase(callTxt,argDict,'MySQL error updating template asset property',None,False)
+    argDict = {'v':iProp,'r':iRat,'a':taId,'p':I_PROPERTY}
+    self.updateDatabase(callTxt,argDict,'MySQL error updating template asset property',session,False)
+    argDict = {'v':avProp,'r':avRat,'a':taId,'p':AV_PROPERTY}
+    self.updateDatabase(callTxt,argDict,'MySQL error updating template asset property',session,False)
+    argDict = {'v':acProp,'r':acRat,'a':taId,'p':AC_PROPERTY}
+    self.updateDatabase(callTxt,argDict,'MySQL error updating template asset property',session,False)
+    argDict = {'v':anProp,'r':anRat,'a':taId,'p':AN_PROPERTY}
+    self.updateDatabase(callTxt,argDict,'MySQL error updating template asset property',session,False)
+    argDict = {'v':panProp,'r':panRat,'a':taId,'p':PAN_PROPERTY}
+    self.updateDatabase(callTxt,argDict,'MySQL error updating template asset property',session,False)
+    argDict = {'v':unlProp,'r':unlRat,'a':taId,'p':UNL_PROPERTY}
+    self.updateDatabase(callTxt,argDict,'MySQL error updating template asset property',session,False)
+    argDict = {'v':unoProp,'r':unoRat,'a':taId,'p':UNO_PROPERTY}
+    self.updateDatabase(callTxt,argDict,'MySQL error updating template asset property',session,False)
+    self.commitDatabase(session)
 
   def addSecurityProperties(self,dimTable,objtId,environmentName,securityProperties,pRationale):
     sqlTxt = 'call add_' + dimTable + '_properties(:obj,:env,:cPr,:iPr,:avPr,:acPr,:anPr,:panPr,:unlPr,:unoPr,:cRa,:iRa,:avRa,:acRa,:anRa,:panRa,:unlRa,:unoRa)'
@@ -685,29 +678,20 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     threatType = parameters.type()
     threatMethod = parameters.method()
     tags = parameters.tags()
-    try:
-      session = self.conn()
-      session.execute("call addThreat(:id,:name,:type,:method)",{'id':threatId,'name':threatName,'type':threatType,'method':threatMethod.encode('utf-8')})
-      session.commit()
-      self.addTags(threatName,'threat',tags)
-      for cProperties in parameters.environmentProperties():
-        environmentName = cProperties.name()
-        self.addDimensionEnvironment(threatId,'threat',environmentName)
-        session.execute("call addThreatLikelihood(:tId,:env,:likely)",{'tId':threatId,'env':environmentName,'likely':cProperties.likelihood()})
-        self.addSecurityProperties('threat',threatId,environmentName,cProperties.properties(),cProperties.rationale())
+    session = self.updateDatabase("call addThreat(:id,:name,:type,:method)",{'id':threatId,'name':threatName,'type':threatType,'method':threatMethod.encode('utf-8')},'MySQL error adding threat',None,False)
+    self.addTags(threatName,'threat',tags)
+    for cProperties in parameters.environmentProperties():
+      environmentName = cProperties.name()
+      self.addDimensionEnvironment(threatId,'threat',environmentName)
+      self.updateDatabase("call addThreatLikelihood(:tId,:env,:likely)",{'tId':threatId,'env':environmentName,'likely':cProperties.likelihood()},'MySQL error adding threat likelihood',session,False)
+      self.addSecurityProperties('threat',threatId,environmentName,cProperties.properties(),cProperties.rationale())
 
-        for assetName in cProperties.assets():
-          session.execute("call addAssetThreat(:tId,:env,:assName)",{'tId':threatId,'env':environmentName,'assName':assetName})
-        for attacker in cProperties.attackers():
-          session.execute("call addThreatAttacker(:tId,:env,:attacker)",{'tId':threatId,'env':environmentName,'attacker':attacker})
-      session.commit()
-      session.close()
-      return threatId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding threat ' + threatName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
+      for assetName in cProperties.assets():
+        self.updateDatabase("call addAssetThreat(:tId,:env,:assName)",{'tId':threatId,'env':environmentName,'assName':assetName},'MySQL error adding asset threat',session,False)
+      for attacker in cProperties.attackers():
+        self.updateDatabase("call addThreatAttacker(:tId,:env,:attacker)",{'tId':threatId,'env':environmentName,'attacker':attacker},'MySQL error adding threat attacker',session,False)
+    self.commitDatabase(session)
+    return threatId
 
   def updateThreat(self,parameters):
     threatId = parameters.id()
@@ -716,29 +700,21 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     threatMethod = parameters.method()
     tags = parameters.tags()
 
-    try:
-      session = self.conn()
-      session.execute('call deleteThreatComponents(:id)',{'id':threatId})
-      session.execute('call updateThreat(:id,:name,:type,:method)',{'id':threatId,'name':threatName,'type':threatType,'method':threatMethod.encode('utf-8')})
-      session.commit()
-      self.addTags(threatName,'threat',tags)
+    session = self.updateDatabase('call deleteThreatComponents(:id)',{'id':threatId},'MySQL error deleting threat components',None,False)
+    self.updateDatabase('call updateThreat(:id,:name,:type,:method)',{'id':threatId,'name':threatName,'type':threatType,'method':threatMethod.encode('utf-8')},'MySQL error updating threat',session,False)
+    self.addTags(threatName,'threat',tags)
 
-      for cProperties in parameters.environmentProperties():
-        environmentName = cProperties.name()
-        self.addDimensionEnvironment(threatId,'threat',environmentName)
-        session.execute("call addThreatLikelihood(:tId,:env,:likely)",{'tId':threatId,'env':environmentName,'likely':cProperties.likelihood()})
-        self.addSecurityProperties('threat',threatId,environmentName,cProperties.properties(),cProperties.rationale())
+    for cProperties in parameters.environmentProperties():
+      environmentName = cProperties.name()
+      self.addDimensionEnvironment(threatId,'threat',environmentName)
+      self.updateDatabase("call addThreatLikelihood(:tId,:env,:likely)",{'tId':threatId,'env':environmentName,'likely':cProperties.likelihood()},'MySQL error adding threat likelihood',session,False)
+      self.addSecurityProperties('threat',threatId,environmentName,cProperties.properties(),cProperties.rationale())
 
-        for assetName in cProperties.assets():
-          session.execute("call addAssetThreat(:tId,:env,:assName)",{'tId':threatId,'env':environmentName,'assName':assetName})
-        for attacker in cProperties.attackers():
-          session.execute("call addThreatAttacker(:tId,:env,:attacker)",{'tId':threatId,'env':environmentName,'attacker':attacker})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating threat ' + threatName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+      for assetName in cProperties.assets():
+        self.updateDatabase("call addAssetThreat(:tId,:env,:assName)",{'tId':threatId,'env':environmentName,'assName':assetName},'MySQL error adding asset threat',session,False)
+      for attacker in cProperties.attackers():
+        self.updateDatabase("call addThreatAttacker(:tId,:env,:attacker)",{'tId':threatId,'env':environmentName,'attacker':attacker},'MySQL error adding threat attacker',session,False)
+    self.commitDatabase(session)
 
   def getVulnerabilities(self,constraintId = -1):
     vulRows = self.responseList('call getVulnerabilities(:id)',{'id':constraintId},'MySQL error getting vulnerabilities')
@@ -765,25 +741,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     vulDesc = parameters.description()
     vulType = parameters.type()
     tags = parameters.tags()
-    try:
-      vulId = self.newId()
-      session = self.conn()
-      session.execute('call addVulnerability(:id,:name,:desc,:type)',{'id':vulId,'name':vulName,'desc':vulDesc.encode('utf-8'),'type':vulType})
-      session.commit()
-      self.addTags(vulName,'vulnerability',tags)
-      for cProperties in parameters.environmentProperties():
-        environmentName = cProperties.name()
-        self.addDimensionEnvironment(vulId,'vulnerability',environmentName)
-        session.execute("call addVulnerabilitySeverity(:vId,:env,:severity)",{'vId':vulId,'env':environmentName,'severity':cProperties.severity()})
-        for assetName in cProperties.assets():
-          session.execute("call addAssetVulnerability(:vId,:env,:assName)",{'vId':vulId,'env':environmentName,'assName':assetName})
-      session.commit()
-      session.close()
-      return vulId
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding vulnerability ' + vulName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    vulId = self.newId()
+    session = self.updateDatabase('call addVulnerability(:id,:name,:desc,:type)',{'id':vulId,'name':vulName,'desc':vulDesc.encode('utf-8'),'type':vulType},'MySQL error adding vulnerabilitity',None,False)
+    self.addTags(vulName,'vulnerability',tags)
+    for cProperties in parameters.environmentProperties():
+      environmentName = cProperties.name()
+      self.addDimensionEnvironment(vulId,'vulnerability',environmentName)
+      self.updateDatabase("call addVulnerabilitySeverity(:vId,:env,:severity)",{'vId':vulId,'env':environmentName,'severity':cProperties.severity()},'MySQL error adding vulnerability severity',session,False)
+      for assetName in cProperties.assets():
+        self.updateDatabase("call addAssetVulnerability(:vId,:env,:assName)",{'vId':vulId,'env':environmentName,'assName':assetName},'MySQL error adding asset vulnerability',session,False)
+    self.commitDatabase(session)
+    return vulId
 
   def updateVulnerability(self,parameters):
     vulId = parameters.id()
@@ -792,24 +760,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     vulType = parameters.type()
     tags = parameters.tags()
 
-    try:
-      session = self.conn()
-      session.execute('call deleteVulnerabilityComponents(:id)',{'id':vulId})
-      session.execute('call updateVulnerability(:id,:name,:desc,:type)',{'id':vulId,'name':vulName,'desc':vulDesc.encode('utf-8'),'type':vulType})
-      session.commit()
-      self.addTags(vulName,'vulnerability',tags)
-      for cProperties in parameters.environmentProperties():
-        environmentName = cProperties.name()
-        self.addDimensionEnvironment(vulId,'vulnerability',environmentName)
-        session.execute("call addVulnerabilitySeverity(:vId,:env,:severity)",{'vId':vulId,'env':environmentName,'severity':cProperties.severity()})
-        for assetName in cProperties.assets():
-          session.execute("call addAssetVulnerability(:vId,:env,:assName)",{'vId':vulId,'env':environmentName,'assName':assetName})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating vulnerability (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deleteVulnerabilityComponents(:id)',{'id':vulId},'MySQL error deleting vulnerability components',None,False)
+    self.updateDatabase('call updateVulnerability(:id,:name,:desc,:type)',{'id':vulId,'name':vulName,'desc':vulDesc.encode('utf-8'),'type':vulType},'MySQL error updating vulnerability',session,False)
+    self.addTags(vulName,'vulnerability',tags)
+    for cProperties in parameters.environmentProperties():
+      environmentName = cProperties.name()
+      self.addDimensionEnvironment(vulId,'vulnerability',environmentName)
+      self.updateDatabase("call addVulnerabilitySeverity(:vId,:env,:severity)",{'vId':vulId,'env':environmentName,'severity':cProperties.severity()},'MySQL error adding vulnerability severity',session,False)
+      for assetName in cProperties.assets():
+        self.updateDatabase("call addAssetVulnerability(:vId,:env,:assName)",{'vId':vulId,'env':environmentName,'assName':assetName},'MySQL error adding asset vulnerability',session,False)
+    self.commitDatabase(session)
 
   def relatedProperties(self,dimTable,objtId,environmentId):
     callTxt = 'call ' + dimTable + 'Properties (:objtId,:envId)'
@@ -923,26 +883,17 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     codes = parameters.codes()
     tags = parameters.tags()
 
-    try:
-      session = self.conn()
-      session.execute('call deletePersonaComponents(:id)',{'id':personaId})
-      session.execute('call updatePersona(:id,:name,:act,:att,:apt,:mot,:skills,:intr,:cont,:img,:ass,:type)',{'id':personaId,'name':personaName,'act':activities.encode('utf-8'),'att':attitudes.encode('utf-8'),'apt':aptitudes.encode('utf-8'),'mot':motivations.encode('utf-8'),'skills':skills.encode('utf-8'),'intr':intrinsic.encode('utf-8'),'cont':contextual.encode('utf-8'),'img':image,'ass':isAssumption,'type':pType})
-      session.commit()
-      self.addPersonaCodes(personaName,codes)
-      self.addTags(personaName,'persona',tags)
-      for environmentProperties in parameters.environmentProperties():
-        environmentName = environmentProperties.name()
-        self.addDimensionEnvironment(personaId,'persona',environmentName)
-        self.addPersonaNarrative(personaId,environmentName,environmentProperties.narrative().encode('utf-8'))
-        self.addPersonaDirect(personaId,environmentName,environmentProperties.directFlag())
-        self.addDimensionRoles(personaId,'persona',environmentName,environmentProperties.roles())
-        self.addPersonaEnvironmentCodes(personaName,environmentName,environmentProperties.codes())
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating persona (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deletePersonaComponents(:id)',{'id':personaId},'MySQL error deleting persona components',None,False)
+    self.updateDatabase('call updatePersona(:id,:name,:act,:att,:apt,:mot,:skills,:intr,:cont,:img,:ass,:type)',{'id':personaId,'name':personaName,'act':activities.encode('utf-8'),'att':attitudes.encode('utf-8'),'apt':aptitudes.encode('utf-8'),'mot':motivations.encode('utf-8'),'skills':skills.encode('utf-8'),'intr':intrinsic.encode('utf-8'),'cont':contextual.encode('utf-8'),'img':image,'ass':isAssumption,'type':pType},'MySQL error updating database',session)
+    self.addPersonaCodes(personaName,codes)
+    self.addTags(personaName,'persona',tags)
+    for environmentProperties in parameters.environmentProperties():
+      environmentName = environmentProperties.name()
+      self.addDimensionEnvironment(personaId,'persona',environmentName)
+      self.addPersonaNarrative(personaId,environmentName,environmentProperties.narrative().encode('utf-8'))
+      self.addPersonaDirect(personaId,environmentName,environmentProperties.directFlag())
+      self.addDimensionRoles(personaId,'persona',environmentName,environmentProperties.roles())
+      self.addPersonaEnvironmentCodes(personaName,environmentName,environmentProperties.codes())
 
   def deletePersona(self,personaId):
     self.deleteObject(personaId,'persona')
@@ -1056,47 +1007,31 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     isAssumption = parameters.assumption()
     taskAuthor = parameters.author()
     tags = parameters.tags()
-    try:
-      session = self.conn()
-      session.execute('call deleteTaskComponents(:id)',{'id':taskId})
-      session.execute('call updateTask(:id,:name,:shortCode,:obj,:ass,:auth)',{'id':taskId,'name':taskName,'shortCode':taskShortCode,'obj':taskObjective,'ass':isAssumption,'auth':taskAuthor})
-      session.commit()
-      session.close()
-      self.addTags(taskName,'task',tags)
-      for cProperties in parameters.environmentProperties():
-        environmentName = cProperties.name()
-        self.addDimensionEnvironment(taskId,'task',environmentName)
-        self.addTaskDependencies(taskId,cProperties.dependencies(),environmentName)
-        self.addTaskConcernAssociations(taskId,environmentName,cProperties.concernAssociations())
-        self.addTaskPersonas(taskId,cProperties.personas(),environmentName)
-        taskAssets = cProperties.assets()
-        if (len(taskAssets) > 0):
-          self.addTaskAssets(taskId,taskAssets,environmentName)
-        self.addTaskNarrative(taskId,cProperties.narrative().encode('utf-8'),cProperties.consequences().encode('utf-8'),cProperties.benefits().encode('utf-8'),environmentName)
-        self.addTaskEnvironmentCodes(taskName,environmentName,cProperties.codes())
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding task ' + taskName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deleteTaskComponents(:id)',{'id':taskId},'MySQL error deleting task components',None,False)
+    self.updateDatabase('call updateTask(:id,:name,:shortCode,:obj,:ass,:auth)',{'id':taskId,'name':taskName,'shortCode':taskShortCode,'obj':taskObjective,'ass':isAssumption,'auth':taskAuthor},session)
+    self.addTags(taskName,'task',tags)
+    for cProperties in parameters.environmentProperties():
+      environmentName = cProperties.name()
+      self.addDimensionEnvironment(taskId,'task',environmentName)
+      self.addTaskDependencies(taskId,cProperties.dependencies(),environmentName)
+      self.addTaskConcernAssociations(taskId,environmentName,cProperties.concernAssociations())
+      self.addTaskPersonas(taskId,cProperties.personas(),environmentName)
+      taskAssets = cProperties.assets()
+      if (len(taskAssets) > 0):
+        self.addTaskAssets(taskId,taskAssets,environmentName)
+      self.addTaskNarrative(taskId,cProperties.narrative().encode('utf-8'),cProperties.consequences().encode('utf-8'),cProperties.benefits().encode('utf-8'),environmentName)
+      self.addTaskEnvironmentCodes(taskName,environmentName,cProperties.codes())
 
   def updateMisuseCase(self,parameters):
     mcId = parameters.id()
     mcName = parameters.name()
-    try:
-      session = self.conn()
-      session.execute('call deleteMisuseCaseComponents(:id)',{'id':mcId})
-      session.execute('call updateMisuseCase(:id,:name)',{'id':mcId,'name':mcName})
-      session.commit()
-      session.close()
-      self.addMisuseCaseRisk(mcId,parameters.risk())
-      for cProperties in parameters.environmentProperties():
-        environmentName = cProperties.name()
-        self.addDimensionEnvironment(mcId,'misusecase',environmentName)
-        self.addMisuseCaseNarrative(mcId,cProperties.narrative().encode('utf-8'),environmentName)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error adding misuse case ' + mcName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deleteMisuseCaseComponents(:id)',{'id':mcId},'MySQL error dleting misuse case components',None,False)
+    self.updateDatabase('call updateMisuseCase(:id,:name)',{'id':mcId,'name':mcName},'MySQL error updating misuse case',session)
+    self.addMisuseCaseRisk(mcId,parameters.risk())
+    for cProperties in parameters.environmentProperties():
+      environmentName = cProperties.name()
+      self.addDimensionEnvironment(mcId,'misusecase',environmentName)
+      self.addMisuseCaseNarrative(mcId,cProperties.narrative().encode('utf-8'),environmentName)
 
 
   def addTaskPersonas(self,taskId,personas,environmentName):
@@ -1736,28 +1671,20 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     goalName = parameters.name()
     goalOrig = parameters.originator()
     tags = parameters.tags()
-    try:
-      session = self.conn()
-      session.execute('call deleteGoalComponents(:id)',{'id':goalId})
-      session.execute('call updateGoal(:id,:name,:orig)',{'id':goalId,'name':goalName,'orig':goalOrig})
-      session.commit()
-      session.close()
-      self.addTags(goalName,'goal',tags)
-      for environmentProperties in parameters.environmentProperties():
-        environmentName = environmentProperties.name()
-        self.addDimensionEnvironment(goalId,'goal',environmentName)
-        self.addGoalDefinition(goalId,environmentName,environmentProperties.definition())
-        self.addGoalCategory(goalId,environmentName,environmentProperties.category())
-        self.addGoalPriority(goalId,environmentName,environmentProperties.priority())
-        self.addGoalFitCriterion(goalId,environmentName,environmentProperties.fitCriterion())
-        self.addGoalIssue(goalId,environmentName,environmentProperties.issue())
-        self.addGoalRefinements(goalId,goalName,environmentName,environmentProperties.goalRefinements(),environmentProperties.subGoalRefinements())
-        self.addGoalConcerns(goalId,environmentName,environmentProperties.concerns())
-        self.addGoalConcernAssociations(goalId,environmentName,environmentProperties.concernAssociations())
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating goal ' + goalName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deleteGoalComponents(:id)',{'id':goalId},'MySQL error deleting goal components',None,False)
+    self.updateDatabase('call updateGoal(:id,:name,:orig)',{'id':goalId,'name':goalName,'orig':goalOrig},'MySQL error updating goal',session)
+    self.addTags(goalName,'goal',tags)
+    for environmentProperties in parameters.environmentProperties():
+      environmentName = environmentProperties.name()
+      self.addDimensionEnvironment(goalId,'goal',environmentName)
+      self.addGoalDefinition(goalId,environmentName,environmentProperties.definition())
+      self.addGoalCategory(goalId,environmentName,environmentProperties.category())
+      self.addGoalPriority(goalId,environmentName,environmentProperties.priority())
+      self.addGoalFitCriterion(goalId,environmentName,environmentProperties.fitCriterion())
+      self.addGoalIssue(goalId,environmentName,environmentProperties.issue())
+      self.addGoalRefinements(goalId,goalName,environmentName,environmentProperties.goalRefinements(),environmentProperties.subGoalRefinements())
+      self.addGoalConcerns(goalId,environmentName,environmentProperties.concerns())
+      self.addGoalConcernAssociations(goalId,environmentName,environmentProperties.concernAssociations())
 
   def getGoals(self,constraintId = -1):
     goalRows = self.responseList('call getGoals(:id)',{'id':constraintId},'MySQL error getting goals')
@@ -2278,24 +2205,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     obsName = parameters.name()
     obsOrig = parameters.originator()
     tags = parameters.tags()
-    try:
-      session = self.conn()
-      session.execute('call deleteObstacleComponents(:id)',{'id':obsId})
-      session.execute('call updateObstacle(:id,:name,:orig)',{'id':obsId,'name':obsName,'orig':obsOrig})
-      session.commit()
-      session.close()
-      self.addTags(obsName,'obstacle',tags)
-      for environmentProperties in parameters.environmentProperties():
-        environmentName = environmentProperties.name()
-        self.addDimensionEnvironment(obsId,'obstacle',environmentName)
-        self.addObstacleDefinition(obsId,environmentName,environmentProperties.definition(),environmentProperties.probability(),environmentProperties.probabilityRationale())
-        self.addObstacleCategory(obsId,environmentName,environmentProperties.category())
-        self.addObstacleRefinements(obsId,obsName,environmentName,environmentProperties.goalRefinements(),environmentProperties.subGoalRefinements())
-        self.addObstacleConcerns(obsId,environmentName,environmentProperties.concerns())
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating obstacle ' + obsName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call deleteObstacleComponents(:id)',{'id':obsId},'MySQL error deleting obstacle components',None,False)
+    self.updateDatabase('call updateObstacle(:id,:name,:orig)',{'id':obsId,'name':obsName,'orig':obsOrig},'MySQL error updating obstacle',session)
+    self.addTags(obsName,'obstacle',tags)
+    for environmentProperties in parameters.environmentProperties():
+      environmentName = environmentProperties.name()
+      self.addDimensionEnvironment(obsId,'obstacle',environmentName)
+      self.addObstacleDefinition(obsId,environmentName,environmentProperties.definition(),environmentProperties.probability(),environmentProperties.probabilityRationale())
+      self.addObstacleCategory(obsId,environmentName,environmentProperties.category())
+      self.addObstacleRefinements(obsId,obsName,environmentName,environmentProperties.goalRefinements(),environmentProperties.subGoalRefinements())
+      self.addObstacleConcerns(obsId,environmentName,environmentProperties.concerns())
 
   def addObstacleDefinition(self,obsId,environmentName,obsDef,obsProb,obsProbRat):
     self.updateDatabase('call addObstacleDefinition(:id,:env,:def,:prob,:probRat)',{'id':obsId,'env':environmentName,'def':obsDef,'prob':obsProb,'probRat':obsProbRat},'MySQL error adding obstacle definition')
@@ -2305,27 +2224,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def deleteObstacle(self,obsId):
     self.deleteObject(obsId,'obstacle')
-    
 
   def updateSettings(self, projName, background, goals, scope, definitions, contributors,revisions,richPicture,fontSize = '7.5',fontName = 'Times New Roman'):
-    try:
-      session = self.conn()
-      session.execute('call updateProjectSettings(:proj,:bg,:goals,:scope,:picture,:fontSize,:font)',{'proj':projName,'bg':background.encode('utf-8'),'goals':goals.encode('utf-8'),'scope':scope.encode('utf-8'),'picture':richPicture,'fontSize':fontSize,'font':fontName})
-      session.execute('call deleteDictionary()')
-      for entry in definitions:
-        session.execute('call addDictionaryEntry(:e0,:e1)',{'e0':entry[0],'e1':entry[1].encode('utf-8')})
-      session.execute('call deleteContributors()')
-      for entry in contributors:
-        session.execute('call addContributorEntry(:e0,:e1,:e2,:e3)',{'e0':entry[0],'e1':entry[1],'e2':entry[2],'e3':entry[3]})
-      session.execute('call deleteRevisions()')
-      for entry in revisions:
-        session.execute('call addRevision(:e0,:e1,:e2)',{'e0':entry[0],'e1':entry[1],'e2':entry[2]})
-      session.commit()
-      session.close()
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error updating project settings (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    session = self.updateDatabase('call updateProjectSettings(:proj,:bg,:goals,:scope,:picture,:fontSize,:font)',{'proj':projName,'bg':background.encode('utf-8'),'goals':goals.encode('utf-8'),'scope':scope.encode('utf-8'),'picture':richPicture,'fontSize':fontSize,'font':fontName},'MySQL error updating project settings',None,False)
+    self.updateDatabase('call deleteDictionary()',{},'MySQL error deleting directory',session,False)
+    for entry in definitions:
+      self.updateDatabase('call addDictionaryEntry(:e0,:e1)',{'e0':entry[0],'e1':entry[1].encode('utf-8')},'MySQL error adding dictionary entry',session,False)
+    self.updateDatabase('call deleteContributors()',{},'MySQL error deleting contributions',session,False)
+    for entry in contributors:
+      self.updateDatabase('call addContributorEntry(:e0,:e1,:e2,:e3)',{'e0':entry[0],'e1':entry[1],'e2':entry[2],'e3':entry[3]},'MySQL error adding contribution entry',session,False)
+    self.updateDatabase('call deleteRevisions()',{},'MySQL error deleting revisions',session,False)
+    for entry in revisions:
+      self.updateDatabase('call addRevision(:e0,:e1,:e2)',{'e0':entry[0],'e1':entry[1],'e2':entry[2]},'MySQL error adding revision',session,False)
+    self.commitDatabase(session)
 
   def getProjectSettings(self):
     rows = self.responseList('call getProjectSettings()',{},'MySQL error getting project settings')
