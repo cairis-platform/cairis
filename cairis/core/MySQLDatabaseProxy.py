@@ -3041,7 +3041,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
 
   def getArgReference(self,atName,constraintName):
-    row = self.responseList('call get' + atName + '(:const)',{'const':constraintName},'MySQL error getting ' + atName + ':' + constraintName)
+    row = self.responseList('call get' + atName + '(:const)',{'const':constraintName},'MySQL error getting ' + atName + ':' + constraintName)[0]
     groundsName = row[0] 
     dimName = row[1]
     objtName = row[2]
