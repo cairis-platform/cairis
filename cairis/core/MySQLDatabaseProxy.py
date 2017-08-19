@@ -3041,26 +3041,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
 
   def getArgReference(self,atName,constraintName):
-    try:
-      session = self.conn()
-      rs = session.execute('call get' + atName + '(:const)',{'const':constraintName})
-      groundsName = ''
-      dimName = ''
-      objtName = ''
-      refDesc = ''
-      for row in rs.fetchall():
-        row = list(row)
-        groundsName = row[0] 
-        dimName = row[1]
-        objtName = row[2]
-        refDesc = row[3]
-      rs.close()
-      session.close()   
-      return (dimName,objtName,refDesc) 
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting ' + atName + ':' + constraintName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    row = self.responseList('call get' + atName + '(:const)',{'const':constraintName},'MySQL error getting ' + atName + ':' + constraintName)
+    groundsName = row[0] 
+    dimName = row[1]
+    objtName = row[2]
+    refDesc = row[3]
+    return (dimName,objtName,refDesc) 
 
   def addThreatDirectory(self,tDir,isOverwrite = 1):
     self.addDirectory(tDir,'threat',isOverwrite)
@@ -4822,30 +4808,19 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call getLocationNames(:locs)',{'locs':locsName},'MySQL error getting location names')
 
   def getLocationLinks(self,locsName):
-    try:
-      session = self.conn()
-      rs = session.execute('call getLocationLinks(:locs)',{'locs':locsName})
-      linkDict = {}
-      for row in rs.fetchall():
-        row = list(row)
-        tailLoc = row[0]
-        headLoc = row[1]
-        if tailLoc in linkDict:
-          linkDict[tailLoc].append(headLoc)
-        else:
-          linkDict[tailLoc] = [headLoc]
+    rows = self.responseList('call getLocationLinks(:locs)',{'locs':locsName},'MySQL error getting location links')
+    linkDict = {}
+    for tailLoc,headLoc in rows:
+      if tailLoc in linkDict:
+        linkDict[tailLoc].append(headLoc)
+      else:
+        linkDict[tailLoc] = [headLoc]
 
-        if headLoc in linkDict:
-          linkDict[headLoc].append(tailLoc)
-        else:
-          linkDict[headLoc] = [tailLoc]
-      rs.close()
-      session.close()
-      return linkDict
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error getting location links (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exception)
+      if headLoc in linkDict:
+        linkDict[headLoc].append(tailLoc)
+      else:
+        linkDict[headLoc] = [tailLoc]
+    return linkDict
 
   def getAssetInstances(self,locName):
     return self.responseList('call getAssetInstances(:locs)',{'locs':locName},'MySQL error getting asset instances')
