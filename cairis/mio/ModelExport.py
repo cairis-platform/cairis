@@ -19,6 +19,7 @@
 from cairis.core.Borg import Borg
 import os
 import re
+import codecs
 
 __author__ = 'Shamal Faily'
 
@@ -90,7 +91,7 @@ def exportRedmineScenarios(outFile,session_id = None):
   for sName,sEnv,sTxt in rmScenarios:
     buf += sTxt + '\n'
     noScenarios += 1
-  sFile = open(outFile,'w')
+  sFile = codecs.open(outFile,'w','utf-8')
   sFile.write(buf)
   sFile.close()
   return 'Exported ' + str(noScenarios) + ' scenarios.'
@@ -290,7 +291,7 @@ def exportModel(outFile = None,session_id = None):
   if outFile == None:
     return xmlBuf
   else:
-    f = open(outFile,'w')
+    f = codecs.open(outFile,'w','utf-8')
     f.write(xmlBuf)
     f.close()
     return 'Exported model'
