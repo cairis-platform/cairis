@@ -2720,7 +2720,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docDate = self.conn.connection().connection.escape_string(parameters.date())
     docAuthors = self.conn.connection().connection.escape_string(parameters.authors())
     docDesc = self.conn.connection().connection.escape_string(parameters.description())
-    self.updateDatabase('call updateExternalDocument(:id,:name,:vers,:date,:auth,:desc)',{'id':docId,'name':docName.encode('utf-8'),'vers':docVersion.encode('utf-8'),'date':docDate.encode('utf-8'),'auth':docAuthors.encode('utf-8'),'desc':docDesc.encode('utf-8')},'MySQL error updating external document')
+    if (sys.version_info > (3,)):
+      self.updateDatabase('call updateExternalDocument(:id,:name,:vers,:date,:auth,:desc)',{'id':docId,'name':docName,'vers':docVersion,'date':docDate,'auth':docAuthors,'desc':docDesc},'MySQL error updating external document')
+    else:
+      self.updateDatabase('call updateExternalDocument(:id,:name,:vers,:date,:auth,:desc)',{'id':docId,'name':docName.encode('utf-8'),'vers':docVersion.encode('utf-8'),'date':docDate.encode('utf-8'),'auth':docAuthors.encode('utf-8'),'desc':docDesc.encode('utf-8')},'MySQL error updating external document')
 
   def addDocumentReference(self,parameters):
     refId = self.newId()
@@ -2743,7 +2746,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     docName = parameters.document()
     cName = parameters.contributor()
     refExc = parameters.description()
-    self.updateDatabase('call updateDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName.encode('utf-8'),'dName':docName.encode('utf-8'),'cName':cName.encode('utf-8'),'rExec':refExc.encode('utf-8')},'MySQL error updating document reference')
+    if (sys.version_info > (3,)):
+      self.updateDatabase('call updateDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName,'dName':docName,'cName':cName,'rExec':refExc},'MySQL error updating document reference')
+    else:
+      self.updateDatabase('call updateDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName.encode('utf-8'),'dName':docName.encode('utf-8'),'cName':cName.encode('utf-8'),'rExec':refExc.encode('utf-8')},'MySQL error updating document reference')
 
   def addPersonaCharacteristic(self,parameters):
     pcId = self.newId()
@@ -2754,7 +2760,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     grounds = parameters.grounds()
     warrant = parameters.warrant() 
     rebuttal = parameters.rebuttal()
-    self.updateDatabase('call addPersonaCharacteristic(:pc,:pers,:qual,:bVar,:cDesc)',{'pc':pcId,'pers':personaName,'qual':qualName,'bVar':bVar,'cDesc':cDesc.encode('utf-8')},'MySQL error adding persona characteristic')
+    if (sys.version_info > (3,)):
+      self.updateDatabase('call addPersonaCharacteristic(:pc,:pers,:qual,:bVar,:cDesc)',{'pc':pcId,'pers':personaName,'qual':qualName,'bVar':bVar,'cDesc':cDesc},'MySQL error adding persona characteristic')
+    else:
+      self.updateDatabase('call addPersonaCharacteristic(:pc,:pers,:qual,:bVar,:cDesc)',{'pc':pcId,'pers':personaName,'qual':qualName,'bVar':bVar,'cDesc':cDesc.encode('utf-8')},'MySQL error adding persona characteristic')
     self.addPersonaCharacteristicReferences(pcId,grounds,warrant,rebuttal)
     return pcId
 
@@ -2768,7 +2777,10 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     warrant = parameters.warrant() 
     rebuttal = parameters.rebuttal()
     session = self.updateDatabase('call deletePersonaCharacteristicComponents(:pers)',{'pers':pcId},'MySQL error deleting persona characteristic components',None,False)
-    self.updateDatabase('call updatePersonaCharacteristic(:pc,:pers,:qual,:bVar,:cDesc)',{'pc':pcId,'pers':personaName,'qual':qualName,'bVar':bVar,'cDesc':cDesc.encode('utf-8')},'MySQL error updating persona characteristic',session)
+    if (sys.version_info > (3,)):
+      self.updateDatabase('call updatePersonaCharacteristic(:pc,:pers,:qual,:bVar,:cDesc)',{'pc':pcId,'pers':personaName,'qual':qualName,'bVar':bVar,'cDesc':cDesc},'MySQL error updating persona characteristic',session)
+    else:
+      self.updateDatabase('call updatePersonaCharacteristic(:pc,:pers,:qual,:bVar,:cDesc)',{'pc':pcId,'pers':personaName,'qual':qualName,'bVar':bVar,'cDesc':cDesc.encode('utf-8')},'MySQL error updating persona characteristic',session)
     self.addPersonaCharacteristicReferences(pcId,grounds,warrant,rebuttal)
 
   def getPersonaBehaviouralCharacteristics(self,pName,bvName):
@@ -2890,7 +2902,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       
 
   def addDirectoryEntry(self,dLabel,dName,dDesc,dTypeId,dRef,dimName):
-    dimName = string.upper(dimName[0]) + dimName[1:]
+    dimName = dimName[0].upper() + dimName[1:]
     self.updateDatabase('call add' + dimName + 'DirectoryEntry(:lbl,:name,:desc,:type,:ref)',{'lbl':dLabel,'name':dName,'desc':dDesc.encode('utf-8'),'type':dTypeId,'ref':dRef},'MySQL error adding directory entry')
 
   def lastRequirementLabel(self,assetName):
