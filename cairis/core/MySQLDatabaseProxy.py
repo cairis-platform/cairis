@@ -127,7 +127,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       db = b.dbName
 
     try:
-      dbEngine = create_engine('mysql+mysqldb://'+user+':'+passwd+'@'+host+':'+str(port)+'/'+db)
+      dbEngine = create_engine('mysql+mysqldb://'+user+':'+passwd+'@'+host+':'+str(port)+'/'+db,encoding='latin1')
       self.conn = scoped_session(sessionmaker(bind=dbEngine))
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
@@ -141,11 +141,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       if (closeConn) and self.conn.connection().connection.open:
         self.conn.close()
       if b.runmode == 'desktop':
-        dbEngine = create_engine('mysql+mysqldb://'+b.dbUser+':'+b.dbPasswd+'@'+b.dbHost+':'+str(b.dbPort)+'/'+b.dbName)
+        dbEngine = create_engine('mysql+mysqldb://'+b.dbUser+':'+b.dbPasswd+'@'+b.dbHost+':'+str(b.dbPort)+'/'+b.dbName,encoding='latin1')
         self.conn = scoped_session(sessionmaker(bind=dbEngine))
       elif b.runmode == 'web':
         ses_settings = b.get_settings(session_id)
-        dbEngine = create_engine('mysql+mysqldb://'+ses_settings['dbUser']+':'+ses_settings['dbPasswd']+'@'+ses_settings['dbHost']+':'+str(ses_settings['dbPort'])+'/'+ses_settings['dbName'])
+        dbEngine = create_engine('mysql+mysqldb://'+ses_settings['dbUser']+':'+ses_settings['dbPasswd']+'@'+ses_settings['dbHost']+':'+str(ses_settings['dbPort'])+'/'+ses_settings['dbName'],encoding='latin1')
         self.conn = scoped_session(sessionmaker(bind=dbEngine))
       else:
         raise RuntimeError('Run mode not recognized')
