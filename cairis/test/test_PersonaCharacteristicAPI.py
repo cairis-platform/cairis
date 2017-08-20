@@ -16,8 +16,12 @@
 #  under the License.
 
 import logging
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import jsonpickle
 from cairis.core.PersonaCharacteristic import PersonaCharacteristic
@@ -65,7 +69,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     self.assertIsInstance(pcs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(pcs), 0, 'No persona characteristics in the dictionary')
     self.logger.info('[%s] Persona characteristics found: %d', method, len(pcs))
-    pc = pcs.values()[0]
+    pc = list(pcs.values())[0]
     self.logger.info('[%s] First persona characteristic: %s [%d]\n', method, pc['theCharacteristic'], pc['theId'])
 
   def test_get_by_name(self):

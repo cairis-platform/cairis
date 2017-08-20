@@ -17,8 +17,12 @@
 
 import logging
 import json
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import jsonpickle
 import cairis.core.BorgFactory
@@ -87,7 +91,7 @@ class TemplateRequirementAPITests(CairisDaemonTestCase):
     self.assertIsInstance(trs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(trs), 0, 'No template requirements in the dictionary')
     self.logger.info('[%s] Template requirements found: %d', method, len(trs))
-    tr = trs.values()[0]
+    tr = list(trs.values())[0]
     self.logger.info('[%s] First template requirement: %s \n', method, tr['theName'])
 
   def test_get_by_name(self):

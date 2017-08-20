@@ -16,8 +16,11 @@
 #  under the License.
 
 import logging
-from urllib import quote
-
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 import os
 from cairis.core.MisuseCaseParameters import MisuseCaseParameters
@@ -55,7 +58,7 @@ class RiskAPITests(CairisDaemonTestCase):
         self.assertIsInstance(risks, dict, 'The result is not a dictionary as expected')
         self.assertGreater(len(risks), 0, 'No risks in the dictionary')
         self.logger.info('[%s] Risks found: %d', method, len(risks))
-        risk = risks.values()[0]
+        risk = list(risks.values())[0]
         self.logger.info('[%s] First risk: %s [%d]\n', method, risk['theName'], risk['theId'])
 
     def test_get_by_name(self):
@@ -172,7 +175,7 @@ class RiskAPITests(CairisDaemonTestCase):
         self.assertIsNotNone(scores, 'No results after deserialization')
         self.assertGreater(len(scores), 0, 'No results for current criteria')
         score = scores[0]
-        has_all_keys = all (k in score.keys() for k in RiskScore.required)
+        has_all_keys = all (k in list(score.keys()) for k in RiskScore.required)
         self.assertTrue(has_all_keys, 'Response is not a RiskScore object')
         self.logger.info('[%s] %s - %d - %d\n', method, score['responseName'], score['unmitScore'], score['mitScore'])
 

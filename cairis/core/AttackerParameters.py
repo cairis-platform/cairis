@@ -18,7 +18,7 @@
 __author__ = 'Shamal Faily'
 
 
-from ObjectCreationParameters import ObjectCreationParameters
+from .ObjectCreationParameters import ObjectCreationParameters
 
 class AttackerParameters(ObjectCreationParameters):
   def __init__(self,name,desc,image,tags,properties):

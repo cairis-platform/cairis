@@ -45,7 +45,7 @@ class GoalDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in goals.items():
+      for key, value in list(goals.items()):
         goals[key] = self.simplify(value)
 
     return goals
@@ -130,7 +130,7 @@ class GoalDAO(CairisDAO):
       if goal_name != '': goalFilter = 1
       if usecase_name != '': ucFilter = 1
       associationDictionary = self.db_proxy.goalModel(environment_name,goal_name,0,ucFilter)
-      associations = KaosModel(associationDictionary.values(), environment_name, 'goal',goal_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
+      associations = KaosModel(list(associationDictionary.values()), environment_name, 'goal',goal_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
       dot_code = associations.graph()
       return dot_code
     except DatabaseProxyException as ex:
@@ -141,7 +141,7 @@ class GoalDAO(CairisDAO):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       associationDictionary = self.db_proxy.responsibilityModel(environment_name, role_name)
-      associations = KaosModel(associationDictionary.values(), environment_name, 'responsibility',goalName=role_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
+      associations = KaosModel(list(associationDictionary.values()), environment_name, 'responsibility',goalName=role_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
       dot_code = associations.graph()
       return dot_code
     except DatabaseProxyException as ex:

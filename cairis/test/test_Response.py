@@ -169,7 +169,7 @@ class ResponseTest(unittest.TestCase):
     b.dbProxy.relabelGoals(iaep2.name())
 
     oGoals = b.dbProxy.getGoals()
-    print oGoals
+    print(oGoals)
     rg = oGoals['Deter' + self.oar2.risk()]
     vg = oGoals[vulnerabilityParameters.name()]
     tg = oGoals[threatParameters.name()]

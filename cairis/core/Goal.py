@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from GoalEnvironmentProperties import GoalEnvironmentProperties
+from .GoalEnvironmentProperties import GoalEnvironmentProperties
 
 __author__ = 'Shamal Faily'
 

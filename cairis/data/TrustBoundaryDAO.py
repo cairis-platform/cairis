@@ -44,7 +44,7 @@ class TrustBoundaryDAO(CairisDAO):
     """
     try:
       tbs = self.db_proxy.getTrustBoundaries(constraint_id)
-      for key, value in tbs.items():
+      for key, value in list(tbs.items()):
         tbs[key] = self.simplify(value)
       return tbs
     except DatabaseProxyException as ex:

@@ -16,8 +16,12 @@
 #  under the License.
 
 import logging
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import jsonpickle
 from cairis.core.ClassAssociation import ClassAssociation
@@ -67,7 +71,7 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(rv.data, 'No response')
     assocs = jsonpickle.decode(rv.data)
     self.assertIsNotNone(assocs, 'No results after deserialization')
-    assoc = assocs[assocs.keys()[0]]
+    assoc = assocs[list(assocs.keys())[0]]
     self.assertEqual(assoc['theEnvironmentName'],'Core Technology')
     self.assertEqual(assoc['theHeadAsset'],'Data node')
     self.assertEqual(assoc['theTailAsset'],'Delegation token')

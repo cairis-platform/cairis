@@ -16,7 +16,7 @@
 #  under the License.
 
 from flask_security import UserMixin, RoleMixin
-from cdb import db
+from .cdb import db
 
 __author__ = 'Robin Quetin, Shamal Faily'
 

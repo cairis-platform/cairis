@@ -17,8 +17,12 @@
 
 import logging
 import json
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import jsonpickle
 import cairis.core.BorgFactory
@@ -86,7 +90,7 @@ class TemplateGoalAPITests(CairisDaemonTestCase):
     self.assertIsInstance(tgs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(tgs), 0, 'No template goals in the dictionary')
     self.logger.info('[%s] Template goals found: %d', method, len(tgs))
-    tg = tgs.values()[0]
+    tg = list(tgs.values())[0]
     self.logger.info('[%s] First template goal: %s \n', method, tg['theName'])
 
   def test_get_by_name(self):

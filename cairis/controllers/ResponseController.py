@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -56,7 +62,7 @@ class ResponsesAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -69,7 +75,7 @@ class ResponsesAPI(Resource):
         dao = ResponseDAO(session_id)
         responses = dao.get_responses(constraint_id)
 
-        resp = make_response(json_serialize(responses, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(responses, session_id=session_id), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -97,7 +103,7 @@ class ResponsesAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             },
             {
@@ -118,7 +124,7 @@ class ResponsesAPI(Resource):
         response_id = dao.add_response(response)
 
         resp_dict = {'message': 'Response successfully added', 'response_id': response_id}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -140,7 +146,7 @@ class ResponseByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -153,7 +159,7 @@ class ResponseByNameAPI(Resource):
         found_response = dao.get_response_by_name(name)
         dao.close()
 
-        resp = make_response(json_serialize(found_response, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(found_response, session_id=session_id), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -181,11 +187,11 @@ class ResponseByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
@@ -208,7 +214,7 @@ class ResponseByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Response successfully updated'}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -228,11 +234,11 @@ class ResponseByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
@@ -254,7 +260,7 @@ class ResponseByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Response successfully deleted'}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -276,7 +282,7 @@ class ResponseByNameGenerateAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -290,6 +296,6 @@ class ResponseByNameGenerateAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Goal successfully generated'}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp

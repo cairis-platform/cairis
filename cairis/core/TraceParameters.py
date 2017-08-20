@@ -17,7 +17,7 @@
 
 __author__ = 'Shamal Faily'
 
-import ObjectCreationParameters
+from . import ObjectCreationParameters
 
 class TraceParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,fromObjt,fromName,toObjt,toName):

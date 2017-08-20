@@ -135,7 +135,7 @@ class ProjectDAO(CairisDAO):
         SilentHTTPError('A revision did not contain all required fields. Skipping this one.')
 
     json_dict['definitions'] = json_dict.get('definitions', None) or {}
-    json_dict['definitions'] = json_dict['definitions'].items()
+    json_dict['definitions'] = list(json_dict['definitions'].items())
 
     settings = json_deserialize(json_dict)
     return settings

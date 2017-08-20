@@ -16,100 +16,101 @@
 #  under the License.
 
 
-from Borg import Borg
+from .Borg import Borg
 import MySQLdb
-import RequirementFactory
-from Environment import Environment
-from ARM import *
+from . import RequirementFactory
+from .Environment import Environment
+from .ARM import *
 import _mysql_exceptions 
-import Attacker
-import Asset
-import Threat
-import Vulnerability
-import Persona
-import MisuseCase
-import Task
-import Risk
-import Response
-import ClassAssociation
-import DatabaseProxy
-from AttackerParameters import AttackerParameters
-from PersonaParameters import PersonaParameters
-from GoalParameters import GoalParameters
-from ObstacleParameters import ObstacleParameters
-from AssetParameters import AssetParameters
-from TemplateAssetParameters import TemplateAssetParameters
-from TemplateGoalParameters import TemplateGoalParameters
-from TemplateRequirementParameters import TemplateRequirementParameters
-from SecurityPatternParameters import SecurityPatternParameters
-from ThreatParameters import ThreatParameters
-from VulnerabilityParameters import VulnerabilityParameters
-from RiskParameters import RiskParameters
-from ResponseParameters import ResponseParameters
-from RoleParameters import RoleParameters
-from ResponsibilityParameters import ResponsibilityParameters
-import ObjectFactory
-from TaskParameters import TaskParameters
-from MisuseCaseParameters import MisuseCaseParameters
-from DomainPropertyParameters import DomainPropertyParameters
-import Trace
+from . import Attacker
+from . import Asset
+from . import Threat
+from . import Vulnerability
+from . import Persona
+from . import MisuseCase
+from . import Task
+from . import Risk
+from . import Response
+from . import ClassAssociation
+from . import DatabaseProxy
+from .AttackerParameters import AttackerParameters
+from .PersonaParameters import PersonaParameters
+from .GoalParameters import GoalParameters
+from .ObstacleParameters import ObstacleParameters
+from .AssetParameters import AssetParameters
+from .TemplateAssetParameters import TemplateAssetParameters
+from .TemplateGoalParameters import TemplateGoalParameters
+from .TemplateRequirementParameters import TemplateRequirementParameters
+from .SecurityPatternParameters import SecurityPatternParameters
+from .ThreatParameters import ThreatParameters
+from .VulnerabilityParameters import VulnerabilityParameters
+from .RiskParameters import RiskParameters
+from .ResponseParameters import ResponseParameters
+from .RoleParameters import RoleParameters
+from .ResponsibilityParameters import ResponsibilityParameters
+from . import ObjectFactory
+from .TaskParameters import TaskParameters
+from .MisuseCaseParameters import MisuseCaseParameters
+from .DomainPropertyParameters import DomainPropertyParameters
+from . import Trace
 from cairis.core.armid import *
-from DotTraceParameters import DotTraceParameters
-from EnvironmentParameters import EnvironmentParameters
-from Target import Target
-from AttackerEnvironmentProperties import AttackerEnvironmentProperties
-from AssetEnvironmentProperties import AssetEnvironmentProperties
-from ThreatEnvironmentProperties import ThreatEnvironmentProperties
-from VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
-from AcceptEnvironmentProperties import AcceptEnvironmentProperties
-from TransferEnvironmentProperties import TransferEnvironmentProperties
-from MitigateEnvironmentProperties import MitigateEnvironmentProperties
-from CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
-from CountermeasureParameters import CountermeasureParameters
-from PersonaEnvironmentProperties import PersonaEnvironmentProperties
-from TaskEnvironmentProperties import TaskEnvironmentProperties
-from MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
-from RoleEnvironmentProperties import RoleEnvironmentProperties
-from ClassAssociationParameters import ClassAssociationParameters
-from GoalAssociationParameters import GoalAssociationParameters
-from DependencyParameters import DependencyParameters
-from GoalEnvironmentProperties import GoalEnvironmentProperties
-from ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
-from ValueTypeParameters import ValueTypeParameters
-from ExternalDocumentParameters import ExternalDocumentParameters
-from InternalDocumentParameters import InternalDocumentParameters
-from CodeParameters import CodeParameters
-from MemoParameters import MemoParameters
-from DocumentReferenceParameters import DocumentReferenceParameters
-from ConceptReferenceParameters import ConceptReferenceParameters
-from PersonaCharacteristicParameters import PersonaCharacteristicParameters
-from TaskCharacteristicParameters import TaskCharacteristicParameters
-from UseCaseParameters import UseCaseParameters
-from UseCase import UseCase
-from UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
-from UseCaseParameters import UseCaseParameters
-from Step import Step
-from Steps import Steps
-from ReferenceSynopsis import ReferenceSynopsis
-from ReferenceContribution import ReferenceContribution
-from ConceptMapAssociationParameters import ConceptMapAssociationParameters
-from ComponentViewParameters import ComponentViewParameters;
-from ComponentParameters import ComponentParameters;
-from ConnectorParameters import ConnectorParameters;
-from WeaknessTarget import WeaknessTarget
-from ImpliedProcess import ImpliedProcess
-from ImpliedProcessParameters import ImpliedProcessParameters
-from Location import Location
-from Locations import Locations
-from LocationsParameters import LocationsParameters
-from DataFlow import DataFlow
-from DataFlowParameters import DataFlowParameters
-from TrustBoundary import TrustBoundary
+from .DotTraceParameters import DotTraceParameters
+from .EnvironmentParameters import EnvironmentParameters
+from .Target import Target
+from .AttackerEnvironmentProperties import AttackerEnvironmentProperties
+from .AssetEnvironmentProperties import AssetEnvironmentProperties
+from .ThreatEnvironmentProperties import ThreatEnvironmentProperties
+from .VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
+from .AcceptEnvironmentProperties import AcceptEnvironmentProperties
+from .TransferEnvironmentProperties import TransferEnvironmentProperties
+from .MitigateEnvironmentProperties import MitigateEnvironmentProperties
+from .CountermeasureEnvironmentProperties import CountermeasureEnvironmentProperties
+from .CountermeasureParameters import CountermeasureParameters
+from .PersonaEnvironmentProperties import PersonaEnvironmentProperties
+from .TaskEnvironmentProperties import TaskEnvironmentProperties
+from .MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
+from .RoleEnvironmentProperties import RoleEnvironmentProperties
+from .ClassAssociationParameters import ClassAssociationParameters
+from .GoalAssociationParameters import GoalAssociationParameters
+from .DependencyParameters import DependencyParameters
+from .GoalEnvironmentProperties import GoalEnvironmentProperties
+from .ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
+from .ValueTypeParameters import ValueTypeParameters
+from .ExternalDocumentParameters import ExternalDocumentParameters
+from .InternalDocumentParameters import InternalDocumentParameters
+from .CodeParameters import CodeParameters
+from .MemoParameters import MemoParameters
+from .DocumentReferenceParameters import DocumentReferenceParameters
+from .ConceptReferenceParameters import ConceptReferenceParameters
+from .PersonaCharacteristicParameters import PersonaCharacteristicParameters
+from .TaskCharacteristicParameters import TaskCharacteristicParameters
+from .UseCaseParameters import UseCaseParameters
+from .UseCase import UseCase
+from .UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
+from .UseCaseParameters import UseCaseParameters
+from .Step import Step
+from .Steps import Steps
+from .ReferenceSynopsis import ReferenceSynopsis
+from .ReferenceContribution import ReferenceContribution
+from .ConceptMapAssociationParameters import ConceptMapAssociationParameters
+from .ComponentViewParameters import ComponentViewParameters;
+from .ComponentParameters import ComponentParameters;
+from .ConnectorParameters import ConnectorParameters;
+from .WeaknessTarget import WeaknessTarget
+from .ImpliedProcess import ImpliedProcess
+from .ImpliedProcessParameters import ImpliedProcessParameters
+from .Location import Location
+from .Locations import Locations
+from .LocationsParameters import LocationsParameters
+from .DataFlow import DataFlow
+from .DataFlowParameters import DataFlowParameters
+from .TrustBoundary import TrustBoundary
 import string
 import os
 from numpy import *
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+import sys
 
 __author__ = 'Shamal Faily, Robin Quetin, Nathan Jenkins'
 
@@ -128,7 +129,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       dbEngine = create_engine('mysql+mysqldb://'+user+':'+passwd+'@'+host+':'+str(port)+'/'+db)
       self.conn = scoped_session(sessionmaker(bind=dbEngine))
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
@@ -148,7 +149,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         self.conn = scoped_session(sessionmaker(bind=dbEngine))
       else:
         raise RuntimeError('Run mode not recognized')
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
       raise DatabaseProxyException(exceptionText) 
     self.theDimIdLookup, self.theDimNameLookup = self.buildDimensionLookup()
@@ -201,7 +202,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     try:
       session.commit()
       session.close()
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
@@ -217,7 +218,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         return None
       else:
         return session
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
@@ -301,7 +302,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       rs.close()
       session.close()
       return responseList
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
@@ -566,7 +567,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     elif (dimensionTable == 'trust_boundary'):
       objts = self.getTrustBoundaries(constraintId)
 
-    return (objts.values())[0]
+    return (list(objts.values()))[0]
 
 
   def getAssets(self,constraintId = -1):
@@ -640,7 +641,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       rs.close()
       session.close()
       return dimId
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error getting '
       exceptionText += dimensionTable + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -1299,11 +1300,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       sqlTxt = 'call delete_environment(%s)'
       curs.execute(sqlTxt,[environmentId])
       curs.close()
-    except _mysql_exceptions.IntegrityError, e:
+    except _mysql_exceptions.IntegrityError as e:
       id,msg = e
       exceptionText = 'Cannot remove environment due to dependent data (id:' + str(id) + ',message:' + msg + ').'
       raise IntegrityException(exceptionText) 
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error deleting environments (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText)     
@@ -2697,12 +2698,18 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addExternalDocument(self,parameters):
     docId = self.newId()
-    docName = self.conn.connection().connection.escape_string(parameters.name().replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u2013", "-").replace(u"\u2022","*"))
+    if (sys.version_info > (3,)):
+      docName = parameters.name() 
+    else:
+      docName = self.conn.connection().connection.escape_string(parameters.name().replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-").replace("\\u2022","*"))
     docVersion = parameters.version()
     docDate = self.conn.connection().connection.escape_string(parameters.date())
     docAuthors = self.conn.connection().connection.escape_string(parameters.authors())
     docDesc = self.conn.connection().connection.escape_string(parameters.description())
-    self.updateDatabase('call addExternalDocument(:id,:name,:vers,:date,:auth,:desc)',{'id':docId,'name':docName.encode('utf-8'),'vers':docVersion.encode('utf-8'),'date':docDate.encode('utf-8'),'auth':docAuthors.encode('utf-8'),'desc':docDesc.encode('utf-8')},'MySQL error adding external document')
+    if (sys.version_info > (3,)):
+      self.updateDatabase('call addExternalDocument(:id,:name,:vers,:date,:auth,:desc)',{'id':docId,'name':docName,'vers':docVersion,'date':docDate,'auth':docAuthors,'desc':docDesc},'MySQL error adding external document')
+    else:
+      self.updateDatabase('call addExternalDocument(:id,:name,:vers,:date,:auth,:desc)',{'id':docId,'name':docName.encode('utf-8'),'vers':docVersion.encode('utf-8'),'date':docDate.encode('utf-8'),'auth':docAuthors.encode('utf-8'),'desc':docDesc.encode('utf-8')},'MySQL error adding external document')
     return docId
 
 
@@ -2718,12 +2725,16 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addDocumentReference(self,parameters):
     refId = self.newId()
     refName = parameters.name()
-    refName = self.conn.connection().connection.escape_string(parameters.name().replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u2013", "-").replace(u"\u2022","*"))
-    refName = self.conn.connection().connection.escape_string(parameters.name().replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u2013", "-"))
-    docName = self.conn.connection().connection.escape_string(parameters.document().replace(u"\u2018", "'").replace(u"\u2019", "'").replace(u"\u2013", "-").replace(u"\u2022","*"))
+    docName = parameters.document()
     cName = parameters.contributor()
     refExc = parameters.description()
-    self.updateDatabase('call addDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName.encode('utf-8'),'dName':docName.encode('utf-8'),'cName':cName.encode('utf-8'),'rExec':refExc.encode('utf-8')},'MySQL error adding document reference')
+    if (sys.version_info < (3,)):
+      refName = self.conn.connection().connection.escape_string(parameters.name().replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-").replace("\\u2022","*"))
+      refName = self.conn.connection().connection.escape_string(parameters.name().replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-"))
+      docName = self.conn.connection().connection.escape_string(parameters.document().replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-").replace("\\u2022","*"))
+      self.updateDatabase('call addDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName.encode('utf-8'),'dName':docName.encode('utf-8'),'cName':cName.encode('utf-8'),'rExec':refExc.encode('utf-8')},'MySQL error adding document reference')
+    else:
+      self.updateDatabase('call addDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName,'dName':docName,'cName':cName,'rExec':refExc},'MySQL error adding document reference')
     return refId
 
   def updateDocumentReference(self,parameters):
@@ -2967,7 +2978,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.updateDatabase('call addUseCaseStep(:id,:env,:step,:text,:synopsis,:actor,:type)',{'id':ucId,'env':envName,'step':stepNo,'text':step.text(),'synopsis':step.synopsis(),'actor':step.actor(),'type':step.actorType()},'MySQL error adding use case step') 
     for tag in step.tags():
       self.addUseCaseStepTag(ucId,envName,stepNo,tag)
-    for idx,exc in (step.theExceptions).iteritems():
+    for idx,exc in list((step.theExceptions).items()):
       self.addUseCaseStepException(ucId,envName,stepNo,exc[0],exc[1],exc[2],exc[3],exc[4])
 
   def addUseCaseStepTag(self,ucId,envName,stepNo,tag):
@@ -3370,7 +3381,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       g = ObjectFactory.build(goalId,parameters)
       lbl = g.label(envName)
       goals[lbl] = g
-    lbls = goals.keys()
+    lbls = list(goals.keys())
     lbls.sort(key=lambda x: [int(y) for y in x.split('.')])
     return lbls,goals
 
@@ -3386,7 +3397,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       g = ObjectFactory.build(goalId,parameters)
       lbl = g.label(envName)
       goals[lbl] = g
-    lbls = goals.keys()
+    lbls = list(goals.keys())
     if (len(lbls) > 0):
       shortCode = lbls[0].split('-')[0]
       lblNos = []
@@ -3503,7 +3514,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addTag(self,tagObjt,tagName,tagDim, curs):
     try:
       curs.execute('call addTag(%s,%s,%s)',[tagObjt,tagName,tagDim])
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error adding tag ' + tagName + ' to ' + tagDim + ' ' + tagObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
@@ -3518,7 +3529,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for tag in tags:
         self.addTag(dimObjt,tag,dimName, curs)
       curs.close()
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error deleting tags from ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
@@ -3621,7 +3632,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.deleteInterfaces(dimObjt,dimName)
       for ifName,ifType,arName,pName in ifs:
         self.addInterface(dimObjt,ifName,ifType,arName,pName,dimName)
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error adding interfaces to ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
@@ -3815,7 +3826,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       for op in obstructParameters:
         self.addGoalAssociation(op)
  
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error situating ' + cvName + ' component view in ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
@@ -4621,7 +4632,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         except LookupError:
           logger.warning('Unable to get max_sp_recursion_depth. Be sure max_sp_recursion_depth is set to 255 or more.')
 
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error preparing database'
       raise DatabaseProxyException(exceptionText)
@@ -4681,7 +4692,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       b.settings[session_id]['dbName'] = dbName
       self.clearDatabase(session_id)
       self.reconnect(True,session_id)
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error creating CAIRIS database ' + dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
@@ -4718,7 +4729,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       session.execute(stmt)
       session.close()
       tmpConn.remove()
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error creating CAIRIS database ' + dbName + '(id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
@@ -4811,7 +4822,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addTrustBoundary(self,tb):
     tbId = self.newId()
     self.updateDatabase("call addTrustBoundary(:id,:name,:desc)",{'id':tbId,'name':tb.name(),'desc':tb.description()},'MySQL error adding trust boundary ' + str(tbId))
-    for environmentName in tb.environmentProperties().keys():
+    for environmentName in list(tb.environmentProperties().keys()):
       for tbComponentType,tbComponent in tb.environmentProperties()[environmentName]:
         self.addTrustBoundaryComponent(tbId,environmentName,tbComponent)
 
@@ -4822,7 +4833,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def updateTrustBoundary(self,tb):
     self.updateDatabase('call deleteTrustBoundaryComponents(:id)',{'id':tb.id()},'MySQL error deleting trust boundary components for ' + tb.name())
     self.updateDatabase("call updateTrustBoundary(:id,:name,:desc)",{'id':tb.id(),'name':tb.name(),'desc':tb.description()},'MySQL error adding trust boundary ' + tb.name())
-    for environmentName in tb.environmentProperties().keys():
+    for environmentName in list(tb.environmentProperties().keys()):
       for tbComponentType,tbComponent in tb.environmentProperties()[environmentName]:
         self.addTrustBoundaryComponent(tb.id(),environmentName,tbComponent)
 

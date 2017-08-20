@@ -17,7 +17,11 @@
 
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.UseCase import UseCase
 from cairis.core.Trace import Trace
@@ -65,7 +69,7 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.assertIsInstance(usecases, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(usecases), 0, 'No usecases in the dictionary')
     self.logger.info('[%s] Use Cases found: %d', method, len(usecases))
-    usecase = usecases.values()[0]
+    usecase = list(usecases.values())[0]
     self.logger.info('[%s] First usecase: %s [%d]\n', method, usecase['theName'], usecase['theId'])
 
   def test_get_by_name(self):

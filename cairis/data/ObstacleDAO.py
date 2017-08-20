@@ -42,7 +42,7 @@ class ObstacleDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in obstacles.items():
+      for key, value in list(obstacles.items()):
         obstacles[key] = self.simplify(value)
 
     return obstacles
@@ -117,7 +117,7 @@ class ObstacleDAO(CairisDAO):
       if obstacle_name != '': obstacle_filter = 1
 
       associationDictionary = self.db_proxy.obstacleModel(environment_name, obstacle_name, obstacle_filter)
-      associations = KaosModel(associationDictionary.values(), environment_name, 'obstacle',obstacle_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
+      associations = KaosModel(list(associationDictionary.values()), environment_name, 'obstacle',obstacle_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
       dot_code = associations.graph()
       return dot_code
     except DatabaseProxyException as ex:

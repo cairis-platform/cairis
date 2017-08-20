@@ -17,8 +17,11 @@
 
 import logging
 import os
-import httplib
-
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+else: 
+  import httplib
 from flask import Flask, make_response, request, send_from_directory
 from flask import session
 from flask_sqlalchemy import SQLAlchemy
@@ -31,7 +34,7 @@ from jsonpickle import encode
 from cairis.core.Borg import Borg
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
 
-from CairisHTTPError import CairisHTTPError, ARMHTTPError
+from .CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.core.ARM import ARMException, DatabaseProxyException
 from cairis.controllers import AssetController, AttackerController, CImportController, CExportController, DependencyController, \
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
@@ -104,7 +107,7 @@ def set_dbproxy():
 def make_session():
   s = set_dbproxy()
   resp_dict = {'session_id': s['session_id'], 'message': 'Session created'}
-  resp = make_response(encode(resp_dict), httplib.OK)
+  resp = make_response(encode(resp_dict), http.client.OK)
   resp.headers['Content-type'] = 'application/json'
   return resp
 
@@ -198,13 +201,13 @@ def handle_error(error):
 
 @app.errorhandler(AssertionError)
 def handle_asserterror(error):
-  err = CairisHTTPError(httplib.CONFLICT, str(error.message), 'Unmet requirement')
+  err = CairisHTTPError(http.client.CONFLICT, str(error.message), 'Unmet requirement')
   return handle_error(err)
 
 
 @app.errorhandler(KeyError)
 def handle_keyerror(error):
-  err = CairisHTTPError(httplib.BAD_REQUEST, str(error.message), 'Missing attribute')
+  err = CairisHTTPError(http.client.BAD_REQUEST, str(error.message), 'Missing attribute')
   return handle_error(err)
 
 
@@ -226,7 +229,7 @@ def handle_exception(e):
   elif isinstance(e, KeyError):
     return handle_keyerror(e)
   else:
-    new_ex = CairisHTTPError(httplib.INTERNAL_SERVER_ERROR, str(e), 'Unknown error')
+    new_ex = CairisHTTPError(http.client.INTERNAL_SERVER_ERROR, str(e), 'Unknown error')
     return handle_error(new_ex)
 
 def start():

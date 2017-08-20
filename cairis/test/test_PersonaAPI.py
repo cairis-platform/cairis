@@ -17,7 +17,11 @@
 
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.Persona import Persona
 from cairis.core.PersonaEnvironmentProperties import PersonaEnvironmentProperties
@@ -54,7 +58,7 @@ class PersonaAPITests(CairisDaemonTestCase):
     self.assertIsInstance(personas, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(personas), 0, 'No personas in the dictionary')
     self.logger.info('[%s] Personas found: %d', method, len(personas))
-    persona = personas.values()[0]
+    persona = list(personas.values())[0]
     self.logger.info('[%s] First persona: %s [%d]\n', method, persona['theName'], persona['theId'])
 
   def test_get_by_name(self):

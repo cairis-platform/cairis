@@ -17,7 +17,7 @@
 
 __author__ = 'Shamal Faily'
 
-from ObjectCreationParameters import ObjectCreationParameters
+from .ObjectCreationParameters import ObjectCreationParameters
 
 class TaskCharacteristicParameters(ObjectCreationParameters):
   def __init__(self,pName,modQual,cDesc,pcGrounds,pcWarrant,pcBacking,pcRebuttal):

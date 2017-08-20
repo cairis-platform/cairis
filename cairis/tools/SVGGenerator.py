@@ -48,7 +48,7 @@ class SVGGenerator(object):
     try:
       fs_output.write(output)
       fs_output.close()
-    except Exception, ex:
+    except Exception as ex:
       fs_output.close()
       raise ex
 

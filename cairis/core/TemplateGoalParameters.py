@@ -17,7 +17,7 @@
 
 __author__ = 'Shamal Faily'
 
-import ObjectCreationParameters
+from . import ObjectCreationParameters
 
 class TemplateGoalParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,goalName,goalDef,goalRat,goalConcerns,goalResp):

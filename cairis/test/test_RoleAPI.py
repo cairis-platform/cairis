@@ -16,7 +16,11 @@
 #  under the License.
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 from cairis.core.Role import Role
 import jsonpickle
 import os
@@ -70,9 +74,9 @@ class RoleAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(roles, 'No results after deserialization')
     self.assertIsInstance(roles, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(roles), 0, 'No roles in the dictionary')
-    self.assertIsInstance(roles.values()[0], Role)
+    self.assertIsInstance(list(roles.values())[0], Role)
     self.logger.info('[%s] Roles found: %d', method, len(roles))
-    self.logger.info('[%s] First role: %s [%d]\n', method, roles.values()[0].theName, roles.values()[0].theId)
+    self.logger.info('[%s] First role: %s [%d]\n', method, list(roles.values())[0].theName, list(roles.values())[0].theId)
 
   def test_post(self):
     method = 'test_post_new'

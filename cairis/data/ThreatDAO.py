@@ -56,9 +56,9 @@ class ThreatDAO(CairisDAO):
     }
     self.rev_attr_dict = dict()
     self.rev_prop_dict = dict()
-    for key, value in self.attr_dict.items():
+    for key, value in list(self.attr_dict.items()):
       self.rev_attr_dict[value] = key
-    for key, value in self.prop_dict.items():
+    for key, value in list(self.prop_dict.items()):
       self.rev_prop_dict[value] = key
 
   def get_threats(self, constraint_id=-1, simplify=True):
@@ -69,7 +69,7 @@ class ThreatDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in threats.items():
+      for key, value in list(threats.items()):
         threats[key] = self.simplify(value)
 
     return threats
@@ -84,8 +84,8 @@ class ThreatDAO(CairisDAO):
 
     idx = 0
     while found_threat is None and idx < len(threats):
-      if threats.values()[idx].theId == threat_id:
-        found_threat = threats.values()[idx]
+      if list(threats.values())[idx].theId == threat_id:
+        found_threat = list(threats.values())[idx]
       idx += 1
 
     if found_threat is None:

@@ -16,7 +16,7 @@
 #  under the License.
 
 
-import Trace
+from . import Trace
 
 __author__ = 'Shamal Faily'
 

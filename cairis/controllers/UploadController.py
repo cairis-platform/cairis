@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, make_response
 from flask import request
 from flask_restful import Resource
@@ -53,15 +59,15 @@ class UploadImageAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided parameters are invalid'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Unsupported file type'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Image not found'
       }
     ]
@@ -72,7 +78,7 @@ class UploadImageAPI(Resource):
 
     if session_id is None:
       raise CairisHTTPError(
-        status_code=httplib.BAD_REQUEST,
+        status_code=BAD_REQUEST,
         message='The session is neither started or no session ID is provided with the request.'
       )
 
@@ -87,7 +93,7 @@ class UploadImageAPI(Resource):
       raise MissingParameterHTTPError(param_names=['file'])
     except Exception as ex:
       raise CairisHTTPError(
-              status_code=httplib.CONFLICT,
+              status_code=CONFLICT,
               message=str(ex.message),
               status='Unknown error'
       )
@@ -96,6 +102,6 @@ class UploadImageAPI(Resource):
     filename = dao.upload_image(file)
 
     resp_dict = {'message': 'File successfully uploaded', 'filename': filename}
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp

@@ -15,7 +15,14 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+
 from flask import session, request, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -46,7 +53,7 @@ class SecurityPatternsAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
     ]
@@ -57,7 +64,7 @@ class SecurityPatternsAPI(Resource):
     dao = SecurityPatternDAO(session_id)
     sps = dao.get_security_patterns()
     dao.close()
-    resp = make_response(json_serialize(sps, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(sps, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -86,15 +93,15 @@ class SecurityPatternsAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -111,7 +118,7 @@ class SecurityPatternsAPI(Resource):
     dao.add_security_pattern(new_sp)
     dao.close()
     resp_dict = {'message': 'Security Pattern successfully added'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -142,7 +149,7 @@ class SecurityPatternByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
     ]
@@ -153,7 +160,7 @@ class SecurityPatternByNameAPI(Resource):
     dao = SecurityPatternDAO(session_id)
     sp = dao.get_security_pattern(name)
     dao.close()
-    resp = make_response(json_serialize(sp, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(sp, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -191,15 +198,15 @@ class SecurityPatternByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -216,7 +223,7 @@ class SecurityPatternByNameAPI(Resource):
     dao.update_security_pattern(upd_sp,name)
     dao.close()
     resp_dict = {'message': 'Security Pattern successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -246,19 +253,19 @@ class SecurityPatternByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided threat name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       { 
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -271,7 +278,7 @@ class SecurityPatternByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Security Pattern successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -309,7 +316,7 @@ class SituateSecurityPatternAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
     ]
@@ -321,6 +328,6 @@ class SituateSecurityPatternAPI(Resource):
     dao.situate_security_pattern(security_pattern_name,environment_name)
     dao.close()
     resp_dict = {'message': 'Security Pattern successfully situated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

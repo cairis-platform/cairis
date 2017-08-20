@@ -16,8 +16,12 @@
 #  under the License.
 
 import logging
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import jsonpickle
 from cairis.core.Trace import Trace
@@ -55,7 +59,7 @@ class TraceAPITests(CairisDaemonTestCase):
     fromDims = jsonpickle.decode(rv.data)
     self.assertIsNotNone(fromDims, 'No results after deserialization')
     self.logger.info('[%s] Traces found: %d', method, len(fromDims))
-    self.assertEquals(len(fromDims),6)
+    self.assertEqual(len(fromDims),6)
 
     url = '/api/traces/dimensions/requirement/is_from/0?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
@@ -63,7 +67,7 @@ class TraceAPITests(CairisDaemonTestCase):
     toDims = jsonpickle.decode(rv.data)
     self.assertIsNotNone(toDims, 'No results after deserialization')
     self.logger.info('[%s] Traces found: %d', method, len(toDims))
-    self.assertEquals(len(toDims),2)
+    self.assertEqual(len(toDims),2)
 
 
   def test_get_all(self):
@@ -74,7 +78,7 @@ class TraceAPITests(CairisDaemonTestCase):
     trs = jsonpickle.decode(rv.data)
     self.assertIsNotNone(trs, 'No results after deserialization')
     self.logger.info('[%s] Traces found: %d', method, len(trs))
-    self.assertEquals(len(trs),0)
+    self.assertEqual(len(trs),0)
 
   def test_post(self):
     method = 'test_post_new'

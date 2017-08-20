@@ -15,8 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from Location import Location
-from ObjectCreationParameters import ObjectCreationParameters
+from .Location import Location
+from .ObjectCreationParameters import ObjectCreationParameters
 
 __author__ = 'Shamal Faily'
 

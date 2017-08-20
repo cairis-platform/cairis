@@ -44,7 +44,7 @@ class TemplateAssetDAO(CairisDAO):
       'Unobservability': cairis.core.armid.UNO_PROPERTY
     }
     self.rev_attr_dict = {}
-    for key, value in self.attr_dict.items():
+    for key, value in list(self.attr_dict.items()):
       self.rev_attr_dict[value] = key
     self.rev_value_dict = {0:'None', 1:'Low',2:'Medium', 3:'High'}
 
@@ -63,7 +63,7 @@ class TemplateAssetDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
-    for key, value in tas.items():
+    for key, value in list(tas.items()):
       tas[key] = self.simplify(value)
     return tas
 

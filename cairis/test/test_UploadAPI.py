@@ -17,8 +17,13 @@
 
 import logging
 import os
-import urllib
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  import urllib.request, urllib.parse, urllib.error
+  from io import StringIO
+else:
+  import urllib
+  from StringIO import StringIO
 import jsonpickle
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 
@@ -31,7 +36,13 @@ class UploadAPITests(CairisDaemonTestCase):
 
   def test_image_upload(self):
     method = 'test_image_upload'
-    name, request = urllib.urlretrieve('http://high-resolution-photos.com/stock_photos/royalty_free_3.jpg')
+
+    name = ''
+    request = ''
+    if (sys.version_info > (3,)):
+      name, request = urllib.request.urlretrieve('http://high-resolution-photos.com/stock_photos/royalty_free_3.jpg')
+    else:
+      name, request = urllib.urlretrieve('http://high-resolution-photos.com/stock_photos/royalty_free_3.jpg')
     if name and os.path.exists(name):
       fs_image = open(name, 'rb')
       image_bytes = fs_image.read()
@@ -40,14 +51,21 @@ class UploadAPITests(CairisDaemonTestCase):
       })
       self.logger.info('[%s] Response data: %s', method, rv.data)
       json_dict = jsonpickle.decode(rv.data)
-      self.assertTrue(json_dict.has_key('filename'), 'Image was not saved on the server')
+      self.assertTrue('filename' in json_dict, 'Image was not saved on the server')
     else:
       self.fail('Image could not be downloaded from the Internet.')
 
   def test_big_image_upload(self):
     method = 'test_big_image_upload'
     self.logger.info('[%s] Downloading a big image. This could take a while...', method)
-    name, request = urllib.urlretrieve('http://upload.wikimedia.org/wikipedia/commons/d/d4/Nature_landscape_ukraine_poltava_(8093169218).jpg')
+
+    name = ''
+    request = ''
+    if (sys.version_info > (3,)):
+      name, request = urllib.request.urlretrieve('http://upload.wikimedia.org/wikipedia/commons/d/d4/Nature_landscape_ukraine_poltava_(8093169218).jpg')
+    else:
+      name, request = urllib.urlretrieve('http://upload.wikimedia.org/wikipedia/commons/d/d4/Nature_landscape_ukraine_poltava_(8093169218).jpg')
+
     if name and os.path.exists(name):
       fs_image = open(name, 'rb')
       image_bytes = fs_image.read()

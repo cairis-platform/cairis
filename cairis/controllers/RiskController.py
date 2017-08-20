@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -57,7 +63,7 @@ class RisksAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -69,7 +75,7 @@ class RisksAPI(Resource):
 
     dao = RiskDAO(session_id)
     risks = dao.get_risks(constraint_id)
-    resp = make_response(json_serialize(risks, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(risks, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -97,7 +103,7 @@ class RisksAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       },
       {
@@ -119,7 +125,7 @@ class RisksAPI(Resource):
     risk_id = dao.add_risk(risk)
 
     resp_dict = {'message': 'Risk successfully added', 'risk_id': risk_id}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -141,7 +147,7 @@ class RiskByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -154,7 +160,7 @@ class RiskByNameAPI(Resource):
     found_risk = dao.get_risk_by_name(name)
     dao.close()
 
-    resp = make_response(json_serialize(found_risk, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(found_risk, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -182,11 +188,11 @@ class RiskByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
@@ -208,7 +214,7 @@ class RiskByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Risk successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -228,11 +234,11 @@ class RiskByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
@@ -253,7 +259,7 @@ class RiskByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Risk successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -276,7 +282,7 @@ class RiskAnalysisModelAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -305,7 +311,7 @@ class RiskAnalysisModelAPI(Resource):
     dot_code = dao.get_risk_analysis_model(environment, dim_name, obj_name, renderer)
     dao.close()
 
-    resp = make_response(model_generator.generate(dot_code, model_type='risk', renderer=renderer), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code, model_type='risk', renderer=renderer), OK)
 
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
@@ -333,7 +339,7 @@ class RisksScoreByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -345,7 +351,7 @@ class RisksScoreByNameAPI(Resource):
     dao = RiskDAO(session_id)
     risk_scores = dao.get_scores_by_rtve(name, threat, vulnerability, environment)
 
-    resp = make_response(json_serialize(risk_scores, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(risk_scores, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -368,7 +374,7 @@ class RisksRatingByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -380,7 +386,7 @@ class RisksRatingByNameAPI(Resource):
     dao = RiskDAO(session_id)
     risk_rating = dao.get_risk_rating_by_tve(threat, vulnerability, environment)
 
-    resp = make_response(json_serialize(risk_rating, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(risk_rating, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -402,7 +408,7 @@ class RiskAnalysisModelNamesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -412,6 +418,6 @@ class RiskAnalysisModelNamesAPI(Resource):
     session_id = get_session_id(session, request)
     dao = RiskDAO(session_id)
     element_names = dao.risk_model_elements(environment)
-    resp = make_response(json_serialize(element_names, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(element_names, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp

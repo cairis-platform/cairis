@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from PropertyHolder import PropertyHolder;
+from .PropertyHolder import PropertyHolder;
 from numpy import *
 
 __author__ = 'Shamal Faily'
@@ -90,7 +90,7 @@ class Countermeasure:
                 workingTargets[currentTargetName] = t
             else:
               workingTargets[currentTargetName] = t
-      return workingTargets.values()
+      return list(workingTargets.values())
 
   def propertyList(self,environmentName,dupProperty,overridingEnvironment):
     if (len(dupProperty) == 0):
@@ -170,4 +170,4 @@ class Countermeasure:
       return set(mergedPersonas)
 
   def environments(self):
-    return self.theEnvironmentDictionary.keys()
+    return list(self.theEnvironmentDictionary.keys())

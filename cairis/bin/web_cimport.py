@@ -22,8 +22,12 @@ import glob
 import imghdr
 import argparse
 import os
-from urllib import quote
 import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+
 
 __author__ = 'Shamal Faily'
 
@@ -71,6 +75,6 @@ def file_import(importFile,url,dbName,createDb,overwrite,mFormat):
 if __name__ == '__main__':
   try:
     main()
-  except Exception, e:
-    print "Fatal web_cimport error: " + str(e)
+  except Exception as e:
+    print("Fatal web_cimport error: " + str(e))
     sys.exit(-1)

@@ -16,7 +16,11 @@
 #  under the License.
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.Threat import Threat
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
@@ -57,7 +61,7 @@ class ThreatAPITests(CairisDaemonTestCase):
         self.assertIsInstance(threats, dict, 'The result is not a dictionary as expected')
         self.assertGreater(len(threats), 0, 'No threats in the dictionary')
         self.logger.info('[%s] Threats found: %d', method, len(threats))
-        threat = threats.values()[0]
+        threat = list(threats.values())[0]
         self.logger.info('[%s] First threat: %s [%d]\n', method, threat['theThreatName'], threat['theId'])
 
     def test_get_by_name(self):
@@ -187,7 +191,7 @@ class ThreatAPITests(CairisDaemonTestCase):
         json_resp = jsonpickle.decode(rv.data)
         self.assertIsNotNone(json_resp, 'No results after deserialization')
         ackMsg = json_resp.get('message', None)
-        self.assertEquals(ackMsg, 'Threat type successfully added')
+        self.assertEqual(ackMsg, 'Threat type successfully added')
 
         rv = self.app.delete('/api/threats/types/name/%s?session_id=test' % quote(self.prepare_new_threat_type().theName))
 
@@ -205,7 +209,7 @@ class ThreatAPITests(CairisDaemonTestCase):
         json_resp = jsonpickle.decode(rv.data)
         self.assertIsNotNone(json_resp, 'No results after deserialization')
         ackMsg = json_resp.get('message', None)
-        self.assertEquals(ackMsg, 'Threat type successfully added')
+        self.assertEqual(ackMsg, 'Threat type successfully added')
 
         type_to_update = self.prepare_new_threat_type()
         type_to_update.theName = 'Edited test threat type'

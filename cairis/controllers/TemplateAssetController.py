@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful_swagger import swagger
 from flask_restful import Resource
@@ -46,7 +52,7 @@ class TemplateAssetsAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -88,15 +94,15 @@ class TemplateAssetsAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -110,7 +116,7 @@ class TemplateAssetsAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Template Asset successfully added'}
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -133,7 +139,7 @@ class TemplateAssetByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -174,15 +180,15 @@ class TemplateAssetByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -196,7 +202,7 @@ class TemplateAssetByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Template Asset successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -216,15 +222,15 @@ class TemplateAssetByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -238,6 +244,6 @@ class TemplateAssetByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Template Asset successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

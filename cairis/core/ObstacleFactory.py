@@ -15,8 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from ObstacleParameters import ObstacleParameters
-from ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
+from .ObstacleParameters import ObstacleParameters
+from .ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
 
 __author__ = 'Shamal Faily'
 

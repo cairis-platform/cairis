@@ -17,7 +17,11 @@
 
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.Attacker import Attacker
 from cairis.core.AttackerEnvironmentProperties import AttackerEnvironmentProperties
@@ -64,7 +68,7 @@ class AttackerAPITests(CairisDaemonTestCase):
     self.assertIsInstance(attackers, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(attackers), 0, 'No attackers in the dictionary')
     self.logger.info('[%s] Attackers found: %d', method, len(attackers))
-    attacker = attackers.values()[0]
+    attacker = list(attackers.values())[0]
     self.logger.info('[%s] First attacker: %s [%d]\n', method, attacker['theName'], attacker['theId'])
 
   def test_get_by_name(self):

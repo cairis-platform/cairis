@@ -16,11 +16,11 @@
 #  under the License.
 
 
-from ARM import *
-from MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
-from MisuseCase import MisuseCase
+from .ARM import *
+from .MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
+from .MisuseCase import MisuseCase
 from cairis.tools.PseudoClasses import RiskRating
-from Borg import Borg
+from .Borg import Borg
 
 __author__ = 'Shamal Faily'
 

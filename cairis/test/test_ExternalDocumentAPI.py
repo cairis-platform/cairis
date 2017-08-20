@@ -16,8 +16,12 @@
 #  under the License.
 
 import logging
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import jsonpickle
 from cairis.core.ExternalDocument import ExternalDocument
@@ -60,7 +64,7 @@ class ExternalDocumentAPITests(CairisDaemonTestCase):
     self.assertIsInstance(edocs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(edocs), 0, 'No external documents in the dictionary')
     self.logger.info('[%s] External documents found: %d', method, len(edocs))
-    edoc = edocs.values()[0]
+    edoc = list(edocs.values())[0]
     self.logger.info('[%s] First external document: %s [%d]\n', method, edoc['theName'], edoc['theId'])
 
   def test_get_by_name(self):

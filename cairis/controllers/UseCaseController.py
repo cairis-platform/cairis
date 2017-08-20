@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -57,7 +63,7 @@ class UseCasesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -71,7 +77,7 @@ class UseCasesAPI(Resource):
     usecases = dao.get_usecases(constraint_id=constraint_id)
     dao.close()
 
-    resp = make_response(json_serialize(usecases, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(usecases, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -99,15 +105,15 @@ class UseCasesAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -128,7 +134,7 @@ class UseCasesAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'UseCase successfully added', 'usecase_id': usecase_id}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -150,7 +156,7 @@ class UseCaseByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -163,7 +169,7 @@ class UseCaseByNameAPI(Resource):
     usecase = dao.get_usecase_by_name(name=name)
     dao.close()
 
-    resp = make_response(json_serialize(usecase, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(usecase, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -191,11 +197,11 @@ class UseCaseByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'UseCase' is defined.'''
       }
     ]
@@ -216,7 +222,7 @@ class UseCaseByNameAPI(Resource):
 
 
     resp_dict = {'message': 'UseCase successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -236,19 +242,19 @@ class UseCaseByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided usecase name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -262,7 +268,7 @@ class UseCaseByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'UseCase successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -291,11 +297,11 @@ class UseCaseRequirementsByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       },
       {
-        "code": httplib.CONFLICT,
+        "code": CONFLICT,
         "message": "Database conflict"
       }
 
@@ -309,7 +315,7 @@ class UseCaseRequirementsByNameAPI(Resource):
     reqs = dao.get_usecase_requirements(usecase_name)
     dao.close()
 
-    resp = make_response(json_serialize(reqs, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(reqs, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -346,11 +352,11 @@ class UseCaseGoalsByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       },
       {
-        "code": httplib.CONFLICT,
+        "code": CONFLICT,
         "message": "Database conflict"
       }
 
@@ -364,7 +370,7 @@ class UseCaseGoalsByNameAPI(Resource):
     goals = dao.get_usecase_goals(usecase_name,environment_name)
     dao.close()
 
-    resp = make_response(json_serialize(goals, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(goals, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -418,15 +424,15 @@ class UseCaseExceptionAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -445,6 +451,6 @@ class UseCaseExceptionAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Obstacle generated from exception'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

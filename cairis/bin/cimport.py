@@ -94,10 +94,10 @@ if __name__ == '__main__':
   try:
     from cairis.core.ARM import ARMException
     main()
-  except ImportError, e:
-    print "Fatal CAIRIS error: " + str(e)
+  except ImportError as e:
+    print("Fatal CAIRIS error: " + str(e))
     sys.exit(-1)
-  except ARMException, e:
-    print 'Fatal cimport error: ' + str(e)
+  except ARMException as e:
+    print('Fatal cimport error: ' + str(e))
     sys.exit(-1)
 

@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from AssetParameters import AssetParameters
+from .AssetParameters import AssetParameters
 from numpy import *
 
 __author__ = 'Shamal Faily'

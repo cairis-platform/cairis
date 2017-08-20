@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -66,7 +72,7 @@ class RequirementsAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       },
       {
@@ -89,7 +95,7 @@ class RequirementsAPI(Resource):
     reqs = dao.get_requirements(constraint_id=constraint_id, ordered=(ordered=='1'))
     dao.close()
 
-    resp = make_response(json_serialize(reqs, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(reqs, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
@@ -158,7 +164,7 @@ class RequirementsAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Requirement successfully added'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -190,7 +196,7 @@ class RequirementsByAssetAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       },
       {
@@ -212,7 +218,7 @@ class RequirementsByAssetAPI(Resource):
     reqs = dao.get_requirements(constraint_id=name, is_asset=True, ordered=(ordered=='1'))
     dao.close()
 
-    resp = make_response(json_serialize(reqs, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(reqs, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -245,7 +251,7 @@ class RequirementsByEnvironmentAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       },
       {
@@ -267,7 +273,7 @@ class RequirementsByEnvironmentAPI(Resource):
     reqs = dao.get_requirements(constraint_id=name, is_asset=False, ordered=(ordered=='1'))
     dao.close()
 
-    resp = make_response(json_serialize(reqs, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(reqs, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -290,7 +296,7 @@ class RequirementByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       },
       {
@@ -315,7 +321,7 @@ class RequirementByNameAPI(Resource):
     req = dao.get_requirement_by_name(name)
     dao.close()
 
-    resp = make_response(json_serialize(req, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(req, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -361,7 +367,7 @@ class RequirementByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Requirement successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -407,7 +413,7 @@ class RequirementByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Requirement successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -450,7 +456,7 @@ class RequirementByShortcodeAPI(Resource):
     req = dao.get_requirement_by_shortcode(shortcode)
     dao.close()
 
-    resp = make_response(json_serialize(req, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(req, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -487,7 +493,7 @@ class ConceptMapModelAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -507,7 +513,7 @@ class ConceptMapModelAPI(Resource):
     if not isinstance(dot_code, str):
       raise ObjectNotFoundHTTPError('The model')
 
-    resp = make_response(model_generator.generate(dot_code,renderer='dot'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code,renderer='dot'), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'

@@ -64,7 +64,7 @@ class Response:
                 roleDictionary[role] = cost
           else:
             roleDictionary[role] = (role,cost)
-      return roleDictionary.values()
+      return list(roleDictionary.values())
 
   def roleNames(self,environmentName,dupProperty,overridingEnvironment):
     if (self.theResponseType != 'Transfer'):
@@ -88,7 +88,7 @@ class Response:
                 roleDictionary[role] = cost
           else:
             roleDictionary[role] = (role,cost)
-      return roleDictionary.keys()
+      return list(roleDictionary.keys())
 
 
   def cost(self,environmentName,dupProperty,overridingEnvironment):

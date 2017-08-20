@@ -19,14 +19,18 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 import logging
 import os
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+else:
+  import httplib
 from flask import Flask
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_cors import CORS
 from cairis.core.Borg import Borg
-import WebConfig
-from cdb import db
-from models import User, Role
+from cairis.daemon.WebConfig import *
+from .cdb import db
+from .models import User, Role
 
 
 def create_app():
@@ -55,7 +59,7 @@ def create_app():
   user_datastore = SQLAlchemyUserDatastore(db,User, Role)
   security = Security(app, user_datastore)
 
-  from main import main as main_blueprint 
+  from .main import main as main_blueprint 
   app.register_blueprint(main_blueprint)
 
   with app.app_context():

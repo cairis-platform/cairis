@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -57,7 +63,7 @@ class DomainPropertiesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -71,7 +77,7 @@ class DomainPropertiesAPI(Resource):
     domain_properties = dao.get_domain_properties(constraint_id=constraint_id)
     dao.close()
 
-    resp = make_response(json_serialize(domain_properties, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(domain_properties, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -99,15 +105,15 @@ class DomainPropertiesAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -126,7 +132,7 @@ class DomainPropertiesAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'DomainProperty successfully added'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -148,7 +154,7 @@ class DomainPropertiesByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -161,7 +167,7 @@ class DomainPropertiesByNameAPI(Resource):
     domain_property = dao.get_domain_property_by_name(name=name)
     dao.close()
 
-    resp = make_response(json_serialize(domain_property, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(domain_property, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -189,11 +195,11 @@ class DomainPropertiesByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'DomainProperty' is defined.'''
       }
     ]
@@ -208,7 +214,7 @@ class DomainPropertiesByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'DomainProperty successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -228,19 +234,19 @@ class DomainPropertiesByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided domainProperty name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -254,6 +260,6 @@ class DomainPropertiesByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'DomainProperty successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

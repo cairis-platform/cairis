@@ -16,7 +16,7 @@
 #  under the License.
 
 
-import TraceParameters
+from . import TraceParameters
 
 __author__ = 'Shamal Faily'
 

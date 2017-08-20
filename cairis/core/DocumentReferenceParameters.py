@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from ObjectCreationParameters import ObjectCreationParameters
+from .ObjectCreationParameters import ObjectCreationParameters
 
 __author__ = 'Shamal Faily'
 

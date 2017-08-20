@@ -17,8 +17,12 @@
 
 import logging
 import json
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import jsonpickle
 import cairis.core.BorgFactory
@@ -89,7 +93,7 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     self.assertIsInstance(tas, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(tas), 0, 'No template assets in the dictionary')
     self.logger.info('[%s] Template assets found: %d', method, len(tas))
-    ta = tas.values()[0]
+    ta = list(tas.values())[0]
     self.logger.info('[%s] First template asset: %s \n', method, ta['theName'])
 
   def test_get_by_name(self):

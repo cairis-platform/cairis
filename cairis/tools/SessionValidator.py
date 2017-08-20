@@ -15,7 +15,11 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+else: 
+  import httplib
 import logging
 from cairis.core.ARM import DatabaseProxyException
 from cairis.core.Borg import Borg
@@ -104,12 +108,12 @@ def validate_proxy(session, id, request=None, conf=None):
           return db_proxy
         else:
           raise CairisHTTPError(
-            status_code=httplib.CONFLICT,
+            status_code=http.client.CONFLICT,
             message='The database connection could not be created.'
           )
       except DatabaseProxyException:
         raise CairisHTTPError(
-          status_code=httplib.BAD_REQUEST,
+          status_code=http.client.BAD_REQUEST,
           message='The provided settings are invalid and cannot be used to create a database connection'
         )
 
@@ -121,19 +125,19 @@ def validate_proxy(session, id, request=None, conf=None):
 
     if db_proxy is None:
       raise CairisHTTPError(
-        status_code=httplib.CONFLICT,
+        status_code=http.client.CONFLICT,
         message='The database connection could not be created.'
       )
     elif isinstance(db_proxy, MySQLDatabaseProxy):
       return db_proxy
     else:
       raise CairisHTTPError(
-        status_code=httplib.CONFLICT,
+        status_code=http.client.CONFLICT,
         message='The database connection was not properly set up. Please try to reset the connection.'
       )
   else:
     raise CairisHTTPError(
-      status_code=httplib.BAD_REQUEST,
+      status_code=http.client.BAD_REQUEST,
       message='The session is neither started or no session ID is provided with the request.'
     )
 
@@ -154,19 +158,19 @@ def get_fonts(session_id=None):
 
     if fontName is None or fontSize is None or apFontName is None:
       raise CairisHTTPError(
-        status_code=httplib.BAD_REQUEST,
+        status_code=http.client.BAD_REQUEST,
         message='The method is not callable without setting up the project settings.'
       )
     elif isinstance(fontName, str) and isinstance(fontSize, str) and isinstance(apFontName, str):
       return fontName, fontSize, apFontName
     else:
       raise CairisHTTPError(
-        status_code=httplib.BAD_REQUEST,
+        status_code=http.client.BAD_REQUEST,
         message='The database connection was not properly set up. Please try to reset the connection.'
       )
   else:
     raise CairisHTTPError(
-      status_code=httplib.BAD_REQUEST,
+      status_code=http.client.BAD_REQUEST,
       message='The method is not callable without setting up the project settings.'
     )
 

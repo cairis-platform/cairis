@@ -17,7 +17,11 @@
 
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.Obstacle import Obstacle
 from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
@@ -53,7 +57,7 @@ class ObstacleAPITests(CairisDaemonTestCase):
     self.assertIsInstance(obstacles, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(obstacles), 0, 'No obstacles in the dictionary')
     self.logger.info('[%s] Obstacles found: %d', method, len(obstacles))
-    obstacle = obstacles.values()[0]
+    obstacle = list(obstacles.values())[0]
     self.logger.info('[%s] First obstacle: %s [%d]\n', method, obstacle['theName'], obstacle['theId'])
     
   def test_get_by_name(self):

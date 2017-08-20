@@ -29,7 +29,7 @@ from cairis.core.MisuseCase import MisuseCase
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from cairis.core.Requirement import Requirement
 from cairis.core.RiskParameters import RiskParameters
-from ModelDefinitions import AssetEnvironmentPropertiesModel, SecurityAttribute
+from .ModelDefinitions import AssetEnvironmentPropertiesModel, SecurityAttribute
 
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -98,7 +98,7 @@ def json_deserialize(string, class_name=None):
     obj = deserialize(string)
     if isinstance(obj, Environment):
       tensions = {}
-      for key, value in obj.theTensions.items():
+      for key, value in list(obj.theTensions.items()):
         key = str(key)
         attrs = key.strip('(').strip(')').split(',')
         if len(attrs) == 2:
@@ -120,7 +120,7 @@ def json_deserialize(string, class_name=None):
 
     if isinstance(obj, dict):
       if class_name == 'asset':
-        from CairisHTTPError import MalformedJSONHTTPError
+        from cairis.daemon.CairisHTTPError import MalformedJSONHTTPError
         raise MalformedJSONHTTPError()
       elif class_name == 'goal':
         obj = deserialize_goal(dict)
@@ -129,7 +129,7 @@ def json_deserialize(string, class_name=None):
 
     return obj
   except Exception as ex:
-    from CairisHTTPError import handle_exception
+    from cairis.daemon.CairisHTTPError import handle_exception
     handle_exception(ex)
 
 def deserialize_goal(dict):

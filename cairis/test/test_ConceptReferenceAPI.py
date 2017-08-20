@@ -16,8 +16,12 @@
 #  under the License.
 
 import logging
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import jsonpickle
 from cairis.core.ConceptReference import ConceptReference
@@ -58,7 +62,7 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     self.assertIsInstance(crs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(crs), 0, 'No concept references in the dictionary')
     self.logger.info('[%s] Concept references found: %d', method, len(crs))
-    cr = crs.values()[0]
+    cr = list(crs.values())[0]
     self.logger.info('[%s] First concept reference: %s [%d]\n', method, cr['theName'], cr['theId'])
 
   def test_get_by_name(self):

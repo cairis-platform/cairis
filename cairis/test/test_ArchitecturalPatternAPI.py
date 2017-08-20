@@ -19,8 +19,11 @@
 import logging
 import json
 import jsonpickle
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
@@ -113,7 +116,7 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
-    self.assertEquals(msg, 'Architectural Pattern successfully added')
+    self.assertEqual(msg, 'Architectural Pattern successfully added')
 
   def test_put(self):
     url = '/api/architectural_patterns/name/Context%20Policy%20Management?session_id=test'
@@ -130,7 +133,7 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
-    self.assertEquals(msg, 'Architectural Pattern successfully updated')
+    self.assertEqual(msg, 'Architectural Pattern successfully updated')
 
   def test_component_asset_model(self):
     url = '/api/architectural_patterns/component/asset/model/Policy%20Manager?session_id=test'
@@ -139,7 +142,7 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     rv = self.app.get(url, content_type='application/json')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEquals(rv.data.find('svg'),1)
+    self.assertEqual(rv.data.find('svg'),1)
 
   def test_component_goal_model(self):
     url = '/api/architectural_patterns/component/goal/model/Policy%20Manager?session_id=test'
@@ -148,7 +151,7 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     rv = self.app.get(url, content_type='application/json')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEquals(rv.data.find('svg'),1)
+    self.assertEqual(rv.data.find('svg'),1)
 
   def test_component_model(self):
     url = '/api/architectural_patterns/component/model/Context%20Policy%20Management?session_id=test'
@@ -157,7 +160,7 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     rv = self.app.get(url, content_type='application/json')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEquals(rv.data.find('svg'),1)
+    self.assertEqual(rv.data.find('svg'),1)
 
   def test_weakness_analysis(self):
     importComponentViewFile(os.environ['CAIRIS_SRC'] + '/test/ContextPolicyManagement.xml','test')
@@ -179,7 +182,7 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
-    self.assertEquals(msg, 'Architectural Pattern successfully situated')
+    self.assertEqual(msg, 'Architectural Pattern successfully situated')
 
   def prepare_json(self, ap):
     data_dict = {'session_id' : 'test','object' : ap}

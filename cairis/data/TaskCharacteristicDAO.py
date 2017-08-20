@@ -49,7 +49,7 @@ class TaskCharacteristicDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in tcs.items():
+      for key, value in list(tcs.items()):
         tcs[key] = self.convert_tcrs(real_tc=value) 
 
     return tcs

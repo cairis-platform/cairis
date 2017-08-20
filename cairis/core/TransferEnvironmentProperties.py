@@ -17,7 +17,7 @@
 
 __author__ = 'Shamal Faily'
 
-from EnvironmentProperties import EnvironmentProperties
+from .EnvironmentProperties import EnvironmentProperties
 
 class TransferEnvironmentProperties(EnvironmentProperties):
   def __init__(self,environmentName,rationale = '',roles = []):

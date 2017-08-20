@@ -17,10 +17,8 @@
 
 import logging
 import os
-
 from cairis.core.Borg import Borg
 import cairis.core.BorgFactory
-
 
 __author__ = 'Robin Quetin'
 
@@ -30,17 +28,17 @@ logger = logging.getLogger('cairisd')
 def config(settings):
   logger.info('Starting CAIRIS as web daemon')
 
-  if settings.has_key('configFile'):
+  if 'configFile' in settings:
     loadSettingsFromFile(settings['configFile'])
   else:
     loadSettingsFromFile()
-  if settings.has_key('staticDir'):
+  if 'staticDir' in settings:
     setStaticDir(settings['staticDir'])
-  if settings.has_key('port'):
+  if 'port' in settings:
     setPort(int(settings['port']))
-  if settings.has_key('loggingLevel'):
+  if 'loggingLevel' in settings:
     setLoglevel(settings['loggingLevel'])
-  if settings.has_key('unitTesting'):
+  if 'unitTesting' in settings:
     setUnitTesting(settings['unitTesting'])
 
   logParams()

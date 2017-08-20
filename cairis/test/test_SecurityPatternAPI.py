@@ -19,8 +19,12 @@
 import logging
 import json
 import jsonpickle
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import jsonpickle
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
@@ -101,7 +105,7 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
-    self.assertEquals(msg, 'Security Pattern successfully added')
+    self.assertEqual(msg, 'Security Pattern successfully added')
 
   def test_put(self):
     url = '/api/security_patterns/name/TestPattern?session_id=test'
@@ -118,7 +122,7 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
-    self.assertEquals(msg, 'Security Pattern successfully updated')
+    self.assertEqual(msg, 'Security Pattern successfully updated')
 
   def test_situate_security_pattern(self):
     importSecurityPatternsFile(os.environ['CAIRIS_SRC'] + '/../examples/architecture/schumacher_patterns.xml','test')
@@ -130,7 +134,7 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
-    self.assertEquals(msg, 'Security Pattern successfully situated')
+    self.assertEqual(msg, 'Security Pattern successfully situated')
 
   def prepare_json(self, sp):
     data_dict = {'session_id' : 'test','object' : sp}

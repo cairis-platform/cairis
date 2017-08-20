@@ -19,8 +19,8 @@
 __author__ = 'Shamal Faily'
 
 
-from EnvironmentProperties import EnvironmentProperties
-from Steps import Steps
+from .EnvironmentProperties import EnvironmentProperties
+from .Steps import Steps
 
 class UseCaseEnvironmentProperties(EnvironmentProperties):
   def __init__(self,environmentName,preCond='',steps = None,postCond=''):

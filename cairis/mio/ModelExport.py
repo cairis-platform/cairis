@@ -71,7 +71,7 @@ def drawGraph(graph,graphName):
 def buildConceptMap(p,envName,graphName):
   from cairis.gui.kaosxdot import KaosXDotParser
   from cairis.gui.ConceptMapModel import ConceptMapModel
-  model = ConceptMapModel(p.conceptMapModel(envName).values(),envName,'',True)
+  model = ConceptMapModel(list(p.conceptMapModel(envName).values()),envName,'',True)
   if (model.size() == 0):
     return False
   parser = KaosXDotParser('conceptmap',model.graph())
@@ -107,7 +107,7 @@ def exportRedmineUseCases(outFile,session_id = None):
   for ucName,ucShortCode,ucAuthor,ucTxt in rmUseCases:
     ucCat = re.sub('[0-9]','',ucShortCode)
     ucDict[ucCat].append( (ucName,ucShortCode,ucAuthor,ucTxt))
-  fnlCats = ucDict.keys()
+  fnlCats = list(ucDict.keys())
   fnlCats.sort()
 
   for fnlCat in fnlCats:
@@ -124,7 +124,7 @@ def exportRedmineRequirements(outFileName,session_id = None):
   b = Borg()
   reqs = b.get_dbproxy(session_id).getRedmineRequirements()
 
-  envNames = reqs.keys()
+  envNames = list(reqs.keys())
   envNames.sort()
   outputDir = os.environ['OUTPUT_DIR']
 
@@ -185,7 +185,7 @@ def buildComponentAssetModel(p,cName,graphName):
   from cairis.gui.kaosxdot import KaosXDotParser
   from cairis.gui.AssetModel import AssetModel
   assocs = p.componentAssetModel(cName)
-  model = AssetModel(assocs.values(),'')
+  model = AssetModel(list(assocs.values()),'')
   parser = KaosXDotParser('class',model.graph())
   graph = parser.parse()
   drawGraph(graph,graphName)
@@ -195,7 +195,7 @@ def buildComponentGoalModel(p,cName,graphName):
   from cairis.gui.kaosxdot import KaosXDotParser
   from cairis.gui.KaosModel import KaosModel
   assocs = p.componentGoalModel(cName)
-  model = KaosModel(assocs.values(),'','template_goal')
+  model = KaosModel(list(assocs.values()),'','template_goal')
   parser = KaosXDotParser('goal',model.graph())
   graph = parser.parse()
   drawGraph(graph,graphName)
@@ -205,7 +205,7 @@ def buildRiskObstacleModel(p,apName,envName,graphName):
   from cairis.gui.kaosxdot import KaosXDotParser
   from cairis.gui.KaosModel import KaosModel
   assocs = p.riskObstacleModel(apName,envName)
-  model = KaosModel(assocs.values(),envName,'obstacle',apName)
+  model = KaosModel(list(assocs.values()),envName,'obstacle',apName)
   parser = KaosXDotParser('obstacle',model.graph())
   graph = parser.parse()
   drawGraph(graph,graphName)

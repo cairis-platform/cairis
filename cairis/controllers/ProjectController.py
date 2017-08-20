@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -46,7 +52,7 @@ class ProjectCreateAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided parameters are invalid'
       }
     ]
@@ -60,7 +66,7 @@ class ProjectCreateAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'New project successfully created'}
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -90,7 +96,7 @@ class ProjectCreateDatabaseAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided parameters are invalid'
       }
     ]
@@ -102,7 +108,7 @@ class ProjectCreateDatabaseAPI(Resource):
     dao.create_new_database(db_name)
     dao.close()
     resp_dict = {'message': 'New database successfully created'}
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -133,7 +139,7 @@ class ProjectOpenDatabaseAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided parameters are invalid'
       }
     ]
@@ -145,7 +151,7 @@ class ProjectOpenDatabaseAPI(Resource):
     dao.open_database(db_name)
     dao.close()
     resp_dict = {'message': 'Database successfully opened'}
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -176,7 +182,7 @@ class ProjectDeleteDatabaseAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided parameters are invalid'
       }
     ]
@@ -188,7 +194,7 @@ class ProjectDeleteDatabaseAPI(Resource):
     dao.delete_database(db_name)
     dao.close()
     resp_dict = {'message': 'Database successfully deleted'}
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -212,7 +218,7 @@ class ProjectShowDatabasesAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided parameters are invalid'
       }
     ]
@@ -223,7 +229,7 @@ class ProjectShowDatabasesAPI(Resource):
     dao = ProjectDAO(session_id)
     dbs = dao.show_databases()
     dao.close()
-    resp = make_response(json_serialize(dbs, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(dbs, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -245,7 +251,7 @@ class ProjectSettingsAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided parameters are invalid'
       }
     ]
@@ -257,7 +263,7 @@ class ProjectSettingsAPI(Resource):
     dao = ProjectDAO(session_id)
     settings = dao.get_settings()
 
-    resp = make_response(json_serialize(settings, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(settings, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -285,7 +291,7 @@ class ProjectSettingsAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided parameters are invalid'
       }
     ]
@@ -300,6 +306,6 @@ class ProjectSettingsAPI(Resource):
     dao.apply_settings(settings)
 
     resp_dict = {'message': 'Project settings successfully updated'}
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp

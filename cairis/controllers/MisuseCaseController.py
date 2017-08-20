@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -45,7 +51,7 @@ class MisuseCasesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -59,7 +65,7 @@ class MisuseCasesAPI(Resource):
     misuse_cases = dao.get_misuse_cases(constraintsId)
     dao.close()
 
-    resp = make_response(json_serialize(misuse_cases, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(misuse_cases, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -82,7 +88,7 @@ class MisuseCaseByRiskNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -95,7 +101,7 @@ class MisuseCaseByRiskNameAPI(Resource):
     found_misuse_case = dao.get_misuse_case_by_risk_name(risk_name)
     dao.close()
 
-    resp = make_response(json_serialize(found_misuse_case, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(found_misuse_case, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -117,7 +123,7 @@ class MisuseCaseByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -130,7 +136,7 @@ class MisuseCaseByNameAPI(Resource):
     found_misuse_case = dao.get_misuse_case_by_name(misuse_case_name)
     dao.close()
 
-    resp = make_response(json_serialize(found_misuse_case, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(found_misuse_case, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -152,7 +158,7 @@ class MisuseCaseByTVAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -165,6 +171,6 @@ class MisuseCaseByTVAPI(Resource):
     template_misuse_case = dao.get_misuse_case_by_threat_vulnerability(threat,vulnerability)
     dao.close()
 
-    resp = make_response(json_serialize(template_misuse_case, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(template_misuse_case, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

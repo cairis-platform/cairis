@@ -72,35 +72,35 @@ class CAIRISConfigurationForm(np.ActionForm):
     try:
       grantUsageSql = "grant usage on *.* to '" + self.theUser.value + "'@'" + self.theHost.value + "' identified by '" + self.thePassword.value + "' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0"
       rootCursor.execute(grantUsageSql)
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error granting usage to ' + self.theUser.value + ' (id: ' + str(id) + ', message: ' + msg
 
     try:
       createSql = "create database if not exists `" + self.theDbName.value + "`"
       rootCursor.execute(createSql)
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error creating ' + self.theDbName.value + ' database (id: ' + str(id) + ', message: ' + msg
 
     try:
       grantPrivilegesSql = "grant all privileges on `" + self.theDbName.value + "`.* to '" + self.theUser.value + "'@'" + self.theHost.value + "'"
       rootCursor.execute(grantPrivilegesSql)
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error granting privileges to ' + self.theUser.value + ' for ' + self.theDbName.value + ' database (id: ' + str(id) + ', message: ' + msg
 
     try:
       recursionDepthSql = "set global max_sp_recursion_depth = 255"
       rootCursor.execute(recursionDepthSql)
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error setting recursion depth ' + self.theUser.value + ' for ' + self.theDbName.value + ' database (id: ' + str(id) + ', message: ' + msg
 
     try:
       flushPrivilegesSql = "flush privileges"
       rootCursor.execute(flushPrivilegesSql)
-    except _mysql_exceptions.DatabaseError, e:
+    except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error flushing privileges (id: ' + str(id) + ', message: ' + msg
 
@@ -160,7 +160,7 @@ def main(args=None):
     try:
       App.run()
     except np.wgwidget.NotEnoughSpaceForWidget:
-      print "The terminal window is too small to display the configuration form, please resize it and try again."
+      print("The terminal window is too small to display the configuration form, please resize it and try again.")
 
 if __name__ == '__main__':
   main()

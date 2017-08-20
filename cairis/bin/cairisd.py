@@ -40,6 +40,6 @@ def main(args):
 if __name__ == '__main__':
   try:
     main(sys.argv)
-  except CairisHTTPError, e:
-    print 'Fatal CAIRIS error: ' + str(e)
+  except CairisHTTPError as e:
+    print('Fatal CAIRIS error: ' + str(e))
     sys.exit(-1)

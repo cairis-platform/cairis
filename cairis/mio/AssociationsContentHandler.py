@@ -142,7 +142,7 @@ class AssociationsContentHandler(ContentHandler,EntityResolver):
         tableName = self.theFromDim + '_' + self.theToDim
         if (tableName,fromId,toId,self.theReferenceType) not in self.theManualAssociations:
           self.theManualAssociations.add((tableName,fromId,toId,self.theReferenceType))
-      except DatabaseProxyException, e:
+      except DatabaseProxyException as e:
         pass # skipping invalid trace
       self.resetManualAssociationAttributes()
     elif name == 'goal_association':

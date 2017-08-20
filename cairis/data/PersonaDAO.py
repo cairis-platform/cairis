@@ -56,7 +56,7 @@ class PersonaDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in personas.items():
+      for key, value in list(personas.items()):
         personas[key] = self.simplify(value)
 
     return personas

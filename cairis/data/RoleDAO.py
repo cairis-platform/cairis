@@ -63,8 +63,8 @@ class RoleDAO(CairisDAO):
         idx = 0
 
         while found_role is None and idx < len(roles):
-            if roles.values()[idx].theId == role_id:
-                found_role = roles.values()[idx]
+            if list(roles.values())[idx].theId == role_id:
+                found_role = list(roles.values())[idx]
             idx += 1
 
         if found_role is None:

@@ -16,11 +16,11 @@
 #  under the License.
 
 
-from Response import Response
+from .Response import Response
 from numpy import *
-from AssetParameters import AssetParameters
-from PropertyHolder import PropertyHolder
-import armid
+from .AssetParameters import AssetParameters
+from .PropertyHolder import PropertyHolder
+from . import armid
 
 __author__ = 'Shamal Faily'
 

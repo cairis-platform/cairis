@@ -17,7 +17,7 @@
 
 __author__ = 'Shamal Faily'
 
-from ObjectCreationParameters import ObjectCreationParameters
+from .ObjectCreationParameters import ObjectCreationParameters
 
 class ResponsibilityParameters(ObjectCreationParameters):
   def __init__(self,name):

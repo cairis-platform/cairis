@@ -55,7 +55,7 @@ class RiskDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if isinstance(risks, dict):
-      for key, value in risks.items():
+      for key, value in list(risks.items()):
         if value.theMisuseCase and not skip_misuse:
           risks[key].theMisuseCase = self.get_misuse_case_by_risk_name(value.theName, simplify=False)
         if simplify:
@@ -65,7 +65,7 @@ class RiskDAO(CairisDAO):
 
   def get_risk_names(self):
     risks = self.get_risks(skip_misuse=True)
-    risk_names = risks.keys()
+    risk_names = list(risks.keys())
     return risk_names
 
   def risk_model_elements(self,envName):

@@ -18,7 +18,7 @@
 __author__ = 'Shamal Faily'
 
 
-from EnvironmentProperties import EnvironmentProperties
+from .EnvironmentProperties import EnvironmentProperties
 
 class AssetEnvironmentProperties(EnvironmentProperties):
   def __init__(self,environmentName,syProperties,pRationale,associations=[]):

@@ -55,8 +55,8 @@ class RequirementDAO(CairisDAO):
     if requirements is not None:
       idx = 0
       while found_requirement is None and idx < len(requirements):
-        if (requirements.values()[idx].theName == name) or (requirements.values()[idx].theLabel == name):
-          found_requirement = requirements.values()[idx]
+        if (list(requirements.values())[idx].theName == name) or (list(requirements.values())[idx].theLabel == name):
+          found_requirement = list(requirements.values())[idx]
         idx += 1
 
     if found_requirement is None:
@@ -67,7 +67,7 @@ class RequirementDAO(CairisDAO):
 
   def get_requirement_by_shortcode(self, shortcode):
     found_requirement = None
-    requirements = self.get_requirements().values()
+    requirements = list(self.get_requirements().values())
     idx = 0
 
     while found_requirement is None and idx < len(requirements):
@@ -174,7 +174,7 @@ class RequirementDAO(CairisDAO):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       associationDictionary = self.db_proxy.conceptMapModel(environment_name, requirement_name)
-      associations = GraphicalConceptMapModel(associationDictionary.values(), environment_name, requirement_name, True, db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
+      associations = GraphicalConceptMapModel(list(associationDictionary.values()), environment_name, requirement_name, True, db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
       dot_code = associations.graph()
       return dot_code
     except DatabaseProxyException as ex:

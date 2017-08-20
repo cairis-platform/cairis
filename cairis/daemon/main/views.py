@@ -16,7 +16,11 @@
 #  under the License.
 
 import os
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+else:
+  import httplib
 from flask import send_from_directory, make_response, session
 from flask_restful_swagger import swagger
 from flask_restful import Api
@@ -58,7 +62,7 @@ def set_dbproxy():
 def make_session():
   s = set_dbproxy()
   resp_dict = {'session_id': s['session_id'], 'message': 'Session created'}
-  resp = make_response(encode(resp_dict), httplib.OK)
+  resp = make_response(encode(resp_dict), http.client.OK)
   resp.headers['Content-type'] = 'application/json'
   return resp
 

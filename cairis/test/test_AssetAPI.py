@@ -16,7 +16,11 @@
 #  under the License.
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.Asset import Asset
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
@@ -88,9 +92,9 @@ class AssetAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(assets, 'No results after deserialization')
     self.assertIsInstance(assets, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(assets), 0, 'No assets in the dictionary')
-    self.assertIsInstance(assets.values()[0], Asset)
+    self.assertIsInstance(list(assets.values())[0], Asset)
     self.logger.info('[%s] Assets found: %d', method, len(assets))
-    self.logger.info('[%s] First asset: %s [%d]\n', method, assets.values()[0].theName, assets.values()[0].theId)
+    self.logger.info('[%s] First asset: %s [%d]\n', method, list(assets.values())[0].theName, list(assets.values())[0].theId)
 
   def test_post(self):
     method = 'test_post_new'
@@ -217,7 +221,7 @@ class AssetAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(rv.data)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEquals(ackMsg, 'Asset type successfully added')
+    self.assertEqual(ackMsg, 'Asset type successfully added')
 
     rv = self.app.delete('/api/assets/types/name/%s?session_id=test' % quote(self.prepare_new_asset_type().theName))
 

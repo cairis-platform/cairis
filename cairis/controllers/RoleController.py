@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -25,7 +31,7 @@ from cairis.tools.MessageDefinitions import RoleMessage
 from cairis.tools.ModelDefinitions import RoleModel, RoleEnvironmentPropertiesModel
 from cairis.tools.SessionValidator import get_session_id
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 
 class RolesAPI(Resource):
@@ -55,7 +61,7 @@ class RolesAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -97,15 +103,15 @@ class RolesAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'A database error has occurred'
             }
         ]
@@ -120,7 +126,7 @@ class RolesAPI(Resource):
         dao.close()
 
         resp_dict = {'role_id': role_id}
-        resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -142,7 +148,7 @@ class RolesByIdAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -183,19 +189,19 @@ class RolesByIdAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
-                'code': httplib.NOT_FOUND,
+                'code': NOT_FOUND,
                 'message': 'The provided role name could not be found in the database'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'A database error has occurred'
             }
         ]
@@ -210,7 +216,7 @@ class RolesByIdAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Update successful'}
-        resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -230,19 +236,19 @@ class RolesByIdAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
-                'code': httplib.NOT_FOUND,
+                'code': NOT_FOUND,
                 'message': 'The provided role name could not be found in the database'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'A database error has occurred'
             }
         ]
@@ -256,7 +262,7 @@ class RolesByIdAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Role successfully deleted'}
-        resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -278,7 +284,7 @@ class RolesByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -319,19 +325,19 @@ class RolesByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
-                'code': httplib.NOT_FOUND,
+                'code': NOT_FOUND,
                 'message': 'The provided role name could not be found in the database'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'A database error has occurred'
             }
         ]
@@ -346,7 +352,7 @@ class RolesByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Update successful'}
-        resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -366,19 +372,19 @@ class RolesByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
-                'code': httplib.NOT_FOUND,
+                'code': NOT_FOUND,
                 'message': 'The provided role name could not be found in the database'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'A database error has occurred'
             }
         ]
@@ -392,7 +398,7 @@ class RolesByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Role successfully deleted'}
-        resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -414,7 +420,7 @@ class RoleEnvironmentPropertiesAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -427,6 +433,6 @@ class RoleEnvironmentPropertiesAPI(Resource):
         props = dao.get_role_props(name)
         dao.close()
 
-        resp = make_response(json_serialize(props, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(props, session_id=session_id), OK)
         resp.contenttype = 'application/json'
         return resp

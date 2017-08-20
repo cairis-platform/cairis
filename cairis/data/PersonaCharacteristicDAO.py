@@ -51,7 +51,7 @@ class PersonaCharacteristicDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in pcs.items():
+      for key, value in list(pcs.items()):
         pcs[key] = self.convert_pcrs(real_pc=value) 
         pName,bvName,pcDesc = key.split('/')
         cs = self.db_proxy.getCharacteristicSynopsis(pcDesc)

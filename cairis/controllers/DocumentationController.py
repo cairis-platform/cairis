@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 import os.path
 from flask import make_response, request, session, send_file
 from flask_restful import Resource
@@ -28,7 +34,7 @@ from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import DocumentationMessage
 from cairis.tools.ModelDefinitions import DocumentationParams
 from cairis.tools.SessionValidator import get_session_id
-from StringIO import StringIO
+from io import StringIO
 
 __author__ = 'Shamal Faily'
 
@@ -66,11 +72,11 @@ class DocumentationAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'file_contents' and 'type' are defined.'''
       }
     ]

@@ -53,7 +53,7 @@ class DependencyAPITests(CairisDaemonTestCase):
     self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
     self.assertGreater(len(json_dict), 0, 'No dependencies found')
     assert isinstance(json_dict, dict)
-    item = json_dict.items()[0]
+    item = list(json_dict.items())[0]
     self.logger.info('[%s] First dependency: %s [%d]\n', method, item[0], item[1]['theId'])
 
   def test_dependencies_name_get(self):

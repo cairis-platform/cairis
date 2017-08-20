@@ -17,7 +17,11 @@
 
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.Goal import Goal
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
@@ -52,7 +56,7 @@ class GoalAPITests(CairisDaemonTestCase):
     self.assertIsInstance(goals, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(goals), 0, 'No goals in the dictionary')
     self.logger.info('[%s] Goals found: %d', method, len(goals))
-    goal = goals.values()[0]
+    goal = list(goals.values())[0]
     self.logger.info('[%s] First goal: %s [%d]\n', method, goal['theName'], goal['theId'])
     
   def test_get_by_name(self):

@@ -46,7 +46,7 @@ class EnvironmentDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in environments.items():
+      for key, value in list(environments.items()):
         environments[key] = self.simplify(value)
     return environments
 
@@ -106,8 +106,8 @@ class EnvironmentDAO(CairisDAO):
       found_environment = None
       idx = 0
       while found_environment is None and idx < len(environments):
-        if environments.values()[idx].theId == env_id:
-          found_environment = environments.values()[idx]
+        if list(environments.values())[idx].theId == env_id:
+          found_environment = list(environments.values())[idx]
         idx += 1
 
     if found_environment is None:
@@ -275,7 +275,7 @@ class EnvironmentDAO(CairisDAO):
     check_required_keys(json_dict, EnvironmentModel.required)
     json_dict['__python_obj__'] = Environment.__module__+'.'+Environment.__name__
 
-    if json_dict.has_key('theTensions'):
+    if 'theTensions' in json_dict:
       assert isinstance(json_dict['theTensions'], list)
       tensions = json_dict['theTensions']
       json_dict['theTensions'] = {}
@@ -298,6 +298,6 @@ class EnvironmentDAO(CairisDAO):
     the_tensions = obj.theTensions
     assert isinstance(the_tensions, dict)
     obj.theTensions = []
-    for key, value in the_tensions.items():
+    for key, value in list(the_tensions.items()):
       obj.theTensions.append(EnvironmentTensionModel(key=key, value=value))
     return obj

@@ -59,7 +59,7 @@ class Step:
 
   def exceptions(self):
     if len(self.theExceptions) > 0:
-      return self.theExceptions.keys()
+      return list(self.theExceptions.keys())
     else:
       return []
 

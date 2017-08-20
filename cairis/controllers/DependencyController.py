@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, make_response
 from flask import request
 from flask_restful import Resource
@@ -56,7 +62,7 @@ class DependenciesAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -70,7 +76,7 @@ class DependenciesAPI(Resource):
         dependencies = dao.get_dependencies(constraintsId)
         dao.close()
 
-        resp = make_response(json_serialize(dependencies, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(dependencies, session_id=session_id), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -98,7 +104,7 @@ class DependenciesAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             },
             {
@@ -121,7 +127,7 @@ class DependenciesAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Dependency successfully added', 'dependency_id': new_dependency_id}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -143,7 +149,7 @@ class DependencyByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -161,7 +167,7 @@ class DependencyByNameAPI(Resource):
         )
         dao.close()
 
-        resp = make_response(json_serialize(found_dependency, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(found_dependency, session_id=session_id), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -189,11 +195,11 @@ class DependencyByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
@@ -217,7 +223,7 @@ class DependencyByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Dependency successfully updated'}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -246,7 +252,7 @@ class DependencyByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             },
             {
@@ -269,7 +275,7 @@ class DependencyByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Dependency successfully added', 'dependency_id': new_dependency_id}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -297,11 +303,11 @@ class DependencyByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
@@ -331,6 +337,6 @@ class DependencyByNameAPI(Resource):
             resp_dict = {'message': count+' dependencies successfully deleted'}
         else:
             resp_dict = {'message': 'Dependency successfully deleted'}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp

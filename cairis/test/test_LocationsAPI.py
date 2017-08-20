@@ -16,8 +16,12 @@
 #  under the License.
 
 import logging
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import json
 import jsonpickle
@@ -82,7 +86,7 @@ class LocationsAPITests(CairisDaemonTestCase):
     self.assertIsInstance(locs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(locs), 0, 'No Locations in the dictionary')
     self.logger.info('[%s] Locations found: %d', method, len(locs))
-    locs = locs.values()[0]
+    locs = list(locs.values())[0]
     self.logger.info('[%s] First locations: %s [%d]\n', method, locs['theName'], locs['theId'])
 
   def test_get_by_name(self):

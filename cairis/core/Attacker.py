@@ -17,7 +17,7 @@
 
 __author__ = 'Shamal Faily'
 
-from AttackerEnvironmentProperties import AttackerEnvironmentProperties
+from .AttackerEnvironmentProperties import AttackerEnvironmentProperties
 
 class Attacker:
   def __init__(self,attackerId,attackerName,attackerDescription,attackerImage,tags,environmentProperties):

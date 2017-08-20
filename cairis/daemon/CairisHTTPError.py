@@ -15,7 +15,11 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+else:
+  import httplib
 import logging
 
 from flask import request, make_response
@@ -46,7 +50,7 @@ def handle_exception(ex):
             raise MalformedJSONHTTPError()
 
     raise CairisHTTPError(
-        status_code=httplib.INTERNAL_SERVER_ERROR,
+        status_code=http.client.INTERNAL_SERVER_ERROR,
         message=str(ex.message),
         status='Undefined error'
     )
@@ -84,7 +88,10 @@ class CairisHTTPError(HTTPException):
         return json_serialize({'message': self.message, 'code': self.status_code, 'status': self.status})
 
 class ARMHTTPError(CairisHTTPError):
-    status_code=httplib.CONFLICT
+    if (sys.version_info > (3,)):
+      status_code=http.client.CONFLICT
+    else:
+      status_code=httplib.CONFLICT
     status='Database conflict'
 
     def __init__(self, exception):
@@ -96,21 +103,24 @@ class ARMHTTPError(CairisHTTPError):
         if isinstance(real_exception.value, DatabaseProxyException):
             real_exception = real_exception.value
         CairisHTTPError.__init__(self,
-            status_code=httplib.CONFLICT,
+            status_code=self.status_code,
             message=str(real_exception.value),
             status='Database conflict'
         )
 
 class MalformedJSONHTTPError(CairisHTTPError):
     status='Unreadable JSON data'
-    status_code=httplib.BAD_REQUEST,
+    if (sys.version_info > (3,)):
+      status_code=http.client.BAD_REQUEST,
+    else:
+      status_code=httplib.BAD_REQUEST,
 
     def __init__(self, data=None):
         if data is not None:
             logger.debug('Data: %s', data)
 
         CairisHTTPError.__init__(self,
-            status_code=httplib.BAD_REQUEST,
+            status_code=self.status_code,
             message='The request body could not be converted to a JSON object.' +
                     '''Check if the request content type is 'application/json' ''' +
                     'and that the JSON string is well-formed.',
@@ -118,7 +128,10 @@ class MalformedJSONHTTPError(CairisHTTPError):
         )
 
 class MissingParameterHTTPError(CairisHTTPError):
-    status_code = httplib.BAD_REQUEST
+    if (sys.version_info > (3,)):
+      status_code = http.client.BAD_REQUEST
+    else:
+      status_code = httplib.BAD_REQUEST
     status = 'One or more parameters are missing'
 
     def __init__(self, exception=None, param_names=None):
@@ -147,19 +160,25 @@ class MissingParameterHTTPError(CairisHTTPError):
         )
 
 class ObjectNotFoundHTTPError(CairisHTTPError):
-    status_code=httplib.NOT_FOUND
+    if (sys.version_info > (3,)):
+      status_code=http.client.NOT_FOUND
+    else:
+      status_code=httplib.NOT_FOUND
     status='Object not found'
 
     def __init__(self, obj):
         CairisHTTPError.__init__(
             self,
-            status_code=httplib.NOT_FOUND,
+            status_code=self.status_code,
             message='{} could not be found in the database'.format(obj),
             status='Object not found'
         )
 
 class OverwriteNotAllowedHTTPError(CairisHTTPError):
-    status_code=httplib.CONFLICT
+    if (sys.version_info > (3,)):
+      status_code=http.client.CONFLICT
+    else:
+      status_code=httplib.CONFLICT
     status='Object already exists'
 
     def __init__(self, obj_name):

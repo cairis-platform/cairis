@@ -16,7 +16,11 @@
 #  under the License.
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.AcceptEnvironmentProperties import AcceptEnvironmentProperties
 from cairis.core.MitigateEnvironmentProperties import MitigateEnvironmentProperties
@@ -56,7 +60,7 @@ class ResponseAPITests(CairisDaemonTestCase):
     self.assertIsInstance(responses, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(responses), 0, 'No responses in the dictionary')
     self.logger.info('[%s] Responses found: %d', method, len(responses))
-    response = responses.values()[0]
+    response = list(responses.values())[0]
     self.logger.info('[%s] First response: %s [%d]\n', method, response['theName'], response['theId'])
 
   def test_get_by_name(self):

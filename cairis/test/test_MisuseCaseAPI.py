@@ -16,7 +16,11 @@
 #  under the License.
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.MisuseCase import MisuseCase
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -47,7 +51,7 @@ class MisuseCaseAPITests(CairisDaemonTestCase):
     self.assertIsInstance(misuse_cases, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(misuse_cases), 0, 'No misuse_cases in the dictionary')
     self.logger.info('[%s] MisuseCases found: %d', method, len(misuse_cases))
-    misuse_case = misuse_cases.values()[0]
+    misuse_case = list(misuse_cases.values())[0]
     self.logger.info('[%s] First misuse_case: %s [%d]\n', method, misuse_case['theName'], misuse_case['theId'])
 
   def test_get_by_name(self):

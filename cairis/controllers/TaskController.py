@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -57,7 +63,7 @@ class TasksAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -71,7 +77,7 @@ class TasksAPI(Resource):
     tasks = dao.get_tasks(constraint_id=constraint_id)
     dao.close()
 
-    resp = make_response(json_serialize(tasks, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(tasks, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -99,15 +105,15 @@ class TasksAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -126,7 +132,7 @@ class TasksAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Task successfully added', 'task_id': task_id}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -148,7 +154,7 @@ class TaskByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -161,7 +167,7 @@ class TaskByNameAPI(Resource):
     task = dao.get_task_by_name(name=name)
     dao.close()
 
-    resp = make_response(json_serialize(task, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(task, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -189,11 +195,11 @@ class TaskByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'Task' is defined.'''
       }
     ]
@@ -208,7 +214,7 @@ class TaskByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Task successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -228,19 +234,19 @@ class TaskByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided task name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -254,7 +260,7 @@ class TaskByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Task successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -300,7 +306,7 @@ class TaskModelByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -317,7 +323,7 @@ class TaskModelByNameAPI(Resource):
     dot_code = dao.get_task_model(environment,task,misusecase)
     dao.close()
 
-    resp = make_response(model_generator.generate(dot_code, model_type='task',renderer='dot'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code, model_type='task',renderer='dot'), OK)
 
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
@@ -344,7 +350,7 @@ class TaskLoadByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -355,7 +361,7 @@ class TaskLoadByNameAPI(Resource):
     dao = TaskDAO(session_id)
     taskLoad = dao.task_load_by_name_environment(task,environment)
     dao.close()
-    resp = make_response(json_serialize(taskLoad, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(taskLoad, session_id=session_id), OK)
     return resp
 
 class TaskHindranceByNameAPI(Resource):
@@ -376,7 +382,7 @@ class TaskHindranceByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -387,7 +393,7 @@ class TaskHindranceByNameAPI(Resource):
     dao = TaskDAO(session_id)
     cmLoad = dao.task_hindrance_by_name_environment(task,environment)
     dao.close()
-    resp = make_response(json_serialize(cmLoad, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(cmLoad, session_id=session_id), OK)
     return resp
 
 class TaskScoreByNameAPI(Resource):
@@ -408,7 +414,7 @@ class TaskScoreByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -419,7 +425,7 @@ class TaskScoreByNameAPI(Resource):
     dao = TaskDAO(session_id)
     taskScore = dao.task_score_by_name_environment(task,environment)
     dao.close()
-    resp = make_response(json_serialize(taskScore, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(taskScore, session_id=session_id), OK)
     return resp
 
 class MisusabilityModelAPI(Resource):
@@ -456,7 +462,7 @@ class MisusabilityModelAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -472,7 +478,7 @@ class MisusabilityModelAPI(Resource):
     dot_code = dao.get_misusability_model(mc_name,tc_name)
     dao.close()
 
-    resp = make_response(model_generator.generate(dot_code, model_type='misusability',renderer='dot'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code, model_type='misusability',renderer='dot'), OK)
 
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:

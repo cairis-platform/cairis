@@ -16,23 +16,23 @@
 #  under the License.
 
 
-from SecurityPatternContentHandler import SecurityPatternContentHandler
-from AttackPatternContentHandler import AttackPatternContentHandler
-from TVTypeContentHandler import TVTypeContentHandler
-from DomainValueContentHandler import DomainValueContentHandler
-from DirectoryContentHandler import DirectoryContentHandler
-from RiskAnalysisContentHandler import RiskAnalysisContentHandler
-from GoalsContentHandler import GoalsContentHandler
-from UsabilityContentHandler import UsabilityContentHandler
-from MisusabilityContentHandler import MisusabilityContentHandler
-from AssociationsContentHandler import AssociationsContentHandler
-from CairisContentHandler import CairisContentHandler
-from ArchitecturalPatternContentHandler import ArchitecturalPatternContentHandler
-from SynopsesContentHandler import SynopsesContentHandler
-from TemplateAssetsContentHandler import TemplateAssetsContentHandler
-from ProcessesContentHandler import ProcessesContentHandler
-from LocationsContentHandler import LocationsContentHandler
-from DataflowsContentHandler import DataflowsContentHandler
+from .SecurityPatternContentHandler import SecurityPatternContentHandler
+from .AttackPatternContentHandler import AttackPatternContentHandler
+from .TVTypeContentHandler import TVTypeContentHandler
+from .DomainValueContentHandler import DomainValueContentHandler
+from .DirectoryContentHandler import DirectoryContentHandler
+from .RiskAnalysisContentHandler import RiskAnalysisContentHandler
+from .GoalsContentHandler import GoalsContentHandler
+from .UsabilityContentHandler import UsabilityContentHandler
+from .MisusabilityContentHandler import MisusabilityContentHandler
+from .AssociationsContentHandler import AssociationsContentHandler
+from .CairisContentHandler import CairisContentHandler
+from .ArchitecturalPatternContentHandler import ArchitecturalPatternContentHandler
+from .SynopsesContentHandler import SynopsesContentHandler
+from .TemplateAssetsContentHandler import TemplateAssetsContentHandler
+from .ProcessesContentHandler import ProcessesContentHandler
+from .LocationsContentHandler import LocationsContentHandler
+from .DataflowsContentHandler import DataflowsContentHandler
 from cairis.core.Borg import Borg
 import xml.sax
 from cairis.core.ARM import *
@@ -50,7 +50,7 @@ def importSecurityPatternsFile(importFile,session_id = None):
     spps = handler.patterns()
     vts = handler.metricTypes()
     return importSecurityPatterns(taps,spps,vts,session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importSecurityPatterns(taps,spps,vts,session_id=None):
@@ -100,7 +100,7 @@ def importAttackPattern(importFile,session_id = None):
     obsTxt = importRequirements([],[],handler.obstacles(),[],[],[],session_id)
     assocTxt = importAssociations([],handler.obstacleAssociations(),[],session_id)
     return obsTxt + assocTxt + raTxt
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importTVTypeFile(importFile,isOverwrite=1,session_id = None):
@@ -112,7 +112,7 @@ def importTVTypeFile(importFile,isOverwrite=1,session_id = None):
     parser.parse(importFile)
     vulTypes,threatTypes = handler.types()
     return importTVTypes(vulTypes,threatTypes,isOverwrite,session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
  
 def importTVTypes(vulTypes,threatTypes,isOverwrite,session_id):
@@ -151,7 +151,7 @@ def importDirectoryFile(importFile,isOverwrite=1,session_id = None):
       db_proxy.addThreatDirectory(threatDir,isOverwrite)
     msgStr = 'Imported ' + str(vdSize) + ' template vulnerabilities and ' + str(tdSize) + ' template threats.'
     return msgStr
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 
@@ -163,7 +163,7 @@ def importRequirementsFile(importFile,session_id = None):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.usecases(),handler.countermeasures(),session_id = session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importRequirementsString(buf,session_id = None):
@@ -171,7 +171,7 @@ def importRequirementsString(buf,session_id = None):
     handler = GoalsContentHandler(session_id = session_id)
     xml.sax.parseString(buf,handler)
     return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.usecases(),handler.countermeasures(),session_id = session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParameterSet,ucParameterSet,cmParameterSet,session_id):
@@ -249,7 +249,7 @@ def importRiskAnalysisFile(importFile,session_id = None):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     return importRiskAnalysis(handler.roles(),handler.assets(),handler.vulnerabilities(),handler.attackers(),handler.threats(),handler.risks(),handler.responses(),handler.associations(),session_id = session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importRiskAnalysis(roleParameterSet,assetParameterSet,vulParameterSet,attackerParameterSet,threatParameterSet,riskParameterSet,responseParameterSet,assocParameterSet,session_id):
@@ -342,7 +342,7 @@ def importUsabilityFile(importFile,session_id = None):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     return importUsability(handler.personas(),handler.externalDocuments(),handler.documentReferences(),handler.personaCharacteristics(),handler.tasks(),session_id=session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 
@@ -407,7 +407,7 @@ def importMisusabilityFile(importFile,session_id = None):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     return importMisusability(handler.conceptReferences(),handler.taskCharacteristics(),session_id=session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importMisusability(crParameterSet,tcParameterSet,session_id):
@@ -444,7 +444,7 @@ def importAssociationsFile(importFile,session_id = None):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations(),session_id = session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importAssociationsString(buf,session_id = None):
@@ -452,7 +452,7 @@ def importAssociationsString(buf,session_id = None):
     handler = AssociationsContentHandler(session_id = session_id)
     xml.sax.parseString(buf,handler)
     return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations(),session_id = session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
   
@@ -484,7 +484,7 @@ def importProjectFile(importFile,session_id = None):
     pSettings = handler.settings()
     envParameterSet = handler.environments()
     return importProjectData(pSettings,envParameterSet,session_id = session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importProjectData(pSettings,envParameterSet,session_id):
@@ -516,7 +516,7 @@ def importComponentViewFile(importFile,session_id = None):
     parser.parse(importFile)
     view = handler.view()
     return importComponentViewData(view,session_id = session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importAssetsFile(importFile,session_id = None):
@@ -527,7 +527,7 @@ def importAssetsFile(importFile,session_id = None):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     return importAssets(handler.valueTypes(),handler.assets(),session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importAssets(valueTypes,assets,session_id):
@@ -568,7 +568,7 @@ def importSynopsesFile(importFile,session_id = None):
     refConts = handler.referenceContributions()
     ucConts = handler.useCaseContributions()
     return importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,session_id = session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,session_id):
@@ -596,9 +596,9 @@ def importDomainValuesFile(importFile,session_id = None):
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
     parser.parse(importFile)
-    tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues = handler.values()
+    tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues = list(handler.values())
     return importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues,session_id = session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,motValues,session_id):
@@ -670,7 +670,7 @@ def importProcessesFile(importFile,session_id = None):
     intentions = handler.intentions()
     contributions = handler.contributions()
     return importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,intentions,contributions,session_id = session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,intentions,contributions,session_id):
@@ -734,7 +734,7 @@ def importLocationsFile(importFile,session_id = None):
     parser.parse(importFile)
     locations = handler.locations()
     return importLocations(locations,session_id)
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
   
 def importLocations(locations,session_id):
@@ -756,7 +756,7 @@ def importDataflowsFile(importFile,session_id = None):
     buf = importDataflows(dfs,session_id)
     buf += importTrustBoundaries(tbs,session_id)
     return buf
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importDataflows(dataflows,session_id):
@@ -803,7 +803,7 @@ def importModelFile(importFile,isOverwrite = 1,session_id = None):
     modelTxt += importMisusabilityFile(importFile,session_id) + ' '
     modelTxt += importDataflowsFile(importFile,session_id)
     return modelTxt
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
 def importAttackTreeString(buf,session_id = None):
@@ -814,5 +814,5 @@ def importAttackTreeString(buf,session_id = None):
     modelTxt += importRequirementsString(buf,session_id) + ' '
     modelTxt += importAssociationsString(buf,session_id) + ' '
     return modelTxt
-  except xml.sax.SAXException, e:
+  except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())

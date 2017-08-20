@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -56,7 +62,7 @@ class PersonasAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -70,7 +76,7 @@ class PersonasAPI(Resource):
     personas = dao.get_personas(constraint_id=constraint_id)
     dao.close()
 
-    resp = make_response(json_serialize(personas, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(personas, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -98,15 +104,15 @@ class PersonasAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -125,7 +131,7 @@ class PersonasAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Persona successfully added', 'persona_id': persona_id}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -147,7 +153,7 @@ class PersonaByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -160,7 +166,7 @@ class PersonaByNameAPI(Resource):
     persona = dao.get_persona_by_name(name=name)
     dao.close()
 
-    resp = make_response(json_serialize(persona, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(persona, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -188,11 +194,11 @@ class PersonaByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'persona' is defined.'''
       }
     ]
@@ -207,7 +213,7 @@ class PersonaByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Persona successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -227,19 +233,19 @@ class PersonaByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided persona name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -253,7 +259,7 @@ class PersonaByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Persona successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -299,7 +305,7 @@ class PersonaModelByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -315,7 +321,7 @@ class PersonaModelByNameAPI(Resource):
     dot_code = dao.get_persona_model(persona,variable,characteristic)
     dao.close()
 
-    resp = make_response(model_generator.generate(dot_code, model_type='persona', renderer='dot'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code, model_type='persona', renderer='dot'), OK)
 
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
@@ -366,7 +372,7 @@ class PersonaCharacteristicsByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -381,7 +387,7 @@ class PersonaCharacteristicsByNameAPI(Resource):
     if characteristic == 'All': characteristic = ''
     char_names = dao.get_persona_characteristics(persona,variable,characteristic)
     dao.close()
-    resp = make_response(json_serialize(char_names, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(char_names, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -403,7 +409,7 @@ class PersonaNamesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -416,7 +422,7 @@ class PersonaNamesAPI(Resource):
     persona_names = dao.get_persona_names()
     dao.close()
 
-    resp = make_response(json_serialize(persona_names, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(persona_names, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -439,7 +445,7 @@ class PersonaTypesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -450,7 +456,7 @@ class PersonaTypesAPI(Resource):
     dao = PersonaDAO(session_id)
     pTypes = dao.get_persona_types()
     dao.close()
-    resp = make_response(json_serialize(pTypes, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(pTypes, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -472,7 +478,7 @@ class PersonaEnvironmentPropertiesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -510,7 +516,7 @@ class PersonaEnvironmentPropertiesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -523,6 +529,6 @@ class PersonaEnvironmentPropertiesAPI(Resource):
     dao.update_persona_properties(persona_prop, name=persona_name)
     dao.close()
     resp_dict = {'message': 'The persona properties were successfully updated.'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

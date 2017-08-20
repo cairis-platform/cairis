@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from MySQLDatabaseProxy import MySQLDatabaseProxy
+from .MySQLDatabaseProxy import MySQLDatabaseProxy
 
 __author__ = 'Shamal Faily'
 

@@ -17,8 +17,12 @@
 
 
 import logging
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import jsonpickle
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.ModelDefinitions import ObjectDependencyModel

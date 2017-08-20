@@ -15,11 +15,18 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import unquote
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  from urllib import unquote
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from os import close as fd_close
 from os import remove as remove_file
 from tempfile import mkstemp
-from urllib import unquote
 from flask import make_response, request, session
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -62,11 +69,11 @@ class CImportTextAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'file_contents' and 'type' are defined.'''
       }
     ]
@@ -82,7 +89,7 @@ class CImportTextAPI(Resource):
     check_required_keys(cimport_params or {}, CImportParams.required)
     file_contents = cimport_params['urlenc_file_contents']
     file_contents = unquote(file_contents)
-    file_contents = file_contents.replace(u"\u2018", "'").replace(u"\u2019", "'")
+    file_contents = file_contents.replace("\u2018", "'").replace("\u2019", "'")
     overwrite = cimport_params['overwrite']
     type = cimport_params['type']
 
@@ -107,7 +114,7 @@ class CImportTextAPI(Resource):
       remove_file(abs_path)
 
       resp_dict = {'message': str(result)}
-      resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+      resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
       resp.headers['Content-Type'] = 'application/json'
       return resp
     elif type == 'Attack Tree (Dot)':
@@ -126,7 +133,7 @@ class CImportTextAPI(Resource):
     
 
     else:
-      raise CairisHTTPError(status_code=httplib.BAD_REQUEST,message='The provided file is not a valid XML file',status='Invalid XML input')
+      raise CairisHTTPError(status_code=BAD_REQUEST,message='The provided file is not a valid XML file',status='Invalid XML input')
 
 
 class CImportFileAPI(Resource):
@@ -154,11 +161,11 @@ class CImportFileAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'file_contents' and 'type' are defined.'''
       }
     ]
@@ -181,7 +188,7 @@ class CImportFileAPI(Resource):
       fs_temp.close()
       fd_close(fd)
     except IOError:
-      raise CairisHTTPError(status_code=httplib.CONFLICT,status='Unable to load XML file',message='The XML file could not be loaded on the server.' + 'Please check if the application has permission to write temporary files.')
+      raise CairisHTTPError(status_code=CONFLICT,status='Unable to load XML file',message='The XML file could not be loaded on the server.' + 'Please check if the application has permission to write temporary files.')
 
     try:
       dao = ImportDAO(session_id)
@@ -197,6 +204,6 @@ class CImportFileAPI(Resource):
     remove_file(abs_path)
 
     resp_dict = { 'message': str(result) }
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.headers['Content-Type'] = 'application/json'
     return resp

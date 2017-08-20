@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from EnvironmentProperties import EnvironmentProperties
+from .EnvironmentProperties import EnvironmentProperties
 
 __author__ = 'Shamal Faily'
 

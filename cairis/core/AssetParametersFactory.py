@@ -17,10 +17,10 @@
 
 __author__ = 'Shamal Faily'
 
-from AssetParameters import AssetParameters
-from AssetEnvironmentProperties import AssetEnvironmentProperties
-from Response import Response
-from Borg import Borg
+from .AssetParameters import AssetParameters
+from .AssetEnvironmentProperties import AssetEnvironmentProperties
+from .Response import Response
+from .Borg import Borg
 
 def build(target,dbProxy = None):
   if target.__class__.__name__ == 'Countermeasure':

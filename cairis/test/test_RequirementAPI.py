@@ -16,7 +16,11 @@
 #  under the License.
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.Requirement import Requirement
 from cairis.core.Trace import Trace
@@ -69,7 +73,7 @@ class RequirementAPITests(CairisDaemonTestCase):
     self.assertIsInstance(requirements_dict, dict, 'The result is not a dictionary as expected')
     assert isinstance(requirements_dict, dict)
     self.assertGreater(len(requirements_dict), 0, 'No requirements in the dictionary')
-    requirements = requirements_dict.values()
+    requirements = list(requirements_dict.values())
     self.logger.info('[%s] Requirements found: %d', method, len(requirements))
     self.logger.info('[%s] First requirement: %s [%d]\n', method, requirements[0]['theName'])
 
@@ -171,4 +175,4 @@ class RequirementAPITests(CairisDaemonTestCase):
     rv = self.app.get(url, content_type='application/json')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEquals(rv.data.find('svg'),1)
+    self.assertEqual(rv.data.find('svg'),1)

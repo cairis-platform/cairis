@@ -17,7 +17,11 @@
 
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.DataFlow import DataFlow
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -58,7 +62,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.assertIsInstance(dataflows, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(dataflows), 0, 'No dataflows in the dictionary')
     self.logger.info('[%s] DataFlows found: %d', method, len(dataflows))
-    dataflow = dataflows.values()[1]
+    dataflow = list(dataflows.values())[1]
     self.assertEqual(dataflow['theName'],self.existing_dataflow_name)
     self.assertEqual(dataflow['theEnvironmentName'],self.existing_environment_name)
     self.assertEqual(dataflow['theFromName'],self.existing_from_name)
@@ -138,7 +142,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     rv = self.app.get(url, content_type='application/json')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEquals(rv.data.find('svg'),1)
+    self.assertEqual(rv.data.find('svg'),1)
 
 
   def prepare_new_dataflow(self):

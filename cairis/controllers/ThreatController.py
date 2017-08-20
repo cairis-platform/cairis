@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -58,7 +64,7 @@ class ThreatAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -72,7 +78,7 @@ class ThreatAPI(Resource):
     threats = dao.get_threats(constraint_id=constraint_id)
     dao.close()
 
-    resp = make_response(json_serialize(threats, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(threats, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -100,15 +106,15 @@ class ThreatAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -123,7 +129,7 @@ class ThreatAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Threat successfully added', 'threat_id': threat_id}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -145,7 +151,7 @@ class ThreatByIdAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -158,7 +164,7 @@ class ThreatByIdAPI(Resource):
     threat = dao.get_threat_by_id(threat_id=id)
     dao.close()
 
-    resp = make_response(json_serialize(threat, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(threat, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -180,7 +186,7 @@ class ThreatByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -193,7 +199,7 @@ class ThreatByNameAPI(Resource):
     threat = dao.get_threat_by_name(name=name)
     dao.close()
 
-    resp = make_response(json_serialize(threat, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(threat, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -221,11 +227,11 @@ class ThreatByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'threat' is defined.'''
       }
     ]
@@ -240,7 +246,7 @@ class ThreatByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Threat successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -260,19 +266,19 @@ class ThreatByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided threat name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -286,7 +292,7 @@ class ThreatByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Threat successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -309,7 +315,7 @@ class ThreatTypesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -323,7 +329,7 @@ class ThreatTypesAPI(Resource):
     threats = dao.get_threat_types(environment_name=environment_name)
     dao.close()
 
-    resp = make_response(json_serialize(threats, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(threats, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -351,15 +357,15 @@ class ThreatTypesAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -375,7 +381,7 @@ class ThreatTypesAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Threat type successfully added', 'threat_type_id': threat_type_id}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -397,7 +403,7 @@ class ThreatTypeByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -411,7 +417,7 @@ class ThreatTypeByNameAPI(Resource):
     threat_type = dao.get_threat_type_by_name(name=name, environment_name=environment_name)
     dao.close()
 
-    resp = make_response(json_serialize(threat_type, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(threat_type, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -439,11 +445,11 @@ class ThreatTypeByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'threat' is defined.'''
       }
     ]
@@ -459,7 +465,7 @@ class ThreatTypeByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Threat type successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -479,19 +485,19 @@ class ThreatTypeByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided threat name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -506,6 +512,6 @@ class ThreatTypeByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Threat type successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

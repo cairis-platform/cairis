@@ -25,16 +25,16 @@ import os
 import sys
 from subprocess import check_output as cmd
 from tempfile import mkstemp as make_tempfile
-from EnvironmentModel import EnvironmentModel
-from KaosModel import KaosModel
-from AssetModel import AssetModel
-from AssumptionPersonaModel import AssumptionPersonaModel
+from .EnvironmentModel import EnvironmentModel
+from .KaosModel import KaosModel
+from .AssetModel import AssetModel
+from .AssumptionPersonaModel import AssumptionPersonaModel
 from cairis.core.armid import *
 
 __author__ = 'Shamal Faily'
 
 def dictToRows(dict):
-  keys = dict.keys()
+  keys = list(dict.keys())
   keys.sort()
   rows = []
   for key in keys:
@@ -129,27 +129,27 @@ def buildModel(p,envName,modelType,graphFile):
       return False
     drawGraph(model.graph(),'dot',graphFile)
   elif (modelType == 'Asset'):
-    model = AssetModel(p.classModel(envName).values(),envName,db_proxy=p)
+    model = AssetModel(list(p.classModel(envName).values()),envName,db_proxy=p)
     if (model.size() == 0):
       return False
     drawGraph(model.graph(),'dot',graphFile)
   elif (modelType == 'Goal'):
-    model = KaosModel(p.goalModel(envName).values(),envName,'goal',db_proxy=p)
+    model = KaosModel(list(p.goalModel(envName).values()),envName,'goal',db_proxy=p)
     if (model.size() == 0):
       return False
     drawGraph(model.graph(),'dot',graphFile)
   elif (modelType == 'Obstacle'):
-    model = KaosModel(p.obstacleModel(envName).values(),envName,'obstacle',db_proxy=p)
+    model = KaosModel(list(p.obstacleModel(envName).values()),envName,'obstacle',db_proxy=p)
     if (model.size() == 0):
       return False
     drawGraph(model.graph(),'dot',graphFile)
   elif (modelType == 'Task'):
-    model = KaosModel(p.taskModel(envName).values(),envName,'task',db_proxy=p)
+    model = KaosModel(list(p.taskModel(envName).values()),envName,'task',db_proxy=p)
     if (model.size() == 0):
       return False
     drawGraph(model.graph(),'dot',graphFile)
   elif (modelType == 'Responsibility'):
-    model = KaosModel(p.responsibilityModel(envName).values(),envName,'responsibility',db_proxy=p)
+    model = KaosModel(list(p.responsibilityModel(envName).values()),envName,'responsibility',db_proxy=p)
     if (model.size() == 0):
       return False
     drawGraph(model.graph(),'dot',graphFile)
@@ -331,7 +331,7 @@ def mandatedConstraints(p):
     return ""
 
   rows = []
-  for idx,objt in objts.iteritems():
+  for idx,objt in objts.items():
     rows.append((objt.name(),objt.type(),objt.description()))
   chapterTxt += buildTable('DomainProperties','Constraints',['Name','Type','Description'],rows,0)
   chapterTxt += """
@@ -348,7 +348,7 @@ def namingConventions(p):
   if (objts == None):
     return ""
 
-  for name,defn in objts.iteritems():
+  for name,defn in objts.items():
     entryRows.append((name,defn)) 
   chapterTxt += buildTable('projectNamingConventions','Naming Conventions',['Name','Definition'],entryRows,0)
   chapterTxt += """
@@ -371,7 +371,7 @@ def frReqSection(typename,reqs):
   else:
     reqSect = """
   <section><title>""" + typename + " Requirements</title>"
-    sections = reqs.keys()
+    sections = list(reqs.keys())
     sections.sort()
     for section in sections:
       reqSect += """
@@ -425,7 +425,7 @@ def useCases(p,docDir):
   if (ucs == None):
     return ""
 
-  for idx,uc in ucs.iteritems():
+  for idx,uc in ucs.items():
     ucName = uc.name()
     chapterTxt +=  """
     <section id=\"""" + ucName.replace(" ","_") + "\"><title>" + ucName + "</title>" + """ 
@@ -498,7 +498,7 @@ def tasks(p,docDir):
   frequencyLookup['Low'] = 'Monthly or less'
   frequencyLookup['None'] = 'None'
 
-  for idx,task in tasks.iteritems():
+  for idx,task in tasks.items():
     taskName = task.name()
     chapterTxt +=  """
     <section id=\"""" + taskName.replace(" ","_") + "\"><title>" + taskName + "</title>" + """ 
@@ -539,7 +539,7 @@ def tasks(p,docDir):
   return chapterTxt
 
 def characteristicsToRows(pcDict):
-  pcList = pcDict.values()
+  pcList = list(pcDict.values())
   rows = []
   for pc in pcList:
     rows.append((pc.characteristic(),pc.qualifier(),tuplesToPara(pc.grounds()),tuplesToPara(pc.warrant()),listToPara(pc.backing()),tuplesToPara(pc.rebuttal())) )
@@ -561,7 +561,7 @@ def personas(p,docDir):
       <para>Personas may fulfil one or more of the below roles.  However, roles may also be fulfilled by potential attackers.</para>
 """
   componentRows = []
-  for idx,role in roles.iteritems():
+  for idx,role in roles.items():
     componentRows.append((role.name(),role.description()))
   chapterTxt += buildTable( "RolePropertiesTable"," Roles",['Name','Description'],componentRows,0) + """
     </section>
@@ -569,7 +569,7 @@ def personas(p,docDir):
 """
   b = Borg()
   personas = p.getPersonas()
-  for idx,persona in personas.iteritems():
+  for idx,persona in personas.items():
     personaName = persona.name()
     chapterTxt += """
       <section id=\"""" + personaName.replace(" ","_") + "\"><title>" + personaName + "</title>"
@@ -676,7 +676,7 @@ def attackers(p):
   attackers = p.getAttackers()
   if (attackers == None):
     return ""
-  for idx,attacker in attackers.iteritems():
+  for idx,attacker in attackers.items():
     attackerName = attacker.name()
     chapterTxt += """
     <section id=\"""" + attackerName.replace(" ","_") + "\"><title>" + attackerName + "</title>"
@@ -726,7 +726,7 @@ def misuseCases(p):
   if mcs == None:
     return ""
  
-  for idx,mc in mcs.iteritems():
+  for idx,mc in mcs.items():
     mcName = mc.name()
     riskName = mc.risk()
     threatName,vulName = p.riskComponents(riskName) 
@@ -778,7 +778,7 @@ def assets(p,docDir):
   objts = p.getAssets()
   if (objts == None):
     return ""
-  for idx,objt in objts.iteritems():
+  for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt += """
       <section id=\"""" + objtName.replace(" ","_") + "\"><title>" + objtName + "</title>"
@@ -829,7 +829,7 @@ def threats(p):
   objts = p.getThreats()
   if (objts == None):
     return ""
-  for idx,objt in objts.iteritems():
+  for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt += """
       <section id=\"""" + objtName.replace(" ","_") + "\"><title>" + objtName + "</title>"
@@ -867,7 +867,7 @@ def vulnerabilities(p):
   objts = p.getVulnerabilities()
   if (objts == None):
     return ""
-  for idx,objt in objts.iteritems():
+  for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt +=  """
     <section id=\"""" + objtName.replace(" ","_") + "\"><title>" + objtName + "</title>" + """ 
@@ -902,7 +902,7 @@ def modelSection(p,modelType,docDir):
   txt = """
     <section><title>Models</title>"""
   envs = p.getEnvironments()
-  for idx,env in envs.iteritems():
+  for idx,env in envs.items():
     environmentName = env.name()
     modelFile = docDir + '/' + environmentName + modelType + 'Model'
     if (buildModel(p,environmentName,modelType,modelFile) == True):
@@ -963,7 +963,7 @@ def goals(p,docDir):
   objts = p.getGoals()
   if (objts == None):
     return ""
-  for idx,objt in objts.iteritems():
+  for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt +=  """
     <section id=\"""" + objtName.replace(" ","_") + "\"><title>" + objtName + "</title>"
@@ -995,7 +995,7 @@ def responsibilities(p,docDir):
     chapterTxt += """
     <section><title>Dependencies</title>
     """
-    envs = deps.keys()
+    envs = list(deps.keys())
     envs.sort()
     for env in envs:
       chapterTxt += """
@@ -1022,7 +1022,7 @@ def obstacles(p,docDir):
   objts = p.getObstacles()
   if (objts == None):
     return ""
-  for idx,objt in objts.iteritems():
+  for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt +=  """
     <section id=\"""" + objtName.replace(" ","_") + "\"><title>" + objtName + "</title>"
@@ -1055,7 +1055,7 @@ def risks(p,docDir):
   objts = p.getRisks()
   if (objts == None):
     return ""
-  for idx,objt in objts.iteritems():
+  for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt +=  """
     <section id=\"""" + objtName.replace(" ","_") + "\"><title>" + objtName + "</title>" + """ 
@@ -1295,7 +1295,7 @@ def responses(p):
   mitigateTxt = ''
   
 
-  for idx,response in responses.iteritems():
+  for idx,response in responses.items():
     if (response.responseType() == 'Accept'):
       if (len(acceptTxt) == 0):
         acceptTxt += sectionHeader('Accept')
@@ -1336,7 +1336,7 @@ def countermeasures(p):
   objts = p.getCountermeasures()
   if (objts == None):
     return ""
-  for idx,objt in objts.iteritems():
+  for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt +=  """
     <section id=\"""" + objtName.replace(" ","_") + "\"><title>" + objtName + "</title>" + """ 
@@ -1385,7 +1385,7 @@ def environments(p,docDir):
       <para>This paragraph describes the environments within which the planned system will operate in.  Properties associated with artifacts such as goals, assets, threats, and vulnerabilties may vary based on these environments, although the system needs to be designed to work in all possible environments.</para>
     </section>
 """
-  for idx,environment in environments.iteritems():
+  for idx,environment in environments.items():
     environmentName = environment.name()
     chapterTxt +=  """
       <section id=\'""" + environmentName.replace(" ","_") + "\' ><title>" + environmentName + "</title>"

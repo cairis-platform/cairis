@@ -17,7 +17,7 @@
 
 __author__ = 'Shamal Faily'
 
-import ObjectCreationParameters
+from . import ObjectCreationParameters
 
 class SecurityPatternParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,spName,spContext,spProb,spSol,spReqs,spAssocs):

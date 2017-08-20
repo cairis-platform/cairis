@@ -53,7 +53,7 @@ class UseCaseDAO(CairisDAO):
     try:
       usecases = self.db_proxy.getUseCases(constraint_id)
       if simplify:
-        for key, value in usecases.items():
+        for key, value in list(usecases.items()):
           uc = self.simplify(value)
           uc.theReferenceContributions = []
           contribs = self.db_proxy.getUseCaseContributions(uc.name())

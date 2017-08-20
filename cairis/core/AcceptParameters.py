@@ -18,7 +18,7 @@
 __author__ = 'Shamal Faily'
 
 
-import ObjectCreationParameters
+from . import ObjectCreationParameters
 
 class ResponseParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,respName,respRisk):

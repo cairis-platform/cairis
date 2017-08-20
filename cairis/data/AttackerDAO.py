@@ -54,7 +54,7 @@ class AttackerDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in attackers.items():
+      for key, value in list(attackers.items()):
         attackers[key] = self.simplify(value)
 
     return attackers

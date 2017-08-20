@@ -17,7 +17,11 @@
 
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.Task import Task
 from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
@@ -63,7 +67,7 @@ class TaskAPITests(CairisDaemonTestCase):
     self.assertIsInstance(tasks, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(tasks), 0, 'No tasks in the dictionary')
     self.logger.info('[%s] Tasks found: %d', method, len(tasks))
-    task = tasks.values()[0]
+    task = list(tasks.values())[0]
     self.logger.info('[%s] First task: %s [%d]\n', method, task['theName'], task['theId'])
 
   def test_get_by_name(self):
@@ -184,7 +188,7 @@ class TaskAPITests(CairisDaemonTestCase):
     rv = self.app.get(url, content_type='application/json')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEquals(rv.data.find('svg'),1)
+    self.assertEqual(rv.data.find('svg'),1)
 
 
   def prepare_new_task(self):

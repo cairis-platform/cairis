@@ -59,7 +59,7 @@ class TaskDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in tasks.items():
+      for key, value in list(tasks.items()):
         tasks[key] = self.simplify(value)
 
     return tasks
@@ -254,7 +254,7 @@ class TaskDAO(CairisDAO):
         mcFilter = True
         filter_name = misusecase_name
       associationDirectory = self.db_proxy.taskModel(environment_name,filter_name,mcFilter)
-      associations = KaosModel(associationDirectory.values(), environment_name, kaosModelType = 'task',goalName = filter_name,db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
+      associations = KaosModel(list(associationDirectory.values()), environment_name, kaosModelType = 'task',goalName = filter_name,db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
       dot_code = associations.graph()
       if not dot_code:
         raise ObjectNotFoundHTTPError('The task model')

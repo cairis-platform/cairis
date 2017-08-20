@@ -17,7 +17,7 @@
 
 __author__ = 'Shamal Faily'
 
-from Step import Step
+from .Step import Step
 
 class Steps:
   def __init__(self):

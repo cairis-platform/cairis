@@ -15,7 +15,11 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+else:
+  import httplib
 import imghdr
 import os
 import uuid
@@ -49,7 +53,7 @@ class UploadDAO(CairisDAO):
       file.save(f_path)
     except IOError:
       raise CairisHTTPError(
-        status_code=httplib.CONFLICT,
+        status_code=http.client.CONFLICT,
         status='Unable to save image',
         message='Please check if the static web directory exists ' +
                 'and if the application has permission to write in the directory',
@@ -57,7 +61,7 @@ class UploadDAO(CairisDAO):
 
     if not os.path.exists(f_path):
       raise CairisHTTPError(
-                status_code=httplib.CONFLICT,
+                status_code=http.client.CONFLICT,
                 status='Image not found',
                 message='The image could not be saved on the server. \
 Please check the server configuration to fix this problem.'
@@ -66,7 +70,7 @@ Please check the server configuration to fix this problem.'
     if not img_format or img_format not in self.accepted_image_types:
       os.remove(f_name)
       raise CairisHTTPError(
-              status_code=httplib.CONFLICT,
+              status_code=http.client.CONFLICT,
               status='Unsupported file type',
               message='The provided image file is not supported by CAIRIS'
       )

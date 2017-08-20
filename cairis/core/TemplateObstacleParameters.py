@@ -17,7 +17,7 @@
 
 __author__ = 'Shamal Faily'
 
-import ObjectCreationParameters
+from . import ObjectCreationParameters
 
 class TemplateObstacleParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,obsName,obsCat,obsDef,obsConcerns,obsResp,obsProb,obsProbRat):

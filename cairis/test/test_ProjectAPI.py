@@ -17,8 +17,13 @@
 
 
 import logging
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+  from io import StringIO
+else:
+  from urllib import quote
+  from StringIO import StringIO
 import jsonpickle
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision
@@ -85,7 +90,7 @@ class ProjectAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(rv.data, 'No response')
     json_dict = jsonpickle.decode(rv.data)
     self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
-    self.assertTrue(json_dict.has_key('message'), 'No message in reponse')
+    self.assertTrue('message' in json_dict, 'No message in reponse')
     message = str(json_dict['message'])
     self.logger.info('[%s] Message: %s', method, message)
     self.assertGreater(message.find('successfully'), -1, 'Failed to create new project')
@@ -145,7 +150,7 @@ class ProjectAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(rv.data, 'No response')
     json_dict = jsonpickle.decode(rv.data)
     self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
-    self.assertTrue(json_dict.has_key('message'), 'No message in reponse')
+    self.assertTrue('message' in json_dict, 'No message in reponse')
     message = str(json_dict['message'])
     self.logger.info('[%s] Message: %s', method, message)
     self.assertGreater(message.find('successfully'), -1, 'Failed to create new database')
@@ -160,7 +165,7 @@ class ProjectAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(rv.data, 'No response')
     json_dict = jsonpickle.decode(rv.data)
     self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
-    self.assertTrue(json_dict.has_key('message'), 'No message in reponse')
+    self.assertTrue('message' in json_dict, 'No message in reponse')
     message = str(json_dict['message'])
     self.logger.info('[%s] Message: %s', method, message)
     self.assertGreater(message.find('successfully'), -1, 'Failed to open database')

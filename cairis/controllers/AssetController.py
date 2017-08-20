@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful_swagger import swagger
 from flask_restful import Resource
@@ -58,7 +64,7 @@ class AssetsAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -98,15 +104,11 @@ class AssetsAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -121,7 +123,7 @@ class AssetsAPI(Resource):
     dao.close()
 
     resp_dict = {'asset_id': new_id}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -144,7 +146,7 @@ class AssetByEnvironmentNamesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -180,7 +182,7 @@ class AssetByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -221,19 +223,15 @@ class AssetByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided asset name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -248,7 +246,7 @@ class AssetByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Update successful'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -268,19 +266,15 @@ class AssetByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided asset name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -294,7 +288,7 @@ class AssetByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Asset successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -316,7 +310,7 @@ class AssetByIdAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -355,7 +349,7 @@ class AssetNamesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -415,7 +409,7 @@ class AssetModelAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -439,7 +433,7 @@ class AssetModelAPI(Resource):
     if not isinstance(dot_code, str):
       raise ObjectNotFoundHTTPError('The model')
 
-    resp = make_response(model_generator.generate(dot_code,renderer='dot'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code,renderer='dot'), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'
@@ -467,7 +461,7 @@ class AssetEnvironmentPropertiesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -507,7 +501,7 @@ class AssetEnvironmentPropertiesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
          "message": "The database connection was not properly set up"
       }
     ]
@@ -522,7 +516,7 @@ class AssetEnvironmentPropertiesAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'The asset properties were successfully updated.'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -546,7 +540,7 @@ class AssetTypesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -560,7 +554,7 @@ class AssetTypesAPI(Resource):
     assets = dao.get_asset_types(environment_name=environment_name)
     dao.close()
 
-    resp = make_response(json_serialize(assets, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(assets, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -588,15 +582,11 @@ class AssetTypesAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -612,7 +602,7 @@ class AssetTypesAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Asset type successfully added'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -635,7 +625,7 @@ class AssetTypeByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -649,7 +639,7 @@ class AssetTypeByNameAPI(Resource):
     asset_type = dao.get_asset_type_by_name(name=name, environment_name=environment_name)
     dao.close()
 
-    resp = make_response(json_serialize(asset_type, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(asset_type, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -677,11 +667,11 @@ class AssetTypeByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'asset' is defined.'''
       }
     ]
@@ -697,7 +687,7 @@ class AssetTypeByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Asset type successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -717,19 +707,15 @@ class AssetTypeByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided asset name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -744,7 +730,7 @@ class AssetTypeByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Asset type successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -768,7 +754,7 @@ class AssetValuesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -781,7 +767,7 @@ class AssetValuesAPI(Resource):
     assets = dao.get_asset_values(environment_name=environment_name)
     dao.close()
 
-    resp = make_response(json_serialize(assets, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(assets, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -804,7 +790,7 @@ class AssetValueByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -817,7 +803,7 @@ class AssetValueByNameAPI(Resource):
     asset_value = dao.get_asset_value_by_name(name=name, environment_name=environment_name)
     dao.close()
 
-    resp = make_response(json_serialize(asset_value, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(asset_value, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -845,12 +831,8 @@ class AssetValueByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': httplib.BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'asset' is defined.'''
       }
     ]
   )
@@ -864,7 +846,7 @@ class AssetValueByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Asset type successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -911,12 +893,8 @@ class AssetAssociationByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
-      },
-      {
-        'code': httplib.BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure asset association is defined.'''
       }
     ]
   )
@@ -970,15 +948,11 @@ class AssetAssociationByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -992,7 +966,7 @@ class AssetAssociationByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Asset Association successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -1036,15 +1010,11 @@ class AssetAssociationByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -1057,7 +1027,7 @@ class AssetAssociationByNameAPI(Resource):
     dao.update_asset_association(environment_name,head_name,tail_name,assoc)
     dao.close()
     resp_dict = {'message': 'Asset Association successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -1081,7 +1051,7 @@ class AssetAssociationAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -1122,15 +1092,11 @@ class AssetAssociationAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -1145,7 +1111,7 @@ class AssetAssociationAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Asset Association successfully added'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 

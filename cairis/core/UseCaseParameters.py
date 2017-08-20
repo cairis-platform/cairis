@@ -18,7 +18,7 @@
 __author__ = 'Shamal Faily'
 
 
-from ObjectCreationParameters import ObjectCreationParameters
+from .ObjectCreationParameters import ObjectCreationParameters
 
 class UseCaseParameters(ObjectCreationParameters):
   def __init__(self,ucName,ucAuth,ucCode,ucActors,ucDesc,tags,cProps):

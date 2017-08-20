@@ -51,7 +51,7 @@ class AssetDAO(CairisDAO):
       'Unobservability': cairis.core.armid.UNO_PROPERTY
     }
     self.rev_attr_dict = {}
-    for key, value in self.attr_dict.items():
+    for key, value in list(self.attr_dict.items()):
       self.rev_attr_dict[value] = key
 
   def get_assets(self, constraint_id=-1, simplify=True):
@@ -62,7 +62,7 @@ class AssetDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in assets.items():
+      for key, value in list(assets.items()):
         assets[key] = self.simplify(value)
 
     return assets
@@ -88,8 +88,8 @@ class AssetDAO(CairisDAO):
 
     idx = 0
     while found_asset is None and idx < len(assets):
-      if assets.values()[idx].theId == id:
-        found_asset = assets.values()[idx]
+      if list(assets.values())[idx].theId == id:
+        found_asset = list(assets.values())[idx]
       idx += 1
 
     if found_asset is None:
@@ -317,7 +317,7 @@ class AssetDAO(CairisDAO):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       associationDictionary = self.db_proxy.classModel(environment_name, asset_name, hideConcerns=hide_concerns)
-      associations = GraphicalAssetModel(associationDictionary.values(), environment_name, asset_name, hideConcerns=hide_concerns, db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize)
+      associations = GraphicalAssetModel(list(associationDictionary.values()), environment_name, asset_name, hideConcerns=hide_concerns, db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize)
       dot_code = associations.graph()
       return dot_code
     except DatabaseProxyException as ex:

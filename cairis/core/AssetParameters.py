@@ -18,7 +18,7 @@
 __author__ = 'Shamal Faily'
 
 
-import ObjectCreationParameters
+from . import ObjectCreationParameters
 
 class AssetParameters(ObjectCreationParameters.ObjectCreationParameters):
   def __init__(self,assetName,shortCode,assetDesc,assetSig,assetType,cFlag,cRationale,tags,ifs,cProperties):

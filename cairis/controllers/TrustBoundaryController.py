@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -48,7 +54,7 @@ class TrustBoundariesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -59,7 +65,7 @@ class TrustBoundariesAPI(Resource):
     dao = TrustBoundaryDAO(session_id)
     tbs = dao.get_trust_boundaries()
     dao.close()
-    resp = make_response(json_serialize(tbs, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(tbs, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -87,15 +93,15 @@ class TrustBoundariesAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -114,7 +120,7 @@ class TrustBoundariesAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'TrustBoundary successfully added'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -144,7 +150,7 @@ class TrustBoundaryByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -156,7 +162,7 @@ class TrustBoundaryByNameAPI(Resource):
     dao = TrustBoundaryDAO(session_id)
     tb = dao.get_trust_boundary_by_name(trust_boundary_name)
     dao.close()
-    resp = make_response(json_serialize(tb, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(tb, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -192,11 +198,11 @@ class TrustBoundaryByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'TrustBoundary' is defined.'''
       }
     ]
@@ -211,7 +217,7 @@ class TrustBoundaryByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'TrustBoundary successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -239,19 +245,19 @@ class TrustBoundaryByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided trustboundary name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -265,6 +271,6 @@ class TrustBoundaryByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'TrustBoundary successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

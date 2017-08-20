@@ -15,7 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from Location import Location
+from .Location import Location
 
 __author__ = 'Shamal Faily'
 

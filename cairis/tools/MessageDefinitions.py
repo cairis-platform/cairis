@@ -17,11 +17,11 @@
 
 from flask_restful import fields
 from flask_restful_swagger import swagger
-import PseudoClasses
+from . import PseudoClasses
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
-import ModelDefinitions
+from . import ModelDefinitions
 
 def gen_message_fields(class_ref):
   resource_fields = {

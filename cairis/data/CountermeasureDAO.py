@@ -62,9 +62,9 @@ class CountermeasureDAO(CairisDAO):
     }
     self.rev_attr_dict = dict()
     self.rev_prop_dict = dict()
-    for key, value in self.attr_dict.items():
+    for key, value in list(self.attr_dict.items()):
       self.rev_attr_dict[value] = key
-    for key, value in self.prop_dict.items():
+    for key, value in list(self.prop_dict.items()):
       self.rev_prop_dict[value] = key
 
 
@@ -86,7 +86,7 @@ class CountermeasureDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in countermeasures.items():
+      for key, value in list(countermeasures.items()):
         countermeasures[key] = self.simplify(value)
 
     return countermeasures
@@ -193,7 +193,7 @@ class CountermeasureDAO(CairisDAO):
     :raise ARMHTTPError:
     """
     try:
-      return self.db_proxy.targetNames(reqList,envName).keys()
+      return list(self.db_proxy.targetNames(reqList,envName).keys())
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

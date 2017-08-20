@@ -211,7 +211,7 @@ class ArchitecturalPatternDAO(CairisDAO):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       associationDictionary = self.db_proxy.componentAssetModel(cName)
-      associations = GraphicalAssetModel(associationDictionary.values(), db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize,isComponentAssetModel=True)
+      associations = GraphicalAssetModel(list(associationDictionary.values()), db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize,isComponentAssetModel=True)
       dot_code = associations.graph()
       return dot_code
     except DatabaseProxyException as ex:
@@ -227,7 +227,7 @@ class ArchitecturalPatternDAO(CairisDAO):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       associationDictionary = self.db_proxy.componentGoalModel(cName)
-      associations = KaosModel(associationDictionary.values(), '',kaosModelType='template_goal',db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
+      associations = KaosModel(list(associationDictionary.values()), '',kaosModelType='template_goal',db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
       dot_code = associations.graph()
       return dot_code
     except DatabaseProxyException as ex:

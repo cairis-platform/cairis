@@ -17,7 +17,11 @@
 
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.DomainProperty import DomainProperty
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -54,7 +58,7 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     self.assertIsInstance(domainproperties, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(domainproperties), 0, 'No domainproperties in the dictionary')
     self.logger.info('[%s] DomainProperties found: %d', method, len(domainproperties))
-    domainproperty = domainproperties.values()[0]
+    domainproperty = list(domainproperties.values())[0]
     self.logger.info('[%s] First domainproperty: %s [%d]\n', method, domainproperty['theName'], domainproperty['theId'])
 
   def test_get_by_name(self):

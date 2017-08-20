@@ -98,5 +98,5 @@ class DataFlowDiagram:
           df = pydot.Edge(fromName,toName,dir='forward',label=dfName,arrowhead='vee',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
           self.theGraph.add_edge(df)
       return self.layout()
-    except DatabaseProxyException, errTxt:
+    except DatabaseProxyException as errTxt:
       raise ARMException(errTxt)

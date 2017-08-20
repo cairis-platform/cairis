@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from Requirement import Requirement
+from .Requirement import Requirement
 
 __author__ = 'Shamal Faily'
 

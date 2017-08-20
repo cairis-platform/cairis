@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -48,7 +54,7 @@ class DataFlowsAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -59,7 +65,7 @@ class DataFlowsAPI(Resource):
     dao = DataFlowDAO(session_id)
     dataflows = dao.get_dataflows()
     dao.close()
-    resp = make_response(json_serialize(dataflows, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(dataflows, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -87,15 +93,15 @@ class DataFlowsAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -114,7 +120,7 @@ class DataFlowsAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'DataFlow successfully added'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -152,7 +158,7 @@ class DataFlowByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -164,7 +170,7 @@ class DataFlowByNameAPI(Resource):
     dao = DataFlowDAO(session_id)
     dataflow = dao.get_dataflow_by_name(dataflow_name,environment_name)
     dao.close()
-    resp = make_response(json_serialize(dataflow, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(dataflow, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -208,11 +214,11 @@ class DataFlowByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'DataFlow' is defined.'''
       }
     ]
@@ -227,7 +233,7 @@ class DataFlowByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'DataFlow successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -263,19 +269,19 @@ class DataFlowByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided dataflow name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -289,7 +295,7 @@ class DataFlowByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'DataFlow successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -327,7 +333,7 @@ class DataFlowDiagramAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -341,7 +347,7 @@ class DataFlowDiagramAPI(Resource):
       filter_element = ''
     dot_code = dao.get_dataflow_diagram(environment_name,filter_element)
     dao.close()
-    resp = make_response(model_generator.generate(dot_code, model_type='dataflow',renderer='dot'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code, model_type='dataflow',renderer='dot'), OK)
 
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:

@@ -16,8 +16,12 @@
 #  under the License.
 
 import logging
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import jsonpickle
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -45,10 +49,10 @@ class SummaryAPITests(CairisDaemonTestCase):
     sumRows = jsonpickle.decode(rv.data)
     self.assertIsNotNone(sumRows, 'No results after deserialization')
     self.logger.info('[%s] Rows: %d', method, len(sumRows))
-    self.assertEquals(len(sumRows),3)
-    self.assertEquals(sumRows[0]['theLabel'],'Catastrophic')
-    self.assertEquals(sumRows[0]['theValue'],1)
-    self.assertEquals(sumRows[1]['theLabel'],'Critical')
-    self.assertEquals(sumRows[1]['theValue'],2)
-    self.assertEquals(sumRows[2]['theLabel'],'Marginal')
-    self.assertEquals(sumRows[2]['theValue'],1)
+    self.assertEqual(len(sumRows),3)
+    self.assertEqual(sumRows[0]['theLabel'],'Catastrophic')
+    self.assertEqual(sumRows[0]['theValue'],1)
+    self.assertEqual(sumRows[1]['theLabel'],'Critical')
+    self.assertEqual(sumRows[1]['theValue'],2)
+    self.assertEqual(sumRows[2]['theLabel'],'Marginal')
+    self.assertEqual(sumRows[2]['theValue'],1)

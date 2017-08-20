@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -57,7 +63,7 @@ class AttackersAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -71,7 +77,7 @@ class AttackersAPI(Resource):
         attackers = dao.get_attackers(constraint_id=constraint_id)
         dao.close()
 
-        resp = make_response(json_serialize(attackers, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(attackers, session_id=session_id), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -99,15 +105,15 @@ class AttackersAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'A database error has occurred'
             },
             {
@@ -126,7 +132,7 @@ class AttackersAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Attacker successfully added', 'attacker_id': attacker_id}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -148,7 +154,7 @@ class AttackerByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -161,7 +167,7 @@ class AttackerByNameAPI(Resource):
         attacker = dao.get_attacker_by_name(name=name)
         dao.close()
 
-        resp = make_response(json_serialize(attacker, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(attacker, session_id=session_id), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -189,11 +195,11 @@ class AttackerByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'The provided file is not a valid XML file'
             },
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': '''Some parameters are missing. Be sure 'attacker' is defined.'''
             }
         ]
@@ -208,7 +214,7 @@ class AttackerByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Attacker successfully updated'}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -228,19 +234,19 @@ class AttackerByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.NOT_FOUND,
+                'code': NOT_FOUND,
                 'message': 'The provided attacker name could not be found in the database'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'A database error has occurred'
             }
         ]
@@ -254,7 +260,7 @@ class AttackerByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Attacker successfully deleted'}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -277,7 +283,7 @@ class AttackerCapabilitiesAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -291,7 +297,7 @@ class AttackerCapabilitiesAPI(Resource):
         assets = dao.get_attacker_capabilities(environment_name=environment_name)
         dao.close()
 
-        resp = make_response(json_serialize(assets, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(assets, session_id=session_id), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -319,15 +325,15 @@ class AttackerCapabilitiesAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'A database error has occurred'
             }
         ]
@@ -343,7 +349,7 @@ class AttackerCapabilitiesAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Attacker capability successfully added', 'attacker_capability_id': attacker_capability_id}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -365,7 +371,7 @@ class AttackerCapabilityByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -379,7 +385,7 @@ class AttackerCapabilityByNameAPI(Resource):
         attacker_capability = dao.get_attacker_capability_by_name(name=name, environment_name=environment_name)
         dao.close()
 
-        resp = make_response(json_serialize(attacker_capability, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(attacker_capability, session_id=session_id), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -407,11 +413,11 @@ class AttackerCapabilityByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'The provided file is not a valid XML file'
             },
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': '''Some parameters are missing. Be sure 'asset' is defined.'''
             }
         ]
@@ -427,7 +433,7 @@ class AttackerCapabilityByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Attacker capability successfully updated'}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -447,19 +453,19 @@ class AttackerCapabilityByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.NOT_FOUND,
+                'code': NOT_FOUND,
                 'message': 'The provided asset name could not be found in the database'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'A database error has occurred'
             }
         ]
@@ -474,7 +480,7 @@ class AttackerCapabilityByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Attacker capability successfully deleted'}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -497,7 +503,7 @@ class AttackerMotivationsAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -511,7 +517,7 @@ class AttackerMotivationsAPI(Resource):
         assets = dao.get_attacker_motivations(environment_name=environment_name)
         dao.close()
 
-        resp = make_response(json_serialize(assets, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(assets, session_id=session_id), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -539,15 +545,15 @@ class AttackerMotivationsAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'A database error has occurred'
             }
         ]
@@ -563,7 +569,7 @@ class AttackerMotivationsAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Attacker motivation successfully added', 'attacker_motivation_id': attacker_motivation_id}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.contenttype = 'application/json'
         return resp
 
@@ -585,7 +591,7 @@ class AttackerMotivationByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                "code": httplib.BAD_REQUEST,
+                "code": BAD_REQUEST,
                 "message": "The database connection was not properly set up"
             }
         ]
@@ -599,7 +605,7 @@ class AttackerMotivationByNameAPI(Resource):
         attacker_motivation = dao.get_attacker_motivation_by_name(name=name, environment_name=environment_name)
         dao.close()
 
-        resp = make_response(json_serialize(attacker_motivation, session_id=session_id), httplib.OK)
+        resp = make_response(json_serialize(attacker_motivation, session_id=session_id), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -627,11 +633,11 @@ class AttackerMotivationByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'The provided file is not a valid XML file'
             },
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': '''Some parameters are missing. Be sure 'asset' is defined.'''
             }
         ]
@@ -647,7 +653,7 @@ class AttackerMotivationByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Attacker motivation successfully updated'}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp
 
@@ -667,19 +673,19 @@ class AttackerMotivationByNameAPI(Resource):
         ],
         responseMessages=[
             {
-                'code': httplib.BAD_REQUEST,
+                'code': BAD_REQUEST,
                 'message': 'One or more attributes are missing'
             },
             {
-                'code': httplib.NOT_FOUND,
+                'code': NOT_FOUND,
                 'message': 'The provided asset name could not be found in the database'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'Some problems were found during the name check'
             },
             {
-                'code': httplib.CONFLICT,
+                'code': CONFLICT,
                 'message': 'A database error has occurred'
             }
         ]
@@ -694,6 +700,6 @@ class AttackerMotivationByNameAPI(Resource):
         dao.close()
 
         resp_dict = {'message': 'Attacker motivation successfully deleted'}
-        resp = make_response(json_serialize(resp_dict), httplib.OK)
+        resp = make_response(json_serialize(resp_dict), OK)
         resp.headers['Content-type'] = 'application/json'
         return resp

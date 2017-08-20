@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -28,7 +34,7 @@ from cairis.tools.SessionValidator import get_session_id
 from cairis.tools.JsonConverter import json_serialize
 
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 
 class EnvironmentsAPI(Resource):
@@ -49,7 +55,7 @@ class EnvironmentsAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -63,13 +69,13 @@ class EnvironmentsAPI(Resource):
     environments = dao.get_environments(constraintsId)
     dao.close()
 
-    resp = make_response(json_serialize(environments, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(environments, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
   #region Swagger Docs
   const_str = ''
-  for key, value in EnvironmentTensionModel.attr_dictionary.items():
+  for key, value in list(EnvironmentTensionModel.attr_dictionary.items()):
     formatted_str = '<br/>- %s: %d' % (key, value)
     const_str += formatted_str
   @swagger.operation(
@@ -95,7 +101,7 @@ class EnvironmentsAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       },
       {
@@ -117,7 +123,7 @@ class EnvironmentsAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Environment successfully added', 'environment_id': new_environment_id}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -139,7 +145,7 @@ class EnvironmentByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -152,7 +158,7 @@ class EnvironmentByNameAPI(Resource):
     found_environment = dao.get_environment_by_name(name)
     dao.close()
 
-    resp = make_response(json_serialize(found_environment, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(found_environment, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -180,11 +186,11 @@ class EnvironmentByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
@@ -207,7 +213,7 @@ class EnvironmentByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Environment successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -227,11 +233,11 @@ class EnvironmentByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
@@ -253,7 +259,7 @@ class EnvironmentByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Environment successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -276,7 +282,7 @@ class EnvironmentsByThreatVulnerability(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -289,7 +295,7 @@ class EnvironmentsByThreatVulnerability(Resource):
     environments = dao.get_environments_by_threat_vulnerability(threat, vulnerability)
     dao.close()
 
-    resp = make_response(json_serialize(environments, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(environments, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -312,7 +318,7 @@ class EnvironmentNamesByThreatVulnerability(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -325,7 +331,7 @@ class EnvironmentNamesByThreatVulnerability(Resource):
     environments = dao.get_environment_names_by_threat_vulnerability(threat, vulnerability)
     dao.close()
 
-    resp = make_response(json_serialize(environments, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(environments, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -347,7 +353,7 @@ class EnvironmentNamesByRisk(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -360,7 +366,7 @@ class EnvironmentNamesByRisk(Resource):
     environments = dao.get_environment_names_by_risk(risk)
     dao.close()
 
-    resp = make_response(json_serialize(environments, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(environments, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -383,7 +389,7 @@ class EnvironmentNamesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -396,6 +402,6 @@ class EnvironmentNamesAPI(Resource):
     environment_names = dao.get_environment_names()
     dao.close()
 
-    resp = make_response(json_serialize(environment_names, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(environment_names, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

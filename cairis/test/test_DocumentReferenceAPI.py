@@ -16,8 +16,12 @@
 #  under the License.
 
 import logging
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import jsonpickle
 from cairis.core.DocumentReference import DocumentReference
@@ -59,7 +63,7 @@ class DocumentReferenceAPITests(CairisDaemonTestCase):
     self.assertIsInstance(drs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(drs), 0, 'No document references in the dictionary')
     self.logger.info('[%s] Document references found: %d', method, len(drs))
-    dr = drs.values()[0]
+    dr = list(drs.values())[0]
     self.logger.info('[%s] First document reference: %s [%d]\n', method, dr['theName'], dr['theId'])
 
   def test_get_by_name(self):

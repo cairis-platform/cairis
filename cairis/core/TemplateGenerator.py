@@ -17,7 +17,7 @@
 
 import mako.lookup
 from mako.template import Template
-from Borg import Borg
+from .Borg import Borg
 from cairis.templates.NavObject import NavObject
 
 __author__ = 'Raf Vandelaer'

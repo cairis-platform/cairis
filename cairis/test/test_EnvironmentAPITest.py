@@ -16,7 +16,11 @@
 #  under the License.
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.Environment import Environment
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -45,7 +49,7 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     self.assertIsInstance(environments, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(environments), 0, 'No environments in the dictionary')
     self.logger.info('[%s] Environments found: %d', method, len(environments))
-    environment = environments.values()[0]
+    environment = list(environments.values())[0]
     self.logger.info('[%s] First environment: %s [%d]\n', method, environment['theName'], environment['theId'])
 
   def test_get_all_names(self):

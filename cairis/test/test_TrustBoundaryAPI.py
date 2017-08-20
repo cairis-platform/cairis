@@ -17,7 +17,11 @@
 
 import json
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.TrustBoundary import TrustBoundary
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -65,7 +69,7 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
     self.assertIsInstance(tbs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(tbs), 0, 'No trust_boundaries in the dictionary')
     self.logger.info('[%s] TrustBoundaries found: %d', method, len(tbs))
-    tb = tbs.values()[0]
+    tb = list(tbs.values())[0]
     self.assertEqual(tb['theName'],'local')
     self.assertEqual(tb['theDescription'],'Local IT support')
     self.assertEqual(tb['theEnvironmentProperties'][0]['theComponents'][0]['theName'],'Credentials Store')

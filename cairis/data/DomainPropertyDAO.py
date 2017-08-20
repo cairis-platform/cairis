@@ -54,7 +54,7 @@ class DomainPropertyDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
     if simplify:
-      for key, value in domain_properties.items():
+      for key, value in list(domain_properties.items()):
         domain_properties[key] = self.simplify(value)
 
     return domain_properties

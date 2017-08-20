@@ -35,9 +35,9 @@ if __name__ == '__main__':
     from cairis.gui.IRISApp import IRISApp
     from cairis.core.ARM import ARMException
     main()
-  except ImportError, e:
-    print "Fatal CAIRIS error: " + str(e) 
+  except ImportError as e:
+    print("Fatal CAIRIS error: " + str(e)) 
     sys.exit(-1)
-  except ARMException, e:
-    print "Fatal CAIRIS error: " + str(e) 
+  except ARMException as e:
+    print("Fatal CAIRIS error: " + str(e)) 
     sys.exit(-1)

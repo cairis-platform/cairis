@@ -16,7 +16,7 @@
 #  under the License.
 
 
-from ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
+from .ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
 
 __author__ = 'Shamal Faily'
 

@@ -16,11 +16,11 @@
 #  under the License.
 
 
-import Mitigation
-from ARM import *
-from GoalEnvironmentProperties import GoalEnvironmentProperties
-from GoalParameters import GoalParameters
-from Borg import Borg
+from . import Mitigation
+from .ARM import *
+from .GoalEnvironmentProperties import GoalEnvironmentProperties
+from .GoalParameters import GoalParameters
+from .Borg import Borg
 
 __author__ = 'Shamal Faily'
 

@@ -16,8 +16,12 @@
 #  under the License.
 
 import logging
-from urllib import quote
-from StringIO import StringIO
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+from io import StringIO
 import os
 import jsonpickle
 from cairis.core.TaskCharacteristic import TaskCharacteristic
@@ -63,7 +67,7 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     self.assertIsInstance(tcs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(tcs), 0, 'No task characteristics in the dictionary')
     self.logger.info('[%s] Task characteristics found: %d', method, len(tcs))
-    tc = tcs.values()[0]
+    tc = list(tcs.values())[0]
     self.logger.info('[%s] First task characteristic: %s [%d]\n', method, tc['theCharacteristic'], tc['theId'])
 
   def test_get_by_name(self):

@@ -37,7 +37,7 @@ class CharacteristicReferenceSynopsis(object):
     "theActorType": fields.String,
     "theActor": fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field : gen_class_metadata(ReferenceSynopsis)
@@ -62,7 +62,7 @@ class CharacteristicReferenceContribution(object):
     "theMeansEnd": fields.String,
     "theContribution": fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field : gen_class_metadata(ReferenceContribution)
@@ -87,7 +87,7 @@ class CharacteristicReference(object):
     'theReferenceSynopsis' : fields.Nested(CharacteristicReferenceSynopsis.resource_fields),
     'theReferenceContribution' : fields.Nested(CharacteristicReferenceContribution.resource_fields)
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: {
@@ -145,7 +145,7 @@ class Contributor(object):
     'affiliation': fields.String,
     'role': fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: {
@@ -182,17 +182,17 @@ class EnvironmentTensionModel(object):
     "value": fields.Integer,
     "rationale": fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: {
       "enum": ["tools.PseudoClasses."+__name__]
     },
     "base_attr_id": {
-      "enum": range(0,4)
+      "enum": list(range(0,4))
     },
     "attr_id": {
-      "enum": range(4,8)
+      "enum": list(range(4,8))
     },
     "value": {
       "enum": [-1,0,1]
@@ -208,11 +208,11 @@ class EnvironmentTensionModel(object):
     'Unlinkability': 6,
     'Unobservability': 7
   }
-  attr_dictionary = OrderedDict(sorted(attr_dictionary.items(), key=lambda t: t[1]))
+  attr_dictionary = OrderedDict(sorted(list(attr_dictionary.items()), key=lambda t: t[1]))
   # endregion
 
-  base_attr_values = range(-1,4)
-  attr_values = range(4,8)
+  base_attr_values = list(range(-1,4))
+  attr_values = list(range(4,8))
   attr_values.append(-1)
 
   def __init__(self, base_attr_id=-1, attr_id=-1, value=0, rationale='None', key=None):
@@ -247,7 +247,7 @@ class Revision(object):
     'date': fields.String,
     'description': fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: { 'enum': [ __name__ + '.Revision'] },
@@ -293,7 +293,7 @@ class ProjectSettings(object):
     'projectBackground': fields.String,
     'revisions': fields.List(fields.Nested(Revision.resource_fields))
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: {
@@ -344,7 +344,7 @@ class RiskScore(object):
     'mitScore': fields.Integer,
     'details': fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: { 'enum': [__name__+'.RiskScore'] }
@@ -373,7 +373,7 @@ class RiskRating(object):
     'vulnerability': fields.String,
     'environment': fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: { 'enum': [__name__+'.RiskRating'] }
@@ -404,7 +404,7 @@ class CountermeasureTarget(object):
     "theEffectiveness": fields.String,
     "theRationale": fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     "theEffectiveness": {
@@ -447,7 +447,7 @@ class PersonaTaskCharacteristics(object):
     "theDemands": fields.String,
     "theGoalConflict": fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     "theDuration": {
@@ -516,7 +516,7 @@ class CountermeasureTaskCharacteristics(object):
     "theDemands": fields.String,
     "theGoalConflict": fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     "theDuration": {
@@ -585,7 +585,7 @@ class SecurityAttribute(object):
     "value": fields.String,
     "rationale": fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     "__python_obj__": {
@@ -643,7 +643,7 @@ class ValuedRole(object):
     'roleName': fields.String,
     'cost': fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: { 'enum': [__name__+'.ValuedRole'] }
@@ -664,7 +664,7 @@ class ExceptionAttributes(object):
     'theCategoryName': fields.String,
     'theDescription': fields.String
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: { 'enum': [__name__+'.ExceptionAttribute'] }
@@ -689,7 +689,7 @@ class StepAttributes(object):
     'theTags': fields.List(fields.String),
     'theExceptions': fields.List(fields.Nested(ExceptionAttributes.resource_fields)),
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: { 'enum': [__name__+'.StepsAttribute'] }
@@ -717,7 +717,7 @@ class StepsAttributes(object):
     obj_id_field: fields.String,
     'theSteps': fields.List(fields.Nested(StepAttributes.resource_fields)),
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: { 'enum': [__name__+'.StepsAttribute'] }
@@ -752,7 +752,7 @@ class ObjectDependency(object):
     'theDimensionName': fields.String,
     'theObjectName': fields.String,
   }
-  required = resource_fields.keys()
+  required = list(resource_fields.keys())
   required.remove(obj_id_field)
   swagger_metadata = {
     obj_id_field: { 'enum': [__name__+'.ObjectDependency'] }

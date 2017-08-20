@@ -18,7 +18,7 @@
 __author__ = 'Shamal Faily'
 
 
-from PropertyHolder import PropertyHolder;
+from .PropertyHolder import PropertyHolder;
 from numpy import *
 
 class Asset:

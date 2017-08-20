@@ -17,7 +17,11 @@
 
 
 import logging
-from urllib import quote
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import jsonpickle
 from cairis.core.Countermeasure import Countermeasure
 from cairis.core.Target import Target
@@ -63,7 +67,7 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.assertIsInstance(countermeasures, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(countermeasures), 0, 'No countermeasures in the dictionary')
     self.logger.info('[%s] Countermeasures found: %d', method, len(countermeasures))
-    countermeasure = countermeasures.values()[0]
+    countermeasure = list(countermeasures.values())[0]
     self.logger.info('[%s] First countermeasure: %s [%d]\n', method, countermeasure['theName'], countermeasure['theId'])
 
   def test_get_by_name(self):

@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -57,7 +63,7 @@ class CountermeasuresAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -71,7 +77,7 @@ class CountermeasuresAPI(Resource):
     countermeasures = dao.get_countermeasures(constraint_id=constraint_id)
     dao.close()
 
-    resp = make_response(json_serialize(countermeasures, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(countermeasures, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -99,15 +105,15 @@ class CountermeasuresAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -126,7 +132,7 @@ class CountermeasuresAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Countermeasure successfully added', 'countermeasure_id': countermeasure_id}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -148,7 +154,7 @@ class CountermeasureByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -161,7 +167,7 @@ class CountermeasureByNameAPI(Resource):
     countermeasure = dao.get_countermeasure_by_name(name=name)
     dao.close()
 
-    resp = make_response(json_serialize(countermeasure, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(countermeasure, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -189,11 +195,11 @@ class CountermeasureByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The provided file is not a valid XML file'
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure 'Countermeasure' is defined.'''
       }
     ]
@@ -208,7 +214,7 @@ class CountermeasureByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Countermeasure successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -228,19 +234,19 @@ class CountermeasureByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided countermeasure name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -254,7 +260,7 @@ class CountermeasureByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Countermeasure successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -292,7 +298,7 @@ class TargetsAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -305,7 +311,7 @@ class TargetsAPI(Resource):
     targets = dao.get_countermeasure_targets(reqList,environment)
     dao.close()
 
-    resp = make_response(json_serialize(targets, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(targets, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
     dao.close()
@@ -345,7 +351,7 @@ class CountermeasureTasksAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -358,7 +364,7 @@ class CountermeasureTasksAPI(Resource):
     tasks = dao.get_countermeasure_tasks(roleList,environment)
     dao.close()
 
-    resp = make_response(json_serialize(tasks, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(tasks, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
     dao.close()
@@ -381,15 +387,15 @@ class GenerateAssetAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -407,6 +413,6 @@ class GenerateAssetAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Asset successfully generated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

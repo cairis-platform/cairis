@@ -22,8 +22,13 @@ import jsonpickle
 import glob
 import imghdr
 import argparse
-from urllib import quote
+
 import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
+
 
 def importModel(url,dbName,modelFile):
 
@@ -114,15 +119,15 @@ def main(args=None):
   importModel(args.url,args.dbName,args.modelFile)
   importModelRichPicture(args.url,args.imageDir,args.rpImage)
   personaObjts = objectsWithImages(args.url,'persona')
-  for pName in personaObjts.keys():
+  for pName in list(personaObjts.keys()):
     updateObjectImage(args.url,'persona',args.imageDir,personaObjts[pName])
   attackerObjts = objectsWithImages(args.url,'attacker')
-  for aName in attackerObjts.keys():
+  for aName in list(attackerObjts.keys()):
     updateObjectImage(args.url,'attacker',args.imageDir,attackerObjts[aName])
 
 if __name__ == '__main__':
   try:
     main()
-  except Exception, e:
-    print 'Fatal import error: ' + str(e)
+  except Exception as e:
+    print('Fatal import error: ' + str(e))
     sys.exit(-1)

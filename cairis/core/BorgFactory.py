@@ -17,15 +17,14 @@
 
 __author__ = 'Shamal Faily, Robin Quetin'
 
-from Borg import Borg
+from .Borg import Borg
 import os
 import logging
-import DatabaseProxyFactory
+from . import DatabaseProxyFactory
 from cairis.tools.GraphicsGenerator import GraphicsGenerator
-from MySQLDatabaseProxy import MySQLDatabaseProxy
-from TemplateGenerator import TemplateGenerator
-from ARM import ARMException
-from string import strip
+from .MySQLDatabaseProxy import MySQLDatabaseProxy
+from .TemplateGenerator import TemplateGenerator
+from .ARM import ARMException
 
 def testUploadDirectory(uploadDir,logger):
   
@@ -42,7 +41,7 @@ def testUploadDirectory(uploadDir,logger):
       logger.warning(err_msg)
   else:
     try:
-      os.mkdir(image_upload_dir, 0775)
+      os.mkdir(image_upload_dir, 0o775)
     except IOError:
       err_msg = 'Unable to create directory to store images into. Image uploading will probably not work.'
       logger.warning(err_msg)
@@ -65,7 +64,7 @@ def parseConfigFile():
     if len(cfgTuple) != 2:
       pass
     else:
-      cfgDict[strip(cfgTuple[0])] = strip(cfgTuple[1])
+      cfgDict[cfgTuple[0].strip()] = cfgTuple[1].strip()
   cfgFile.close()
   return cfgDict
 
@@ -138,7 +137,7 @@ def dInitialise():
 
   try:
     b.webPort = int(cfgDict['web_port'])
-  except TypeError, ex:
+  except TypeError as ex:
     b.logger.error(str(ex.message))
 
   if cfgDict['log_level'].lower() == 'debug':
@@ -165,7 +164,7 @@ def dInitialise():
     'upload': b.uploadDir
   }
 
-  for key, path in paths.items():
+  for key, path in list(paths.items()):
     if not os.path.exists(path):
       err_msg = 'The {0} directory of CAIRIS is inaccessible or not existing.{1}Path: {2}'.format(key, os.linesep, path)
       b.logger.error(err_msg)

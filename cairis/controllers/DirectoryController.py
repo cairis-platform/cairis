@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -56,7 +62,7 @@ class ThreatDirectoryAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -69,7 +75,7 @@ class ThreatDirectoryAPI(Resource):
       entry_name = ''
     tds = dao.get_threat_directory(entry_name)
     dao.close()
-    resp = make_response(json_serialize(tds, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(tds, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -100,7 +106,7 @@ class VulnerabilityDirectoryAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -113,6 +119,6 @@ class VulnerabilityDirectoryAPI(Resource):
       entry_name = ''
     vds = dao.get_vulnerability_directory(entry_name)
     dao.close()
-    resp = make_response(json_serialize(vds, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(vds, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp

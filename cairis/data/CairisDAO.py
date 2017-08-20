@@ -15,9 +15,12 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+else:
+  import httplib
 import logging
-
 from cairis.core.Borg import Borg
 from cairis.daemon.CairisHTTPError import CairisHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
@@ -90,7 +93,7 @@ class CairisDAO(object):
 
       if db_proxy is None:
         raise CairisHTTPError(
-          status_code=httplib.CONFLICT,
+          status_code=http.client.CONFLICT,
           message='The database connection could not be created.'
         )
       elif isinstance(db_proxy, MySQLDatabaseProxy):
@@ -99,7 +102,7 @@ class CairisDAO(object):
         return db_proxy
       else:
         raise CairisHTTPError(
-          status_code=httplib.CONFLICT,
+          status_code=http.client.CONFLICT,
           message='The database connection was not properly set up. Please try to reset the connection.'
         )
     else:

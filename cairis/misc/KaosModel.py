@@ -258,8 +258,8 @@ class KaosModel:
 
       objtUrl = goalDimName + '#' + subGoalDimName + '#' + assocType
       if ((subGoalName,goalName,assocLabel) not in edgeSet):
-	if assocLabel == '':
-	    assocLabel = ' '
+        if (assocLabel == ''):
+          assocLabel = ' '
         self.theGraph.add_edge(pydot.Edge(subGoalName,goalName,style=edgeStyle,dir=assocDir,arrowhead=arrowHead,arrowtail=arrowTail,label=assocLabel,fontsize=fontSize,weight='1',fontcolor=fontColour,color=edgeColour,URL=objtUrl))
         edgeSet.add((subGoalName,goalName,assocLabel))
 
@@ -286,6 +286,6 @@ class KaosModel:
         self.buildTaskModel()
 
       return self.layout()
-    except DatabaseProxyException, errTxt:
+    except DatabaseProxyException as errTxt:
       raise ARMException(errTxt)
 

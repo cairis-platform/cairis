@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful_swagger import swagger
 from flask_restful import Resource
@@ -55,7 +61,7 @@ class GoalsAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -98,15 +104,15 @@ class GoalsAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -121,7 +127,7 @@ class GoalsAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Goal successfully added', 'goal_id': new_goal_id}
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -152,7 +158,7 @@ class GoalByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -194,15 +200,15 @@ class GoalByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -217,7 +223,7 @@ class GoalByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Goal successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -237,15 +243,15 @@ class GoalByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -259,7 +265,7 @@ class GoalByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Goal successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -306,15 +312,15 @@ class GoalModelAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       },
       {
-        "code": httplib.NOT_FOUND,
+        "code": NOT_FOUND,
         "message": "Environment not found"
       },
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "Environment not defined"
       }
     ]
@@ -330,7 +336,7 @@ class GoalModelAPI(Resource):
     dot_code = dao.get_goal_model(environment,goal,usecase)
     dao.close()
 
-    resp = make_response(model_generator.generate(dot_code, model_type='goal',renderer='dot'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code, model_type='goal',renderer='dot'), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'
@@ -356,7 +362,7 @@ class GoalByEnvironmentNamesAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -407,15 +413,15 @@ class ResponsibilityModelAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       },
       {
-        "code": httplib.NOT_FOUND,
+        "code": NOT_FOUND,
         "message": "Environment not found"
       },
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "Environment not defined"
       }
     ]
@@ -431,7 +437,7 @@ class ResponsibilityModelAPI(Resource):
     dot_code = dao.get_responsibility_model(environment, role)
     dao.close()
 
-    resp = make_response(model_generator.generate(dot_code, model_type='responsibility',renderer='neato'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code, model_type='responsibility',renderer='neato'), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'
@@ -481,11 +487,11 @@ class GoalAssociationByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       },
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': '''Some parameters are missing. Be sure asset association is defined.'''
       }
     ]
@@ -542,15 +548,15 @@ class GoalAssociationByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -563,7 +569,7 @@ class GoalAssociationByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Goal Association successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -592,15 +598,15 @@ class GoalAssociationAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -615,7 +621,7 @@ class GoalAssociationAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Goal Association successfully added'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -643,15 +649,15 @@ class GoalAssociationAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'One or more attributes are missing'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -665,6 +671,6 @@ class GoalAssociationAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Goal Association successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

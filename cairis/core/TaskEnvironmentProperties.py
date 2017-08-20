@@ -17,7 +17,7 @@
 
 __author__ = 'Shamal Faily'
 
-from EnvironmentProperties import EnvironmentProperties
+from .EnvironmentProperties import EnvironmentProperties
 
 class TaskEnvironmentProperties(EnvironmentProperties):
   def __init__(self,environmentName,deps = '',personas = [],assets = [],concs=[],narrative = '',consequences = '', benefits = '',tCodes={'narrative':{},'benefits':{},'consequences':{}}):

@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import httplib
+import sys
+if (sys.version_info > (3,)):
+  import http.client
+  from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
+else:
+  import httplib
+  from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
@@ -46,7 +52,7 @@ class ArchitecturalPatternsAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
     ]
@@ -57,7 +63,7 @@ class ArchitecturalPatternsAPI(Resource):
     dao = ArchitecturalPatternDAO(session_id)
     aps = dao.get_architectural_patterns()
     dao.close()
-    resp = make_response(json_serialize(aps, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(aps, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -86,15 +92,15 @@ class ArchitecturalPatternsAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -111,7 +117,7 @@ class ArchitecturalPatternsAPI(Resource):
     dao.add_architectural_pattern(new_ap)
     dao.close()
     resp_dict = {'message': 'Architectural Pattern successfully added'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -142,7 +148,7 @@ class ArchitecturalPatternByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
     ]
@@ -153,7 +159,7 @@ class ArchitecturalPatternByNameAPI(Resource):
     dao = ArchitecturalPatternDAO(session_id)
     ap = dao.get_architectural_pattern(name)
     dao.close()
-    resp = make_response(json_serialize(ap, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(ap, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -191,15 +197,15 @@ class ArchitecturalPatternByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       },
       {
@@ -216,7 +222,7 @@ class ArchitecturalPatternByNameAPI(Resource):
     dao.update_architectural_pattern(upd_ap,name)
     dao.close()
     resp_dict = {'message': 'Architectural Pattern successfully updated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -246,19 +252,19 @@ class ArchitecturalPatternByNameAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
       {
-        'code': httplib.NOT_FOUND,
+        'code': NOT_FOUND,
         'message': 'The provided threat name could not be found in the database'
       },
       {
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'Some problems were found during the name check'
       },
       { 
-        'code': httplib.CONFLICT,
+        'code': CONFLICT,
         'message': 'A database error has occurred'
       }
     ]
@@ -271,7 +277,7 @@ class ArchitecturalPatternByNameAPI(Resource):
     dao.close()
 
     resp_dict = {'message': 'Architectural Pattern successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
@@ -300,7 +306,7 @@ class ComponentAssetModelAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -317,7 +323,7 @@ class ComponentAssetModelAPI(Resource):
     if not isinstance(dot_code, str):
       raise ObjectNotFoundHTTPError('The model')
 
-    resp = make_response(model_generator.generate(dot_code,renderer='dot'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code,renderer='dot'), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'
@@ -351,7 +357,7 @@ class ComponentGoalModelAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -368,7 +374,7 @@ class ComponentGoalModelAPI(Resource):
     if not isinstance(dot_code, str):
       raise ObjectNotFoundHTTPError('The model')
 
-    resp = make_response(model_generator.generate(dot_code,model_type='goal',renderer='dot'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code,model_type='goal',renderer='dot'), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'
@@ -402,7 +408,7 @@ class ComponentModelAPI(Resource):
     ],
     responseMessages=[
       {
-        "code": httplib.BAD_REQUEST,
+        "code": BAD_REQUEST,
         "message": "The database connection was not properly set up"
       }
     ]
@@ -419,7 +425,7 @@ class ComponentModelAPI(Resource):
     if not isinstance(dot_code, str):
       raise ObjectNotFoundHTTPError('The model')
 
-    resp = make_response(model_generator.generate(dot_code,renderer='dot'), httplib.OK)
+    resp = make_response(model_generator.generate(dot_code,renderer='dot'), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'
@@ -462,7 +468,7 @@ class WeaknessAnalysisAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
     ]
@@ -473,7 +479,7 @@ class WeaknessAnalysisAPI(Resource):
     dao = ArchitecturalPatternDAO(session_id)
     cwm = dao.get_weakness_analysis(architectural_pattern_name,environment_name)
     dao.close()
-    resp = make_response(json_serialize(cwm, session_id=session_id), httplib.OK)
+    resp = make_response(json_serialize(cwm, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
@@ -511,7 +517,7 @@ class SituateArchitecturalPatternAPI(Resource):
     ],
     responseMessages=[
       {
-        'code': httplib.BAD_REQUEST,
+        'code': BAD_REQUEST,
         'message': 'The database connection was not properly setup'
       },
     ]
@@ -523,6 +529,6 @@ class SituateArchitecturalPatternAPI(Resource):
     cwm = dao.situate_component_view(architectural_pattern_name,environment_name)
     dao.close()
     resp_dict = {'message': 'Architectural Pattern successfully situated'}
-    resp = make_response(json_serialize(resp_dict), httplib.OK)
+    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
