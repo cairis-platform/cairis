@@ -153,7 +153,7 @@ class CountermeasureTest(unittest.TestCase):
     riskParameters = rgp[0]
     riskGoalId = b.dbProxy.addGoal(riskParameters)
     b.dbProxy.addTrace('response_goal',self.oar2.id(),riskGoalId)
-    if (rgp > 1):
+    if (len(rgp) > 1):
       threatParameters = rgp[1]
       vulnerabilityParameters = rgp[2]
       b.dbProxy.addGoal(vulnerabilityParameters)
