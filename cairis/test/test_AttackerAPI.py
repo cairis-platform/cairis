@@ -63,7 +63,10 @@ class AttackerAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/attackers?session_id=test')
-    attackers = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      attackers = jsonpickle.decode(rv.data.decode('utf-8'))
+    else:
+      attackers = jsonpickle.decode(rv.data)
     self.assertIsNotNone(attackers, 'No results after deserialization')
     self.assertIsInstance(attackers, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(attackers), 0, 'No attackers in the dictionary')
@@ -77,7 +80,10 @@ class AttackerAPITests(CairisDaemonTestCase):
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
-    attacker = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      attacker = jsonpickle.decode(rv.data.decode('utf-8'))
+    else:
+      attacker = jsonpickle.decode(rv.data)
     self.assertIsNotNone(attacker, 'No results after deserialization')
     self.logger.info('[%s] Attacker: %s [%d]\n', method, attacker['theName'], attacker['theId'])
 
@@ -91,9 +97,13 @@ class AttackerAPITests(CairisDaemonTestCase):
     self.app.post('/api/attackers', content_type='application/json', data=new_attacker_body)
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.delete(url)
-    self.logger.info('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.info('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No response')
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -107,8 +117,12 @@ class AttackerAPITests(CairisDaemonTestCase):
 
     self.app.delete('/api/attackers/name/%s?session_id=test' % quote(self.prepare_new_attacker().theName))
     rv = self.app.post(url, content_type='application/json', data=new_attacker_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('attacker_id', None)
     self.assertIsNotNone(env_id, 'No attacker ID returned')
@@ -125,8 +139,12 @@ class AttackerAPITests(CairisDaemonTestCase):
 
     rv = self.app.delete('/api/attackers/name/%s?session_id=test' % quote(self.prepare_new_attacker().theName))
     rv = self.app.post(url, content_type='application/json', data=new_attacker_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('attacker_id', None)
     self.assertIsNotNone(env_id, 'No attacker ID returned')
@@ -138,8 +156,12 @@ class AttackerAPITests(CairisDaemonTestCase):
     attacker_to_update.theId = env_id
     upd_env_body = self.prepare_json(attacker=attacker_to_update)
     rv = self.app.put('/api/attackers/name/%s?session_id=test' % quote(self.prepare_new_attacker().theName), data=upd_env_body, content_type='application/json')
-    self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.assertIsNotNone(responseData, 'No response')
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertIsInstance(json_resp, dict)
     message = json_resp.get('message', None)
@@ -148,9 +170,13 @@ class AttackerAPITests(CairisDaemonTestCase):
     self.assertGreater(message.find('successfully updated'), -1, 'The attacker was not successfully updated')
 
     rv = self.app.get('/api/attackers/name/%s?session_id=test' % quote(attacker_to_update.theName))
-    upd_attacker = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    upd_attacker = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_attacker, 'Unable to decode JSON data')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.logger.debug('[%s] Response data: %s', method, responseData)
     self.logger.info('[%s] Attacker: %s [%d]\n', method, upd_attacker['theName'], upd_attacker['theId'])
 
     rv = self.app.delete('/api/attackers/name/%s?session_id=test' % quote(attacker_to_update.theName))
