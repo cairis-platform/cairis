@@ -21,6 +21,7 @@ from cairis.core.Dependency import Dependency
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.ModelDefinitions import DependencyModel
 import os
+import sys
 from cairis.mio.ModelImport import importModelFile
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -49,7 +50,11 @@ class DependencyAPITests(CairisDaemonTestCase):
 
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
     self.assertGreater(len(json_dict), 0, 'No dependencies found')
     assert isinstance(json_dict, dict)
@@ -62,7 +67,11 @@ class DependencyAPITests(CairisDaemonTestCase):
 
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(json_dict, list, 'The response is not a valid JSON dictionary')
     self.assertGreater(len(json_dict), 0, 'No dependencies found')
     assert isinstance(json_dict, list)
@@ -77,7 +86,11 @@ class DependencyAPITests(CairisDaemonTestCase):
 
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(json_dict, list, 'The response is not a valid JSON dictionary')
     self.assertEqual(len(json_dict), 1, 'Result is not unique')
     assert isinstance(json_dict, list)
@@ -103,7 +116,11 @@ class DependencyAPITests(CairisDaemonTestCase):
 
     rv = self.app.post(url, data=json_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
     message = json_dict.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -132,7 +149,11 @@ class DependencyAPITests(CairisDaemonTestCase):
     delete_url = '/api/dependencies/environment/%s/depender/%s/dependee/%s/dependency/%s?session_id=test' % new_name
     rv = self.app.delete(delete_url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
     message = json_dict.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -161,7 +182,11 @@ class DependencyAPITests(CairisDaemonTestCase):
     upd_url = '/api/dependencies/environment/%s/depender/%s/dependee/%s/dependency/%s?session_id=test' % new_name
     rv = self.app.put(upd_url, data=json_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
     message = json_dict.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -171,7 +196,11 @@ class DependencyAPITests(CairisDaemonTestCase):
     delete_name = (upd_dep.theEnvironmentName, upd_dep.theDepender, upd_dep.theDependee, upd_dep.theDependency)
     del_get_url = '/api/dependencies/environment/%s/depender/%s/dependee/%s/dependency/%s?session_id=test' % delete_name
     rv = self.app.get(del_get_url)
-    self.logger.debug('[%s] Updated dependency:\n%s\n', method, rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Updated dependency:\n%s\n', method, responseData)
     self.app.delete(del_get_url)
 
   def prepare_new_dependency(self):
