@@ -57,7 +57,11 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     url = '/api/concept_references?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    crs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    crs = jsonpickle.decode(responseData)
     self.assertIsNotNone(crs, 'No results after deserialization')
     self.assertIsInstance(crs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(crs), 0, 'No concept references in the dictionary')
@@ -70,16 +74,24 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     url = '/api/concept_references/name/%s?session_id=test' % quote(self.existing_cr_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    cr = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    cr = jsonpickle.decode(responseData)
     self.assertIsNotNone(cr, 'No results after deserialization')
     self.logger.info('[%s] Concept reference: %s [%d]\n', method, cr['theName'], cr['theId'])
 
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/concept_references', content_type='application/json', data=jsonpickle.encode(self.new_cr_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Concept Reference successfully added')
@@ -89,8 +101,12 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     self.new_cr_dict['object'].theDescription = 'Updated text segment'
     url = '/api/concept_references/name/%s?session_id=test' % quote(self.existing_cr_name)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_cr_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Concept Reference successfully updated')
@@ -106,7 +122,11 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     rv = self.app.delete(url)
 
     self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Concept Reference successfully deleted')
