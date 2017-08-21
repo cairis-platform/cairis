@@ -18,8 +18,10 @@
 import sys
 if (sys.version_info > (3,)):
   import http.client
+  from http.client import BAD_REQUEST, CONFLICT
 else: 
   import httplib
+  from httplib import BAD_REQUEST, CONFLICT
 import logging
 from cairis.core.ARM import DatabaseProxyException
 from cairis.core.Borg import Borg
@@ -27,6 +29,7 @@ from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
 from cairis.daemon.CairisHTTPError import MissingParameterHTTPError, CairisHTTPError, ObjectNotFoundHTTPError
 from cairis.core.TemplateGenerator import TemplateGenerator
 from cairis.tools.GraphicsGenerator import GraphicsGenerator
+from six import string_types
 
 __author__ = 'Robin Quetin'
 
@@ -108,12 +111,12 @@ def validate_proxy(session, id, request=None, conf=None):
           return db_proxy
         else:
           raise CairisHTTPError(
-            status_code=http.client.CONFLICT,
+            status_code=CONFLICT,
             message='The database connection could not be created.'
           )
       except DatabaseProxyException:
         raise CairisHTTPError(
-          status_code=http.client.BAD_REQUEST,
+          status_code=BAD_REQUEST,
           message='The provided settings are invalid and cannot be used to create a database connection'
         )
 
@@ -125,19 +128,19 @@ def validate_proxy(session, id, request=None, conf=None):
 
     if db_proxy is None:
       raise CairisHTTPError(
-        status_code=http.client.CONFLICT,
+        status_code=CONFLICT,
         message='The database connection could not be created.'
       )
     elif isinstance(db_proxy, MySQLDatabaseProxy):
       return db_proxy
     else:
       raise CairisHTTPError(
-        status_code=http.client.CONFLICT,
+        status_code=CONFLICT,
         message='The database connection was not properly set up. Please try to reset the connection.'
       )
   else:
     raise CairisHTTPError(
-      status_code=http.client.BAD_REQUEST,
+      status_code=BAD_REQUEST,
       message='The session is neither started or no session ID is provided with the request.'
     )
 
@@ -158,19 +161,19 @@ def get_fonts(session_id=None):
 
     if fontName is None or fontSize is None or apFontName is None:
       raise CairisHTTPError(
-        status_code=http.client.BAD_REQUEST,
+        status_code=BAD_REQUEST,
         message='The method is not callable without setting up the project settings.'
       )
-    elif isinstance(fontName, str) and isinstance(fontSize, str) and isinstance(apFontName, str):
+    elif isinstance(fontName, string_types) and isinstance(fontSize, string_types) and isinstance(apFontName, string_types):
       return fontName, fontSize, apFontName
     else:
       raise CairisHTTPError(
-        status_code=http.client.BAD_REQUEST,
+        status_code=BAD_REQUEST,
         message='The database connection was not properly set up. Please try to reset the connection.'
       )
   else:
     raise CairisHTTPError(
-      status_code=http.client.BAD_REQUEST,
+      status_code=BAD_REQUEST,
       message='The method is not callable without setting up the project settings.'
     )
 

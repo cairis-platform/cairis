@@ -30,6 +30,7 @@ from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentPro
 from cairis.core.Requirement import Requirement
 from cairis.core.RiskParameters import RiskParameters
 from .ModelDefinitions import AssetEnvironmentPropertiesModel, SecurityAttribute
+from six import string_types
 
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -90,7 +91,7 @@ def json_deserialize(string, class_name=None):
         item_string = item_string.replace(conv_terms[key], key)
       list_result.append(json_deserialize(item_string))
 
-  if isinstance(string, str):
+  if isinstance(string, string_types):
     for key in conv_terms:
       string = string.replace(conv_terms[key], key)
 

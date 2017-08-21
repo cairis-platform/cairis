@@ -54,31 +54,37 @@ class CImportTests(CairisDaemonTestCase):
         }
         json_body = jsonpickle.encode(json_dict)
         rv = self.app.post(url, data=json_body, content_type='application/json')
-        self.assertIsNotNone(rv.data, 'No response')
-        json_dict = jsonpickle.decode(rv.data)
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        self.assertIsNotNone(responseData, 'No response')
+        json_dict = jsonpickle.decode(responseData)
         self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
         assert isinstance(json_dict, dict)
         message = json_dict.get('message')
         self.assertIsNotNone(message, 'Response does not contain a message')
         self.logger.info('[%s] Message: %s', method, message)
-        self.assertGreater('0', -1, 'Nothing imported')
 
     def test_cimport_file_post(self):
         method = 'test_cimport_file_post'
         type = 'all'
         url = '/api/import/file/type/%s?session_id=test' % quote(type)
-        fs_xmlfile = open(self.xmlfile, 'rb')
+        fs_xmlfile = open(self.xmlfile, 'r')
         file_contents = fs_xmlfile.read()
         self.logger.info('[%s] URL: %s', method, url)
         self.logger.debug('[%s] XML file:\n%s', method, file_contents)
-
-        data = {
+        dataIn = {
             'file': (StringIO(file_contents), 'import.xml'),
             'session_id': 'test'
         }
-        rv = self.app.post(url, data=data, content_type='multipart/form-data')
-        self.assertIsNotNone(rv.data, 'No response')
-        json_dict = jsonpickle.decode(rv.data)
+        rv = self.app.post(url, data=dataIn, content_type='multipart/form-data')
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        self.assertIsNotNone(responseData, 'No response')
+        json_dict = jsonpickle.decode(responseData)
         self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
         assert isinstance(json_dict, dict)
         message = json_dict.get('message')
