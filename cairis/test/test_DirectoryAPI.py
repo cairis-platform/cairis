@@ -49,7 +49,11 @@ class DirectoryAPITests(CairisDaemonTestCase):
     url = '/api/directory/threat/all?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    tds = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    tds = jsonpickle.decode(responseData)
     self.assertIsNotNone(tds, 'No results after deserialization')
     self.assertEqual(len(tds), 12)
 
@@ -58,7 +62,11 @@ class DirectoryAPITests(CairisDaemonTestCase):
     url = '/api/directory/threat/Acts%20of%20nature%20causing%20system%20unavailability?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    tds = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    tds = jsonpickle.decode(responseData)
     self.assertIsNotNone(tds, 'No results after deserialization')
     self.assertEqual(len(tds), 1)
 
@@ -67,7 +75,11 @@ class DirectoryAPITests(CairisDaemonTestCase):
     url = '/api/directory/vulnerability/all?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    vds = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    vds = jsonpickle.decode(responseData)
     self.assertIsNotNone(vds, 'No results after deserialization')
     self.assertEqual(len(vds), 10)
 
@@ -76,7 +88,11 @@ class DirectoryAPITests(CairisDaemonTestCase):
     url = '/api/directory/vulnerability/Lack%20of%20risk%20assessment?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    vds = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    vds = jsonpickle.decode(responseData)
     self.assertIsNotNone(vds, 'No results after deserialization')
     self.assertEqual(len(vds), 1)
 
