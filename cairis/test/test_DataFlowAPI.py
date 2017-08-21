@@ -75,8 +75,12 @@ class DataFlowAPITests(CairisDaemonTestCase):
     url = '/api/dataflows/name/' + quote(self.existing_dataflow_name) + '/environment/' + quote(self.existing_environment_name) + '?session_id=test'
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    dataflow = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    dataflow = jsonpickle.decode(responseData)
     self.assertIsNotNone(dataflow, 'No results after deserialization')
     self.assertEqual(dataflow['theName'],self.existing_dataflow_name)
     self.assertEqual(dataflow['theEnvironmentName'],self.existing_environment_name)
@@ -92,8 +96,12 @@ class DataFlowAPITests(CairisDaemonTestCase):
     new_dataflow_body = self.prepare_json()
 
     rv = self.app.post(url, content_type='application/json', data=new_dataflow_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     self.assertEqual(json_resp['message'],'DataFlow successfully added')
     rv = self.app.delete('/api/dataflows/name/acknowledge/environment/Psychosis?session_id=test')
@@ -105,8 +113,12 @@ class DataFlowAPITests(CairisDaemonTestCase):
     new_dataflow_body = self.prepare_json()
 
     rv = self.app.post(url, content_type='application/json', data=new_dataflow_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
 
     dataflow_to_update = self.prepare_new_dataflow()
@@ -114,12 +126,20 @@ class DataFlowAPITests(CairisDaemonTestCase):
     upd_env_body = self.prepare_json(dataflow=dataflow_to_update)
     rv = self.app.put('/api/dataflows/name/acknowledge/environment/Psychosis?session_id=test', data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertEqual(json_resp['message'],'DataFlow successfully updated')
 
     rv = self.app.get('/api/dataflows/name/Edited%20test%20dataflow/environment/Psychosis?session_id=test')
-    upd_dataflow = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    upd_dataflow = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_dataflow, 'Unable to decode JSON data')
 
     self.assertEqual(upd_dataflow['theName'],dataflow_to_update.name())
@@ -131,7 +151,11 @@ class DataFlowAPITests(CairisDaemonTestCase):
 
     rv = self.app.delete('/api/dataflows/name/Edited%20test%20dataflow/environment/Psychosis?session_id=test')
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertEqual(json_resp['message'],'DataFlow successfully deleted')
 
@@ -140,9 +164,13 @@ class DataFlowAPITests(CairisDaemonTestCase):
     method = 'test_dataflow_datagram'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url, content_type='application/json')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEqual(rv.data.find('svg'),1)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No results after deserialization')
+    self.assertEqual(responseData.find('svg'),1)
 
 
   def prepare_new_dataflow(self):
