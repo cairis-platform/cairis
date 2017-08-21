@@ -69,12 +69,12 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    assocs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      assocs = jsonpickle.decode(rv.data.decode('utf-8'))
+    else:
+      assocs = jsonpickle.decode(rv.data)
     self.assertIsNotNone(assocs, 'No results after deserialization')
-    assoc = assocs[list(assocs.keys())[0]]
-    self.assertEqual(assoc['theEnvironmentName'],'Core Technology')
-    self.assertEqual(assoc['theHeadAsset'],'Data node')
-    self.assertEqual(assoc['theTailAsset'],'Delegation token')
+    self.assertEqual(len(assocs),30)
 
   def test_get(self):
     method = 'test_asset_association'
@@ -82,7 +82,10 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    assoc = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      assoc = jsonpickle.decode(rv.data.decode('utf-8'))
+    else:
+      assoc = jsonpickle.decode(rv.data)
     self.assertIsNotNone(assoc, 'No results after deserialization')
     self.assertEqual(assoc['theHeadAsset'],'Client workstation')
     self.assertEqual(assoc['theTailAsset'],'Web-browser')
@@ -90,8 +93,12 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/assets/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Asset Association successfully added')
@@ -104,8 +111,12 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
     oldHeadName = self.new_assoc_dict['object'].theHeadAsset
     oldTailName = self.new_assoc_dict['object'].theTailAsset
     rv = self.app.put('/api/assets/association/environment/' + oldEnvName + '/head/' + oldHeadName + '/tail/' + oldTailName, content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Asset Association successfully updated')
@@ -113,14 +124,21 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
   def test_delete(self):
     method = 'test_delete'
     rv = self.app.post('/api/assets/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
 
     url = '/api/assets/association/environment/Psychosis/head/Portal/tail/User%20certificate?session_id=test'
     rv = self.app.delete(url)
-
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Asset Association successfully deleted')
