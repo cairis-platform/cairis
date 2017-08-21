@@ -33,18 +33,18 @@ class SVGGenerator(object):
     if not dot_code:
       dot_code = ''
     fd, temp_abspath = make_tempfile(suffix=self.extension)
-    temp_file = open(temp_abspath, 'wb')
+    temp_file = open(temp_abspath, 'w')
     temp_file.write(dot_code)
     temp_file.close()
     os.close(fd)
-    output = cmd([renderer, '-Tsvg', temp_abspath])
+    output = cmd([renderer, '-Tsvg', temp_abspath]).decode('utf-8')
     os.remove(temp_abspath)
     output = self.process_output(str(output), model_type)
     return output
 
   def generate_file(self, dot_code, output_file, model_type, renderer):
-    output = self.generate(dot_code, model_type, renderer)
-    fs_output = open(output_file, 'wb')
+    output = self.generate(dot_code, model_type, renderer).decode('utf-8')
+    fs_output = open(output_file, 'w')
     try:
       fs_output.write(output)
       fs_output.close()

@@ -19933,7 +19933,7 @@ begin
   declare roleName varchar(255);
   declare assetId int;
   declare goalDef varchar(255);
-  declare goalRationale varchar(255);
+  declare goalRationale varchar(1000);
   declare goalId int;
   declare tgId int;
   declare assocId int;
@@ -22267,15 +22267,19 @@ begin
     declare shortCode varchar(50);
     declare reqId int;
 
-    call requirementLabelComponents(reqCode,shortCode,reqLabel);
-    select o.id into reqId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
+    select o.id into reqId from requirement o where o.name = reqCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
     if reqId is null
     then
-      select o.id into reqId from requirement o, environment_requirement ar, environment a where o.label = reqLabel and o.id = ar.requirement_id and ar.environment_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
-
+      call requirementLabelComponents(reqCode,shortCode,reqLabel);
+      select o.id into reqId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
       if reqId is null
       then
-        select o.id into reqId from requirement o where o.name = reqCode and o.version = (select max(i.version) from requirement i where i.id = o.id); 
+        select o.id into reqId from requirement o, environment_requirement ar, environment a where o.label = reqLabel and o.id = ar.requirement_id and ar.environment_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
+
+        if reqId is null
+        then
+          select o.id into reqId from requirement o where o.name = reqCode and o.version = (select max(i.version) from requirement i where i.id = o.id); 
+        end if;
       end if;
     end if;
     return reqId;
@@ -22426,7 +22430,7 @@ begin
   declare tgId int;
   declare tgName varchar(255);
   declare tgDef varchar(1000);
-  declare tgRat varchar(255);
+  declare tgRat varchar(1000);
   declare tgcName varchar(50);
   declare tgrName varchar(255);
   declare compId int;

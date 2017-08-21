@@ -2001,7 +2001,7 @@ CREATE TABLE template_goal(
   id INT NOT NULL,
   name VARCHAR(255),
   definition VARCHAR(4000),
-  rationale VARCHAR(255) NOT NULL,
+  rationale VARCHAR(1000) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=INNODB;
 CREATE TABLE template_goal_concern (
