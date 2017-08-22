@@ -19,7 +19,7 @@ import logging
 import sys
 if (sys.version_info > (3,)):
   from urllib.parse import quote
-  from io import StringIO
+  from io import BytesIO
 else:
   from urllib import quote
   from StringIO import StringIO
@@ -68,17 +68,20 @@ class CImportTests(CairisDaemonTestCase):
 
     def test_cimport_file_post(self):
         method = 'test_cimport_file_post'
-        type = 'all'
-        url = '/api/import/file/type/%s?session_id=test' % quote(type)
-        fs_xmlfile = open(self.xmlfile, 'r')
+        url = '/api/import/file/type/all?session_id=test'
+        fs_xmlfile = open(self.xmlfile, 'rb')
         file_contents = fs_xmlfile.read()
         self.logger.info('[%s] URL: %s', method, url)
         self.logger.debug('[%s] XML file:\n%s', method, file_contents)
-        dataIn = {
-            'file': (StringIO(file_contents), 'import.xml'),
+        if (sys.version_info > (3,)):
+          buf = BytesIO(file_contents)
+        else:
+          buf = StringIO(file_contents)
+        data = {
+            'file': (buf, 'import.xml'),
             'session_id': 'test'
         }
-        rv = self.app.post(url, data=dataIn, content_type='multipart/form-data')
+        rv = self.app.post(url, data=data, content_type='multipart/form-data')
         if (sys.version_info > (3,)):
           responseData = rv.data.decode('utf-8')
         else:
@@ -90,4 +93,4 @@ class CImportTests(CairisDaemonTestCase):
         message = json_dict.get('message')
         self.assertIsNotNone(message, 'Response does not contain a message')
         self.logger.info('[%s] Message: %s', method, message)
-        self.assertGreater('0', -1, 'Nothing imported')
+        self.assertEquals(message,'0')

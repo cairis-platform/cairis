@@ -182,7 +182,7 @@ class CImportFileAPI(Resource):
 
     try:
       fd, abs_path = mkstemp(suffix='.xml')
-      fs_temp = open(abs_path, 'w')
+      fs_temp = open(abs_path, 'wb')
       xml_text = file.stream.read()
       fs_temp.write(xml_text)
       fs_temp.close()

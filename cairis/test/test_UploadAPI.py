@@ -20,7 +20,7 @@ import os
 import sys
 if (sys.version_info > (3,)):
   import urllib.request, urllib.parse, urllib.error
-  from io import StringIO
+  from io import BytesIO
 else:
   import urllib
   from StringIO import StringIO
@@ -46,8 +46,12 @@ class UploadAPITests(CairisDaemonTestCase):
     if name and os.path.exists(name):
       fs_image = open(name, 'rb')
       image_bytes = fs_image.read()
+      if (sys.version_info > (3,)):
+        buf = BytesIO(image_bytes)
+      else:
+        buf = StringIO(image_bytes)
       rv = self.app.post('/api/upload/image?session_id=test', data={
-        'file': (StringIO(image_bytes), name),
+        'file': (buf, name),
       })
       self.logger.info('[%s] Response data: %s', method, rv.data)
       json_dict = jsonpickle.decode(rv.data)
@@ -69,7 +73,12 @@ class UploadAPITests(CairisDaemonTestCase):
     if name and os.path.exists(name):
       fs_image = open(name, 'rb')
       image_bytes = fs_image.read()
+
+      if (sys.version_info > (3,)):
+        buf = BytesIO(image_bytes)
+      else:
+        buf = StringIO(image_bytes)
       rv = self.app.post('/api/upload/image?session_id=test', data={
-        'file': (StringIO(image_bytes), name),
+        'file': (buf, name),
       })
       self.logger.info('[%s] Response data: %s', method, rv.data)
