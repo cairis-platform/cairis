@@ -45,7 +45,11 @@ class DimensionAPITests(CairisDaemonTestCase):
   def test_get_all_dimensions(self):
     method = 'test_get_all_dimensions'
     rv = self.app.get('/api/dimensions/table/role?session_id=test')
-    dims = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    dims = jsonpickle.decode(responseData)
     self.assertIsNotNone(dims, 'No results after deserialization')
     self.assertIsInstance(dims, list, 'The result is not a dict as expected')
     self.assertGreater(len(dims), 0, 'No dimensions in the dictionary')
@@ -57,7 +61,11 @@ class DimensionAPITests(CairisDaemonTestCase):
     method = 'test_get_all_dimensions_by_environment'
     url = '/api/dimensions/table/asset/environment/Psychosis?session_id=test'
     rv = self.app.get(url)
-    dims = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    dims = jsonpickle.decode(responseData)
     self.assertIsNotNone(dims, 'No results are deserialization')
     self.assertGreater(len(dims), 0, 'No dimensions in the dictionary')
     self.assertEqual(len(dims), 12, 'Incorrect number of asset names returned')

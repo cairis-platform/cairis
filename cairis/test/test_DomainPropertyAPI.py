@@ -53,7 +53,11 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/domainproperties?session_id=test')
-    domainproperties = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    domainproperties = jsonpickle.decode(responseData)
     self.assertIsNotNone(domainproperties, 'No results after deserialization')
     self.assertIsInstance(domainproperties, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(domainproperties), 0, 'No domainproperties in the dictionary')
@@ -65,9 +69,13 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     method = 'test_get_by_name'
     url = '/api/domainproperties/name/%s?session_id=test' % quote(self.existing_domainproperty_name)
     rv = self.app.get(url)
-    self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    domainproperty = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.assertIsNotNone(responseData, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    domainproperty = jsonpickle.decode(responseData)
     self.assertIsNotNone(domainproperty, 'No results after deserialization')
     self.logger.info('[%s] Domain Property: %s [%d]\n', method, domainproperty['theName'], domainproperty['theId'])
 
@@ -80,9 +88,13 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     self.app.post('/api/domainproperties', content_type='application/json', data=new_domainproperty_body)
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.delete(url)
-    self.logger.info('[%s] Response data: %s', method, rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.info('[%s] Response data: %s', method, responseData)
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -95,8 +107,12 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     new_domainproperty_body = self.prepare_json()
 
     rv = self.app.post(url, content_type='application/json', data=new_domainproperty_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
 
     rv = self.app.delete('/api/domainproperties/name/%s?session_id=test' % quote(self.prepare_new_domainproperty().name()))
@@ -108,8 +124,12 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     new_domainproperty_body = self.prepare_json()
 
     rv = self.app.post(url, content_type='application/json', data=new_domainproperty_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
 
     domainproperty_to_update = self.prepare_new_domainproperty()
@@ -117,7 +137,11 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     upd_env_body = self.prepare_json(domainproperty=domainproperty_to_update)
     rv = self.app.put('/api/domainproperties/name/%s?session_id=test' % quote(self.prepare_new_domainproperty().name()), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertIsInstance(json_resp, dict)
     message = json_resp.get('message', None)
@@ -126,9 +150,13 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     self.assertGreater(message.find('successfully updated'), -1, 'The domainproperty was not successfully updated')
 
     rv = self.app.get('/api/domainproperties/name/%s?session_id=test' % quote(domainproperty_to_update.name()))
-    upd_domainproperty = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    upd_domainproperty = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_domainproperty, 'Unable to decode JSON data')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.logger.debug('[%s] Response data: %s', method, responseData)
     self.logger.info('[%s] Domain Property: %s [%d]\n', method, upd_domainproperty['theName'], upd_domainproperty['theId'])
 
     rv = self.app.delete('/api/domainproperties/name/%s?session_id=test' % quote(domainproperty_to_update.theName))
