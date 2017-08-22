@@ -64,7 +64,11 @@ class UseCaseAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/usecases?session_id=test')
-    usecases = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    usecases = jsonpickle.decode(responseData)
     self.assertIsNotNone(usecases, 'No results after deserialization')
     self.assertIsInstance(usecases, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(usecases), 0, 'No usecases in the dictionary')
@@ -77,8 +81,12 @@ class UseCaseAPITests(CairisDaemonTestCase):
     url = '/api/usecases/name/%s?session_id=test' % quote(self.existing_usecase_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    usecase = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    usecase = jsonpickle.decode(responseData)
     self.assertIsNotNone(usecase, 'No results after deserialization')
     self.logger.info('[%s] UseCase: %s [%d]\n', method, usecase['theName'], usecase['theId'])
 
@@ -98,8 +106,12 @@ class UseCaseAPITests(CairisDaemonTestCase):
     url = '/api/usecases/name/%s/requirements?session_id=test' % quote(self.existing_usecase_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    reqs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    reqs = jsonpickle.decode(responseData)
     self.assertIsNotNone(reqs, 'No results after deserialization')
     self.assertEqual(new_tr.theFromName,reqs[0]);
 
@@ -107,7 +119,11 @@ class UseCaseAPITests(CairisDaemonTestCase):
     method = 'test_generate_obstacle_from_exception'
     url = '/api/usecases/name/%s?session_id=test' % quote(self.existing_usecase_name)
     rv = self.app.get(url)
-    uc = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    uc = jsonpickle.decode(responseData)
     url = '/api/usecases/environment/Psychosis/step/' + quote('Researcher does something') + '/exception/anException/generate_obstacle?session_id=test' 
     existing_uc_dict = {
       'session_id': 'test',
@@ -115,7 +131,11 @@ class UseCaseAPITests(CairisDaemonTestCase):
     }
     rv = self.app.post(url, content_type='application/json', data=jsonpickle.encode(existing_uc_dict))
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertIsInstance(json_resp, dict)
     message = json_resp.get('message', None)
@@ -139,9 +159,13 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.app.post('/api/usecases', content_type='application/json', data=new_usecase_body)
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.delete(url)
-    self.logger.info('[%s] Response data: %s', method, rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.info('[%s] Response data: %s', method, responseData)
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -151,12 +175,20 @@ class UseCaseAPITests(CairisDaemonTestCase):
     method = 'test_post'
 
     rv = self.app.get('/api/persona_characteristics/name/Managers%20delegate%20security%20decisions?session_id=test')
-    pc = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    pc = jsonpickle.decode(responseData)
     pc['theCharacteristicSynopsis'] = {"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceSynopsis", "theActor" : "Claire", "theActorType" : "persona", "theSynopsis" : "Security delegated", "theDimension" : "goal"}
     pcDict = {'session_id' : 'test','object' : pc}
     rv = self.app.put('/api/persona_characteristics/name/Managers%20delegate%20security%20decisions?session_id=test', content_type='application/json', data=jsonpickle.encode(pcDict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Persona Characteristic successfully updated')
@@ -168,8 +200,12 @@ class UseCaseAPITests(CairisDaemonTestCase):
 
     self.app.delete('/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name()))
     rv = self.app.post(url, content_type='application/json', data=new_usecase_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('usecase_id', None)
     self.assertIsNotNone(env_id, 'No usecase ID returned')
@@ -187,8 +223,12 @@ class UseCaseAPITests(CairisDaemonTestCase):
 
     rv = self.app.delete('/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name()))
     rv = self.app.post(url, content_type='application/json', data=new_usecase_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('usecase_id', None)
     self.assertIsNotNone(env_id, 'No usecase ID returned')
@@ -201,7 +241,11 @@ class UseCaseAPITests(CairisDaemonTestCase):
     upd_env_body = self.prepare_json(usecase=usecase_to_update)
     rv = self.app.put('/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name()), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertIsInstance(json_resp, dict)
     message = json_resp.get('message', None)
@@ -210,9 +254,13 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.assertGreater(message.find('successfully updated'), -1, 'The usecase was not successfully updated')
 
     rv = self.app.get('/api/usecases/name/%s?session_id=test' % quote(usecase_to_update.name()))
-    upd_usecase = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    upd_usecase = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_usecase, 'Unable to decode JSON data')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.logger.debug('[%s] Response data: %s', method, responseData)
     self.logger.info('[%s] UseCase: %s [%d]\n', method, upd_usecase['theName'], upd_usecase['theId'])
 
     rv = self.app.delete('/api/usecases/name/%s?session_id=test' % quote(usecase_to_update.theName))
