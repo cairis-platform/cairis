@@ -20,7 +20,7 @@ import logging
 import sys
 if (sys.version_info > (3,)):
   from urllib.parse import quote
-  from io import StringIO
+  from io import BytesIO
 else:
   from urllib import quote
   from StringIO import StringIO
@@ -115,11 +115,15 @@ class ProjectAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Message: %s', method, message)
     self.assertGreater(message.find('successfully'), -1, 'Failed to create new project')
 
-    fs_xmlfile = open(self.xmlfile, 'r')
+    fs_xmlfile = open(self.xmlfile, 'rb')
     file_contents = fs_xmlfile.read()
+    if (sys.version_info > (3,)):
+      buf = BytesIO(file_contents)
+    else:
+      buf = StringIO(file_contents)
     data = {
       'session_id': 'test',
-      'file': (StringIO(file_contents), 'import.xml')
+      'file': (buf, 'import.xml')
     }
     rv = self.app.post(import_url, data=data, content_type='multipart/form-data')
     self.assertIsNotNone(rv.data, 'No response after reimporting model')
