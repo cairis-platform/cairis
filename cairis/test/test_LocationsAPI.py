@@ -81,7 +81,11 @@ class LocationsAPITests(CairisDaemonTestCase):
     url = '/api/locations?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    locs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    locs = jsonpickle.decode(responseData)
     self.assertIsNotNone(locs, 'No results after deserialization')
     self.assertIsInstance(locs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(locs), 0, 'No Locations in the dictionary')
@@ -94,16 +98,24 @@ class LocationsAPITests(CairisDaemonTestCase):
     url = '/api/locations/name/%s?session_id=test' % quote(self.existing_locs_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    locs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    locs = jsonpickle.decode(responseData)
     self.assertIsNotNone(locs, 'No results after deserialization')
     self.logger.info('[%s] Locations: %s [%d]\n', method, locs['theName'], locs['theId'])
 
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/locations', content_type='application/json', data=jsonpickle.encode(self.new_locs_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Locations successfully added')
@@ -112,8 +124,12 @@ class LocationsAPITests(CairisDaemonTestCase):
     method = 'test_put'
     url = '/api/locations/name/%s?session_id=test' % quote(self.new_locs_dict['object'].theName)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_locs_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Locations successfully updated')
@@ -122,14 +138,21 @@ class LocationsAPITests(CairisDaemonTestCase):
     method = 'test_delete'
 
     rv = self.app.post('/api/locations', content_type='application/json', data=jsonpickle.encode(self.new_locs_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
 
     url = '/api/locations/name/%s?session_id=test' % quote(self.new_locs.theName)
     rv = self.app.delete(url)
-
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Locations successfully deleted')
@@ -139,4 +162,8 @@ class LocationsAPITests(CairisDaemonTestCase):
     url = '/api/locations/model/locations/' + quote(self.existing_locs_name) + '/environment/Day?session_id=test'
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)

@@ -45,8 +45,12 @@ class ObjectDependencyAPITests(CairisDaemonTestCase):
     method = 'test_object_dependency_get'
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    deps = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else: 
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    deps = jsonpickle.decode(responseData)
     self.assertIsInstance(deps, dict, 'Response is not a valid JSON object')
     self.assertEqual(len(deps['theDependencies']),5)
     objtDep = deps['theDependencies'][0]
@@ -57,9 +61,13 @@ class ObjectDependencyAPITests(CairisDaemonTestCase):
     url = '/api/object_dependency/dimension/asset/object/Portal?session_id=test'
     method = 'test_object_dependency_delete'
     rv = self.app.delete(url)
-    self.logger.info('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else: 
+      responseData = rv.data
+    self.logger.info('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No response')
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
