@@ -58,7 +58,11 @@ class DocumentReferenceAPITests(CairisDaemonTestCase):
     url = '/api/document_references?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    drs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    drs = jsonpickle.decode(responseData)
     self.assertIsNotNone(drs, 'No results after deserialization')
     self.assertIsInstance(drs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(drs), 0, 'No document references in the dictionary')
@@ -70,17 +74,25 @@ class DocumentReferenceAPITests(CairisDaemonTestCase):
     method = 'test_get_by_name'
     url = '/api/document_references/name/%s?session_id=test' % quote(self.existing_dr_name)
     rv = self.app.get(url)
-    self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    dr = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.assertIsNotNone(responseData, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    dr = jsonpickle.decode(responseData)
     self.assertIsNotNone(dr, 'No results after deserialization')
     self.logger.info('[%s] Document reference: %s [%d]\n', method, dr['theName'], dr['theId'])
 
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/document_references', content_type='application/json', data=jsonpickle.encode(self.new_dr_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Document Reference successfully added')
@@ -90,8 +102,12 @@ class DocumentReferenceAPITests(CairisDaemonTestCase):
     self.new_dr_dict['object'].theExcerpt = 'Updated text segment'
     url = '/api/document_references/name/%s?session_id=test' % quote(self.existing_dr_name)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_dr_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Document Reference successfully updated')
@@ -100,14 +116,21 @@ class DocumentReferenceAPITests(CairisDaemonTestCase):
     method = 'test_delete'
 
     rv = self.app.post('/api/document_references', content_type='application/json', data=jsonpickle.encode(self.new_dr_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
 
     url = '/api/document_references/name/%s?session_id=test' % quote(self.new_dr.theName)
     rv = self.app.delete(url)
-
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Document Reference successfully deleted')
