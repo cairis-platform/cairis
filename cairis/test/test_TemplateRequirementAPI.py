@@ -86,7 +86,11 @@ class TemplateRequirementAPITests(CairisDaemonTestCase):
     url = '/api/template_requirements?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    trs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    trs = jsonpickle.decode(responseData)
     self.assertIsNotNone(trs, 'No results after deserialization')
     self.assertIsInstance(trs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(trs), 0, 'No template requirements in the dictionary')
@@ -99,16 +103,24 @@ class TemplateRequirementAPITests(CairisDaemonTestCase):
     url = '/api/template_requirements/name/%s?session_id=test' % quote(self.existing_tr_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    tr = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    tr = jsonpickle.decode(responseData)
     self.assertIsNotNone(tr, 'No results after deserialization')
     self.logger.info('[%s] Template requirement: %s \n', method, tr['theName'])
 
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/template_requirements', content_type='application/json', data=jsonpickle.encode(self.new_tr_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Template Requirement successfully added')
@@ -118,8 +130,12 @@ class TemplateRequirementAPITests(CairisDaemonTestCase):
     self.new_tr_dict['object'].theDefinition = 'Updated definition'
     url = '/api/template_requirements/name/%s?session_id=test' % quote(self.existing_tr_name)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_tr_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Template Requirement successfully updated')
@@ -128,14 +144,22 @@ class TemplateRequirementAPITests(CairisDaemonTestCase):
     method = 'test_delete'
 
     rv = self.app.post('/api/template_requirements', content_type='application/json', data=jsonpickle.encode(self.new_tr_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
 
     url = '/api/template_requirements/name/%s?session_id=test' % quote(self.new_tr.theName)
     rv = self.app.delete(url)
 
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Template Requirement successfully deleted')

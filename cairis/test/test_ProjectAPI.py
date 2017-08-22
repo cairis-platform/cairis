@@ -115,7 +115,7 @@ class ProjectAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Message: %s', method, message)
     self.assertGreater(message.find('successfully'), -1, 'Failed to create new project')
 
-    fs_xmlfile = open(self.xmlfile, 'rb')
+    fs_xmlfile = open(self.xmlfile, 'r')
     file_contents = fs_xmlfile.read()
     data = {
       'session_id': 'test',

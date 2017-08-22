@@ -155,8 +155,6 @@ class ResponseAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Goal successfully generated')
-   
-
     rv = self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
 
 
