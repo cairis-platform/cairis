@@ -1,4 +1,4 @@
-FROM ubuntu:zesty
+FROM debian:wheezy
 MAINTAINER Shamal Faily <sfaily@bournemouth.ac.uk>
 RUN apt-get update && apt-get install -y python-dev build-essential mysql-client graphviz python-pip python-numpy git libmysqlclient-dev docbook python-apt dblatex texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev libxslt1-dev apache2-threaded-dev poppler-utils
 COPY requirements.txt /
