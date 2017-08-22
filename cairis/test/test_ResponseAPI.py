@@ -55,7 +55,11 @@ class ResponseAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/responses?session_id=test')
-    responses = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    responses = jsonpickle.decode(responseData)
     self.assertIsNotNone(responses, 'No results after deserialization')
     self.assertIsInstance(responses, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(responses), 0, 'No responses in the dictionary')
@@ -68,8 +72,12 @@ class ResponseAPITests(CairisDaemonTestCase):
     url = '/api/responses/name/%s?session_id=test' % quote(self.existing_response_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    response = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    response = jsonpickle.decode(responseData)
     self.assertIsNotNone(response, 'No results after deserialization')
     self.logger.info('[%s] Response: %s [%d]\n', method, response['theName'], response['theId'])
 
@@ -83,9 +91,13 @@ class ResponseAPITests(CairisDaemonTestCase):
     self.app.post('/api/responses', content_type='application/json', data=new_response_body)
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.delete(url)
-    self.logger.info('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.info('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No response')
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -99,8 +111,12 @@ class ResponseAPITests(CairisDaemonTestCase):
 
     self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
     rv = self.app.post(url, content_type='application/json', data=new_response_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('response_id', None)
     self.assertIsNotNone(env_id, 'No response ID returned')
@@ -117,8 +133,12 @@ class ResponseAPITests(CairisDaemonTestCase):
 
     self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
     rv = self.app.post(url, content_type='application/json', data=new_response_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('response_id', None)
     self.assertIsNotNone(env_id, 'No response ID returned')
@@ -126,8 +146,12 @@ class ResponseAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Response ID: %d\n', method, env_id)
 
     rv = self.app.post('/api/responses/name/%s/generate_goal?session_id=test' % quote(self.prepare_new_response().theName))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Goal successfully generated')
@@ -144,9 +168,13 @@ class ResponseAPITests(CairisDaemonTestCase):
 
     self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
     rv = self.app.post(url, content_type='application/json', data=new_response_body)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
 
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Response successfully added')
@@ -161,8 +189,12 @@ class ResponseAPITests(CairisDaemonTestCase):
 
     rv = self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
     rv = self.app.post(url, content_type='application/json', data=new_response_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('response_id', None)
     self.assertIsNotNone(env_id, 'No response ID returned')
@@ -175,7 +207,11 @@ class ResponseAPITests(CairisDaemonTestCase):
     upd_env_body = self.prepare_json(response=response_to_update)
     rv = self.app.put('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertIsInstance(json_resp, dict)
     message = json_resp.get('message', None)
@@ -184,9 +220,13 @@ class ResponseAPITests(CairisDaemonTestCase):
     self.assertGreater(message.find('successfully updated'), -1, 'The response was not successfully updated')
 
     rv = self.app.get('/api/responses/name/%s?session_id=test' % quote(response_to_update.theName))
-    upd_response = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    upd_response = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_response, 'Unable to decode JSON data')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.logger.debug('[%s] Response data: %s', method, responseData)
     self.logger.info('[%s] Response: %s [%d]\n', method, upd_response['theName'], upd_response['theId'])
 
     rv = self.app.delete('/api/responses/name/%s?session_id=test' % quote(response_to_update.theName))

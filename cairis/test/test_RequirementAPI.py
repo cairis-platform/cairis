@@ -68,7 +68,11 @@ class RequirementAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/requirements?session_id=test')
-    requirements_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    requirements_dict = jsonpickle.decode(responseData)
     self.assertIsNotNone(requirements_dict, 'No results after deserialization')
     self.assertIsInstance(requirements_dict, dict, 'The result is not a dictionary as expected')
     assert isinstance(requirements_dict, dict)
@@ -82,21 +86,33 @@ class RequirementAPITests(CairisDaemonTestCase):
     url = '/api/requirements?asset=%s' % quote(self.existing_asset_name)
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.post(url, content_type='application/json', data=self.new_requirement_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
 
     rv = self.app.get('/api/requirements/shortcode/%d?session_id=test' % int(self.new_requirement.label()))
-    requirement = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    requirement = jsonpickle.decode(responseData)
     self.logger.info('[%s] Requirement: %s [%d]\n', method, self.new_requirement.name(), self.new_requirement.label())
 
   def test_get_asset_name(self):
     method = 'test_asset_get_name'
     url = '/api/requirements/asset/%s?session_id=test' % quote(self.existing_asset_name)
     rv = self.app.get(url)
-    self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    requirements = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.assertIsNotNone(responseData, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    requirements = jsonpickle.decode(responseData)
     self.assertIsNotNone(requirements, 'No results after deserialization')
     self.assertGreater(len(requirements), 0, 'No requirements found for this environment')
     self.logger.info('[%s] Requirement: %s [%d]\n', method, requirements[0]['theName'])
@@ -105,9 +121,13 @@ class RequirementAPITests(CairisDaemonTestCase):
     method = 'test_environment_get_name'
     url = '/api/requirements/environment/%s?session_id=test' % quote(self.existing_asset_name)
     rv = self.app.get(url)
-    self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    requirements = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.assertIsNotNone(responseData, 'No response')
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    requirements = jsonpickle.decode(responseData)
     self.assertIsNotNone(requirements, 'No results after deserialization')
     if len(requirements) > 0:
       self.logger.info('[%s] Requirement: %s [%d]\n', method, requirements[0]['theName'])
@@ -120,7 +140,11 @@ class RequirementAPITests(CairisDaemonTestCase):
 
     url = '/api/requirements'
     rv = self.app.get('/api/requirements?session_id=test')
-    reqs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    reqs = jsonpickle.decode(responseData)
     requirement = reqs.get(self.new_requirement.theDescription)
 
     upd_requirement = self.new_requirement
@@ -131,16 +155,24 @@ class RequirementAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] JSON data: %s', method, upd_requirement_body)
 
     rv = self.app.put(url, content_type='application/json', data=upd_requirement_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message returned')
     self.logger.info('Message: %s', message)
 
     rv = self.app.get('/api/requirements?session_id=test')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    requirements = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    requirements = jsonpickle.decode(responseData)
     requirement = requirements.get(upd_requirement.theDescription, None)
     self.assertIsNotNone(requirement, 'Requirement not updated as expected')
     self.logger.info('[%s] Requirement: %s [%d]\n', method, requirement['theName'])
@@ -153,7 +185,11 @@ class RequirementAPITests(CairisDaemonTestCase):
     reqBody1['object'].theDescription='OneRequirement description'
     reqBody1['object'].attrs['asset'] =''
     rv = self.app.post(url, content_type='application/json', data=jsonpickle.encode(reqBody1))
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
 
     reqBody2 = self.new_requirement_dict
@@ -162,7 +198,11 @@ class RequirementAPITests(CairisDaemonTestCase):
     reqBody2['object'].theDescription='AnotherRequirement description'
     reqBody2['object'].attrs['asset'] =''
     rv = self.app.post(url, content_type='application/json', data=jsonpickle.encode(reqBody2))
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
 
     aTrace = Trace(fObjt = 'requirement',fName ='OneRequirement',tObjt = 'requirement', tName = 'AnotherRequirement')
@@ -173,6 +213,10 @@ class RequirementAPITests(CairisDaemonTestCase):
     method = 'test_concept_map_model'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url, content_type='application/json')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEqual(rv.data.find('svg'),1)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No results after deserialization')
+    self.assertEqual(responseData.find('svg'),1)
