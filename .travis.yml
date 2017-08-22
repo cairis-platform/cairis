@@ -6,14 +6,14 @@ python:
 dist: trusty
 sudo: false
 
+services:
+ - mysql
+
 addons:
   apt:
     packages:
     - python-dev 
     - build-essential 
-    - mysql-server-core-5.5
-    - mysql-server-5.5
-    - mysql-client-5.5
     - graphviz 
     - python-pip 
     - python-numpy 
