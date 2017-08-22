@@ -147,7 +147,11 @@ class UseCaseAPITests(CairisDaemonTestCase):
     method = 'test_delete'
 
     rv = self.app.get('/api/persona_characteristics/name/Managers%20delegate%20security%20decisions?session_id=test')
-    pc = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    pc = jsonpickle.decode(responseData)
     pc['theCharacteristicSynopsis'] = {"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceSynopsis", "theActor" : "Claire", "theActorType" : "persona", "theSynopsis" : "Security delegated", "theDimension" : "goal"}
     pcDict = {'session_id' : 'test','object' : pc}
     rv = self.app.put('/api/persona_characteristics/name/Managers%20delegate%20security%20decisions?session_id=test', content_type='application/json', data=jsonpickle.encode(pcDict))
@@ -164,7 +168,7 @@ class UseCaseAPITests(CairisDaemonTestCase):
     else:
       responseData = rv.data
     self.logger.info('[%s] Response data: %s', method, responseData)
-    self.assertIsNotNone(rv.data, 'No response')
+    self.assertIsNotNone(responseData, 'No response')
     json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)

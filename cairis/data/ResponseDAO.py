@@ -265,7 +265,7 @@ class ResponseDAO(CairisDAO):
       riskParameters = goalParameters[0]
       riskGoalId = self.db_proxy.addGoal(riskParameters)
       self.db_proxy.addTrace('response_goal',respId,riskGoalId)
-      if (goalParameters > 1):
+      if (len(goalParameters) > 1):
         threatParameters = goalParameters[1]
         vulnerabilityParameters = goalParameters[2]
         self.db_proxy.addGoal(vulnerabilityParameters)
