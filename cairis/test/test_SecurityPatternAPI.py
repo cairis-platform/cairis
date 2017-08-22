@@ -87,7 +87,7 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     sps = jsonpickle.decode(responseData)
     sp = sps[0]
     self.assertIsInstance(sp, dict, 'Response is not a valid JSON object')
-    self.assertEqual(sp['theName'],'Packet Filter Firewall')
+    self.assertEqual(len(sps),5)
 
   def test_get_by_name(self):
     importSecurityPatternsFile(os.environ['CAIRIS_SRC'] + '/../examples/architecture/schumacher_patterns.xml','test')
