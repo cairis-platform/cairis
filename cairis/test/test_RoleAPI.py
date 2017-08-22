@@ -70,7 +70,11 @@ class RoleAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/roles?session_id=test')
-    roles = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    roles = json_deserialize(responseData)
     self.assertIsNotNone(roles, 'No results after deserialization')
     self.assertIsInstance(roles, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(roles), 0, 'No roles in the dictionary')
@@ -81,15 +85,23 @@ class RoleAPITests(CairisDaemonTestCase):
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/roles', content_type='application/json', data=self.new_role_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     role_id = json_resp.get('role_id', None)
     self.assertIsNotNone(role_id, 'No role ID returned')
     self.logger.info('[%s] Role ID: %d', method, role_id)
 
     rv = self.app.get('/api/roles/id/%d?session_id=test' % role_id)
-    role = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    role = jsonpickle.decode(responseData)
     self.logger.info('[%s] Role: %s [%d]\n', method, role['theName'], role['theId'])
 
   def test_get_id(self):
@@ -98,8 +110,12 @@ class RoleAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    role = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    role = jsonpickle.decode(responseData)
     self.assertIsNotNone(role, 'No results after deserialization')
     self.assertEqual(role['__python_obj__'], self.role_class, 'The result is not an role as expected')
     self.logger.info('[%s] Role: %s [%d]\n', method, role['theName'], role['theId'])
@@ -108,7 +124,11 @@ class RoleAPITests(CairisDaemonTestCase):
     method = 'test_get_name'
     url = '/api/roles/name/%s?session_id=test' % quote(self.existing_role_name)
     rv = self.app.get(url)
-    role = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    role = json_deserialize(responseData)
     self.assertIsNotNone(role, 'No results after deserialization')
     self.assertIsInstance(role, Role, 'The result is not an role as expected')
     self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
@@ -127,14 +147,22 @@ class RoleAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] JSON data: %s', method, upd_role_body)
 
     rv = self.app.put(url, content_type='application/json', data=upd_role_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message returned')
 
     rv = self.app.get('/api/roles/name/Test3?session_id=test')
-    role = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    role = json_deserialize(responseData)
     self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
 
   def test_put_id(self):
@@ -143,7 +171,11 @@ class RoleAPITests(CairisDaemonTestCase):
     rv = self.app.post('/api/roles', content_type='application/json', data=self.new_role_body)
 
     rv = self.app.get('/api/roles?session_id=test')
-    roles = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    roles = json_deserialize(responseData)
     role = roles.get(self.new_role.theName)
     url = '/api/roles/id/%d' % role.theId
 
@@ -155,14 +187,22 @@ class RoleAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] JSON data: %s', method, upd_role_body)
 
     rv = self.app.put(url, content_type='application/json', data=upd_role_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message returned')
 
     rv = self.app.get('/api/roles/name/Test2?session_id=test')
-    role = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    role = json_deserialize(responseData)
     self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
 
   def test_x_delete_name(self):
@@ -172,8 +212,12 @@ class RoleAPITests(CairisDaemonTestCase):
 
     url = '/api/roles/name/{}?session_id=test'.format(quote(self.new_role.theName))
     rv = self.app.delete(url)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message returned')
@@ -181,7 +225,11 @@ class RoleAPITests(CairisDaemonTestCase):
 
     rv = self.app.post('/api/roles', content_type='application/json', data=self.new_role_body)
     rv = self.app.get('/api/roles?session_id=test')
-    roles = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    roles = json_deserialize(responseData)
     role = roles.get(self.new_role.theName)
     url = '/api/roles/id/%d' % role.theId
 
@@ -200,7 +248,11 @@ class RoleAPITests(CairisDaemonTestCase):
     cls_role_prop = RoleEnvironmentProperties.__module__+'.'+RoleEnvironmentProperties.__name__
 
     rv = self.app.get(url)
-    role_props = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    role_props = jsonpickle.decode(responseData)
     self.assertIsNotNone(role_props, 'No results after deserialization')
     self.assertGreater(len(role_props), 0, 'List does not contain any elements')
     role_prop = role_props[0]
