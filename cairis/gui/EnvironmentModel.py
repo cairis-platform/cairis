@@ -24,7 +24,6 @@ from cairis.core.ARM import *
 import gtk
 from cairis.core.Borg import Borg
 from cairis.core.colourcodes import threatColourCode
-from cairis.core.colourcodes import responseColourCode
 from cairis.core.colourcodes import usabilityColourCode
 from cairis.core.colourcodes import usabilityTextColourCode
 from cairis.core.colourcodes import riskTextColourCode
