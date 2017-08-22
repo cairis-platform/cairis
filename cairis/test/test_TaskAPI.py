@@ -62,7 +62,11 @@ class TaskAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/tasks?session_id=test')
-    tasks = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    tasks = jsonpickle.decode(responseData)
     self.assertIsNotNone(tasks, 'No results after deserialization')
     self.assertIsInstance(tasks, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(tasks), 0, 'No tasks in the dictionary')
@@ -75,8 +79,12 @@ class TaskAPITests(CairisDaemonTestCase):
     url = '/api/tasks/name/%s?session_id=test' % quote(self.existing_task_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    task = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    task = jsonpickle.decode(responseData)
     self.assertIsNotNone(task, 'No results after deserialization')
     self.logger.info('[%s] Task: %s [%d]\n', method, task['theName'], task['theId'])
 
@@ -85,27 +93,39 @@ class TaskAPITests(CairisDaemonTestCase):
     url = '/api/tasks/name/' + quote(self.existing_task_name) + '/environment/Psychosis/load?session_id=test'
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEqual(rv.data,'5');
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No results after deserialization')
+    self.assertEqual(responseData,'5');
 
   def test_hindrance_by_name(self):
     method = 'test_hindrance_by_name'
     url = '/api/tasks/name/' + quote(self.existing_task_name) + '/environment/Psychosis/hindrance?session_id=test'
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEqual(rv.data,'1');
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No results after deserialization')
+    self.assertEqual(responseData,'1');
 
   def test_score_by_name(self):
     method = 'test_score_by_name'
     url = '/api/tasks/name/' + quote(self.existing_task_name) + '/environment/Psychosis/score?session_id=test'
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEqual(rv.data,'6');
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No results after deserialization')
+    self.assertEqual(responseData,'6');
 
   def test_delete(self):
     method = 'test_delete'
@@ -117,9 +137,13 @@ class TaskAPITests(CairisDaemonTestCase):
     self.app.post('/api/tasks', content_type='application/json', data=new_task_body)
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.delete(url)
-    self.logger.info('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.info('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No response')
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -133,8 +157,12 @@ class TaskAPITests(CairisDaemonTestCase):
 
     self.app.delete('/api/tasks/name/%s?session_id=test' % quote(self.prepare_new_task().name()))
     rv = self.app.post(url, content_type='application/json', data=new_task_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('task_id', None)
     self.assertIsNotNone(env_id, 'No task ID returned')
@@ -151,8 +179,12 @@ class TaskAPITests(CairisDaemonTestCase):
 
     rv = self.app.delete('/api/tasks/name/%s?session_id=test' % quote(self.prepare_new_task().name()))
     rv = self.app.post(url, content_type='application/json', data=new_task_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('task_id', None)
     self.assertIsNotNone(env_id, 'No task ID returned')
@@ -165,7 +197,11 @@ class TaskAPITests(CairisDaemonTestCase):
     upd_env_body = self.prepare_json(task=task_to_update)
     rv = self.app.put('/api/tasks/name/%s?session_id=test' % quote(self.prepare_new_task().name()), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertIsInstance(json_resp, dict)
     message = json_resp.get('message', None)
@@ -174,9 +210,13 @@ class TaskAPITests(CairisDaemonTestCase):
     self.assertGreater(message.find('successfully updated'), -1, 'The task was not successfully updated')
 
     rv = self.app.get('/api/tasks/name/%s?session_id=test' % quote(task_to_update.name()))
-    upd_task = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    upd_task = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_task, 'Unable to decode JSON data')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.logger.debug('[%s] Response data: %s', method, responseData)
     self.logger.info('[%s] Task: %s [%d]\n', method, upd_task['theName'], upd_task['theId'])
 
     rv = self.app.delete('/api/tasks/name/%s?session_id=test' % quote(task_to_update.theName))
@@ -186,9 +226,13 @@ class TaskAPITests(CairisDaemonTestCase):
     method = 'test_misusability_model'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url, content_type='application/json')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No results after deserialization')
-    self.assertEqual(rv.data.find('svg'),1)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No results after deserialization')
+    self.assertEqual(responseData.find('svg'),1)
 
 
   def prepare_new_task(self):
