@@ -53,8 +53,12 @@ class UploadAPITests(CairisDaemonTestCase):
       rv = self.app.post('/api/upload/image?session_id=test', data={
         'file': (buf, name),
       })
-      self.logger.info('[%s] Response data: %s', method, rv.data)
-      json_dict = jsonpickle.decode(rv.data)
+      if (sys.version_info > (3,)):
+        responseData = rv.data.decode('utf-8')
+      else:
+        responseData = rv.data
+      self.logger.info('[%s] Response data: %s', method, responseData)
+      json_dict = jsonpickle.decode(responseData)
       self.assertTrue('filename' in json_dict, 'Image was not saved on the server')
     else:
       self.fail('Image could not be downloaded from the Internet.')
@@ -81,4 +85,8 @@ class UploadAPITests(CairisDaemonTestCase):
       rv = self.app.post('/api/upload/image?session_id=test', data={
         'file': (buf, name),
       })
-      self.logger.info('[%s] Response data: %s', method, rv.data)
+      if (sys.version_info > (3,)):
+        responseData = rv.data.decode('utf-8')
+      else:
+        responseData = rv.data
+      self.logger.info('[%s] Response data: %s', method, responseData)
