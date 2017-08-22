@@ -11,8 +11,8 @@ addons:
     packages:
     - python-dev 
     - build-essential 
-    - mysql-server 
-    - mysql-client 
+    - mysql-server-5.5
+    - mysql-client-5.5
     - graphviz 
     - python-pip 
     - python-numpy 
