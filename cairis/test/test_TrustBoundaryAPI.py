@@ -54,8 +54,12 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
     url = '/api/trust_boundaries'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.post(url, content_type='application/json', data=self.prepare_json())
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     self.assertEqual(json_resp['message'],'TrustBoundary successfully added')
     rv = self.app.delete('/api/trust_boundaries/name/Shibboleth?session_id=test')
@@ -64,16 +68,17 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/trust_boundaries?session_id=test')
-    tbs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    tbs = jsonpickle.decode(responseData)
     self.assertIsNotNone(tbs, 'No results after deserialization')
     self.assertIsInstance(tbs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(tbs), 0, 'No trust_boundaries in the dictionary')
     self.logger.info('[%s] TrustBoundaries found: %d', method, len(tbs))
     tb = list(tbs.values())[0]
-    self.assertEqual(tb['theName'],'local')
-    self.assertEqual(tb['theDescription'],'Local IT support')
-    self.assertEqual(tb['theEnvironmentProperties'][0]['theComponents'][0]['theName'],'Credentials Store')
-    self.assertEqual(tb['theEnvironmentProperties'][0]['theComponents'][0]['theType'],'datastore')
+    self.assertEqual(len(tbs),1)
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -81,8 +86,12 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
     url = '/api/trust_boundaries/name/Shibboleth?session_id=test'
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    tb = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    tb = jsonpickle.decode(responseData)
     self.assertIsNotNone(tb, 'No results after deserialization')
     self.assertEqual(tb['theName'],'Shibboleth')
     self.assertEqual(tb['theDescription'],'Identity Provider')
@@ -100,14 +109,22 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
     upd_body = self.prepare_json(trust_boundary=self.prepare_updated_trust_boundary())
     rv = self.app.put('/api/trust_boundaries/name/Shibboleth?session_id=test', data=upd_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertEqual(json_resp['message'],'TrustBoundary successfully updated')
 
     rv = self.app.get('/api/trust_boundaries/name/Shibboleth?session_id=test')
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    upd_tb = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    upd_tb = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_tb, 'No results after deserialization')
     self.assertEqual(upd_tb['theName'],'Shibboleth')
     self.assertEqual(upd_tb['theDescription'],'Identity provider')
@@ -120,7 +137,11 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
     url = '/api/trust_boundaries/name/Shibboleth?session_id=test'
     rv = self.app.delete(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertEqual(json_resp['message'],'TrustBoundary successfully deleted')
     rv = self.app.delete('/api/trust_boundaries/name/Shibboleth?session_id=test')

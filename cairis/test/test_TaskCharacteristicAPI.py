@@ -62,7 +62,11 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     url = '/api/task_characteristics?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    tcs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    tcs = jsonpickle.decode(responseData)
     self.assertIsNotNone(tcs, 'No results after deserialization')
     self.assertIsInstance(tcs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(tcs), 0, 'No task characteristics in the dictionary')
@@ -75,16 +79,24 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     url = '/api/task_characteristics/name/%s?session_id=test' % quote(self.existing_tc_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    tc = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    tc = jsonpickle.decode(responseData)
     self.assertIsNotNone(tc, 'No results after deserialization')
     self.logger.info('[%s] Task characteristic: %s [%d]\n', method, tc['theCharacteristic'], tc['theId'])
 
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/task_characteristics', content_type='application/json', data=jsonpickle.encode(self.new_tc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Task Characteristic successfully added')
@@ -95,8 +107,12 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     self.new_tc_dict['object'].theExcerpt = 'Updated text segment'
     url = '/api/task_characteristics/name/%s?session_id=test' % quote(self.new_tc.theCharacteristic)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_tc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Task Characteristic successfully updated')
@@ -105,14 +121,21 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
   def test_delete(self):
     method = 'test_delete'
     rv = self.app.post('/api/task_characteristics', content_type='application/json', data=jsonpickle.encode(self.new_tc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
 
     url = '/api/task_characteristics/name/%s?session_id=test' % quote(self.new_tc.theCharacteristic)
     rv = self.app.delete(url)
-
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Task Characteristic successfully deleted')
