@@ -44,7 +44,11 @@ class EnvironmentAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/environments?session_id=test')
-    environments = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    environments = jsonpickle.decode(responseData)
     self.assertIsNotNone(environments, 'No results after deserialization')
     self.assertIsInstance(environments, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(environments), 0, 'No environments in the dictionary')
@@ -55,7 +59,11 @@ class EnvironmentAPITests(CairisDaemonTestCase):
   def test_get_all_names(self):
     method = 'test_get_all_names'
     rv = self.app.get('/api/environments/all/names?session_id=test')
-    environments = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    environments = jsonpickle.decode(responseData)
     self.assertIsNotNone(environments, 'No results after deserialization')
     self.assertIsInstance(environments, list, 'The result is not a list as expected')
     self.assertGreater(len(environments), 0, 'No environments in the list')
@@ -68,7 +76,11 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     riskName = 'User Certificate Theft'
     url = '/api/environments/risk/%s/names?session_id=test' % quote(riskName)
     rv = self.app.get(url)
-    environments = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    environments = jsonpickle.decode(responseData)
     self.assertIsNotNone(environments, 'No results after deserialization')
     self.assertIsInstance(environments, list, 'The result is not a list as expected')
     self.assertGreater(len(environments), 0, 'No environments in the list')
@@ -81,8 +93,12 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     url = '/api/environments/name/%s?session_id=test' % quote(self.existing_environment_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    environment = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    environment = jsonpickle.decode(responseData)
     self.assertIsNotNone(environment, 'No results after deserialization')
     self.logger.info('[%s] Environment: %s [%d]\n', method, environment['theName'], environment['theId'])
 
@@ -97,7 +113,11 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.delete(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -111,8 +131,12 @@ class EnvironmentAPITests(CairisDaemonTestCase):
 
     self.app.delete('/api/environments/name/%s?session_id=test' % quote(self.prepare_new_environment().theName))
     rv = self.app.post(url, content_type='application/json', data=new_environment_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('environment_id', None)
     self.assertIsNotNone(env_id, 'No environment ID returned')
@@ -129,8 +153,12 @@ class EnvironmentAPITests(CairisDaemonTestCase):
 
     rv = self.app.delete('/api/environments/name/%s?session_id=test' % quote(self.prepare_new_environment().theName))
     rv = self.app.post(url, content_type='application/json', data=new_environment_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('environment_id', None)
     self.assertIsNotNone(env_id, 'No environment ID returned')
@@ -143,7 +171,11 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     upd_env_body = self.prepare_json(environment=environment_to_update)
     rv = self.app.put('/api/environments/name/%s?session_id=test' % quote(self.prepare_new_environment().theName), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertIsInstance(json_resp, dict)
     message = json_resp.get('message', None)
@@ -152,9 +184,13 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     self.assertGreater(message.find('successfully updated'), -1, 'The environment was not successfully updated')
 
     rv = self.app.get('/api/environments/name/%s?session_id=test' % quote(environment_to_update.theName))
-    upd_environment = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    upd_environment = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_environment, 'Unable to decode JSON data')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.logger.debug('[%s] Response data: %s', method, responseData)
     self.logger.info('[%s] Environment: %s [%d]\n', method, upd_environment['theName'], upd_environment['theId'])
 
     rv = self.app.delete('/api/environments/name/%s?session_id=test' % quote(environment_to_update.theName))

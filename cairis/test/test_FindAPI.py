@@ -45,7 +45,11 @@ class FindAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    objts = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    objts = jsonpickle.decode(responseData)
     self.assertIsNotNone(objts, 'No results after deserialization')
     self.assertEqual(objts[0][0],'Psychosis')
     self.assertEqual(objts[0][1],'Persona')

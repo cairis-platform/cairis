@@ -59,7 +59,11 @@ class ExternalDocumentAPITests(CairisDaemonTestCase):
     url = '/api/external_documents?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    edocs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    edocs = jsonpickle.decode(responseData)
     self.assertIsNotNone(edocs, 'No results after deserialization')
     self.assertIsInstance(edocs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(edocs), 0, 'No external documents in the dictionary')
@@ -72,16 +76,24 @@ class ExternalDocumentAPITests(CairisDaemonTestCase):
     url = '/api/external_documents/name/%s?session_id=test' % quote(self.existing_edoc_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    edoc = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    edoc = jsonpickle.decode(responseData)
     self.assertIsNotNone(edoc, 'No results after deserialization')
     self.logger.info('[%s] External document: %s [%d]\n', method, edoc['theName'], edoc['theId'])
 
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/external_documents', content_type='application/json', data=jsonpickle.encode(self.new_edoc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'External Document successfully added')
@@ -91,8 +103,12 @@ class ExternalDocumentAPITests(CairisDaemonTestCase):
     self.new_edoc_dict['object'].theVersion = '2'
     url = '/api/external_documents/name/%s?session_id=test' % quote(self.existing_edoc_name)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_edoc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'External Document successfully updated')
@@ -101,14 +117,22 @@ class ExternalDocumentAPITests(CairisDaemonTestCase):
     method = 'test_delete'
 
     rv = self.app.post('/api/external_documents', content_type='application/json', data=jsonpickle.encode(self.new_edoc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
 
     url = '/api/external_documents/name/%s?session_id=test' % quote(self.new_edoc.theName)
     rv = self.app.delete(url)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
 
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'External Document successfully deleted')
