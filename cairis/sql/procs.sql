@@ -7526,8 +7526,13 @@ begin
     end if;
   end loop cm_loop;
   close cmCursor;
+  if (cmNo > 0)
+  then
+    insert into temp_mitigatingvalues values(round(mitigatingLikelihoods/cmNo),round(mitigatingSeverities/cmNo),round(cmCProperty/cmNo),round(cmIProperty/cmNo),round(cmAvProperty/cmNo),round(cmAcProperty/cmNo),round(cmAnProperty/cmNo),round(cmPanProperty/cmNo),round(cmUnlProperty/cmNo),round(cmUnoProperty/cmNo),msComments,mlComments);
+  else
+    insert into temp_mitigatingvalues values(mitigatingLikelihoods,mitigatingSeverities,cmCProperty,cmIProperty,cmAvProperty,cmAcProperty,cmAnProperty,cmPanProperty,cmUnlProperty,cmUnoProperty,msComments,mlComments);
 
-  insert into temp_mitigatingvalues values(round(mitigatingLikelihoods/cmNo),round(mitigatingSeverities/cmNo),round(cmCProperty/cmNo),round(cmIProperty/cmNo),round(cmAvProperty/cmNo),round(cmAcProperty/cmNo),round(cmAnProperty/cmNo),round(cmPanProperty/cmNo),round(cmUnlProperty/cmNo),round(cmUnoProperty/cmNo),msComments,mlComments);
+  end if;
 end
 //
 

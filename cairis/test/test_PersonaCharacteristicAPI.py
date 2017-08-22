@@ -64,7 +64,11 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     url = '/api/persona_characteristics?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    pcs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    pcs = jsonpickle.decode(responseData)
     self.assertIsNotNone(pcs, 'No results after deserialization')
     self.assertIsInstance(pcs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(pcs), 0, 'No persona characteristics in the dictionary')
@@ -77,16 +81,24 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     url = '/api/persona_characteristics/name/%s?session_id=test' % quote(self.existing_pc_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    pc = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    pc = jsonpickle.decode(responseData)
     self.assertIsNotNone(pc, 'No results after deserialization')
     self.logger.info('[%s] Persona characteristic: %s [%d]\n', method, pc['theCharacteristic'], pc['theId'])
 
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/persona_characteristics', content_type='application/json', data=jsonpickle.encode(self.new_pc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Persona Characteristic successfully added')
@@ -97,8 +109,12 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     self.new_pc_dict['object'].theExcerpt = 'Updated text segment'
     url = '/api/persona_characteristics/name/%s?session_id=test' % quote(self.new_pc.theCharacteristic)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_pc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Persona Characteristic successfully updated')
@@ -107,14 +123,22 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
   def test_delete(self):
     method = 'test_delete'
     rv = self.app.post('/api/persona_characteristics', content_type='application/json', data=jsonpickle.encode(self.new_pc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
 
     url = '/api/persona_characteristics/name/%s?session_id=test' % quote(self.new_pc.theCharacteristic)
     rv = self.app.delete(url)
 
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Persona Characteristic successfully deleted')

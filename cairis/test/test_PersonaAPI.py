@@ -53,7 +53,11 @@ class PersonaAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/personas?session_id=test')
-    personas = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    personas = jsonpickle.decode(responseData)
     self.assertIsNotNone(personas, 'No results after deserialization')
     self.assertIsInstance(personas, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(personas), 0, 'No personas in the dictionary')
@@ -66,8 +70,12 @@ class PersonaAPITests(CairisDaemonTestCase):
     url = '/api/personas/name/%s?session_id=test' % quote(self.existing_persona_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    persona = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    persona = jsonpickle.decode(responseData)
     self.assertIsNotNone(persona, 'No results after deserialization')
     self.logger.info('[%s] Persona: %s [%d]\n', method, persona['theName'], persona['theId'])
 
@@ -81,9 +89,13 @@ class PersonaAPITests(CairisDaemonTestCase):
     self.app.post('/api/personas', content_type='application/json', data=new_persona_body)
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.delete(url)
-    self.logger.info('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.info('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No response')
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -97,8 +109,12 @@ class PersonaAPITests(CairisDaemonTestCase):
 
     self.app.delete('/api/personas/name/%s?session_id=test' % quote(self.prepare_new_persona().name()))
     rv = self.app.post(url, content_type='application/json', data=new_persona_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('persona_id', None)
     self.assertIsNotNone(env_id, 'No persona ID returned')
@@ -115,8 +131,12 @@ class PersonaAPITests(CairisDaemonTestCase):
 
     rv = self.app.delete('/api/personas/name/%s?session_id=test' % quote(self.prepare_new_persona().theName))
     rv = self.app.post(url, content_type='application/json', data=new_persona_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('persona_id', None)
     self.assertIsNotNone(env_id, 'No persona ID returned')
@@ -129,7 +149,11 @@ class PersonaAPITests(CairisDaemonTestCase):
     upd_env_body = self.prepare_json(persona=persona_to_update)
     rv = self.app.put('/api/personas/name/%s?session_id=test' % quote(self.prepare_new_persona().name()), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertIsInstance(json_resp, dict)
     message = json_resp.get('message', None)
@@ -138,7 +162,11 @@ class PersonaAPITests(CairisDaemonTestCase):
     self.assertGreater(message.find('successfully updated'), -1, 'The persona was not successfully updated')
 
     rv = self.app.get('/api/personas/name/%s?session_id=test' % quote(persona_to_update.name()))
-    upd_persona = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    upd_persona = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_persona, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
     self.logger.info('[%s] Persona: %s [%d]\n', method, upd_persona['theName'], upd_persona['theId'])

@@ -102,7 +102,7 @@ def embedImage(line):
     b = Borg()
     with open(b.staticDir + linkName, "rb") as image_file:
       encoded_string = base64.b64encode(image_file.read())
-      line = line.replace(linkName,'data:image/png;base64,' + encoded_string)
+      line = line.replace(linkName,'data:image/png;base64,' + str(encoded_string))
   return line
 
 def correctTableLabel(line):

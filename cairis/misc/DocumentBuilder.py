@@ -113,7 +113,7 @@ def buildImage(imageFile,caption):
 
 def drawGraph(dotTxt,renderer,graphFile):
   fd, temp_abspath = make_tempfile(suffix='svg')
-  temp_file = open(temp_abspath, 'wb')
+  temp_file = open(temp_abspath, 'w')
   temp_file.write(dotTxt)
   temp_file.close()
   os.close(fd)

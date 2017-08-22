@@ -48,8 +48,12 @@ class ProjectAPITests(CairisDaemonTestCase):
 
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
     has_all_keys = all (k in json_dict for k in ProjectSettings.required)
     self.assertTrue(has_all_keys, 'The response is not a valid ProjectSettings object')
@@ -59,7 +63,11 @@ class ProjectAPITests(CairisDaemonTestCase):
     url = '/api/settings?session_id=test'
     method = 'test_settings_put'
     rv = self.app.get(url)
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     self.logger.info('[%s] Current project name: %s', method, json_dict['projectName'])
 
     settings = self.convert_to_obj(json_dict)
@@ -68,14 +76,22 @@ class ProjectAPITests(CairisDaemonTestCase):
     json_body = jsonpickle.encode(new_json_dict)
     rv = self.app.put(url, data=json_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    new_json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    new_json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(new_json_dict, dict, 'Response is not a valid JSON dictionary')
     message = new_json_dict.get('message', None)
     self.assertIsNotNone(message)
     self.logger.info('[%s] Message: %s', method, message)
 
     rv = self.app.get(url)
-    new_json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    new_json_dict = jsonpickle.decode(responseData)
     self.logger.info('[%s] New project name: %s\n', method, new_json_dict['projectName'])
 
     new_json_dict = { 'session_id': 'test', 'object': json_dict }
@@ -88,7 +104,11 @@ class ProjectAPITests(CairisDaemonTestCase):
     method = 'test_create_new_project'
     rv = self.app.post(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
     self.assertTrue('message' in json_dict, 'No message in reponse')
     message = str(json_dict['message'])
@@ -103,7 +123,11 @@ class ProjectAPITests(CairisDaemonTestCase):
     }
     rv = self.app.post(import_url, data=data, content_type='multipart/form-data')
     self.assertIsNotNone(rv.data, 'No response after reimporting model')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
     assert isinstance(json_dict, dict)
     message = json_dict.get('message', None)
@@ -148,7 +172,11 @@ class ProjectAPITests(CairisDaemonTestCase):
     url = '/api/settings/database/testdb/create?session_id=test'
     rv = self.app.post(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
     self.assertTrue('message' in json_dict, 'No message in reponse')
     message = str(json_dict['message'])
@@ -163,7 +191,11 @@ class ProjectAPITests(CairisDaemonTestCase):
     url = '/api/settings/database/testdb/open?session_id=test'
     rv = self.app.post(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
     self.assertTrue('message' in json_dict, 'No message in reponse')
     message = str(json_dict['message'])
@@ -175,19 +207,31 @@ class ProjectAPITests(CairisDaemonTestCase):
     url = '/api/settings/database/testdb/create?session_id=test'
     rv = self.app.post(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     message = str(json_dict['message'])
     self.assertGreater(message.find('successfully'), -1, 'Failed to create testdb')
 
     url = '/api/settings/database/cairis_default/open?session_id=test'
     rv = self.app.post(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     message = str(json_dict['message'])
     self.assertGreater(message.find('successfully'), -1, 'Failed to open testdb')
 
     rv = self.app.get('/api/settings/databases?session_id=test')
-    dbs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    dbs = jsonpickle.decode(responseData)
     self.assertIsNotNone(dbs, 'No results after deserialization')
     self.assertIsInstance(dbs, list, 'The result is not a list as expected')
     self.assertGreater(len(dbs), 0, 'No databases in the list')
@@ -199,26 +243,42 @@ class ProjectAPITests(CairisDaemonTestCase):
     url = '/api/settings/database/testdb/create?session_id=test'
     rv = self.app.post(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     message = str(json_dict['message'])
     self.assertGreater(message.find('successfully'), -1, 'Failed to create testdb')
 
     url = '/api/settings/database/cairis_default/open?session_id=test'
     rv = self.app.post(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     message = str(json_dict['message'])
     self.assertGreater(message.find('successfully'), -1, 'Failed to open cairis_default')
 
     url = '/api/settings/database/testdb/delete?session_id=test'
     rv = self.app.post(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_dict = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
     message = str(json_dict['message'])
     self.assertGreater(message.find('successfully'), -1, 'Failed to delete testdb')
 
     rv = self.app.get('/api/settings/databases?session_id=test')
-    dbs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    dbs = jsonpickle.decode(responseData)
     self.assertIsNotNone(dbs, 'No results after deserialization')
     self.assertIsInstance(dbs, list, 'The result is not a list as expected')
     self.assertEqual(len(dbs), 0)
