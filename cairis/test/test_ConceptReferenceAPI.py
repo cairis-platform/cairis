@@ -115,17 +115,21 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     method = 'test_delete'
 
     rv = self.app.post('/api/concept_references', content_type='application/json', data=jsonpickle.encode(self.new_cr_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
-
-    url = '/api/concept_references/name/%s?session_id=test' % quote(self.new_cr.theName)
-    rv = self.app.delete(url)
-
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:
       responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
+
+    url = '/api/concept_references/name/%s?session_id=test' % quote(self.new_cr.theName)
+    rv = self.app.delete(url)
+
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
