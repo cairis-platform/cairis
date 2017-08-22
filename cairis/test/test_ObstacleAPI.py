@@ -52,7 +52,11 @@ class ObstacleAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/obstacles?session_id=test')
-    obstacles = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    obstacles = jsonpickle.decode(responseData)
     self.assertIsNotNone(obstacles, 'No results after deserialization')
     self.assertIsInstance(obstacles, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(obstacles), 0, 'No obstacles in the dictionary')
@@ -65,8 +69,12 @@ class ObstacleAPITests(CairisDaemonTestCase):
     url = '/api/obstacles/name/%s?session_id=test' % quote(self.existing_obstacle_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    obstacle = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    obstacle = jsonpickle.decode(responseData)
     self.assertIsNotNone(obstacle, 'No results after deserialization')
     self.logger.info('[%s] Obstacle: %s [%d]\n', method, obstacle['theName'], obstacle['theId'])
     
@@ -81,9 +89,13 @@ class ObstacleAPITests(CairisDaemonTestCase):
     self.app.post('/api/obstacles', content_type='application/json', data=new_obstacle_body)
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.delete(url)
-    self.logger.info('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.info('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No response')
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -96,8 +108,12 @@ class ObstacleAPITests(CairisDaemonTestCase):
     new_obstacle_body = self.prepare_json()
     
     rv = self.app.post(url, content_type='application/json', data=new_obstacle_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('obstacle_id', None)
     self.assertIsNotNone(env_id, 'No obstacle ID returned')
@@ -113,8 +129,12 @@ class ObstacleAPITests(CairisDaemonTestCase):
     new_obstacle_body = self.prepare_json()
     
     rv = self.app.post(url, content_type='application/json', data=new_obstacle_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('obstacle_id', None)
     self.assertIsNotNone(env_id, 'No obstacle ID returned')
@@ -127,7 +147,11 @@ class ObstacleAPITests(CairisDaemonTestCase):
     upd_env_body = self.prepare_json(obstacle=obstacle_to_update)
     rv = self.app.put('/api/obstacles/name/%s?session_id=test' % quote(self.prepare_new_obstacle().theName), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertIsInstance(json_resp, dict)
     message = json_resp.get('message', None)
@@ -136,9 +160,13 @@ class ObstacleAPITests(CairisDaemonTestCase):
     self.assertGreater(message.find('successfully updated'), -1, 'The obstacle was not successfully updated')
     
     rv = self.app.get('/api/obstacles/name/%s?session_id=test' % quote(obstacle_to_update.theName))
-    upd_obstacle = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    upd_obstacle = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_obstacle, 'Unable to decode JSON data')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.logger.debug('[%s] Response data: %s', method, responseData)
     self.logger.info('[%s] Obstacle: %s [%d]\n', method, upd_obstacle['theName'], upd_obstacle['theId'])
   
     rv = self.app.delete('/api/obstacles/name/%s?session_id=test' % quote(obstacle_to_update.theName))

@@ -46,7 +46,11 @@ class MisuseCaseAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/misusecases?session_id=test')
-    misuse_cases = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    misuse_cases = jsonpickle.decode(responseData)
     self.assertIsNotNone(misuse_cases, 'No results after deserialization')
     self.assertIsInstance(misuse_cases, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(misuse_cases), 0, 'No misuse_cases in the dictionary')
@@ -59,8 +63,12 @@ class MisuseCaseAPITests(CairisDaemonTestCase):
     url = '/api/misusecases/risk/%s?session_id=test' % quote(self.existing_risk_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    misuse_case = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    misuse_case = jsonpickle.decode(responseData)
     self.assertIsNotNone(misuse_case, 'No results after deserialization')
     self.logger.info('[%s] MisuseCase: %s [%d]\n', method, misuse_case['theName'], misuse_case['theId'])
 
@@ -69,8 +77,12 @@ class MisuseCaseAPITests(CairisDaemonTestCase):
     url = '/api/misusecases/threat/Social%20Engineering/vulnerability/Certificate%20ubiquity?session_id=test'
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    mc = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    mc = jsonpickle.decode(responseData)
     self.assertIsNotNone(mc, 'No results after deserialization')
     mcEnv = mc['theEnvironmentProperties'][0]
     self.assertEqual(mcEnv['theEnvironmentName'],'Psychosis')
