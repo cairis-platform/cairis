@@ -51,7 +51,11 @@ class GoalAPITests(CairisDaemonTestCase):
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/goals?session_id=test')
-    goals = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    goals = jsonpickle.decode(responseData)
     self.assertIsNotNone(goals, 'No results after deserialization')
     self.assertIsInstance(goals, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(goals), 0, 'No goals in the dictionary')
@@ -64,8 +68,12 @@ class GoalAPITests(CairisDaemonTestCase):
     url = '/api/goals/name/%s?session_id=test' % quote(self.existing_goal_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    goal = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    goal = jsonpickle.decode(responseData)
     self.assertIsNotNone(goal, 'No results after deserialization')
     self.logger.info('[%s] Goal: %s [%d]\n', method, goal['theName'], goal['theId'])
     
@@ -79,9 +87,13 @@ class GoalAPITests(CairisDaemonTestCase):
     self.app.post('/api/goals', content_type='application/json', data=new_goal_body)
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.delete(url)
-    self.logger.info('[%s] Response data: %s', method, rv.data)
-    self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.info('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No response')
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -95,8 +107,12 @@ class GoalAPITests(CairisDaemonTestCase):
     
     self.app.delete('/api/goals/name/%s?session_id=test' % quote(self.prepare_new_goal().theName))
     rv = self.app.post(url, content_type='application/json', data=new_goal_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('goal_id', None)
     self.assertIsNotNone(env_id, 'No goal ID returned')
@@ -113,8 +129,12 @@ class GoalAPITests(CairisDaemonTestCase):
     
     rv = self.app.delete('/api/goals/name/%s?session_id=test' % quote(self.prepare_new_goal().theName))
     rv = self.app.post(url, content_type='application/json', data=new_goal_body)
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     env_id = json_resp.get('goal_id', None)
     self.assertIsNotNone(env_id, 'No goal ID returned')
@@ -127,7 +147,11 @@ class GoalAPITests(CairisDaemonTestCase):
     upd_env_body = self.prepare_json(goal=goal_to_update)
     rv = self.app.put('/api/goals/name/%s?session_id=test' % quote(self.prepare_new_goal().theName), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
     self.assertIsInstance(json_resp, dict)
     message = json_resp.get('message', None)
@@ -136,9 +160,13 @@ class GoalAPITests(CairisDaemonTestCase):
     self.assertGreater(message.find('successfully updated'), -1, 'The goal was not successfully updated')
     
     rv = self.app.get('/api/goals/name/%s?session_id=test' % quote(goal_to_update.theName))
-    upd_goal = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    upd_goal = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_goal, 'Unable to decode JSON data')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
+    self.logger.debug('[%s] Response data: %s', method, responseData)
     self.logger.info('[%s] Goal: %s [%d]\n', method, upd_goal['theName'], upd_goal['theId'])
   
     rv = self.app.delete('/api/goals/name/%s?session_id=test' % quote(goal_to_update.theName))

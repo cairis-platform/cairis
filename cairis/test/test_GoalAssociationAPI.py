@@ -62,7 +62,11 @@ class GoalAssociationAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    assoc = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    assoc = jsonpickle.decode(responseData)
     self.assertIsNotNone(assoc, 'No results after deserialization')
     self.assertEqual(assoc['theGoal'],'Upload clinical data to NeuroGrid')
     self.assertEqual(assoc['theSubGoal'],'Anonymise data')
@@ -70,8 +74,12 @@ class GoalAssociationAPITests(CairisDaemonTestCase):
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/goals/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Goal Association successfully added')
@@ -81,8 +89,12 @@ class GoalAssociationAPITests(CairisDaemonTestCase):
 
     self.new_assoc_dict['object'].theAlternativeId = '1'
     rv = self.app.put('/api/goals/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Goal Association successfully updated')
@@ -91,14 +103,21 @@ class GoalAssociationAPITests(CairisDaemonTestCase):
     method = 'test_delete'
 
     rv = self.app.post('/api/goals/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
 
     url = '/api/goals/association/environment/Psychosis/goal/Upload%20clinical%20data%20to%20NeuroGrid/subgoal/Anonymise%20data?session_id=test'
     rv = self.app.delete(url)
-
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Goal Association successfully deleted')
