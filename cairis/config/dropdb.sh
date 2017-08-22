@@ -17,4 +17,4 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-mysql --user=root --password='' < $CAIRIS_SRC/sql/dropdb.sql
+mysql --user=root --password='my-secret-pw' < $CAIRIS_CFG_DIR/dropdb.sql

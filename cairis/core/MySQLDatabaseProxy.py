@@ -1301,13 +1301,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       curs.execute(sqlTxt,[environmentId])
       curs.close()
     except _mysql_exceptions.IntegrityError as e:
-      id,msg = e
-      exceptionText = 'Cannot remove environment due to dependent data (id:' + str(id) + ',message:' + msg + ').'
+      exceptionText = 'Cannot remove environment due to dependent data (' + str(e) + ').'
       raise IntegrityException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
-      id,msg = e
-      exceptionText = 'MySQL error deleting environments (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText)     
+      exceptionText = 'MySQL error deleting environments (' + str(e) + ')'
+      raise DatabaseProxyException(exceptionText)  
 
   def riskRating(self,thrName,vulName,environmentName):
     return self.responseList('call riskRating(:thr,:vuln,:env)',{'thr':thrName,'vuln':vulName,'env':environmentName},'MySQL error rating risk associated with threat/vulnerability/environment ' + thrName + '/' + vulName + '/' + environmentName)[0]
