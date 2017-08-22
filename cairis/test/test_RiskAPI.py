@@ -53,7 +53,11 @@ class RiskAPITests(CairisDaemonTestCase):
     def test_get_all(self):
         method = 'test_get_all'
         rv = self.app.get('/api/risks?session_id=test')
-        risks = jsonpickle.decode(rv.data)
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        risks = jsonpickle.decode(responseData)
         self.assertIsNotNone(risks, 'No results after deserialization')
         self.assertIsInstance(risks, dict, 'The result is not a dictionary as expected')
         self.assertGreater(len(risks), 0, 'No risks in the dictionary')
@@ -66,8 +70,12 @@ class RiskAPITests(CairisDaemonTestCase):
         url = '/api/risks/name/%s?session_id=test' % quote(self.existing_risk_name)
         rv = self.app.get(url)
         self.assertIsNotNone(rv.data, 'No response')
-        self.logger.debug('[%s] Response data: %s', method, rv.data)
-        risk = jsonpickle.decode(rv.data)
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        self.logger.debug('[%s] Response data: %s', method, responseData)
+        risk = jsonpickle.decode(responseData)
         self.assertIsNotNone(risk, 'No results after deserialization')
         self.logger.info('[%s] Risk: %s [%d]\n', method, risk['theName'], risk['theId'])
 
@@ -81,9 +89,13 @@ class RiskAPITests(CairisDaemonTestCase):
         self.app.post('/api/risks', content_type='application/json', data=new_risk_body)
         self.logger.info('[%s] URL: %s', method, url)
         rv = self.app.delete(url)
-        self.logger.info('[%s] Response data: %s', method, rv.data)
-        self.assertIsNotNone(rv.data, 'No response')
-        json_resp = jsonpickle.decode(rv.data)
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        self.logger.info('[%s] Response data: %s', method, responseData)
+        self.assertIsNotNone(responseData, 'No response')
+        json_resp = jsonpickle.decode(responseData)
         self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
         message = json_resp.get('message', None)
         self.assertIsNotNone(message, 'No message in response')
@@ -97,8 +109,12 @@ class RiskAPITests(CairisDaemonTestCase):
 
 #        self.app.delete('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()))
         rv = self.app.post(url, content_type='application/json', data=new_risk_body)
-        self.logger.debug('[%s] Response data: %s', method, rv.data)
-        json_resp = jsonpickle.decode(rv.data)
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        self.logger.debug('[%s] Response data: %s', method, responseData)
+        json_resp = jsonpickle.decode(responseData)
         self.assertIsNotNone(json_resp, 'No results after deserialization')
         env_id = json_resp.get('risk_id', None)
         self.assertIsNotNone(env_id, 'No risk ID returned')
@@ -115,8 +131,12 @@ class RiskAPITests(CairisDaemonTestCase):
 
 #        rv = self.app.delete('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()))
         rv = self.app.post(url, content_type='application/json', data=new_risk_body)
-        self.logger.debug('[%s] Response data: %s', method, rv.data)
-        json_resp = jsonpickle.decode(rv.data)
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        self.logger.debug('[%s] Response data: %s', method, responseData)
+        json_resp = jsonpickle.decode(responseData)
         self.assertIsNotNone(json_resp, 'No results after deserialization')
         env_id = json_resp.get('risk_id', None)
         self.assertIsNotNone(env_id, 'No risk ID returned')
@@ -128,8 +148,12 @@ class RiskAPITests(CairisDaemonTestCase):
         risk_to_update.theId = env_id
         upd_env_body = self.prepare_json(risk=risk_to_update)
         rv = self.app.put('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()), data=upd_env_body, content_type='application/json')
-        self.assertIsNotNone(rv.data, 'No response')
-        json_resp = jsonpickle.decode(rv.data)
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        self.assertIsNotNone(responseData, 'No response')
+        json_resp = jsonpickle.decode(responseData)
         self.assertIsNotNone(json_resp)
         self.assertIsInstance(json_resp, dict)
         message = json_resp.get('message', None)
@@ -138,9 +162,13 @@ class RiskAPITests(CairisDaemonTestCase):
         self.assertGreater(message.find('successfully updated'), -1, 'The risk was not successfully updated')
 
         rv = self.app.get('/api/risks/name/%s?session_id=test' % quote(risk_to_update.theName))
-        upd_risk = jsonpickle.decode(rv.data)
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        upd_risk = jsonpickle.decode(responseData)
         self.assertIsNotNone(upd_risk, 'Unable to decode JSON data')
-        self.logger.debug('[%s] Response data: %s', method, rv.data)
+        self.logger.debug('[%s] Response data: %s', method, responseData)
         self.logger.info('[%s] Risk: %s \n', method, upd_risk['theName'])
 
         rv = self.app.delete('/api/risks/name/%s?session_id=test' % quote(risk_to_update.theName))
@@ -155,8 +183,12 @@ class RiskAPITests(CairisDaemonTestCase):
         )
         rv = self.app.get(url)
         self.assertIsNotNone(rv.data, 'No response')
-        self.logger.debug('[%s] Response data: %s', method, rv.data)
-        rating = jsonpickle.decode(rv.data)
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        self.logger.debug('[%s] Response data: %s', method, responseData)
+        rating = jsonpickle.decode(responseData)
         self.assertIsNotNone(rating, 'No results after deserialization')
         self.logger.info('[%s] Risk rating: %s\n', method, rating['rating'])
 
@@ -170,8 +202,12 @@ class RiskAPITests(CairisDaemonTestCase):
         )
         rv = self.app.get(url)
         self.assertIsNotNone(rv.data, 'No response')
-        self.logger.debug('[%s] Response data: %s', method, rv.data)
-        scores = jsonpickle.decode(rv.data)
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        self.logger.debug('[%s] Response data: %s', method, responseData)
+        scores = jsonpickle.decode(responseData)
         self.assertIsNotNone(scores, 'No results after deserialization')
         self.assertGreater(len(scores), 0, 'No results for current criteria')
         score = scores[0]
