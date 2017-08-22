@@ -62,7 +62,11 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     method = 'test_delete'
     rv = self.app.delete(url)
     self.assertIsNotNone(rv.data, 'No response')
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsInstance(json_resp, dict, 'The response cannot be converted to a dictionary')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
@@ -75,8 +79,12 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    sps = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    sps = jsonpickle.decode(responseData)
     sp = sps[0]
     self.assertIsInstance(sp, dict, 'Response is not a valid JSON object')
     self.assertEqual(sp['theName'],'Packet Filter Firewall')
@@ -87,8 +95,12 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     method = 'test_get_by_name'
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    ap = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    ap = jsonpickle.decode(responseData)
     self.assertIsInstance(ap, dict, 'Response is not a valid JSON object')
     self.assertEqual(ap['theName'],'Packet Filter Firewall')
 
@@ -101,8 +113,12 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     addSPDependentData(d)
     sp = d['security_patterns'][0]
     rv = self.app.post(url, content_type='application/json', data=self.prepare_json(sp))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
     self.assertEqual(msg, 'Security Pattern successfully added')
@@ -118,8 +134,12 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     rv = self.app.post('/api/security_patterns?session_id=test', content_type='application/json', data=self.prepare_json(sp))
     sp['theProblem'] = 'Revised problem'
     rv = self.app.put(url, content_type='application/json', data=self.prepare_json(sp))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
     self.assertEqual(msg, 'Security Pattern successfully updated')
@@ -130,8 +150,12 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     method = 'test_situate_security_pattern'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.post(url, content_type='application/json')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
     self.assertEqual(msg, 'Security Pattern successfully situated')

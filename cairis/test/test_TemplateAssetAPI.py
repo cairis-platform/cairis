@@ -88,7 +88,11 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     url = '/api/template_assets?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    tas = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    tas = jsonpickle.decode(responseData)
     self.assertIsNotNone(tas, 'No results after deserialization')
     self.assertIsInstance(tas, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(tas), 0, 'No template assets in the dictionary')
@@ -101,16 +105,24 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     url = '/api/template_assets/name/%s?session_id=test' % quote(self.existing_ta_name)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    ta = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    ta = jsonpickle.decode(responseData)
     self.assertIsNotNone(ta, 'No results after deserialization')
     self.logger.info('[%s] Template asset: %s \n', method, ta['theName'])
 
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/template_assets', content_type='application/json', data=jsonpickle.encode(self.new_ta_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Template Asset successfully added')
@@ -121,8 +133,12 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     self.new_ta_dict['object'].theDescription = 'Updated description'
     url = '/api/template_assets/name/%s?session_id=test' % quote(self.existing_ta_name)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_ta_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Template Asset successfully updated')
@@ -132,15 +148,21 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     method = 'test_delete'
 
     rv = self.app.post('/api/template_assets', content_type='application/json', data=jsonpickle.encode(self.new_ta_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
 
     url = '/api/template_assets/name/%s?session_id=test' % quote(self.new_ta.theName)
     rv = self.app.delete(url)
-
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Template Asset successfully deleted')
-
