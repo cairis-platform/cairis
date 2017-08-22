@@ -56,7 +56,11 @@ class TraceAPITests(CairisDaemonTestCase):
     url = '/api/traces/dimensions/requirement/is_from/1?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    fromDims = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    fromDims = jsonpickle.decode(responseData)
     self.assertIsNotNone(fromDims, 'No results after deserialization')
     self.logger.info('[%s] Traces found: %d', method, len(fromDims))
     self.assertEqual(len(fromDims),6)
@@ -64,7 +68,11 @@ class TraceAPITests(CairisDaemonTestCase):
     url = '/api/traces/dimensions/requirement/is_from/0?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    toDims = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    toDims = jsonpickle.decode(responseData)
     self.assertIsNotNone(toDims, 'No results after deserialization')
     self.logger.info('[%s] Traces found: %d', method, len(toDims))
     self.assertEqual(len(toDims),2)
@@ -75,7 +83,11 @@ class TraceAPITests(CairisDaemonTestCase):
     url = '/api/traces/environment/Psychosis?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    trs = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    trs = jsonpickle.decode(responseData)
     self.assertIsNotNone(trs, 'No results after deserialization')
     self.logger.info('[%s] Traces found: %d', method, len(trs))
     self.assertEqual(len(trs),0)
@@ -83,8 +95,12 @@ class TraceAPITests(CairisDaemonTestCase):
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/traces', content_type='application/json', data=jsonpickle.encode(self.new_tr_dict))
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Trace successfully added')
@@ -92,9 +108,12 @@ class TraceAPITests(CairisDaemonTestCase):
   def test_delete(self):
     method = 'test_delete'
     rv = self.app.delete('/api/traces/from_type/requirement/from_name/Dataset%20policy/to_type/vulnerability/to_name/Certificate%20ubiquity?session_id=test', content_type='application/json')
-
-    self.logger.debug('[%s] Response data: %s', method, rv.data)
-    json_resp = json_deserialize(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Trace successfully deleted')

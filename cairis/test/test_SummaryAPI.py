@@ -46,7 +46,11 @@ class SummaryAPITests(CairisDaemonTestCase):
     url = '/api/summary/dimension/vulnerability/environment/Psychosis?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
-    sumRows = jsonpickle.decode(rv.data)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    sumRows = jsonpickle.decode(responseData)
     self.assertIsNotNone(sumRows, 'No results after deserialization')
     self.logger.info('[%s] Rows: %d', method, len(sumRows))
     self.assertEqual(len(sumRows),3)
