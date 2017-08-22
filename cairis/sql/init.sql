@@ -665,7 +665,7 @@ CREATE TABLE threat (
   id INT NOT NULL,
   name VARCHAR(200) NOT NULL,
   threat_type_id INT NOT NULL,
-  method VARCHAR(4000) NOT NULL,
+  method TEXT NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(threat_type_id) REFERENCES threat_type(id)
 ) ENGINE=INNODB;
@@ -673,7 +673,7 @@ CREATE TABLE threat_directory (
   id INT NOT NULL,
   label VARCHAR(200) NOT NULL,
   name VARCHAR(200) NOT NULL,
-  description VARCHAR(4000) NOT NULL,
+  description TEXT NOT NULL,
   threat_type_id INT NOT NULL,
   reference VARCHAR(100) NOT NULL,
   PRIMARY KEY(id),

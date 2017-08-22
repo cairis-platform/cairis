@@ -12235,7 +12235,7 @@ begin
   declare threatId int;
   declare threatName varchar(200);
   declare threatType varchar(100);
-  declare threatMethod varchar(500);
+  declare threatMethod text;
   declare threatCount int default 0;
   declare riskId int;
   declare riskName varchar(200);
@@ -17569,7 +17569,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_usecase;
-  create temporary table temp_usecase (name varchar(200),short_code varchar(100), author varchar(255), text varchar(90000));
+  create temporary table temp_usecase (name varchar(200),short_code varchar(100), author varchar(255), text longtext);
 
   open ucCursor;
   ucCursor_loop: loop
@@ -17789,7 +17789,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_task;
-  create temporary table temp_task (name varchar(200),environment varchar(50), text varchar(90000));
+  create temporary table temp_task (name varchar(200),environment varchar(50), text longtext);
 
   open taskCursor;
   task_loop: loop
@@ -18168,7 +18168,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_depcheck;
-  create temporary table temp_depcheck (requirement_name varchar(255), has_circular_dependency int, dependency_chain varchar(900000));
+  create temporary table temp_depcheck (requirement_name varchar(255), has_circular_dependency int, dependency_chain longtext);
 
   open reqCursor;
   req_loop: loop
@@ -20515,7 +20515,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_architecture;
-  create temporary table temp_architecture (name varchar(200),artifact_type varchar(50),text varchar(90000));
+  create temporary table temp_architecture (name varchar(200),artifact_type varchar(50),text longtext);
 
   set done = 0;
 
@@ -20922,7 +20922,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_attackpattern;
-  create temporary table temp_attackpattern (name varchar(200),environment_name varchar(50), content_type varchar(50), text varchar(90000));
+  create temporary table temp_attackpattern (name varchar(200),environment_name varchar(50), content_type varchar(50), text longtext);
 
   open apCursor;
   ap_loop: loop
@@ -21114,7 +21114,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_architecturesummary;
-  create temporary table temp_architecturesummary (name varchar(200),text varchar(90000));
+  create temporary table temp_architecturesummary (name varchar(200),text longtext);
 
   select id into envId from environment where name = envName limit 1;
 
