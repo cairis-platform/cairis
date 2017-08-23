@@ -3510,10 +3510,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addTags(self,dimObjt,dimName,tags):
     self.deleteTags(dimObjt,dimName)
-    session = self.conn()
+    curs = self.conn.connection().connection.cursor()
     for tag in tags:
-      self.updateDatabase('call addTag(:objt,:name,:dim)',{'objt':dimObjt,'name':tag,'dim':dimName},'MySQL error adding tag',session,False)
-    self.commitDatabase(session)
+      try:
+        curs.execute('call addTag(%s,%s,%s)',[dimObjt,tag,dimName])
+      except _mysql_exceptions.DatabaseError as e:
+        id,msg = e
+        raise DatabaseProxyException('MySQL error adding tag (id:' + str(id) + ', message: ' + msg)
+    curs.close()
 
   def getTags(self,dimObjt,dimName):
     return self.responseList('call getTags(:obj,:name)',{'obj':dimObjt,'name':dimName},'MySQL error getting tags')
