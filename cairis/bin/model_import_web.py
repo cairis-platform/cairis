@@ -22,6 +22,7 @@ import jsonpickle
 import glob
 import imghdr
 import argparse
+import base64
 
 import sys
 if (sys.version_info > (3,)):
@@ -29,8 +30,11 @@ if (sys.version_info > (3,)):
 else:
   from urllib import quote
 
-
-def importModel(url,dbName,modelFile):
+def authenticate(url,userName,passWd):
+  resp = requests.post(url + '/api/session',headers={'Authorization':'Basic ' + base64.b64encode(userName + ':' + passWd)})  
+  return resp.json()['session_id']
+  
+def importModel(url,dbName,modelFile,session):
 
   newDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/create?session_id=test')
   if not newDbResp.ok:
@@ -50,7 +54,7 @@ def importModel(url,dbName,modelFile):
     exceptionTxt = 'Cannot import ' + modelFile + ': ' + importResp.text
     raise Exception(exceptionTxt)
 
-def importModelRichPicture(url,imgDir,imgFile):
+def importModelRichPicture(url,imgDir,imgFile,session):
   resp = requests.get(url + '/api/settings?session_id=test')
   if not resp.ok: 
     exceptionTxt = 'Cannot get project settings' + resp.text
@@ -74,7 +78,7 @@ def importModelRichPicture(url,imgDir,imgFile):
       raise Exception(exceptionTxt)
 
 
-def objectsWithImages(url,dimName):
+def objectsWithImages(url,dimName,session):
   resp = requests.get(url + '/api/' + dimName + 's?session_id=test')
   if not resp.ok: 
     exceptionTxt = 'Cannot get ' + dimName + 's: ' + resp.text
@@ -82,7 +86,7 @@ def objectsWithImages(url,dimName):
   else:
     return resp.json()
 
-def updateObjectImage(url,dimName,imgDir,objt):
+def updateObjectImage(url,dimName,imgDir,objt,session):
   objtName = objt['theName']
   objtGlob = glob.glob(imgDir + '/' + objtName + '.*')
   if len(objtGlob) == 0:
@@ -112,18 +116,21 @@ def main(args=None):
   parser.add_argument('modelFile',help='model file to import')
   parser.add_argument('--url',dest='url',help='URL for CAIRIS server')
   parser.add_argument('--database',dest='dbName',help='New database name')
+  parser.add_argument('--user',dest='userName',default='test',help='Username')
+  parser.add_argument('--password',dest='passWd',default='test',help='Password')
   parser.add_argument('--image_dir',dest='imageDir',help='Directory for model images')
   parser.add_argument('--rich_pic',dest='rpImage',help='Rich picture image file')
   args = parser.parse_args() 
 
-  importModel(args.url,args.dbName,args.modelFile)
-  importModelRichPicture(args.url,args.imageDir,args.rpImage)
-  personaObjts = objectsWithImages(args.url,'persona')
+  session = authenticate(args.url,args.userName,args.passWd)
+  importModel(args.url,args.dbName,args.modelFile,session)
+  importModelRichPicture(args.url,args.imageDir,args.rpImage,session)
+  personaObjts = objectsWithImages(args.url,'persona',session)
   for pName in list(personaObjts.keys()):
-    updateObjectImage(args.url,'persona',args.imageDir,personaObjts[pName])
-  attackerObjts = objectsWithImages(args.url,'attacker')
+    updateObjectImage(args.url,'persona',args.imageDir,personaObjts[pName],session)
+  attackerObjts = objectsWithImages(args.url,'attacker',session)
   for aName in list(attackerObjts.keys()):
-    updateObjectImage(args.url,'attacker',args.imageDir,attackerObjts[aName])
+    updateObjectImage(args.url,'attacker',args.imageDir,attackerObjts[aName],session)
 
 if __name__ == '__main__':
   try:

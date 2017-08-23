@@ -101,7 +101,7 @@ def embedImage(line):
       raise Exception("No relevant image link found")
     b = Borg()
     with open(b.staticDir + linkName, "rb") as image_file:
-      encoded_string = base64.b64encode(image_file.read())
+      encoded_string = base64.b64encode(image_file.read()).decode('ascii')
       line = line.replace(linkName,'data:image/png;base64,' + str(encoded_string))
   return line
 
