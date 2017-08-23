@@ -3126,9 +3126,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       tChars[tName + '/' + tcDesc] = tChar
     return tChars
 
-  def prettyPrintGoals(self,categoryName):
-    return self.responseList('call goalsPrettyPrint(:category)',{'category':categoryName},'MySQL error pretty printing goals')[0]
-
   def searchModel(self,inTxt,opts):
     argDict = {
     'in': inTxt,
@@ -3382,19 +3379,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def obstacleLabel(self,goalId,environmentId):
     return self.responseList('select obstacle_label(:goal,:env)',{'goal':goalId,'env':environmentId},'MySQL error getting obstacle label')[0]
 
-  def getLabelledGoals(self,envName):
-    goalRows = self.responseList('call getEnvironmentGoals(:goal,:env)',{'goal':'','env':envName},'MySQL error getting labelled goals')
-    goals = {}
-    for goalId,goalName,goalOrig in goalRows:
-      environmentProperties = self.goalEnvironmentProperties(goalId)
-      parameters = GoalParameters(goalName,goalOrig,[],self.goalEnvironmentProperties(goalId))
-      g = ObjectFactory.build(goalId,parameters)
-      lbl = g.label(envName)
-      goals[lbl] = g
-    lbls = list(goals.keys())
-    lbls.sort(key=lambda x: [int(y) for y in x.split('.')])
-    return lbls,goals
-
   def redmineGoals(self,envName):
     goalRows = self.responseList('call redmineGoals(:env)',{'env':envName},'MySQL error getting redmine goals')
     goals = {}
@@ -3521,28 +3505,15 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def environmentRequirements(self,envName):
     return self.responseList('call requirementNames(:env)',{'env':envName},'MySQL error getting requirements associated with environment ' + envName)
 
-  def addTag(self,tagObjt,tagName,tagDim, curs):
-    try:
-      curs.execute('call addTag(%s,%s,%s)',[tagObjt,tagName,tagDim])
-    except _mysql_exceptions.DatabaseError as e:
-      id,msg = e
-      exceptionText = 'MySQL error adding tag ' + tagName + ' to ' + tagDim + ' ' + tagObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
   def deleteTags(self,tagObjt,tagDim):
     self.updateDatabase('call deleteTags(:obj,:dim)',{'obj':tagObjt,'dim':tagDim},'MySQL error deleting tags')
 
   def addTags(self,dimObjt,dimName,tags):
-    try:
-      self.deleteTags(dimObjt,dimName)
-      curs = self.conn.connection().connection.cursor()
-      for tag in tags:
-        self.addTag(dimObjt,tag,dimName, curs)
-      curs.close()
-    except _mysql_exceptions.DatabaseError as e:
-      id,msg = e
-      exceptionText = 'MySQL error deleting tags from ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
+    self.deleteTags(dimObjt,dimName)
+    session = self.conn()
+    for tag in tags:
+      self.updateDatabase('call addTag(:objt,:name,:dim)',{'objt':dimObjt,'name':tag,'dim':dimName},'MySQL error adding tag',session,False)
+    self.commitDatabase(session)
 
   def getTags(self,dimObjt,dimName):
     return self.responseList('call getTags(:obj,:name)',{'obj':dimObjt,'name':dimName},'MySQL error getting tags')
@@ -4603,49 +4574,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
       traces.append(ObjectFactory.build(-1,parameters))
     return traces
-
-  def prepareDatabase(self):
-    try:
-      import logging
-      logger = logging.getLogger(__name__)
-      self.conn.query('select @@max_sp_recursion_depth;')
-      result = self.conn.store_result()
-      if (result is None):
-        exceptionText = 'Error returned stored_result'
-        raise DatabaseProxyException(exceptionText)
-
-      real_result = result.fetch_row()
-      if (len(real_result) < 1):
-        exceptionText = 'Error getting max_sp_recursion_depth from database'
-        raise DatabaseProxyException(exceptionText)
-
-      try:
-        rec_value = real_result[0][0]
-      except LookupError:
-        rec_value = -1
-
-      if rec_value == -1:
-        logger.warning('Unable to get max_sp_recursion_depth. Be sure max_sp_recursion_depth is set to 255 or more.')
-      elif rec_value < 255:
-        self.conn.query('set max_sp_recursion_depth = 255')
-        self.conn.store_result()
-
-        self.conn.query('select @@max_sp_recursion_depth;')
-        result = self.conn.use_result()
-        real_result = result.fetch_row()
-
-        try:
-          rec_value = real_result[0][0]
-          logger.debug('max_sp_recursion_depth is %d.' % rec_value)
-          if rec_value < 255:
-            logger.warning('WARNING: some features may not work because the maximum recursion depth for stored procedures is too low')
-        except LookupError:
-          logger.warning('Unable to get max_sp_recursion_depth. Be sure max_sp_recursion_depth is set to 255 or more.')
-
-    except _mysql_exceptions.DatabaseError as e:
-      id,msg = e
-      exceptionText = 'MySQL error preparing database'
-      raise DatabaseProxyException(exceptionText)
 
   def templateAssetMetrics(self,taName):
     return self.responseList('call templateAssetMetrics(:ta)',{'ta':taName},'MySQL error getting template asset metrics')[0]
