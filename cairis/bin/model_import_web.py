@@ -31,7 +31,8 @@ else:
   from urllib import quote
 
 def authenticate(url,userName,passWd):
-  resp = requests.post(url + '/api/session',headers={'Authorization':'Basic ' + base64.b64encode(userName + ':' + passWd)})  
+  credentials = 'Basic ' + base64.b64encode((userName + ':' + passWd).encode('ascii')).decode('ascii')
+  resp = requests.post(url + '/api/session',headers={'Authorization': credentials})
   if not resp.ok:
     raise Exception('Authentication error' + resp.text)
   return resp.json()['session_id']
@@ -48,7 +49,7 @@ def importModel(url,dbName,modelFile,session):
     exceptionTxt = 'Cannot open database ' + dbName + ': ' + openDbResp.text
     raise Exception(exceptionTxt)
 
-  buf = open(modelFile,'rb').read()
+  buf = open(modelFile,'rb').read().decode('utf-8')
   import_json = {'session_id' : session ,'object': {'urlenc_file_contents':buf,'overwrite': 1,'type':'all'}}
   hdrs = {'Content-type': 'application/json'}
   importResp = requests.post(url + '/api/import/text',data=json.dumps(import_json),headers=hdrs);
