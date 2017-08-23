@@ -45,8 +45,6 @@ class InternalDocumentTest(unittest.TestCase):
     self.assertEqual(i.description(),o.description())
     self.assertEqual(i.content(),o.content())
 
-
-
     o.theDescription = 'Updated description'
     b.dbProxy.updateInternalDocument(o)
 

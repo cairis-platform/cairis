@@ -3,5 +3,13 @@
       {"theName" : "FocusGroup1",
        "theDescription" : "Transcript from first focus group",
        "theContent" : "Some content"}
+  ],
+  "codes" : [
+     {"theName" : "SomeCode",
+      "theType" : "context",
+      "theDescription" : "Some description",
+      "theInclusionCriteria" : "some text",
+      "theExample" : "None"
+     }
   ]
 }

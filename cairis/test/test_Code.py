@@ -17,27 +17,53 @@
 
 import unittest
 import os
-from cairis.mio.ModelImport import importModelFile,importProcessesFile
+import json
+from subprocess import call
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
+from cairis.core.CodeParameters import CodeParameters
+import sys
 
-__author__ = 'Shamal Faily'
-
-
-class CodeTests(unittest.TestCase):
-
-  @classmethod
-  def setUpClass(cls):
-    cairis.core.BorgFactory.initialise()
-    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1)
+class CodeTest(unittest.TestCase):
 
   def setUp(self):
-    os.environ['OUTPUT_DIR'] = '/tmp'
+    call([os.environ['CAIRIS_CFG_DIR'] + "/initdb.sh"])
+    cairis.core.BorgFactory.initialise()
+    f = open(os.environ['CAIRIS_SRC'] + '/test/processes.json')
+    d = json.load(f)
+    f.close()
+    self.iCodes = d['codes']
+    
 
+  def testAddUpdateCode(self):
+    i = CodeParameters(self.iCodes[0]["theName"], self.iCodes[0]["theType"],self.iCodes[0]["theDescription"], self.iCodes[0]["theInclusionCriteria"], self.iCodes[0]["theExample"])
+    b = Borg()
+    b.dbProxy.addCode(i)
+    ocs = b.dbProxy.getCodes()
+    o = ocs[self.iCodes[0]["theName"]]
+    self.assertEqual(i.name(), o.name())
+    self.assertEqual(i.type(), o.type())
+    self.assertEqual(i.description(),o.description())
+    self.assertEqual(i.inclusionCriteria(),o.inclusionCriteria())
+    self.assertEqual(i.example(),o.example())
+
+    o.theDescription = 'Updated description'
+    b.dbProxy.updateCode(o)
+
+    ocs2 = b.dbProxy.getCodes(o.id())
+    o2 = ocs2[self.iCodes[0]["theName"]]
+    self.assertEqual(i.name(), o2.name())
+    self.assertEqual(i.type(), o2.type())
+    self.assertEqual('Updated description',o2.description())
+    self.assertEqual(i.inclusionCriteria(),o2.inclusionCriteria())
+    self.assertEqual(i.example(),o2.example())
+
+    b.dbProxy.deleteCode(o.id())
+  
   def tearDown(self):
-    pass
+    b = Borg()
+    b.dbProxy.close()
+    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
 
-  def testImportProcesses(self):
-    importProcessesFile(os.environ['CAIRIS_SRC'] + '/test/installCodes.xml',0)
-    importProcessesFile(os.environ['CAIRIS_SRC'] + '/test/coding.xml',0)
-    importProcessesFile(os.environ['CAIRIS_SRC'] + '/test/processes.xml',0)
+if __name__ == '__main__':
+  unittest.main()
