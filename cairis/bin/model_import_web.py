@@ -31,23 +31,26 @@ else:
   from urllib import quote
 
 def authenticate(url,userName,passWd):
-  resp = requests.post(url + '/api/session',headers={'Authorization':'Basic ' + base64.b64encode(userName + ':' + passWd)})  
+  credentials = 'Basic ' + base64.b64encode((userName + ':' + passWd).encode('ascii')).decode('ascii')
+  resp = requests.post(url + '/api/session',headers={'Authorization': credentials})
+  if not resp.ok:
+    raise Exception('Authentication error' + resp.text)
   return resp.json()['session_id']
   
 def importModel(url,dbName,modelFile,session):
-
-  newDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/create?session_id=test')
+  data = {'session_id':session}
+  newDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/create',data=data)
   if not newDbResp.ok:
     exceptionTxt = 'Cannot create database ' + dbName + ': ' + newDbResp.text
     raise Exception(exceptionTxt)
 
-  openDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/open?session_id=test')
+  openDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/open',data=data)
   if not openDbResp.ok:
     exceptionTxt = 'Cannot open database ' + dbName + ': ' + openDbResp.text
     raise Exception(exceptionTxt)
 
-  buf = open(modelFile,'rb').read()
-  import_json = {'session_id' : 'test','object' : {'urlenc_file_contents':buf,'overwrite': 1,'type':'all'}}
+  buf = open(modelFile,'rb').read().decode('utf-8')
+  import_json = {'session_id' : session ,'object': {'urlenc_file_contents':buf,'overwrite': 1,'type':'all'}}
   hdrs = {'Content-type': 'application/json'}
   importResp = requests.post(url + '/api/import/text',data=json.dumps(import_json),headers=hdrs);
   if not importResp.ok:
@@ -55,7 +58,8 @@ def importModel(url,dbName,modelFile,session):
     raise Exception(exceptionTxt)
 
 def importModelRichPicture(url,imgDir,imgFile,session):
-  resp = requests.get(url + '/api/settings?session_id=test')
+  data = {'session_id':session}
+  resp = requests.get(url + '/api/settings',data=data)
   if not resp.ok: 
     exceptionTxt = 'Cannot get project settings' + resp.text
     raise Exception(exceptionTxt)
@@ -64,13 +68,13 @@ def importModelRichPicture(url,imgDir,imgFile,session):
       exceptionTxt = 'Error updating project settings: ' + imgFile + ' is an invalid image file.'
       raise Exception(exceptionTxt)
     settings = resp.json()
-    imgResp = requests.post(url + '/api/upload/image?session_id=test',files=dict(file=open(imgDir + '/' + imgFile,'rb')))
+    imgResp = requests.post(url + '/api/upload/image',data=data,files=dict(file=open(imgDir + '/' + imgFile,'rb')))
     if not imgResp.ok:
       exceptionTxt = 'Error uploading ' + imgFile + ' :' + imgResp.text
       raise Exception(exceptionTxt)
     else:
       settings['richPicture'] = imgResp.json()['filename']
-      settings_json = {'session_id' : 'test','object' : settings}
+      settings_json = {'session_id' : session,'object' : settings}
       hdrs = {'Content-type': 'application/json'}
       settingsUpdResp = requests.put(url + '/api/settings',data=json.dumps(settings_json),headers=hdrs);
     if not settingsUpdResp.ok:
@@ -79,7 +83,8 @@ def importModelRichPicture(url,imgDir,imgFile,session):
 
 
 def objectsWithImages(url,dimName,session):
-  resp = requests.get(url + '/api/' + dimName + 's?session_id=test')
+  data = {'session_id':session}
+  resp = requests.get(url + '/api/' + dimName + 's',data=data)
   if not resp.ok: 
     exceptionTxt = 'Cannot get ' + dimName + 's: ' + resp.text
     raise Exception(exceptionTxt)
@@ -87,6 +92,7 @@ def objectsWithImages(url,dimName,session):
     return resp.json()
 
 def updateObjectImage(url,dimName,imgDir,objt,session):
+  data = {'session_id':session}
   objtName = objt['theName']
   objtGlob = glob.glob(imgDir + '/' + objtName + '.*')
   if len(objtGlob) == 0:
@@ -98,13 +104,13 @@ def updateObjectImage(url,dimName,imgDir,objt,session):
   if (imghdr.what(imgFile) == None):
     exceptionTxt = 'Error uploading ' + imgFile + ': invalid image file.'
     raise Exception(exceptionTxt)
-  imgResp = requests.post(url + '/api/upload/image?session_id=test',files=dict(file=open(imgFile,'rb')))
+  imgResp = requests.post(url + '/api/upload/image',data=data,files=dict(file=open(imgFile,'rb')))
   if not imgResp.ok:
     exceptionTxt = 'Error uploading ' + imgFile + ' :' + imgResp.text + '.'
     raise Exception(exceptionTxt)
   else:
     objt['theImage'] = imgResp.json()['filename']
-    objt_json = {'session_id' : 'test','object' : objt}
+    objt_json = {'session_id' : session,'object' : objt}
     hdrs = {'Content-type': 'application/json'}
     objtUpdResp = requests.put(url + '/api/' + dimName + 's/name/' + objtName,data=json.dumps(objt_json),headers=hdrs);
     if not objtUpdResp.ok:
@@ -118,19 +124,22 @@ def main(args=None):
   parser.add_argument('--database',dest='dbName',help='New database name')
   parser.add_argument('--user',dest='userName',default='test',help='Username')
   parser.add_argument('--password',dest='passWd',default='test',help='Password')
-  parser.add_argument('--image_dir',dest='imageDir',help='Directory for model images')
-  parser.add_argument('--rich_pic',dest='rpImage',help='Rich picture image file')
+  parser.add_argument('--image_dir',dest='imageDir',default='',help='Directory for model images')
+  parser.add_argument('--rich_pic',dest='rpImage',default='',help='Rich picture image file')
   args = parser.parse_args() 
 
   session = authenticate(args.url,args.userName,args.passWd)
   importModel(args.url,args.dbName,args.modelFile,session)
-  importModelRichPicture(args.url,args.imageDir,args.rpImage,session)
-  personaObjts = objectsWithImages(args.url,'persona',session)
-  for pName in list(personaObjts.keys()):
-    updateObjectImage(args.url,'persona',args.imageDir,personaObjts[pName],session)
-  attackerObjts = objectsWithImages(args.url,'attacker',session)
-  for aName in list(attackerObjts.keys()):
-    updateObjectImage(args.url,'attacker',args.imageDir,attackerObjts[aName],session)
+  if (args.imageDir != '' and args.rpImage != ''):
+    importModelRichPicture(args.url,args.imageDir,args.rpImage,session)
+
+  if (args.imageDir != ''):
+    personaObjts = objectsWithImages(args.url,'persona',session)
+    for pName in list(personaObjts.keys()):
+      updateObjectImage(args.url,'persona',args.imageDir,personaObjts[pName],session)
+    attackerObjts = objectsWithImages(args.url,'attacker',session)
+    for aName in list(attackerObjts.keys()):
+      updateObjectImage(args.url,'attacker',args.imageDir,attackerObjts[aName],session)
 
 if __name__ == '__main__':
   try:

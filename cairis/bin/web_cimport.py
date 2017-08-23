@@ -23,6 +23,7 @@ import imghdr
 import argparse
 import os
 import sys
+import base64
 if (sys.version_info > (3,)):
   from urllib.parse import quote
 else:
@@ -31,20 +32,29 @@ else:
 
 __author__ = 'Shamal Faily'
 
-def importModelFile(importFile,url,dbName,createDb,overwrite,mFormat):
+def authenticate(url,userName,passWd):
+  credentials = 'Basic ' + base64.b64encode((userName + ':' + passWd).encode('ascii')).decode('ascii')
+  resp = requests.post(url + '/api/session',headers={'Authorization': credentials})
+  if not resp.ok:
+    raise Exception('Authentication error' + resp.text)
+  return resp.json()['session_id']
 
+
+def importModelFile(importFile,url,dbName,createDb,overwrite,mFormat,userName,passWd):
+  session = authenticate(url,userName,passWd)
+  data = {'session_id':session}
   if (createDb):
-    newDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/create?session_id=test')
+    newDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/create',data=data)
     if not newDbResp.ok:
       exceptionTxt = 'Cannot create database ' + dbName + ': ' + newDbResp.text
       raise Exception(exceptionTxt)
 
-  openDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/open?session_id=test')
+  openDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/open',data=data)
   if not openDbResp.ok:
     exceptionTxt = 'Cannot open database ' + dbName + ': ' + openDbResp.text
     raise Exception(exceptionTxt)
-  buf = open(importFile,'rb').read()
-  import_json = {'session_id' : 'test','object' : {'urlenc_file_contents':buf,'overwrite':overwrite,'type':mFormat}}
+  buf = open(importFile,'rb').read().decode('utf-8')
+  import_json = {'session_id' : session,'object' : {'urlenc_file_contents':buf,'overwrite':overwrite,'type':mFormat}}
   hdrs = {'Content-type': 'application/json'}
   importResp = requests.post(url + '/api/import/text',data=json.dumps(import_json),headers=hdrs);
   if not importResp.ok:
@@ -55,19 +65,21 @@ def main(args=None):
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Import using CAIRIS API')
   parser.add_argument('modelFile',help='model file to import')
   parser.add_argument('--url',dest='url',help='URL for CAIRIS server')
-  parser.add_argument('--database',dest='dbName',help='database name')
+  parser.add_argument('--database',dest='dbName',default='cairis_default',help='database name')
+  parser.add_argument('--user',dest='userName',default='test',help='Username')
+  parser.add_argument('--password',dest='passWd',default='test',help='Password')
   parser.add_argument('--create',help='create flag',action="store_true")
   parser.add_argument('--overwrite',help='overwrite flag',action="store_true")
   parser.add_argument('--type',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, misusability, project, domainvalues, architecturalpattern, associations, synopses, processes, assets, locations, dataflows or all')
   args = parser.parse_args() 
-  file_import(args.modelFile,args.url,args.dbName,args.create,args.overwrite,args.modelFormat)
+  file_import(args.modelFile,args.url,args.dbName,args.create,args.overwrite,args.modelFormat,args.userName,args.passWd)
 
-def file_import(importFile,url,dbName,createDb,overwrite,mFormat):
+def file_import(importFile,url,dbName,createDb,overwrite,mFormat,userName,passWd):
   if (os.access(importFile, os.R_OK)) == False:
     raise Exception("Cannot access " + importFile)
 
   if (mFormat in ['securitypattern','attackpattern','tvtypes','directory','requirements','riskanalysis','usability', 'misusability','project','domainvalues','architecturalpattern','associations','synopses','processes','assets','locations','dataflows','all']):
-    importModelFile(importFile,url,dbName,createDb,overwrite,mFormat)
+    importModelFile(importFile,url,dbName,createDb,overwrite,mFormat,userName,passWd)
   else:
     raise Exception('Input model type ' + mFormat + ' not recognised')
   return 0
