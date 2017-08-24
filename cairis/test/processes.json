@@ -1,20 +1,47 @@
 {
+  "environments" : [
+    {"theName" : "Psychosis",
+     "theShortCode" : "PSY",
+     "theDescription" : "The exemplar aims to integrate large existing datasets of serial MRI scans and behaviour data coupled to the NeuroGrid image analysis service into a Grid-based database, test image normalisation techniques, and develop a general ontology for a psychosis databas, for use in multi-centre studies. The exemplar tests capabilities of NeuroGrid to deal with restrospective data, assimilate material into databases, and use of the toolkit for normalisation and analysis."}
+  ],
   "internaldocuments" : [
-      {"theName" : "FocusGroup1",
-       "theDescription" : "Transcript from first focus group",
-       "theContent" : "Some content"}
+    {"theName" : "FocusGroup1",
+     "theDescription" : "Transcript from first focus group",
+     "theContent" : "Lorem ipsum dolor sit amet, turpis cum, venenatis purus consequat dui faucibus ligula, minim semper eu neque quis donec, neque fermentum litora augue quis, porttitor interdum nibh. Libero molestie sodales neque maecenas mauris dui, felis sed risus, quis dui rutrum. Posuere vel sed posuere tristique. Vestibulum etiam vitae, lorem ante odio, dictum suspendisse blandit amet eget, faucibus posuere adipiscing dui vehicula urna."}
   ],
   "codes" : [
-     {"theName" : "SomeCode",
-      "theType" : "context",
-      "theDescription" : "Some description",
-      "theInclusionCriteria" : "some text",
-      "theExample" : "None"
-     }
+    {"theName" : "SomeCode",
+     "theType" : "context",
+     "theDescription" : "Some description",
+     "theInclusionCriteria" : "some text",
+     "theExample" : "None"
+    }
   ],
   "memos" : [
-     {"theName" : "SomeMemo",
-      "theDescription" : "Some description"
-     }
+    {"theName" : "SomeMemo",
+     "theDescription" : "Some description"
+    }
+  ],
+  "quotations" : [
+    {"theType" : "code",
+    "theCode" : "SomeCode",
+    "theArtifactType" : "internal_document",
+    "theArtifactName" : "FocusGroup1",
+    "theEnvironment" : "Psychosis",
+    "theSection" : "None",
+    "theStartIdx" : 0,
+    "theEndIdx" : 9,
+    "theLabel" : "Sessions recorded",
+    "theSynopsis" : "Focus group sessions are recorded"},
+    {"theType" : "memo",
+    "theCode" : "SomeMemo",
+    "theArtifactType" : "internal_document",
+    "theArtifactName" : "FocusGroup1",
+    "theEnvironment" : "None",
+    "theSection" : "None",
+    "theStartIdx" : 16,
+    "theEndIdx" : 20,
+    "theLabel" : "None",
+    "theSynopsis" : "None"}
   ]
 }

@@ -4088,7 +4088,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.addArtifactEnvironmentCode(artName,envName,artType,sectName,docCode,startIdx,endIdx)
 
   def addArtifactEnvironmentCode(self,artName,envName,artType,sectName,docCode,startIdx,endIdx):
-    self.updataDatabase('call addArtifactEnvironmentCode(:art,:env,:type,:sect,:code,:sIdx,:eIdx)',{'art':artName,'env':envName,'type':artType,'sect':sectName,'code':docCode,'sIdx':startIdx,'eIdx':endIdx},'MySQL error adding artifact environment code')
+    self.updateDatabase('call addArtifactEnvironmentCode(:art,:env,:type,:sect,:code,:sIdx,:eIdx)',{'art':artName,'env':envName,'type':artType,'sect':sectName,'code':docCode,'sIdx':startIdx,'eIdx':endIdx},'MySQL error adding artifact environment code')
 
   def personaCodeNetwork(self,personaName,fromCode='',toCode=''):
     return self.responseList('call artifactCodeNetwork(:pers,:a,:fCode,:tCode)',{'pers':personaName,'a':'persona','fCode':fromCode,'tCode':toCode},'MySQL error getting persona code network')
@@ -4374,7 +4374,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     return self.responseList('call impliedProcessChannels(:proc)',{'proc':procName},'MySQL error getting implied process channels')
 
   def getQuotations(self):
-    return self.responsList('call getQuotations()',{},'MySQL error getting quotations')
+    return self.responseList('call getQuotations()',{},'MySQL error getting quotations')
 
   def updateQuotation(self,codeName,atName,aName,oldStartIdx,oldEndIdx,startIdx,endIdx,synopsis,label):
     if atName == 'internal_document':
