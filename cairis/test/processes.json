@@ -11,5 +11,10 @@
       "theInclusionCriteria" : "some text",
       "theExample" : "None"
      }
+  ],
+  "memos" : [
+     {"theName" : "SomeMemo",
+      "theDescription" : "Some description"
+     }
   ]
 }
