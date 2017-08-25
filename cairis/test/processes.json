@@ -1,8 +1,33 @@
-{
+{ "roles" : [
+   {"theName" : "Researcher",
+    "theType" : "Stakeholder",
+    "theShortCode" : "RCHR",
+    "theDescription" : "Uses and supplies data to NeuroGrid"
+    }
+  ],
   "environments" : [
-    {"theName" : "Psychosis",
-     "theShortCode" : "PSY",
-     "theDescription" : "The exemplar aims to integrate large existing datasets of serial MRI scans and behaviour data coupled to the NeuroGrid image analysis service into a Grid-based database, test image normalisation techniques, and develop a general ontology for a psychosis databas, for use in multi-centre studies. The exemplar tests capabilities of NeuroGrid to deal with restrospective data, assimilate material into databases, and use of the toolkit for normalisation and analysis."}
+   {"theName" : "Psychosis",
+    "theShortCode" : "PSY",
+    "theDescription" : "The exemplar aims to integrate large existing datasets of serial MRI scans and behaviour data coupled to the NeuroGrid image analysis service into a Grid-based database, test image normalisation techniques, and develop a general ontology for a psychosis databas, for use in multi-centre studies. The exemplar tests capabilities of NeuroGrid to deal with restrospective data, assimilate material into databases, and use of the toolkit for normalisation and analysis."}
+  ],
+  "personas" : [
+    {"theName" : "Claire",
+     "theActivities" : "Claire is a clinical researcher within the Psychosis exemplar.  She is responsible for a group which is developing and testing processing pipelines for harmonising MRI images from different centres. Claire authorises requests that other members of her group make for accessing NeuroGrid, and is officially responsible for making sure her colleagues aren't misusing their access.  In practice, however, she delegates much of her responsibility to one of her more security-knowledgeable colleagues.",
+     "theAttitudes" : "Claire feels that NeuroGrid has a lot to offer her research but, right now, its hard to see the benefits for the usability problems she faces. Although Claire appreciates the importance of security and the confidentialty of her research subjects, authorising colleague requests for data access and liasing with the infrastructure team is a time consuming process which isn't helping her get any research done. Claire is also perplexed at why security could cause simple workflows take such a long time to run, but she also remembers how long it used to take to get data before NeuroGrid so she can live with the performance issues.",
+     "theAptitudes" : "Claire and her colleagues follow a set of processes and guidelines when working with data uploaded to NeuroGrid. Because obtaining data is an expensive business, Claire also tries to reuse data and analysis as much as possible, and as far as her ethics clearance allows.",
+     "theMotivations" : "Besides her research, Claire's primary security concerns are centered around the datasets she maintains, and making sure her colleagues and collaborators can access the data they need.",
+     "theSkills" : "Nothing stipulated",
+     "theIntrinsic" : "None",
+     "theContextual" : "None",
+     "thePersonaType" : "Primary",
+     "theEnvironmentProperties" : [
+       {"theName" : "Psychosis",
+        "theDirectFlag" : "False",
+        "theRole" : ["Researcher"],
+        "theNarrative" : "Nothing stipulated"
+      }
+     ]
+   }
   ],
   "internaldocuments" : [
     {"theName" : "FocusGroup1",
@@ -11,6 +36,12 @@
   ],
   "codes" : [
     {"theName" : "SomeCode",
+     "theType" : "context",
+     "theDescription" : "Some description",
+     "theInclusionCriteria" : "some text",
+     "theExample" : "None"
+    },
+    {"theName" : "AnotherCode",
      "theType" : "context",
      "theDescription" : "Some description",
      "theInclusionCriteria" : "some text",
@@ -43,5 +74,12 @@
     "theEndIdx" : 20,
     "theLabel" : "None",
     "theSynopsis" : "None"}
+  ],
+  "code_networks" : [
+    {"thePersonaName" : "Claire",
+     "theFromCode": "SomeCode",
+     "theToCode": "AnotherCode",
+     "theRshipType" : "implies"
+    }
   ]
 }
