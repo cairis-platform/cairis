@@ -70,11 +70,11 @@ class QuotationTest(unittest.TestCase):
     self.assertEqual(self.iQs[0]["theSection"],o1[3])
     self.assertEqual(self.iQs[0]["theStartIdx"],o1[4])
     self.assertEqual(self.iQs[0]["theEndIdx"],o1[5])
-    self.assertEqual('',o1[6])
+    self.assertEqual('Lorem ip',o1[6])
     self.assertEqual(self.iQs[0]["theSynopsis"],o1[7])
     self.assertEqual(self.iQs[0]["theLabel"],o1[8])
 
-    b.dbProxy.updateQuotation(self.iQs[0]["theCode"],self.iQs[0]["theArtifactType"],self.iQs[0]["theArtifactName"],self.iQs[0]["theStartIdx"],self.iQs[0]["theEndIdx"],1,self.iQs[0]["theEndIdx"],self.iQs[0]["theSynopsis"],self.iQs[0]["theLabel"])
+    b.dbProxy.updateQuotation(self.iQs[0]["theCode"],self.iQs[0]["theArtifactType"],self.iQs[0]["theArtifactName"],self.iQs[0]["theStartIdx"],self.iQs[0]["theEndIdx"],2,self.iQs[0]["theEndIdx"],self.iQs[0]["theSynopsis"],self.iQs[0]["theLabel"])
 
     oqs = b.dbProxy.getQuotations()
     ou1 = oqs[0]
@@ -82,9 +82,9 @@ class QuotationTest(unittest.TestCase):
     self.assertEqual(self.iQs[0]["theArtifactType"],ou1[1])
     self.assertEqual(self.iQs[0]["theArtifactName"],ou1[2])
     self.assertEqual(self.iQs[0]["theSection"],ou1[3])
-    self.assertEqual(1,ou1[4])
+    self.assertEqual(2,ou1[4])
     self.assertEqual(self.iQs[0]["theEndIdx"],ou1[5])
-    self.assertEqual('',o1[6])
+    self.assertEqual('orem ip',ou1[6])
     self.assertEqual(self.iQs[0]["theSynopsis"],ou1[7])
     self.assertEqual(self.iQs[0]["theLabel"],ou1[8])
 
