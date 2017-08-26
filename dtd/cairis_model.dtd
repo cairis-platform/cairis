@@ -179,7 +179,7 @@
 <!ELEMENT detection_mechanism EMPTY>
 <!ATTLIST detection_mechanism name CDATA #REQUIRED>
 
-<!ELEMENT asset_association EMPTY>
+<!ELEMENT asset_association (rationale?)>
 <!ATTLIST asset_association environment CDATA #REQUIRED>
 <!ATTLIST asset_association head_name CDATA #REQUIRED>
 <!ATTLIST asset_association head_adornment CDATA #REQUIRED>
@@ -191,9 +191,8 @@
 <!ATTLIST asset_association tail_nav (1 | 0) #REQUIRED>
 <!ATTLIST asset_association tail_adornment CDATA #REQUIRED>
 <!ATTLIST asset_association tail_name CDATA #REQUIRED>
-<!ATTLIST asset_association rationale CDATA #IMPLIED>
 
-<!ELEMENT usability (persona*,external_document*,document_reference*,persona_characteristic*,task*,usecase*)>
+<!ELEMENT usability (persona*,external_document*,document_reference*,persona_characteristic*,task*)>
 
 <!ELEMENT persona (tag*,activities,attitudes,aptitudes,motivations,skills,intrinsic,contextual,persona_environment+)>
 <!ATTLIST persona name CDATA #REQUIRED>
@@ -329,6 +328,7 @@
 <!ATTLIST exception value CDATA #REQUIRED>
 <!ATTLIST exception category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat ) #REQUIRED>
 <!ELEMENT postconditions (#PCDATA)>
+
 
 <!ELEMENT countermeasure (tag*,description,countermeasure_environment+)>
 <!ATTLIST countermeasure name CDATA #REQUIRED>
