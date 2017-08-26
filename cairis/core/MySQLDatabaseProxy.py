@@ -1774,7 +1774,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     tailNav = parameters.tailNavigation()
     tailType = parameters.tailType()
     tailAsset = parameters.tailAsset()
-    self.updateDatabase('call addClassAssociation(:ass,:env,:hAss,:hType,:hNav,:hMult,:hRole,:tRole,:tMult,:tNav,:tType,:tAss)',{'ass':associationId,'env':envName,'hAss':headAsset,'hType':headType,'hNav':headNav,'hMult':headMult,'hRole':headRole,'tRole':tailRole,'tMult':tailMult,'tNav':tailNav,'tType':tailType,'tAss':tailAsset},'MySQL error adding class association')
+    assocRationale = parameters.rationale()
+    self.updateDatabase('call addClassAssociation(:ass,:env,:hAss,:hType,:hNav,:hMult,:hRole,:tRole,:tMult,:tNav,:tType,:tAss,:rationale)',{'ass':associationId,'env':envName,'hAss':headAsset,'hType':headType,'hNav':headNav,'hMult':headMult,'hRole':headRole,'tRole':tailRole,'tMult':tailMult,'tNav':tailNav,'tType':tailType,'tAss':tailAsset,'rationale':assocRationale},'MySQL error adding class association')
     return associationId
 
   def updateClassAssociation(self,parameters):
@@ -1790,7 +1791,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     tailNav = parameters.tailNavigation()
     tailType = parameters.tailType()
     tailAsset = parameters.tailAsset()
-    self.updateDatabase('call updateClassAssociation(:ass,:env,:hAss,:hType,:hNav,:hMult,:hRole,:tRole,:tMult,:tNav,:tType,:tAss)',{'ass':associationId,'env':envName,'hAss':headAsset,'hType':headType,'hNav':headNav,'hMult':headMult,'hRole':headRole,'tRole':tailRole,'tMult':tailMult,'tNav':tailNav,'tType':tailType,'tAss':tailAsset},'MySQL error updating class association')
+    assocRationale = parameters.rationale()
+    self.updateDatabase('call updateClassAssociation(:ass,:env,:hAss,:hType,:hNav,:hMult,:hRole,:tRole,:tMult,:tNav,:tType,:tAss,:rationale)',{'ass':associationId,'env':envName,'hAss':headAsset,'hType':headType,'hNav':headNav,'hMult':headMult,'hRole':headRole,'tRole':tailRole,'tMult':tailMult,'tNav':tailNav,'tType':tailType,'tAss':tailAsset,'rationale':assocRationale},'MySQL error updating class association')
 
   def deleteClassAssociation(self,associationId):
     self.deleteObject(associationId,'classassociation')
