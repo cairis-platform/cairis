@@ -20,8 +20,10 @@ __author__ = 'Shamal Faily'
 import sys
 if (sys.version_info > (3,)):
   import http.client
+  from http.client import CONFLICT, BAD_REQUEST, INTERNAL_SERVER_ERROR
 else:
   import httplib
+  from httplib import CONFLICT, BAD_REQUEST, INTERNAL_SERVER_ERROR
 from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.core.ARM import ARMException, DatabaseProxyException
 from flask import request, make_response
@@ -42,13 +44,13 @@ def handle_error(error):
 
 @main.errorhandler(AssertionError)
 def handle_asserterror(error):
-  err = CairisHTTPError(http.client.CONFLICT, str(error.message), 'Unmet requirement')
+  err = CairisHTTPError(CONFLICT, str(error.message), 'Unmet requirement')
   return handle_error(err)
 
 
 @main.errorhandler(KeyError)
 def handle_keyerror(error):
-  err = CairisHTTPError(http.client.BAD_REQUEST, str(error.message), 'Missing attribute')
+  err = CairisHTTPError(BAD_REQUEST, str(error.message), 'Missing attribute')
   return handle_error(err)
 
 
@@ -70,5 +72,5 @@ def handle_exception(e):
   elif isinstance(e, KeyError):
     return handle_keyerror(e)
   else:
-    new_ex = CairisHTTPError(http.client.INTERNAL_SERVER_ERROR, str(e), 'Unknown error')
+    new_ex = CairisHTTPError(INTERNAL_SERVER_ERROR, str(e), 'Unknown error')
     return handle_error(new_ex)
