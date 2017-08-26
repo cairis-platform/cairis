@@ -73,13 +73,38 @@
     "theStartIdx" : 16,
     "theEndIdx" : 20,
     "theLabel" : "None",
-    "theSynopsis" : "None"}
+    "theSynopsis" : "None"},
+    {"theType" : "code",
+    "theCode" : "AnotherCode",
+    "theArtifactType" : "internal_document",
+    "theArtifactName" : "FocusGroup1",
+    "theEnvironment" : "Psychosis",
+    "theSection" : "None",
+    "theStartIdx" : 21,
+    "theEndIdx" : 22,
+    "theLabel" : "Some label",
+    "theSynopsis" : "Some label synopsis"}
   ],
   "code_networks" : [
     {"thePersonaName" : "Claire",
      "theFromCode": "SomeCode",
      "theToCode": "AnotherCode",
-     "theRshipType" : "implies"
+     "theRshipType" : "implies",
+     "theImpliedCharacteristic" : {
+       "theName" : "testTrustChar",
+       "theQualifier" : "Probably",
+       "theType" : "Intrinsic",
+       "theIntentionName" : "SomeIntention",
+       "theIntentionType" : "softgoal",
+       "theFromLabel" : "Sessions recorded",
+       "theFromReferenceType" : "grounds",
+       "theFromLabelContribution" : "means",
+       "theFromLabelValue" : "Make",
+       "theToLabel" : "Some label",
+       "theToReferenceType" : "warrant",
+       "theToLabelContribution" : "end",
+       "theToLabelValue": "SomePositive"
+     }
     }
   ]
 }
