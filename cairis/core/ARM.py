@@ -19,50 +19,38 @@ __author__ = 'Shamal Faily'
 
 
 class ARMException(Exception):
-  def __init__(self,value):
-    self.value = value
-  def __str__(self):
-    return repr(self.value)
+  def __init__(self,value): self.value = value
+  def __str__(self): return repr(self.value)
 
 class EnvironmentValidationError(ARMException):
-  def __init__(self,value):
-    ARMException.__init__(self,value)
+  def __init__(self,value): ARMException.__init__(self,value)
 
 class DatabaseProxyException(ARMException):
-  def __init__(self,value):
-    ARMException.__init__(self,value)
+  def __init__(self,value): ARMException.__init__(self,value)
 
 class IntegrityException(DatabaseProxyException):
-  def __init__(self,value):
-    DatabaseProxyException.__init__(self,value)
+  def __init__(self,value): ARMException.__init__(self,value)
 
 class RequirementDoesNotExist(ARMException):
-  def __init__(self,value):
-    ARMException.__init__(self,value)
+  def __init__(self,value): ARMException.__init__(self,value)
 
 class UnknownParameterClass(ARMException):
-  def __init__(self,value):
-    ARMException.__init__(self,value)
+  def __init__(self,value): ARMException.__init__(self,value)
 
 class UnknownPanelClass(ARMException):
-  def __init__(self,value):
-    ARMException.__init__(self,value)
+  def __init__(self,value): ARMException.__init__(self,value)
 
 class UnknownNodeType(ARMException):
-  def __init__(self,value):
-    ARMException.__init__(self,value)
+  def __init__(self,value): ARMException.__init__(self,value)
 
 class UnknownDialogClass(ARMException):
-  def __init__(self,value):
-    ARMException.__init__(self,value)
+  def __init__(self,value): ARMException.__init__(self,value)
 
 class UnknownOperatingSystem(ARMException):
-  def __init__(self,value):
-    ARMException.__init__(self,value)
+  def __init__(self,value): ARMException.__init__(self,value)
 
 class ConflictingType(ARMException):
-  def __init__(self,value):
-    ARMException.__init__(self,value)
+  def __init__(self,value): ARMException.__init__(self,value)
 
 class NoImpliedCharacteristic(Exception):
   def __init__(self,pName,fromCode,toCode,rtName):
@@ -75,6 +63,4 @@ class NoImpliedCharacteristic(Exception):
   def fromCode(self): return self.theFromCode
   def toCode(self): return self.theToCode
   def rType(self): return self.theRTName
-
-  def __str__(self):
-    return repr(self.thePersonaName + '/' + self.theFromCode + '/' + self.theToCode + '/' + self.theRTName)
+  def __str__(self):  return repr(self.thePersonaName + '/' + self.theFromCode + '/' + self.theToCode + '/' + self.theRTName)

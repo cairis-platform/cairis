@@ -35,7 +35,6 @@ class UseCase:
       self.theEnvironmentDictionary[environmentName] = p
 
   def environmentProperties(self): return self.theEnvironmentProperties
-
   def id(self): return self.theId
   def name(self): return self.theName
   def tags(self): return self.theTags
@@ -43,12 +42,6 @@ class UseCase:
   def code(self): return self.theCode
   def actors(self): return self.theActors
   def description(self): return self.theDescription
-
-  def steps(self,environmentName,dupProperty = ''):
-    return (self.theEnvironmentDictionary[environmentName]).steps()
-
-  def preconditions(self,environmentName,dupProperty = ''):
-    return (self.theEnvironmentDictionary[environmentName]).preconditions()
-
-  def postconditions(self,environmentName,dupProperty = ''):
-    return (self.theEnvironmentDictionary[environmentName]).postconditions()
+  def steps(self,environmentName,dupProperty = ''): return (self.theEnvironmentDictionary[environmentName]).steps()
+  def preconditions(self,environmentName,dupProperty = ''): return (self.theEnvironmentDictionary[environmentName]).preconditions()
+  def postconditions(self,environmentName,dupProperty = ''): return (self.theEnvironmentDictionary[environmentName]).postconditions()

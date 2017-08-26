@@ -21,5 +21,4 @@ class DatabaseProxy:
   def __init__(self):
     pass
 
-  def getAttackers(self):
-    pass
+  def getAttackers(self): pass
