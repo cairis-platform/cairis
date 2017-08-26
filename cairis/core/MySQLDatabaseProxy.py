@@ -254,8 +254,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.commitDatabase(session)
       assetValues = parameters.assetValues()
       if (assetValues != None):
-        for v in assetValues:
-          self.updateValueType(v)
+        for v in assetValues: self.updateValueType(v)
       self.addValueTensions(environmentId,parameters.tensions())
     self.commitDatabase(session)
 
@@ -277,8 +276,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     session = self.updateDatabase('call deleteEnvironmentComponents(:id)',{'id':parameters.id()},'MySQL error deleting environment components',None,False)
     self.updateDatabase('call updateEnvironment(:id,:name,:shortCode,:desc)',{'id':environmentId,'name':environmentName,'shortCode':environmentShortCode,'desc':environmentDescription},'MySQL error updating environment',session,False)
     if (len(parameters.environments()) > 0):
-      for c in parameters.environments():
-        self.updateDatabase('call addCompositeEnvironment(:id,:c)',{'id':environmentId,'c':c},'MySQL error adding composite environment',session,False)
+      for c in parameters.environments():  self.updateDatabase('call addCompositeEnvironment(:id,:c)',{'id':environmentId,'c':c},'MySQL error adding composite environment',session,False)
     self.commitDatabase(session)
     if (len(parameters.duplicateProperty()) > 0):
       self.addCompositeEnvironmentProperties(environmentId,parameters.duplicateProperty(),parameters.overridingEnvironment())
@@ -931,8 +929,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def riskMisuseCase(self,riskId):
     rows = self.responseList('call riskMisuseCase(:id)',{'id':riskId},'MySQL error getting risk misuse case')
-    if (len(rows) == 0):
-      return None
+    if (len(rows) == 0): return None
     else:
       row = rows[0]
       mcId = row[0]
@@ -1106,8 +1103,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.deleteObject(riskId,'risk')
     
 
-  def deleteMisuseCase(self,mcId):
-    self.deleteObject(mcId,'misusecase')
+  def deleteMisuseCase(self,mcId): self.deleteObject(mcId,'misusecase')
     
   def getResponses(self,constraintId = -1):
     responseRows = self.responseList('call getResponses(:id)',{'id':constraintId},'MySQL error getting responses')
@@ -1330,8 +1326,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     rows = self.responseList('call targetNames(:req,:env)',{'req':reqLabel,'env':envName},'MySQL error getting target names')
     targets = {}
     for targetName,responseName in rows:
-      if (targetName in targets):
-        targets[targetName].add(responseName)
+      if (targetName in targers): targets[targetName].add(responseName)
       else:
         targets[targetName] = set([responseName])
     return targets
@@ -1515,8 +1510,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def personaDirect(self,scId,environmentId):
     directFlag = self.responseList('select personaDirect(:scId,:env)',{'scId':scId,'env':environmentId},'MySQL error getting directFlag for persona id ' + str(scId) + ' in environment ' + str(environmentId))[0]
     directValue = 'False'
-    if (directFlag == 1):
-      directValue = 'True'
+    if (directFlag == 1): directValue = 'True'
     return directValue
    
 
@@ -1670,11 +1664,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def countermeasureLoad(self,taskId,environmentId):
     return self.responseList('select hindrance_score(:tId,:eId)',{'tId':taskId,'eId':environmentId},'MySQL error getting task countermeasure load')[0]
 
-  def environmentDimensions(self,dimension,envName):
-    return self.responseList('call ' + dimension + 'Names(:env)',{'env':envName},'MySQL error getting ' + dimension + 's associated with environment ' + envName)
+  def environmentDimensions(self,dimension,envName): return self.responseList('call ' + dimension + 'Names(:env)',{'env':envName},'MySQL error getting ' + dimension + 's associated with environment ' + envName)
 
-  def environmentAssets(self,envName):
-    return self.environmentDimensions('asset',envName)
+  def environmentAssets(self,envName): return self.environmentDimensions('asset',envName)
 
   def environmentGoals(self,envName):
     return self.environmentDimensions('goal',envName)
@@ -1914,14 +1906,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addGoalRefinements(self,goalId,goalName,environmentName,goalAssociations,subGoalAssociations):
     for goal,goalDim,refinement,altName,rationale in subGoalAssociations:
       alternativeId = 0
-      if (altName == 'Yes'):
-        alternativeId = 1
+      if (altName == 'Yes'): alternativeId = 1
       parameters = GoalAssociationParameters(environmentName,goalName,'goal',refinement,goal,goalDim,alternativeId,rationale)
       self.addGoalAssociation(parameters) 
     for goal,goalDim,refinement,altName,rationale in goalAssociations:
       alternativeId = 0
-      if (altName == 'Yes'):
-        alternativeId = 1
+      if (altName == 'Yes'): alternativeId = 1
       parameters = GoalAssociationParameters(environmentName,goal,goalDim,refinement,goalName,'goal',alternativeId,rationale)
       self.addGoalAssociation(parameters) 
 
