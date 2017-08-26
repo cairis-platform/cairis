@@ -117,8 +117,7 @@ def build(objtId,p):
     return TemplateGoal(objtId,p.name(),p.definition(),p.rationale(),p.concerns(),p.responsibilities())
   if (p.__class__.__name__ == 'SecurityPatternParameters'):
     return SecurityPattern(objtId,p.name(),p.context(),p.problem(),p.solution(),p.requirements(),p.associations())
-  if (p.__class__.__name__ == 'ComponentParameters'):
-    return Component(objtId,p.name(),p.description(),p.interfaces(),p.structure(),p.requirements(),p.goals(),p.associations())
+  if (p.__class__.__name__ == 'ComponentParameters'): return Component(objtId,p.name(),p.description(),p.interfaces(),p.structure(),p.requirements(),p.goals(),p.associations())
   if (p.__class__.__name__ == 'ComponentViewParameters'):
     return ComponentView(objtId,p.name(),p.synopsis(),p.components(),p.connectors(),p.attackSurfaceMetric())
   if (p.__class__.__name__ == 'ValueTypeParameters'):
@@ -157,8 +156,7 @@ def build(objtId,p):
     return Environment(objtId,p.name(),p.shortCode(),p.description(),p.environments(),p.duplicateProperty(),p.overridingEnvironment(),p.tensions())
   if (p.__class__.__name__ == 'RoleParameters'):
     return Role(objtId,p.name(),p.type(),p.shortCode(),p.description(),p.environmentProperties())
-  if (p.__class__.__name__ == 'ResponsibilityParameters'):
-    return Responsibility(objtId,p.name())
+  if (p.__class__.__name__ == 'ResponsibilityParameters'): return Responsibility(objtId,p.name())
   if (p.__class__.__name__ == 'ExternalDocumentParameters'):
     return ExternalDocument(objtId,p.name(),p.version(),p.date(),p.authors(),p.description())
   if (p.__class__.__name__ == 'InternalDocumentParameters'):
@@ -175,11 +173,9 @@ def build(objtId,p):
     return PersonaCharacteristic(objtId,p.persona(),p.qualifier(),p.behaviouralVariable(),p.characteristic(),p.grounds(),p.warrant(),p.backing(),p.rebuttal())
   if (p.__class__.__name__ == 'TaskCharacteristicParameters'):
     return TaskCharacteristic(objtId,p.task(),p.qualifier(),p.characteristic(),p.grounds(),p.warrant(),p.backing(),p.rebuttal())
-  if (p.__class__.__name__ == 'ImpliedProcessParameters'):
-    return ImpliedProcess(objtId,p.name(),p.description(),p.persona(),p.network(),p.specification(),p.channels())
+  if (p.__class__.__name__ == 'ImpliedProcessParameters'): return ImpliedProcess(objtId,p.name(),p.description(),p.persona(),p.network(),p.specification(),p.channels())
   if (p.__class__.__name__ == 'LocationsParameters'):
     return Locations(objtId,p.name(),p.diagram(),p.locations(),p.links())
   if (p.__class__.__name__ == 'DataFlowParameters'):
     return DataFlow(p.name(),p.environment(),p.fromName(),p.fromType(),p.toName(),p.toType(),p.assets())
-  else:
-    raise UnknownParameterClass(str(objtId))
+  else: raise UnknownParameterClass(str(objtId))

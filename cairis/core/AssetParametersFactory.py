@@ -32,9 +32,6 @@ def buildCMAsset(target,proxy):
   assetType = target.type()
   shortCode = 'XX'
   significanceText = 'Mitigates risk '
-  if (proxy == None):
-    b = Borg()
-    proxy = b.dbProxy
   risks = proxy.mitigatedRisks(target.id())
   significanceText += risks[0]
   assetEnvironmentProperties = []

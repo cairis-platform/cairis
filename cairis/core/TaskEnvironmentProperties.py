@@ -39,7 +39,5 @@ class TaskEnvironmentProperties(EnvironmentProperties):
   def dependencies(self): return self.theDependencies
   def concernAssociations(self): return self.theConcernAssociations
   def codes(self,sectName = ''): 
-    if sectName == '':
-      return self.theCodes
-    else:
-      return self.theCodes[sectName]
+    if sectName == '': return self.theCodes
+    else: return self.theCodes[sectName]
