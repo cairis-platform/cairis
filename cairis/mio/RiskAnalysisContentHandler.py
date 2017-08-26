@@ -234,6 +234,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
     self.theTailNav = ''
     self.theTailAdornment = ''
     self.theTailName = ''
+    self.theRationale = ''
 
   def startElement(self,name,attrs):
     self.currentElementName = name
@@ -493,7 +494,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.theEnvironmentProperties.append(p)
       self.resetResponseEnvironmentAttributes()
     elif name == 'asset_association':
-      p = ClassAssociationParameters(self.theEnvironmentName,self.theHeadName,'asset',self.theHeadNav,self.theHeadAdornment,self.theHeadNry,self.theHeadRole,self.theTailRole,self.theTailNry,self.theTailAdornment,self.theTailNav,'asset',self.theTailName)
+      p = ClassAssociationParameters(self.theEnvironmentName,self.theHeadName,'asset',self.theHeadNav,self.theHeadAdornment,self.theHeadNry,self.theHeadRole,self.theTailRole,self.theTailNry,self.theTailAdornment,self.theTailNav,'asset',self.theTailName,self.theRationale)
       self.theAssociations.append(p)
       self.resetAssociationAttributes()
     elif name == 'description':

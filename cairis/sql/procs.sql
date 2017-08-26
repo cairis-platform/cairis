@@ -12257,6 +12257,7 @@ begin
   declare tailName varchar(50);
   declare headNav int;
   declare tailNav int;
+  declare assocRationale longtext default '';
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE riskanalysis PUBLIC "-//CAIRIS//DTD RISKANALYSIS 1.0//EN" "http://cairis.org/dtd/riskanalysis.dtd">\n\n<riskanalysis>\n';
   declare done int default 0;
   declare assetIFCursor cursor for select i.name,ai.required_id from asset_interface ai, interface i where ai.asset_id = assetId and ai.interface_id = i.id;
@@ -12286,7 +12287,7 @@ begin
   declare responseCursor cursor for select re.id,re.name,rt.name,r.name from response re,goal_category_type rt, risk r where re.goal_category_type_id = rt.id and re.risk_id = r.id;
   declare responseRoleCursor cursor for select r.name,c.name from responserole_goalassociation rr, role r, cost c where rr.goal_id = responseId and rr.environment_id = envId and rr.subgoal_id = r.id and rr.cost_id = c.id;
   declare detMechCursor cursor for select a.name from asset a, reaction_detection_mechanism rdm where rdm.response_id = responseId and rdm.environment_id = envId and rdm.asset_id = a.id;
-  declare assocCursor cursor for select e.name, ha.name,a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,ta.name from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id;
+  declare assocCursor cursor for select e.name, ha.name,a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,ta.name,a.rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id;
   declare continue handler for not found set done = 1;
 
   if includeHeader = 0
@@ -12752,12 +12753,12 @@ begin
   set done = 0;
   open assocCursor;
   assoc_loop: loop
-    fetch assocCursor into envName, headName, headNav, headAdornment, headNry, headRole, tailRole, tailNry, tailAdornment, tailNav, tailName;
+    fetch assocCursor into envName, headName, headNav, headAdornment, headNry, headRole, tailRole, tailNry, tailAdornment, tailNav, tailName,assocRationale;
     if done = 1
     then
       leave assoc_loop;
     end if;
-    set buf = concat(buf,'<asset_association environment=\"',envName,'\"  head_name=\"',headName,'\" head_nav=\"',headNav,'\" head_adornment=\"',headAdornment,'\" head_nry=\"',s2a(headNry),'\" head_role=\"',headRole,'\" tail_role=\"',tailRole,'\" tail_nry=\"',s2a(tailNry),'\" tail_adornment=\"',tailAdornment,'\" tail_nav=\"',tailNav,'\" tail_name=\"',tailName,'\" />\n');
+    set buf = concat(buf,'<asset_association environment=\"',envName,'\"  head_name=\"',headName,'\" head_nav=\"',headNav,'\" head_adornment=\"',headAdornment,'\" head_nry=\"',s2a(headNry),'\" head_role=\"',headRole,'\" tail_role=\"',tailRole,'\" tail_nry=\"',s2a(tailNry),'\" tail_adornment=\"',tailAdornment,'\" tail_nav=\"',tailNav,'\" tail_name=\"',tailName,'\" rationale=\"',assocRationale,'\" />\n');
     set rshipCount = rshipCount + 1;
   end loop assoc_loop;
   close assocCursor;
@@ -12828,6 +12829,21 @@ begin
   declare reqRat varchar(255);
   declare reqFc varchar(255);
   declare reqOrig varchar(255);
+  declare ucId int;
+  declare ucName varchar(50);
+  declare ucAuthor varchar(255);
+  declare ucShortCode varchar(100);
+  declare ucDesc varchar(2000);
+  declare ucPreCond varchar(2000);
+  declare ucPostCond varchar(2000);
+  declare stepNo int;
+  declare stepDesc varchar(2000);
+  declare ucExcName varchar(200);
+  declare excDim varchar(20);
+  declare ucExcRelValue varchar(50);
+  declare ucExcCategory varchar(50);
+  declare ucExcDesc varchar(2000);
+  declare ucCount int default 0;
   declare cmId int;
   declare cmName varchar(100);
   declare cmDesc varchar(4000);
@@ -12860,11 +12876,11 @@ begin
   declare probRationale varchar(4000);
   declare obsProb float;
   declare trName varchar(50);
-
   declare goalCount int default 0;
   declare obsCount int default 0;
   declare reqCount int default 0;
   declare cmCount int default 0;
+  declare tagName varchar(255);
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE goals PUBLIC "-//CAIRIS//DTD REQUIREMENTS 1.0//EN" "http://cairis.org/dtd/goals.dtd">\n\n<goals>\n';
   declare done int default 0;
   declare dpCursor cursor for select dp.name,dp.description,dpt.name,dp.originator from domainproperty dp, domainproperty_type dpt where dp.domainproperty_type_id = dpt.id;
@@ -12879,6 +12895,17 @@ begin
     select a.name,'asset',o.label,rt.name,o.priority,o.name,o.description,o.rationale,o.fit_criterion,o.originator from requirement o, asset_requirement ar, asset a, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = ar.requirement_id and ar.asset_id = a.id 
     union
     select e.name,'environment',o.label,rt.name,o.priority,o.name,o.description,o.rationale,o.fit_criterion,o.originator from requirement o, environment_requirement er, environment e, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = er.requirement_id and er.environment_id = e.id; 
+  declare ucCursor cursor for select id,name,author,short_code,description from usecase;
+  declare ucEnvCursor cursor for select eu.environment_id,e.name from environment_usecase eu, environment e where eu.usecase_id = ucId and eu.environment_id = e.id;
+  declare ucActorCursor cursor for select r.name from usecase_role ur, role r where ur.usecase_id = ucId and ur.role_id = r.id;
+  declare ucStepCursor cursor for select step_no,description from usecase_step where usecase_id = ucId and environment_id = envId order by 1;
+  declare ucStepExceptionCursor cursor for
+    select usge.name, 'Goal', g.name, oct.name, usge.description from usecase_step_goal_exception usge, goal g, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = g.id and usge.category_type_id = oct.id
+    union
+    select usge.name, 'Requirement', concat(a.short_code,'-',r.label), oct.name, usge.description from usecase_step_requirement_exception usge, requirement r, asset_requirement ar, asset a, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id
+    union
+    select usge.name, 'Requirement', concat(e.short_code,'-',r.label), oct.name, usge.description from usecase_step_requirement_exception usge, requirement r, environment_requirement er, environment e, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id;
+  declare ucStepTagCursor cursor for select t.name from usecase_step_tag ust, tag t where ust.usecase_id = ucId and ust.environment_id = envId and ust.step_no = stepNo and ust.tag_id = t.id order by 1;
   declare cmCursor cursor for select c.id,c.name,c.description,at.name from countermeasure c,asset_type at where c.countermeasure_type_id = at.id;
   declare cmEnvCursor cursor for select ec.environment_id,e.name from environment_countermeasure ec, environment e where ec.countermeasure_id = cmId and ec.environment_id = e.id;
   declare cmReqsCursor cursor for
@@ -13028,6 +13055,90 @@ begin
   close reqCursor;
   set done = 0;
 
+  set done = 0;
+  open ucCursor;
+  uc_loop: loop
+    fetch ucCursor into ucId,ucName,ucAuthor,ucShortCode,ucDesc;
+    if done = 1
+    then
+      leave uc_loop;
+    end if;
+    set buf = concat(buf,'<usecase name=\"',ucName,'\" author=\"',ucAuthor,'\" code=\"',ucShortCode,'\" >\n  <description>',ucDesc,'</description>\n');
+    set ucCount = ucCount + 1;
+
+    open ucActorCursor;
+    ucActor_loop: loop
+      fetch ucActorCursor into roleName;
+      if done = 1
+      then
+        leave ucActor_loop;
+      end if;
+      set buf = concat(buf,'  <actor name=\"',roleName,'\" />\n');
+    end loop ucActor_loop;
+    close ucActorCursor;
+    set done = 0;
+
+    open ucEnvCursor;
+    ucEnv_loop: loop
+      fetch ucEnvCursor into envId,envName;
+      if done = 1
+      then
+        leave ucEnv_loop;
+      end if;
+      select preconditions into ucPreCond from usecase_conditions where usecase_id = ucId and environment_id = envId;
+      set buf = concat(buf,'  <usecase_environment name=\"',envName,'\" >\n    <preconditions>',ucPreCond,'</preconditions>\n    <flow>\n');
+
+      open ucStepCursor;
+      ucStep_loop: loop
+        fetch ucStepCursor into stepNo, stepDesc;
+        if done = 1
+        then
+          leave ucStep_loop;
+        end if; 
+        set buf = concat(buf,'      <step number=\"',stepNo,'\" description=\"',stepDesc,'\" >\n');
+
+
+        open ucStepTagCursor;
+        ucStepTag_loop: loop
+          fetch ucStepTagCursor into tagName;
+          if done = 1
+          then
+            leave ucStepTag_loop;
+          end if;
+          set buf = concat(buf,'        <tag name=\"',tagName,'\" />\n'); 
+        end loop ucStepTag_loop;
+        close ucStepTagCursor;
+        set done = 0;
+
+        open ucStepExceptionCursor;
+        ucStepException_loop: loop
+          fetch ucStepExceptionCursor into ucExcName,excDim,ucExcRelValue,ucExcCategory,ucExcDesc;
+          if done = 1
+          then
+            leave ucStepException_loop;
+          end if;
+          set buf = concat(buf,'        <exception name=\"',ucExcName,'\" type=\"',excDim,'\" value=\"',ucExcRelValue,'\" category=\"',replace(ucExcCategory,' ','_'),'\" >\n          <definition>',ucExcDesc,'</definition>\n        </exception>\n');
+        end loop ucStepException_loop;
+        close ucStepExceptionCursor;
+        set done = 0;
+
+        set buf = concat(buf,'      </step>\n');
+      end loop ucStep_loop;
+      close ucStepCursor;
+      set done = 0;
+   
+      set buf = concat(buf,'    </flow>\n');
+      select postconditions into ucPostCond from usecase_conditions where usecase_id = ucId and environment_id = envId;
+      set buf = concat(buf,'    <postconditions>',ucPostCond,'</postconditions>\n');
+      set buf = concat(buf,'  </usecase_environment>\n');
+    end loop ucEnv_loop;
+    close ucEnvCursor;
+    set done = 0;
+
+    set buf = concat(buf,'</usecase>\n');
+  end loop uc_loop;
+  close ucCursor;
+
   open cmCursor;
   cm_loop: loop
     fetch cmCursor into cmId, cmName, cmDesc, cmType;
@@ -13160,7 +13271,7 @@ begin
   close cmCursor;
 
   set buf = concat(buf,'</goals>');
-  select buf,dpCount,goalCount,obsCount,reqCount,cmCount;
+  select buf,dpCount,goalCount,obsCount,reqCount,ucCount,cmCount;
 end
 //
 
@@ -13388,22 +13499,7 @@ begin
   declare concernLink varchar(50);
   declare targetNry varchar(10);
   declare targetName varchar(50);
-  declare ucId int;
-  declare ucName varchar(50);
-  declare ucAuthor varchar(255);
-  declare ucShortCode varchar(100);
-  declare ucDesc varchar(2000);
-  declare ucPreCond varchar(2000);
-  declare ucPostCond varchar(2000);
-  declare stepNo int;
-  declare stepDesc varchar(2000);
-  declare ucExcName varchar(200);
-  declare excDim varchar(20);
-  declare ucExcRelValue varchar(50);
-  declare ucExcCategory varchar(50);
-  declare ucExcDesc varchar(2000);
-  declare ucCount int default 0;
-  declare tagName varchar(255);
+
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">\n\n<usability>\n';
   declare done int default 0;
   declare personaCursor cursor for select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
@@ -13412,7 +13508,6 @@ begin
   declare edCursor cursor for select name,version,publication_date,authors,description from external_document;
   declare drCursor cursor for select distinct dr.name,ed.name,dr.contributor,dr.excerpt from document_reference dr, external_document ed where dr.document_id = ed.id;
   declare pcCursor cursor for select pc.id,p.name,bv.name,pc.qualifier,pc.description from persona_characteristic pc, persona p, behavioural_variable bv where pc.persona_id = p.id and pc.variable_id = bv.id order by 2,3;
-
 
   declare groundsCursor cursor for
     select 'document',dr.name,'' from persona_characteristic_document pc, document_reference dr where pc.characteristic_id = pcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 0
@@ -13523,22 +13618,11 @@ begin
     union
     select 'vulnerability',cr.name,c.name from persona_characteristic_vulnerability pc, vulnerability_reference cr, vulnerability c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.vulnerability_id = c.id and pc.characteristic_reference_type_id = 2;
   declare taskCursor cursor for select id,name,short_code,author,objective,assumption_id from task;
+  declare taskEnvCursor cursor for select et.environment_id,e.name from environment_task et, environment e where et.task_id = taskId and et.environment_id = e.id;  
   declare taskPersonaCursor cursor for select p.name,duv.name,fv.name,dev.name,gv.name from persona p, task_persona tp, security_property_value duv, security_property_value fv, security_property_value dev, security_property_value gv where tp.task_id = taskId and tp.environment_id = envId and tp.persona_id = p.id and tp.duration_id = duv.id and tp.frequency_id = fv.id and tp.demands_id = dev.id and tp.goalsupport_id = gv.id;
   declare taskConcernCursor cursor for select a.name from task_asset tc, asset a where tc.task_id = taskId and tc.environment_id = envId and tc.asset_id = a.id;
   declare taskConcernAssocCursor cursor for select sa.name,smt.name,ca.link,ta.name,tmt.name from task_concernassociation ca, asset sa, asset ta, multiplicity_type smt, multiplicity_type tmt where ca.task_id = taskId and ca.environment_id = envId and ca.source_id = sa.id and ca.source_multiplicity_id = smt.id and ca.target_id = ta.id and ca.target_multiplicity_id = tmt.id;
-  declare ucCursor cursor for select id,name,author,short_code,description from usecase;
-  declare ucStepCursor cursor for select step_no,description from usecase_step where usecase_id = ucId and environment_id = envId order by 1;
-  declare ucStepExceptionCursor cursor for
-    select usge.name, 'Goal', g.name, oct.name, usge.description from usecase_step_goal_exception usge, goal g, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = g.id and usge.category_type_id = oct.id
-    union
-    select usge.name, 'Requirement', concat(a.short_code,'-',r.label), oct.name, usge.description from usecase_step_requirement_exception usge, requirement r, asset_requirement ar, asset a, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id
-    union
-    select usge.name, 'Requirement', concat(e.short_code,'-',r.label), oct.name, usge.description from usecase_step_requirement_exception usge, requirement r, environment_requirement er, environment e, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id;
-  declare taskEnvCursor cursor for select et.environment_id,e.name from environment_task et, environment e where et.task_id = taskId and et.environment_id = e.id;
-  
-  declare ucEnvCursor cursor for select eu.environment_id,e.name from environment_usecase eu, environment e where eu.usecase_id = ucId and eu.environment_id = e.id;
-  declare ucActorCursor cursor for select r.name from usecase_role ur, role r where ur.usecase_id = ucId and ur.role_id = r.id;
-  declare ucStepTagCursor cursor for select t.name from usecase_step_tag ust, tag t where ust.usecase_id = ucId and ust.environment_id = envId and ust.step_no = stepNo and ust.tag_id = t.id order by 1;
+
   declare continue handler for not found set done = 1;
 
 
@@ -13748,92 +13832,8 @@ begin
   end loop task_loop;
   close taskCursor;
 
-  set done = 0;
-  open ucCursor;
-  uc_loop: loop
-    fetch ucCursor into ucId,ucName,ucAuthor,ucShortCode,ucDesc;
-    if done = 1
-    then
-      leave uc_loop;
-    end if;
-    set buf = concat(buf,'<usecase name=\"',ucName,'\" author=\"',ucAuthor,'\" code=\"',ucShortCode,'\" >\n  <description>',ucDesc,'</description>\n');
-    set ucCount = ucCount + 1;
-
-    open ucActorCursor;
-    ucActor_loop: loop
-      fetch ucActorCursor into roleName;
-      if done = 1
-      then
-        leave ucActor_loop;
-      end if;
-      set buf = concat(buf,'  <actor name=\"',roleName,'\" />\n');
-    end loop ucActor_loop;
-    close ucActorCursor;
-    set done = 0;
-
-    open ucEnvCursor;
-    ucEnv_loop: loop
-      fetch ucEnvCursor into envId,envName;
-      if done = 1
-      then
-        leave ucEnv_loop;
-      end if;
-      select preconditions into ucPreCond from usecase_conditions where usecase_id = ucId and environment_id = envId;
-      set buf = concat(buf,'  <usecase_environment name=\"',envName,'\" >\n    <preconditions>',ucPreCond,'</preconditions>\n    <flow>\n');
-
-      open ucStepCursor;
-      ucStep_loop: loop
-        fetch ucStepCursor into stepNo, stepDesc;
-        if done = 1
-        then
-          leave ucStep_loop;
-        end if; 
-        set buf = concat(buf,'      <step number=\"',stepNo,'\" description=\"',stepDesc,'\" >\n');
-
-
-        open ucStepTagCursor;
-        ucStepTag_loop: loop
-          fetch ucStepTagCursor into tagName;
-          if done = 1
-          then
-            leave ucStepTag_loop;
-          end if;
-          set buf = concat(buf,'        <tag name=\"',tagName,'\" />\n'); 
-        end loop ucStepTag_loop;
-        close ucStepTagCursor;
-        set done = 0;
-
-        open ucStepExceptionCursor;
-        ucStepException_loop: loop
-          fetch ucStepExceptionCursor into ucExcName,excDim,ucExcRelValue,ucExcCategory,ucExcDesc;
-          if done = 1
-          then
-            leave ucStepException_loop;
-          end if;
-          set buf = concat(buf,'        <exception name=\"',ucExcName,'\" type=\"',excDim,'\" value=\"',ucExcRelValue,'\" category=\"',replace(ucExcCategory,' ','_'),'\" >\n          <definition>',ucExcDesc,'</definition>\n        </exception>\n');
-        end loop ucStepException_loop;
-        close ucStepExceptionCursor;
-        set done = 0;
-
-        set buf = concat(buf,'      </step>\n');
-      end loop ucStep_loop;
-      close ucStepCursor;
-      set done = 0;
-   
-      set buf = concat(buf,'    </flow>\n');
-      select postconditions into ucPostCond from usecase_conditions where usecase_id = ucId and environment_id = envId;
-      set buf = concat(buf,'    <postconditions>',ucPostCond,'</postconditions>\n');
-      set buf = concat(buf,'  </usecase_environment>\n');
-    end loop ucEnv_loop;
-    close ucEnvCursor;
-    set done = 0;
-
-    set buf = concat(buf,'</usecase>\n');
-  end loop uc_loop;
-  close ucCursor;
-
   set buf = concat(buf,'</usability>');
-  select buf,personaCount,edCount,drCount,pcCount,taskCount,ucCount;
+  select buf,personaCount,edCount,drCount,pcCount,taskCount;
 end
 //
 

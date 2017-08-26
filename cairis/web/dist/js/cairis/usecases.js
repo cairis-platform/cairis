@@ -447,6 +447,7 @@ mainContent.on('click', '#UpdateUseCase', function (e) {
   else {
     var oldName = usecase.theName;
     usecase.theName = $("#theName").val();
+    usecase.theCode = $("#theCode").val();
     usecase.theAuthor = $("#theAuthor").val();
     usecase.theObjective = $("#theObjective").val();
     usecase.theDescription = $("#theDescription").val();

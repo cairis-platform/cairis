@@ -633,7 +633,7 @@ CREATE TABLE multiplicity_type (
   tail_id INT NOT NULL,
   head_navigation INT NOT NULL default 0,
   tail_navigation INT NOT NULL default 0,
-  rationale LONGTEXT NOT NULL default '',
+  rationale LONGTEXT NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(environment_id) REFERENCES environment(id),
   FOREIGN KEY(head_id) REFERENCES asset(id),
