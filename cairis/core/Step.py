@@ -42,20 +42,15 @@ class Step:
 
   def setTags(self,t): self.theTags = t
 
-  def __str__(self):
-    return self.theStepText
+  def __str__(self): return self.theStepText
 
-  def addException(self,exc):
-    self.theExceptions[exc[0]] = exc
+  def addException(self,exc): self.theExceptions[exc[0]] = exc
 
-  def deleteException(self,excName):
-    del self.theExceptions[excName]
+  def deleteException(self,excName): del self.theExceptions[excName]
     
-  def text(self):
-    return self.theStepText
+  def text(self): return self.theStepText
 
-  def setText(self,txt):
-    self.theStepText = txt
+  def setText(self,txt): self.theStepText = txt
 
   def exceptions(self):
     if len(self.theExceptions) > 0:
@@ -63,8 +58,7 @@ class Step:
     else:
       return []
 
-  def exception(self,excName):
-    return self.theExceptions[excName]
+  def exception(self,excName): return self.theExceptions[excName]
 
   def setException(self,oldExcName,exc):
     del self.theExceptions[oldExcName] 

@@ -67,8 +67,7 @@ class Requirement:
   def asset(self):
     return self.attrs['asset']
 
-  def dirty(self):
-    return len(self.dirtyAttrs)
+  def dirty(self): return len(self.dirtyAttrs)
 
   def update(self,attr,val):
     if (attr == 'label'):
