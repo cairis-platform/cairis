@@ -20,7 +20,6 @@ __author__ = 'Shamal Faily, Robin Quetin'
 from .Borg import Borg
 import os
 import logging
-from . import DatabaseProxyFactory
 from cairis.tools.GraphicsGenerator import GraphicsGenerator
 from .MySQLDatabaseProxy import MySQLDatabaseProxy
 from .TemplateGenerator import TemplateGenerator
