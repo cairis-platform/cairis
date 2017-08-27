@@ -32,7 +32,6 @@ from . import Task
 from . import Risk
 from . import Response
 from . import ClassAssociation
-from . import DatabaseProxy
 from .AttackerParameters import AttackerParameters
 from .PersonaParameters import PersonaParameters
 from .GoalParameters import GoalParameters
@@ -114,10 +113,8 @@ import sys
 
 __author__ = 'Shamal Faily, Robin Quetin, Nathan Jenkins'
 
-class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
+class MySQLDatabaseProxy:
   def __init__(self, host=None, port=None, user=None, passwd=None, db=None):
-    DatabaseProxy.DatabaseProxy.__init__(self)
-    self.theGrid = 0
     b = Borg()
     if (host is None or port is None or user is None or passwd is None or db is None):
       host = b.dbHost
@@ -155,9 +152,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.theDimIdLookup, self.theDimNameLookup = self.buildDimensionLookup()
 
 
-  def associateGrid(self,gridObjt): self.theGrid = gridObjt
-
-    
   def buildDimensionLookup(self):
     dimRows = self.responseList('call traceDimensions()',{},'MySQL error building trace dimension lookup tables')
     idLookup  = {}
@@ -1491,12 +1485,6 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addMisuseCaseNarrative(self,mcId,narrativeText,environmentName):
     self.updateDatabase('call addMisuseCaseNarrative(:mcId,:nTxt,:env)',{'mcId':mcId,'nTxt':narrativeText,'env':environmentName},'MySQL error adding misuse case narrative')
 
-  def riskEnvironmentNames(self,riskName):
-    return self.responseList('call riskEnvironmentNames(:risk)',{'risk':riskName},'MySQL error getting environments associated with risk ' + riskName)
-
-  def threatVulnerabilityEnvironmentNames(self,threatName,vulName):
-    return self.responseList('call threatVulnerabilityEnvironmentNames(:threat,:vuln)',{'threat':threatName,'vuln':vulName},'MySQL error getting environments associated with threat ' + threatName + ' and vulnerability ' + vulName);
-
   def taskDependencies(self,tId,environmentId):
     return self.responseList('select taskDependencies(:tId,:eId)',{'tId':tId,'eId':environmentId},'MySQL error getting dependencies for task id ' + str(tId) + ' in environment ' + str(environmentId))[0]
 
@@ -2174,82 +2162,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     vtRat = parameters.rationale()
     self.updateDatabase('call updateValueType(:id,:name,:desc,:type,:env,:score,:rat)',{'id':valueTypeId,'name':vtName,'desc':vtDesc,'type':vtType,'env':envName,'score':vtScore,'rat':vtRat},'MySQL error updating value type')
 
-  def threatTypes(self,envName = ''):
-    rows = self.responseList('call threatTypes(:env)',{'env':envName},'MySQL error getting threat types')
-    stats = {}
-    for key,value in rows:
-      stats[row[0]] = row[1]
-    return stats
-
-  def inheritedAssetProperties(self,assetId,environmentName):
-    environmentId = self.getDimensionId(environmentName,'environment')
-    syProperties,pRationale = self.relatedProperties('asset',assetId,environmentId)
-    assetAssociations = self.assetAssociations(assetId,environmentId)
-    return AssetEnvironmentProperties(environmentName,syProperties,pRationale,assetAssociations)
-
-  def inheritedAttackerProperties(self,attackerId,environmentName):
-    environmentId = self.getDimensionId(environmentName,'environment')
-    roles = self.dimensionRoles(attackerId,environmentId,'attacker')
-    capabilities = self.attackerCapabilities(attackerId,environmentId)
-    motives = self.attackerMotives(attackerId,environmentId)
-    return AttackerEnvironmentProperties(environmentName,roles,motives,capabilities)
-
-  def inheritedThreatProperties(self,threatId,environmentName):
-    environmentId = self.getDimensionId(environmentName,'environment')
-    likelihood = self.threatLikelihood(threatId,environmentId)
-    assets = self.threatenedAssets(threatId,environmentId) 
-    attackers = self.threatAttackers(threatId,environmentId)
-    syProperties,pRationale = self.relatedProperties('threat',threatId,environmentId)
-    return ThreatEnvironmentProperties(environmentName,likelihood,assets,attackers,syProperties,pRationale)
-
-  def inheritedVulnerabilityProperties(self,vulId,environmentName):
-    environmentId = self.getDimensionId(environmentName,'environment')
-    severity = self.vulnerabilitySeverity(vulId,environmentId)
-    assets = self.vulnerableAssets(vulId,environmentId)
-    return VulnerabilityEnvironmentProperties(environmentName,severity,assets)
-
-  def inheritedTaskProperties(self,taskId,environmentName):
-    environmentId = self.getDimensionId(environmentName,'environment')
-    dependencies = self.taskDependencies(taskId,environmentId)
-    personas = self.taskPersonas(taskId,environmentId)
-    assets = self.taskAssets(taskId,environmentId)
-    concs = self.taskConcernAssociations(taskId,environmentId)
-    narrative = self.taskNarrative(taskId,environmentId)
-    return TaskEnvironmentProperties(environmentName,dependencies,personas,assets,concs,narrative)
-
-  def inheritedUseCaseProperties(self,ucId,environmentName):
-    environmentId = self.getDimensionId(environmentName,'environment')
-    preConds,postConds = self.useCaseConditions(ucId,environmentId)
-    ucSteps = self.useCaseSteps(ucId,environmentId)
-    return UseCaseEnvironmentProperties(environmentName,preConds,ucSteps,postConds)
-
-  def inheritedGoalProperties(self,goalId,environmentName):
-    environmentId = self.getDimensionId(environmentName,'environment')
-    goalDef = self.goalDefinition(goalId,environmentId)
-    goalType = self.goalCategory(goalId,environmentId)
-    goalPriority = self.goalPriority(goalId,environmentId)
-    goalFitCriterion = self.goalFitCriterion(goalId,environmentId)
-    goalIssue = self.goalIssue(goalId,environmentId) 
-    concs = self.goalConcerns(goalId,environmentId)
-    cas = self.goalConcernAssociations(goalId,environmentId)
-    goalRefinements,subGoalRefinements = self.goalRefinements(goalId,environmentId)
-    return GoalEnvironmentProperties(environmentName,'',goalDef,goalType,goalPriority,goalFitCriterion,goalIssue,goalRefinements,subGoalRefinements,concs,cas)
-
-  def inheritedObstacleProperties(self,obsId,environmentName):
-    environmentId = self.getDimensionId(environmentName,'environment')
-    obsDef = self.obstacleDefinition(obsId,environmentId)
-    obsType = self.obstacleCategory(obsId,environmentId)
-    goalRefinements,subGoalRefinements = self.goalRefinements(obsId,environmentId)
-    return ObstacleEnvironmentProperties(environmentName,'',obsDef,obsType,goalRefinements,subGoalRefinements)
-
   def getVulnerabilityDirectory(self,vulName = ''):
     return self.responseList('call getVulnerabilityDirectory(:vuln)',{'vuln':vulName},'MySQL error getting vulnerability directory')
 
   def getThreatDirectory(self,thrName = ''):
     return self.responseList('call getThreatDirectory(:threat)',{'threat':thrName},'MySQL error getting threat directory')
-
-  def reassociateAsset(self,assetName,envName,reqId):
-    self.updateDatabase('call reassociateAsset(:ass,:env,:req)',{'ass':assetName,'env':envName,'req':reqId},'MySQL error reassociating asset')
 
   def obstacleConcerns(self,obsId,envId):
     return self.responseList('call obstacleConcerns(:obs,:env)',{'obs':obsId,'env':envId},'MySQL error getting obstacle concerns')

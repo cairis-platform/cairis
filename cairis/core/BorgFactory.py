@@ -113,7 +113,8 @@ def initialise():
   b.configDir = b.cairisRoot + '/config'
   setupDocBookConfig()
 
-  b.dbProxy = DatabaseProxyFactory.build()
+  from cairis.gui.GUIDatabaseProxy import GUIDatabaseProxy
+  b.dbProxy = GUIDatabaseProxy()
   initialiseDesktopSettings()
 
 def dInitialise():
