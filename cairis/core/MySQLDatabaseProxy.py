@@ -485,86 +485,46 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     
 
   def dimensionObject(self,constraintName,dimensionTable):
-    if (dimensionTable != 'requirement'):
-      constraintId = self.getDimensionId(constraintName,dimensionTable)
+    if (dimensionTable != 'requirement'): constraintId = self.getDimensionId(constraintName,dimensionTable)
     objts = {}
-    if (dimensionTable == 'provided_interface' or dimensionTable == 'required_interface'):
-      objts = self.getInterfaces(constraintId)
-    if (dimensionTable == 'goalassociation'):
-      objts = self.getGoalAssociations(constraintId)
-    if (dimensionTable == 'asset'):
-      objts = self.getAssets(constraintId)
-    if (dimensionTable == 'template_asset'):
-      objts = self.getTemplateAssets(constraintId)
-    if (dimensionTable == 'template_requirement'):
-      objts = self.getTemplateRequirements(constraintId)
-    if (dimensionTable == 'template_goal'):
-      objts = self.getTemplateGoals(constraintId)
-    if (dimensionTable == 'securitypattern'):
-      objts = self.getSecurityPatterns(constraintId)
-    if (dimensionTable == 'component_view'):
-      objts = self.getComponentViews(constraintId)
-    if (dimensionTable == 'component'):
-      objts = self.getComponents(constraintId)
-    if (dimensionTable == 'classassociation'):
-      objts = self.getClassAssociations(constraintId)
-    if (dimensionTable == 'goal'):
-      objts = self.getGoals(constraintId)
-    if (dimensionTable == 'obstacle'):
-      objts = self.getObstacles(constraintId)
-    elif (dimensionTable == 'attacker'):
-      objts = self.getAttackers(constraintId)
-    elif (dimensionTable == 'threat'):
-      objts = self.getThreats(constraintId)
-    elif (dimensionTable == 'vulnerability'):
-      objts = self.getVulnerabilities(constraintId)
-    elif (dimensionTable == 'risk'):
-      objts = self.getRisks(constraintId)
-    elif (dimensionTable == 'response'):
-      objts = self.getResponses(constraintId)
-    elif (dimensionTable == 'countermeasure'):
-      objts = self.getCountermeasures(constraintId)
-    elif (dimensionTable == 'persona'):
-      objts = self.getPersonas(constraintId)
-    elif (dimensionTable == 'task'):
-      objts = self.getTasks(constraintId)
-    elif (dimensionTable == 'usecase'):
-      objts = self.getUseCases(constraintId)
-    elif (dimensionTable == 'misusecase'):
-      objts = self.getMisuseCases(constraintId)
-    elif (dimensionTable == 'requirement'):
-      objts = self.getRequirement(constraintName)
-    elif (dimensionTable == 'environment'):
-      objts = self.getEnvironments(constraintId)
-    elif (dimensionTable == 'role'):
-      objts = self.getRoles(constraintId)
-    elif (dimensionTable == 'domainproperty'):
-      objts = self.getDomainProperties(constraintId)
-    elif (dimensionTable == 'document_reference'):
-      objts = self.getDocumentReferences(constraintId)
-    elif (dimensionTable == 'concept_reference'):
-      objts = self.getConceptReferences(constraintId)
-    elif (dimensionTable == 'persona_characteristic'):
-      objts = self.getPersonaCharacteristics(constraintId)
-    elif (dimensionTable == 'task_characteristic'):
-      objts = self.getTaskCharacteristics(constraintId)
-    elif (dimensionTable == 'external_document'):
-      objts = self.getExternalDocuments(constraintId)
-    elif (dimensionTable == 'internal_document'):
-      objts = self.getInternalDocuments(constraintId)
-    elif (dimensionTable == 'code'):
-      objts = self.getCodes(constraintId)
-    elif (dimensionTable == 'memo'):
-      objts = self.getMemos(constraintId)
-    elif (dimensionTable == 'reference_synopsis'):
-      objts = self.getReferenceSynopsis(constraintId)
-    elif (dimensionTable == 'reference_contribution'):
-      objts = self.getReferenceContributions(constraintId)
-    elif (dimensionTable == 'persona_implied_process'):
-      objts = self.getImpliedProcesses(constraintId)
-    elif (dimensionTable == 'trust_boundary'):
-      objts = self.getTrustBoundaries(constraintId)
-
+    if (dimensionTable == 'provided_interface' or dimensionTable == 'required_interface'): objts = self.getInterfaces(constraintId)
+    if (dimensionTable == 'goalassociation'): objts = self.getGoalAssociations(constraintId)
+    if (dimensionTable == 'asset'): objts = self.getAssets(constraintId)
+    if (dimensionTable == 'template_asset'): objts = self.getTemplateAssets(constraintId)
+    if (dimensionTable == 'template_requirement'): objts = self.getTemplateRequirements(constraintId)
+    if (dimensionTable == 'template_goal'): objts = self.getTemplateGoals(constraintId)
+    if (dimensionTable == 'securitypattern'): objts = self.getSecurityPatterns(constraintId)
+    if (dimensionTable == 'component_view'): objts = self.getComponentViews(constraintId)
+    if (dimensionTable == 'component'): objts = self.getComponents(constraintId)
+    if (dimensionTable == 'classassociation'): objts = self.getClassAssociations(constraintId)
+    if (dimensionTable == 'goal'): objts = self.getGoals(constraintId)
+    if (dimensionTable == 'obstacle'): objts = self.getObstacles(constraintId)
+    elif (dimensionTable == 'attacker'): objts = self.getAttackers(constraintId)
+    elif (dimensionTable == 'threat'): objts = self.getThreats(constraintId)
+    elif (dimensionTable == 'vulnerability'): objts = self.getVulnerabilities(constraintId)
+    elif (dimensionTable == 'risk'): objts = self.getRisks(constraintId)
+    elif (dimensionTable == 'response'): objts = self.getResponses(constraintId)
+    elif (dimensionTable == 'countermeasure'): objts = self.getCountermeasures(constraintId)
+    elif (dimensionTable == 'persona'): objts = self.getPersonas(constraintId)
+    elif (dimensionTable == 'task'): objts = self.getTasks(constraintId)
+    elif (dimensionTable == 'usecase'): objts = self.getUseCases(constraintId)
+    elif (dimensionTable == 'misusecase'): objts = self.getMisuseCases(constraintId)
+    elif (dimensionTable == 'requirement'): objts = self.getRequirement(constraintName)
+    elif (dimensionTable == 'environment'): objts = self.getEnvironments(constraintId)
+    elif (dimensionTable == 'role'): objts = self.getRoles(constraintId)
+    elif (dimensionTable == 'domainproperty'): objts = self.getDomainProperties(constraintId)
+    elif (dimensionTable == 'document_reference'): objts = self.getDocumentReferences(constraintId)
+    elif (dimensionTable == 'concept_reference'): objts = self.getConceptReferences(constraintId)
+    elif (dimensionTable == 'persona_characteristic'): objts = self.getPersonaCharacteristics(constraintId)
+    elif (dimensionTable == 'task_characteristic'): objts = self.getTaskCharacteristics(constraintId)
+    elif (dimensionTable == 'external_document'): objts = self.getExternalDocuments(constraintId)
+    elif (dimensionTable == 'internal_document'): objts = self.getInternalDocuments(constraintId)
+    elif (dimensionTable == 'code'): objts = self.getCodes(constraintId)
+    elif (dimensionTable == 'memo'): objts = self.getMemos(constraintId)
+    elif (dimensionTable == 'reference_synopsis'): objts = self.getReferenceSynopsis(constraintId)
+    elif (dimensionTable == 'reference_contribution'): objts = self.getReferenceContributions(constraintId)
+    elif (dimensionTable == 'persona_implied_process'): objts = self.getImpliedProcesses(constraintId)
+    elif (dimensionTable == 'trust_boundary'): objts = self.getTrustBoundaries(constraintId)
     return (list(objts.values()))[0]
 
 
@@ -657,16 +617,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       callTxt = 'call ' + dimensionTable + 'Names(:env)' 
       argDict = {'env':currentEnvironment}
       return self.responseList(callTxt,argDict,'MySQL error getting ' + dimensionTable + 's')
-    elif (dimensionTable == 'template_asset'):
-      return self.responseList('call template_assetNames()',{},'MySQL error getting ' + dimensionTable + 's')
-    elif (dimensionTable == 'template_requirement'):
-      return self.responseList('call template_requirementNames()',{},'MySQL error getting ' + dimensionTable + 's')
-    elif (dimensionTable == 'template_goal'):
-      return self.responseList('call template_goalNames()',{},'MySQL error getting ' + dimensionTable + 's')
-    elif (dimensionTable == 'locations'):
-      return self.responseList('call locationsNames()',{},'MySQL error getting ' + dimensionTable + 's')
-    elif (dimensionTable == 'persona_characteristic_synopsis'):
-      return self.responseList('call persona_characteristic_synopsisNames()',{},'MySQL error getting ' + dimensionTable + 's')
+    elif (dimensionTable == 'template_asset'): return self.responseList('call template_assetNames()',{},'MySQL error getting ' + dimensionTable + 's')
+    elif (dimensionTable == 'template_requirement'): return self.responseList('call template_requirementNames()',{},'MySQL error getting ' + dimensionTable + 's')
+    elif (dimensionTable == 'template_goal'): return self.responseList('call template_goalNames()',{},'MySQL error getting ' + dimensionTable + 's')
+    elif (dimensionTable == 'locations'): return self.responseList('call locationsNames()',{},'MySQL error getting ' + dimensionTable + 's')
+    elif (dimensionTable == 'persona_characteristic_synopsis'): return self.responseList('call persona_characteristic_synopsisNames()',{},'MySQL error getting ' + dimensionTable + 's')
 
   def getEnvironmentNames(self):
     return self.responseList('call nonCompositeEnvironmentNames()',{},'MySQL error getting environments')
@@ -1244,11 +1199,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     traces = []
     for fromObjt,fromName,toObjt,toName in traceRows:
       if (dimensionName != ''):
-        if (fromObjt != dimensionName) and (toObjt != dimensionName):
-          continue
+        if (fromObjt != dimensionName) and (toObjt != dimensionName): continue
       if (objectName != ''):
-        if (fromName != objectName) and (toName != objectName):
-          continue
+        if (fromName != objectName) and (toName != objectName): continue
       parameters = DotTraceParameters(fromObjt,fromName,toObjt,toName)
       traces.append(ObjectFactory.build(-1,parameters))
     return traces
@@ -1668,34 +1621,25 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def environmentAssets(self,envName): return self.environmentDimensions('asset',envName)
 
-  def environmentGoals(self,envName):
-    return self.environmentDimensions('goal',envName)
+  def environmentGoals(self,envName): return self.environmentDimensions('goal',envName)
 
-  def environmentObstacles(self,envName):
-    return self.environmentDimensions('obstacle',envName)
+  def environmentObstacles(self,envName): return self.environmentDimensions('obstacle',envName)
 
-  def environmentDomainProperties(self,envName):
-    return self.environmentDimensions('domainProperty',envName)
+  def environmentDomainProperties(self,envName): return self.environmentDimensions('domainProperty',envName)
 
-  def environmentCountermeasures(self,envName):
-    return self.environmentDimensions('countermeasure',envName)
+  def environmentCountermeasures(self,envName): return self.environmentDimensions('countermeasure',envName)
 
-  def environmentTasks(self,envName):
-    return self.environmentDimensions('task',envName)
+  def environmentTasks(self,envName): return self.environmentDimensions('task',envName)
 
-  def environmentThreats(self,envName):
-    return self.environmentDimensions('threat',envName)
+  def environmentThreats(self,envName): return self.environmentDimensions('threat',envName)
 
-  def environmentVulnerabilities(self,envName):
-    return self.environmentDimensions('vulnerability',envName)
+  def environmentVulnerabilities(self,envName): return self.environmentDimensions('vulnerability',envName)
 
-  def environmentUseCases(self,envName):
-    return self.environmentDimensions('usecase',envName)
+  def environmentUseCases(self,envName): return self.environmentDimensions('usecase',envName)
 
-  def environmentMisuseCases(self,envName):
-    return self.environmentDimensions('misusecase',envName)
+  def environmentMisuseCases(self,envName): return self.environmentDimensions('misusecase',envName)
 
-  def goalModelElements(self,envName):
+  def goalModelElements(self,envName): 
     return self.responseList('call goalModelElements(:env)',{'env':envName},'MySQL error getting goal model elements')
 
   def obstacleModelElements(self,envName):
@@ -1862,8 +1806,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     associationId = self.newId()
     envName = parameters.environment()
     goalName = parameters.goal()
-    if (goalName == ''):
-      return
+    if (goalName == ''): return
     goalDimName = parameters.goalDimension()
     aType = parameters.type()
     subGoalName = parameters.subGoal()
@@ -1932,14 +1875,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addObstacleRefinements(self,goalId,goalName,environmentName,goalAssociations,subGoalAssociations):
     for goal,goalDim,refinement,altName,rationale in subGoalAssociations:
       alternativeId = 0
-      if (altName == 'Yes'):
-        alternativeId = 1
+      if (altName == 'Yes'): alternativeId = 1
       parameters = GoalAssociationParameters(environmentName,goalName,'obstacle',refinement,goal,goalDim,alternativeId,rationale)
       self.addGoalAssociation(parameters) 
     for goal,goalDim,refinement,altName,rationale in goalAssociations:
       alternativeId = 0
-      if (altName == 'Yes'):
-        alternativeId = 1
+      if (altName == 'Yes'): alternativeId = 1
       parameters = GoalAssociationParameters(environmentName,goal,goalDim,refinement,goalName,'obstacle',alternativeId,rationale)
       self.addGoalAssociation(parameters) 
 
@@ -2173,8 +2114,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def getRequirementVersions(self,reqId):
     return self.responseList('call getRequirementVersions(:id)',{'id':reqId},'MySQL error getting requirement versions')
 
-  def existingResponseGoal(self,responseId):
-    return int(self.responseList('select existingResponseGoal(:id)',{'id':responseId},'MySQL error getting existing response goal')[0])
+  def existingResponseGoal(self,responseId): return int(self.responseList('select existingResponseGoal(:id)',{'id':responseId},'MySQL error getting existing response goal')[0])
 
   def getValueTypes(self,dimName,envName = ''):
     customisableValues = set(['asset_value','threat_value','risk_class','countermeasure_value','capability','motivation','asset_type','threat_type','vulnerability_type','severity','likelihood','access_right','protocol','privilege','surface_type'])
@@ -2189,11 +2129,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       values.append(objt)
     return values
 
-  def deleteCapability(self,objtId):
-    self.deleteValueType(objtId,'capability')
+  def deleteCapability(self,objtId): self.deleteValueType(objtId,'capability')
 
-  def deleteMotivation(self,objtId):
-    self.deleteValueType(objtId,'motivation')
+  def deleteMotivation(self,objtId): self.deleteValueType(objtId,'motivation')
 
   def deleteAssetType(self,objtId):
     self.deleteValueType(objtId,'asset_type')
@@ -2216,8 +2154,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     vtDesc = parameters.description()
     vtType = parameters.type()
     vtScore = parameters.score()
-    if vtScore == '':
-      vtScore = 0
+    if vtScore == '': vtScore = 0
     else:
       vtScore = int(vtScore)
     vtRat = parameters.rationale()
@@ -2373,11 +2310,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
         deps[env] = self.getDependencyTable(env)
     return deps
 
-  def reportAssociationDependencies(self,fromAsset,toAsset,envName):
-    return self.responseList('call associationDependencyCheck(:from,:to,:env)',{'from':fromAsset,'to':toAsset,'env':envName},'MySQL error reporting association dependencies')
+  def reportAssociationDependencies(self,fromAsset,toAsset,envName): return self.responseList('call associationDependencyCheck(:from,:to,:env)',{'from':fromAsset,'to':toAsset,'env':envName},'MySQL error reporting association dependencies')
 
-  def reportAssociationTargetDependencies(self,assetProperties,toAsset,envName):
-    return self.responseList('call associationTargetDependencyCheck(:a0,:a1,:a2,:a3,:a4,:a5,:a6,:a7,:to,:env)',{'a0':assetProperties[0],'a1':assetProperties[1],'a2':assetProperties[2],'a3':assetProperties[3],'a4':assetProperties[4],'a5':assetProperties[5],'a6':assetProperties[6],'a7':assetProperties[7],'to':toAsset,'env':envName},'MySQL error reporting association target dependencies')
+  def reportAssociationTargetDependencies(self,assetProperties,toAsset,envName): return self.responseList('call associationTargetDependencyCheck(:a0,:a1,:a2,:a3,:a4,:a5,:a6,:a7,:to,:env)',{'a0':assetProperties[0],'a1':assetProperties[1],'a2':assetProperties[2],'a3':assetProperties[3],'a4':assetProperties[4],'a5':assetProperties[5],'a6':assetProperties[6],'a7':assetProperties[7],'to':toAsset,'env':envName},'MySQL error reporting association target dependencies')
 
   def addTemplateAsset(self,parameters):
     assetId = self.newId()
@@ -2546,11 +2481,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def situatePatternAsset(self,patternId,assetId):
     self.updateDatabase('call situatePatternAsset(:ass,:pat)',{'ass':assetId,'pat':patternId},'MySQL error situating pattern asset')
 
-  def isCountermeasureAssetGenerated(self,cmId):
-    return self.responseList('select isCountermeasureAssetGenerated(:cm)',{'cm':cmId},'MySQL error checking assets associated with countermeasure')[0]
+  def isCountermeasureAssetGenerated(self,cmId): return self.responseList('select isCountermeasureAssetGenerated(:cm)',{'cm':cmId},'MySQL error checking assets associated with countermeasure')[0]
 
-  def isCountermeasurePatternGenerated(self,cmId):
-    return self.responseList('select isCountermeasurePatternGenerated(:cm)',{'cm':cmId},'MySQL error checking patterns associated with countermeasure')[0]
+  def isCountermeasurePatternGenerated(self,cmId): return self.responseList('select isCountermeasurePatternGenerated(:cm)',{'cm':cmId},'MySQL error checking patterns associated with countermeasure')[0]
 
 
   def exposedCountermeasures(self,parameters):
@@ -2574,33 +2507,24 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     for envName,cmName,assetName,cmEffectiveness in expCMs:
       self.updateCountermeasureEffectiveness(objtId,dimName,cmName,assetName,envName,cmEffectiveness) 
 
-  def updateCountermeasureEffectiveness(self,objtId,dimName,cmName,assetName,envName,cmEffectiveness):
-    self.updateDatabase('call updateCountermeasureEffectiveness(:obj,:dim,:cm,:ass,:env,:cmEff)',{'obj':objtId,'dim':dimName,'cm':cmName,'ass':assetName,'env':envName,'cmEff':cmEffectiveness},'MySQL error updating effectiveness of countermeasure ' + cmName)
+  def updateCountermeasureEffectiveness(self,objtId,dimName,cmName,assetName,envName,cmEffectiveness): self.updateDatabase('call updateCountermeasureEffectiveness(:obj,:dim,:cm,:ass,:env,:cmEff)',{'obj':objtId,'dim':dimName,'cm':cmName,'ass':assetName,'env':envName,'cmEff':cmEffectiveness},'MySQL error updating effectiveness of countermeasure ' + cmName)
 
-  def countermeasurePatterns(self,cmId):
-    return self.responseList('call countermeasurePatterns(:cm)',{'cm':cmId},'MySQL error getting patterns associated with countermeasure')
+  def countermeasurePatterns(self,cmId): return self.responseList('call countermeasurePatterns(:cm)',{'cm':cmId},'MySQL error getting patterns associated with countermeasure')
 
-  def deleteSituatedPattern(self,cmId,patternName):
-    self.updateDatabase('call deleteSituatedPattern(:cm,:pat)',{'cm':cmId,'pat':patternName},'MySQL deleting situated pattern')
+  def deleteSituatedPattern(self,cmId,patternName): self.updateDatabase('call deleteSituatedPattern(:cm,:pat)',{'cm':cmId,'pat':patternName},'MySQL deleting situated pattern')
 
-  def candidateCountermeasurePatterns(self,cmId):
-    return self.responseList('call candidateCountermeasurePatterns(:cm)',{'cm':cmId},'MySQL error getting candidate countermeasure patterns')
+  def candidateCountermeasurePatterns(self,cmId): return self.responseList('call candidateCountermeasurePatterns(:cm)',{'cm':cmId},'MySQL error getting candidate countermeasure patterns')
 
-  def associateCountermeasureToPattern(self,cmId,patternName):
-    self.updateDatabase('call associateCountermeasureToPattern(:cm,:pat)',{'cm':cmId,'pat':patternName},'MySQL error associating countermeasure to pattern')
+  def associateCountermeasureToPattern(self,cmId,patternName): self.updateDatabase('call associateCountermeasureToPattern(:cm,:pat)',{'cm':cmId,'pat':patternName},'MySQL error associating countermeasure to pattern')
 
   def nameCheck(self,objtName,dimName):
     objtCount = self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
-    if (objtCount > 0):
-      exceptionText = dimName + ' ' + objtName + ' already exists.'
-      raise ARMException(exceptionText) 
-   
+    if (objtCount > 0): raise ARMException(dimName + ' ' + objtName + ' already exists.')
+  
 
   def nameCheckEnvironment(self,objtName,envName,dimName):
     objtCount = self.responseList('call nameEnvironmentExists(:obj,:env,:dim)',{'obj':objtName,'env':envName,'dim':dimName},'MySQL error naming checking in environment')[0]
-    if (objtCount > 0):
-      exceptionText = dimName + ' ' + objtName + ' in environment ' + envName + ' already exists.'
-      raise ARMException(exceptionText) 
+    if (objtCount > 0): raise ARMException(dimName + ' ' + objtName + ' in environment ' + envName + ' already exists.')
 
   def nameExists(self,objtName,dimName):
     objtCount = self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking name exists')[0]
@@ -2830,14 +2754,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addPersonaCharacteristicReference(self,pcId,refName,crTypeName,refDesc,dimName):
     self.updateDatabase('call addPersonaCharacteristicReference(:pc,:ref,:cr,:refD,:dim)',{'pc':pcId,'ref':refName,'cr':crTypeName,'refD':refDesc.encode('utf-8'),'dim':dimName},'MySQL error adding persona characteristic reference')
 
-  def referenceDescription(self,dimName,refName):
-    return self.responseList('call referenceDescription(:dim,:ref)',{'dim':dimName,'ref':refName},'MySQL error getting reference description')[0]
+  def referenceDescription(self,dimName,refName): return self.responseList('call referenceDescription(:dim,:ref)',{'dim':dimName,'ref':refName},'MySQL error getting reference description')[0]
   
-  def documentReferenceNames(self,docName):
-    return self.responseList('call documentReferenceNames(:doc)',{'doc':docName},'MySQL error getting document reference names')
+  def documentReferenceNames(self,docName): return self.responseList('call documentReferenceNames(:doc)',{'doc':docName},'MySQL error getting document reference names')
 
-  def referenceUse(self,refName,dimName):
-    return self.responseList('call referenceUse(:ref,:dim)',{'ref':refName,'dim':dimName},'MySQL error getting reference use')
+  def referenceUse(self,refName,dimName): return self.responseList('call referenceUse(:ref,:dim)',{'ref':refName,'dim':dimName},'MySQL error getting reference use')
 
   def characteristicBacking(self,pcId,spName):
     argDict = {'pc':pcId}
@@ -2859,14 +2780,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def getRebuttal(self,constraintName):
     return self.getArgReference('Rebuttal',constraintName)
 
-  def getTaskGrounds(self,constraintName):
-    return self.getArgReference('TaskGrounds',constraintName)
+  def getTaskGrounds(self,constraintName): return self.getArgReference('TaskGrounds',constraintName)
 
-  def getTaskWarrant(self,constraintName):
-    return self.getArgReference('TaskWarrant',constraintName)
+  def getTaskWarrant(self,constraintName): return self.getArgReference('TaskWarrant',constraintName)
 
-  def getTaskRebuttal(self,constraintName):
-    return self.getArgReference('TaskRebuttal',constraintName)
+  def getTaskRebuttal(self,constraintName): return self.getArgReference('TaskRebuttal',constraintName)
 
 
   def getArgReference(self,atName,constraintName):
@@ -2884,8 +2802,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.addDirectory(vDir,'vulnerability',isOverwrite)
 
   def addDirectory(self,gDir,dimName,isOverwrite):
-    if (isOverwrite):
-      self.deleteObject(-1,dimName + '_directory')
+    if (isOverwrite): self.deleteObject(-1,dimName + '_directory')
     for dLabel,dName,dDesc,dType,dRef in gDir:
       dTypeId = self.getDimensionId(dType,dimName + '_type')
       self.addDirectoryEntry(dLabel,dName,dDesc,dTypeId,dRef,dimName)
@@ -2895,8 +2812,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     dimName = dimName[0].upper() + dimName[1:]
     self.updateDatabase('call add' + dimName + 'DirectoryEntry(:lbl,:name,:desc,:type,:ref)',{'lbl':dLabel,'name':dName,'desc':dDesc.encode('utf-8'),'type':dTypeId,'ref':dRef},'MySQL error adding directory entry')
 
-  def lastRequirementLabel(self,assetName):
-    return self.responseList('select lastRequirementLabel(:ass)',{'ass':assetName},'MySQL error getting last requirement label')[0]
+  def lastRequirementLabel(self,assetName): return self.responseList('select lastRequirementLabel(:ass)',{'ass':assetName},'MySQL error getting last requirement label')[0]
 
   def getUseCases(self,constraintId = -1):
     ucRows = self.responseList('call getUseCases(:id)',{'id':constraintId},'MySQL error getting use cases')
@@ -2978,8 +2894,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def addUseCaseStep(self,ucId,envName,stepNo,step):
     self.updateDatabase('call addUseCaseStep(:id,:env,:step,:text,:synopsis,:actor,:type)',{'id':ucId,'env':envName,'step':stepNo,'text':step.text(),'synopsis':step.synopsis(),'actor':step.actor(),'type':step.actorType()},'MySQL error adding use case step') 
-    for tag in step.tags():
-      self.addUseCaseStepTag(ucId,envName,stepNo,tag)
+    for tag in step.tags(): self.addUseCaseStepTag(ucId,envName,stepNo,tag)
     for idx,exc in list((step.theExceptions).items()):
       self.addUseCaseStepException(ucId,envName,stepNo,exc[0],exc[1],exc[2],exc[3],exc[4])
 
@@ -3020,8 +2935,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       traces.append(ObjectFactory.build(-1,parameters))
     return traces
 
-  def isRisk(self,candidateRiskName):
-    return self.responseList('select is_risk(:cand)',{'cand':candidateRiskName},'MySQL error checking candidate risk')[0]
+  def isRisk(self,candidateRiskName): return self.responseList('select is_risk(:cand)',{'cand':candidateRiskName},'MySQL error checking candidate risk')[0]
 
   def textualArgumentationModel(self,personaName,bvType):
     return self.responseList('call assumptionPersonaModel_textual(:pers,:type)',{'pers':personaName,'type':bvType},'MySQL error getting textual argumentation model')
@@ -3148,11 +3062,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     'tag': opts[24]}
     return self.responseList('call grepModel(:in,:ps,:env,:role,:pc,:tc,:ref,:p,:task,:uc,:dp,:goal,:obs,:req,:asset,:vul,:attacker,:thr,:risk,:resp,:cm,:dir,:code,:memo,:id,:tag)',argDict,'MySQL error searching model')
 
-  def getExternalDocumentReferencesByExternalDocument(self,edName):
-    return self.responseList('call getExternalDocumentReferences(:name)',{'name':edName},'MySQL error external document references')
+  def getExternalDocumentReferencesByExternalDocument(self,edName): return self.responseList('call getExternalDocumentReferences(:name)',{'name':edName},'MySQL error external document references')
 
-  def dimensionNameByShortCode(self,scName):
-    return self.responseList('call dimensionNameByShortCode(:shortCode)',{'shortCode':scName},'MySQL error calling dimension name by short code')
+  def dimensionNameByShortCode(self,scName): return self.responseList('call dimensionNameByShortCode(:shortCode)',{'shortCode':scName},'MySQL error calling dimension name by short code')
 
   def misuseCaseRiskComponents(self,mcName):
     return self.responseList('call misuseCaseRiskComponents(:misuse)',{'misuse':mcName},'MySQL error getting risk components associated with misuse case ' + mcName)[0]
@@ -3160,8 +3072,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def personaToXml(self,pName):
     return self.responseList('call personaToXml(:persona)',{'persona':pName},'MySQL error exporting persona to XML')[0]
 
-  def defaultEnvironment(self):
-    return self.responseList('select defaultEnvironment()',{},'MySQL error obtaining default environment')[0]
+  def defaultEnvironment(self): return self.responseList('select defaultEnvironment()',{},'MySQL error obtaining default environment')[0]
 
   def environmentTensions(self,envName):
     rows = self.responseList('call environmentTensions(:env)',{'env':envName},'MySQL error getting environment tensions')
@@ -3248,8 +3159,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     actorName = cs.actor()
     self.updateDatabase('call updateCharacteristicSynopsis(:cName,:csName,:csDim,:atName,:actName)',{'cName':cName,'csName':csName,'csDim':csDim,'atName':atName,'actName':actorName},'MySQL error updating characteristic synopsis')
 
-  def referenceCharacteristic(self,refName):
-    return self.responseList('call referenceCharacteristic(:ref)',{'ref':refName},'MySQL error getting characteristics associated with reference ' + refName)
+  def referenceCharacteristic(self,refName): return self.responseList('call referenceCharacteristic(:ref)',{'ref':refName},'MySQL error getting characteristics associated with reference ' + refName)
 
   def getCharacteristicSynopsis(self,cName):
     row = self.responseList('call getCharacteristicSynopsis(:characteristic)',{'characteristic':cName},'MySQL error getting characteristic synopsis')[0]
@@ -3264,11 +3174,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     rs = ReferenceSynopsis(synId,cName,synName,dimName,aType,aName)
     return rs 
 
-  def hasCharacteristicSynopsis(self,charName):
-    return self.responseList('select hasCharacteristicSynopsis(:characteristic)',{'characteristic':charName},'MySQL error finding characteristic synopsis')[0]
+  def hasCharacteristicSynopsis(self,charName): return self.responseList('select hasCharacteristicSynopsis(:characteristic)',{'characteristic':charName},'MySQL error finding characteristic synopsis')[0]
 
-  def hasReferenceSynopsis(self,refName):
-    return self.responseList('select hasReferenceSynopsis(:ref)',{'ref':refName},'MySQL error finding reference synopsis')[0]
+  def hasReferenceSynopsis(self,refName): return self.responseList('select hasReferenceSynopsis(:ref)',{'ref':refName},'MySQL error finding reference synopsis')[0]
 
   def addUseCaseSynopsis(self,cs):
     cName = cs.reference()
@@ -3328,8 +3236,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     rows += self.responseList('call subGoalNames(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting sub goal names')
     return rows
 
-  def dependentLabels(self,goalName,envName):
-    return self.responseList('call dependentLabels(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting dependent labels')
+  def dependentLabels(self,goalName,envName): return self.responseList('call dependentLabels(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting dependent labels')
 
   def goalEnvironments(self,goalName):
     rows = ['']
@@ -3494,11 +3401,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       bis.append('None')
     return bis
 
-  def environmentRequirements(self,envName):
-    return self.responseList('call requirementNames(:env)',{'env':envName},'MySQL error getting requirements associated with environment ' + envName)
+  def environmentRequirements(self,envName): return self.responseList('call requirementNames(:env)',{'env':envName},'MySQL error getting requirements associated with environment ' + envName)
 
-  def deleteTags(self,tagObjt,tagDim):
-    self.updateDatabase('call deleteTags(:obj,:dim)',{'obj':tagObjt,'dim':tagDim},'MySQL error deleting tags')
+  def deleteTags(self,tagObjt,tagDim): self.updateDatabase('call deleteTags(:obj,:dim)',{'obj':tagObjt,'dim':tagDim},'MySQL error deleting tags')
 
   def addTags(self,dimObjt,dimName,tags):
     self.deleteTags(dimObjt,dimName)
@@ -3514,8 +3419,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def getTags(self,dimObjt,dimName):
     return self.responseList('call getTags(:obj,:name)',{'obj':dimObjt,'name':dimName},'MySQL error getting tags')
 
-  def deleteTag(self,tagId):
-    self.deleteObject(tagId,'tag')
+  def deleteTag(self,tagId): self.deleteObject(tagId,'tag')
     
 
   def componentView(self,cvName):
@@ -3527,8 +3431,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def componentViewConnectors(self,cvName):
     return self.responseList('call componentViewConnectors(:cv)',{'cv':cvName},'MySQL error getting component view connectors')
 
-  def addComponentToView(self,cId,cvId):
-    self.updateDatabase('call addComponentToView(:cId,:cvId)',{'cId':cId,'cvId':cvId},'MySQL error adding component to view')
+  def addComponentToView(self,cId,cvId): self.updateDatabase('call addComponentToView(:cId,:cvId)',{'cId':cId,'cvId':cvId},'MySQL error adding component to view')
 
   def addComponent(self,parameters,cvId = -1):
     componentId = self.newId()
@@ -3599,8 +3502,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     ifs = []
     for ifName,ifTypeId,arName,prName in rows:
       ifType = 'provided'
-      if (ifTypeId == 1):
-        ifType = 'required'
+      if (ifTypeId == 1): ifType = 'required'
       ifs.append((ifName,ifType,arName,prName))
     return ifs
 
@@ -3635,8 +3537,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     for idx,reqName in enumerate(componentRequirements):
       self.addComponentRequirement(idx+1,componentId,reqName)
 
-  def addComponentRequirement(self,reqLabel,componentId,reqName):
-    self.updateDatabase('call addComponentRequirement(:reqLbl,:comp,:req)',{'reqLbl':reqLabel,'comp':componentId,'req':reqName},'MySQL error adding component requirement')
+  def addComponentRequirement(self,reqLabel,componentId,reqName): self.updateDatabase('call addComponentRequirement(:reqLbl,:comp,:req)',{'reqLbl':reqLabel,'comp':componentId,'req':reqName},'MySQL error adding component requirement')
 
   def getComponentViews(self,constraintId = -1):
     cvRows = self.responseList('call getComponentView(:cons)',{'cons':constraintId},'MySQL error getting component view')
@@ -3732,8 +3633,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.updateDatabase('call updateComponentView(:id,:name,:syn)',{'id':cvId,'name':cvName,'syn':cvSyn},'MySQL error updating component view',session)
     for taParameters in cvAssets:
       self.updateTemplateAsset(taParameters)
-    for trParameters in cvReqs:
-      self.updateTemplateRequirement(trParameters)
+    for trParameters in cvReqs: self.updateTemplateRequirement(trParameters)
     for comParameters in cvComs:
       self.addComponent(comParameters,cvId)
     for conParameters in cvCons:
@@ -3753,10 +3653,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     for cName,taName,aName,targetName,targetType in rows:
       t = None
       if targetType == 'threat':
-        if targetName not in thrDict:
-          t = WeaknessTarget(targetName)
-        else:
-          t = thrDict[targetName]
+        if targetName not in thrDict: t = WeaknessTarget(targetName)
+        else: t = thrDict[targetName]
         t.addTemplateAsset(taName)
         t.addAsset(aName)
         t.addComponent(cName)
@@ -3775,8 +3673,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def componentAssets(self,cvName,reqName = ''):
     return self.responseList('call componentAssets(:cv,:req)',{'cv':cvName,'req':reqName},'MySQL error getting component assets')
 
-  def componentGoalAssets(self,cvName,goalName = ''):
-    return self.responseList('call componentGoalAssets(:cv,:goal)',{'cv':cvName,'goal':goalName},'MySQL error getting component goal assets')
+  def componentGoalAssets(self,cvName,goalName = ''): return self.responseList('call componentGoalAssets(:cv,:goal)',{'cv':cvName,'goal':goalName},'MySQL error getting component goal assets')
 
   def existingObject(self,objtName,dimName):
     argDict = {'objt':objtName,'dim':dimName}
@@ -3798,10 +3695,8 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.situateComponentViewRequirements(cvName)
       self.situateComponentViewGoals(cvName,envName)
       self.situateComponentViewGoalAssociations(cvName,envName)
-      for target in targets:
-        self.addComponentViewTargets(target,envName)
-      for op in obstructParameters:
-        self.addGoalAssociation(op)
+      for target in targets: self.addComponentViewTargets(target,envName)
+      for op in obstructParameters: self.addGoalAssociation(op)
  
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
@@ -3854,11 +3749,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     self.deleteObject(reqId,'template_requirement')
     
 
-  def componentViewRequirements(self,cvName):
-    return self.responseList('call componentViewRequirements(:cv)',{'cv':cvName},'MySQL error getting component view requirements')
+  def componentViewRequirements(self,cvName): return self.responseList('call componentViewRequirements(:cv)',{'cv':cvName},'MySQL error getting component view requirements')
 
-  def componentViewGoals(self,cvName):
-    return self.responseList('call componentViewGoals(:cv)',{'cv':cvName},'MySQL error getting component view goals')
+  def componentViewGoals(self,cvName): return self.responseList('call componentViewGoals(:cv)',{'cv':cvName},'MySQL error getting component view goals')
 
   def situateComponentViewRequirements(self,cvName):
     self.updateDatabase('call situateComponentViewRequirements(:cv)',{'cv':cvName},'MySQL error situating component view requirements')
@@ -3881,8 +3774,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def personasImpact(self,cvName,envName):
     rows = self.responseList('call personasImpact(:cv,:env)',{'cv':cvName,'env':envName},'MySQL error getting personas impact')
     pImpact = []
-    for c1,c2 in rows:
-      pImpact.append((c1,str(c2)))
+    for c1,c2 in rows: pImpact.append((c1,str(c2)))
     return pImpact
 
   def personaImpactRationale(self,cvName,personaName,envName):
@@ -3901,11 +3793,9 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       piRationale[taskName].append(ucDict) 
     return piRationale
 
-  def taskUseCases(self,taskName):
-    return self.responseList('call taskUseCases(:task)',{'task':taskName},'MySQL error getting task use cases')
+  def taskUseCases(self,taskName): return self.responseList('call taskUseCases(:task)',{'task':taskName},'MySQL error getting task use cases')
 
-  def usecaseComponents(self,ucName):
-    return self.responseList('call usecaseComponents(:useCase)',{'useCase':ucName},'MySQL error getting use case components')
+  def usecaseComponents(self,ucName): return self.responseList('call usecaseComponents(:useCase)',{'useCase':ucName},'MySQL error getting use case components')
 
   def attackSurfaceMetric(self,cvName):
     return self.responseList('call attackSurfaceMetric(:cv)',{'cv':cvName},'MySQL error getting attack surface metrics')[0]
@@ -4104,8 +3994,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       ips[ipName] = ip
     return ips
 
-  def impliedProcessNetwork(self,ipName):
-    return self.responseList('call impliedProcessNetwork(:name)',{'name':ipName},'MySQL error getting implied process network')
+  def impliedProcessNetwork(self,ipName): return self.responseList('call impliedProcessNetwork(:name)',{'name':ipName},'MySQL error getting implied process network')
 
   def addImpliedProcess(self,parameters):
     ipId = self.newId()
@@ -4140,14 +4029,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addImpliedProcessNetworkRelationship(self,ipId,personaName,fromName,toName,rType):
     self.updateDatabase('call addImpliedProcessNetworkRelationship(:id,:pers,:fName,:tName,:type)',{'id':ipId,'pers':personaName,'fName':fromName,'tName':toName,'type':rType},'MySQL error adding implied process network relationship')
 
-  def deleteImpliedProcess(self,ipId):
-    self.deleteObject(ipId,'persona_implied_process')
+  def deleteImpliedProcess(self,ipId): self.deleteObject(ipId,'persona_implied_process')
     
-  def addStepSynopsis(self,ucName,envName,stepNo,synName,aType,aName):
-    self.updateDatabase('call addStepSynopsis(:uc,:env,:step,:syn,:aName,:aType)',{'uc':ucName,'env':envName,'step':stepNo,'syn':synName,'aName':aName,'aType':aType},'MySQL error adding step synopsis')
+  def addStepSynopsis(self,ucName,envName,stepNo,synName,aType,aName): self.updateDatabase('call addStepSynopsis(:uc,:env,:step,:syn,:aName,:aType)',{'uc':ucName,'env':envName,'step':stepNo,'syn':synName,'aName':aName,'aType':aType},'MySQL error adding step synopsis')
 
-  def directoryEntry(self,objtName,dType):
-    return self.responseList('call directoryEntry(:obj,:dir)',{'obj':objtName,'dir':dType},'MySQL error getting directory entry')[0]
+  def directoryEntry(self,objtName,dType): return self.responseList('call directoryEntry(:obj,:dir)',{'obj':objtName,'dir':dType},'MySQL error getting directory entry')[0]
 
   def getTemplateGoals(self,constraintId = -1):
     tgRows = self.responseList('call getTemplateGoals(:const)',{'const':constraintId},'MySQL error getting template goals')
@@ -4163,9 +4049,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def deleteTemplateGoal(self,tgId):
     self.deleteObject(tgId,'template_goal')
     
-
-  def componentViewGoals(self,cvName):
-    return self.responseList('call componentViewGoals(:cv)',{'cv':cvName},'MySQL error getting component view goals')
+  def componentViewGoals(self,cvName): return self.responseList('call componentViewGoals(:cv)',{'cv':cvName},'MySQL error getting component view goals')
 
   def situateComponentViewGoals(self,cvName,envName):
     self.updateDatabase('call situateComponentViewGoals(:cv,:env)',{'cv':cvName,'env':envName},'MySQL error situating component view goals')
@@ -4268,14 +4152,12 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def templateGoalResponsibilities(self,tgId):
     return self.responseList('call templateGoalResponsibilities(:tg)',{'tg':tgId},'MySQL error getting template goal responsibilities')
 
-  def importTemplateAsset(self,taName,environmentName):
-    self.updateDatabase('call importTemplateAssetIntoEnvironment(:ta,:env)',{'ta':taName,'env':environmentName},'MySQL error importing template asset')
+  def importTemplateAsset(self,taName,environmentName): self.updateDatabase('call importTemplateAssetIntoEnvironment(:ta,:env)',{'ta':taName,'env':environmentName},'MySQL error importing template asset')
 
   def candidateGoalObstacles(self,cvName,envName):
     return self.responseList('call candidateGoalObstacles(:cv,:env)',{'cv':cvName,'env':envName},'MySQL error getting candidate goal obstacles')
 
-  def templateGoalDefinition(self,tgId):
-    return self.responseList('select definition from template_goal where id =:tg',{'tg':tgId},'MySQL error getting template goal definition')[0]
+  def templateGoalDefinition(self,tgId): return self.responseList('select definition from template_goal where id =:tg',{'tg':tgId},'MySQL error getting template goal definition')[0]
 
   def redmineArchitectureSummary(self,envName):
     return self.responseList('call redmineArchitectureSummary(:env)',{'env':envName},'MySQL error getting redmine architecture summary')
@@ -4283,8 +4165,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def redmineAttackPatternsSummary(self,envName):
     return self.responseList('call redmineAttackPatternsSummary(:env)',{'env':envName},'MySQL error getting redmine attack patterns summary')[0]
 
-  def processesToXml(self,includeHeader=True):
-    return self.responseList('call processesToXml(:head)',{'head':includeHeader},'MySQL error exporting processes to XML')[0]
+  def processesToXml(self,includeHeader=True): return self.responseList('call processesToXml(:head)',{'head':includeHeader},'MySQL error exporting processes to XML')[0]
 
   def addQuotation(self,quotation):
     qType = quotation[0]
@@ -4352,8 +4233,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def addDocumentMemo(self,docName,memoName,memoTxt,startIdx,endIdx):
     self.updateDatabase('call addDocumentMemo(:doc,:mem,:txt,:sIdx,:eIdx)',{'doc':docName,'mem':memoName,'txt':memoTxt,'sIdx':startIdx,'eIdx':endIdx},'MySQL error adding document memo')
 
-  def impliedProcess(self,procName):
-    return self.responseList('call impliedProcess(:proc)',{'proc':procName},'MySQL error getting implied process')[0]
+  def impliedProcess(self,procName): return self.responseList('call impliedProcess(:proc)',{'proc':procName},'MySQL error getting implied process')[0]
 
   def addImpliedProcessChannels(self,ipId,channels):
     for channelName,dataType in channels:
@@ -4384,8 +4264,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
 
   def impliedCharacteristic(self,pName,fromCode,toCode,rtName):
     row = self.responseList('call impliedCharacteristic(:pName,:fCode,:tCode,:rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName},'MySQL error getting implied characteristic')[0]
-    if (len(row) == 0):
-      raise NoImpliedCharacteristic(pName,fromCode,toCode,rtName)
+    if (len(row) == 0): raise NoImpliedCharacteristic(pName,fromCode,toCode,rtName)
     return row
 
   def impliedCharacteristicElements(self,pName,fromCode,toCode,rtName,isLhs):
@@ -4432,17 +4311,14 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       self.updateImpliedCharacteristicElement(charName,lblName,rtName)
     self.updateImpliedCharacteristicIntention(charName,intName,intType)
 
-  def updateImpliedCharacteristicIntention(self,charName,intName,intType):
-    self.updateDatabase('call updateImpliedCharacteristicIntention(:char,:int,:type)',{'char':charName,'int':intName,'type':intType},'MySQL error updating implied characteristic intention')
+  def updateImpliedCharacteristicIntention(self,charName,intName,intType): self.updateDatabase('call updateImpliedCharacteristicIntention(:char,:int,:type)',{'char':charName,'int':intName,'type':intType},'MySQL error updating implied characteristic intention')
 
   def addImpliedCharacteristicElement(self,charName,lblName,rtName):
     self.updateDatabase('call addImpliedCharacteristicElement(:char,:lbl,:rt)',{'char':charName,'lbl':lblName,'rt':rtName},'MySQL error adding implied characteristic element')
 
-  def updateImpliedCharacteristicElement(self,charName,lblName,rtName):
-    self.updateDatabase('call updateImpliedCharacteristicElement(:char,:lbl,:rt)',{'char':charName,'lbl':lblName,'rt':rtName},'MySQL error updating implied characteristic element')
+  def updateImpliedCharacteristicElement(self,charName,lblName,rtName): self.updateDatabase('call updateImpliedCharacteristicElement(:char,:lbl,:rt)',{'char':charName,'lbl':lblName,'rt':rtName},'MySQL error updating implied characteristic element')
 
-  def codeCount(self,codeName):
-    return self.responseList('select codeCount(:code)',{'code':codeName},'MySQL error getting code count')[0]
+  def codeCount(self,codeName): return self.responseList('select codeCount(:code)',{'code':codeName},'MySQL error getting code count')[0]
 
   def addIntention(self,intention):
     refName = intention[0]
@@ -4458,17 +4334,13 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     valName = contribution[3]
     self.updateDatabase('call addContribution(:src,:dest,:means,:val)',{'src':srcName,'dest':destName,'means':meansEnd,'val':valName},'MySQL error adding contribution')
 
-  def impliedCharacteristicIntention(self,synName,pName,fromCode,toCode,rtName):
-    return self.responseLis('select impliedCharacteristicIntention(:syn,:pName,:fCode,:tCode,:rt)',{'syn':synName,'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName},'MySQL error getting implied characteristic intention')[0].split('#')
+  def impliedCharacteristicIntention(self,synName,pName,fromCode,toCode,rtName): return self.responseLis('select impliedCharacteristicIntention(:syn,:pName,:fCode,:tCode,:rt)',{'syn':synName,'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName},'MySQL error getting implied characteristic intention')[0].split('#')
 
-  def impliedCharacteristicElementIntention(self,ciName,elName):
-    return self.responseList('select impliedCharacteristicElementIntention(:ci,:el)',{'ci':ciName,'el':elName},'MySQL error getting implied characteristic element intention')[0].split('#')
+  def impliedCharacteristicElementIntention(self,ciName,elName): return self.responseList('select impliedCharacteristicElementIntention(:ci,:el)',{'ci':ciName,'el':elName},'MySQL error getting implied characteristic element intention')[0].split('#')
 
-  def updateImpliedCharacteristicElementIntention(self,ciName,elName,intName,intDim,meName,contName):
-    self.updateDatabase('call updateImpliedCharacteristicElementIntention(:ci,:el,:int,:dim,:me,:cont)',{'ci':ciName,'el':elName,'int':intName,'dim':intDim,'me':meName,'cont':contName},'MySQL error updating intention for element ' + elName + ' for implied characteristic ' + ciName)
+  def updateImpliedCharacteristicElementIntention(self,ciName,elName,intName,intDim,meName,contName): self.updateDatabase('call updateImpliedCharacteristicElementIntention(:ci,:el,:int,:dim,:me,:cont)',{'ci':ciName,'el':elName,'int':intName,'dim':intDim,'me':meName,'cont':contName},'MySQL error updating intention for element ' + elName + ' for implied characteristic ' + ciName)
 
-  def deniedGoals(self,codeName):
-    return self.responseList('call deniedGoals(:code)',{'code':codeName},'MySQL error getting denied goals')
+  def deniedGoals(self,codeName): return self.responseList('call deniedGoals(:code)',{'code':codeName},'MySQL error getting denied goals')
 
   def addLocations(self,parameters):
     locsId = self.newId()
@@ -4542,12 +4414,11 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     rows = self.responseList('call getLocationLinks(:locs)',{'locs':locsName},'MySQL error getting location links')
     linkDict = {}
     for tailLoc,headLoc in rows:
-      if tailLoc in linkDict:
-        linkDict[tailLoc].append(headLoc)
+      if tailLoc in linkDict: linkDict[tailLoc].append(headLoc)
       else:
         linkDict[tailLoc] = [headLoc]
 
-      if headLoc in linkDict:
+      if headLoc in linkDict: 
         linkDict[headLoc].append(tailLoc)
       else:
         linkDict[headLoc] = [tailLoc]
@@ -4571,8 +4442,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
       traces.append(ObjectFactory.build(-1,parameters))
     return traces
 
-  def templateAssetMetrics(self,taName):
-    return self.responseList('call templateAssetMetrics(:ta)',{'ta':taName},'MySQL error getting template asset metrics')[0]
+  def templateAssetMetrics(self,taName): return self.responseList('call templateAssetMetrics(:ta)',{'ta':taName},'MySQL error getting template asset metrics')[0]
 
   def riskModelElements(self,envName):
     rows = self.responseList('call riskAnalysisModelElements(:env)',{'env':envName},'MySQL error getting risk analysis model elements')
@@ -4671,8 +4541,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def getUseCaseRequirements(self,ucName):
     return self.responseList('call useCaseRequirements(:uc)',{'uc':ucName},'MySQL error getting requirements associated with use case ' + ucName)
 
-  def getUseCaseGoals(self,ucName,envName):
-    return self.responseList('call useCaseGoals(:uc,:env)',{'uc':ucName,'env':envName},'MySQL error getting goals associated with use case ' + ucName)
+  def getUseCaseGoals(self,ucName,envName): return self.responseList('call useCaseGoals(:uc,:env)',{'uc':ucName,'env':envName},'MySQL error getting goals associated with use case ' + ucName)
 
   def synopsisId(self,synTxt):
     return self.responseList('select synopsisId(:syn)',{'syn':synTxt},'MySQL error finding synopsis id for text ' + synTxt)[0]
@@ -4687,8 +4556,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     else:
       return False
 
-  def removeUseCaseContributions(self,ucId):
-    self.updateDatabase('call removeUseCaseContributions(:id)',{'id':ucId},'MySQL error removing use case contribution')
+  def removeUseCaseContributions(self,ucId): self.updateDatabase('call removeUseCaseContributions(:id)',{'id':ucId},'MySQL error removing use case contribution')
 
   def getDataFlows(self,dfName='',envName=''):
     dfRows = self.responseList('call getDataFlows(:df,:env)',{'df':dfName,'env':envName},'MySQL error getting data flows')
@@ -4737,8 +4605,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
   def dataFlowDiagram(self,envName,filterElement = ''):
     return self.responseList('call dataFlowDiagram(:env,:fe)',{'env':envName,'fe':filterElement},'MySQL error getting data flow diagram')
 
-  def relabelRequirements(self,reqReference):
-    self.updateDatabase('call relabelRequirements(:reqReference)',{'reqReference':reqReference},'MySQL error relabelling requirements')
+  def relabelRequirements(self,reqReference): self.updateDatabase('call relabelRequirements(:reqReference)',{'reqReference':reqReference},'MySQL error relabelling requirements')
 
   def getTrustBoundaries(self,constraintId = -1):
     tbRows = self.responseList('call getTrustBoundaries(:id)',{'id':constraintId},'MySQL error getting trust boundaries')
