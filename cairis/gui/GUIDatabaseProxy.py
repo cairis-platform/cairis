@@ -28,7 +28,7 @@ from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentPropertie
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
 from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
 from cairis.core.GoalParameters import GoalParameters
-from cairis.core.ObjectFactory import ObjectFactory
+import cairis.core.ObjectFactory
 
 __author__ = 'Shamal Faily'
 
@@ -121,7 +121,7 @@ class GUIDatabaseProxy(MySQLDatabaseProxy):
     for goalId,goalName,goalOrig in goalRows:
       environmentProperties = self.goalEnvironmentProperties(goalId)
       parameters = GoalParameters(goalName,goalOrig,[],self.goalEnvironmentProperties(goalId))
-      goal = ObjectFactory.build(goalId,parameters)
+      goal = cairis.core.ObjectFactory.build(goalId,parameters)
       goals.append(goal)
     return goals
 
@@ -144,6 +144,6 @@ class GUIDatabaseProxy(MySQLDatabaseProxy):
     for tcId,tName,qualName,tcDesc in tcSumm:
       grounds,warrant,backing,rebuttal = self.characteristicReferences(tcId,'taskCharacteristicReferences')
       parameters = TaskCharacteristicParameters(tName,qualName,tcDesc,grounds,warrant,backing,rebuttal)
-      tChar = ObjectFactory.build(tcId,parameters)
+      tChar = cairis.core.ObjectFactory.build(tcId,parameters)
       tChars[tName + '/' + tcDesc] = tChar
     return tChars
