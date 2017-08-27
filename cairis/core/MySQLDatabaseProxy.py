@@ -2936,19 +2936,6 @@ class MySQLDatabaseProxy:
   def assumptionTaskModel(self,taskName = '',tcName = ''):
     return self.responseList('call assumptionTaskModel(:task,:tc)',{'task':taskName,'tc':tcName},'MySQL error getting assumption task model')
 
-  def getTaskSpecificCharacteristics(self,tName):
-    rows = self.responseList('call taskSpecificCharacteristics(:task)',{'task':tName},'MySQL error getting task specific characteristics')
-    tChars = {}
-    tcSumm = []
-    for tcId,qualName,tcDesc in rows:
-      tcSumm.append((tcId,tName,qualName,tcDesc))
-    for tcId,tName,qualName,tcDesc in tcSumm:
-      grounds,warrant,backing,rebuttal = self.characteristicReferences(tcId,'taskCharacteristicReferences')
-      parameters = TaskCharacteristicParameters(tName,qualName,tcDesc,grounds,warrant,backing,rebuttal)
-      tChar = ObjectFactory.build(tcId,parameters)
-      tChars[tName + '/' + tcDesc] = tChar
-    return tChars
-
   def searchModel(self,inTxt,opts):
     argDict = {
     'in': inTxt,
@@ -3128,25 +3115,7 @@ class MySQLDatabaseProxy:
   def pcToGrl(self,pNames,tNames,envName):
     return self.responseList('call pcToGrl(":pNames", ":tNames", :env)',{'pNames':pNames,'tNames':tNames,'env':envName},'MySQL error exporting to GRL')[0]
 
-  def getEnvironmentGoals(self,goalName,envName):
-    goalRows = self.responseList('call getEnvironmentGoals(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting goals')
-    oals = []
-    for goalId,goalName,goalOrig in goalRows:
-      environmentProperties = self.goalEnvironmentProperties(goalId)
-      parameters = GoalParameters(goalName,goalOrig,[],self.goalEnvironmentProperties(goalId))
-      goal = ObjectFactory.build(goalId,parameters)
-      goals.append(goal)
-    return goals
 
-  def updateEnvironmentGoal(self,g,envName):
-    envProps = g.environmentProperty(envName)
-    goalDef = envProps.definition()
-    goalCat = envProps.category()
-    goalPri = envProps.priority()
-    goalFc = envProps.fitCriterion()
-    goalIssue = envProps.issue()
-    
-    self.updateDatabase('call updateEnvironmentGoal(:id,:env,:name,:orig,:def,:cat,:pri,:fc,:issue)',{'id':g.id(),'env':envName,'name':g.name(),'orig':g.originator(),'def':goalDef,'cat':goalCat,'pri':goalPri,'fc':goalFc,'issue':goalIssue},'MySQL error updating environment goal')
  
   def getSubGoalNames(self,goalName,envName):
     rows = ['']

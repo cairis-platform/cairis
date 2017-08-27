@@ -27,6 +27,8 @@ from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
 from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
+from cairis.core.GoalParameters import GoalParameters
+from cairis.core.ObjectFactory import ObjectFactory
 
 __author__ = 'Shamal Faily'
 
@@ -113,3 +115,35 @@ class GUIDatabaseProxy(MySQLDatabaseProxy):
   def reassociateAsset(self,assetName,envName,reqId):
     self.updateDatabase('call reassociateAsset(:ass,:env,:req)',{'ass':assetName,'env':envName,'req':reqId},'MySQL error reassociating asset')
 
+  def getEnvironmentGoals(self,goalName,envName):
+    goalRows = self.responseList('call getEnvironmentGoals(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting goals')
+    oals = []
+    for goalId,goalName,goalOrig in goalRows:
+      environmentProperties = self.goalEnvironmentProperties(goalId)
+      parameters = GoalParameters(goalName,goalOrig,[],self.goalEnvironmentProperties(goalId))
+      goal = ObjectFactory.build(goalId,parameters)
+      goals.append(goal)
+    return goals
+
+  def updateEnvironmentGoal(self,g,envName):
+    envProps = g.environmentProperty(envName)
+    goalDef = envProps.definition()
+    goalCat = envProps.category()
+    goalPri = envProps.priority()
+    goalFc = envProps.fitCriterion()
+    goalIssue = envProps.issue()
+    
+    self.updateDatabase('call updateEnvironmentGoal(:id,:env,:name,:orig,:def,:cat,:pri,:fc,:issue)',{'id':g.id(),'env':envName,'name':g.name(),'orig':g.originator(),'def':goalDef,'cat':goalCat,'pri':goalPri,'fc':goalFc,'issue':goalIssue},'MySQL error updating environment goal')
+
+  def getTaskSpecificCharacteristics(self,tName):
+    rows = self.responseList('call taskSpecificCharacteristics(:task)',{'task':tName},'MySQL error getting task specific characteristics')
+    tChars = {}
+    tcSumm = []
+    for tcId,qualName,tcDesc in rows:
+      tcSumm.append((tcId,tName,qualName,tcDesc))
+    for tcId,tName,qualName,tcDesc in tcSumm:
+      grounds,warrant,backing,rebuttal = self.characteristicReferences(tcId,'taskCharacteristicReferences')
+      parameters = TaskCharacteristicParameters(tName,qualName,tcDesc,grounds,warrant,backing,rebuttal)
+      tChar = ObjectFactory.build(tcId,parameters)
+      tChars[tName + '/' + tcDesc] = tChar
+    return tChars
