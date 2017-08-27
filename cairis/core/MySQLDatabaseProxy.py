@@ -1326,7 +1326,7 @@ class MySQLDatabaseProxy(DatabaseProxy.DatabaseProxy):
     rows = self.responseList('call targetNames(:req,:env)',{'req':reqLabel,'env':envName},'MySQL error getting target names')
     targets = {}
     for targetName,responseName in rows:
-      if (targetName in targers): targets[targetName].add(responseName)
+      if (targetName in targets): targets[targetName].add(responseName)
       else:
         targets[targetName] = set([responseName])
     return targets
