@@ -171,3 +171,41 @@ class GUIDatabaseProxy(MySQLDatabaseProxy):
     self.updateDatabase('call updateImpliedProcess(:id,:name,:desc,:proc,:spec)',{'id':ipId,'name':ipName,'desc':ipDesc.encode('utf-8'),'proc':pName,'spec':ipSpec.encode('utf-8')},'MySQL error updating implied process',session)
     self.addImpliedProcessNetwork(ipId,pName,cNet)
     self.addImpliedProcessChannels(ipId,chs)
+
+  def getSubGoalNames(self,goalName,envName):
+    rows = ['']
+    rows += self.responseList('call subGoalNames(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting sub goal names')
+    return rows
+
+  def getSubObstacleNames(self,obsName,envName):
+    rows = ['']
+    rows += self.responseList('call subObstacleNames(:obs,:env)',{'obs':obsName,'env':envName},'MySQL error getting sub obstacle names')
+    return rows
+
+  def goalEnvironments(self,goalName):
+    rows = ['']
+    rows += self.responseList('call goalEnvironments(:goal)',{'goal':goalName},'MySQL error getting goal environments')
+    return rows
+
+  def obstacleEnvironments(self,obsName):
+    rows = ['']
+    rows += self.responseList('call obstacleEnvironments(:obs)',{'obs':obsName},'MySQL error getting obstacle environments')
+    return rows
+
+  def getEnvironmentObstacles(self,obsName,envName):
+    obsRows = self.responseList('call getEnvironmentObstacles(:obs,:env)',{'obs':obsName,'env':envName},'MySQL error getting obstacles')
+    obs = []
+    for obsId,obsName,obsOrig in obsRows:
+      environmentProperties = self.obstacleEnvironmentProperties(obsId)
+      parameters = ObstacleParameters(obsName,obsOrig,self.obstacleEnvironmentProperties(obsId))
+      obstacle = ObjectFactory.build(obsId,parameters)
+      obs.append(obstacle)
+    return obs
+
+  def updateEnvironmentObstacle(self,o,envName):
+    envProps = o.environmentProperty(envName)
+    obsDef = envProps.definition()
+    obsCat = envProps.category()
+    self.updateDatabase('call updateEnvironmentObstacle(:id,:env,:name,:orig,:def,:cat)',{'id':o.id(),'env':envName,'name':o.name(),'orig':o.originator(),'def':obsDef,'cat':obsCat},'MySQL error updating environment obstacle')
+
+

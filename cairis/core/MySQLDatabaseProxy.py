@@ -3109,45 +3109,7 @@ class MySQLDatabaseProxy:
   def pcToGrl(self,pNames,tNames,envName):
     return self.responseList('call pcToGrl(":pNames", ":tNames", :env)',{'pNames':pNames,'tNames':tNames,'env':envName},'MySQL error exporting to GRL')[0]
 
-
- 
-  def getSubGoalNames(self,goalName,envName):
-    rows = ['']
-    rows += self.responseList('call subGoalNames(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting sub goal names')
-    return rows
-
   def dependentLabels(self,goalName,envName): return self.responseList('call dependentLabels(:goal,:env)',{'goal':goalName,'env':envName},'MySQL error getting dependent labels')
-
-  def goalEnvironments(self,goalName):
-    rows = ['']
-    rows += self.responseList('call goalEnvironments(:goal)',{'goal':goalName},'MySQL error getting goal environments')
-    return rows
-
-  def obstacleEnvironments(self,obsName):
-    rows = ['']
-    rows += self.responseList('call obstacleEnvironments(:obs)',{'obs':obsName},'MySQL error getting obstacle environments')
-    return rows
-
-  def getSubObstacleNames(self,obsName,envName):
-    rows = ['']
-    rows += self.responseList('call subObstacleNames(:obs,:env)',{'obs':obsName,'env':envName},'MySQL error getting sub obstacle names')
-    return rows
-
-  def getEnvironmentObstacles(self,obsName,envName):
-    obsRows = self.responseList('call getEnvironmentObstacles(:obs,:env)',{'obs':obsName,'env':envName},'MySQL error getting obstacles')
-    obs = []
-    for obsId,obsName,obsOrig in obsRows:
-      environmentProperties = self.obstacleEnvironmentProperties(obsId)
-      parameters = ObstacleParameters(obsName,obsOrig,self.obstacleEnvironmentProperties(obsId))
-      obstacle = ObjectFactory.build(obsId,parameters)
-      obs.append(obstacle)
-    return obs
-
-  def updateEnvironmentObstacle(self,o,envName):
-    envProps = o.environmentProperty(envName)
-    obsDef = envProps.definition()
-    obsCat = envProps.category()
-    self.updateDatabase('call updateEnvironmentObstacle(:id,:env,:name,:orig,:def,:cat)',{'id':o.id(),'env':envName,'name':o.name(),'orig':o.originator(),'def':obsDef,'cat':obsCat},'MySQL error updating environment obstacle')
 
   def relabelGoals(self,envName):
     self.updateDatabase('call relabelGoals(:env)',{'env':envName},'MySQL error relabelling goals')
