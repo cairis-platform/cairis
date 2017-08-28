@@ -67,7 +67,7 @@ class ImpliedCharacteristicTest(unittest.TestCase):
     b.dbProxy.addCodeRelationship(self.iCN[0]["thePersonaName"],self.iCN[0]["theFromCode"],self.iCN[0]["theToCode"],self.iCN[0]["theRshipType"])
     
 
-  def testAddImpliedCharacteristic(self):
+  def testAddUpdateImpliedCharacteristic(self):
     b = Borg()
 
     p = ImpliedCharacteristicParameters(self.iCN[0]["thePersonaName"],self.iCN[0]["theFromCode"],self.iCN[0]["theToCode"],self.iCN[0]["theRshipType"],self.iCN[0]["theImpliedCharacteristic"]["theName"],self.iCN[0]["theImpliedCharacteristic"]["theQualifier"],[(self.iCN[0]["theImpliedCharacteristic"]["theFromLabel"],self.iCN[0]["theImpliedCharacteristic"]["theFromReferenceType"])],[(self.iCN[0]["theImpliedCharacteristic"]["theToLabel"],self.iCN[0]["theImpliedCharacteristic"]["theToReferenceType"])],self.iCN[0]["theImpliedCharacteristic"]["theType"])
@@ -76,6 +76,14 @@ class ImpliedCharacteristicTest(unittest.TestCase):
 #    b.dbProxy.addContribution((self.iCN[0]["theImpliedCharacteristic"]["theName"],self.iCN[0]["theImpliedCharacteristic"]["theFromLabel"],self.iCN[0]["theImpliedCharacteristic"]["theFromLabelContribution"],self.iCN[0]["theImpliedCharacteristic"]["theFromLabelValue"]))
 #    b.dbProxy.addContribution((self.iCN[0]["theImpliedCharacteristic"]["theName"],self.iCN[0]["theImpliedCharacteristicName"]["theToLabel"],self.iCN[0]["theImpliedCharacteristic"]["theToLabelContribution"],self.iCN[0]["theImpliedCharacteristic"]["theToLabelValue"]))
 
+    p.setIntention(self.iCN[0]["theImpliedCharacteristic"]["theIntentionName"])
+    p.setIntentionType(self.iCN[0]["theImpliedCharacteristic"]["theIntentionType"])
+    o = b.dbProxy.impliedCharacteristic(self.iCN[0]["thePersonaName"],self.iCN[0]["theFromCode"],self.iCN[0]["theToCode"],self.iCN[0]["theRshipType"])
+    self.assertEqual(self.iCN[0]["theImpliedCharacteristic"]["theName"], o[0])
+    self.assertEqual(self.iCN[0]["theImpliedCharacteristic"]["theQualifier"], o[1])
+    self.assertEqual(self.iCN[0]["theImpliedCharacteristic"]["theType"], o[2])
+
+    b.dbProxy.updateImpliedCharacteristic(p)
     o = b.dbProxy.impliedCharacteristic(self.iCN[0]["thePersonaName"],self.iCN[0]["theFromCode"],self.iCN[0]["theToCode"],self.iCN[0]["theRshipType"])
     self.assertEqual(self.iCN[0]["theImpliedCharacteristic"]["theName"], o[0])
     self.assertEqual(self.iCN[0]["theImpliedCharacteristic"]["theQualifier"], o[1])

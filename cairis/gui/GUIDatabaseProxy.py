@@ -147,3 +147,27 @@ class GUIDatabaseProxy(MySQLDatabaseProxy):
       tChar = cairis.core.ObjectFactory.build(tcId,parameters)
       tChars[tName + '/' + tcDesc] = tChar
     return tChars
+
+  def getImpliedProcesses(self,constraintId = -1):
+    ipRows = self.responseList('call getImpliedProcesses(:const)',{'const':constraintId},'MySQL error getting implied processes')
+    ips = {}
+    for ipId,ipName,ipDesc,pName,ipSpec in ipRows:
+      ipNet = self.impliedProcessNetwork(ipName)
+      chs = self.impliedProcessChannels(ipName)
+      parameters = ImpliedProcessParameters(ipName,ipDesc,pName,ipNet,ipSpec,chs)
+      ip = ObjectFactory.build(ipId,parameters)
+      ips[ipName] = ip
+    return ips
+
+  def updateImpliedProcess(self,parameters):
+    ipId = parameters.id()
+    ipName = parameters.name()
+    ipDesc = parameters.description()
+    pName = parameters.persona()
+    cNet = parameters.network()
+    ipSpec = parameters.specification()
+    chs = parameters.channels()
+    session = self.updateDatabase('call deleteImpliedProcessComponents(:id)',{'id':ipId},'MySQL error deleting implied process components',None,False)
+    self.updateDatabase('call updateImpliedProcess(:id,:name,:desc,:proc,:spec)',{'id':ipId,'name':ipName,'desc':ipDesc.encode('utf-8'),'proc':pName,'spec':ipSpec.encode('utf-8')},'MySQL error updating implied process',session)
+    self.addImpliedProcessNetwork(ipId,pName,cNet)
+    self.addImpliedProcessChannels(ipId,chs)
