@@ -2133,8 +2133,7 @@ class MySQLDatabaseProxy:
     self.deleteObject(objtId,value_type)
     
   def addValueType(self,parameters):
-    if (parameters.id() != -1):
-      valueTypeId = parameters.id()
+    if (parameters.id() != -1): valueTypeId = parameters.id()
     else:
       valueTypeId = self.newId()
     vtName = parameters.name()
@@ -2814,8 +2813,7 @@ class MySQLDatabaseProxy:
     for idx,exc in list((step.theExceptions).items()):
       self.addUseCaseStepException(ucId,envName,stepNo,exc[0],exc[1],exc[2],exc[3],exc[4])
 
-  def addUseCaseStepTag(self,ucId,envName,stepNo,tag):
-    self.updateDatabase('call addUseCaseStepTag(:id,:env,:step,:tag)',{'id':ucId,'env':envName,'step':stepNo,'tag':tag},'MySQL error adding use case step tag')
+  def addUseCaseStepTag(self,ucId,envName,stepNo,tag): self.updateDatabase('call addUseCaseStepTag(:id,:env,:step,:tag)',{'id':ucId,'env':envName,'step':stepNo,'tag':tag},'MySQL error adding use case step tag')
 
   def addUseCaseStepException(self,ucId,envName,stepNo,exName,dimType,dimName,catName,exDesc):
     self.updateDatabase('call addUseCaseStepException(:uc,:env,:step,:ex,:dType,:dName,:cName,:desc)',{'uc':ucId,'env':envName,'step':stepNo,'ex':exName,'dType':dimType,'dName':dimName,'cName':catName,'desc':exDesc},'MySQL error adding use case step exception')
@@ -2906,11 +2904,9 @@ class MySQLDatabaseProxy:
     for g,desc,dim in grounds:
       self.addTaskCharacteristicReference(tcId,g,'grounds',desc.encode('utf-8'),dim)
 
-    for w,desc,dim in warrant:
-      self.addTaskCharacteristicReference(tcId,w,'warrant',desc.encode('utf-8'),dim)
+    for w,desc,dim in warrant:  self.addTaskCharacteristicReference(tcId,w,'warrant',desc.encode('utf-8'),dim)
 
-    for r,desc,dim in rebuttal:
-      self.addTaskCharacteristicReference(tcId,r,'rebuttal',desc.encode('utf-8'),dim)
+    for r, desc, dim in rebuttal:  self.addTaskCharacteristicReference(tcId,r,'rebuttal',desc.encode('utf-8'),dim)
 
 
   def addTaskCharacteristicReference(self,tcId,refName,crTypeName,refDesc,dimName):
@@ -3081,8 +3077,7 @@ class MySQLDatabaseProxy:
 
   def hasReferenceSynopsis(self,refName): return self.responseList('select hasReferenceSynopsis(:ref)',{'ref':refName},'MySQL error finding reference synopsis')[0]
 
-  def addUseCaseSynopsis(self,cs):
-    self.updateDatabase('call addUseCaseSynopsis(:cName,:csName,:csDim,:atName,:actName)',{'cName':cs.reference(),'csName':cs.synopsis(),'csDim':cs.dimension(),'atName':cs.actorType(),'actName':cs.actor()},'MySQL error adding use case synopsis')
+  def addUseCaseSynopsis(self,cs): self.updateDatabase('call addUseCaseSynopsis(:cName,:csName,:csDim,:atName,:actName)',{'cName':cs.reference(),'csName':cs.synopsis(),'csDim':cs.dimension(),'atName':cs.actorType(),'actName':cs.actor()},'MySQL error adding use case synopsis')
 
   def getUseCaseContributions(self,ucName):
     rows = self.responseList('call getUseCaseContributions(:useCase)',{'useCase':ucName},'MySQL error getting use case contributions')
@@ -3526,25 +3521,19 @@ class MySQLDatabaseProxy:
 
 
   def situateComponentView(self,cvName,envName,acDict,assetParametersList,targets,obstructParameters):
-    try:
-      for assetParameters in assetParametersList:
-        assetName = assetParameters.name()
-        assetId = self.existingObject(assetName,'asset')
-        if assetId == -1:
-          assetId = self.addAsset(assetParameters)
-        for cName in acDict[assetName]:
-          self.situateComponentAsset(cName,assetId)
-      self.situateComponentViewRequirements(cvName)
-      self.situateComponentViewGoals(cvName,envName)
-      self.situateComponentViewGoalAssociations(cvName,envName)
-      for target in targets: self.addComponentViewTargets(target,envName)
-      for op in obstructParameters: self.addGoalAssociation(op)
+    for assetParameters in assetParametersList:
+      assetName = assetParameters.name()
+      assetId = self.existingObject(assetName,'asset')
+      if assetId == -1:
+        assetId = self.addAsset(assetParameters)
+      for cName in acDict[assetName]:
+        self.situateComponentAsset(cName,assetId)
+    self.situateComponentViewRequirements(cvName)
+    self.situateComponentViewGoals(cvName,envName)
+    self.situateComponentViewGoalAssociations(cvName,envName)
+    for target in targets: self.addComponentViewTargets(target,envName)
+    for op in obstructParameters: self.addGoalAssociation(op)
  
-    except _mysql_exceptions.DatabaseError as e:
-      id,msg = e
-      exceptionText = 'MySQL error situating ' + cvName + ' component view in ' + envName + ' (id:' + str(id) + ',message:' + msg + ')'
-      raise DatabaseProxyException(exceptionText) 
-
   def situateComponentAsset(self,componentName,assetId):
     self.updateDatabase('call situateComponentAsset(:ass,:comp)',{'ass':assetId,'comp':componentName},'MySQL error situating component asset')
 
@@ -4062,9 +4051,6 @@ class MySQLDatabaseProxy:
   def addImpliedProcessChannel(self,ipId,channelName,dataType):
     self.updateDatabase('call addImpliedProcessChannel(:id,:chan,:type)',{'id':ipId,'chan':channelName,'type':dataType},'MySQL error adding implied process channel')
 
-  def impliedProcessChannels(self,procName):
-    return self.responseList('call impliedProcessChannels(:proc)',{'proc':procName},'MySQL error getting implied process channels')
-
   def getQuotations(self):
     return self.responseList('call getQuotations()',{},'MySQL error getting quotations')
 
@@ -4076,22 +4062,10 @@ class MySQLDatabaseProxy:
     if atName == 'internal_document':
       self.updateDatabase('call deleteDocumentCode(:aName,:code,:sIdx,:eIdx)',{'aName':aName,'code':codeName,'sIdx':startIdx,'eIdx':endIdx},'MySQL error deleting quotation')
 
-  def artifactText(self,artType,artName):
-    if artType == 'internal_document':
-      return self.responseList('call artifactText(:type,:name)',{'type':artType,'name':artName},'MySQL error getting artifact text')[0]
-    else: 
-      return ''
-
   def impliedCharacteristic(self,pName,fromCode,toCode,rtName):
     row = self.responseList('call impliedCharacteristic(:pName,:fCode,:tCode,:rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName},'MySQL error getting implied characteristic')[0]
     if (len(row) == 0): raise NoImpliedCharacteristic(pName,fromCode,toCode,rtName)
     return row
-
-  def impliedCharacteristicElements(self,pName,fromCode,toCode,rtName,isLhs):
-    return self.responseList('call impliedCharacteristicElements(:pName,:fCode,:tCode,:rt,:lhs)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName,'lhs':isLhs},'MySQL error getting implied characteristic elements')
-
-  def initialiseImpliedCharacteristic(self,pName,fromCode,toCode,rtName):
-    self.updateDatabase('call initialiseImpliedCharacteristic(pName,fCode,tCode,rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName},'MySQL error initialising implied characteristic')
 
   def addImpliedCharacteristic(self,parameters):
     pName = parameters.persona()

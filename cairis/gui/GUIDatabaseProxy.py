@@ -208,4 +208,18 @@ class GUIDatabaseProxy(MySQLDatabaseProxy):
     obsCat = envProps.category()
     self.updateDatabase('call updateEnvironmentObstacle(:id,:env,:name,:orig,:def,:cat)',{'id':o.id(),'env':envName,'name':o.name(),'orig':o.originator(),'def':obsDef,'cat':obsCat},'MySQL error updating environment obstacle')
 
+  def impliedProcessChannels(self,procName):
+    return self.responseList('call impliedProcessChannels(:proc)',{'proc':procName},'MySQL error getting implied process channels')
+
+  def artifactText(self,artType,artName):
+    if artType == 'internal_document':
+      return self.responseList('call artifactText(:type,:name)',{'type':artType,'name':artName},'MySQL error getting artifact text')[0]
+    else: 
+      return ''
+
+  def impliedCharacteristicElements(self,pName,fromCode,toCode,rtName,isLhs):
+    return self.responseList('call impliedCharacteristicElements(:pName,:fCode,:tCode,:rt,:lhs)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName,'lhs':isLhs},'MySQL error getting implied characteristic elements')
+
+  def initialiseImpliedCharacteristic(self,pName,fromCode,toCode,rtName):
+    self.updateDatabase('call initialiseImpliedCharacteristic(pName,fCode,tCode,rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName},'MySQL error initialising implied characteristic')
 
