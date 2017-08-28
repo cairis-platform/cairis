@@ -46,7 +46,6 @@ from .VulnerabilityParameters import VulnerabilityParameters
 from .RiskParameters import RiskParameters
 from .ResponseParameters import ResponseParameters
 from .RoleParameters import RoleParameters
-from .ResponsibilityParameters import ResponsibilityParameters
 from . import ObjectFactory
 from .TaskParameters import TaskParameters
 from .MisuseCaseParameters import MisuseCaseParameters

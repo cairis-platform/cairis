@@ -48,7 +48,6 @@ from .DocumentReference import DocumentReference
 from .ConceptReference import ConceptReference
 from .PersonaCharacteristic import PersonaCharacteristic
 from .TaskCharacteristic import TaskCharacteristic
-from .Responsibility import Responsibility
 from .ClassAssociation import ClassAssociation
 from .GoalAssociation import GoalAssociation
 from .Dependency import Dependency
@@ -74,7 +73,6 @@ from .MisuseCaseParameters import MisuseCaseParameters
 from .DotTraceParameters import DotTraceParameters
 from .EnvironmentParameters import EnvironmentParameters
 from .RoleParameters import RoleParameters
-from .ResponsibilityParameters import ResponsibilityParameters
 from .AttackerEnvironmentProperties import AttackerEnvironmentProperties
 from .AssetEnvironmentProperties import AssetEnvironmentProperties
 from .ThreatEnvironmentProperties import ThreatEnvironmentProperties
@@ -156,7 +154,6 @@ def build(objtId,p):
     return Environment(objtId,p.name(),p.shortCode(),p.description(),p.environments(),p.duplicateProperty(),p.overridingEnvironment(),p.tensions())
   if (p.__class__.__name__ == 'RoleParameters'):
     return Role(objtId,p.name(),p.type(),p.shortCode(),p.description(),p.environmentProperties())
-  if (p.__class__.__name__ == 'ResponsibilityParameters'): return Responsibility(objtId,p.name())
   if (p.__class__.__name__ == 'ExternalDocumentParameters'):
     return ExternalDocument(objtId,p.name(),p.version(),p.date(),p.authors(),p.description())
   if (p.__class__.__name__ == 'InternalDocumentParameters'):
