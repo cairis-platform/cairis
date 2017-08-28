@@ -26,11 +26,3 @@ class Target:
   def name(self): return self.theName
   def effectiveness(self): return self.theEffectiveness
   def rationale(self): return self.theRationale
- 
-  def __getitem__(self,idx): 
-    if (idx == 0): 
-      return self.theName
-    elif (idx == 1):
-      return self.theEffectiveness
-    else:
-      return self.theRationale
