@@ -139,21 +139,16 @@ def dInitialise():
   except TypeError as ex:
     b.logger.error(str(ex.message))
 
-  if cfgDict['log_level'].lower() == 'debug':
-    b.logLevel = logging.DEBUG
-  elif cfgDict['log_level'].lower() == 'none':
-    b.logLevel = logging.FATAL
-  elif cfgDict['log_level'].lower() == 'info':
-    b.logLevel = logging.INFO
-  elif cfgDict['log_level'].lower() == 'error':
-    b.logLevel = logging.ERROR
+  if cfgDict['log_level'].lower() == 'debug': b.logLevel = logging.DEBUG
+  elif cfgDict['log_level'].lower() == 'none': b.logLevel = logging.FATAL
+  elif cfgDict['log_level'].lower() == 'info': b.logLevel = logging.INFO
+  elif cfgDict['log_level'].lower() == 'error': b.logLevel = logging.ERROR
   else:
     b.logLevel = logging.WARNING
 
   b.staticDir = cfgDict['web_static_dir']
   b.templateDir = os.path.join(b.cairisRoot,'templates')
-  if not hasattr(b, 'uploadDir'):
-    b.uploadDir = os.path.join(b.cairisRoot,'cairis/static')
+  if not hasattr(b, 'uploadDir'): b.uploadDir = os.path.join(b.cairisRoot,'cairis/static')
 
   paths = {
     'root': b.cairisRoot,
