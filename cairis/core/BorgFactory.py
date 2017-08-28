@@ -169,7 +169,7 @@ def dInitialise():
       b.logger.error(err_msg)
       exit(6)
 
-#  testUploadDirectory(b.uploadDir,b.logger)
+  testUploadDirectory(b.uploadDir,b.logger)
 
   b.model_generator = GraphicsGenerator('svg')
 
