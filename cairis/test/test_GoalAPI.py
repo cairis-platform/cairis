@@ -62,6 +62,23 @@ class GoalAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Goals found: %d', method, len(goals))
     goal = list(goals.values())[0]
     self.logger.info('[%s] First goal: %s [%d]\n', method, goal['theName'], goal['theId'])
+
+  def test_get_all_coloured(self):
+    method = 'test_get_all_coloured'
+    rv = self.app.get('/api/goals?session_id=test&coloured=1')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    goals = jsonpickle.decode(responseData)
+    self.assertIsNotNone(goals, 'No results after deserialization')
+    self.assertIsInstance(goals, dict, 'The result is not a dictionary as expected')
+    self.assertGreater(len(goals), 0, 'No goals in the dictionary')
+    self.logger.info('[%s] Goals found: %d', method, len(goals))
+    goal = list(goals.values())[0]
+    self.logger.info('[%s] First goal: %s [%d]\n', method, goal['theName'], goal['theId'])
+
+
     
   def test_get_by_name(self):
     method = 'test_get_by_name'
