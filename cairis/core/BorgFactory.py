@@ -22,7 +22,6 @@ import os
 import logging
 from cairis.tools.GraphicsGenerator import GraphicsGenerator
 from .MySQLDatabaseProxy import MySQLDatabaseProxy
-from .TemplateGenerator import TemplateGenerator
 from .ARM import ARMException
 
 def testUploadDirectory(uploadDir,logger):
@@ -172,7 +171,6 @@ def dInitialise():
 
 #  testUploadDirectory(b.uploadDir,b.logger)
 
-  b.template_generator = TemplateGenerator()
   b.model_generator = GraphicsGenerator('svg')
 
   b.settings = dict()
