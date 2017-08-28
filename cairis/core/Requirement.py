@@ -70,16 +70,11 @@ class Requirement:
   def dirty(self): return len(self.dirtyAttrs)
 
   def update(self,attr,val):
-    if (attr == 'label'):
-      self.theLabel = val
-    elif (attr == 'name'):
-      self.theName = val
-    elif (attr == 'description'):
-      self.theDescription = val
-    elif (attr == 'priority'):
-      self.thePriority = val
-    else:
-      self.attrs[attr] = str(val)
+    if (attr == 'label'): self.theLabel = val
+    elif (attr == 'name'): self.theName = val
+    elif (attr == 'description'): self.theDescription = val
+    elif (attr == 'priority'): self.thePriority = val
+    else: self.attrs[attr] = str(val)
     self.dirtyAttrs.add(attr)
 
   def incrementVersion(self):
@@ -88,5 +83,4 @@ class Requirement:
   def id(self):
     return self.theId
 
-  def asString(self):
-    return 'id:' + str(self.theId) + ', label:' + str(self.theLabel) + ', name: ' + self.theName + ', description:' + self.theDescription + ', priority:' + str(self.thePriority) + ', rationale:' + self.attrs['rationale'] + ', fit criterion:' + self.attrs['fitCriterion'] + ', originator:' + self.attrs['originator'] + ',type:' + self.attrs['type'] + ',version:' + str(self.theVersion)
+  def asString(self):  return 'id:' + str(self.theId) + ', label:' + str(self.theLabel) + ', name: ' + self.theName + ', description:' + self.theDescription + ', priority:' + str(self.thePriority) + ', rationale:' + self.attrs['rationale'] + ', fit criterion:' + self.attrs['fitCriterion'] + ', originator:' + self.attrs['originator'] + ',type:' + self.attrs['type'] + ',version:' + str(self.theVersion)
