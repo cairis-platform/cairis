@@ -2,7 +2,10 @@
   "environments" : [
       {"theName" : "Day",
        "theShortCode" : "DAY",
-       "theDescription" : "Day-time plant operations"}
+       "theDescription" : "Day-time plant operations"},
+      {"theName" : "Night",
+       "theShortCode" : "NIGHT",
+       "theDescription" : "Night-time plant operations"}
   ],
   "roles" : [
       {"theName" : "Vendor",
@@ -76,6 +79,15 @@
             ["Technology","Medium"],
 	    ["Software","Low"]
 	   ]
+         },
+         {"theName" : "Night",
+          "theRoles" : ["Vendor"],
+          "theMotives" : ["Revenge"],
+	  "theCapabilities" : 
+	   [
+            ["Technology","Medium"],
+	    ["Software","Low"]
+	   ]
          }
        ]
     }
@@ -103,7 +115,21 @@
 	     [0,0,3,0,0,0,0,0]
 	    ]
 	   ]
-        }
+        },
+        {"theName" : "Night",
+         "theLikelihood" : "Improbable",
+         "theAssets" : ["STCS Application"],
+	 "theAttackers" : ["Victor"],
+	 "theProperties" : 
+	  [
+           ["integrity",
+	    [0,2,0,0,0,0,0,0]
+	   ],
+	   ["availability",
+	    [0,0,3,0,0,0,0,0]
+	   ]
+	  ]
+	}
      ]
    }
   ],
@@ -120,13 +146,9 @@
          [0,3,0,0,0,0,0,0], 
          ["None","","None","None","None","None","None","None"]
         ],
-        ["Day",
+        ["Night",
          [0,0,2,0,0,0,0,0], 
          ["None","None","","None","None","None","None","None"]
-        ],
-        ["Day",
-         [0,0,0,1,0,0,0,0], 
-         ["None","None","None","","None","None","None","None"]
         ]
       ]
     }
