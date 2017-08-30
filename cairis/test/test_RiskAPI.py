@@ -65,6 +65,16 @@ class RiskAPITests(CairisDaemonTestCase):
         risk = list(risks.values())[0]
         self.logger.info('[%s] First risk: %s [%d]\n', method, risk['theName'], risk['theId'])
 
+    def test_get_risk_model_elements(self):
+        method = 'test_get_risk_model_elements'
+        rv = self.app.get('/api/risks/model/environment/Psychosis/names?session_id=test')
+        if (sys.version_info > (3,)):
+          responseData = rv.data.decode('utf-8')
+        else:
+          responseData = rv.data
+        elements = jsonpickle.decode(responseData)
+        self.assertEqual(len(elements),68)
+
     def test_get_by_name(self):
         method = 'test_get_by_name'
         url = '/api/risks/name/%s?session_id=test' % quote(self.existing_risk_name)

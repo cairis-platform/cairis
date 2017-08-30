@@ -2400,23 +2400,6 @@ class MySQLDatabaseProxy:
 
   def isCountermeasurePatternGenerated(self,cmId): return self.responseList('select isCountermeasurePatternGenerated(:cm)',{'cm':cmId},'MySQL error checking patterns associated with countermeasure')[0]
 
-
-  def exposedCountermeasures(self,parameters):
-    objtId = parameters.id()
-    expCMs = []
-    for cProperties in parameters.environmentProperties():
-      envName = cProperties.name()
-      expAssets = cProperties.assets()
-      for expAsset in expAssets:
-        expCMs += self.exposedCountermeasure(envName,expAsset)
-    return expCMs
-
-  def exposedCountermeasure(self,envName,assetName):
-    rows = self.responseList('call exposedCountermeasure(:env,:ass)',{'env':envName,'ass':assetName},'MySQL error checking countermeasures exposed by ' + assetName)
-    expCMs = []
-    for r1, r2 in rows:
-      expCMs.append((envName,r1,assetName,r2))
-    return expCMs
   
   def updateCountermeasuresEffectiveness(self,objtId,dimName,expCMs):
     for envName,cmName,assetName,cmEffectiveness in expCMs:
@@ -2460,15 +2443,6 @@ class MySQLDatabaseProxy:
 
   def getDocumentReferences(self,constraintId = -1):
     drRows = self.responseList('call getDocumentReferences(:id)',{'id':constraintId},'MySQL error getting document references')
-    dRefs = {}
-    for refId,refName,docName,cName,excerpt in drRows:
-      parameters = DocumentReferenceParameters(refName,docName,cName,excerpt)
-      dRef = ObjectFactory.build(refId,parameters)
-      dRefs[refName] = dRef
-    return dRefs
-
-  def getExternalDocumentReferences(self,docName = ''):
-    drRows = self.responseList('call getDocumentReferencesByExternalDocument(:doc)',{'doc':docName},'MySQL error getting document references for external document ' + docName)
     dRefs = {}
     for refId,refName,docName,cName,excerpt in drRows:
       parameters = DocumentReferenceParameters(refName,docName,cName,excerpt)
@@ -2611,19 +2585,6 @@ class MySQLDatabaseProxy:
     else:
       self.updateDatabase('call updatePersonaCharacteristic(:pc,:pers,:qual,:bVar,:cDesc)',{'pc':pcId,'pers':personaName,'qual':qualName,'bVar':bVar,'cDesc':cDesc.encode('utf-8')},'MySQL error updating persona characteristic',session)
     self.addPersonaCharacteristicReferences(pcId,grounds,warrant,rebuttal)
-
-  def getPersonaBehaviouralCharacteristics(self,pName,bvName):
-    rows = self.responseList('call personaBehaviouralCharacteristics(:pName,:bvName)',{'pName':pName,'bvName':bvName},'MySQL error getting persona behavioural characteristics')
-    pChars = {}
-    pcSumm = []
-    for pcId, qualName, pcDesc in rows:
-      pcSumm.append((pcId,pName,bvName,qualName,pcDesc))
-    for pcId,pName,bvName,qualName,pcDesc in pcSumm:
-      grounds,warrant,backing,rebuttal = self.characteristicReferences(pcId,'characteristicReferences')
-      parameters = PersonaCharacteristicParameters(pName,qualName,bvName,pcDesc,grounds,warrant,backing,rebuttal)
-      pChar = ObjectFactory.build(pcId,parameters)
-      pChars[pName + '/' + bvName + '/' + pcDesc] = pChar
-    return pChars
 
   def getConceptReferences(self,constraintId = -1):
     crRows = self.responseList('call getConceptReferences(:id)',{'id':constraintId},'MySQL error getting concept references')

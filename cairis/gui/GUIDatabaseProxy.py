@@ -223,3 +223,41 @@ class GUIDatabaseProxy(MySQLDatabaseProxy):
   def initialiseImpliedCharacteristic(self,pName,fromCode,toCode,rtName):
     self.updateDatabase('call initialiseImpliedCharacteristic(pName,fCode,tCode,rt)',{'pName':pName,'fCode':fromCode,'tCode':toCode,'rt':rtName},'MySQL error initialising implied characteristic')
 
+  def exposedCountermeasures(self,parameters):
+    objtId = parameters.id()
+    expCMs = []
+    for cProperties in parameters.environmentProperties():
+      envName = cProperties.name()
+      expAssets = cProperties.assets()
+      for expAsset in expAssets:
+        expCMs += self.exposedCountermeasure(envName,expAsset)
+    return expCMs
+
+  def exposedCountermeasure(self,envName,assetName):
+    rows = self.responseList('call exposedCountermeasure(:env,:ass)',{'env':envName,'ass':assetName},'MySQL error checking countermeasures exposed by ' + assetName)
+    expCMs = []
+    for r1, r2 in rows:
+      expCMs.append((envName,r1,assetName,r2))
+    return expCMs
+
+  def getExternalDocumentReferences(self,docName = ''):
+    drRows = self.responseList('call getDocumentReferencesByExternalDocument(:doc)',{'doc':docName},'MySQL error getting document references for external document ' + docName)
+    dRefs = {}
+    for refId,refName,docName,cName,excerpt in drRows:
+      parameters = DocumentReferenceParameters(refName,docName,cName,excerpt)
+      dRef = ObjectFactory.build(refId,parameters)
+      dRefs[refName] = dRef
+    return dRefs
+
+  def getPersonaBehaviouralCharacteristics(self,pName,bvName):
+    rows = self.responseList('call personaBehaviouralCharacteristics(:pName,:bvName)',{'pName':pName,'bvName':bvName},'MySQL error getting persona behavioural characteristics')
+    pChars = {}
+    pcSumm = []
+    for pcId, qualName, pcDesc in rows:
+      pcSumm.append((pcId,pName,bvName,qualName,pcDesc))
+    for pcId,pName,bvName,qualName,pcDesc in pcSumm:
+      grounds,warrant,backing,rebuttal = self.characteristicReferences(pcId,'characteristicReferences')
+      parameters = PersonaCharacteristicParameters(pName,qualName,bvName,pcDesc,grounds,warrant,backing,rebuttal)
+      pChar = ObjectFactory.build(pcId,parameters)
+      pChars[pName + '/' + bvName + '/' + pcDesc] = pChar
+    return pChars
