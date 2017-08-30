@@ -43,32 +43,26 @@ class ThreatTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/threats.json')
     d = json.load(f)
     f.close()
-    self.ienvs = d['environments']
-    self.iep = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
-    self.iep1 = EnvironmentParameters(self.ienvs[1]["theName"],self.ienvs[1]["theShortCode"],self.ienvs[1]["theDescription"])
+    ienvs = d['environments']
+    iep = EnvironmentParameters(ienvs[0]["theName"],ienvs[0]["theShortCode"],ienvs[0]["theDescription"])
+    iep1 = EnvironmentParameters(ienvs[1]["theName"],ienvs[1]["theShortCode"],ienvs[1]["theDescription"])
     b = Borg()
-    b.dbProxy.addEnvironment(self.iep)
-    b.dbProxy.addEnvironment(self.iep1)
-    self.oenvs = b.dbProxy.getEnvironments()
-    self.iRoles = d['roles']
-    self.irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
-    b.dbProxy.addRole(self.irp)
-    self.oRoles = b.dbProxy.getRoles()
-
-    self.iAttackers = d['attackers']
-    self.iatkeps = [AttackerEnvironmentProperties(self.iAttackers[0]["theEnvironmentProperties"][0]["theName"],self.iAttackers[0]["theEnvironmentProperties"][0]["theRoles"],self.iAttackers[0]["theEnvironmentProperties"][0]["theMotives"],self.iAttackers[0]["theEnvironmentProperties"][0]["theCapabilities"]),AttackerEnvironmentProperties(self.iAttackers[0]["theEnvironmentProperties"][1]["theName"],self.iAttackers[0]["theEnvironmentProperties"][1]["theRoles"],self.iAttackers[0]["theEnvironmentProperties"][1]["theMotives"],self.iAttackers[0]["theEnvironmentProperties"][1]["theCapabilities"])]
-    self.iatk = AttackerParameters(self.iAttackers[0]["theName"], self.iAttackers[0]["theDescription"], self.iAttackers[0]["theImage"],[],self.iatkeps)
-    b.dbProxy.addAttacker(self.iatk)
-    self.oAttackers = b.dbProxy.getAttackers()
-    self.iVtypes = d['valuetypes']
-    self.ivt = ValueTypeParameters(self.iVtypes[0]["theName"], self.iVtypes[0]["theDescription"], self.iVtypes[0]["theType"])
-    b.dbProxy.addValueType(self.ivt)
-    self.ovt = b.dbProxy.getValueTypes('threat_type')
-    self.iassets = d['assets']
-    self.iaeps = [AssetEnvironmentProperties(self.iassets[0]["theEnvironmentProperties"][0][0],self.iassets[0]["theEnvironmentProperties"][0][1],self.iassets[0]["theEnvironmentProperties"][0][2]),AssetEnvironmentProperties(self.iassets[0]["theEnvironmentProperties"][1][0],self.iassets[0]["theEnvironmentProperties"][1][1],self.iassets[0]["theEnvironmentProperties"][1][2])]
-    self.iap = AssetParameters(self.iassets[0]["theName"],self.iassets[0]["theShortCode"],self.iassets[0]["theDescription"],self.iassets[0]["theSignificance"],self.iassets[0]["theType"],"0","N/A",[],[],self.iaeps)
-    b.dbProxy.addAsset(self.iap)
-    self.oap = b.dbProxy.getAssets()
+    b.dbProxy.addEnvironment(iep)
+    b.dbProxy.addEnvironment(iep1)
+    iRoles = d['roles']
+    irp = RoleParameters(iRoles[0]["theName"], iRoles[0]["theType"], iRoles[0]["theShortCode"], iRoles[0]["theDescription"],[])
+    b.dbProxy.addRole(irp)
+    iAttackers = d['attackers']
+    iatkeps = [AttackerEnvironmentProperties(iAttackers[0]["theEnvironmentProperties"][0]["theName"],iAttackers[0]["theEnvironmentProperties"][0]["theRoles"],iAttackers[0]["theEnvironmentProperties"][0]["theMotives"],iAttackers[0]["theEnvironmentProperties"][0]["theCapabilities"]),AttackerEnvironmentProperties(iAttackers[0]["theEnvironmentProperties"][1]["theName"],iAttackers[0]["theEnvironmentProperties"][1]["theRoles"],iAttackers[0]["theEnvironmentProperties"][1]["theMotives"],iAttackers[0]["theEnvironmentProperties"][1]["theCapabilities"])]
+    iatk = AttackerParameters(iAttackers[0]["theName"], iAttackers[0]["theDescription"], iAttackers[0]["theImage"],[],iatkeps)
+    b.dbProxy.addAttacker(iatk)
+    iVtypes = d['valuetypes']
+    ivt = ValueTypeParameters(iVtypes[0]["theName"], iVtypes[0]["theDescription"], iVtypes[0]["theType"])
+    b.dbProxy.addValueType(ivt)
+    iassets = d['assets']
+    iaeps = [AssetEnvironmentProperties(iassets[0]["theEnvironmentProperties"][0][0],iassets[0]["theEnvironmentProperties"][0][1],iassets[0]["theEnvironmentProperties"][0][2]),AssetEnvironmentProperties(iassets[0]["theEnvironmentProperties"][1][0],iassets[0]["theEnvironmentProperties"][1][1],iassets[0]["theEnvironmentProperties"][1][2])]
+    iap = AssetParameters(iassets[0]["theName"],iassets[0]["theShortCode"],iassets[0]["theDescription"],iassets[0]["theSignificance"],iassets[0]["theType"],"0","N/A",[],[],iaeps)
+    b.dbProxy.addAsset(iap)
     self.iThreats = d['threats']
 
   def testThreat(self):
