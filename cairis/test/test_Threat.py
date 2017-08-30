@@ -31,6 +31,7 @@ from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 from cairis.core.ThreatParameters import ThreatParameters
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from cairis.core.ARM import DatabaseProxyException
+from numpy import array
 
 __author__ = 'Shamal Faily'
 
@@ -83,6 +84,8 @@ class ThreatTest(unittest.TestCase):
     self.assertEqual(iteps[0].likelihood(),o.likelihood('','Maximise','None'))
     self.assertEqual(iteps[0].likelihood(),o.likelihood('','Override','Day'))
     self.assertEqual(iteps[0].assets(), oteps[0].assets())
+    self.assertEqual(iteps[0].assets(), o.assets('Day',''))
+    self.assertEqual(iteps[0].assets(), list(o.assets('','Maximise')))
     self.assertEqual(iteps[0].attackers(), oteps[0].attackers())
     self.assertEqual(iteps[0].attackers(), o.attackers('Day',''))
     self.assertEqual(iteps[0].attackers(), list(o.attackers('','Maximise')))
@@ -94,6 +97,10 @@ class ThreatTest(unittest.TestCase):
     self.assertEqual(str(iteps[0].rationale()[5]), oteps[0].rationale()[5])
     self.assertEqual(str(iteps[0].rationale()[6]), oteps[0].rationale()[6])
     self.assertEqual(str(iteps[0].rationale()[7]), oteps[0].rationale()[7])
+    self.assertEqual(array([0,2,0,0,0,0,0,0]).tolist(),o.securityProperties('','Maximise','').tolist())
+    self.assertEqual(array([0,2,0,0,0,0,0,0]).tolist(),o.securityProperties('','Override','Day').tolist())
+    self.assertEqual([['Integrity','Medium']],o.propertyList('','Maximise',''))
+    self.assertEqual([['Integrity','Medium']],o.propertyList('','Override','Day'))
 
     envName = self.iThreats[0]["theEnvironmentProperties"][0]["theName"]
     self.assertEqual(iteps[0].likelihood(), o.likelihood(envName,'',envName))

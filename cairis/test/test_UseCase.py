@@ -43,13 +43,9 @@ class UseCaseTest(unittest.TestCase):
     iep1 = EnvironmentParameters(self.iEnvironments[0]["theName"],self.iEnvironments[0]["theShortCode"],self.iEnvironments[0]["theDescription"])
     b = Borg()
     b.dbProxy.addEnvironment(iep1)
-    self.theEnvironments = b.dbProxy.getEnvironments()
-
-    self.iRoles = d['roles']
-    irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
+    iRoles = d['roles']
+    irp = RoleParameters(iRoles[0]["theName"], iRoles[0]["theType"], iRoles[0]["theShortCode"], iRoles[0]["theDescription"],[])
     b.dbProxy.addRole(irp)
-    self.theRoles = b.dbProxy.getRoles()
-
     self.iUseCases = d['use_cases']
     
 
