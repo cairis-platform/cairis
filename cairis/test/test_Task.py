@@ -41,28 +41,25 @@ class TaskTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/tasks.json')
     d = json.load(f)
     f.close()
-    self.iEnvironments = d['environments']
-    iep1 = EnvironmentParameters(self.iEnvironments[0]["theName"],self.iEnvironments[0]["theShortCode"],self.iEnvironments[0]["theDescription"])
+    iEnvironments = d['environments']
+    iep1 = EnvironmentParameters(iEnvironments[0]["theName"],iEnvironments[0]["theShortCode"],iEnvironments[0]["theDescription"])
+    iep2 = EnvironmentParameters(iEnvironments[1]["theName"],iEnvironments[1]["theShortCode"],iEnvironments[1]["theDescription"])
     b = Borg()
     b.dbProxy.addEnvironment(iep1)
-    self.theEnvironments = b.dbProxy.getEnvironments()
+    b.dbProxy.addEnvironment(iep2)
 
-    self.iRoles = d['roles']
-    irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
+    iRoles = d['roles']
+    irp = RoleParameters(iRoles[0]["theName"], iRoles[0]["theType"], iRoles[0]["theShortCode"], iRoles[0]["theDescription"],[])
     b.dbProxy.addRole(irp)
-    self.theRoles = b.dbProxy.getRoles()
-    self.iPersonas = d['personas']
-    ipp = PersonaParameters(self.iPersonas[0]["theName"],self.iPersonas[0]["theActivities"],self.iPersonas[0]["theAttitudes"],self.iPersonas[0]["theAptitudes"],self.iPersonas[0]["theMotivations"],self.iPersonas[0]["theSkills"],self.iPersonas[0]["theIntrinsic"],self.iPersonas[0]["theContextual"],"","0",self.iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(self.iPersonas[0]["theEnvironmentProperties"][0]["theName"],(self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
+    iPersonas = d['personas']
+    ipp = PersonaParameters(iPersonas[0]["theName"],iPersonas[0]["theActivities"],iPersonas[0]["theAttitudes"],iPersonas[0]["theAptitudes"],iPersonas[0]["theMotivations"],iPersonas[0]["theSkills"],iPersonas[0]["theIntrinsic"],iPersonas[0]["theContextual"],"","0",iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(iPersonas[0]["theEnvironmentProperties"][0]["theName"],(iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],iPersonas[0]["theEnvironmentProperties"][0]["theRole"]),PersonaEnvironmentProperties(iPersonas[0]["theEnvironmentProperties"][1]["theName"],(iPersonas[0]["theEnvironmentProperties"][1]["theDirectFlag"] == "True"),iPersonas[0]["theEnvironmentProperties"][1]["theNarrative"],iPersonas[0]["theEnvironmentProperties"][1]["theRole"])],[])
     b.dbProxy.addPersona(ipp) 
-    self.thePersonas = b.dbProxy.getPersonas()
     
-    self.iAssets = d['assets']
-    iaeps = [AssetEnvironmentProperties(self.iAssets[0]["theEnvironmentProperties"][0][0],self.iAssets[0]["theEnvironmentProperties"][0][1],self.iAssets[0]["theEnvironmentProperties"][0][2])]
-    iap = AssetParameters(self.iAssets[0]["theName"],self.iAssets[0]["theShortCode"],self.iAssets[0]["theDescription"],self.iAssets[0]["theSignificance"],self.iAssets[0]["theType"],"0","N/A",[],[],iaeps)
+    iAssets = d['assets']
+    iaeps = [AssetEnvironmentProperties(iAssets[0]["theEnvironmentProperties"][0][0],iAssets[0]["theEnvironmentProperties"][0][1],iAssets[0]["theEnvironmentProperties"][0][2]),AssetEnvironmentProperties(iAssets[0]["theEnvironmentProperties"][1][0],iAssets[0]["theEnvironmentProperties"][1][1],iAssets[0]["theEnvironmentProperties"][1][2])]
+    iap = AssetParameters(iAssets[0]["theName"],iAssets[0]["theShortCode"],iAssets[0]["theDescription"],iAssets[0]["theSignificance"],iAssets[0]["theType"],"0","N/A",[],[],iaeps)
     b = Borg()
     b.dbProxy.addAsset(iap)
-    self.theAssets = b.dbProxy.getAssets()
-
     self.iTasks = d['tasks']
 
   def testTask(self):
@@ -121,20 +118,24 @@ class TaskTest(unittest.TestCase):
     self.assertEqual(iTask.assumption(),oTask.assumption())
     self.assertEqual(iTask.author(),oTask.author())
     self.assertEqual(iTask.environmentProperties()[0].personas(),oTask.environmentProperties()[0].personas())
+    self.assertEqual(iTask.environmentProperties()[0].personas(),oTask.personas('Psychosis','',''))
+    self.assertEqual(iTask.environmentProperties()[0].personas()[0][1],list(oTask.personas('Psychosis','Maximise',''))[0][1])
     self.assertEqual(iTask.environmentProperties()[0].assets(),oTask.environmentProperties()[0].assets())
+    self.assertEqual(iTask.environmentProperties()[0].assets(),oTask.assets('Psychosis',''))
+    self.assertEqual(iTask.environmentProperties()[0].assets(),list(oTask.assets('','Maximise')))
     self.assertEqual(iTask.environmentProperties()[0].narrative(),oTask.environmentProperties()[0].narrative())
+    self.assertEqual(iTask.environmentProperties()[0].narrative(),oTask.narrative('Psychosis',''))
+    self.assertEqual(iTask.environmentProperties()[0].narrative(),oTask.narrative('','Maximise'))
     self.assertEqual(iTask.environmentProperties()[0].consequences(),oTask.environmentProperties()[0].consequences())
     self.assertEqual(iTask.environmentProperties()[0].benefits(),oTask.environmentProperties()[0].benefits())
     self.assertEqual(iTask.environmentProperties()[0].dependencies(),oTask.environmentProperties()[0].dependencies())
+    self.assertEqual(iTask.environmentProperties()[0].dependencies(),oTask.dependencies('Psychosis',''))
+    self.assertEqual(iTask.environmentProperties()[0].dependencies(),oTask.dependencies('','Maximise'))
 
     b.dbProxy.deleteTask(oTask.id())
 
   def tearDown(self):
     b = Borg()
-    b.dbProxy.deleteAsset(self.theAssets[self.iAssets[0]["theName"]].id())
-    b.dbProxy.deletePersona(self.thePersonas[self.iPersonas[0]["theName"]].id())
-    b.dbProxy.deleteRole(self.theRoles[self.iRoles[0]["theName"]].id())
-    b.dbProxy.deleteEnvironment(self.theEnvironments[self.iEnvironments[0]["theName"]].id())
     b.dbProxy.close()
     call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
 

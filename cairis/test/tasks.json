@@ -8,7 +8,10 @@
   "environments" : [
    {"theName" : "Psychosis",
     "theShortCode" : "PSY",
-    "theDescription" : "The exemplar aims to integrate large existing datasets of serial MRI scans and behaviour data coupled to the NeuroGrid image analysis service into a Grid-based database, test image normalisation techniques, and develop a general ontology for a psychosis databas, for use in multi-centre studies. The exemplar tests capabilities of NeuroGrid to deal with restrospective data, assimilate material into databases, and use of the toolkit for normalisation and analysis."}
+    "theDescription" : "The exemplar aims to integrate large existing datasets of serial MRI scans and behaviour data coupled to the NeuroGrid image analysis service into a Grid-based database, test image normalisation techniques, and develop a general ontology for a psychosis databas, for use in multi-centre studies. The exemplar tests capabilities of NeuroGrid to deal with restrospective data, assimilate material into databases, and use of the toolkit for normalisation and analysis."},
+   {"theName" : "Stroke",
+    "theShortCode" : "STRK",
+    "theDescription" : "Stroke exemplar description"}
   ],
   "personas" : [
     {"theName" : "Claire",
@@ -22,6 +25,11 @@
      "thePersonaType" : "Primary",
      "theEnvironmentProperties" : [
        {"theName" : "Psychosis",
+        "theDirectFlag" : "False",
+        "theRole" : ["Researcher"],
+        "theNarrative" : "Nothing stipulated"
+       },
+       {"theName" : "Stroke",
         "theDirectFlag" : "False",
         "theRole" : ["Researcher"],
         "theNarrative" : "Nothing stipulated"
@@ -39,6 +47,10 @@
      "theEnvironmentProperties" :
       [
         ["Psychosis",
+         [3,0,2,0,0,0,0,0],
+         ["Researchers very worried about the disclosure of partially anonymised patient data.","None","Availability of NeuroGrid is quite important, but prepared to sacrifice this if doing so safeguards clinical data.","None","None","None","None","None"]
+        ],
+        ["Stroke",
          [3,0,2,0,0,0,0,0],
          ["Researchers very worried about the disclosure of partially anonymised patient data.","None","Availability of NeuroGrid is quite important, but prepared to sacrifice this if doing so safeguards clinical data.","None","None","None","None","None"]
         ]
@@ -66,8 +78,22 @@
           "theNarrative" : "Claire wants to analyse a data set, in relation to other data sets on NeuroGrid.  She anonymises her data to the extent that as much personalised data is removed as possible, but not to the extent that her analysis software will fail.  She then uploads this data, tagging this as available only to members of her exemplar.",
           "theConsequences" : "None",
           "theBenefits" : "None"
-         }]
-        }
-      
+         },
+         {"theName" : "Stroke",
+          "theDependencies" : "Claire's workstation is properly set-up to access the NeuroGrid portal.  Claire has permission to upload data",
+          "theTaskPersonas" : [
+            {"thePersona" : "Claire",
+             "theDuration" : "Medium",
+             "theFrequency" : "Medium",
+             "theDemands" : "Low",
+             "theGoalConflict" : "Medium"}
+          ],
+          "theTaskAssets" : ["Clinical Data"],
+          "theNarrative" : "Claire wants to analyse a data set, in relation to other data sets on NeuroGrid.  She anonymises her data to the extent that as much personalised data is removed as possible, but not to the extent that her analysis software will fail.  She then uploads this data, tagging this as available only to members of her exemplar.",
+          "theConsequences" : "None",
+          "theBenefits" : "None"
+         }
+       ]
+     }
   ]
 }
