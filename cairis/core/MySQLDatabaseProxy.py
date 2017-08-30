@@ -1767,8 +1767,8 @@ class MySQLDatabaseProxy:
   def riskObstacleModel(self,riskName,envName):
     rows = self.responseList('call riskObstacleTree(:risk,:env,0)',{'risk':riskName,'env':envName},'MySQL error getting risk obstacle model')
     associations = {}
-    for associationId,envName,goalDim,goalName,aType,subGoalName,subGoalDimName,alternativeId,rationale in rows:
-      parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
+    for associationId,envName,goalDim,goalName,aType,subGoalName,subGoalDim,alternativeId,rationale in rows:
+      parameters = GoalAssociationParameters(envName,goalName,goalDim,aType,subGoalName,subGoalDim,alternativeId,rationale)
       association = ObjectFactory.build(associationId,parameters)
       asLabel = envName + '/' + goalName + '/' + subGoalName + '/' + aType
       associations[asLabel] = association
