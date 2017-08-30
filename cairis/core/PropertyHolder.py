@@ -37,34 +37,6 @@ class PropertyHolder:
 
   def properties(self): return self.theSecurityProperties
 
-  def propertyStrings(self):
-    setProperties = []
-    for idx,p in enumerate(self.theSecurityProperties):
-      if (p > 0): setProperties.append(idx)
-
-    properties = ''
-    for idx,pr in enumerate(setProperties):
-      if (pr == C_IDX):
-        properties += 'C=' + self.confidentialityPropertyChar() 
-      elif (pr == I_IDX):
-        properties += 'I=' + self.integrityPropertyChar() 
-      elif (pr == AV_IDX):
-        properties += 'Av=' + self.availabilityPropertyChar() 
-      elif (pr == AC_IDX):
-        properties += 'Ac=' + self.accountabilityPropertyChar() 
-      elif (pr == AN_IDX):
-        properties += 'An=' + self.anonymityPropertyChar() 
-      elif (pr == PAN_IDX):
-        properties += 'Pan=' + self.pseudonymityPropertyChar() 
-      elif (pr == UNL_IDX):
-        properties += 'Unl=' + self.unlinkabilityPropertyChar() 
-      else:
-        properties += 'Uno=' + self.unobservabilityPropertyChar() 
-
-      if (idx != (len(setProperties) - 1)):
-        properties += ','
-    return properties
-
   def propertyList(self):
     setProperties = []
     for idx,p in enumerate(self.theSecurityProperties):
@@ -80,21 +52,11 @@ class PropertyHolder:
         properties.append(['Availability',self.availabilityPropertyString()])
       elif (pr == AC_IDX):
         properties.append(['Accountability',self.accountabilityPropertyString()])
-      elif (pr == AN_IDX):
-        properties.append(['Anonymity',self.anonymityPropertyString()])
-      elif (pr == PAN_IDX):
-        properties.append(['Pseudonymity',self.pseudonymityPropertyString()])
-      elif (pr == UNL_IDX):
-        properties.append(['Unlinkability',self.unlinkabilityPropertyString()])
-      else:
-        properties.append(['Unobservability',self.unobservabilityPropertyString()])
+      elif (pr == AN_IDX): properties.append(['Anonymity',self.anonymityPropertyString()])
+      elif (pr == PAN_IDX): properties.append(['Pseudonymity',self.pseudonymityPropertyString()])
+      elif (pr == UNL_IDX):  properties.append(['Unlinkability',self.unlinkabilityPropertyString()])
+      else: properties.append(['Unobservability',self.unobservabilityPropertyString()])
     return properties
-
-  def propertyChar(self,pValue):
-    if (pValue == NONE_ID) : return ''
-    elif (pValue == LOW_ID): return 'L'
-    elif (pValue == MED_ID): return 'M'
-    elif (pValue == HIGH_ID): return 'H'
 
   def propertyString(self,pValue):
     if (pValue == NONE_ID): return 'None'
