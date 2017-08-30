@@ -261,3 +261,19 @@ class GUIDatabaseProxy(MySQLDatabaseProxy):
       pChar = ObjectFactory.build(pcId,parameters)
       pChars[pName + '/' + bvName + '/' + pcDesc] = pChar
     return pChars
+
+  def personaImpactRationale(self,cvName,personaName,envName):
+    rows = self.responseList('call personaImpactRationale(:cv,:pers,:env)',{'cv':cvName,'pers':personaName,'env':envName},'MySQL error getting persona impact rationale')
+    piRationale = {}
+    for taskName, durLabel, freqLabel, pdLabel, gcLabel in rows:
+      piRationale[taskName] = [durLabel,freqLabel,pdLabel,gcLabel]
+    for taskName in piRationale:
+      ucDict = {}
+      taskUseCases = self.taskUseCases(taskName)
+      for ucName in taskUseCases:
+        ucComs = self.usecaseComponents(ucName) 
+        ucDict[ucName] = []
+        for componentName in ucComs:
+          ucDict[ucName].append(componentName)
+      piRationale[taskName].append(ucDict) 
+    return piRationale

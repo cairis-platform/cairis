@@ -59,6 +59,7 @@ class ModelExportTests(unittest.TestCase):
 
   def testExportRedmineGoals(self):
     b = Borg()
+    b.dbProxy.relabelGoals('Complete')
     b.dbProxy.redmineGoals('Complete')
 
   def testExportRedmineRequirements(self):
