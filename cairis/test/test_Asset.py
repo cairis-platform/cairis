@@ -89,7 +89,9 @@ class AssetTest(unittest.TestCase):
     self.assertEqual(str(iaeps[0].properties()[5]), str(oap.securityProperties(envName,'',envName)[5]))
     self.assertEqual(str(iaeps[0].properties()[6]), str(oap.securityProperties(envName,'',envName)[6]))
     self.assertEqual(str(iaeps[0].properties()[7]), str(oap.securityProperties(envName,'',envName)[7]))
-
+    self.assertEqual([['Confidentiality','High'],['Availability','Medium']],oap.propertyList('Psychosis','',''))
+    self.assertEqual([['Confidentiality','High'],['Availability','Medium']],oap.propertyList('','Maximise',''))
+    self.assertEqual([['Confidentiality','High'],['Availability','Medium']],oap.propertyList('','Override','Psychosis'))
     oap.theShortCode = 'TESTCODE'
     oap.theAssetPropertyDictionary['Psychosis'].theSecurityProperties[0] = 1;
 
