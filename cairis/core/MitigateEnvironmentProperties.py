@@ -30,3 +30,4 @@ class MitigateEnvironmentProperties(EnvironmentProperties):
   def type(self): return self.theType
   def detectionPoint(self): return self.theDetectionPoint
   def detectionMechanisms(self): return self.theDetectionMechanisms
+  def description(self): return ''
