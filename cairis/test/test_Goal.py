@@ -40,18 +40,14 @@ class GoalTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/goals.json')
     d = json.load(f)
     f.close()
-    self.ienvs = d['environments']
-    self.iep1 = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
+    ienvs = d['environments']
+    iep1 = EnvironmentParameters(ienvs[0]["theName"],ienvs[0]["theShortCode"],ienvs[0]["theDescription"])
     b = Borg()
-    b.dbProxy.addEnvironment(self.iep1)
-    self.oenvs = b.dbProxy.getEnvironments()
-
-    self.iassets = d['assets']
-    self.iaeps1 = [AssetEnvironmentProperties(self.iassets[0]["theEnvironmentProperties"][0][0],self.iassets[0]["theEnvironmentProperties"][0][1],self.iassets[0]["theEnvironmentProperties"][0][2])]
-    self.iap1 = AssetParameters(self.iassets[0]["theName"],self.iassets[0]["theShortCode"],self.iassets[0]["theDescription"],self.iassets[0]["theSignificance"],self.iassets[0]["theType"],"0","N/A",[],[],self.iaeps1)
-    b.dbProxy.addAsset(self.iap1)
-    self.oap = b.dbProxy.getAssets()
-
+    b.dbProxy.addEnvironment(iep1)
+    iassets = d['assets']
+    iaeps1 = [AssetEnvironmentProperties(iassets[0]["theEnvironmentProperties"][0][0],iassets[0]["theEnvironmentProperties"][0][1],iassets[0]["theEnvironmentProperties"][0][2])]
+    iap1 = AssetParameters(iassets[0]["theName"],iassets[0]["theShortCode"],iassets[0]["theDescription"],iassets[0]["theSignificance"],iassets[0]["theType"],"0","N/A",[],[],iaeps1)
+    b.dbProxy.addAsset(iap1)
     self.iGoals = d['goals']
 
   def testGoal(self):
@@ -145,9 +141,6 @@ class GoalTest(unittest.TestCase):
   
   def tearDown(self):
     b = Borg()
-    
-    b.dbProxy.deleteAsset(self.oap[self.iap1.name()].id())
-    b.dbProxy.deleteEnvironment(self.oenvs[self.iep1.name()].id())
     b.dbProxy.close()
     call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
 

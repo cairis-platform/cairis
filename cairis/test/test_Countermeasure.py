@@ -26,9 +26,6 @@ from cairis.core.EnvironmentParameters import EnvironmentParameters
 from cairis.core.RoleParameters import RoleParameters
 from cairis.core.PersonaParameters import PersonaParameters
 from cairis.core.PersonaEnvironmentProperties import PersonaEnvironmentProperties
-from cairis.core.ExternalDocumentParameters import ExternalDocumentParameters
-from cairis.core.DocumentReferenceParameters import DocumentReferenceParameters
-from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicParameters
 from cairis.core.AttackerParameters import AttackerParameters
 from cairis.core.AttackerEnvironmentProperties import AttackerEnvironmentProperties
 from cairis.core.ValueTypeParameters import ValueTypeParameters
@@ -62,97 +59,69 @@ class CountermeasureTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/countermeasures.json')
     d = json.load(f)
     f.close()
-    self.ienvs = d['environments']
-    self.iep1 = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
+    ienvs = d['environments']
+    iep1 = EnvironmentParameters(ienvs[0]["theName"],ienvs[0]["theShortCode"],ienvs[0]["theDescription"])
     b = Borg()
-    b.dbProxy.addEnvironment(self.iep1)
-    self.oenvs = b.dbProxy.getEnvironments()
-    self.iRoles = d['roles']
-    self.irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
-    b.dbProxy.addRole(self.irp)
-    self.oRoles = b.dbProxy.getRoles()
-    self.iPersonas = d['personas']
-    self.ipp = PersonaParameters(self.iPersonas[0]["theName"],self.iPersonas[0]["theActivities"],self.iPersonas[0]["theAttitudes"],self.iPersonas[0]["theAptitudes"],self.iPersonas[0]["theMotivations"],self.iPersonas[0]["theSkills"],self.iPersonas[0]["theIntrinsic"],self.iPersonas[0]["theContextual"],"","0",self.iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(self.iPersonas[0]["theEnvironmentProperties"][0]["theName"],(self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
-    b.dbProxy.addPersona(self.ipp)
-    self.opp = b.dbProxy.getPersonas()
-    self.iExternalDocuments = d['external_documents']
-    self.iec1 = ExternalDocumentParameters(self.iExternalDocuments[0]["theName"],self.iExternalDocuments[0]["theVersion"],self.iExternalDocuments[0]["thePublicationDate"],self.iExternalDocuments[0]["theAuthors"],self.iExternalDocuments[0]["theDescription"])
-    self.iec2 = ExternalDocumentParameters(self.iExternalDocuments[1]["theName"],self.iExternalDocuments[1]["theVersion"],self.iExternalDocuments[1]["thePublicationDate"],self.iExternalDocuments[1]["theAuthors"],self.iExternalDocuments[1]["theDescription"])
-    b.dbProxy.addExternalDocument(self.iec1)
-    b.dbProxy.addExternalDocument(self.iec2)
-    self.oecs = b.dbProxy.getExternalDocuments()
-    self.iDocumentReferences = d['document_references']
-    self.idr1 = DocumentReferenceParameters(self.iDocumentReferences[0]["theName"],self.iDocumentReferences[0]["theDocName"],self.iDocumentReferences[0]["theContributor"],self.iDocumentReferences[0]["theExcerpt"])
-    self.idr2 = DocumentReferenceParameters(self.iDocumentReferences[1]["theName"],self.iDocumentReferences[1]["theDocName"],self.iDocumentReferences[1]["theContributor"],self.iDocumentReferences[1]["theExcerpt"])
-    b.dbProxy.addDocumentReference(self.idr1)
-    b.dbProxy.addDocumentReference(self.idr2)
-    self.odrs = b.dbProxy.getDocumentReferences()
-    self.iPersonaCharacteristics = d['persona_characteristics']
-    self.ipc1 = PersonaCharacteristicParameters(self.iPersonaCharacteristics[0]["thePersonaName"],self.iPersonaCharacteristics[0]["theModQual"],self.iPersonaCharacteristics[0]["theVariable"],self.iPersonaCharacteristics[0]["theCharacteristic"],[(self.iPersonaCharacteristics[0]["ground"],'','document')],[(self.iPersonaCharacteristics[0]["warrant"],'','document')],[],[])
-    b.dbProxy.addPersonaCharacteristic(self.ipc1)
-    self.opcs = b.dbProxy.getPersonaCharacteristics()
-    self.iAttackers = d['attackers']
-    self.iatkeps = [AttackerEnvironmentProperties(self.iAttackers[0]["theEnvironmentProperties"][0]["theName"],self.iAttackers[0]["theEnvironmentProperties"][0]["theRoles"],self.iAttackers[0]["theEnvironmentProperties"][0]["theMotives"],self.iAttackers[0]["theEnvironmentProperties"][0]["theCapabilities"])]
-    self.iatk = AttackerParameters(self.iAttackers[0]["theName"], self.iAttackers[0]["theDescription"], self.iAttackers[0]["theImage"],[],self.iatkeps)
-    b.dbProxy.addAttacker(self.iatk)
-    self.oAttackers = b.dbProxy.getAttackers()
-    self.iVtypes = d['valuetypes']
-    self.ivt1 = ValueTypeParameters(self.iVtypes[0]["theName"], self.iVtypes[0]["theDescription"], self.iVtypes[0]["theType"])
-    self.ivt2 = ValueTypeParameters(self.iVtypes[1]["theName"], self.iVtypes[1]["theDescription"], self.iVtypes[1]["theType"])
-    b.dbProxy.addValueType(self.ivt1)
-    b.dbProxy.addValueType(self.ivt2)
-    self.ovtt = b.dbProxy.getValueTypes('threat_type')
-    self.ovtv = b.dbProxy.getValueTypes('vulnerability_type')
-    self.iassets = d['assets']
-    self.iaeps1 = [AssetEnvironmentProperties(self.iassets[0]["theEnvironmentProperties"][0][0],self.iassets[0]["theEnvironmentProperties"][0][1],self.iassets[0]["theEnvironmentProperties"][0][2])]
-    self.iaeps2 = [AssetEnvironmentProperties(self.iassets[1]["theEnvironmentProperties"][0][0],self.iassets[1]["theEnvironmentProperties"][0][1],self.iassets[1]["theEnvironmentProperties"][0][2])]
-    self.iaeps3 = [AssetEnvironmentProperties(self.iassets[2]["theEnvironmentProperties"][0][0],self.iassets[2]["theEnvironmentProperties"][0][1],self.iassets[2]["theEnvironmentProperties"][0][2])]
-    self.iap1 = AssetParameters(self.iassets[0]["theName"],self.iassets[0]["theShortCode"],self.iassets[0]["theDescription"],self.iassets[0]["theSignificance"],self.iassets[0]["theType"],"0","N/A",[],[],self.iaeps1)
-    self.iap2 = AssetParameters(self.iassets[1]["theName"],self.iassets[1]["theShortCode"],self.iassets[1]["theDescription"],self.iassets[1]["theSignificance"],self.iassets[1]["theType"],"0","N/A",[],[],self.iaeps2)
-    self.iap3 = AssetParameters(self.iassets[2]["theName"],self.iassets[2]["theShortCode"],self.iassets[2]["theDescription"],self.iassets[2]["theSignificance"],self.iassets[2]["theType"],"0","N/A",[],[],self.iaeps3)
-    b.dbProxy.addAsset(self.iap1)
-    b.dbProxy.addAsset(self.iap2)
-    b.dbProxy.addAsset(self.iap3)
-    self.oap = b.dbProxy.getAssets()
-    self.iThreats = d['threats']
-    self.iteps = [ThreatEnvironmentProperties(self.iThreats[0]["theEnvironmentProperties"][0]["theName"],self.iThreats[0]["theEnvironmentProperties"][0]["theLikelihood"],self.iThreats[0]["theEnvironmentProperties"][0]["theAssets"],self.iThreats[0]["theEnvironmentProperties"][0]["theAttackers"],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"][0][1],self.iThreats[0]["theEnvironmentProperties"][0]["theProperties"][0][1])]
-    self.itps = ThreatParameters(self.iThreats[0]["theName"],self.iThreats[0]["theType"],self.iThreats[0]["theMethod"],[],self.iteps)
-    b.dbProxy.addThreat(self.itps)
-    self.otps = b.dbProxy.getThreats()
-    self.iVuln = d['vulnerabilities']
-    self.iveps = [VulnerabilityEnvironmentProperties(self.iVuln[0]["theEnvironmentProperties"][0]["theName"],self.iVuln[0]["theEnvironmentProperties"][0]["theSeverity"],self.iVuln[0]["theEnvironmentProperties"][0]["theAssets"])]
-    self.ivp = VulnerabilityParameters(self.iVuln[0]["theName"],self.iVuln[0]["theDescription"],self.iVuln[0]["theType"], [], self.iveps)
-    b.dbProxy.addVulnerability(self.ivp)
-    self.ovp = b.dbProxy.getVulnerabilities()
-    self.imc = d['misuseCase']
-    self.iRisks = d['risks']
-
-    imcep = [MisuseCaseEnvironmentProperties(self.imc[0]["theEnvironmentProperties"][0]["theName"],self.imc[0]["theEnvironmentProperties"][0]["theDescription"])]
-    imcp = MisuseCase(int(0), self.imc[0]["theName"], imcep,self.imc[0]["theRisk"])
-    irp = RiskParameters(self.iRisks[0]["theName"],self.iRisks[0]["threatName"],self.iRisks[0]["vulName"], imcp,[])
+    b.dbProxy.addEnvironment(iep1)
+    iRoles = d['roles']
+    irp = RoleParameters(iRoles[0]["theName"], iRoles[0]["theType"], iRoles[0]["theShortCode"], iRoles[0]["theDescription"],[])
+    b.dbProxy.addRole(irp)
+    iPersonas = d['personas']
+    ipp = PersonaParameters(iPersonas[0]["theName"],iPersonas[0]["theActivities"],iPersonas[0]["theAttitudes"],iPersonas[0]["theAptitudes"],iPersonas[0]["theMotivations"],iPersonas[0]["theSkills"],iPersonas[0]["theIntrinsic"],iPersonas[0]["theContextual"],"","0",iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(iPersonas[0]["theEnvironmentProperties"][0]["theName"],(iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
+    b.dbProxy.addPersona(ipp)
+    iAttackers = d['attackers']
+    iatkeps = [AttackerEnvironmentProperties(iAttackers[0]["theEnvironmentProperties"][0]["theName"],iAttackers[0]["theEnvironmentProperties"][0]["theRoles"],iAttackers[0]["theEnvironmentProperties"][0]["theMotives"],iAttackers[0]["theEnvironmentProperties"][0]["theCapabilities"])]
+    iatk = AttackerParameters(iAttackers[0]["theName"], iAttackers[0]["theDescription"], iAttackers[0]["theImage"],[],iatkeps)
+    b.dbProxy.addAttacker(iatk)
+    iVtypes = d['valuetypes']
+    ivt1 = ValueTypeParameters(iVtypes[0]["theName"], iVtypes[0]["theDescription"], iVtypes[0]["theType"])
+    ivt2 = ValueTypeParameters(iVtypes[1]["theName"], iVtypes[1]["theDescription"], iVtypes[1]["theType"])
+    b.dbProxy.addValueType(ivt1)
+    b.dbProxy.addValueType(ivt2)
+    iassets = d['assets']
+    iaeps1 = [AssetEnvironmentProperties(iassets[0]["theEnvironmentProperties"][0][0],iassets[0]["theEnvironmentProperties"][0][1],iassets[0]["theEnvironmentProperties"][0][2])]
+    iaeps2 = [AssetEnvironmentProperties(iassets[1]["theEnvironmentProperties"][0][0],iassets[1]["theEnvironmentProperties"][0][1],iassets[1]["theEnvironmentProperties"][0][2])]
+    iaeps3 = [AssetEnvironmentProperties(iassets[2]["theEnvironmentProperties"][0][0],iassets[2]["theEnvironmentProperties"][0][1],iassets[2]["theEnvironmentProperties"][0][2])]
+    iap1 = AssetParameters(iassets[0]["theName"],iassets[0]["theShortCode"],iassets[0]["theDescription"],iassets[0]["theSignificance"],iassets[0]["theType"],"0","N/A",[],[],iaeps1)
+    iap2 = AssetParameters(iassets[1]["theName"],iassets[1]["theShortCode"],iassets[1]["theDescription"],iassets[1]["theSignificance"],iassets[1]["theType"],"0","N/A",[],[],iaeps2)
+    iap3 = AssetParameters(iassets[2]["theName"],iassets[2]["theShortCode"],iassets[2]["theDescription"],iassets[2]["theSignificance"],iassets[2]["theType"],"0","N/A",[],[],iaeps3)
+    b.dbProxy.addAsset(iap1)
+    b.dbProxy.addAsset(iap2)
+    b.dbProxy.addAsset(iap3)
+    iThreats = d['threats']
+    iteps = [ThreatEnvironmentProperties(iThreats[0]["theEnvironmentProperties"][0]["theName"],iThreats[0]["theEnvironmentProperties"][0]["theLikelihood"],iThreats[0]["theEnvironmentProperties"][0]["theAssets"],iThreats[0]["theEnvironmentProperties"][0]["theAttackers"],iThreats[0]["theEnvironmentProperties"][0]["theProperties"][0][1],iThreats[0]["theEnvironmentProperties"][0]["theProperties"][0][1])]
+    itps = ThreatParameters(iThreats[0]["theName"],iThreats[0]["theType"],iThreats[0]["theMethod"],[],iteps)
+    b.dbProxy.addThreat(itps)
+    iVuln = d['vulnerabilities']
+    iveps = [VulnerabilityEnvironmentProperties(iVuln[0]["theEnvironmentProperties"][0]["theName"],iVuln[0]["theEnvironmentProperties"][0]["theSeverity"],iVuln[0]["theEnvironmentProperties"][0]["theAssets"])]
+    ivp = VulnerabilityParameters(iVuln[0]["theName"],iVuln[0]["theDescription"],iVuln[0]["theType"], [], iveps)
+    b.dbProxy.addVulnerability(ivp)
+    imc = d['misuseCase']
+    iRisks = d['risks']
+    imcep = [MisuseCaseEnvironmentProperties(imc[0]["theEnvironmentProperties"][0]["theName"],imc[0]["theEnvironmentProperties"][0]["theDescription"])]
+    imcp = MisuseCase(int(0), imc[0]["theName"], imcep,imc[0]["theRisk"])
+    irp = RiskParameters(iRisks[0]["theName"],iRisks[0]["threatName"],iRisks[0]["vulName"], imcp,[])
     b.dbProxy.addRisk(irp)
-    oRisks = b.dbProxy.getRisks()
-    self.r = oRisks[self.iRisks[0]["theName"]]
-    self.iResponses = d['responses']
-    iar1Name = self.iResponses[0]["theType"] + " " + self.iResponses[0]["theRisk"] 
-    iaep1 = AcceptEnvironmentProperties(self.iResponses[0]["theEnvironmentProperties"][0],self.iResponses[0]["theEnvironmentProperties"][1],self.iResponses[0]["theEnvironmentProperties"][2])
-    iar1 = ResponseParameters(iar1Name,self.iResponses[0]["theRisk"],[],[iaep1], self.iResponses[0]["theType"])
+    iResponses = d['responses']
+    iar1Name = iResponses[0]["theType"] + " " + iResponses[0]["theRisk"] 
+    iaep1 = AcceptEnvironmentProperties(iResponses[0]["theEnvironmentProperties"][0],iResponses[0]["theEnvironmentProperties"][1],iResponses[0]["theEnvironmentProperties"][2])
+    iar1 = ResponseParameters(iar1Name,iResponses[0]["theRisk"],[],[iaep1], iResponses[0]["theType"])
 
-    iar2Name = self.iResponses[1]["theType"] + " " + self.iResponses[1]["theRisk"] 
-    iaep2 = MitigateEnvironmentProperties(self.iResponses[1]["theEnvironmentProperties"],self.iResponses[1]["theType"])
-    iar2 = ResponseParameters(iar2Name,self.iResponses[1]["theRisk"],[],[iaep2], self.iResponses[1]["theType"])
+    iar2Name = iResponses[1]["theType"] + " " + iResponses[1]["theRisk"] 
+    iaep2 = MitigateEnvironmentProperties(iResponses[1]["theEnvironmentProperties"],iResponses[1]["theType"])
+    iar2 = ResponseParameters(iar2Name,iResponses[1]["theRisk"],[],[iaep2], iResponses[1]["theType"])
 
     b.dbProxy.addResponse(iar1)
     b.dbProxy.addResponse(iar2)
 
-    self.ors = b.dbProxy.getResponses()
-    self.oar1 = self.ors[iar1Name]
-    self.oar2 = self.ors[iar2Name]
+    ors = b.dbProxy.getResponses()
+    oar1 = ors[iar1Name]
+    oar2 = ors[iar2Name]
 
-    rgp = cairis.core.GoalFactory.build(self.oar2)
+    rgp = cairis.core.GoalFactory.build(oar2)
     riskParameters = rgp[0]
     riskGoalId = b.dbProxy.addGoal(riskParameters)
-    b.dbProxy.addTrace('response_goal',self.oar2.id(),riskGoalId)
+    b.dbProxy.addTrace('response_goal',oar2.id(),riskGoalId)
     if (len(rgp) > 1):
       threatParameters = rgp[1]
       vulnerabilityParameters = rgp[2]
@@ -161,30 +130,23 @@ class CountermeasureTest(unittest.TestCase):
     b.dbProxy.relabelGoals(iaep2.name())
 
     oGoals = b.dbProxy.getGoals()
-    self.rg = oGoals['Deter' + self.oar2.risk()]
-    self.vg = oGoals[vulnerabilityParameters.name()]
-    self.tg = oGoals[threatParameters.name()]
+    rg = oGoals['Deter' + oar2.risk()]
+    vg = oGoals[vulnerabilityParameters.name()]
+    tg = oGoals[threatParameters.name()]
 
-    ogops = b.dbProxy.getGoalAssociations()
-    self.ogop1 = ogops[iaep2.name() + '/' + riskParameters.name() + '/' + threatParameters.name() + '/or']
-    self.ogop2 = ogops[iaep2.name() + '/' + riskParameters.name() + '/' + vulnerabilityParameters.name() + '/or']
+    reqId = b.dbProxy.newId()
+    irequirements = d['requirements']
+    ireq = cairis.core.RequirementFactory.build(reqId,irequirements[0]["theLabel"],irequirements[0]["theName"],irequirements[0]["theDescription"],irequirements[0]["thePriority"],irequirements[0]["theRationale"],irequirements[0]["theFitCriterion"],irequirements[0]["theOriginator"],irequirements[0]["theType"],irequirements[0]["theReference"],1)
+    b.dbProxy.addRequirement(ireq,irequirements[0]["theReference"],True)
 
-    self.reqId = b.dbProxy.newId()
-    self.irequirements = d['requirements']
-    self.ireq = cairis.core.RequirementFactory.build(self.reqId,self.irequirements[0]["theLabel"],self.irequirements[0]["theName"],self.irequirements[0]["theDescription"],self.irequirements[0]["thePriority"],self.irequirements[0]["theRationale"],self.irequirements[0]["theFitCriterion"],self.irequirements[0]["theOriginator"],self.irequirements[0]["theType"],self.irequirements[0]["theReference"],1)
-    b.dbProxy.addRequirement(self.ireq,self.irequirements[0]["theReference"],True)
     oreqs = b.dbProxy.getRequirements()
-    self.oreq = oreqs[self.ireq.description()]
+    oreq = oreqs[ireq.description()]
 
-    iga = GoalAssociationParameters(iaep2.name(),self.vg.name(),'goal','and',self.oreq.name(),'requirement',0,'None')
+    iga = GoalAssociationParameters(iaep2.name(),vg.name(),'goal','and',oreq.name(),'requirement',0,'None')
     b.dbProxy.addGoalAssociation(iga)
     ogops = b.dbProxy.getGoalAssociations()
-    self.ogop3 = ogops[iaep2.name() + '/' + self.vg.name() + '/' + self.oreq.name() + '/and']
-
-
+    self.ogop3 = ogops[iaep2.name() + '/' + vg.name() + '/' + oreq.name() + '/and']
     self.iCountermeasures = d['countermeasures']
-
-
 
 
   def testCountermeasure(self):
@@ -213,33 +175,6 @@ class CountermeasureTest(unittest.TestCase):
   
   def tearDown(self):
     b = Borg()
-    
-    b.dbProxy.deleteGoalAssociation(self.ogop3.id(),self.ogop3.goal(),self.ogop3.subGoal())
-    b.dbProxy.deleteRequirement(self.reqId)
-    b.dbProxy.deleteGoalAssociation(self.ogop1.id(),self.ogop1.goal(),self.ogop1.subGoal())
-    b.dbProxy.deleteGoalAssociation(self.ogop2.id(),self.ogop2.goal(),self.ogop2.subGoal())
-    b.dbProxy.deleteTrace('response',self.oar2.name(),'goal',self.rg.name())
-    b.dbProxy.deleteGoal(self.tg.id())
-    b.dbProxy.deleteGoal(self.vg.id())
-    b.dbProxy.deleteGoal(self.rg.id())
-    b.dbProxy.deleteResponse(self.oar2.id())
-    b.dbProxy.deleteResponse(self.oar1.id())
-    b.dbProxy.deleteRisk(self.r.id())
-    b.dbProxy.deleteVulnerability(self.ovp[self.ivp.name()].id())
-    b.dbProxy.deleteThreat(self.otps[self.itps.name()].id())
-    b.dbProxy.deleteAsset(self.oap[self.iap3.name()].id())
-    b.dbProxy.deleteAsset(self.oap[self.iap2.name()].id())
-    b.dbProxy.deleteAsset(self.oap[self.iap1.name()].id())
-    b.dbProxy.deleteVulnerabilityType(0)
-    b.dbProxy.deleteThreatType(0)
-    b.dbProxy.deleteAttacker(self.oAttackers[self.iatk.name()].id())
-    b.dbProxy.deleteDocumentReference(self.odrs[self.idr1.name()].id())
-    b.dbProxy.deleteDocumentReference(self.odrs[self.idr2.name()].id())
-    b.dbProxy.deleteExternalDocument(self.oecs[self.iec1.name()].id())
-    b.dbProxy.deleteExternalDocument(self.oecs[self.iec2.name()].id())
-    b.dbProxy.deletePersona(self.opp[self.ipp.name()].id())
-    b.dbProxy.deleteRole(self.oRoles[self.irp.name()].id())
-    b.dbProxy.deleteEnvironment(self.oenvs[self.iep1.name()].id())
     b.dbProxy.close()
     call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
 

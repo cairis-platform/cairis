@@ -22,11 +22,6 @@ from subprocess import call
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 from cairis.core.EnvironmentParameters import EnvironmentParameters
-from cairis.core.AssetParameters import AssetParameters
-from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
-from cairis.core.GoalParameters import GoalParameters
-from cairis.core.GoalAssociationParameters import GoalAssociationParameters
-from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
 from cairis.core.ObstacleParameters import ObstacleParameters
 from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
 from cairis.core.ARM import DatabaseProxyException
@@ -41,13 +36,10 @@ class ObstacleTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/obstacles.json')
     d = json.load(f)
     f.close()
-    self.ienvs = d['environments']
-    self.iep1 = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
+    ienvs = d['environments']
+    iep1 = EnvironmentParameters(ienvs[0]["theName"],ienvs[0]["theShortCode"],ienvs[0]["theDescription"])
     b = Borg()
-    b.dbProxy.addEnvironment(self.iep1)
-    self.oenvs = b.dbProxy.getEnvironments()
-
-
+    b.dbProxy.addEnvironment(iep1)
     self.iObstacle = d['obstacles']
 
   def testObstacle(self):
@@ -76,8 +68,6 @@ class ObstacleTest(unittest.TestCase):
  
   def tearDown(self):
     b = Borg()
-    
-    b.dbProxy.deleteEnvironment(self.oenvs[self.iep1.name()].id())
     b.dbProxy.close()
     call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
 
