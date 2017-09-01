@@ -58,19 +58,6 @@ class EnvironmentTest(unittest.TestCase):
     self.assertEqual(iep3.shortCode(),oep3.shortCode())
     self.assertEqual(iep3.description(),oep3.description())
 
-    b.dbProxy.deleteEnvironment(oep1.id())
-    b.dbProxy.deleteEnvironment(oep2.id())
-    b.dbProxy.deleteEnvironment(oep3.id())
-  
-  def testCompositeEnvironment(self):
-    iep1 = EnvironmentParameters(self.ienvs[0]["theName"],self.ienvs[0]["theShortCode"],self.ienvs[0]["theDescription"])
-    iep2 = EnvironmentParameters(self.ienvs[1]["theName"],self.ienvs[1]["theShortCode"],self.ienvs[1]["theDescription"])
-    iep3 = EnvironmentParameters(self.ienvs[2]["theName"],self.ienvs[2]["theShortCode"],self.ienvs[2]["theDescription"])
-    b = Borg()
-    b.dbProxy.addEnvironment(iep1)
-    b.dbProxy.addEnvironment(iep2)
-    b.dbProxy.addEnvironment(iep3)
-  
     iep4 = EnvironmentParameters(self.ienvs[3]["Composite_name"],'COMP','Composite test',[iep1.name(),iep2.name(),iep3.name()],self.ienvs[4]["Duplication"])
     b.dbProxy.addEnvironment(iep4)
 
@@ -93,9 +80,7 @@ class EnvironmentTest(unittest.TestCase):
     b.dbProxy.deleteEnvironment(oep3.id())
 
   def tearDown(self):
-    b = Borg()
-    b.dbProxy.close()
-    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
+    pass
 
 if __name__ == '__main__':
   unittest.main()

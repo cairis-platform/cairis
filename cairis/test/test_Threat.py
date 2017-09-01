@@ -119,8 +119,7 @@ class ThreatTest(unittest.TestCase):
     b.dbProxy.deleteThreat(o.id())
   
   def tearDown(self):
-    b = Borg()
-    b.dbProxy.close()
+    pass
 
 if __name__ == '__main__':
   unittest.main()

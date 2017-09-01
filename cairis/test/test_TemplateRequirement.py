@@ -36,21 +36,18 @@ class TemplateRequirementTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/templaterequirements.json')
     d = json.load(f)
     f.close()
-    self.iAccessRights = d['access_rights']
-    iar1 = ValueTypeParameters(self.iAccessRights[0]["theName"], self.iAccessRights[0]["theDescription"], 'access_right','',self.iAccessRights[0]["theValue"],self.iAccessRights[0]["theRationale"])
-    self.iSurfaceTypes = d['surface_types']
-    ist1 = ValueTypeParameters(self.iSurfaceTypes[0]["theName"], self.iSurfaceTypes[0]["theDescription"], 'surface_type','',self.iSurfaceTypes[0]["theValue"],self.iSurfaceTypes[0]["theRationale"])
+    iAccessRights = d['access_rights']
+    iar1 = ValueTypeParameters(iAccessRights[0]["theName"], iAccessRights[0]["theDescription"], 'access_right','',iAccessRights[0]["theValue"],iAccessRights[0]["theRationale"])
+    iSurfaceTypes = d['surface_types']
+    ist1 = ValueTypeParameters(iSurfaceTypes[0]["theName"], iSurfaceTypes[0]["theDescription"], 'surface_type','',iSurfaceTypes[0]["theValue"],iSurfaceTypes[0]["theRationale"])
     b = Borg()
     b.dbProxy.addValueType(iar1)
     b.dbProxy.addValueType(ist1)
-    self.iTemplateAssets = d['template_assets']
+    iTemplateAssets = d['template_assets']
     spValues = [0,0,0,0,0,0,0,0]
     srValues = ['None','None','None','None','None','None','None','None']
-    iTap = TemplateAssetParameters(self.iTemplateAssets[0]["theName"], self.iTemplateAssets[0]["theShortCode"], self.iTemplateAssets[0]["theDescription"], self.iTemplateAssets[0]["theSignificance"],self.iTemplateAssets[0]["theType"],self.iTemplateAssets[0]["theSurfaceType"],self.iTemplateAssets[0]["theAccessRight"],spValues,srValues,[],[])
+    iTap = TemplateAssetParameters(iTemplateAssets[0]["theName"], iTemplateAssets[0]["theShortCode"], iTemplateAssets[0]["theDescription"], iTemplateAssets[0]["theSignificance"],iTemplateAssets[0]["theType"],iTemplateAssets[0]["theSurfaceType"],iTemplateAssets[0]["theAccessRight"],spValues,srValues,[],[])
     b.dbProxy.addTemplateAsset(iTap)
-    oTaps = b.dbProxy.getTemplateAssets()
-    self.oTap = oTaps[self.iTemplateAssets[0]["theName"]]
-
     self.iTemplateReqs = d["template_requirements"]
 
   def testTemplateRequirement(self):
@@ -75,15 +72,10 @@ class TemplateRequirementTest(unittest.TestCase):
     oTar = oTars['Updated name']
     self.assertEqual(oTar.name(),'Updated name')
 
-
     b.dbProxy.deleteTemplateRequirement(oTar.id())
   
   def tearDown(self):
-    b = Borg()
-    b.dbProxy.deleteTemplateAsset(self.oTap.id())
-
-    b.dbProxy.close()
-    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
+    pass
 
 if __name__ == '__main__':
   unittest.main()

@@ -40,30 +40,22 @@ class LocationsTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/locations.json')
     d = json.load(f)
     f.close()
-    self.iEnvironments = d['environments']
-    iep1 = EnvironmentParameters(self.iEnvironments[0]["theName"],self.iEnvironments[0]["theShortCode"],self.iEnvironments[0]["theDescription"])
+    iEnvironments = d['environments']
+    iep1 = EnvironmentParameters(iEnvironments[0]["theName"],iEnvironments[0]["theShortCode"],iEnvironments[0]["theDescription"])
     b = Borg()
     b.dbProxy.addEnvironment(iep1)
-    self.theEnvironments = b.dbProxy.getEnvironments()
 
-    self.iRoles = d['roles']
-    irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
+    iRoles = d['roles']
+    irp = RoleParameters(iRoles[0]["theName"], iRoles[0]["theType"], iRoles[0]["theShortCode"], iRoles[0]["theDescription"],[])
     b.dbProxy.addRole(irp)
-    self.theRoles = b.dbProxy.getRoles()
-    self.iPersonas = d['personas']
-    ipp = PersonaParameters(self.iPersonas[0]["theName"],self.iPersonas[0]["theActivities"],self.iPersonas[0]["theAttitudes"],self.iPersonas[0]["theAptitudes"],self.iPersonas[0]["theMotivations"],self.iPersonas[0]["theSkills"],self.iPersonas[0]["theIntrinsic"],self.iPersonas[0]["theContextual"],"","0",self.iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(self.iPersonas[0]["theEnvironmentProperties"][0]["theName"],(self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],self.iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
+    iPersonas = d['personas']
+    ipp = PersonaParameters(iPersonas[0]["theName"],iPersonas[0]["theActivities"],iPersonas[0]["theAttitudes"],iPersonas[0]["theAptitudes"],iPersonas[0]["theMotivations"],iPersonas[0]["theSkills"],iPersonas[0]["theIntrinsic"],iPersonas[0]["theContextual"],"","0",iPersonas[0]["thePersonaType"],[],[PersonaEnvironmentProperties(iPersonas[0]["theEnvironmentProperties"][0]["theName"],(iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"] == "True"),iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],iPersonas[0]["theEnvironmentProperties"][0]["theRole"])],[])
     b.dbProxy.addPersona(ipp) 
-    thePersonas = b.dbProxy.getPersonas()
-    self.thePersona = thePersonas[self.iPersonas[0]["theName"]]
-
-    self.iassets = d['assets']
-    iaeps = [AssetEnvironmentProperties(self.iassets[0]["theEnvironmentProperties"][0][0],self.iassets[0]["theEnvironmentProperties"][0][1],self.iassets[0]["theEnvironmentProperties"][0][2])]
-    iap = AssetParameters(self.iassets[0]["theName"],self.iassets[0]["theShortCode"],self.iassets[0]["theDescription"],self.iassets[0]["theSignificance"],self.iassets[0]["theType"],"0","N/A",[],[],iaeps)
+    iassets = d['assets']
+    iaeps = [AssetEnvironmentProperties(iassets[0]["theEnvironmentProperties"][0][0],iassets[0]["theEnvironmentProperties"][0][1],iassets[0]["theEnvironmentProperties"][0][2])]
+    iap = AssetParameters(iassets[0]["theName"],iassets[0]["theShortCode"],iassets[0]["theDescription"],iassets[0]["theSignificance"],iassets[0]["theType"],"0","N/A",[],[],iaeps)
     b = Borg()
     b.dbProxy.addAsset(iap)
-
-    oaps = b.dbProxy.getAssets()
-    self.theAsset = oaps[self.iassets[0]["theName"]]
     self.ilocations = d['locations']
 
   def testLocations(self):
@@ -126,13 +118,7 @@ class LocationsTest(unittest.TestCase):
     b.dbProxy.deleteLocations(uLocsId)
 
   def tearDown(self):
-    b = Borg()
-    b.dbProxy.deleteAsset(self.theAsset.id())
-    b.dbProxy.deletePersona(self.thePersona.id())
-    b.dbProxy.deleteRole(self.theRoles[self.iRoles[0]["theName"]].id())
-    b.dbProxy.deleteEnvironment(self.theEnvironments[self.iEnvironments[0]["theName"]].id())
-    b.dbProxy.close()
-    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
+    pass
 
 if __name__ == '__main__':
   unittest.main()

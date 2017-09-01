@@ -40,16 +40,14 @@ class PersonaTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/personas.json')
     d = json.load(f)
     f.close()
-    self.iEnvironments = d['environments']
-    iep1 = EnvironmentParameters(self.iEnvironments[0]["theName"],self.iEnvironments[0]["theShortCode"],self.iEnvironments[0]["theDescription"])
+    iEnvironments = d['environments']
+    iep1 = EnvironmentParameters(iEnvironments[0]["theName"],iEnvironments[0]["theShortCode"],iEnvironments[0]["theDescription"])
     b = Borg()
     b.dbProxy.addEnvironment(iep1)
-    self.theEnvironments = b.dbProxy.getEnvironments()
 
-    self.iRoles = d['roles']
-    irp = RoleParameters(self.iRoles[0]["theName"], self.iRoles[0]["theType"], self.iRoles[0]["theShortCode"], self.iRoles[0]["theDescription"],[])
+    iRoles = d['roles']
+    irp = RoleParameters(iRoles[0]["theName"], iRoles[0]["theType"], iRoles[0]["theShortCode"], iRoles[0]["theDescription"],[])
     b.dbProxy.addRole(irp)
-    self.theRoles = b.dbProxy.getRoles()
     self.iPersonas = d['personas']
     self.iExternalDocuments = d['external_documents']
     self.iDocumentReferences = d['document_references']
@@ -153,24 +151,16 @@ class PersonaTest(unittest.TestCase):
     op2 = theUpdatedPersonas['Changed name']
     self.assertEqual(ipp2.name(),op2.name())
 
-
-
     b.dbProxy.deletePersonaCharacteristic(opc1.id())
-
     b.dbProxy.deleteDocumentReference(odr1.id())
     b.dbProxy.deleteDocumentReference(odr2.id())
     b.dbProxy.deleteDocumentReference(odr3.id())
-
     b.dbProxy.deleteExternalDocument(oec1.id())
     b.dbProxy.deleteExternalDocument(oec2.id())
     b.dbProxy.deletePersona(op.id())
 
   def tearDown(self):
-    b = Borg()
-    b.dbProxy.deleteRole(self.theRoles[self.iRoles[0]["theName"]].id())
-    b.dbProxy.deleteEnvironment(self.theEnvironments[self.iEnvironments[0]["theName"]].id())
-    b.dbProxy.close()
-    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
+    pass
 
 if __name__ == '__main__':
   unittest.main()

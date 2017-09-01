@@ -35,13 +35,13 @@ class TemplateAssetTest(unittest.TestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/templateassets.json')
     d = json.load(f)
     f.close()
-    self.iAccessRights = d['access_rights']
-    iar1 = ValueTypeParameters(self.iAccessRights[0]["theName"], self.iAccessRights[0]["theDescription"], 'access_right','',self.iAccessRights[0]["theValue"],self.iAccessRights[0]["theRationale"])
-    self.iSurfaceTypes = d['surface_type']
-    ist1 = ValueTypeParameters(self.iSurfaceTypes[0]["theName"], self.iSurfaceTypes[0]["theDescription"], 'surface_type','',self.iSurfaceTypes[0]["theValue"],self.iSurfaceTypes[0]["theRationale"])
-    self.iPrivileges = d['privileges']
-    ist1 = ValueTypeParameters(self.iSurfaceTypes[0]["theName"], self.iSurfaceTypes[0]["theDescription"], 'surface_type','',self.iSurfaceTypes[0]["theValue"],self.iSurfaceTypes[0]["theRationale"])
-    ipr1 = ValueTypeParameters(self.iPrivileges[0]["theName"], self.iPrivileges[0]["theDescription"], 'privilege','',self.iPrivileges[0]["theValue"],self.iPrivileges[0]["theRationale"])
+    iAccessRights = d['access_rights']
+    iar1 = ValueTypeParameters(iAccessRights[0]["theName"], iAccessRights[0]["theDescription"], 'access_right','',iAccessRights[0]["theValue"],iAccessRights[0]["theRationale"])
+    iSurfaceTypes = d['surface_type']
+    ist1 = ValueTypeParameters(iSurfaceTypes[0]["theName"], iSurfaceTypes[0]["theDescription"], 'surface_type','',iSurfaceTypes[0]["theValue"],iSurfaceTypes[0]["theRationale"])
+    iPrivileges = d['privileges']
+    ist1 = ValueTypeParameters(iSurfaceTypes[0]["theName"], iSurfaceTypes[0]["theDescription"], 'surface_type','',iSurfaceTypes[0]["theValue"],iSurfaceTypes[0]["theRationale"])
+    ipr1 = ValueTypeParameters(iPrivileges[0]["theName"], iPrivileges[0]["theDescription"], 'privilege','',iPrivileges[0]["theValue"],iPrivileges[0]["theRationale"])
     b = Borg()
     b.dbProxy.addValueType(iar1)
     b.dbProxy.addValueType(ist1)
@@ -67,9 +67,7 @@ class TemplateAssetTest(unittest.TestCase):
     b.dbProxy.deleteTemplateAsset(oTap.id())
   
   def tearDown(self):
-    b = Borg()
-    b.dbProxy.close()
-    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
+    pass
 
 if __name__ == '__main__':
   unittest.main()

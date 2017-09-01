@@ -39,20 +39,17 @@ class RequirementTest(unittest.TestCase):
     d = json.load(f)
     f.close()
     ienvs = d['environments']
-    self.iep1 = EnvironmentParameters(ienvs[0]["theName"],ienvs[0]["theShortCode"],ienvs[0]["theDescription"])
-    self.iep2 = EnvironmentParameters(ienvs[1]["theName"],ienvs[1]["theShortCode"],ienvs[1]["theDescription"])
-    self.iep3 = EnvironmentParameters(ienvs[2]["theName"],ienvs[2]["theShortCode"],ienvs[2]["theDescription"])
+    iep1 = EnvironmentParameters(ienvs[0]["theName"],ienvs[0]["theShortCode"],ienvs[0]["theDescription"])
+    iep2 = EnvironmentParameters(ienvs[1]["theName"],ienvs[1]["theShortCode"],ienvs[1]["theDescription"])
+    iep3 = EnvironmentParameters(ienvs[2]["theName"],ienvs[2]["theShortCode"],ienvs[2]["theDescription"])
     b = Borg()
-    b.dbProxy.addEnvironment(self.iep1)
-    b.dbProxy.addEnvironment(self.iep2)
-    b.dbProxy.addEnvironment(self.iep3)
-    self.oenvs = b.dbProxy.getEnvironments()
+    b.dbProxy.addEnvironment(iep1)
+    b.dbProxy.addEnvironment(iep2)
+    b.dbProxy.addEnvironment(iep3)
     self.iassets = d['assets']
     iaeps = [AssetEnvironmentProperties(self.iassets[0]["theEnvironmentProperties"][0][0],self.iassets[0]["theEnvironmentProperties"][0][1],self.iassets[0]["theEnvironmentProperties"][0][2])]
     iap = AssetParameters(self.iassets[0]["theName"],self.iassets[0]["theShortCode"],self.iassets[0]["theDescription"],self.iassets[0]["theSignificance"],self.iassets[0]["theType"],"0","N/A",[],[],iaeps)
     b.dbProxy.addAsset(iap)
-    self.oaps = b.dbProxy.getAssets()
-
     self.irequirements = d['requirements']
 
   def testRequirement(self):
