@@ -113,15 +113,7 @@ class RequirementTest(unittest.TestCase):
     b.dbProxy.deleteRequirement(ireq.id())
 
   def tearDown(self):
-    b = Borg()
-
-    b.dbProxy.deleteAsset(self.oaps[self.iassets[0]["theName"]].id())
-    b.dbProxy.deleteEnvironment(self.oenvs[self.iep1.name()].id())
-    b.dbProxy.deleteEnvironment(self.oenvs[self.iep2.name()].id())
-    b.dbProxy.deleteEnvironment(self.oenvs[self.iep3.name()].id())
-
-    b.dbProxy.close()
-    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
+    pass
 
 if __name__ == '__main__':
   unittest.main()

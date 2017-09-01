@@ -133,10 +133,7 @@ class ComponentViewTest(unittest.TestCase):
     b.dbProxy.deleteComponentView(ocvp.id())
   
   def tearDown(self):
-    b = Borg()
-
-    b.dbProxy.close()
-    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
+    pass
 
 if __name__ == '__main__':
   unittest.main()

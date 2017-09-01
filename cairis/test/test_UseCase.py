@@ -97,7 +97,7 @@ class UseCaseTest(unittest.TestCase):
     b.dbProxy.deleteUseCase(ouc.id())
 
   def tearDown(self):
-    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
+    pass
 
 if __name__ == '__main__':
   unittest.main()
