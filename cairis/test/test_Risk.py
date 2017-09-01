@@ -117,9 +117,7 @@ class RiskTest(unittest.TestCase):
     b.dbProxy.deleteRisk(o.id())
   
   def tearDown(self):
-    b = Borg()
-    b.dbProxy.close()
-    call([os.environ['CAIRIS_CFG_DIR'] + "/dropdb.sh"])
+    pass
 
 
 if __name__ == '__main__':
