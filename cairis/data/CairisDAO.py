@@ -18,8 +18,10 @@
 import sys
 if (sys.version_info > (3,)):
   import http.client
+  from http.client import CONFLICT
 else:
   import httplib
+  from httplib import CONFLICT
 import logging
 from cairis.core.Borg import Borg
 from cairis.daemon.CairisHTTPError import CairisHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError
@@ -93,7 +95,7 @@ class CairisDAO(object):
 
       if db_proxy is None:
         raise CairisHTTPError(
-          status_code=http.client.CONFLICT,
+          status_code=CONFLICT,
           message='The database connection could not be created.'
         )
       elif isinstance(db_proxy, MySQLDatabaseProxy):
@@ -102,7 +104,7 @@ class CairisDAO(object):
         return db_proxy
       else:
         raise CairisHTTPError(
-          status_code=http.client.CONFLICT,
+          status_code=CONFLICT,
           message='The database connection was not properly set up. Please try to reset the connection.'
         )
     else:

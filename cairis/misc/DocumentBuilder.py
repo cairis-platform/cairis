@@ -51,7 +51,7 @@ def listToString(l):
   return s
 
 def paraText(txt):
-  paraTxt = '<para>'
+  paraTxt = ''
   for c in txt:
     if c == '\n':
       paraTxt += '</para><para>'
@@ -59,7 +59,6 @@ def paraText(txt):
       c = '\&'
     else:
       paraTxt += c 
-  paraTxt += '</para>'
   return paraTxt
 
 def listToRows(l):
@@ -464,7 +463,7 @@ def useCases(p,docDir):
             <para>""" + eProps.postconditions() + "</para>" + """
           </section>
         </section>"""
-      chapterTxt += """
+    chapterTxt += """
       </section>
     </section>
     """
@@ -576,28 +575,28 @@ def personas(p,docDir):
     chapterTxt += buildImage(b.imageDir + "/" + persona.image(),persona.name())
     chapterTxt += """
         <section><title>Type</title>
-          """ + paraText(persona.type()) + """
+          """ + "<para>" + paraText(persona.type()) + "</para>" + """
         </section>
         <section><title>Activities</title>
-          """ + paraText(persona.activities()) + """
+          """ + "<para>" + paraText(persona.activities()) + "</para>" + """
         </section>
         <section><title>Attitudes</title>
-          """ + paraText(persona.attitudes()) + """
+          """ + "<para>" + paraText(persona.attitudes()) + "</para>" + """
         </section>
         <section><title>Aptitudes</title>
-          """ + paraText(persona.aptitudes()) + """
+          """ + "<para>" + paraText(persona.aptitudes()) + "</para>" + """
         </section>
         <section><title>Motivations</title>
-          """ + paraText(persona.motivations()) + """
+          """ + "<para>" + paraText(persona.motivations()) + "</para>" + """
         </section>
         <section><title>Skills</title>
-          """ + paraText(persona.skills()) + """
+          """ + "<para>" + paraText(persona.skills()) + "</para>" + """
         </section>
         <section><title>Intrinsic</title>
-          """ + paraText(persona.intrinsic()) + """
+          """ + "<para>" + paraText(persona.intrinsic()) + "</para>" + """
         </section>
         <section><title>Contextual</title>
-          """ + paraText(persona.contextual()) + """
+          """ + "<para>" + paraText(persona.contextual()) + "</para>" + """
         </section>
     """
 
@@ -610,7 +609,7 @@ def personas(p,docDir):
       chapterTxt += buildTable( personaName.replace(" ","_") + environmentName.replace(" ","_") + "PropertiesTable",personaName + " role attributes",['Roles','Direct/Indirect'],envRows,0) + """
         </section>
         <section><title>""" + environmentName + " Security Issues</title>" + """
-          """ + paraText(eProps.narrative()) + """
+          """ + "<para>" + paraText(eProps.narrative()) + "</para>" + """
         </section>
       """ 
     
@@ -681,7 +680,7 @@ def attackers(p):
     chapterTxt += """
     <section id=\"""" + attackerName.replace(" ","_") + "\"><title>" + attackerName + "</title>"
     chapterTxt += buildImage(b.imageDir + "/" + attacker.image(),attacker.name())
-    chapterTxt += paraText(attacker.description())
+    chapterTxt += "<para>" + paraText(attacker.description()) + "</para>"
 
     aaRows = []
     for eProps in attacker.environmentProperties():
