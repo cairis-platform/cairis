@@ -29,6 +29,7 @@ from .EnvironmentModel import EnvironmentModel
 from .KaosModel import KaosModel
 from .AssetModel import AssetModel
 from .DataFlowDiagram import DataFlowDiagram
+from .LocationModel import LocationModel
 from .AssumptionPersonaModel import AssumptionPersonaModel
 from cairis.core.armid import *
 
@@ -82,6 +83,16 @@ def listToItems(l):
     for v in l:
       paraTxt += '<listitem><para>' + v + '</para></listitem>'
     paraTxt += '</itemizedlist>'
+
+def tupledListToItems(l):
+  if len(l) == 0:
+    return 'None'
+  else:
+    paraTxt = '<itemizedlist>'
+    for v in l:
+        paraTxt += '<listitem><para>' + v[0] + ' : ' + v[1] + '</para></listitem>'
+    paraTxt += '</itemizedlist>'
+    return paraTxt
     return paraTxt
 
 
@@ -121,7 +132,7 @@ def drawGraph(dotTxt,renderer,graphFile):
   os.remove(temp_abspath)
 
 
-def buildModel(p,envName,modelType,graphFile):
+def buildModel(p,envName,modelType,graphFile,locsName = ''):
   graph = None
   if (modelType == 'Risk'):
     model = EnvironmentModel(p.riskAnalysisModel(envName),envName,p,'dot')
@@ -155,6 +166,12 @@ def buildModel(p,envName,modelType,graphFile):
     drawGraph(model.graph(),'dot',graphFile)
   elif (modelType == 'DataFlow'):
     model = DataFlowDiagram(p.dataFlowDiagram(envName),envName,db_proxy=p)
+    if (model.size() == 0):
+      return False
+    drawGraph(model.graph(),'dot',graphFile)
+  elif (modelType == 'Locations'):
+    riskOverlay = p.locationsRiskModel(locsName,envName)
+    model = LocationModel(locsName,envName,riskOverlay,db_proxy=p)
     if (model.size() == 0):
       return False
     drawGraph(model.graph(),'dot',graphFile)
@@ -924,6 +941,29 @@ def modelSection(p,modelType,docDir):
   else:
     return txt
 
+def locationModelSection(p,locsName,docDir):
+  validModels = False
+  txt = """
+      <section><title>""" + locsName + """</title>"""
+  envs = p.getEnvironments()
+  for idx,env in envs.items():
+    environmentName = env.name()
+    modelFile = docDir + '/' + locsName + environmentName + 'LocationsModel'
+    if (buildModel(p,environmentName,'Locations',modelFile,locsName) == True):
+      validModels = True
+      txt += """
+        <section><title>""" + environmentName + "</title>" 
+      txt += buildImage(modelFile,environmentName + ' ' + 'Locations Model')
+      txt += """
+        </section>"""
+  txt += """
+      </section>"""
+  if (validModels == False):
+    return ""
+  else:
+    return txt
+
+
 def personaModelSection(p,pName,docDir):
   validModels = False
   txt = """
@@ -1455,7 +1495,7 @@ def dependencies(p):
       envDict[d.environment()] = [t]
     else:
       envDict[d.environment()].append(t)
-  envList = envDict.keys()
+  envList = list(envDict.keys())
   envList.sort()
   for envName in envList:
     chapterTxt +=  """
@@ -1480,7 +1520,7 @@ def dataflows(p,docDir):
       envDict[d.environment()] = [(d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets()))]
     else:
       envDict[d.environment()].append((d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets())))
-  envList = envDict.keys()
+  envList = list(envDict.keys())
   envList.sort()
   for envName in envList:
     chapterTxt +=  """
@@ -1497,7 +1537,28 @@ def dataflows(p,docDir):
 def locations(p,docDir):
   chapterTxt = """
   <chapter><title>Locations</title>
-"""
+    <section><title>Models</title>"""
+
+  allLocs = p.getLocations()
+  locsList = list(allLocs.keys())
+  locsList.sort()
+  for locs in locsList:
+    chapterTxt += locationModelSection(p,locs,docDir)
+  chapterTxt += """
+    </section>
+  """          
+  for locsName in locsList:
+    chapterTxt += """
+      <section><title>""" + locs + """</title>
+    """          
+    locs = allLocs[locsName]
+    locsRows = []
+    for loc in locs.locations():
+      locsRows.append((loc.name(),tupledListToItems(loc.assetInstances()),tupledListToItems(loc.personaInstances())))
+    chapterTxt += buildTable(locsName + '_' + 'LocationTable'.replace(" ","_"),'Locations',['Location','Objects','People'],locsRows,0)
+    chapterTxt += """
+      </section>
+    """          
   chapterTxt += """
   </chapter>
   """          

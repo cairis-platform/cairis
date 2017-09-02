@@ -35,6 +35,9 @@ class LocationModel:
     self.theGraph = pydot.Dot()
     self.fontName = font_name
     self.fontSize = font_size
+    if font_size is None or font_name is None:
+      self.fontName = b.fontName
+      self.fontSize = b.fontSize
     self.theGraph.set_graph_defaults(rankdir='LR')
     self.theGraph.set_node_defaults(shape='rectangle',fontname=self.fontName,fontsize=self.fontSize)
     self.nodeList= set([])
@@ -42,7 +45,7 @@ class LocationModel:
     self.theOverlayTraces = riskOverlay
 
   def size(self):
-    return len(self.theAssociations)
+    return len(self.theOverlayTraces)
 
   def layout(self,renderer = 'dot'):
     self.theGraph.write_xdot(self.theGraphName,prog=renderer)
@@ -65,7 +68,6 @@ class LocationModel:
       for persona in personaInstances:
         instName = persona[0]
         personaName = persona[1] 
-#        locCluster.add_node(pydot.Node(instName,shape='circle',margin=0,URL='persona#' + personaName))
         locCluster.add_node(pydot.Node(instName,label=instName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL='persona#' + personaName,peripheries='0'))
 
       self.theGraph.add_subgraph(locCluster)
