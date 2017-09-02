@@ -31,7 +31,7 @@ def testUploadDirectory(uploadDir,logger):
     try:
       test_file = os.path.join(image_upload_dir, 'test.txt')
       fs_test = open(test_file, 'wb')
-      fs_test.write('test')
+      fs_test.write('test'.encode('utf-8'))
       fs_test.close()
       os.remove(test_file)
     except IOError:

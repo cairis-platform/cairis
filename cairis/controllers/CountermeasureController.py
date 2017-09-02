@@ -463,3 +463,50 @@ class GenerateAssetFromTemplateAPI(Resource):
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
+
+class SituateCountermeasurePatternAPI(Resource):
+  # region Swagger Docs
+  @swagger.operation(
+    notes='Situate Countermeasure Pattern',
+    nickname='countermeasure-situate-countermeasure-pattern',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': BAD_REQUEST,
+        'message': 'One or more attributes are missing'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'A database error has occurred'
+      },
+      {
+        'code': ARMHTTPError.status_code,
+        'message': ARMHTTPError.status
+      }
+    ]
+  )
+  # endregion
+  def post(self, name, security_pattern_name):
+    session_id = get_session_id(session, request)
+
+    dao = CountermeasureDAO(session_id)
+    dao.situate_countermeasure_pattern(name,security_pattern_name)
+    dao.close()
+
+    resp_dict = {'message': 'Security pattern situated'}
+    resp = make_response(json_serialize(resp_dict), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp

@@ -100,6 +100,18 @@ function createCountermeasuresTable(){
 		$('#chooseEnvironment').modal('show');
 	      });
             }
+          },
+          "situateCountermeasurePattern": {
+            name: "Situate Countermeasure Pattern",
+            callback: function(key, opt) {
+              var cmName = $(this).closest("tr").find("td").eq(1).html();
+	      $('#chooseEnvironment').attr('data-cmName',cmName);
+              refreshDimensionSelector($('#chooseEnvironmentSelect'),'securitypattern',undefined,function() {
+                $('#chooseEnvironment').attr('data-chooseDimension',"Security Pattern");
+		$('#chooseEnvironment').attr('data-applyEnvironmentSelection',"situateCountermeasurePattern");
+		$('#chooseEnvironment').modal('show');
+	      });
+            }
           }
         }
       });
@@ -963,6 +975,39 @@ function generateAssetFromTemplate() {
     }
   });
 }
+
+function situateCountermeasurePattern() {
+  var cmName = $("#chooseEnvironment").attr('data-cmName');
+  var spName = $('#chooseEnvironmentSelect').val();
+  var output = {};
+  output.session_id = $.session.get('sessionID');
+  output = JSON.stringify(output);
+  debugLogger(output);
+
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    data: output,
+    url: serverIP + "/api/countermeasures/name/" + encodeURIComponent(cmName) + "/security_pattern/" + encodeURIComponent(spName) + "/situate",
+    success: function (data) {
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+
+
 
 $('#countermeasureValuesClick').click(function(){
   $('#unsupportedModal').modal('show');

@@ -249,6 +249,26 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Message: %s\n', method, message)
     self.assertGreater(message.find('successfully generated'), -1, 'Countermeasure asset not generated')
 
+  def test_situate_countermeasure_pattern(self):
+    method = 'test_situate_countermeasure_pattern'
+    url = '/api/countermeasures/name/' + quote(self.existing_countermeasure_name) + '/security_pattern/Demilitarized%20Zone/situate?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+
+    rv = self.app.post(url, content_type='application/json',data=jsonpickle.encode({'session_id':'test'}))
+    self.assertIsNotNone(rv.data, 'No response')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    self.assertIsInstance(json_resp, dict)
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message in response')
+    self.logger.info('[%s] Message: %s\n', method, message)
+    self.assertGreater(message.find('pattern situated'), -1, 'Security pattern not situated')
+
   def prepare_new_countermeasure(self):
     new_countermeasure_props = [
       CountermeasureEnvironmentProperties(

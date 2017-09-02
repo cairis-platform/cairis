@@ -245,6 +245,22 @@ class CountermeasureDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
+  def situate_countermeasure_pattern(self,cmName,spName):
+    try:
+      cm = self.get_countermeasure_by_name(cmName, simplify=False)
+      patternId = self.db_proxy.getDimensionId(spName,'securitypattern')
+      assetParametersList = []
+      for assetName in self.db_proxy.patternAssets(patternId):
+        assetParametersList.append(cairis.core.AssetParametersFactory.buildFromTemplate(assetName,cm.environments()))
+      self.db_proxy.addSituatedAssets(patternId,assetParametersList)
+      self.db_proxy.addTrace('countermeasure_securitypattern',cm.id(),patternId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
   def from_json(self, request):
     """
     :rtype : Countermeasure
