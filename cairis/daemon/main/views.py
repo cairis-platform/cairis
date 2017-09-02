@@ -193,6 +193,7 @@ api.add_resource(ConceptReferenceController.ConceptReferenceByNameAPI, '/api/con
 api.add_resource(CountermeasureController.CountermeasuresAPI, '/api/countermeasures',endpoint='countermeasures')
 api.add_resource(CountermeasureController.CountermeasureByNameAPI, '/api/countermeasures/name/<string:name>',endpoint='countermeasure')
 api.add_resource(CountermeasureController.GenerateAssetAPI, '/api/countermeasures/name/<string:name>/generate_asset',endpoint='countermeasure_generate_asset')
+api.add_resource(CountermeasureController.GenerateAssetFromTemplateAPI, '/api/countermeasures/name/<string:name>/template_asset/<string:template_asset_name>/generate_asset',endpoint='countermeasure_generate_asset_from_template')
 api.add_resource(CountermeasureController.TargetsAPI, '/api/countermeasures/targets/environment/<string:environment>',endpoint='targets')
 api.add_resource(CountermeasureController.CountermeasureTasksAPI, '/api/countermeasures/tasks/environment/<string:environment>',endpoint='countermeasuretasks')
 

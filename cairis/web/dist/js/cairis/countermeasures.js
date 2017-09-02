@@ -88,6 +88,18 @@ function createCountermeasuresTable(){
             callback: function(key, opt) {
               generateAsset($(this).closest("tr").find("td").eq(1).html());
             }
+          },
+          "generateAssetFromTemplate": {
+            name: "Generate Asset from Template",
+            callback: function(key, opt) {
+              var cmName = $(this).closest("tr").find("td").eq(1).html();
+	      $('#chooseEnvironment').attr('data-cmName',cmName);
+              refreshDimensionSelector($('#chooseEnvironmentSelect'),'template_asset',undefined,function() {
+                $('#chooseEnvironment').attr('data-chooseDimension',"Template Asset");
+		$('#chooseEnvironment').attr('data-applyEnvironmentSelection',"generateAssetFromTemplate");
+		$('#chooseEnvironment').modal('show');
+	      });
+            }
           }
         }
       });
@@ -908,6 +920,38 @@ function generateAsset(cmName) {
     origin: serverIP,
     data: output,
     url: serverIP + "/api/countermeasures/name/" + encodeURIComponent(cmName) + "/generate_asset?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+
+
+function generateAssetFromTemplate() {
+  var cmName = $("#chooseEnvironment").attr('data-cmName');
+  var taName = $('#chooseEnvironmentSelect').val();
+  var output = {};
+  output.session_id = $.session.get('sessionID');
+  output = JSON.stringify(output);
+  debugLogger(output);
+
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    data: output,
+    url: serverIP + "/api/countermeasures/name/" + encodeURIComponent(cmName) + "/template_asset/" + encodeURIComponent(taName) + "/generate_asset",
     success: function (data) {
       showPopup(true);
     },

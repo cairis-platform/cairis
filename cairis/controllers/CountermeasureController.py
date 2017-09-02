@@ -416,3 +416,50 @@ class GenerateAssetAPI(Resource):
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
+
+class GenerateAssetFromTemplateAPI(Resource):
+  # region Swagger Docs
+  @swagger.operation(
+    notes='Generate asset from template based on countermeasure name',
+    nickname='countermeasure-generate-asset-from-template',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': BAD_REQUEST,
+        'message': 'One or more attributes are missing'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'A database error has occurred'
+      },
+      {
+        'code': ARMHTTPError.status_code,
+        'message': ARMHTTPError.status
+      }
+    ]
+  )
+  # endregion
+  def post(self, name, template_asset_name):
+    session_id = get_session_id(session, request)
+
+    dao = CountermeasureDAO(session_id)
+    dao.generate_asset_from_template(name,template_asset_name)
+    dao.close()
+
+    resp_dict = {'message': 'Asset successfully generated'}
+    resp = make_response(json_serialize(resp_dict), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp

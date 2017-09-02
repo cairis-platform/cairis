@@ -29,7 +29,7 @@ from cairis.core.CountermeasureEnvironmentProperties import CountermeasureEnviro
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import SecurityAttribute, CountermeasureTarget, CountermeasureTaskCharacteristics
 import os
-from cairis.mio.ModelImport import importModelFile
+from cairis.mio.ModelImport import importModelFile, importSecurityPatternsFile
 
 __author__ = 'Shamal Faily'
 
@@ -39,6 +39,7 @@ class CountermeasureAPITests(CairisDaemonTestCase):
   @classmethod
   def setUpClass(cls):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+    importSecurityPatternsFile(os.environ['CAIRIS_SRC'] + '/../examples/architecture/schumacher_patterns.xml','test')
   
   def setUp(self):
     # region Class fields
@@ -211,6 +212,26 @@ class CountermeasureAPITests(CairisDaemonTestCase):
   def test_generate_asset(self):
     method = 'test_generate_asset'
     url = '/api/countermeasures/name/' + quote(self.existing_countermeasure_name) + '/generate_asset?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+
+    rv = self.app.post(url, content_type='application/json',data=jsonpickle.encode({'session_id':'test'}))
+    self.assertIsNotNone(rv.data, 'No response')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    self.assertIsInstance(json_resp, dict)
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message in response')
+    self.logger.info('[%s] Message: %s\n', method, message)
+    self.assertGreater(message.find('successfully generated'), -1, 'Countermeasure asset not generated')
+
+  def test_generate_asset_from_template(self):
+    method = 'test_generate_asset_from_template'
+    url = '/api/countermeasures/name/' + quote(self.existing_countermeasure_name) + '/template_asset/PFFirewall/generate_asset?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
 
     rv = self.app.post(url, content_type='application/json',data=jsonpickle.encode({'session_id':'test'}))

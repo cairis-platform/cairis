@@ -233,7 +233,17 @@ class CountermeasureDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-
+  def generate_asset_from_template(self,cmName,taName):
+    try:
+      cm = self.get_countermeasure_by_name(cmName, simplify=False)
+      assetId = self.db_proxy.addAsset(cairis.core.AssetParametersFactory.buildFromTemplate(taName,cm.environments()))
+      self.db_proxy.addTrace('countermeasure_asset',cm.id(),assetId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
   def from_json(self, request):
     """
