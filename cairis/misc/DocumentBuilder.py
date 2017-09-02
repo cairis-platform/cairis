@@ -1437,6 +1437,83 @@ def environments(p,docDir):
 """
   return chapterTxt
 
+def dependencies(p):
+  chapterTxt = """
+  <chapter><title>Dependencies</title>
+"""
+  dependencies = p.getDependencies()
+  envDict = {}
+  for idx,d in dependencies.items():
+    if d.environment() not in envDict:
+      envDict[d.environment()] = [d]
+    else:
+      envDict[d.environment()].append(d)
+  envList = envDict.keys()
+  envList.sort()
+  for envName in envList:
+    chapterTxt +=  """
+      <section id=\'""" + envName.replace(" ","_") + "_Dependencies\' ><title>" + envName + "</title>" + """
+        <table id=\"""" + envName.replace(" ","_") + "DependenciesTable\"" + """><title>""" + envName + """ Dependencies </title>
+          <tgroup cols="5">
+            <colspec align="left" />
+            <colspec align="left" />
+          <thead>
+            <row>
+              <entry>Depender</entry>
+              <entry>Dependee</entry>
+              <entry>Dependency</entry>
+              <entry>Type</entry>
+              <entry>Rationale</entry>
+            </row>
+          </thead>
+          <tbody>"""
+    for d in envDict[envName]:
+      chapterTxt += """
+            <row>
+              <entry>""" + d.depender() + "</entry>" + """
+              <entry>""" + d.dependee() + "</entry>" + """
+              <entry>""" + d.dependency() + "</entry>" + """
+              <entry>""" + d.dependencyType() + "</entry>" + """
+              <entry>""" + d.rationale() + "</entry>" + """
+            </row>"""
+    chapterTxt += """
+          </tbody>
+          </tgroup>
+        </table>
+      </section>""" 
+  chapterTxt += """
+  </chapter>
+  """          
+  return chapterTxt
+
+def dataflows(p,docDir):
+  chapterTxt = """
+  <chapter><title>Data Flows</title>
+"""
+  chapterTxt += """
+  </chapter>
+  """          
+  return chapterTxt
+
+def locations(p,docDir):
+  chapterTxt = """
+  <chapter><title>Locations</title>
+"""
+  chapterTxt += """
+  </chapter>
+  """          
+  return chapterTxt
+
+
+def architecture(p,docDir):
+  chapterTxt = """
+  <chapter><title>Architectural Patterns</title>
+"""
+  chapterTxt += """
+  </chapter>
+  """          
+  return chapterTxt
+
 
 def buildReqSpecBody(p,sectionFlags,docDir):
   contributors = p.getContributors()
@@ -1466,6 +1543,8 @@ def buildReqSpecBody(p,sectionFlags,docDir):
     specDoc += tasks(p,docDir)
   if (sectionFlags[REQDOC_USECASES_ID]):
     specDoc += useCases(p,docDir)
+  if (sectionFlags[REQDOC_DATAFLOWS_ID]):
+    specDoc += dataflows(p,docDir)
   if (sectionFlags[REQDOC_GOALS_ID]):
     specDoc += goals(p,docDir)
   if (sectionFlags[REQDOC_RESPONSIBILITIES_ID]):
@@ -1480,6 +1559,8 @@ def buildReqSpecBody(p,sectionFlags,docDir):
     specDoc += threats(p)
   if (sectionFlags[REQDOC_RISKS_ID]):
     specDoc += risks(p,docDir)
+  if (sectionFlags[REQDOC_LOCATIONS_ID]):
+    specDoc += locations(p,docDir)
   if (sectionFlags[REQDOC_MISUSECASES_ID]):
     specDoc += misuseCases(p)
   if (sectionFlags[REQDOC_RESPONSES_ID]):
@@ -1521,6 +1602,11 @@ def buildReqSpecBody(p,sectionFlags,docDir):
 
     specDoc += functionalRequirements(frDomDict,ddDomDict)
     specDoc += nonFunctionalRequirements(reqDict)
+
+  if (sectionFlags[REQDOC_DEPENDENCIES_ID]):
+    specDoc += dependencies(p)
+  if (sectionFlags[REQDOC_ARCHITECTURALPATTERNS_ID]):
+    specDoc += architecture(p,docDir)
   return specDoc
 
 def buildPersonasBody(p,sectionFlags,docDir):
