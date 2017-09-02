@@ -261,6 +261,29 @@ class CountermeasureDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
+  def associate_situated_pattern(self,cmName,spName):
+    try:
+      cmId = self.db_proxy.getDimensionId(cmName,'countermeasure')
+      self.db_proxy.associateCountermeasureToPattern(cmId,spName)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def remove_situated_pattern(self,cmName,spName):
+    try:
+      cmId = self.db_proxy.getDimensionId(cmName,'countermeasure')
+      self.db_proxy.deleteSituatedPattern(cmId,spName)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+
   def from_json(self, request):
     """
     :rtype : Countermeasure

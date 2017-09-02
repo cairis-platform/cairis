@@ -195,6 +195,8 @@ api.add_resource(CountermeasureController.CountermeasureByNameAPI, '/api/counter
 api.add_resource(CountermeasureController.GenerateAssetAPI, '/api/countermeasures/name/<string:name>/generate_asset',endpoint='countermeasure_generate_asset')
 api.add_resource(CountermeasureController.GenerateAssetFromTemplateAPI, '/api/countermeasures/name/<string:name>/template_asset/<string:template_asset_name>/generate_asset',endpoint='countermeasure_generate_asset_from_template')
 api.add_resource(CountermeasureController.SituateCountermeasurePatternAPI, '/api/countermeasures/name/<string:name>/security_pattern/<string:security_pattern_name>/situate',endpoint='countermeasure_situate_countermeasure_pattern')
+api.add_resource(CountermeasureController.AssociateSituatedPatternAPI, '/api/countermeasures/name/<string:name>/security_pattern/<string:security_pattern_name>/associate_situated',endpoint='associate_situated_pattern')
+api.add_resource(CountermeasureController.RemoveSituatedPatternAPI, '/api/countermeasures/name/<string:name>/security_pattern/<string:security_pattern_name>/remove_situated',endpoint='remove_situated_pattern')
 api.add_resource(CountermeasureController.TargetsAPI, '/api/countermeasures/targets/environment/<string:environment>',endpoint='targets')
 api.add_resource(CountermeasureController.CountermeasureTasksAPI, '/api/countermeasures/tasks/environment/<string:environment>',endpoint='countermeasuretasks')
 

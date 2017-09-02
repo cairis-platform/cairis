@@ -510,3 +510,97 @@ class SituateCountermeasurePatternAPI(Resource):
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
+
+class AssociateSituatedPatternAPI(Resource):
+  # region Swagger Docs
+  @swagger.operation(
+    notes='Associated Situated Pattern',
+    nickname='associate-situated-pattern',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': BAD_REQUEST,
+        'message': 'One or more attributes are missing'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'A database error has occurred'
+      },
+      {
+        'code': ARMHTTPError.status_code,
+        'message': ARMHTTPError.status
+      }
+    ]
+  )
+  # endregion
+  def post(self, name, security_pattern_name):
+    session_id = get_session_id(session, request)
+
+    dao = CountermeasureDAO(session_id)
+    dao.associate_situated_pattern(name,security_pattern_name)
+    dao.close()
+
+    resp_dict = {'message': 'Situated pattern associated'}
+    resp = make_response(json_serialize(resp_dict), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
+class RemoveSituatedPatternAPI(Resource):
+  # region Swagger Docs
+  @swagger.operation(
+    notes='Remove Situated Pattern',
+    nickname='remove-situated-pattern',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': BAD_REQUEST,
+        'message': 'One or more attributes are missing'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'A database error has occurred'
+      },
+      {
+        'code': ARMHTTPError.status_code,
+        'message': ARMHTTPError.status
+      }
+    ]
+  )
+  # endregion
+  def delete(self, name, security_pattern_name):
+    session_id = get_session_id(session, request)
+
+    dao = CountermeasureDAO(session_id)
+    dao.remove_situated_pattern(name,security_pattern_name)
+    dao.close()
+
+    resp_dict = {'message': 'Situated pattern removed'}
+    resp = make_response(json_serialize(resp_dict), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
