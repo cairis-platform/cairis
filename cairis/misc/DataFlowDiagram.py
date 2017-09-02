@@ -80,8 +80,11 @@ class DataFlowDiagram:
         c = pydot.Cluster(tbName,label=str(tbName),style='dashed',fontname=self.fontName,fontsize=self.fontSize)
         self.theClusters[tbName] = c
         self.theGraph.add_subgraph(c)
-        for tbType,tbComponent in tbs[tbName].environmentProperties()[self.theEnvironmentName]:
-          self.tbDict[tbComponent] = tbName
+        try:
+          for tbType,tbComponent in tbs[tbName].environmentProperties()[self.theEnvironmentName]:
+            self.tbDict[tbComponent] = tbName
+        except KeyError:
+          pass
 
       for dfName,fromName,fromType,toName,toType in self.theAssociations:
 

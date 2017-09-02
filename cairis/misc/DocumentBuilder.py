@@ -28,6 +28,7 @@ from tempfile import mkstemp as make_tempfile
 from .EnvironmentModel import EnvironmentModel
 from .KaosModel import KaosModel
 from .AssetModel import AssetModel
+from .DataFlowDiagram import DataFlowDiagram
 from .AssumptionPersonaModel import AssumptionPersonaModel
 from cairis.core.armid import *
 
@@ -149,6 +150,11 @@ def buildModel(p,envName,modelType,graphFile):
     drawGraph(model.graph(),'dot',graphFile)
   elif (modelType == 'Responsibility'):
     model = KaosModel(list(p.responsibilityModel(envName).values()),envName,'responsibility',db_proxy=p)
+    if (model.size() == 0):
+      return False
+    drawGraph(model.graph(),'dot',graphFile)
+  elif (modelType == 'DataFlow'):
+    model = DataFlowDiagram(p.dataFlowDiagram(envName),envName,db_proxy=p)
     if (model.size() == 0):
       return False
     drawGraph(model.graph(),'dot',graphFile)
@@ -1445,41 +1451,17 @@ def dependencies(p):
   envDict = {}
   for idx,d in dependencies.items():
     if d.environment() not in envDict:
-      envDict[d.environment()] = [d]
+      t = (d.depender(),d.dependee(),d.dependency(),d.dependencyType(),d.rationale())
+      envDict[d.environment()] = [t]
     else:
-      envDict[d.environment()].append(d)
+      envDict[d.environment()].append(t)
   envList = envDict.keys()
   envList.sort()
   for envName in envList:
     chapterTxt +=  """
-      <section id=\'""" + envName.replace(" ","_") + "_Dependencies\' ><title>" + envName + "</title>" + """
-        <table id=\"""" + envName.replace(" ","_") + "DependenciesTable\"" + """><title>""" + envName + """ Dependencies </title>
-          <tgroup cols="5">
-            <colspec align="left" />
-            <colspec align="left" />
-          <thead>
-            <row>
-              <entry>Depender</entry>
-              <entry>Dependee</entry>
-              <entry>Dependency</entry>
-              <entry>Type</entry>
-              <entry>Rationale</entry>
-            </row>
-          </thead>
-          <tbody>"""
-    for d in envDict[envName]:
-      chapterTxt += """
-            <row>
-              <entry>""" + d.depender() + "</entry>" + """
-              <entry>""" + d.dependee() + "</entry>" + """
-              <entry>""" + d.dependency() + "</entry>" + """
-              <entry>""" + d.dependencyType() + "</entry>" + """
-              <entry>""" + d.rationale() + "</entry>" + """
-            </row>"""
+      <section id=\'""" + envName.replace(" ","_") + "_Dependencies\' ><title>" + envName + "</title>" 
+    chapterTxt += buildTable(envName + '_' + 'DepdendenciesTable'.replace(" ","_"),'Dependencies',['Depender','Dependee','Dependency','Type','Rationale'],envDict[envName],0)
     chapterTxt += """
-          </tbody>
-          </tgroup>
-        </table>
       </section>""" 
   chapterTxt += """
   </chapter>
@@ -1490,6 +1472,23 @@ def dataflows(p,docDir):
   chapterTxt = """
   <chapter><title>Data Flows</title>
 """
+  chapterTxt += modelSection(p,'DataFlow',docDir)
+  dfs = p.getDataFlows()
+  envDict = {}
+  for idx,d in dfs.items():
+    if d.environment() not in envDict:
+      envDict[d.environment()] = [(d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets()))]
+    else:
+      envDict[d.environment()].append((d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets())))
+  envList = envDict.keys()
+  envList.sort()
+  for envName in envList:
+    chapterTxt +=  """
+      <section id=\'""" + envName.replace(" ","_") + "_Dataflows\' ><title>" + envName + "</title>"
+    chapterTxt += buildTable(envName + '_' + 'DataFlows'.replace(" ","_"),'Data Flows',['Name','From','Type','To','Type','Assets'],envDict[envName],0)
+
+    chapterTxt += """
+      </section>""" 
   chapterTxt += """
   </chapter>
   """          
