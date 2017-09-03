@@ -112,7 +112,31 @@ function createCountermeasuresTable(){
 		$('#chooseEnvironment').modal('show');
 	      });
             }
-          }
+          },
+          "associateWithSituatedPattern": {
+            name: "Associate with situated pattern",
+            callback: function(key, opt) {
+              var cmName = $(this).closest("tr").find("td").eq(1).html();
+	      $('#chooseEnvironment').attr('data-cmName',cmName);
+              refreshSpecificSelector($('#chooseEnvironmentSelect'),'/api/countermeasures/name/' + encodeURIComponent(cmName) + '/candidate_patterns',function() {
+                $('#chooseEnvironment').attr('data-chooseDimension',"Security Pattern");
+		$('#chooseEnvironment').attr('data-applyEnvironmentSelection',"associateWithSituatedPattern");
+		$('#chooseEnvironment').modal('show');
+	      });
+            }
+          },
+          "removeCountermeasurePattern": {
+            name: "Remove countermeasure pattern",
+            callback: function(key, opt) {
+              var cmName = $(this).closest("tr").find("td").eq(1).html();
+	      $('#chooseEnvironment').attr('data-cmName',cmName);
+              refreshSpecificSelector($('#chooseEnvironmentSelect'),'/api/countermeasures/name/' + encodeURIComponent(cmName) + '/patterns',function() {
+                $('#chooseEnvironment').attr('data-chooseDimension',"Security Pattern");
+		$('#chooseEnvironment').attr('data-applyEnvironmentSelection',"removeCountermeasurePattern");
+		$('#chooseEnvironment').modal('show');
+	      });
+            }
+          },
         }
       });
       activeElement("mainTable");
@@ -1007,6 +1031,66 @@ function situateCountermeasurePattern() {
 }
 
 
+function associateWithSituatedPattern() {
+  var cmName = $("#chooseEnvironment").attr('data-cmName');
+  var spName = $('#chooseEnvironmentSelect').val();
+  var output = {};
+  output.session_id = $.session.get('sessionID');
+  output = JSON.stringify(output);
+  debugLogger(output);
+
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    data: output,
+    url: serverIP + "/api/countermeasures/name/" + encodeURIComponent(cmName) + "/security_pattern/" + encodeURIComponent(spName) + "/associate_situated",
+    success: function (data) {
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
+
+function removeCountermeasurePattern() {
+  var cmName = $("#chooseEnvironment").attr('data-cmName');
+  var spName = $('#chooseEnvironmentSelect').val();
+  var output = {};
+  output.session_id = $.session.get('sessionID');
+  output = JSON.stringify(output);
+  debugLogger(output);
+
+  $.ajax({
+    type: "DELETE",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    data: output,
+    url: serverIP + "/api/countermeasures/name/" + encodeURIComponent(cmName) + "/security_pattern/" + encodeURIComponent(spName) + "/remove_situated",
+    success: function (data) {
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
 
 
 $('#countermeasureValuesClick').click(function(){

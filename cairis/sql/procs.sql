@@ -10502,7 +10502,6 @@ begin
   declare continue handler for not found set done = 1;
 
   set done = 0;
-
   open assetCursor;
   asset_loop: loop
     fetch assetCursor into assetId,assetName;
@@ -10524,7 +10523,25 @@ end
 create procedure deleteSituatedPattern(in cmId int, in patternName text)
 begin
   declare patternId int;
+  declare assetId int;
+  declare done int default 0;
+  declare cspAssetCursor cursor for select asset_id from countermeasure_asset where countermeasure_id = cmId;
+  declare continue handler for not found set done = 1;
+
   select id into patternId from securitypattern where name = patternName;
+
+  set done = 0;
+  open cspAssetCursor;
+  cspAssetCursor_loop: loop
+    fetch cspAssetCursor into assetId;
+    if done = 1
+    then
+      leave cspAssetCursor_loop;
+    end if;
+    call delete_asset(assetId);
+  end loop cspAssetCursor_loop;
+  close cspAssetCursor;
+  delete from countermeasure_asset where countermeasure_id = cmId;
   delete from countermeasure_securitypattern where countermeasure_id = cmId and pattern_id = patternId;
 end
 //
@@ -10602,6 +10619,9 @@ begin
   select cmId,ata.asset_id from securitypattern_asset_template_asset ata, securitypattern_classassociation sca where sca.pattern_id = patternId and sca.pattern_id = ata.pattern_id and sca.head_id = ata.template_asset_id 
   union 
   select cmId,ata.asset_id from securitypattern_asset_template_asset ata, securitypattern_classassociation sca where sca.pattern_id = patternId and sca.pattern_id = ata.pattern_id and sca.tail_id = ata.template_asset_id;
+
+  insert into countermeasure_securitypattern(countermeasure_id,pattern_id) values (cmId,patternId);
+
 end
 //
 

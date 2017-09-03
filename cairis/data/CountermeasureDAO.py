@@ -283,6 +283,27 @@ class CountermeasureDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
+  def candidate_countermeasure_patterns(self,cmName):
+    try:
+      cmId = self.db_proxy.getDimensionId(cmName,'countermeasure')
+      return self.db_proxy.candidateCountermeasurePatterns(cmId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def countermeasure_patterns(self,cmName):
+    try:
+      cmId = self.db_proxy.getDimensionId(cmName,'countermeasure')
+      return self.db_proxy.countermeasurePatterns(cmId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
   def from_json(self, request):
     """

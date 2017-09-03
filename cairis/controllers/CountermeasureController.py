@@ -310,11 +310,9 @@ class TargetsAPI(Resource):
     dao = CountermeasureDAO(session_id)
     targets = dao.get_countermeasure_targets(reqList,environment)
     dao.close()
-
     resp = make_response(json_serialize(targets, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
-    dao.close()
 
 
 class CountermeasureTasksAPI(Resource):
@@ -604,3 +602,92 @@ class RemoveSituatedPatternAPI(Resource):
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
+
+class CandidatePatternsAPI(Resource):
+  # region Swagger Docs
+  @swagger.operation(
+    notes='Get candidate countermeasure patterns',
+    nickname='candidate-countermeasure-patterns',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': BAD_REQUEST,
+        'message': 'One or more attributes are missing'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'A database error has occurred'
+      },
+      {
+        'code': ARMHTTPError.status_code,
+        'message': ARMHTTPError.status
+      }
+    ]
+  )
+  # endregion
+  def get(self, name):
+    session_id = get_session_id(session, request)
+    dao = CountermeasureDAO(session_id)
+    spNames = dao.candidate_countermeasure_patterns(name)
+    dao.close()
+    resp = make_response(json_serialize(spNames, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+class CountermeasurePatternsAPI(Resource):
+  # region Swagger Docs
+  @swagger.operation(
+    notes='Get countermeasure patterns',
+    nickname='countermeasure-patterns',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': BAD_REQUEST,
+        'message': 'One or more attributes are missing'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'Some problems were found during the name check'
+      },
+      {
+        'code': CONFLICT,
+        'message': 'A database error has occurred'
+      },
+      {
+        'code': ARMHTTPError.status_code,
+        'message': ARMHTTPError.status
+      }
+    ]
+  )
+  # endregion
+  def get(self, name):
+    session_id = get_session_id(session, request)
+    dao = CountermeasureDAO(session_id)
+    spNames = dao.countermeasure_patterns(name)
+    dao.close()
+    resp = make_response(json_serialize(spNames, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+

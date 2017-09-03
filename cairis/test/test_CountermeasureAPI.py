@@ -281,6 +281,13 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     msg = json_resp.get('message', None)
     self.assertEqual(msg, 'Security Pattern successfully situated')
 
+    rv = self.app.get('api/countermeasures/name/Location-based%20X.509%20extension/candidate_patterns?session_id=test')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    cps = jsonpickle.decode(responseData)
+    self.assertEqual(cps[0],'Protection Reverse Proxy') 
 
     url = '/api/countermeasures/name/' + quote(self.existing_countermeasure_name) + '/security_pattern/Protection%20Reverse%20Proxy/associate_situated?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
@@ -300,6 +307,14 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Message: %s\n', method, message)
     self.assertGreater(message.find('pattern associated'), -1, 'Situated pattern not associated')
 
+    rv = self.app.get('api/countermeasures/name/Location-based%20X.509%20extension/patterns?session_id=test')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    cps = jsonpickle.decode(responseData)
+    self.assertEqual(cps[0],'Protection Reverse Proxy') 
+
     url = '/api/countermeasures/name/' + quote(self.existing_countermeasure_name) + '/security_pattern/Protection%20Reverse%20Proxy/remove_situated'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.delete(url, content_type='application/json',data=jsonpickle.encode({'session_id':'test'}))
@@ -316,6 +331,14 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(message, 'No message in response')
     self.logger.info('[%s] Message: %s\n', method, message)
     self.assertGreater(message.find('pattern removed'), -1, 'Situated pattern not removed')
+
+    rv = self.app.get('api/countermeasures/name/Location-based%20X.509%20extension/patterns?session_id=test')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    cps = jsonpickle.decode(responseData)
+    self.assertEqual(len(cps),0)
 
 
   def prepare_new_countermeasure(self):

@@ -199,6 +199,8 @@ api.add_resource(CountermeasureController.AssociateSituatedPatternAPI, '/api/cou
 api.add_resource(CountermeasureController.RemoveSituatedPatternAPI, '/api/countermeasures/name/<string:name>/security_pattern/<string:security_pattern_name>/remove_situated',endpoint='remove_situated_pattern')
 api.add_resource(CountermeasureController.TargetsAPI, '/api/countermeasures/targets/environment/<string:environment>',endpoint='targets')
 api.add_resource(CountermeasureController.CountermeasureTasksAPI, '/api/countermeasures/tasks/environment/<string:environment>',endpoint='countermeasuretasks')
+api.add_resource(CountermeasureController.CandidatePatternsAPI, '/api/countermeasures/name/<string:name>/candidate_patterns',endpoint='candidate_patterns')
+api.add_resource(CountermeasureController.CountermeasurePatternsAPI, '/api/countermeasures/name/<string:name>/patterns',endpoint='countermeasure_patterns')
 
 # Dataflow routes
 api.add_resource(DataFlowController.DataFlowsAPI, '/api/dataflows',endpoint='dataflows')
