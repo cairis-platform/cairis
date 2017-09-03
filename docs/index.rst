@@ -10,20 +10,30 @@ CAIRIS documentation
    :maxdepth: 2
    :caption: Contents:
 
+   io
+   databases
    projects
    environments
    assets
    roles_personas
    tasks
+   misusability
    domainproperties
    gro
+   usecases
+   dependencies
    patterns
+   df
    vulnerabilities
    attackers
    threats
    risks
+   locations
    responses
    countermeasures
+   traceability
+   architecturalpatterns
+   configurable
    gendoc
 
 
