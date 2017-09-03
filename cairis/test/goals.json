@@ -2,7 +2,11 @@
   "environments" : [
       {"theName" : "Day",
        "theShortCode" : "DAY",
-       "theDescription" : "Day-time plant operations"}
+       "theDescription" : "Day-time plant operations"},
+      {"theName" : "Night",
+       "theShortCode" : "NIGHT",
+       "theDescription" : "Night-time plant operations"}
+
   ],
   "assets" : [
    {
@@ -17,17 +21,9 @@
          [2,0,0,0,0,0,0,0],
          ["","None","None","None","None","None","None","None"]
         ],
-        ["Day",
+        ["Night",
          [0,2,0,0,0,0,0,0],
          ["None","","None","None","None","None","None","None"]
-        ],
-        ["Day",
-         [0,0,2,0,0,0,0,0],
-         ["None","None","","None","None","None","None","None"]
-        ],
-        ["Day",
-         [0,0,0,2,0,0,0,0],
-         ["None","None","None","","None","None","None","None"]
         ]
       ]
     }
@@ -37,46 +33,67 @@
        "theName" : "Active Directory Network Services",
        "theOriginator" : "Anon",
        "theEnvironmentProperties" : [
-         "Day",
-         "DAY-1",
-         "Network services shall be controlled using Active Directory",
-         "Maintain",
-         "High",
-         "Network connectivity to any SCADA, Telemetry, and Control System application workstation can be cut using Active Directory.",
-         "Standard 7.2(q)",
-         "Corporate Network"
+	 {"theName": "Day",
+         "theLabel": "DAY-1",
+         "theDefinition" : "Network services shall be controlled using Active Directory",
+         "theCategory": "Maintain",
+         "thePriority": "High",
+         "theFitCriterion" : "Network connectivity to any SCADA, Telemetry, and Control System application workstation can be cut using Active Directory.",
+         "theIssue" : "Standard 7.2(q)",
+         "theConcerns" : ["Corporate Network"]},
+	 {"theName": "Night",
+         "theLabel": "NIGHT-1",
+         "theDefinition" : "Network services shall be controlled using Active Directory",
+         "theCategory": "Maintain",
+         "thePriority": "High",
+         "theFitCriterion" : "Network connectivity to any SCADA, Telemetry, and Control System application workstation can be cut using Active Directory.",
+         "theIssue" : "Standard 7.2(q)",
+         "theConcerns" : ["Corporate Network"]}
        ]
      },
      {
        "theName" : "sg1",
        "theOriginator" : "Anon",
        "theEnvironmentProperties" : [
-         "Day",
-         "DAY-2",
-         "sg1desc",
-         "Maintain",
-         "High",
-         "sg1fit",
-         "sg1issue",
-         "Corporate Network"
+	 {"theName" : "Day",
+         "theLabel" : "DAY-2",
+         "theDefinition" : "sg1desc",
+         "theCategory" : "Maintain",
+         "thePriority" : "High",
+         "theFitCriterion" : "sg1fit",
+         "theIssue" : "sg1issue",
+         "theConcerns" : ["Corporate Network"]},
+	 {"theName" : "Night",
+         "theLabel" : "NIGHT-2",
+         "theDefinition" : "sg1desc",
+         "theCategory" : "Maintain",
+         "thePriority" : "High",
+         "theFitCriterion" : "sg1fit",
+         "theIssue" : "sg1issue",
+         "theConcerns" : ["Corporate Network"]}
        ]
      },
      {
        "theName" : "sg2",
        "theOriginator" : "Anon",
        "theEnvironmentProperties" : [
-         "Day",
-         "DAY-3",
-         "sg2desc",
-         "Maintain",
-         "High",
-         "sg2fit",
-         "sg2issue",
-         "Corporate Network"
+	 {"theName" : "Day",
+         "theLabel" : "DAY-3",
+         "theDefinition" : "sg2desc",
+         "theCategory" : "Maintain",
+         "thePriority" : "High",
+         "theFitCriterion" : "sg2fit",
+         "theIssue" : "sg2issue",
+         "theConcerns" : ["Corporate Network"]},
+	 {"theName" : "Night",
+         "theLabel" : "NIGHT-3",
+         "theDefinition" : "sg2desc",
+         "theCategory" : "Maintain",
+         "thePriority" : "High",
+         "theFitCriterion" : "sg2fit",
+         "theIssue" : "sg2issue",
+         "theConcerns" : ["Corporate Network"]}
        ]
      }
-
-
-
   ]
 }
