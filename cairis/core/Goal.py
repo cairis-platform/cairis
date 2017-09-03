@@ -111,26 +111,19 @@ class Goal:
           workingAttr += ' [' + environmentName + '].  '
       return workingAttr
 
-  def setName(self, v):
-    self.theName = v
+  def setName(self, v): self.theName = v
 
-  def setOriginator(self, v):
-    self.theOriginator = v
+  def setOriginator(self, v):  self.theOriginator = v
 
-  def setDefinition(self,environmentName,v):
-    (self.theEnvironmentDictionary[environmentName]).setDefinition(v)
+  def setDefinition(self,environmentName,v):  (self.theEnvironmentDictionary[environmentName]).setDefinition(v)
 
-  def setCategory(self,environmentName,v):
-    (self.theEnvironmentDictionary[environmentName]).setCategory(v)
+  def setCategory(self,environmentName,v):  (self.theEnvironmentDictionary[environmentName]).setCategory(v)
 
-  def setPriority(self,environmentName,v):
-    (self.theEnvironmentDictionary[environmentName]).setPriority(v)
+  def setPriority(self,environmentName,v):  (self.theEnvironmentDictionary[environmentName]).setPriority(v)
 
-  def setFitCriterion(self,environmentName,v):
-    (self.theEnvironmentDictionary[environmentName]).setFitCriterion(v)
+  def setFitCriterion(self,environmentName,v):  (self.theEnvironmentDictionary[environmentName]).setFitCriterion(v)
 
-  def setIssue(self,environmentName,v):
-    (self.theEnvironmentDictionary[environmentName]).setIssue(v)
+  def setIssue(self,environmentName,v):  (self.theEnvironmentDictionary[environmentName]).setIssue(v)
 
   def refinements(self,environmentName):
     for assoc in ((self.theEnvironmentDictionary[environmentName]).subGoalRefinements()):
