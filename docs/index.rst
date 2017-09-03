@@ -10,7 +10,20 @@ CAIRIS documentation
    :maxdepth: 2
    :caption: Contents:
 
-   doc
+   projects
+   environments
+   assets
+   roles_personas
+   tasks
+   domainproperties
+   gro
+   patterns
+   vulnerabilities
+   attackers
+   threats
+   risks
+   responses
+   countermeasures
    gendoc
 
 
