@@ -11,6 +11,7 @@ CAIRIS documentation
    :caption: Contents:
 
    doc
+   gendoc
 
 
 Indices and tables
