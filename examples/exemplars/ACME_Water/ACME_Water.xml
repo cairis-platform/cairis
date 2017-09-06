@@ -278,24 +278,34 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
   <significance>Obtaining some or all of ICT credentials may allow an unauthorised person to logically impersonate an authorised principal</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="confidentiality" value="Medium">
-    <rationale></rationale>
+    <rationale>Unauthorised access to credentials may lead to access to sensitive corporate data.</rationale>
   </security_property>
-  <security_property environment="Day" property="availability" value="Medium">
-    <rationale></rationale>
+  <security_property environment="Day" property="availability" value="Low">
+    <rationale>Loss of credentials hampers tasks requiring authentication.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="Low">
-    <rationale></rationale>
+    <rationale>Credentials should be issued only to authorised ACME staff</rationale>
   </security_property>
+  <security_property environment="Night" property="confidentiality" value="Medium">
+    <rationale>Unauthorised access to credentials may lead to access to sensitive corporate data.</rationale>
+  </security_property>
+  <security_property environment="Night" property="availability" value="Medium">
+    <rationale>Loss of credentials may significantly hamper tasks requiring authentication, due to lack of ICT helpdesk support.</rationale>
+  </security_property>
+  <security_property environment="Day" property="accountability" value="Low">
+    <rationale>Credentials should be issued only to authorised ACME staff</rationale>
+  </security_property>
+
 </asset>
 <asset name="STCS credentials" short_code="STCSC" type="Information" is_critical="0">
   <description>Credentials allowing an authorised user to be authenticated with a SCADA, Telemetry, or Control System client</description>
   <significance>Obtaining STCS credentials may allow an unauthorised person to logically impersonate an authorised principal</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="confidentiality" value="High">
-    <rationale></rationale>
+    <rationale>Access to the credentials could lead to catastrophic misuse of attached systems.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="Medium">
-    <rationale></rationale>
+    <rationale>Credential management should be tracked.</rationale>
   </security_property>
 </asset>
 <asset name="SCADA Workstation" short_code="SW" type="Systems" is_critical="0">
@@ -303,27 +313,45 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
   <significance>Detects alarms.  Monitors trends.  Turns kit on and off.  </significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="integrity" value="High">
-    <rationale></rationale>
+    <rationale>Compromising the workstation could compromise any connected systems.</rationale>
   </security_property>
   <security_property environment="Day" property="availability" value="High">
-    <rationale></rationale>
+    <rationale>Unavailable workstations could leads to delays monitoring operations, and responding to anomalies.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="High">
-    <rationale></rationale>
+    <rationale>Workstations should be used only by authorised plant staff.</rationale>
+  </security_property>
+  <security_property environment="Night" property="integrity" value="High">
+    <rationale>Compromising the workstation could compromise any connected systems.</rationale>
+  </security_property>
+  <security_property environment="Night" property="availability" value="High">
+    <rationale>Unavailable workstations could leads to delays monitoring operations, and responding to anomalies.</rationale>
+  </security_property>
+  <security_property environment="Night" property="accountability" value="High">
+    <rationale>Workstations should be used only by authorised plant staff.</rationale>
   </security_property>
 </asset>
 <asset name="Laptop" short_code="L" type="Systems" is_critical="0">
   <description>Instrument Tech laptop.  Development tools installed for uploading software to and from outstations and PLCs.</description>
-  <significance>Compromising laptop could compromise any connected systems.</significance>
+  <significance>Compromising the laptop could compromise any connected systems.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="integrity" value="High">
-    <rationale></rationale>
+    <rationale>Compromised laptop could compromise control systems they connect to.</rationale>
   </security_property>
   <security_property environment="Day" property="availability" value="High">
-    <rationale></rationale>
+    <rationale>Unavailable laptops stymies ability to patch PLCs and other equipment.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="Medium">
-    <rationale></rationale>
+    <rationale>Laptops should be issued and used only to authorised technicians.</rationale>
+  </security_property>
+  <security_property environment="Night" property="integrity" value="High">
+    <rationale>Compromised laptop could compromise control systems they connect to.</rationale>
+  </security_property>
+  <security_property environment="Night" property="availability" value="High">
+    <rationale>Unavailable laptops stymies ability to patch PLCs and other equipment.</rationale>
+  </security_property>
+  <security_property environment="Night" property="accountability" value="Medium">
+    <rationale>Laptops should be issued and used only to authorised technicians.</rationale>
   </security_property>
 </asset>
 <asset name="InfoPortal" short_code="IZ" type="Systems" is_critical="0">
@@ -353,13 +381,22 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
   <significance>Facilitates access to corporate ICT and telemetry services to authorised principals.  Turns pumps on and off</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="integrity" value="Medium">
-    <rationale></rationale>
+    <rationale>Tampering with the PC could affect STCS applications running on the ICT network.</rationale>
   </security_property>
   <security_property environment="Day" property="availability" value="Medium">
-    <rationale></rationale>
+    <rationale>Unavailability affects tasks relying on productivity applications.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="Low">
-    <rationale></rationale>
+    <rationale>PCs should be used only by authorised ACME employees.</rationale>
+  </security_property>
+  <security_property environment="Night" property="integrity" value="Medium">
+    <rationale>Tampering with the PC could affect STCS applications running on the ICT network.</rationale>
+  </security_property>
+  <security_property environment="Night" property="availability" value="Medium">
+    <rationale>Unavailability affects tasks relying on productivity applications.</rationale>
+  </security_property>
+  <security_property environment="Night" property="accountability" value="Low">
+    <rationale>PCs should be used only by authorised ACME employees.</rationale>
   </security_property>
 </asset>
 <asset name="EnterpriseSCADA Server" short_code="EnterpriseSCADA" type="Systems" is_critical="0">
@@ -437,6 +474,15 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
   <security_property environment="Day" property="accountability" value="High">
     <rationale></rationale>
   </security_property>
+  <security_property environment="Night" property="confidentiality" value="Medium">
+    <rationale></rationale>
+  </security_property>
+  <security_property environment="Night" property="integrity" value="High">
+    <rationale></rationale>
+  </security_property>
+  <security_property environment="Night" property="accountability" value="High">
+    <rationale></rationale>
+  </security_property>
 </asset>
 <asset name="Enterprise SCADA Network" short_code="ESN" type="Systems" is_critical="0">
   <description>Enterprise Control Network, connecting PLCs, EnterpriseSCADA servers, and EnterpriseSCADA clients</description>
@@ -485,13 +531,22 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
   <significance>Water Treatment process could be compromised by corrupted or non-available software.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="integrity" value="High">
-    <rationale></rationale>
+    <rationale>Tampering with STCS settings could hava a catastrophic impact to the plant and broader environment.</rationale>
   </security_property>
   <security_property environment="Day" property="availability" value="Medium">
-    <rationale></rationale>
+    <rationale>Awkward for operators if STCS Applications are unavailable.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="Low">
-    <rationale></rationale>
+    <rationale>Changes to STCS settings should be tracked.</rationale>
+  </security_property>
+  <security_property environment="Night" property="integrity" value="High">
+    <rationale>Tampering with STCS settings could hava a catastrophic impact to the plant and broader environment.</rationale>
+  </security_property>
+  <security_property environment="Night" property="availability" value="Medium">
+    <rationale>Awkward for operators if STCS Applications are unavailable.</rationale>
+  </security_property>
+  <security_property environment="Night" property="accountability" value="Low">
+    <rationale>Changes to STCS settings should be tracked.</rationale>
   </security_property>
 </asset>
 <asset name="ICT cabinet" short_code="ICAB" type="Hardware" is_critical="0">
@@ -555,10 +610,10 @@ Information security: Vulnerable to hacker/terrorist malicious actions.  Disclos
   <significance>Audit trail for how anomalous operations handled.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="integrity" value="Medium">
-    <rationale>Tampering could compromise accountability</rationale>
+    <rationale>Tampering could compromise accountability.</rationale>
   </security_property>
   <security_property environment="Night" property="integrity" value="Medium">
-    <rationale>Tampering could compromise accountability</rationale>
+    <rationale>Tampering could compromise accountability.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="Medium">
     <rationale>Important to know who updated diary in the event of an incident.</rationale>
@@ -963,7 +1018,7 @@ In the meantime, back at the plant, Rick is unable to login to the ICT PC to use
 <risk name="Automated account lockout" vulnerability="Wide Scope" threat="Password enumeration">
   <misusecase environment="Day">
     <narrative>Ben is supervising Alex in the running of RedTeam's ICS network auditing to identify potential vulnerabilities on ACME's corporate IT network.  The tool has crawled the corporate network to identify information that identifies members of staff.  Unfortunately, neither Ben nor Alex realised that an account lockout policy exists and, consequently, manages to lock several arbitrary accounts out.
- 
+
 In the meantime, back at the plant, Rick is unable to login to the ICT PC to use the telemetry service software because his account is locked out.</narrative>
   </misusecase>
 </risk>
@@ -1019,6 +1074,10 @@ Ben promptly installs a keylogger onto this PC before logging out.</narrative>
 <asset_association environment="Day"  head_name="Firewall" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Router" />
 <asset_association environment="Day"  head_name="ICT PC" head_nav="0" head_adornment="Aggregation" head_nry="a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="ICT Application" />
 <asset_association environment="Day"  head_name="ICT cabinet" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Firewall" />
+<asset_association environment="Day"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="1" tail_name="PLC Event" />
+<asset_association environment="Day"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="1" tail_name="Suppress Event" />
+<asset_association environment="Day"  head_name="Works Diary" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Diary Entry" />
+<asset_association environment="Day"  head_name="PLC" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="PLC Event" />
 <asset_association environment="Night"  head_name="ICT Application" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="ICT credentials" />
 <asset_association environment="Night"  head_name="Router" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Corporate Network" />
 <asset_association environment="Night"  head_name="InfoPortal" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Corporate Network" />
@@ -1040,6 +1099,10 @@ Ben promptly installs a keylogger onto this PC before logging out.</narrative>
 <asset_association environment="Night"  head_name="Firewall" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Router" />
 <asset_association environment="Night"  head_name="ICT PC" head_nav="0" head_adornment="Aggregation" head_nry="a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="ICT Application" />
 <asset_association environment="Night"  head_name="ICT cabinet" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Firewall" />
+<asset_association environment="Night"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="1" tail_name="PLC Event" />
+<asset_association environment="Night"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="1" tail_name="Suppress Event" />
+<asset_association environment="Night"  head_name="Works Diary" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Diary Entry" />
+<asset_association environment="Night"  head_name="PLC" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="PLC Event" />
 
 </riskanalysis>
 
@@ -1770,11 +1833,12 @@ Due to the lack of ACME ICT support for PC hardware at his site, Barry has learn
   <task_environment name="Day" >
     <dependencies>A chemicals order has been made.  Rick is currently logged into the SCADA and ICT PCs in the control room.  Rick is the only person available to take the delivery.</dependencies>
     <task_persona persona="Rick" duration="Minutes" frequency="Daily_-_Weekly" demands="Low" goal_conflict="Low" />
+    <task_concern asset="Works Diary" />
     <narrative>At 10am, Rick receives a call from the main gate intercom.  Rick looks at the CCTV camera, and sees the regular sight of the chemical deliveries truck.  After a brief conversation, Rick deduces that the delivery is authentic and opens the main gate.
 
 Rick leaves the control room and heads down to the loading area.  Once there, he supervises the delivery.  After 20 minutes, the Chlorine delivery has been unloaded and signed for, and Rick heads back to the control room.  When he gets back, he sits down and note the time of the Chlorine delivery in the works diary.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
 </task>
 <task name="Resolve reservoir alarm" code="RES_ALARM" author="Anon" assumption_task="FALSE" >
@@ -1788,8 +1852,8 @@ Rick leaves the control room and heads down to the loading area.  Once there, he
     <narrative>Rick looks at the SCADA monitor nearest to him and notices that the levels of the reservoir nearby are unusually high.  When the level gets too high, the entire works need to be shutdown.
 
 In this situation, Rick knows exactly what to do.  After stopping the alarm, Rick logs into the ICT PC next to the SCADA workstation, and clicks on the TMSview icon.  After logging into TMSview, he finds the location of a pumping station 10 miles upstream on the map and connects to it.  After a few moments, he masters the main pump before switching it off.  Rick then returns the pump to its normal slave setting before shutting down TMSview.  The alarm periodically starts and stop again but, after about an hour, the reservoir level normalises again.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
   <task_environment name="Night" >
     <dependencies>Rick is currently in the control room, and hears an alarm.</dependencies>
@@ -1800,8 +1864,8 @@ In this situation, Rick knows exactly what to do.  After stopping the alarm, Ric
     <narrative>Rick looks at the SCADA monitor nearest to him and notices that the levels of the reservoir nearby are unusually high.  When the level gets too high, the entire works need to be shutdown.
 
 In this situation, Rick knows exactly what to do.  After stopping the alarm, Rick logs into the ICT PC next to the SCADA workstation, and clicks on the TMSview icon.  After logging into TMSview, he finds the location of a pumping station 10 miles upstream on the map and connects to it.  After a few moments, he masters the main pump before switching it off.  Rick then returns the pump to its normal slave setting before shutting down TMSview.  The alarm periodically starts and stop again but, after about an hour, the reservoir level normalises again.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
 </task>
 <task name="Broken instrument alarm" code="BIA" author="Anon" assumption_task="FALSE" >
@@ -1813,20 +1877,21 @@ In this situation, Rick knows exactly what to do.  After stopping the alarm, Ric
     <narrative>Rick looks at the SCADA terminal and notices one of the inlet pumps appears to have failed.  Rick leaves the control room building, and walks to the building where the offending inlet pump lives.  Once he gets there, he doesn't see anything obviously wrong, so he checks the MCC to see if there has been some sort of trip.  Again, Rick can't find anything amiss with the electrics, so he concludes there must be some sort of communications problem.
 
 Rick returns back to the control room, and calls up one of the instrument techs located in a building on the other side of the site.  After Rick explains the problem and puts the phone down, he stops the alarm and notes his actions so far in the works diary.  After the 15 minutes, Rick gets a phone call.  As he picks the phone up, he notices that trends have returned to normal again.  Barry explains that there was a minor fault due to a spurious PLC setting, but everything is back to normal again.  After this call, Rick again notes the event in the works diary.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
   <task_environment name="Night" >
     <dependencies>Rick hears an audible alarm and notices that the trends have flatlined.</dependencies>
     <task_persona persona="Rick" duration="Hours_or_longer" frequency="Hourly_or_more" demands="Low" goal_conflict="Low" />
     <task_concern asset="STCS Application" />
+    <task_concern asset="Works Diary" />
     <narrative>Rick looks at the SCADA terminal and notices one of the inlet pumps appears to have failed.  Because Rick is the only person currently on site, Rick leaves the control room building, locking all the doors behind him, and walks to the building where the offending inlet pump lives.  Once he gets there, he doesn't see anything obviously wrong, so he checks the MCC to see if there has been some sort of trip.  Again, Rick can't find anything amiss with the electrics, so he concludes there must be some sort of communications problem.
 
 Rick returns back to the control room, and calls up the bunker at Dorchester.  He describes the problem, and asks for a stand-by instrument tech to be called out to take a look.  After Rick puts the phone down, he stops the alarm and notes his actions so far in the works diary.  After an hour, Rick glances up at the CCTV camera and notices a white transit van approaching, after stopping at the gate for a few moments, the electrified gate opens up and the van drives through.  This van is driven by Barry, an instrument tech who is a frequent visitor to the site.  After a few minutes, Rick hears the buzzer for the main entrance to the building, after hearing Barry's voice, Rick buzzes Barry in.  When Barry gets to the control room and exchanges a few pleasantries, Rick explains the problem to Barry, who heads down to the inlet pump building.
 
 Fifteen minutes later, Barry arrives back at the control room and explains there was a minor fault due to a spurious PLC setting, but everything is back to normal again.  Rick glances over to the SCADA terminal and notices that the trends are indeed back to normal.  After Barry leaves, Rick notes the event in the works diary.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
 </task>
 <task name="Modify SCADA HMI software" code="MOD_SCADA" author="Anon" assumption_task="FALSE" >
@@ -1840,8 +1905,8 @@ Fifteen minutes later, Barry arrives back at the control room and explains there
     <narrative>Barry copies the latest HMI software from his laptop to the SCADA workstation, and modifies the HMI software in order to make the required screen changes.  Barry also changes the configuration parameters.
 
 After the changes have been made, Barry backs up the SCADA HMI software configuration.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
   <task_environment name="Night" >
     <dependencies>Barry contacted over the phone by Rick, who verbally issues the job details.  If Barry thinks a backup may not be available on site, he downloads the latest version of the SCADA software to his laptop.</dependencies>
@@ -1852,8 +1917,8 @@ After the changes have been made, Barry backs up the SCADA HMI software configur
     <narrative>Barry copies the latest HMI software from his laptop to the SCADA workstation.  Barry then frigs the configuration parameters to ensure the plant remains monitored.
 
 Once the SCADA is up and running, Barry re-generates his own job and inputs information about the work he did in order to re-install the SCADA HMI software, and backs up the SCADA HMI software configuration files.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
 </task>
 <task name="Modify PLC software" code="MOD_PLC" author="Anon" assumption_task="FALSE" >
@@ -1870,8 +1935,8 @@ Barry walks over to the panel which accesses the PLC needing to be modified.  Ba
 After downloading, Barry carries out a number of site operation checks to commision the software; this involves taking the piece of equipment out of service in order to make sure the plant operates.  These checks involve co-ordination with Rick.
 
 After the site operations check, Barry backs up the software.  Finally, Barry speaks to Rick to make sure he is happy with the changes made.  Barry then closes the job down using his hand-held.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
   <task_environment name="Night" >
     <dependencies>Barry has been verbally given information about the job from Rick.  Barry makes a decision to download the latest version of the PLC software based on local factors.</dependencies>
@@ -1887,8 +1952,8 @@ In order to get the plant up and running, Barry frigs the code in certain places
 After downloading, Barry carries out a high level check on the site to validate the software download was successful.  This check involves co-ordinating with Rick.
 
 Finally, Barry checks that Rick is happy with the work carried out.  Barry then retrospectively creates the job, and backs up the software.</narrative>
-    <consequences></consequences>
-    <benefits></benefits>
+    <consequences>None</consequences>
+    <benefits>None</benefits>
   </task_environment>
 </task>
 </usability>
@@ -1921,13 +1986,6 @@ Finally, Barry checks that Rick is happy with the work carried out.  Barry then 
     <issue>Standard 7.1(p)</issue>
   </goal_environment>
 </goal>
-<goal name="Product security configuration" originator="Anon">
-  <goal_environment name="Day" category="Achieve" priority="High" >
-    <definition>Product meta-data necessary to configure ACME security controls shall be provided before a product is installed in the Enterprise SCADA environment.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.14(qqqq)</issue>
-  </goal_environment>
-</goal>
 <goal name="Intrusion Prevention System" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>An Intrusion Prevention System shall be deployed to monitor and respond to malicious traffic.</definition>
@@ -1941,13 +1999,6 @@ Finally, Barry checks that Rick is happy with the work carried out.  Barry then 
     <fit_criterion>None</fit_criterion>
     <issue>Standard 7.2(u)
 Standard 7.3(x)</issue>
-  </goal_environment>
-</goal>
-<goal name="Hardware Firewall" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>Firewalls shall be implemented using dedicated hardware.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.3(y)</issue>
   </goal_environment>
 </goal>
 <goal name="Firewall rule attributes" originator="Anon">
@@ -1967,32 +2018,9 @@ Standard 7.3(ee)</issue>
     <concern name="Firewall" />
   </goal_environment>
 </goal>
-<goal name="Malicious traffic blocking" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>Malicious firewall traffic shall be actively blocked.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.3(cc)</issue>
-  </goal_environment>
-</goal>
-<goal name="Malicious traffic alert" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>ACME and ICT partner InfoSec teams shall be alerted to malicious firewall traffic.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.3(dd)
-Standard 7.12(yyy)</issue>
-    <concern name="Firewall" />
-  </goal_environment>
-</goal>
 <goal name="Secure Routers" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Routers shall be installed and maintained in compliance with the TCP/IP addressing standard, the ACME firewall build, and the ACME VPN configuration standard.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>None</issue>
-  </goal_environment>
-</goal>
-<goal name="Firewall administration monitoring" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="Low" >
-    <definition>Firewall administration activities shall be monitored.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
@@ -2072,28 +2100,6 @@ Standard 7.12(yyy)</issue>
     <issue>Standard 7.6(nn)</issue>
   </goal_environment>
 </goal>
-<goal name="Two-Factor Remote Access" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>Remote access shall be controlled by two-factor authentication controls.</definition>
-    <fit_criterion>TBC</fit_criterion>
-    <issue>Standard 7.6(pp)</issue>
-    <concern name="STCS credentials" />
-  </goal_environment>
-</goal>
-<goal name="Third party requests" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>All third party requests for remote access to SCADA, Telemetry, and Control Systems shall be reviewed using the ACME Health Check Process</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.6(rr)</issue>
-  </goal_environment>
-</goal>
-<goal name="Third party remote access" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>Third party systems remotely accessing SCADA, Telemetry, and Control Systems shall conform to the ACME Information Security policy hardware guidelines.</definition>
-    <fit_criterion>TBC</fit_criterion>
-    <issue>Standard 7.6(ss)</issue>
-  </goal_environment>
-</goal>
 <goal name="Internet access" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Internet access from SCADA, Telemetry and Control Systems shall be disabled.</definition>
@@ -2141,13 +2147,6 @@ Standard 7.8(zz)</issue>
     <issue>Standard 7.8(aaa)</issue>
   </goal_environment>
 </goal>
-<goal name="Administration access warrant" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>Administration level privileges shall be approved using the Code of Conduct (CoCo) forms on InfoPortal.</definition>
-    <fit_criterion>Group access for administrators is monitored manually, and each instance of access is logged.</fit_criterion>
-    <issue>Standard 7.8(bbb)</issue>
-  </goal_environment>
-</goal>
 <goal name="EnterpriseSCADA access control" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>EnterpriseSCADA access control credentials shall meet ACME security policy requirements.</definition>
@@ -2177,16 +2176,6 @@ Standard 7.8(zz)</issue>
     <fit_criterion>TBC</fit_criterion>
     <issue>Standard 7.10(kkk)
 Standard 7.10(mmm)</issue>
-  </goal_environment>
-</goal>
-<goal name="Port scan" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>Connecting PLCs and RTUs shall be port-scanned to determine their requisite ports, services, and protocols.</definition>
-    <fit_criterion>TBC</fit_criterion>
-    <issue>Standard 7.10(lll)</issue>
-    <concern name="Telemetry Network" />
-    <concern name="Works Network" />
-    <concern name="Enterprise SCADA Network" />
   </goal_environment>
 </goal>
 <goal name="Authorised removable media" originator="Anon">
@@ -2225,53 +2214,11 @@ Standard 7.10(mmm)</issue>
     <issue>Standard 5(a)</issue>
   </goal_environment>
 </goal>
-<goal name="Responsibility clarification" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>When staff responsibilities and applicability is unclear, the Information Security manager shall be consulted for advice.</definition>
-    <fit_criterion>Significant tasks are written as mandated procedures.</fit_criterion>
-    <issue>Standard 5(b)</issue>
-  </goal_environment>
-</goal>
-<goal name="Router misuse prevention" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="Medium" >
-    <definition>All ACME employees responsible for maintaining information security measures within their area of responsibility shall ensure routing devices are not compromised through misuse of other information processing facilities.</definition>
-    <fit_criterion>Generic users and passwords are not present on any router devices.  For any given router under a particular contract, the contract states how service availability is maintained and what the partner's security policy expectations are, including explicit definitions of security requirements.</fit_criterion>
-    <issue>Standard 7.4(hh)</issue>
-  </goal_environment>
-</goal>
 <goal name="Secure wifi" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Wireless systems shall be securely deployed.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>Standard 7.5</issue>
-  </goal_environment>
-</goal>
-<goal name="Wifi encryption" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>Wireless networking traffic shall be encrypted encompassing WPA or WPA2 level security.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.5(jj)</issue>
-  </goal_environment>
-</goal>
-<goal name="SSID broadcast" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>The SSID of a wireless network shall not be broadcast.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.5(kk)</issue>
-  </goal_environment>
-</goal>
-<goal name="MAC address filtering" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="Medium" >
-    <definition>MAC address filtering shall be applied to authorised wireless access points to disallow unauthorised network connections.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.5(ll)</issue>
-  </goal_environment>
-</goal>
-<goal name="Active Directory wifi control" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>Access control to wifi devices shall be managed through Active Directory.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.5(mm)</issue>
   </goal_environment>
 </goal>
 <goal name="Access revocation" originator="Anon">
@@ -2283,22 +2230,6 @@ Standard 7.10(mmm)</issue>
     <concern name="Telemetry Network" />
     <concern name="Works Network" />
     <concern name="Enterprise SCADA Network" />
-  </goal_environment>
-</goal>
-<goal name="Communication device backdoors" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="Medium" >
-    <definition>Where vendor installed communication devices exist, backdoor access shall not be configured.</definition>
-    <fit_criterion>TBC</fit_criterion>
-    <issue>Standard 7.6(tt)</issue>
-    <concern name="Router" />
-    <concern name="Firewall" />
-  </goal_environment>
-</goal>
-<goal name="Email routing" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>Email from SCADA, Telemetry and Control Systems shall be routed through the corporate e-mail System.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.7 (vv)</issue>
   </goal_environment>
 </goal>
 <goal name="Password policy" originator="Anon">
@@ -2344,13 +2275,6 @@ Standard 7.10(mmm)</issue>
     <definition>Passwords shall not be written down.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>Standard 7.9 (jjj)</issue>
-  </goal_environment>
-</goal>
-<goal name="Inbuilt security" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>All inbuilt security features shall be reviewed and, where appropriate, enabled.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.10(nnn)</issue>
   </goal_environment>
 </goal>
 <goal name="Critical Vendor patches" originator="Anon">
@@ -2498,25 +2422,11 @@ Standard 7.11(vvv)</issue>
     <issue>Standard 7.13(jjjj)</issue>
   </goal_environment>
 </goal>
-<goal name="Application program backup" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>PLC and SCADA application programs shall be stored in the central software repository.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.14(kkkk)</issue>
-  </goal_environment>
-</goal>
 <goal name="Compliance audit" originator="Anon">
   <goal_environment name="Day" category="Maintain" priority="High" >
     <definition>Regular audits shall be carried out to ensure the ACME Information Security Policy is being followed.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>Standard 7.14</issue>
-  </goal_environment>
-</goal>
-<goal name="Acceptable Use Policy" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>All users shall have read and signed the Acceptable Use Policy (AUP) and Code of Conduct (CoCo) forms.</definition>
-    <fit_criterion>None</fit_criterion>
-    <issue>Standard 7.14(mmmm)</issue>
   </goal_environment>
 </goal>
 <goal name="Remote connection audit" originator="Anon">
@@ -2650,13 +2560,7 @@ Standard 7.11(vvv)</issue>
     <issue>Organisational InfoSec Policy 2.5 para 1.</issue>
   </goal_environment>
 </goal>
-<goal name="Authorised SMB/WebDAV connections" originator="Anon">
-  <goal_environment name="Day" category="Maintain" priority="High" >
-    <definition>The firewall shall disallow outbound SMB or WebDAV connections unless explicitly authorised.</definition>
-    <fit_criterion>TBC</fit_criterion>
-    <issue>Rationale: several recent Windows Zero Day threats impact SCADA systems rely on outbound WebDav connections.</issue>
-  </goal_environment>
-</goal>
+
 <goal name="DetectWar-dialing attack" originator="Anon">
   <goal_environment name="Night" category="Detect" priority="Medium" >
     <definition>The system shall detect risk War-dialing attack after its occurrence.</definition>
@@ -2785,6 +2689,138 @@ Standard 7.11(vvv)</issue>
     <definition>Firewall rules fail to identify the characteristics of an intentional attack.</definition>
   </obstacle_environment>
 </obstacle>
+<requirement name="Active Directory wifi control" reference="Corporate Network" reference_type="asset" label="1" type="Functional" priority="1" >
+  <description>Access control to wifi devices shall be managed through Active Directory.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.5(mm)</originator>
+</requirement>
+<requirement name="Communication device backdoors" reference="Corporate Network" reference_type="asset" label="2" type="Security" priority="1" >
+  <description>Where vendor installed communication devices exist, backdoor access shall not be configured.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.6(tt)</originator>
+</requirement>
+<requirement name="Email routing" reference="Corporate Network" reference_type="asset" label="3" type="Functional" priority="1" >
+  <description>Email from SCADA, Telemetry and Control Systems shall be routed through the corporate e-mail System.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.7 (vv)</originator>
+</requirement>
+<requirement name="Port scan" reference="Corporate Network" reference_type="asset" label="4" type="Security" priority="1" >
+  <description>Connecting PLCs and RTUs shall be port-scanned to determine their requisite ports, services, and protocols.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.10(lll)</originator>
+</requirement>
+<requirement name="SSID broadcast" reference="Corporate Network" reference_type="asset" label="5" type="Security" priority="1" >
+  <description>The SSID of a wireless network shall not be broadcast.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.5(kk)</originator>
+</requirement>
+<requirement name="Third party remote access" reference="Corporate Network" reference_type="asset" label="6" type="Security" priority="1" >
+  <description>Third party systems remotely accessing SCADA, Telemetry, and Control Systems shall conform to the ACME Information Security policy hardware guidelines.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.6(ss)</originator>
+</requirement>
+<requirement name="Two-Factor Remote Access" reference="Corporate Network" reference_type="asset" label="7" type="Security" priority="1" >
+  <description>Remote access shall be controlled by two-factor authentication controls.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.6(pp)</originator>
+</requirement>
+<requirement name="Wifi encryption" reference="Corporate Network" reference_type="asset" label="8" type="Security" priority="1" >
+  <description>Wireless networking traffic shall be encrypted encompassing WPA or WPA2 level security.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.5(jj)</originator>
+</requirement>
+<requirement name="Acceptable Use Policy" reference="ICT Application" reference_type="asset" label="1" type="Functional" priority="1" >
+  <description>All users shall have read and signed the Acceptable Use Policy (AUP) and Code of Conduct (CoCo) forms.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.14(mmmm)</originator>
+</requirement>
+<requirement name="Administration access warrant" reference="ICT Application" reference_type="asset" label="2" type="Functional" priority="1" >
+  <description>Administration level privileges shall be approved using the Code of Conduct (CoCo) forms on InfoPortal.</description>
+  <rationale>None</rationale>
+  <fit_criterion>Group access for administrators is monitored manually, and each instance of access is logged.</fit_criterion>
+  <originator>Standard 7.8(bbb)</originator>
+</requirement>
+<requirement name="Inbuilt security" reference="ICT Application" reference_type="asset" label="3" type="Security" priority="1" >
+  <description>All inbuilt security features shall be reviewed and, where appropriate, enabled.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.10(nnn)</originator>
+</requirement>
+<requirement name="Product security configuration" reference="ICT Application" reference_type="asset" label="4" type="Security" priority="1" >
+  <description>Product meta-data necessary to configure ACME security controls shall be provided before a product is installed in the Enterprise SCADA environment.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.14(qqqq)</originator>
+</requirement>
+<requirement name="Third party requests" reference="STCS Application" reference_type="asset" label="1" type="Functional" priority="1" >
+  <description>All third party requests for remote access to SCADA, Telemetry, and Control Systems shall be reviewed using the ACME Health Check Process.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.6(rr)</originator>
+</requirement>
+<requirement name="Application program backup" reference="STCS Application" reference_type="asset" label="2" type="Functional" priority="1">
+  <description>PLC and SCADA application programs shall be stored in the central software repository.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.14(kkkk)</originator>
+</requirement>
+<requirement name="Responsibility clarification" reference="InfoPortal" reference_type="asset" label="1" type="Functional" priority="1" >
+  <description>When staff responsibilities and applicability is unclear, the Information Security manager shall be consulted for advice.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 5(b)</originator>
+</requirement>
+<requirement name="Router misuse prevention" reference="Router" reference_type="asset" label="1" type="Functional" priority="1" >
+  <description>All ACME employees responsible for maintaining information security measures within their area of responsibility shall ensure routing devices are not compromised through misuse of other information processing facilities.</description>
+  <rationale>None</rationale>
+  <fit_criterion>Generic users and passwords are not present on any router devices.  For any given router under a particular contract, the contract states how service availability is maintained and what the partner's security policy expectations are, including explicit definitions of security requirements.</fit_criterion>
+  <originator>Standard 7.4(hh)</originator>
+</requirement>
+<requirement name="Malicious traffic alert" reference="Intrusion Detection System" reference_type="asset" label="1" type="Security" priority="1" >
+  <description>ACME and ICT partner InfoSec teams shall be alerted to malicious firewall traffic.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.3(dd), Standard 7.12(yyy)</originator>
+</requirement>
+<requirement name="Malicious traffic blocking" reference="Firewall" reference_type="asset" label="1" type="Security" priority="1" >
+  <description>Malicious firewall traffic shall be actively blocked</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.3(cc)</originator>
+</requirement>
+<requirement name="MAC address filtering" reference="Firewall" reference_type="asset" label="2" type="Security" priority="1" >
+  <description>MAC address filtering shall be applied to authorised wireless access points to disallow unauthorised network connections.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.5(ll)</originator>
+</requirement>
+<requirement name="Authorised SMB or WebDAV connections" reference="Firewall" reference_type="asset" label="3" type="Security" priority="1">
+  <description>The firewall shall disallow outbound SMB or WebDAV connections unless explicitly authorised.</description>
+  <rationale>Rationale: several recent Windows Zero Day threats impact SCADA systems rely on outbound WebDav connections.</rationale>
+  <fit_criterion>TBC</fit_criterion>
+  <originator>Anon</originator>
+</requirement>
+<requirement name="Firewall administration monitoring" reference="Firewall" reference_type="asset" label="4" type="Security" priority="3">
+  <description>Firewall administration activities shall be monitored.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>None</originator>
+</requirement>
+<requirement name="Hardware Firewall" reference="Firewall" reference_type="asset" label="5" type="Functional" priority="1">
+  <description>Firewalls shall be implemented using dedicated hardware.</description>
+  <rationale>None</rationale>
+  <fit_criterion>None</fit_criterion>
+  <originator>Standard 7.3(y)</originator>
+</requirement>
 <usecase name="Modify Telemetry Software" author="Anon" code="MTS">
 <description>Modify telemetry software</description>
 <actor name="Instrument Technician" />
@@ -2840,7 +2876,7 @@ Standard 7.11(vvv)</issue>
     <preconditions>Alarm raised.</preconditions>
     <flow>
       <step number="1" description="Plant operator enters details of notable event." />
-      <step number="1" description="System acknowledges log entry." />
+      <step number="2" description="System acknowledges log entry." />
     </flow>
     <postconditions>Notable event logged.</postconditions>
   </usecase_environment>
@@ -2848,13 +2884,13 @@ Standard 7.11(vvv)</issue>
     <preconditions>Alarm raised.</preconditions>
     <flow>
       <step number="1" description="Plant operator enters details of notable event." />
-      <step number="1" description="System acknowledges log entry." />
+      <step number="2" description="System acknowledges log entry." />
     </flow>
     <postconditions>Notable event logged.</postconditions>
   </usecase_environment>
 </usecase>
 <usecase name="Authenticate with ICT services" author="Anon" code="ANICT" >
-  <description>tbc</description>
+  <description>Authenticate with ICT services</description>
   <actor name="Plant Operator" />
   <usecase_environment name="Day" >
     <preconditions>Plant Operator not authenticated with ICT services</preconditions>
@@ -2896,22 +2932,22 @@ Standard 7.11(vvv)</issue>
 </goals>
 <associations>
 <manual_association from_name="Detect War-dialing attack" from_dim="response" to_name="DetectWar-dialing attack" to_dim="goal" />
-<goal_association environment="Day"  goal_name="Active Directory Network Services" goal_dim="goal" ref_type="and" subgoal_name="Active Directory wifi control" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Active Directory Network Services" goal_dim="goal" ref_type="and" subgoal_name="Active Directory wifi control" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Product security accreditation" goal_dim="goal" ref_type="and" subgoal_name="Communication device backdoors" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Product security accreditation" goal_dim="goal" ref_type="and" subgoal_name="Communication device backdoors" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Firewall and DMZ" goal_dim="goal" ref_type="and" subgoal_name="Firewall administration monitoring" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Firewall and DMZ" goal_dim="goal" ref_type="and" subgoal_name="Firewall administration monitoring" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Firewall and DMZ" goal_dim="goal" ref_type="and" subgoal_name="Hardware Firewall" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Firewall and DMZ" goal_dim="goal" ref_type="and" subgoal_name="Hardware Firewall" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Firewall and DMZ" goal_dim="goal" ref_type="and" subgoal_name="Internet access" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Firewall and DMZ" goal_dim="goal" ref_type="and" subgoal_name="Authorised SMB/WebDAV connections" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Firewall and DMZ" goal_dim="goal" ref_type="and" subgoal_name="Authorised SMB or WebDAV connections" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Firewall and DMZ" goal_dim="goal" ref_type="and" subgoal_name="Firewall rule attributes" subgoal_dim="goal" alternative_id="0" >
@@ -2923,10 +2959,10 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Firewall and DMZ" goal_dim="goal" ref_type="and" subgoal_name="Least privilege connections" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Firewall trafffic monitoring" goal_dim="goal" ref_type="and" subgoal_name="Malicious traffic blocking" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Firewall trafffic monitoring" goal_dim="goal" ref_type="and" subgoal_name="Malicious traffic blocking" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Firewall trafffic monitoring" goal_dim="goal" ref_type="and" subgoal_name="Malicious traffic alert" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Firewall trafffic monitoring" goal_dim="goal" ref_type="and" subgoal_name="Malicious traffic alert" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Secure Routers" goal_dim="goal" ref_type="and" subgoal_name="Router Installation" subgoal_dim="goal" alternative_id="0" >
@@ -3016,10 +3052,10 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Secure changes" goal_dim="goal" ref_type="and" subgoal_name="Patch Risk Management" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Secure Remote Access" goal_dim="goal" ref_type="and" subgoal_name="Third party requests" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Secure Remote Access" goal_dim="goal" ref_type="and" subgoal_name="Third party requests" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Secure Remote Access" goal_dim="goal" ref_type="and" subgoal_name="Third party remote access" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Secure Remote Access" goal_dim="goal" ref_type="and" subgoal_name="Third party remote access" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Secure Remote Access" goal_dim="goal" ref_type="and" subgoal_name="Access revocation" subgoal_dim="goal" alternative_id="0" >
@@ -3028,7 +3064,7 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Secure Remote Access" goal_dim="goal" ref_type="and" subgoal_name="Remote access inventory" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Secure Remote Access" goal_dim="goal" ref_type="and" subgoal_name="Two-Factor Remote Access" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Secure Remote Access" goal_dim="goal" ref_type="and" subgoal_name="Two-Factor Remote Access" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Access Control" goal_dim="goal" ref_type="and" subgoal_name="User Id Least privilege" subgoal_dim="goal" alternative_id="0" >
@@ -3052,7 +3088,7 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Access Control" goal_dim="goal" ref_type="and" subgoal_name="Credentials non-disclosure" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Warranted Access" goal_dim="goal" ref_type="and" subgoal_name="Administration access warrant" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Warranted Access" goal_dim="goal" ref_type="and" subgoal_name="Administration access warrant" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Credentials non-disclosure" goal_dim="goal" ref_type="and" subgoal_name="Pay number sharing" subgoal_dim="goal" alternative_id="0" >
@@ -3064,7 +3100,7 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Secure Operating Systems" goal_dim="goal" ref_type="and" subgoal_name="Operating system logs" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Secure Operating Systems" goal_dim="goal" ref_type="and" subgoal_name="Product security configuration" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Secure Operating Systems" goal_dim="goal" ref_type="and" subgoal_name="Product security configuration" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Secure Operating Systems" goal_dim="goal" ref_type="and" subgoal_name="Authorised removable media" subgoal_dim="goal" alternative_id="0" >
@@ -3073,13 +3109,13 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Secure Operating Systems" goal_dim="goal" ref_type="and" subgoal_name="Anti-virus" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="OS hardening" goal_dim="goal" ref_type="and" subgoal_name="Email routing" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="OS hardening" goal_dim="goal" ref_type="and" subgoal_name="Email routing" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="OS hardening" goal_dim="goal" ref_type="and" subgoal_name="Inbuilt security" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="OS hardening" goal_dim="goal" ref_type="and" subgoal_name="Inbuilt security" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="OS hardening" goal_dim="goal" ref_type="and" subgoal_name="Port scan" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="OS hardening" goal_dim="goal" ref_type="and" subgoal_name="Port scan" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Authorised removable media" goal_dim="goal" ref_type="and" subgoal_name="Scanned media" subgoal_dim="goal" alternative_id="0" >
@@ -3088,22 +3124,22 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Standard build" goal_dim="goal" ref_type="and" subgoal_name="OS hardening" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Secure Roles" goal_dim="goal" ref_type="and" subgoal_name="Responsibility clarification" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Secure Roles" goal_dim="goal" ref_type="and" subgoal_name="Responsibility clarification" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Secure Roles" goal_dim="goal" ref_type="and" subgoal_name="Router misuse prevention" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Secure Roles" goal_dim="goal" ref_type="and" subgoal_name="Router misuse prevention" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Secure wifi" goal_dim="goal" ref_type="and" subgoal_name="Wifi encryption" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Secure wifi" goal_dim="goal" ref_type="and" subgoal_name="Wifi encryption" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Secure wifi" goal_dim="goal" ref_type="and" subgoal_name="SSID broadcast" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Secure wifi" goal_dim="goal" ref_type="and" subgoal_name="SSID broadcast" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Secure wifi" goal_dim="goal" ref_type="and" subgoal_name="Active Directory wifi control" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Secure wifi" goal_dim="goal" ref_type="and" subgoal_name="Active Directory wifi control" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Secure wifi" goal_dim="goal" ref_type="and" subgoal_name="MAC address filtering" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Secure wifi" goal_dim="goal" ref_type="and" subgoal_name="MAC address filtering" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Password policy" goal_dim="goal" ref_type="and" subgoal_name="Password expiration" subgoal_dim="goal" alternative_id="0" >
@@ -3166,13 +3202,13 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Secure backup" goal_dim="goal" ref_type="and" subgoal_name="Backup logs" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Secure backup" goal_dim="goal" ref_type="and" subgoal_name="Application program backup" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Secure backup" goal_dim="goal" ref_type="and" subgoal_name="Application program backup" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Offsite backup" goal_dim="goal" ref_type="and" subgoal_name="Backup storage" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Compliance audit" goal_dim="goal" ref_type="and" subgoal_name="Acceptable Use Policy" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Compliance audit" goal_dim="goal" ref_type="and" subgoal_name="Acceptable Use Policy" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Compliance audit" goal_dim="goal" ref_type="and" subgoal_name="Remote connection audit" subgoal_dim="goal" alternative_id="0" >
@@ -3187,10 +3223,10 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Asset Inventory" goal_dim="goal" ref_type="and" subgoal_name="Build data" subgoal_dim="goal" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Asset Inventory" goal_dim="goal" ref_type="and" subgoal_name="Product security configuration" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Asset Inventory" goal_dim="goal" ref_type="and" subgoal_name="Product security configuration" subgoal_dim="requirement" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Third party compliance" goal_dim="goal" ref_type="and" subgoal_name="Third party remote access" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Third party compliance" goal_dim="goal" ref_type="and" subgoal_name="Third party remote access" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Secure site" goal_dim="goal" ref_type="and" subgoal_name="ICT awareness" subgoal_dim="goal" alternative_id="0" >
@@ -3244,16 +3280,16 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Least privilege connections" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Acceptable Use Policy" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Acceptable Use Policy" goal_dim="requirement" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Firewall rule attributes" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Two-Factor Remote Access" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Two-Factor Remote Access" goal_dim="requirement" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Third party requests" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Third party requests" goal_dim="requirement" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Access revocation" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
@@ -3265,7 +3301,7 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Intrusion Prevention System" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Inbuilt security" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Inbuilt security" goal_dim="requirement" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="TMS access control" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
@@ -3277,10 +3313,10 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Secure SLA" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Responsibility clarification" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Responsibility clarification" goal_dim="requirement" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Administration access warrant" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Administration access warrant" goal_dim="requirement" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Patch Risk Management" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
@@ -3289,10 +3325,10 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Industrialised secure cabinets" goal_dim="goal" ref_type="responsible" subgoal_name="Information Security Manager" subgoal_dim="role" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Product security configuration" goal_dim="goal" ref_type="responsible" subgoal_name="Vendor" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Product security configuration" goal_dim="requirement" ref_type="responsible" subgoal_name="Vendor" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Communication device backdoors" goal_dim="goal" ref_type="responsible" subgoal_name="Vendor" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Communication device backdoors" goal_dim="requirement" ref_type="responsible" subgoal_name="Vendor" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Build data" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
@@ -3307,28 +3343,28 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Remote connection audit" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Malicious traffic blocking" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Malicious traffic blocking" goal_dim="requirement" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Authorised SMB/WebDAV connections" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Authorised SMB or WebDAV connections" goal_dim="requirement" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Hardware Firewall" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Hardware Firewall" goal_dim="requirement" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Firewall administration monitoring" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Firewall administration monitoring" goal_dim="requirement" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Active Directory wifi control" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Active Directory wifi control" goal_dim="requirement" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Wifi encryption" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Wifi encryption" goal_dim="requirement" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="SSID broadcast" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="SSID broadcast" goal_dim="requirement" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="MAC address filtering" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="MAC address filtering" goal_dim="requirement" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="ACME Change Control" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
@@ -3340,7 +3376,7 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Log file size" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Email routing" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Email routing" goal_dim="requirement" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Password expiration" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
@@ -3370,13 +3406,13 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Backup logs" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Application program backup" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Application program backup" goal_dim="requirement" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Backup storage" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Router misuse prevention" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Router misuse prevention" goal_dim="requirement" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Active Directory software deployment" goal_dim="goal" ref_type="responsible" subgoal_name="ICT Partner" subgoal_dim="role" alternative_id="0" >
@@ -3395,10 +3431,10 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Versioned PLC changes" goal_dim="goal" ref_type="responsible" subgoal_name="Instrument Technician" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Third party remote access" goal_dim="goal" ref_type="responsible" subgoal_name="Integrator" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Third party remote access" goal_dim="requirement" ref_type="responsible" subgoal_name="Integrator" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Port scan" goal_dim="goal" ref_type="responsible" subgoal_name="Integrator" subgoal_dim="role" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Port scan" goal_dim="requirement" ref_type="responsible" subgoal_name="Integrator" subgoal_dim="role" alternative_id="0" >
   <rationale></rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Fire suppression" goal_dim="goal" ref_type="responsible" subgoal_name="Facilities Management" subgoal_dim="role" alternative_id="0" >
@@ -3449,7 +3485,7 @@ Standard 7.11(vvv)</issue>
 <goal_association environment="Day"  goal_name="Vendor passwords" goal_dim="goal" ref_type="obstruct" subgoal_name="Vendor passwords unchanged" subgoal_dim="obstacle" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Day"  goal_name="Malicious traffic alert" goal_dim="goal" ref_type="obstruct" subgoal_name="Undetected malicious traffic" subgoal_dim="obstacle" alternative_id="0" >
+<goal_association environment="Day"  goal_name="Malicious traffic alert" goal_dim="requirement" ref_type="obstruct" subgoal_name="Undetected malicious traffic" subgoal_dim="obstacle" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Day"  goal_name="Credentials non-disclosure" goal_dim="goal" ref_type="obstruct" subgoal_name="Ubiquitous identity data" subgoal_dim="obstacle" alternative_id="0" >
@@ -3545,7 +3581,7 @@ Standard 7.11(vvv)</issue>
     <dataflow_asset name="Suppress Event" />
   </dataflow>
   <trust_boundary name="Operations">
-    <description>All processes and objects associated with plant operations is considered trustworthy.</description> 
+    <description>All processes and objects associated with plant operations is considered trustworthy.</description>
     <trust_boundary_environment name="Day">
       <trust_boundary_component name="Raise Alarm" type="process" />
       <trust_boundary_component name="Suppress Alarm" type="process" />
