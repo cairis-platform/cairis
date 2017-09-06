@@ -19103,7 +19103,7 @@ begin
   declare reqName varchar(4000);
   declare reqDesc varchar(255);
   declare reqRationale varchar(255);
-  declare reqFc varchar(255);
+  declare reqFc varchar(4000);
   declare reqId int;
   declare trId int;
   declare assetName varchar(50);
