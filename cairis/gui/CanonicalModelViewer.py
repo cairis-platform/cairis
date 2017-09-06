@@ -120,38 +120,38 @@ class CanonicalModelViewer(kaosxdot.KaosDotWindow):
     try:
       xdotcode = self.canonicalModel.graph()
       environmentNames = self.dbProxy.getDimensionNames('environment')
-      environmentNames.sort(key=str.lower)
+      environmentNames.sort()
 
       if (self.modelType == 'goal' or self.modelType == 'template_goal'):
         goalNames = ucNames = []
         if self.environment != '':
           goalNames = self.dbProxy.environmentGoals(self.environment.name())
-          goalNames.sort(key=str.lower)
+          goalNames.sort()
           ucNames = self.dbProxy.environmentUseCases(self.environment.name())
-          ucNames.sort(key=str.lower)
+          ucNames.sort()
         self.loadFilters(environmentNames,goalNames,ucNames)
       elif (self.modelType == 'obstacle'):
         obsNames = self.dbProxy.environmentObstacles(self.environment.name())
-        obsNames.sort(key=str.lower)
+        obsNames.sort()
         self.loadFilters(environmentNames,obsNames)
       elif (self.modelType == 'class'):
         asNames = []
         if self.environment != '':
           asNames = self.dbProxy.environmentAssets(self.environment.name())
-        asNames.sort(key=str.lower)
+        asNames.sort()
         self.loadFilters(environmentNames,asNames)
       elif (self.modelType == 'conceptmap'):
         asNames = self.dbProxy.environmentRequirements(self.environment.name())
-        asNames.sort(key=str.lower)
+        asNames.sort()
         self.loadFilters(environmentNames,asNames)
       elif (self.modelType == 'task'):
         taskNames = self.dbProxy.environmentTasks(self.environment.name())
         mcNames = self.dbProxy.getDimensionNames('misusecase')
-        taskNames.sort(key=str.lower)
+        taskNames.sort()
         self.loadFilters(environmentNames,taskNames,mcNames)
       elif (self.modelType == 'responsibility'):
         roleNames = self.dbProxy.getDimensionNames('role')
-        roleNames.sort(key=str.lower)
+        roleNames.sort()
         self.loadFilters(environmentNames,roleNames)
       else:
         self.loadFilters(environmentNames)

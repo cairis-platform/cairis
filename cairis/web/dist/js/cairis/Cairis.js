@@ -206,11 +206,13 @@ $('#aparchitecturalpatternsbox').change(function() {
 
 $('#tmenvironmentsbox').change(function() {
   var envName = $(this).find('option:selected').text();
+  var taskName = JSON.parse(JSON.stringify($('#tmtaskbox').val()));
+  var mcName = JSON.parse(JSON.stringify($('#tmmisusecasebox').val()));
   refreshDimensionSelector($('#tmtaskbox'),'task',envName,function() {
     refreshDimensionSelector($('#tmmisusecasebox'),'misusecase',envName,function() {
-      $('#tmtaskbox').val('All');
-      $('#tmmisusecasebox').val('All');
-      getTaskview(envName,'all','all');
+      $('#tmtaskbox').val(taskName);
+      $('#tmmisusecasebox').val(mcName);
+      getTaskview(envName,taskName,mcName);
     });
   });
 });
@@ -239,10 +241,10 @@ $('#remenvironmentsbox').change(function() {
 $('#rmenvironmentsbox').change(function() {
   var envName = $(this).find('option:selected').val();
   $('#rmenvironmentsbox').val(envName);
-  $('#rmdimensionbox').val('All');
-  $('#rmobjectbox').empty();
+  var dimName = JSON.parse(JSON.stringify($('#rmdimensionbox').val()));
+  var objtName = JSON.parse(JSON.stringify($('#rmobjectbox').val()));
   var modelLayout = $('#rmlayout').val();
-  getRiskview(envName,'all','all',modelLayout);
+  getRiskview(envName,dimName,objtName,modelLayout);
 });
 
 function fillObjectBox(cBoxId,dimName,objtNames) {
