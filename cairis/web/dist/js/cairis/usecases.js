@@ -672,7 +672,7 @@ function refreshExceptionTypeValues(excType,excTypeValue) {
     if (excTypeValue != undefined) {
       $('#theExceptionTypeValues').val(excTypeValue);
     }
-  });
+  },['All']);
 };
 
 mainContent.on('click',"#AddStepExceptionButton", function() {

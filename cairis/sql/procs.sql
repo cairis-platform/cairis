@@ -4709,7 +4709,7 @@ end
 create procedure assetDependents(in assetId int)
 begin
   declare reqId int;
-  declare reqName varchar(255);
+  declare reqName longtext;
   declare threatId int;
   declare threatName varchar(200);
   declare vulId int;
@@ -12844,11 +12844,11 @@ begin
   declare reqLabel int;
   declare reqType varchar(255);
   declare reqPriority int;
-  declare reqName varchar(4000);
-  declare reqDesc varchar(4000);
-  declare reqRat varchar(255);
-  declare reqFc varchar(255);
-  declare reqOrig varchar(255);
+  declare reqName longtext;
+  declare reqDesc longtext;
+  declare reqRat longtext;
+  declare reqFc longtext;
+  declare reqOrig longtext;
   declare ucId int;
   declare ucName varchar(50);
   declare ucAuthor varchar(255);
@@ -17556,7 +17556,7 @@ begin
   declare ucId int;
   declare envId int;
   declare scName varchar(200);
-  declare reqName varchar(200);
+  declare reqName longtext;
   declare ucName varchar(200);
   declare shortCode varchar(100);
   declare ucAuth varchar(255);
@@ -18179,7 +18179,7 @@ end
 
 create procedure requirementDependencyCheck()
 begin
-  declare reqName varchar(255);
+  declare reqName longtext;
   declare startId int;
   declare isCircularDependency int default 0;
   declare buf LONGTEXT;
@@ -18188,7 +18188,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_depcheck;
-  create temporary table temp_depcheck (requirement_name varchar(255), has_circular_dependency int, dependency_chain longtext);
+  create temporary table temp_depcheck (requirement_name longtext, has_circular_dependency int, dependency_chain longtext);
 
   open reqCursor;
   req_loop: loop
@@ -19100,10 +19100,10 @@ create procedure situateComponentViewRequirement(in cvId int, in cId int, in cNa
 begin
   declare reqLabel int;
   declare typeName varchar(50);
-  declare reqName varchar(4000);
-  declare reqDesc varchar(255);
-  declare reqRationale varchar(255);
-  declare reqFc varchar(4000);
+  declare reqName longtext;
+  declare reqDesc longtext;
+  declare reqRationale longtext;
+  declare reqFc longtext;
   declare reqId int;
   declare trId int;
   declare assetName varchar(50);

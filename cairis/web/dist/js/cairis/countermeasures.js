@@ -122,7 +122,7 @@ function createCountermeasuresTable(){
                 $('#chooseEnvironment').attr('data-chooseDimension',"Security Pattern");
 		$('#chooseEnvironment').attr('data-applyEnvironmentSelection',"associateWithSituatedPattern");
 		$('#chooseEnvironment').modal('show');
-	      });
+	      },['All']);
             }
           },
           "removeCountermeasurePattern": {
@@ -134,7 +134,7 @@ function createCountermeasuresTable(){
                 $('#chooseEnvironment').attr('data-chooseDimension',"Security Pattern");
 		$('#chooseEnvironment').attr('data-applyEnvironmentSelection',"removeCountermeasurePattern");
 		$('#chooseEnvironment').modal('show');
-	      });
+	      },['All']);
             }
           },
         }

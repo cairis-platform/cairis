@@ -266,7 +266,7 @@ $('#rmdimensionbox').change(function() {
   else {
    refreshSpecificSelector($('#rmobjectbox'),'/api/risks/model/environment/' + encodeURIComponent(envName) + '/names',function(){
       getRiskview(envName,dimName,'all',modelLayout);
-    },['All']);
+    });
   }
 });
 
@@ -276,6 +276,7 @@ $('#rmobjectbox').change(function() {
   var objtName = $('#rmobjectbox').val()
   var modelLayout = $('#rmlayout').val()
   getRiskview(envName,dimName,objtName,modelLayout);
+
 });
 
 
@@ -866,6 +867,7 @@ function refreshSpecificSelector(sBox,urlPrefix,callback,filterList) {
     success: function (data) {
       data.sort();
       sBox.empty();
+      sBox.append("<option>All</option>");
       if (filterList != undefined) {
         data = data.filter(x => filterList.indexOf(x) < 0);
       }
