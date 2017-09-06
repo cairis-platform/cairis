@@ -421,8 +421,10 @@ $('#riskModelClick').click(function(){
 function viewRiskModel() {
   var envName = $('#chooseEnvironment').attr('data-chosenDimension');
   refreshDimensionSelector($('#rmenvironmentsbox'),'environment',undefined,function() {
-    $('#rmenvironmentsbox').val(envName);
-    getRiskview(envName,'all','all','Hierarchical');
+    refreshSpecificSelector($('#rmobjectbox'),'/api/risks/model/environment/' + encodeURIComponent(envName) + '/names',function() {
+      $('#rmenvironmentsbox').val(envName);
+      getRiskview(envName,'all','all','Hierarchical');
+    },['All']);
   });
 }
 

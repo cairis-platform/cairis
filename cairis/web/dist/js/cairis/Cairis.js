@@ -258,9 +258,16 @@ $('#rmdimensionbox').change(function() {
   var envName = $('#rmenvironmentsbox').val();
   var dimName = $(this).find('option:selected').val();
   var modelLayout = $('#rmlayout').val();
-  refreshDimensionSelector($('#rmobjectbox'),dimName,envName,function() {
-    getRiskview(envName,dimName,'all',modelLayout);
-  });
+  if (dimName != 'all') {
+    refreshDimensionSelector($('#rmobjectbox'),dimName,envName,function() {
+      getRiskview(envName,dimName,'all',modelLayout);
+    });
+  }
+  else {
+   refreshSpecificSelector($('#rmobjectbox'),'/api/risks/model/environment/' + encodeURIComponent(envName) + '/names',function(){
+      getRiskview(envName,dimName,'all',modelLayout);
+    },['All']);
+  }
 });
 
 $('#rmobjectbox').change(function() {
