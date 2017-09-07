@@ -278,8 +278,9 @@ function putRequirementRow(row,oldName){
     accept: "application/json",
     data: objectoutput,
     crossDomain: true,
-    url: serverIP + "/api/requirements/name/" + oldName.replace(' ',"%20"),
+    url: serverIP + "/api/requirements/name/" + encodeURIComponent(oldName),
     success: function (data) {
+      $(row).attr('data-name',json['theName']);
       showPopup(true);
     },
     error: function (xhr, textStatus, errorThrown) {
