@@ -12214,7 +12214,7 @@ begin
   declare envId int;
   declare envName varchar(50);
   declare assetName varchar(50);
-  declare assetShortCode varchar(10);
+  declare assetShortCode varchar(20);
   declare assetDesc varchar(1000);
   declare assetSignif varchar(1000);
   declare assetType varchar(50);
