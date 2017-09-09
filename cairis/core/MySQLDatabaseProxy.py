@@ -245,10 +245,10 @@ class MySQLDatabaseProxy:
         self.updateDatabase('call addCompositeEnvironment(:id,:c)',{'id':environmentId,'c':c},'MySQL error adding composite environment',session,False)
       self.addCompositeEnvironmentProperties(environmentId,parameters.duplicateProperty(),parameters.overridingEnvironment(),session)
       self.commitDatabase(session)
-      assetValues = parameters.assetValues()
-      if (assetValues != None):
-        for v in assetValues: self.updateValueType(v)
-      self.addValueTensions(environmentId,parameters.tensions())
+    assetValues = parameters.assetValues()
+    if (assetValues != None):
+      for v in assetValues: self.updateValueType(v)
+    self.addValueTensions(environmentId,parameters.tensions())
     self.commitDatabase(session)
 
   def addCompositeEnvironmentProperties(self,environmentId,duplicateProperty,overridingEnvironment,session = None):

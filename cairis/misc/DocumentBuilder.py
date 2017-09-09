@@ -1440,6 +1440,13 @@ def environments(p,docDir):
         </section>
         <section><title>Short Code</title>
           <para>""" + paraText(environment.shortCode()) + "</para>" + """
+        </section>
+        <section><title>Asset Values</title>"""
+    avRows = []
+    for avt in p.getValueTypes('asset_value',environmentName):
+      avRows.append((avt.name(),avt.description()))
+    chapterTxt += buildTable( (environmentName + "AssetValues").replace(" ","_") + "AssetValuesTable","",['Value','Description'],avRows,0)
+    chapterTxt += """
         </section>"""
     if (len(environment.environments()) > 0):
       chapterTxt += """
