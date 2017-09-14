@@ -20,8 +20,18 @@
 'use strict';
 
 $("#assetValuesClick").click(function () {
-  $('#unsupportedModel').modal('show');
+  refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment', undefined, function(){
+    $('#chooseEnvironment').attr('data-chooseDimension','environment');
+    $('#chooseEnvironment').attr('data-applyEnvironmentSelection','viewAssetValues');
+    $('#chooseEnvironment').modal('show');
+  },['All']);
 });
+
+function viewAssetValues() {
+  var envName = $("#chooseEnvironmentSelect").val();
+  $('#menuBCClick').attr('dimension','asset_value');
+  refreshMenuBreadCrumb('asset_value',envName);
+}
 
 $("#assetTypesClick").click(function () {
   $('#menuBCClick').attr('dimension','asset_type');
@@ -84,9 +94,18 @@ $("#threatValuesClick").click(function () {
 });
 
 
-function createValueTypesTable(valueType){
+function createValueTypesTable(valueType,envName){
 
   $.session.set('value_type',valueType);
+  var vtUrl = serverIP + "/api/value_types/type/" + valueType + "/environment/";
+  if (envName == undefined) {
+    vtUrl += "all";
+    $.session.set('environment',undefined);
+  }
+  else {
+    vtUrl += encodeURIComponent(envName);
+    $.session.set('environment',envName);
+  } 
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -95,14 +114,13 @@ function createValueTypesTable(valueType){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/value_types/type/" + valueType + "/environment/all",
+    url: vtUrl,
     success: function (data) {
       setTableHeader(valueType);
       var theTable = $(".theTable");
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
       var i = 0;
-
       var keys = [];
       for (key in data) {
         keys.push(key);
@@ -114,8 +132,9 @@ function createValueTypesTable(valueType){
         var item = data[key];
 
         textToInsert[i++] = "<tr>";
-
-        textToInsert[i++] = '<td class="deleteValueTypeButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
+	if (envName == undefined) {
+          textToInsert[i++] = '<td class="deleteValueTypeButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
+	}
         textToInsert[i++] = '<td class="valuetype-rows" name="theName">';
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
@@ -147,6 +166,11 @@ $(document).on('click', "td.valuetype-rows", function () {
   var name = $(this).text();
   refreshObjectBreadCrumb(name);
   var valueType = $.session.get("value_type");
+  var envName = $.session.get("environment");
+  if (envName == undefined) {
+    envName = 'all';
+  }
+
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -155,14 +179,17 @@ $(document).on('click', "td.valuetype-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/value_types/type/" + valueType + "/environment/all/name/" + encodeURIComponent(name),
+    url: serverIP + "/api/value_types/type/" + valueType + "/environment/" + encodeURIComponent(envName) + "/name/" + encodeURIComponent(name),
     success: function (data) {
       $("#UpdateValueType").text("Update");
+      $('#theRationaleLabel').hide();
+      $('#theRationale').hide();
       var vtPage = "editValueTypeOptions.html";
       var formObjt = "#editValueTypeOptionsForm";
       if (valueType == 'access_right' || valueType == 'protocol' || valueType == 'privilege' || valueType == 'surface_type') {
         vtPage = 'editScoredValueTypeOptions.html';
         formObjt = "#editScoredValueTypeOptionsForm";
+        $('#Rationale').attr('display','inline');
       }
       fillOptionMenu("fastTemplates/" + vtPage, "#objectViewer", null, true, true, function () {
         $.session.set("ValueType", JSON.stringify(data));
@@ -185,9 +212,12 @@ mainContent.on('click', '#UpdateValueType', function (e) {
   var oldName = vt.theName;
   vt.theName = $("#theName").val();
   vt.theDescription = $("#theDescription").val();
-  vt.theRationale = $("#theRationale").val();
   vt.theType = $.session.get("value_type");
-  vt.theEnvironmentName = 'all';
+  vt.theEnvironmentName = $.session.get("environment");
+  if (vt.theEnvironmentName == undefined) {
+    vt.theEnvironmentName = 'all';
+  }
+  vt.theRationale = $("#theRationale").val();
 
   var formObjt = "#editValueTypeOptionsForm";
   if (vt.theType == 'access_right' || vt.theType == 'protocol' || vt.theType == 'privilege' || vt.theType == 'surface_type') {
@@ -199,11 +229,12 @@ mainContent.on('click', '#UpdateValueType', function (e) {
     postValueType(vt, function () {
       createValueTypesTable(vt.theType);
       $(formObjt).removeClass("new")
+      refreshMenuBreadCrumb(vt.theType)
     });
   } 
   else {
     putValueType(vt, oldName, function () {
-      createValueTypesTable(vt.theType);
+      refreshMenuBreadCrumb(vt.theType,$.session.get("environment"))
     });
   }
 });
@@ -299,6 +330,10 @@ function putValueType(vt, oldName, callback){
   output = JSON.stringify(output);
   debugLogger(output);
   var valueType = $.session.get("value_type");
+  var envName = $.session.get("environment");
+  if (envName == undefined) {
+    envName = 'all';
+  }
 
   $.ajax({
     type: "PUT",
@@ -309,7 +344,7 @@ function putValueType(vt, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/value_types/type/" + valueType + "/environment/all/name/" + oldName.replace(" ", "%20").replace("/","%47") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/value_types/type/" + valueType + "/environment/" + encodeURIComponent(envName) + "/name/" + oldName.replace(" ", "%20").replace("/","%47") + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -359,5 +394,5 @@ function postValueType(vt, callback){
 
 mainContent.on('click', '#CloseValueType', function (e) {
   e.preventDefault();
-  createValueTypesTable($.session.get("value_type"));
+  refreshMenuBreadCrumb($.session.get("value_type"),$.session.get("environment"))
 });

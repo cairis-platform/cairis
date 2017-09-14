@@ -36,7 +36,7 @@ function refreshHomeBreadCrumb() {
   summaryTables();
 }
 
-function refreshMenuBreadCrumb(dimName) {
+function refreshMenuBreadCrumb(dimName,envName) {
   $('#BC').show();
   $('#homeBCClick').show();
   $('#objtBCClick').hide();
@@ -189,6 +189,20 @@ function refreshMenuBreadCrumb(dimName) {
     $('#menuBCClick').text('Asset Types');
     $('#menuBCClick').show();
     createValueTypesTable('asset_type');
+  }
+  else if (dimName == 'asset_value') {
+    if (envName == undefined) {
+      refreshDimensionSelector($('#chooseEnvironmentSelect'),'environment', undefined, function(){
+        $('#chooseEnvironment').attr('data-chooseDimension','environment');
+	$('#chooseEnvironment').attr('data-applyEnvironmentSelection','viewAssetValues');
+	$('#chooseEnvironment').modal('show');
+      },['All']);
+    }
+    else {
+      $('#menuBCClick').text('Asset Values');
+      $('#menuBCClick').show();
+      createValueTypesTable('asset_value',envName);
+    }
   }
   else if (dimName == 'access_right') {
     $('#menuBCClick').text('Access Rights');

@@ -29,13 +29,49 @@
      "theAccessRight" : "trusted",
      "theDescription" : "Application data",
      "theSignificance" : "Application data",
+     "theTags" : [],
      "theInterfaces" : [
        {"theInterfaceName" : "anInterface",
         "theInterfaceType" : "provided",
         "theAccessRight" : "trusted",
         "thePrivilege" : "privileged"
        }
-     ]},
+     ],
+     "theProperties" : [
+       {"name": "Confidentiality",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Integrity",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Availability",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Accountability",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Anonymity",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Pseudonymity",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Unlinkability",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Unobservability",
+        "value" : "None",
+	"rationale" : "None"
+       }
+     ]
+    },
     {"theName" : "Context Object",
      "theShortCode" : "CTXOBJT",
      "theType" : "Information",
@@ -43,12 +79,48 @@
      "theAccessRight" : "authenticated",
      "theDescription" : "Structured contextual information",
      "theSignificance" : "Can be customised by applications",
+     "theTags" : [],
      "theInterfaces" : [
        {"theInterfaceName" : "anInterface",
         "theInterfaceType" : "provided",
         "theAccessRight" : "trusted",
         "thePrivilege" : "privileged"
        }
-     ]}
+     ],
+     "theProperties" : [
+       {"name": "Confidentiality",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Integrity",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Availability",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Accountability",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Anonymity",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Pseudonymity",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Unlinkability",
+        "value" : "None",
+	"rationale" : "None"
+       },
+       {"name": "Unobservability",
+        "value" : "None",
+	"rationale" : "None"
+       }
+     ]
+    }
   ]
 }

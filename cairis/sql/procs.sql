@@ -16216,34 +16216,34 @@ begin
   if dimensionName = 'asset_value'
   then
     select id into envId from environment where name = envName;
-    select id,name,description,'','' from asset_value where environment_id = envId order by 1;
+    select id,name,description,-1,'' from asset_value where environment_id = envId order by 1;
   elseif dimensionName = 'threat_value'
   then
-    select id,name,description,'','' from threat_value order by 1;
+    select id,name,description,-1,'' from threat_value order by 1;
   elseif dimensionName = 'countermeasure_value'
   then
-    select id,name,description,'','' from countermeasure_value order by 1;
+    select id,name,description,-1,'' from countermeasure_value order by 1;
   elseif dimensionName = 'capability'
   then
-    select id,name,description,'','' from capability order by 1;
+    select id,name,description,-1,'' from capability order by 1;
   elseif dimensionName = 'motivation'
   then
-    select id,name,description,'','' from motivation order by 1;
+    select id,name,description,-1,'' from motivation order by 1;
   elseif dimensionName = 'asset_type'
   then
-    select id,name,description,'','' from asset_type order by 1;
+    select id,name,description,-1,'' from asset_type order by 1;
   elseif dimensionName = 'threat_type'
   then
-    select id,name,description,'','' from threat_type order by 1;
+    select id,name,description,-1,'' from threat_type order by 1;
   elseif dimensionName = 'vulnerability_type'
   then
-    select id,name,description,'','' from vulnerability_type order by 1;
+    select id,name,description,-1,'' from vulnerability_type order by 1;
   elseif dimensionName = 'severity'
   then
-    select id,name,description,'','' from severity order by 1;
+    select id,name,description,-1,'' from severity order by 1;
   elseif dimensionName = 'risk_class'
   then
-    select id,name,ifnull(description,''),'','' from risk_class order by 1;
+    select id,name,ifnull(description,''),-1,'' from risk_class order by 1;
   elseif dimensionName = 'access_right'
   then
     select id,name,description,value,rationale from access_right order by 1;
@@ -16257,7 +16257,7 @@ begin
   then
     select id,name,description,value,rationale from surface_type order by 1;
   else
-    select id,name,description,'','' from likelihood order by 1;
+    select id,name,description,-1,'' from likelihood order by 1;
   end if;
 end
 //

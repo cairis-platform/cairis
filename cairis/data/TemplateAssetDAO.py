@@ -137,12 +137,15 @@ class TemplateAssetDAO(CairisDAO):
     json_dict['__python_obj__'] = TemplateAsset.__module__+'.'+ TemplateAsset.__name__
     ifs = json_dict.pop('theInterfaces',[])
     ifs = self.convert_ifs(fake_ifs=ifs)
-
+    props = json_dict.pop('theProperties',[])
     ta = json_serialize(json_dict)
+    props,rats = self.convert_props(fake_props=props)
     ta = json_deserialize(ta)
 
     if isinstance(ta, TemplateAsset):
       ta.theInterfaces = ifs
+      ta.theProperties = props
+      ta.theRationale = rats
       return ta
     else:
       self.close()
@@ -151,6 +154,7 @@ class TemplateAssetDAO(CairisDAO):
   def simplify(self, ta):
     assert isinstance(ta, TemplateAsset)
     ta.theInterfaces = self.convert_ifs(real_ifs=ta.theInterfaces)
+    ta.theProperties = self.convert_props(real_props=ta.theProperties,fake_props=None,rationales=ta.theRationale)
     return ta
 
   def convert_ifs(self, real_ifs=None, fake_ifs=None):
@@ -173,10 +177,15 @@ class TemplateAssetDAO(CairisDAO):
 
   def convert_props(self, real_props=None, fake_props=None, rationales=None):
     prop_dict = {}
-    prop_dict[0] = 'None'
-    prop_dict[1] = 'Low'
-    prop_dict[2] = 'Medium'
-    prop_dict[3] = 'High'
+    prop_dict['None'] = 0
+    prop_dict['Low'] = 1
+    prop_dict['Medium'] = 2
+    prop_dict['High'] = 3
+    rev_prop_dict = {}
+    rev_prop_dict[0] = 'None'
+    rev_prop_dict[1] = 'Low'
+    rev_prop_dict[2] = 'Medium'
+    rev_prop_dict[3] = 'High'
     new_props = []
     if real_props is not None:
       if len(real_props) > 0:
@@ -184,7 +193,7 @@ class TemplateAssetDAO(CairisDAO):
         for idx in range(0, len(real_props)):
           try:
             attr_name = self.rev_attr_dict[idx]
-            attr_value = prop_dict[real_props[idx]]
+            attr_value = rev_prop_dict[real_props[idx]]
             new_sec_attr = SecurityAttribute(attr_name, attr_value, rationales[idx])
             new_props.append(new_sec_attr)
           except LookupError:
@@ -197,7 +206,7 @@ class TemplateAssetDAO(CairisDAO):
         for sec_attr in fake_props:
           attr_id = self.attr_dict[sec_attr['name']]
           attr_value = prop_dict[sec_attr['value']]
-          attr_rationale = prop_dict[sec_attr['rationale']]
+          attr_rationale = sec_attr['rationale']
           new_props[attr_id] = attr_value
           new_rationale[attr_id] = attr_rationale
       return (new_props,new_rationale)

@@ -1176,7 +1176,7 @@ function setTableHeader(activeTable){
       break;
     case "asset_value":
       debugLogger("Is Asset Value");
-      thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Asset Value</th><th>Description</th>";
+      thead = "<th>Asset Value</th><th>Description</th>";
       break;
     case "asset_type":
       debugLogger("Is Asset Type");
@@ -1915,6 +1915,16 @@ function validateClick(dimension,callback) {
     dimensionCheck('environment',function() {
       dimensionCheck('usecase',callback);
     });
+  }
+  else if (dimension == 'template_asset') {
+    dimensionCheck('surface_type',function() {
+      dimensionCheck('access_right',function() {
+        dimensionCheck('privilege',callback);
+      });
+    });
+  }
+  else if (dimension == 'template_requirement') {
+    dimensionCheck('template_asset',callback);
   }
 }
 

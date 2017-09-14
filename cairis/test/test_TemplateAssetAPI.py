@@ -73,11 +73,15 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     f = open(os.environ['CAIRIS_SRC'] + '/test/templateassets.json')
     d = json.load(f)
     f.close()
-    spValues = [0,0,0,0,0,0,0,0]
-    srValues = ['None','None','None','None','None','None','None','None']
     iTemplateAssets = d['template_assets']
-    self.new_ta = TemplateAsset(-1,iTemplateAssets[1]["theName"], iTemplateAssets[1]["theShortCode"], iTemplateAssets[1]["theDescription"], iTemplateAssets[1]["theSignificance"],iTemplateAssets[1]["theType"],iTemplateAssets[1]["theSurfaceType"],iTemplateAssets[1]["theAccessRight"],spValues,srValues,[],iTemplateAssets[1]["theInterfaces"])
+    self.new_ta = d['template_assets'][1]
     self.new_ta_dict = {
+      'session_id' : 'test',
+      'object': self.new_ta
+    }
+    self.existing_ta_name = 'Application Data'
+    self.upd_ta = d['template_assets'][0]
+    self.upd_ta_dict = {
       'session_id' : 'test',
       'object': self.new_ta
     }
@@ -129,10 +133,10 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
 
   def test_put(self):
     method = 'test_put'
-    self.new_ta_dict['object'].theName = self.existing_ta_name
-    self.new_ta_dict['object'].theDescription = 'Updated description'
+    self.upd_ta_dict['object']['theName'] = self.existing_ta_name
+    self.upd_ta_dict['object']['theDescription'] = 'Updated description'
     url = '/api/template_assets/name/%s?session_id=test' % quote(self.existing_ta_name)
-    rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_ta_dict))
+    rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.upd_ta_dict))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:
@@ -155,7 +159,7 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = json_deserialize(responseData)
 
-    url = '/api/template_assets/name/%s?session_id=test' % quote(self.new_ta.theName)
+    url = '/api/template_assets/name/%s?session_id=test' % quote(self.new_ta['theName'])
     rv = self.app.delete(url)
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')

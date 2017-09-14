@@ -20,8 +20,10 @@
 'use strict';
 
 $("#templateRequirementsClick").click(function(){
-  $('#menuBCClick').attr('dimension','template_requirement');
-  refreshMenuBreadCrumb('template_requirement');
+  validateClick('template_requirement',function() {
+    $('#menuBCClick').attr('dimension','template_requirement');
+    refreshMenuBreadCrumb('template_requirement');
+  });
 });
 
 function createTemplateRequirementsTable(){

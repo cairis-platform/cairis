@@ -1266,7 +1266,6 @@ class TemplateAssetModel(object):
     "theSurfaceType": fields.String,
     "theAccessRight": fields.String,
     "theProperties": fields.List(fields.Nested(SecurityAttribute.resource_fields)),
-    "theRationale": fields.List(fields.String),
     "theTags": fields.String,
     "theInterfaces" : fields.List(fields.Nested(InterfaceModel.resource_fields))
   }
