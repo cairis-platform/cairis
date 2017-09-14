@@ -21,8 +21,10 @@
 
 
 $("#assetAssociationMenuClick").click(function(){
-  $('#menuBCClick').attr('dimension','assetassociation');
-  refreshMenuBreadCrumb('assetassociation');
+  validateClick('assetassociation',function() {
+    $('#menuBCClick').attr('dimension','assetassociation');
+    refreshMenuBreadCrumb('assetassociation');
+  });
 });
 
 function createAssetAssociationsTable(){
@@ -217,7 +219,6 @@ $(document).on("click", "#addNewAssetAssociation", function () {
           $('#theTailNavigation').val('0');
           $('#theRationale').val('');
           $.session.set("AssetAssociation", JSON.stringify(jQuery.extend(true, {},classAssociationDefault )));
-          $('#editAssetAssociationOptionsForm').loadJSON(assoc, null);
         },['All']);
       },['All']);
     },['All']);

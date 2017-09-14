@@ -1876,6 +1876,11 @@ function validateClick(dimension,callback) {
       dimensionCheck('environment',callback);
     });
   }
+  else if (dimension == 'assetassociation') {
+    dimensionCheck('environment',function() {
+      dimensionCheck('asset',callback);
+    });
+  }
   else if (dimension == 'vulnerability') {
     dimensionCheck('vulnerability_type',function() {
       dimensionCheck('environment',function() {
