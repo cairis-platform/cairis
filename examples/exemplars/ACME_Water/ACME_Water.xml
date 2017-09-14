@@ -177,7 +177,7 @@
   <asset_values>
     <none>No impact</none>
     <low>Helps sustain day-to-day operations.</low>
-    <medium>Important for night-time operations.</medium>
+    <medium>Important for daytime operations.</medium>
     <high>Critical to day-to-day operations.</high>
   </asset_values>
 </environment>
