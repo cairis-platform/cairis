@@ -99,6 +99,8 @@ function createArchitecturalPatternsTable(){
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -161,6 +163,8 @@ function viewArchitecturalPattern(apName) {
       });
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -183,6 +187,8 @@ function viewComponentAssetModel(cName) {
       var viewerWindow = window.open('viewer.html');
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -205,6 +211,8 @@ function viewComponentGoalModel(cName) {
       var viewerWindow = window.open('viewer.html');
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }

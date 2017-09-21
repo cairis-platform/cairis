@@ -79,6 +79,8 @@ function createPersonaCharacteristicsTable(){
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -144,6 +146,8 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
             $("#editPersonaCharacteristicOptionsForm").validator('update');
           },
           error: function (xhr, textStatus, errorThrown) {
+            var error = JSON.parse(xhr.responseText);
+            showPopup(false, String(error.message));
             debugLogger(String(this.url));
             debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
           }
@@ -151,6 +155,8 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
       });
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -217,6 +223,8 @@ $(document).on("click", "#addNewPersonaCharacteristic", function () {
         $.session.set("PersonaCharacteristic", JSON.stringify(jQuery.extend(true, {},personaCharacteristicDefault )));
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         debugLogger(String(this.url));
         debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }

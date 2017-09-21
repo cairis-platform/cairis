@@ -31,7 +31,6 @@ function debugLogger(info){
 
 
 $(window).load(function() {
-
   var sessionID = $.session.get('sessionID');
   if(!sessionID){
     $.ajax({
@@ -91,6 +90,8 @@ function viewComponentModel(modelUrl) {
       fillSvgViewer(data);
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -138,6 +139,8 @@ function appendPersonaCharacteristics(pName,bvName,pcName) {
       $('#apcharacteristicbox').val(pcName);
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -158,6 +161,8 @@ function getPersonaView(pName,bvName,pcName){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }

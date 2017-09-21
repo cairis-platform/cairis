@@ -20,6 +20,7 @@ __author__ = 'Shamal Faily, Robin Quetin'
 from random import choice
 import string
 from time import sleep
+from .ARM import SessionNotFound
 
 class Borg:
   __shared_state = {}
@@ -38,7 +39,7 @@ class Borg:
         if settings is not None:
           return settings.get('dbProxy', None)
         else:
-          return None
+          raise SessionNotFound(id)
     else:
       return None
 

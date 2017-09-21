@@ -50,6 +50,8 @@ $( document ).ajaxComplete(function() {
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -92,12 +94,16 @@ $( document ).ajaxComplete(function() {
               });
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -146,12 +152,16 @@ $( document ).ajaxComplete(function() {
               });
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -189,12 +199,16 @@ $( document ).ajaxComplete(function() {
               });
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -254,12 +268,16 @@ $( document ).ajaxComplete(function() {
               });
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -301,12 +319,16 @@ $( document ).ajaxComplete(function() {
               });
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -353,12 +375,16 @@ $( document ).ajaxComplete(function() {
               });
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -415,12 +441,16 @@ $( document ).ajaxComplete(function() {
               });
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -485,12 +515,16 @@ $( document ).ajaxComplete(function() {
                         })
                       },
                       error: function (xhr, textStatus, errorThrown) {
+                        var error = JSON.parse(xhr.responseText);
+                        showPopup(false, String(error.message));
                         debugLogger(String(this.url));
                         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
                       }
                     });
                   },
                   error: function (xhr, textStatus, errorThrown) {
+                    var error = JSON.parse(xhr.responseText);
+                    showPopup(false, String(error.message));
                     debugLogger(String(this.url));
                     debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
                   }
@@ -498,12 +532,16 @@ $( document ).ajaxComplete(function() {
               });
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -568,6 +606,8 @@ $( document ).ajaxComplete(function() {
                         $("#theUsability").val(data);
                       },
                       error: function(xhr, textStatus, errorThrown) {
+                        var error = JSON.parse(xhr.responseText);
+                        showPopup(false, String(error.message));
                         console.log(this.url);
                         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
                       }
@@ -585,6 +625,8 @@ $( document ).ajaxComplete(function() {
                         $("#theTaskLoad").val(data);
                       },
                       error: function(xhr, textStatus, errorThrown) {
+                        var error = JSON.parse(xhr.responseText);
+                        showPopup(false, String(error.message));
                         console.log(this.url);
                         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
                       }
@@ -603,6 +645,8 @@ $( document ).ajaxComplete(function() {
                         $("#theCountermeasureLoad").val(data);
                       },
                       error: function(xhr, textStatus, errorThrown) {
+                        var error = JSON.parse(xhr.responseText);
+                        showPopup(false, String(error.message));
                         console.log(this.url);
                         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
                       }
@@ -612,12 +656,16 @@ $( document ).ajaxComplete(function() {
               });
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -687,12 +735,16 @@ $( document ).ajaxComplete(function() {
               }
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -733,12 +785,16 @@ $( document ).ajaxComplete(function() {
               }); 
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -782,12 +838,16 @@ else if(link.indexOf("obstacles") > -1) {
               }); 
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -855,12 +915,16 @@ else if(link.indexOf("obstacles") > -1) {
               }); 
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -898,12 +962,16 @@ else if(link.indexOf("obstacles") > -1) {
               });
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -959,12 +1027,16 @@ else if(link.indexOf("obstacles") > -1) {
               });
             },
             error: function(xhr, textStatus, errorThrown) {
+              var error = JSON.parse(xhr.responseText);
+              showPopup(false, String(error.message));
               console.log(this.url);
               debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
             }
           });
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           console.log(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }

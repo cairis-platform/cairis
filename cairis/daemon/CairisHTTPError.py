@@ -108,6 +108,28 @@ class ARMHTTPError(CairisHTTPError):
             status='Database conflict'
         )
 
+class NoSessionError(CairisHTTPError):
+    if (sys.version_info > (3,)):
+      status_code=http.client.CONFLICT
+    else:
+      status_code=httplib.CONFLICT
+    status='Session error'
+
+    def __init__(self, exception):
+        """
+
+        :type exception: ARMException
+        """
+        real_exception = exception
+        if isinstance(real_exception.value, DatabaseProxyException):
+            real_exception = real_exception.value
+        CairisHTTPError.__init__(self,
+            status_code=self.status_code,
+            message=str(real_exception.value),
+            status='Session error'
+        )
+
+
 class MalformedJSONHTTPError(CairisHTTPError):
     status='Unreadable JSON data'
     if (sys.version_info > (3,)):

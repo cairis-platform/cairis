@@ -72,7 +72,6 @@ class RisksAPI(Resource):
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
-
     dao = RiskDAO(session_id)
     risks = dao.get_risks(constraint_id)
     resp = make_response(json_serialize(risks, session_id=session_id), OK)

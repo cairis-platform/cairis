@@ -52,6 +52,9 @@ class UnknownOperatingSystem(ARMException):
 class ConflictingType(ARMException):
   def __init__(self,value): ARMException.__init__(self,value)
 
+class SessionNotFound(ARMException):
+  def __init__(self,value): ARMException.__init__(self,'Session not found')
+
 class NoImpliedCharacteristic(Exception):
   def __init__(self,pName,fromCode,toCode,rtName):
     self.thePersonaName = pName

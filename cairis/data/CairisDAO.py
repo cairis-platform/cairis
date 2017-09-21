@@ -24,14 +24,15 @@ else:
   from httplib import CONFLICT
 import logging
 from cairis.core.Borg import Borg
-from cairis.daemon.CairisHTTPError import CairisHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError
+from cairis.core.ARM import SessionNotFound
+from cairis.daemon.CairisHTTPError import CairisHTTPError, NoSessionError, ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
 from cairis.core.ValueType import ValueType
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import ValueTypeModel
 from cairis.tools.SessionValidator import check_required_keys
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 class CairisDAO(object):
   def __init__(self, session_id):
@@ -91,14 +92,12 @@ class CairisDAO(object):
     """
     if session_id:
       b = Borg()
-      db_proxy = b.get_dbproxy(session_id)
+      try:
+        db_proxy = b.get_dbproxy(session_id)
+      except SessionNotFound as ex:
+        raise NoSessionError(ex)
 
-      if db_proxy is None:
-        raise CairisHTTPError(
-          status_code=CONFLICT,
-          message='The database connection could not be created.'
-        )
-      elif isinstance(db_proxy, MySQLDatabaseProxy):
+      if isinstance(db_proxy, MySQLDatabaseProxy):
         if db_proxy.conn is None:
           db_proxy.reconnect(session_id=session_id)
         return db_proxy

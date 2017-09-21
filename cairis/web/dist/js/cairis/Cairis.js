@@ -30,31 +30,26 @@ function debugLogger(info){
 }
 
 $(document).ready(function() {
-  var sessionID = $.session.get('sessionID');
-  if(!sessionID){
-    $.ajax({
-      type: 'POST',
-      url: serverIP + '/make_session',
-      data: {},
-      accept:"application/json",
-      contentType : "application/json",
-      success: function(data, status, xhr) {
-        debugLogger(data);
-        $.session.set("sessionID", data.session_id);
-        refreshHomeBreadCrumb();
-        hideLoading();
-      },
-      error: function(data, status, xhr) {
-        console.log(this.url);
-        debugLogger("error: " + xhr.responseText +  ", textstatus: " + status + ", thrown: " + data);
-        alert("There is a problem with the server...");
-      }
-    });
-  }
-  else {
-    summaryTables();
-    hideLoading();
-  }
+  $.ajax({
+    type: 'POST',
+    url: serverIP + '/make_session',
+    data: {},
+    accept:"application/json",
+    contentType : "application/json",
+    success: function(data, status, xhr) {
+      debugLogger(data);
+      $.session.set("sessionID", data.session_id);
+      refreshHomeBreadCrumb();
+      hideLoading();
+    },
+    error: function(data, status, xhr) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      console.log(this.url);
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + status + ", thrown: " + data);
+      alert("There is a problem with the server...");
+    }
+  });
 });
 
 function showLoading(){
@@ -175,6 +170,8 @@ function appendPersonaCharacteristics(pName,bvName,pcName) {
       $('#apcharacteristicbox').val(pcName);
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -350,6 +347,8 @@ function getAssetview(environment){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -375,6 +374,8 @@ function getDataFlowDiagram(environment,filter){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -397,6 +398,8 @@ function getArchitecturalPatternView(apName){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -423,6 +426,8 @@ function getMisusabilityView(mcName,tcName){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -452,6 +457,8 @@ $('#mmmisusabilitycasesbox').change(function() {
       getMisusabilityView(mcName,'All');
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -479,6 +486,8 @@ function getGoalview(environment,goalName,ucName){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -503,6 +512,8 @@ function getObstacleview(environment,obstacle){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -526,6 +537,8 @@ function getResponsibilityview(environment,role){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -641,6 +654,8 @@ function getRequirementScores(lbls) {
         reqDict[reqLabel] = scObjt;
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         debugLogger(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -708,6 +723,8 @@ function getRiskview(environment,dimName,objtName,modelLayout){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -734,6 +751,8 @@ function getRequirementView(environment,reqName){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -760,6 +779,8 @@ function getTaskview(environment,task,misusecase){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -783,6 +804,8 @@ function getPersonaView(pName,bvName,pcName){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -804,6 +827,8 @@ function getLocationsView(locsName,envName){
       fillSvgViewer(data);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -849,6 +874,8 @@ function refreshDimensionSelector(sBox,dimName,envName,callback,filterList) {
       }
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -886,6 +913,8 @@ function refreshSpecificSelector(sBox,urlPrefix,callback,filterList) {
       }
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -915,6 +944,8 @@ function requirementsTable(dimName){
           $(".loadingWrapper").fadeOut(500);
         },
         error: function(xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           debugLogger(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -1289,6 +1320,8 @@ function getAllAssets(callback) {
       }
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       return null;
@@ -1312,6 +1345,8 @@ function getAllAssetsInEnv(env,callback) {
       }
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       return null;
@@ -1335,6 +1370,8 @@ function getAllRequirements(callback) {
       }
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       return null;
@@ -1432,7 +1469,7 @@ function showPopup(succes, text){
     charcount = charcount/47;
     time = 7000;
     popup.css("width","350px");
-    popup.css("height",30*(charcount+1));
+    popup.css("height",35*(charcount+1));
     $(".Fail").show();
     $(".Fail").find(".faultInfo").text(text);
     $(".Succes").hide();
@@ -1470,6 +1507,8 @@ function deleteObject(dimName,objtName,deleteFn) {
       }
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -1530,6 +1569,8 @@ $("#reportObjectDependencies").on('click', '#confirmODDelete',function(e) {
       $("#reportObjectDependencies").modal('hide');
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -1572,6 +1613,8 @@ $(document).on('shown.bs.modal','#addInterfaceDialog',function() {
       }
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -1599,6 +1642,8 @@ $(document).on('shown.bs.modal','#addInterfaceDialog',function() {
       }
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -1638,6 +1683,8 @@ $("#traceExplorer").on('shown.bs.modal', function() {
       });
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -1675,6 +1722,8 @@ $('#traceExplorer').on('click',"td.trace-dimension", function() {
       });
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -1771,6 +1820,8 @@ $("#chooseEnvironment").on('click', '#chooseEnvironmentButton',function(e) {
         getMisusabilityView(mcName,'All');
       },
       error: function(xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         debugLogger(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -1808,6 +1859,8 @@ function showDirectoryEntries(dirDim) {
       }
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -1841,6 +1894,8 @@ $("#showDirectoryDialog").on('click', '.directoryEntry',function(e) {
       }
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -1861,6 +1916,8 @@ function getNoOfRisks(callback) {
       callback(data.length);
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -1949,6 +2006,8 @@ function dimensionCheck(dimensionName,callback) {
       }
     },
     error: function(xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }

@@ -143,6 +143,8 @@ function createCountermeasuresTable(){
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -188,6 +190,8 @@ function viewCountermeasure(cmName) {
       });
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -330,6 +334,8 @@ mainContent.on('shown.bs.modal','#ChooseTargetDialog',function(e) {
           }
         },
         error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
           debugLogger(String(this.url));
           debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
         }
@@ -934,6 +940,8 @@ function updateCountermeasureTasks(envName,roleList) {
       });
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }

@@ -93,6 +93,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -120,6 +122,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -150,6 +154,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -184,6 +190,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -208,6 +216,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -254,6 +264,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -282,6 +294,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -316,6 +330,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -359,6 +375,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -405,6 +423,8 @@ function handleNodeClick(event,objt) {
                   forceOpenOptions();
                 },
                 error: function (xhr, textStatus, errorThrown) {
+                  var error = JSON.parse(xhr.responseText);
+                  showPopup(false, String(error.message));
                   debugLogger(String(this.url));
                   debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
                 }
@@ -414,6 +434,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -465,6 +487,8 @@ function handleNodeClick(event,objt) {
                   $("#theUsability").val(data);
                 },
                 error: function(xhr, textStatus, errorThrown) {
+                  var error = JSON.parse(xhr.responseText);
+                  showPopup(false, String(error.message));
                   console.log(this.url);
                   debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
                 }
@@ -482,6 +506,8 @@ function handleNodeClick(event,objt) {
                   $("#theTaskLoad").val(data);
                 },
                 error: function(xhr, textStatus, errorThrown) {
+                  var error = JSON.parse(xhr.responseText);
+                  showPopup(false, String(error.message));
                   console.log(this.url);
                   debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
                 }
@@ -500,6 +526,8 @@ function handleNodeClick(event,objt) {
                   $("#theCountermeasureLoad").val(data);
                 },
                 error: function(xhr, textStatus, errorThrown) {
+                  var error = JSON.parse(xhr.responseText);
+                  showPopup(false, String(error.message));
                   console.log(this.url);
                   debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
                 }
@@ -510,6 +538,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -568,6 +598,8 @@ function handleNodeClick(event,objt) {
         }
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -597,6 +629,8 @@ function handleNodeClick(event,objt) {
         }); 
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -630,6 +664,8 @@ function handleNodeClick(event,objt) {
         }); 
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -686,6 +722,8 @@ function handleNodeClick(event,objt) {
         }); 
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -710,6 +748,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
@@ -751,6 +791,8 @@ function handleNodeClick(event,objt) {
         });
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         console.log(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }

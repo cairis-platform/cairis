@@ -74,6 +74,8 @@ function createTaskCharacteristicsTable(){
       sortTableByRow(0);
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -135,6 +137,8 @@ $(document).on('click', "td.taskcharacteristic-rows", function () {
             $("#editTaskCharacteristicOptionsForm").validator('update');
           },
           error: function (xhr, textStatus, errorThrown) {
+            var error = JSON.parse(xhr.responseText);
+            showPopup(false, String(error.message));
             debugLogger(String(this.url));
             debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
           }
@@ -142,6 +146,8 @@ $(document).on('click', "td.taskcharacteristic-rows", function () {
       });
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
@@ -204,6 +210,8 @@ $(document).on("click", "#addNewTaskCharacteristic", function () {
         $.session.set("TaskCharacteristic", JSON.stringify(jQuery.extend(true, {},taskCharacteristicDefault )));
       },
       error: function (xhr, textStatus, errorThrown) {
+        var error = JSON.parse(xhr.responseText);
+        showPopup(false, String(error.message));
         debugLogger(String(this.url));
         debugLogger("error: " + xhr.responseText + ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
