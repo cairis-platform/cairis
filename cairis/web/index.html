@@ -96,6 +96,7 @@
               <li><a id="assetAssociationMenuClick" href="#">Asset Associations</a></li>
               <li><a id="attackerMenuClick" href="#">Attackers</a></li>
               <li><a id="threatMenuClick" href="#">Threats</a></li>
+              <li><a id="threatModelMenuClick" href="#">Threat Model</a></li>
               <li><a id="vulnerabilityMenuClick" href="#">Vulnerabilities</a></li>
               <li><a id="riskMenuClick" href="#">Risks</a></li>
               <li><a id="responseMenuClick" href="#">Responses</a></li>
@@ -440,20 +441,67 @@
             <select class="topCombobox form-control" id="summaryenvironmentsbox"></select>
           </div>
         </div>
-        <div class="row">
-          <div id="vulnerabilitySummary" class="col-md-4">
-            <label class="control-label">Vulnerability Summary</label>
-            <svg style="height:400px"></svg>
-          </div>
-          <div id="threatSummary" class="col-md-4">
-            <label class="control-label">Threat Summary</label>
-            <svg style="height:400px"></svg>
-          </div>
-          <div id="riskSummary" class="col-md-4">
-            <label class="control-label">Risk Summary</label>
-            <svg style="height:400px"></svg>
-          </div>
-        </div>
+	<div class="tabs">
+	  <ul class="nav nav-pills">   
+	    <li><a href="#graphs" data-toggle="tab">Summary</a></li>
+	    <li><a href="#tables" data-toggle="tab">Threat Model</a></li>
+	  </ul>
+	  <div class="tab-content">
+	    <div id="graphs" class="tab-pane active">   
+              <div class="row">
+                <div id="vulnerabilitySummary" class="col-md-4">
+                  <label class="control-label">Vulnerability Summary</label>
+                  <svg style="height:400px"></svg>
+                </div>
+                <div id="threatSummary" class="col-md-4">
+                  <label class="control-label">Threat Summary</label>
+                  <svg style="height:400px"></svg>
+                </div>
+                <div id="riskSummary" class="col-md-4">
+                  <label class="control-label">Risk Summary</label>
+                  <svg style="height:400px"></svg>
+                </div>
+              </div>
+            </div>
+	    <div id="tables" class="tab-pane">
+	      <div class="row">
+                <div class="col-md-1">
+                  <table id="entityTable"class="table table-striped table-bordered">
+                    <thead>
+                      <tr><th>Entity</th><th>Confidentiality</th><th>Integrity</th><th>Availability</th><th>Accountability</th><th>Anonymity</th><th>Pseudonymity</th><th>Unlinkability</th><th>Unobservability</th></tr>
+	            </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+		  </br>
+                  <table id="processTable"class="table table-striped table-bordered">
+                    <thead>
+                      <tr><th>Process</th><th>Confidentiality</th><th>Integrity</th><th>Availability</th><th>Accountability</th><th>Anonymity</th><th>Pseudonymity</th><th>Unlinkability</th><th>Unobservability</th></tr>
+	            </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+		  </br>
+                  <table id="datastoreTable"class="table table-striped table-bordered">
+                    <thead>
+                      <tr><th>Datastore</th><th>Confidentiality</th><th>Integrity</th><th>Availability</th><th>Accountability</th><th>Anonymity</th><th>Pseudonymity</th><th>Unlinkability</th><th>Unobservability</th></tr>
+	            </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+		  </br>
+                  <table id="dataflowTable"class="table table-striped table-bordered">
+                    <thead>
+                      <tr><th>Dataflow</th><th>Confidentiality</th><th>Integrity</th><th>Availability</th><th>Accountability</th><th>Anonymity</th><th>Pseudonymity</th><th>Unlinkability</th><th>Unobservability</th></tr>
+	            </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+	        </div>
+              </div>
+            </div>
+	  </div>
+	</div>
       </div>
       <div id="objectViewer" class="no-print"></div>
     </section><!-- /.content -->

@@ -374,4 +374,61 @@ $('#summaryenvironmentsbox').change(function() {
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crfossDomain: true,
+    url: serverIP + "/api/threats/model/environment/" + encodeURIComponent(envName),
+    success: function (tm) {
+      $("#entityTable").find("tbody").empty();
+      $.each(tm.theEntities,function(idx,row) {
+        appendToTMTable("#entityTable",row);
+      });
+
+      $("#processTable").find("tbody").empty();
+      $.each(tm.theProcesses,function(idx,row) {
+        appendToTMTable("#processTable",row);
+      });
+
+      $("#datastoreTable").find("tbody").empty();
+      $.each(tm.theDatastores,function(idx,row) {
+        appendToTMTable("#datastoreTable",row);
+      });
+
+      $("#dataflowTable").find("tbody").empty();
+      $.each(tm.theDataflows,function(idx,row) {
+        appendToTMTable("#dataflowTable",row);
+      });
+
+
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
 });
+
+function appendToTMTable(tableId,tableRow) {
+  $(tableId).append('<tr><td>' + tableRow.theElement + '</td><td>' + arrayToList(tableRow.theProperties[0].theThreats) + '</td><td>' + arrayToList(tableRow.theProperties[1].theThreats) + '</td><td>' + arrayToList(tableRow.theProperties[2].theThreats) + '</td><td>' + arrayToList(tableRow.theProperties[3].theThreats) + '</td><td>' + arrayToList(tableRow.theProperties[4].theThreats) + '</td><td>' + arrayToList(tableRow.theProperties[5].theThreats) + '</td><td>' + arrayToList(tableRow.theProperties[6].theThreats) + '</td><td>' + arrayToList(tableRow.theProperties[7].theThreats) + '</td></tr>')
+}
+
+function arrayToList(l) {
+  if (l.length == 0) {
+    return '';
+  }
+  else {
+    var buf = "<ul>";
+    for (var i = 0; i < l.length; ++i) {
+      buf += "<li>" + l[i] + "</li>";
+    }
+    buf += "</ul>";
+    return buf;
+  }
+}
