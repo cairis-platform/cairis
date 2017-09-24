@@ -1557,3 +1557,35 @@ class TrustBoundaryModel(object):
   swagger_metadata = {
     obj_id_field: gen_class_metadata(TrustBoundary)
   }
+
+@swagger.model
+class ThreatModelPropertyModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theProperty': fields.String,
+    'theThreats': fields.List(fields.String)
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
+@swagger.model
+class ThreatModelElementModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theElement': fields.String,
+    'theProperties': fields.List(fields.Nested(ThreatModelPropertyModel.resource_fields))
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
+@swagger.model
+class ThreatModelModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theEntities': fields.List(fields.Nested(ThreatModelElementModel.resource_fields)),
+    'theProcesses': fields.List(fields.Nested(ThreatModelElementModel.resource_fields)),
+    'theDatastores': fields.List(fields.Nested(ThreatModelElementModel.resource_fields)),
+    'theDataflows': fields.List(fields.Nested(ThreatModelElementModel.resource_fields))
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)

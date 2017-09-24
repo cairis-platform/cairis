@@ -29,11 +29,11 @@ from flask_restful_swagger import swagger
 from cairis.data.ThreatDAO import ThreatDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import ThreatMessage, ValueTypeMessage
-from cairis.tools.ModelDefinitions import ThreatModel, ValueTypeModel
+from cairis.tools.ModelDefinitions import ThreatModel, ValueTypeModel, ThreatModelModel
 from cairis.tools.SessionValidator import get_session_id
 
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 
 class ThreatAPI(Resource):
@@ -514,4 +514,46 @@ class ThreatTypeByNameAPI(Resource):
     resp_dict = {'message': 'Threat type successfully deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
+    return resp
+
+class ThreatModelAPI(Resource):
+  #region Swagger Doc
+  @swagger.operation(
+    notes='Get threat model',
+    nickname='threat-model-get',
+    responseClass=ThreatModelModel.__name__,
+    responseContainer='List',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+      {
+        "name": "environment_name",
+        "description": "Environment name",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      },
+    ],
+    responseMessages=[
+      {
+        "code": BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  #endregion
+  def get(self,environment_name):
+    session_id = get_session_id(session, request)
+    dao = ThreatDAO(session_id)
+    model = dao.get_threat_model(environment_name)
+    dao.close()
+    resp = make_response(json_serialize(model, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
     return resp

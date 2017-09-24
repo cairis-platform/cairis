@@ -390,6 +390,7 @@ api.add_resource(ThreatController.ThreatByIdAPI, '/api/threats/id/<int:id>',endp
 api.add_resource(ThreatController.ThreatByNameAPI, '/api/threats/name/<string:name>',endpoint='threat')
 api.add_resource(ThreatController.ThreatTypesAPI, '/api/threats/types',endpoint='threat_types')
 api.add_resource(ThreatController.ThreatTypeByNameAPI, '/api/threats/types/name/<string:name>',endpoint='threat_type')
+api.add_resource(ThreatController.ThreatModelAPI, '/api/threats/model/environment/<string:environment_name>',endpoint='threat_model')
 
 # Trace routes
 api.add_resource(TraceController.TracesAPI, '/api/traces',endpoint='traces')

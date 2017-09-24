@@ -4379,3 +4379,15 @@ class MySQLDatabaseProxy:
 
   def deleteTrustBoundary(self,tbId):
     self.deleteObject(tbId,'trust_boundary')
+
+  def threatenedEntities(self,envName):
+    return self.responseList('call threatenedEntities(:envName)',{'envName':envName},'MySQL error getting threatened entities')
+
+  def threatenedProcesses(self,envName):
+    return self.responseList('call threatenedProcesses(:envName)',{'envName':envName},'MySQL error getting threatened processes')
+
+  def threatenedDatastores(self,envName):
+    return self.responseList('call threatenedDatastores(:envName)',{'envName':envName},'MySQL error getting threatened datastores')
+
+  def threatenedDataflows(self,envName):
+    return self.responseList('call threatenedDataflows(:envName)',{'envName':envName},'MySQL error getting threatened dataflows')

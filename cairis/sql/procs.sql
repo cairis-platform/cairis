@@ -896,6 +896,10 @@ drop procedure if exists delete_trust_boundary;
 drop procedure if exists addTrustBoundaryComponent;
 drop procedure if exists relabelRequirements;
 drop procedure if exists trust_boundary_environments;
+drop procedure if exists threatenedEntities;
+drop procedure if exists threatenedDatastores;
+drop procedure if exists threatenedProcesses;
+drop procedure if exists threatenedDataflows;
 
 delimiter //
 
@@ -23819,6 +23823,39 @@ end
 create procedure trust_boundary_environments(in tbId int)
 begin
   select et.environment_id,e.name from environment_trust_boundary et,environment e where et.trust_boundary_id = tbId and et.environment_id = e.id;
+end
+//
+
+create procedure threatenedEntities(in envName text)
+begin
+  declare envId int;
+  select id into envId from environment where name = envName limit 1;
+  select e.name,t.name,sp.name from entity e, asset_threat at, threat_property tp, threat t, security_property sp where at.asset_id = e.id and at.environment_id = envId and at.threat_id = tp.threat_id and at.environment_id = tp.environment_id and tp.property_value_id > 0 and tp.threat_id = t.id and tp.property_id = sp.id order by 1,2;
+end
+//
+
+create procedure threatenedDatastores(in envName text)
+begin
+  declare envId int;
+  select id into envId from environment where name = envName limit 1;
+  select d.name,t.name,sp.name from datastore d, asset_threat at, threat_property tp, threat t, security_property sp where at.asset_id = d.id and at.environment_id = envId and at.threat_id = tp.threat_id and at.environment_id = tp.environment_id and tp.property_value_id > 0 and tp.threat_id = t.id and tp.property_id = sp.id order by 1,2;
+end
+//
+
+
+create procedure threatenedProcesses(in envName text)
+begin
+  declare envId int;
+  select id into envId from environment where name = envName limit 1;
+  select u.name,t.name,sp.name from usecase u, goalusecase_goalassociation uga, goalobstacle_goalassociation oga, obstaclethreat_goalassociation tga, threat_property tp, threat t, security_property sp where u.id = uga.subgoal_id and uga.environment_id = envId and uga.goal_id = oga.goal_id and uga.environment_id = oga.environment_id and oga.subgoal_id = tga.goal_id and oga.environment_id = tga.environment_id and tga.subgoal_id = tp.threat_id and tga.environment_id = tp.environment_id and tp.property_value_id > 0 and tp.threat_id = t.id and tp.property_id = sp.id order by 1,2;
+end
+//
+
+create procedure threatenedDataflows(in envName text)
+begin
+  declare envId int;
+  select id into envId from environment where name = envName limit 1;
+  select df.name,t.name,sp.name from dataflow df, dataflow_asset da, asset_threat at, threat_property tp, threat t, security_property sp where df.environment_id = envId and df.id = da.dataflow_id and da.asset_id = at.asset_id  and at.environment_id = df.environment_id and at.threat_id = tp.threat_id and at.environment_id = tp.environment_id and tp.property_value_id > 0 and tp.threat_id = t.id and tp.property_id = sp.id order by 1,2;
 end
 //
 

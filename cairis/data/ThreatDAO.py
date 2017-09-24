@@ -28,7 +28,7 @@ from cairis.core.ValueTypeParameters import ValueTypeParameters
 import cairis.core.armid
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-from cairis.tools.ModelDefinitions import ThreatModel, ThreatEnvironmentPropertiesModel
+from cairis.tools.ModelDefinitions import ThreatModel, ThreatEnvironmentPropertiesModel, ThreatModelPropertyModel, ThreatModelElementModel, ThreatModelModel
 from cairis.tools.PseudoClasses import SecurityAttribute
 from cairis.tools.SessionValidator import check_required_keys
 
@@ -273,6 +273,44 @@ class ThreatDAO(CairisDAO):
 
     try:
       self.db_proxy.deleteThreatType(found_type.theId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def buildThreatModelElement(self,elements):
+
+    apDict = {}
+    for ap in elements:
+      if ap[0] not in apDict:
+        propDict = {'Confidentiality':[],'Integrity':[],'Availability':[],'Accountability':[],'Anonymity':[],'Pseudonymity':[],'Unlinkability':[],'Unobservability':[]}
+        apDict[ap[0]] = propDict
+      apDict[ap[0]][ap[2]].append(ap[1])
+    els = []
+    for ap in apDict:
+      elObjt = ThreatModelElementModel()
+      elObjt.theElement = ap
+      elObjt.theProperties = []
+      props = ['Confidentiality','Integrity','Availability','Accountability','Anonymity','Pseudonymity','Unlinkability','Unobservability']
+      for prop in props:
+        propObjt = ThreatModelPropertyModel()
+        propObjt.theProperty = prop
+        propObjt.theThreats = apDict[ap][prop]
+        elObjt.theProperties.append(propObjt)
+      els.append(elObjt)
+    return els
+
+
+  def get_threat_model(self,environment_name):
+    try:
+      tm = ThreatModelModel()
+      tm.theEntities = self.buildThreatModelElement(self.db_proxy.threatenedEntities(environment_name))
+      tm.theProcesses = self.buildThreatModelElement(self.db_proxy.threatenedProcesses(environment_name))
+      tm.theDatastores = self.buildThreatModelElement(self.db_proxy.threatenedDatastores(environment_name))
+      tm.theDataflows = self.buildThreatModelElement(self.db_proxy.threatenedDataflows(environment_name))
+      return tm
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
