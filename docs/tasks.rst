@@ -12,8 +12,7 @@ Adding, updating, or deleting a task
    :alt: Task Dialog
 
 
--  Click on the UX/Tasks button to open the Tasks table, and
-   click on the Add button to open the Task form.
+-  Click on the UX/Tasks menu to open the Tasks table, and click on the Add button to open the Task form.
 
 -  Enter a task name, and the objective of carrying out the task.
 
