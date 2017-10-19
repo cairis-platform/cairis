@@ -26,9 +26,9 @@ Adding, updating, or deleting a use cases
 
 -  Click on the Create button to add the new use case.
 
--  Existing tasks can be modified by clicking on the use case in the Use Cases table, making the necessary changes, and clicking on the Update button.
+-  Existing use cases can be modified by clicking on the use case in the Use Cases table, making the necessary changes, and clicking on the Update button.
 
--  To delete a task, select the use case to delete in the Use Cases, and click the Delete button. If any artifacts are dependent on this use case then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the use case dependencies and the use case itself, or No to cancel the deletion.
+-  To delete a use case, select the use case to delete in the Use Cases, and click the Delete button. If any artifacts are dependent on this use case then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the use case dependencies and the use case itself, or No to cancel the deletion.
 
 Add exceptions to use case steps
 --------------------------------
@@ -43,5 +43,7 @@ Add exceptions to use case steps
 -  Select the goal or requirement that this step conflicts with.  Goals are visible only if you have added a sub-goal refinement relationship between goals and this use case.  Requirements are visible only if you have added a manual 'Supported by' traceability link between requirements and this use case.
 
 -  Click Add to add the exception to the Exceptions table.
+
+-  Existing exceptions can be modified by double clicking on the step in the Exceptions table, making the necessary changes, and clicking on the Update button.
 
 -  To generate an Obstacle based on this exception, right click on the exception entry in this table, and select Generate Obstacle from the speed menu.

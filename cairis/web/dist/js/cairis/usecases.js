@@ -287,7 +287,7 @@ mainContent.on('change','#theActorType',function() {
   refreshDimensionSelector($('#theGRLActor'),$('#theActorType').val(),envName,undefined,['All']);
 });
 
-mainContent.on('click','td.usecaseStep',function() {
+mainContent.on('dblclick','.clickable-row',function() {
   $('#AddStepButton').text('Update');
   var stepIdx = $(this).closest('tr').index();
   $('#useCaseStepDialog').attr('data-selectedIndex',stepIdx);
