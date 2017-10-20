@@ -10,9 +10,9 @@ CAIRIS documentation
    :maxdepth: 2
    :caption: Contents:
 
-   io
-   databases
    projects
+   databases
+   io
    environments
    assets
    roles_personas

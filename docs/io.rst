@@ -1,6 +1,9 @@
 Importing and Exporting models
 ==============================
 
+Importing models
+----------------
+
 You can import models by selecting the System / Import Model menu, selecting the model type to import, and the model file itself.
 
 .. figure:: ImportModel.jpg
@@ -47,5 +50,8 @@ You will usually want to stick with the Model option, which imports a standard C
 +------------------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 | Attack Tree (Dot)                  | N/A                          | Graphviz (Dot) representation of an attack tree                                                                               |
 +------------------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
+
+Exporting models
+----------------
 
 To export a model, select the System / Export Model option.  This will render the current CAIRIS database you are working with as a CAIRIS XML model (conforming to cairis_model.dtd).
