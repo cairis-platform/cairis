@@ -34,6 +34,7 @@ CAIRIS documentation
    traceability
    architecturalpatterns
    configurable
+   searching
    gendoc
 
 

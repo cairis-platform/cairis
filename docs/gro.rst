@@ -182,7 +182,7 @@ main differences are goal filtering is not possible, only the obstacle
 tree is displayed, and obstacles refine to obstacles, as opposed to
 goals.
 
-For details on how to print models as SVG files, see the `Viewing Asset models`_ section.
+For details on how to print obstacle models as SVG files, see the `Generating Documentation`_ section.
 
 
 Adding, updating, and deleting requirements
@@ -214,18 +214,11 @@ identified.
    requirement labels.
 
 
-Searching requirement text
---------------------------
+Attack tree modelling with obstacles
+------------------------------------
 
-It is possible to search for a requirement or any other model object with a particular text
-string from the Search box in the menu bar. This Find dialog is very similar to
-the Find dialog found in many WYSIWYG applications.
+Attack trees are a formal methodological way of describing the security of systems.  Together with Data Flow Diagrams (DFDs) these are a standard for visualising threat models.
 
-Requirements traceability
--------------------------
+Because obstacle models are represented using the same top-down notation as attack trees, they are a good candidate for representing attack.
 
-Normally requirements traceability is synonymous with adding a goal
-refinement association but, requirements may also contribute to
-vulnerabilities (as well as tasks), or be supported by assets or misuse
-cases. Consequently, requirements can be manually traced to these
-artifacts in the same manner as tasks.
+You can import attack trees represented as Dot files directly into a CAIRIS model.  See the `Importing and Exporting models`_ section for more details on how to import models into CAIRIS.

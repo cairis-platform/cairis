@@ -54,7 +54,7 @@ Manual traceability links can be removed by selecting the Options/Traceability m
 Visualising tasks
 -----------------
 
-Task models can be viewed by selecting the Models/Task menu, and selecting the environment to view the environment for.
+Task models can be viewed by selecting the Models/Task menu, and selecting the environment to view the model for.
 
 .. figure:: TaskModel.jpg
    :alt: Task Model
@@ -65,4 +65,4 @@ model for a different environment can be viewed. The model can also be filtered 
 By clicking on a model element, information about that artifact can be
 viewed.
 
-For details on how to print models as SVG files, see the `Viewing Asset models`_ section.
+For details on how to print task models as SVG files, see the `Generating Documentation`_ section.
