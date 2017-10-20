@@ -46,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'CAIRIS'
-copyright = u'2016, Shamal Faily'
+copyright = u'2017, Shamal Faily'
 author = u'Shamal Faily'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -82,7 +82,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -107,7 +107,7 @@ htmlhelp_basename = 'CAIRISdoc'
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
-    # 'papersize': 'letterpaper',
+    'papersize': 'a4paper'
 
     # The font size ('10pt', '11pt' or '12pt').
     #
