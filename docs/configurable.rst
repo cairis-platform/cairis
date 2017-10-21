@@ -21,7 +21,7 @@ A selected asset type can be deleted by clicking on its delete button.  Although
 
 
 Other Types
-------------------------------------------------------
+-----------
 
 You can add a selection of types associated with risk and architectural models appropriate sub-menu in the Options, and clicking on the Add button.  You should then enter a name, score, description, and score rationale before clicking on the Create button.
 
