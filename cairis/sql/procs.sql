@@ -19961,7 +19961,7 @@ begin
   declare assetName varchar(50);
   declare roleName varchar(255);
   declare assetId int;
-  declare goalDef varchar(255);
+  declare goalDef varchar(4000);
   declare goalRationale varchar(1000);
   declare goalId int;
   declare tgId int;

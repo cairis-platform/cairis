@@ -1461,7 +1461,7 @@ CREATE TABLE goal_label (
 CREATE TABLE goal_definition (
   goal_id INT NOT NULL,
   environment_id INT NOT NULL,
-  definition VARCHAR(1000) NOT NULL,
+  definition VARCHAR(4000) NOT NULL,
   PRIMARY KEY(goal_id,environment_id),
   FOREIGN KEY(goal_id) REFERENCES goal(id),
   FOREIGN KEY(environment_id) REFERENCES environment(id)
