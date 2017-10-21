@@ -6,7 +6,7 @@ In some cases, however, it is necessary to add manual traceability relationships
 
 The table below indicates what manual links are allowed to be set between elements.
 
-+------------------------------------+
++---------------+--------------------+
 | From          | To                 |
 +===============+====================+
 | Requirement   | Task               |
