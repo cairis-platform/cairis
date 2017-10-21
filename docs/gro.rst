@@ -127,6 +127,16 @@ goal.
 
 For details on how to print models as SVG files, see the `Viewing Asset models`_ section.
 
+Template Goals
+~~~~~~~~~~~~~~~
+
+.. figure:: TemplateGoalDialog.jpg
+   :alt: TemplateGoalDialog
+
+You can specify libraries of template goals that you might form the basis of architectural patterns.
+
+These can be added, updated, and deleted in much the same way as standard goals.
+
 
 Adding, updating, and deleting an obstacle
 ------------------------------------------
@@ -212,6 +222,16 @@ identified.
 
 -  A requirement can be deleting by right clicking on any cell in the row to be removed, and selecting Remove from the speed menu. Deleting a requirement also has the effect of re-ordering the
    requirement labels.
+
+Template Requirements
+~~~~~~~~~~~~~~~~~~~~~
+
+.. figure:: TemplateRequirementDialog.jpg
+:alt: TemplateRequirementDialog
+
+You can specify libraries of template requirements that you might form the basis of security and architectural patterns.
+
+These can be added, updated, and deleted in much the same way as other CAIRIS objects.
 
 
 Attack tree modelling with obstacles

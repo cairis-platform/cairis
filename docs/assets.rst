@@ -122,3 +122,17 @@ By clicking on a model element, information about that artifact can be
 viewed.
 
 For details on how to print asset models as SVG files, see the `Generating Documentation`_ section.
+
+Template Assets
+~~~~~~~~~~~~~~~
+
+.. figure:: TemplateAssetDialog.jpg
+   :alt: TemplateAssetDialog
+
+You can specify libraries of template assets that you might form the basis of security or architectural patterns.
+
+These can be added, updated, and deleted in much the same way as standard assets, but with two differences:
+
+1.  Template assets are not environment specific, so you need to specify the general security properties that need to be protected should this asset be included in a model.
+
+2.  You need to first define Access Rights, Surface Types, and Privileges.
