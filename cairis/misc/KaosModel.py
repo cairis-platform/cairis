@@ -157,11 +157,16 @@ class KaosModel:
           goalEdge = pydot.Edge(subGoalName,goalName,dir='forward',arrowhead='veetee',weight='1')
           self.theGraph.add_edge(goalEdge)
           edgeSet.add((subGoalName,goalName))
-      elif (associationType == 'depend'):
+      elif (associationType == 'depender'):
         if ((subGoalName,goalName) not in edgeSet):
-          goalEdge = pydot.Edge(subGoalName,goalName,dir='forward',arrowhead='curve',weight='1')
+          goalEdge = pydot.Edge(goalName,subGoalName,dir='forward',arrowhead='curve',weight='1')
           self.theGraph.add_edge(goalEdge)
-          edgeSet.add((subGoalName,goalName))
+          edgeSet.add((goalName,subGoalName))
+      elif (associationType == 'dependee'):
+        if ((subGoalName,goalName) not in edgeSet):
+          goalEdge = pydot.Edge(goalName,subGoalName,dir='forward',arrowhead='curve',weight='1')
+          self.theGraph.add_edge(goalEdge)
+          edgeSet.add((goalName,subGoalName))
       else:
         refNodeName = goalName + '#' + associationType
         # This is probably a good time to see if there is already another goalassociation in the graph for another environment

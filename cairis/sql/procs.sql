@@ -6946,13 +6946,13 @@ begin
     union
     select rg.id id,e.name environment,hg.name goal_name,'role' goal_dim,'depend' ref_type, tg.name subgoal_name,'goal' subgoal_dim,'0',rg.rationale from rolegoalrole_dependency rg, role hg, goal tg, environment e where rg.environment_id = environmentId and rg.depender_id = hg.id and rg.dependency_id = tg.id and rg.environment_id = e.id
     union
-    select rt.id id,e.name environment,hg.name goal_name,'role' goal_dim,'depend' ref_type, tg.name subgoal_name,'task' subgoal_dim,'0',rt.rationale from roletaskrole_dependency rt, role hg, task tg, environment e where rt.environment_id = environmentId and rt.depender_id = hg.id and rt.dependency_id = tg.id and rt.environment_id = e.id
+    select rt.id id,e.name environment,hg.name goal_name,'role' goal_dim,'depender' ref_type, tg.name subgoal_name,'task' subgoal_dim,'0',rt.rationale from roletaskrole_dependency rt, role hg, task tg, environment e where rt.environment_id = environmentId and rt.depender_id = hg.id and rt.dependency_id = tg.id and rt.environment_id = e.id
     union
     select ra.id id,e.name environment,hg.name goal_name,'role' goal_dim,'depend' ref_type, tg.name subgoal_name,'asset' subgoal_dim,'0',ra.rationale from roleassetrole_dependency ra, role hg, asset tg, environment e where ra.environment_id = environmentId and ra.depender_id = hg.id and ra.dependency_id = tg.id and ra.environment_id = e.id
     union
     select gr.id id,e.name environment,hg.name goal_name,'goal' goal_dim,'depend' ref_type, tg.name subgoal_name,'role' subgoal_dim,'0',gr.rationale from rolegoalrole_dependency gr, goal hg, role tg, environment e where gr.environment_id = environmentId and gr.dependency_id = hg.id and gr.dependee_id = tg.id and gr.environment_id = e.id
     union
-    select tr.id id,e.name environment,hg.name goal_name,'task' goal_dim,'depend' ref_type, tg.name subgoal_name,'role' subgoal_dim,'0',tr.rationale from roletaskrole_dependency tr, task hg, role tg, environment e where tr.environment_id = environmentId and tr.dependency_id = hg.id and tr.dependee_id = tg.id and tr.environment_id = e.id
+    select tr.id id,e.name environment,hg.name goal_name,'task' goal_dim,'dependee' ref_type, tg.name subgoal_name,'role' subgoal_dim,'0',tr.rationale from roletaskrole_dependency tr, task hg, role tg, environment e where tr.environment_id = environmentId and tr.dependency_id = hg.id and tr.dependee_id = tg.id and tr.environment_id = e.id
     union
     select ar.id id,e.name environment,hg.name goal_name,'asset' goal_dim,'depend' ref_type, tg.name subgoal_name,'role' subgoal_dim,'0',ar.rationale from roleassetrole_dependency ar, asset hg, role tg, environment e where ar.environment_id = environmentId and ar.dependency_id = hg.id and ar.dependee_id = tg.id and ar.environment_id = e.id;
   else
