@@ -26,7 +26,7 @@ Adding, updating, and deleting a response
    :alt: Response form
 
 
--  Select the Risk/Responses toolbar menu to open the Responses table, and click on the Add button. Select the response to take from the available options presented.
+-  Select the Risk/Responses menu to open the Responses table, and click on the Add button. Select the response to take from the available options presented.
 
 -  Select the risk to associate this response with.
 
