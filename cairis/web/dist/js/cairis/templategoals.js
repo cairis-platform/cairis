@@ -60,7 +60,7 @@ function fillTemplateGoalsTable(data, callback){
 
     textToInsert[i++] = '<td class="deleteTemplateGoalButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
 
-    textToInsert[i++] = '<td class="template-requirement-rows" name="theName" value="' + item.theName + '">';
+    textToInsert[i++] = '<td class="template-goal-rows" name="theName" value="' + item.theName + '">';
     textToInsert[i++] = item.theName;
     textToInsert[i++] = '</td>';
 
@@ -72,7 +72,7 @@ function fillTemplateGoalsTable(data, callback){
 
   });
   theTable.append(textToInsert.join(''));
-  $.contextMenu('destroy',$('.requirement-rows'));
+  $.contextMenu('destroy',$('.goal-rows'));
   theTable.css("visibility","visible");
   $("#mainTable").find("tbody").removeClass();
 
