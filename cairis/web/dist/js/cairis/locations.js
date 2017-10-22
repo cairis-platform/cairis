@@ -100,14 +100,13 @@ function viewLocations(locsName) {
     url: serverIP + "/api/locations/name/" + locsName.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editLocationsOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editLocationsOptionsForm").validator();
+        $.session.set("Locations", JSON.stringify(data));
         $("#UpdateLocations").text("Update");
         $('#theLocationsName').val(data.theName);
         $('#theLocations').find("tbody").empty();
         $.each(data.theLocations,function(idx,loc) {
           appendLocation(loc);
         });
-        $.session.set("Locations", JSON.stringify(data));
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -127,7 +126,6 @@ $(document).on("click", "#addNewLocations", function () {
   refreshObjectBreadCrumb('New Locations');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editLocationsOptions.html", "#objectViewer", null, true, true, function () {
-    $("#editLocationsOptionsForm").validator();
     $("#UpdateLocations").text("Create");
     $("#editLocationsOptionsForm").addClass("new");
     $('#theLocationsName').val('');
