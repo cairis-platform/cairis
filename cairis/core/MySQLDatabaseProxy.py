@@ -4138,7 +4138,9 @@ class MySQLDatabaseProxy:
       for locName in locNames:
         assetInstances = self.getAssetInstances(locName)
         personaInstances = self.getPersonaInstances(locName)
-        locLinks = linkDict[locName]
+        locLinks = []
+        if locName in linkDict:
+          locLinks = linkDict[locName]
         loc = Location(-1,locName,assetInstances,personaInstances,locLinks)
         locs.append(loc)
       p = LocationsParameters(locsName,locsDia,locs)
