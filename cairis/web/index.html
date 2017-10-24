@@ -965,6 +965,84 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="editTaskCharacteristicReference" tabindex="-1" role="dialog" aria-labelledby="cTCR_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Edit Task Characteristic Reference</h4>
+        </div>
+        <div class="modal-body">
+          <div class="tabs">
+            <ul>
+              <li><a href="#reference">Reference</a></li>
+              <li><a href="#grl">GRL Elements</a></li>
+            </ul>
+            <div id="reference">
+              <div class="form-group" id="theTCArtifactTypeDiv">
+                <label for="theTCArtifactType" class="control-label">Artifact Type</label>
+                <select class="optionsInput form-control" name="theTCArtifactType" id="theTCArtifactType" style="width: 75%;" required>
+                  <option value="document">Document</option>
+                  <option value="persona">Persona</option>
+                  <option value="requirement">Requirement</option>
+                  <option value="task">Task</option>
+                  <option value="usecase">Use Case</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="theTCReferenceName" class="control-label">Reference</label>
+                <select class="optionsInput form-control" style="width: 75%;" name="theTCReferenceName" id="theTCReferenceName">
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="theTCDescription" class="control-label">Description</label>
+                <textarea rows="5" class="optionsInput form-control" name="theTCDescription" id="theTCDescription" data-error="Description not provided" required> </textarea>
+                <div class="help-block with-errors"></div>
+              </div>
+            </div>
+            <div id="grl">
+              <div class="form-group">
+                <label for="theGWRContributionCharacteristic" class="control-label">Characteristic</label>
+                <input class="form-control" type="text" name="theGWRContributionCharacteristic" id="theGWRContributionCharacteristic" disabled>
+              </div>
+              <div class="form-group">
+                <label for="theGWRSynopsis" class="control-label">Synopsis</label>
+                <input class="form-control" type="text" name="theGWRSynopsis" id="theGWRSynopsis">
+              </div>
+              <div class="form-group">
+                <label for="theTaskGWRElementType" class="control-label">Element Type</label>
+                <select class="form-control" name="theGWRElementType" id="theGWRElementType">
+                  <option value="goal">Goal</option>
+                  <option value="softgoal">Soft Goal</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="theGWRMeansEnds" class="control-label">Means/Ends</label>
+                <select class="form-control" name="theGWRMeansEnds" id="theGWRMeansEnds">
+                  <option value="means">Means</option>
+                  <option value="ends">Ends</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="theGWRContribution" class="control-label">Contribution</label>
+                <select class="form-control" name="theGWRContribution" id="theGWRContribution">
+                  <option value="Make">Make</option>
+                  <option value="SomePositive">SomePositive</option>
+                  <option value="Help">Help</option>
+                  <option value="Hurt">Hurt</option>
+                  <option value="SomeNegative">SomeNegative</option>
+                  <option value="Break">Break</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="saveTaskCharacteristicReference" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="modal fade" id="addInterfaceDialog" tabindex="-1" role="dialog" aria-labelledby="cAID_label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

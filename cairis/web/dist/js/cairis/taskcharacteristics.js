@@ -324,43 +324,50 @@ function appendTaskBacking(item) {
 };
 
 function loadTaskCharacteristicReference() {
-  $('#theArtifactTypeDiv').show();
-  var cr = $("#editCharacteristicReference").data("currentcr");
+  $('#theTCArtifactTypeDiv').show();
+  var cr = $("#editTaskCharacteristicReference").data("currentcr");
   if (cr != undefined) {
-    $('#theArtifactType').val(cr.dimension);
-    refreshDimensionSelector($('#theReferenceName'),cr.dimension + '_reference',undefined,function() {
+    $('#theTCArtifactType').val(cr.dimension);
+    refreshDimensionSelector($('#theTCReferenceName'),cr.dimension + '_reference',undefined,function() {
       var cr = JSON.parse(cr);
-      $("#theReferenceName").val(cr.name);
-      $("#theDescription").val(cr.description);
+      $("#theTCReferenceName").val(cr.name);
+      $("#theTCDescription").val(cr.description);
     });
   }
   else {
-    $('#theArtifactType').val('document');
-    refreshDimensionSelector($('#theReferenceName'),'document_reference',undefined,function() {
-      $("#theDescription").val('');
+    $('#theTCArtifactType').val('document');
+    refreshDimensionSelector($('#theTCReferenceName'),'document_reference',undefined,function() {
+      $("#theTCDescription").val('');
     });
   }
 };
 
-$('#editCharacteristicReference').on("change", "#theArtifactType", function(){
-  var artifactType = $('#theArtifactType').val();
-  var cr = JSON.parse($("#editCharacteristicReference").data("currentcr"));
-
-  refreshDimensionSelector($('#theReferenceName'),artifactType + '_reference',undefined,function() {
-    $("#theReferenceName").val(cr.name);
-    $("#theDescription").val(cr.description);
-  });
+$('#editTaskCharacteristicReference').on("change", "#theTCArtifactType", function(){
+  var artifactType = $('#theTCArtifactType').val();
+  var cr = $("#editTaskCharacteristicReference").data("currentcr");
+  if (cr != undefined) {
+   cr = JSON.parse(cr);
+    refreshDimensionSelector($('#theTCReferenceName'),artifactType + '_reference',undefined,function() {
+      $("#theTCReferenceName").val(cr.name);
+      $("#theTCDescription").val(cr.description);
+    });
+  }
+  else {
+    refreshDimensionSelector($('#theTCReferenceName'),artifactType + '_reference',undefined,function() {
+      $("#theTCDescription").val('');
+    });
+  }
 });
 
 
 
 function addTaskCharacteristicReference(e) {
   e.preventDefault();
-  var cr = JSON.parse($("#editCharacteristicReference").data("crtype"));
+  var cr = JSON.parse($("#editTaskCharacteristicReference").data("crtype"));
   var item = jQuery.extend(true, {},characteristicReferenceDefault );
-  item.theReferenceName = $("#theReferenceName").val();
-  item.theReferenceDescription = $("#theDescription").val();
-  item.theDimensionName = 'document';
+  item.theReferenceName = $("#theTCReferenceName").val();
+  item.theReferenceDescription = $("#theTCDescription").val();
+  item.theDimensionName = $('#theTCArtifactType').val();
   var tc = JSON.parse($.session.get("TaskCharacteristic"));
 
   if (cr.tableId == '#theGrounds' && gwrItemPresent(tc.theGrounds,item.theReferenceName) == false) {
@@ -381,18 +388,18 @@ function addTaskCharacteristicReference(e) {
     appendTaskGWR(cr.tableId,cr.classId,item);
     $.session.set("TaskCharacteristic", JSON.stringify(tc));
   }
-  $("#editCharacteristicReference").modal('hide');
+  $("#editTaskCharacteristicReference").modal('hide');
 }
 
 function updateTaskReferenceList(e) {
   e.preventDefault();
-  var cr = JSON.parse($("#editCharacteristicReference").data("currentcr"));
+  var cr = JSON.parse($("#editTaskCharacteristicReference").data("currentcr"));
   var item = jQuery.extend(true, {},characteristicReferenceDefault );
-  item.theReferenceName = $("#theReferenceName").val();
-  item.theReferenceDescription = $("#theDescription").val();
+  item.theReferenceName = $("#theTCReferenceName").val();
+  item.theReferenceDescription = $("#theTCReferenceDescription").val();
   $(cr.tableId).find("tbody").find('tr:eq(' + cr.index + ')').find('td:eq(1)').text(item.theReferenceName);
   $(cr.tableId).find("tbody").find('tr:eq(' + cr.index + ')').find('td:eq(2)').text(item.theReferenceDescription);
-  item.theDimensionName = 'document';
+  item.theDimensionName = $('#theTCReferenceArtifactType').val();
   var tc = JSON.parse($.session.get("TaskCharacteristic"));
 
   if (cr.tableId == '#theGrounds') {
@@ -420,7 +427,7 @@ function updateTaskReferenceList(e) {
     });
   }
   $.session.set("TaskCharacteristic", JSON.stringify(tc));
-  $("#editCharacteristicReference").modal('hide');
+  $("#editTaskCharacteristicReference").modal('hide');
 }
 
 
@@ -428,39 +435,39 @@ mainContent.on("click", "#addTCGrounds", function(){
   var crt = {};
   crt.tableId = "#theGrounds";
   crt.classId = 'ground'; 
-  $("#editCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
-  $("#editCharacteristicReference").data("savecr",addTaskCharacteristicReference);
-  $("#editCharacteristicReference").data("crtype",JSON.stringify(crt));
-  $("#editCharacteristicReference").modal('show');
+  $("#editTaskCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
+  $("#editTaskCharacteristicReference").data("savecr",addTaskCharacteristicReference);
+  $("#editTaskCharacteristicReference").data("crtype",JSON.stringify(crt));
+  $("#editTaskCharacteristicReference").modal('show');
 });
 
 mainContent.on("click", "#addTCWarrant", function(){
   var crt = {};
   crt.tableId = "#theWarrant";
   crt.classId = 'warrant'; 
-  $("#editCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
-  $("#editCharacteristicReference").data("savecr",addTaskCharacteristicReference);
-  $("#editCharacteristicReference").data("crtype",JSON.stringify(crt));
-  $("#editCharacteristicReference").modal('show');
+  $("#editTaskCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
+  $("#editTaskCharacteristicReference").data("savecr",addTaskCharacteristicReference);
+  $("#editTaskCharacteristicReference").data("crtype",JSON.stringify(crt));
+  $("#editTaskCharacteristicReference").modal('show');
 });
 
 mainContent.on("click", "#addTCRebuttal", function(){
   var crt = {};
   crt.tableId = "#theRebuttal";
   crt.classId = 'rebuttal'; 
-  $("#editCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
-  $("#editCharacteristicReference").data("savecr",addTaskCharacteristicReference);
-  $("#editCharacteristicReference").data("crtype",JSON.stringify(crt));
-  $("#editCharacteristicReference").modal('show');
+  $("#editTaskCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
+  $("#editTaskCharacteristicReference").data("savecr",addTaskCharacteristicReference);
+  $("#editTaskCharacteristicReference").data("crtype",JSON.stringify(crt));
+  $("#editTaskCharacteristicReference").modal('show');
 });
 
-$("#editCharacteristicReference").on('shown.bs.modal', function() {
-  var cmd = $("#editCharacteristicReference").data("loadcr");
+$("#editTaskCharacteristicReference").on('shown.bs.modal', function() {
+  var cmd = $("#editTaskCharacteristicReference").data("loadcr");
   cmd();
 });
 
-$("#editCharacteristicReference").on('click', '#saveCharacteristicReference',function(e) {
-  var cmd = $("#editCharacteristicReference").data("savecr");
+$("#editTaskCharacteristicReference").on('click', '#saveTaskCharacteristicReference',function(e) {
+  var cmd = $("#editTaskCharacteristicReference").data("savecr");
   cmd(e);
 });
 
@@ -472,10 +479,10 @@ mainContent.on("click",".tc_ground", function () {
   cr.description = propRow.find("td:eq(3)").text();
   cr.index = propRow.index();
   cr.tableId = "#theGrounds";
-  $("#editCharacteristicReference").data("currentcr",JSON.stringify(cr));
-  $("#editCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
-  $("#editCharacteristicReference").data("savecr",updateTaskReferenceList);
-  $("#editCharacteristicReference").modal('show');
+  $("#editTaskCharacteristicReference").data("currentcr",JSON.stringify(cr));
+  $("#editTaskCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
+  $("#editTaskCharacteristicReference").data("savecr",updateTaskReferenceList);
+  $("#editTaskCharacteristicReference").modal('show');
 });
 mainContent.on("click",".tc_warrant", function () {
   var propRow = $(this).closest("tr");
@@ -485,10 +492,10 @@ mainContent.on("click",".tc_warrant", function () {
   cr.description = propRow.find("td:eq(3)").text();
   cr.index = propRow.index();
   cr.tableId = "#theWarrant";
-  $("#editCharacteristicReference").data("currentcr",JSON.stringify(cr));
-  $("#editCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
-  $("#editCharacteristicReference").data("savecr",updateTaskReferenceList);
-  $("#editCharacteristicReference").modal('show');
+  $("#editTaskCharacteristicReference").data("currentcr",JSON.stringify(cr));
+  $("#editTaskCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
+  $("#editTaskCharacteristicReference").data("savecr",updateTaskReferenceList);
+  $("#editTaskCharacteristicReference").modal('show');
 });
 mainContent.on("click",".tc_rebuttal", function () {
   var propRow = $(this).closest("tr");
@@ -498,10 +505,10 @@ mainContent.on("click",".tc_rebuttal", function () {
   cr.description = propRow.find("td:eq(3)").text();
   cr.index = propRow.index();
   cr.tableId = "#theRebuttal";
-  $("#editCharacteristicReference").data("currentcr",JSON.stringify(cr));
-  $("#editCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
-  $("#editCharacteristicReference").data("savecr",updateTaskReferenceList);
-  $("#editCharacteristicReference").modal('show');
+  $("#editTaskCharacteristicReference").data("currentcr",JSON.stringify(cr));
+  $("#editTaskCharacteristicReference").data('loadcr',loadTaskCharacteristicReference);
+  $("#editTaskCharacteristicReference").data("savecr",updateTaskReferenceList);
+  $("#editTaskCharacteristicReference").modal('show');
 });
 
 mainContent.on('click','td.deletetcground',function() {
