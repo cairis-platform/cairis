@@ -96,12 +96,14 @@ $(document).on('click', "td.conceptreference-rows", function () {
     url: serverIP + "/api/concept_references/name/" + name.replace(" ", "%20"),
     success: function (data) {
       fillOptionMenu("fastTemplates/editConceptReferenceOptions.html", "#objectViewer", null, true, true, function () {
-        $("#editConceptReferenceOptionsForm").validator();
-        $("#UpdateConceptReference").text("Update");
-        $('#theDimName').val(data.theDimName);
-        getObjtNames(data.theDimName,data.theObjtName);
-        $.session.set("ConceptReference", JSON.stringify(data));
-        $('#editConceptReferenceOptionsForm').loadJSON(data, null);
+        refreshDimensionSelector($('#theObjtName'),$('#theDimName').val(),undefined,function() {
+          $("#UpdateConceptReference").text("Update");
+          $('#theDimName').val(data.theDimName);
+          getObjtNames(data.theDimName,data.theObjtName);
+          $.session.set("ConceptReference", JSON.stringify(data));
+          $('#editConceptReferenceOptionsForm').loadJSON(data, null);
+          $("#editConceptReferenceOptionsForm").validator('update');
+	});
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -151,10 +153,12 @@ $(document).on('click', 'td.deleteConceptReferenceButton', function (e) {
 $(document).on("click", "#addNewConceptReference", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editConceptReferenceOptions.html", "#objectViewer", null, true, true, function () {
-    $("#editConceptReferenceOptionsForm").validator();
-    $("#UpdateConceptReference").text("Create");
-    $("#editConceptReferenceOptionsForm").addClass("new");
-    $.session.set("ConceptReference", JSON.stringify(jQuery.extend(true, {},conceptReferenceDefault )));
+    refreshDimensionSelector($('#theObjtName'),$('#theDimName').val(),undefined,function() {
+      $("#editConceptReferenceOptionsForm").validator();
+      $("#UpdateConceptReference").text("Create");
+      $("#editConceptReferenceOptionsForm").addClass("new");
+      $.session.set("ConceptReference", JSON.stringify(jQuery.extend(true, {},conceptReferenceDefault )));
+    });
   });
 });
 

@@ -376,13 +376,13 @@ function addTaskCharacteristicReference(e) {
     appendTaskGWR(cr.tableId,cr.classId,item);
     $.session.set("TaskCharacteristic", JSON.stringify(tc));
   }
-  else if (cr.tableId == '#theWarrant' && gwrItemPresent(pc.theWarrant,item.theReferenceName) == false) {
+  else if (cr.tableId == '#theWarrant' && gwrItemPresent(tc.theWarrant,item.theReferenceName) == false) {
     item.theCharacteristicType = 'warrant';
     tc.theWarrant.push(item);
     appendTaskGWR(cr.tableId,cr.classId,item);
     $.session.set("TaskCharacteristic", JSON.stringify(tc));
   }
-  else if (cr.tableId == '#theRebuttal' && gwrItemPresent(pc.theRebuttal,item.theReferenceName) == false) {
+  else if (cr.tableId == '#theRebuttal' && gwrItemPresent(tc.theRebuttal,item.theReferenceName) == false) {
     item.theCharacteristicType = 'rebuttal';
     tc.theRebuttal.push(item);
     appendTaskGWR(cr.tableId,cr.classId,item);
@@ -535,6 +535,6 @@ mainContent.on('click','td.deletetcrebuttal',function() {
   rRow.remove();
   var tc = JSON.parse($.session.get("TaskCharacteristic"));
   tc.theRebuttal.splice(rowIdx,1);
-  $.session.set("TaskCharacteristic", JSON.stringify(pc));
+  $.session.set("TaskCharacteristic", JSON.stringify(tc));
 });
 
