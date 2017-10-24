@@ -8,7 +8,7 @@ CAIRIS makes it possible to overlay risks onto location models, to explore the i
 Adding, updating, and deleting a locations object
 -------------------------------------------------
 
-.. figure:: LocationsTable.jpg
+.. figure:: LocationsForm.jpg
    :alt: Locations table
 
 -  Select the UX / Locations menu to view the list of Locations objects.
@@ -18,7 +18,7 @@ Adding, updating, and deleting a locations object
 
 -  To add a location to this object, click on the Add button in the table of locations.
 
-.. figure:: LocationTable.jpg
+.. figure:: LocationForm.jpg
    :alt: Location table
 
 -  In the Objects folder, click on the Add button to open the Asset Instance dialog.  Enter the name of the asset instance, select the asset name, and click on Add to add the instance object.
