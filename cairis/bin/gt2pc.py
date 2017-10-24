@@ -92,9 +92,9 @@ def main(args=None):
   personaNames = set([])
   
   pcf = open(args.characteristicsFile,"r")
-  for l in pcf.readlines():
-    l = string.strip(l)
-    pce = l.split(',')
+  for li in pcf.readlines():
+    li = string.strip(li)
+    pce = li.split(',')
     gtr = pce[0]
     pcName = pce[1]
     labelName = pce[2]
