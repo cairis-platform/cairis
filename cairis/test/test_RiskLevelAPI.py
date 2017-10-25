@@ -83,8 +83,6 @@ class RiskLevelAPITests(CairisDaemonTestCase):
     self.assertIsInstance(level, int, 'The result is not an integer as expected')
     self.assertEqual(level, 0)
 
-
-
   def test_get_risk_threat_level(self):
     method = 'test_get_risk_level'
     url = '/api/risk_level/asset/threat_type/' + quote(self.existing_asset_name) + '/' + quote(self.existing_threat_name) + '?session_id=test'
@@ -98,3 +96,31 @@ class RiskLevelAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(level, 'No results after deserialization')
     self.assertIsInstance(level, int, 'The result is not an integer as expected')
     self.assertEqual(level, 9)
+
+  def test_get_risk_threat_level_by_environment(self):
+    method = 'test_get_risk_level_by_environment'
+    url = '/api/risk_level/asset/threat_type/ICT%20Application/Enumeration/environment/Day?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    level = jsonpickle.decode(responseData)
+    self.assertIsNotNone(level, 'No results after deserialization')
+    self.assertIsInstance(level, int, 'The result is not an integer as expected')
+    self.assertEqual(level, 9)
+
+    url = '/api/risk_level/asset/threat_type/ICT%20Application/Enumeration/environment/Night?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    level = jsonpickle.decode(responseData)
+    self.assertIsNotNone(level, 'No results after deserialization')
+    self.assertIsInstance(level, int, 'The result is not an integer as expected')
+    self.assertEqual(level, 0)
+
+

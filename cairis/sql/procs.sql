@@ -23154,7 +23154,7 @@ begin
 end
 //
 
-create procedure assetThreatRiskLevel(in assetName text,in threatName text)
+create procedure assetThreatRiskLevel(in assetName text,in threatName text, in inputEnvName text)
 begin
   declare currentRiskScore int;
   declare assetRiskScore int default 0;
@@ -23172,15 +23172,39 @@ begin
   select id into assetId from asset where name = assetName limit 1;
   select id into threatId from threat where name = threatName limit 1;
 
-  open envAssetCursor;
-  envAsset_loop: loop
-    fetch envAssetCursor into envId;
-    if done = 1
-    then
-      leave envAsset_loop;
-    end if;
-    select name into envName from environment where id = envId;
+  if inputEnvName = ''
+  then
+    open envAssetCursor;
+    envAsset_loop: loop
+      fetch envAssetCursor into envId;
+      if done = 1
+      then
+        leave envAsset_loop;
+      end if;
+      select name into envName from environment where id = envId;
 
+      open riskCursor;
+      risk_loop: loop
+        fetch riskCursor into riskName,vulName;
+        if done = 1
+        then
+          leave risk_loop;
+        end if;
+        call nvRiskScore(threatName,vulName,envName,riskName);
+        select max(postScore) into currentRiskScore from temp_riskscore;
+       
+        if currentRiskScore > assetRiskScore
+        then
+          set assetRiskScore = currentRiskScore;
+        end if;
+      end loop risk_loop;
+      close riskCursor;
+      set done = 0;
+    end loop envAsset_loop;
+    close envAssetCursor;
+  else
+    set envName = inputEnvName;
+    select id into envId from environment where name = envName;
     open riskCursor;
     risk_loop: loop
       fetch riskCursor into riskName,vulName;
@@ -23198,9 +23222,7 @@ begin
     end loop risk_loop;
     close riskCursor;
     set done = 0;
-
-  end loop envAsset_loop;
-  close envAssetCursor;
+  end if;
   select assetRiskScore;
 end
 //

@@ -4192,8 +4192,8 @@ class MySQLDatabaseProxy:
       elNames.append(c1)
     return elNames
 
-  def assetThreatRiskLevel(self,assetName,threatName):
-    return self.responseList('call assetThreatRiskLevel(:ass,:thr)',{'ass':assetName,'thr':threatName},'MySQL error getting asset threat risk level')[0]
+  def assetThreatRiskLevel(self,assetName,threatName,envName):
+    return self.responseList('call assetThreatRiskLevel(:ass,:thr,:env)',{'ass':assetName,'thr':threatName,'env':envName},'MySQL error getting asset threat risk level')[0]
 
   def assetRiskLevel(self,assetName,envName):
     return self.responseList('call assetRiskLevel(:ass,:env)',{'ass':assetName,'env':envName},'MySQL error getting asset risk level')[0]
