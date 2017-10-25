@@ -4195,8 +4195,8 @@ class MySQLDatabaseProxy:
   def assetThreatRiskLevel(self,assetName,threatName):
     return self.responseList('call assetThreatRiskLevel(:ass,:thr)',{'ass':assetName,'thr':threatName},'MySQL error getting asset threat risk level')[0]
 
-  def assetRiskLevel(self,assetName):
-    return self.responseList('call assetRiskLevel(:ass)',{'ass':assetName},'MySQL error getting asset risk level')[0]
+  def assetRiskLevel(self,assetName,envName):
+    return self.responseList('call assetRiskLevel(:ass,:env)',{'ass':assetName,'env':envName},'MySQL error getting asset risk level')[0]
 
   def dimensionSummary(self,dimName,envName):
     return self.responseList('call ' + dimName + 'Summary(:name)',{'name':envName},'MySQL error getting ' + dimName + ' summary for environment ' + envName)

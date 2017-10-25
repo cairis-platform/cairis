@@ -343,6 +343,7 @@ api.add_resource(RiskController.RiskAnalysisModelNamesAPI, '/api/risks/model/env
 
 # Risk Levels routes
 api.add_resource(RiskLevelController.RiskLevelAPI, '/api/risk_level/asset/<string:name>',endpoint='risklevel')
+api.add_resource(RiskLevelController.RiskLevelByEnvironmentAPI, '/api/risk_level/asset/<string:name>/environment/<string:environment>',endpoint='risklevelbyenvironment')
 api.add_resource(RiskLevelController.RiskThreatLevelAPI, '/api/risk_level/asset/threat_type/<string:asset>/<string:threat>',endpoint='riskthreatlevel')
 
 # Role routes

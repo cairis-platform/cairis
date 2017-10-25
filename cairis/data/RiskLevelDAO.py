@@ -27,14 +27,14 @@ class RiskLevelDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_risk_level(self,assetName):
+  def get_risk_level(self,assetName,envName):
     """
     :rtype: int
     :return
     :raise ARMHTTPError:
     """
     try:
-      riskLevel = self.db_proxy.assetRiskLevel(assetName)
+      riskLevel = self.db_proxy.assetRiskLevel(assetName,envName)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
