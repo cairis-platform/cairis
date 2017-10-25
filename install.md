@@ -126,7 +126,7 @@ If you want to run the Flask development servier, run `./cairisd.py runserver` (
 
 You can now point your browser to http://SERVERNAME:PORT_NUMBER, depending on where `cairisd` is installed, and what port cairisd or mod_wsgi-express is listening to, e.g. http://myserver.org:7071.  Once you have authenticated, the application should load.
 
-## Desktop application
+## Desktop application (deprecated)
 
 In theory, the desktop CAIRIS application can be installed on any platform that its open-source dependencies are available for.  In practice, CAIRIS has found to be most stable when running on [Ubuntu](http://www.ubuntu.com) or [Debian](https://www.debian.org) Linux.
 
@@ -137,6 +137,7 @@ In theory, the desktop CAIRIS application can be installed on any platform that 
 {% highlight bash %}
 $ sudo apt-get install python-wxglade python-glade2 python-wxgtk3.0 python-dev build-essential mysql-server mysql-client graphviz docbook dblatex python-pip python-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev poppler-utils
 {% endhighlight %}
+
 
 * Install CAIRIS:
 
