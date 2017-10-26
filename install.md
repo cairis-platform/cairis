@@ -36,7 +36,7 @@ When asked for credentials, provide test/test
 * Install the required applications and dependencies:
 
 {% highlight bash %}
-$ sudo apt-get install python-dev build-essential mysql-server mysql-client graphviz docbook dblatex python-pip python-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev poppler-utils
+$ sudo apt-get install python-dev build-essential mysql-server mysql-client graphviz docbook dblatex python-pip python-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev poppler-utils python-setuptools
 {% endhighlight %}
 
 * Clone the latest version of the CAIRIS github repository, and use pip to install the dependencies in the root directory, i.e.
