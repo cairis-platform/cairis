@@ -65,6 +65,7 @@ You can accept many of these defaults, except for the database root password.  W
 
 You will need to supply a username and password here. When you select `Ok`, the script will add a user to the CAIRIS database.
 
+
 * Reload your .bashrc file i.e.
 
 {% highlight bash %}
@@ -94,3 +95,18 @@ To start mod_wsgi-express, you should run `mod_wsgi-express start-server cairis.
 * Use the application
 
 You can now point your browser to http://SERVERNAME:PORT_NUMBER, depending on where `cairisd` is installed, and what port cairisd or mod_wsgi-express is listening to, e.g. http://myserver.org:7071.
+
+* [Optional] Additional steps for developers
+
+If you plan to develop for CAIRIS, you should install the requisite packages for running the tests in cairis/cairis/test.
+
+{% highlight bash %}
+$ sudo pip install -r test_requirements.txt
+{% endhighlight %}
+
+You should also set the `CAIRIS_SRC` and `CAIRIS_CFG_DIR` environment variables in your .bashrc file.
+
+{% highlight bash %}
+export CAIRIS_SRC=/home/cairisuser/cairis/cairis
+export CAIRIS_CFG_DIR=${CAIRIS_SRC}/config
+{% endhighlight %}
