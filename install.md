@@ -75,56 +75,6 @@ If you want to run the Flask development servier, run `./cairisd.py runserver` (
 
 You can now point your browser to http://SERVERNAME:PORT_NUMBER, depending on where `cairisd` is installed, and what port cairisd or mod_wsgi-express is listening to, e.g. http://myserver.org:7071.  Once you have authenticated, the application should load.
 
-## Alternatively:
-
-* Run the CAIRIS quick setup initialisation script (which can be found in cairis/).  When you run this script, you should get the below form.
-
-{% highlight bash %}
-$ ./quick_setup.py
-{% endhighlight %}
-
-![fig:configure_cairis_db]({{ site.baseurl }}/images/configure_cairis_db.jpg)
-
-You can usually accept many of these defaults, you will however need to modify the location of the root directory and the static directory to reflect the location of the CAIRIS files. For example if you cloned the repository to the root directory you would change the root and static directories to look like the below.
-
-![fig:change_configure_cairis_db]({{ site.baseurl }}/images/change_configure_cairis_db.jpg)
-
-When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file;
-this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool.
-
-* Ensure the CAIRIS_CFG environment variable points to your CAIRIS configuration file, and is persistent, i.e.
-
-{% highlight bash %}
-$ echo export CAIRIS_CFG=/home/cairisuser/cairis.cnf >> .bashrc
-{% endhighlight %}
-
-* Ensure the PYTHONPATH environment variable points to your CAIRIS application location, and is persistent, i.e.
-
-{% highlight bash %}
-$ echo export PYTHONPATH=/home/cairisuser/cairis >> .bashrc
-{% endhighlight %}
-
-* Reload your .bashrc file i.e.
-
-{% highlight bash %}
-source .bashrc
-{% endhighlight bash%}
-
-* Add a user account
-
-Run the `add_cairis_user` script in cairis/cairis/bin (run `add_cairis_user --help` to check the parameters you need to provide).
-
-{% highlight bash %}
-./add_cairis_user test test
-{% endhighlight %}
-
-* Starting cairisd
-
-If you want to run the Flask development servier, run `./cairisd.py runserver` (the script can be found in cairis/cairis/bin).  However, before doing this, you need to ensure CAIRIS has been installed to a location that the process running `cairisd` has write access to. Alternatively, if you want to web services to be accessed via mod_wsgi-express run `mod_wsgi-express start-server cairis.wsgi`; cairis.wsgi can also be found in cairis/cairis/bin.
-
-* Use the application
-
-You can now point your browser to http://SERVERNAME:PORT_NUMBER, depending on where `cairisd` is installed, and what port cairisd or mod_wsgi-express is listening to, e.g. http://myserver.org:7071.  Once you have authenticated, the application should load.
 
 ## Desktop application (deprecated)
 
@@ -135,7 +85,7 @@ In theory, the desktop CAIRIS application can be installed on any platform that 
 * Install the required applications and dependencies:
 
 {% highlight bash %}
-$ sudo apt-get install python-wxglade python-glade2 python-wxgtk3.0 python-dev build-essential mysql-server mysql-client graphviz docbook dblatex python-pip python-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev poppler-utils
+$ sudo apt-get install python-wxglade python-glade2 python-wxgtk3.0 python-dev build-essential mysql-server mysql-client graphviz docbook dblatex python-pip python-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev poppler-utils python-setuptools
 {% endhighlight %}
 
 
