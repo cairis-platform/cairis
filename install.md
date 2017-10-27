@@ -71,13 +71,19 @@ You will need to supply a username and password here. When you select `Ok`, the 
 source .bashrc
 {% endhighlight bash%}
 
-* Starting cairisd
+* Starting the cairisd
 
 If you want to run the Flask development server, run `./cairisd.py runserver` (the script can be found in cairis/cairis/bin).   
 
 * Starting mod_wsgi-express
 
-If you want to run CAIRIS in a production environment then it may be sensible to run CAIRIS via mod_wsgi-express.  To do this, you will need to use pip to install the requisite dependencies, i.e.
+If you want to run CAIRIS in a production environment then it may be sensible to use mod_wsgi-express rather than the Flask development server.  To do this, you will need to install the requisite Apache2 packages.
+
+{% highlight bash %}
+$ sudo apt-get install apache2 apache2-dev
+{% endhighlight %}
+
+You will then need to use pip to install the requisite dependencies.
 
 {% highlight bash %}
 $ sudo pip install -r wsgi_requirements.txt
