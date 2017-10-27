@@ -13,9 +13,9 @@ The live demo comes with two example models: [NeuroGrid](http://cairis.org/Neuro
 
 # Installing CAIRIS
 
-## Docker Hub
+## CAIRIS container on Docker Hub
 
-The easiest way of getting up and running with the web application is to download the CAIRIS container from [Docker hub](https://hub.docker.com/r/shamalfaily/cairis/).  This is built from the latest changes in github, and uses [mod_wsgi-express](https://pypi.python.org/pypi/mod_wsgi) to deliver the CAIRIS web services.
+If you have Docker installed on your laptop or an available machine, the easiest way of getting up and running with the web application is to download the CAIRIS container from [Docker hub](https://hub.docker.com/r/shamalfaily/cairis/).  This is built from the latest changes in github, and uses [mod_wsgi-express](https://pypi.python.org/pypi/mod_wsgi) to deliver the CAIRIS web services.
 
 * Download and run the container, and its linked mysql container:  
 {% highlight bash %}
