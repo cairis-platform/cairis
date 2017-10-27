@@ -122,8 +122,8 @@ function viewTemplateAsset(assetName) {
                   appendTemplateSecurityProperty(taProp.name,taProp.value,taProp.rationale);
                 }
               });
-              $('#editTemplateAssetOptionsform').validator('update');
               $('#editTemplateAssetOptionsform').loadJSON(newdata,null);
+              $('#editTemplateAssetOptionsform').validator('update');
             },['All']);
           },['All']);
         },['All']);

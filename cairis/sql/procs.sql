@@ -7568,13 +7568,12 @@ begin
   then
     select distinct cc.composite_environment_id into envId from composite_environment cc, environment e where cc.composite_environment_id = e.id and e.name = envName;
   end if;
-
   select threat_likelihood(threatId,envId) into likelihoodName;
   select vulnerability_severity(vulId,envId) into severityName;
   select id into threatLikelihood from likelihood where name = likelihoodName;
   select id into vulSeverity from severity where name = severityName;
   drop table if exists temp_riskscore;
-  create temporary table temp_riskscore (response_name varchar(50),preScore int, postScore int, details text);
+  create temporary table temp_riskscore (response_name varchar(100),preScore int, postScore int, details text);
 
   if riskName != ''
   then
@@ -7669,6 +7668,7 @@ begin
   declare riskUnoValue int default 0;
   declare msComments text default '';
   declare mlComments text default '';
+
   if responseId != -1
   then
     call mitigatingValues(responseId,envId);
@@ -10089,7 +10089,7 @@ create procedure criticalAssetVulnerabilityCheck(in vulId int, in envId int, ino
 begin
   declare done int default 0;
   declare criticalId int default 0;
-  declare vulName varchar(50);
+  declare vulName varchar(200);
   declare assetName varchar(50);
   declare criticalCursor cursor for select a.is_critical,a.name from asset a, environment_asset ea,environment_vulnerability ev where ea.environment_id = envId and ea.asset_id = a.id and ea.environment_id = ev.environment_id and ev.vulnerability_id = vulId;
   declare continue handler for not found set done = 1;
@@ -18343,12 +18343,20 @@ begin
 end
 //
 
-create procedure addComponentInterface(in componentId int, in interfaceName text, in reqId int, in arName text, in pName text)
+create procedure addComponentInterface(in componentId int, in interfaceName text, in reqTxt text, in arName text, in pName text)
 begin
+  declare reqId int;
   declare interfaceId int;
   declare arId int;
   declare pId int;
   declare ciCount int;
+
+  if reqTxt = 'required'
+  then
+    set reqId = 1;
+  else
+    set reqId = 0;
+  end if;
 
   select id into arId from access_right where name = arName;
   select id into pId from privilege where name = pName;
