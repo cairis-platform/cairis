@@ -39,12 +39,6 @@ def a2i(spLabel):
   else:
     return 0
 
-def it2Id(itLabel):
-  if itLabel == 'required':
-    return 1
-  else:
-    return 0
-
 class ArchitecturalPatternContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     self.theViewParameters = None
@@ -203,7 +197,7 @@ class ArchitecturalPatternContentHandler(ContentHandler,EntityResolver):
       self.inRationale = 1
       self.theRationale = ''
     elif name == 'interface':
-      self.theInterfaces.append((attrs['name'],it2Id(attrs['type']),attrs['access_right'],attrs['privilege']))
+      self.theInterfaces.append((attrs['name'],attrs['type'],attrs['access_right'],attrs['privilege']))
     elif name == 'concern':
       self.theConcerns.append(attrs['name'])
     elif name == 'responsibility':

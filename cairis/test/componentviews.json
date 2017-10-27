@@ -89,7 +89,7 @@
          "theDescription" : "XACML based policy manager component",
          "theInterfaces" : [
            {"theName" : "enforceRequest",
-            "theType" : 0,
+            "theType" : "provided",
             "theAccessRight" : "trusted",
             "thePrivilege" : "normal"
            }
@@ -118,7 +118,7 @@
          "theDescription" : "Context Manager implementation",
          "theInterfaces" : [
            {"theName" : "enforceRequest",
-            "theType" : 1,
+            "theType" : "required",
             "theAccessRight" : "trusted",
             "thePrivilege" : "normal"
            }

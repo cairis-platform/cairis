@@ -125,6 +125,7 @@ class MySQLDatabaseProxy:
     try:
       dbEngine = create_engine('mysql+mysqldb://'+user+':'+passwd+'@'+host+':'+str(port)+'/'+db+'?charset=utf8')
       self.conn = scoped_session(sessionmaker(bind=dbEngine))
+      self.conn.execute("set session max_sp_recursion_depth = 255")
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + msg

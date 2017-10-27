@@ -18343,12 +18343,20 @@ begin
 end
 //
 
-create procedure addComponentInterface(in componentId int, in interfaceName text, in reqId int, in arName text, in pName text)
+create procedure addComponentInterface(in componentId int, in interfaceName text, in reqTxt text, in arName text, in pName text)
 begin
+  declare reqId int;
   declare interfaceId int;
   declare arId int;
   declare pId int;
   declare ciCount int;
+
+  if reqTxt = 'required'
+  then
+    set reqId = 1;
+  else
+    set reqId = 0;
+  end if;
 
   select id into arId from access_right where name = arName;
   select id into pId from privilege where name = pName;
