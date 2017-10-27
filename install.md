@@ -73,8 +73,18 @@ source .bashrc
 
 * Starting cairisd
 
-If you want to run the Flask development servier, run `./cairisd.py runserver` (the script can be found in cairis/cairis/bin).  However, before doing this, you need to ensure CAIRIS has been installed to a location that the process running `cairisd` has write access to. Alternatively, if you want to web services to be accessed via mod_wsgi-express run `mod_wsgi-express start-server cairis.wsgi`; cairis.wsgi can also be found in cairis/cairis/bin.
+If you want to run the Flask development server, run `./cairisd.py runserver` (the script can be found in cairis/cairis/bin).   
+
+* Starting mod_wsgi-express
+
+If you want to run CAIRIS in a production environment then it may be sensible to run CAIRIS via mod_wsgi-express.  To do this, you will need to use pip to install the requisite dependencies, i.e.
+
+{% highlight bash %}
+$ sudo pip install -r wsgi_requirements.txt
+{% endhighlight %}
+
+To start mod_wsgi-express, you should run `mod_wsgi-express start-server cairis.wsgi`; cairis.wsgi can also be found in cairis/cairis/bin.
 
 * Use the application
 
-You can now point your browser to http://SERVERNAME:PORT_NUMBER, depending on where `cairisd` is installed, and what port cairisd or mod_wsgi-express is listening to, e.g. http://myserver.org:7071.  Once you have authenticated, the application should load.
+You can now point your browser to http://SERVERNAME:PORT_NUMBER, depending on where `cairisd` is installed, and what port cairisd or mod_wsgi-express is listening to, e.g. http://myserver.org:7071.
