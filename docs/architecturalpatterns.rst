@@ -86,3 +86,11 @@ Components in this model are shaded red based on the component attack surface,  
    :alt: Component Asset Model
 
 It is also possible to view asset and goal models associated with a component in an architectural pattern by right clicking on the component in the architectural patterns component table, and select the *View Assets* or *View Goals* respectively.
+
+Situating an pattern
+--------------------------
+
+.. figure:: WeaknessAnalysis.jpg
+   :alt: weakness analysis
+
+-  To introduce an architectural pattern into the working project, Right click on the architectural pattern in the architectural patterns table, select *Weakness Analysis*, followed by the environment to situate the pattern in.  A weakness analysis dialog is displayed, which summarises the threats and vulnerabilities that will become associated with the pattern, the impact to persona task scores, and obstacles mitigated by goals introduced by the pattern.  Clicking on the Situate button introduces the patterns template goals, requirements, and assets as standard goals, requirements, and assets respectively.
