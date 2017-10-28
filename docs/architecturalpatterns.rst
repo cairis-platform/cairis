@@ -82,4 +82,7 @@ and selecting the architectural pattern to display
 
 Components in this model are shaded red based on the component attack surface,  This value is based on the DER\ :sub:`i` metric.
 
+.. figure:: ComponentAssetModel.jpg
+   :alt: Component Asset Model
+
 It is also possible to view asset and goal models associated with a component in an architectural pattern by right clicking on the component in the architectural patterns component table, and select the *View Assets* or *View Goals* respectively.
