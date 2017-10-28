@@ -11,7 +11,7 @@ Editing Architectural Patterns
 .. figure:: ArchitecturalPatternsTable.jpg
    :alt: Architectural Patterns table
 
--  Select the Requirements / Architectural Patterns table to view the table of Architectural Patterns.  The table provides a summary of the Damage-Effort Ratios for Interfaces, Channels, and Untrusted Surfaces.  These metrics are explained in more details [here](http://reports-archive.adm.cs.cmu.edu/anon/isr2011/CMU-ISR-11-121.pdf).
+-  Select the Requirements / Architectural Patterns table to view the table of Architectural Patterns.  The table provides a summary of the Damage-Effort Ratios for Interfaces, Channels, and Untrusted Surfaces.  These metrics are explained in more details `here <http://reports-archive.adm.cs.cmu.edu/anon/isr2011/CMU-ISR-11-121.pdf>`_.
 
 -  To create a new Architectural Pattern in CAIRIS, click on the Add button to open the Architectural Pattern form.
 
