@@ -334,6 +334,33 @@ $( document ).ajaxComplete(function() {
         }
       });
     }
+    else if(link.indexOf("template_goals") > -1) {
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        accept: "application/json",
+        data: {
+          session_id: String($.session.get('sessionID'))
+        },
+        crossDomain: true,
+        url: serverIP + link.replace(" ","%20"),
+        success: function (data) {
+          fillOptionMenu("fastTemplates/TemplateGoalOptions.html", "#optionsContent", data,false,true,function(){
+            $('#templateGoalsForm').loadJSON(data,null);
+            $("#optionsHeaderGear").text("Template Goal properties");
+            $("#theTemplateGoalNodeDefinition").val(data.theDefinition);
+            $("#theTemplateGoalNodeRationale").val(data.theRationale);
+            forceOpenOptions();
+           });
+        },
+	error: function (xhr, textStatus, errorThrown) {
+          var error = JSON.parse(xhr.responseText);
+          showPopup(false, String(error.message));
+          console.log(String(this.url));
+          debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+        }
+      });
+    }
     else if(link.indexOf("goals") > -1) {
       forceOpenOptions();
       $.ajax({
