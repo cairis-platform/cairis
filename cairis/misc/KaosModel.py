@@ -57,9 +57,11 @@ class KaosModel:
     return len(self.theAssociations)
 
   def buildNode(self,dimName,objtName):
+    if ((self.theKaosModel == 'template_goal') and (dimName == 'goal')):
+      dimName = 'template_goal'
     objtUrl = dimName + '#' + objtName
     b = Borg()
-    if (dimName == 'goal'):
+    if ((dimName == 'goal') or (dimName == 'template_goal')):
       self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'obstacle'):
       obsId = self.dbProxy.getDimensionId(objtName,'obstacle')

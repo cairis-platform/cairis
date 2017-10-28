@@ -91,7 +91,7 @@ def surfaceTypeColourCode(valueId):
   elif (valueId == 4): return '27 .48 .99'
   elif (valueId == 3): return '34 .38 .99'
   elif (valueId == 2): return '36 .21 1'
-  elif (valueId == 1): return '37 .07 1'
+  elif (valueId <= 1): return '37 .07 1'
 
 def surfaceTypeTextColourCode(valueId):
   if (valueId >= 7): return 'white'

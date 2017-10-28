@@ -69,8 +69,8 @@ class AssetModel:
       if (dimName == 'asset' and assetObjt.critical()):
         borderColour = 'red'
       if (dimName == 'template_asset' and self.isComponentAssetModel):
-        stScore = self.dbProxy.templateAssetMetrics(objtName)
-        assetNode = pydot.Node(objtName,shape='record',style='filled',margin=0,fillcolor=surfaceTypeColourCode(stScore),fontcolor=surfaceTypeTextColourCode(stScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
+        stValue,arValue = self.dbProxy.templateAssetMetrics(objtName)
+        assetNode = pydot.Node(objtName,shape='record',style='filled',margin=0,fillcolor=surfaceTypeColourCode(stValue / arValue),fontcolor=surfaceTypeTextColourCode(stValue / arValue),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
       else:
         assetNode = pydot.Node(objtName,shape='record',margin=0,color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
       self.theGraph.add_node(assetNode)
