@@ -481,8 +481,24 @@ function refreshConnectorPanels(ap) {
     $('#theFromComponent').append($("<option></option>").attr("value",comp.theName).text(comp.theName));
     $('#theToComponent').append($("<option></option>").attr("value",comp.theName).text(comp.theName));
   });
+  
   $("#theFromInterface option").remove();
   $("#theToInterface option").remove();
+
+  var fromCompName = $('#theFromComponent').val();
+  var toCompName = $('#theFromComponent').val();
+  $.each(ap.theComponents,function(idx,comp) {
+    if (comp.theName == fromCompName) {
+      $.each(comp.theInterfaces,function(idx,compInt) {
+        $("#theFromInterface").append($("<option></option>").attr("value",compInt.theName).text(compInt.theName));
+      });
+    }
+    if (comp.theName == toCompName) {
+      $.each(comp.theInterfaces,function(idx,compInt) {
+        $("#theToInterface").append($("<option></option>").attr("value",compInt.theName).text(compInt.theName));
+      });
+    }
+  });
 }
 
 mainContent.on('click', "td.connector-row", function () {
