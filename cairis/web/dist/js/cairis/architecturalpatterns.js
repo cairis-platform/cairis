@@ -43,15 +43,20 @@ function createArchitecturalPatternsTable(){
       var textToInsert = [];
       var i = 0;
 
+      var apDict = {};
+      $.each(data,function(idx,ap) {
+        apDict[ap.theName] = ap;
+      });
+
       var keys = [];
-      for (key in data) {
+      for (key in apDict) {
         keys.push(key);
       }
       keys.sort();
 
       for (var ki = 0; ki < keys.length; ki++) {
         var key = keys[ki];
-        var item = data[key];
+        var item = apDict[key];
 
         textToInsert[i++] = "<tr>";
         textToInsert[i++] = '<td class="deleteArchitecturalPatternButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
