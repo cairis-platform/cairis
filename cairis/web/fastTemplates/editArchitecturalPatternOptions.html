@@ -2,7 +2,7 @@
   <div class="panel panel-default control-group form-group">
     <div class="form-group">
       <label for="theName" class="control-label">Name</label>
-      <input class="optionsInput form-control" type="text" name="theName" id="theName" style="width: 75%;" data-error="Architectural Pattern name is required" required>
+      <input class="optionsInput form-control" type="text" name="theName" id="theName" maxlength="255" style="width: 75%;" data-error="Architectural Pattern name is required" required>
       <div class="help-block with-errors"></div>
     </div>
     <div class="tabs">
@@ -13,7 +13,7 @@
       </ul>
       <div id="synopsis">
         <div class="form-group">
-          <textarea rows="15" id="theSynopsis" class="form-control" data-error="Synopsis is required" required></textarea>
+          <textarea rows="15" maxlength="255" id="theSynopsis" class="form-control" maxlength="255" data-error="Synopsis is required" required></textarea>
         </div>
       </div>
       <div id="components" class="panel panel-default control-group">
@@ -48,7 +48,7 @@
   <div class="panel panel-default control-group form-group">
     <div class="form-group">
       <label for="theComponentName" class="control-label">Name</label>
-      <input class="optionsInput form-control" type="text" name="theComponentName" id="theComponentName" style="width: 75%;" data-error="Component name is required" required>
+      <input class="optionsInput form-control" type="text" name="theComponentName" id="theComponentName" maxlength="255" style="width: 75%;" data-error="Component name is required" required>
       <div class="help-block with-errors"></div>
     </div>
     <div class="tabs">
@@ -62,7 +62,7 @@
       </ul>
       <div id="description">
         <div class="form-group">
-          <textarea rows="15" id="theDescription" class="form-control" data-error="Description is required" required></textarea>
+          <textarea rows="15" id="theDescription" class="form-control" maxlength="255" data-error="Description is required" required></textarea>
         </div>
       </div>
       <div id="interfaces" class="panel panel-default control-group">
@@ -128,7 +128,7 @@
       <div class="modal-body">
         <div class="form-group">
           <label for="theInterfaceName" class="control-label">Name</label>
-          <input class="optionsInput form-control" type="text" name="theInterfaceName" id="theInterfaceName" style="width: 75%;" data-error="Interface Name is required" required>
+          <input class="optionsInput form-control" type="text" name="theInterfaceName" maxlength="255" id="theInterfaceName" style="width: 75%;" data-error="Interface Name is required" required>
           </select>
         </div>
         <div class="form-group">
@@ -199,11 +199,11 @@
         </div>
         <div class="form-group">
           <label for="headRole" class="control-label">Role</label>
-          <input class="optionsInput form-control" type="text" name="headRole" id="headRole" style="width: 100%;">
+          <input class="optionsInput form-control" type="text" name="headRole" id="headRole" maxlength="255" style="width: 100%;">
         </div>
         <div class="form-group">
           <label for="tailRole" class="control-label">Role</label>
-          <input class="optionsInput form-control" type="text" name="tailRole" id="tailRole" style="width: 100%;">
+          <input class="optionsInput form-control" type="text" name="tailRole" id="tailRole" maxlength="255" style="width: 100%;">
         </div>
         <div class="form-group">
           <label for="tailNry" class="control-label">nry</label>
@@ -317,7 +317,7 @@
         </div>
         <div>
           <label for="theRationale" class="control-label">Rationale</label>
-          <textarea rows="15" class="right form-control" id="theRationale" data-error="Rationale is required" required></textarea>
+          <textarea rows="15" maxlength="1000" class="right form-control" id="theRationale" data-error="Rationale is required" required></textarea>
           <div class="help-block with-errors"></div>
         </div>
       </div>
@@ -337,7 +337,7 @@
   <div class="panel panel-default control-group form-group">
     <div class="form-group">
       <label for="theConnectorName" class="control-label">Name</label>
-      <input class="optionsInput form-control" type="text" name="theConnectorName" id="theConnectorName" style="width: 75%;" data-error="Connector name is required" required>
+      <input class="optionsInput form-control" type="text" name="theConnectorName" id="theConnectorName" maxlength="255" style="width: 75%;" data-error="Connector name is required" required>
       <div class="help-block with-errors"></div>
     </div>
     <div class="tabs">
@@ -349,7 +349,7 @@
       <div id="from">
         <div class="form-group">
           <label for="theFromRole" class="control-label">Role</label>
-          <input class="optionsInput form-control" type="text" name="theFromRole" id="theFromRole" style="width: 75%;" data-error="Role is required" required>
+          <input class="optionsInput form-control" type="text" name="theFromRole" id="theFromRole" maxlength="255" style="width: 75%;" data-error="Role is required" required>
           <div class="help-block with-errors"></div>
         </div>
         <div class="form-group">
@@ -368,7 +368,7 @@
       <div id="to">
         <div class="form-group">
           <label for="theToRole" class="control-label">Role</label>
-          <input class="optionsInput form-control" type="text" name="theToRole" id="theToRole" style="width: 75%;" data-error="Role is required" required>
+          <input class="optionsInput form-control" type="text" name="theToRole" id="theToRole" maxlength="255" style="width: 75%;" data-error="Role is required" required>
           <div class="help-block with-errors"></div>
         </div>
         <div class="form-group">

@@ -1,7 +1,7 @@
 <form role="form" xmlns="http://www.w3.org/1999/html" id="editGoalOptionsForm" class="gearOptions">
   <div class="form-group">
     <label for="theName" class="control-label">Goal</label>
-    <input class="optionsInput form-control" type="text" id="theName" name="theName" data-error="Goal name is required" required>
+    <input class="optionsInput form-control" type="text" id="theName" name="theName" maxlength="100" data-error="Goal name is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group">
@@ -10,7 +10,7 @@
   </div>
   <div class="form-group">
     <label for="theOriginator" class="control-label">Originator</label>
-    <input class="optionsInput form-control" type="text" id="theOriginator" name="theOriginator" data-error="Originator is required" required>
+    <input class="optionsInput form-control" type="text" id="theOriginator" name="theOriginator" maxlength="50" data-error="Originator is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="inblock">
@@ -34,7 +34,7 @@
       <div id="Definition">
         <div class="form-group">
           <label for="theLabel" class="control-label">Label</label> 
-          <input id="theLabel" type="text" class="form-control" name="theLabel" readonly>
+          <input id="theLabel" type="text" class="form-control" maxlength="255" name="theLabel" readonly>
         </div>
         <div class="form-group">
           <label for="theCategory" class="control-label">Category</label> 
@@ -58,16 +58,16 @@
         </div>
         <div class="form-group">
           <label for="theDefinition" class="control-label">Definition</label>
-          <textarea rows="5" id="theDefinition"  class="goalAutoUpdater form-control" name="theDefinition"  data-error="Definition is required" required></textarea>
+          <textarea rows="5" id="theDefinition"  class="goalAutoUpdater form-control" name="theDefinition" maxlength="4000" data-error="Definition is required" required></textarea>
           <div class="help-block with-errors"></div>
         </div>
       </div>
       <div class="form-group" id="Fit-Criterion">
-        <textarea rows="15" id="theFitCriterion" class="goalAutoUpdater form-control" name="theFitCriterion" data-error="Fit Criterion is required" required></textarea>
+        <textarea rows="15" id="theFitCriterion" class="goalAutoUpdater form-control" name="theFitCriterion" maxlength="1000" data-error="Fit Criterion is required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group" id="Issue">
-        <textarea rows="15" id="theIssue" class="goalAutoUpdater form-control" name="theIssue" data-error="Issue is required" required></textarea>
+        <textarea rows="15" id="theIssue" class="goalAutoUpdater form-control" name="theIssue" maxlength="1000" data-error="Issue is required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group" id="Goals">
@@ -130,7 +130,7 @@
   </div>
   <div class="form-group">
     <label for="theLink" class="control-label"> Link</label>
-    <input id="theLink" class="right form-control">
+    <input id="theLink" maxlength="100" class="right form-control">
   </div>
   <div class="form-group">
     <label for="theN2Select" class="control-label">n</label>
@@ -191,7 +191,7 @@
   </div>
   <div class="form-group">
     <label for="theGoalSubGoalRationale" class="control-label">Rationale</label>
-    <textarea rows="5" class="right form-control" id="theGoalSubGoalRationale" data-error="Rationale is required" required></textarea>
+    <textarea rows="5" class="right form-control" id="theGoalSubGoalRationale" maxlength="1000" data-error="Rationale is required" required></textarea>
     <div class="help-block with-errors"></div>
   </div>
   <div class="row">
@@ -241,7 +241,7 @@
   </div>
   <div class="form-group">
     <label for="theGoalGoalRationale" class="control-label">Rationale</label>
-    <textarea rows="5" class="right form-control" id="theGoalGoalRationale" data-error="Rationale is required" required></textarea>
+    <textarea rows="5" class="right form-control" id="theGoalGoalRationale" maxlength="1000" data-error="Rationale is required" required></textarea>
     <div class="help-block with-errors"></div>
   </div>
   <div class="row">

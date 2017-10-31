@@ -20,8 +20,10 @@
 'use strict';
 
 $("#architecturalPatternsClick").click(function () {
-  $('#menuBCClick').attr('dimension','architectural_pattern');
-  refreshMenuBreadCrumb('architectural_pattern');
+  validateClick('architectural_pattern',function() {
+    $('#menuBCClick').attr('dimension','architectural_pattern');
+    refreshMenuBreadCrumb('architectural_pattern');
+  });
 });
 
 function createArchitecturalPatternsTable(){

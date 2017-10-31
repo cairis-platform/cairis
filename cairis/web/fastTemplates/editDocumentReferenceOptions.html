@@ -2,7 +2,7 @@
 
   <div class="form-group">
     <label for="theName" class="control-label">Reference</label>
-    <input class="optionsInput form-control" type="text" name="theName" id="theName" style="width: 75%" data-error="Document Reference name is required" required>
+    <input class="optionsInput form-control" type="text" name="theName" id="theName" maxlength="200" style="width: 75%" data-error="Document Reference name is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group">
@@ -12,12 +12,12 @@
   </div>
   <div class="form-group">
     <label for="theContributor" class="control-label">Contributor</label>
-    <input class="optionsInput form-control" type="text" name="theContributor" id="theContributor" style="width: 75%" data-error="Contributor is required" required>
+    <input class="optionsInput form-control" type="text" name="theContributor" id="theContributor" maxlength="200" style="width: 75%" data-error="Contributor is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group" id="Excerpt">
     <label for="theExcerpt" class="control-label">Excerpt</label>
-    <textarea rows="15" class="form-control" name="theExcerpt" id="theExcerpt" style="width: 100%" data-error="Excerpt is required" required></textarea>
+    <textarea rows="15" class="form-control" name="theExcerpt" id="theExcerpt" style="width: 100%" maxlength="2000" data-error="Excerpt is required" required></textarea>
     <div class="help-block with-errors"></div>
   </div>
   <div class="row">

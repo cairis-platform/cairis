@@ -2,27 +2,27 @@
 
   <div class="form-group">
     <label for="theName" class="control-label">Document</label>
-    <input class="optionsInput form-control" type="text" name="theName" id="theName" style="width: 75%" data-error="External Document name is required" required>
+    <input class="optionsInput form-control" type="text" name="theName" id="theName" maxlength="2000" style="width: 75%" data-error="External Document name is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group">
     <label for="theVersion" class="control-label">Version</label>
-    <input class="optionsInput form-control" type="text" name="theVersion" id="theVersion" style="width: 75%" data-error="Version is required" required>
+    <input class="optionsInput form-control" type="text" name="theVersion" id="theVersion" maxlength="20" style="width: 75%" data-error="Version is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group">
     <label for="theAuthors" class="control-label">Authors</label>
-    <input class="optionsInput form-control" type="text" name="theAuthors" id="theAuthors" style="width: 75%" data-error="Authors are required" required>
+    <input class="optionsInput form-control" type="text" name="theAuthors" id="theAuthors" maxlength="2000" style="width: 75%" data-error="Authors are required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div>
     <label for="thePublicationDate" class="control-label">Publication Date</label>
-    <input class="optionsInput form-control" type="text" name="thePublicationDate" id="thePublicationDate" style="width: 75%" data-error="Authors are required" required>
+    <input class="optionsInput form-control" type="text" name="thePublicationDate" id="thePublicationDate" maxlength="100" style="width: 75%" data-error="Authors are required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group" id="Description">
     <label for="theDescription" class="control-label">Description</label>
-    <textarea rows="15" class="form-control" name="theDescription" id="theDescription" style="width: 100%" data-error="Description is required" required></textarea>
+    <textarea rows="15" class="form-control" name="theDescription" id="theDescription" style="width: 100%" maxlength="2000" data-error="Description is required" required></textarea>
     <div class="help-block with-errors"></div>
   </div>
   <div class="row">

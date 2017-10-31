@@ -2,7 +2,7 @@
   <div class="panel panel-default control-group form-group">
     <div class="form-group">
       <label for="theName" class="control-label">Name</label>
-      <input class="optionsInput form-control" type="text" name="theName" id="theName" style="width: 75%;" data-error="Security Pattern name is required" required>
+      <input class="optionsInput form-control" type="text" name="theName" id="theName" maxlength="50" style="width: 75%;" data-error="Security Pattern name is required" required>
       <div class="help-block with-errors"></div>
     </div>
     <div class="tabs">
@@ -15,17 +15,17 @@
       </ul>
       <div id="context">
         <div class="form-group">
-          <textarea rows="15" id="theContext" class="form-control" data-error="Context is required" required></textarea>
+          <textarea rows="15" maxlength="4000" id="theContext" class="form-control" data-error="Context is required" required></textarea>
         </div>
       </div>
       <div id="problem">
         <div class="form-group">
-          <textarea rows="15" id="theProblem" class="form-control" data-error="Problem is required" required></textarea>
+          <textarea rows="15" maxlength="4000" id="theProblem" class="form-control" data-error="Problem is required" required></textarea>
         </div>
       </div>
       <div id="solution">
         <div class="form-group">
-          <textarea rows="15" id="theSolution" class="form-control" data-error="Solution is required" required></textarea>
+          <textarea rows="15" maxlength="4000" id="theSolution" class="form-control" data-error="Solution is required" required></textarea>
         </div>
       </div>
       <div id="structure" class="panel panel-default control-group">

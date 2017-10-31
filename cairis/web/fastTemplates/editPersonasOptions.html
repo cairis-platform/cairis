@@ -25,7 +25,7 @@
       <div id="summary">
         <div class="form-group">
           <label class="control-label">Name</label>
-          <input class="optionsInput personaUpdate form-control" type="text" name="theName" id="theName" style="float: right; width: 75%;" data-error="Persona name is required" required>
+          <input class="optionsInput personaUpdate form-control" type="text" name="theName" id="theName" maxlength="50" style="float: right; width: 75%;" data-error="Persona name is required" required>
           <div class="help-block with-errors"></div>
         </div>
         <div class="form-group">
@@ -39,31 +39,31 @@
         </div>
       </div>
       <div class="form-group" id="activities">
-        <textarea rows="15" id="theActivities" class="personaUpdate form-control " data-error="Activities are required" required></textarea>
+        <textarea rows="15" id="theActivities" class="personaUpdate form-control " maxlength="4000" data-error="Activities are required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group" id="attitudes">
-        <textarea rows="15" id="theAttitudes" class="personaUpdate form-control" data-error="Attitudes are required" required></textarea>
+        <textarea rows="15" id="theAttitudes" class="personaUpdate form-control" maxlength="4000" data-error="Attitudes are required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group" id="aptitudes">
-        <textarea rows="15" id="theAptitudes" class="personaUpdate form-control" data-error="Aptitudes are required" required></textarea>
+        <textarea rows="15" id="theAptitudes" class="personaUpdate form-control" maxlength="4000" data-error="Aptitudes are required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group" id="motivations">
-        <textarea rows="15" id="theMotivations" class="personaUpdate form-control" data-error="Motivations are required" required></textarea>
+        <textarea rows="15" id="theMotivations" class="personaUpdate form-control" maxlength="4000" data-error="Motivations are required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group" id="skills">
-        <textarea rows="15" id="theSkills" class="personaUpdate form-control" data-error="Skills are required" required></textarea>
+        <textarea rows="15" id="theSkills" class="personaUpdate form-control" maxlength="4000" data-error="Skills are required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group" id="contextual">
-        <textarea rows="15" id="theContextual" class="personaUpdate form-control" data-error="Contextual trust is required" required></textarea>
+        <textarea rows="15" id="theContextual" class="personaUpdate form-control" maxlength="4000" data-error="Contextual trust is required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group" id="intrinsic">
-        <textarea rows="15" id="theIntrinsic" class="personaUpdate form-control" data-error="Intrinsic trust is required" required></textarea>
+        <textarea rows="15" id="theIntrinsic" class="personaUpdate form-control" maxlength="4000" data-error="Intrinsic trust is required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
     </div>
@@ -99,7 +99,7 @@
             </table>
           </div>
           <div class="form-group" id="narrative">
-            <textarea rows="8" id="theNarrative" class="personaUpdate form-control" data-error="Environment specific narrative required" required></textarea>
+            <textarea rows="8" id="theNarrative" maxlength="4000" class="personaUpdate form-control" data-error="Environment specific narrative required" required></textarea>
             <div class="help-block with-errors"></div>
           </div>
         </div>

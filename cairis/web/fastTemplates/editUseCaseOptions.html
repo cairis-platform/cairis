@@ -10,12 +10,12 @@
     <div id="summary">
       <div class="form-group">
         <label for="theName" class="control-label">Use Case</label>
-        <input class="optionsInput usecaseUpdate form-control" type="text" name="theName" id="theName" data-error="Name is required" required>
+        <input class="optionsInput usecaseUpdate form-control" type="text" name="theName" maxlength="200" id="theName" data-error="Name is required" required>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group">
         <label for="theCode" class="control-label">Code</label>
-        <input class="optionsInput usecaseUpdate form-control" type="text" value="" id="theCode" name="theCode">
+        <input class="optionsInput usecaseUpdate form-control" type="text" value="" maxlength="100" id="theCode" name="theCode">
       </div>
       <div class="form-group">
         <label for="theTags" class="control-label">Tags</label>
@@ -23,12 +23,12 @@
       </div>
       <div class="form-group">
         <label for="theAuthor" class="control-label">Authors</label>
-        <input class="optionsInput usecaseUpdate form-control" type="text" name="theAuthor" id="theAuthor" data-error="Authors are required" required>
+        <input class="optionsInput usecaseUpdate form-control" type="text" name="theAuthor" maxlength="255" id="theAuthor" data-error="Authors are required" required>
         <div class="help-block with-errors"></div>
       </div>
     </div>   
     <div class="form-group" id="description">
-      <textarea rows="5" id="theDescription" class="form-control usecaseUpdate" style="width: 100%" data-error="Description is required" required></textarea>
+      <textarea rows="5" id="theDescription" class="form-control usecaseUpdate" style="width: 100%" maxlength="2000" data-error="Description is required" required></textarea>
         <div class="help-block with-errors"></div>
     </div>   
     <div class="form-group" id="actors">
@@ -70,7 +70,7 @@
         <li><a href="#postconditions">Postconditions</a></li>
       </ul>
       <div class="form-group" id="preconditions">
-        <textarea rows="7" id="thePreCond" class="usecaseUpdate form-control" data-error="Preconditions are required" required></textarea>
+        <textarea rows="7" maxlength="2000" id="thePreCond" class="usecaseUpdate form-control" data-error="Preconditions are required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group" id="flow">
@@ -97,7 +97,7 @@
         </table>
       </div>
       <div class="form-group" id="postconditions">
-        <textarea rows="7" id="thePostCond" class="usecaseUpdate form-control" data-error="Postconditions are required" required></textarea>
+        <textarea rows="7" id="thePostCond" maxlength="2000" class="usecaseUpdate form-control" data-error="Postconditions are required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
     </div>
@@ -165,13 +165,13 @@
             </ul>
             <div id="step">
               <div class="form-group">
-                <textarea rows="5" id="theStep" class="form-control" style="width: 100%" data-error="Step is required" required></textarea>
+                <textarea rows="5" id="theStep" class="form-control" maxlength="2000" style="width: 100%" data-error="Step is required" required></textarea>
               </div>
             </div>
             <div id="synopsis">
               <div class="form-group">
                 <label for="theSynopsis" class="control-label">Intention</label>
-                <input class="form-control" type="text" name="theSynopsis" id="theSynopsis">
+                <input class="form-control" type="text" name="theSynopsis" maxlength="500" id="theSynopsis">
               </div>
               <div class="form-group">
                 <label for="theActorType" class="control-label">Actor Type</label>

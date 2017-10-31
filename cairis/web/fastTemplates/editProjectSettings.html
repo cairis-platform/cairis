@@ -12,21 +12,21 @@
     <div id="Background">
       <div class="form-group">
         <label for="projectName" class="control-label">Project Name</label> 
-        <input class="form-control" id="projectName" type="text" name="projectName" style="width: 75%;" data-error="Project name is required" required>
+        <input class="form-control" id="projectName" type="text" name="projectName" maxlength="50" style="width: 75%;" data-error="Project name is required" required>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group">
         <label for="projectBackground" class="control-label">Project Background</label>
-        <textarea rows="15" class="form-control" id="projectBackground" name="projectBackground" data-error="Project background is required" required></textarea>
+        <textarea rows="15" class="form-control" id="projectBackground" name="projectBackground" maxlength="4000" data-error="Project background is required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
     </div>
     <div class="form-group" id="ProjectGoalsDiv">
-      <textarea class="form-control" id="projectGoals" name="projectGoals" rows="15" data-error="Project goals required" required></textarea>
+      <textarea class="form-control" id="projectGoals" name="projectGoals" rows="15" maxlength="4000" data-error="Project goals required" required></textarea>
       <div class="help-block with-errors"></div>
     </div>
     <div class="form-group" id="Scope">
-      <textarea class="form-control" id="projectScope"  class="goalAutoUpdater" rows="15" name="projectScope" data-error="Project scope is required" required></textarea>
+      <textarea class="form-control" id="projectScope"  class="goalAutoUpdater" rows="15" maxlength="4000" name="projectScope" data-error="Project scope is required" required></textarea>
       <div class="help-block with-errors"></div>
     </div>
     <div class="form-group" id="Rich-Picture">
@@ -79,17 +79,17 @@
 <div id="editContributorWindow" style="display: none; margin:10px;">
   <div class="form-group">
     <label for="firstName" class="control-label">Firstname</label>
-    <input class="form-control optionsInput" type="text" name="firstName" id="firstName" data-error="First name is required" required>
+    <input class="form-control optionsInput" type="text" name="firstName" id="firstName" maxlength="100" data-error="First name is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group">
     <label for="surname" class="control-label">Surname</label>
-    <input class="form-control optionsInput" type="text" value="" id="surname" name="surname" data-error="Surname is required" required>
+    <input class="form-control optionsInput" type="text" value="" id="surname" name="surname" maxlength="100" data-error="Surname is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group">
     <label for="affiliation" class="control-label">Affliation</label>
-    <input class="form-control optionsInput" type="text" value="" id="affiliation" name="affiliation" data-error="Affiliation is required" required>
+    <input class="form-control optionsInput" type="text" value="" id="affiliation" name="affiliation" maxlength="100" data-error="Affiliation is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group">
@@ -110,7 +110,7 @@
 <div id="addRevision" style="display: none; margin:10px;">
   <div class="form-group">
     <label for="revisionTextArea" class="control-label"> Add a Revision</label>
-    <textarea id="revisionTextArea" class="form-control" data-error="Revision text is required" required></textarea>
+    <textarea id="revisionTextArea" class="form-control" maxlength="1000" data-error="Revision text is required" required></textarea>
     <div class="help-block with-errors"></div>
   </div>
   <div class="row">

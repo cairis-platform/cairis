@@ -16,7 +16,7 @@
           <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Assets are things of tangible value" id="theAssetNameHelp"></i></label>
         </div>
         <div class="col-md-10">
-          <input class="optionsInput assetUpdate form-control" type="text" name="theName" id="theName" data-error="Asset name is required" required>
+          <input class="optionsInput assetUpdate form-control" type="text" name="theName" id="theName" maxlength="50" data-error="Asset name is required" required>
           <div class="help-block with-errors"></div>
         </div>
       </div>
@@ -35,7 +35,7 @@
           <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="This may be used to identify the asset elsewhere in CAIRIS." id="theAssetShortcodeHelp"></i></label>
         </div>
         <div class="col-md-10">
-          <input class="optionsInput assetUpdate form-control" type="text" id="theShortCode" name="theShortCode" data-error="Short code is required" required>
+          <input class="optionsInput assetUpdate form-control" type="text" id="theShortCode" name="theShortCode" maxlength="20" data-error="Short code is required" required>
           <div class="help-block with-errors"></div>
         </div>
       </div>
@@ -50,12 +50,12 @@
       </div>
     </div>
     <div class="form-group" id="Description">
-      <textarea rows="15" class="assetUpdate form-control" name="theDescription" id="theDescription" data-error="Description is required" required></textarea>
+      <textarea rows="15" maxlength="1000" class="assetUpdate form-control" name="theDescription" id="theDescription" data-error="Description is required" required></textarea>
       <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Describes in detail what the asset is or does." id="theAssetDescriptionHelp"></i>
       <div class="help-block with-errors"></div>
     </div>
     <div class="form-group" id="Significance">
-      <textarea rows="15" class="assetUpdate form-control" name="theSignificance" id="theSignificance" data-error="Significance is required" required></textarea>
+      <textarea rows="15" maxlength="1000" class="assetUpdate form-control" name="theSignificance" id="theSignificance" data-error="Significance is required" required></textarea>
       <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="From a security perspective, what is so significant about this asset?" id="theAssetSignificanceHelp"></i>
       <div class="help-block with-errors"></div>
     </div>

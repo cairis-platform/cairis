@@ -17,7 +17,7 @@
     <div class="form-group">
       <label for="theName" class="control-label">Attacker
       <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Attackers are human agents that launch attacks in the form of threats." id="theAttackerNameHelp"></i></label>
-      <input class="optionsInput form-control" type="text" name="theName" id="theName" style="width: 100%;" data-error="Attacker name is required" required>
+      <input class="optionsInput form-control" type="text" name="theName" id="theName" maxlength="50" style="width: 100%;" data-error="Attacker name is required" required>
       <div class="help-block with-errors"></div>
     </div>
     <div>
@@ -28,7 +28,7 @@
     <div class="form-group" id="Description">
       <label for="theDescription" class="control-label">Description
       <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="Introduces the attacker in sufficient detail that the associated roles, capabilities, and motivations can be better understood." id="theAttackerDescriptionHelp"></i></label>
-      <textarea rows="5" class="right form-control" name="theDescription" id="theDescription" style="width: 100%; margin-bottom: 15px;" data-error="Description is required" required></textarea>
+      <textarea rows="5" class="right form-control" name="theDescription" id="theDescription" maxlength="4000" style="width: 100%; margin-bottom: 15px;" data-error="Description is required" required></textarea>
       <div class="help-block with-errors"></div>
     </div>
   </div>

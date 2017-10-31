@@ -1,7 +1,7 @@
 <form role="form" xmlns="http://www.w3.org/1999/html" id="editObstacleOptionsForm" class="gearOptions">
   <div class="form-group">
     <label for="theName" class="control-label">Obstacle</label>
-    <input class="optionsInput form-control" type="text" id="theName" name="theName" data-error="Obstacle name is required" required>
+    <input class="optionsInput form-control" type="text" id="theName" name="theName" maxlength="100" data-error="Obstacle name is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group">
@@ -10,7 +10,7 @@
   </div>
   <div>
     <label for="theOriginator" class="control-label">Originator</label>
-    <input class="optionsInput form-control" type="text" id="theOriginator" name="theOriginator" data-error="Originator is required" required>
+    <input class="optionsInput form-control" type="text" id="theOriginator" name="theOriginator" maxlength="50" data-error="Originator is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div class="inblock">
@@ -32,7 +32,7 @@
       <div id="Definition">
         <div class="form-group">
           <label for="theLabel" class="control-label">Label</label> 
-          <input id="theLabel" class="form-control" type="text" name="theLabel" readonly>
+          <input id="theLabel" class="form-control" type="text" maxlength="255" name="theLabel" readonly>
         </div>
         <div class="form-group">
           <label for="theCategory" class="control-label">Category</label> 
@@ -55,18 +55,18 @@
         </div>
         <div class="form-group">
           <label for="theDefinition" class="control-label">Definition</label>
-          <textarea rows="5" id="theDefinition"  class="obstacleAutoUpdater form-control" name="theDefinition" data-error="Definition is required" required></textarea>
+          <textarea rows="5" id="theDefinition"  class="obstacleAutoUpdater form-control" name="theDefinition" maxlength="1000" data-error="Definition is required" required></textarea>
           <div class="help-block with-errors"></div>
         </div>
       </div>
       <div id="Probability">
         <div class="form-group">
           <label for="theProbability" class="control-label">Value</label> 
-          <input id="theProbability" class="obstacleAutoUpdater form-control" type="text" name="theProbability">
+          <input id="theProbability" class="obstacleAutoUpdater form-control" type="number" min="0" step="0.01" name="theProbability">
         </div>
         <div class="form-group">
           <label for="theProbabilityRationale" class="control-label">Rationale</label>
-          <textarea rows="7" id="theProbabilityRationale"  class="obstacleAutoUpdater form-control" name="theProbabilityRationale"></textarea>
+          <textarea rows="7" id="theProbabilityRationale"  class="obstacleAutoUpdater form-control" maxlength="4000" name="theProbabilityRationale"></textarea>
         </div>
       </div>
       <div id="Goals" class="form-group">
@@ -153,7 +153,7 @@
         </div>
         <div class="form-group">
           <label for="obstacle_theGoalSubGoalRationale" class="control-label" >Rationale</label>
-          <textarea rows="5" class="right form-control" id="obstacle_theGoalSubGoalRationale" style="width: 100%;" data-error="Rationale is required" required></textarea>
+          <textarea rows="5" class="right form-control" id="obstacle_theGoalSubGoalRationale" maxlength="1000" style="width: 100%;" data-error="Rationale is required" required></textarea>
           <div class="help-block with-errors"></div>
         </div>
       </div>
@@ -212,7 +212,7 @@
         </div>
         <div class="form-group">
           <label for="obstacle_theGoalGoalRationale" class="control-label" >Rationale</label>
-          <textarea rows="5" class="right form-control" id="obstacle_theGoalGoalRationale" style="width: 100%;" data-error="Rationale is required" required></textarea>
+          <textarea rows="5" class="right form-control" id="obstacle_theGoalGoalRationale" style="width: 100%;" maxlength="1000" data-error="Rationale is required" required></textarea>
           <div class="help-block with-errors"></div>
         </div>
       </div>

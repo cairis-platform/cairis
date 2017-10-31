@@ -1983,6 +1983,11 @@ function validateClick(dimension,callback) {
   else if (dimension == 'template_requirement') {
     dimensionCheck('template_asset',callback);
   }
+  else if (dimension == 'architectural_pattern') {
+    dimensionCheck('template_asset',function() {
+      dimensionCheck('protocol',callback);
+    });
+  }
 }
 
 function dimensionCheck(dimensionName,callback) {

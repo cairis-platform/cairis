@@ -12,7 +12,7 @@
           <label for="theName" class="control-label">Task</label>
         </div>
         <div class="col-md-10">
-          <input class="optionsInput taskUpdate form-control" type="text" name="theName" id="theName" data-error="Task name is required" required>
+          <input class="optionsInput taskUpdate form-control" type="text" name="theName" id="theName" maxlength="200" data-error="Task name is required" required>
           <div class="help-block with-errors"></div>
         </div>
       </div>
@@ -29,13 +29,13 @@
           <label for="theAuthors" class="control-label">Authors</label>
         </div>
         <div class="col-md-10">
-          <input class="optionsInput taskUpdate form-control" type="text" name="theAuthor" id="theAuthor" data-error="Authors are required" required>
+          <input class="optionsInput taskUpdate form-control" type="text" name="theAuthor" id="theAuthor" maxlength="255" data-error="Authors are required" required>
           <div class="help-block with-errors"></div>
         </div>
       </div>
     </div>   
     <div class="form-group" id="objectives">
-      <textarea rows="15" id="theObjective" class="taskUpdate form-control" style="width: 100%" data-error="Objectives are required" required></textarea>
+      <textarea rows="15" id="theObjective" class="taskUpdate form-control" style="width: 100%" maxlength="2000" data-error="Objectives are required" required></textarea>
     </div>   
   </div>
   <div class="inblock">
@@ -82,19 +82,19 @@
             </table>
           </div>
           <div class="form-group" id="dependencies">
-            <textarea rows="15" id="theDependencies" class="taskUpdate form-control" data-error="Dependencies are required" required></textarea>
+            <textarea rows="15" maxlength="4000" id="theDependencies" class="taskUpdate form-control" data-error="Dependencies are required" required></textarea>
             <div class="help-block with-errors"></div>
           </div>
           <div class="form-group" id="narrative">
-            <textarea rows="15" id="theNarrative" class="taskUpdate form-control" data-error="Narrative is required" required></textarea>
+            <textarea rows="15" id="theNarrative" maxlength="5000" class="taskUpdate form-control" data-error="Narrative is required" required></textarea>
             <div class="help-block with-errors"></div>
           </div>
           <div class="form-group" id="consequences">
-            <textarea rows="15" id="theConsequences" class="taskUpdate form-control" data-error="Consequences are required" required></textarea>
+            <textarea rows="15" id="theConsequences" maxlength="4000" class="taskUpdate form-control" data-error="Consequences are required" required></textarea>
             <div class="help-block with-errors"></div>
           </div>
           <div class="form-group" id="benefits">
-            <textarea rows="15" id="theBenefits" class="taskUpdate form-control" data-error="Benefits are required" required></textarea>
+            <textarea rows="15" id="theBenefits" maxlength="4000" class="taskUpdate form-control" data-error="Benefits are required" required></textarea>
             <div class="help-block with-errors"></div>
           </div>
           <div id="concernassociations">

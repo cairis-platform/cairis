@@ -8,7 +8,7 @@
     <div id="summary">
       <div class="form-group">
         <label for="theName" class="control-label">Countermeasure</label>
-        <input class="optionsInput countermeasureUpdate form-control" type="text" name="theName" id="theName" style="float: right; width: 75%" date-error="Name is required" required>
+        <input class="optionsInput countermeasureUpdate form-control" type="text" name="theName" id="theName" maxlength="100" style="float: right; width: 75%" date-error="Name is required" required>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group">
@@ -27,7 +27,7 @@
       </div>
     </div>   
     <div class="form-group" id="description">
-      <textarea id="theDescription" class="countermeasureUpdate form-control" style="width: 100%" date-error="Description is required" required></textarea>
+      <textarea id="theDescription" class="countermeasureUpdate form-control" style="width: 100%" maxlength="255" date-error="Description is required" required></textarea>
       <div class="help-block with-errors"></div>
     </div>   
   </div>

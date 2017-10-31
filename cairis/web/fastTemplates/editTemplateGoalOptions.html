@@ -2,17 +2,17 @@
 
   <div class="form-group">
     <label for="theName" class="control-label">Name</label>
-    <input type="text" class="optionsInput form-control" id="theName" name="theName" style="width: 75%;" data-error="Goal name is required" required>
+    <input type="text" class="optionsInput form-control" id="theName" name="theName" style="width: 75%;" maxlength="255" data-error="Goal name is required" required>
     <div class="help-block with-errors"></div>
   </div>
   <div>
     <label for="theDefinition" class="control-label">Definition</label>
-    <textarea rows="5" class="form-control" name="theDefinition" id="theDefinition" data-error="Definition is required" required></textarea>
+    <textarea rows="5" class="form-control" name="theDefinition" id="theDefinition" maxlength="4000" data-error="Definition is required" required></textarea>
     <div class="help-block with-errors"></div>
   </div>
   <div>
     <label for="theRationale" class="control-label">Rationale</label>
-    <textarea rows="5" class="form-control" name="theRationale" id="theRationale" data-error="Rationale is required" required></textarea>
+    <textarea rows="5" class="form-control" name="theRationale" id="theRationale" maxlength="1000" data-error="Rationale is required" required></textarea>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group">

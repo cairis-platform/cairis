@@ -9,7 +9,7 @@
     <div id="Summary">
       <div class="form-group">
         <label for="theName" class="control-label">Name</label>
-        <input type="text" class="optionsInput form-control" id="theName" name="theName" style="width: 75%;" data-error="Requirement name is required" required>
+        <input type="text" class="optionsInput form-control" id="theName" name="theName" maxlength="255" style="width: 75%;" data-error="Requirement name is required" required>
         <div class="help-block with-errors"></div>
       </div>
       <div class="form-group">
@@ -37,16 +37,16 @@
       </div>
       <div>
         <label for="theDescription" class="control-label">Description</label>
-        <textarea rows="5" class="form-control" name="theDescription" id="theDescription" data-error="Description is required" required></textarea>
+        <textarea rows="5" class="form-control" name="theDescription" id="theDescription" maxlength="4000" data-error="Description is required" required></textarea>
         <div class="help-block with-errors"></div>
       </div>
     </div>
     <div class="form-group" id="Rationale">
-      <textarea rows="5" class="form-control" name="theRationale" id="theRationale" data-error="Rationale is required" required></textarea>
+      <textarea rows="5" class="form-control" name="theRationale" id="theRationale" maxlength="255" data-error="Rationale is required" required></textarea>
       <div class="help-block with-errors"></div>
     </div>
     <div class="form-group" id="FitCriterion">
-      <textarea rows="5" class="form-control" name="theFitCriterion" id="theFitCriterion" data-error="Fit Criterion is required" required></textarea>
+      <textarea rows="5" class="form-control" name="theFitCriterion" id="theFitCriterion" maxlength="4000" data-error="Fit Criterion is required" required></textarea>
       <div class="help-block with-errors"></div>
     </div>
   </div>

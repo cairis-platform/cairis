@@ -1,7 +1,7 @@
 <form role="form" id="editEnvironmentOptionsform" xmlns="http://www.w3.org/1999/html">
   <div class="form-group">
     <label for="theName" class="control-label">Environment</label>
-    <input class="optionsInput form-control" type="text" name="theName" id="theName" data-error="Environment name is required" required>
+    <input class="optionsInput form-control" type="text" name="theName" id="theName" maxlength="50" data-error="Environment name is required" required>
     <div class="help-block with-errors"></div>
   </div>
   </br>
@@ -15,12 +15,12 @@
       <div id="Summary">
         <div class="form-group">
           <label for="theShortCode" class="control-label">Short code</label>
-          <input class="optionsInput form-control" type="text" name="theShortCode" id="theShortCode" data-error="Short code is required" required>
+          <input class="optionsInput form-control" type="text" name="theShortCode" id="theShortCode" maxlength="20" data-error="Short code is required" required>
           <div class="help-block with-errors"></div>
         </div>
         <div class="form-group">
           <label for="theDescription" class="control-label">Description</label>
-          <textarea rows="7" class="form-control" name="theDescription" id="theDescription" data-error="Description is required" required></textarea>
+          <textarea rows="7" class="form-control" name="theDescription" id="theDescription" maxlength="4000" data-error="Description is required" required></textarea>
           <div class="help-block with-errors"></div>
         </div>
       </div>
