@@ -231,6 +231,7 @@ $('#architecturalPatternModelClick').click(function(){
     url: serverIP + "/api/dimensions/table/component_view",
     success: function (data) {
       $("#chooseEnvironmentSelect").empty();
+      data.sort();
       $("#aparchitecturalpatternsbox").empty();
       $.each(data, function(i, item) {
         $("#chooseEnvironmentSelect").append('<option value="' + item + '">'  + item + '</option>');

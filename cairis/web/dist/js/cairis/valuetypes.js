@@ -196,6 +196,9 @@ $(document).on('click', "td.valuetype-rows", function () {
       fillOptionMenu("fastTemplates/" + vtPage, "#objectViewer", null, true, true, function () {
         $.session.set("ValueType", JSON.stringify(data));
         $(formObjt).loadJSON(data, null);
+        if (valueType == 'access_right' || valueType == 'protocol' || valueType == 'privilege' || valueType == 'surface_type') {
+          $('#theScore').val(data.theScore);
+        }
 
       });
     },
