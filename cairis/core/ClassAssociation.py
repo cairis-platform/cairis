@@ -17,8 +17,11 @@
 
 __author__ = 'Shamal Faily'
 
-class ClassAssociation:
+from . import ObjectValidator
+
+class ClassAssociation(ObjectValidator.ObjectValidator):
   def __init__(self,associationId,envName,headName,headDim,headNav,headType,headMultiplicity,headRole,tailRole,tailMultiplicity,tailType,tailNav,tailDim,tailName,rationale=''):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = associationId
     self.theEnvironmentName = envName
     self.theHeadAsset = headName

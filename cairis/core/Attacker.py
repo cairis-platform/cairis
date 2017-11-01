@@ -18,9 +18,11 @@
 __author__ = 'Shamal Faily'
 
 from .AttackerEnvironmentProperties import AttackerEnvironmentProperties
+from . import ObjectValidator
 
-class Attacker:
+class Attacker(ObjectValidator.ObjectValidator):
   def __init__(self,attackerId,attackerName,attackerDescription,attackerImage,tags,environmentProperties):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = attackerId
     self.theName = attackerName
     self.theDescription = attackerDescription

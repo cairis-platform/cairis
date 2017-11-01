@@ -77,6 +77,47 @@
   "Step" : {
     "theStepText" : 2000,
     "theSynopsis" : 500
+  },
+  "ComponentView" : {
+    "theName" : 255,
+    "theSynopsis" : 255 
+  },
+  "ComponentViewParameters" : {
+    "theName" : 255,
+    "theSynopsis" : 255
+  },
+  "RoleParameters" : {
+    "theName" : 255,
+    "theShortCode" : 100,
+    "theDescription" : 1000 
+  },
+  "Role" : {
+    "theName" : 255,
+    "theShortCode" : 100,
+    "theDescription" : 1000 
+  },
+  "ClassAssociation" : {
+    "theHeadRole" : 50,
+    "theTailRole" : 50
+  },
+  "ClassAssociationParameters" : {
+    "theHeadRole" : 50,
+    "theTailRole" : 50
+  },
+  "Attacker" : {
+    "theName" : 50,
+    "theDescription" : 4000 
+  },
+  "AttackerParameters" : {
+    "theName" : 50,
+    "theDescription" : 4000 
+  },
+  "Vulnerability" : {
+    "theName" : 200,
+    "theDescription" : 4000 
+  },
+  "VulnerabilityParameters" : {
+    "theName" : 200,
+    "theDescription" : 4000 
   }
-
 }

@@ -17,8 +17,11 @@
 
 __author__ = 'Shamal Faily'
 
-class ComponentView:
+from . import ObjectValidator
+
+class ComponentView(ObjectValidator.ObjectValidator):
   def __init__(self,cvId,cvName,cvSyn,cvComs,cvCons,asm = [0,0,0]):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = cvId
     self.theName = cvName
     self.theSynopsis = cvSyn

@@ -356,6 +356,7 @@ class MySQLDatabaseProxy:
     return self.responseList('call attacker_capability(:aId,:eId)',{'aId':attackerId,'eId':environmentId},'MySQL error getting capabilities for attacker id ' + str(attackerId) + ' in environment id ' + str(environmentId))
 
   def addAttacker(self,parameters):
+    parameters.validate()
     attackerId = self.newId()
     attackerName = parameters.name()
     attackerDesc = parameters.description()
@@ -383,6 +384,7 @@ class MySQLDatabaseProxy:
       self.updateDatabase('call addAttackerCapability(:aId,:envName,:name,:value)',{'aId':attackerId,'envName':environmentName,'name':name,'value':value},'MySQL error updating attacker capabilities for attacker id ' + str(attackerId))
   
   def updateAttacker(self,parameters):
+    parameters.validate()
     session = self.updateDatabase('call deleteAttackerComponents(:id)',{'id':parameters.id()},'MySQL error deleting attacker components',None,False)
     attackerId = parameters.id()
     attackerName = parameters.name()
@@ -689,6 +691,7 @@ class MySQLDatabaseProxy:
     
 
   def addVulnerability(self,parameters):
+    parameters.validate()
     vulName = parameters.name()
     vulDesc = parameters.description()
     vulType = parameters.type()
@@ -706,6 +709,7 @@ class MySQLDatabaseProxy:
     return vulId
 
   def updateVulnerability(self,parameters):
+    parameters.validate()
     vulId = parameters.id()
     vulName = parameters.name()
     vulDesc = parameters.description()
@@ -1298,6 +1302,7 @@ class MySQLDatabaseProxy:
     return roles
 
   def addRole(self,parameters):
+    parameters.validate()
     roleId = self.newId()
     roleName = parameters.name()
     roleType = parameters.type()
@@ -1307,6 +1312,7 @@ class MySQLDatabaseProxy:
     return roleId
 
   def updateRole(self,parameters):
+    parameters.validate()
     roleId = parameters.id()
     roleName = parameters.name()
     roleType = parameters.type()
@@ -1694,6 +1700,7 @@ class MySQLDatabaseProxy:
     return associations
 
   def addClassAssociation(self,parameters):
+    parameters.validate()
     associationId = self.newId()
     envName = parameters.environment()
     headAsset = parameters.headAsset()
@@ -1711,6 +1718,7 @@ class MySQLDatabaseProxy:
     return associationId
 
   def updateClassAssociation(self,parameters):
+    parameters.validate()
     associationId = parameters.id()
     envName = parameters.environment()
     headAsset = parameters.headAsset()
@@ -3393,6 +3401,7 @@ class MySQLDatabaseProxy:
     return ifs
 
   def addComponentView(self,parameters):
+    parameters.validate();
     cvId = self.newId()
     cvName = parameters.name()
     cvSyn = parameters.synopsis()
@@ -3439,6 +3448,7 @@ class MySQLDatabaseProxy:
     return cvId
 
   def updateComponentView(self,parameters):
+    parameters.validate();
     cvId = parameters.id()
     cvName = parameters.name()
     cvSyn = parameters.synopsis()

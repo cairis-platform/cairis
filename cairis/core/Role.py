@@ -17,8 +17,11 @@
 
 __author__ = 'Shamal Faily'
 
-class Role:
+from . import ObjectValidator
+
+class Role(ObjectValidator.ObjectValidator):
   def __init__(self,roleId,roleName,rType,sCode,roleDesc,cProps):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = roleId
     self.theName = roleName
     self.theType = rType
