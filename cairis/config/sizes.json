@@ -23,12 +23,12 @@
   },
   "DomainPropertyParameters" : {
     "theName" : 255,
-    "theOriginator" : 20,
+    "theOriginator" : 100,
     "theDescription" : 4000
   },
   "DomainProperty" : {
     "theName" : 255,
-    "theOriginator" : 20,
+    "theOriginator" : 100,
     "theDescription" : 4000
   }
 }
