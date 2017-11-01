@@ -22,7 +22,7 @@ from subprocess import call
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 from cairis.core.EnvironmentParameters import EnvironmentParameters
-from cairis.core.ARM import DatabaseProxyException
+from cairis.core.ARM import DatabaseProxyException, AttributeTooBig
 
 __author__ = 'Shamal Faily'
 
@@ -41,6 +41,10 @@ class EnvironmentTest(unittest.TestCase):
     iep2 = EnvironmentParameters(self.ienvs[1]["theName"],self.ienvs[1]["theShortCode"],self.ienvs[1]["theDescription"])
     iep3 = EnvironmentParameters(self.ienvs[2]["theName"],self.ienvs[2]["theShortCode"],self.ienvs[2]["theDescription"])
     b = Borg()
+    iep1.theShortCode = '0' * 25
+    with self.assertRaises(AttributeTooBig):
+      b.dbProxy.addEnvironment(iep1)
+    iep1.theShortCode = self.ienvs[0]["theShortCode"]
     b.dbProxy.addEnvironment(iep1)
     b.dbProxy.addEnvironment(iep2)
     b.dbProxy.addEnvironment(iep3)

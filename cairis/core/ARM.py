@@ -55,6 +55,9 @@ class ConflictingType(ARMException):
 class SessionNotFound(ARMException):
   def __init__(self,value): ARMException.__init__(self,'Session not found')
 
+class AttributeTooBig(ARMException):
+  def __init__(self,value): ARMException.__init__(self,value)
+
 class NoImpliedCharacteristic(Exception):
   def __init__(self,pName,fromCode,toCode,rtName):
     self.thePersonaName = pName

@@ -15,10 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+from . import ObjectValidator
+
 __author__ = 'Shamal Faily'
 
-class Environment:
+class Environment(ObjectValidator.ObjectValidator):
   def __init__(self,id,name,sc,description,environments,duplProperty,overridingEnvironment,envTensions):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = id
     self.theName = name
     self.theShortCode = sc

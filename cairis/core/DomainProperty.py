@@ -15,10 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+from . import ObjectValidator
+
 __author__ = 'Shamal Faily'
 
-class DomainProperty:
+class DomainProperty(ObjectValidator.ObjectValidator):
   def __init__(self,dpId,dpName,dpDesc,dpType,dpOrig,tags):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = dpId
     self.theName = dpName
     self.theTags = tags

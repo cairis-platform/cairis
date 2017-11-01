@@ -236,6 +236,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call addValueTension(:env,:sp,:pr,:tId,:rationale)',{'env':envId,'sp':spId,'pr':prId,'tId':tId,'rationale':tRationale},'MySQL error adding value tension for environment id ' + str(envId))
 
   def addEnvironment(self,parameters):
+    parameters.validate()
     environmentId = self.newId()
     environmentName = parameters.name()
     environmentShortCode = parameters.shortCode()
@@ -262,6 +263,7 @@ class MySQLDatabaseProxy:
     return self.responseList('call riskEnvironmentsByRisk(:risk)',{'risk':riskName},'MySQL error getting environments associated with risk ' + riskName)
 
   def updateEnvironment(self,parameters):
+    parameters.validate()
     environmentId = parameters.id()
     environmentName = parameters.name()
     environmentShortCode = parameters.shortCode()
@@ -405,6 +407,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase(sqlTxt,{'obj':objtId},'MySQL error deleting ' + tableName + 's')
 
   def addAsset(self,parameters):
+    parameters.validate()
     assetId = self.newId()
     assetName = parameters.name()
     shortCode = parameters.shortCode()
@@ -426,6 +429,7 @@ class MySQLDatabaseProxy:
     return assetId
 
   def updateAsset(self,parameters):
+    parameters.validate()
     assetId = parameters.id()
     assetName = parameters.name()
     shortCode = parameters.shortCode()
@@ -1961,6 +1965,7 @@ class MySQLDatabaseProxy:
     return dps
 
   def addDomainProperty(self,parameters):
+    parameters.validate()
     dpId = self.newId()
     dpName = parameters.name()
     dpDesc = parameters.description()
@@ -1972,6 +1977,7 @@ class MySQLDatabaseProxy:
     return dpId
 
   def updateDomainProperty(self,parameters):
+    parameters.validate()
     dpId = parameters.id()
     dpName = parameters.name()
     dpDesc = parameters.description()

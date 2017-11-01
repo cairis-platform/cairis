@@ -17,12 +17,13 @@
 
 __author__ = 'Shamal Faily'
 
-
+from . import ObjectValidator
 from .PropertyHolder import PropertyHolder;
 from numpy import *
 
-class Asset:
+class Asset(ObjectValidator.ObjectValidator):
   def __init__(self,assetId,assetName,shortCode,assetDescription,assetSig,assetType,cFlag,cRationale,tags,ifs,cProps):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = assetId
     self.theName = assetName
     self.theShortCode = shortCode

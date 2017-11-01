@@ -24,7 +24,7 @@ from cairis.core.Borg import Borg
 from cairis.core.EnvironmentParameters import EnvironmentParameters
 from cairis.core.AssetParameters import AssetParameters
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
-from cairis.core.ARM import DatabaseProxyException
+from cairis.core.ARM import DatabaseProxyException,AttributeTooBig
 
 __author__ = 'Shamal Faily'
 
@@ -52,6 +52,11 @@ class AssetTest(unittest.TestCase):
     iaeps = [AssetEnvironmentProperties(self.iassets[0]["theEnvironmentProperties"][0][0],self.iassets[0]["theEnvironmentProperties"][0][1],self.iassets[0]["theEnvironmentProperties"][0][2])]
     iap = AssetParameters(self.iassets[0]["theName"],self.iassets[0]["theShortCode"],self.iassets[0]["theDescription"],self.iassets[0]["theSignificance"],self.iassets[0]["theType"],"0","N/A",[],[],iaeps)
     b = Borg()
+
+    iap.theShortCode = 'TESTCODE123456789012345678901234567890'
+    with self.assertRaises(AttributeTooBig):
+      b.dbProxy.addAsset(iap)
+    iap.theShortCode = 'TESTCODE'
     b.dbProxy.addAsset(iap)
 
     oaps = b.dbProxy.getAssets()

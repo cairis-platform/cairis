@@ -15,17 +15,22 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from . import ObjectValidator
 __author__ = 'Shamal Faily'
 
-class ObjectCreationParameters(ObjectValidator.ObjectValidator):
+from .Borg import Borg
+from .ARM import AttributeTooBig
+
+class ObjectValidator:
   def __init__(self):
-    ObjectValidator.ObjectValidator.__init__(self)
-    self.theId = -1
     pass
 
-  def setId(self,anId):
-    self.theId = anId
-
-  def id(self):
-    return self.theId
+  def validate(self):
+    b = Borg()
+    if self.__class__.__name__ in b.objtSizes:
+      pSizes = b.objtSizes[self.__class__.__name__]
+      for pAttr in dir(self):
+        if pAttr in pSizes:
+          inAttrLen = len(getattr(self,pAttr))
+          if (inAttrLen > pSizes[pAttr]):
+            msg = self.__class__.__name__ + ' attribute ' + pAttr + ' length is ' + str(inAttrLen) + ', but the maximum allowable length is ' + str(pSizes[pAttr])
+            raise AttributeTooBig(msg)

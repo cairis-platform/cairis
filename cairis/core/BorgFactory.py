@@ -20,6 +20,7 @@ __author__ = 'Shamal Faily, Robin Quetin'
 from .Borg import Borg
 import os
 import logging
+import json
 from cairis.tools.GraphicsGenerator import GraphicsGenerator
 from .MySQLDatabaseProxy import MySQLDatabaseProxy
 from .ARM import ARMException
@@ -90,6 +91,9 @@ def setupDocBookConfig():
     b.docBookDir = '/usr/share/sgml/docbook/dtd/4.5'
   else:
     b.logger.warning('Unable to find DocBook schemes. Check if DocBook is correctly installed.')
+  tf = open(b.configDir + '/sizes.json')
+  b.objtSizes = json.load(tf)
+  tf.close()
 
 def initialiseDesktopSettings():
   b = Borg()
