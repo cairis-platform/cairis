@@ -69,6 +69,12 @@ class PersonaTest(unittest.TestCase):
     self.assertEqual(ipp.skills(),op.skills())
     self.assertEqual(ipp.intrinsic(),op.intrinsic())
     self.assertEqual(ipp.contextual(),op.contextual())
+    self.assertEqual(op.roles('Psychosis','')[0],'Researcher')
+    self.assertEqual('Researcher' in op.roles('Psychosis','override'),True)
+    self.assertEqual(op.directFlag('Psychosis',''),'False')
+    self.assertEqual(op.directFlag('Psychosis','override'),'False')
+    self.assertEqual(op.narrative('Psychosis',''),'Nothing stipulated')
+    self.assertEqual(op.narrative('Psychosis','override'),'Nothing stipulated')
     
     self.assertEqual(self.iPersonas[0]["theEnvironmentProperties"][0]["theDirectFlag"],op.environmentProperties()[0].directFlag())
     self.assertEqual(self.iPersonas[0]["theEnvironmentProperties"][0]["theNarrative"],op.environmentProperties()[0].narrative())
