@@ -78,6 +78,7 @@ class GoalTest(unittest.TestCase):
     self.assertEqual(igp1.originator(), og1.originator())
     ogep1 = og1.environmentProperty(igep1d.name())
     ogep2 = og2.environmentProperty(igep1d.name())
+    self.assertEqual(og1.refinements('Day'),False)
 
     self.assertEqual(igep1d.label(), ogep1.label())
     self.assertEqual(igep1d.definition(), ogep1.definition())
