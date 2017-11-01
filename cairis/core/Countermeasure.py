@@ -18,11 +18,13 @@
 
 from .PropertyHolder import PropertyHolder;
 from numpy import *
+from . import ObjectValidator
 
 __author__ = 'Shamal Faily'
 
-class Countermeasure:
+class Countermeasure(ObjectValidator.ObjectValidator):
   def __init__(self,cmId,cmName,cmDesc,cmType,tags,cProps):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = cmId
     self.theName = cmName
     self.theTags = tags

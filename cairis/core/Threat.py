@@ -18,10 +18,12 @@
 __author__ = 'Shamal Faily'
 
 from .PropertyHolder import PropertyHolder
+from . import ObjectValidator
 from numpy import *
 
-class Threat:
+class Threat(ObjectValidator.ObjectValidator):
   def __init__(self,threatId,threatName,threatType,threatMethod,tags,cProps):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = threatId
     self.theThreatName = threatName
     self.theType = threatType

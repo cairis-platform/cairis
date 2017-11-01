@@ -17,8 +17,11 @@
 
 __author__ = 'Shamal Faily'
 
-class MisuseCase:
+from . import ObjectValidator
+
+class MisuseCase(ObjectValidator.ObjectValidator):
   def __init__(self,mcId,mcName,cProps,riskName):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = mcId
     self.theName = mcName
     self.theEnvironmentProperties = cProps

@@ -17,8 +17,11 @@
 
 __author__ = 'Shamal Faily'
 
-class Response:
+from . import ObjectValidator
+
+class Response(ObjectValidator.ObjectValidator):
   def __init__(self,respId,respName,respRisk,tags,cProps,respType):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = respId
     self.theName = respName
     self.theTags = tags

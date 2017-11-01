@@ -627,6 +627,7 @@ class MySQLDatabaseProxy:
     return self.responseList('call nonCompositeEnvironmentNames()',{},'MySQL error getting environments')
 
   def addThreat(self,parameters,update = False):
+    parameters.validate()
     threatId = self.newId()
     threatName = parameters.name()
     threatType = parameters.type()
@@ -648,6 +649,7 @@ class MySQLDatabaseProxy:
     return threatId
 
   def updateThreat(self,parameters):
+    parameters.validate()
     threatId = parameters.id()
     threatName = parameters.name()
     threatType = parameters.type()
@@ -936,11 +938,13 @@ class MySQLDatabaseProxy:
     return taskId
 
   def addMisuseCase(self,parameters):
+    parameters.validate()
     mcName = parameters.name()
     mcId = self.newId()
     self.updateDatabase('call addMisuseCase(:id,:name)',{'id':mcId,'name':mcName},'MySQL error adding misuse case ' + mcName)
     self.addMisuseCaseRisk(mcId,parameters.risk())
     for cProperties in parameters.environmentProperties():
+      cProperties.validate()
       environmentName = cProperties.name()
       self.addDimensionEnvironment(mcId,'misusecase',environmentName)
       self.addMisuseCaseNarrative(mcId,cProperties.narrative().encode('utf-8'),environmentName)
@@ -971,12 +975,14 @@ class MySQLDatabaseProxy:
       self.addTaskEnvironmentCodes(taskName,environmentName,cProperties.codes())
 
   def updateMisuseCase(self,parameters):
+    parameters.validate()
     mcId = parameters.id()
     mcName = parameters.name()
     session = self.updateDatabase('call deleteMisuseCaseComponents(:id)',{'id':mcId},'MySQL error dleting misuse case components',None,False)
     self.updateDatabase('call updateMisuseCase(:id,:name)',{'id':mcId,'name':mcName},'MySQL error updating misuse case',session)
     self.addMisuseCaseRisk(mcId,parameters.risk())
     for cProperties in parameters.environmentProperties():
+      cProperties.validate()
       environmentName = cProperties.name()
       self.addDimensionEnvironment(mcId,'misusecase',environmentName)
       self.addMisuseCaseNarrative(mcId,cProperties.narrative().encode('utf-8'),environmentName)
@@ -1115,6 +1121,7 @@ class MySQLDatabaseProxy:
     return [threatName,vulName]
 
   def addResponse(self,parameters):
+    parameters.validate()
     respName = parameters.name()
     respRisk = parameters.risk()
     respType = parameters.responseType()
@@ -1123,6 +1130,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call addResponse(:id,:name,:type,:risk)',{'id':respId,'name':respName,'type':respType,'risk':respRisk},'MySQL error adding response')
     self.addTags(respName,'response',tags)
     for cProperties in parameters.environmentProperties():
+      cProperties.validate()
       environmentName = cProperties.name()
       self.addDimensionEnvironment(respId,'response',environmentName)
       if (respType == 'Accept'):
@@ -1156,6 +1164,7 @@ class MySQLDatabaseProxy:
     self.commitDatabase(session)
 
   def updateResponse(self,parameters):
+    parameters.validate()
     respName = parameters.name()
     respRisk = parameters.risk()
     respType = parameters.responseType()
@@ -1165,6 +1174,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call updateResponse(:id,:name,:type,:risk)',{'id':respId,'name':respName,'type':respType,'risk':respRisk},'MySQL error updating response',session)
     self.addTags(respName,'response',tags)
     for cProperties in parameters.environmentProperties():
+      cProperties.validate()
       environmentName = cProperties.name()
       self.addDimensionEnvironment(respId,'response',environmentName)
       if (respType == 'Accept'):
@@ -1365,6 +1375,7 @@ class MySQLDatabaseProxy:
     return self.responseList('call countermeasurePersonas(:cmId,:envId)',{'cmId':cmId,'envId':environmentId},'MySQL error getting personas associated with countermeasure id ' + str(cmId))
 
   def addCountermeasure(self,parameters):
+    parameters.validate()
     cmName = parameters.name()
     cmDesc = parameters.description()
     cmType = parameters.type()
@@ -1373,6 +1384,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call addCountermeasure(:id,:name,:desc,:type)',{'id':cmId,'name':cmName,'desc':cmDesc,'type':cmType},'MySQL error adding countermeasure')
     self.addTags(cmName,'countermeasure',tags)
     for cProperties in parameters.environmentProperties():
+      cProperties.validate()
       environmentName = cProperties.name()
       self.addDimensionEnvironment(cmId,'countermeasure',environmentName)
       self.addCountermeasureTargets(cmId,cProperties.requirements(),cProperties.targets(),environmentName)
@@ -1384,6 +1396,7 @@ class MySQLDatabaseProxy:
     return cmId
 
   def updateCountermeasure(self,parameters):
+    parameters.validate()
     cmName = parameters.name()
     cmDesc = parameters.description()
     cmType = parameters.type()
@@ -1394,6 +1407,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call updateCountermeasure(:id,:name,:desc,:type)',{'id':cmId,'name':cmName,'desc':cmDesc,'type':cmType},'MySQL error updating countermeasures',session)
     self.addTags(cmName,'countermeasure',tags)
     for cProperties in environmentProperties:
+      cProperties.validate()
       environmentName = cProperties.name()
       self.addDimensionEnvironment(cmId,'countermeasure',environmentName)
       self.updateCountermeasureTargets(cmId,cProperties.requirements(),cProperties.targets(),environmentName)
