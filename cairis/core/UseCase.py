@@ -15,12 +15,14 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+from . import ObjectValidator
 
 __author__ = 'Shamal Faily'
 
 
-class UseCase:
+class UseCase(ObjectValidator.ObjectValidator):
   def __init__(self,ucId,ucName,ucAuth,ucCode,ucActors,ucDesc,tags,cProps):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = ucId
     self.theName = ucName
     self.theTags = tags

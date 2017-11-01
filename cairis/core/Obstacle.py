@@ -17,11 +17,13 @@
 
 
 from .ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
+from . import ObjectValidator
 
 __author__ = 'Shamal Faily'
 
-class Obstacle:
+class Obstacle(ObjectValidator.ObjectValidator):
   def __init__(self,obsId,obsName,obsOrig,tags,environmentProperties):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = obsId
     self.theName = obsName
     self.theTags = tags

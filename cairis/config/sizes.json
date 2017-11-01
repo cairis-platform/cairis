@@ -30,5 +30,53 @@
     "theName" : 255,
     "theOriginator" : 100,
     "theDescription" : 4000
+  },
+  "GoalParameters" : {
+    "theName" : 100,
+    "theOriginator" : 50
+  },
+  "Goal" : {
+    "theName" : 100,
+    "theOriginator" : 50
+  },
+  "GoalEnvironmentProperties" : {
+    "theLabel" : 255,
+    "theDefinition" : 4000,
+    "theFitCriterion" : 1000,
+    "theIssue" : 1000
+  },
+  "ObstacleParameters" : {
+    "theName" : 100,
+    "theOriginator" : 50
+  },
+  "Obstacle" : {
+    "theName" : 100,
+    "theOriginator" : 50
+  },
+  "ObstacleEnvironmentProperties" : {
+    "theLabel" : 255,
+    "theDefinition" : 4000,
+    "theProbabilityRationale" : 4000
+  },
+  "UseCase" : {
+    "theName" : 200,
+    "theAuthor" : 255,
+    "theCode" : 100,
+    "theDescription" : 2000
+  },
+  "UseCaseParameters" : {
+    "theName" : 200,
+    "theAuthor" : 255,
+    "theCode" : 100,
+    "theDescription" : 2000
+  },
+  "UseCaseEnvironmentProperties" : {
+    "thePreCond" : 2000,
+    "thePostCond" : 2000
+  },
+  "Step" : {
+    "theStepText" : 2000,
+    "theSynopsis" : 500
   }
+
 }

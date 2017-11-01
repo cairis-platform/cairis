@@ -1506,6 +1506,7 @@ class MySQLDatabaseProxy:
     
 
   def addGoal(self,parameters):
+    parameters.validate()
     goalId = self.newId()
     goalName = parameters.name()
     goalOrig = parameters.originator()
@@ -1513,6 +1514,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call addGoal(:id,:name,:orig)',{'id':goalId,'name':goalName,'orig':goalOrig},'MySQL error adding goal')
     self.addTags(goalName,'goal',tags)
     for environmentProperties in parameters.environmentProperties():
+      environmentProperties.validate()
       environmentName = environmentProperties.name()
       self.addDimensionEnvironment(goalId,'goal',environmentName)
       self.addGoalDefinition(goalId,environmentName,environmentProperties.definition())
@@ -1526,6 +1528,7 @@ class MySQLDatabaseProxy:
     return goalId
 
   def updateGoal(self,parameters):
+    parameters.validate()
     goalId = parameters.id()
     goalName = parameters.name()
     goalOrig = parameters.originator()
@@ -1534,6 +1537,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call updateGoal(:id,:name,:orig)',{'id':goalId,'name':goalName,'orig':goalOrig},'MySQL error updating goal',session)
     self.addTags(goalName,'goal',tags)
     for environmentProperties in parameters.environmentProperties():
+      environmentProperties.validate()
       environmentName = environmentProperties.name()
       self.addDimensionEnvironment(goalId,'goal',environmentName)
       self.addGoalDefinition(goalId,environmentName,environmentProperties.definition())
@@ -2032,6 +2036,7 @@ class MySQLDatabaseProxy:
     return self.responseList('select obstacle_category(:oId,:eId)',{'oId':obsId,'eId':environmentId},'MySQL error getting obstacle category')[0]
 
   def addObstacle(self,parameters):
+    parameters.validate()
     obsId = self.newId()
     obsName = parameters.name().encode('utf-8')
     obsOrig = parameters.originator().encode('utf-8')
@@ -2039,6 +2044,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call addObstacle(:id,:name,:orig)',{'id':obsId,'name':obsName,'orig':obsOrig},'MySQL error adding obstacle')
     self.addTags(obsName,'obstacle',tags)
     for environmentProperties in parameters.environmentProperties():
+      environmentProperties.validate()
       environmentName = environmentProperties.name()
       self.addDimensionEnvironment(obsId,'obstacle',environmentName)
       self.addObstacleDefinition(obsId,environmentName,environmentProperties.definition(),environmentProperties.probability(),environmentProperties.probabilityRationale())
@@ -2048,6 +2054,7 @@ class MySQLDatabaseProxy:
     return obsId
 
   def updateObstacle(self,parameters):
+    parameters.validate()
     obsId = parameters.id()
     obsName = parameters.name()
     obsOrig = parameters.originator()
@@ -2056,6 +2063,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call updateObstacle(:id,:name,:orig)',{'id':obsId,'name':obsName,'orig':obsOrig},'MySQL error updating obstacle',session)
     self.addTags(obsName,'obstacle',tags)
     for environmentProperties in parameters.environmentProperties():
+      environmentProperties.validate()
       environmentName = environmentProperties.name()
       self.addDimensionEnvironment(obsId,'obstacle',environmentName)
       self.addObstacleDefinition(obsId,environmentName,environmentProperties.definition(),environmentProperties.probability(),environmentProperties.probabilityRationale())
@@ -2745,6 +2753,7 @@ class MySQLDatabaseProxy:
     return self.responseList('call useCaseStepTags(:uc,:env,:step)',{'uc':ucId,'env':envId,'step':stepNo},'MySQL error getting tags associated with use case id ' + str(ucId))
 
   def addUseCase(self,parameters):
+    parameters.validate()
     ucName = parameters.name()
     ucAuth = parameters.author()
     ucCode = parameters.code()
@@ -2758,6 +2767,7 @@ class MySQLDatabaseProxy:
     self.addTags(ucName,'usecase',tags)
 
     for cProperties in parameters.environmentProperties():
+      parameters.validate()
       environmentName = cProperties.name()
       self.addDimensionEnvironment(ucId,'usecase',environmentName)
       self.addUseCaseConditions(ucId,environmentName,cProperties.preconditions(),cProperties.postconditions())
@@ -2776,6 +2786,7 @@ class MySQLDatabaseProxy:
       self.addUseCaseStep(ucId,envName,stepNo,step)
 
   def addUseCaseStep(self,ucId,envName,stepNo,step):
+    step.validate()
     self.updateDatabase('call addUseCaseStep(:id,:env,:step,:text,:synopsis,:actor,:type)',{'id':ucId,'env':envName,'step':stepNo,'text':step.text(),'synopsis':step.synopsis(),'actor':step.actor(),'type':step.actorType()},'MySQL error adding use case step') 
     for tag in step.tags(): self.addUseCaseStepTag(ucId,envName,stepNo,tag)
     for idx,exc in list((step.theExceptions).items()):
@@ -2787,6 +2798,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call addUseCaseStepException(:uc,:env,:step,:ex,:dType,:dName,:cName,:desc)',{'uc':ucId,'env':envName,'step':stepNo,'ex':exName,'dType':dimType,'dName':dimName,'cName':catName,'desc':exDesc},'MySQL error adding use case step exception')
 
   def updateUseCase(self,parameters):
+    parameters.validate()
     ucId = parameters.id()
     ucName = parameters.name()
     ucAuth = parameters.author()
@@ -2800,6 +2812,7 @@ class MySQLDatabaseProxy:
       self.addUseCaseRole(ucId,actor)
     self.addTags(ucName,'usecase',tags)
     for cProperties in parameters.environmentProperties():
+      cProperties.validate()
       environmentName = cProperties.name()
       self.addDimensionEnvironment(ucId,'usecase',environmentName)
       self.addUseCaseConditions(ucId,environmentName,cProperties.preconditions(),cProperties.postconditions())

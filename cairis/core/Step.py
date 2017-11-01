@@ -15,10 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+from . import ObjectValidator
+
 __author__ = 'Shamal Faily'
 
-class Step:
+class Step(ObjectValidator.ObjectValidator):
   def __init__(self,stepTxt = '',stepSyn = '',stepActor = '',stepActorType = '',stepTags = []):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theExceptions = {}
     self.theStepText = stepTxt
     self.theSynopsis = stepSyn

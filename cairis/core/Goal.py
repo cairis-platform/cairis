@@ -15,13 +15,14 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-
+from . import ObjectValidator
 from .GoalEnvironmentProperties import GoalEnvironmentProperties
 
 __author__ = 'Shamal Faily'
 
-class Goal:
+class Goal(ObjectValidator.ObjectValidator):
   def __init__(self,goalId,goalName,goalOrig,tags,environmentProperties):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = goalId
     self.theName = goalName
     self.theTags = tags
