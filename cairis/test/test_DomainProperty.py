@@ -40,7 +40,7 @@ class DomainPropertyTest(unittest.TestCase):
   def testDomainProperty(self):
     idp = DomainPropertyParameters(self.iDomainProperties[0]["theName"], self.iDomainProperties[0]["theDefinition"], self.iDomainProperties[0]["theType"],self.iDomainProperties[0]["theOriginator"],[])
     b = Borg()
-    idp.theOriginator = '0' * 35
+    idp.theOriginator = '0' * 200
     with self.assertRaises(AttributeTooBig):
       b.dbProxy.addDomainProperty(idp)
     idp.theOriginator = self.iDomainProperties[0]["theOriginator"]
