@@ -218,9 +218,11 @@ class MySQLDatabaseProxy:
       raise DatabaseProxyException(exceptionText) 
 
   def addRequirement(self,r,assetName,isAsset = True):
+    r.validate()
     self.updateDatabase('call addRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type,:asName,:isAs)',{'lbl':r.label(),'id':r.id(),'vers':r.version(),'name':r.name(),'desc':r.description(),'rationale':r.rationale(),'origin':r.originator(),'fCrit':r.fitCriterion(),'priority':r.priority(),'type':r.type(),'asName':assetName,'isAs':isAsset},'MySQL error adding new requirement ' + str(r.id()))
 
   def updateRequirement(self,r):
+    r.validate()
     self.updateDatabase('call updateRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type)',{'lbl':r.label(),'id':r.id(),'vers':r.version(),'name':r.name(),'desc':r.description(),'rationale':r.rationale(),'origin':r.originator(),'fCrit':r.fitCriterion(),'priority':r.priority(),'type':r.type()},'MySQL error updating requirement ' + str(r.id()))
 
   def addValueTensions(self,envId,tensions):

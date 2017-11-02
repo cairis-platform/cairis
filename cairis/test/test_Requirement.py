@@ -89,8 +89,16 @@ class RequirementTest(unittest.TestCase):
 
 
     uireq = oreq
+    uireq.update('label',oreq.label())
     uireq.update('description','revised description')
     uireq.update('name','revised name')
+    uireq.update('priority',oreq.priority())
+    uireq.update('rationale',oreq.rationale())
+    uireq.update('fitCriterion',oreq.fitCriterion())
+    uireq.update('supportingMaterial','None')
+    uireq.update('type',oreq.type())
+    uireq.update('asset',oreq.asset())
+    self.assertEqual(uireq.dirty(),9)
     uireq.incrementVersion()
 
     uireq.theLabel = int(uireq.theLabel.split('-')[1])

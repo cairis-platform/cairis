@@ -17,8 +17,11 @@
 
 __author__ = 'Shamal Faily'
 
-class Requirement:
+from . import ObjectValidator
+
+class Requirement(ObjectValidator.ObjectValidator):
   def __init__(self, id, label, name='', description='', priority='1', rationale='', fitCriterion='', originator='', type='Functional', asset='', version=-1):
+    ObjectValidator.ObjectValidator.__init__(self)
     self.theId = id
     if (version == -1):
       self.theVersion = 1
@@ -29,12 +32,12 @@ class Requirement:
     self.theName = name
     self.theDescription = description
     self.thePriority = priority
-    self.attrs['rationale'] = rationale
-    self.attrs['originator'] = originator
-    self.attrs['fitCriterion'] = fitCriterion
-    self.attrs['supportingMaterial'] = ''
-    self.attrs['type'] = type
-    self.attrs['asset'] = asset
+    self.theRationale = rationale
+    self.theOriginator = originator
+    self.theFitCriterion = fitCriterion
+    self.theSupportingMaterial = ''
+    self.theType = type
+    self.theAsset = asset
     self.dirtyAttrs = set([])
 
   def label(self):
@@ -50,22 +53,22 @@ class Requirement:
     return self.thePriority
 
   def rationale(self):
-    return self.attrs['rationale']
+    return self.theRationale
 
   def fitCriterion(self):
-    return self.attrs['fitCriterion']
+    return self.theFitCriterion
 
   def version(self):
     return self.theVersion
 
   def originator(self):
-    return self.attrs['originator']
+    return self.theOriginator
 
   def type(self):
-    return self.attrs['type']
+    return self.theType
 
   def asset(self):
-    return self.attrs['asset']
+    return self.theAsset
 
   def dirty(self): return len(self.dirtyAttrs)
 
@@ -74,7 +77,12 @@ class Requirement:
     elif (attr == 'name'): self.theName = val
     elif (attr == 'description'): self.theDescription = val
     elif (attr == 'priority'): self.thePriority = val
-    else: self.attrs[attr] = str(val)
+    elif (attr == 'rationale'): self.theRationale = val
+    elif (attr == 'originator'): self.theOriginator = val
+    elif (attr == 'fitCriterion'): self.theFitCriterion = val
+    elif (attr == 'supportingMaterial'): self.theSupportingMaterial = val
+    elif (attr == 'type'): self.theType = val
+    elif (attr == 'asset'): self.theAsset = val
     self.dirtyAttrs.add(attr)
 
   def incrementVersion(self):
@@ -83,4 +91,4 @@ class Requirement:
   def id(self):
     return self.theId
 
-  def asString(self):  return 'id:' + str(self.theId) + ', label:' + str(self.theLabel) + ', name: ' + self.theName + ', description:' + self.theDescription + ', priority:' + str(self.thePriority) + ', rationale:' + self.attrs['rationale'] + ', fit criterion:' + self.attrs['fitCriterion'] + ', originator:' + self.attrs['originator'] + ',type:' + self.attrs['type'] + ',version:' + str(self.theVersion)
+  def asString(self):  return 'id:' + str(self.theId) + ', label:' + str(self.theLabel) + ', name: ' + self.theName + ', description:' + self.theDescription + ', priority:' + str(self.thePriority) + ', rationale:' + self.theRationale + ', fit criterion:' + self.theFitCriterion + ', originator:' + self.theOriginator + ',type:' + self.theType + ',version:' + str(self.theVersion)

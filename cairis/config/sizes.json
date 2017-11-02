@@ -159,5 +159,13 @@
   },
   "CountermeasureEnvironmentProperties" : {
     "theRationale" : 400
+  },
+  "Requirement" : {
+    "theName" : 4000,
+    "theDescription" : 4000,
+    "theRationale" : 4000,
+    "theOriginator" : 4000,
+    "theFitCriterion" : 4000,
+    "theSupportingMaterial" : 4000
   }
 }
