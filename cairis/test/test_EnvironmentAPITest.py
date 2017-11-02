@@ -192,8 +192,68 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(upd_environment, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
     self.logger.info('[%s] Environment: %s [%d]\n', method, upd_environment['theName'], upd_environment['theId'])
-
     rv = self.app.delete('/api/environments/name/%s?session_id=test' % quote(environment_to_update.theName))
+
+
+  def test_put_composite(self):
+    method = 'test_put_composite'
+    url = '/api/environments?session_id=test'
+    new_environment_body = self.prepare_json(comp_env=True)
+    rv = self.app.post(url, content_type='application/json', data=new_environment_body)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    env_id = json_resp.get('environment_id', None)
+    self.assertIsNotNone(env_id, 'No environment ID returned')
+    self.assertGreater(env_id, 0, 'Invalid environment ID returned [%d]' % env_id)
+    self.logger.info('[%s] Environment ID: %d', method, env_id)
+
+    environment_to_update = self.prepare_comp_environment()
+    environment_to_update.theName = 'Edited test environment'
+    environment_to_update.theId = env_id
+    upd_env_body = self.prepare_json(environment=environment_to_update)
+    rv = self.app.put('/api/environments/name/%s?session_id=test' % quote(self.prepare_comp_environment().theName), data=upd_env_body, content_type='application/json')
+    self.assertIsNotNone(rv.data, 'No response')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
+    self.assertIsNotNone(json_resp)
+    self.assertIsInstance(json_resp, dict)
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message in response')
+    self.logger.info('[%s] Message: %s', method, message)
+    self.assertGreater(message.find('successfully updated'), -1, 'The environment was not successfully updated')
+
+    rv = self.app.get('/api/environments/name/%s?session_id=test' % quote(environment_to_update.theName))
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    upd_environment = jsonpickle.decode(responseData)
+    self.assertIsNotNone(upd_environment, 'Unable to decode JSON data')
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    self.logger.info('[%s] Environment: %s [%d]\n', method, upd_environment['theName'], upd_environment['theId'])
+    rv = self.app.delete('/api/environments/name/%s?session_id=test' % quote(environment_to_update.theName))
+
+
+  def prepare_comp_environment(self):
+    new_environment = Environment(
+      id=-1,
+      name='Complete',
+      sc='ALL',
+      description='This is a test description',
+      environments=['Psychosis','Stroke','Core Technology'],
+      duplProperty='Maximise',
+      overridingEnvironment='',
+      envTensions=[]
+    )
+    return new_environment
 
   def prepare_new_environment(self):
     new_environment = Environment(
@@ -219,9 +279,12 @@ class EnvironmentAPITests(CairisDaemonTestCase):
 
     return new_environment
 
-  def prepare_dict(self, environment=None):
+  def prepare_dict(self, environment=None,comp_env=False):
     if environment is None:
-      environment = self.prepare_new_environment()
+      if comp_env == False:
+        environment = self.prepare_new_environment()
+      else:
+        environment = self.prepare_comp_environment()
     else:
       assert isinstance(environment, Environment)
 
@@ -230,9 +293,9 @@ class EnvironmentAPITests(CairisDaemonTestCase):
       'object': environment,
     }
 
-  def prepare_json(self, data_dict=None, environment=None):
+  def prepare_json(self, data_dict=None, environment=None,comp_env=False):
     if data_dict is None:
-      data_dict = self.prepare_dict(environment=environment)
+      data_dict = self.prepare_dict(environment=environment,comp_env=comp_env)
     else:
       assert isinstance(data_dict, dict)
     new_environment_body = jsonpickle.encode(data_dict)

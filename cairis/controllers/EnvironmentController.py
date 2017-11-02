@@ -206,7 +206,6 @@ class EnvironmentByNameAPI(Resource):
   # endregion
   def put(self, name):
     session_id = get_session_id(session, request)
-
     dao = EnvironmentDAO(session_id)
     new_environment = dao.from_json(request)
     dao.update_environment(new_environment, name=name)
