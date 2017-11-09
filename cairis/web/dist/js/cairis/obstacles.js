@@ -499,7 +499,7 @@ function viewObstacle(obsName){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/obstacles/name/" + obsName.replace(" ", "%20"),
+    url: serverIP + "/api/obstacles/name/" + encodeURIComponent(obsName),
     success: function (data) {
       fillObstacleOptionMenu(data);
     },
@@ -595,7 +595,7 @@ $(document).on('click', "td.deleteObstacleButton", function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/obstacles/name/" + obsName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/obstacles/name/" + encodeURIComponent(obsName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','obstacle');
@@ -626,7 +626,7 @@ function putObstacle(obstacle, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/obstacles/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/obstacles/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

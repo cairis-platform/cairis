@@ -102,7 +102,7 @@ function viewVulnerability(vulName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/vulnerabilities/name/" + vulName.replace(" ", "%20"),
+    url: serverIP + "/api/vulnerabilities/name/" + encodeURIComponent(vulName),
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
         refreshDimensionSelector($('#theVulnerabilityType'),'vulnerability_type',undefined,function() {
@@ -310,7 +310,7 @@ $(document).on('click','td.deleteVulnerabilityButton', function (event) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/vulnerabilities/name/" + vulName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/vulnerabilities/name/" + encodeURIComponent(vulName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','vulnerability');
@@ -374,7 +374,7 @@ function putVulnerability(vuln, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/vulnerabilities/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/vulnerabilities/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

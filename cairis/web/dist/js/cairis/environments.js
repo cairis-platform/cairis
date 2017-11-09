@@ -34,7 +34,7 @@ $(document).on('click', "td.environment-rows",function(){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/environments/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/environments/name/" + encodeURIComponent(name),
     success: function (data) {
       fillOptionMenu("fastTemplates/editEnvironmentOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateEnvironment").text("Update");
@@ -89,7 +89,7 @@ $(document).on('click', "td.deleteEnvironmentButton",function(e){
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/environments/name/" + envName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/environments/name/" + encodeURIComponent(envName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','environment');
@@ -341,7 +341,7 @@ function putEnvironment(environment, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/environments/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/environments/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

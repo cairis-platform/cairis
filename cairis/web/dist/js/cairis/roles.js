@@ -98,7 +98,7 @@ function viewRole(roleName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/roles/name/" + roleName.replace(" ", "%20"),
+    url: serverIP + "/api/roles/name/" + encodeURIComponent(roleName),
     success: function (json) {
       fillOptionMenu("fastTemplates/editRoleOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateRole").text("Update");
@@ -113,7 +113,7 @@ function viewRole(roleName) {
             session_id: String($.session.get('sessionID'))
           },
           crossDomain: true,
-          url: serverIP + "/api/roles/name/" + roleName.replace(" ", "%20") + "/properties",
+          url: serverIP + "/api/roles/name/" + encodeURIComponent(roleName) + "/properties",
           success: function (json) {
             $.each(json, function (index, value) {
               $("#theEnvironments").find("tbody").append("<tr><td class='roleEnvironmentClick'>" + value.theEnvironmentName + "</td></tr>");
@@ -190,7 +190,7 @@ $(document).on('click',"td.deleteRoleButton",function(event){
       processData: false,
       origin: serverIP,
       data: roleName,
-      url: serverIP + "/api/roles/name/" + roleName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/roles/name/" + encodeURIComponent(roleName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','role');
@@ -267,7 +267,7 @@ function updateRole(role, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/roles/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/roles/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

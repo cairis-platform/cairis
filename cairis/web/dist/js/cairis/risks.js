@@ -238,7 +238,7 @@ $(document).on('click', 'td.risk-rows', function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/risks/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/risks/name/" + encodeURIComponent(name),
     success: function (mainData) {
       $("#editRisksForm").validator();
       $.session.set("Risk",JSON.stringify(mainData));
@@ -491,7 +491,7 @@ $(document).on('click', 'td.deleteRiskButton', function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/risks/name/" + riskName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/risks/name/" + encodeURIComponent(riskName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','risk');
@@ -513,7 +513,7 @@ $(document).on('click', 'td.deleteRiskButton', function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/risks/name/" + riskName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/risks/name/" + encodeURIComponent(riskName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','risk');
@@ -545,7 +545,7 @@ function putRisk(risk, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/risks/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/risks/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

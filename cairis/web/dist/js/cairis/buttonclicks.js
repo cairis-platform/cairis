@@ -70,7 +70,7 @@ $("#removeReqMenu").click(function() {
 
 function removeReq(reqName) {
   deleteObject('requirement',reqName,function(reqName) {
-    var ursl = serverIP + "/api/requirements/name/" + reqName.replace(' ',"%20");
+    var ursl = serverIP + "/api/requirements/name/" + encodeURIComponent(reqName);
     var object = {};
     object.session_id= $.session.get('sessionID');
     var objectoutput = JSON.stringify(object);

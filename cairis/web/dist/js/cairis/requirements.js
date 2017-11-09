@@ -134,48 +134,37 @@ function createRequirementsTable(data){
     textToInsert[i++] = "<option value='3'>3</option></select>";
     textToInsert[i++] = '</td>';
 
-    var datas = eval(item.attrs);
-    for (var key in datas) {
-      if (datas.hasOwnProperty(key)) {
-        // Made this so the TD's are in the right order.
-        switch(key){
-          case "originator":
-            originator = '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
-            break;
-          case "rationale":
-            rationale = '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
-            break;
-          case "fitCriterion":
-            fitCriterion = '<td name=' + key + ' contenteditable=true >'+ datas[key] + '</td>';
-            break;
-          case "type":
-            type = "<td name=" + key + " contenteditable=true class='reqCombo'>";
-            type +="<select class='form-control'>";
-            type += "<option value='Functional'>Functional</option>";
-            type += "<option value='Data'>Data</option>";
-            type += "<option value='Look and Feel'>Look and Feel</option>";
-            type += "<option value='Usability'>Usability</option>";
-            type += "<option value='Performance'>Performance</option>";
-            type += "<option value='Operational'>Operational</option>";
-            type += "<option value='Maintainability'>Maintainability</option>";
-            type += "<option value='Portability'>Portability</option>";
-            type += "<option value='Security'>Security</option>";
-            type += "<option value='Cultural and Political'>Cultural and Political</option>";
-            type += "<option value='Legal'>Legal</option>";
-            type += "<option value='Privacy'>Privacy</option></select>";
-            type += '</td>';
-            break;
-        }
-      }
-    }
-    textToInsert[i++] = rationale;
-    textToInsert[i++] = fitCriterion;
-    textToInsert[i++] = originator;
-    textToInsert[i++] = type;
+    textToInsert[i++] = "<td name='theRationale' contenteditable=true>";
+    textToInsert[i++] = item.theRationale;
+    textToInsert[i++] = '</td>';
+
+    textToInsert[i++] = "<td name='theFitCriterion' contenteditable=true>";
+    textToInsert[i++] = item.theFitCriterion;
+    textToInsert[i++] = '</td>';
+
+    textToInsert[i++] = "<td name='theOriginator' contenteditable=true>";
+    textToInsert[i++] = item.theOriginator;
+    textToInsert[i++] = '</td>';
+
+    textToInsert[i++] = "<td name='theType' contenteditable=true class='reqCombo'>";
+    textToInsert[i++] ="<select class='form-control'>";
+    textToInsert[i++] = "<option value='Functional'>Functional</option>";
+    textToInsert[i++] = "<option value='Data'>Data</option>";
+    textToInsert[i++] = "<option value='Look and Feel'>Look and Feel</option>";
+    textToInsert[i++] = "<option value='Usability'>Usability</option>";
+    textToInsert[i++] = "<option value='Performance'>Performance</option>";
+    textToInsert[i++] = "<option value='Operational'>Operational</option>";
+    textToInsert[i++] = "<option value='Maintainability'>Maintainability</option>";
+    textToInsert[i++] = "<option value='Portability'>Portability</option>";
+    textToInsert[i++] = "<option value='Security'>Security</option>";
+    textToInsert[i++] = "<option value='Cultural and Political'>Cultural and Political</option>";
+    textToInsert[i++] = "<option value='Legal'>Legal</option>";
+    textToInsert[i++] = "<option value='Privacy'>Privacy</option></select>";
+    textToInsert[i++] = '</td>';
     textToInsert[i++] = '</tr>';
     theTable.append(textToInsert.join(''));
     theTable.find('tbody').find('tr').last().find('td:eq(3)').find('.form-control').val(item.thePriority);
-    theTable.find('tbody').find('tr').last().find('td:eq(7)').find('.form-control').val(datas['type']);
+    theTable.find('tbody').find('tr').last().find('td:eq(7)').find('.form-control').val(item.theType);
     theTable.find('tbody').find('tr').last().attr('data-name',item.theName);
   });
   theTable.css("visibility","visible");
@@ -248,17 +237,14 @@ function reqRowtoJSON(row){
 
   $.each(row[0].children, function (i, v) {
     name =  $(v).attr("name");
-    if(name != "originator" && name != "rationale" && name != "type" && name != "fitCriterion" && name != "thePriority"){
+    if(name != "thePriority" && name != "theType"){
       json[name] =  v.innerHTML;
     }
     else if (name == 'thePriority') {
       json[name] = row.find('td:eq(3)').find('.form-control').val();
     }
-    else if (name == 'type') {
-      json.attrs[name] = row.find('td:eq(7)').find('.form-control').val();
-    }
-    else{
-      json.attrs[name] = v.innerHTML;
+    else if (name == 'theType') {
+      json[name] = row.find('td:eq(7)').find('.form-control').val();
     }
   });
   var reqDomain = $('#assetsbox').val();
@@ -304,7 +290,7 @@ function postRequirementRow(row,whatKind,value){
     dimName = "environment";
     objtName = $( "#environmentsbox").find("option:selected").text();
   }
-  var ursl = serverIP + "/api/requirements?" + dimName + "=" + objtName.replace(' ',"%20");
+  var ursl = serverIP + "/api/requirements?" + dimName + "=" + encodeURIComponent(objtName);
   var object = {};
   object.object = json;
   object.session_id= $.session.get('sessionID');

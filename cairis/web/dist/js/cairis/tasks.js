@@ -145,7 +145,7 @@ function viewTask(taskName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/tasks/name/" + taskName.replace(" ", "%20"),
+    url: serverIP + "/api/tasks/name/" + encodeURIComponent(taskName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editTaskOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateTask").text("Update");
@@ -523,7 +523,7 @@ $(document).on('click', 'td.deleteTaskButton', function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/tasks/name/" + taskName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/tasks/name/" + encodeURIComponent(taskName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','task');
@@ -574,7 +574,7 @@ function putTask(task, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/tasks/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/tasks/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

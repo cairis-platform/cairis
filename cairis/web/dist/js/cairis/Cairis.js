@@ -481,7 +481,7 @@ function getGoalview(environment,goalName,ucName){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/goals/model/environment/" + environment.replace(" ","%20") + "/goal/" + goalName.replace(" ","%20") + "/usecase/" + ucName.replace(" ","%20"),
+    url: serverIP + "/api/goals/model/environment/" + encodeURIComponent(environment) + "/goal/" + encodeURIComponent(goalName) + "/usecase/" + encodeURIComponent(ucName),
     success: function(data){
       fillSvgViewer(data);
     },
@@ -578,9 +578,9 @@ function getRequirementScores(lbls) {
       url: serverIP + "/api/requirements/name/" + encodeURIComponent(reqLabel),
       success: function (req) {
         var reqDesc = req.theDescription;
-        var reqRat = req.attrs.rationale;
-        var reqFC = req.attrs.fitCriterion;
-        var reqOrig = req.attrs.originator;
+        var reqRat = req.theRationale;
+        var reqFC = req.theFitCriterion;
+        var reqOrig = req.theOriginator;
        
         var completeScore = 0;
         if (reqDesc == '') {
@@ -715,7 +715,7 @@ function getRiskview(environment,dimName,objtName,modelLayout){
       layout : modelLayout
     },
     crossDomain: true,
-    url: serverIP + "/api/risks/model/environment/" + environment.replace(" ","%20"),
+    url: serverIP + "/api/risks/model/environment/" + encodeURIComponent(environment),
     success: function(data){
       var lbls = getRequirementLabels(data);
       var reqDict = getRequirementScores(lbls);
@@ -1338,7 +1338,7 @@ function getAllAssetsInEnv(env,callback) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/assets/environment/" + env.replace(" ", "%20") + "/names" ,
+    url: serverIP + "/api/assets/environment/" + encodeURIComponent(env) + "/names" ,
     success: function (data) {
       if (jQuery.isFunction(callback)) {
         callback(data);
@@ -1488,7 +1488,7 @@ function deleteObject(dimName,objtName,deleteFn) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/object_dependency/dimension/" + dimName + "/object/" + objtName.replace(" ", "%20"),
+    url: serverIP + "/api/object_dependency/dimension/" + dimName + "/object/" + encodeURIComponent(objtName),
     success: function (data) {
       if (data['theDependencies'].length == 0) {
        $("#confirmObjectDelete").data("deleteFn",deleteFn);
@@ -1562,7 +1562,7 @@ $("#reportObjectDependencies").on('click', '#confirmODDelete',function(e) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/object_dependency/dimension/" + dimName + "/object/" + objtName.replace(" ", "%20"),
+    url: serverIP + "/api/object_dependency/dimension/" + dimName + "/object/" + encodeURIComponent(objtName),
     success: function (data) {
       var deleteFn = $("#reportObjectDependencies").data("deleteFn");
       deleteFn(objtName);

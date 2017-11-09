@@ -124,7 +124,7 @@ function viewUseCase(ucName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/usecases/name/" + ucName.replace(" ", "%20"),
+    url: serverIP + "/api/usecases/name/" + encodeURIComponent(ucName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#objectViewer", null, true, true, function () {
         $('#UpdateUseCase').text("Update");
@@ -499,7 +499,7 @@ $(document).on('click', 'td.deleteUseCaseButton', function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/usecases/name/" + ucName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/usecases/name/" + encodeURIComponent(ucName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','use_case');
@@ -549,7 +549,7 @@ function putUseCase(usecase, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/usecases/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/usecases/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

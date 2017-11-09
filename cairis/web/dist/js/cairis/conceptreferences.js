@@ -93,7 +93,7 @@ $(document).on('click', "td.conceptreference-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/concept_references/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/concept_references/name/" + encodeURIComponent(name),
     success: function (data) {
       fillOptionMenu("fastTemplates/editConceptReferenceOptions.html", "#objectViewer", null, true, true, function () {
         refreshDimensionSelector($('#theObjtName'),$('#theDimName').val(),undefined,function() {

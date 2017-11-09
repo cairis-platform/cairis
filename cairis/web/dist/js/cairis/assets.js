@@ -125,7 +125,7 @@ function viewAsset(assetName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/assets/name/" + assetName.replace(" ", "%20"),
+    url: serverIP + "/api/assets/name/" + encodeURIComponent(assetName),
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editAssetsOptions.html","#objectViewer",null,true,true, function(){
         $.session.set("Asset", JSON.stringify(newdata));
@@ -496,7 +496,7 @@ $(document).on('click', "td.deleteAssetButton",function(e){
         name: assetName
       },
       crossDomain: true,
-      url: serverIP + "/api/assets/name/" + assetName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/assets/name/" + encodeURIComponent(assetName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         $.ajax({
           type: "GET",
@@ -595,7 +595,7 @@ function appendSecurityProperty(prop){
 
 mainContent.on("click", "#addNewAssociation", function(){
   var envName = $.session.get("assetEnvironmentName");
-  var ursl = serverIP + "/api/assets/environment/" + envName.replace(' ',"%20") + "/names";
+  var ursl = serverIP + "/api/assets/environment/" + encodeURIComponent(envName) + "/names";
   $("#editAssetsOptionsform").hide();
   $("#editAssociationsWindow").show(function(){
     $.ajax({
@@ -747,7 +747,7 @@ function getAssetDefinition(props){
 }
 
 function putAssetProperty(assetSON){
-  var ursl = serverIP + "/api/assets/name/"+ $.session.get("AssetName").replace(' ',"%20") + "/properties?session_id=" + String($.session.get('sessionID'));
+  var ursl = serverIP + "/api/assets/name/"+ encodeURIComponent($.session.get("AssetName")) + "/properties?session_id=" + String($.session.get('sessionID'));
   var propsJon = JSON.parse($.session.get("thePropObject")).attributes;
   var theWholeObject = JSON.parse($.session.get("AssetProperties"));
 
@@ -785,7 +785,7 @@ function putAssetProperty(assetSON){
 }
 
 function putAsset(json){
-  var ursl = serverIP + "/api/assets/name/"+ $.session.get("AssetName").replace(' ',"%20") + "?session_id=" + String($.session.get('sessionID'));
+  var ursl = serverIP + "/api/assets/name/"+ encodeURIComponent($.session.get("AssetName")) + "?session_id=" + String($.session.get('sessionID'));
 
   var output = {};
   output.object = json;
@@ -845,7 +845,7 @@ function postAsset(json,callback){
 }
 
 function updateAssetEnvironment(json,callback){
-  var ursl = serverIP + "/api/assets/name/"+ $.session.get("AssetName").replace(' ',"%20") + "/properties?session_id=" + String($.session.get('sessionID'));
+  var ursl = serverIP + "/api/assets/name/"+ encodeURIComponent($.session.get("AssetName")) + "/properties?session_id=" + String($.session.get('sessionID'));
 
   var output = {};
   output.object = json;
@@ -877,7 +877,7 @@ function updateAssetEnvironment(json,callback){
 }
 
 function newAssetEnvironment(jsonString,callback){
-  var ursl = serverIP + "/api/assets/name/"+ $.session.get("AssetName").replace(' ',"%20") + "/properties?session_id=" + String($.session.get('sessionID'));
+  var ursl = serverIP + "/api/assets/name/"+ encodeURIComponent($.session.get("AssetName")) + "/properties?session_id=" + String($.session.get('sessionID'));
   var output = {};
 
   if(typeof jsonString == 'undefined'){

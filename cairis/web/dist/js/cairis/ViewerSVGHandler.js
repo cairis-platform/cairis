@@ -34,7 +34,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ","%20"),
+        url: serverIP + link,
         success: function (data) {
           fillOptionMenu("fastTemplates/TemplateAssetOptions.html", "#optionsContent", data,false,true,function(){
             $("#optionsHeaderGear").text("Template Asset properties");
@@ -67,7 +67,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           var theTableArr =[];
 
@@ -119,7 +119,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           var theTableArr =[];
 
@@ -177,7 +177,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           var theTableArr =[];
 
@@ -224,7 +224,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           var theTableArr =[];
 
@@ -293,7 +293,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           var theTableArr =[];
 
@@ -343,7 +343,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ","%20"),
+        url: serverIP + link,
         success: function (data) {
           fillOptionMenu("fastTemplates/TemplateGoalOptions.html", "#optionsContent", data,false,true,function(){
             $('#templateGoalsForm').loadJSON(data,null);
@@ -371,7 +371,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           var theTableArr =[];
 
@@ -427,7 +427,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           var theTableArr =[];
 
@@ -493,7 +493,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           $.ajax({
             type:"GET",
@@ -584,7 +584,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           var theTableArr =[];
 
@@ -708,7 +708,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           $.ajax({
             type:"GET",
@@ -787,7 +787,7 @@ $( document ).ajaxComplete(function() {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           $.ajax({
             type:"GET",
@@ -837,7 +837,7 @@ else if(link.indexOf("obstacles") > -1) {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           $.ajax({
             type:"GET",
@@ -890,7 +890,7 @@ else if(link.indexOf("obstacles") > -1) {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           $.ajax({
             type:"GET",
@@ -967,7 +967,7 @@ else if(link.indexOf("obstacles") > -1) {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           var theTableArr =[];
 
@@ -1014,7 +1014,7 @@ else if(link.indexOf("obstacles") > -1) {
           session_id: String($.session.get('sessionID'))
         },
         crossDomain: true,
-        url: serverIP + link.replace(" ", "%20"),
+        url: serverIP + link,
         success: function (data) {
           var theTableArr =[];
 

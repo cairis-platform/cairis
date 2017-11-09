@@ -522,7 +522,7 @@ function generateGoal(respName) {
     crossDomain: true,
     processData: false,
     origin: serverIP,
-    url: serverIP + "/api/responses/name/" + respName.replace(" ","%20") + "/generate_goal?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/responses/name/" + encodeURIComponent(respName) + "/generate_goal?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
     },
@@ -561,7 +561,7 @@ $(document).on('click', 'td.deleteResponseButton', function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/responses/name/" + respName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/responses/name/" + encodeURIComponent(respName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','response');
@@ -602,7 +602,7 @@ function putResponse(response, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/responses/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/responses/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

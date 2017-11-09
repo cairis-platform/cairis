@@ -73,7 +73,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ","%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/AssetOptions.html", "#optionsContent", data,false,true,function(){
           $("#optionsHeaderGear").text("Asset properties");
@@ -109,7 +109,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/DataflowOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Dataflow", JSON.stringify(data));
@@ -139,7 +139,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/PersonaOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Persona", JSON.stringify(data));
@@ -170,7 +170,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/VulnerabilityOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Vulnerability", JSON.stringify(data));
@@ -206,7 +206,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/RoleOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Role", JSON.stringify(data));
@@ -232,7 +232,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/ThreatOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Threat", JSON.stringify(data));
@@ -280,7 +280,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/RequirementOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Requirement", JSON.stringify(data));
@@ -338,7 +338,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/GoalOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Goal", JSON.stringify(data));
@@ -374,7 +374,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/AttackerOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Attacker", JSON.stringify(data));
@@ -419,7 +419,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/RiskOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Risk", JSON.stringify(data));
@@ -478,7 +478,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/TaskOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Task", JSON.stringify(data));
@@ -582,7 +582,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         if (data.theResponseType == 'Accept') {
           fillOptionMenu("fastTemplates/AcceptOptions.html", "#optionsContent", data,false,true,function(){
@@ -642,7 +642,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/MisuseCaseOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("MisuseCase", JSON.stringify(data));
@@ -673,7 +673,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/ObstacleOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Obstacle", JSON.stringify(data));
@@ -708,7 +708,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/CountermeasureOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("Countermeasure", JSON.stringify(data));
@@ -766,7 +766,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/DomainPropertyOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("DomainProperty", JSON.stringify(data));
@@ -792,7 +792,7 @@ function handleNodeClick(event,objt) {
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + link.replace(" ", "%20"),
+      url: serverIP + link,
       success: function (data) {
         fillOptionMenu("fastTemplates/UseCaseOptions.html", "#optionsContent", data,false,true,function(){
           $.session.set("UseCase", JSON.stringify(data));

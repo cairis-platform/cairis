@@ -100,7 +100,7 @@ function viewAttacker(attackerName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/attackers/name/" + attackerName.replace(" ", "%20"),
+    url: serverIP + "/api/attackers/name/" + encodeURIComponent(attackerName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editAttackerOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateAttacker").text("Update");
@@ -491,7 +491,7 @@ $(document).on('click', 'td.deleteAttackerButton', function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/attackers/name/" + attackerName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/attackers/name/" + encodeURIComponent(attackerName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','attacker');
@@ -609,7 +609,7 @@ function putAttacker(attacker, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/attackers/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/attackers/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

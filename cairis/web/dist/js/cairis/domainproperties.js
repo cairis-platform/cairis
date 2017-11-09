@@ -105,7 +105,7 @@ function viewDomainProperty(dpName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/domainproperties/name/" + dpName.replace(" ", "%20"),
+    url: serverIP + "/api/domainproperties/name/" + encodeURIComponent(dpName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editDomainPropertyOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateDomainProperty").text("Update");
@@ -175,7 +175,7 @@ $(document).on('click', 'td.deleteDomainPropertyButton', function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/domainproperties/name/" + dpName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/domainproperties/name/" + encodeURIComponent(dpName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         $('#menuBCClick').attr('dimension','domain_property');
         showPopup(true);
@@ -222,7 +222,7 @@ function putDomainProperty(dp, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/domainproperties/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/domainproperties/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

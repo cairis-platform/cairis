@@ -33,7 +33,7 @@ $("#FindButton").click(function(e){
         session_id: String($.session.get('sessionID'))
       },
       crossDomain: true,
-      url: serverIP + "/api/find/" + searchString.replace(" ", "%20"),
+      url: serverIP + "/api/find/" + encodeURIComponent(searchString),
       success: function (data) {
         $("#theResults").find("tbody").empty();
         $.each(data, function(idx,searchRes) {

@@ -111,7 +111,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.theName = ''
     self.theTags = []
     self.theType = ''
-    self.theDescription = ''
+    self.theDefinition = ''
     self.theOriginator = ''
 
   def resetGoalAttributes(self):
@@ -140,10 +140,10 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.theConcernAssociations = []
 
   def resetObstacleEnvironmentAttributes(self):
-    self.inDescription = 0
+    self.inDefinition = 0
     self.theEnvironmentName = ''
     self.theCategory = ''
-    self.theDescription = ''
+    self.theDefinition = ''
     self.theConcerns = []
     self.resetProbabilityElements()
 
@@ -357,7 +357,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'domainproperty':
-      p = DomainPropertyParameters(self.theName,self.theDescription,self.theType,self.theOriginator,self.theTags)
+      p = DomainPropertyParameters(self.theName,self.theDefinition,self.theType,self.theOriginator,self.theTags)
       self.theDomainProperties.append(p)
       self.resetDomainPropertyAttributes()
     elif name == 'goal_environment':
@@ -365,7 +365,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theEnvironmentProperties.append(p)
       self.resetGoalEnvironmentAttributes()
     elif name == 'obstacle_environment':
-      p = ObstacleEnvironmentProperties(self.theEnvironmentName,'',self.theDescription,self.theCategory,[],[],self.theConcerns)
+      p = ObstacleEnvironmentProperties(self.theEnvironmentName,'',self.theDefinition,self.theCategory,[],[],self.theConcerns)
       p.theProbability = self.theProbability
       p.theProbabilityRationale = self.theRationale
       self.theEnvironmentProperties.append(p)

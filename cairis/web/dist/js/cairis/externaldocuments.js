@@ -93,7 +93,7 @@ $(document).on('click', "td.externaldocument-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/external_documents/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/external_documents/name/" + encodeURIComponent(name),
     success: function (data) {
       fillOptionMenu("fastTemplates/editExternalDocumentOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateExternalDocument").text("Update");
@@ -171,7 +171,7 @@ function putExternalDocument(edoc, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/external_documents/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/external_documents/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -228,7 +228,7 @@ function deleteExternalDocument(name, callback){
     crossDomain: true,
     processData: false,
     origin: serverIP,
-    url: serverIP + "/api/external_documents/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/external_documents/name/" + encodeURIComponent(name) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

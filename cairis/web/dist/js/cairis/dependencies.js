@@ -230,7 +230,7 @@ function deleteDependency(dependency, callback){
     crossDomain: true,
     processData: false,
     origin: serverIP,
-    url: serverIP +  "/api/dependencies/environment/" + dependency.theEnvironmentName.replace(" ","%20") + "/depender/" + dependency.theDepender.replace(" ","%20") + "/dependee/" + dependency.theDependee + "/dependency/" + dependency.theDependency.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP +  "/api/dependencies/environment/" + encodeURIComponent(dependency.theEnvironmentName) + "/depender/" + encodeURIComponent(dependency.theDepender) + "/dependee/" + dependency.theDependee + "/dependency/" + encodeURIComponent(dependency.theDependency) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -262,7 +262,7 @@ function putDependency(dependency, oldEnvName, oldDepender, oldDependee, oldDepe
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP +  "/api/dependencies/environment/" + oldEnvName.replace(" ","%20") + "/depender/" + oldDepender.replace(" ","%20") + "/dependee/" + oldDependee + "/dependency/" + oldDependency.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP +  "/api/dependencies/environment/" + encodeURIComponent(oldEnvName) + "/depender/" + encodeURIComponent(oldDepender) + "/dependee/" + oldDependee + "/dependency/" + encodeURIComponent(oldDependency) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -294,7 +294,7 @@ function postDependency(dependency, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP +  "/api/dependencies/environment/" + dependency.theEnvironmentName.replace(" ","%20") + "/depender/" + dependency.theDepender.replace(" ","%20") + "/dependee/" + dependency.theDependee + "/dependency/" + dependency.theDependency.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP +  "/api/dependencies/environment/" + encodeURIComponent(dependency.theEnvironmentName) + "/depender/" + encodeURIComponent(dependency.theDepender) + "/dependee/" + dependency.theDependee + "/dependency/" + encodeURIComponent(dependency.theDependency) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

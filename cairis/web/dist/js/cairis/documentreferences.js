@@ -95,7 +95,7 @@ $(document).on('click', "td.documentreference-rows", function () {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/document_references/name/" + name.replace(" ", "%20"),
+    url: serverIP + "/api/document_references/name/" + encodeURIComponent(name),
     success: function (data) {
       fillOptionMenu("fastTemplates/editDocumentReferenceOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateDocumentReference").text("Update");
@@ -188,7 +188,7 @@ function putDocumentReference(dr, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/document_references/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/document_references/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -245,7 +245,7 @@ function deleteDocumentReference(name, callback){
     crossDomain: true,
     processData: false,
     origin: serverIP,
-    url: serverIP + "/api/document_references/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/document_references/name/" + encodeURIComponent(name) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

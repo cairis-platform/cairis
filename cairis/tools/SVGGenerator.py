@@ -15,6 +15,11 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+import sys
+if (sys.version_info > (3,)):
+  from urllib.parse import quote
+else:
+  from urllib import quote
 import os
 from re import sub as substitute
 import base64
@@ -129,13 +134,12 @@ def correctHref(line, model_type):
       type = parts[0]
       if type[-1] == 'y':
         type = type[:-1]+'ie'
-
-     
-      object = parts[1]
       if (model_type == 'dataflow' and type == 'dataflow'):
         environment = ''.join(parts[2:])
       else:
         object = ''.join(parts[1:])
+      object = quote(parts[1])
+      new_link = '/api/{0}/name/{1}'.format(type,object)
  
       if type == 'domainproperty':
         new_link = '/api/domainproperties/shortcode/{0}'.format(object)
@@ -143,7 +147,7 @@ def correctHref(line, model_type):
       if (model_type == 'goal' or model_type == 'risk') and type == 'requirement':
         new_link = '/api/{0}s/shortcode/{1}'.format(type, object)
       elif (model_type == 'dataflow' and type == 'dataflow'):
-        new_link = '/api/{0}s/name/{1}/environment/{2}'.format(type,object,environment)
+        new_link = '/api/{0}s/name/{1}/environment/{2}'.format(type,object,quote(environment))
       else:
         if type == 'grounds': 
           new_link = '/api/{0}/name/{1}'.format(type, object)

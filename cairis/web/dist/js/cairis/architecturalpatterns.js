@@ -130,7 +130,7 @@ function viewArchitecturalPattern(apName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/architectural_patterns/name/" + apName.replace(" ", "%20"),
+    url: serverIP + "/api/architectural_patterns/name/" + encodeURIComponent(apName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editArchitecturalPatternOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateArchitecturalPattern").text("Update");

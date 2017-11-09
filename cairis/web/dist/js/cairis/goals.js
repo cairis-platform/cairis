@@ -575,7 +575,7 @@ function viewGoal(goalName){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/goals/name/" + goalName.replace(" ", "%20"),
+    url: serverIP + "/api/goals/name/" + encodeURIComponent(goalName),
     success: function (data) {
       fillGoalOptionMenu(data);
     },
@@ -697,7 +697,7 @@ $(document).on('click', "td.deleteGoalButton", function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/goals/name/" + goalName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/goals/name/" + encodeURIComponent(goalName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         $('#menuBCClick').attr('dimension','goal');
         showPopup(true);
@@ -728,7 +728,7 @@ function putGoal(goal, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/goals/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/goals/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

@@ -259,7 +259,7 @@ $(document).on('click', 'td.deleteValueTypeButton', function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/value_types/type/" + valueType + "/environment/all/name/" + vtName.replace(" ", "%20").replace("/","%47") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/value_types/type/" + valueType + "/environment/all/name/" + encodeURIComponent(vtName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         createValueTypesTable(valueType);
         showPopup(true);
@@ -351,7 +351,7 @@ function putValueType(vt, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/value_types/type/" + valueType + "/environment/" + encodeURIComponent(envName) + "/name/" + oldName.replace(" ", "%20").replace("/","%47") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/value_types/type/" + valueType + "/environment/" + encodeURIComponent(envName) + "/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

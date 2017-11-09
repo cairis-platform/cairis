@@ -97,7 +97,7 @@ function viewLocations(locsName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/locations/name/" + locsName.replace(" ", "%20"),
+    url: serverIP + "/api/locations/name/" + encodeURIComponent(locsName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editLocationsOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("Locations", JSON.stringify(data));
@@ -525,7 +525,7 @@ function putLocations(locs, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/locations/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/locations/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -582,7 +582,7 @@ function deleteLocations(name, callback){
     crossDomain: true,
     processData: false,
     origin: serverIP,
-    url: serverIP + "/api/locations/name/" + name.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/locations/name/" + encodeURIComponent(name) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){

@@ -169,7 +169,7 @@ function viewCountermeasure(cmName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/countermeasures/name/" + cmName.replace(" ", "%20"),
+    url: serverIP + "/api/countermeasures/name/" + encodeURIComponent(cmName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("Countermeasure", JSON.stringify(data));
@@ -768,7 +768,7 @@ $(document).on('click', 'td.deleteCountermeasureButton', function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/countermeasures/name/" + cmName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/countermeasures/name/" + encodeURIComponent(cmName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','countermeasure');
@@ -799,7 +799,7 @@ function putCountermeasure(countermeasure, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/countermeasures/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/countermeasures/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
@@ -923,7 +923,7 @@ function updateCountermeasureTasks(envName,roleList) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/countermeasures/tasks/environment/" + envName.replace(" ","%20") + "?" + encodeQueryList("role",roleList),
+    url: serverIP + "/api/countermeasures/tasks/environment/" + encodeURIComponent(envName) + "?" + encodeQueryList("role",roleList),
     success: function (data) {
       $("#thePersonas").find("tbody").empty(); 
       var taskList = [];

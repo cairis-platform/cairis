@@ -101,7 +101,7 @@ function viewThreat(thrName) {
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/threats/name/" + thrName.replace(" ", "%20"),
+    url: serverIP + "/api/threats/name/" + encodeURIComponent(thrName),
     success: function (data) {
       activeElement("objectViewer");
       fillOptionMenu("fastTemplates/editThreatOptions.html", "#objectViewer", null, true, true, function () {
@@ -504,7 +504,7 @@ $(document).on('click', 'td.deleteThreatButton', function (e) {
       crossDomain: true,
       processData: false,
       origin: serverIP,
-      url: serverIP + "/api/threats/name/" + threatName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+      url: serverIP + "/api/threats/name/" + encodeURIComponent(threatName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
         showPopup(true);
         $('#menuBCClick').attr('dimension','threat');
@@ -583,7 +583,7 @@ function putThreat(threat, oldName, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP + "/api/threats/name/" + oldName.replace(" ","%20") + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/threats/name/" + encodeURIComponent(oldName) + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
