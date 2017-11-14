@@ -29,28 +29,6 @@ function debugLogger(info){
   }
 }
 
-$(document).ready(function() {
-  $.ajax({
-    type: 'POST',
-    url: serverIP + '/make_session',
-    data: {},
-    accept:"application/json",
-    contentType : "application/json",
-    success: function(data, status, xhr) {
-      debugLogger(data);
-      $.session.set("sessionID", data.session_id);
-      refreshHomeBreadCrumb();
-      hideLoading();
-    },
-    error: function(data, status, xhr) {
-      var error = JSON.parse(xhr.responseText);
-      showPopup(false, String(error.message));
-      console.log(this.url);
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + status + ", thrown: " + data);
-      alert("There is a problem with the server...");
-    }
-  });
-});
 
 function showLoading(){
   $(".loadingWrapper").fadeIn(500);
@@ -2018,3 +1996,32 @@ function dimensionCheck(dimensionName,callback) {
     }
   });
 }
+
+function refreshHomeBreadCrumb() {
+  $('#BC').hide();
+  summaryTables();
+}
+
+
+$(document).ready(function() {
+  $.ajax({
+    type: 'POST',
+    url: serverIP + '/make_session',
+    data: {},
+    accept:"application/json",
+    contentType : "application/json",
+    success: function(data, status, xhr) {
+      debugLogger(data);
+      $.session.set("sessionID", data.session_id);
+      refreshHomeBreadCrumb();
+      hideLoading();
+    },
+    error: function(data, status, xhr) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      console.log(this.url);
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + status + ", thrown: " + data);
+      alert("There is a problem with the server...");
+    }
+  });
+});

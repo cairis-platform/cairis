@@ -31,11 +31,6 @@ $('#menuBCClick').click(function() {
   refreshMenuBreadCrumb($(this).attr('dimension'));
 });
 
-function refreshHomeBreadCrumb() {
-  $('#BC').hide();
-  summaryTables();
-}
-
 function refreshMenuBreadCrumb(dimName,envName) {
   $('#BC').show();
   $('#homeBCClick').show();
