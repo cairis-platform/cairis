@@ -37,6 +37,10 @@ function hideLoading(){
   $(".loadingWrapper").fadeOut(500);
 }
 
+$(document).ready(function() {
+  makeSession();
+});
+
 // For converting the form in JSON
 $.fn.serializeObject = function()
 {
@@ -2003,7 +2007,7 @@ function refreshHomeBreadCrumb() {
 }
 
 
-$(document).ready(function() {
+function makeSession() {
   $.ajax({
     type: 'POST',
     url: serverIP + '/make_session',
@@ -2011,7 +2015,6 @@ $(document).ready(function() {
     accept:"application/json",
     contentType : "application/json",
     success: function(data, status, xhr) {
-      debugLogger(data);
       $.session.set("sessionID", data.session_id);
       refreshHomeBreadCrumb();
       hideLoading();
@@ -2024,4 +2027,5 @@ $(document).ready(function() {
       alert("There is a problem with the server...");
     }
   });
-});
+}
+

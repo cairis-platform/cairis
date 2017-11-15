@@ -17,6 +17,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+from cairis.core.ARM import ARMException
+from sqlalchemy.exc import SQLAlchemyError
 import npyscreen as np
 import os
 import sys
@@ -60,24 +62,33 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
         break
 
   def on_ok(self):
-    self.createDatabase()
-    self.initialiseDatabase()
-    self.createCairisCnf()
-    os.environ["CAIRIS_CFG"] = str(self.theFileName.value)
-    sys.path.insert(0, self.pathName)
-    fileName = os.environ.get("HOME") + "/.bashrc"
-    f = open(fileName,'a')
-    f.write("export CAIRIS_CFG="+str(self.theFileName.value)+"\n")
-    f.write("export PYTHONPATH=${PYTHONPATH}:"+self.pathName+"\n")
-    f.close()
-    self.parentApp.setNextForm("NEXT")
+    try:
+      self.createDatabase()
+      self.initialiseDatabase()
+      self.createCairisCnf()
+      os.environ["CAIRIS_CFG"] = str(self.theFileName.value)
+      sys.path.insert(0, self.pathName)
+      fileName = os.environ.get("HOME") + "/.bashrc"
+      f = open(fileName,'a')
+      f.write("export CAIRIS_CFG="+str(self.theFileName.value)+"\n")
+      f.write("export PYTHONPATH=${PYTHONPATH}:"+self.pathName+"\n")
+      f.close()
+      self.parentApp.setNextForm("NEXT")
+    except ARMException as e:
+      np.notify_confirm(str(e), title = 'Error')
 
   def on_cancel(self):
     self.parentApp.setNextForm(None)
 
   def createDatabase(self):
-    rootConn = MySQLdb.connect(host=self.theHost.value,port=int(self.thePort.value),user='root',passwd=self.theRootPassword.value)
-    rootCursor = rootConn.cursor()
+    try:
+      rootConn = MySQLdb.connect(host=self.theHost.value,port=int(self.thePort.value),user='root',passwd=self.theRootPassword.value)
+      rootCursor = rootConn.cursor()
+    except _mysql_exceptions.DatabaseError as e:
+      id,msg = e
+      exceptionText = 'Error creating database (id:' + str(id) + ',message:' + msg + ')'
+      raise ARMException(exceptionText)
+
 
     try:
       grantUsageSql = "grant usage on *.* to '" + self.theUser.value + "'@'" + self.theHost.value + "' identified by '" + self.thePassword.value + "' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0"
@@ -85,6 +96,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error granting usage to ' + self.theUser.value + ' (id: ' + str(id) + ', message: ' + msg
+      raise ARMException(exceptionText)
 
     try:
       createSql = "create database if not exists `" + self.theDbName.value + "`"
@@ -92,6 +104,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error creating ' + self.theDbName.value + ' database (id: ' + str(id) + ', message: ' + msg
+      raise ARMException(exceptionText)
 
     try:
       grantPrivilegesSql = "grant all privileges on `" + self.theDbName.value + "`.* to '" + self.theUser.value + "'@'" + self.theHost.value + "'"
@@ -99,6 +112,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error granting privileges to ' + self.theUser.value + ' for ' + self.theDbName.value + ' database (id: ' + str(id) + ', message: ' + msg
+      raise ARMException(exceptionText)
 
     try:
       recursionDepthSql = "set global max_sp_recursion_depth = 255"
@@ -106,6 +120,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error setting recursion depth ' + self.theUser.value + ' for ' + self.theDbName.value + ' database (id: ' + str(id) + ', message: ' + msg
+      raise ARMException(exceptionText)
 
     try:
       flushPrivilegesSql = "flush privileges"
@@ -113,6 +128,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error flushing privileges (id: ' + str(id) + ', message: ' + msg
+      raise ARMException(exceptionText)
 
     rootCursor.close()
     rootConn.close()
@@ -166,11 +182,18 @@ class CAIRISUserConfigurationForm(np.ActionForm):
     self.thePassword = self.add(np.TitlePassword, name = "Password:", value = "")
 
   def on_ok(self):
-    from cairis.bin.add_cairis_user import user_datastore, db
-    db.create_all()
-    user_datastore.create_user(email=self.theUsername.value, password=self.thePassword.value)
-    db.session.commit()
-    self.parentApp.setNextForm(None)
+    try:
+      if (len(self.theUsername.value) > 255):
+        raise ARMException("Username cannot be longer than 255 characters")
+      from cairis.bin.add_cairis_user import user_datastore, db
+      db.create_all()
+      user_datastore.create_user(email=self.theUsername.value, password=self.thePassword.value)
+      db.session.commit()
+      self.parentApp.setNextForm(None)
+    except ARMException as e:
+      np.notify_confirm('Error adding CAIRIS user: ' + str(e), title = 'Error')
+    except SQLAlchemyError as e:
+      np.notify_confirm('Error adding CAIRIS user: ' + str(e), title = 'Error')
 	
   def on_cancel(self):
     self.parentApp.setNextForm(None)
