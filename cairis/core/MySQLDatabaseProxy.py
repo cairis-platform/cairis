@@ -217,13 +217,13 @@ class MySQLDatabaseProxy:
       exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
 
-  def addRequirement(self,r,assetName,isAsset = True):
-    r.validate()
-    self.updateDatabase('call addRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type,:asName,:isAs)',{'lbl':r.label(),'id':r.id(),'vers':r.version(),'name':r.name(),'desc':r.description(),'rationale':r.rationale(),'origin':r.originator(),'fCrit':r.fitCriterion(),'priority':r.priority(),'type':r.type(),'asName':assetName,'isAs':isAsset},'MySQL error adding new requirement ' + str(r.id()))
+  def addRequirement(self,req,assetName,isAsset = True):
+    req.validate()
+    self.updateDatabase('call addRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type,:asName,:isAs)',{'lbl':req.label(),'id':req.id(),'vers':req.version(),'name':req.name(),'desc':req.description(),'rationale':req.rationale(),'origin':req.originator(),'fCrit':req.fitCriterion(),'priority':req.priority(),'type':req.type(),'asName':assetName,'isAs':isAsset},'MySQL error adding new requirement ' + str(req.id()))
 
-  def updateRequirement(self,r):
-    r.validate()
-    self.updateDatabase('call updateRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type)',{'lbl':r.label(),'id':r.id(),'vers':r.version(),'name':r.name(),'desc':r.description(),'rationale':r.rationale(),'origin':r.originator(),'fCrit':r.fitCriterion(),'priority':r.priority(),'type':r.type()},'MySQL error updating requirement ' + str(r.id()))
+  def updateRequirement(self,req):
+    req.validate()
+    self.updateDatabase('call updateRequirement(:lbl,:id,:vers,:name,:desc,:rationale,:origin,:fCrit,:priority,:type)',{'lbl':req.label(),'id':req.id(),'vers':req.version(),'name':req.name(),'desc':req.description(),'rationale':req.rationale(),'origin':req.originator(),'fCrit':req.fitCriterion(),'priority':req.priority(),'type':req.type()},'MySQL error updating requirement ' + str(req.id()))
 
   def addValueTensions(self,envId,tensions):
     for vtKey in tensions:

@@ -96,13 +96,13 @@ class RequirementDAO(CairisDAO):
     if asset_name is not None:
       try:
         self.db_proxy.addRequirement(requirement, assetName=asset_name, isAsset=True)
-      except Exception as ex:
+      except ARMException as ex:
         self.close()
         handle_exception(ex)
     elif environment_name is not None:
       try:
         self.db_proxy.addRequirement(requirement, assetName=environment_name, isAsset=False)
-      except Exception as ex:
+      except ARMException as ex:
         self.close()
         handle_exception(ex)
     else:

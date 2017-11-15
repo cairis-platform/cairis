@@ -251,7 +251,7 @@ function reqRowtoJSON(row){
   if (reqDomain == null) {
     reqDomain = $('#environmentsbox').val();
   } 
-  json.attrs['asset'] = reqDomain;
+  json['asset'] = reqDomain;
   return json
 }
 
