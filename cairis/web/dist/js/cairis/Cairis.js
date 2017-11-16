@@ -903,16 +903,29 @@ function refreshSpecificSelector(sBox,urlPrefix,callback,filterList) {
   });
 }
 
-function requirementsTable(dimName){
+function requirementsTable(dimName,objtName){
   refreshDimensionSelector($('#assetsbox'),'asset',undefined,function(){
     refreshDimensionSelector($('#environmentsbox'),'environment',undefined,function(){
-      var assetName = $('#assetsbox').val();
+      if ((dimName != undefined) && (objtName != undefined)) {
+        $(dimName +'sbox').val(objtName);
+      }
+      else {
+        dimName = 'asset';
+        objtName = $('#assetsbox').val();
+        if (objtName == undefined) {
+          dimName = 'environment';
+	        objtName = $('#environmentsbox').val();
+        }
+        else {
+          $('#environmentsbox').val('');
+        }
+      }
       $.ajax({
         type:"GET",
         dataType: "json",
         accept:"application/json",
         crossDomain: true,
-        url: serverIP + "/api/requirements/asset/" + encodeURIComponent(assetName),
+        url: serverIP + "/api/requirements/" + dimName + "/" + encodeURIComponent(objtName),
         data: {session_id: String($.session.get('sessionID')),
           ordered: "1"
         },
@@ -920,7 +933,6 @@ function requirementsTable(dimName){
           setTableHeader("Requirements");
           createRequirementsTable(data);
           activeElement("reqTable");
-          $('#assetsbox').change();
           $(".topCombobox").css("visibility", "visible");
           $('#environmentsbox').css("visibility", "visible");
           $(".loadingWrapper").fadeOut(500);
@@ -1056,191 +1068,144 @@ function setTableHeader(activeTable){
 
   switch (activeTable) {
     case "Requirements":
-      debugLogger("Is Requirement");
       thead = "<th width='50px' id='addReqMenu'><i class='fa fa-plus floatCenter'></i></th></th><th>Requirement</th><th>Description</th><th>Priority</th><th>Rationale</th><th>Fit Citerion</th><th>Originator</th><th>Type</th>";
       break;
     case "TemplateRequirements":
-      debugLogger("Is Template Requirement");
       thead = "<th width='50px' id='addTemplateRequirement'><i class='fa fa-plus floatCenter'></i></th><th>Requirement</th><th>Type</th>";
       break;
     case "TemplateGoals":
-      debugLogger("Is Template Goal");
       thead = "<th width='50px' id='addTemplateGoal'><i class='fa fa-plus floatCenter'></i></th><th>Goal</th><th>Definition</th>";
       break;
     case "Goals":
-      debugLogger("Is Goal");
       thead = "<th width='50px'></th><th>Goal</th><th>Definition</th><th>Category</th><th>Priority</th><th>Fit Citerion</th><th>Issue</th><th>Originator</th>";
       break;
     case "Obstacles":
-      debugLogger("Is Obstacle");
       thead = "<th width='50px'></th><th>Obstacle</th><th>Definition</th><th>Originator</th>";
       break;
     case "EditGoals":
-      debugLogger("Is EditGoals");
       thead = "<th width='50px' id='addNewGoal'><i class='fa fa-plus floatCenter'></i></th><th>Goal</th><th>Originator</th><th>Status</th>";
       break;
     case "EditObstacles":
-      debugLogger("Is EditObstacles");
       thead = "<th width='50px' id='addNewObstacle'><i class='fa fa-plus floatCenter'></i></th><th>Obstacle</th><th>Originator</th>";
       break;
     case "Assets":
-      debugLogger("Is Asset");
       thead = "<th width='50px' id='addNewAsset'><i class='fa fa-plus floatCenter'></i></th><th>Asset</th><th>Type</th>";
       break;
     case "TemplateAssets":
-      debugLogger("Is TemplateAsset");
       thead = "<th width='50px' id='addNewTemplateAsset'><i class='fa fa-plus floatCenter'></i></th><th>Template Asset</th><th>Type</th>";
       break;
     case "Roles":
-      debugLogger("Is Role");
       thead = "<th width='50px' id='addNewRole'><i class='fa fa-plus floatCenter'></i></th><th>Role</th><th>Shortcode</th><th>Type</th>";
       break;
     case "Environment":
-      debugLogger("Is Environment");
       thead = "<th width='50px' id='addNewEnvironment'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Description</th>";
       break;
     case "Vulnerability":
-      debugLogger("Is Vulnerability");
       thead = "<th width='50px' id='addNewVulnerability'><i class='fa fa-plus floatCenter'></i></th><th>Vulnerability</th><th>Type</th><th width='100px' id='introduceVulnerabilityDirectoryEntry'><i class='fa fa-plus-square'></i> Introduce</th>";
       break;
     case "Threats":
-      debugLogger("Is Threat");
       thead = "<th width='50px' id='addNewThreat'><i class='fa fa-plus floatCenter'></i></th><th>Threat</th><th>Type</th><th width='100px' id='introduceThreatDirectoryEntry'><i class='fa fa-plus-square'></i> Introduce</th>";
       break;
     case "Attackers":
-      debugLogger("Is Attacker");
       thead = "<th width='50px' id='addNewAttacker'><i class='fa fa-plus floatCenter'></i></th><th>Attacker</th><th>Description</th>";
       break;
     case "Personas":
-      debugLogger("Is Persona");
       thead = "<th width='50px' id='addNewPersona'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Type</th>";
       break;
     case "Risks":
-      debugLogger("Is Risk");
       thead = "<th width='50px' id='addNewRisk'><i class='fa fa-plus floatCenter'></i></th><th>Risk</th><th>Vulnerability</th><th>Threat</th>";
       break;
     case "Responses":
-      debugLogger("Is Response");
       thead = "<th width='50px' id='addNewResponse'><i class='fa fa-plus floatCenter'></i></th><th>Response</th><th>Type</th>";
       break;
     case "Countermeasures":
-      debugLogger("Is Countermeasure");
       thead = "<th width='50px' id='addNewCountermeasure'><i class='fa fa-plus floatCenter'></i></th><th>Countermeasure</th><th>Type</th>";
       break;
     case "Tasks":
-      debugLogger("Is Task");
       thead = "<th width='50px' id='addNewTask'><i class='fa fa-plus floatCenter'></i></th><th>Task</th><th>Objective</th>";
       break;
     case "UseCases":
-      debugLogger("Is UseCase");
       thead = "<th width='50px' id='addNewUseCase'><i class='fa fa-plus floatCenter'></i></th><th>Use Case</th><th>Description</th>";
       break;
     case "DomainProperties":
-      debugLogger("Is Domain Property");
       thead = "<th width='50px' id='addNewDomainProperty'><i class='fa fa-plus floatCenter'></i></th><th>Domain Property</th><th>Type</th>";
       break;
     case "Dependency":
-      debugLogger("Is Dependency");
       thead = "<th width='50px' id='addNewDependency'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Depender</th><th>Dependee</th><th>Noun</th><th>Dependency</th>";
       break;
     case "AssetAssociation":
-      debugLogger("Is Asset Association");
       thead = "<th width='50px' id='addNewAssetAssociation'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Head</th><th>Nav</th><th>Type</th><th>Nry</th><th>Role</th><th>Role</th><th>Nry</th><th>Type</th><th>Nav</th><th>Tail</th>";
       break;
     case "Dataflows":
-      debugLogger("Is Dataflows");
       thead = "<th width='50px' id='addNewDataflow'><i class='fa fa-plus floatCenter'></i></th><th>Environment</th><th>Name</th><th>From</th><th>Type</th><th>To</th><th>Type</th>";
       break;
     case "TrustBoundaries":
-      debugLogger("Is TrustBoundaries");
       thead = "<th width='50px' id='addNewTrustBoundary'><i class='fa fa-plus floatCenter'></i></th><th>Name</th><th>Description</th>";
       break;
     case "ExternalDocuments":
-      debugLogger("Is External Documents");
       thead = "<th width='50px' id='addNewExternalDocument'><i class='fa fa-plus floatCenter'></i></th><th>External Document</th><th>Description</th>";
       break;
     case "DocumentReferences":
-      debugLogger("Is Document References");
       thead = "<th width='50px' id='addNewDocumentReference'><i class='fa fa-plus floatCenter'></i></th><th>Document Reference</th><th>Document</th>";
       break;
     case "ConceptReferences":
-      debugLogger("Is Concept References");
       thead = "<th width='50px' id='addNewConceptReference'><i class='fa fa-plus floatCenter'></i></th><th>Concept Reference</th><th>Dimension</th>";
       break;
     case "PersonaCharacteristics":
-      debugLogger("Is Persona Characteristics");
       thead = "<th width='50px' id='addNewPersonaCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Variable</th><th>Characteristic</th>";
       break;
     case "TaskCharacteristics":
-      debugLogger("Is Task Characteristics");
       thead = "<th width='50px' id='addNewTaskCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Task</th><th>Characteristic</th>";
       break;
     case "ArchitecturalPatterns":
-      debugLogger("Is Architectural Patterns");
       thead = "<th width='50px' id='addNewArchitecturalPattern'><i class='fa fa-plus floatCenter'></i></th><th>Model</th><th>Interfaces DER</th><th>Channels DER</th><th>Untrusted Surface DES</th>";
       break;
     case "SecurityPatterns":
-      debugLogger("Is Security Patterns");
       thead = "<th width='50px' id='addNewSecurityPattern'><i class='fa fa-plus floatCenter'></i></th><th>Security Pattern</th>";
       break;
     case "Locations":
-      debugLogger("Is Locations");
       thead = "<th width='50px' id='addNewLocations'><i class='fa fa-plus floatCenter'></i></th><th>Locations</th>";
       break;
     case "asset_value":
-      debugLogger("Is Asset Value");
       thead = "<th>Asset Value</th><th>Description</th>";
       break;
     case "asset_type":
-      debugLogger("Is Asset Type");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Asset Type</th><th>Description</th>";
       break;
     case "access_right":
-      debugLogger("Is Access Right");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Access Right</th><th>Description</th>";
       break;
     case "protocol":
-      debugLogger("Is Protocol");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Protocol</th><th>Description</th>";
       break;
     case "privilege":
-      debugLogger("Is Privilege");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Privilege</th><th>Description</th>";
       break;
     case "surface_type":
-      debugLogger("Is Surface Type");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Surface Type</th><th>Description</th>";
       break;
     case "vulnerability_type":
-      debugLogger("Is Vulnerability Type");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Vulnerability Type</th><th>Description</th>";
       break;
     case "severity":
-      debugLogger("Is Severity");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Severity</th><th>Description</th>";
       break;
     case "capability":
-      debugLogger("Is Capability");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Capability</th><th>Description</th>";
       break;
     case "motivation":
-      debugLogger("Is Motivation");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Motivation</th><th>Description</th>";
       break;
     case "threat_type":
-      debugLogger("Is Threat Type");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Threat Type</th><th>Description</th>";
       break;
     case "likelihood":
-      debugLogger("Is Likelihood");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Likelihood</th><th>Description</th>";
       break;
     case "threat_value":
-      debugLogger("Is Threat Value");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Threat Value</th><th>Description</th>";
       break;
     case "risk_value":
-      debugLogger("Is Risk Value");
       thead = "<th width='50px' id='addNewValueType'><i class='fa fa-plus floatCenter'></i></th><th>Risk Value</th><th>Description</th>";
       break;
   }

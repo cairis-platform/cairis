@@ -113,23 +113,18 @@ class RequirementDAO(CairisDAO):
 
   def delete_requirement(self, name=None):
     if name is not None:
-      req = self.get_requirement_by_name(name)
+      req = self.db_proxy.getRequirement(name)
+      reqReference = req.asset()
+      self.db_proxy.deleteRequirement(req.id())
+      self.db_proxy.relabelRequirements(reqReference)
     else:
       self.close()
-      raise MissingParameterHTTPError(param_names=['id'])
-
-    if req is None:
-      self.close()
-      raise ObjectNotFoundHTTPError('The provided requirement')
-
-    reqReference = req.asset()
-    self.db_proxy.deleteRequirement(req.theId)
-    self.db_proxy.relabelRequirements(reqReference)
+      raise MissingParameterHTTPError(param_names=['name'])
 
   def update_requirement(self, requirement, name=None):
     old_requirement = None
     if name is not None:
-      old_requirement = self.get_requirement_by_name(name)
+      old_requirement = self.db_proxy.getRequirement(name)
     else:
       self.close()
       raise MissingParameterHTTPError(param_names=['theId'])

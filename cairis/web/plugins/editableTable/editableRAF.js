@@ -81,19 +81,14 @@ $.fn.editableTableWidget = function (options) {
       editor.hide();
     }).keydown(function (e) {
       if (e.which === ENTER) {
-        updateModels();
         setActiveText();
         editor.hide();
         active.focus();
         e.preventDefault();
         e.stopPropagation();
-        //This function is for our Ajax calls
-        debugLogger("Name: " + active.attr("Name"));
-        debugLogger("The Row is: " + $(active).parent().index());
         var rows = $('tr', "#mainTable");
         var row = rows.eq($(active).parent().index());
         updateRequirement(row);
-        updateModels();
         setActiveText();
         editor.hide();
         active.focus();
@@ -173,18 +168,7 @@ $.fn.editableTableWidget.defaultOptions = {
     'border', 'border-top', 'border-bottom', 'border-left', 'border-right'],
   editor: $('<input>')
 };
-function updateModels(){
-  var asBox = $('#assetsbox');
-  var environmentsbox = $('#environmentsbox');
 
-  //var row = $(this).parent().parent().children().index($(this).parent()); (ZIE HIERBOVEN)
-  if(asBox.find('option:selected').text() != "All" && (asBox.find('option:selected').text() != "")){
-    debugLogger("This can be updated as an asset");
-  }
-  else if(environmentsbox.find('option:selected').text() != "All" && (environmentsbox.find('option:selected').text() != "")){
-    debugLogger("This can be updated as an environment");
-  }
-}
 function getActiveindex(){
   return Activeindex;
 }

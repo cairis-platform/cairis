@@ -27,11 +27,9 @@ $('#assetsbox').change(function() {
 
 function updateAssetRequirementsTable(selection) {
   if (window.theVisualModel == 'None') {
-    debugLogger("Selection: " + selection);
-    // Clearing the environmentsbox
     $('#environmentsbox').prop('selectedIndex', -1);
-    if (selection.toLowerCase() == "all") {
-      requirementsTable();
+    if (selection.toLowerCase() == "") {
+      requirementsTable('asset',selection);
     }  
     else {
       $.ajax({
@@ -56,7 +54,6 @@ function updateAssetRequirementsTable(selection) {
     }
   }
   else if (window.theVisualModel == 'asset') {
-    debugLogger("Selection: " + selection);
     getAssetview($('#amenvironmentsbox').val());
   }
 }
@@ -69,12 +66,10 @@ $('#environmentsbox').change(function() {
 function updateEnvironmentRequirementsTable(selection) {
   if (window.theVisualModel == 'None') {
     $('#assetsbox').prop('selectedIndex', -1);
-
-    if (selection.toLowerCase() == "all") {
-      requirementsTable();
+    if (selection.toLowerCase() == "") {
+      requirementsTable('environment',selection);
     }   
     else {
-      //Assetsbox
       $.ajax({
         type: "GET",
         dataType: "json",
@@ -307,6 +302,7 @@ function postRequirementRow(row,whatKind,value){
     success: function (data) {
       $(row).attr('data-name',json['theName']);
       showPopup(true);
+      $(document).on("click","#addReqMenu",addReq);
     },
     error: function (xhr, textStatus, errorThrown) {
       var error = JSON.parse(xhr.responseText);
@@ -316,7 +312,3 @@ function postRequirementRow(row,whatKind,value){
     }
   });
 }
-
-$(document).on('click',"#addReqMenu",function(){
-  addReq();
-});

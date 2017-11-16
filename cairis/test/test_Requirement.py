@@ -76,8 +76,7 @@ class RequirementTest(unittest.TestCase):
 
     self.assertEqual(len(b.dbProxy.getRequirementVersions(ireq.id())),1)
 
-    soreqs = b.dbProxy.getRequirement(oreq.label())
-    soreq = soreqs[ireq.description()]
+    soreq = b.dbProxy.getRequirement(oreq.label())
     self.assertEqual(str(oreq.name()),str(soreq.name()))
     self.assertEqual(str(oreq.description()),str(soreq.description()))
     self.assertEqual(str(oreq.rationale()),str(soreq.rationale()))

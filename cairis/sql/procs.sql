@@ -23847,6 +23847,7 @@ begin
   if refId is null
   then
     select id into refId from environment where name = reqReference limit 1;
+    set done = 0;
     open envReqCursor;
     er_loop: loop
       fetch envReqCursor into oldLabel,reqId;
@@ -23855,9 +23856,11 @@ begin
         leave er_loop;
       end if;
       update requirement set label = newLabel where id = reqId;
+      set newLabel = newLabel + 1;
     end loop er_loop;
     close envReqCursor;
   else
+    set done = 0;
     open assetReqCursor;
     ar_loop: loop
       fetch assetReqCursor into oldLabel,reqId;

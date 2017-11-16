@@ -18,3 +18,5 @@ To open *cairis_default* or another database, select the System/Open Database me
 
 You can delete a database by selecting the System/Delete Database option, and selecting the name of the database you want to remove.  You cannot delete the database you currently have open.
 Please note that any CAIRIS user can interact or delete any CAIRIS database - including *cairis_default*!
+
+To empty the contents of any database, select the System/Clear Database menu.

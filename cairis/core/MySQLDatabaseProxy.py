@@ -176,9 +176,7 @@ class MySQLDatabaseProxy:
     reqRows = self.responseList('call getRequirement(:id)',{'id':reqId},'MySQL error getting requirement')
     reqDict = {}
     for reqLabel, reqId, reqName, reqDesc, priority, rationale, fitCriterion, originator, reqVersion, reqType, reqDomain in reqRows:
-      r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
-      reqDict[reqDesc] = r
-    return reqDict
+      return RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
 
   def getOrderedRequirements(self,constraintId = '',isAsset = True):
     reqRows = self.responseList('call getRequirements(:id,:isAs)',{'id':constraintId,'isAs':isAsset},'MySQL error getting requirements')
@@ -511,7 +509,7 @@ class MySQLDatabaseProxy:
     elif (dimensionTable == 'task'): objts = self.getTasks(constraintId)
     elif (dimensionTable == 'usecase'): objts = self.getUseCases(constraintId)
     elif (dimensionTable == 'misusecase'): objts = self.getMisuseCases(constraintId)
-    elif (dimensionTable == 'requirement'): objts = self.getRequirement(constraintName)
+    elif (dimensionTable == 'requirement'): return self.getRequirement(constraintName)
     elif (dimensionTable == 'environment'): objts = self.getEnvironments(constraintId)
     elif (dimensionTable == 'role'): objts = self.getRoles(constraintId)
     elif (dimensionTable == 'domainproperty'): objts = self.getDomainProperties(constraintId)

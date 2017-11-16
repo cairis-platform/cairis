@@ -20,15 +20,13 @@
 'use strict';
 
 //  Function for adding a row to the table
-$("#addReq").click(function() {
-  addReq();
-});
+$(document).on("click","#addReqMenu",addReq);
 
 function addReq() {
 
   var kind  = "";
 
-  if($( "#assetsbox").find("option:selected" ).text() == "All" && $( "#environmentsbox").find("option:selected" ).text() == "All"){
+  if($( "#assetsbox").find("option:selected" ).text() == "" && $( "#environmentsbox").find("option:selected" ).text() == ""){
     alert("Please select an asset or an environment");
   }
   else{
@@ -54,19 +52,12 @@ function addReq() {
     $("#mainTable").append(template);
     $('#mainTable').find('tbody').find('tr').last().addClass(kind);
     sortTableByRow(0);
+    $(document).off("click","#addReqMenu");
   }
 }
 
 // Removing the active tr
-$("#removeReq").click(function() {
-  removeReq();
-});
-
-$("#removeReqMenu").click(function() {
-  removeReq();
-});
-
-
+$("#removeReq").on('click',removeReq);
 
 function removeReq(reqName) {
   deleteObject('requirement',reqName,function(reqName) {
@@ -90,6 +81,7 @@ function removeReq(reqName) {
           updateAssetRequirementsTable(refName);
         }
         else {
+          refName = $('#environmentsbox').val()
           updateEnvironmentRequirementsTable(refName);
         }
         showPopup(true);
@@ -575,7 +567,7 @@ $("#chooseLocationsEnvironmentDialog").on('click', '#chooseLocationEnvironmentBu
 
 
 
-$("#newClick").click(function () {
+$("#clearClick").click(function () {
   showLoading();
   postNewProject(function () {
     refreshHomeBreadCrumb();
