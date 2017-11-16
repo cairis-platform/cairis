@@ -5,7 +5,7 @@ title: Getting started
 
 {% include toc.html %}
 
-CAIRIS will work on most modern desktop and mobile browsers, but please note there are currently some compatibility problems with Firefox when working with requirements.
+CAIRIS will work on most modern desktop and mobile browsers, but please note there are currently some compatibility problems with Firefox when working with Requirements.
 
 # Live Demo
 
