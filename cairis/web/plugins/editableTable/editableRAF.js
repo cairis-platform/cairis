@@ -166,7 +166,6 @@ $.fn.editableTableWidget = function (options) {
       }
     });
   });
-
 };
 $.fn.editableTableWidget.defaultOptions = {
   cloneProperties: ['padding', 'padding-top', 'padding-bottom', 'padding-left', 'padding-right',

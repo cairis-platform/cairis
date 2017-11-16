@@ -45,7 +45,7 @@ function addReq() {
                '<td name="theLabel">' + num + '</td>' +
                '<td name="theName" contenteditable="true"></td>'+
                '<td name="theDescription" contenteditable="true"></td>'+
-               "<td name='thePriority' class='reqCombo' contenteditable='true'><select class='form-control'><option value='1' selected>1</option><option value='2'>2</option value='3'><option>3</option></select></td>'"+
+               '<td name="thePriority" class="reqCombo" contenteditable="true"><select class="form-control"><option value="1" selected>1</option><option value="2">2</option value="3"><option>3</option></select></td>'+
                '<td name="theRationale" contenteditable="true">None</td>'+
                '<td name="theFitCriterion" contenteditable="true">None</td>'+
                '<td name="theOriginator" contenteditable="true"></td>'+
