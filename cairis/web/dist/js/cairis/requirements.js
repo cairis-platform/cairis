@@ -122,7 +122,7 @@ function createRequirementsTable(data){
     textToInsert[i++] = item.theDescription;
     textToInsert[i++] = '</td>';
 
-    textToInsert[i++] = "<td name='thePriority' class='reqCombo' contenteditable=true>";
+    textToInsert[i++] = "<td name='thePriority' class='reqCombo'>";
     textToInsert[i++] = "<select class='form-control'>";
     textToInsert[i++] = "<option value='1'>1</option>";
     textToInsert[i++] = "<option value='2'>2</option>";
@@ -141,7 +141,7 @@ function createRequirementsTable(data){
     textToInsert[i++] = item.theOriginator;
     textToInsert[i++] = '</td>';
 
-    textToInsert[i++] = "<td name='theType' contenteditable=true class='reqCombo'>";
+    textToInsert[i++] = "<td name='theType' class='reqCombo'>";
     textToInsert[i++] ="<select class='form-control'>";
     textToInsert[i++] = "<option value='Functional'>Functional</option>";
     textToInsert[i++] = "<option value='Data'>Data</option>";
