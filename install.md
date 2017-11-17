@@ -5,8 +5,6 @@ title: Getting started
 
 {% include toc.html %}
 
-CAIRIS will work on most modern desktop and mobile browsers, but please note there are currently some compatibility problems with Firefox when working with Requirements.
-
 # Live Demo
 
 A live demo of CAIRIS is available to use on [http://demo.cairis.org](http://demo.cairis.org).  The username and password you need are *test* and *test*.  The live demo is rebuilt every night based on the latest updates to CAIRIS.
