@@ -1,5 +1,23 @@
 Changelog
 =========
+### 0.11.9
+* Fixing another issue with `<select multiple/>` elements. (#463)
+* No longer skipping a custom validator if its attribute has a falsy value. (#475)
+* Fixing stale values being read for data-attributes.
+
+### 0.11.8
+* Properly updating the submit button state when you run `.validator(‘update’)`. (#461)
+* Clearing errors on fields with `data-validate="false"` upon calling `.validator('update')`. (#387)
+
+### 0.11.7
+* Skip auto-validation of fields with errors that were set before plugin init. (#401)
+* Fixing non-multiple select validation, which accidentally broke in the last release. (#453)
+
+### 0.11.6
+* Scope `focus` option's error scrolling to only inputs within the validator's form element. (#385)
+* Fixing `<select multiple required />` being marked as invalid by default with jQuery 3.x (#393)
+* Fixing a memory leak of `this.$inputs` on `.validator('destroy')`
+
 ### 0.11.5
 * Fixed an event binding order issue when the form is reset. ([#375](https://github.com/1000hz/bootstrap-validator/pull/375))
 

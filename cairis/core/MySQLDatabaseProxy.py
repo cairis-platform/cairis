@@ -273,9 +273,9 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call updateEnvironment(:id,:name,:shortCode,:desc)',{'id':environmentId,'name':environmentName,'shortCode':environmentShortCode,'desc':environmentDescription},'MySQL error updating environment',session,False)
     if (len(parameters.environments()) > 0):
       for c in parameters.environments():  self.updateDatabase('call addCompositeEnvironment(:id,:c)',{'id':environmentId,'c':c},'MySQL error adding composite environment',session,False)
+      if (len(parameters.duplicateProperty()) > 0):
+        self.addCompositeEnvironmentProperties(environmentId,parameters.duplicateProperty(),parameters.overridingEnvironment())
     self.commitDatabase(session)
-    if (len(parameters.duplicateProperty()) > 0):
-      self.addCompositeEnvironmentProperties(environmentId,parameters.duplicateProperty(),parameters.overridingEnvironment())
     self.addValueTensions(environmentId,parameters.tensions())
     self.commitDatabase(session)
 

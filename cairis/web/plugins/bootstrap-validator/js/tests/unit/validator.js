@@ -489,6 +489,7 @@ $(function () {
   })
 
   QUnit.test('should clean up after itself when destroy called', function (assert) {
+    var done = assert.async()
     var form = '<form>'
       + '<div class="form-group has-feedback">'
       +   '<input type="text" data-error="error message" required>'
@@ -501,15 +502,25 @@ $(function () {
     form = $(form)
       .appendTo('#qunit-fixture')
       .validator('validate')
-      .validator('destroy')
 
-    assert.ok(!form.data('bs.validator'), 'removed data reference to plugin instance')
-    assert.ok(!form.attr('novalidate'), 'removed novalidate browser override')
-    assert.ok(Object.keys(form.find('input').data()).length === 1, 'removed data left on inputs (excluding data-* attrs)')
-    assert.ok(!form.find('.has-error').length, 'removed has-error class from all inputs')
-    assert.ok(!form.find('.glyphicon-remove').length, 'removed feedback class from all inputs')
-    assert.ok(form.find('.help-block').html() === 'original content', 'help block content restored')
-    assert.ok(!form.find('button').is('.disabled'), 're-enabled submit button')
+    var validator = form.data('bs.validator')
+
+    window.setTimeout(function () {
+      form.validator('destroy')
+
+      Object.keys(validator).forEach(function (key) {
+        assert.ok(validator[key] === null, 'removed ' + key + ' reference from plugin instance')
+      })
+
+      assert.ok(!form.data('bs.validator'), 'removed data reference to plugin instance')
+      assert.ok(!form.attr('novalidate'), 'removed novalidate browser override')
+      assert.ok(Object.keys(form.find('input').data()).length === 1, 'removed data left on inputs (excluding data-* attrs)')
+      assert.ok(!form.find('.has-error').length, 'removed has-error class from all inputs')
+      assert.ok(!form.find('.glyphicon-remove').length, 'removed feedback class from all inputs')
+      assert.ok(form.find('.help-block').html() === 'original content', 'help block content restored')
+      assert.ok(!form.find('button').is('.disabled'), 're-enabled submit button')
+      done()
+    })
   })
 
   QUnit.test('should run custom validators', function (assert) {
@@ -520,6 +531,10 @@ $(function () {
       + '</div>'
       + '<div class="form-group">'
       +   '<input type="text" id="bar" data-foo="foo" value="bar">'
+      +   '<div class="help-block with-errors"></div>'
+      + '</div>'
+      + '<div class="form-group">'
+      +   '<input type="text" id="baz" data-foo value="baz">'
       +   '<div class="help-block with-errors"></div>'
       + '</div>'
       + '<button type="submit">Submit</button>'
@@ -541,10 +556,11 @@ $(function () {
     assert.ok($('#foo').data('bs.validator.errors').length === 0, 'foo input is valid')
     assert.ok($('#bar').data('bs.validator.errors').length === 1, 'bar input is invalid')
     assert.ok($('#bar').data('bs.validator.errors')[0] === 'not equal to foo', 'bar error is custom error')
+    assert.ok($('#baz').data('bs.validator.errors').length === 1, 'baz ran validator even though data-foo has no attr value')
   })
 
   QUnit.test('should update set of fields', function (assert) {
-    var form  = '<form></form>'
+    var form  = '<form><button id="btn" type="submit">Submit</button></form>'
     var group = '<div class="form-group">'
       +   '<input type="text" data-error="error" required>'
       +   '<div id="errors" class="help-block with-errors"></div>'
@@ -560,9 +576,11 @@ $(function () {
 
     assert.equal($errors.text(), '', 'field was not validated since it was added after the validator was initialized')
 
-    form
-      .validator('update')
-      .validator('validate')
+    form.validator('update')
+
+    assert.ok($('#btn').hasClass('disabled'), 'submit was disabled after update because form is now incomplete')
+
+    form.validator('validate')
 
     assert.equal($errors.text(), 'error', 'field was validated after a call to .validator(\'update\')')
   })
@@ -589,6 +607,11 @@ $(function () {
 
     assert.equal($('#validated').text(), 'error', 'validation of skipped field was forced due to data-validate="true"')
     assert.equal($('#skipped').text(), '', 'validation of field was bypassed due to data-validate="false"')
+
+    $('[data-validate="true"]').attr('data-validate', false)
+    form.validator('update')
+
+    assert.equal($('#validated').text(), '', 'error is cleared when data-validate="false" and the form is updated')
 
     $.fn.validator.Constructor.INPUT_SELECTOR = inputSelector
   })
@@ -654,5 +677,63 @@ $(function () {
       assert.equal($('#errors').text(), '', 'error is cleared on form reset')
       done()
     }, 0)
+  })
+
+  QUnit.test('should validate select elements', function (assert) {
+      var form = '<form>'
+        + '<div class="form-group">'
+        +   '<select required>'
+        +     '<option value=""></option>'
+        +     '<option id="option" value="foo">Foo</option>'
+        +   '</select>'
+        + '</div>'
+        + '<button type="submit" id="btn">Submit</button>'
+        + '</form>'
+
+      var $form = $(form)
+        .appendTo('#qunit-fixture')
+        .validator('validate')
+
+      var $btn = $('#btn')
+
+      assert.ok($form.find('.form-group').hasClass('has-error'), '.has-error class is added to form-group')
+      assert.ok($btn.hasClass('disabled'), 'submit button disabled because form is incomplete')
+
+      $('#option').prop('selected', true)
+      $('select').trigger('input')
+
+      assert.ok(!$form.find('.form-group').hasClass('has-error'), '.has-error class is removed from form-group')
+      assert.ok(!$btn.hasClass('disabled'), 'submit button enabled because form is complete')
+  })
+
+  QUnit.test('should not add .has-error class to the pristine select with required and multiple attribute', function (assert) {
+      var form = '<form>'
+        + '<div class="form-group">'
+        +   '<select required multiple>'
+        +     '<option value="foo">Foo</option>'
+        +   '</select>'
+        + '</div>'
+        + '</form>'
+
+      var $form = $(form)
+        .appendTo('#qunit-fixture')
+        .validator()
+
+      assert.ok(!$form.find('.form-group').hasClass('has-error'), '.has-error class is not added to form-group')
+  })
+
+  QUnit.test('should not clobber server-side errors', function (assert) {
+      var form = '<form>'
+        + '<div class="form-group has-error">'
+        +   '<input type="text" value="foo" required>'
+        +   '<div class="help-block with-errors">server says foo is invalid</div>'
+        + '</div>'
+        + '</form>'
+
+      var $form = $(form)
+        .appendTo('#qunit-fixture')
+        .validator()
+
+      assert.ok($form.find('.form-group').hasClass('has-error'), '.has-error class is not removed from form-group')
   })
 })

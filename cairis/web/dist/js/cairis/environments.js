@@ -38,7 +38,7 @@ $(document).on('click', "td.environment-rows",function(){
     success: function (data) {
       fillOptionMenu("fastTemplates/editEnvironmentOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateEnvironment").text("Update");
-        $.session.set("editableEnvironment", JSON.stringify(data));
+        $.session.set("Environment", JSON.stringify(data));
         $('#editEnvironmentOptionsform').loadJSON(data, null);
         $.each(data.theTensions, function (index, tension) {
           setTimeout(function () {
@@ -106,9 +106,6 @@ $(document).on('click', "td.deleteEnvironmentButton",function(e){
 });
 
 
-
-
-
 $("#environmentsClick").click(function () {
   $('#menuBCClick').attr('dimension','environment');
   refreshMenuBreadCrumb('environment');
@@ -159,7 +156,6 @@ mainContent.on("keyup", "#rationale", function () {
 });
 
 mainContent.on("click", "#addEnvtoEnv", function () {
-
   var filterList = [];
   $("#envToEnvTable").find(".envInEnv").each(function(index, env){
     filterList.push($(env).text());
@@ -180,25 +176,27 @@ function addEnvToEnv() {
   $('#chooseEnvironment').modal('hide');
 };
 
-mainContent.on('click', "#UpdateEnvironment", function (e) {
 
-  e.preventDefault();
-  var env = JSON.parse($.session.get("editableEnvironment"));
-  env =  fillupEnvironmentObject(env);
-  $.session.set("editableEnvironment", env);
-  if($("#editEnvironmentOptionsform").hasClass("newEnvironment")){
-    $("#editEnvironmentOptionsform").removeClass("newEnvironment");
-    postEnvironment(env, function () {
-      $('#menuBCClick').attr('dimension','environment');
-      refreshMenuBreadCrumb('environment');
-    });
-  }
-  else {
+$(document).on('submit',function(e) {
+  if (!e.isDefaultPrevented()) {
+    e.preventDefault();
+    var env = JSON.parse($.session.get("Environment"));
     var oldName = env.theName;
-    putEnvironment(env, oldName, function () {
-      $('#menuBCClick').attr('dimension','environment');
-      refreshMenuBreadCrumb('environment');
-    });
+    env =  fillupEnvironmentObject(env);
+    $.session.set("Environment", env);
+    if($("#editEnvironmentOptionsform").hasClass("newEnvironment")){
+      $("#editEnvironmentOptionsform").removeClass("newEnvironment");
+      postEnvironment(env, function () {
+        $('#menuBCClick').attr('dimension','environment');
+        refreshMenuBreadCrumb('environment');
+      });
+    }
+    else {
+      putEnvironment(env, oldName, function () {
+        $('#menuBCClick').attr('dimension','environment');
+        refreshMenuBreadCrumb('environment');
+      });
+    }
   }
 });
 
@@ -210,9 +208,8 @@ $("#mainTable").on("click", "#addNewEnvironment", function () {
     $("#editEnvironmentOptionsform").validator();
     $("#UpdateEnvironment").text("Create");
     $("#editEnvironmentOptionsform").addClass("newEnvironment");
-    $.session.set("editableEnvironment", JSON.stringify(jQuery.extend(true,{},environmentDefault)));
+    $.session.set("Environment", JSON.stringify(jQuery.extend(true,{},environmentDefault)));
   });
-
 });
 
 
@@ -228,7 +225,7 @@ function fillupEnvironmentObject(env) {
   $("#tensionsTable").find("td").each(function() {
     var attr = $(this).find("select").attr('rationale');
     if(typeof attr !== typeof undefined && attr !== false) {
-      var env = JSON.parse($.session.get("editableEnvironment"));
+      var env = JSON.parse($.session.get("Environment"));
       var select = $(this).find("select");
       var tension = jQuery.extend(true, {}, tensionDefault);
       tension.rationale = select.attr("rationale");
@@ -330,7 +327,6 @@ function putEnvironment(environment, oldName, callback){
   output.object = environment;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -362,7 +358,6 @@ function postEnvironment(environment, callback){
   output.object = environment;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",
@@ -388,3 +383,4 @@ function postEnvironment(environment, callback){
     }
   });
 }
+
