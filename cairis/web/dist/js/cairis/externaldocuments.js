@@ -110,8 +110,8 @@ $(document).on('click', "td.externaldocument-rows", function () {
 });
 
 var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdateExternalDocument', function (e) {
-  e.preventDefault();
+
+function commitExternalDocument() {
   var edoc = JSON.parse($.session.get("ExternalDocument"));
   var oldName = edoc.theName;
   edoc.theName = $("#theName").val();
@@ -133,7 +133,7 @@ mainContent.on('click', '#UpdateExternalDocument', function (e) {
       refreshMenuBreadCrumb('external_document');
     });
   }
-});
+}
 
 $(document).on('click', 'td.deleteExternalDocumentButton', function (e) {
   e.preventDefault();
@@ -160,7 +160,6 @@ function putExternalDocument(edoc, oldName, callback){
   output.object = edoc;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -192,7 +191,6 @@ function postExternalDocument(edoc, callback){
   output.object = edoc;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

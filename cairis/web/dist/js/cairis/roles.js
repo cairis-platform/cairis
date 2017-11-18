@@ -139,9 +139,7 @@ function viewRole(roleName) {
 };
 
 var mainContent = $("#objectViewer");
-mainContent.on('click','#UpdateRole', function (event) {
-  event.preventDefault();
-
+function commitRole() {
   if ($("#editRoleOptionsform").hasClass("newRole")) {
     var theRoleObject = jQuery.extend(true, {},roleDefaultObject );
     theRoleObject.theName = mainContent.find("#theName").val();
@@ -175,7 +173,7 @@ mainContent.on('click','#UpdateRole', function (event) {
       });
     }
   }
-});
+}
 
 $(document).on('click',"td.deleteRoleButton",function(event){
   event.preventDefault();
@@ -256,7 +254,6 @@ function updateRole(role, oldName, callback){
   output.object = role;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -289,7 +286,6 @@ function postRole(role, callback){
   output.object = role;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

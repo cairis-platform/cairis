@@ -422,9 +422,7 @@ function addThreatEnvironment() {
   });
 };
 
-mainContent.on('click', '#UpdateThreat', function (e) {
-  e.preventDefault();
-  var test = $.session.get("theThreat");
+function commitThreat() {
   var threat = JSON.parse($.session.get("theThreat"));
   if (threat.theEnvironmentProperties.length == 0) {
     alert("Environments not defined");
@@ -452,7 +450,7 @@ mainContent.on('click', '#UpdateThreat', function (e) {
       });
     }
   }
-});
+}
 
 mainContent.on('click', ".deleteThreatEnv", function () {
   var envi = $(this).next(".threatEnvironments").text();
@@ -572,7 +570,6 @@ function putThreat(threat, oldName, callback){
   output.object = threat;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -604,7 +601,6 @@ function postThreat(threat, callback){
   output.object = threat;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

@@ -591,7 +591,6 @@ function putResponse(response, oldName, callback){
   output.object = response;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -623,7 +622,6 @@ function postResponse(response, callback){
   output.object = response;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",
@@ -650,17 +648,31 @@ function postResponse(response, callback){
   });
 }
 
-mainContent.on('click', '#UpdateResponse', function (e) {
-  e.preventDefault();
 
-  $("#editResponseOptionsform").validator();
 
+function commitResponse() {
   var resp = JSON.parse($.session.get("response"));
   var respKind = $.session.get("responseKind");
+  
   if (resp.theEnvironmentProperties[respKind.toLowerCase()].length == 0) {
     alert("Environments not defined");
+    return;
   }
-  else {
+  if ((respKind == 'Accept') && ($('#theAcceptanceCost').val() == undefined)) {
+    alert("Cost of accepting risk not specified");
+    return;
+  }
+  var valid = true;
+  if (respKind == 'Transfer') {
+    $.each(resp.theEnvironmentProperties[respKind.toLowerCase()],function(idx,env) {
+      if (env['theRoles'].length == 0) {
+        alert("Risk not transferred to any roles in environment" + env.theEnvironmentName);
+        valid = false; 
+        return;
+      }
+    });
+  }
+  if (valid) {
     resp.theName = $("#theResponseName").val();
     var arr = $("#theTags").val().split(", ")
     if(arr[0] != "") {
@@ -683,4 +695,4 @@ mainContent.on('click', '#UpdateResponse', function (e) {
       });
     }
   }
-});
+}

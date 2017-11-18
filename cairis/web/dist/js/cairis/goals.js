@@ -430,35 +430,34 @@ $(document).on('click', '#addNewGoal', function () {
 });
 
 
-mainContent.on('click', "#updateGoalButton", function (e) {
-  e.preventDefault();
-  var goal = JSON.parse($.session.get("Goal"));
-  if (goal.theEnvironmentProperties.length == 0) {
-    alert("Environments not defined");
-  }
-  else {
-    var oldName = goal.theName;
-    goal.theName = $("#theName").val();
-    goal.theOriginator = $("#theOriginator").val();
-    var tags = $("#theTags").text().split(", ");
-    if(tags[0] != ""){
-      goal.theTags = tags;
+function commitGoal() {
+    var goal = JSON.parse($.session.get("Goal"));
+    if (goal.theEnvironmentProperties.length == 0) {
+      alert("Environments not defined");
     }
-    if($("#editGoalOptionsForm").hasClass("new")){
-      postGoal(goal, function () {
-        $("#editGoalOptionsForm").removeClass("new")
-        $('#menuBCClick').attr('dimension','goal');
-        refreshMenuBreadCrumb('goal');
-      });
-    } 
     else {
-      putGoal(goal, oldName, function () {
-        $('#menuBCClick').attr('dimension','goal');
-        refreshMenuBreadCrumb('goal');
-      });
+      var oldName = goal.theName;
+      goal.theName = $("#theName").val();
+      goal.theOriginator = $("#theOriginator").val();
+      var tags = $("#theTags").text().split(", ");
+      if(tags[0] != ""){
+        goal.theTags = tags;
+      }
+      if($("#editGoalOptionsForm").hasClass("new")){
+        postGoal(goal, function () {
+          $("#editGoalOptionsForm").removeClass("new")
+          $('#menuBCClick').attr('dimension','goal');
+          refreshMenuBreadCrumb('goal');
+        });
+      } 
+      else {
+        putGoal(goal, oldName, function () {
+          $('#menuBCClick').attr('dimension','goal');
+          refreshMenuBreadCrumb('goal');
+        });
+      }
     }
-  }
-});
+}
 
 mainContent.on('click', '.editGoalSubGoalRow', function () {
   toggleGoalWindow("#editgoalSubGoal");
@@ -749,7 +748,6 @@ function postGoal(goal, callback){
   output.object = goal;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

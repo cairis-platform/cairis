@@ -211,7 +211,6 @@ function generateObstacleFromException(exceptionIdx) {
       output.object = uc;
       output.session_id = $.session.get('sessionID');
       output = JSON.stringify(output);
-      debugLogger(output);
 
       $.ajax({
         type: "POST",
@@ -442,8 +441,7 @@ function addUseCaseEnvironment() {
   });
 };
 
-mainContent.on('click', '#UpdateUseCase', function (e) {
-  e.preventDefault();
+function commitUseCase() {
   var usecase = JSON.parse($.session.get("UseCase"));
   if (usecase.theEnvironmentProperties.length == 0) {
     alert("Environments not defined");
@@ -485,7 +483,7 @@ mainContent.on('click', '#UpdateUseCase', function (e) {
       });
     }
   }
-});
+}
 
 $(document).on('click', 'td.deleteUseCaseButton', function (e) {
   e.preventDefault();
@@ -538,7 +536,6 @@ function putUseCase(usecase, oldName, callback){
   output.object = usecase;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -570,7 +567,6 @@ function postUseCase(usecase, callback){
   output.object = usecase;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

@@ -115,14 +115,13 @@ $(document).on('click', "td.conceptreference-rows", function () {
   });
 });
 
+var mainContent = $("#objectViewer");
 mainContent.on('change', '#theDimName', function (e) {
   e.preventDefault();
   getObjtNames($('#theDimName').val());
 });
 
-var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdateConceptReference', function (e) {
-  e.preventDefault();
+function commitConceptReference() {
   var cr = JSON.parse($.session.get("ConceptReference"));
   var oldName = cr.theName;
   cr.theName = $("#theName").val();
@@ -141,7 +140,7 @@ mainContent.on('click', '#UpdateConceptReference', function (e) {
       createConceptReferencesTable();
     });
   }
-});
+}
 
 $(document).on('click', 'td.deleteConceptReferenceButton', function (e) {
   e.preventDefault();
@@ -168,7 +167,6 @@ function putConceptReference(cr, oldName, callback){
   output.object = cr;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -200,7 +198,6 @@ function postConceptReference(cr, callback){
   output.object = cr;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

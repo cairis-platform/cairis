@@ -112,11 +112,8 @@ function appendTrustBoundaryComponent(tbComponent) {
 }
 
 var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdateTrustBoundary', function (e) {
-  e.preventDefault();
-  $("#editTrustBoundaryOptionsForm").validator();
 
-
+function commitTrustBoundary() {
   var tb = JSON.parse($.session.get("TrustBoundary"));
   var oldTbName = tb.theName;
   tb.theName = $("#theTrustBoundaryName").val();
@@ -135,7 +132,7 @@ mainContent.on('click', '#UpdateTrustBoundary', function (e) {
       refreshMenuBreadCrumb('trust_boundary');
     });
   }
-});
+}
 
 $(document).on("click", "#addNewTrustBoundary", function () {
   activeElement("objectViewer");
@@ -202,7 +199,6 @@ function putTrustBoundary(tb, oldTbName, callback){
   output.object = tb;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -234,7 +230,6 @@ function postTrustBoundary(tb, callback){
   output.object = tb;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

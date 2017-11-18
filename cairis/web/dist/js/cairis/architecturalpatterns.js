@@ -241,9 +241,7 @@ $(document).on("click", "#addNewArchitecturalPattern", function () {
   });
 });
 
-var mainContent = $("#objectViewer");
-mainContent.on("click","#UpdateArchitecturalPattern",function(e) {
-  e.preventDefault();
+function commitArchitecturalPattern() {
   var ap = JSON.parse($.session.get("ArchitecturalPattern"));
   if ($("#editArchitecturalPatternOptionsForm").hasClass("new")) {
     ap.theName = $('#theName').val();
@@ -263,7 +261,7 @@ mainContent.on("click","#UpdateArchitecturalPattern",function(e) {
       refreshMenuBreadCrumb('architectural_pattern');
     });
   }
-});
+}
 
 function postArchitecturalPattern(ap, callback){
   var output = {};
@@ -402,6 +400,7 @@ $(document).on('click', "td.component-row", function () {
   });
 });
 
+var mainContent = $("#objectViewer");
 mainContent.on('click','#addComponent',function() {
   $.session.set("Component", JSON.stringify(jQuery.extend(true, {},componentDefault )));
   $("#editComponentDiv").addClass('new');

@@ -466,8 +466,7 @@ function addTaskEnvironment() {
   });
 };
 
-mainContent.on('click', '#UpdateTask', function (e) {
-  e.preventDefault();
+function commitTask() {
   var task = JSON.parse($.session.get("Task"));
   if (task.theEnvironmentProperties.length == 0) {
     alert("Environments not defined");
@@ -509,7 +508,7 @@ mainContent.on('click', '#UpdateTask', function (e) {
       });
     }
   }
-});
+}
 
 $(document).on('click', 'td.deleteTaskButton', function (e) {
   e.preventDefault();
@@ -563,7 +562,6 @@ function putTask(task, oldName, callback){
   output.object = task;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -595,7 +593,6 @@ function postTask(task, callback){
   output.object = task;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

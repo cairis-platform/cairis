@@ -124,7 +124,6 @@ $(document).on('click', "td.assetassociation-rows", function(){
   var assoc = assocs[$(this).closest('tr').index()];
 
   fillOptionMenu("fastTemplates/editAssetAssociationOptions.html","#objectViewer",null,true,true, function(){
-    $('#editAssetAssociationOptionsForm').validator();
     $('#UpdateAssetAssociation').text("Update");
     refreshDimensionSelector($('#theEnvironmentName'),'environment',undefined,function() {
       $('#theEnvironmentName').val(assoc.theEnvironmentName);
@@ -143,17 +142,14 @@ $(document).on('click', "td.assetassociation-rows", function(){
           $('#theRationale').val(assoc.theRationale);
           $.session.set("AssetAssociation", JSON.stringify(assoc));
           $('#editAssetAssociationOptionsForm').loadJSON(assoc, null);
+          $('#editAssetAssociationOptionsForm').validator('update');
         },['All']);
       },['All']);
     },['All']);
   });
 });
 
-var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdateAssetAssociation', function (e) {
-  e.preventDefault();
-  $("#editAssetAssociationOptionsForm").validator();
-
+function commitAssetAssociation() {
   var assoc = JSON.parse($.session.get("AssetAssociation"));
   var oldEnvName = assoc.theEnvironmentName;
   var oldHeadName = assoc.theHeadAsset;
@@ -184,8 +180,9 @@ mainContent.on('click', '#UpdateAssetAssociation', function (e) {
       refreshMenuBreadCrumb('assetassociation');
     });
   }
-});
+}
 
+var mainContent = $("#objectViewer");
 mainContent.on('change',"#theEnvironmentName", function() {
   var envName = $(this).find('option:selected').text();
   var currentHeadAsset = $('#theHeadAsset').val();
@@ -276,7 +273,6 @@ function putAssetAssociation(assoc, oldEnvName, oldHeadAsset, oldTailAsset, call
   output.object = assoc;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -308,7 +304,6 @@ function postAssetAssociation(assoc, callback){
   output.object = assoc;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

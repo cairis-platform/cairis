@@ -193,8 +193,8 @@ $(document).on('click', "td.deleteTemplateGoalButton",function(e){
 });
 
 var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdateTemplateGoal',function(e){
-  e.preventDefault();
+
+function commitTemplateGoal(){
   var tg = $.session.get("TemplateGoal");
   if($("#editTemplateGoalOptionsForm").hasClass("new")){
     postTemplateGoalForm($("#editTemplateGoalOptionsForm"), function(){createTemplateGoalsTable();});
@@ -204,7 +204,7 @@ mainContent.on('click', '#UpdateTemplateGoal',function(e){
     putTemplateGoalForm($("#editTemplateGoalOptionsForm"));
     createTemplateGoalsTable();
   }
-});
+}
 
 mainContent.on('click', '#CloseTemplateGoal', function (e) {
   e.preventDefault();

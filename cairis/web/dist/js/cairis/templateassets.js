@@ -328,8 +328,7 @@ function appendTemplateSecurityProperty(label,value,rationale){
   $("#theTemplateProperties").find("tbody").append('<tr class="clickable-properties"><td style="display: none;">' + label + '</td><td><div class="fillparent deleteTemplateProperty"><i class="fa fa-minus"></i></div></td><td class="theTemplateAssetPropName" name="name">' + label + '</td><td name="value">'+ value +'</td><td name="rationale">'+ rationale +'</td></tr>').animate('slow');
 };
 
-mainContent.on('click', '#UpdateTemplateAsset',function(e){
-  e.preventDefault();
+function commitTemplateAsset() {
   var ta = $.session.get("TemplateAsset");
   if($("#editTemplateAssetOptionsform").hasClass("new")){
     postTemplateAssetForm($("#editTemplateAssetOptionsform"), function(){});
@@ -338,7 +337,7 @@ mainContent.on('click', '#UpdateTemplateAsset',function(e){
     putTemplateAssetForm($("#editTemplateAssetOptionsform"));
   }
   refreshMenuBreadCrumb('template_asset');
-});
+}
 
 mainContent.on('click', '#CloseTemplateAsset', function (e) {
   e.preventDefault();

@@ -136,32 +136,30 @@ function viewDomainProperty(dpName) {
 
 var mainContent = $("#objectViewer");
 
-mainContent.on('click', '#UpdateDomainProperty', function (e) {
-  e.preventDefault();
-  var dp = JSON.parse($.session.get("DomainProperty"));
-  var oldName = dp.theName;
-  dp.theName = $("#theName").val();
-  dp.theType = $("#theType").val();
-  dp.theDescription = $("#theDescription").val();
-  var tags = $("#theTags").text().split(", ");
-  if(tags[0] != ""){
-    dp.theTags = tags;
-  }
-
-  if($("#editDomainPropertyOptionsForm").hasClass("new")){
-    postDomainProperty(dp, function () {
-      $("#editDomainPropertyOptionsForm").removeClass("new")
-      $('#menuBCClick').attr('dimension','domain_property');
-      refreshMenuBreadCrumb('domain_property');
-    });
-  } 
-  else {
-    putDomainProperty(dp, oldName, function () {
-      $('#menuBCClick').attr('dimension','domain_property');
-      refreshMenuBreadCrumb('domain_property');
-    });
-  }
-});
+function commitDomainProperty() {
+    var dp = JSON.parse($.session.get("DomainProperty"));
+    var oldName = dp.theName;
+    dp.theName = $("#theName").val();
+    dp.theType = $("#theType").val();
+    dp.theDescription = $("#theDescription").val();
+    var tags = $("#theTags").text().split(", ");
+    if(tags[0] != ""){
+      dp.theTags = tags;
+    }
+    if($("#editDomainPropertyOptionsForm").hasClass("new")){
+      postDomainProperty(dp, function () {
+        $("#editDomainPropertyOptionsForm").removeClass("new")
+        $('#menuBCClick').attr('dimension','domain_property');
+        refreshMenuBreadCrumb('domain_property');
+      });
+    } 
+    else {
+      putDomainProperty(dp, oldName, function () {
+        $('#menuBCClick').attr('dimension','domain_property');
+        refreshMenuBreadCrumb('domain_property');
+      });
+    }
+}
 
 $(document).on('click', 'td.deleteDomainPropertyButton', function (e) {
   e.preventDefault();
@@ -211,7 +209,6 @@ function putDomainProperty(dp, oldName, callback){
   output.object = dp;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -243,7 +240,6 @@ function postDomainProperty(dp, callback){
   output.object = dp;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

@@ -157,8 +157,8 @@ $(document).on("click", "#addNewSecurityPattern", function () {
 });
 
 var mainContent = $("#objectViewer");
-mainContent.on("click","#UpdateSecurityPattern",function(e) {
-  e.preventDefault();
+
+function commitSecurityPattern() {
   var sp = JSON.parse($.session.get("SecurityPattern"));
   if ($("#editSecurityPatternOptionsForm").hasClass("new")) {
     sp.theName = $('#theName').val();
@@ -182,14 +182,13 @@ mainContent.on("click","#UpdateSecurityPattern",function(e) {
       refreshMenuBreadCrumb('security_pattern');
     });
   }
-});
+}
 
 function postSecurityPattern(sp, callback){
   var output = {};
   output.object = sp;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",
@@ -221,7 +220,6 @@ function putSecurityPattern(sp, oldName, callback){
   output.object = sp;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
   
   $.ajax({
     type: "PUT",
@@ -491,7 +489,6 @@ function situateSecurityPattern() {
   var output = {};
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

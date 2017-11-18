@@ -227,8 +227,7 @@ $(document).on('click', "td.deleteTemplateRequirementButton",function(e){
   });
 });
 
-mainContent.on('click', '#UpdateTemplateRequirement',function(e){
-  e.preventDefault();
+function commitTemplateRequirement() {
   var tr = $.session.get("TemplateRequirement");
   if($("#editTemplateRequirementOptionsForm").hasClass("new")){
     postTemplateRequirementForm($("#editTemplateRequirementOptionsForm"), function(){createTemplateRequirementsTable();});
@@ -237,7 +236,7 @@ mainContent.on('click', '#UpdateTemplateRequirement',function(e){
     putTemplateRequirementForm($("#editTemplateRequirementOptionsForm"));
     createTemplateRequirementsTable();
   }
-});
+}
 
 mainContent.on('click', '#CloseTemplateRequirement', function (e) {
   e.preventDefault();

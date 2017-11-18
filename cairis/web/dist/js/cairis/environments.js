@@ -177,9 +177,7 @@ function addEnvToEnv() {
 };
 
 
-$(document).on('submit',function(e) {
-  if (!e.isDefaultPrevented()) {
-    e.preventDefault();
+function commitEnvironment() {
     var env = JSON.parse($.session.get("Environment"));
     var oldName = env.theName;
     env =  fillupEnvironmentObject(env);
@@ -197,8 +195,7 @@ $(document).on('submit',function(e) {
         refreshMenuBreadCrumb('environment');
       });
     }
-  }
-});
+}
 
 
 $("#mainTable").on("click", "#addNewEnvironment", function () {

@@ -155,8 +155,7 @@ $(document).on('click', "td.taskcharacteristic-rows", function () {
 });
 
 var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdateTaskCharacteristic', function (e) {
-  e.preventDefault();
+function commitTaskCharacteristic() {
   var tc = JSON.parse($.session.get("TaskCharacteristic"));
   var oldName = tc.theCharacteristic;
   tc.theTaskName = $("#theTaskName").val();
@@ -176,7 +175,7 @@ mainContent.on('click', '#UpdateTaskCharacteristic', function (e) {
       refreshMenuBreadCrumb('task_characteristic');
     });
   }
-});
+}
 
 $(document).on('click', 'td.deleteTaskCharacteristicButton', function (e) {
   e.preventDefault();
@@ -225,7 +224,6 @@ function putTaskCharacteristic(tc, oldName, callback){
   output.object = tc;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -257,7 +255,6 @@ function postTaskCharacteristic(tc, callback){
   output.object = tc;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

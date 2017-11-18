@@ -1716,7 +1716,6 @@ $("#traceExplorer").on('click', '#AddTrace',function(e) {
   output.object = tr;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",
@@ -1994,3 +1993,110 @@ function makeSession() {
   });
 }
 
+$(document).on('submit',function(e) {
+  if (!e.isDefaultPrevented()) {
+    e.preventDefault();
+    var originForm = $(e.target).attr('id');
+    switch (originForm) {
+      case "editArchitecturalPatternOptionsForm":
+        commitArchitecturalPattern();
+        break;
+      case "editAssetsOptionsform":
+        commitAsset();
+        break;
+      case "editAssetAssociationOptionsForm":
+        commitAssetAssociation();
+        break;
+      case "editAttackerOptionsForm":
+        commitAttacker();
+        break;
+      case "editConceptReferenceOptionsForm":
+        commitConceptReference();
+        break;
+      case "editCountermeasureOptionsForm":
+        commitCountermeasure();
+        break;
+      case "editDataflowOptionsForm":
+        commitDataFlow();
+        break;
+      case "editDependencyOptionsForm":
+        commitDependency();
+        break;
+      case "editDocumentReferenceOptionsForm":
+        commitDocumentReference();
+        break;
+      case "editDomainPropertyOptionsForm":    
+        commitDomainProperty();
+        break;
+      case "editEnvironmentOptionsform":    
+        commitEnvironment();
+        break;
+      case "editExternalDocumentOptionsForm":
+        commitExternalDocument();
+        break;
+      case "editGoalOptionsForm":
+        commitGoal();
+        break;
+      case "editLocationsOptionsForm":
+        commitLocations();
+        break;
+      case "editObstacleOptionsForm":
+        commitObstacle();
+        break;
+      case "editPersonaCharacteristicOptionsForm":
+        commitPersonaCharacteristic();
+        break;
+      case "editPersonasOptionsForm":
+        commitPersona();
+        break;
+      case "ProjectsProperties":
+        commitProject();
+        break;
+      case "editResponseOptionsform":
+        commitResponse();
+        break;
+      case "editRisksForm":
+        commitRisk();
+        break;
+      case "editRoleOptionsform":
+        commitRole();
+        break;
+      case "editScoredValueTypeOptionsForm":
+        commitValueType();
+        break;
+      case "editSecurityPatternOptionsForm":
+        commitSecurityPattern();
+        break;
+      case "editTaskCharacteristicOptionsForm":
+        commitTaskCharacteristic();
+        break;
+      case "editTaskOptionsForm" :
+        commitTask();
+        break;
+      case "editTemplateAssetOptionsform":
+        commitTemplateAsset();
+        break;
+      case "editTemplateGoalOptionsForm":
+        commitTemplateGoal();
+        break;
+      case "editTemplateRequirementOptionsForm": 
+        commitTemplateRequirement();
+        break;
+      case "editThreatOptionsform":
+        commitThreat();
+        break;
+      case "editTrustBoundaryOptionsForm":
+        commitTrustBoundary();
+        break;
+      case "editUseCaseOptionsForm":
+        commitUseCase();
+        break;
+      case "editValueTypeOptionsForm":
+        commitValueType();
+        break;
+      case "editVulnerabilityOptionsform":
+        commitVulnerability();
+        break;
+    }
+  }
+});

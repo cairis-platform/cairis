@@ -19,12 +19,6 @@
 
 'use strict';
 
-$('#editDependencyOptionsForm').validator().on('submit', function (e) {
-  if (e.isDefaultPrevented()) {
-    alert("Def prevented");
-  }
-});
-
 $("#dependenciesClick").click(function(){
   validateClick('dependency',function() {
     $('#menuBCClick').attr('dimension','dependency');
@@ -120,19 +114,15 @@ $(document).on('click', "td.dependency-rows", function(){
             $('#theRationale').val(dependency.theRationale);
             $.session.set("Dependency", JSON.stringify(dependency));
             $('#editDependencyOptionsForm').loadJSON(dependency, null);
+            $('#editDependencyOptionsForm').validator('update');
           },['All']);
-        });
-      });
-    });
+        },['All']);
+      },['All']);
+    },['All']);
   });
 });
 
-var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdateDependency', function (e) {
-
-  e.preventDefault();
-  $("#editDependencyOptionsForm").validator();
-
+function commitDependency() {
   var dependency = JSON.parse($.session.get("Dependency"));
   var oldEnvName = dependency.theEnvironmentName;
   var oldDepender = dependency.theDepender;
@@ -158,8 +148,9 @@ mainContent.on('click', '#UpdateDependency', function (e) {
       refreshMenuBreadCrumb('dependency');
     });
   }
-});
+}
 
+var mainContent = $("#objectViewer");
 mainContent.on('change',"#theEnvironmentName", function() {
   var envName = $(this).find('option:selected').text();
   var currentDepender = $('#theDependerName').val();
@@ -251,7 +242,6 @@ function putDependency(dependency, oldEnvName, oldDepender, oldDependee, oldDepe
   output.object = dependency;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -283,7 +273,6 @@ function postDependency(dependency, callback){
   output.object = dependency;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

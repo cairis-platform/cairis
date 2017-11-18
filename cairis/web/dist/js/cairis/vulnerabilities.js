@@ -237,7 +237,6 @@ function addAssetToVulnerabilityEnvironment() {
       prop.theAssets.push(text);
     }
   });
-  debugLogger(theVul);
   $.session.set("Vulnerability", JSON.stringify(theVul));
 };
 
@@ -259,10 +258,7 @@ mainContent.on("click", ".removeVulnEnvAsset", function () {
   $(this).closest("tr").remove();
 });
 
-mainContent.on('click', '#UpdateVulnerability', function (e) {
-
-  $("#editVulnerabilityOptionsform").validator();
-
+function commitVulnerability() {
   var theVul = JSON.parse($.session.get("Vulnerability"));
   if (theVul.theEnvironmentProperties.length == 0) {
     alert("Environments not defined");
@@ -295,7 +291,7 @@ mainContent.on('click', '#UpdateVulnerability', function (e) {
     }
   }
   e.preventDefault();
-});
+}
 
 
 $(document).on('click','td.deleteVulnerabilityButton', function (event) {
@@ -363,7 +359,6 @@ function putVulnerability(vuln, oldName, callback){
   output.object = vuln;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -395,7 +390,6 @@ function postVulnerability(vuln, callback){
   output.object = vuln;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

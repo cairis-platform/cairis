@@ -382,8 +382,7 @@ function addRoleToAttacker() {
   });
 }
 
-mainContent.on('click', '#UpdateAttacker', function (e) {
-  e.preventDefault();
+function commitAttacker() {
   $("#editAttackerOptionsForm").validator('validate');
   var attacker = JSON.parse($.session.get("Attacker"));
   if (attacker.theEnvironmentProperties.length == 0) {
@@ -411,7 +410,7 @@ mainContent.on('click', '#UpdateAttacker', function (e) {
       });
     }
   }
-});
+}
 
 $(document).on("click", "#addNewAttacker", function () {
   refreshObjectBreadCrumb('New Attacker');
@@ -424,42 +423,6 @@ $(document).on("click", "#addNewAttacker", function () {
     $.session.set("Attacker", JSON.stringify(jQuery.extend(true, {},attackerDefault )));
   });
 });
-
-/*
-mainContent.on('click', "#UpdateAttackerCapability", function () {
-  var attacker = JSON.parse($.session.get("Attacker"));
-  var theEnvName = $.session.get("attackerEnvironmentName");
-  if($("#addAttackerPropertyDiv").hasClass("new")){
-    $.each(attacker.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        var prop = {};
-        prop.name = $("#theCap option:selected").text();
-        prop.value = $("#thePropValue option:selected").text();
-        env.theCapabilities.push(prop);
-        $.session.set("Attacker", JSON.stringify(attacker));
-        appendAttackerCapability(prop);
-        attackerToggle();
-      }
-    });
-  }
-  else {
-    var oldCapName = $.session.get("AttackerCapName");
-    $.each(attacker.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == theEnvName){
-        $.each(env.theCapabilities, function (index, cap) {
-          if(oldCapName == cap.name){
-            cap.name = $("#theCap option:selected").text();
-            cap.value = $("#thePropValue option:selected").text();
-          }
-        });
-        $.session.set("Attacker", JSON.stringify(attacker));
-        $("#theAttackerEnvironments").find(".attackerEnvironment:first").trigger('click');
-        attackerToggle();
-      }
-    });
-  }
-}); 
-*/
 
 mainContent.on("click", ".removeAttackerCapability", function () {
   var text = $(this).closest('tr').find(".attackerCapability").text();
@@ -506,9 +469,6 @@ $(document).on('click', 'td.deleteAttackerButton', function (e) {
     });
   });
 });
-
-
-
 
 var uploading = false;
 $("#objectViewer").on('click', '#theAttackerImage', function () {
@@ -598,7 +558,6 @@ function putAttacker(attacker, oldName, callback){
   output.object = attacker;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -630,7 +589,6 @@ function postAttacker(attacker, callback){
   output.object = attacker;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

@@ -107,6 +107,7 @@ function viewLocations(locsName) {
         $.each(data.theLocations,function(idx,loc) {
           appendLocation(loc);
         });
+        $("#editLocationsOptionsForm").validator('update');
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -467,8 +468,7 @@ mainContent.on('click','td.deleteLocationLink',function() {
 });
 
 
-mainContent.on('click', '#UpdateLocations', function (e) {
-  e.preventDefault();
+function commitLocations() {
   var locs = JSON.parse($.session.get("Locations"));
   var oldName = locs.theName;
   locs.theName = $("#theLocationsName").val();
@@ -486,7 +486,7 @@ mainContent.on('click', '#UpdateLocations', function (e) {
       refreshMenuBreadCrumb('location');
     });
   }
-});
+}
 
 $(document).on('click', 'td.deleteLocationsButton', function (e) {
   e.preventDefault();
@@ -514,7 +514,6 @@ function putLocations(locs, oldName, callback){
   output.object = locs;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -546,7 +545,6 @@ function postLocations(locs, callback){
   output.object = locs;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

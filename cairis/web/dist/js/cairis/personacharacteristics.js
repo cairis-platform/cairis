@@ -164,8 +164,7 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
 });
 
 var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdatePersonaCharacteristic', function (e) {
-  e.preventDefault();
+function commitPersonaCharacteristic() {
   var pc = JSON.parse($.session.get("PersonaCharacteristic"));
   var oldName = pc.theCharacteristic;
   pc.thePersonaName = $("#thePersonaName").val();
@@ -188,7 +187,7 @@ mainContent.on('click', '#UpdatePersonaCharacteristic', function (e) {
       refreshMenuBreadCrumb('persona_characteristic');
     });
   }
-});
+}
 
 $(document).on('click', 'td.deletePersonaCharacteristicButton', function (e) {
   e.preventDefault();
@@ -238,7 +237,6 @@ function putPersonaCharacteristic(pc, oldName, callback){
   output.object = pc;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -270,7 +268,6 @@ function postPersonaCharacteristic(pc, callback){
   output.object = pc;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

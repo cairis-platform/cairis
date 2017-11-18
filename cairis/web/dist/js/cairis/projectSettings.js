@@ -22,7 +22,6 @@
 $("#projectClick").click(function () {
   $('#menuBCClick').attr('dimension','properties');
   refreshMenuBreadCrumb('properties');
-//  showProjectSettingsForm();
 });
 
 function showProjectSettingsForm() {
@@ -48,6 +47,7 @@ function showProjectSettingsForm() {
         currentRevision += 1;
       });
       $.session.set("ProjectRevision", currentRevision);
+      $('#ProjectsProperties').validator('update');
     }); 
   });
 };
@@ -163,8 +163,7 @@ mainContent.on('click', '.editNamingConvention', function () {
   $("#conventionDefinition").val(val);
 });
 
-mainContent.on("click", "#updateProjectButton", function (e) {
-  e.preventDefault();
+function commitProject() {
   var settings =  JSON.parse($.session.get("ProjectSettings"));
   settings.projectName = $("#projectName").val();
   settings.projectBackground = $("#projectBackground").val();
@@ -174,7 +173,7 @@ mainContent.on("click", "#updateProjectButton", function (e) {
   forceCloseOptions();
   $.session.set("ProjectSettings", JSON.stringify(settings));
   refreshHomeBreadCrumb();
-});
+}
 
 mainContent.on("click", "#closeProjectButton", function (e) {
   e.preventDefault();

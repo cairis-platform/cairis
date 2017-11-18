@@ -132,9 +132,9 @@ function createValueTypesTable(valueType,envName){
         var item = data[key];
 
         textToInsert[i++] = "<tr>";
-	if (envName == undefined) {
+	      if (envName == undefined) {
           textToInsert[i++] = '<td class="deleteValueTypeButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
-	}
+	      }
         textToInsert[i++] = '<td class="valuetype-rows" name="theName">';
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
@@ -199,7 +199,7 @@ $(document).on('click', "td.valuetype-rows", function () {
         if (valueType == 'access_right' || valueType == 'protocol' || valueType == 'privilege' || valueType == 'surface_type') {
           $('#theScore').val(data.theScore);
         }
-
+        $(formObjt).validator('update');
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -213,8 +213,8 @@ $(document).on('click', "td.valuetype-rows", function () {
 
 
 var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdateValueType', function (e) {
-  e.preventDefault();
+
+function commitValueType() {
   var vt = JSON.parse($.session.get("ValueType"));
   var oldName = vt.theName;
   vt.theName = $("#theName").val();
@@ -244,7 +244,7 @@ mainContent.on('click', '#UpdateValueType', function (e) {
       refreshMenuBreadCrumb(vt.theType,$.session.get("environment"))
     });
   }
-});
+}
 
 $(document).on('click', 'td.deleteValueTypeButton', function (e) {
   e.preventDefault();
@@ -323,6 +323,7 @@ $(document).on("click", "#addNewValueType", function () {
   if (valueType == 'access_right' || valueType == 'protocol' || valueType == 'privilege' || valueType == 'surface_type') {
     formObjt = "editScoredValueTypeOptions";
   }
+  $(formObjt).validator();
   fillOptionMenu("fastTemplates/" + formObjt + ".html", "#objectViewer", null, true, true, function () {
     $("#UpdateValueType").text("Create");
     $("#" + formObjt + "Form").addClass("new");
@@ -335,7 +336,6 @@ function putValueType(vt, oldName, callback){
   output.object = vt;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
   var valueType = $.session.get("value_type");
   var envName = $.session.get("environment");
   if (envName == undefined) {
@@ -372,7 +372,6 @@ function postValueType(vt, callback){
   output.object = vt;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

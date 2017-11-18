@@ -104,7 +104,6 @@ $(document).on('click', "td.dataflow-rows", function(){
   $.session.set("Dataflow", JSON.stringify(dataflow));
 
   fillOptionMenu("fastTemplates/editDataflowOptions.html","#objectViewer",null,true,true, function(){
-    $('#editDataflowOptionsForm').validator();
     $('#UpdateDataflow').text("Update");
     refreshDimensionSelector($('#theDataflowEnvironmentName'),'environment',undefined,function() {
       $('#theDataflowEnvironmentName').val(dataflow.theEnvironmentName);
@@ -116,6 +115,7 @@ $(document).on('click', "td.dataflow-rows", function(){
           $.each(dataflow.theAssets,function(idx,dfAsset) {
             appendDataflowAsset(dfAsset);
           });
+          $('#editDataflowOptionsForm').validator('update');
         },['All']);
       },['All']);
     });
@@ -127,13 +127,7 @@ function appendDataflowAsset(dfAsset) {
   $("#theDataflowAssets").find("tbody").append("<tr><td class='removeDataflowAsset'><i class='fa fa-minus'></i></td><td class='dataflow-asset'>" + dfAsset + "</td></tr>").animate('slow');
 }
 
-var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdateDataflow', function (e) {
-
-  e.preventDefault();
-  $("#editDataflowOptionsForm").validator();
-
-
+function commitDataFlow() {
   var dataflow = JSON.parse($.session.get("Dataflow"));
   var oldDfName = dataflow.theName;
   var oldEnvName = dataflow.theEnvironmentName;
@@ -157,8 +151,9 @@ mainContent.on('click', '#UpdateDataflow', function (e) {
       refreshMenuBreadCrumb('dataflow');
     });
   }
-});
+}
 
+var mainContent = $("#objectViewer");
 mainContent.on('change',"#theDataflowEnvironmentName", function() {
   var envName = $(this).find('option:selected').text();
   var currentFromName = $('#theDataflowFromName').val();
@@ -215,7 +210,8 @@ $(document).on("click", "#addNewDataflow", function () {
 $(document).on('click', 'td.deleteDataflowButton', function (e) {
   e.preventDefault();
   var dataflows = JSON.parse($.session.get("Dataflows"));
-  var dataflow = dataflows[$(this).index()];
+  var dfRow = $(this).closest('tr');
+  var dataflow = dataflows[dfRow.index()];
   deleteDataflow(dataflow, function () {
     $('#menuBCClick').attr('dimension','dataflow');
     refreshMenuBreadCrumb('dataflow');
@@ -263,7 +259,6 @@ function putDataflow(dataflow, oldDfName, oldEnvName, callback){
   output.object = dataflow;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -295,7 +290,6 @@ function postDataflow(dataflow, callback){
   output.object = dataflow;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

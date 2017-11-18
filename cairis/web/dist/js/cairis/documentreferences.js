@@ -122,8 +122,8 @@ $(document).on('click', "td.documentreference-rows", function () {
 });
 
 var mainContent = $("#objectViewer");
-mainContent.on('click', '#UpdateDocumentReference', function (e) {
-  e.preventDefault();
+
+function commitDocumentReference() {
   var dr = JSON.parse($.session.get("DocumentReference"));
   var oldName = dr.theName;
   dr.theName = $("#theName").val();
@@ -144,7 +144,7 @@ mainContent.on('click', '#UpdateDocumentReference', function (e) {
       refreshMenuBreadCrumb('document_reference');
     });
   }
-});
+}
 
 $(document).on('click', 'td.deleteDocumentReferenceButton', function (e) {
   e.preventDefault();
@@ -177,7 +177,6 @@ function putDocumentReference(dr, oldName, callback){
   output.object = dr;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -209,7 +208,6 @@ function postDocumentReference(dr, callback){
   output.object = dr;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

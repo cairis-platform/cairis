@@ -628,8 +628,7 @@ function addCountermeasureEnvironment() {
   });
 };
 
-mainContent.on('click', '#UpdateCountermeasure', function (e) {
-  e.preventDefault();
+function commitCountermeasure() {
   var cm = JSON.parse($.session.get("Countermeasure"));
   if (cm.theEnvironmentProperties.length == 0) {
     alert("Environments not defined");
@@ -657,7 +656,7 @@ mainContent.on('click', '#UpdateCountermeasure', function (e) {
       });
     }
   }
-});
+}
 
 mainContent.on('click', ".deleteCountermeasureEnv", function () {
   var envi = $(this).next(".countermeasuresEnvironments").text();
@@ -820,7 +819,6 @@ function postCountermeasure(countermeasure, callback){
   output.object = countermeasure;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",
@@ -952,7 +950,6 @@ function generateAsset(cmName) {
   var output = {};
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",
@@ -984,7 +981,6 @@ function generateAssetFromTemplate() {
   var output = {};
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",
@@ -1014,7 +1010,6 @@ function situateCountermeasurePattern() {
   var output = {};
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",
@@ -1045,7 +1040,6 @@ function associateWithSituatedPattern() {
   var output = {};
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",
@@ -1076,7 +1070,6 @@ function removeCountermeasurePattern() {
   var output = {};
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "DELETE",

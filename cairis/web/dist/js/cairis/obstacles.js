@@ -424,8 +424,7 @@ $(document).on('click', '#addNewObstacle', function () {
 });
 
 
-mainContent.on('click', "#updateObstacleButton", function (e) {
-  e.preventDefault();
+function commitObstacle() {
   var obstacle = JSON.parse($.session.get("Obstacle"));
   if (obstacle.theEnvironmentProperties.length == 0) {
     alert("Environments not defined");
@@ -452,7 +451,7 @@ mainContent.on('click', "#updateObstacleButton", function (e) {
       });
     }
   }
-});
+}
 
 mainContent.on('click', '.obstacle_editGoalSubGoalRow', function () {
   var refRow = $(this).closest('tr');
@@ -647,7 +646,6 @@ function postObstacle(obstacle, callback){
   output.object = obstacle;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

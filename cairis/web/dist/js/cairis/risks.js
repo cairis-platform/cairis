@@ -446,10 +446,10 @@ function appendMisuseEnvironment(environment){
   $("#theMisuseEnvironments").find("tbody").append('<tr><td class="misusecaseEnvironment">'+environment+'</td></tr>');
 }
 
-mainContent.on('click', '#UpdateRisk', function (e) {
-  e.preventDefault();
+function commitRisk() {
   var risk = JSON.parse($.session.get("Risk"));
   var oldName = risk.theName;
+  risk.theName = $("#theName").val();
   risk.theRiskName = $("#theName").val();
   risk.theThreatName = $("#theThreatNames").val();
   risk.theVulnerabilityName = $("#theVulnerabilityNames").val();
@@ -471,7 +471,7 @@ mainContent.on('click', '#UpdateRisk', function (e) {
       refreshMenuBreadCrumb('risk');
     });
   }
-});
+}
 
 mainContent.on('click', '#CloseRisk', function (e) {
   e.preventDefault();
@@ -534,7 +534,6 @@ function putRisk(risk, oldName, callback){
   output.object = risk;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -566,7 +565,6 @@ function postRisk(risk, callback){
   output.object = risk;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",

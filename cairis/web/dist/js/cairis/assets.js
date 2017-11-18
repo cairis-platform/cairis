@@ -632,8 +632,7 @@ mainContent.on('click', '#cancelButtonAsset', function(){
 });
 
 
-mainContent.on('click', '#UpdateAsset',function(e){
-  e.preventDefault();
+function commitAsset(){
   var envProps = $.session.get("AssetProperties");
   if (envProps == undefined || envProps.length == 0) {
     alert("Environments not defined");
@@ -648,7 +647,7 @@ mainContent.on('click', '#UpdateAsset',function(e){
     $('#menuBCClick').attr('dimension','asset');
     refreshMenuBreadCrumb('asset');
   }
-});
+}
 
 mainContent.on('click', '#CloseAsset', function (e) {
   e.preventDefault();

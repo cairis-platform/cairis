@@ -280,9 +280,7 @@ function addRoleToPersona(){
   });
 };
 
-mainContent.on('click', '#UpdatePersona', function (e) {
-  $("#editPersonasOptionsForm").validator('validate');
-  e.preventDefault();
+function commitPersona() {
   var persona = JSON.parse($.session.get("Persona"));
   if (persona.theEnvironmentProperties.length == 0) {
     alert("Environments not defined");
@@ -329,7 +327,7 @@ mainContent.on('click', '#UpdatePersona', function (e) {
       });
     }
   }
-});
+}
 
 $(document).on("click", "#addNewPersona", function () {
   refreshObjectBreadCrumb('New Persona');
@@ -465,7 +463,6 @@ function putPersona(persona, oldName, callback){
   output.object = persona;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "PUT",
@@ -497,7 +494,6 @@ function postPersona(persona, callback){
   output.object = persona;
   output.session_id = $.session.get('sessionID');
   output = JSON.stringify(output);
-  debugLogger(output);
 
   $.ajax({
     type: "POST",
