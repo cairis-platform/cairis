@@ -240,11 +240,11 @@ $(document).on('click', 'td.risk-rows', function () {
     crossDomain: true,
     url: serverIP + "/api/risks/name/" + encodeURIComponent(name),
     success: function (mainData) {
-      $("#editRisksForm").validator();
       $.session.set("Risk",JSON.stringify(mainData));
       fillOptionMenu("fastTemplates/editRiskOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateRisk").text("Update");
         $("#theName").val(mainData.theName);
+        $("#editRisksForm").validator('update');
         var tags = mainData.theTags;
         var text = "";
         $.each(tags, function (index, type) {
