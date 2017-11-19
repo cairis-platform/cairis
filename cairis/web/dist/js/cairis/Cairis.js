@@ -1993,6 +1993,11 @@ function makeSession() {
   });
 }
 
+$("#logoutClick").click(function () {
+  $.session.clear();
+  window.open(serverIP + '/logout','_self');
+});
+
 $(document).on('submit',function(e) {
   if (!e.isDefaultPrevented()) {
     e.preventDefault();
