@@ -219,7 +219,7 @@ class ProjectAPITests(CairisDaemonTestCase):
     message = str(json_dict['message'])
     self.assertGreater(message.find('successfully'), -1, 'Failed to create testdb')
 
-    url = '/api/settings/database/cairis_default/open?session_id=test'
+    url = '/api/settings/database/cairis_test/open?session_id=test'
     rv = self.app.post(url)
     self.assertIsNotNone(rv.data, 'No response')
     if (sys.version_info > (3,)):
@@ -255,7 +255,7 @@ class ProjectAPITests(CairisDaemonTestCase):
     message = str(json_dict['message'])
     self.assertGreater(message.find('successfully'), -1, 'Failed to create testdb')
 
-    url = '/api/settings/database/cairis_default/open?session_id=test'
+    url = '/api/settings/database/cairis_test/open?session_id=test'
     rv = self.app.post(url)
     self.assertIsNotNone(rv.data, 'No response')
     if (sys.version_info > (3,)):
