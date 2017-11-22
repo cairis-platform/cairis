@@ -1,8 +1,5 @@
 dbhost = cairis-mysql
 dbport = 3306
-dbuser = cairisuser
-dbpasswd = cairisuser
-dbname = cairis_default
 rpasswd = my-secret-pw
 tmp_dir = /tmp
 root = /cairis/cairis
