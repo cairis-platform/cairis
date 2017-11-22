@@ -89,6 +89,14 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
       exceptionText = 'Error creating database (id:' + str(id) + ',message:' + msg + ')'
       raise ARMException(exceptionText)
 
+    try:
+      createUserDbSql = "create database if not exists cairis_user"
+      rootCursor.execute(createUserDbSql)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error creating cairis_user database (id: ' + str(id) + ', message: ' + msg
+      raise ARMException(exceptionText)
+
 
     try:
       grantUsageSql = "grant usage on *.* to '" + self.theUser.value + "'@'" + self.theHost.value + "' identified by '" + self.thePassword.value + "' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0"
@@ -158,12 +166,6 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     f.write("log_level = " + self.theLogLevel.value + "\n")
     f.write("web_static_dir = " + self.theStaticDir.value + "\n")
     f.write("upload_dir = " + self.theUploadDir.value + "\n")
-
-    f.write("\n")
-    f.write("auth_dbhost = " + self.theHost.value + "\n")
-    f.write("auth_dbuser = " + self.theUser.value + "\n")
-    f.write("auth_dbpasswd = " + self.thePassword.value + "\n")
-    f.write("auth_dbname = " + self.theDbName.value + "\n")
 
     f.write("\n")
     f.write("secret_key = " + self.theSecretKey + "\n")

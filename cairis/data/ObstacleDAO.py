@@ -289,7 +289,6 @@ class ObstacleDAO(CairisDAO):
     return new_props
 
   def from_json(self, request):
-    self.logger.debug('Request data: %s', request.data)
     json = request.get_json(silent=True)
     if json is False or json is None:
       self.close()

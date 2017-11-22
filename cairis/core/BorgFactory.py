@@ -132,11 +132,6 @@ def dInitialise():
   b.secretKey = cfgDict['secret_key']
   b.passwordHash = cfgDict['password_hash']
   b.passwordSalt = cfgDict['password_salt']
-  b.auth_dbHost = cfgDict['auth_dbhost']
-  b.auth_dbUser = cfgDict['auth_dbuser']
-  b.auth_dbPasswd = cfgDict['auth_dbpasswd']
-  b.auth_dbName = cfgDict['auth_dbname']
-
 
   try:
     b.webPort = int(cfgDict['web_port'])

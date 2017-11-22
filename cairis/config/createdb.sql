@@ -18,11 +18,8 @@
 */
 
 grant usage on *.* to 'cairisuser'@'%' identified by 'cairisuser' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0;
-grant usage on *.* to 'flaskuser'@'%' identified by 'flaskuser' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0;
 create database if not exists `cairis_default`;
-create database if not exists `flaskdb`;
 grant all privileges on `cairis_default`.* to 'cairisuser'@'%';
-grant all privileges on `flaskdb`.* to 'flaskuser'@'%';
 set global max_sp_recursion_depth = 255;
 
 alter database cairis_default default character set utf8;

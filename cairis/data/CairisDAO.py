@@ -45,7 +45,6 @@ class CairisDAO(object):
   def close(self):
     if self.db_proxy.conn is not None:
       self.db_proxy.close()
-    self.logger.debug('Connection closed')
 
   def from_json(self, request):
     json = request.get_json(silent=True)

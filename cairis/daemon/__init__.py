@@ -46,7 +46,7 @@ def create_app():
   app.config['SECRET_KEY'] = b.secretKey
   app.config['SECURITY_PASSWORD_HASH'] = b.passwordHash
   app.config['SECURITY_PASSWORD_SALT'] = b.passwordSalt
-  app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://' + b.auth_dbUser + ':' + b.auth_dbPasswd + '@' + b.auth_dbHost + '/' + b.auth_dbName
+  app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:' + b.rPasswd + '@' + b.dbHost + '/cairis_user'
   b.logger.setLevel(b.logLevel)
   b.logger.debug('Error handlers: {0}'.format(app.error_handler_spec))
   app.secret_key = os.urandom(24)
