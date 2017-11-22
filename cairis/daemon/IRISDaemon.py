@@ -52,7 +52,7 @@ app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = b.secretKey
 app.config['SECURITY_PASSWORD_HASH'] = b.passwordHash
 app.config['SECURITY_PASSWORD_SALT'] = b.passwordSalt
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://' + b.auth_dbUser + ':' + b.auth_dbPasswd + '@' + b.auth_dbHost + '/' + b.auth_dbName
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:' + b.rPasswd + '@' + b.dbHost + '/cairis_user'
 
 db = SQLAlchemy(app)
 api = swagger.docs(Api(app), apiVersion='1.2.10', description='CAIRIS API', api_spec_url='/api/cairis')
