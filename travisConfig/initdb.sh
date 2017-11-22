@@ -18,5 +18,5 @@
 #  under the License.
 
 mysql --user=root < $CAIRIS_CFG_DIR/createdb.sql
-mysql --user=cairisuser --password=cairisuser --database=cairis_default < $CAIRIS_SRC/sql/init.sql
-mysql --user=cairisuser --password=cairisuser --database=cairis_default < $CAIRIS_SRC/sql/procs.sql
+mysql --user=cairis_test --password=cairis_test --database=cairis_test < $CAIRIS_SRC/sql/init.sql
+mysql --user=cairis_test --password=cairis_test --database=cairis_test < $CAIRIS_SRC/sql/procs.sql

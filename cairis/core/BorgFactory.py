@@ -71,9 +71,9 @@ def initialiseCairisDbSettings(cfgDict):
   b = Borg()
   b.dbHost = cfgDict['dbhost']
   b.dbPort = int(cfgDict['dbport'])
-  b.dbUser = cfgDict['dbuser']
-  b.dbPasswd = cfgDict['dbpasswd']
-  b.dbName = cfgDict['dbname']
+  b.dbUser = 'cairis_test'
+  b.dbPasswd = 'cairis_test'
+  b.dbName = 'cairis_test'
   b.tmpDir = cfgDict['tmp_dir']
   b.cairisRoot = cfgDict['root']
   b.imageDir = os.path.abspath(cfgDict['default_image_dir'])
@@ -119,7 +119,7 @@ def initialise():
   b.dbProxy = GUIDatabaseProxy()
   initialiseDesktopSettings()
 
-def dInitialise():
+def dInitialise(withTest = True):
   cfgDict = parseConfigFile()
   initialiseCairisDbSettings(cfgDict)
 
@@ -168,27 +168,27 @@ def dInitialise():
   b.model_generator = GraphicsGenerator('svg')
 
   b.settings = dict()
+
+
   b.settings['test'] = {
     'session_id': 'test',
     'fontSize': '13',
     'fontName': 'Times New Roman',
     'jsonPrettyPrint': True,
     'apFontSize': '7.5',
+    'dbUser': 'cairis_test',
+    'dbPasswd' : 'cairis_test',
+    'dbName' : 'cairis_test',
     'dbHost': b.dbHost,
     'dbPort': b.dbPort,
-    'dbUser': b.dbUser,
-    'dbPasswd': b.dbPasswd,
-    'dbName': b.dbName,
     'rPasswd': b.rPasswd
   }
-
   db_proxy = MySQLDatabaseProxy(
     host = b.settings['test']['dbHost'],
     port = b.settings['test']['dbPort'],
     user = b.settings['test']['dbUser'],
     passwd = b.settings['test']['dbPasswd'],
     db = b.settings['test']['dbName'])
-
   if db_proxy.conn is not None:
     db_proxy.close()
 

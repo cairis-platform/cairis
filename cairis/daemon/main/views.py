@@ -23,10 +23,12 @@ if (sys.version_info > (3,)):
 else:
   import httplib
   from httplib import OK
+import MySQLdb
 from flask import send_from_directory, make_response, session
 from flask_restful_swagger import swagger
 from flask_restful import Api
 from flask_security import login_required, http_auth_required
+from flask_security.core import current_user
 from jsonpickle import encode
 from cairis.core.Borg import Borg
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
@@ -40,20 +42,23 @@ from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
-def set_dbproxy():
+def set_dbproxy(dbUser):
   b = Borg()
-  db_proxy = MySQLDatabaseProxy()
+  dbName = dbUser + '_default'
+  dbPasswd = ''
+
+  db_proxy = MySQLDatabaseProxy(user=dbUser,passwd=dbPasswd,db=dbName)
   pSettings = db_proxy.getProjectSettings()
 
   id = b.init_settings()
   db_proxy.close()
   session['session_id'] = id
   b.settings[id]['dbProxy'] = db_proxy
-  b.settings[id]['dbUser'] = b.dbUser
-  b.settings[id]['dbPasswd'] = b.dbPasswd
+  b.settings[id]['dbUser'] = dbUser
+  b.settings[id]['dbPasswd'] =dbPasswd
   b.settings[id]['dbHost'] = b.dbHost
   b.settings[id]['dbPort'] = b.dbPort
-  b.settings[id]['dbName'] = b.dbName
+  b.settings[id]['dbName'] = dbName
   b.settings[id]['rPasswd'] = b.rPasswd
   b.settings[id]['fontSize'] = pSettings['Font Size']
   b.settings[id]['apFontSize'] = pSettings['AP Font Size']
@@ -62,7 +67,7 @@ def set_dbproxy():
   return b.settings[id]
 
 def make_session():
-  s = set_dbproxy()
+  s = set_dbproxy(current_user.email)
   resp_dict = {'session_id': s['session_id'], 'message': 'Session created'}
   resp = make_response(encode(resp_dict), OK)
   resp.headers['Content-type'] = 'application/json'

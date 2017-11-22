@@ -112,15 +112,60 @@ import sys
 
 __author__ = 'Shamal Faily, Robin Quetin, Nathan Jenkins'
 
+def createDatabaseSchema(rootDir,dbHost,dbPort,dbUser,dbPasswd,dbName):
+  srcDir = rootDir + '/sql'
+  initSql = srcDir + '/init.sql'
+  procsSql = srcDir + '/procs.sql'
+  cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + initSql
+  os.system(cmd)
+  cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + procsSql
+  os.system(cmd)
+
+def createDatabaseAccount(rPasswd,dbHost,dbPort,dbUser,dbPasswd):
+  try:
+    rootConn = MySQLdb.connect(host=dbHost,port=int(dbPort),user='root',passwd=rPasswd)
+    rootCursor = rootConn.cursor()
+    stmts = ['drop user if exists ' + dbUser,
+             "create user if not exists '" + dbUser + "'@'" + "%' identified by '" + dbPasswd + "'",
+             'flush privileges']
+    for stmt in stmts:
+      rootCursor.execute(stmt)
+    rootCursor.close()
+    rootConn.close()
+  except _mysql_exceptions.DatabaseError as e:
+    id,msg = e
+    exceptionText = 'MySQL error creating database account ' + dbUser + ' (id:' + str(id) + ',message:' + msg
+    raise DatabaseProxyException(exceptionText) 
+
+def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName):
+  try:
+    rootConn = MySQLdb.connect(host=dbHost,port=int(dbPort),user='root',passwd=rPasswd)
+    rootCursor = rootConn.cursor()
+    stmts = ['drop database if exists `' + dbName + '`',
+             'create database ' + dbName,
+             "grant all privileges on `" + dbName + "`.* TO '" + dbUser + "'@'%'",
+             'alter database ' + dbName + ' default character set utf8',
+             'alter database ' + dbName + ' default collate utf8_general_ci',
+             'flush tables',
+             'flush privileges']
+    for stmt in stmts:
+      rootCursor.execute(stmt)
+    rootCursor.close()
+    rootConn.close()
+  except _mysql_exceptions.DatabaseError as e:
+    id,msg = e
+    exceptionText = 'MySQL error creating CAIRIS database ' + dbName + ' on host ' + dbHost + ' at port ' + str(dbPort) + ' with user ' + dbUser + ' (id:' + str(id) + ',message:' + msg
+    raise DatabaseProxyException(exceptionText) 
+
 class MySQLDatabaseProxy:
   def __init__(self, host=None, port=None, user=None, passwd=None, db=None):
     b = Borg()
-    if (host is None or port is None or user is None or passwd is None or db is None):
-      host = b.dbHost
-      port = b.dbPort
+    if (user is None or passwd is None or db is None):
       user = b.dbUser
       passwd = b.dbPasswd
       db = b.dbName
+    host = b.dbHost
+    port = b.dbPort
 
     try:
       dbEngine = create_engine('mysql+mysqldb://'+user+':'+passwd+'@'+host+':'+str(port)+'/'+db+'?charset=utf8')
@@ -128,7 +173,7 @@ class MySQLDatabaseProxy:
       self.conn.execute("set session max_sp_recursion_depth = 255")
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
-      exceptionText = 'MySQL error connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + msg
+      exceptionText = 'MySQL error connecting to the CAIRIS database ' + db + ' on host ' + host + ' at port ' + str(port) + ' with user ' + user + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
     self.theDimIdLookup, self.theDimNameLookup = self.buildDimensionLookup()
 
@@ -3161,7 +3206,8 @@ class MySQLDatabaseProxy:
   def domainValuesToXml(self,includeHeader=True):
     return self.responseList('call domainValuesToXml(:head)',{'head':includeHeader},'MySQL error exporting domain values to XML')[0]
 
-  def clearDatabase(self,session_id = None):
+
+  def clearDatabase(self,session_id = None,dbUser=None,dbPasswd=None,dbName=None):
     b = Borg()
     if b.runmode == 'desktop':
       db_proxy = b.dbProxy
@@ -3175,21 +3221,17 @@ class MySQLDatabaseProxy:
       db_proxy = ses_settings['dbProxy']
       dbHost = ses_settings['dbHost']
       dbPort = ses_settings['dbPort']
-      dbUser = ses_settings['dbUser']
-      dbPasswd = ses_settings['dbPasswd']
-      dbName = ses_settings['dbName']
+
+      if (dbUser == None or dbPasswd == None or dbName == None):
+        dbUser = ses_settings['dbUser']
+        dbPasswd = ses_settings['dbPasswd']
+        dbName = ses_settings['dbName']
     else:
       raise RuntimeError('Run mode not recognized')
     db_proxy.close()
-    srcDir = b.cairisRoot + '/sql'
-    initSql = srcDir + '/init.sql'
-    procsSql = srcDir + '/procs.sql'
-    cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + initSql
-    os.system(cmd)
-    cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + procsSql
-    os.system(cmd)
-    db_proxy.reconnect(False, session_id)
-
+    createDatabaseSchema(b.cairisRoot,dbHost,dbPort,dbUser,dbPasswd,dbName)
+    if (session_id != None):
+      db_proxy.reconnect(False, session_id)
 
   def conceptMapModel(self,envName,reqName = ''):
     callTxt = 'call parameterisedConceptMapModel(:env,:req)'
@@ -4253,38 +4295,14 @@ class MySQLDatabaseProxy:
     dbHost = ses_settings['dbHost']
     dbPort = ses_settings['dbPort']
     rPasswd = ses_settings['rPasswd']
-
     dbUser = ses_settings['dbUser']
     dbPasswd = ses_settings['dbPasswd']
 
-    host = b.dbHost
-    port = b.dbPort
-    user = b.dbUser
-    passwd = b.dbPasswd
-    db = dbName
-
-    try:
-      dbEngine = create_engine('mysql+mysqldb://root:'+rPasswd+'@'+dbHost+':'+str(dbPort))
-      self.conn = scoped_session(sessionmaker(bind=dbEngine))
-      stmts = ['drop database if exists `' + dbName + '`',
-               'create database ' + dbName,
-               "grant all privileges on `" + dbName + "`.* TO '" + dbUser + "'@'%' identified by '" + dbPasswd + "'",
-               'alter database ' + dbName + ' default character set utf8',
-               'alter database ' + dbName + ' default collate utf8_general_ci',
-               'flush tables',
-               'flush privileges']
-      session = self.conn()
-      for stmt in stmts:
-        session.execute(stmt)
-      session.close()
-      self.conn.close()
-      b.settings[session_id]['dbName'] = dbName
-      self.clearDatabase(session_id)
-      self.reconnect(True,session_id)
-    except _mysql_exceptions.DatabaseError as e:
-      id,msg = e
-      exceptionText = 'MySQL error creating CAIRIS database ' + dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + msg
-      raise DatabaseProxyException(exceptionText) 
+    createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName)
+    
+    b.settings[session_id]['dbName'] = dbName
+    self.clearDatabase(session_id)
+    self.reconnect(True,session_id)
 
   def openDatabase(self,dbName,session_id):
     b = Borg()

@@ -24,7 +24,7 @@ import os
 import sys
 import MySQLdb
 import _mysql_exceptions
-from subprocess import Popen
+from cairis.core.MySQLDatabaseProxy import createDatabaseAccount, createDatabaseAndPrivileges, createDatabaseSchema
 
 __author__ = 'Shamal Faily'
 
@@ -38,10 +38,6 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     self.theHost = self.add(np.TitleText, name = "Database host:", value = "localhost")
     self.thePort = self.add(np.TitleText, name = "Database port:", value = "3306")
     self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = "")
-    self.theDbName = self.add(np.TitleText, name = "Database name (created if non-existent):", value = "cairis_default")
-    self.theUser = self.add(np.TitleText, name = "Database user (created if non-existent):", value = "cairisuser")
-    defaultUserPassword = os.urandom(10).encode('hex')
-    self.thePassword = self.add(np.TitlePassword, name = "Database user password:", value = defaultUserPassword)
     self.theTmpDir = self.add(np.TitleText, name = "Temp directory:", value = "/tmp")
     self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = self.pathName + "cairis")
     self.theImageDir = self.add(np.TitleText, name = "Default image directory:", value = ".")
@@ -63,8 +59,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
 
   def on_ok(self):
     try:
-      self.createDatabase()
-      self.initialiseDatabase()
+      self.createUserDatabase()
       self.createCairisCnf()
       os.environ["CAIRIS_CFG"] = str(self.theFileName.value)
       sys.path.insert(0, self.pathName)
@@ -80,14 +75,26 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
   def on_cancel(self):
     self.parentApp.setNextForm(None)
 
-  def createDatabase(self):
+  def createUserDatabase(self):
     try:
       rootConn = MySQLdb.connect(host=self.theHost.value,port=int(self.thePort.value),user='root',passwd=self.theRootPassword.value)
       rootCursor = rootConn.cursor()
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
-      exceptionText = 'Error creating database (id:' + str(id) + ',message:' + msg + ')'
+      exceptionText = 'Error connecting to MySQL (id:' + str(id) + ',message:' + msg + ')'
       raise ARMException(exceptionText)
+
+    try:
+      dropUserDbSql = "drop database if exists cairis_user"
+      rootCursor.execute(dropUserDbSql)
+    except _mysql_exceptions.DatabaseError, e:
+      id,msg = e
+      exceptionText = 'MySQL error removing existing cairis_user database (id: ' + str(id) + ', message: ' + msg
+      raise ARMException(exceptionText)
+
+    createDatabaseAccount(self.theRootPassword.value,self.theHost.value,self.thePort.value,'cairis_test','cairis_test')
+    createDatabaseAndPrivileges(self.theRootPassword.value,self.theHost.value,self.thePort.value,'cairis_test','cairis_test','cairis_test')
+    createDatabaseSchema(self.theRootDir.value,self.theHost.value,self.thePort.value,'cairis_test','cairis_test','cairis_test')
 
     try:
       createUserDbSql = "create database if not exists cairis_user"
@@ -95,31 +102,6 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     except _mysql_exceptions.DatabaseError, e:
       id,msg = e
       exceptionText = 'MySQL error creating cairis_user database (id: ' + str(id) + ', message: ' + msg
-      raise ARMException(exceptionText)
-
-
-    try:
-      grantUsageSql = "grant usage on *.* to '" + self.theUser.value + "'@'" + self.theHost.value + "' identified by '" + self.thePassword.value + "' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0"
-      rootCursor.execute(grantUsageSql)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error granting usage to ' + self.theUser.value + ' (id: ' + str(id) + ', message: ' + msg
-      raise ARMException(exceptionText)
-
-    try:
-      createSql = "create database if not exists `" + self.theDbName.value + "`"
-      rootCursor.execute(createSql)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error creating ' + self.theDbName.value + ' database (id: ' + str(id) + ', message: ' + msg
-      raise ARMException(exceptionText)
-
-    try:
-      grantPrivilegesSql = "grant all privileges on `" + self.theDbName.value + "`.* to '" + self.theUser.value + "'@'" + self.theHost.value + "'"
-      rootCursor.execute(grantPrivilegesSql)
-    except _mysql_exceptions.DatabaseError, e:
-      id,msg = e
-      exceptionText = 'MySQL error granting privileges to ' + self.theUser.value + ' for ' + self.theDbName.value + ' database (id: ' + str(id) + ', message: ' + msg
       raise ARMException(exceptionText)
 
     try:
@@ -141,24 +123,11 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     rootCursor.close()
     rootConn.close()
 
-  def initialiseDatabase(self):
-    initDbCmd = "mysql --user=" + self.theUser.value + " --password=" + self.thePassword.value + " --database=" + self.theDbName.value + " < " + self.theRootDir.value + "/sql/init.sql"
-    p = Popen(initDbCmd,shell=True)
-    os.waitpid(p.pid,0)
-
-    procsCmd = "mysql --user=" + self.theUser.value + " --password=" + self.thePassword.value + " --database=" + self.theDbName.value + " < " + self.theRootDir.value + "/sql/procs.sql"
-    p = Popen(procsCmd,shell=True)
-    os.waitpid(p.pid,0)
-
-
   def createCairisCnf(self):
     f = open(self.theFileName.value,'w')
     f.write("rpasswd = " +self.theRootPassword.value + "\n")
     f.write("dbhost = " + self.theHost.value + "\n")
     f.write("dbport = " + self.thePort.value + "\n")
-    f.write("dbuser = " + self.theUser.value + "\n")
-    f.write("dbpasswd = " + self.thePassword.value + "\n")
-    f.write("dbname = " + self.theDbName.value + "\n")
     f.write("tmp_dir = " + self.theTmpDir.value + "\n")
     f.write("root = " + self.theRootDir.value + "\n")
     f.write("default_image_dir = " + self.theImageDir.value + "\n")
@@ -179,9 +148,15 @@ class CAIRISUserConfigurationForm(np.ActionForm):
 
 
   def create(self):
+    self.pathName = os.path.realpath(__file__)
+    self.pathName = self.pathName.replace("quick_setup.py", "")
     self.name = "Add CAIRIS User"
-    self.theUsername = self.add(np.TitleText, name = "Username:", value = "test")
+    self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = "my-secret-pw")
+    self.theHost = self.add(np.TitleText, name = "Database host:", value = "localhost")
+    self.thePort = self.add(np.TitleText, name = "Database port:", value = "3306")
+    self.theUsername = self.add(np.TitleText, name = "Username:", value = "")
     self.thePassword = self.add(np.TitlePassword, name = "Password:", value = "")
+    self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = self.pathName + "cairis")
 
   def on_ok(self):
     try:
@@ -191,6 +166,10 @@ class CAIRISUserConfigurationForm(np.ActionForm):
       db.create_all()
       user_datastore.create_user(email=self.theUsername.value, password=self.thePassword.value)
       db.session.commit()
+      createDatabaseAccount(self.theRootPassword.value,self.theHost.value,self.thePort.value,self.theUsername.value,'')
+      createDatabaseAndPrivileges(self.theRootPassword.value,self.theHost.value,self.thePort.value,self.theUsername.value,'',self.theUsername.value + '_default')
+      createDatabaseSchema(self.theRootDir.value,self.theHost.value,self.thePort.value,self.theUsername.value,'',self.theUsername.value + '_default')
+
       self.parentApp.setNextForm(None)
     except ARMException as e:
       np.notify_confirm('Error adding CAIRIS user: ' + str(e), title = 'Error')

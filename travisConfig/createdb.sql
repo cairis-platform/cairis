@@ -17,14 +17,21 @@
   under the License.
 */
 
+
+drop database `cairis_user`;
 create database if not exists `cairis_user`;
-grant usage on *.* to 'cairisuser'@'%' identified by 'cairisuser' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0;
-create database if not exists `cairis_default`;
-grant all privileges on `cairis_default`.* to 'cairisuser'@'%';
+
+drop user if exists test;
+create user if not exists 'test'@'%' identified by 'test';
+grant usage on *.* to 'test'@'%' with max_queries_per_hour 0 max_connections_per_hour 0 max_updates_per_hour 0 max_user_connections 0;
+flush privileges;
+
+create database if not exists `cairis_test`;
+grant all privileges on `cairis_test`.* to 'test'@'%';
 set global max_sp_recursion_depth = 255;
 
-alter database cairis_default default character set utf8;
-alter database cairis_default default collate utf8_general_ci;
+alter database cairis_test default character set utf8;
+alter database cairis_test default collate utf8_general_ci;
 
 flush tables;
 flush privileges;
