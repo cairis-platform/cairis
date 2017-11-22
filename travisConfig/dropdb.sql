@@ -17,7 +17,7 @@
   under the License.
 */
 
-DROP USER 'cairisuser'@'localhost';
+DROP USER 'cairis_test'@'localhost';
 DROP DATABASE IF EXISTS cairis_default;
 flush table;
 flush privileges;
