@@ -18,7 +18,7 @@
 */
 
 
-drop database `cairis_user`;
+drop database if exists `cairis_user`;
 create database if not exists `cairis_user`;
 
 drop user if exists test;
