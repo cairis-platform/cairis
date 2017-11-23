@@ -1,5 +1,11 @@
 # Contributing
 
+## Reporting problems
+
+We welcome reports on any problems related the functionality, security, or general quality of CAIRIS, its documentation or other material.  To report a problem, please raise an issue in GitHub.  If you wish to make a private vulnerability report, please email the main contributor directly.
+
+## Contributing new changes
+
 When contributing to CAIRIS, please first discuss the change you wish to make via issue (preferrable) or email before making a change. 
 
 Please note we have a code of conduct, please follow it in all your interactions with the project.
