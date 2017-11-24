@@ -41,7 +41,6 @@ function fillAssetTable(){
       createAssetsTable(data, function(){
         newSorting(1);
       });
-      $.session.set("allAssets", JSON.stringify(data));
       activeElement("mainTable");
     },
     error: function (xhr, textStatus, errorThrown) {
