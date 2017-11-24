@@ -7,9 +7,9 @@ title: Getting started
 
 # Live Demo
 
-A live demo of CAIRIS is available to use on [http://demo.cairis.org](http://demo.cairis.org).  The username and password you need are *test* and *test*.  The live demo is rebuilt every night based on the latest updates to CAIRIS.
+A live demo of CAIRIS is available to use on [demo.cairis.org](http://demo.cairis.org).  The username and password you need are *test* and *test*.  The live demo is rebuilt every night based on the latest updates to CAIRIS.
 
-The live demo comes with two example models: [NeuroGrid](http://cairis.org/NeuroGrid) and [ACME Water](http://cairis.org/ACME_Water).  To open these, select the System / Open Database menu, and choose the model to open.
+The live demo comes with two example models: [NeuroGrid](https://cairis.org/NeuroGrid) and [ACME Water](https://cairis.org/ACME_Water).  To open these, select the System / Open Database menu, and choose the model to open.
 
 # Installing CAIRIS
 

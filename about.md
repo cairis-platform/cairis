@@ -41,15 +41,15 @@ We're always interested in hearing from others interested in adopting the tool, 
 
 <h2>Are there any examples of CAIRIS in action?</h2>
 
-Yes, see the [Examples](http://cairis.org/examples) page.
+Yes, see the [Examples](https://cairis.org/examples) page.
 
 The [design data](https://github.com/webinos/webinos-design-data) for [webinos](http://webinos.org) is also based on CAIRIS.  
 
-We are currently working on [a project to build specification exemplars for critical infrastructure systems](https://cybersecurity.bournemouth.ac.uk/?page_id=55); these models will be based on CAIRIS.  [ACME Water](http://cairis.org/ACME_Water) is the first of these exemplars.  We are currently building a second exemplar based on a rail company.  Please [get in touch](mailto:sfaily@bournemouth.ac.uk) for more information if these models or this project is of interest.
+We are currently working on [a project to build specification exemplars for critical infrastructure systems](https://cybersecurity.bournemouth.ac.uk/?page_id=55); these models will be based on CAIRIS.  [ACME Water](https://cairis.org/ACME_Water) is the first of these exemplars.  We are currently building a second exemplar based on a rail company.  Please [get in touch](mailto:sfaily@bournemouth.ac.uk) for more information if these models or this project is of interest.
 
 <h2>Is there is a live demo of CAIRIS that I can play with?</h2>
 
-Yes.  You can get started [here](http://cairis.org/cairis/cloud/).
+Yes.  You can get started [here](https://cairis.org/cairis/cloud/).
 
 <h2>Is CAIRIS free?</h2>
 
@@ -67,7 +67,7 @@ Very much so.  We have a number of undergraduate and postgraduate research assis
 
 You can contribute in several ways.
 
-* We have a number of [ideas for interesting projects that sustain, extend, or apply CAIRIS](http://cairis.org/ideas).  Please get in touch if any of these are of interest.
+* We have a number of [ideas for interesting projects that sustain, extend, or apply CAIRIS](https://cairis.org/ideas).  Please get in touch if any of these are of interest.
 * You can use CAIRIS in your own practice.  One of our aims in developing CAIRIS is to transfer knowledge about security design tool best practice, so by using CAIRIS you will be helping us do this.  We welcome problem reports or feature requests; you can contribute these by doing little more than raising [an issue on github](https://github.com/failys/cairis/issues), or [getting in touch](mailto:sfaily@bournemouth.ac.uk) if your requirements are a little more elaborate.
 * If you work in higher education, please consider using CAIRIS as a tool for teaching security design.  CAIRIS has already been used in [Oxford](http://www.cs.ox.ac.uk)'s postgraduate [Design of Security](http://www.cs.ox.ac.uk/softeng/subjects/DES.html) course.  At [BU](https://www1.bournemouth.ac.uk), we're also incorporating CAIRIS into our own cybersecurity teaching.  We're happy to share any teaching material we develop, so if you're interested in using CAIRIS as part of your teaching then please [get in touch](mailto:sfaily@bournemouth.ac.uk).
 * We're always looking for people to help with general maintenance activities.  The CAIRIS documentation is a little out of date in places, and a number of really interesting features (e.g. the functionality associated with specifying and analysing software architectures) isn't documented as well as it could be.  We would also love to hear from people interested in looking at how CAIRIS can be best packaged, given the various platforms and infrastructures they might wish to use CAIRIS for.

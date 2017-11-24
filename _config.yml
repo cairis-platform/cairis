@@ -5,7 +5,7 @@ description: Computer Aided Integration of Requirements and Information Security
 logo: logo.gif # 120x120 px default image used for Twitter summary card
 teaser: teaser.gif # 400x250 px default teaser image used in image archive grid
 locale:
-url: http://cairis.org
+url: https://cairis.org
 # Jekyll configuration
 
 sass:
