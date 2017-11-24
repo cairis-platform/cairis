@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE dataflows PUBLIC "-//CAIRIS//DTD DATAFLOW 1.0//EN" "http://cairis.org/dtd/dataflow.dtd">
+<!DOCTYPE dataflows PUBLIC "-//CAIRIS//DTD DATAFLOW 1.0//EN" "https://cairis.org/dtd/dataflow.dtd">
 
 <dataflows>
   <dataflow name="authenticate" environment="Psychosis" from_name="Authorised Researcher" from_type="entity" to_name="Authenticate Researcher" to_type="process">

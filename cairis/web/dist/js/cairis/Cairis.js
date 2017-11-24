@@ -19,7 +19,7 @@
 
 'use strict';
 
-window.serverIP = "http://"+ window.location.host;
+window.serverIP = window.location.protocol + "//" + window.location.host;
 
 window.debug = true;
 

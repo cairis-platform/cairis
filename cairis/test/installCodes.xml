@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE processes PUBLIC "-//CAIRIS//DTD PROCESSES 1.0//EN" "http://cairis.org/dtd/processes.dtd">
+<!DOCTYPE processes PUBLIC "-//CAIRIS//DTD PROCESSES 1.0//EN" "https://cairis.org/dtd/processes.dtd">
 
 <!-- Events that are associated with installing applications and making decisions about what application should be allowed access to -->
 
