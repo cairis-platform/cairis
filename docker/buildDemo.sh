@@ -14,7 +14,7 @@ sudo docker rm $(sudo docker ps -aq)
 sudo docker rmi $(sudo docker images -q)
 sudo docker volume rm $(docker volume ls)
 sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7
-sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
+sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:7071 --net=bridge shamalfaily/cairis
 sleep 60
 
 
