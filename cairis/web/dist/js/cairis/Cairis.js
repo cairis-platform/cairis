@@ -1998,7 +1998,8 @@ $("#logoutClick").click(function () {
   $.ajax({
     url: serverIP + '/logout',
     success: function(data, status, xhr) {
-      window.open(serverIP + "/login","_self");
+      var win = window.open("","_self");
+      win.document.write("<p>Logged out</p>");
     },
     error: function(data, status, xhr) {
       var error = JSON.parse(xhr.responseText);
