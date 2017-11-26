@@ -1122,6 +1122,7 @@ class AssetsSummaryAPI(Resource):
     notes='Get summary of assets',
     responseClass=SwaggerObjectSummaryModel.__name__,
     nickname='assets-summary-get',
+    responseContainer='List',
     parameters=[
       {
         "name": "session_id",
