@@ -19,6 +19,7 @@ from flask_restful import fields
 from flask_restful_swagger import swagger
 from cairis.core.AcceptEnvironmentProperties import AcceptEnvironmentProperties
 
+from cairis.core.ObjectSummary import ObjectSummary
 from cairis.core.Asset import Asset
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 from cairis.core.Attacker import Attacker
@@ -151,6 +152,22 @@ class AssetModel(object):
   swagger_metadata = {
     obj_id_field : gen_class_metadata(Asset)
   }
+
+class ObjectSummaryModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theName": fields.String,
+    "theType": fields.String,
+    "theDescription": fields.String,
+    "theOriginator": fields.String,
+    "theStatus": fields.String
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(ObjectSummary)
+  }
+
 
 @swagger.model
 class CapabilityModel(object):

@@ -26,7 +26,7 @@ $("#assetMenuClick").click(function(){
   });
 });
 
-function fillAssetTable(){
+function createAssetsTable(){
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -35,74 +35,58 @@ function fillAssetTable(){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/assets",
+    url: serverIP + "/api/assets/summary",
     success: function (data) {
       setTableHeader("Assets");
-      createAssetsTable(data, function(){
-        newSorting(1);
+
+      var theTable = $(".theTable");
+      var textToInsert = [];
+      var i = 0;
+
+      for (var r = 0; r < data.length; r++) {
+        var item = data[r];
+        textToInsert[i++] = '<tr>'
+
+        textToInsert[i++] = '<td class="deleteAssetButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
+
+        textToInsert[i++] = '<td class="asset-row" name="theName" value="' + item.theName + '">';
+        textToInsert[i++] = item.theName;
+        textToInsert[i++] = '</td>';
+
+        textToInsert[i++] = '<td name="theType">';
+        textToInsert[i++] = item.theType;
+        textToInsert[i++] = '</td>';
+
+        textToInsert[i++] = '</tr>';
+      }
+
+      theTable.append(textToInsert.join(''));
+      $.contextMenu('destroy',$('.requirement-rows'));
+      $.contextMenu('destroy',$('.asset-rows'));
+      theTable.css("visibility","visible");
+      $("#mainTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").addClass('asset-rows');
+      $('.asset-rows').contextMenu({
+        selector: 'td',
+        items: {
+          "contributes": {
+            name: "Contributes to",
+            callback: function(key, opt) {
+              var assetName = $(this).closest("tr").find("td").eq(1).html();
+              traceExplorer('asset',assetName,'1');
+            }
+          },
+        }
       });
       activeElement("mainTable");
     },
     error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
       debugLogger(String(this.url));
       debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
     }
   });
-}
-
-function createAssetsTable(data, callback){
-  var theTable = $(".theTable");
-  var textToInsert = [];
-  var i = 0;
-
-  var keys = [];
-  for (key in data) {
-    keys.push(key);
-  }
-  keys.sort();
-
-  for (var ki = 0; ki < keys.length; ki++) {
-    var key = keys[ki];
-    var item = data[key];
-    textToInsert[i++] = '<tr>'
-
-    textToInsert[i++] = '<td class="deleteAssetButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
-
-    textToInsert[i++] = '<td class="asset-row" name="theName" value="' + item.theName + '">';
-    textToInsert[i++] = item.theName;
-    textToInsert[i++] = '</td>';
-
-    textToInsert[i++] = '<td name="theType">';
-    textToInsert[i++] = item.theType;
-    textToInsert[i++] = '</td>';
-
-    textToInsert[i++] = '<td name="theId" style="display:none;">';
-    textToInsert[i++] = item.theId;
-    textToInsert[i++] = '</td>';
-    textToInsert[i++] = '</tr>';
-  }
-
-  theTable.append(textToInsert.join(''));
-  $.contextMenu('destroy',$('.requirement-rows'));
-  $.contextMenu('destroy',$('.asset-rows'));
-  theTable.css("visibility","visible");
-  $("#mainTable").find("tbody").removeClass();
-
-  $("#mainTable").find("tbody").addClass('asset-rows');
-
-  $('.asset-rows').contextMenu({
-    selector: 'td',
-    items: {
-      "contributes": {
-        name: "Contributes to",
-        callback: function(key, opt) {
-          var assetName = $(this).closest("tr").find("td").eq(1).html();
-          traceExplorer('asset',assetName,'1');
-        }
-      },
-    }
-  });
-  callback();
 }
 
 $(document).on('click', "td.asset-row", function(){
@@ -507,12 +491,9 @@ $(document).on('click', "td.deleteAssetButton",function(e){
           crossDomain: true,
           url: serverIP + "/api/assets",
           success: function (data) {
-            setTableHeader("Assets");
-            createAssetsTable(data, function(){
-              newSorting(1);
-            });
-            activeElement("mainTable");
             showPopup(true);
+            $('#menuBCClick').attr('dimension','asset');
+            refreshMenuBreadCrumb('asset');
           },
           error: function (xhr, textStatus, errorThrown) {
             var error = JSON.parse(xhr.responseText);
@@ -651,7 +632,7 @@ function commitAsset(){
 mainContent.on('click', '#CloseAsset', function (e) {
   e.preventDefault();
   $('#menuBCClick').attr('dimension','asset');
-  refreshMenuBreadCrumb('asset');
+  refreshMenuBreadCrumb('asset'); 
 });
 
 function fillEditAssetsEnvironment(){

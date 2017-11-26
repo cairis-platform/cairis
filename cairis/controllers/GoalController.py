@@ -30,6 +30,7 @@ from cairis.data.GoalAssociationDAO import GoalAssociationDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import GoalMessage, GoalAssociationMessage
 from cairis.tools.ModelDefinitions import GoalModel as SwaggerGoalModel, GoalAssociationModel
+from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -673,4 +674,37 @@ class GoalAssociationAPI(Resource):
     resp_dict = {'message': 'Goal Association successfully updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
+    return resp
+
+class GoalsSummaryAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get summary of goals',
+    responseClass=SwaggerObjectSummaryModel.__name__,
+    nickname='goals-summary-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self):
+    session_id = get_session_id(session, request)
+    dao = GoalDAO(session_id)
+    objts = dao.get_goals_summary()
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
     return resp

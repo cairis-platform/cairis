@@ -32,6 +32,7 @@ from . import Task
 from . import Risk
 from . import Response
 from . import ClassAssociation
+from .ObjectSummary import ObjectSummary
 from .AttackerParameters import AttackerParameters
 from .PersonaParameters import PersonaParameters
 from .GoalParameters import GoalParameters
@@ -589,6 +590,20 @@ class MySQLDatabaseProxy:
       asset = ObjectFactory.build(assetId,parameters)
       assets[assetName] = asset
     return assets
+
+  def getAssetsSummary(self):
+    objtRows = self.responseList('call getAssetsSummary()',{},'MySQL error getting asset summary')
+    rows = []
+    for objtName, objtType in objtRows:
+      rows.append(ObjectSummary(objtName,type=objtType))
+    return rows
+
+  def getGoalsSummary(self):
+    objtRows = self.responseList('call getGoalsSummary()',{},'MySQL error getting goal summary')
+    rows = []
+    for objtName, objtOrig, objtStatus in objtRows:
+      rows.append(ObjectSummary(objtName,originator=objtOrig,status=objtStatus))
+    return rows
 
 
   def getThreats(self,constraintId = -1):

@@ -50,6 +50,15 @@ class GoalDAO(CairisDAO):
 
     return goals
 
+  def get_goals_summary(self):
+    try:
+      goals = self.db_proxy.getGoalsSummary()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    return goals
+
+
   def get_goal_by_name(self, name, coloured=False, simplify=True):
     found_goal = None
     goalId = self.db_proxy.getDimensionId(name,'goal')

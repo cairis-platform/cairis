@@ -186,6 +186,7 @@ api.add_resource(ArchitecturalPatternController.SituateArchitecturalPatternAPI, 
 
 # Asset routes
 api.add_resource(AssetController.AssetsAPI, '/api/assets',endpoint='assets')
+api.add_resource(AssetController.AssetsSummaryAPI, '/api/assets/summary',endpoint='assetssummary')
 api.add_resource(AssetController.AssetByNameAPI, '/api/assets/name/<string:name>',endpoint='assetbyname')
 api.add_resource(AssetController.AssetByEnvironmentNamesAPI, '/api/assets/environment/<string:environment>/names',endpoint='assetbyenvironmentname')
 api.add_resource(AssetController.AssetByIdAPI, '/api/assets/id/<int:id>',endpoint='assetbyid')
@@ -275,6 +276,7 @@ api.add_resource(ExternalDocumentController.ExternalDocumentByNameAPI, '/api/ext
 
 # Goal routes
 api.add_resource(GoalController.GoalsAPI, '/api/goals',endpoint='goals')
+api.add_resource(GoalController.GoalsSummaryAPI, '/api/goals/summary',endpoint='goalssummary')
 api.add_resource(GoalController.GoalByNameAPI, '/api/goals/name/<string:name>',endpoint='goal')
 api.add_resource(GoalController.GoalByEnvironmentNamesAPI, '/api/goals/environment/<string:environment>/names',endpoint='goal_environment')
 api.add_resource(GoalController.GoalModelAPI, '/api/goals/model/environment/<string:environment>/goal/<string:goal>/usecase/<string:usecase>',endpoint='goal_model')

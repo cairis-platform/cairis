@@ -60,12 +60,19 @@ class AssetDAO(CairisDAO):
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
-
     if simplify:
       for key, value in list(assets.items()):
         assets[key] = self.simplify(value)
-
     return assets
+
+  def get_assets_summary(self):
+    try:
+      assets = self.db_proxy.getAssetsSummary()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    return assets
+
 
   def get_asset_names(self, environment=''):
     try:

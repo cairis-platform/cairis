@@ -78,6 +78,7 @@ drop procedure if exists attacker_capability;
 drop procedure if exists attacker_motivation;
 drop procedure if exists getAttackers;
 drop procedure if exists getAssets;
+drop procedure if exists getAssetsSummary;
 drop procedure if exists getThreats;
 drop procedure if exists getVulnerabilities;
 drop procedure if exists getRisks;
@@ -333,6 +334,7 @@ drop procedure if exists addRole;
 drop procedure if exists updateRole;
 drop procedure if exists getCountermeasures;
 drop procedure if exists getGoals;
+drop procedure if exists getGoalsSummary;
 drop procedure if exists getEnvironmentGoals;
 drop procedure if exists dimensionId;
 drop procedure if exists getDimensions;
@@ -2179,6 +2181,12 @@ begin
   else
     select a.id,a.name,a.short_code,a.description,a.significance,at.name,a.is_critical,a.critical_rationale from asset a,asset_type at where a.id = constraintId and a.asset_type_id = at.id;
   end if;
+end
+//
+
+create procedure getAssetsSummary()
+begin
+  select a.name,at.name from asset a,asset_type at where a.asset_type_id = at.id order by 1;
 end
 //
 
@@ -9459,6 +9467,12 @@ begin
   else
     select id,name,originator,goalColour(id) from goal where id = constraintId;
   end if;
+end
+//
+
+create procedure getGoalsSummary()
+begin
+  select name,originator,goalColour(id) from goal order by 1;
 end
 //
 

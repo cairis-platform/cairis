@@ -23,6 +23,7 @@ else:
   from urllib import quote
 import jsonpickle
 from cairis.core.Asset import Asset
+from cairis.core.ObjectSummary import ObjectSummary
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 from cairis.core.ValueType import ValueType
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -98,6 +99,19 @@ class AssetAPITests(CairisDaemonTestCase):
     self.assertIsInstance(list(assets.values())[0], Asset)
     self.logger.info('[%s] Assets found: %d', method, len(assets))
     self.logger.info('[%s] First asset: %s [%d]\n', method, list(assets.values())[0].theName, list(assets.values())[0].theId)
+
+  def test_get_all_summary(self):
+    method = 'test_get_all_summary'
+    rv = self.app.get('/api/assets/summary?session_id=test')
+    if (sys.version_info > (3,)):
+      assets = json_deserialize(rv.data.decode('utf-8'))
+    else:
+      assets = json_deserialize(rv.data)
+    self.assertIsNotNone(assets, 'No results after deserialization')
+    self.assertGreater(len(assets), 0, 'No asset summaries')
+    self.assertIsInstance(assets[0], ObjectSummary)
+    self.logger.info('[%s] Assets found: %d', method, len(assets))
+    self.logger.info('[%s] First asset summary: %s [%d]\n', method, assets[0].theName, assets[0].theType)
 
   def test_post(self):
     method = 'test_post_new'

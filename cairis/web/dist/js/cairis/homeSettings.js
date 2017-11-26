@@ -48,7 +48,7 @@ function refreshMenuBreadCrumb(dimName,envName) {
   else if (dimName == 'asset') {
     $('#menuBCClick').text('Assets');
     $('#menuBCClick').show();
-    fillAssetTable();
+    createAssetsTable();
   }
   else if (dimName == 'requirement') {
     $('#menuBCClick').text('Requirements');

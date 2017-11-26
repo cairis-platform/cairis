@@ -36,7 +36,7 @@ function createEditGoalsTable(){
       coloured: '1'
     },
     crfossDomain: true,
-    url: serverIP + "/api/goals",
+    url: serverIP + "/api/goals/summary",
     success: function (data) {
       setTableHeader("EditGoals");
       var theTable = $(".theTable");
@@ -44,15 +44,8 @@ function createEditGoalsTable(){
       var textToInsert = [];
       var i = 0;
 
-      var keys = [];
-      for (key in data) {
-        keys.push(key);
-      }
-      keys.sort();
-
-      for (var ki = 0; ki < keys.length; ki++) {
-        var key = keys[ki];
-        var item = data[key];
+      for (var r = 0; r < data.length; r++) {
+        var item = data[r];
         textToInsert[i++] = "<tr>";
         textToInsert[i++] = '<td class="deleteGoalButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
 
@@ -65,20 +58,16 @@ function createEditGoalsTable(){
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '<td name="Status">';
-        if(item.theColour == 'black'){
+        if(item.theStatus == 'black'){
           textToInsert[i++] = "Check";
         }
-        else if(item.theColour == 'red'){
+        else if(item.theStatus == 'red'){
           textToInsert[i++] = "To refine";
         }
         else {
           textToInsert[i++] = "OK";
         }
 
-        textToInsert[i++] = '</td>';
-
-        textToInsert[i++] = '<td name="theId"  style="display:none;">';
-        textToInsert[i++] = item.theId;
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '</tr>';
