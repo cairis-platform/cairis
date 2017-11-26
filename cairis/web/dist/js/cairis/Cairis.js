@@ -1995,21 +1995,8 @@ function makeSession() {
 
 $("#logoutClick").click(function () {
   $.session.clear();
-  $.ajax({
-    url: serverIP + '/logout',
-    success: function(data, status, xhr) {
-      var win = window.open("","_self");
-      win.document.write("<p>Logged out</p>");
-    },
-    error: function(data, status, xhr) {
-      var error = JSON.parse(xhr.responseText);
-      showPopup(false, String(error.message));
-      console.log(this.url);
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + status + ", thrown: " + data);
-      alert("There is a problem with the server...");
-    }
-  });
-//  window.open(serverIP + '/logout',"_self");
+  var win = window.open(serverIP + '/logout',"_self");
+  win.document.write("<p>Logged out</p>");
 });
 
 $(document).on('submit',function(e) {
