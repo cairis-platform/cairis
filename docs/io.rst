@@ -9,10 +9,10 @@ You can import models by selecting the System / Import Model menu, selecting the
 .. figure:: ImportModel.jpg
    :alt: import model form
 
-You will usually want to stick with the Model option, which imports a standard CAIRIS XML model file (as defined by the DTD in http://cairis.org/dtd/cairis_model.dtd).  You can, however, import other types of model into your current working project.
+You will usually want to stick with the Model option, which imports a standard CAIRIS XML model file (as defined by the DTD in https://cairis.org/dtd/cairis_model.dtd).  You can, however, import other types of model into your current working project.
 
 +------------------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
-| Model type                         |DTD (in http://cairis.org/dtd)| Model elements                                                                                                                |
+| Model type                         |DTD (in https://cairis.org/dtd)| Model elements                                                                                                                |
 +====================================+==============================+===============================================================================================================================+
 | Project data                       | cairis.dtd                   | Project background, goal, scope, rich picture, naming conventions, contributors, revisions                                    |
 +------------------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------+

@@ -10,7 +10,7 @@ Each CAIRIS account comes with an *<account>_default* database.  If you or your 
 Using other databases
 ---------------------
 
-There might be times when it might be helpful to setup multiple databases.  For example, the live demo on http://demo.cairis.org has two exemplar databases that people can interact with to see different examples of CAIRIS projects.
+There might be times when it might be helpful to setup multiple databases.  For example, the live demo on https//demo.cairis.org has two exemplar databases that people can interact with to see different examples of CAIRIS projects.
 
 To create a new database, select the System/New Database menu, and enter the name for a new database.  After a few moments, a new database will be created and your CAIRIS application will point to this database.
 
