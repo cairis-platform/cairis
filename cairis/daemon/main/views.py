@@ -28,6 +28,7 @@ from flask import send_from_directory, make_response, session
 from flask_restful_swagger import swagger
 from flask_restful import Api
 from flask_security import login_required, http_auth_required
+from flask_security.utils import logout_user
 from flask_security.core import current_user
 from jsonpickle import encode
 from cairis.core.Borg import Borg
@@ -77,6 +78,22 @@ def make_session():
 @login_required
 def home():
   return main.send_static_file('index.html')
+
+@main.route('/disconnect')
+@login_required
+def logout():
+  id = session['session_id']
+  b = Borg()
+  db_proxy = b.settings[id]['dbProxy']
+  db_proxy.close()
+  del b.settings[id]
+  session.pop(id,None)
+  logout_user()
+  resp_dict = {'message': 'Logged out'}
+  resp = make_response(encode(resp_dict), OK)
+  resp.headers['Content-type'] = 'application/json'
+  return resp
+
 
 @main.route('/make_session',methods=['POST'])
 @login_required

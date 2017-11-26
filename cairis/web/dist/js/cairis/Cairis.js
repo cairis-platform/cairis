@@ -1994,9 +1994,27 @@ function makeSession() {
 }
 
 $("#logoutClick").click(function () {
-  $.session.clear();
-  var win = window.open(serverIP + '/logout',"_self");
-  win.document.write("<p>Logged out</p>");
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    accept: "application/json",
+    data: {
+      session_id: String($.session.get('sessionID'))
+    },
+    crossDomain: true,
+    url: serverIP + '/disconnect',
+    success: function(data, status, xhr) {
+      $.session.clear();
+      window.document.write("<p>Logged out.  You can now close this window or tab.</p>");
+    },
+    error: function(data, status, xhr) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      console.log(this.url);
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + status + ", thrown: " + data);
+      alert("There is a problem with the server...");
+    }
+  });
 });
 
 $(document).on('submit',function(e) {

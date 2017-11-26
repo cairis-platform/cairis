@@ -32,7 +32,6 @@ from cairis.daemon.WebConfig import *
 from .cdb import db
 from .models import User, Role
 
-
 def create_app():
   options = {
     'port' : 0,
