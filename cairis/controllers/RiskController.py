@@ -30,6 +30,7 @@ from cairis.data.RiskDAO import RiskDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import RiskMessage
 from cairis.tools.ModelDefinitions import RiskModel as SwaggerRiskModel
+from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
 from cairis.tools.PseudoClasses import RiskScore
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
@@ -419,4 +420,37 @@ class RiskAnalysisModelNamesAPI(Resource):
     element_names = dao.risk_model_elements(environment)
     resp = make_response(json_serialize(element_names, session_id=session_id), OK)
     resp.contenttype = 'application/json'
+    return resp
+
+class RisksSummaryAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get summary of risks',
+    responseClass=SwaggerObjectSummaryModel.__name__,
+    nickname='risks-summary-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self):
+    session_id = get_session_id(session, request)
+    dao = RiskDAO(session_id)
+    objts = dao.get_risks_summary()
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
     return resp

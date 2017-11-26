@@ -312,6 +312,7 @@ api.add_resource(ObjectDependencyController.ObjectDependencyAPI, '/api/object_de
 
 # Obstacle routes
 api.add_resource(ObstacleController.ObstaclesAPI, '/api/obstacles',endpoint='obstacles')
+api.add_resource(ObstacleController.ObstaclesSummaryAPI, '/api/obstacles/summary',endpoint='obstaclessummary')
 api.add_resource(ObstacleController.ObstacleByNameAPI, '/api/obstacles/name/<string:name>',endpoint='obstacle')
 api.add_resource(ObstacleController.ObstacleByEnvironmentNamesAPI, '/api/obstacles/environment/<string:environment>/names',endpoint='obstacle_environment')
 api.add_resource(ObstacleController.ObstacleModelAPI, '/api/obstacles/model/environment/<string:environment>/obstacle/<string:obstacle>',endpoint='obstacle_model')
@@ -352,6 +353,7 @@ api.add_resource(ResponseController.ResponseByNameGenerateAPI, '/api/responses/n
 
 # Risk routes
 api.add_resource(RiskController.RisksAPI, '/api/risks',endpoint='risks')
+api.add_resource(RiskController.RisksSummaryAPI, '/api/risks/summary',endpoint='riskssummary')
 api.add_resource(RiskController.RiskByNameAPI, '/api/risks/name/<string:name>',endpoint='risk')
 api.add_resource(
   RiskController.RisksScoreByNameAPI,

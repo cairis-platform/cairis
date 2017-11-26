@@ -160,7 +160,9 @@ class ObjectSummaryModel(object):
     "theType": fields.String,
     "theDescription": fields.String,
     "theOriginator": fields.String,
-    "theStatus": fields.String
+    "theStatus": fields.String,
+    "theVulnerability": fields.String,
+    "theThreat": fields.String
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)

@@ -82,6 +82,7 @@ drop procedure if exists getAssetsSummary;
 drop procedure if exists getThreats;
 drop procedure if exists getVulnerabilities;
 drop procedure if exists getRisks;
+drop procedure if exists getRisksSummary;
 drop function if exists threat_likelihood;
 drop function if exists vulnerability_severity;
 drop procedure if exists threat_asset;
@@ -350,6 +351,7 @@ drop procedure if exists delete_obstacle;
 drop procedure if exists addObstacleDefinition;
 drop procedure if exists addObstacleCategory;
 drop procedure if exists getObstacles;
+drop procedure if exists getObstaclesSummary;
 drop function if exists obstacle_definition;
 drop function if exists obstacle_category;
 drop procedure if exists add_obstacle_environment;
@@ -2222,6 +2224,13 @@ begin
   end if;
 end
 //
+
+create procedure getRisksSummary()
+begin
+  select r.name,t.name,v.name from risk r, threat t, vulnerability v where r.threat_id = t.id and r.vulnerability_id = v.id order by 1;
+end
+//
+
 
 create function threat_likelihood(threatId int,environmentId int) 
 returns varchar(200)
@@ -8333,6 +8342,10 @@ begin
     select id,name,originator from obstacle where id = constraintId;
   end if;
 end
+//
+
+create procedure getObstaclesSummary()
+  select name,originator from obstacle order by 1;
 //
 
 create function obstacle_definition(obsId int,environmentId int) 

@@ -29,6 +29,7 @@ from cairis.data.ObstacleDAO import ObstacleDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import ObstacleMessage
 from cairis.tools.ModelDefinitions import ObstacleModel as SwaggerObstacleModel
+from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
 __author__ = 'Shamal Faily'
@@ -348,5 +349,38 @@ class ObstacleByEnvironmentNamesAPI(Resource):
     dao.close()
 
     resp = make_response(json_serialize(goals, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
+    return resp
+
+class ObstaclesSummaryAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get summary of obstacles',
+    responseClass=SwaggerObjectSummaryModel.__name__,
+    nickname='obstacles-summary-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self):
+    session_id = get_session_id(session, request)
+    dao = ObstacleDAO(session_id)
+    objts = dao.get_obstacles_summary()
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp

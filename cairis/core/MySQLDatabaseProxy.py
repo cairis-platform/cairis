@@ -605,6 +605,13 @@ class MySQLDatabaseProxy:
       rows.append(ObjectSummary(objtName,originator=objtOrig,status=objtStatus))
     return rows
 
+  def getObstaclesSummary(self):
+    objtRows = self.responseList('call getObstaclesSummary()',{},'MySQL error getting obstacle summary')
+    rows = []
+    for objtName, objtOrig in objtRows:
+      rows.append(ObjectSummary(objtName,originator=objtOrig))
+    return rows
+
 
   def getThreats(self,constraintId = -1):
     threats = {}
@@ -1092,6 +1099,13 @@ class MySQLDatabaseProxy:
       risk = ObjectFactory.build(riskId,parameters)
       risks[risk.name()] = risk
     return risks
+
+  def getRisksSummary(self):
+    objtRows = self.responseList('call getRisksSummary()',{},'MySQL error getting risk summary')
+    rows = []
+    for objtName, thrName, vulName in objtRows:
+      rows.append(ObjectSummary(objtName,vulnerability=vulName,threat=thrName))
+    return rows
 
 
   def addRisk(self,parameters):

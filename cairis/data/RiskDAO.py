@@ -63,6 +63,14 @@ class RiskDAO(CairisDAO):
 
       return risks
 
+  def get_risks_summary(self):
+    try:
+      risks = self.db_proxy.getRisksSummary()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    return risks
+
   def get_risk_names(self):
     risks = self.get_risks(skip_misuse=True)
     risk_names = list(risks.keys())

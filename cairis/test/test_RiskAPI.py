@@ -23,6 +23,8 @@ else:
   from urllib import quote
 import jsonpickle
 import os
+from cairis.core.ObjectSummary import ObjectSummary
+from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.MisuseCaseParameters import MisuseCaseParameters
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from cairis.core.RiskParameters import RiskParameters
@@ -64,6 +66,20 @@ class RiskAPITests(CairisDaemonTestCase):
         self.logger.info('[%s] Risks found: %d', method, len(risks))
         risk = list(risks.values())[0]
         self.logger.info('[%s] First risk: %s [%d]\n', method, risk['theName'], risk['theId'])
+
+    def test_get_all_summary(self):
+        method = 'test_get_all_summary'
+        rv = self.app.get('/api/risks/summary?session_id=test')
+        if (sys.version_info > (3,)):
+          risks = json_deserialize(rv.data.decode('utf-8'))
+        else:
+          risks = json_deserialize(rv.data)
+        self.assertIsNotNone(risks, 'No results after deserialization')
+        self.assertGreater(len(risks), 0, 'No risk summaries')
+        self.assertIsInstance(risks[0], ObjectSummary)
+        self.logger.info('[%s] Risks found: %d', method, len(risks))
+        self.logger.info('[%s] First risk summary: %s [%d]\n', method, risks[0].theName)
+
 
     def test_get_risk_model_elements(self):
         method = 'test_get_risk_model_elements'

@@ -47,6 +47,14 @@ class ObstacleDAO(CairisDAO):
 
     return obstacles
 
+  def get_obstacles_summary(self):
+    try:
+      obs = self.db_proxy.getObstaclesSummary()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    return obs
+
   def get_obstacle_by_name(self, name, simplify=True):
     obsId = self.db_proxy.getDimensionId(name,'obstacle')
     found_obstacle = None

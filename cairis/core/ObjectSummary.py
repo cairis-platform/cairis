@@ -18,9 +18,11 @@
 __author__ = 'Shamal Faily'
 
 class ObjectSummary:
-  def __init__(self,name, type='N/A', description='N/A', originator='N/A', status='N/A'):
+  def __init__(self,name, type='N/A', description='N/A', originator='N/A', status='N/A',vulnerability='N/A',threat='N/A'):
     self.theName = name
     self.theType = type
     self.theDescription = description
     self.theOriginator = originator
     self.theStatus = status
+    self.theVulnerability = vulnerability
+    self.theThreat = threat

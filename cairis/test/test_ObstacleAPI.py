@@ -23,6 +23,8 @@ if (sys.version_info > (3,)):
 else:
   from urllib import quote
 import jsonpickle
+from cairis.core.ObjectSummary import ObjectSummary
+from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.Obstacle import Obstacle
 from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -63,6 +65,19 @@ class ObstacleAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Obstacles found: %d', method, len(obstacles))
     obstacle = list(obstacles.values())[0]
     self.logger.info('[%s] First obstacle: %s [%d]\n', method, obstacle['theName'], obstacle['theId'])
+
+  def test_get_all_summary(self):
+    method = 'test_get_all_summary'
+    rv = self.app.get('/api/obstacles/summary?session_id=test')
+    if (sys.version_info > (3,)):
+      obs = json_deserialize(rv.data.decode('utf-8'))
+    else:
+      obs = json_deserialize(rv.data)
+    self.assertIsNotNone(obs, 'No results after deserialization')
+    self.assertGreater(len(obs), 0, 'No goal summaries')
+    self.assertIsInstance(obs[0], ObjectSummary)
+    self.logger.info('[%s] Obstacles found: %d', method, len(obs))
+    self.logger.info('[%s] First obstacle summary: %s [%d]\n', method, obs[0].theName)
     
   def test_get_by_name(self):
     method = 'test_get_by_name'

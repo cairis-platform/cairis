@@ -118,26 +118,10 @@ function viewAsset(assetName) {
           appendAssetInterface(aInt);
         });
         $('#editAssetsOptionsform').loadJSON(newdata,null);
-        $.ajax({
-          type: "GET",
-          dataType: "json",
-          accept: "application/json",
-          data: {
-            session_id: String($.session.get('sessionID'))
-          },
-          crossDomain: true,
-          url: serverIP + "/api/assets/name/" + newdata.theName + "/properties",
-          success: function (data) {
-            $.session.set("AssetProperties", JSON.stringify(data));
-            fillEditAssetsEnvironment();
-            $('#editAssetsOptionsform').validator('update');
-            $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:first").trigger('click');
-          },
-          error: function (xhr, textStatus, errorThrown) {
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-          }
-        });
+        $.session.set("AssetProperties", JSON.stringify(newdata.theEnvironmentProperties));
+        fillAssetEnvironments(newdata.theEnvironmentProperties);
+        $('#editAssetsOptionsform').validator('update');
+        $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:first").trigger('click');
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -480,27 +464,9 @@ $(document).on('click', "td.deleteAssetButton",function(e){
       crossDomain: true,
       url: serverIP + "/api/assets/name/" + encodeURIComponent(assetName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
-        $.ajax({
-          type: "GET",
-          dataType: "json",
-          accept: "application/json",
-          data: {
-            session_id: String($.session.get('sessionID'))
-          },
-          crossDomain: true,
-          url: serverIP + "/api/assets",
-          success: function (data) {
-            showPopup(true);
-            $('#menuBCClick').attr('dimension','asset');
-            refreshMenuBreadCrumb('asset');
-          },
-          error: function (xhr, textStatus, errorThrown) {
-            var error = JSON.parse(xhr.responseText);
-            showPopup(false, String(error.message));
-            debugLogger(String(this.url));
-            debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-          }
-        });
+        showPopup(true);
+        $('#menuBCClick').attr('dimension','asset');
+        refreshMenuBreadCrumb('asset');
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -634,8 +600,7 @@ mainContent.on('click', '#CloseAsset', function (e) {
   refreshMenuBreadCrumb('asset'); 
 });
 
-function fillEditAssetsEnvironment(){
-  var data = JSON.parse( $.session.get("AssetProperties"));
+function fillAssetEnvironments(data){
   var i = 0;
   var textToInsert = [];
   $.each(data, function(arrayindex, value) {
@@ -645,16 +610,6 @@ function fillEditAssetsEnvironment(){
   });
   $('#theEnvironmentDictionary').find("tbody").empty();
   $('#theEnvironmentDictionary').append(textToInsert.join(''));
-
-  var env = $.session.get("assetEnvironmentName");
-
-  var props;
-  $.each(data, function(arrayID,group) {
-    if(group.environment == env){
-      getAssetDefinition(group.attributes);
-      $.session.set("thePropObject", JSON.stringify(group));
-    }
-  });
   $("#theEnvironmentDictionary").find(".clickable-environments:first").trigger('click');
 }
 

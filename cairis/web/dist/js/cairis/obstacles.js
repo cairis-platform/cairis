@@ -36,7 +36,7 @@ function createEditObstaclesTable(){
       session_id: String($.session.get('sessionID'))
     },
     crfossDomain: true,
-    url: serverIP + "/api/obstacles",
+    url: serverIP + "/api/obstacles/summary",
     success: function (data) {
       setTableHeader("EditObstacles");
       var theTable = $(".theTable");
@@ -44,33 +44,18 @@ function createEditObstaclesTable(){
       var textToInsert = [];
       var i = 0;
 
-      var keys = [];
-      for (key in data) {
-        keys.push(key);
-      }
-      keys.sort();
-
-      for (var ki = 0; ki < keys.length; ki++) {
-        var key = keys[ki];
-        var item = data[key];
+      for (var r = 0; r < data.length; r++) {
+        var item = data[r];
 
         textToInsert[i++] = "<tr>";
         textToInsert[i++] = '<td class="deleteObstacleButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
-
         textToInsert[i++] = '<td class="obstacle-rows" name="theName">';
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
-
         textToInsert[i++] = '<td name="theOriginator">';
         textToInsert[i++] = item.theOriginator;
         textToInsert[i++] = '</td>';
-
         textToInsert[i++] = '</td>';
-
-        textToInsert[i++] = '<td name="theId"  style="display:none;">';
-        textToInsert[i++] = item.theId;
-        textToInsert[i++] = '</td>';
-
         textToInsert[i++] = '</tr>';
       }
       theTable.append(textToInsert.join(''));
