@@ -20,6 +20,7 @@
 'use strict';
 
 $("#projectClick").click(function () {
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','properties');
   refreshMenuBreadCrumb('properties');
 });
@@ -177,6 +178,7 @@ function commitProject() {
 
 mainContent.on("click", "#closeProjectButton", function (e) {
   e.preventDefault();
+  clearLocalStorage('properties');
   refreshHomeBreadCrumb();
 });
 
@@ -463,6 +465,7 @@ function putProjectSettings(settings, callback){
     data: output,
     url: serverIP + "/api/settings?session_id=" + $.session.get('sessionID'),
     success: function (data) {
+      clearLocalStorage('properties');
       showPopup(true);
       if(jQuery.isFunction(callback)){
         callback();

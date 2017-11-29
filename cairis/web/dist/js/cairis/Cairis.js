@@ -2257,6 +2257,16 @@ function clearLocalStorage(dimName) {
       $.session.remove("TemplateRequirementName");
       $.session.remove("RequirementName");
       break;
+    case "file_import":
+      $.session.remove("importParameters");
+      $.session.remove("importModelContent");
+      break;
+    case "properties":
+      $.session.remove("ProjectRevision");
+      $.session.remove("ProjectSettings");
+      $.session.remove("namingConvName");
+      $.session.remove("contributorOldName");
+      break;
     case undefined:
       break;
   }

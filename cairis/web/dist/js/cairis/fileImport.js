@@ -20,6 +20,8 @@
 'use strict';
 
 $("#importClick").click(function () {
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $('#menuBCClick').attr('dimension','file_import');
   $('#typeOfFileDialog').modal('show');
 });
 
@@ -68,6 +70,7 @@ function importModel(json) {
     data: objectoutput,
     url: serverIP + "/api/import/text",
     success: function (data) {
+      clearLocalStorage('file_import');
       showPopup(true);
       refreshHomeBreadCrumb();
     },
