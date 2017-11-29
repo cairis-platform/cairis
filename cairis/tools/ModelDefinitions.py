@@ -137,7 +137,6 @@ class AssetModel(object):
     obj_id_field: fields.String,
     "theDescription": fields.String,
     "theSignificance": fields.String,
-    "theId": fields.Integer,
     "theTags": fields.List(fields.String),
     "theCriticalRationale": fields.String,
     "theInterfaces": fields.List(fields.Nested(InterfaceModel.resource_fields)),

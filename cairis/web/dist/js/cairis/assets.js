@@ -26,6 +26,12 @@ $("#assetMenuClick").click(function(){
   });
 });
 
+function clearAssetCache() {
+  $.session.remove("Arrayindex");
+  $.session.remove("Asset");
+  $.session.remove('assetEnvironmentName');
+}
+
 function createAssetsTable(){
   $.ajax({
     type: "GET",
@@ -108,7 +114,6 @@ function viewAsset(assetName) {
     url: serverIP + "/api/assets/name/" + encodeURIComponent(assetName),
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editAssetsOptions.html","#objectViewer",null,true,true, function(){
-        $.session.set("AssetName", assetName.trim());
         $("#UpdateAsset").text("Update");
         $.session.set("Asset", JSON.stringify(newdata));
         refreshDimensionSelector($('#theType'),'asset_type',undefined,function() {
@@ -118,7 +123,6 @@ function viewAsset(assetName) {
           appendAssetInterface(aInt);
         });
         $('#editAssetsOptionsform').loadJSON(newdata,null);
-        $.session.set("AssetProperties", JSON.stringify(newdata.theEnvironmentProperties));
         fillAssetEnvironments(newdata.theEnvironmentProperties);
         $('#editAssetsOptionsform').validator('update');
         $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:first").trigger('click');
@@ -135,6 +139,7 @@ function appendAssetInterface(aInt) {
   $("#theAssetInterfaces").find("tbody").append('<tr><td class="deleteAssetInterface"><i class="fa fa-minus"></i></td><td class="asset-interface">'+ aInt.theInterfaceName +'</td><td>' + aInt.theInterfaceType + '</td><td>' + aInt.theAccessRight + '</td><td>' + aInt.thePrivilege + '</td></tr>');
 }
 
+var mainContent = $("#objectViewer");
 mainContent.on('click','td.deleteAssetInterface',function() {
   var intRow = $(this).closest("tr");
   var rowIdx = intRow.index();
@@ -144,15 +149,14 @@ mainContent.on('click','td.deleteAssetInterface',function() {
   $.session.set("Asset", JSON.stringify(asset));
 });
 
-var mainContent = $("#objectViewer");
 mainContent.on('click', ".removeAssetEnvironment", function () {
   var envi = $(this).next(".clickable-environments").text();
   var row =  $(this).closest("tr");
-  var asset = JSON.parse($.session.get("AssetProperties"));
-  $.each(asset, function (index, env) {
+  var asset = JSON.parse($.session.get("Asset"));
+  $.each(asset.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == envi){
-      asset.splice( index ,1 );
-      $.session.set("AssetProperties", JSON.stringify(asset));
+      asset.theEnvironmentProperties.splice( index ,1 );
+      $.session.set("Asset", JSON.stringify(asset));
 
       row.remove();
       var UIenv = $("#theEnvironmentDictionary").find("tbody");
@@ -173,11 +177,11 @@ mainContent.on('click', ".removeAssetAssociation", function (e) {
   var assocRow = $(this).closest('tr');
   var rowIdx = assocRow.index();
   assocRow.remove();
-  var asset = JSON.parse($.session.get("AssetProperties"));
-  $.each(asset, function (index, env) {
+  var asset = JSON.parse($.session.get("Asset"));
+  $.each(asset.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == envName){
       env.theAssociations.splice( rowIdx ,1 );
-      $.session.set("AssetProperties", JSON.stringify(asset));
+      $.session.set("Asset", JSON.stringify(asset));
       return false;
     }
   });
@@ -186,30 +190,28 @@ mainContent.on('click', ".removeAssetAssociation", function (e) {
 mainContent.on('click', ".removeAssetEnvironment", function () {
   var envName = $.session.get("assetEnvironmentName");
   $(this).closest("tr").remove();
-  var asset = JSON.parse($.session.get("AssetProperties"));
-  $.each(asset, function (index, env) {
+  var asset = JSON.parse($.session.get("Asset"));
+  $.each(asset.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
       env.theProperties.splice( index ,1 );
-      $.session.set("AssetProperties", JSON.stringify(asset));
+      $.session.set("Asset", JSON.stringify(asset));
     }
   });
 });
 
 
 mainContent.on('click', '.assetEnvironmentRow', function(event){
-  var assts = JSON.parse($.session.get("AssetProperties"));
+  var asset = JSON.parse($.session.get("Asset"));
   var text = $(this).text();
   $.session.set("assetEnvironmentName", text);
   var props;
-  $.each(assts, function(arrayID,group) {
+  $.each(asset.theEnvironmentProperties, function(arrayID,group) {
     if(group.theEnvironmentName == text){
       props = group.theProperties;
-      $.session.set("thePropObject", JSON.stringify(group));
       $.session.set("Arrayindex", arrayID);
-      $.session.set("UsedProperties", JSON.stringify(props));
       getAssetDefinition(props);
       $("#assetAssociationsTable > tbody").empty();
-      $.each(assts[arrayID].theAssociations,function(idx,assoc) {
+      $.each(asset.theEnvironmentProperties[arrayID].theAssociations,function(idx,assoc) {
         appendAssetAssociation(assoc);
       });
       $("#assetstabsID").show("fast");
@@ -232,15 +234,15 @@ function updateAssetSecurityProperty() {
   updProp.value =  $("#theSecurityPropertyValue").val();
   updProp.rationale =  $("#theSecurityPropertyRationale").val();
 
-  var secProperties = JSON.parse($.session.get("AssetProperties"));
+  var asset = JSON.parse($.session.get("Asset"));
   var theEnvName = $.session.get("assetEnvironmentName");
 
-  $.each(secProperties, function (index, env) {
+  $.each(asset.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
       $.each(env.theProperties, function(idx, secProp){
         if (updProp.name == secProp.name) {
-          secProperties[index].theProperties[idx] = updProp;
-          $.session.set("AssetProperties", JSON.stringify(secProperties));
+          asset.theEnvironmentProperties[index].theProperties[idx] = updProp;
+          $.session.set("Asset", JSON.stringify(asset));
           propRow.find("td:eq(2)").text(updProp.name);
           propRow.find("td:eq(3)").text(updProp.value);
           propRow.find("td:eq(4)").text(updProp.rationale);
@@ -299,28 +301,27 @@ mainContent.on('click', '.addEnvironmentPlus',function(){
 function addAssetEnvironment() {
   var chosenText = $("#chooseEnvironmentSelect").val();
   $("#theEnvironmentDictionary").find("tbody").append("<tr><td class='deleteAssetEnv'><i class='fa fa-minus'></i></td><td class='clickable-environments assetEnvironmentRow'>" + chosenText +"</td></tr>");
-  var sessionProps = $.session.get("AssetProperties");
-  if(! sessionProps) {
-    var Assetprops = [];
+  var asset = JSON.parse($.session.get("Asset"));
+  if(asset.theEnvironmentProperties.length == 0) {
     var newProp = jQuery.extend(true, {}, assetEnvironmentDefault);
     newProp.theEnvironmentName = chosenText;
     $.session.set("assetEnvironmentName", newProp.theEnvironmentName);
-    Assetprops.push(newProp);
+    asset.theEnvironmentProperties.push(newProp);
   } 
   else {
-    var Assetprops = JSON.parse($.session.get("AssetProperties"));
     var newProp = jQuery.extend(true, {}, assetEnvironmentDefault);
     newProp.theEnvironmentName = chosenText;
     $.session.set("assetEnvironmentName", newProp.theEnvironmentName);
-    Assetprops.push(newProp);
+    asset.theEnvironmentProperties.push(newProp);
   }
-  $.session.set("AssetProperties", JSON.stringify(Assetprops));
+  $.session.set("Asset", JSON.stringify(asset));
   $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:last").trigger('click');
 }
 
 
 mainContent.on("click", "#updateButtonAsset", function(){
-  var allprops = JSON.parse($.session.get("AssetProperties"));
+  var asset = JSON.parse($.session.get("Asset"));
+  var allprops = asset.theEnvironmentProperties;
   var props;
 
   if($("#editAssociationsWindow").hasClass("newAssociation")){
@@ -360,16 +361,14 @@ mainContent.on("click", "#updateButtonAsset", function(){
       if (idx == associationIdx) {
         allprops[arrIndex].theAssociations[idx] = assoc;
         $("#assetAssociationsTable").find("tr").eq(associationIdx + 1).replaceWith(assocToTr(assoc));
-        $.session.set("AssetProperties", JSON.stringify(allprops))
+        $.session.set("Asset", JSON.stringify(asset))
         $("#editAssetsOptionsform").toggle();
         $("#editAssociationsWindow").toggle();
         $("#theEnvironmentDictionary").find("tbody").find(".clickable-environments:first").trigger('click');
-
       }
     });
   }
-  $.session.set("AssetProperties", JSON.stringify(allprops));
-  fillEditAssetsEnvironment();
+  $.session.set("Asset", JSON.stringify(asset));
 });
 
 function appendAssetAssociation(assoc) {
@@ -381,34 +380,33 @@ function assocToTr(assoc) {
 }
 
 mainContent.on('click', '.removeEnvironment', function () {
-  var assetProps = JSON.parse($.session.get("AssetProperties"));
+  var asset = JSON.parse($.session.get("Asset"));
   var text = $(this).next('td').text();
   var theIndex = -1;
-  $.each(assetProps, function(arrayID,prop) {
+  $.each(asset.theEnvironmentProperties, function(arrayID,prop) {
     if(prop.environment == text){
       theIndex = arrayID;
     }
   });
   //Splice = removes element at "theIndex", 1 = only one item
-  assetProps.splice(theIndex, 1);
-  debugLogger(JSON.stringify(assetProps));
-  $.session.set("AssetProperties", JSON.stringify(assetProps));
+  asset.theEnvironmentProperties.splice(theIndex, 1);
+  $.session.set("Asset", JSON.stringify(asset));
 });
 
 mainContent.on("click",".deleteProperty", function(){
-  var propName = $(this).closest("tr").find("td:eq(1)").text();
+  var propName = $(this).closest("tr").find("td:eq(2)").text();
   $(this).closest("tr").remove();
-  var assets = JSON.parse($.session.get("AssetProperties"));
+  var asset = JSON.parse($.session.get("Asset"));
   var theEnvName = $.session.get("assetEnvironmentName");
-  $.each(assets, function (index, env) {
+  $.each(asset.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
       $.each(env.theProperties, function(idx,prop) {
         if (prop.name == propName) {
-          assets[index].theProperties[idx].value = 'None';
-          assets[index].theProperties[idx].rationale = 'None';
+          asset.theEnvironmentProperties[index].theProperties[idx].value = 'None';
+          asset.theEnvironmentProperties[index].theProperties[idx].rationale = 'None';
         }
       });
-      $.session.set("AssetProperties", JSON.stringify(assets));
+      $.session.set("Asset", JSON.stringify(asset));
     }
   });
 });
@@ -434,6 +432,7 @@ $(document).on('click', "#addNewAsset",function(){
           typeSelect.append($("<option></option>").attr("value",type.name).text(type.theName));
         });
         $("#assetstabsID").hide();
+        $.session.set("Asset", JSON.stringify(jQuery.extend(true, {},assetDefault )));
       },
       error: function (xhr, textStatus, errorThrown) {
         var error = JSON.parse(xhr.responseText);
@@ -443,7 +442,6 @@ $(document).on('click', "#addNewAsset",function(){
       }
     });
     // empty it because new environment;
-    $.session.set("AssetProperties","");
     $("#editAssetsOptionsform").addClass("new");
   });
 });
@@ -507,7 +505,8 @@ function addAssetSecurityProperty(e) {
   prop.name =  $("#theSecurityPropertyName").find("option:selected").text();
   prop.value =  $("#theSecurityPropertyValue").val();
   prop.rationale =  $("#theSecurityPropertyRationale").val()
-  var secProperties = JSON.parse( $.session.get("AssetProperties"));
+  var asset = JSON.parse( $.session.get("Asset"));
+  var secProperties = asset.theEnvironmentProperties;
   var theEnvName = $.session.get("assetEnvironmentName");
   $.each(secProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
@@ -516,7 +515,7 @@ function addAssetSecurityProperty(e) {
           secProp.value = prop.value;
           secProp.rationale = prop.rationale;
           secProperties[index].theProperties[idx] = secProp;
-          $.session.set("AssetProperties", JSON.stringify(secProperties));
+          $.session.set("Asset", JSON.stringify(asset));
           appendSecurityProperty(prop);
         }
       });
@@ -578,7 +577,9 @@ mainContent.on('click', '#cancelButtonAsset', function(){
 
 
 function commitAsset(){
-  var envProps = $.session.get("AssetProperties");
+  var assetName = (JSON.parse($.session.get("Asset"))).theName;
+  var asset = JSON.parse($.session.get("Asset"));
+  var envProps = asset.theEnvironmentProperties;
   if (envProps == undefined || envProps.length == 0) {
     alert("Environments not defined");
   }
@@ -587,18 +588,13 @@ function commitAsset(){
       postAssetForm($("#editAssetsOptionsform"), function(){});
     }
     else{
-      putAssetForm($("#editAssetsOptionsform"));
+      putAsset(assetName,assetFormToJSON($('#editAssetsOptionsform')));
     }
     $('#menuBCClick').attr('dimension','asset');
     refreshMenuBreadCrumb('asset');
   }
 }
 
-mainContent.on('click', '#CloseAsset', function (e) {
-  e.preventDefault();
-  $('#menuBCClick').attr('dimension','asset');
-  refreshMenuBreadCrumb('asset'); 
-});
 
 function fillAssetEnvironments(data){
   var i = 0;
@@ -613,14 +609,8 @@ function fillAssetEnvironments(data){
   $("#theEnvironmentDictionary").find(".clickable-environments:first").trigger('click');
 }
 
-function assetFormToJSON(data, newAsset){
-  var json
-  if(newAsset){
-    json = jQuery.extend(true, {},mainAssetObject );
-  }
-  else{
-    json =  JSON.parse($.session.get("Asset"));
-  }
+function assetFormToJSON(data){
+  var json =  JSON.parse($.session.get("Asset"));
   json.theName = $(data).find('#theName').val();
 
   json["theShortCode"] = $(data).find('#theShortCode').val();
@@ -629,7 +619,6 @@ function assetFormToJSON(data, newAsset){
   json["theCriticalRationale"] = $(data).find('#theCriticalRationale').val();
   json["isCritical"] = +$("#isCritical").is( ':checked' );
   json.theType =  $(data).find( "#theType option:selected" ).text().trim();
-
 
   $(data).children().each(function () {
     if(String($(this).prop("tagName")).toLowerCase() == "p"){
@@ -650,20 +639,16 @@ function assetFormToJSON(data, newAsset){
       });
     }
   });
-  json['theEnvironmentProperties'] = JSON.parse($.session.get("AssetProperties"));
+  json['theEnvironmentProperties'] = json.theEnvironmentProperties;
+  clearAssetCache();
   return json
 }
 
-function putAssetForm(data){
-  putAsset(assetFormToJSON(data));
-}
-
 function postAssetForm(data,callback){
-  var newAsset = assetFormToJSON(data,true);
+  var newAsset = assetFormToJSON(data);
   var assetName = $(data).find('#theName').val();
   var asobject = {};
   asobject.object = newAsset
-  $.session.set("AssetName",assetName);
   postAsset(asobject,callback);
 }
 
@@ -679,8 +664,8 @@ function getAssetDefinition(props){
   $('#Properties').find('tbody').append(textToInsert.join(''));
 }
 
-function putAsset(json){
-  var ursl = serverIP + "/api/assets/name/"+ encodeURIComponent($.session.get("AssetName")) + "?session_id=" + String($.session.get('sessionID'));
+function putAsset(assetName,json){
+  var ursl = serverIP + "/api/assets/name/"+ encodeURIComponent(assetName) + "?session_id=" + String($.session.get('sessionID'));
   var output = {};
   output.object = json;
   output = JSON.stringify(output);
@@ -767,6 +752,14 @@ mainContent.on('click','#isCritical', function() {
   }
 });
 
+
+mainContent.on('click', '#CloseAsset', function (e) {
+  e.preventDefault();
+  clearAssetCache();
+  $('#menuBCClick').attr('dimension','asset');
+  refreshMenuBreadCrumb('asset'); 
+});
+
 function updateAssetInterface() {
   var selectedInt = {};
   selectedInt.theInterfaceName = $('#theInterfaceName').val();
@@ -791,3 +784,4 @@ function updateAssetInterface() {
   }
   $('#addInterfaceDialog').modal('hide');
 }
+

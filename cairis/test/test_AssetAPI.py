@@ -98,7 +98,7 @@ class AssetAPITests(CairisDaemonTestCase):
     self.assertGreater(len(assets), 0, 'No assets in the dictionary')
     self.assertIsInstance(list(assets.values())[0], Asset)
     self.logger.info('[%s] Assets found: %d', method, len(assets))
-    self.logger.info('[%s] First asset: %s [%d]\n', method, list(assets.values())[0].theName, list(assets.values())[0].theId)
+    self.logger.info('[%s] First asset: %s\n', method, list(assets.values())[0].theName)
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -123,26 +123,13 @@ class AssetAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, postResponse)
     json_resp = json_deserialize(postResponse)
     self.assertIsNotNone(postResponse, 'No results after deserialization')
-    asset_id = json_resp.get('asset_id', None)
-    self.assertIsNotNone(asset_id, 'No asset ID returned')
-
-    rv = self.app.get('/api/assets/id/%d?session_id=test' % asset_id)
+    url = '/api/assets/name/' + quote(self.new_asset_dict['object'].theName) + '?session_id=test'
+    rv = self.app.get(url)
     if (sys.version_info > (3,)):
       asset = json_deserialize(rv.data.decode('utf-8'))
     else:
       asset = json_deserialize(rv.data)
-    self.logger.info('[%s] Asset: %s [%d]\n', method, asset.theName, asset.theId)
-
-  def test_get_id(self):
-    method = 'test_get_id'
-    rv = self.app.get('/api/assets/id/127?session_id=test')
-    if (sys.version_info > (3,)):
-      asset = json_deserialize(rv.data.decode('utf-8'))
-    else:
-      asset = json_deserialize(rv.data)
-    self.assertIsNotNone(asset, 'No results after deserialization')
-    self.assertIsInstance(asset, Asset, 'The result is not an asset as expected')
-    self.logger.info('[%s] Asset: %s [%d]\n', method, asset.theName, asset.theId)
+    self.logger.info('[%s] Asset: %s\n', method, asset.theName)
 
   def test_get_name(self):
     method = 'test_get_name'
@@ -154,7 +141,7 @@ class AssetAPITests(CairisDaemonTestCase):
       asset = json_deserialize(rv.data)
     self.assertIsNotNone(asset, 'No results after deserialization')
     self.assertIsInstance(asset, Asset, 'The result is not an asset as expected')
-    self.logger.info('[%s] Asset: %s [%d]\n', method, asset.theName, asset.theId)
+    self.logger.info('[%s] Asset: %s\n', method, asset.theName)
 
   def test_put_name(self):
     method = 'test_put_name'
@@ -184,7 +171,7 @@ class AssetAPITests(CairisDaemonTestCase):
       asset = json_deserialize(rv.data.decode('utf-8'))
     else:
       asset = json_deserialize(rv.data)
-    self.logger.info('[%s] Asset: %s [%d]\n', method, asset.name(), asset.id())
+    self.logger.info('[%s] Asset: %s\n', method, asset.name)
 
   def test_delete_name(self):
     method = 'test_delete_name'
@@ -230,7 +217,7 @@ class AssetAPITests(CairisDaemonTestCase):
     self.assertGreater(len(assets), 0, 'No assets in the dictionary')
     self.logger.info('[%s] Asset types found: %d', method, len(assets))
     asset_type = assets[0]
-    self.logger.info('[%s] First asset types: %s [%d]\n', method, asset_type['theName'], asset_type['theId'])
+    self.logger.info('[%s] First asset types: %s\n', method, asset_type['theName'])
 
   def test_types_delete(self):
     method = 'test_types_delete'
@@ -326,7 +313,7 @@ class AssetAPITests(CairisDaemonTestCase):
     upd_asset_type = jsonpickle.decode(getResponse)
     self.assertIsNotNone(upd_asset_type, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, getResponse)
-    self.logger.info('[%s] Asset type: %s [%d]\n', method, upd_asset_type['theName'], upd_asset_type['theId'])
+    self.logger.info('[%s] Asset type: %s\n', method, upd_asset_type['theName'])
 
     rv = self.app.delete('/api/assets/types/name/%s?session_id=test' % quote(type_to_update.theName))
 

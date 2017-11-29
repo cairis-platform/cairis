@@ -10,4 +10,4 @@ set global max_sp_recursion_depth = 255;
 flush tables;
 flush privileges;
 !
-/cairis/cairis/bin/cairisd.py runserver
+mod_wsgi-express start-server /cairis/cairis/bin/cairis.wsgi

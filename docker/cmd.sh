@@ -1,2 +1,2 @@
 #!/bin/bash
-/cairis/cairis/bin/cairisd.py runserver
+mod_wsgi-express start-server /cairis/cairis/bin/cairis.wsgi

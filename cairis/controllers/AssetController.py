@@ -293,44 +293,6 @@ class AssetByNameAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-class AssetByIdAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get an asset by ID',
-    responseClass=SwaggerAssetModel.__name__,
-    nickname='asset-by-id-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
-  def get(self, id):
-    session_id = get_session_id(session, request)
-
-    dao = AssetDAO(session_id)
-    asset = dao.get_asset_by_id(id)
-    dao.close()
-    if asset is None:
-      raise ObjectNotFoundHTTPError('The asset')
-
-    resp = make_response(json_serialize(asset, session_id=session_id))
-    resp.headers['Content-Type'] = "application/json"
-    return resp
-
-
 class AssetNamesAPI(Resource):
   # region Swagger Doc
   @swagger.operation(

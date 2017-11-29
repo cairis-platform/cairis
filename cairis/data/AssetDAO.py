@@ -85,33 +85,10 @@ class AssetDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_asset_by_id(self, id, simplify=True):
-    found_asset = None
-    try:
-      assets = self.db_proxy.getAssets()
-    except DatabaseProxyException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
-
-    idx = 0
-    while found_asset is None and idx < len(assets):
-      if list(assets.values())[idx].theId == id:
-        found_asset = list(assets.values())[idx]
-      idx += 1
-
-    if found_asset is None:
-      self.close()
-      raise ObjectNotFoundHTTPError('The provided asset ID')
-
-    if simplify:
-      found_asset = self.simplify(found_asset)
-
-    return found_asset
-
   def get_asset_by_name(self, name, simplify=True):
-    found_asset = None
     try:
-      assets = self.db_proxy.getAssets()
+      assetId = self.db_proxy.getDimensionId(name,'asset')
+      assets = self.db_proxy.getAssets(assetId)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -128,7 +105,6 @@ class AssetDAO(CairisDAO):
 
     if simplify:
       found_asset = self.simplify(found_asset)
-
     return found_asset
 
   def get_threatened_assets(self, threat_name, environment_name):
@@ -298,11 +274,11 @@ class AssetDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_asset(self, name=None, asset_id=-1):
+  def delete_asset(self, name=None):
     if name is not None:
-      found_asset = self.get_asset_by_name(name)
-    elif asset_id > -1:
-      found_asset = self.get_asset_by_id(asset_id)
+      assetId = self.db_proxy.getDimensionId(name,'asset')
+      assets = self.db_proxy.getAssets(assetId)
+      found_asset = assets.get(name)
     else:
       self.close()
       raise MissingParameterHTTPError(param_names=['name'])
@@ -619,6 +595,7 @@ class AssetDAO(CairisDAO):
     :rtype: Asset
     """
     assert isinstance(asset, Asset)
+    del asset.theId
     asset.theInterfaces = self.convert_ifs(real_ifs=asset.theInterfaces)
     asset.theEnvironmentProperties = self.convert_props(real_props=asset.theEnvironmentProperties)
     asset.theEnvironmentDictionary = {}

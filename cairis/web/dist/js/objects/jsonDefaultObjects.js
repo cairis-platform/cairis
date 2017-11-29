@@ -82,21 +82,18 @@ var assetEnvironmentDefault =
   "theProperties": [ConfidentialitySecurityAttribute,IntegritySecurityAttribute,AvailabilitySecurityAttribute,AccountabilitySecurityAttribute,AnonymitySecurityAttribute,PseudonymitySecurityAttribute,UnlinkabilitySecurityAttribute,UnobservabilitySecurityAttribute],
   "theEnvironmentName": ""
 };
-var mainAssetObject =
+var assetDefault =
 {
-  "__python_obj__": "Asset.Asset",
-  "theEnvironmentDictionary": {},
-  "theDescription": "",
-  "theAssetPropertyDictionary": {},
-  "theSignificance": "",
-  "theId": -1,
-  "theTags": [],
-  "theCriticalRationale": "",
-  "theInterfaces": [],
-  "theType": "",
-  "theName": "",
-  "isCritical": 0,
-  "theShortCode": "",
+  "__python_obj__": "tools.ModelDefinitions.AssetModel",
+  "theDescription" : "",
+  "theSignificance" : "",
+  "theTags" : [],
+  "theCriticalRationale" : "",
+  "theInterfaces" : [],
+  "theType" : "",
+  "theName" : "",
+  "isCritical" : 0,
+  "theShortCode" : "",
   "theEnvironmentProperties": []
 };
 
