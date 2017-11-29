@@ -2124,3 +2124,140 @@ $(document).on('submit',function(e) {
     }
   }
 });
+
+function clearLocalStorage(dimName) {
+  switch (dimName) {
+    case "asset":
+      $.session.remove("Arrayindex");
+      $.session.remove("Asset");
+      $.session.remove('assetEnvironmentName');
+      break;
+    case "domain_property":
+      $.session.remove("DomainProperty");
+      break;
+    case "goal":
+      $.session.remove("GoalEnvName");
+      $.session.remove("Goal");
+      $.session.remove("oldSubGoalName");
+      $.session.remove("oldGoalName");
+      $.session.remove("goalAssocName");
+      break;
+    case "obstacle":
+      $.session.remove("ObstacleEnvName");
+      $.session.remove("Obstacle");
+      $.session.remove("oldsubGoalName");
+      $.session.remove("oldGoalName");
+      break;
+    case "use_case":
+      $.session.remove("UseCase");
+      $.session.remove("usecaseEnvironmentName");
+      break;
+    case "dependency":
+      $.session.remove("Dependencies");
+      $.session.remove("Dependency");
+      break;
+    case "architecturalpattern":
+      $.session.remove("ArchitecturalPattern");
+      $.session.remove("Component");
+      break;
+    case "role":
+      $.session.remove("Roles");
+      $.session.remove("allRoles");
+      $.session.remove("RoleObject");
+      $.session.remove("RoleEnvironments");
+      break;
+    case "assetassociation":
+      $.session.remove("AssetAssociations");
+      $.session.remove("AssetAssociation");
+      break;
+    case "attacker":
+      $.session.remove("Attacker");
+      $.session.remove("attackerEnvironmentName");
+      break;
+    case "threat":
+      $.session.remove("theThreat");
+      $.session.remove("threatEnvironmentName");
+      break;
+    case "vulnerability":
+      $.session.remove("Vulnerability");
+      $.session.remove("VulnerabilityName");
+      $.session.remove("VulnEnvironmentName");
+      break;
+    case "risk":
+      $.session.remove("MisuseCase");
+      $.session.remove("Risk");
+      $.session.remove("misusecaseEnvironmentName");
+      $.session.remove("riskName");
+      break;
+    case "response":
+      $.session.remove("response");
+      $.session.remove("responseKind");
+      $.session.remove("ResponseName");
+      $.session.remove("responseEnvironment");
+      break;
+    case "countermeasure":
+      $.session.remove("Countermeasure");
+      $.session.remove("countermeasureEnvironmentName");
+      break;
+    case "security_pattern":
+      $.session.remove("SecurityPattern");
+      break;
+    case "environment":
+      $.session.remove("tensionMatrix");
+      $.session.remove("Environment");
+      $.session.remove("EnvironmentName");
+      break;
+    case "persona":
+      $.session.remove("Persona");
+      $.session.remove("personaEnvironmentName");
+      break;
+    case "task":
+      $.session.remove("Task");
+      $.session.remove("taskEnvironmentName");
+      break;
+    case "dataflow":
+      $.session.remove("Dataflows");
+      $.session.remove("Dataflow");
+      break;
+    case "trust_boundary":
+      $.session.remove("TrustBoundaries");
+      $.session.remove("TrustBoundary");
+      $.session.remove("TrustBoundaryEnvironmentName");
+      break;
+    case "external_document":
+      $.session.remove("ExternalDocument");
+      break;
+    case "document_reference":
+      $.session.remove("DocumentReference");
+      break;
+    case "concept_reference":
+      $.session.remove("DocumentReference");
+      break;
+    case "persona_characteristic":
+      $.session.remove("PersonaCharacteristic");
+      break;
+    case "task_characteristic":
+      $.session.remove("TaskCharacteristic");
+      break;
+    case "location":
+      $.session.remove("Locations");
+      $.session.remove("Location");
+      break;
+    case "template_asset":
+      $.session.remove("AssetName");
+      $.session.remove("TemplateAsset");
+      break;
+    case "template_goal":
+      $.session.remove("TemplateGoal");
+      $.session.remove("TemplateGoalName");
+      $.session.remove("GoalName");
+      break;
+    case "template_requirement":
+      $.session.remove("TemplateRequirement");
+      $.session.remove("TemplateRequirementName");
+      $.session.remove("RequirementName");
+      break;
+    case undefined:
+      break;
+  }
+}

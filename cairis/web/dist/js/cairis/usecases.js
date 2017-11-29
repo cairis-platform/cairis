@@ -21,6 +21,7 @@
 
 $("#useCaseClick").click(function () {
   validateClick('usecase',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','use_case');
     refreshMenuBreadCrumb('use_case');
   });
@@ -471,6 +472,7 @@ function commitUseCase() {
 
     if($("#editUseCaseOptionsForm").hasClass("new")){
       postUseCase(usecase, function () {
+        clearLocalStorage("use_case");
         $("#editUseCaseOptionsForm").removeClass("new")
         $('#menuBCClick').attr('dimension','use_case');
         refreshMenuBreadCrumb('use_case');
@@ -478,6 +480,7 @@ function commitUseCase() {
     } 
     else {
       putUseCase(usecase, oldName, function () {
+        clearLocalStorage("use_case");
         $('#menuBCClick').attr('dimension','use_case');
         refreshMenuBreadCrumb('use_case');
       });
@@ -527,6 +530,7 @@ $(document).on("click", "#addNewUseCase", function () {
 
 mainContent.on('click', '#CloseUseCase', function (e) {
   e.preventDefault();
+  clearLocalStorage("use_case");
   $('#menuBCClick').attr('dimension','use_case');
   refreshMenuBreadCrumb('use_case');
 });

@@ -21,6 +21,7 @@
 
 $("#dataflowsMenuClick").click(function(){
   validateClick('dataflow',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','dataflow');
     refreshMenuBreadCrumb('dataflow');
   });
@@ -140,6 +141,7 @@ function commitDataFlow() {
 
   if($("#editDataflowOptionsForm").hasClass("new")){
     postDataflow(dataflow, function () {
+      clearLocalStorage('dataflow');
       $("#editDataflowOptionsForm").removeClass("new")
       $('#menuBCClick').attr('dimension','dataflow');
       refreshMenuBreadCrumb('dataflow');
@@ -147,6 +149,7 @@ function commitDataFlow() {
   }
   else {
     putDataflow(dataflow, oldDfName, oldEnvName,  function () {
+      clearLocalStorage('dataflow');
       $('#menuBCClick').attr('dimension','dataflow');
       refreshMenuBreadCrumb('dataflow');
     });
@@ -220,6 +223,7 @@ $(document).on('click', 'td.deleteDataflowButton', function (e) {
 
 mainContent.on('click', '#CloseDataflow', function (e) {
   e.preventDefault();
+  clearLocalStorage('dataflow');
   $('#menuBCClick').attr('dimension','dataflow');
   refreshMenuBreadCrumb('dataflow');
 });

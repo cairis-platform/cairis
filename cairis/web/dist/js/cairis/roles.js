@@ -20,6 +20,7 @@
 'use strict';
 
 $("#roleMenuClick").click(function () {
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','role');
   refreshMenuBreadCrumb('role');
 });
@@ -151,6 +152,7 @@ function commitRole() {
     }
     else {
       postRole(theRoleObject, function () {
+        clearLocalStorage("role");
         $('#menuBCClick').attr('dimension','role');
         refreshMenuBreadCrumb('role');
       });
@@ -168,6 +170,7 @@ function commitRole() {
     }
     else {
       updateRole(theRoleObject, oldname, function () {
+        clearLocalStorage("role");
         $('#menuBCClick').attr('dimension','role');
         refreshMenuBreadCrumb('role');
       });
@@ -245,6 +248,7 @@ $(document).on('click', '#addNewRole', function () {
 
 mainContent.on('click', '#CloseRole', function (e) {
   e.preventDefault();
+  clearLocalStorage("role");
   $('#menuBCClick').attr('dimension','role');
   refreshMenuBreadCrumb('role');
 });

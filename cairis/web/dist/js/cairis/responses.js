@@ -21,6 +21,7 @@
 
 $("#responseMenuClick").click(function () {
   validateClick('response',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','response');
     refreshMenuBreadCrumb('response');
   });
@@ -545,6 +546,7 @@ function appendResponseTransferRole(role){
 
 mainContent.on('click', '#CloseResponse', function (e) {
   e.preventDefault();
+  clearLocalStorage('response');
   $('#menuBCClick').attr('dimension','response');
   refreshMenuBreadCrumb('response');
 });
@@ -683,6 +685,7 @@ function commitResponse() {
 
     if($("#editResponseOptionsform").hasClass("newResponse")){
       postResponse(resp, function () {
+        clearLocalStorage('response');
         $("#editResponseOptionsform").removeClass("newResponse")
         $('#menuBCClick').attr('dimension','response');
         refreshMenuBreadCrumb('response');
@@ -690,6 +693,7 @@ function commitResponse() {
     }
     else {
       putResponse(resp, $.session.get("ResponseName"), function () {
+        clearLocalStorage('response');
         $('#menuBCClick').attr('dimension','response');
         refreshMenuBreadCrumb('response');
       });

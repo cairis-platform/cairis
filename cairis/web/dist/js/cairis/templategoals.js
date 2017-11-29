@@ -20,6 +20,7 @@
 'use strict';
 
 $("#templateGoalsClick").click(function(){
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','template_goal');
   refreshMenuBreadCrumb('template_goal');
 });
@@ -208,6 +209,7 @@ function commitTemplateGoal(){
 
 mainContent.on('click', '#CloseTemplateGoal', function (e) {
   e.preventDefault();
+  clearLocalStorage('template_goal');
   createTemplateGoalsTable();
 });
 
@@ -248,6 +250,7 @@ function putTemplateGoal(json){
     data: output,
     url: ursl,
     success: function (data) {
+      clearLocalStorage('template_goal');
       showPopup(true);
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -274,6 +277,7 @@ function postTemplateGoal(json,callback){
     data: output,
     url: ursl,
     success: function (data) {
+      clearLocalStorage('template_goal');
       showPopup(true);
       if(typeof(callback) == "function"){
         callback();

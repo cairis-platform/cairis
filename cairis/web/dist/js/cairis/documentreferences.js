@@ -20,6 +20,7 @@
 'use strict';
 
 $("#documentReferencesClick").click(function(){
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','document_reference');
   refreshMenuBreadCrumb('document_reference');
 });
@@ -133,6 +134,7 @@ function commitDocumentReference() {
 
   if($("#editDocumentReferenceOptionsForm").hasClass("new")){
     postDocumentReference(dr, function () {
+      clearLocalStorage('document_reference');
       $("#editDocumentReferenceOptionsForm").removeClass("new")
       $('#menuBCClick').attr('dimension','document_reference');
       refreshMenuBreadCrumb('document_reference');
@@ -140,6 +142,7 @@ function commitDocumentReference() {
   }
   else {
     putDocumentReference(dr, oldName, function () {
+      clearLocalStorage('document_reference');
       $('#menuBCClick').attr('dimension','document_reference');
       refreshMenuBreadCrumb('document_reference');
     });
@@ -285,6 +288,7 @@ function getDocNames(callback){
 
 mainContent.on('click', '#CloseDocumentReference', function (e) {
   e.preventDefault();
+  clearLocalStorage('document_reference');
   $('#menuBCClick').attr('dimension','document_reference');
   refreshMenuBreadCrumb('document_reference');
 });

@@ -20,6 +20,7 @@
 'use strict';
 
 $("#taskCharacteristicsClick").click(function(){
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','task_characteristic');
   refreshMenuBreadCrumb('task_characteristic');
 });
@@ -164,6 +165,7 @@ function commitTaskCharacteristic() {
 
   if($("#editTaskCharacteristicOptionsForm").hasClass("new")){
     postTaskCharacteristic(tc, function () {
+      clearLocalStorage('task_characteristic');
       $("#editTaskCharacteristicOptionsForm").removeClass("new")
       $('#menuBCClick').attr('dimension','task_characteristic');
       refreshMenuBreadCrumb('task_characteristic');
@@ -171,6 +173,7 @@ function commitTaskCharacteristic() {
   }
   else {
     putTaskCharacteristic(tc, oldName, function () {
+      clearLocalStorage('task_characteristic');
       $('#menuBCClick').attr('dimension','task_characteristic');
       refreshMenuBreadCrumb('task_characteristic');
     });
@@ -308,6 +311,7 @@ function deleteTaskCharacteristic(name, callback){
 
 mainContent.on('click', '#CloseTaskCharacteristic', function (e) {
   e.preventDefault();
+  clearLocalStorage('task_characteristic');
   $('#menuBCClick').attr('dimension','task_characteristic');
   refreshMenuBreadCrumb('task_characteristic');
 });

@@ -21,6 +21,7 @@
 
 $("#locationsClick").click(function(){
   validateClick('location',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','location');
     refreshMenuBreadCrumb('location');
   });
@@ -475,6 +476,7 @@ function commitLocations() {
 
   if($("#editLocationsOptionsForm").hasClass("new")){
     postLocations(locs, function () {
+      clearLocalStorage('location');
       $('#menuBCClick').attr('dimension','location');
       refreshMenuBreadCrumb('location');
       $("#editLocationsOptionsForm").removeClass("new")
@@ -482,6 +484,7 @@ function commitLocations() {
   }
   else {
     putLocations(locs, oldName, function () {
+      clearLocalStorage('location');
       $('#menuBCClick').attr('dimension','location');
       refreshMenuBreadCrumb('location');
     });
@@ -598,6 +601,7 @@ function deleteLocations(name, callback){
 
 mainContent.on('click', '#CloseLocations', function (e) {
   e.preventDefault();
+  clearLocalStorage('location');
   $('#menuBCClick').attr('dimension','location');
   refreshMenuBreadCrumb('location');
 });

@@ -38,6 +38,7 @@ window.reverseFrequencyLookup['High'] = 'Monthly or less';
 
 
 $("#taskClick").click(function () {
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','task');
   refreshMenuBreadCrumb('task');
 });
@@ -496,6 +497,7 @@ function commitTask() {
 
     if($("#editTaskOptionsForm").hasClass("new")){
       postTask(task, function () {
+        clearLocalStorage('task');
         $("#editTaskOptionsForm").removeClass("new")
         $('#menuBCClick').attr('dimension','task');
         refreshMenuBreadCrumb('task');
@@ -503,6 +505,7 @@ function commitTask() {
     } 
     else {
       putTask(task, oldName, function () {
+        clearLocalStorage('task');
         $('#menuBCClick').attr('dimension','task');
         refreshMenuBreadCrumb('task');
       });
@@ -553,6 +556,7 @@ $(document).on("click", "#addNewTask", function () {
 
 mainContent.on('click', '#CloseTask', function (e) {
   e.preventDefault();
+  clearLocalStorage('task');
   $('#menuBCClick').attr('dimension','task');
   refreshMenuBreadCrumb('task');
 });

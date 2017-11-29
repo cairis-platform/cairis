@@ -131,12 +131,14 @@ function commitConceptReference() {
 
   if($("#editConceptReferenceOptionsForm").hasClass("new")){
     postConceptReference(cr, function () {
+      clearLocalStorage('concept_reference');
       createConceptReferencesTable();
       $("#editConceptReferenceOptionsForm").removeClass("new")
     });
   }
   else {
     putConceptReference(cr, oldName, function () {
+      clearLocalStorage('concept_reference');
       createConceptReferencesTable();
     });
   }
@@ -280,6 +282,7 @@ function getObjtNames(dimName,currentValue){
 
 mainContent.on('click', '#CloseConceptReference', function (e) {
   e.preventDefault();
+  clearLocalStorage('concept_reference');
   createConceptReferencesTable();
 });
 

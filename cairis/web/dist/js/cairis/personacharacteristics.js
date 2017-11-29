@@ -20,6 +20,7 @@
 'use strict';
 
 $("#personaCharacteristicsClick").click(function(){
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','persona_characteristic');
   refreshMenuBreadCrumb('persona_characteristic');
 });
@@ -176,6 +177,7 @@ function commitPersonaCharacteristic() {
 
   if($("#editPersonaCharacteristicOptionsForm").hasClass("new")){
     postPersonaCharacteristic(pc, function () {
+      clearLocalStorage('persona_characteristic');
       $("#editPersonaCharacteristicOptionsForm").removeClass("new")
       $('#menuBCClick').attr('dimension','persona_characteristic');
       refreshMenuBreadCrumb('persona_characteristic');
@@ -183,6 +185,7 @@ function commitPersonaCharacteristic() {
   }
   else {
     putPersonaCharacteristic(pc, oldName, function () {
+      clearLocalStorage('persona_characteristic');
       $('#menuBCClick').attr('dimension','persona_characteristic');
       refreshMenuBreadCrumb('persona_characteristic');
     });
@@ -321,6 +324,7 @@ function deletePersonaCharacteristic(name, callback){
 
 mainContent.on('click', '#ClosePersonaCharacteristic', function (e) {
   e.preventDefault();
+  clearLocalStorage('persona_characteristic');
   $('#menuBCClick').attr('dimension','persona_characteristic');
   refreshMenuBreadCrumb('persona_characteristic');
 });

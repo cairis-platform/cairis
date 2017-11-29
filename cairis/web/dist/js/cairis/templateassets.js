@@ -21,6 +21,7 @@
 
 $("#templateAssetsClick").click(function(){
   validateClick('template_asset',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','template_asset');
     refreshMenuBreadCrumb('template_asset');
   });
@@ -341,6 +342,7 @@ function commitTemplateAsset() {
 
 mainContent.on('click', '#CloseTemplateAsset', function (e) {
   e.preventDefault();
+  clearLocalStorage('template_asset');
   refreshMenuBreadCrumb('template_asset');
 });
 
@@ -407,6 +409,7 @@ function putTemplateAsset(json){
     data: output,
     url: ursl,
     success: function (data) {
+      clearLocalStorage('template_asset');
       showPopup(true);
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -433,6 +436,7 @@ function postTemplateAsset(json,callback){
     data: output,
     url: ursl,
     success: function (data) {
+      clearLocalStorage('template_asset');
       showPopup(true);
       if(typeof(callback) == "function"){
         callback();

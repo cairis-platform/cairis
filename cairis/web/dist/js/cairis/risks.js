@@ -21,6 +21,7 @@
 
 $("#riskMenuClick").click(function () {
   validateClick('risk',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','risk');
     refreshMenuBreadCrumb('risk');
   });
@@ -451,6 +452,7 @@ function commitRisk() {
 
   if($("#editRisksForm").hasClass("new")){
     postRisk(risk, function () {
+      clearLocalStorage('risk');
       $("#editRisksForm").removeClass("new")
       $('#menuBCClick').attr('dimension','risk');
       refreshMenuBreadCrumb('risk');
@@ -458,6 +460,7 @@ function commitRisk() {
   }
   else {
     putRisk(risk, oldName, function () {
+      clearLocalStorage('risk');
       $('#menuBCClick').attr('dimension','risk');
       refreshMenuBreadCrumb('risk');
     });
@@ -466,6 +469,7 @@ function commitRisk() {
 
 mainContent.on('click', '#CloseRisk', function (e) {
   e.preventDefault();
+  clearLocalStorage('risk');
   $('#menuBCClick').attr('dimension','risk');
   refreshMenuBreadCrumb('risk');
 });

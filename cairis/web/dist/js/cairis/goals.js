@@ -21,6 +21,7 @@
 
 $("#goalMenuClick").click(function(){
   validateClick('goal',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','goal');
     refreshMenuBreadCrumb('goal');
   });
@@ -434,6 +435,7 @@ function commitGoal() {
       }
       if($("#editGoalOptionsForm").hasClass("new")){
         postGoal(goal, function () {
+          clearLocalStorage("goal");
           $("#editGoalOptionsForm").removeClass("new")
           $('#menuBCClick').attr('dimension','goal');
           refreshMenuBreadCrumb('goal');
@@ -441,6 +443,7 @@ function commitGoal() {
       } 
       else {
         putGoal(goal, oldName, function () {
+          clearLocalStorage("goal");
           $('#menuBCClick').attr('dimension','goal');
           refreshMenuBreadCrumb('goal');
         });
@@ -511,6 +514,7 @@ mainContent.on('click', '.editGoalConcernAssoc', function () {
 });
 
 mainContent.on('click', '#goalCancelButton', function (e) {
+  clearLocalStorage("goal");
   e.preventDefault();
   toggleGoalWindow("#editGoalOptionsForm");
 });

@@ -21,6 +21,7 @@
 
 $("#trustBoundariesMenuClick").click(function(){
   validateClick('trust_boundary',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','trust_boundary');
     refreshMenuBreadCrumb('trust_boundary');
   });
@@ -121,6 +122,7 @@ function commitTrustBoundary() {
 
   if($("#editTrustBoundaryOptionsForm").hasClass("new")){
     postTrustBoundary(tb, function () {
+      clearLocalStorage('trust_boundary');
       $("#editTrustBoundaryOptionsForm").removeClass("new")
       $('#menuBCClick').attr('dimension','trust_boundary');
       refreshMenuBreadCrumb('trust_boundary');
@@ -128,6 +130,7 @@ function commitTrustBoundary() {
   }
   else {
     putTrustBoundary(tb, oldTbName,  function () {
+      clearLocalStorage('trust_boundary');
       $('#menuBCClick').attr('dimension','trust_boundary');
       refreshMenuBreadCrumb('trust_boundary');
     });
@@ -160,6 +163,7 @@ $(document).on('click', 'td.deleteTrustBoundaryButton', function (e) {
 
 mainContent.on('click', '#CloseTrustBoundary', function (e) {
   e.preventDefault();
+  clearLocalStorage('trust_boundary');
   $('#menuBCClick').attr('dimension','trust_boundary');
   refreshMenuBreadCrumb('trust_boundary');
 });

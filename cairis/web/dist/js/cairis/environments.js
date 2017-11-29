@@ -107,11 +107,13 @@ $(document).on('click', "td.deleteEnvironmentButton",function(e){
 
 
 $("#environmentsClick").click(function () {
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','environment');
   refreshMenuBreadCrumb('environment');
 });
 
 $("#environmentMenuClick").click(function () {
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','environment');
   refreshMenuBreadCrumb('environment');
 });
@@ -185,12 +187,14 @@ function commitEnvironment() {
     if($("#editEnvironmentOptionsform").hasClass("newEnvironment")){
       $("#editEnvironmentOptionsform").removeClass("newEnvironment");
       postEnvironment(env, function () {
+        clearLocalStorage('environment');
         $('#menuBCClick').attr('dimension','environment');
         refreshMenuBreadCrumb('environment');
       });
     }
     else {
       putEnvironment(env, oldName, function () {
+        clearLocalStorage('environment');
         $('#menuBCClick').attr('dimension','environment');
         refreshMenuBreadCrumb('environment');
       });
@@ -282,6 +286,7 @@ function createEnvironmentsTable(){
 
 mainContent.on('click', '#CloseEnvironment', function (e) {
   e.preventDefault();
+  clearLocalStorage('environment');
   $('#menuBCClick').attr('dimension','environment');
   refreshMenuBreadCrumb('environment');
 });

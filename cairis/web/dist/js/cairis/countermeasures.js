@@ -21,6 +21,7 @@
 
 $("#countermeasuresClick").click(function () {
   validateClick('countermeasure',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','countermeasure');
     refreshMenuBreadCrumb('countermeasure');
   });
@@ -644,6 +645,7 @@ function commitCountermeasure() {
 
     if($("#editCountermeasureOptionsForm").hasClass("new")){
       postCountermeasure(cm, function () {
+        clearLocalStorage('countermeasure');
         $("#editCountermeasureOptionsForm").removeClass("new");
         $('#menuBCClick').attr('dimension','countermeasure');
         refreshMenuBreadCrumb('countermeasure');
@@ -651,6 +653,7 @@ function commitCountermeasure() {
     } 
     else {
       putCountermeasure(cm, oldName, function () {
+        clearLocalStorage('countermeasure');
         $('#menuBCClick').attr('dimension','countermeasure');
         refreshMenuBreadCrumb('countermeasure');
       });
@@ -751,6 +754,7 @@ function clearCountermeasureEnvInfo(){
 
 mainContent.on('click', '#CloseCountermeasure', function (e) {
   e.preventDefault();
+  clearLocalStorage('countermeasure');
   $('#menuBCClick').attr('dimension','countermeasure');
   refreshMenuBreadCrumb('countermeasure');
 });

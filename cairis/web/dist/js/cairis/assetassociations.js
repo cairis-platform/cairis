@@ -22,6 +22,7 @@
 
 $("#assetAssociationMenuClick").click(function(){
   validateClick('assetassociation',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','assetassociation');
     refreshMenuBreadCrumb('assetassociation');
   });
@@ -169,6 +170,7 @@ function commitAssetAssociation() {
 
   if($("#editAssetAssociationOptionsForm").hasClass("new")){
     postAssetAssociation(assoc, function () {
+      clearLocalStorage('assetassociation');
       $("#editAssetAssociationOptionsForm").removeClass("new")
       $('#menuBCClick').attr('dimension','assetassociation');
       refreshMenuBreadCrumb('assetassociation');
@@ -176,6 +178,7 @@ function commitAssetAssociation() {
   }
   else {
     putAssetAssociation(assoc, oldEnvName, oldHeadName, oldTailName,  function () {
+      clearLocalStorage('assetassociation');
       $('#menuBCClick').attr('dimension','assetassociation');
       refreshMenuBreadCrumb('assetassociation');
     });
@@ -239,6 +242,7 @@ $(document).on('click', 'td.deleteAssetAssociationButton', function (e) {
 
 mainContent.on('click', '#CloseAssetAssociation', function (e) {
   e.preventDefault();
+  clearLocalStorage('assetassociation');
   $('#menuBCClick').attr('dimension','assetassociation');
   refreshMenuBreadCrumb('assetassociation');
 });

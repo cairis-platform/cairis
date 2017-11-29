@@ -21,6 +21,7 @@
 
 $("#vulnerabilityMenuClick").click(function(){
   validateClick('vulnerability',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','vulnerability');
     refreshMenuBreadCrumb('vulnerability');
   });
@@ -279,12 +280,14 @@ function commitVulnerability() {
     });
     if($(this).hasClass("newVulnerability")){
       postVulnerability(theVul, function () {
+        clearLocalStorage('vulnerability');
         $('#menuBCClick').attr('dimension','vulnerability');
         refreshMenuBreadCrumb('vulnerability');
       });
     }
     else {
       putVulnerability(theVul, $.session.get("VulnerabilityName"), function () {
+        clearLocalStorage('vulnerability');
         $('#menuBCClick').attr('dimension','vulnerability');
         refreshMenuBreadCrumb('vulnerability');
       });
@@ -350,6 +353,7 @@ function addVulnerabilityEnvironment() {
 
 mainContent.on('click', '#CloseVulnerability', function (e) {
   e.preventDefault();
+  clearLocalStorage('vulnerability');
   $('#menuBCClick').attr('dimension','vulnerability');
   refreshMenuBreadCrumb('vulnerability');
 });

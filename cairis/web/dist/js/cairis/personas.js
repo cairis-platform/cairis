@@ -21,6 +21,7 @@
 
 $("#personaMenuClick").click(function () {
   validateClick('persona',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','persona');
     refreshMenuBreadCrumb('persona');
   });
@@ -315,6 +316,7 @@ function commitPersona() {
 
     if($("#editPersonasOptionsForm").hasClass("new")){
       postPersona(persona, function () {
+        clearLocalStorage('persona');
         $("#editPersonasOptionsForm").removeClass("new")
         $('#menuBCClick').attr('dimension','persona');
         refreshMenuBreadCrumb('persona');
@@ -322,6 +324,7 @@ function commitPersona() {
     } 
     else {
       putPersona(persona, oldName, function () {
+        clearLocalStorage('persona');
         $('#menuBCClick').attr('dimension','persona');
         refreshMenuBreadCrumb('persona');
       });
@@ -429,6 +432,7 @@ function clearPersonaEnvInfo(){
 
 mainContent.on('click', '#ClosePersona', function (e) {
   e.preventDefault();
+  clearLocalStorage('persona');
   $('#menuBCClick').attr('dimension','persona');
   refreshMenuBreadCrumb('persona');
 });

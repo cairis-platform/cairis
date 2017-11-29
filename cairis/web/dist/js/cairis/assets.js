@@ -21,16 +21,12 @@
 
 $("#assetMenuClick").click(function(){
   validateClick('asset',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','asset');
     refreshMenuBreadCrumb('asset');
   });
 });
 
-function clearAssetCache() {
-  $.session.remove("Arrayindex");
-  $.session.remove("Asset");
-  $.session.remove('assetEnvironmentName');
-}
 
 function createAssetsTable(){
   $.ajax({
@@ -640,7 +636,7 @@ function assetFormToJSON(data){
     }
   });
   json['theEnvironmentProperties'] = json.theEnvironmentProperties;
-  clearAssetCache();
+  clearLocalStorage("asset");
   return json
 }
 
@@ -755,7 +751,7 @@ mainContent.on('click','#isCritical', function() {
 
 mainContent.on('click', '#CloseAsset', function (e) {
   e.preventDefault();
-  clearAssetCache();
+  clearLocalStorage("asset");
   $('#menuBCClick').attr('dimension','asset');
   refreshMenuBreadCrumb('asset'); 
 });

@@ -21,6 +21,7 @@
 
 $("#threatMenuClick").click(function () {
   validateClick('threat',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','threat');
     refreshMenuBreadCrumb('threat');
   });
@@ -439,12 +440,14 @@ function commitThreat() {
 
     if($("#editThreatOptionsform").hasClass("newThreat")){
       postThreat(threat, function () {
+        clearLocalStorage('threat');
         $('#menuBCClick').attr('dimension','threat');
         refreshMenuBreadCrumb('threat');
       });
     } 
     else {
       putThreat(threat, oldName, function () {
+        clearLocalStorage('threat');
         $('#menuBCClick').attr('dimension','threat');
         refreshMenuBreadCrumb('threat');
       });
@@ -561,6 +564,7 @@ function clearThreatEnvInfo(){
 
 mainContent.on('click', '#CloseThreat', function (e) {
   e.preventDefault();
+  clearLocalStorage('threat');
   $('#menuBCClick').attr('dimension','threat');
   refreshMenuBreadCrumb('threat');
 });

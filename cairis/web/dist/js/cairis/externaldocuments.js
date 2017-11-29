@@ -20,6 +20,7 @@
 'use strict';
 
 $("#externalDocumentsClick").click(function(){
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','external_document');
   refreshMenuBreadCrumb('external_document');
 });
@@ -122,6 +123,7 @@ function commitExternalDocument() {
 
   if($("#editExternalDocumentOptionsForm").hasClass("new")){
     postExternalDocument(edoc, function () {
+      clearLocalStorage('external_document');
       $("#editExternalDocumentOptionsForm").removeClass("new")
       $('#menuBCClick').attr('dimension','external_document');
       refreshMenuBreadCrumb('external_document');
@@ -129,6 +131,7 @@ function commitExternalDocument() {
   }
   else {
     putExternalDocument(edoc, oldName, function () {
+      clearLocalStorage('external_document');
       $('#menuBCClick').attr('dimension','external_document');
       refreshMenuBreadCrumb('external_document');
     });
@@ -244,6 +247,7 @@ function deleteExternalDocument(name, callback){
 
 mainContent.on('click', '#CloseExternalDocument', function (e) {
   e.preventDefault();
+  clearLocalStorage('external_document');
   $('#menuBCClick').attr('dimension','external_document');
   refreshMenuBreadCrumb('external_document');
 });

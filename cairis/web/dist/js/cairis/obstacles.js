@@ -22,6 +22,7 @@
 
 $("#obstacleMenuClick").click(function(){
   validateClick('obstacle',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','obstacle');
     refreshMenuBreadCrumb('obstacle');
   });
@@ -563,6 +564,7 @@ function appendObstacleConcern(concern){
 
 mainContent.on('click', '#closeObstacleButton', function (e) {
   e.preventDefault();
+  clearLocalStorage("obstacle");
   $('#menuBCClick').attr('dimension','obstacle');
   refreshMenuBreadCrumb('obstacle');
 });

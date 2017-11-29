@@ -21,6 +21,7 @@
 
 $("#templateRequirementsClick").click(function(){
   validateClick('template_requirement',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','template_requirement');
     refreshMenuBreadCrumb('template_requirement');
   });
@@ -285,6 +286,7 @@ function putTemplateRequirement(json){
     data: output,
     url: ursl,
     success: function (data) {
+      clearLocalStorage('template_requirement');
       showPopup(true);
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -311,6 +313,7 @@ function postTemplateRequirement(json,callback){
     data: output,
     url: ursl,
     success: function (data) {
+      clearLocalStorage('template_requirement');
       showPopup(true);
       if(typeof(callback) == "function"){
         callback();

@@ -20,6 +20,7 @@
 'use strict';
 
 $("#securityPatternsClick").click(function () {
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','security_pattern');
   refreshMenuBreadCrumb('security_pattern');
 });
@@ -166,6 +167,7 @@ function commitSecurityPattern() {
     sp.theProblem = $('#theProblem').val();
     sp.theSolution = $('#theSolution').val();
     postSecurityPattern(sp,function() {
+      clearLocalStorage('security_pattern');
       $("#editSecurityPatternsOptionsForm").removeClass("new");
       $('#menuBCClick').attr('dimension','security_pattern');
       refreshMenuBreadCrumb('security_pattern');
@@ -178,6 +180,7 @@ function commitSecurityPattern() {
     sp.theProblem = $('#theProblem').val();
     sp.theSolution = $('#theSolution').val();
     putSecurityPattern(sp,oldName,function() {
+      clearLocalStorage('security_pattern');
       $('#menuBCClick').attr('dimension','security_pattern');
       refreshMenuBreadCrumb('security_pattern');
     });
@@ -284,6 +287,7 @@ function appendPatternRequirement(preq) {
 
 mainContent.on('click', '#CloseSecurityPattern', function (e) {
   e.preventDefault();
+  clearLocalStorage('security_pattern');
   $('#menuBCClick').attr('dimension','security_pattern');
   refreshMenuBreadCrumb('security_pattern');
 });

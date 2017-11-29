@@ -21,6 +21,7 @@
 
 $("#dependenciesClick").click(function(){
   validateClick('dependency',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','dependency');
     refreshMenuBreadCrumb('dependency');
   });
@@ -137,6 +138,7 @@ function commitDependency() {
 
   if($("#editDependencyOptionsForm").hasClass("new")){
     postDependency(dependency, function () {
+      clearLocalStorage("dependency");
       $("#editDependencyOptionsForm").removeClass("new")
       $('#menuBCClick').attr('dimension','dependency');
       refreshMenuBreadCrumb('dependency');
@@ -144,6 +146,7 @@ function commitDependency() {
   }
   else {
     putDependency(dependency, oldEnvName, oldDepender, oldDependee,oldDependency,  function () {
+      clearLocalStorage("dependency");
       $('#menuBCClick').attr('dimension','dependency');
       refreshMenuBreadCrumb('dependency');
     });
@@ -208,6 +211,7 @@ $(document).on('click', 'td.deleteDependencyButton', function (e) {
 
 mainContent.on('click', '#CloseDependency', function (e) {
   e.preventDefault();
+  clearLocalStorage("dependency");
   $('#menuBCClick').attr('dimension','dependency');
   refreshMenuBreadCrumb('dependency');
 });

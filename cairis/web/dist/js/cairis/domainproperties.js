@@ -20,11 +20,13 @@
 'use strict';
 
 $("#domainPropertyClick").click(function () {
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','domain_property');
   refreshMenuBreadCrumb('domain_property');
 });
 
 $("#domainPropertyMenuClick").click(function () {
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
   $('#menuBCClick').attr('dimension','domain_property');
   refreshMenuBreadCrumb('domain_property');
 });
@@ -148,6 +150,7 @@ function commitDomainProperty() {
     }
     if($("#editDomainPropertyOptionsForm").hasClass("new")){
       postDomainProperty(dp, function () {
+        clearLocalStorage("domain_property");
         $("#editDomainPropertyOptionsForm").removeClass("new")
         $('#menuBCClick').attr('dimension','domain_property');
         refreshMenuBreadCrumb('domain_property');
@@ -155,6 +158,7 @@ function commitDomainProperty() {
     } 
     else {
       putDomainProperty(dp, oldName, function () {
+        clearLocalStorage("domain_property");
         $('#menuBCClick').attr('dimension','domain_property');
         refreshMenuBreadCrumb('domain_property');
       });
@@ -268,6 +272,7 @@ function postDomainProperty(dp, callback){
 
 mainContent.on('click', '#CloseDomainProperty', function (e) {
   e.preventDefault();
+  clearLocalStorage("domainproperty");
   $('#menuBCClick').attr('dimension','domain_property');
   refreshMenuBreadCrumb('domain_property');
 });

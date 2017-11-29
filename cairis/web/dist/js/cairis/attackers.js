@@ -21,6 +21,7 @@
 
 $("#attackerMenuClick").click(function () {
   validateClick('attacker',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'))
     $('#menuBCClick').attr('dimension','attacker');
     refreshMenuBreadCrumb('attacker');
   });
@@ -398,6 +399,7 @@ function commitAttacker() {
     }
     if($("#editAttackerOptionsForm").hasClass("new")){
       postAttacker(attacker, function () {
+        clearLocalStorage('attacker');
         $("#editAttackerOptionsForm").removeClass("new")
         $('#menuBCClick').attr('dimension','attacker');
         refreshMenuBreadCrumb('attacker');
@@ -405,6 +407,7 @@ function commitAttacker() {
     } 
     else {
       putAttacker(attacker, oldName, function () {
+        clearLocalStorage('attacker');
         $('#menuBCClick').attr('dimension','attacker');
         refreshMenuBreadCrumb('attacker');
       });
@@ -549,6 +552,7 @@ function clearAttackerEnvInfo(){
 
 mainContent.on('click', '#CloseAttacker', function (e) {
   e.preventDefault();
+  clearLocalStorage('attacker');
   $('#menuBCClick').attr('dimension','attacker');
   refreshMenuBreadCrumb('attacker');
 });

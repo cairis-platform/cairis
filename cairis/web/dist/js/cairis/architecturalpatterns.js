@@ -21,6 +21,7 @@
 
 $("#architecturalPatternsClick").click(function () {
   validateClick('architectural_pattern',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
     $('#menuBCClick').attr('dimension','architectural_pattern');
     refreshMenuBreadCrumb('architectural_pattern');
   });
@@ -247,6 +248,7 @@ function commitArchitecturalPattern() {
     ap.theName = $('#theName').val();
     ap.theSynopsis = $('#theSynopsis').val();
     postArchitecturalPattern(ap,function() {
+      clearLocalStorage("architectural_pattern");
       $("#editArchitecturalPatternsOptionsForm").removeClass("new");
       $('#menuBCClick').attr('dimension','architectural_pattern');
       refreshMenuBreadCrumb('architectural_pattern');
@@ -257,6 +259,7 @@ function commitArchitecturalPattern() {
     ap.theName = $('#theName').val();
     ap.theSynopsis = $('#theSynopsis').val();
     putArchitecturalPattern(ap,oldName,function() {
+      clearLocalStorage("architectural_pattern");
       $('#menuBCClick').attr('dimension','architectural_pattern');
       refreshMenuBreadCrumb('architectural_pattern');
     });
@@ -695,6 +698,7 @@ mainContent.on("click","#CloseConnector",function() {
 
 mainContent.on('click', '#CloseArchitecturalPattern', function (e) {
   e.preventDefault();
+  clearLocalStorage("architectural_pattern");
   $('#menuBCClick').attr('dimension','architectural_pattern');
   refreshMenuBreadCrumb('architectural_pattern');
 });
