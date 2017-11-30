@@ -24,6 +24,8 @@ else:
   from urllib import quote
 import jsonpickle
 from cairis.core.Persona import Persona
+from cairis.core.ObjectSummary import ObjectSummary
+from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.PersonaEnvironmentProperties import PersonaEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
@@ -64,6 +66,19 @@ class PersonaAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Personas found: %d', method, len(personas))
     persona = list(personas.values())[0]
     self.logger.info('[%s] First persona: %s [%d]\n', method, persona['theName'], persona['theId'])
+
+  def test_get_all_summary(self):
+    method = 'test_get_all_summary'
+    rv = self.app.get('/api/personas/summary?session_id=test')
+    if (sys.version_info > (3,)):
+      ps = json_deserialize(rv.data.decode('utf-8'))
+    else:
+      ps = json_deserialize(rv.data)
+    self.assertIsNotNone(ps, 'No results after deserialization')
+    self.assertGreater(len(ps), 0, 'No persona summaries')
+    self.assertIsInstance(ps[0], ObjectSummary)
+    self.logger.info('[%s] Personas found: %d', method, len(ps))
+    self.logger.info('[%s] First persona summary: %s [%s]\n', method, ps[0].theName)
 
   def test_get_by_name(self):
     method = 'test_get_by_name'

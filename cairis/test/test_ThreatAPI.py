@@ -23,6 +23,8 @@ else:
   from urllib import quote
 import jsonpickle
 from cairis.core.Threat import Threat
+from cairis.core.ObjectSummary import ObjectSummary
+from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from cairis.core.ValueType import ValueType
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -67,6 +69,19 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Threats found: %d', method, len(threats))
     threat = list(threats.values())[0]
     self.logger.info('[%s] First threat: %s [%d]\n', method, threat['theThreatName'], threat['theId'])
+
+  def test_get_all_summary(self):
+    method = 'test_get_all_summary'
+    rv = self.app.get('/api/threats/summary?session_id=test')
+    if (sys.version_info > (3,)):
+      thrs = json_deserialize(rv.data.decode('utf-8'))
+    else:
+      thrs = json_deserialize(rv.data)
+    self.assertIsNotNone(thrs, 'No results after deserialization')
+    self.assertGreater(len(thrs), 0, 'No threat summaries')
+    self.assertIsInstance(thrs[0], ObjectSummary)
+    self.logger.info('[%s] Threats found: %d', method, len(thrs))
+    self.logger.info('[%s] First threat summary: %s [%s]\n', method, thrs[0].theName)
 
   def test_get_threat_model(self):
     method = 'test_get_threat_model'

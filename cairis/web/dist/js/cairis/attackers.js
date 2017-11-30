@@ -36,7 +36,7 @@ function createAttackersTable(){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/attackers",
+    url: serverIP + "/api/attackers/summary",
     success: function (data) {
       setTableHeader("Attackers");
       var theTable = $(".theTable");
@@ -44,20 +44,13 @@ function createAttackersTable(){
       var textToInsert = [];
       var i = 0;
 
-      var keys = [];
-      for (key in data) {
-        keys.push(key);
-      }
-      keys.sort();
-
-      for (var ki = 0; ki < keys.length; ki++) {
-        var key = keys[ki];
-        var item = data[key];
+      for (var r = 0; r < data.length; r++) {
+        var item = data[r];
 
         textToInsert[i++] = "<tr>";
         textToInsert[i++] = '<td class="deleteAttackerButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
         textToInsert[i++] = '<td class="attacker-rows" name="theName">';
-        textToInsert[i++] = key;
+        textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '<td name="theType">';

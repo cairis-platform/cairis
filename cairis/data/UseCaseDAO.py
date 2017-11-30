@@ -70,6 +70,13 @@ class UseCaseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
+  def get_usecases_summary(self):
+    try:
+      ucs = self.db_proxy.getUseCasesSummary()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    return ucs
 
   def get_usecase_by_name(self, name, simplify=True):
     """

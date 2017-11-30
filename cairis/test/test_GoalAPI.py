@@ -76,7 +76,7 @@ class GoalAPITests(CairisDaemonTestCase):
     self.assertGreater(len(goals), 0, 'No goal summaries')
     self.assertIsInstance(goals[0], ObjectSummary)
     self.logger.info('[%s] Goals found: %d', method, len(goals))
-    self.logger.info('[%s] First goal summary: %s [%d]\n', method, goals[0].theName)
+    self.logger.info('[%s] First goal summary: %s [%s]\n', method, goals[0].theName)
 
   def test_get_all_coloured(self):
     method = 'test_get_all_coloured'

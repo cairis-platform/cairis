@@ -30,6 +30,7 @@ from cairis.data.ThreatDAO import ThreatDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import ThreatMessage, ValueTypeMessage
 from cairis.tools.ModelDefinitions import ThreatModel, ValueTypeModel, ThreatModelModel
+from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
 from cairis.tools.SessionValidator import get_session_id
 
 
@@ -556,4 +557,37 @@ class ThreatModelAPI(Resource):
     dao.close()
     resp = make_response(json_serialize(model, session_id=session_id), OK)
     resp.contenttype = 'application/json'
+    return resp
+
+class ThreatsSummaryAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get summary of threats',
+    responseClass=SwaggerObjectSummaryModel.__name__,
+    nickname='threats-summary-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self):
+    session_id = get_session_id(session, request)
+    dao = ThreatDAO(session_id)
+    objts = dao.get_threats_summary()
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
     return resp

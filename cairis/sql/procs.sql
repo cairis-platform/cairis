@@ -77,9 +77,11 @@ drop procedure if exists persona_roles;
 drop procedure if exists attacker_capability;
 drop procedure if exists attacker_motivation;
 drop procedure if exists getAttackers;
+drop procedure if exists getAttackersSummary;
 drop procedure if exists getAssets;
 drop procedure if exists getAssetsSummary;
 drop procedure if exists getThreats;
+drop procedure if exists getThreatsSummary;
 drop procedure if exists getVulnerabilities;
 drop procedure if exists getRisks;
 drop procedure if exists getRisksSummary;
@@ -320,8 +322,10 @@ drop procedure if exists updateRequirement;
 drop procedure if exists getEnvironments;
 drop function if exists requirementName;
 drop procedure if exists getPersonas;
+drop procedure if exists getPersonasSummary;
 drop procedure if exists getTasks;
 drop procedure if exists getUseCases;
+drop procedure if exists getUseCasesSummary;
 drop procedure if exists getMisuseCases;
 drop procedure if exists riskMisuseCase;
 drop procedure if exists traceDimensionList;
@@ -2176,6 +2180,12 @@ begin
 end
 //
 
+create procedure getAttackersSummary()
+begin
+  select name,description from attacker order by 1;
+end
+//
+
 create procedure getAssets(in constraintId int)
 begin
   if constraintId = -1
@@ -2201,6 +2211,12 @@ begin
   else
     select t.id, t.name, tt.name, t.method from threat t, threat_type tt where t.id = constraintId and t.threat_type_id = tt.id;
   end if;
+end
+//
+
+create procedure getThreatsSummary()
+begin
+  select t.name, tt.name from threat t, threat_type tt where t.threat_type_id = tt.id order by 1;
 end
 //
 
@@ -7977,6 +7993,13 @@ begin
 end
 //
 
+
+create procedure getPersonasSummary()
+begin
+  select p.name,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id order by 1;
+end
+//
+
 create procedure getTasks(in constraintId int)
 begin
   if constraintId = -1
@@ -7996,6 +8019,12 @@ begin
   else
     select id,name,author,short_code,description from usecase where id = constraintId;
   end if;
+end
+//
+
+create procedure getUseCasesSummary()
+begin
+  select name,description from usecase order by 1;
 end
 //
 

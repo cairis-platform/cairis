@@ -31,6 +31,7 @@ from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import UseCaseMessage, ValueTypeMessage
 from cairis.tools.ModelDefinitions import UseCaseModel, ValueTypeModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
+from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
 
 __author__ = 'Shamal Faily'
 
@@ -453,4 +454,37 @@ class UseCaseExceptionAPI(Resource):
     resp_dict = {'message': 'Obstacle generated from exception'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
+    return resp
+
+class UseCasesSummaryAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get summary of use cases',
+    responseClass=SwaggerObjectSummaryModel.__name__,
+    nickname='usecases-summary-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self):
+    session_id = get_session_id(session, request)
+    dao = UseCaseDAO(session_id)
+    objts = dao.get_usecases_summary()
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
     return resp

@@ -201,6 +201,7 @@ api.add_resource(AssetController.AssetAssociationByNameAPI, '/api/assets/associa
 
 # Attacker routes
 api.add_resource(AttackerController.AttackersAPI, '/api/attackers',endpoint='attackers')
+api.add_resource(AttackerController.AttackersSummaryAPI, '/api/attackers/summary',endpoint='attackerssummary')
 api.add_resource(AttackerController.AttackerByNameAPI, '/api/attackers/name/<string:name>',endpoint='attackerbyname')
 api.add_resource(AttackerController.AttackerCapabilitiesAPI, '/api/attackers/capabilities',endpoint='attackercapabilities')
 api.add_resource(AttackerController.AttackerCapabilityByNameAPI, '/api/attackers/capabilities/name/<string:name>',endpoint='attackercapability')
@@ -318,6 +319,7 @@ api.add_resource(ObstacleController.ObstacleModelAPI, '/api/obstacles/model/envi
 
 # Persona routes
 api.add_resource(PersonaController.PersonasAPI, '/api/personas',endpoint='personas')
+api.add_resource(PersonaController.PersonasSummaryAPI, '/api/personas/summary',endpoint='personasummary')
 api.add_resource(PersonaController.PersonaNamesAPI, '/api/personas/names', '/api/personas/all/names',endpoint='persona_names')
 api.add_resource(PersonaController.PersonaByNameAPI, '/api/personas/name/<string:name>',endpoint='persona')
 api.add_resource(PersonaController.PersonaModelByNameAPI, '/api/personas/model/name/<string:persona>/variable/<string:variable>/characteristic/<string:characteristic>',endpoint='persona_model')
@@ -414,6 +416,7 @@ api.add_resource(TemplateRequirementController.TemplateRequirementByNameAPI, '/a
 
 # Threat routes
 api.add_resource(ThreatController.ThreatAPI, '/api/threats',endpoint='threats')
+api.add_resource(ThreatController.ThreatsSummaryAPI, '/api/threats/summary',endpoint='threatssummary')
 api.add_resource(ThreatController.ThreatByIdAPI, '/api/threats/id/<int:id>',endpoint='threat_id')
 api.add_resource(ThreatController.ThreatByNameAPI, '/api/threats/name/<string:name>',endpoint='threat')
 api.add_resource(ThreatController.ThreatTypesAPI, '/api/threats/types',endpoint='threat_types')
@@ -435,6 +438,7 @@ api.add_resource(UploadController.UploadImageAPI, '/api/upload/image',endpoint='
 
 # Use Case routes
 api.add_resource(UseCaseController.UseCasesAPI, '/api/usecases',endpoint='usecases')
+api.add_resource(UseCaseController.UseCasesSummaryAPI, '/api/usecases/summary',endpoint='usecasessummary')
 api.add_resource(UseCaseController.UseCaseByNameAPI, '/api/usecases/name/<string:name>',endpoint='usecase')
 api.add_resource(UseCaseController.UseCaseRequirementsByNameAPI, '/api/usecases/name/<string:usecase_name>/requirements',endpoint='usecaserequirements')
 api.add_resource(UseCaseController.UseCaseGoalsByNameAPI, '/api/usecases/name/<string:usecase_name>/environment/<string:environment_name>/goals',endpoint='usecasegoals')

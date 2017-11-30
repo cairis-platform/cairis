@@ -25,6 +25,8 @@ else:
 import jsonpickle
 from cairis.core.UseCase import UseCase
 from cairis.core.Trace import Trace
+from cairis.core.ObjectSummary import ObjectSummary
+from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 import os
@@ -75,6 +77,19 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Use Cases found: %d', method, len(usecases))
     usecase = list(usecases.values())[0]
     self.logger.info('[%s] First usecase: %s [%d]\n', method, usecase['theName'], usecase['theId'])
+
+  def test_get_all_summary(self):
+    method = 'test_get_all_summary'
+    rv = self.app.get('/api/usecases/summary?session_id=test')
+    if (sys.version_info > (3,)):
+      ucs = json_deserialize(rv.data.decode('utf-8'))
+    else:
+      ucs = json_deserialize(rv.data)
+    self.assertIsNotNone(ucs, 'No results after deserialization')
+    self.assertGreater(len(ucs), 0, 'No goal summaries')
+    self.assertIsInstance(ucs[0], ObjectSummary)
+    self.logger.info('[%s] Use Cases found: %d', method, len(ucs))
+    self.logger.info('[%s] First use case summary: %s [%s]\n', method, ucs[0].theName)
 
   def test_get_by_name(self):
     method = 'test_get_by_name'

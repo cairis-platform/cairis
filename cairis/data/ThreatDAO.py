@@ -74,6 +74,14 @@ class ThreatDAO(CairisDAO):
 
     return threats
 
+  def get_threats_summary(self):
+    try:
+      thrs = self.db_proxy.getThreatsSummary()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    return thrs
+
   def get_threat_by_id(self, threat_id, simplify=True):
     found_threat = None
     try:

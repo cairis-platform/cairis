@@ -30,6 +30,7 @@ from cairis.data.PersonaDAO import PersonaDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import PersonaMessage, PersonaEnvironmentPropertiesMessage, ValueTypeMessage
 from cairis.tools.ModelDefinitions import PersonaModel, PersonaEnvironmentPropertiesModel, ValueTypeModel
+from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 __author__ = 'Shamal Faily'
 
@@ -531,4 +532,37 @@ class PersonaEnvironmentPropertiesAPI(Resource):
     resp_dict = {'message': 'The persona properties were successfully updated.'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
+    return resp
+
+class PersonasSummaryAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get summary of personas',
+    responseClass=SwaggerObjectSummaryModel.__name__,
+    nickname='personas-summary-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self):
+    session_id = get_session_id(session, request)
+    dao = PersonaDAO(session_id)
+    objts = dao.get_personas_summary()
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
     return resp

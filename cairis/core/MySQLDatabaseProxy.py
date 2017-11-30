@@ -612,6 +612,34 @@ class MySQLDatabaseProxy:
       rows.append(ObjectSummary(objtName,originator=objtOrig))
     return rows
 
+  def getUseCasesSummary(self):
+    objtRows = self.responseList('call getUseCasesSummary()',{},'MySQL error getting use case summary')
+    rows = []
+    for objtName, objtDesc in objtRows:
+      rows.append(ObjectSummary(objtName,description=objtDesc))
+    return rows
+
+  def getAttackersSummary(self):
+    objtRows = self.responseList('call getAttackersSummary()',{},'MySQL error getting attacker summary')
+    rows = []
+    for objtName, objtDesc in objtRows:
+      rows.append(ObjectSummary(objtName,description=objtDesc))
+    return rows
+
+  def getPersonasSummary(self):
+    objtRows = self.responseList('call getPersonasSummary()',{},'MySQL error getting persona summary')
+    rows = []
+    for objtName, objtType in objtRows:
+      rows.append(ObjectSummary(objtName,type=objtType))
+    return rows
+
+  def getThreatsSummary(self):
+    objtRows = self.responseList('call getThreatsSummary()',{},'MySQL error getting threat summary')
+    rows = []
+    for objtName, objtType in objtRows:
+      rows.append(ObjectSummary(objtName,type=objtType))
+    return rows
+
   def getPersonaCharacteristicsSummary(self):
     objtRows = self.responseList('call getPersonaCharacteristicsSummary()',{},'MySQL error getting persona characteristics summary')
     rows = []

@@ -59,6 +59,14 @@ class AttackerDAO(CairisDAO):
 
     return attackers
 
+  def get_attackers_summary(self):
+    try:
+      ats = self.db_proxy.getAttackersSummary()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    return ats
+
   def get_attacker_by_name(self, name, simplify=True):
     """
     :rtype: Attacker

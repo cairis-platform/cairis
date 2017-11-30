@@ -61,6 +61,14 @@ class PersonaDAO(CairisDAO):
 
     return personas
 
+  def get_personas_summary(self):
+    try:
+      ps = self.db_proxy.getPersonasSummary()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    return ps
+
   def get_persona_names(self):
     """
     Get the available persona names.
