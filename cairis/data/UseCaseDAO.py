@@ -83,14 +83,32 @@ class UseCaseDAO(CairisDAO):
     :rtype: UseCase
     :raise ObjectNotFoundHTTPError:
     """
-    usecases = self.get_usecases(simplify=simplify)
-    found_usecase = usecases.get(name, None)
-
-    if found_usecase is None:
+    try:
+      ucId = self.db_proxy.getDimensionId(name,'usecase')
+      ucs = self.db_proxy.getUseCases(ucId)
+    except DatabaseProxyException as ex:
       self.close()
-      raise ObjectNotFoundHTTPError('The provided usecase name')
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
-    return found_usecase
+    if ucs is not None:
+      found_uc = ucs.get(name)
+
+    if found_uc is None:
+      self.close()
+      raise ObjectNotFoundHTTPError(obj='The provided usecase name')
+
+    found_uc = self.simplify(found_uc)
+    found_uc.theReferenceContributions = []
+    contribs = self.db_proxy.getUseCaseContributions(found_uc.name())
+    for rsName in contribs: 
+      rrc,rsType = contribs[rsName]
+      frc = CharacteristicReferenceContribution(rrc.meansEnd(),rrc.contribution())
+      found_uc.theReferenceContributions.append(UseCaseContributionModel(rsName,frc))
+    return found_uc
+
 
   def add_usecase(self, usecase):
     """

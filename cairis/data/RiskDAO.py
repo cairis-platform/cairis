@@ -92,13 +92,27 @@ class RiskDAO(CairisDAO):
     """
     :rtype : Risk
     """
-    risks = self.get_risks(simplify=simplify, skip_misuse=skip_misuse)
-    found_risk = risks.get(name, None)
+    try:
+      riskId = self.db_proxy.getDimensionId(name,'risk')
+      risks = self.db_proxy.getRisks(riskId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+    if risks is not None:
+      found_risk = risks.get(name)
 
     if found_risk is None:
       self.close()
       raise ObjectNotFoundHTTPError(obj='The provided risk name')
-
+  
+    if found_risk.theMisuseCase and not skip_misuse:
+      found_risk.theMisuseCase = self.get_misuse_case_by_risk_name(found_risk.theName, simplify=False)
+    if simplify:
+      found_risk = self.simplify(found_risk)
     return found_risk
 
   def get_risk_analysis_model(self, environment_name, dim_name, obj_name,model_layout):

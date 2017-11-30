@@ -91,13 +91,22 @@ class PersonaDAO(CairisDAO):
     :rtype: Persona
     :raise ObjectNotFoundHTTPError:
     """
-    personas = self.get_personas(simplify=simplify)
+    try:
+      personaId = self.db_proxy.getDimensionId(name,'persona')
+      personas = self.db_proxy.getPersonas(personaId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
     found_persona = personas.get(name, None)
 
     if found_persona is None:
       self.close()
       raise ObjectNotFoundHTTPError('The provided persona name')
 
+    found_persona = self.simplify(found_persona)
     return found_persona
 
   def add_persona(self, persona):
