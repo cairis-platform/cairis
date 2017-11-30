@@ -29,6 +29,7 @@ from cairis.data.PersonaCharacteristicDAO import PersonaCharacteristicDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import PersonaCharacteristicMessage
 from cairis.tools.ModelDefinitions import PersonaCharacteristicModel
+from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
 from cairis.tools.SessionValidator import get_session_id
 
 __author__ = 'Shamal Faily'
@@ -251,4 +252,37 @@ class PersonaCharacteristicByNameAPI(Resource):
     resp_dict = {'message': 'Persona Characteristic successfully deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
+    return resp
+
+class PersonaCharacteristicsSummaryAPI(Resource):
+  # region Swagger Doc
+  @swagger.operation(
+    notes='Get summary of persona characteristics',
+    responseClass=SwaggerObjectSummaryModel.__name__,
+    nickname='personacharacteristics-summary-get',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        "code": BAD_REQUEST,
+        "message": "The database connection was not properly set up"
+      }
+    ]
+  )
+  # endregion
+  def get(self):
+    session_id = get_session_id(session, request)
+    dao = PersonaCharacteristicDAO(session_id)
+    objts = dao.get_persona_characteristics_summary()
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
     return resp

@@ -327,6 +327,7 @@ api.add_resource(PersonaController.PersonaEnvironmentPropertiesAPI, '/api/person
 
 # Persona Characteristic routes
 api.add_resource(PersonaCharacteristicController.PersonaCharacteristicsAPI, '/api/persona_characteristics',endpoint='persona_characteristics')
+api.add_resource(PersonaCharacteristicController.PersonaCharacteristicsSummaryAPI, '/api/persona_characteristics/summary',endpoint='personacharacteristicssummary')
 api.add_resource(PersonaCharacteristicController.PersonaCharacteristicByNameAPI, '/api/persona_characteristics/name/<string:name>',endpoint='persona_characteristic')
 
 # Project routes

@@ -494,6 +494,7 @@ drop procedure if exists updateTaskCharacteristic;
 drop procedure if exists addPersonaCharacteristicReference;
 drop procedure if exists addTaskCharacteristicReference;
 drop procedure if exists getPersonaCharacteristics;
+drop procedure if exists getPersonaCharacteristicsSummary;
 drop procedure if exists getTaskCharacteristics;
 drop procedure if exists getPersonaCharacteristicReferences;
 drop procedure if exists delete_persona_characteristic;
@@ -11025,6 +11026,13 @@ begin
   end if;
 end
 //
+
+create procedure getPersonaCharacteristicsSummary()
+begin
+  select p.name,bv.name,pc.description from persona_characteristic pc, persona p, behavioural_variable bv where pc.persona_id = p.id and pc.variable_id = bv.id order by 1,2;
+end
+//
+
 
 create procedure delete_persona_characteristic(in pcId int)
 begin

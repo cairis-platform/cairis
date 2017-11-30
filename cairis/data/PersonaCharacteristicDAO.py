@@ -59,6 +59,15 @@ class PersonaCharacteristicDAO(CairisDAO):
         pcs[key].theCharacteristicSynopsis = crs
     return pcs
 
+  def get_persona_characteristics_summary(self):
+    try:
+      pcs = self.db_proxy.getPersonaCharacteristicsSummary()
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    return pcs
+
+
   def get_persona_characteristic(self, persona_characteristic_name):
     pcId = self.db_proxy.getDimensionId(persona_characteristic_name,'persona_characteristic')
     pcs = self.get_persona_characteristics(pcId)

@@ -35,7 +35,7 @@ function createPersonaCharacteristicsTable(){
       session_id: String($.session.get('sessionID'))
     },
     crossDomain: true,
-    url: serverIP + "/api/persona_characteristics",
+    url: serverIP + "/api/persona_characteristics/summary",
     success: function (data) {
       setTableHeader("PersonaCharacteristics");
       var theTable = $(".theTable");
@@ -43,21 +43,14 @@ function createPersonaCharacteristicsTable(){
       var textToInsert = [];
       var i = 0;
 
-      var keys = [];
-      for (key in data) {
-        keys.push(key);
-      }
-      keys.sort();
-
-      for (var ki = 0; ki < keys.length; ki++) {
-        var key = keys[ki];
-        var item = data[key];
+      for (var r = 0; r < data.length; r++) {
+        var item = data[r];
 
         textToInsert[i++] = "<tr>";
 
-        textToInsert[i++] = '<td class="deletePersonaCharacteristicButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="deletePersonaCharacteristicButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
         textToInsert[i++] = '<td class="personacharacteristic-rows" name="theName">';
-        textToInsert[i++] = item.thePersonaName;
+        textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '<td name="theVariable">';

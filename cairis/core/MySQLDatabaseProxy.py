@@ -612,6 +612,13 @@ class MySQLDatabaseProxy:
       rows.append(ObjectSummary(objtName,originator=objtOrig))
     return rows
 
+  def getPersonaCharacteristicsSummary(self):
+    objtRows = self.responseList('call getPersonaCharacteristicsSummary()',{},'MySQL error getting persona characteristics summary')
+    rows = []
+    for objtName, objtVar, objtChar in objtRows:
+      rows.append(ObjectSummary(objtName,variable=objtVar,characteristic=objtChar))
+    return rows
+
 
   def getThreats(self,constraintId = -1):
     threats = {}

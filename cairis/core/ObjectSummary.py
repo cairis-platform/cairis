@@ -18,7 +18,7 @@
 __author__ = 'Shamal Faily'
 
 class ObjectSummary:
-  def __init__(self,name, type='N/A', description='N/A', originator='N/A', status='N/A',vulnerability='N/A',threat='N/A'):
+  def __init__(self,name, type='N/A', description='N/A', originator='N/A', status='N/A',vulnerability='N/A',threat='N/A',variable='N/A',characteristic='N/A'):
     self.theName = name
     self.theType = type
     self.theDescription = description
@@ -26,3 +26,5 @@ class ObjectSummary:
     self.theStatus = status
     self.theVulnerability = vulnerability
     self.theThreat = threat
+    self.theVariable = variable
+    self.theCharacteristic = characteristic
