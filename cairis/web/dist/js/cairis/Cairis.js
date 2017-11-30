@@ -2005,7 +2005,8 @@ $("#logoutClick").click(function () {
     url: serverIP + '/disconnect',
     success: function(data, status, xhr) {
       $.session.clear();
-      window.document.write("<p>Logged out.  You can now close this window or tab.</p>");
+      document.cookie = '__session:' + window.name + ':=http:' + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      window.open(serverIP + "/login","_self");
     },
     error: function(data, status, xhr) {
       var error = JSON.parse(xhr.responseText);
