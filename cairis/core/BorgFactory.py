@@ -103,7 +103,7 @@ def initialiseDesktopSettings():
   b.fontName = pSettings['Font Name']
   b.mainFrame = None
 
-def initialise():
+def initialise(user='cairis_test',db='cairis_test'):
   cfgDict = parseConfigFile()
   initialiseCairisDbSettings(cfgDict)
 
@@ -116,7 +116,10 @@ def initialise():
   setupDocBookConfig()
 
   from cairis.gui.GUIDatabaseProxy import GUIDatabaseProxy
-  b.dbProxy = GUIDatabaseProxy()
+  dbPasswd = ''
+  if (user == 'cairis_test'):
+    dbPasswd = 'cairis_test'
+  b.dbProxy = GUIDatabaseProxy(user=user,passwd=dbPasswd,db=db)
   initialiseDesktopSettings()
 
 def dInitialise(withTest = True):
