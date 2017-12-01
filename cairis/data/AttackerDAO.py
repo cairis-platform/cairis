@@ -97,8 +97,7 @@ class AttackerDAO(CairisDAO):
 
     try:
       if not self.check_existing_attacker(attacker.theName):
-        new_id = self.db_proxy.addAttacker(attacker_params)
-        return new_id
+        self.db_proxy.addAttacker(attacker_params)
       else:
         self.close()
         raise OverwriteNotAllowedHTTPError(obj_name=attacker.theName)

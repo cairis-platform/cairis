@@ -69,13 +69,22 @@ class TaskDAO(CairisDAO):
     :rtype: Task
     :raise ObjectNotFoundHTTPError:
     """
-    tasks = self.get_tasks(simplify=simplify)
+    try:
+      taskId = self.db_proxy.getDimensionId(name,'task')
+      tasks = self.db_proxy.getTasks(taskId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
     found_task = tasks.get(name, None)
 
     if found_task is None:
       self.close()
       raise ObjectNotFoundHTTPError('The provided task name')
-
+    found_task = self.simplify(found_task)
     return found_task
 
   def add_task(self, task):

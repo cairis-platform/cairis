@@ -147,9 +147,11 @@ class RiskDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def add_risk(self, risk):
-    if self.check_existing_risk(risk.name()):
+    try:
+      self.db_proxy.nameCheck(risk.name(), 'risk')
+    except ARMException as ex:
       self.close()
-      raise OverwriteNotAllowedHTTPError('The provided risk name')
+      raise ARMHTTPError(ex)
 
     params = RiskParameters(riskName=risk.name(),threatName=risk.threat(),vulName=risk.vulnerability(),mc=risk.misuseCase(),rTags=risk.tags())
 

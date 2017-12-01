@@ -119,12 +119,11 @@ class RisksAPI(Resource):
   #endregion
   def post(self):
     session_id = get_session_id(session, request)
-
     dao = RiskDAO(session_id)
     risk = dao.from_json(request)
-    risk_id = dao.add_risk(risk)
+    dao.add_risk(risk)
 
-    resp_dict = {'message': 'Risk successfully added', 'risk_id': risk_id}
+    resp_dict = {'message': 'Risk successfully added'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

@@ -129,10 +129,9 @@ class AttackersAPI(Resource):
 
     dao = AttackerDAO(session_id)
     new_attacker = dao.from_json(request)
-    attacker_id = dao.add_attacker(new_attacker)
+    dao.add_attacker(new_attacker)
     dao.close()
-
-    resp_dict = {'message': 'Attacker successfully added', 'attacker_id': attacker_id}
+    resp_dict = {'message': 'Attacker successfully added'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

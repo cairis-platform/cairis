@@ -133,7 +133,6 @@ class RiskAPITests(CairisDaemonTestCase):
         self.logger.info('[%s] URL: %s', method, url)
         new_risk_body = self.prepare_json()
 
-#        self.app.delete('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()))
         rv = self.app.post(url, content_type='application/json', data=new_risk_body)
         if (sys.version_info > (3,)):
           responseData = rv.data.decode('utf-8')
@@ -142,10 +141,6 @@ class RiskAPITests(CairisDaemonTestCase):
         self.logger.debug('[%s] Response data: %s', method, responseData)
         json_resp = jsonpickle.decode(responseData)
         self.assertIsNotNone(json_resp, 'No results after deserialization')
-        env_id = json_resp.get('risk_id', None)
-        self.assertIsNotNone(env_id, 'No risk ID returned')
-        self.assertGreater(env_id, 0, 'Invalid risk ID returned [%d]' % env_id)
-        self.logger.info('[%s] Risk ID: %d\n', method, env_id)
 
         rv = self.app.delete('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()))
 
@@ -155,7 +150,6 @@ class RiskAPITests(CairisDaemonTestCase):
         self.logger.info('[%s] URL: %s', method, url)
         new_risk_body = self.prepare_json()
 
-#        rv = self.app.delete('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()))
         rv = self.app.post(url, content_type='application/json', data=new_risk_body)
         if (sys.version_info > (3,)):
           responseData = rv.data.decode('utf-8')
@@ -164,14 +158,10 @@ class RiskAPITests(CairisDaemonTestCase):
         self.logger.debug('[%s] Response data: %s', method, responseData)
         json_resp = jsonpickle.decode(responseData)
         self.assertIsNotNone(json_resp, 'No results after deserialization')
-        env_id = json_resp.get('risk_id', None)
-        self.assertIsNotNone(env_id, 'No risk ID returned')
-        self.assertGreater(env_id, 0, 'Invalid risk ID returned [%d]' % env_id)
-        self.logger.info('[%s] Risk ID: %d', method, env_id)
 
         risk_to_update = self.prepare_new_risk()
         risk_to_update.theName = 'Edited test risk'
-        risk_to_update.theId = env_id
+        risk_to_update.theId = -1
         upd_env_body = self.prepare_json(risk=risk_to_update)
         rv = self.app.put('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()), data=upd_env_body, content_type='application/json')
         if (sys.version_info > (3,)):

@@ -139,10 +139,6 @@ class AttackerAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('attacker_id', None)
-    self.assertIsNotNone(env_id, 'No attacker ID returned')
-    self.assertGreater(env_id, 0, 'Invalid attacker ID returned [%d]' % env_id)
-    self.logger.info('[%s] Attacker ID: %d\n', method, env_id)
 
     rv = self.app.delete('/api/attackers/name/%s?session_id=test' % quote(self.prepare_new_attacker().theName))
 
@@ -161,14 +157,10 @@ class AttackerAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('attacker_id', None)
-    self.assertIsNotNone(env_id, 'No attacker ID returned')
-    self.assertGreater(env_id, 0, 'Invalid attacker ID returned [%d]' % env_id)
-    self.logger.info('[%s] Attacker ID: %d', method, env_id)
 
     attacker_to_update = self.prepare_new_attacker()
     attacker_to_update.theName = 'Edited test attacker'
-    attacker_to_update.theId = env_id
+    attacker_to_update.theId = -1
     upd_env_body = self.prepare_json(attacker=attacker_to_update)
     rv = self.app.put('/api/attackers/name/%s?session_id=test' % quote(self.prepare_new_attacker().theName), data=upd_env_body, content_type='application/json')
     if (sys.version_info > (3,)):
