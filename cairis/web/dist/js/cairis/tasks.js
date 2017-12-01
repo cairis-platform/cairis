@@ -39,6 +39,7 @@ window.reverseFrequencyLookup['High'] = 'Monthly or less';
 
 $("#taskClick").click(function () {
   clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','task');
   refreshMenuBreadCrumb('task');
 });
@@ -557,6 +558,7 @@ $(document).on("click", "#addNewTask", function () {
 mainContent.on('click', '#CloseTask', function (e) {
   e.preventDefault();
   clearLocalStorage('task');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','task');
   refreshMenuBreadCrumb('task');
 });

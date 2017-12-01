@@ -22,6 +22,7 @@
 $("#assetMenuClick").click(function(){
   validateClick('asset',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','asset');
     refreshMenuBreadCrumb('asset');
   });
@@ -752,6 +753,7 @@ mainContent.on('click','#isCritical', function() {
 mainContent.on('click', '#CloseAsset', function (e) {
   e.preventDefault();
   clearLocalStorage("asset");
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','asset');
   refreshMenuBreadCrumb('asset'); 
 });

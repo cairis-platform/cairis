@@ -22,6 +22,7 @@
 $("#vulnerabilityMenuClick").click(function(){
   validateClick('vulnerability',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','vulnerability');
     refreshMenuBreadCrumb('vulnerability');
   });
@@ -354,6 +355,7 @@ function addVulnerabilityEnvironment() {
 mainContent.on('click', '#CloseVulnerability', function (e) {
   e.preventDefault();
   clearLocalStorage('vulnerability');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','vulnerability');
   refreshMenuBreadCrumb('vulnerability');
 });

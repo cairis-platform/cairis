@@ -22,6 +22,7 @@
 $("#dataflowsMenuClick").click(function(){
   validateClick('dataflow',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','dataflow');
     refreshMenuBreadCrumb('dataflow');
   });
@@ -224,6 +225,7 @@ $(document).on('click', 'td.deleteDataflowButton', function (e) {
 mainContent.on('click', '#CloseDataflow', function (e) {
   e.preventDefault();
   clearLocalStorage('dataflow');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','dataflow');
   refreshMenuBreadCrumb('dataflow');
 });

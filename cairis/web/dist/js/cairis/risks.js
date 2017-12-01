@@ -22,6 +22,7 @@
 $("#riskMenuClick").click(function () {
   validateClick('risk',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','risk');
     refreshMenuBreadCrumb('risk');
   });
@@ -470,6 +471,7 @@ function commitRisk() {
 mainContent.on('click', '#CloseRisk', function (e) {
   e.preventDefault();
   clearLocalStorage('risk');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','risk');
   refreshMenuBreadCrumb('risk');
 });

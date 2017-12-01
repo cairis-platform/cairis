@@ -22,6 +22,7 @@
 $("#countermeasuresClick").click(function () {
   validateClick('countermeasure',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','countermeasure');
     refreshMenuBreadCrumb('countermeasure');
   });
@@ -755,6 +756,7 @@ function clearCountermeasureEnvInfo(){
 mainContent.on('click', '#CloseCountermeasure', function (e) {
   e.preventDefault();
   clearLocalStorage('countermeasure');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','countermeasure');
   refreshMenuBreadCrumb('countermeasure');
 });

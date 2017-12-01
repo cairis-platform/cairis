@@ -22,6 +22,7 @@
 $("#architecturalPatternsClick").click(function () {
   validateClick('architectural_pattern',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','architectural_pattern');
     refreshMenuBreadCrumb('architectural_pattern');
   });
@@ -699,6 +700,7 @@ mainContent.on("click","#CloseConnector",function() {
 mainContent.on('click', '#CloseArchitecturalPattern', function (e) {
   e.preventDefault();
   clearLocalStorage("architectural_pattern");
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','architectural_pattern');
   refreshMenuBreadCrumb('architectural_pattern');
 });

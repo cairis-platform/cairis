@@ -22,6 +22,7 @@
 $("#templateRequirementsClick").click(function(){
   validateClick('template_requirement',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','template_requirement');
     refreshMenuBreadCrumb('template_requirement');
   });
@@ -241,6 +242,7 @@ function commitTemplateRequirement() {
 
 mainContent.on('click', '#CloseTemplateRequirement', function (e) {
   e.preventDefault();
+  $("#objectViewer").empty();
   createTemplateRequirementsTable();
 });
 

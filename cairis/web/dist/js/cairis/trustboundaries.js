@@ -22,6 +22,7 @@
 $("#trustBoundariesMenuClick").click(function(){
   validateClick('trust_boundary',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','trust_boundary');
     refreshMenuBreadCrumb('trust_boundary');
   });
@@ -164,6 +165,7 @@ $(document).on('click', 'td.deleteTrustBoundaryButton', function (e) {
 mainContent.on('click', '#CloseTrustBoundary', function (e) {
   e.preventDefault();
   clearLocalStorage('trust_boundary');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','trust_boundary');
   refreshMenuBreadCrumb('trust_boundary');
 });

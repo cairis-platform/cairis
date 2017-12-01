@@ -22,6 +22,7 @@
 $("#attackerMenuClick").click(function () {
   validateClick('attacker',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'))
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','attacker');
     refreshMenuBreadCrumb('attacker');
   });
@@ -546,6 +547,7 @@ function clearAttackerEnvInfo(){
 mainContent.on('click', '#CloseAttacker', function (e) {
   e.preventDefault();
   clearLocalStorage('attacker');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','attacker');
   refreshMenuBreadCrumb('attacker');
 });

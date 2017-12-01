@@ -108,6 +108,7 @@ $(document).on('click', "td.deleteEnvironmentButton",function(e){
 
 $("#environmentsClick").click(function () {
   clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','environment');
   refreshMenuBreadCrumb('environment');
 });
@@ -287,6 +288,7 @@ function createEnvironmentsTable(){
 mainContent.on('click', '#CloseEnvironment', function (e) {
   e.preventDefault();
   clearLocalStorage('environment');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','environment');
   refreshMenuBreadCrumb('environment');
 });

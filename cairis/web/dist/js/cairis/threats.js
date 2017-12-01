@@ -22,6 +22,7 @@
 $("#threatMenuClick").click(function () {
   validateClick('threat',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','threat');
     refreshMenuBreadCrumb('threat');
   });
@@ -558,6 +559,7 @@ function clearThreatEnvInfo(){
 mainContent.on('click', '#CloseThreat', function (e) {
   e.preventDefault();
   clearLocalStorage('threat');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','threat');
   refreshMenuBreadCrumb('threat');
 });

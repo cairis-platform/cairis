@@ -21,6 +21,7 @@
 
 $("#externalDocumentsClick").click(function(){
   clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','external_document');
   refreshMenuBreadCrumb('external_document');
 });
@@ -248,6 +249,7 @@ function deleteExternalDocument(name, callback){
 mainContent.on('click', '#CloseExternalDocument', function (e) {
   e.preventDefault();
   clearLocalStorage('external_document');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','external_document');
   refreshMenuBreadCrumb('external_document');
 });

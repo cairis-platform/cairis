@@ -21,6 +21,7 @@
 
 $("#documentReferencesClick").click(function(){
   clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','document_reference');
   refreshMenuBreadCrumb('document_reference');
 });
@@ -289,6 +290,7 @@ function getDocNames(callback){
 mainContent.on('click', '#CloseDocumentReference', function (e) {
   e.preventDefault();
   clearLocalStorage('document_reference');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','document_reference');
   refreshMenuBreadCrumb('document_reference');
 });

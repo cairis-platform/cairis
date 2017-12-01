@@ -22,6 +22,7 @@
 $("#personaMenuClick").click(function () {
   validateClick('persona',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','persona');
     refreshMenuBreadCrumb('persona');
   });
@@ -426,6 +427,7 @@ function clearPersonaEnvInfo(){
 mainContent.on('click', '#ClosePersona', function (e) {
   e.preventDefault();
   clearLocalStorage('persona');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','persona');
   refreshMenuBreadCrumb('persona');
 });

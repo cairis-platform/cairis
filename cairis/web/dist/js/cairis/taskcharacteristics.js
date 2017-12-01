@@ -21,6 +21,7 @@
 
 $("#taskCharacteristicsClick").click(function(){
   clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','task_characteristic');
   refreshMenuBreadCrumb('task_characteristic');
 });
@@ -312,6 +313,7 @@ function deleteTaskCharacteristic(name, callback){
 mainContent.on('click', '#CloseTaskCharacteristic', function (e) {
   e.preventDefault();
   clearLocalStorage('task_characteristic');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','task_characteristic');
   refreshMenuBreadCrumb('task_characteristic');
 });

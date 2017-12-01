@@ -21,6 +21,7 @@
 
 $("#templateGoalsClick").click(function(){
   clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','template_goal');
   refreshMenuBreadCrumb('template_goal');
 });
@@ -210,6 +211,7 @@ function commitTemplateGoal(){
 mainContent.on('click', '#CloseTemplateGoal', function (e) {
   e.preventDefault();
   clearLocalStorage('template_goal');
+  $("#objectViewer").empty();
   createTemplateGoalsTable();
 });
 

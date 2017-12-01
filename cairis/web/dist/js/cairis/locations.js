@@ -22,6 +22,7 @@
 $("#locationsClick").click(function(){
   validateClick('location',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','location');
     refreshMenuBreadCrumb('location');
   });
@@ -602,6 +603,7 @@ function deleteLocations(name, callback){
 mainContent.on('click', '#CloseLocations', function (e) {
   e.preventDefault();
   clearLocalStorage('location');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','location');
   refreshMenuBreadCrumb('location');
 });

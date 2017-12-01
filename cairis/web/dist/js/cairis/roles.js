@@ -21,6 +21,7 @@
 
 $("#roleMenuClick").click(function () {
   clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','role');
   refreshMenuBreadCrumb('role');
 });
@@ -249,6 +250,7 @@ $(document).on('click', '#addNewRole', function () {
 mainContent.on('click', '#CloseRole', function (e) {
   e.preventDefault();
   clearLocalStorage("role");
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','role');
   refreshMenuBreadCrumb('role');
 });

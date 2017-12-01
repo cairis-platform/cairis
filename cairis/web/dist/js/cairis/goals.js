@@ -22,6 +22,7 @@
 $("#goalMenuClick").click(function(){
   validateClick('goal',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','goal');
     refreshMenuBreadCrumb('goal');
   });
@@ -515,6 +516,7 @@ mainContent.on('click', '.editGoalConcernAssoc', function () {
 
 mainContent.on('click', '#goalCancelButton', function (e) {
   clearLocalStorage("goal");
+  $("#objectViewer").empty();
   e.preventDefault();
   toggleGoalWindow("#editGoalOptionsForm");
 });

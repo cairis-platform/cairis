@@ -21,6 +21,7 @@
 
 $("#personaCharacteristicsClick").click(function(){
   clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','persona_characteristic');
   refreshMenuBreadCrumb('persona_characteristic');
 });
@@ -318,6 +319,7 @@ function deletePersonaCharacteristic(name, callback){
 mainContent.on('click', '#ClosePersonaCharacteristic', function (e) {
   e.preventDefault();
   clearLocalStorage('persona_characteristic');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','persona_characteristic');
   refreshMenuBreadCrumb('persona_characteristic');
 });

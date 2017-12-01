@@ -22,6 +22,7 @@
 $("#templateAssetsClick").click(function(){
   validateClick('template_asset',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','template_asset');
     refreshMenuBreadCrumb('template_asset');
   });
@@ -343,6 +344,7 @@ function commitTemplateAsset() {
 mainContent.on('click', '#CloseTemplateAsset', function (e) {
   e.preventDefault();
   clearLocalStorage('template_asset');
+  $("#objectViewer").empty();
   refreshMenuBreadCrumb('template_asset');
 });
 

@@ -21,6 +21,7 @@
 
 $("#domainPropertyClick").click(function () {
   clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','domain_property');
   refreshMenuBreadCrumb('domain_property');
 });
@@ -273,6 +274,7 @@ function postDomainProperty(dp, callback){
 mainContent.on('click', '#CloseDomainProperty', function (e) {
   e.preventDefault();
   clearLocalStorage("domainproperty");
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','domain_property');
   refreshMenuBreadCrumb('domain_property');
 });

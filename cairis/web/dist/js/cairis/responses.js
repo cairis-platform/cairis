@@ -22,6 +22,7 @@
 $("#responseMenuClick").click(function () {
   validateClick('response',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','response');
     refreshMenuBreadCrumb('response');
   });
@@ -547,6 +548,7 @@ function appendResponseTransferRole(role){
 mainContent.on('click', '#CloseResponse', function (e) {
   e.preventDefault();
   clearLocalStorage('response');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','response');
   refreshMenuBreadCrumb('response');
 });

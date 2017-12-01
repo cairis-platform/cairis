@@ -22,6 +22,7 @@
 $("#dependenciesClick").click(function(){
   validateClick('dependency',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','dependency');
     refreshMenuBreadCrumb('dependency');
   });
@@ -212,6 +213,7 @@ $(document).on('click', 'td.deleteDependencyButton', function (e) {
 mainContent.on('click', '#CloseDependency', function (e) {
   e.preventDefault();
   clearLocalStorage("dependency");
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','dependency');
   refreshMenuBreadCrumb('dependency');
 });

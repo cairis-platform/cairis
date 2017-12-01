@@ -21,6 +21,7 @@
 
 $("#securityPatternsClick").click(function () {
   clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','security_pattern');
   refreshMenuBreadCrumb('security_pattern');
 });
@@ -288,6 +289,7 @@ function appendPatternRequirement(preq) {
 mainContent.on('click', '#CloseSecurityPattern', function (e) {
   e.preventDefault();
   clearLocalStorage('security_pattern');
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','security_pattern');
   refreshMenuBreadCrumb('security_pattern');
 });

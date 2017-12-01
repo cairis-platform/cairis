@@ -22,6 +22,7 @@
 $("#useCaseClick").click(function () {
   validateClick('usecase',function() {
     clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
     $('#menuBCClick').attr('dimension','use_case');
     refreshMenuBreadCrumb('use_case');
   });
@@ -524,6 +525,7 @@ $(document).on("click", "#addNewUseCase", function () {
 mainContent.on('click', '#CloseUseCase', function (e) {
   e.preventDefault();
   clearLocalStorage("use_case");
+  $("#objectViewer").empty();
   $('#menuBCClick').attr('dimension','use_case');
   refreshMenuBreadCrumb('use_case');
 });
