@@ -1,2 +1,1 @@
-mod_wsgi-httpd>=2.4.27.1
 mod_wsgi>=4.5.22
