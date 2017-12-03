@@ -710,6 +710,7 @@ drop procedure if exists getComponentStructure;
 drop procedure if exists addComponentRequirement;
 drop procedure if exists getComponentRequirements;
 drop procedure if exists getComponentView;
+drop procedure if exists getComponentViewSummary;
 drop procedure if exists componentInterfaces;
 drop procedure if exists componentViewWeaknesses;
 drop procedure if exists getComponents;

@@ -2157,7 +2157,7 @@ function clearLocalStorage(dimName) {
       $.session.remove("Dependencies");
       $.session.remove("Dependency");
       break;
-    case "architecturalpattern":
+    case "architectural_pattern":
       $.session.remove("ArchitecturalPattern");
       $.session.remove("Component");
       break;
@@ -2267,6 +2267,11 @@ function clearLocalStorage(dimName) {
       $.session.remove("ProjectSettings");
       $.session.remove("namingConvName");
       $.session.remove("contributorOldName");
+      break;
+    case "value_type":
+      $.session.remove("environment");
+      $.session.remove("ValueType");
+      $.session.remove("value_type");
       break;
     case undefined:
       break;

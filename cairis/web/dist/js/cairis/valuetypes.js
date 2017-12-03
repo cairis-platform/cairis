@@ -29,66 +29,79 @@ $("#assetValuesClick").click(function () {
 
 function viewAssetValues() {
   var envName = $("#chooseEnvironmentSelect").val();
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','asset_value');
   refreshMenuBreadCrumb('asset_value',envName);
 }
 
 $("#assetTypesClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','asset_type');
   refreshMenuBreadCrumb('asset_type');
 });
 
 $("#accessRightsClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','access_right');
   refreshMenuBreadCrumb('access_right');
 });
 
 $("#protocolsClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','protocol');
   refreshMenuBreadCrumb('protocol');
 });
 
 $("#privilegesClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','privilege');
   refreshMenuBreadCrumb('privilege');
 });
 
 $("#surfaceTypesClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','surface_type');
   refreshMenuBreadCrumb('surface_type');
 });
 
 $("#vulnerabilityTypesClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','vulnerability_type');
   refreshMenuBreadCrumb('vulnerability_type');
 });
 
 $("#vulnerabilitySeveritiesClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','severity');
   refreshMenuBreadCrumb('severity');
 });
 
 $("#capabilitiesClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','capability');
   refreshMenuBreadCrumb('capability');
 });
 
 $("#motivationsClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','motivation');
   refreshMenuBreadCrumb('motivation');
 });
 
 $("#threatTypesClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','threat_type');
   refreshMenuBreadCrumb('threat_type');
 });
 
 $("#threatLikelihoodsClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','likelihood');
   refreshMenuBreadCrumb('likelihood');
 });
 
 $("#threatValuesClick").click(function () {
+  clearLocalStorage("value_type");
   $('#menuBCClick').attr('dimension','threat_value');
   refreshMenuBreadCrumb('threat_value');
 });
@@ -234,6 +247,7 @@ function commitValueType() {
 
   if($(formObjt).hasClass("new")){
     postValueType(vt, function () {
+      clearLocalStorage("value_type");
       createValueTypesTable(vt.theType);
       $(formObjt).removeClass("new")
       refreshMenuBreadCrumb(vt.theType)
@@ -241,6 +255,7 @@ function commitValueType() {
   } 
   else {
     putValueType(vt, oldName, function () {
+      clearLocalStorage("value_type");
       refreshMenuBreadCrumb(vt.theType,$.session.get("environment"))
     });
   }
@@ -401,4 +416,5 @@ function postValueType(vt, callback){
 mainContent.on('click', '#CloseValueType', function (e) {
   e.preventDefault();
   refreshMenuBreadCrumb($.session.get("value_type"),$.session.get("environment"))
+  clearLocalStorage("value_type");
 });
