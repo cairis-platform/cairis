@@ -125,6 +125,7 @@ function viewDomainProperty(dpName) {
           });
           $("#theTags").val(text);
         }
+        $("#theOriginator").val(data.theOriginator);
         $("#editDomainPropertyOptionsForm").validator('update');
       });
     },
@@ -145,6 +146,7 @@ function commitDomainProperty() {
     dp.theName = $("#theName").val();
     dp.theType = $("#theType").val();
     dp.theDescription = $("#theDescription").val();
+    dp.theOriginator = $("#theOriginator").val();
     var tags = $("#theTags").text().split(", ");
     if(tags[0] != ""){
       dp.theTags = tags;
