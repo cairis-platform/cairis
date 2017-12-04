@@ -262,6 +262,23 @@ mainContent.on('click', '#addRoleToPersona', function () {
   },filterList);
 });
 
+mainContent.on('click','#theDirectFlag',function() {
+  var persona = JSON.parse($.session.get("Persona"));
+  var theEnvName = $.session.get("personaEnvironmentName");
+  $.each(persona.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == theEnvName){
+      if ($('#theDirectFlag').prop('checked') == true) {
+        env.theDirectFlag = "True"; 
+      }
+      else {
+        env.theDirectFlag = "False"; 
+      } 
+      $.session.set("Persona", JSON.stringify(persona));
+    }
+  });
+});
+
+
 function addRoleToPersona(){
   var text = $("#chooseEnvironmentSelect").val();
   var persona = JSON.parse($.session.get("Persona"));
