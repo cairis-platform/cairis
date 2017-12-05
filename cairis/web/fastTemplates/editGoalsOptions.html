@@ -115,139 +115,166 @@
     </div>
   </div>
 </form>
-<div id="editgoalConcernAssociations" style="display: none;">
-  <div class="form-group">
-    <label for="theNSelect" class="control-label">n</label>
-    <select id="theNSelect" class="right form-control">
-      <option value="1">1</option>
-      <option value="*">*</option>
-      <option value="1..*">1..*</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="theSourceSelect" class="control-label">Source</label>
-    <select id="theSourceSelect" class="right form-control"></select>
-  </div>
-  <div class="form-group">
-    <label for="theLink" class="control-label"> Link</label>
-    <input id="theLink" maxlength="100" class="right form-control">
-  </div>
-  <div class="form-group">
-    <label for="theN2Select" class="control-label">n</label>
-    <select id="theN2Select" class="right form-control">
-      <option value="1">1</option>
-      <option value="*">*</option>
-      <option value="1..*">1..*</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="theTargetSelect" class="control-label">Target</label>
-    <select id="theTargetSelect" class="right form-control"></select>
-  </div>
-  <div class="row">
-    <div class="form-group col-md-2 col-md-offset-5 footer">
-      <button type="submit" class="btn btn-primary" id="updateGoalConcernAss">Update</button>
-      <button type="submit" class="btn btn-secondary" id="goalCancelButton">Close</button>
+<div class="modal fade" id="goalConcernAssociationsDialog" tabindex="-1" role="dialog" aria-labelledby=egca_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Goal Concern Association</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theNSelect" class="control-label">n</label>
+          <select id="theNSelect" class="right form-control">
+            <option value="1">1</option>
+            <option value="*">*</option>
+            <option value="1..*">1..*</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theSourceSelect" class="control-label">Source</label>
+          <select id="theSourceSelect" class="right form-control"></select>
+        </div>
+        <div class="form-group">
+          <label for="theLink" class="control-label"> Link</label>
+          <input id="theLink" maxlength="100" class="right form-control">
+        </div>
+        <div class="form-group">
+          <label for="theN2Select" class="control-label">n</label>
+          <select id="theN2Select" class="right form-control">
+            <option value="1">1</option>
+            <option value="*">*</option>
+            <option value="1..*">1..*</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theTargetSelect" class="control-label">Target</label>
+          <select id="theTargetSelect" class="right form-control"></select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="AddGoalConcernAssociationButton" class="btn btn-primary">Add</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<div id="editgoalSubGoal" style="display: none;">
-  <div class="form-group">
-    <label for="theSubgoalType" class="control-label" >Type</label>
-    <select id="theSubgoalType" class="right form-control">
-      <option value="goal">goal</option>
-      <option value="task">task</option>
-      <option value="usecase">usecase</option>
-      <option value="requirement">requirement</option>
-      <option value="obstacle">obstacle</option>
-      <option value="domainproperty">domainproperty</option>
-      <option value="threat">threat</option>
-      <option value="vulnerability">vulnerability</option>
-      <option value="role">role</option>
-      <option value="misusecase">misusecase</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="theSubGoalName" class="control-label">Sub-Goal</label>
-    <select id="theSubGoalName" class="right form-control"></select>
-  </div>
-  <div class="form-group">
-    <label for="theRefinementSelect" class="control-label">Refinement</label>
-    <select id="theRefinementSelect" class="right form-control">
-      <option value="and">and</option>
-      <option value="or">or</option>
-      <option value="conflict">conflict</option>
-      <option value="responsible">responsible</option>
-      <option value="obstruct">obstruct</option>
-      <option value="resolve">resolve</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="theAlternate" class="control-label">Target</label>
-    <select id="theAlternate" class="right form-control">
-      <option>Yes</option>
-      <option>No</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="theGoalSubGoalRationale" class="control-label">Rationale</label>
-    <textarea rows="5" class="right form-control" id="theGoalSubGoalRationale" maxlength="1000" data-error="Rationale is required" required></textarea>
-    <div class="help-block with-errors"></div>
-  </div>
-  <div class="row">
-    <div class="form-group col-md-2 col-md-offset-5 footer">
-      <button type="submit" class="btn btn-primary" id="updateGoalSubGoal">Update</button>
-      <button type="submit" class="btn btn-secondary" id="goalCancelButton">Close</button>
+<div class="modal fade" id="editGoalSubGoal" tabindex="-1" role="dialog" aria-labelledby="egsg_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Goal refinement</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theSubgoalType" class="control-label">Type</label>
+          <select id="theSubgoalType" class="right form-control" style="width: 100%;">
+            <option value="goal">goal</option>
+            <option value="task">task</option>
+            <option value="usecase">usecase</option>
+            <option value="requirement">requirement</option>
+            <option value="obstacle">obstacle</option>
+            <option value="domainproperty">domainproperty</option>
+            <option value="threat">threat</option>
+            <option value="vulnerability">vulnerability</option>
+            <option value="role">role</option>
+            <option value="misusecase">misusecase</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theSubGoalName" class="control-label">Sub-Goal</label>
+          <select id="theSubGoalName" class="right form-control" style="width: 100%;"></select>
+        </div>
+        <div class="form-group">
+          <label for="theRefinementSelect" class="control-label">Refinement</label>
+          <select id="theRefinementSelect" class="right form-control" style="width: 100%;">
+            <option value="and">and</option>
+            <option value="or">or</option>
+            <option value="conflict">conflict</option>
+            <option value="responsible">responsible</option>
+            <option value="obstruct">obstruct</option>
+            <option value="resolve">resolve</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theAlternate" class="control-label">Target</label>
+          <select id="theAlternate" class="right form-control" style="width: 100%;">
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theGoalSubGoalRationale" class="control-label" >Rationale</label>
+          <textarea rows="5" class="right form-control" id="theGoalSubGoalRationale" maxlength="1000" style="width: 100%;" data-error="Rationale is required" required></textarea>
+          <div class="help-block with-errors"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="updateGoalSubGoal" class="btn btn-primary">Update</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<div id="editGoalGoal" style="display: none;">
-  <div class="form-group">
-    <label for="theGoalType" class="control-label">Type</label>
-    <select id="theGoalType" class="right form-control">
-      <option value="goal">goal</option>
-      <option value="task">task</option>
-      <option value="usecase">usecase</option>
-      <option value="requirement">requirement</option>
-      <option value="obstacle">obstacle</option>
-      <option value="domainproperty">domainproperty</option>
-      <option value="threat">threat</option>
-      <option value="vulnerability">vulnerability</option>
-      <option value="role">role</option>
-      <option value="misusecase">misusecase</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="theGoalName" class="control-label">Goal</label>
-    <select id="theGoalName" class="right form-control"></select>
-  </div>
-  <div class="form-group">
-    <label for="theGoalRefinementSelect" class="control-label">Refinement</label>
-    <select id="theGoalRefinementSelect" class="right form-control">
-      <option value="and">and</option>
-      <option value="or">or</option>
-      <option value="conflict">conflict</option>
-      <option value="responsible">responsible</option>
-      <option value="obstruct">obstruct</option>
-      <option value="resolve">resolve</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="theGoalAlternate" class="control-label">Target</label>
-    <select id="theGoalAlternate" class="right form-control">
-      <option>Yes</option>
-      <option>No</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="theGoalGoalRationale" class="control-label">Rationale</label>
-    <textarea rows="5" class="right form-control" id="theGoalGoalRationale" maxlength="1000" data-error="Rationale is required" required></textarea>
-    <div class="help-block with-errors"></div>
-  </div>
-  <div class="row">
-    <div class="form-group col-md-2 col-md-offset-5 footer">
-      <button type="submit" class="btn btn-primary" id="updateGoalGoal">Update</button>
-      <button type="submit" class="btn btn-secondary" id="goalCancelButton">Close</button>
+<div class="modal fade" id="editGoalGoal" tabindex="-1" role="dialog" aria-labelledby="egg_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Goal origin</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="theGoalType" class="control-label">Type</label>
+          <select id="theGoalType" class="right form-control" style="width: 100%;">
+            <option value="goal">goal</option>
+            <option value="task">task</option>
+            <option value="usecase">usecase</option>
+            <option value="requirement">requirement</option>
+            <option value="obstacle">obstacle</option>
+            <option value="domainproperty">domainproperty</option>
+            <option value="threat">threat</option>
+            <option value="vulnerability">vulnerability</option>
+            <option value="role">role</option>
+            <option value="misusecase">misusecase</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theGoalName" class="control-label">Goal</label>
+          <select id="theGoalName" class="right form-control" style="width: 100%;"></select>
+        </div>
+        <div class="form-group">
+          <label for="theGoalRefinementSelect" class="control-label">Refinement</label>
+          <select id="theGoalRefinementSelect" class="right form-control" style="width: 100%;">
+            <option value="and">and</option>
+            <option value="or">or</option>
+            <option value="conflict">conflict</option>
+            <option value="responsible">responsible</option>
+            <option value="obstruct">obstruct</option>
+            <option value="resolve">resolve</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theGoalAlternate" class="control-label">Target</label>
+          <select id="theGoalAlternate" class="right form-control" style="width: 100%;">
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="theGoalGoalRationale" class="control-label" >Rationale</label>
+          <textarea rows="5" class="right form-control" id="theGoalGoalRationale" style="width: 100%;" maxlength="1000" data-error="Rationale is required" required></textarea>
+          <div class="help-block with-errors"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group col-md-2 col-md-offset-5">
+          <button type="button" id="updateGoalGoal" class="btn btn-primary">Update</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

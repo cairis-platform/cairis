@@ -1990,7 +1990,7 @@ class MySQLDatabaseProxy:
       self.addGoalConcernAssociation(goalId,environmentName,source,sourceMultiplicity,link,target,targetMultiplicity) 
 
   def addGoalConcernAssociation(self,goalId,environmentName,source,sourceMultiplicity,link,target,targetMultiplicity):
-    self.updateDatabase('call addGoalConcernAssociation(:gId,:env,:src,:sMulti,:link,:trgt,:tMulti)',{'gId':goalId,'env':environmentName,'src':source,'sMulti':sourceMultiplicity,'linl':link,'trgt':target,'tMulti':targetMultiplicity},'MySQL error adding goal concern association')
+    self.updateDatabase('call addGoalConcernAssociation(:gId,:env,:src,:sMulti,:link,:trgt,:tMulti)',{'gId':goalId,'env':environmentName,'src':source,'sMulti':sourceMultiplicity,'link':link,'trgt':target,'tMulti':targetMultiplicity},'MySQL error adding goal concern association')
 
   def addTaskConcernAssociations(self,taskId,environmentName,associations):
     for source,sourceMultiplicity,link,target,targetMultiplicity in associations:

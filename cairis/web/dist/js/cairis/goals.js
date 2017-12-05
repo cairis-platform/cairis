@@ -148,42 +148,37 @@ mainContent.on('click', '.deleteGoalEnvConcernAssoc', function () {
   });
 });
 
-mainContent.on('click', '#updateGoalConcernAss', function () {
+mainContent.on('click', '#AddGoalConcernAssociationButton', function () {
+
+  var assoc = [];
+  assoc[0] = $("#theSourceSelect").val();
+  assoc[1] = $("#theNSelect").val();
+  assoc[2] = $("#theLink").val();
+  assoc[3] = $("#theTargetSelect").val();
+  assoc[4] = $("#theN2Select").val();
+
   var goal = JSON.parse($.session.get("Goal"));
   var envName = $.session.get("GoalEnvName");
-  var arr = [];
-  arr[0] = $("#theSourceSelect").val();
-  arr[1] = $("#theNSelect").val();
-  arr[2] = $("#theLink").val();
-  arr[3] = $("#theTargetSelect").val();
-  arr[4] = $("#theN2Select").val();
-
-  if($("#editgoalConcernAssociations").hasClass("new")){
-    $.each(goal.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == envName){
-        env.theConcernAssociations.push(arr);
+  $.each(goal.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == envName){
+      var selectedIdx = $('#goalConcernAssociationsDialog').attr('data-selectedIndex');
+      if (selectedIdx != undefined) {
+        env.theConcernAssociations[selectedIdx] = assoc;
+        $.session.set("Goal", JSON.stringify(goal));
+        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(assoc[0]);
+        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(assoc[1]);
+        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(assoc[2]);
+        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(assoc[3]);
+        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(assoc[4]);
       }
-    });
-  }
-  else {
-    var oldname = $.session.get("goalAssocName");
-    $.each(goal.theEnvironmentProperties, function (index, env) {
-      if(env.theEnvironmentName == envName){
-        $.each(env.theConcernAssociations, function (index, concern) {
-          if(concern[0] == oldname){
-            concern[0] = $("#theSourceSelect").val();
-            concern[1] = $("#theNSelect").val();
-            concern[2] = $("#theLink").val();
-            concern[3] = $("#theTargetSelect").val();
-            concern[4] = $("#theN2Select").val();
-          }
-        });
+      else {
+        env.theConcernAssociations.push(assoc);
+        $.session.set("Goal", JSON.stringify(goal));
+        appendGoalConcernAssoc(assoc);
       }
-    });
-  }
-  toggleGoalWindow("#editGoalOptionsForm");
-  fillGoalOptionMenu(goal);
-  $.session.set("Goal", JSON.stringify(goal));
+      $('#goalConcernAssociationsDialog').modal('hide');
+    }
+  });
 });
 
 mainContent.on('click',".deleteGoalSubGoal", function () {
@@ -275,33 +270,46 @@ mainContent.on('click',".deleteGoalEnvConcern", function () {
 });
 
 mainContent.on('click', '#addConcernAssociationstoGoal', function () {
-  toggleGoalWindow("#editgoalConcernAssociations");
-  $("#editgoalConcernAssociations").addClass("new");
-  var envName = $.session.get("GoalEnvName");
-  $("#theSourceSelect").empty();
-  $("#theTargetSelect").empty();
-  getAllAssetsInEnv(envName, function (data) {
-    $.each(data, function (index, asset) {
-      $("#theSourceSelect").append($("<option></option>")
-        .attr("value",asset)
-        .text(asset));
-      $("#theTargetSelect").append($("<option></option>")
-        .attr("value",asset)
-        .text(asset));
-    })
-  });
+  $('#AddGoalConcernAssociationButton').text('Add');
+  $('#goalConcernAssociationsDialog').attr('data-selectedIndex',undefined);
+  refreshGoalConcernSelectors();
+  $('#goalConcernAssociationsDialog').modal('show');
 });
 
 mainContent.on('click', '#addSubGoaltoGoal', function () {
-  $("#editgoalSubGoal").addClass("new");
-  toggleGoalWindow("#editgoalSubGoal");
-  fillGoalEditSubGoal();
+  $("#editGoalSubGoal").attr('data-selectedIdx',undefined);
+  $("#editGoalSubGoal").attr('data-currentGoal',undefined);
+  $("#editGoalSubGoal").modal('show');
 });
 
+$(document).on('shown.bs.modal','#editGoalSubGoal',function() {
+  var currentObject = $('#editGoalSubGoal').attr('data-currentGoal');
+  if (currentObject != undefined) {
+    currentObject = JSON.parse(currentObject);
+    fillGoalEditSubGoal(currentObject.name,currentObject.type,currentObject.refinement,currentObject.target,currentObject.rationale);
+  }
+  else {
+    fillGoalEditSubGoal();
+  }
+});
+
+$(document).on('shown.bs.modal','#editGoalGoal',function() {
+  var currentObject = $('#editGoalGoal').attr('data-currentGoal');
+  if (currentObject != undefined) {
+    currentObject= JSON.parse(currentObject);
+    fillGoalEditGoal(currentObject.name,currentObject.type,currentObject.refinement,currentObject.target,currentObject.rationale);
+  }
+  else {
+    fillGoalEditGoal();
+  }
+});
+
+
+
 mainContent.on('click', '#addGoaltoGoal', function () {
-  $("#editGoalGoal").addClass("new");
-  toggleGoalWindow("#editGoalGoal");
-  fillGoalEditGoal();
+  $("#editGoalGoal").attr('data-selectedIdx',undefined);
+  $("#editGoalGoal").attr('data-currentGoal',undefined);
+  $("#editGoalGoal").modal('show');
 });
 
 mainContent.on("click", "#addGoalEnvironment", function () {
@@ -352,8 +360,8 @@ mainContent.on('click', ".deleteGoalEnv", function () {
 mainContent.on('click', '#updateGoalSubGoal', function () {
   var goal = JSON.parse($.session.get("Goal"));
   var envName = $.session.get("GoalEnvName");
-  if($("#editgoalSubGoal").hasClass("new")){
-    $("#editgoalSubGoal").removeClass("new");
+  var selectedIdx = $("#editGoalSubGoal").attr('data-selectedIndex');
+  if(selectedIdx == undefined) {
     $.each(goal.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
         var array = [];
@@ -364,9 +372,11 @@ mainContent.on('click', '#updateGoalSubGoal', function () {
         array[4] = $("#theGoalSubGoalRationale").val();
         env.theSubGoalRefinements.push(array);
         appendGoalSubGoal(array);
+        $.session.set("Goal", JSON.stringify(goal));
+        $("#editGoalSubGoal").modal('hide');
       }
     });
-  } 
+  }
   else {
     var oldName = $.session.get("oldsubGoalName");
     $.each(goal.theEnvironmentProperties, function (index, env) {
@@ -378,14 +388,18 @@ mainContent.on('click', '#updateGoalSubGoal', function () {
             arr[2] = $("#theRefinementSelect").val();
             arr[3] = $("#theAlternate").val();
             arr[4] = $("#theGoalSubGoalRationale").val();
+            $.session.set("Goal", JSON.stringify(goal));
+            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(arr[0]);
+            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(arr[1]);
+            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(arr[2]);
+            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(arr[3]);
+            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(arr[4]);
+            $("#editGoalSubGoal").modal('hide');
           }
         });
       }
     });
   }
-  $.session.set("Goal", JSON.stringify(goal));
-  fillGoalOptionMenu(goal);
-  toggleGoalWindow("#editGoalOptionsForm");
 });
 
 mainContent.on('change', ".goalAutoUpdater" ,function() {
@@ -453,79 +467,89 @@ function commitGoal() {
 }
 
 mainContent.on('click', '.editGoalSubGoalRow', function () {
-  toggleGoalWindow("#editgoalSubGoal");
-  var name = $(this).find("td").eq(1).text();
-  fillGoalEditSubGoal(name);
-  var type = $(this).find("td").eq(2).text();
-  var refinement = $(this).find("td").eq(3).text();
-  var target = $(this).find("td").eq(4).text();
-  var rationale = $(this).find("td").eq(5).text();
-  $.session.set("oldsubGoalName", name);
-
-  $("#theSubgoalType").val(type);
-  $("#theRefinementSelect").val(refinement);
-  $("#theAlternate").val(target);
-  $("#theGoalSubGoalRationale").val(rationale);
+  var refRow = $(this).closest('tr');
+  var currentGoal = {}
+  currentGoal.name = refRow.find("td").eq(1).text();
+  currentGoal.type = refRow.find("td").eq(2).text();
+  currentGoal.refinement = refRow.find("td").eq(3).text();
+  currentGoal.target = refRow.find("td").eq(4).text();
+  currentGoal.rationale = refRow.find("td").eq(5).text();
+  $.session.set("oldsubGoalName", currentGoal.name);
+  $("#editGoalSubGoal").attr('data-currentGoal',JSON.stringify(currentGoal));
+  $("#editGoalSubGoal").attr('data-selectedIndex',refRow.index());
+  $("#theSubgoalType").val(currentGoal.type);
+  $("#theRefinementSelect").val(currentGoal.refinement);
+  $("#theAlternate").val(currentGoal.target);
+  $("#theGoalSubGoalRationale").val(currentGoal.rationale);
+  $("#editGoalSubGoal").modal('show');
 });
 
 mainContent.on('click', '.editGoalGoalRow', function () {
-  toggleGoalWindow("#editGoalGoal");
-  var name = $(this).find("td").eq(1).text();
-  fillGoalEditGoal(name);
-
-  var type = $(this).find("td").eq(2).text();
-  var refinement = $(this).find("td").eq(3).text();
-  var target = $(this).find("td").eq(4).text();
-  var rationale = $(this).find("td").eq(5).text();
-  $.session.set("oldGoalName", name);
-
-  $("#theGoalType").val(type);
-  $("#theGoalRefinementSelect").val(refinement);
-  $("#theGoalAlternate").val(target);
-  $("#theGoalGoalRationale").val(rationale);
+  var refRow = $(this).closest('tr');
+  var currentGoal = {}
+  currentGoal.name = refRow.find("td").eq(1).text();
+  currentGoal.type = refRow.find("td").eq(2).text();
+  currentGoal.refinement = refRow.find("td").eq(3).text();
+  currentGoal.target = refRow.find("td").eq(4).text();
+  currentGoal.rationale = refRow.find("td").eq(5).text();
+  $.session.set("oldGoalName", currentGoal.name);
+  $("#editGoalGoal").attr('data-currentGoal',JSON.stringify(currentGoal));
+  $("#editGoalGoal").attr('data-selectedIndex',refRow.index());
+  $("#theGoalType").val(currentGoal.type);
+  $("#theGoalRefinementSelect").val(currentGoal.refinement);
+  $("#theGoalAlternate").val(currentGoal.target);
+  $("#theGoalGoalRationale").val(currentGoal.rationale);
+  $("#editGoalGoal").modal('show');
 });
 
-//editGoalConcernAssoc
-mainContent.on('click', '.editGoalConcernAssoc', function () {
+function refreshGoalConcernSelectors(name,n1,link,n2,target) {
+  $("#theSourceSelect").empty();
+  $("#theTargetTarget").empty();
+  var goal = JSON.parse($.session.get("Goal"));
   var envName = $.session.get("GoalEnvName");
-  var tr = $(this);
-  getAllAssetsInEnv(envName, function (data) {
-    $.each(data, function (index, asset) {
-      $("#theSourceSelect").append($("<option></option>")
-        .attr("value",asset)
-        .text(asset));
-      $("#theTargetSelect").append($("<option></option>")
-         .attr("value",asset)
-         .text(asset));
-    });
-    var name = $(tr).find(".assocName").text();
-    $.session.set("goalAssocName",name);
-    var n1 = $(tr).find(".assocN1").text();
-    var link = $(tr).find(".assocLink").text();
-    var n2 = $(tr).find(".assocN2").text();
-    var target = $(tr).find(".assocTarget").text();
-
+  $.each(goal.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == envName){
+      $.each(env.theConcerns, function (idx2, conc) {
+        $("#theSourceSelect").append($("<option></option>").attr('value',conc).text(conc));
+        $("#theTargetSelect").append($("<option></option>").attr('value',conc).text(conc));
+      });
+    }
+  });
+  if (name != undefined) {
     $("#theSourceSelect").val(name);
     $("#theNSelect").val(n1);
     $("#theLink").val(link);
     $("#theTargetSelect").val(target);
     $("#theN2Select").val(n2);
-    toggleGoalWindow("#editgoalConcernAssociations");
-  });
+  }
+}
+
+mainContent.on('click', '.editGoalConcernAssoc', function () {
+  var caRow = $(this).closest("tr");
+  $('#AddGoalConcernAssociationButton').text('Edit');
+  $('#goalConcernAssociationsDialog').attr('data-selectedIndex',caRow.index());
+  var name = $(caRow).find(".assocName").text();
+  $.session.set("goalAssocName",name);
+  var n1 = $(caRow).find(".assocN1").text();
+  var link = $(caRow).find(".assocLink").text();
+  var n2 = $(caRow).find(".assocN2").text();
+  var target = $(caRow).find(".assocTarget").text();
+  refreshGoalConcernSelectors(name,n1,link,n2,target);
+  $('#goalConcernAssociationsDialog').modal('show');
 });
 
 mainContent.on('click', '#goalCancelButton', function (e) {
   clearLocalStorage("goal");
   $("#objectViewer").empty();
   e.preventDefault();
-  toggleGoalWindow("#editGoalOptionsForm");
 });
 
 mainContent.on('click',"#updateGoalGoal", function () {
+
   var goal = JSON.parse($.session.get("Goal"));
   var envName = $.session.get("GoalEnvName");
-  if($("#editGoalGoal").hasClass("new")) {
-    $("#editGoalGoal").removeClass("new");
+  var selectedIdx = $("#editGoalGoal").attr('data-selectedIndex');
+  if(selectedIdx == undefined) {
     $.each(goal.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
         var array = [];
@@ -536,28 +560,34 @@ mainContent.on('click',"#updateGoalGoal", function () {
         array[4] = $("#theGoalGoalRationale").val();
         env.theGoalRefinements.push(array);
         appendGoalGoal(array);
+        $.session.set("Goal", JSON.stringify(goal));
+        $("#editGoalGoal").modal('hide');
       }
     });
   }
-  else{
+  else {
+    var oldName = $.session.get("oldGoalName");
     $.each(goal.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
-        var oldname = $.session.get("oldGoalName");
-        $.each(env.theGoalRefinements, function (index, ref) {
-          if(ref[0] == oldname){
-            ref[1] = $("#theGoalType").val();
-            ref[0] = $("#theGoalName").val();
-            ref[2] = $("#theGoalRefinementSelect").val();
-            ref[3] = $("#theGoalAlternate").val();
-            ref[4] = $("#theGoalGoalRationale").val();
+        $.each(env.theGoalRefinements, function (index, arr) {
+          if(arr[0] == oldName){
+            arr[1] = $("#theGoalType").val();
+            arr[0] = $("#theGoalName").val();
+            arr[2] = $("#theGoalRefinementSelect").val();
+            arr[3] = $("#theGoalAlternate").val();
+            arr[4] = $("#theGoalGoalRationale").val();
+            $.session.set("Goal", JSON.stringify(goal));
+            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(arr[0]);
+            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(arr[1]);
+            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(arr[2]);
+            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(arr[3]);
+            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(arr[4]);
+            $("#editGoalGoal").modal('hide');
           }
         });
       }
     });
   }
-  $.session.set("Goal", JSON.stringify(goal));
-  fillGoalOptionMenu(goal);
-  toggleGoalWindow("#editGoalOptionsForm");
 });
 
 function viewGoal(goalName){
@@ -609,20 +639,32 @@ function fillGoalOptionMenu(data,callback){
   });
 }
 
-function fillGoalEditSubGoal(theSettableValue){
-  refreshDimensionSelector($('#theSubGoalName'),'goal',$.session.get("GoalEnvName"),undefined,['All']);
+function fillGoalEditSubGoal(theSettableValue,theSettableType,refinement,target,rationale){
+  if (theSettableType == undefined) {
+    theSettableType = 'goal';
+  }
+  refreshDimensionSelector($('#theSubGoalName'),theSettableType,$.session.get("GoalEnvName"),function() {
+    if (theSettableValue != undefined) {
+      $('#theSubGoalName').val(theSettableValue);
+      $("#theRefinementSelect").val(refinement);
+      $("#theAlternate").val(target);
+      $("#theGoalSubGoalRationale").val(rationale);
+    } 
+  },['All']);
 }
 
-function fillGoalEditGoal(theSettableValue) {
-  refreshDimensionSelector($('#theGoalName'),'goal',$.session.get("GoalEnvName"),undefined,['All']); 
-}
-
-function toggleGoalWindow(window) {
-  $("#editgoalConcernAssociations").hide();
-  $("#editGoalOptionsForm").hide();
-  $("#editgoalSubGoal").hide();
-  $("#editGoalGoal").hide();
-  $(window).show();
+function fillGoalEditGoal(theSettableValue,theSettableType,refinement,target,rationale) {
+  if (theSettableType == undefined) {
+    theSettableType = 'goal';
+  }
+  refreshDimensionSelector($('#theGoalName'),theSettableType,$.session.get("GoalEnvName"),function() {
+    if (theSettableValue != undefined) {
+      $("#theGoalName").val(theSettableValue);
+      $("#theGoalRefinementSelect").val(refinement);
+      $("#theGoalAlternate").val(target);
+      $("#theGoalGoalRationale").val(rationale);
+    }
+  },['All']); 
 }
 
 function emptyGoalEnvTables(){
@@ -645,7 +687,7 @@ function appendGoalConcern(concern){
   $("#editgoalsConcernTable").append('<tr><td class="deleteGoalEnvConcern" value="'+ concern+'"><i class="fa fa-minus"></i></td><td class="GoalConcernName">'+concern+'</td></tr>');
 }
 function appendGoalConcernAssoc(assoc){
-  $("#editgoalsConcernassociationsTable").append('<tr class="editGoalConcernAssoc"><td class="deleteGoalEnvConcernAssoc"><i class="fa fa-minus"></i></td><td class="assocName">'+assoc[0]+'</td><td class="assocN1">'+assoc[1]+'</td><td class="assocLink">'+assoc[2]+'</td><td class="assocN2">'+assoc[4]+'</td><td class="assocTarget">'+assoc[3]+'</td></tr>');
+  $("#editgoalsConcernassociationsTable").append('<tr><td class="deleteGoalEnvConcernAssoc"><i class="fa fa-minus"></i></td><td class="assocName editGoalConcernAssoc">'+assoc[0]+'</td><td class="assocN1">'+assoc[1]+'</td><td class="assocLink">'+assoc[2]+'</td><td class="assocN2">'+assoc[4]+'</td><td class="assocTarget">'+assoc[3]+'</td></tr>');
 }
 
 mainContent.on('click', '#goalCancelButton', function (e) {

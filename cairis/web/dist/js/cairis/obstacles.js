@@ -204,14 +204,13 @@ mainContent.on('click', '#obstacle_addSubGoaltoGoal', function () {
 });
 
 $(document).on('shown.bs.modal','#obstacle_editGoalSubGoal',function() {
-  fillObstacleEditSubGoal();
-  var currentObstacle = $('#obstacle_editGoalSubGoal').attr('data-currentObstacle');
-  if (currentObstacle != undefined) {
-    currentObstacle = JSON.parse(currentObstacle);
-    $("#obstacle_theSubgoalType").val(currentObstacle.type);
-    $("#obstacle_theRefinementSelect").val(currentObstacle.refinement);
-    $("#obstacle_theAlternate").val(currentObstacle.target);
-    $("#obstacle_theGoalSubGoalRationale").val(currentObstacle.rationale);
+  var currentObject = $('#obstacle_editGoalSubGoal').attr('data-currentObstacle');
+  if (currentObject != undefined) {
+    currentObject = JSON.parse(currentObject);
+    fillObstacleEditSubGoal(currentObject.name,currentObject.type,currentObject.refinement,currentObject.target,currentObject.rationale);
+  }
+  else {
+    fillObstacleEditSubGoal();
   }
 });
 
@@ -222,14 +221,13 @@ mainContent.on('click', '#obstacle_addGoaltoGoal', function () {
 });
 
 $(document).on('shown.bs.modal','#obstacle_editGoalGoal',function() {
-  fillObstacleEditGoal();
-  var currentObstacle = $('#obstacle_editGoalGoal').attr('data-currentObstacle');
-  if (currentObstacle != undefined) {
-    currentObstacle = JSON.parse(currentObstacle);
-    $("#obstacle_theGoalType").val(currentObstacle.type);
-    $("#obstacle_theGoalRefinementSelect").val(currentObstacle.refinement);
-    $("#obstacle_theGoalAlternate").val(currentObstacle.target);
-    $("#obstacle_theGoalGoalRationale").val(currentObstacle.rationale);
+  var currentObject = $('#obstacle_editGoalGoal').attr('data-currentObstacle');
+  if (currentObject != undefined) {
+    currentObject= JSON.parse(currentObject);
+    fillObstacleEditGoal(currentObject.name,currentObject.type,currentObject.refinement,currentObject.target,currentObject.rationale);
+  }
+  else {
+    fillObstacleEditGoal();
   }
 });
 
@@ -526,18 +524,31 @@ function fillObstacleOptionMenu(data,callback){
   });
 }
 
-function fillObstacleEditSubGoal(theSettableValue){
-  refreshDimensionSelector($('#obstacle_theSubGoalName'),'goal',$.session.get("ObstacleEnvName"),function() {
-    if (typeof theSettableValue  !== "undefined"){
+function fillObstacleEditSubGoal(theSettableValue,theSettableType,refinement,target,rationale){
+  if (theSettableType == undefined) {
+    theSettableType = 'obstacle';
+  }
+
+  refreshDimensionSelector($('#obstacle_theSubGoalName'),theSettableType,$.session.get("ObstacleEnvName"),function() {
+    if (theSettableValue  != "undefined"){
       $('#obstacle_theSubGoalName').val(theSettableValue);
+      $("#obstacle_theRefinementSelect").val(refinement);
+      $("#obstacle_theAlternate").val(target);
+      $("#obstacle_theGoalSubGoalRationale").val(rationale);
     }
   },['All']);
 }
 
-function fillObstacleEditGoal(theSettableValue){
-  refreshDimensionSelector($('#obstacle_theGoalName'),'goal',$.session.get("ObstacleEnvName"),function() {
-    if (typeof theSettableValue  !== "undefined"){
+function fillObstacleEditGoal(theSettableValue,theSettableType,refinement,target,rationale){
+  if (theSettableType == undefined) {
+    theSettableType = 'obstacle';
+  }
+  refreshDimensionSelector($('#obstacle_theGoalName'),theSettableType,$.session.get("ObstacleEnvName"),function() {
+    if (theSettableValue  != "undefined"){
       $('#obstacle_theGoalName').val(theSettableValue);
+      $("#obstacle_theGoalRefinementSelect").val(refinement);
+      $("#obstacle_theGoalAlternate").val(target);
+      $("#obstacle_theGoalGoalRationale").val(rationale);
     }
   },['All']);
 }
