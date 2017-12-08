@@ -41,15 +41,3 @@ Adding, updating, and deleting a threat
    the Update button.
 
 -  To delete a threat, click on the Delete button threat next to the threat to be removed in the Threats table.  If any artifacts are dependent on this attacker then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the threat dependencies and the threat itself, or No to cancel the deletion.
-
-Introducing template threats and vulnerabilities
-------------------------------------
-
-.. figure:: ImportVulnerabilityDialog.jpg
-   :alt: Import Vulnerability
-
-Libraries of of template vulnerabilities can be imported into the CAIRIS database and introduced to the current CAIRIS model.  Examples of such libraries in cairis/examples/directories. To import one of these,
-select Introduce from the top of Vulnerabilities or Threats table to open the Introduce from vulnerability directory dialog. When a vulnerability is selected, the Vulnerability form is opened, and pre-populated with information from the directory entry.
-
-.. figure:: ImportedVulnerabilityForm.jpg
-   :alt: Imported Vulnerability
