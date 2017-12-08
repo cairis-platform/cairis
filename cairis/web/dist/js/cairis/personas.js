@@ -158,6 +158,7 @@ function viewPersona(personaName) {
 
 var mainContent = $("#objectViewer");
 mainContent.on("click",".personaEnvironment", function () {
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
   clearPersonaEnvInfo();
   var persona = JSON.parse($.session.get("Persona"));
   var theEnvName = $(this).text();

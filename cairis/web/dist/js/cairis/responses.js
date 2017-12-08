@@ -267,6 +267,7 @@ mainContent.on('click', ".deleteRespEnv", function () {
 
 
 mainContent.on('click', ".responseEnvironment", function () {
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
   var type =  $.session.get("responseKind");
   var resp = JSON.parse($.session.get("response"));
   var environmentName = $(this).text();

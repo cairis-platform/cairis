@@ -330,9 +330,9 @@ function loadTaskCharacteristicReference() {
   $('#theTCArtifactTypeDiv').show();
   var cr = $("#editTaskCharacteristicReference").data("currentcr");
   if (cr != undefined) {
+    var cr = JSON.parse(cr);
     $('#theTCArtifactType').val(cr.dimension);
     refreshDimensionSelector($('#theTCReferenceName'),cr.dimension + '_reference',undefined,function() {
-      var cr = JSON.parse(cr);
       $("#theTCReferenceName").val(cr.name);
       $("#theTCDescription").val(cr.description);
     });
@@ -398,10 +398,11 @@ function updateTaskReferenceList(e) {
   var cr = JSON.parse($("#editTaskCharacteristicReference").data("currentcr"));
   var item = jQuery.extend(true, {},characteristicReferenceDefault );
   item.theReferenceName = $("#theTCReferenceName").val();
-  item.theReferenceDescription = $("#theTCReferenceDescription").val();
+  item.theDimensionName = $('#theTCArtifactType').val();
+  item.theReferenceDescription = $("#theTCDescription").val();
   $(cr.tableId).find("tbody").find('tr:eq(' + cr.index + ')').find('td:eq(1)').text(item.theReferenceName);
-  $(cr.tableId).find("tbody").find('tr:eq(' + cr.index + ')').find('td:eq(2)').text(item.theReferenceDescription);
-  item.theDimensionName = $('#theTCReferenceArtifactType').val();
+  $(cr.tableId).find("tbody").find('tr:eq(' + cr.index + ')').find('td:eq(2)').text(item.theDimensionName);
+  $(cr.tableId).find("tbody").find('tr:eq(' + cr.index + ')').find('td:eq(3)').text(item.theReferenceDescription);
   var tc = JSON.parse($.session.get("TaskCharacteristic"));
 
   if (cr.tableId == '#theGrounds') {

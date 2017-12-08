@@ -163,6 +163,7 @@ mainContent.on('click', "#cancelMisuseCase", function (e) {
 });
 
 mainContent.on("click",".misusecaseEnvironment", function () {
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');  
   clearMisuseCaseInfo();
   var misusecase = JSON.parse($.session.get("MisuseCase"));
 
@@ -293,6 +294,7 @@ $(document).on('click','#addNewRisk', function() {
 });
 
 mainContent.on('click', '.riskEnvironment', function () {
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
   var env = $(this).text();
   var name = $("#theName").val();
   getRiskEnvironmentDetails(name, env);
@@ -317,7 +319,6 @@ function getRiskEnvironments(){
     success: function (data) {
       $('#theRiskEnvironments').find('tbody').empty();
       if (data.length > 0) {
-        $('#theRiskRatingDiv').show();
         $('#theRiskEnvironmentDiv').show();
         $.each(data, function (index, object) {
           appendRiskEnvironment(object);
@@ -325,7 +326,6 @@ function getRiskEnvironments(){
         $('#theRiskEnvironments').find('tbody').find('.riskEnvironment:first').click();
       }
       else {
-        $('#theRiskRatingDiv').hide();
         $('#theRiskEnvironmentDiv').hide();
       }
     },

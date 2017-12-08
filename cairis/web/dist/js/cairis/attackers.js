@@ -127,6 +127,7 @@ function viewAttacker(attackerName) {
 
 var mainContent = $("#objectViewer");
 mainContent.on("click",".attackerEnvironment", function () {
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
   clearAttackerEnvInfo();
   var attacker = JSON.parse($.session.get("Attacker"));
   var theEnvName = $(this).text();

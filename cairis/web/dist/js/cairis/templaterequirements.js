@@ -127,7 +127,6 @@ function viewTemplateRequirement(trName) {
             debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
           }
         });
-        $('#editTemplateRequirementOptionsForm').validator();
         $('#theName').val(data.theName);
         $('#theTemplateAssetName').val(data.theAssetName);
         $('#theType').val(data.theType);
@@ -136,6 +135,7 @@ function viewTemplateRequirement(trName) {
         $('#theFitCriterion').val(data.theFitCriterion);
         $.session.set("TemplateRequirement", JSON.stringify(data));
         $('#editTemplateRequirementOptionsDorm').loadJSON(data,null);
+        $('#editTemplateRequirementOptionsForm').validator('update');
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -160,6 +160,7 @@ $(document).on('click', "#addTemplateRequirement",function(){
       crossDomain: true,
       url: serverIP + "/api/dimensions/table/template_asset",
       success: function (tas) {
+        $('#editTemplateRequirementOptionsForm').validator();
         $("#UpdateTemplateRequirement").text("Create");
         $("#theTemplateAssetName option").remove();
         $.each(tas,function(idx,ta) {

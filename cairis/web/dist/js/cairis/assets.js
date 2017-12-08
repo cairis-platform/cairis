@@ -120,6 +120,9 @@ function viewAsset(assetName) {
           appendAssetInterface(aInt);
         });
         $('#editAssetsOptionsform').loadJSON(newdata,null);
+        if (newdata.isCritical) {
+          $('#theCriticalRationale').prop("disabled",false); 
+        }
         fillAssetEnvironments(newdata.theEnvironmentProperties);
         $('#editAssetsOptionsform').validator('update');
         $("#theEnvironmentDictionary").find("tbody").find(".assetEnvironmentRow:first").trigger('click');
@@ -198,6 +201,7 @@ mainContent.on('click', ".removeAssetEnvironment", function () {
 
 
 mainContent.on('click', '.assetEnvironmentRow', function(event){
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
   var asset = JSON.parse($.session.get("Asset"));
   var text = $(this).text();
   $.session.set("assetEnvironmentName", text);

@@ -90,7 +90,6 @@ $(document).on('click', "td.trustboundary-rows", function(){
   $.session.set("TrustBoundary", JSON.stringify(tb));
 
   fillOptionMenu("fastTemplates/editTrustBoundaryOptions.html","#objectViewer",null,true,true, function(){
-    $('#editTrustBoundaryOptionsForm').validator();
     $('#UpdateTrustBoundary').text("Update");
     $('#theTrustBoundaryName').val(tb.theName);
     $('#theTrustBoundaryDescription').val(tb.theDescription);
@@ -99,6 +98,7 @@ $(document).on('click', "td.trustboundary-rows", function(){
       appendTrustBoundaryEnvironment(envprop.theName);
     });
     $("#theTrustBoundaryEnvironments").find(".trustBoundaryEnvironmentProperties:first").trigger('click');
+    $('#editTrustBoundaryOptionsForm').validator('update');
     $.session.set("TrustBoundaryEnvironmentName", $("#theTrustBoundaryEnvironments").find(".trustBoundaryEnvironmentProperties:first").text());
   });
 });
@@ -283,6 +283,7 @@ mainContent.on('click', '.deleteTrustBoundaryEnvironment', function () {
 });
 
 mainContent.on("click", ".trustBoundaryEnvironmentProperties", function () {
+ $(this).closest('tr').addClass('active').siblings().removeClass('active');
   var name = $(this).text();
   $.session.set("TrustBoundaryEnvironmentName", name);
   $("#theTrustBoundaryComponents").find("tbody").empty();
@@ -383,9 +384,9 @@ mainContent.on('click', ".removeTrustBoundaryComponent", function () {
   var envName = $.session.get("TrustBoundaryEnvironmentName");
 
   $.each(tb.theEnvironmentProperties, function (index, env) {
-    if(env.theEnvironmentName == envName){
+    if(env.theName == envName){
       $.each(env.theComponents, function (index2, comp) {
-        if(comp.theName == compText){
+        if(comp.theName == compTxt){
           env.theComponents.splice( index2 ,1 );
           $.session.set("TrustBoundary", JSON.stringify(tb));
           compRow.remove();

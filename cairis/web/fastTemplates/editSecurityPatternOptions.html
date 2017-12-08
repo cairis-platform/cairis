@@ -1,9 +1,13 @@
 <form role="form" id="editSecurityPatternOptionsForm" xmlns="http://www.w3.org/1999/html" >
-  <div class="panel panel-default control-group form-group">
-    <div class="form-group">
-      <label for="theName" class="control-label">Name</label>
-      <input class="optionsInput form-control" type="text" name="theName" id="theName" maxlength="50" style="width: 75%;" data-error="Security Pattern name is required" required>
-      <div class="help-block with-errors"></div>
+  <div class="container-fluid tabs panel panel-default">
+    <div class="row form-group">
+      <div class="col-md-2">
+        <label for="theName" class="control-label">Name</label>
+      </div>
+      <div class="col-md-10">
+        <input class="optionsInput form-control" type="text" name="theName" id="theName" maxlength="50" data-error="Security Pattern name is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
     </div>
     <div class="tabs">
       <ul>
@@ -29,18 +33,18 @@
         </div>
       </div>
       <div id="structure" class="panel panel-default control-group">
-        <table class="clickable-table scrollableTable" id="thePatternStructure">
+        <table class="table table-condensed table-striped table-hover table-bordered" id="thePatternStructure">
           <thead>
-            <tr><th id="addPatternStructure" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Head Asset</th><th>Type</th><th>Nry</th><th>Role</th><th>Tail Role</th><th>Tail Nry</th><th>Tail Type</th><th>Tail Asset</th></tr>
+            <tr><th id="addPatternStructure" class="addRemove"> <i class="fa fa-plus"></i></th><th>Head Asset</th><th>Type</th><th>Nry</th><th>Role</th><th>Tail Role</th><th>Tail Nry</th><th>Tail Type</th><th>Tail Asset</th></tr>
           </thead>
           <tbody>
           </tbody>
         </table>
       </div>
       <div id="requirements" class="panel panel-default control-group">
-        <table class="clickable-table scrollableTable" id="thePatternRequirements">
+        <table class="table table-condensed table-striped table-hover table-bordered" id="thePatternRequirements">
           <thead>
-            <tr><th id="addPatternRequirement" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Requirement</th></tr>
+            <tr><th id="addPatternRequirement" class="addRemove"> <i class="fa fa-plus"></i></th><th>Requirement</th></tr>
           </thead>
           <tbody>
           </tbody>
@@ -48,7 +52,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="container-fluid row">
     <div class="form-group col-md-2 col-md-offset-5 footer">
       <button type="submit" class="btn btn-primary" id="UpdateSecurityPattern">Update</button>
       <button type="click" class="btn btn-secondary" id="CloseSecurityPattern">Close</button>
@@ -66,12 +70,12 @@
       <div class="modal-body">
         <div class="form-group">
           <label for="headAsset" class="control-label">Head</label>
-          <select class="optionsInput form-control" name="headAsset" id="headAsset" style="width: 100%;">
+          <select class="optionsInput form-control" name="headAsset" id="headAsset">
           </select>
         </div>
         <div class="form-group">
           <label for="headAdorn" class="control-label">Adornment</label>
-          <select class="optionsInput form-control" name="headAdorn" id="headAdorn" style="width: 100%;">
+          <select class="optionsInput form-control" name="headAdorn" id="headAdorn">
             <option value="Inheritance">Inheritence</option>
             <option value="Association">Association</option>
             <option value="Aggregation">Aggregation</option>
@@ -81,7 +85,7 @@
         </div>
         <div class="form-group">
           <label for="headNry" class="control-label">nry</label>
-          <select class="optionsInput form-control" name="headNry" id="headNry" style="width: 100%;">
+          <select class="optionsInput form-control" name="headNry" id="headNry">
             <option value="1">1</option>
             <option value="*">*</option>
             <option value="1..*">1..*</option>
@@ -89,15 +93,15 @@
         </div>
         <div class="form-group">
           <label for="headRole" class="control-label">Role</label>
-          <input class="optionsInput form-control" type="text" name="headRole" id="headRole" style="width: 100%;">
+          <input class="optionsInput form-control" type="text" name="headRole" id="headRole">
         </div>
         <div class="form-group">
           <label for="tailRole" class="control-label">Role</label>
-          <input class="optionsInput form-control" type="text" name="tailRole" id="tailRole" style="width: 100%;">
+          <input class="optionsInput form-control" type="text" name="tailRole" id="tailRole">
         </div>
         <div class="form-group">
           <label for="tailNry" class="control-label">nry</label>
-          <select class="optionsInput form-control" name="tailNry" id="tailNry" style="width: 100%;">
+          <select class="optionsInput form-control" name="tailNry" id="tailNry">
             <option value="1">1</option>
             <option value="*">*</option>
             <option value="1..*">1..*</option>
@@ -105,7 +109,7 @@
         </div>
         <div class="form-group">
           <label for="tailAdorn" class="control-label">Adornment</label>
-          <select class="optionsInput form-control" name="tailAdorn" id="tailAdorn" style="width: 100%;">
+          <select class="optionsInput form-control" name="tailAdorn" id="tailAdorn">
             <option value="Inheritance">Inheritence</option>
             <option value="Association">Association</option>
             <option value="Aggregation">Aggregation</option>
@@ -115,7 +119,7 @@
         </div>
         <div class="form-group">
           <label for="tailAsset" class="control-label">Tail</label>
-          <select class="optionsInput form-control" name="tailAsset" id="tailAsset" style="width: 100%;">
+          <select class="optionsInput form-control" name="tailAsset" id="tailAsset">
           </select>
         </div>
       </div>
@@ -137,17 +141,17 @@
       <div class="modal-body">
         <div class="form-group">
           <label for="thePatternRequirementName" class="control-label">Name</label>
-          <input class="optionsInput form-control" type="text" name="thePatternRequirementName" id="thePatternRequirementName" style="width: 75%;" data-error="Name is required" required>
+          <input class="optionsInput form-control" type="text" name="thePatternRequirementName" id="thePatternRequirementName" data-error="Name is required" required>
           <div class="help-block with-errors"></div>
         </div>
         <div class="form-group">
           <label for="thePatternRequirementAsset" class="control-label">Asset</label>
-          <select class="optionsInput form-control" name="thePatternRequirementAsset" id="thePatternRequirementAsset" style="width: 100%;">
+          <select class="optionsInput form-control" name="thePatternRequirementAsset" id="thePatternRequirementAsset">
           </select>
         </div>
         <div class="form-group">
           <label for="thePatternRequirementType" class="control-label">Type</label>
-          <select class="optionsInput form-control" name="thePatternRequirementType" id="thePatternRequirementType" style="width: 100%;">
+          <select class="optionsInput form-control" name="thePatternRequirementType" id="thePatternRequirementType">
             <option value="Functional">Functional</option>
             <option value="Data">Data</option>
             <option value="Look and Feel">Look and Feel</option>

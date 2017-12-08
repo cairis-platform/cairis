@@ -121,6 +121,7 @@ function viewRole(roleName) {
               $("#theEnvironments").find("tbody").append("<tr><td class='roleEnvironmentClick'>" + value.theEnvironmentName + "</td></tr>");
             });
             $.session.set("RoleEnvironments", JSON.stringify(json))
+            $("#theEnvironments").find("tbody").find(".roleEnvironmentClick:first").trigger('click');
           },
           error: function (xhr, textStatus, errorThrown) {
             var error = JSON.parse(xhr.responseText);
@@ -212,6 +213,7 @@ $(document).on('click',"td.deleteRoleButton",function(event){
 
 
 mainContent.on("click", '.roleEnvironmentClick', function () {
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
   $("#theCounterMeasures").find('tbody').empty();
   $("#theResponses").find('tbody').empty();
   var text =  $(this).text();

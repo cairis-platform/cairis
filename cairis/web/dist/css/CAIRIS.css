@@ -87,7 +87,7 @@ table, th, td{
     display: none;
 }
 thead{
-    border-bottom: 3px black solid;
+    border-bottom: 3px #ddd solid;
 }
 .comboboxD{
     visibility: hidden;
@@ -152,19 +152,24 @@ footer{
     min-width: 200px;
 }
 #AssociationsAssetsOptions > th, td { /*min-width: 75px;*/ }
-#assetstabsID{
-    width: 70%;
-}
 .tabs textarea{
     width:100%;
 }
 .right{
     float: right;
 }
-/*environmentstable*/
-#theEnvironmentDictionary{
-    margin : 5px;
+
+.table-striped th {
+  background-color: grey;
+  color: white;
 }
+
+.table-striped th.addRemove td.addRemove {
+  width: 15px;
+}
+
+.table-striped tbody tr.active td {background-color: #ccc;}
+
 table.clickable-table {
     border-collapse: collapse;
 }
@@ -243,7 +248,7 @@ select#theType {
     min-width: 10px;
 }
 .fa-plus{
-    color: green;
+    color: white;
 }
 .fa-minus{
     color: red;

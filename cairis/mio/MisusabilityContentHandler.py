@@ -63,6 +63,20 @@ class MisusabilityContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name']
       self.theConcept = attrs['concept']
       self.theObject = attrs['object']
+    elif name == 'grounds':
+      refName = attrs['reference']
+      refType = attrs['type']
+      refArtifact = ''
+      self.theGrounds.append((refName,'',refType))
+    elif name == 'warrant':
+      refName = attrs['reference']
+      refType = attrs['type']
+      refArtifact = ''
+      self.theWarrants.append((refName,'',refType))
+    elif name == 'rebuttal':
+      refName = attrs['reference']
+      refType = attrs['type']
+      refArtifact = ''
     elif name == 'task_characteristic':
       self.theTask = attrs['task']
       self.theModalQualifier = attrs['modal_qualifier'] 

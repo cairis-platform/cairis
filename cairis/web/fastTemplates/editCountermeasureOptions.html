@@ -1,29 +1,41 @@
 <form role="form" id="editCountermeasureOptionsForm" xmlns="http://www.w3.org/1999/html" >
 
-  <div class="tabs infoWidth" style="width: 100%;">
+  <div class="container-fluid tabs panel panel-default">
     <ul>
       <li><a href="#summary">Summary</a></li>
       <li><a href="#description">Description</a></li>
     </ul>
     <div id="summary">
-      <div class="form-group">
-        <label for="theName" class="control-label">Countermeasure</label>
-        <input class="optionsInput countermeasureUpdate form-control" type="text" name="theName" id="theName" maxlength="100" style="float: right; width: 75%" date-error="Name is required" required>
-        <div class="help-block with-errors"></div>
+      <div class="row form-group">
+        <div class="col-md-2">
+          <label for="theName" class="control-label">Countermeasure</label>
+        </div>
+        <div class="col-md-10">
+          <input class="optionsInput countermeasureUpdate form-control" type="text" name="theName" id="theName" maxlength="100" date-error="Name is required" required>
+          <div class="help-block with-errors"></div>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="theTags" class="control-label">Tags</label>
-        <input class="optionsInput countermeasureUpdate form-control" type="text" value="" id="theTags" name="theTags" style="float: right; width: 75%">
+      <div class="row form-group">
+        <div class="col-md-2">
+          <label for="theTags" class="control-label">Tags</label>
+        </div>
+        <div class="col-md-10">
+          <input class="optionsInput countermeasureUpdate form-control" type="text" value="" id="theTags" name="theTags" >
+        </div>
       </div>
-      <div class="form-group">
-        <label for="theType" class="control-label">Type</label>
-        <select id="theType" name="theType" class="form-control" style="float: right; width: 75%">
-          <option>Information</option>
-          <option>Systems</option>
-          <option>Software</option>
-          <option>Hardware</option>
-          <option>People</option>
-        </select>
+      <div class="row form-group">
+        <div class="col-md-2">
+          <label for="theType" class="control-label">Type</label>
+        </div>
+        <div class="col-md-10">
+          <select id="theType" name="theType" class="form-control" style="float: right; width: 75%">
+            <option>Information</option>
+            <option>Systems</option>
+            <option>Software</option>
+            <option>Hardware</option>
+            <option>People</option>
+          </select>
+        </div>
       </div>
     </div>   
     <div class="form-group" id="description">
@@ -31,68 +43,93 @@
       <div class="help-block with-errors"></div>
     </div>   
   </div>
-  <div class="inblock">
-    <table class="left clickable-table" id="theEnvironments" style="width: 25%;">
-      <thead>
-        <tr><th id="addCountermeasureEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-
-    <div class="tabs right" style="width: 75%;">
-      <div id="Properties" class="clickable-table scrollableTable" style="width: 100%;" >
-        <div class="form-group">
-          <label for="theCountermeasureCost" class="control-label">Cost</label>
-          <select id="theCountermeasureCost" name="theCountermeasureCost" class="form-control" style="float: right; width: 75%">
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
-          </select>
-        </div>
-        <ul>
-          <li><a href="#security">Security</a></li>
-          <li><a href="#usability">Usability</a></li>
-        </ul>
-        <div id="security" class="clickable-table scrollableTable">
-          <div class="inblock">
-            <table id="theRequirements" class="left">
-              <thead><tr><th id="addRequirementToCountermeasure" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Requirement</th></tr></thead>
-              <tbody>
-              </tbody>
-            </table>
-            <table id="theTargets" class="right">
-              <thead><tr><th id="addTargetToCountermeasure" style="width: 30px;"> <i class="fa fa-plus"></i></th><th>Target</th><th>Effectiveness</th><th>Rationale</th></tr></thead>
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-          <table id="countermeasureProperties">
-            <thead><tr><th id="addPropertytoCountermeasure" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Property</th><th>Value</th><th>Rationale</th></tr></thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-        <div id="usability" class="clickable-table scrollableTable">
-          <table id="theRoles" class="left" style="width: 100%">
-            <thead><tr><th id="addRoleToCountermeasure" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Role</th></tr></thead>
-            <tbody>
-            </tbody>
-          </table>
-          <table id="thePersonas" style="width: 100%">
+  <div class="container-fluid tabs">
+    <div class="row row-eq-height">
+      <div class="col-sm-2 col-md-2">
+        <div class="panel panel-default">
+          <table class="table table-condensed table-striped table-hover table-bordered" id="theEnvironments">
             <thead>
-              <tr>
-                <th>Task</th><th>Persona</th><th>Duration</th><th>Frequency</th><th>Demands</th><th>Goal Conflict</th>
-              </tr>
+              <tr><th id="addCountermeasureEnv" class="addRemove"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
             </thead>
             <tbody>
             </tbody>
           </table>
         </div>
       </div>
+      <div class="col-sm-10 col-md-10">
+        <div class="panel panel-default">
+          <div class="row form-group">
+            <div class="col-sm-12 col-md-12">
+              <div class="col-sm-2 col-md-2">
+                <label for="theCountermeasureCost" class="control-label">Cost</label>
+              </div>
+              <div class="col-sm-10 col-md-10">
+                <select id="theCountermeasureCost" name="theCountermeasureCost" class="form-control">
+                  <option>Low</option>
+                  <option>Medium</option>
+                  <option>High</option>
+                </select>
+              </div>
+            </div>
+          </div> 
+          <div class="row form-group">
+            <div class="col-sm-12 col-md-12">
+              <div class="nav nav-tabs">
+                <ul>
+                  <li><a href="#security">Security</a></li>
+                  <li><a href="#usability">Usability</a></li>
+                </ul>
+                <div id="security">
+                  <div class="col-sm-4 col-md-4">
+                    <table id="theRequirements" class="table table-condensed table-striped table-hover table-bordered">
+                      <thead><tr><th id="addRequirementToCountermeasure" class="addRemove"> <i class="fa fa-plus"></i></th><th>Requirement</th></tr></thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-sm-4 col-md-4">
+                    <table id="theTargets" class="table table-condensed table-striped table-hover table-bordered">
+                      <thead><tr><th id="addTargetToCountermeasure" class="addRemove"> <i class="fa fa-plus"></i></th><th>Target</th><th>Effectiveness</th><th>Rationale</th></tr></thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-sm-4 col-md-4">
+                    <table id="countermeasureProperties" class="table table-condensed table-striped table-hover table-bordered">
+                      <thead><tr><th id="addPropertytoCountermeasure" class="addRemove"> <i class="fa fa-plus"></i></th><th>Property</th><th>Value</th><th>Rationale</th></tr></thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div id="usability">
+                  <div class="col-sm-2 col-md-2">
+                    <table id="theRoles" class="table table-condensed table-striped table-hover table-bordered" >
+                      <thead><tr><th id="addRoleToCountermeasure" class="addRemove"> <i class="fa fa-plus"></i></th><th>Role</th></tr></thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-sm-10 col-md-10">
+                    <table id="thePersonas" class="table table-condensed table-striped table-hover table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Task</th><th>Persona</th><th>Duration</th><th>Frequency</th><th>Demands</th><th>Goal Conflict</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
+        </div>
+      </div>
     </div>
   </div>
-  <div class="row">
+  <div class="container-fluid row">
     <div class="form-group col-md-2 col-md-offset-5 footer">
       <button type="submit" class="btn btn-primary" id="UpdateCountermeasure">Update</button>
       <button type="click" class="btn btn-secondary" id="CloseCountermeasure">Close</button>

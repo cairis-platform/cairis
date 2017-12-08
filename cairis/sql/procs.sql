@@ -11061,7 +11061,7 @@ end
 
 create procedure getPersonaCharacteristicsSummary()
 begin
-  select p.name,bv.name,pc.description from persona_characteristic pc, persona p, behavioural_variable bv where pc.persona_id = p.id and pc.variable_id = bv.id order by 1,2;
+  select p.name,bv.name,pc.description from persona_characteristic pc, persona p, behavioural_variable bv where pc.persona_id = p.id and pc.variable_id = bv.id order by 1,2,3;
 end
 //
 

@@ -1,81 +1,102 @@
 <form role="form" id="editThreatOptionsform" xmlns="http://www.w3.org/1999/html" >
-
-  <div class="row form-group">
-    <div class="col-md-2">
-      <label for="theThreatName" class="control-label">Threat</label>
+  <div class="container-fluid panel panel-default">
+    <div class="row form-group">
+      <div class="col-md-2">
+        <label for="theThreatName" class="control-label">Threat</label>
+      </div>
+      <div class="col-md-10">
+        <input class="optionsInput form-control" type="text" name="theThreatName" id="theThreatName" data-error="Threat name is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
     </div>
-    <div class="col-md-10">
-      <input class="optionsInput form-control" type="text" name="theThreatName" id="theThreatName" data-error="Threat name is required" required>
-      <div class="help-block with-errors"></div>
+    <div class="row form-group">
+      <div class="col-md-2">
+        <label for="theTags" class="control-label">Tags</label>
+      </div>
+      <div class="col-md-10">
+        <input class="optionsInput form-control" type="text" value="" maxlength="200" id="theTags" name="theTags">
+      </div>
     </div>
-  </div>
-  <div class="row form-group">
-    <div class="col-md-2">
-      <label for="theTags" class="control-label">Tags</label>
-    </div>
-    <div class="col-md-10">
-      <input class="optionsInput form-control" type="text" value="" maxlength="200" id="theTags" name="theTags">
-    </div>
-  </div>
-  <div class="row form-group">
-    <div class="col-md-2">
-      <label for="theType" class="control-label">Type</label>
-    </div>
-    <div class="col-md-10">
-      <select name="theType" id="theType" class="form-control">
-      </select>
-    </div>
-  </div>
-  <div class="row form-group" id="Description">
-    <div class="col-md-2">
-      <label for="theMethod" class="control-label">Method</label>
-    </div>
-    <div class="col-md-10">
-      <textarea rows="5" class="right form-control" name="theMethod" id="theMethod" style="margin-bottom: 15px;" data-error="Method is required" required></textarea>
-      <div class="help-block with-errors"></div>
-    </div>
-  </div>
-  <br/>
-  <div class="inblock">
-    <table class="left clickable-table" id="theThreatEnvironments" style="width: 25%;">
-      <thead>
-        <tr><th id="addThreatEnv" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-    <div class="tabs right form-group" style="width: 75%;" >
-      <div id="Properties" class="gearOptions clickable-table scrollableTable" >
-        <label for"theLikelihood" class="control-label"> Likelihood</label>
-        <select id="theLikelihood" class="form-control">
-          <option>Improbable</option>
-          <option>Incredible</option>
-          <option>Remote</option>
-          <option>Occasional</option>
-          <option>Probable</option>
-          <option>Frequent</option>
+    <div class="row form-group">
+      <div class="col-md-2">
+        <label for="theType" class="control-label">Type</label>
+      </div>
+      <div class="col-md-10">
+        <select name="theType" id="theType" class="form-control">
         </select>
-        <div class="inblock form-group">
-          <table id="threatAttackers" class="left" style="width: 50%">
-            <thead><tr><th id="addAttackertoThreat" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Attacker</th></tr></thead>
-            <tbody>
-            </tbody>
-          </table>
-          <table id="threatAssets" class="right" style="width: 50%">
-            <thead><tr><th id="addAssettoThreat" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Asset</th></tr></thead>
+      </div>
+    </div>
+    <div class="row form-group" id="Description">
+      <div class="col-md-2">
+        <label for="theMethod" class="control-label">Method</label>
+      </div>
+      <div class="col-md-10">
+        <textarea rows="5" class="right form-control" name="theMethod" id="theMethod" style="margin-bottom: 15px;" data-error="Method is required" required></textarea>
+        <div class="help-block with-errors"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container-fluid tabs">
+    <div class="row row-eq-height">
+      <div class="col-sm-2 col-md-2">
+        <div class="panel-default">
+          <table class="table table-condensed table-striped table-hover table-bordered" id="theThreatEnvironments">
+            <thead>
+              <tr><th id="addThreatEnv" class="addRemove"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
+            </thead>
             <tbody>
             </tbody>
           </table>
         </div>
-        <table id="threatProperties">
-          <thead><tr><th id="addPropertytoThreat" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Property</th><th>Value</th><th>Rationale</th></tr></thead>
-          <tbody>
-          </tbody>
-        </table>
+      </div>
+      <div class="col-sm-10 col-md-10">
+        <div class="panel panel-default">
+          <div class="row">
+            <div class="col-sm-2 col-md-2">
+              <label for"theLikelihood" class="control-label"> Likelihood</label>
+            </div>
+            <div class="col-sm-10 col-md-10">
+              <select id="theLikelihood" class="form-control">
+                <option>Improbable</option>
+                <option>Incredible</option>
+                <option>Remote</option>
+                <option>Occasional</option>
+                <option>Probable</option>
+                <option>Frequent</option>
+              </select>
+            </div>
+          </div>
+          </br>
+          <div class="row row-eq-height">
+            <div class="col-sm-4 col-md-4">
+              <table id="threatAttackers" class="table table-condensed table-striped table-bordered table-hover">
+                <thead><tr><th id="addAttackertoThreat" class="addRemove"> <i class="fa fa-plus"></i></th><th>Attacker</th></tr></thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-4 col-md-4">
+              <table id="threatAssets" class="table table-condensed table-striped table-bordered table-hover">
+                <thead><tr><th id="addAssettoThreat" class="addRemove"> <i class="fa fa-plus"></i></th><th>Asset</th></tr></thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-4 col-md-4">
+              <table id="threatProperties" class="table table-condensed table-striped table-bordered table-hover">
+                <thead><tr><th id="addPropertytoThreat" class="addRemove"> <i class="fa fa-plus"></i></th><th>Property</th><th>Value</th><th>Rationale</th></tr></thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="container-fluid row">
     <div class="form-group col-md-2 col-md-offset-5 footer">
       <button type="submit" class="btn btn-primary" id="UpdateThreat">Update</button>
       <button type="click" class="btn btn-secondary" id="CloseThreat">Close</button>

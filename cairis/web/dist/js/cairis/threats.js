@@ -167,6 +167,7 @@ $(document).on("click","#introduceThreatDirectoryEntry", function() {
 });
 
 mainContent.on("click", ".threatEnvironments", function () {
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
   clearThreatEnvInfo();
   var threat = JSON.parse($.session.get("theThreat"));
   var envName = $(this).text();

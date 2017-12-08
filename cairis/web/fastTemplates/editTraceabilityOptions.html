@@ -1,14 +1,18 @@
 <form role="form" id="editTraceabilityOptionsForm" xmlns="http://www.w3.org/1999/html" >
-  <div class="panel panel-default control-group form-group">
-    <div class="form-group">
-      <label for="theTraceabilityEnvironmentName" class="control-label">Name</label>
-      <select class="optionsInput form-control" name="theTraceabilityEnvironmentName" id="theTraceabilityEnvironmentName" style="width: 100%;">
-      </select>
+  <div class="container-fluid panel panel-default control-group form-group">
+    <div class="row form-group">
+      <div class="col-md-2">
+        <label for="theTraceabilityEnvironmentName" class="control-label">Name</label>
+      </div>
+      <div class="col-md-10">
+        <select class="optionsInput form-control" name="theTraceabilityEnvironmentName" id="theTraceabilityEnvironmentName">
+        </select>
+      </div>
     </div>
     <div class="form-group">
-      <table class="clickable-table scrollableTable" id="theTraces">
+      <table class="table table-condensed table-striped table-hover table-bordered" id="theTraces">
         <thead>
-          <tr><th style="width: 15px;"></th><th>From</th><th>Name</th><th>To</th><th>Name</th></tr>
+          <tr><th class="addRemove"></th><th>From</th><th>Name</th><th>To</th><th>Name</th></tr>
         </thead>
         <tbody>
         </tbody>

@@ -168,10 +168,8 @@ function viewTask(taskName) {
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendTaskEnvironment(env.theEnvironmentName);
         });
-        fillTaskEnvInfo(data.theEnvironmentProperties[0]);
+        $("#theEnvironments").find("tbody").find(".taskEnvironment:first").trigger('click');
         $("#editTaskOptionsForm").validator('update');
-        $('#tasktabsID').show('fast');
-        $.session.set("taskEnvironmentName", data.theEnvironmentProperties[0].theEnvironmentName);
       });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -206,22 +204,9 @@ function fillTaskEnvInfo(env) {
 
 var mainContent = $("#objectViewer");
 mainContent.on("click",".taskEnvironment", function () {
-  var lastEnvName = $.session.get("taskEnvironmentName");
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
+  updateTaskEnvInfo();
   var task = JSON.parse($.session.get("Task"));
-  var updatedEnvProps = [];
-  $.each(task.theEnvironmentProperties, function (index, env) {
-    if(env.theEnvironmentName == lastEnvName){
-      env.theDependencies = $('#theDependencies').val();
-      env.theNarrative = $('#theNarrative').val();
-      env.theConsequences = $('#theConsequences').val();
-      env.theBenefits = $('#theBenefits').val();
-    }
-    updatedEnvProps.push(env);
-  });
-  task.theEnvironmentProperties = updatedEnvProps;
-  $.session.set("Task", JSON.stringify(task));
-  task = JSON.parse($.session.get("Task"));
-
   var envName = $(this).text();
   $.session.set("taskEnvironmentName", envName);
   $.each(task.theEnvironmentProperties, function (index, env) {
@@ -230,6 +215,23 @@ mainContent.on("click",".taskEnvironment", function () {
     }
   });
 });
+
+function updateTaskEnvInfo() {
+  var lastEnvName = $.session.get("taskEnvironmentName");
+  if (lastEnvName != undefined) {
+    var task = JSON.parse($.session.get("Task"));
+    var updatedEnvProps = [];
+    $.each(task.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == lastEnvName){
+        env.theDependencies = $('#theDependencies').val();
+        env.theNarrative = $('#theNarrative').val();
+        env.theConsequences = $('#theConsequences').val();
+        env.theBenefits = $('#theBenefits').val();
+        $.session.set("Task", JSON.stringify(task));
+      }
+    });
+  }
+}
 
 function clearTaskEnvInfo(){
   $("#theDependencies").val('');
@@ -429,10 +431,10 @@ mainContent.on('click', ".deleteTaskEnv", function () {
       var UIenv = $("#theTaskEnvironments").find("tbody");
       if(jQuery(UIenv).has(".taskEnvironment").length){
         UIenv.find(".taskEnvironment:first").trigger('click');
-      }else{
+      }
+      else {
         $("#tasktabsID").hide("fast");
       }
-
       return false;
     }
   });

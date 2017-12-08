@@ -84,11 +84,11 @@ $(document).on('click', "td.obstacle-rows",function() {
 
 var mainContent = $("#objectViewer");
 mainContent.on('click', ".obstacleEnvProperties", function () {
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
   var obstacle = JSON.parse($.session.get("Obstacle"));
   var name = $(this).text();
   $.session.set("ObstacleEnvName", name);
-  emptyGoalEnvTables();
-
+  clearObstacleEnvironmentPanel();
   $.each(obstacle.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == name){
       $("#theDefinition").val(env.theDefinition);

@@ -162,7 +162,8 @@ function viewUseCase(ucName) {
 
 var mainContent = $("#objectViewer");
 mainContent.on("click",".usecaseEnvironment", function () {
-  clearUseCaseEnvInfo();
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
+  updateUseCaseEnvInfo();
   var usecase = JSON.parse($.session.get("UseCase"));
   var theEnvName = $(this).text();
   $.session.set("usecaseEnvironmentName", theEnvName);
@@ -231,12 +232,29 @@ function generateObstacleFromException(exceptionIdx) {
   });
 }
 
-function clearUseCaseEnvInfo(){
+function updateUseCaseEnvInfo(){
+  var usecase = JSON.parse($.session.get("UseCase"));
+  var theEnvName = $(this).text();
+  var theEnvName = $.session.get("usecaseEnvironmentName");
+  if (theEnvName != undefined) {
+    $.each(usecase.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == theEnvName){
+        env.thePreCond = $('#thePreCond').val();
+        env.thePostCond = $('#thePostCond').val();
+        $.session.set("UseCase", JSON.stringify(usecase));
+      }
+    });
+  }
+  clearUseCaseEnvInfo();
+}
+
+function clearUseCaseEnvInfo() {
   $("#thePreCond").val('');
   $("#thePostCond").val('');
   $("#theSteps").find("tbody").empty();
   $("#theExceptions").find("tbody").empty();
   $("#theExceptions").hide();
+
 }
 
 function appendUseCaseEnvironment(environment){
@@ -244,7 +262,7 @@ function appendUseCaseEnvironment(environment){
 }
 
 function appendUseCaseStep(stepTxt) {
-  $("#theSteps").find("tbody").append('<tr class="clickable-row"><td class="removeUseCaseStep"><i class="fa fa-minus"></i></td><td class="usecaseStep">' + stepTxt + '</td></tr>').animate('slow');
+  $("#theSteps").find("tbody").append('<tr class="usecase-step"><td class="removeUseCaseStep"><i class="fa fa-minus"></i></td><td class="usecaseStep">' + stepTxt + '</td></tr>').animate('slow');
 }
 
 function appendUseCaseActor(actor) {
@@ -281,7 +299,7 @@ mainContent.on('change','#theActorType',function() {
   refreshDimensionSelector($('#theGRLActor'),$('#theActorType').val(),envName,undefined,['All']);
 });
 
-mainContent.on('dblclick','.clickable-row',function() {
+mainContent.on('dblclick','.usecase-step',function() {
   $('#AddStepButton').text('Update');
   var stepIdx = $(this).closest('tr').index();
   $('#useCaseStepDialog').attr('data-selectedIndex',stepIdx);
@@ -592,7 +610,7 @@ function postUseCase(usecase, callback){
   });
 }
 
-mainContent.on("click",".clickable-row", function () {
+mainContent.on("click",".usecase-step", function () {
   if($(this).hasClass('active')){
     $(this).removeClass('active'); 
     $("#theExceptions").hide();

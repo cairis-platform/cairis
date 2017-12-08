@@ -231,6 +231,7 @@ mainContent.on("change", "#theCountermeasureCost", function() {
 });
 
 mainContent.on("click", ".countermeasuresEnvironments", function () {
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
   clearCountermeasureEnvInfo();
   var countermeasure = JSON.parse($.session.get("Countermeasure"));
   var envName = $(this).text();
@@ -397,7 +398,7 @@ mainContent.on('click', '#chooseTargetButton', function () {
         $.session.set("Countermeasure", JSON.stringify(cm));
         $('#theTargets').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(target.theName);
         $('#theTargets').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(target.theEffectiveness);
-        $('#theTargets').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(target.theRationale);
+        $('#theTargets').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(target.theRationale);
         $('#ChooseTargetDialog').modal('hide');
       }
       else {

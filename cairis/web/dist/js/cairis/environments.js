@@ -48,21 +48,25 @@ $(document).on('click', "td.environment-rows",function(){
           }, 10);
         });
         $.each(data.theEnvironments, function (index, env) {
-          $("#envToEnvTable").append("<tr><td><i class='fa fa-minus'></i></td><td>" + env + "</td></tr>");
+          $("#envToEnvTable").append("<tr><td class='removeEnvinEnv'><i class='fa fa-minus'></i></td><td class='envInEnv'>" + env + "</td></tr>");
           $("#overrideCombobox").append($("<option />").text(env));
         });
+        if (data.theEnvironments.length > 0) {
+          $('#duplicateSettings').show();
+        }
         switch (data.theDuplicateProperty) {
           case "Maximise":
-            $("#MaximiseID").prop('checked', true);
+            $("#maximise").click();
+            $('#overrideCombobox').empty();
             break;
           case "Override":
-            $("#OverrideID").prop('checked', true);
-            $("#overrideCombobox").prop("disabled", false);
+            $("#override").click();
+            $('#overrideCombobox').val(data.theOverridingEnvironment);
             break;
           case "None":
-            $("#overrideCombobox").prop("disabled", false);
-            $("#OverrideID").prop('checked', false);
-            $("#MaximiseID").prop('checked', false);
+            $('#overrideCombobox').empty();
+            $("#override").prop('checked', false);
+            $("#maximise").prop('checked', true);
             break;
         }
         $("#editEnvironmentOptionsform").validator('update');
@@ -120,15 +124,18 @@ $("#environmentMenuClick").click(function () {
 });
 
 var mainContent = $("#objectViewer");
-mainContent.on('change', "#OverrideID", function () {
-  if($("#OverrideID").prop("checked")){
-    $("#overrideCombobox").prop("disabled",false);
+mainContent.on('change', "#override", function () {
+  $("#overrideCombobox").empty();
+  if($("#override").prop("checked")){
+    $("#envToEnvTable").find("tbody").find("tr .removeEnvinEnv").each(function () {
+      $("#overrideCombobox").append($("<option />").text($(this).next("td").text()));
+    });
   }
 });
 
-mainContent.on('change', "#MaximiseID", function () {
-  if($("#MaximiseID").prop("checked")){
-    $("#overrideCombobox").prop("disabled",true);
+mainContent.on('change', "#maximise", function () {
+  if($("#maximise").prop("checked")){
+    $('#overrideCombobox').empty();
   }
 });
 
@@ -142,9 +149,8 @@ mainContent.on('click', ".removeEnvinEnv", function () {
     }
   });
   if ($('#envToEnvTable').find("tbody").is(':empty')){
-    $("input:radio[name='duplication']").each(function(i) {
-      this.checked = false;
-    });
+    $("#maximise").prop("checked");
+    $('#duplicateSettings').hide();
   }
 });
 
@@ -175,7 +181,16 @@ mainContent.on("click", "#addEnvtoEnv", function () {
 function addEnvToEnv() {
   var text =  $("#chooseEnvironmentSelect").val();
   $("#envToEnvTable").append("<tr><td class='removeEnvinEnv'><i class='fa fa-minus'></i></td><td class='envInEnv'>"+ text +"</td></tr>");
-  $("#overrideCombobox").append("<option value='" + text + "'>" + text + "</option>");
+
+  if ($('#envToEnvTable tr').length == 1) {
+    $("#maximise").prop('checked', true);
+  }
+  else {
+    if ($("#override").prop('checked' == true)) {
+      $("#overrideCombobox").append("<option value='" + text + "'>" + text + "</option>");
+    }
+  }
+  $("#duplicateSettings").show();
   $('#chooseEnvironment').modal('hide');
 };
 
@@ -227,7 +242,6 @@ function fillupEnvironmentObject(env) {
   $("#tensionsTable").find("td").each(function() {
     var attr = $(this).find("select").attr('rationale');
     if(typeof attr !== typeof undefined && attr !== false) {
-      var env = JSON.parse($.session.get("Environment"));
       var select = $(this).find("select");
       var tension = jQuery.extend(true, {}, tensionDefault);
       tension.rationale = select.attr("rationale");
@@ -245,17 +259,16 @@ function fillupEnvironmentObject(env) {
     envInEnv.push($(this).next("td").text());
   });
   env.theEnvironments = envInEnv;
-  env.theDuplicateProperty = $("input:radio[name ='duplication']:checked").val();
-  if(env.theDuplicateProperty == "" || env.theDuplicateProperty == undefined){
-    env.theDuplicateProperty = "None";
-    env.theOverridingEnvironment = $('#overrideCombobox').val();
-  }
 
-  var theEnvinEnvArray = [];
-  $("#overrideCombobox").find("option").each(function (index, option) {
-    theEnvinEnvArray.push($(option).text());
-  });
-  env.theEnvironments = theEnvinEnvArray;
+  if (env.theEnvironments.length > 0) {
+    if ($("#override").prop('checked') == true) {
+      env.theDuplicateProperty = "Override";
+      env.theOverridingEnvironment = $('#overrideCombobox').val();
+    }
+    else {
+      env.theDuplicateProperty = "Maximise";
+    }
+  }
   return env;
 }
 
@@ -387,4 +400,3 @@ function postEnvironment(environment, callback){
     }
   });
 }
-

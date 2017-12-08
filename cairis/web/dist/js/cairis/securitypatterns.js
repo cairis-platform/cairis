@@ -20,10 +20,12 @@
 'use strict';
 
 $("#securityPatternsClick").click(function () {
-  clearLocalStorage($('#menuBCClick').attr('dimension'));
-  $("#objectViewer").empty();
-  $('#menuBCClick').attr('dimension','security_pattern');
-  refreshMenuBreadCrumb('security_pattern');
+  validateClick('template_asset',function() {
+    clearLocalStorage($('#menuBCClick').attr('dimension'));
+    $("#objectViewer").empty();
+    $('#menuBCClick').attr('dimension','security_pattern');
+    refreshMenuBreadCrumb('security_pattern');
+  });
 });
 
 function createSecurityPatternsTable(){

@@ -1,104 +1,147 @@
-<form role="form" xmlns="http://www.w3.org/1999/html" id="editObstacleOptionsForm" class="gearOptions">
-  <div class="form-group">
-    <label for="theName" class="control-label">Obstacle</label>
-    <input class="optionsInput form-control" type="text" id="theName" name="theName" maxlength="100" data-error="Obstacle name is required" required>
-    <div class="help-block with-errors"></div>
+<form role="form" xmlns="http://www.w3.org/1999/html" id="editObstacleOptionsForm">
+  <div class="container-fluid tabs panel panel-default">
+    <div class="row form-group">
+      <div class="col-md-2">
+        <label for="theName" class="control-label">Obstacle</label>
+      </div>
+      <div class="col-md-10">
+        <input class="optionsInput form-control" type="text" id="theName" name="theName" maxlength="100" data-error="Obstacle name is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2">
+        <label for="theTags" class="control-label">Tags</label>
+      </div>
+      <div class="col-md-10">
+        <input class="optionsInput form-control" type="text" id="theTags " name="theTags">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2">
+        <label for="theOriginator" class="control-label">Originator</label>
+      </div>
+      <div class="col-md-10">
+        <input class="optionsInput form-control" type="text" id="theOriginator" name="theOriginator" maxlength="50" data-error="Originator is required" required>
+        <div class="help-block with-errors"></div>
+    </div>
   </div>
-  <div class="form-group">
-    <label for="theTags" class="control-label">Tags</label>
-    <input class="optionsInput form-control" type="text" id="theTags " name="theTags">
-  </div>
-  <div>
-    <label for="theOriginator" class="control-label">Originator</label>
-    <input class="optionsInput form-control" type="text" id="theOriginator" name="theOriginator" maxlength="50" data-error="Originator is required" required>
-    <div class="help-block with-errors"></div>
-  </div>
-  <div class="inblock">
-    <table class="left clickable-table" id="theObstacleEnvironments" class="form-control" style="width: 25%;">
-      <thead>
-        <th id="addObstacleEnvironment" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Environment</th>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-    <div id="obstacleProperties" class="tabs right" style="width: 75%;">
-      <ul>
-        <li><a href="#Definition">Definition</a></li>
-        <li><a href="#Probability">Probability</a></li>
-        <li><a href="#Goals">Goals</a></li>
-        <li><a href="#Sub-Goals">Sub-Goals</a></li>
-        <li><a href="#Concerns">Concerns</a></li>
-      </ul>
-      <div id="Definition">
-        <div class="form-group">
-          <label for="theLabel" class="control-label">Label</label> 
-          <input id="theLabel" class="form-control" type="text" maxlength="255" name="theLabel" readonly>
-        </div>
-        <div class="form-group">
-          <label for="theCategory" class="control-label">Category</label> 
-          <select id="theCategory"  class="obstacleAutoUpdater form-control" name="theCategory" >
-            <option>Confidentiality Threat</option>
-            <option>Integrity Threat</option>
-            <option>Availability Threat</option>
-            <option>Accountability Threat</option>
-            <option>Anonymity Threat</option>
-            <option>Pseudonymity Threat</option>
-            <option>Unlinkability Threat</option>
-            <option>Unobservability Threat</option>
-            <option>Threat</option>
-            <option>Vulnerability</option>
-            <option>Duration</option>
-            <option>Frequency</option>
-            <option>Demands</option>
-            <option>Goal Support</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="theDefinition" class="control-label">Definition</label>
-          <textarea rows="5" id="theDefinition"  class="obstacleAutoUpdater form-control" name="theDefinition" maxlength="1000" data-error="Definition is required" required></textarea>
-          <div class="help-block with-errors"></div>
+  <div class="container-fluid tabs">
+    <div class="row row-eq-height">
+      <div class="col-sm-2 col-md-2">
+        <div class="panel panel-default">
+          <table class="table table-condensed table-striped table-hover table-bordered" id="theObstacleEnvironments">
+            <thead>
+              <th id="addObstacleEnvironment" class="addRemove"> <i class="fa fa-plus"></i></th><th>Environment</th>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div id="Probability">
-        <div class="form-group">
-          <label for="theProbability" class="control-label">Value</label> 
-          <input id="theProbability" class="obstacleAutoUpdater form-control" type="number" min="0" step="0.01" name="theProbability">
+      <div class="col-sm-10 col-md-10">
+        <div class="panel panel-default">
+          <div id="obstacleProperties" class="nav nav-tabs">
+            <ul>
+              <li><a href="#Definition">Definition</a></li>
+              <li><a href="#Probability">Probability</a></li>
+              <li><a href="#Goals">Goals</a></li>
+              <li><a href="#Sub-Goals">Sub-Goals</a></li>
+              <li><a href="#Concerns">Concerns</a></li>
+            </ul>
+            <div id="Definition">
+              <div class="row form-group">
+                <div class="col-md-2">
+                  <label for="theLabel" class="control-label">Label</label> 
+                </div>
+                <div class="col-md-10">
+                  <input id="theLabel" class="form-control" type="text" maxlength="255" name="theLabel" readonly>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-2">
+                  <label for="theCategory" class="control-label">Category</label> 
+                </div>
+                <div class="col-md-10">
+                  <select id="theCategory"  class="obstacleAutoUpdater form-control" name="theCategory" >
+                    <option>Confidentiality Threat</option>
+                    <option>Integrity Threat</option>
+                    <option>Availability Threat</option>
+                    <option>Accountability Threat</option>
+                    <option>Anonymity Threat</option>
+                    <option>Pseudonymity Threat</option>
+                    <option>Unlinkability Threat</option>
+                    <option>Unobservability Threat</option>
+                    <option>Threat</option>
+                    <option>Vulnerability</option>
+                    <option>Duration</option>
+                    <option>Frequency</option>
+                    <option>Demands</option>
+                    <option>Goal Support</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-2">
+                  <label for="theDefinition" class="control-label">Definition</label>
+                </div>
+                <div class="col-md-10">
+                  <textarea rows="5" id="theDefinition"  class="obstacleAutoUpdater form-control" name="theDefinition" maxlength="1000" data-error="Definition is required" required></textarea>
+                  <div class="help-block with-errors"></div>
+                </div>
+              </div>
+            </div>
+            <div id="Probability">
+              <div class="row form-group">
+                <div class="col-md-2">
+                  <label for="theProbability" class="control-label">Value</label> 
+                </div>
+                <div class="col-md-10">
+                  <input id="theProbability" class="obstacleAutoUpdater form-control" type="number" min="0" step="0.01" name="theProbability">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-2">
+                  <label for="theProbabilityRationale" class="control-label">Rationale</label>
+                </div>
+                <div class="col-md-10">
+                  <textarea rows="7" id="theProbabilityRationale"  class="obstacleAutoUpdater form-control" maxlength="4000" name="theProbabilityRationale"></textarea>
+                </div>
+              </div>
+            </div>
+            <div id="Goals" class="form-group">
+              <table id="editObstaclesGoalsTable" class="table table-condensed table-striped table-hover table-bordered">
+                <thead>
+                  <tr><th id="obstacle_addGoaltoGoal" class="addRemove"> <i class="fa fa-plus"></i></th><th>Goal</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th></tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <div id="Sub-Goals" class="form-group">
+              <table id="editObstaclesSubGoalsTable" class="table table-condensed table-striped table-hover table-bordered">
+                <thead>
+                  <tr><th id="obstacle_addSubGoaltoGoal" class="addRemove"> <i class="fa fa-plus"></i></th> <th>Sub-Goals</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th> </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <div id="Concerns" class="form-group">
+              <table id="editObstaclesConcernTable" class="table table-condensed table-striped table-hover table-bordered">
+                <thead>
+                  <tr><th id="addConcerntoObstacle" class="addRemove"> <i class="fa fa-plus"></i></th><th>Concern</th></tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="theProbabilityRationale" class="control-label">Rationale</label>
-          <textarea rows="7" id="theProbabilityRationale"  class="obstacleAutoUpdater form-control" maxlength="4000" name="theProbabilityRationale"></textarea>
-        </div>
-      </div>
-      <div id="Goals" class="form-group">
-        <table id="editObstaclesGoalsTable" class="clickable-table">
-          <thead>
-            <tr><th id="obstacle_addGoaltoGoal" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Goal</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th></tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div id="Sub-Goals" class="form-group">
-        <table id="editObstaclesSubGoalsTable" class="clickable-table">
-          <thead>
-            <tr><th id="obstacle_addSubGoaltoGoal" style="width: 15px;"> <i class="fa fa-plus"></i></th> <th>Sub-Goals</th><th>Type</th><th>Refinement</th><th>Alternative</th><th>Rationale</th> </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div id="Concerns" class="form-group">
-        <table id="editObstaclesConcernTable" class="clickable-table">
-          <thead>
-            <tr><th id="addConcerntoObstacle" style="width: 15px;"> <i class="fa fa-plus"></i></th><th>Concern</th></tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="container-fluid row">
     <div class="form-group col-md-2 col-md-offset-5 footer">
       <button type="submit" class="btn btn-primary" id="updateObstacleButton">Update</button>
       <button type="click" class="btn btn-secondary" id="closeObstacleButton">Close</button>

@@ -436,7 +436,7 @@ mainContent.on('click','#addLocationLink',function() {
 
 mainContent.on('click','td.location-link',function(){
   var iRow = $(this).closest("tr");
-  selectedLink = iRow.find("td:eq(1)").text();
+  var selectedLink = iRow.find("td:eq(1)").text();
   $('#addLocationLinkDialog').attr('data-selectedLink',JSON.stringify(selectedLink));
   $('#addLocationLinkDialog').attr('data-selectedIndex',iRow.index());
   $('#addLocationLinkDialog').modal('show');

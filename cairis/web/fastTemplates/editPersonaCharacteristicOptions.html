@@ -1,5 +1,5 @@
 <form role="form" id="editPersonaCharacteristicOptionsForm" xmlns="http://www.w3.org/1999/html" >
-  <div class="tabs">
+  <div class="container-fluid tabs panel panel-default">
     <ul>
       <li><a href="#general">General</a></li>
       <li><a href="#grounds">Grounds</a></li>
@@ -7,88 +7,112 @@
       <li><a href="#rebuttal">Rebuttal</a></li>
     </ul>
     <div id="general">
-      <div class="tabs">
+      <div class="nav nav-tabs tabs">
         <ul>
           <li><a href="#characteristic">Characteristic</a></li>
           <li><a href="#synopsis">GRL Elements</a></li>
         </ul>
         <div id="characteristic">
-          <div class="form-group">
-            <label for="thePersonaName" class="control-label">Persona</label>
-            <select class="form-control" id="thePersonaName" data-error="Persona is required" required>
-            </select>
-            <div class="help-block with-errors"></div>
+          <div class="row form-group">
+            <div class="col-sm-2 col-md-2">
+              <label for="thePersonaName" class="control-label">Persona</label>
+            </div>
+            <div class="col-sm-10 col-md-10">
+              <select class="form-control" id="thePersonaName" data-error="Persona is required" required>
+              </select>
+              <div class="help-block with-errors"></div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="theVariable" class="control-label">Variable</label>
-            <select class="form-control" id="theVariable" data-error="Variable is required" required>
-              <option value="Activities">Activities</option>
-              <option value="Attitudes">Attitudes</option>
-              <option value="Aptitudes">Aptitudes</option>
-              <option value="Motivations">Motivations</option>
-              <option value="Skills">Skills</option>
-              <option value="Environment Narrative">Environment Narrative</option>
-              <option value="Intrinsic">Intrinsic</option>
-              <option value="Contextual">Contextual</option>
-            </select>
-            <div class="help-block with-errors"></div>
+          <div class="row form-group">
+            <div class="col-sm-2 col-md-2">
+              <label for="theVariable" class="control-label">Variable</label>
+            </div>
+            <div class="col-sm-10 col-md-10">
+              <select class="form-control" id="theVariable" data-error="Variable is required" required>
+                <option value="Activities">Activities</option>
+                <option value="Attitudes">Attitudes</option>
+                <option value="Aptitudes">Aptitudes</option>
+                <option value="Motivations">Motivations</option>
+                <option value="Skills">Skills</option>
+                <option value="Environment Narrative">Environment Narrative</option>
+                <option value="Intrinsic">Intrinsic</option>
+                <option value="Contextual">Contextual</option>
+              </select>
+              <div class="help-block with-errors"></div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="theModQual" class="control-label">Modal Qualifier</label>
-            <input class="optionsInput personaCharacteristicUpdate form-control" type="text" name="theModQual" id="theModQual" maxlength="100" style="width: 75%;" data-error="Modal Qualifier is required" required>
-            <div class="help-block with-errors"></div>
+          <div class="row form-group">
+            <div class="col-sm-2 col-md-2">
+              <label for="theModQual" class="control-label">Modal Qualifier</label>
+            </div>
+            <div class="col-sm-10 col-md-10">
+              <input class="optionsInput personaCharacteristicUpdate form-control" type="text" name="theModQual" id="theModQual" maxlength="100" data-error="Modal Qualifier is required" required>
+              <div class="help-block with-errors"></div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for='theCharacteristic' class="control-label">Definition</label>
-            <textarea rows="15" class="form-control" name="theCharacteristic" id="theCharacteristic" maxlength="2000" style="width: 100%" data-error="Definition is required" required></textarea>
-            <div class="help-block with-errors"></div>
+          <div class="row form-group">
+            <div class="col-sm-2 col-md-2">
+              <label for='theCharacteristic' class="control-label">Definition</label>
+            </div>
+            <div class="col-sm-10 col-md-10">
+              <textarea rows="5" class="form-control" name="theCharacteristic" id="theCharacteristic" maxlength="2000" data-error="Definition is required" required></textarea>
+              <div class="help-block with-errors"></div>
+            </div>
           </div>
         </div>
         <div id="synopsis">
-          <div class="form-group">
-            <label for="theCharacteristicSynopsis" class="control-label">Synopsis</label>
-            <input class="form-control" type="text" name="theCharacteristicSynopsis" maxlength="1000" id="theCharacteristicSynopsis">
+          <div class="row form-group">
+            <div class="col-sm-2 col-md-2">
+              <label for="theCharacteristicSynopsis" class="control-label">Synopsis</label>
+            </div>
+            <div class="col-sm-10 col-md-10">
+              <input class="form-control" type="text" name="theCharacteristicSynopsis" maxlength="1000" id="theCharacteristicSynopsis">
+            </div>
           </div>
-          <div class="form-group">
-            <label for="theCharacteristicSynopsisElementType" class="control-label">Element Type</label>
-            <select class="form-control" name="theCharacteristicSynopsisElementType" id="theCharacteristicSynopsisElementType">
-              <option value="goal">Goal</option>
-              <option value="softgoal">Soft Goal</option>
-              <option value="task">Task</option>
-            </select>
+          <div class="row form-group">
+            <div class="col-sm-2 col-md-2">
+              <label for="theCharacteristicSynopsisElementType" class="control-label">Element Type</label>
+            </div>
+            <div class="col-sm-10 col-md-10">
+              <select class="form-control" name="theCharacteristicSynopsisElementType" id="theCharacteristicSynopsisElementType">
+                <option value="goal">Goal</option>
+                <option value="softgoal">Soft Goal</option>
+                <option value="task">Task</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div id="grounds">
-      <table class="clickable-table" id="theGrounds">
+      <table class="table table-condensed table-striped table-bordered table-hover" id="theGrounds">
         <thead>
-          <tr><th id="addGrounds"><i class="fa fa-plus"></i></th><th>Reference</th><th>Description</th></tr>
+          <tr><th id="addGrounds" class="addRemove"><i class="fa fa-plus"></i></th><th>Reference</th><th>Description</th></tr>
         </thead>
         <tbody>
         </tbody>
       </table>
     </div>
     <div id="warrant">
-      <table class="clickable-table" id="theWarrant">
+      <table class="table table-condensed table-striped table-bordered table-hover" id="theWarrant">
         <thead>
-          <tr><th id="addWarrant"><i class="fa fa-plus"></i></th><th>Reference</th><th>Description</th></tr>
+          <tr><th id="addWarrant" class="addRemove"><i class="fa fa-plus"></i></th><th>Reference</th><th>Description</th></tr>
         </thead>
         <tbody>
         </tbody>
       </table>
     </div>
     <div id="rebuttal">
-      <table class="clickable-table" id="theRebuttal">
+      <table class="table table-condensed table-striped table-bordered table-hover" id="theRebuttal">
         <thead>
-          <tr><th id="addRebuttal"><i class="fa fa-plus"></i></th><th>Reference</th><th>Description</th></tr>
+          <tr><th id="addRebuttal" class="addRemove"><i class="fa fa-plus"></i></th><th>Reference</th><th>Description</th></tr>
         </thead>
         <tbody>
         </tbody>
       </table>
     </div>
   </div>
-  <div class="row">
+  <div class="container-fluid row">
     <div class="form-group col-md-2 col-md-offset-5 footer">
       <button type="submit" class="btn btn-primary" id="UpdatePersonaCharacteristic">Update</button>
       <button type="click" class="btn btn-secondary" id="ClosePersonaCharacteristic">Close</button>

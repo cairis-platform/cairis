@@ -196,6 +196,8 @@ mainContent.on('click', '.deleteVulEnv', function () {
 });
 
 mainContent.on("click", ".vulEnvProperties", function () {
+  $(this).closest('tr').addClass('active').siblings().removeClass('active');
+  updateVulnerabilityEnvironment();
   var name = $(this).text();
   $.session.set("VulnEnvironmentName", name);
   $("#vulnEnvAssets").find("tbody").empty();
@@ -215,6 +217,19 @@ mainContent.on("click", ".vulEnvProperties", function () {
     }
   })
 });
+
+function updateVulnerabilityEnvironment() {
+  var envName = $.session.get("VulnEnvironmentName");
+  if (envName != undefined) {
+    var vul = JSON.parse($.session.get("Vulnerability"));
+    $.each(vul.theEnvironmentProperties, function (index, env) {
+      if(env.theEnvironmentName == envName){
+        env.theSeverity = $("#theSeverity").val();
+        $.session.set("Vulnerability", JSON.stringify(vul));
+      }
+    });
+  }
+}
 
 mainContent.on("click", "#addAssetToEnvFromVuln", function () {
   var filterList = [];

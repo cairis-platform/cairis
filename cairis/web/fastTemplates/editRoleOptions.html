@@ -1,58 +1,86 @@
 <form role="form" id="editRoleOptionsform" xmlns="http://www.w3.org/1999/html" >
-
-  <div class="form-group">
-    <label for="theName" class="control-label">Role</label>
-    <input class="optionsInput form-control" type="text" name="theName" id="theName" style="width: 75%;" maxlength="255" data-error="Role name is required" required>
-    <div class="help-block with-errors"></div>
-  </div>
-  <div class="form-group">
-    <label for="theShortCode" class="control-label">Shortcode</label>
-    <input class="optionsInput form-control" type="text" value="" id="theShortCode" name="theShortCode" maxlength="100" style="width: 75%;" data-error="Shortcode is required" required>
-    <div class="help-block with-errors"></div>
-  </div>
-  <div class="form-group">
-    <label for="theType" class="control-label">Type</label>
-    <select name="TheType" class="form-control" id="theType" style="width: 75%;">
-      <option>Attacker</option>
-      <option selected>Stakeholder</option>
-    </select>
-  </div>
-  <div class="form-group" id="Description">
-    <label for="theDescription" class="control-label">Description</label>
-    <textarea class="right form-control" name="theDescription" id="theDescription" maxlength="1000" data-error="Description is required" required></textarea>
-    <div class="help-block with-errors"></div>
-  </div>
-
-  <div class="inblock">
-    <table class="left clickable-table" id="theEnvironments" style="width: 25%;" >
-      <thead>
-        <tr><th>Environment</th></tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-    <div class="tabs right" style="width: 75%;">
-      <div id="Properties" class="gearOptions clickable-table scrollableTable">
-        <table id="theResponses">
-          <thead>
-            <tr><th>Response</th><th>Cost</th></tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+  <div class="container-fluid panel panel-default">
+    <div class="row form-group">
+      <div class="col-md-2">
+        <label for="theName" class="control-label">Role</label>
       </div>
-      <div id="AssociationsAssetsOptions">
-        <table id="theCounterMeasures">
-          <thead>
-            <tr><th>Countermeasure</th></tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+      <div class="col-md-10">
+        <input class="optionsInput form-control" type="text" name="theName" id="theName" maxlength="255" data-error="Role name is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2">
+        <label for="theShortCode" class="control-label">Shortcode</label>
+      </div>
+      <div class="col-md-10">
+        <input class="optionsInput form-control" type="text" value="" id="theShortCode" name="theShortCode" maxlength="100" data-error="Shortcode is required" required>
+        <div class="help-block with-errors"></div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2">
+        <label for="theType" class="control-label">Type</label>
+      </div>
+      <div class="col-md-10">
+        <select name="TheType" class="form-control" id="theType">
+          <option>Attacker</option>
+          <option selected>Stakeholder</option>
+        </select>
+      </div>
+    </div>
+    <div class="row form-group" id="Description">
+      <div class="col-md-2">
+        <label for="theDescription" class="control-label">Description</label>
+      </div>
+      <div class="col-md-10">
+        <textarea class="right form-control" name="theDescription" id="theDescription" maxlength="1000" data-error="Description is required" required></textarea>
+        <div class="help-block with-errors"></div>
       </div>
     </div>
   </div>
-  <div class="row">
+
+
+  <div class="container-fluid tabs">
+    <div class="row row-eq-height">
+      <div class="col-sm-2 col-md-2">
+        <div class="panel-default">
+          <table class="table table-condensed table-striped table-bordered table-hover" id="theEnvironments" >
+            <thead>
+              <tr><th>Environment</th></tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-10 col-md-10">
+        <div class="panel panel-default">
+          <div class="row row-eq-height">
+            <div class="col-sm-4 col-md-4">
+              <table id="theResponses" class="table table-condensed table-striped table-bordered">
+                <thead>
+                  <tr><th>Response</th><th>Cost</th></tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-4 col-md-4">
+              <table id="theCounterMeasures" class="table table-condensed table-striped table-bordered">
+                <thead>
+                  <tr><th>Countermeasure</th></tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid row">
     <div class="form-group col-md-2 col-md-offset-5 footer">
       <button type="submit" class="btn btn-primary" id="UpdateRole">Update</button>
       <button type="click" class="btn btn-secondary" id="CloseRole">Close</button>

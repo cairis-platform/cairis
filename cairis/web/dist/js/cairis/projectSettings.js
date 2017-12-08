@@ -331,10 +331,10 @@ function postProjectImage(imagedir, actualDir) {
 }
 
 function appendNamingConvention(name,def){
-  $("#editNamingConventionsTable").find("tbody").append("<tr class='editNamingConvention'><td class='removeProjectNamingConvertion' ><i class='fa fa-minus'></i></td><td class='namingConvention'>" + name + "</td><td class='theNameingDef'>"+ def + "</td></tr>");
+  $("#editNamingConventionsTable").find("tbody").append("<tr class='editNamingConvention'><td class='removeProjectNamingConvertion addRemove' ><i class='fa fa-minus'></i></td><td class='namingConvention'>" + name + "</td><td class='theNameingDef'>"+ def + "</td></tr>");
 }
 function appendContributor(con){
-  $("#editContributorTable").find("tbody").append("<tr class='editContributor'><td class='removeContributor' ><i class='fa fa-minus'></i></td><td class='projectContributor'>" + con.firstName + "</td><td class='conSurname'>"+ con.surname + "</td><td class='conAffliation'>"+ con.affiliation + "</td><td class='conRole'>"+ con.role +"</td></tr>");
+  $("#editContributorTable").find("tbody").append("<tr class='editContributor'><td class='removeContributor addRemove' ><i class='fa fa-minus'></i></td><td class='projectContributor'>" + con.firstName + "</td><td class='conSurname'>"+ con.surname + "</td><td class='conAffliation'>"+ con.affiliation + "</td><td class='conRole'>"+ con.role +"</td></tr>");
 }
 
 function editProjectRevisions(rev){

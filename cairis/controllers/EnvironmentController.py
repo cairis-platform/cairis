@@ -252,7 +252,6 @@ class EnvironmentByNameAPI(Resource):
   # endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
-
     dao = EnvironmentDAO(session_id)
     dao.delete_environment(name=name)
     dao.close()

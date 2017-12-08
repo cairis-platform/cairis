@@ -1369,6 +1369,8 @@ class MySQLDatabaseProxy:
       curs = self.conn.connection().connection.cursor()
       sqlTxt = 'call delete_environment(%s)'
       curs.execute(sqlTxt,[environmentId])
+      session = self.conn()
+      session.commit()
       curs.close()
     except _mysql_exceptions.IntegrityError as e:
       exceptionText = 'Cannot remove environment due to dependent data (' + str(e) + ').'

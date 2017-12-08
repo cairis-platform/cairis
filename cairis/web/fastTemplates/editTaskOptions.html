@@ -1,12 +1,11 @@
 <form role="form" id="editTaskOptionsForm" xmlns="http://www.w3.org/1999/html" >
 
-  <div class="tabs" style="width: 100%;">
+  <div class="container-fluid tabs panel panel-default">
     <ul>
       <li><a href="#summary">Summary</a></li>
       <li><a href="#objectives">Objectives</a></li>
     </ul>
     <div id="summary">
-
       <div class="row form-group">
         <div class="col-md-2">
           <label for="theName" class="control-label">Task</label>
@@ -16,7 +15,7 @@
           <div class="help-block with-errors"></div>
         </div>
       </div>
-      <div class="row form-group">
+      <div class="row">
         <div class="col-md-2">
           <label for="theTags" class="control-label">Tags</label>
         </div>
@@ -35,34 +34,55 @@
       </div>
     </div>   
     <div class="form-group" id="objectives">
-      <textarea rows="15" id="theObjective" class="taskUpdate form-control" style="width: 100%" maxlength="2000" data-error="Objectives are required" required></textarea>
+      <textarea rows="5" id="theObjective" class="taskUpdate form-control" maxlength="2000" data-error="Objectives are required" required></textarea>
     </div>   
   </div>
-  <div class="inblock">
-    <table class="left clickable-table" id="theEnvironments" style="width: 25%;">
-      <thead>
-        <tr><th id="addTaskEnv"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-    <div class="tabs right" id="tasktabsID" style="width: 75%;">
-      <ul>
-        <li><a href="#dependencies">Dependencies</a></li>
-        <li><a href="#narrative">Narrative</a></li>
-        <li><a href="#consequences">Consequences</a></li>
-        <li><a href="#benefits">Benefits</a></li>
-        <li><a href="#participants">Participants</a></li>
-        <li><a href="#concerns">Concerns</a></li>
-        <li><a href="#concernassociations">Concern Associations</a></li>
-      </ul>
-      <div id="Properties" class="gearOptions clickable-table scrollableTable">
-        <div class="inblock">
+  <div class="container-fluid tabs">
+    <div class="row row-eq-height">
+      <div class="col-sm-2 col-md-2">
+        <div class="panel panel-default">
+          <table class="table table-condensed table-striped table-hover table-bordered" id="theEnvironments">
+            <thead>
+              <tr><th id="addTaskEnv" class="addRemove"> <i class="fa fa-plus"></i></th><th>Environment</th></tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-10 col-md-10">
+        <div class="panel panel-default">
+          <div class="nav nav-tabs" id="tasktabsID">
+          <ul>
+            <li><a href="#dependencies">Dependencies</a></li>
+            <li><a href="#narrative">Narrative</a></li>
+            <li><a href="#consequences">Consequences</a></li>
+            <li><a href="#benefits">Benefits</a></li>
+            <li><a href="#participants">Participants</a></li>
+            <li><a href="#concerns">Concerns</a></li>
+            <li><a href="#concernassociations">Concern Associations</a></li>
+          </ul>
+          <div class="form-group" id="dependencies">
+            <textarea rows="10" maxlength="4000" id="theDependencies" class="taskUpdate form-control" data-error="Dependencies are required" required></textarea>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group" id="narrative">
+            <textarea rows="10" id="theNarrative" maxlength="5000" class="taskUpdate form-control" data-error="Narrative is required" required></textarea>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group" id="consequences">
+            <textarea rows="10" id="theConsequences" maxlength="4000" class="taskUpdate form-control" data-error="Consequences are required" required></textarea>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group" id="benefits">
+            <textarea rows="10" id="theBenefits" maxlength="4000" class="taskUpdate form-control" data-error="Benefits are required" required></textarea>
+            <div class="help-block with-errors"></div>
+          </div>
           <div id="participants">
-            <table id="thePersonas">
+            <table id="thePersonas" class="table table-condensed table-striped table-bordered table-hover">
               <thead>
                 <tr>
-                  <th id="addPersonaToTask"><i class="fa fa-plus"></i></th>
+                  <th id="addPersonaToTask" class="addRemove"><i class="fa fa-plus"></i></th>
                   <th>Persona</th><th>Duration</th><th>Frequency</th><th>Demands</th><th>Goal Conflict</th>
                 </tr>
               </thead>
@@ -71,37 +91,21 @@
             </table>
           </div>
           <div id="concerns">
-            <table id="theConcerns" class="right">
+            <table id="theConcerns" class="table table-condensed table-striped table-bordered table-hover">
               <thead>
                 <tr>
-                  <th id="addConcernToTask"> <i class="fa fa-plus"></i></th><th>Concern</th>
+                  <th id="addConcernToTask" class="addRemove"> <i class="fa fa-plus"></i></th><th>Concern</th>
                 </tr>
               </thead>
               <tbody>
               </tbody>
             </table>
           </div>
-          <div class="form-group" id="dependencies">
-            <textarea rows="15" maxlength="4000" id="theDependencies" class="taskUpdate form-control" data-error="Dependencies are required" required></textarea>
-            <div class="help-block with-errors"></div>
-          </div>
-          <div class="form-group" id="narrative">
-            <textarea rows="15" id="theNarrative" maxlength="5000" class="taskUpdate form-control" data-error="Narrative is required" required></textarea>
-            <div class="help-block with-errors"></div>
-          </div>
-          <div class="form-group" id="consequences">
-            <textarea rows="15" id="theConsequences" maxlength="4000" class="taskUpdate form-control" data-error="Consequences are required" required></textarea>
-            <div class="help-block with-errors"></div>
-          </div>
-          <div class="form-group" id="benefits">
-            <textarea rows="15" id="theBenefits" maxlength="4000" class="taskUpdate form-control" data-error="Benefits are required" required></textarea>
-            <div class="help-block with-errors"></div>
-          </div>
           <div id="concernassociations">
-            <table id="theConcernAssociations">
+            <table id="theConcernAssociations" class="table table-condensed table-striped table-bordered table-hover">
               <thead>
                 <tr>
-                  <th id="addConcernAssociationToTask"><i class="fa fa-plus"></i></th>
+                  <th id="addConcernAssociationToTask" class="addRemove"><i class="fa fa-plus"></i></th>
                   <th>Source</th><th>n</th><th>Link Verb</th><th>n</th><th>Target</th>
                 </tr>
               </thead>
@@ -113,7 +117,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="container-fluid row">
     <div class="form-group col-md-2 col-md-offset-5 footer">
       <button type="submit" class="btn btn-primary" id="UpdateTask">Update</button>
       <button type="click" class="btn btn-secondary" id="CloseTask">Close</button>
@@ -185,12 +189,12 @@
       <div class="modal-body">
         <div class="form-group">
           <label for="theTaskConcernSource" class="control-label">Source</label>
-          <select class="optionsInput form-control" name="theTaskConcernSource" id="theTaskConcernSource" style="width: 100%;">
+          <select class="optionsInput form-control" name="theTaskConcernSource" id="theTaskConcernSource">
           </select>
         </div>
         <div class="form-group">
           <label for="theTaskConcernSourceNry" class="control-label">n</label>
-          <select class="optionsInput form-control" name="theTaskConcernSourceNry" id="theTaskConcernSourceNry" style="width: 100%;">
+          <select class="optionsInput form-control" name="theTaskConcernSourceNry" id="theTaskConcernSourceNry" >
             <option value="1">1</option>
             <option value="*">*</option>
             <option value="1..*">1..*</option>
@@ -198,12 +202,12 @@
         </div>
         <div class="form-group">
           <label for="theTaskConcernLinkVerb" class="control-label">Link Verb</label>
-          <input class="optionsInput form-control" type="text" name="theTaskConcernLinkVerb" id="theTaskConcernLinkVerb" data-error="Link verb is required" style="width: 100%;" required>
+          <input class="optionsInput form-control" type="text" name="theTaskConcernLinkVerb" value="none" id="theTaskConcernLinkVerb" data-error="Link verb is required" required>
           <div class="help-block with-errors"></div>
         </div>
         <div class="form-group">
           <label for="theTaskConcernTargetNry" class="control-label">n</label>
-          <select class="optionsInput form-control" name="theTaskConcernTargetNry" id="theTaskConcernTargetNry" style="width: 100%;">
+          <select class="optionsInput form-control" name="theTaskConcernTargetNry" id="theTaskConcernTargetNry" >
             <option value="1">1</option>
             <option value="*">*</option>
             <option value="1..*">1..*</option>
@@ -211,7 +215,7 @@
         </div>
         <div class="form-group">
           <label for="theTaskConcernTarget" class="control-label">Target</label>
-          <select class="optionsInput form-control" name="theTaskConcernTarget" id="theTaskConcernTarget" style="width: 100%;">
+          <select class="optionsInput form-control" name="theTaskConcernTarget" id="theTaskConcernTarget" >
           </select>
         </div>
       </div>
