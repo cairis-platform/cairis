@@ -140,6 +140,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
 
   def resetPersonaCharacteristicAttributes(self):
     self.thePersona = ''
+    self.inPC = 0
     self.theBvName = ''
     self.theModalQualifier = ''
     self.inDefinition = 0
@@ -200,19 +201,20 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.theDocument = attrs['document']
     elif name == 'persona_characteristic':
       self.thePersona = attrs['persona']
+      self.inPC = 1
       self.theBvName = u2s(attrs['behavioural_variable'])
       self.theModalQualifier = attrs['modal_qualifier'] 
-    elif name == 'grounds':
+    elif (name == 'grounds' and self.inPC == 1):
       refName = attrs['reference']
       refType = attrs['type']
       refArtifact = ''
       self.theGrounds.append((refName,'',refType))
-    elif name == 'warrant':
+    elif (name == 'warrant' and self.inPC == 1):
       refName = attrs['reference']
       refType = attrs['type']
       refArtifact = ''
       self.theWarrants.append((refName,'',refType))
-    elif name == 'rebuttal':
+    elif (name == 'rebuttal' and self.inPC == 1):
       refName = attrs['reference']
       refType = attrs['type']
       refArtifact = ''

@@ -50,6 +50,7 @@ class MisusabilityContentHandler(ContentHandler,EntityResolver):
 
   def resetTaskCharacteristicAttributes(self):
     self.theTask = ''
+    self.inTC = 0
     self.theModalQualifier = ''
     self.inDefinition = 0
     self.theDefinition = ''
@@ -63,23 +64,24 @@ class MisusabilityContentHandler(ContentHandler,EntityResolver):
       self.theName = attrs['name']
       self.theConcept = attrs['concept']
       self.theObject = attrs['object']
-    elif name == 'grounds':
+    elif (name == 'grounds' and self.inTC == 1):
       refName = attrs['reference']
       refType = attrs['type']
       refArtifact = ''
       self.theGrounds.append((refName,'',refType))
-    elif name == 'warrant':
+    elif (name == 'warrant' and self.inTC == 1):
       refName = attrs['reference']
       refType = attrs['type']
       refArtifact = ''
       self.theWarrants.append((refName,'',refType))
-    elif name == 'rebuttal':
+    elif (name == 'rebuttal' and self.inTC == 1):
       refName = attrs['reference']
       refType = attrs['type']
       refArtifact = ''
     elif name == 'task_characteristic':
       self.theTask = attrs['task']
       self.theModalQualifier = attrs['modal_qualifier'] 
+      self.inTC = 1
     elif name == 'definition':
       self.inDefinition = 1
       self.theDefinition = ''

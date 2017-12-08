@@ -10326,21 +10326,42 @@ Jimmy’s mistake was to assume that his ZenSearch client application cannot be 
 <concept_reference name="Applications launched via events" concept="usecase" object="Background Execution" >
   <description></description>
 </concept_reference>
+
 <task_characteristic task="Policy conflict" modal_qualifier="Definitely" >
   <definition>Constructs coarse grained policy from fine-grained rules</definition>
+  <grounds type="document" reference="Keeps work and personal life separate in her online identities" />
+  <grounds type="requirement" reference="Editors support fine and coarse grained policy editing" />
+  <grounds type="requirement" reference="Policies contain fine-grained rules" />
+  <grounds type="requirement" reference="Sophisticated policy editing tools" />
+  <warrant type="document" reference="Has a second privacy policy for not being observable" />
 </task_characteristic>
+
 <task_characteristic task="Policy conflict" modal_qualifier="Perhaps" >
   <definition>Builds policies in the office</definition>
+  <grounds type="document" reference="Policy decision maker at the e-book store" />
+  <grounds type="requirement" reference="Sophisticated policy editing tools" />
 </task_characteristic>
+
 <task_characteristic task="Policy conflict" modal_qualifier="Maybe" >
   <definition>Privacy policy betrayed</definition>
+  <grounds type="document" reference="Interested in promotions and special deals of her preferred shops" />
+  <grounds type="document" reference="Consciously sets privacy settings" />
 </task_characteristic>
+
 <task_characteristic task="Policy conflict" modal_qualifier="Possibly" >
   <definition>Policy editing too cumbersome for mobiles</definition>
+  <grounds type="requirement" reference="Policies contain fine-grained rules" />
+  <grounds type="requirement" reference="Policy impact is described textually" />
+  <grounds type="requirement" reference="webinos explains policy setting refusals" />
+  <warrant type="requirement" reference="Sophisticated policy editing tools" />
 </task_characteristic>
+
 <task_characteristic task="Policy conflict" modal_qualifier="Possibly" >
   <definition>webinos notifies user when out-of-context</definition>
+  <grounds type="requirement" reference="User alerted on policy warning" />
+  <warrant type="requirement" reference="API throw errors when access control request denied" />
 </task_characteristic>
+
 </misusability>
 
 </cairis_model>
