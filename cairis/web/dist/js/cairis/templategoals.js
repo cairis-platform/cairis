@@ -102,7 +102,6 @@ function viewTemplateGoal(tgName) {
     url: serverIP + "/api/template_goals/name/" + encodeURIComponent(tgName),
     success: function (data) {
       fillOptionMenu("fastTemplates/editTemplateGoalOptions.html","#objectViewer",null,true,true, function(){
-        $('#editTemplateGoalOptionsForm').validator();
         $("#UpdateTemplateGoal").text("Update");
         $('#theName').val(data.theName);
         $('#theDefinition').val(data.theDefinition);
@@ -114,6 +113,7 @@ function viewTemplateGoal(tgName) {
           appendTemplateGoalResponsibility(responsibility);
         });
         $.session.set("TemplateGoal", JSON.stringify(data));
+        $('#editTemplateGoalOptionsForm').validator('update');
       });
     },
     error: function (xhr, textStatus, errorThrown) {
