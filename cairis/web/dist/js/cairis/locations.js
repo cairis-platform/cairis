@@ -347,7 +347,7 @@ mainContent.on('click','td.asset-instance',function(){
   selectedInstance.theAsset = iRow.find("td:eq(2)").text();
 
   $('#addAssetInstanceDialog').attr('data-selectedInstance',JSON.stringify(selectedInstance));
-  $('#addAssetInstanceDialog').attr('data-selectedIndex',intRow.index());
+  $('#addAssetInstanceDialog').attr('data-selectedIndex',iRow.index());
   $('#addAssetInstanceDialog').modal('show');
 });
 
