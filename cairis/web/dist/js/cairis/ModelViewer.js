@@ -19,7 +19,7 @@
 
 'use strict';
 
-window.serverIP = "http://"+ window.location.host;
+window.serverIP = window.location.protocol + "//" + window.location.host;
 
 window.debug = true;
 
@@ -30,7 +30,7 @@ function debugLogger(info){
 }
 
 
-$(window).load(function() {
+$(window).ready(function() {
   var sessionID = $.session.get('sessionID');
   if(!sessionID){
     $.ajax({
@@ -40,7 +40,6 @@ $(window).load(function() {
       accept:"application/json",
       contentType : "application/json",
       success: function(data, status, xhr) {
-        debugLogger(data);
         var sessionID = data.session_id;
         $.session.set("sessionID", sessionID);
       },
