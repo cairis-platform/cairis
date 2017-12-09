@@ -28,7 +28,7 @@ Adding a new environment
    list, select Add from the speed menu, and select the environment/s to
    add.
 
--  It is possible artifact may appear in multiple environments within a
+-  It is possible an artifact may appear in multiple environments within a
    composite environment. It is, therefore, necessary to set duplication
    properties for composite environments. If the maximise radio button
    is selected, then the maximal values associated with that artifact
