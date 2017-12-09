@@ -186,10 +186,12 @@ class MySQLDatabaseProxy:
       if b.runmode == 'desktop':
         dbEngine = create_engine('mysql+mysqldb://'+b.dbUser+':'+b.dbPasswd+'@'+b.dbHost+':'+str(b.dbPort)+'/'+b.dbName+'?charset=utf8')
         self.conn = scoped_session(sessionmaker(bind=dbEngine))
+        self.conn.execute("set session max_sp_recursion_depth = 255")
       elif b.runmode == 'web':
         ses_settings = b.get_settings(session_id)
         dbEngine = create_engine('mysql+mysqldb://'+ses_settings['dbUser']+':'+ses_settings['dbPasswd']+'@'+ses_settings['dbHost']+':'+str(ses_settings['dbPort'])+'/'+ses_settings['dbName']+'?charset=utf8')
         self.conn = scoped_session(sessionmaker(bind=dbEngine))
+        self.conn.execute("set session max_sp_recursion_depth = 255")
       else:
         raise RuntimeError('Run mode not recognized')
     except _mysql_exceptions.DatabaseError as e:

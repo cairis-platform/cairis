@@ -238,6 +238,8 @@ drop procedure if exists vulnerabilityNames;
 drop procedure if exists role_environments;
 drop procedure if exists roleCountermeasures;
 drop procedure if exists roleResponses;
+drop procedure if exists roleGoalResponsibilities;
+drop procedure if exists roleRequirementResponsibilities;
 drop procedure if exists attackerDependents;
 drop procedure if exists threatDependents;
 drop procedure if exists reportDependents;
@@ -4503,6 +4505,18 @@ end
 create procedure roleResponses(in roleId int,in environmentId int)
 begin
   select r.name,c.name from responserole_goalassociation rr, response r, cost c where rr.subgoal_id = roleId and rr.environment_id = environmentId and rr.goal_id = r.id and rr.cost_id = c.id;
+end
+//
+
+create procedure roleGoalResponsibilities(in roleId int,in environmentId int)
+begin
+  select g.name from goalrole_goalassociation gr, goal g where gr.subgoal_id = roleId and gr.environment_id = environmentId and gr.goal_id = g.id order by 1;
+end
+//
+
+create procedure roleRequirementResponsibilities(in roleId int,in environmentId int)
+begin
+  select r.name from requirementrole_goalassociation rr, requirement r where rr.subgoal_id = roleId and rr.environment_id = environmentId and rr.goal_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) order by 1;
 end
 //
 
