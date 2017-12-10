@@ -93,8 +93,8 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
       raise ARMException(exceptionText)
 
     createDatabaseAccount(self.theRootPassword.value,self.theHost.value,self.thePort.value,'cairis_test','cairis_test')
-    createDatabaseAndPrivileges(self.theRootPassword.value,self.theHost.value,self.thePort.value,'cairis_test','cairis_test','cairis_test')
-    createDatabaseSchema(self.theRootDir.value,self.theHost.value,self.thePort.value,'cairis_test','cairis_test','cairis_test')
+    createDatabaseAndPrivileges(self.theRootPassword.value,self.theHost.value,self.thePort.value,'cairis_test','cairis_test','cairis_test_default')
+    createDatabaseSchema(self.theRootDir.value,self.theHost.value,self.thePort.value,'cairis_test','cairis_test','cairis_test_default')
 
     try:
       createUserDbSql = "create database if not exists cairis_user"
@@ -169,7 +169,6 @@ class CAIRISUserConfigurationForm(np.ActionForm):
       createDatabaseAccount(self.theRootPassword.value,self.theHost.value,self.thePort.value,self.theUsername.value,'')
       createDatabaseAndPrivileges(self.theRootPassword.value,self.theHost.value,self.thePort.value,self.theUsername.value,'',self.theUsername.value + '_default')
       createDatabaseSchema(self.theRootDir.value,self.theHost.value,self.thePort.value,self.theUsername.value,'',self.theUsername.value + '_default')
-
       self.parentApp.setNextForm(None)
     except ARMException as e:
       np.notify_confirm('Error adding CAIRIS user: ' + str(e), title = 'Error')

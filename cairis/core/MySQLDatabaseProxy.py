@@ -4365,29 +4365,46 @@ class MySQLDatabaseProxy:
     rPasswd = ses_settings['rPasswd']
     dbUser = ses_settings['dbUser']
     dbPasswd = ses_settings['dbPasswd']
-
+    dbName = dbUser + '_' + dbName
     createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName)
-    
     b.settings[session_id]['dbName'] = dbName
     self.clearDatabase(session_id)
     self.reconnect(True,session_id)
 
   def openDatabase(self,dbName,session_id):
     b = Borg()
-    b.settings[session_id]['dbName'] = dbName
+    dbUser = b.settings[session_id]['dbUser']
+    b.settings[session_id]['dbName'] = dbUser + '_' + dbName
     self.reconnect(True,session_id)
 
   def showDatabases(self,session_id):
     b = Borg()
     ses_settings = b.get_settings(session_id)
+    dbUser = ses_settings['dbUser']
     dbName = ses_settings['dbName']
     rows = self.responseList('show databases',{},'MySQL error showing databases')
     restrictedDbs = ['information_schema','flaskdb','mysql','performance_schema',dbName]
     dbs = []
+    for dbn in rows:
+      if (dbn not in restrictedDbs):
+        dbs.append(dbn.split(dbUser + '_')[1])
+    return dbs
+
+  def checkPermissions(self,reqDbName,session_id):
+    b = Borg()
+    ses_settings = b.get_settings(session_id)
+    dbUser = ses_settings['dbUser']
+    currentDbName = ses_settings['dbName']
+    defaultDbName = dbUser + '_default'
+    reqDbName = dbUser + '_' + reqDbName
+    restrictedDbs = ['information_schema','flaskdb','mysql','performance_schema',currentDbName,defaultDbName]
+    rows = self.responseList('show databases',{},'MySQL error showing databases')
+    dbs = []
     for dbName in rows:
       if (dbName not in restrictedDbs):
-        dbs.append(dbName)
-    return dbs
+        if (reqDbName == dbName):
+          return True
+    return False
 
   def deleteDatabase(self,dbName,session_id):
     b = Borg()
@@ -4396,6 +4413,12 @@ class MySQLDatabaseProxy:
     dbPort = ses_settings['dbPort']
     rPasswd = ses_settings['rPasswd']
 
+    if (self.checkPermissions(dbName,session_id) == False):
+      exceptionText = 'You cannot remove this database.'
+      raise DatabaseProxyException(exceptionText) 
+
+    dbUser = ses_settings['dbUser']
+    dbName = dbUser + '_' + dbName
     try:
       dbEngine = create_engine('mysql+mysqldb://root'+':'+rPasswd+'@'+dbHost+':'+str(dbPort))
       tmpConn = scoped_session(sessionmaker(bind=dbEngine))

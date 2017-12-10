@@ -73,7 +73,7 @@ def initialiseCairisDbSettings(cfgDict):
   b.dbPort = int(cfgDict['dbport'])
   b.dbUser = 'cairis_test'
   b.dbPasswd = 'cairis_test'
-  b.dbName = 'cairis_test'
+  b.dbName = 'cairis_test_default'
   b.tmpDir = cfgDict['tmp_dir']
   b.cairisRoot = cfgDict['root']
   b.imageDir = os.path.abspath(cfgDict['default_image_dir'])
@@ -103,7 +103,7 @@ def initialiseDesktopSettings():
   b.fontName = pSettings['Font Name']
   b.mainFrame = None
 
-def initialise(user='cairis_test',db='cairis_test'):
+def initialise(user='cairis_test',db='cairis_test_default'):
   cfgDict = parseConfigFile()
   initialiseCairisDbSettings(cfgDict)
 
@@ -181,7 +181,7 @@ def dInitialise(withTest = True):
     'apFontSize': '7.5',
     'dbUser': 'cairis_test',
     'dbPasswd' : 'cairis_test',
-    'dbName' : 'cairis_test',
+    'dbName' : 'cairis_test_default',
     'dbHost': b.dbHost,
     'dbPort': b.dbPort,
     'rPasswd': b.rPasswd
