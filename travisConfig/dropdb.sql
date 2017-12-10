@@ -18,6 +18,6 @@
 */
 
 DROP USER 'cairis_test'@'localhost';
-DROP DATABASE IF EXISTS cairis_default;
+DROP DATABASE IF EXISTS cairis_test_default;
 flush table;
 flush privileges;
