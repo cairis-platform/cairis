@@ -26,7 +26,7 @@ flush privileges;
 
 drop database if exists `cairis_test_default`;
 create database if not exists `cairis_test_default`;
-grant usage on `cairis_test`.* to 'cairis_test'@'%';
+grant all privileges on `cairis_test_default`.* to 'cairis_test'@'%';
 set global max_sp_recursion_depth = 255;
 
 alter database cairis_test_default default character set utf8;
