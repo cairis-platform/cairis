@@ -126,7 +126,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'CAIRIS.tex', u'CAIRIS Documentation',
+    (master_doc, 'CAIRIS.tex', u'CAIRIS User Manual',
      u'Shamal Faily', 'manual'),
 ]
 
@@ -136,7 +136,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'cairis', u'CAIRIS Documentation',
+    (master_doc, 'cairis', u'CAIRIS User Manual',
      [author], 1)
 ]
 
@@ -147,7 +147,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'CAIRIS', u'CAIRIS Documentation',
+    (master_doc, 'CAIRIS', u'CAIRIS User Manual',
      author, 'CAIRIS', 'One line description of project.',
      'Miscellaneous'),
 ]
