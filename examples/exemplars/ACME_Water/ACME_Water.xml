@@ -1195,8 +1195,8 @@ Although aware of security, Barry is not exceptionally worried about it.  After 
 Due to the lack of ACME ICT support for PC hardware at his site, Barry has learned how to backup his site PCs, his personal laptop, and recover from PC hardware failures - a significant problem given the age of some of the PCs in his area.</aptitudes>
   <motivations>Barry gets annoyed when he needs to make a software change at a remote site, and finds that he can't get at the software he needs from a PLC or outstation, can't trust the on-site backup left behind or the software on his laptop.</motivations>
   <skills>Barry doesn't have any specific experience of software repositories or version control.  He does, however, have lots of experience archiving and restoring PLC and telemetry software.</skills>
-  <intrinsic></intrinsic>
-  <contextual></contextual>
+  <intrinsic>None</intrinsic>
+  <contextual>None</contextual>
   <persona_environment name="Day" is_direct="FALSE" >
     <persona_role name="Instrument Technician" />
     <narrative>On any given day, Barry makes several modifications and several different locations.  Therefore, it is important that the interface for working with the repository is built around Barry, rather than the other way around.</narrative>
