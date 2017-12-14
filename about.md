@@ -7,7 +7,7 @@ title: About CAIRIS
 
 <h2>What is CAIRIS?</h2>
 
-CAIRIS stands for *Computer Aided Integration of Requirements and Information Security*.  It was designed to be a security requirements management tool, and was built from the ground up to support all the elements necessary for usability, requirements, and risk analysis.  
+CAIRIS stands for *Computer Aided Integration of Requirements and Information Security*.  It is a platform for eliciting, specifying, and validating secure and usable systems.  It was built from the ground up to support all the elements necessary for usability, requirements, and risk analysis.  
 
 <h2>Why did you build CAIRIS?</h2>
 
