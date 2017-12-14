@@ -16,5 +16,6 @@ RUN git clone https://github.com/failys/cairis /cairis
 COPY cairis.cnf /
 COPY setupDb.sh /
 COPY createdb.sql /
+COPY addAccount.sh /
 EXPOSE 8000
 CMD ["./setupDb.sh"]
