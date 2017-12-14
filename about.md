@@ -57,7 +57,7 @@ Yes.  CAIRIS has been made freely available under an Apache Software License.  Y
 
 <h2>Does CAIRIS only work on Linux?</h2>
 
-CAIRIS will run on any platform that supports its open source dependencies.  Although it works best on Linux (particularly Debian based distributions), it has been known to run on Mac OS X and Windows as well.  Because of its architecture, there is no reason why the server side components can't run on one platform, and the client side components can't run on another.
+No, CAIRIS will run on any platform that supports its open source dependencies.  Although it works best on Linux (particularly Debian based distributions), it has been known to run on Mac OS X and Windows as well.  Because of its architecture, there is no reason why the server side components can't run on one platform, and the client side components can't run on another. CAIRIS has also been distributed as a Docker container, which will run on any platform that supports Docker.
 
 <h2>Do you still do research around CAIRIS?</h2>
 
@@ -67,10 +67,9 @@ Very much so.  We have a number of undergraduate and postgraduate research assis
 
 You can contribute in several ways.
 
-* We have a number of [ideas for interesting projects that sustain, extend, or apply CAIRIS](https://cairis.org/ideas).  Please get in touch if any of these are of interest.
 * You can use CAIRIS in your own practice.  One of our aims in developing CAIRIS is to transfer knowledge about security design tool best practice, so by using CAIRIS you will be helping us do this.  We welcome problem reports or feature requests; you can contribute these by doing little more than raising [an issue on github](https://github.com/failys/cairis/issues), or [getting in touch](mailto:sfaily@bournemouth.ac.uk) if your requirements are a little more elaborate.
 * If you work in higher education, please consider using CAIRIS as a tool for teaching security design.  CAIRIS has already been used in [Oxford](http://www.cs.ox.ac.uk)'s postgraduate [Design of Security](http://www.cs.ox.ac.uk/softeng/subjects/DES.html) course.  At [BU](https://www1.bournemouth.ac.uk), we're also incorporating CAIRIS into our own cybersecurity teaching.  We're happy to share any teaching material we develop, so if you're interested in using CAIRIS as part of your teaching then please [get in touch](mailto:sfaily@bournemouth.ac.uk).
-* We're always looking for people to help with general maintenance activities.  The CAIRIS documentation is a little out of date in places, and a number of really interesting features (e.g. the functionality associated with specifying and analysing software architectures) isn't documented as well as it could be.  We would also love to hear from people interested in looking at how CAIRIS can be best packaged, given the various platforms and infrastructures they might wish to use CAIRIS for.
+* We're always looking for people to help with general maintenance activities.  
 
 <h2>How can I sponsor CAIRIS?</h2>
 
