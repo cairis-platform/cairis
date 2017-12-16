@@ -7,7 +7,7 @@
 [![GitHub watchers](https://img.shields.io/github/watchers/failys/cairis.svg?style=flat-square)](https://github.com/failys/cairis/watchers)
 [![GitHub stars](https://img.shields.io/github/stars/failys/cairis.svg?style=flat-square)](https://github.com/failys/cairis/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/failys/cairis.svg?style=flat-square)](https://github.com/failys/cairis/network)
-[![Docker Pulls](https://img.shields.io/docker/pulls/shamalfaily/cairis.svg?style=plastic)](https://hub.docker.com/r/shamalfaily/cairis/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/shamalfaily/cairis.svg?style=flat-square)](https://hub.docker.com/r/shamalfaily/cairis/)
 [![Requirements Status](https://requires.io/github/failys/cairis/requirements.svg?branch=master)](https://requires.io/github/failys/cairis/requirements/?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/cairis/badge/?version=latest)](http://cairis.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/github/license/failys/cairis.svg)](https://github.com/failys/cairis/blob/master/LICENSE)
