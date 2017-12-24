@@ -2276,29 +2276,29 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement name="User certificate" reference="User certificate" reference_type="asset" label="1" type="Functional" priority="1" >
-  <description>User certificates shall be extended such that these are only usable from designated network addresses.</description>
-  <rationale>Provide defence in depth if a root certificate is compromised.</rationale>
-  <fit_criterion>Attempts to login to the NeuroGrid portal with credentials not possible from any other machine beyond that the user certificate was installed for.</fit_criterion>
-  <originator>Goal Model</originator>
-</requirement>
-<requirement name="Truststores" reference="User certificate" reference_type="asset" label="2" type="Functional" priority="2" >
+<requirement name="Truststores" reference="User certificate" reference_type="asset" label="1" type="Functional" priority="2" >
   <description>Java Truststores shall be used for server-side NeuroGrid certificate verification.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement name="Certificate storage" reference="User certificate" reference_type="asset" label="3" type="Functional" priority="1" >
+<requirement name="Certificate storage" reference="User certificate" reference_type="asset" label="2" type="Functional" priority="1" >
   <description>NeuroGrid digital certificates shall not be stored on a machine accessible from the public internet.</description>
   <rationale>Hacking a weakly defined machine can give an attacker access to NeuroGrid and any authorised data sets.</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Certificate replay Misuse Case</originator>
 </requirement>
-<requirement name="Incorrect access response" reference="User certificate" reference_type="asset" label="4" type="Security" priority="1" >
+<requirement name="Incorrect access response" reference="User certificate" reference_type="asset" label="3" type="Security" priority="1" >
   <description>Data requests sent from an account with incorrect access permissions shall be sent a 'no data received' message.</description>
   <rationale>Do not want attackers to know if they have valid access permissions or not.</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
+</requirement>
+<requirement name="User certificate" reference="User certificate" reference_type="asset" label="4" type="Functional" priority="1" >
+  <description>User certificates shall be extended such that these are only usable from designated network addresses.</description>
+  <rationale>Provide defence in depth if a root certificate is compromised.</rationale>
+  <fit_criterion>Attempts to login to the NeuroGrid portal with credentials not possible from any other machine beyond that the user certificate was installed for.</fit_criterion>
+  <originator>Goal Model</originator>
 </requirement>
 <requirement name="Dataset policy" reference="Access Control Policy" reference_type="asset" label="1" type="Functional" priority="1" >
   <description>Access to a NeuroGrid data-set shall be governed by an access control policy.</description>
