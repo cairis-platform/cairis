@@ -438,7 +438,8 @@ class ResponsibilityModelAPI(Resource):
     dot_code = dao.get_responsibility_model(environment, role)
     dao.close()
 
-    resp = make_response(model_generator.generate(dot_code, model_type='responsibility',renderer='neato'), OK)
+#    resp = make_response(model_generator.generate(dot_code, model_type='responsibility',renderer='neato'), OK)
+    resp = make_response(model_generator.generate(dot_code, model_type='responsibility',renderer='dot'), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'

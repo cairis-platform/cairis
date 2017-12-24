@@ -74,7 +74,6 @@ class SVGGenerator(object):
       line = substitute(b.staticDir,"",line)
       line = substitute("<!--.*?-->", "", line)
       if line.find('fill="none"') > -1 and is_node:
-        line = line.replace('fill="none"', 'fill="white"')
         is_node = False
 
       line = correctHref(line, model_type)
