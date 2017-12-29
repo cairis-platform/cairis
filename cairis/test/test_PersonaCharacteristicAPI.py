@@ -74,10 +74,9 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(pcs, 'No results after deserialization')
     self.assertIsInstance(pcs, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(pcs), 0, 'No persona characteristics in the dictionary')
-    if (sys.version_info > (3,)):
-      self.logger.info('[%s] Persona characteristics found: %d', method, len(pcs))
-      pc = list(pcs.values())[0]
-      self.logger.info('[%s] First persona characteristic: %s', method, pc['theCharacteristic'])
+    self.logger.info('[%s] Persona characteristics found: %d', method, len(pcs))
+    pc = list(pcs.values())[0]
+    self.logger.info('[%s] First persona characteristic: %s', method, pc['theCharacteristic'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
