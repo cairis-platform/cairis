@@ -76,7 +76,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     self.assertGreater(len(pcs), 0, 'No persona characteristics in the dictionary')
     self.logger.info('[%s] Persona characteristics found: %d', method, len(pcs))
     pc = list(pcs.values())[0]
-    self.logger.info('[%s] First persona characteristic: %s [%d]\n', method, pc['theCharacteristic'], pc['theId'])
+    self.logger.info('[%s] First persona characteristic: %s', method, pc['theCharacteristic'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -89,7 +89,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     self.assertGreater(len(pcs), 0, 'No persona characteristics summaries')
     self.assertIsInstance(pcs[0], ObjectSummary)
     self.logger.info('[%s] Persona characteristics found: %d', method, len(pcs))
-    self.logger.info('[%s] First persona characteristic summary: %s [%d]\n', method, pcs[0].theName)
+    self.logger.info('[%s] First persona characteristic summary: %s', method, pcs[0].theName)
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -103,7 +103,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     pc = jsonpickle.decode(responseData)
     self.assertIsNotNone(pc, 'No results after deserialization')
-    self.logger.info('[%s] Persona characteristic: %s [%d]\n', method, pc['theCharacteristic'], pc['theId'])
+    self.logger.info('[%s] Persona characteristic: %s \n', method, pc['theCharacteristic'])
 
   def test_post(self):
     method = 'test_post_new'
