@@ -277,9 +277,9 @@ The development of a structure for trial image metadata, based on a careful desc
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="WebDav folder" short_code="WD" type="Information" is_critical="0">
-  <description>WebDev folder</description>
-  <significance>Accessing WebDav folders allows access to process NeuroGrid data</significance>
+<asset name="WebDAV Collection" short_code="WD" type="Information" is_critical="0">
+  <description>WebDAV Collection</description>
+  <significance>Accessing WebDAV folders allows access to process NeuroGrid data</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Psychosis" property="availability" value="Medium">
     <rationale>None</rationale>
@@ -719,14 +719,14 @@ After setting up a packet sniffer to monitor traffic, Mallory spotted the potent
   <misusecase environment="Psychosis">
     <narrative>Alice was in a hurry.  She desparately had to catch that 10.15 train to London but she didn't have time to go all the way back to the Comlab to download the latest analysis results - results she needed for the presentation she was giving at UCL. As she crossed Hythe Bridge, Alice remembered that there was a cheap call shop near the chinese supermarket; perhaps they had internet access.  Alice hurried into the shop and noticed a bank of PCs by the far wall.  
 
-After enquiring about the use of a PC, Alice was told it would be 5 pounds for 30 minutes use.  She only needed the machine for about 5 minutes but her need was urgent so she paid up and hurried over to the nearest PC.   Alice reached for her USB stick, transferred her root certificate to the machine, logged into the NeuroGrid portal, downloaded her results from her WebDav folder, before transferring them to his USB stick.  After glancing nervously at her watch, she pulled out his USB, closed the web-browser down and walked briskly out of the shop and towards the station.  Perhaps she might make that train after all.
+After enquiring about the use of a PC, Alice was told it would be 5 pounds for 30 minutes use.  She only needed the machine for about 5 minutes but her need was urgent so she paid up and hurried over to the nearest PC.   Alice reached for her USB stick, transferred her root certificate to the machine, logged into the NeuroGrid portal, downloaded her results from her WebDAV folder, before transferring them to his USB stick.  After glancing nervously at her watch, she pulled out his USB, closed the web-browser down and walked briskly out of the shop and towards the station.  Perhaps she might make that train after all.
 
 Two hours later, and several hundred miles away, Mallory checked his bot herd status logs.  It looks like he was the proud owner of 10 new PCs.  Mallory ran the machine inventory script of his new prizes, and noticed that one of them had earlier access the NeuroGrid portal.  "Yes!" Mallory exclaimed to himself as he checked the browser cache and found an elusive digital certificate.  As Mallory transferred this certificate to his machine, ensuring afterwards it was removed from the newly owned PC at the internet cafe in Oxford, he could only wonder at the processing power now made available to him.</narrative>
   </misusecase>
   <misusecase environment="Stroke">
     <narrative>Bob was in a hurry.  He desparately had to catch that 10.15 train to London but he didn't have time to go all the way back to the Comlab to download the latest analysis results - results he needed for the presentation he was giving at UCL. As he crossed Hythe Bridge, Bob remembered that there was a cheap call shop near the chinese supermarket; perhaps they had internet access.  Bob hurried into the shop and noticed a bank of PCs by the far wall.  
 
-After enquiring about the use of a PC, Bob was told it would be 5 pounds for 30 minutes use.  He only needed the machine for about 5 minutes but his need was urgent so he paid up and hurried over to the nearest PC.   Bob reached for her USB stick, transferred his root certificate to the machine, logged into the NeuroGrid portal, downloaded his results from his WebDav folder, before transferring them to his USB stick.  After glancing nervously at his watch, he pulled out his USB, closed the web-browser down and walked briskly out of the shop and towards the station.  Perhaps he might make that train after all.
+After enquiring about the use of a PC, Bob was told it would be 5 pounds for 30 minutes use.  He only needed the machine for about 5 minutes but his need was urgent so he paid up and hurried over to the nearest PC.   Bob reached for her USB stick, transferred his root certificate to the machine, logged into the NeuroGrid portal, downloaded his results from his WebDAV folder, before transferring them to his USB stick.  After glancing nervously at his watch, he pulled out his USB, closed the web-browser down and walked briskly out of the shop and towards the station.  Perhaps he might make that train after all.
 
 Two hours later, and several hundred miles away, Mallory checked his bot herd status logs.  It looks like he was the proud owner of 10 new PCs.  Mallory ran the machine inventory script of his new prizes, and noticed that one of them had earlier access the NeuroGrid portal.  "Yes!" Mallory exclaimed to himself as he checked the browser cache and found an elusive digital certificate.  As Mallory transferred this certificate to his machine, ensuring afterwards it was removed from the newly owned PC at the internet cafe in Oxford, he could only wonder at the processing power now made available to him.</narrative>
   </misusecase>
@@ -770,19 +770,19 @@ Yves persuades Sally to run a workflow for him because he is a hurry and still d
 <asset_association environment="Core Technology"  head_name="Data node" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="Delegation token" />
 <asset_association environment="Psychosis"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Clinical data" />
 <asset_association environment="Psychosis"  head_name="Data node" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Analysis data" />
-<asset_association environment="Psychosis"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDav folder" />
+<asset_association environment="Psychosis"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDAV Collection" />
 <asset_association environment="Psychosis"  head_name="Data node" head_nav="0" head_adornment="Aggregation" head_nry="a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Workflow" />
 <asset_association environment="Psychosis"  head_name="Workflow" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Clinical data" />
 <asset_association environment="Psychosis"  head_name="Client workstation" head_nav="0" head_adornment="Composition" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Web-browser" />
 <asset_association environment="Psychosis"  head_name="Workflow" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Analysis data" />
 <asset_association environment="Stroke"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Clinical data" />
 <asset_association environment="Stroke"  head_name="Data node" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Analysis data" />
-<asset_association environment="Stroke"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDav folder" />
+<asset_association environment="Stroke"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDAV Collection" />
 <asset_association environment="Stroke"  head_name="Data node" head_nav="0" head_adornment="Aggregation" head_nry="a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Workflow" />
 <asset_association environment="Stroke"  head_name="Workflow" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Clinical data" />
 <asset_association environment="Stroke"  head_name="Client workstation" head_nav="0" head_adornment="Composition" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Web-browser" />
 <asset_association environment="Stroke"  head_name="Workflow" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Analysis data" />
-<asset_association environment="Core Technology"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDav folder" />
+<asset_association environment="Core Technology"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDAV Collection" />
 
 </riskanalysis>
 
@@ -1272,13 +1272,13 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <excerpt>I think the emphasis was on making it secure, with less emphasis on the realisation that that means it would be difficult to access for certain people.  \\nIt certainly is an issue for other health grids.  \\nI\\\'ve got 6 of them together for a workshop.  \\nGetting them to use it is a big issue, now people are saying: how sustainable is it?, how many people are actually using it?.</excerpt>
 </document_reference>
 <document_reference name="Technical terms confuse users." contributor="SF" document="Engagement artifact GT concept" >
-  <excerpt>In the beginning, we had a problem with the web folder, which was called WebDav folder ; what is meant by _WebDav_ folder?  \\nWhen you explain that it is just a directory on the web, they go ah.  \\nIt\\\'s just a name, but if you aren\\\'t an expert, you don\\\'t know if it is a technical term which means something you need to know about or not.</excerpt>
+  <excerpt>In the beginning, we had a problem with the web folder, which was called WebDAV folder ; what is meant by _WebDAV_ folder?  \\nWhen you explain that it is just a directory on the web, they go ah.  \\nIt\\\'s just a name, but if you aren\\\'t an expert, you don\\\'t know if it is a technical term which means something you need to know about or not.</excerpt>
 </document_reference>
 <document_reference name="Portal is a frame of reference" contributor="SF" document="Engagement artifact GT concept" >
   <excerpt>It isn\\\'t until you get the actual basic portal... I like what [E] said, in that you\\\'ve got to give them something to hate - something real and tangible, a vehicle for engagement.  As soon as you have something, people won\\\'t say what they did want.  \\nThey will automatically say what they didn\\\'t want like you can\\\'t have this and you shouldn\\\'t have the other.  \\nThe requirements then became very obvious and there was a common frame of reference.  \\nHaving an early form of portal as a vehicle was terrifically useful.  </excerpt>
 </document_reference>
 <document_reference name="Metaphors helped people express ideas." contributor="SF" document="Engagement artifact GT concept" >
-  <excerpt>There were lots of issues where people couldn\\\'t express it before as they didn\\\'t know what things were called.  \\nFor example, the WebDav folder kept cropping up and confusing people, so when they saw the prototype they said: Oh that! That\\\'s just an ordinary folder.  \\nThe security discussions came up because people couldn\\\'t access it really.  \\nIn a sense, the security was too good.</excerpt>
+  <excerpt>There were lots of issues where people couldn\\\'t express it before as they didn\\\'t know what things were called.  \\nFor example, the WebDAV folder kept cropping up and confusing people, so when they saw the prototype they said: Oh that! That\\\'s just an ordinary folder.  \\nThe security discussions came up because people couldn\\\'t access it really.  \\nIn a sense, the security was too good.</excerpt>
 </document_reference>
 <document_reference name="Sometimes a perception that internet is safe when it is not" contributor="SF" document="Environmental perception GT concept" >
   <excerpt>SF: So, there aren\\\'t any restrictions set when you install certificates via the browser?  \\nIs there any guidance which says that you can\\\'t use this system in an internet cafe, or is it safe to say you wouldn\\\'t want to do it, but there is nothing in the rules you have which says that you can\\\'t?\\nI2: I\\\'m not entirely sure, but I don\\\'t think it says anywhere.  \\nThis needs to be pointed out.  \\nIt is difficult from a technical point of view, as the internet itself is safe and when I, with my own laptop, go to an insecure web-page, then I still have access as it all goes via my laptop.  </excerpt>
@@ -2095,14 +2095,14 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
     <issue>None</issue>
   </goal_environment>
 </goal>
-<goal name="Download to WebDav folder" originator="SF">
+<goal name="Download to WebDAV folder" originator="SF">
   <goal_environment name="Psychosis" category="Maintain" priority="High" >
-    <definition>Processed analysis data shall be downloadable only to an authorised user's WebDav folder.</definition>
+    <definition>Processed analysis data shall be downloadable only to an authorised user's WebDAV folder.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
   <goal_environment name="Stroke" category="Maintain" priority="High" >
-    <definition>Processed analysis data shall be downloadable only to an authorised user's WebDav folder.</definition>
+    <definition>Processed analysis data shall be downloadable only to an authorised user's WebDAV folder.</definition>
     <fit_criterion>None</fit_criterion>
     <issue>None</issue>
   </goal_environment>
@@ -2360,26 +2360,26 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement name="WebDav client" reference="WebDav folder" reference_type="asset" label="1" type="Functional" priority="1" >
-  <description>NeuroGrid data folders shall be accessible to authorised users via a WebDav client.</description>
+<requirement name="WebDAV client" reference="WebDAV Collection" reference_type="asset" label="1" type="Functional" priority="1" >
+  <description>NeuroGrid data folders shall be accessible to authorised users via a WebDAV client.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement name="WebDav folder retention" reference="WebDav folder" reference_type="asset" label="4" type="Functional" priority="1" >
-  <description>WebDav folders shall be retained on a NeuroGrid data node for 24 hours after its initial creation.</description>
+<requirement name="WebDAV folder retention" reference="WebDAV Collection" reference_type="asset" label="4" type="Functional" priority="1" >
+  <description>WebDAV folders shall be retained on a NeuroGrid data node for 24 hours after its initial creation.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement name="Folder visibility" reference="WebDav folder" reference_type="asset" label="2" type="Portability" priority="1" >
-  <description>WebDav folder names shall be viewable from any WebDav client.</description>
+<requirement name="Folder visibility" reference="WebDAV Collection" reference_type="asset" label="2" type="Portability" priority="1" >
+  <description>WebDAV folder names shall be viewable from any WebDAV client.</description>
   <rationale>None</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement name="Folder permissions" reference="WebDav folder" reference_type="asset" label="3" type="Security" priority="1" >
-  <description>WebDav folders viewed from an account without correct access permissions shall be shown an empty folder.</description>
+<requirement name="Folder permissions" reference="WebDAV Collection" reference_type="asset" label="3" type="Security" priority="1" >
+  <description>WebDAV folders viewed from an account without correct access permissions shall be shown an empty folder.</description>
   <rationale>Do not want attackers to know if they have valid access permissions or not.</rationale>
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
@@ -2506,7 +2506,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 <goal_association environment="Psychosis"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Upload workflows to NeuroGrid" subgoal_dim="goal" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="Download to WebDav folder" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="Download to WebDAV folder" subgoal_dim="goal" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Stroke"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Upload clinical data to NeuroGrid" subgoal_dim="goal" alternative_id="0" >
@@ -2572,7 +2572,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 <goal_association environment="Stroke"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Upload workflows to NeuroGrid" subgoal_dim="goal" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="Download to WebDav folder" subgoal_dim="goal" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Download analysis data" goal_dim="goal" ref_type="and" subgoal_name="Download to WebDAV folder" subgoal_dim="goal" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Psychosis"  goal_name="Anonymise data" goal_dim="goal" ref_type="and" subgoal_name="Anonymisation guidelines" subgoal_dim="requirement" alternative_id="0" >
@@ -2617,13 +2617,13 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 <goal_association environment="Psychosis"  goal_name="Upload workflows to NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Guest workflow submission" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="WebDav client" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Download to WebDAV folder" goal_dim="goal" ref_type="and" subgoal_name="WebDAV client" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="Folder visibility" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Download to WebDAV folder" goal_dim="goal" ref_type="and" subgoal_name="Folder visibility" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="Folder permissions" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Download to WebDAV folder" goal_dim="goal" ref_type="and" subgoal_name="Folder permissions" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Psychosis"  goal_name="Secure data transmission" goal_dim="goal" ref_type="and" subgoal_name="HTTPS data transfer" subgoal_dim="requirement" alternative_id="0" >
@@ -2680,13 +2680,13 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 <goal_association environment="Stroke"  goal_name="Upload workflows to NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Guest workflow submission" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="WebDav client" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Download to WebDAV folder" goal_dim="goal" ref_type="and" subgoal_name="WebDAV client" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="Folder visibility" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Download to WebDAV folder" goal_dim="goal" ref_type="and" subgoal_name="Folder visibility" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Download to WebDav folder" goal_dim="goal" ref_type="and" subgoal_name="Folder permissions" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Download to WebDAV folder" goal_dim="goal" ref_type="and" subgoal_name="Folder permissions" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Stroke"  goal_name="Secure data transmission" goal_dim="goal" ref_type="and" subgoal_name="HTTPS data transfer" subgoal_dim="requirement" alternative_id="0" >
