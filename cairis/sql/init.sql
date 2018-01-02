@@ -4015,6 +4015,7 @@ INSERT INTO motivation values(15,'Disruption','To be defined');
 INSERT INTO motivation values(16,'Accident','To be defined');
 INSERT INTO motivation values(17,'Indifference','To be defined');
 INSERT INTO motivation values(18,'Money','financial gain');
+INSERT INTO motivation values(19,'Productivity','financial gain');
 INSERT INTO capability values (0,'Resources/Equipment','To be defined');
 INSERT INTO capability values (1,'Resources/Facilities','To be defined');
 INSERT INTO capability values (2,'Resources/Personnel and Time','To be defined');
