@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "https://cairis.org/dtd/cairis_model.dtd">
 
-<!-- 
+<!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
   distributed with this work for additional information
@@ -59,7 +59,7 @@
 <threat_type name="Electronic/Phishing and Spoofing">
   <description>Phishing describes a social engineering process designed to trick an organisation\'s customers into imparting confidential information such as passwords, personal data or banking and financial details.  Most commonly these are criminal attacks but the same techniques could be used by others to get sensitive information.</description>
 </threat_type>
-</tvtypes> 
+</tvtypes>
 
 <cairis>
 <project_settings name="NeuroGrid data transfer" >
@@ -95,7 +95,7 @@ The sensitivity of this clinical data and its distributed nature drives the need
   </contributors>
 </project_settings>
 <environment name="Psychosis" short_code="PSY" >
-  <definition>The exemplar aims to integrate large existing datasets of serial MRI scans and behaviour data coupled to the NeuroGrid image analysis service into a Grid-based database, test image normalisation techniques, and develop a general ontology for a psychosis databas, for use in multi-centre studies.  
+  <definition>The exemplar aims to integrate large existing datasets of serial MRI scans and behaviour data coupled to the NeuroGrid image analysis service into a Grid-based database, test image normalisation techniques, and develop a general ontology for a psychosis databas, for use in multi-centre studies.
 
 The exemplar tests capabilities of NeuroGrid to deal with restrospective data, assimilate material into databases, and use of the toolkit for normalisation and analysis.</definition>
   <asset_values>
@@ -277,7 +277,7 @@ The development of a structure for trial image metadata, based on a careful desc
     <rationale>None</rationale>
   </security_property>
 </asset>
-<asset name="WebDAV Collection" short_code="WD" type="Information" is_critical="0">
+<asset name="WebDAV Collection" short_code="WDC" type="Information" is_critical="0">
   <description>WebDAV Collection</description>
   <significance>Accessing WebDAV folders allows access to process NeuroGrid data</significance>
   <critical_rationale></critical_rationale>
@@ -291,6 +291,21 @@ The development of a structure for trial image metadata, based on a careful desc
     <rationale>None</rationale>
   </security_property>
 </asset>
+<asset name="WebDAV Resource" short_code="WDR" type="Information" is_critical="0">
+  <description>WebDAV Resource</description>
+  <significance>WebDAV resources may be input or output to workflows</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Psychosis" property="availability" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property environment="Stroke" property="availability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property environment="Core Technology" property="accountability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+
 <asset name="Grid meta-data" short_code="GM" type="Information" is_critical="0">
   <description>Grid meta-data</description>
   <significance>Meta-data used to control aspects of the NeuroGrid infrastructure.</significance>
@@ -306,6 +321,17 @@ The development of a structure for trial image metadata, based on a careful desc
   </security_property>
   <security_property environment="Core Technology" property="availability" value="High">
     <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="Host Configuration File" short_code="HCF" type="Information" is_critical="0">
+  <description>Host Configuration File</description>
+  <significance>Defines virtual hosts and allowable modules</significance>
+  <critical_rationale></critical_rationale>
+  <security_property environment="Stroke" property="Integrity" value="Medium">
+    <rationale>Corrupting running of web server could lead to unauthorised access to resources</rationale>
+  </security_property>
+  <security_property environment="Core Technology" property="Integrity" value="Medium">
+    <rationale>Corrupting running of web server could lead to unauthorised access to resources</rationale>
   </security_property>
 </asset>
 <asset name="CA Certificate" short_code="CA" type="Information" is_critical="0">
@@ -690,7 +716,7 @@ As security is a topical subject in the media, Carol has been able to secure som
 </threat>
 <risk name="Unauthorised Certificate Access" vulnerability="Certificate ubiquity" threat="Social engineering">
   <misusecase environment="Psychosis">
-    <narrative>Carol gained access to the Computing Laboratory by tail-gating one of the many new DTC students arriving that day.  When she reached the attrium she asked a nearby porter for directions to the Neurosciences areas.  Carol followed the directions and eventually reached an open-plan area with a number of PCs.  The computer room is a shared work area used by the many post-docs working in the department.  Carol espied an unused PC, next to which was a man in his mid-20s who appeared to be deeply engrossed in his work. Carol approached the main and attempted to get his attention.  "Hi there", Carol said, "I'm Carol, and I'm a new post-doc in the group".  Dave looked up from his PC and smiled.  "Hi", said the over-worked post-doc, "I'm Dave.  Due mentioned something about a new post-doc.  Well, I see you found your way here ok.".  "Eventually", said Carol, "Oxford is a bit of a tardis isn't it.  Is this desk free?".  "Sure, make yourself at home", replied Dave.  Carol sat down and pulled an A4 pad and some dog-eared papers from the day-sac she had been carrying around; she wanted to give the impression she was annotating some academic papers.  
+    <narrative>Carol gained access to the Computing Laboratory by tail-gating one of the many new DTC students arriving that day.  When she reached the attrium she asked a nearby porter for directions to the Neurosciences areas.  Carol followed the directions and eventually reached an open-plan area with a number of PCs.  The computer room is a shared work area used by the many post-docs working in the department.  Carol espied an unused PC, next to which was a man in his mid-20s who appeared to be deeply engrossed in his work. Carol approached the main and attempted to get his attention.  "Hi there", Carol said, "I'm Carol, and I'm a new post-doc in the group".  Dave looked up from his PC and smiled.  "Hi", said the over-worked post-doc, "I'm Dave.  Due mentioned something about a new post-doc.  Well, I see you found your way here ok.".  "Eventually", said Carol, "Oxford is a bit of a tardis isn't it.  Is this desk free?".  "Sure, make yourself at home", replied Dave.  Carol sat down and pulled an A4 pad and some dog-eared papers from the day-sac she had been carrying around; she wanted to give the impression she was annotating some academic papers.
 
 After about 30 minutes, Dave sat back from his PC and sighed.  Noticing this, and sensing  an opportunity, Carol asked "Is there anywhere we can get a coffee around here?"  "You must have been reading my mind", Dave said, "Taylors is pretty good, which I'm just on my way to now - do you want to come?".
 
@@ -702,7 +728,7 @@ On the way to the coffee shop, Carol gave her cover story to Dave.  She was a ne
 "Aaarrgghh" cried Yves.  "What's up", asked Sally from the other end of the open-plan office they shared.  "I'm missing several samples of data from that batch of images we got from the Phillipines last week", said Yves.
 Sally came over and looking at the workflow results on Yves screen.  "Ah", said Sally, "I think the data is there but you just don't have access to it."  "What!" exclaimed Yves, "I was told I had everything I needed from Mike, why didn't he tell me I was missing images from this data set.  How am I supposed to submit this paper by the end of the week without a complete validation".  Yves put his head in his hands.
 
-"You know what", said Sally, "I think I've got access to that data.  Why don't you just login as me and resubmit your workflow that way".  
+"You know what", said Sally, "I think I've got access to that data.  Why don't you just login as me and resubmit your workflow that way".
 Yves perked up; "Sally, you're a star", Yves said, "you've just earned yourself some drinks and a paper acknowledgement.".
 
 Sally walked back to her desk, copied her digital certificate to a USB stick, before walking back to Yves to hand over the key.  "Ta", said Yves, before loading the digital certificate to his web-browser, logging back into NeuroGrid, and re-submitting his workflow. </narrative>
@@ -717,14 +743,14 @@ After setting up a packet sniffer to monitor traffic, Mallory spotted the potent
 </risk>
 <risk name="User Certificate Theft" vulnerability="Certificate ubiquity" threat="Trojan Horse">
   <misusecase environment="Psychosis">
-    <narrative>Alice was in a hurry.  She desparately had to catch that 10.15 train to London but she didn't have time to go all the way back to the Comlab to download the latest analysis results - results she needed for the presentation she was giving at UCL. As she crossed Hythe Bridge, Alice remembered that there was a cheap call shop near the chinese supermarket; perhaps they had internet access.  Alice hurried into the shop and noticed a bank of PCs by the far wall.  
+    <narrative>Alice was in a hurry.  She desparately had to catch that 10.15 train to London but she didn't have time to go all the way back to the Comlab to download the latest analysis results - results she needed for the presentation she was giving at UCL. As she crossed Hythe Bridge, Alice remembered that there was a cheap call shop near the chinese supermarket; perhaps they had internet access.  Alice hurried into the shop and noticed a bank of PCs by the far wall.
 
 After enquiring about the use of a PC, Alice was told it would be 5 pounds for 30 minutes use.  She only needed the machine for about 5 minutes but her need was urgent so she paid up and hurried over to the nearest PC.   Alice reached for her USB stick, transferred her root certificate to the machine, logged into the NeuroGrid portal, downloaded her results from her WebDAV folder, before transferring them to his USB stick.  After glancing nervously at her watch, she pulled out his USB, closed the web-browser down and walked briskly out of the shop and towards the station.  Perhaps she might make that train after all.
 
 Two hours later, and several hundred miles away, Mallory checked his bot herd status logs.  It looks like he was the proud owner of 10 new PCs.  Mallory ran the machine inventory script of his new prizes, and noticed that one of them had earlier access the NeuroGrid portal.  "Yes!" Mallory exclaimed to himself as he checked the browser cache and found an elusive digital certificate.  As Mallory transferred this certificate to his machine, ensuring afterwards it was removed from the newly owned PC at the internet cafe in Oxford, he could only wonder at the processing power now made available to him.</narrative>
   </misusecase>
   <misusecase environment="Stroke">
-    <narrative>Bob was in a hurry.  He desparately had to catch that 10.15 train to London but he didn't have time to go all the way back to the Comlab to download the latest analysis results - results he needed for the presentation he was giving at UCL. As he crossed Hythe Bridge, Bob remembered that there was a cheap call shop near the chinese supermarket; perhaps they had internet access.  Bob hurried into the shop and noticed a bank of PCs by the far wall.  
+    <narrative>Bob was in a hurry.  He desparately had to catch that 10.15 train to London but he didn't have time to go all the way back to the Comlab to download the latest analysis results - results he needed for the presentation he was giving at UCL. As he crossed Hythe Bridge, Bob remembered that there was a cheap call shop near the chinese supermarket; perhaps they had internet access.  Bob hurried into the shop and noticed a bank of PCs by the far wall.
 
 After enquiring about the use of a PC, Bob was told it would be 5 pounds for 30 minutes use.  He only needed the machine for about 5 minutes but his need was urgent so he paid up and hurried over to the nearest PC.   Bob reached for her USB stick, transferred his root certificate to the machine, logged into the NeuroGrid portal, downloaded his results from his WebDAV folder, before transferring them to his USB stick.  After glancing nervously at his watch, he pulled out his USB, closed the web-browser down and walked briskly out of the shop and towards the station.  Perhaps he might make that train after all.
 
@@ -757,11 +783,13 @@ Yves persuades Sally to run a workflow for him because he is a hurry and still d
 <asset_association environment="Psychosis"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Access Control Policy" />
 <asset_association environment="Psychosis"  head_name="Web-browser" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="User certificate" />
 <asset_association environment="Psychosis"  head_name="Web-browser" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Personal certificate" />
+<asset_association environment="Psychosis"  head_name="Web-browser" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Guest certificate" />
 <asset_association environment="Stroke"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Portal" />
 <asset_association environment="Stroke"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Access Control Policy" />
 <asset_association environment="Stroke"  head_name="Web-browser" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="User certificate" />
 <asset_association environment="Stroke"  head_name="Web-browser" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Portal" />
 <asset_association environment="Stroke"  head_name="Web-browser" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Personal certificate" />
+<asset_association environment="Stroke"  head_name="Web-browser" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Guest certificate" />
 <asset_association environment="Core Technology"  head_name="CA Certificate" head_nav="0" head_adornment="Association" head_nry="1" head_role="controls" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Grid meta-data" />
 <asset_association environment="Core Technology"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Access Control Policy" />
 <asset_association environment="Core Technology"  head_name="Data node" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Grid meta-data" />
@@ -771,10 +799,12 @@ Yves persuades Sally to run a workflow for him because he is a hurry and still d
 <asset_association environment="Psychosis"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Clinical data" />
 <asset_association environment="Psychosis"  head_name="Data node" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Analysis data" />
 <asset_association environment="Psychosis"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDAV Collection" />
+<asset_association environment="Psychosis"  head_name="WebDAV Collection" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDAV Resource" />
 <asset_association environment="Psychosis"  head_name="Data node" head_nav="0" head_adornment="Aggregation" head_nry="a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Workflow" />
 <asset_association environment="Psychosis"  head_name="Workflow" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Clinical data" />
 <asset_association environment="Psychosis"  head_name="Client workstation" head_nav="0" head_adornment="Composition" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Web-browser" />
 <asset_association environment="Psychosis"  head_name="Workflow" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Analysis data" />
+<asset_association environment="Psychosis"  head_name="WebDAV Resource" head_nav="0" head_adornment="Inheritance" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Analysis data" />
 <asset_association environment="Stroke"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Clinical data" />
 <asset_association environment="Stroke"  head_name="Data node" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Analysis data" />
 <asset_association environment="Stroke"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDAV Collection" />
@@ -782,7 +812,14 @@ Yves persuades Sally to run a workflow for him because he is a hurry and still d
 <asset_association environment="Stroke"  head_name="Workflow" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Clinical data" />
 <asset_association environment="Stroke"  head_name="Client workstation" head_nav="0" head_adornment="Composition" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Web-browser" />
 <asset_association environment="Stroke"  head_name="Workflow" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Analysis data" />
+<asset_association environment="Stroke"  head_name="WebDAV Collection" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDAV Resource" />
+<asset_association environment="Stroke"  head_name="WebDAV Resource" head_nav="0" head_adornment="Inheritance" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Analysis data" />
+<asset_association environment="Stroke"  head_name="Grid meta-data" head_nav="0" head_adornment="Inheritance" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Host Configuration File" />
 <asset_association environment="Core Technology"  head_name="Data node" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDAV Collection" />
+<asset_association environment="Core Technology"  head_name="WebDAV Collection" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="WebDAV Resource" />
+<asset_association environment="Core Technology"  head_name="Grid meta-data" head_nav="0" head_adornment="Inheritance" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Host Configuration File" />
+
+
 
 </riskanalysis>
 
@@ -793,12 +830,12 @@ Yves persuades Sally to run a workflow for him because he is a hurry and still d
 Claire authorises requests that other members of her group make for accessing NeuroGrid, and is officially responsible for making sure her colleagues aren't misusing their access.  In practice, however, she delegates much of her responsibility to one of her more security-knowledgeable colleagues.</activities>
   <attitudes>Claire feels that NeuroGrid has a lot to offer her research but, right now, its hard to see the benefits for the usability problems she faces.
 
-Although Claire appreciates the importance of security and the confidentialty of her research subjects, authorising colleague requests for data access and liasing with the infrastructure team is a time consuming process which isn't helping her get any research done. 
+Although Claire appreciates the importance of security and the confidentialty of her research subjects, authorising colleague requests for data access and liasing with the infrastructure team is a time consuming process which isn't helping her get any research done.
 
 Claire is also perplexed at why security could cause simple workflows take such a long time to run, but she also remembers how long it used to take to get data before NeuroGrid so she can live with the performance issues.</attitudes>
   <aptitudes>Claire and her colleagues follow a set of processes and guidelines when working with data uploaded to NeuroGrid.
 
-Because obtaining data is an expensive business, Claire also tries to reuse data and analysis as much as possible, and as far as her ethics clearance allows.  
+Because obtaining data is an expensive business, Claire also tries to reuse data and analysis as much as possible, and as far as her ethics clearance allows.
 
 </aptitudes>
   <motivations>Besides her research, Claire's primary security concerns are centered around the datasets she maintains, and making sure her colleagues and collaborators can access the data they need. </motivations>
@@ -811,7 +848,7 @@ Because obtaining data is an expensive business, Claire also tries to reuse data
   </persona_environment>
 </persona>
 <persona name="Tom" type="Primary" assumption_persona="FALSE" image="Tom.jpg" >
-  <activities>Tom is an applications developer within the Stroke exemplar.  
+  <activities>Tom is an applications developer within the Stroke exemplar.
 
 Tom collaborates with a his clinical researchers colleagues as part of a number of on-going trials to support their research work.  This includes anonymises images, and uploads these to NeuroGrid.</activities>
   <attitudes>Tom is aware that some of his users find security painful, and he believes that a usable system will eventually lead to a secure system as well.  Having fielding questions from his users about NeuroGrid, Tom has found that when users understand why things are the way they are, NeuroGrid makes a bit more sense.
