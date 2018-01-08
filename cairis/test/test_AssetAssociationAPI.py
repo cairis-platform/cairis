@@ -74,7 +74,7 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
     else:
       assocs = jsonpickle.decode(rv.data)
     self.assertIsNotNone(assocs, 'No results after deserialization')
-    self.assertEqual(len(assocs),30)
+    self.assertEqual(len(assocs),39)
 
   def test_get(self):
     method = 'test_asset_association'

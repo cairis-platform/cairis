@@ -912,6 +912,7 @@ drop procedure if exists threatenedEntities;
 drop procedure if exists threatenedDatastores;
 drop procedure if exists threatenedProcesses;
 drop procedure if exists threatenedDataflows;
+drop procedure if exists defaultValue;
 
 delimiter //
 
@@ -23993,6 +23994,22 @@ begin
   declare envId int;
   select id into envId from environment where name = envName limit 1;
   select df.name,t.name,sp.name from dataflow df, dataflow_asset da, asset_threat at, threat_property tp, threat t, security_property sp where df.environment_id = envId and df.id = da.dataflow_id and da.asset_id = at.asset_id  and at.environment_id = df.environment_id and at.threat_id = tp.threat_id and at.environment_id = tp.environment_id and tp.property_value_id > 0 and tp.threat_id = t.id and tp.property_id = sp.id order by 1,2;
+end
+//
+
+create procedure defaultValue(in valueType text) 
+begin
+  declare defSql varchar(4000);
+  declare defVal varchar(100) default '';
+  declare objtCount int;
+
+  set defSql = concat('select name into @defVal from ',valueType,' limit 1');
+  set @sql = defSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set defVal = @defVal;
+  select defVal;
 end
 //
 

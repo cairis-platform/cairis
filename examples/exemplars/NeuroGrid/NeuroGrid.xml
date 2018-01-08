@@ -327,10 +327,10 @@ The development of a structure for trial image metadata, based on a careful desc
   <description>Host Configuration File</description>
   <significance>Defines virtual hosts and allowable modules</significance>
   <critical_rationale></critical_rationale>
-  <security_property environment="Stroke" property="Integrity" value="Medium">
+  <security_property environment="Stroke" property="integrity" value="Medium">
     <rationale>Corrupting running of web server could lead to unauthorised access to resources</rationale>
   </security_property>
-  <security_property environment="Core Technology" property="Integrity" value="Medium">
+  <security_property environment="Core Technology" property="integrity" value="Medium">
     <rationale>Corrupting running of web server could lead to unauthorised access to resources</rationale>
   </security_property>
 </asset>

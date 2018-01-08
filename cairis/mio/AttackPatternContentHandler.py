@@ -267,7 +267,13 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
     elif name == 'attack_pattern':
       assetList = self.theTargets + self.theExploits
       for assetName in assetList:
-        self.theAssetParameters.append(cairis.core.AssetParametersFactory.buildFromTemplate(assetName,[self.theEnvironment]))
+        assetId = self.dbProxy.existingObject(assetName,'asset')
+        if assetId == -1:
+          taId = self.dbProxy.existingObject(assetName,'template_asset')
+          if taId == -1:
+           raise ARMException('Cannot import attack pattern: no asset or template asset for ' + assetName)
+          else:
+            self.theAssetParameters.append(cairis.core.AssetParametersFactory.buildFromTemplate(assetName,[self.theEnvironment]))
 
       attackerNames = []
       for attackerName,attackerMotives,attackerCapabilities in self.theParticipants:
@@ -296,7 +302,10 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
  
       vp = VulnerabilityEnvironmentProperties(self.theEnvironment,self.theSeverity,self.theExploits)
       vulRows = self.dbProxy.getVulnerabilityDirectory(self.theExploit)
-      vulData = vulRows[0]
+      if (len(vulRows) == 0):
+        vulData = ['','',self.theExploit,self.dbProxy.defaultValue('vulnerability_type')]
+      else:
+        vulData = vulRows[0]
       self.theVulnerabilityParameters = VulnerabilityParameters(self.theExploit,vulData[2],vulData[3],[],[vp])
 
       spDict = {}
@@ -326,7 +335,11 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
 
       tp = ThreatEnvironmentProperties(self.theEnvironment,self.theLikelihood,self.theTargets,attackerNames,[cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty],[cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale])
       thrRows = self.dbProxy.getThreatDirectory(self.theAttack)
-      thrData = thrRows[0]
+
+      if (len(thrRows) == 0):
+        thrData = ['','',self.theExploit,self.dbProxy.defaultValue('threat_type')]
+      else:
+        thrData = thrRows[0]
       self.theThreatParameters = ThreatParameters(self.theAttack,thrData[3],thrData[2],[],[tp])
 
       if (self.theAttackObstacle != ''):

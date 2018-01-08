@@ -4546,3 +4546,6 @@ class MySQLDatabaseProxy:
 
   def threatenedDataflows(self,envName):
     return self.responseList('call threatenedDataflows(:envName)',{'envName':envName},'MySQL error getting threatened dataflows')
+
+  def defaultValue(self,valueType):
+    return self.responseList('call defaultValue(:valueType)',{'valueType':valueType},'MySQL error getting default value for ' + valueType)[0]

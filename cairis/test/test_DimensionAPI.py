@@ -68,6 +68,6 @@ class DimensionAPITests(CairisDaemonTestCase):
     dims = jsonpickle.decode(responseData)
     self.assertIsNotNone(dims, 'No results are deserialization')
     self.assertGreater(len(dims), 0, 'No dimensions in the dictionary')
-    self.assertEqual(len(dims), 12, 'Incorrect number of asset names returned')
+    self.assertEqual(len(dims), 13, 'Incorrect number of asset names returned')
     dimValue = dims[0]
     self.logger.info('[%s] First asset: %s\n', method, dimValue)
