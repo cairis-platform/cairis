@@ -90,7 +90,7 @@ class TraceAPITests(CairisDaemonTestCase):
     trs = jsonpickle.decode(responseData)
     self.assertIsNotNone(trs, 'No results after deserialization')
     self.logger.info('[%s] Traces found: %d', method, len(trs))
-    self.assertEqual(len(trs),0)
+    self.assertEqual(len(trs),2)
 
   def test_post(self):
     method = 'test_post_new'

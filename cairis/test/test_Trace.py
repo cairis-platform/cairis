@@ -43,7 +43,7 @@ class TraceTests(unittest.TestCase):
     b.dbProxy.addTrace('requirement_vulnerability',reqId,vulId)
 
     traces = b.dbProxy.removableTraces('Psychosis')
-    self.assertEqual(len(traces),1)
+    self.assertEqual(len(traces),3)
     self.assertEqual(traces[0][0],'requirement')
     self.assertEqual(traces[0][1],'Dataset policy')
     self.assertEqual(traces[0][2],'vulnerability')
@@ -51,4 +51,4 @@ class TraceTests(unittest.TestCase):
 
     b.dbProxy.deleteTrace('requirement','Dataset policy','vulnerability','Certificate ubiquity')
     traces = b.dbProxy.removableTraces('Psychosis')
-    self.assertEqual(len(traces),0)
+    self.assertEqual(len(traces),2)
