@@ -2479,6 +2479,8 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 </goals>
 
 <associations>
+<manual_association from_name="WebDAV folder retention" from_dim="requirement" to_name="Sysadmin" to_dim="role" />
+<manual_association from_name="Folder permissions" from_dim="requirement" to_name="Sysadmin" to_dim="role" />
 <manual_association from_name="Prevent Unauthorised Certificate Access" from_dim="response" to_name="PreventUnauthorised Certificate Access" to_dim="goal" />
 <goal_association environment="Psychosis"  goal_name="Process clinical data on NeuroGrid" goal_dim="goal" ref_type="and" subgoal_name="Upload clinical data to NeuroGrid" subgoal_dim="goal" alternative_id="0" >
   <rationale>None</rationale>
