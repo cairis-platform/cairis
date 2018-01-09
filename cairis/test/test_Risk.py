@@ -95,11 +95,11 @@ class RiskTest(unittest.TestCase):
     self.assertEqual(irp.threat(),o.threat())
     self.assertEqual(irp.vulnerability(),o.vulnerability())
 
-#    scoreDetails = b.dbProxy.riskScore(self.iRisks[0]["threatName"],self.iRisks[0]["vulName"],self.iaeps1[0].name())
-#    preScore = scoreDetails[0][1]
-#    postScore = scoreDetails[0][2]
-#    self.assertEqual(preScore,9)
-#    self.assertEqual(postScore,9)
+    scoreDetails = b.dbProxy.riskScore(self.iRisks[0]["threatName"],self.iRisks[0]["vulName"],imcep[0].name())
+    preScore = scoreDetails[0][1]
+    postScore = scoreDetails[0][2]
+    self.assertEqual(preScore,9)
+    self.assertEqual(postScore,9)
 
     imcp.theName = 'Updated risk'
     imcp.theId = o.misuseCase().id()
