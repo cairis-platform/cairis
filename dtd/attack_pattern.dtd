@@ -54,7 +54,7 @@
 <!ATTLIST structure attack_obstacle CDATA #IMPLIED>
 <!ATTLIST structure exploit_obstacle CDATA #IMPLIED>
 
-<!ELEMENT participant (motive+,capability+)>
+<!ELEMENT participant (motive*,capability*)>
 <!ATTLIST participant name CDATA #REQUIRED>
 <!ELEMENT motive EMPTY>
 <!ATTLIST motive name CDATA #REQUIRED>
