@@ -277,11 +277,12 @@ class AttackPatternContentHandler(ContentHandler,EntityResolver):
 
       attackerNames = []
       for attackerName,attackerMotives,attackerCapabilities in self.theParticipants:
-        attackerRoles = self.dbProxy.dimensionRoles(self.dbProxy.getDimensionId(attackerName,'persona'),self.dbProxy.getDimensionId(self.theEnvironment,'environment'),'persona')
-        ep = AttackerEnvironmentProperties(self.theEnvironment,attackerRoles,attackerMotives,attackerCapabilities)
-        p = AttackerParameters(attackerName,'','',[],[ep])
-        p.isPersona = True
-        self.theAttackerParameters.append(p) 
+        if (self.dbProxy.existingObject(attackerName,'attacker') == -1):
+          attackerRoles = self.dbProxy.dimensionRoles(self.dbProxy.getDimensionId(attackerName,'persona'),self.dbProxy.getDimensionId(self.theEnvironment,'environment'),'persona')
+          ep = AttackerEnvironmentProperties(self.theEnvironment,attackerRoles,attackerMotives,attackerCapabilities)
+          p = AttackerParameters(attackerName,'','',[],[ep])
+          p.isPersona = True
+          self.theAttackerParameters.append(p) 
         attackerNames.append(attackerName)
   
       for tObs in self.theObstacles:
