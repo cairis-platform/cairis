@@ -3980,6 +3980,7 @@ INSERT INTO allowable_trace values(18,2);
 INSERT INTO allowable_trace values(0,0);
 INSERT INTO allowable_trace values(0,20);
 INSERT INTO allowable_trace values(21,18);
+INSERT INTO allowable_trace values(16,2);
 INSERT INTO requirement_type values(0,'Functional');
 INSERT INTO requirement_type values(1,'Data');
 INSERT INTO requirement_type values(2,'Look and Feel');
