@@ -178,11 +178,11 @@ class AssetModel:
           objtUrl = 'comment#' + assocRationale
           if (assocRationale not in self.nodeList):
             self.theGraph.add_node(pydot.Node(assocRationale,shape='note',margin=0,fontsize=fontSize,fontcolor='blue',color='blue',URL=objtUrl))
-          if ((assocRationale,headName) not in edgeList):
+          if (((assocRationale,headName) not in edgeList) and (headDim not in ['goalconcern','obstacleconcern','taskconcern','usecaseconcern'])):
             edge1 = pydot.Edge(assocRationale,headObjt,dir='none',fontsize=fontSize,color='blue',URL=objtUrl)
             self.theGraph.add_edge(edge1)
             edgeList.add((assocRationale,headName))
-          if ((assocRationale,tailName) not in edgeList):
+          if (((assocRationale,tailName) not in edgeList) and (headDim not in ['goalconcern','obstacleconcern','taskconcern','usecaseconcern'])):
             edge2 = pydot.Edge(assocRationale,tailObjt,dir='none',fontsize=fontSize,color='blue',URL=objtUrl)
             self.theGraph.add_edge(edge2)
             edgeList.add((assocRationale,tailName))
