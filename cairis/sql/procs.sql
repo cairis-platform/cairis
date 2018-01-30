@@ -4384,6 +4384,7 @@ begin
   delete from task_characteristic_requirement where reference_id in (select id from requirement_reference where requirement_id = reqId); 
   delete from requirement_reference where requirement_id = reqId;
   delete from requirement_usecase where requirement_id = reqId;
+  delete from requirement_role where requirement_id = reqId;
   delete from requirement where id = reqId;
 end
 //
