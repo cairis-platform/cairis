@@ -499,6 +499,9 @@ class MySQLDatabaseProxy:
       self.addDimensionEnvironment(assetId,'asset',environmentName)
       self.addAssetAssociations(assetId,assetName,environmentName,cProperties.associations())
       self.addSecurityProperties('asset',assetId,environmentName,cProperties.properties(),cProperties.rationale())
+    self.updateDatabase('call deleteWidowedConcerns(:name)',{'name':assetName},'MySQL error delete widowed concerns')
+    
+
 
   def addTemplateAssetProperties(self,taId,cProp,iProp,avProp,acProp,anProp,panProp,unlProp,unoProp,cRat,iRat,avRat,acRat,anRat,panRat,unlRat,unoRat):
     callTxt = 'call add_template_asset_properties(:ta,:cPr,:iPr,:avPr,:acPr,:anPr,:panPr,:unlPr,:unoPr,:cRa,:iRa,:avRa,:acRa,:anRa,:panRa,:unlRa,:unoRa)'

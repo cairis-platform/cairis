@@ -913,6 +913,7 @@ drop procedure if exists threatenedDatastores;
 drop procedure if exists threatenedProcesses;
 drop procedure if exists threatenedDataflows;
 drop procedure if exists defaultValue;
+drop procedure if exists deleteWidowedConcerns;
 
 delimiter //
 
@@ -5751,7 +5752,7 @@ begin
     union
     select -1,e.name,va.name,'asset',0,'Dependency','1','&lt;&lt;safeguards&gt;&gt;','','1','Association',0,'asset',ma.name,concat('Safeguards ',ma.name) rationale from asset ma, asset va, environment e,countermeasure_asset ca, countermeasure_vulnerability_target cvt, asset_vulnerability av where ma.id = ca.asset_id and ca.countermeasure_id = cvt.countermeasure_id and cvt.vulnerability_id = av.vulnerability_id and av.asset_id = va.id and cvt.environment_id = environmentId and av.environment_id = environmentId and av.environment_id = e.id
     union
-    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Association',0,'asset', a.name,'Used in task' rationale from persona p, asset a, environment e, task_asset ta, task_persona tp where p.id = tp.persona_id and tp.environment_id = environmentId and tp.task_id = ta.task_id and ta.environment_id = tp.environment_id and ta.asset_id = a.id and ta.environment_id = e.id
+    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Association',0,'asset', a.name,concat('Concerns task ',t.name) rationale from persona p, asset a, environment e, task_asset ta, task_persona tp, task t where p.id = tp.persona_id and tp.environment_id = environmentId and tp.task_id = ta.task_id and ta.environment_id = tp.environment_id and ta.asset_id = a.id and ta.environment_id = e.id and ta.task_id = t.id
     union
     select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,concat('Concerns goal ',g.name) rationale from goal_concernassociation ca, asset sa, multiplicity_type smt, asset ta, multiplicity_type tmt, environment e,goal g where ca.environment_id = environmentId and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id and ca.goal_id = g.id
     union
@@ -24011,6 +24012,26 @@ begin
   deallocate prepare stmt;
   set defVal = @defVal;
   select defVal;
+end
+//
+
+create procedure deleteWidowedConcerns(in assetName text)
+begin
+  declare assetId int;
+
+  select id into assetId from asset where name = assetName limit 1;
+
+  delete from classassociation where head_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
+  delete from classassociation where tail_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
+  delete from goal_concern where asset_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
+  delete from obstacle_concern where asset_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
+  delete from task_asset where asset_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
+  delete from usecase_asset where asset_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
+  delete from goal_concernassociation where source_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
+  delete from goal_concernassociation where target_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
+  delete from task_concernassociation where source_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
+  delete from task_concernassociation where target_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
+
 end
 //
 
