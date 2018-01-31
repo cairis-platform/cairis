@@ -260,7 +260,7 @@ function addObstacleEnvironment() {
 };
 
 function clearObstacleEnvironmentPanel() {
-  $('#theCategory').val('');
+  $('#theCategory').val('Threat');
   $('#theDefinition').val('');
   $("#editObstaclesGoalsTable").find("tbody").empty();
   $("#editObstaclesSubGoalsTable").find("tbody").empty();

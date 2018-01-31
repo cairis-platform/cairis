@@ -105,7 +105,7 @@ mainContent.on('click', ".goalEnvProperties", function () {
   var goal = JSON.parse($.session.get("Goal"));
   var name = $(this).text();
   $.session.set("GoalEnvName", name);
-  emptyGoalEnvTables();
+  clearGoalEnvironmentPanel();
 
   $.each(goal.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == name){
@@ -113,7 +113,6 @@ mainContent.on('click', ".goalEnvProperties", function () {
       $("#theIssue").val(env.theIssue);
       $("#theDefinition").val(env.theDefinition);
       $("#theFitCriterion").val(env.theFitCriterion);
-      //theDef fitcrit issue
 
       $.each(env.theGoalRefinements, function (index, goal) {
         appendGoalGoal(goal);
@@ -429,6 +428,8 @@ $(document).on('click', '#addNewGoal', function () {
   refreshObjectBreadCrumb('New Goal');
   fillGoalOptionMenu(null, function () {
     $("#updateGoalButton").text("Create");
+    clearGoalEnvironmentPanel();
+    $("#editGoalOptionsForm").validator();
     $("#editGoalOptionsForm").addClass('new');
     $("#goalProperties").hide();
     $.session.set("Goal", JSON.stringify(jQuery.extend(true, {},goalDefault )));
@@ -668,7 +669,7 @@ function fillGoalEditGoal(theSettableValue,theSettableType,refinement,target,rat
   },['All']); 
 }
 
-function emptyGoalEnvTables(){
+function clearGoalEnvironmentPanel(){
   $("#editgoalsGoalsTable").find("tbody").empty();
   $("#editgoalsSubgoalsTable").find("tbody").empty();
   $("#editgoalsConcernTable").find("tbody").empty();
