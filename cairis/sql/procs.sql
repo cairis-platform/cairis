@@ -13422,7 +13422,7 @@ begin
   declare crCount int default 0;
   declare crExcerpt varchar(2000);
   declare tcId int;
-  declare taskName varchar(50);
+  declare taskName varchar(200);
   declare bvName varchar(50);
   declare modQual varchar(50);
   declare tcDesc varchar(2000);
@@ -13591,7 +13591,7 @@ begin
   declare gwrRef varchar(200);
   declare gwrConcept varchar(50);
   declare taskId int;
-  declare taskName varchar(50);
+  declare taskName varchar(200);
   declare taskCode varchar(100);
   declare taskAuthor varchar(255);
   declare taskObjective varchar(255);
