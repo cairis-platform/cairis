@@ -3323,7 +3323,7 @@ begin
   declare goalId int;
   declare catTypeId int;
   declare reqLabel int;
-  declare shortCode varchar(50);
+  declare shortCode varchar(100);
 
   select id into envId from environment where name = envName;
   select id into catTypeId from obstacle_category_type where name = catName;
@@ -4251,7 +4251,7 @@ create procedure addCountermeasureRequirement(in cmId int,in viewLabel text, in 
 begin
   declare reqId int;
   declare environmentId int;
-  declare shortCode varchar(50);
+  declare shortCode varchar(100);
   declare reqLabel int;
 
   select id into environmentId from environment where name = environmentName limit 1;
@@ -4264,7 +4264,7 @@ create procedure updateCountermeasureRequirement(in cmId int,in viewLabel text, 
 begin
   declare reqId int;
   declare environmentId int;
-  declare shortCode varchar(50);
+  declare shortCode varchar(100);
   declare reqLabel int;
 
   select id into environmentId from environment where name = environmentName limit 1;
@@ -5119,7 +5119,7 @@ begin
   declare fromIdSql varchar(4000);
   declare toIdSql varchar(4000);
   declare traceSql varchar(4000);
-  declare shortCode varchar(50);
+  declare shortCode varchar(100);
   declare reqLabel int;
 
   if fromObjt = 'requirement'
@@ -7244,7 +7244,7 @@ begin
   declare envId int;
   declare reqId int;
   declare rationaleText varchar(1000);
-  declare shortCode varchar(50);
+  declare shortCode varchar(100);
   declare reqLabel int;
 
   set rationaleText = concat('Role ',roleName,' is responsible for Countermeasure ',cmName);
@@ -7262,7 +7262,7 @@ begin
   declare envId int;
   declare reqId int;
   declare rationaleText varchar(1000);
-  declare shortCode varchar(50);
+  declare shortCode varchar(100);
   declare reqLabel int;
 
   set rationaleText = concat('Role ',roleName,' is responsible for Countermeasure ',cmName);
@@ -8188,7 +8188,7 @@ end
 
 create procedure dimensionId(in dimText text, in dimTable text)
 begin
-  declare shortCode varchar(50);
+  declare shortCode varchar(100);
   declare reqLabel int;
   declare objtId int;
   declare dimSql varchar(4000);
@@ -11143,7 +11143,7 @@ end
 create procedure addConceptReference(in refId int, in refName text, in dimName text, in objtName text, in cDesc text)
 begin
   declare objtId int;
-  declare shortCode varchar(50);
+  declare shortCode varchar(100);
   declare reqLabel int;
 
   if dimName = 'asset'
@@ -11224,7 +11224,7 @@ end
 create procedure updateConceptReference(in refId int, in refName text, in dimName text, in objtName text, in cDesc text)
 begin
   declare objtId int;
-  declare shortCode varchar(50);
+  declare shortCode varchar(100);
   declare reqLabel int;
 
   if dimName = 'asset'
@@ -11855,7 +11855,7 @@ begin
   declare reqId int;
   declare reqLabel int;
   declare assetId int;
-  declare shortCode varchar(10) default 'INVALID';
+  declare shortCode varchar(100) default 'INVALID';
 
   select id into assetId from asset where name = assetName;
   select short_code into shortCode from asset where id = assetId;
@@ -14113,7 +14113,7 @@ begin
   declare revRemarks varchar(1000);
   declare envId int;
   declare envName varchar(50);
-  declare envShortCode varchar(10);
+  declare envShortCode varchar(100);
   declare envDesc varchar(4000);
   declare duplicatePolicy varchar(50);
   declare overridingEnvName varchar(50);
@@ -20293,7 +20293,7 @@ end
 create procedure importTemplateAsset(in assetName text, inout assetId int)
 begin
   declare taId int;
-  declare shortCode varchar(20);
+  declare shortCode varchar(100);
   declare assetDesc varchar(1000);
   declare assetSig varchar(1000);
   declare assetType varchar(50);
@@ -22385,7 +22385,7 @@ returns int
 deterministic 
 begin
     declare reqLabel int;
-    declare shortCode varchar(50);
+    declare shortCode varchar(100);
     declare reqId int;
 
     select o.id into reqId from requirement o where o.name = reqCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
@@ -22836,7 +22836,7 @@ create procedure getRequirement(in reqName text)
 begin
   declare reqLabel int;
   declare reqId int;
-  declare shortCode varchar(10);
+  declare shortCode varchar(100);
   declare dimId int;
 
   select o.id into reqId from requirement o where o.name = reqName and o.version = (select max(i.version) from requirement i where i.id = o.id);
