@@ -59,12 +59,7 @@ $ ./quick_setup.py
 
 ![fig:quick_setup_db]({{ site.baseurl }}/images/quick_setup_db.jpg)
 
-You can accept many of these defaults, except for the database root password.  When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool and setup the necessary environment variables. The form below will then be displayed.
-
-![fig:quick_setup_user]({{ site.baseurl }}/images/quick_setup_user.jpg)
-
-You will need to supply a username and password here. When you select `Ok`, the script will add a user to the CAIRIS database.
-
+You can accept many of these defaults, except for the database root password, an initial username and password which need to be supplied.  When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool and setup the necessary environment variables.
 
 * Reload your .bashrc file i.e.
 
