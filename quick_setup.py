@@ -34,7 +34,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     self.findRootDir()
     self.pathName = os.path.realpath(__file__)
     self.pathName = self.pathName.replace("quick_setup.py", "")
-    self.name = "Configure CAIRIS Database"
+    self.name = "Configure CAIRIS database and initial account"
     self.theHost = self.add(np.TitleText, name = "Database host:", value = "localhost")
     self.thePort = self.add(np.TitleText, name = "Database port:", value = "3306")
     self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = "")
@@ -46,6 +46,9 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     self.theLogLevel = self.add(np.TitleText,name = "Log level:", value = "warning");
     self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = self.pathName + "cairis/web")
     self.theUploadDir = self.add(np.TitleText,name = "Upload directory:", value = "/tmp")
+
+    self.theUsername = self.add(np.TitleText, name = "Initial Username:", value = "")
+    self.thePassword = self.add(np.TitlePassword, name = "Initial Password:", value = "")
 
     self.theSecretKey = os.urandom(16).encode('hex')
     self.theSalt = os.urandom(16).encode('hex')
@@ -59,6 +62,8 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
 
   def on_ok(self):
     try:
+      if (len(self.theUsername.value) > 255):
+        raise ARMException("Username cannot be longer than 255 characters")
       self.createUserDatabase()
       self.createCairisCnf()
       os.environ["CAIRIS_CFG"] = str(self.theFileName.value)
@@ -68,9 +73,20 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
       f.write("export CAIRIS_CFG="+str(self.theFileName.value)+"\n")
       f.write("export PYTHONPATH=${PYTHONPATH}:"+self.pathName+"\n")
       f.close()
-      self.parentApp.setNextForm("NEXT")
+
+      from cairis.bin.add_cairis_user import user_datastore, db
+      db.create_all()
+      user_datastore.create_user(email=self.theUsername.value, password=self.thePassword.value)
+      db.session.commit()
+      createDatabaseAccount(self.theRootPassword.value,self.theHost.value,self.thePort.value,self.theUsername.value,'')
+      createDatabaseAndPrivileges(self.theRootPassword.value,self.theHost.value,self.thePort.value,self.theUsername.value,'',self.theUsername.value + '_default')
+      createDatabaseSchema(self.theRootDir.value,self.theHost.value,self.thePort.value,self.theUsername.value,'',self.theUsername.value + '_default')
+
+      self.parentApp.setNextForm(None)
     except ARMException as e:
       np.notify_confirm(str(e), title = 'Error')
+    except SQLAlchemyError as e:
+      np.notify_confirm('Error adding CAIRIS user: ' + str(e), title = 'Error')
 
   def on_cancel(self):
     self.parentApp.setNextForm(None)
@@ -144,44 +160,11 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     f.close()
     self.parentApp.setNextForm(None)
 
-class CAIRISUserConfigurationForm(np.ActionForm):
 
-
-  def create(self):
-    self.pathName = os.path.realpath(__file__)
-    self.pathName = self.pathName.replace("quick_setup.py", "")
-    self.name = "Add CAIRIS User"
-    self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = "my-secret-pw")
-    self.theHost = self.add(np.TitleText, name = "Database host:", value = "localhost")
-    self.thePort = self.add(np.TitleText, name = "Database port:", value = "3306")
-    self.theUsername = self.add(np.TitleText, name = "Username:", value = "")
-    self.thePassword = self.add(np.TitlePassword, name = "Password:", value = "")
-    self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = self.pathName + "cairis")
-
-  def on_ok(self):
-    try:
-      if (len(self.theUsername.value) > 255):
-        raise ARMException("Username cannot be longer than 255 characters")
-      from cairis.bin.add_cairis_user import user_datastore, db
-      db.create_all()
-      user_datastore.create_user(email=self.theUsername.value, password=self.thePassword.value)
-      db.session.commit()
-      createDatabaseAccount(self.theRootPassword.value,self.theHost.value,self.thePort.value,self.theUsername.value,'')
-      createDatabaseAndPrivileges(self.theRootPassword.value,self.theHost.value,self.thePort.value,self.theUsername.value,'',self.theUsername.value + '_default')
-      createDatabaseSchema(self.theRootDir.value,self.theHost.value,self.thePort.value,self.theUsername.value,'',self.theUsername.value + '_default')
-      self.parentApp.setNextForm(None)
-    except ARMException as e:
-      np.notify_confirm('Error adding CAIRIS user: ' + str(e), title = 'Error')
-    except SQLAlchemyError as e:
-      np.notify_confirm('Error adding CAIRIS user: ' + str(e), title = 'Error')
 	
-  def on_cancel(self):
-    self.parentApp.setNextForm(None)
-
 class CAIRISConfigurationApp(np.NPSAppManaged):
   def onStart(self):
     self.addForm("MAIN",CAIRISDatabaseConfigurationForm)
-    self.addForm("NEXT",CAIRISUserConfigurationForm)
 
 
 def main(args=None):
