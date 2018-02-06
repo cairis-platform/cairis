@@ -35,6 +35,7 @@ from cairis.core.MitigateEnvironmentProperties import MitigateEnvironmentPropert
 from cairis.core.MisuseCase import MisuseCase
 from cairis.core.ClassAssociationParameters import ClassAssociationParameters
 from cairis.core.Borg import Borg
+from xml.sax.saxutils import unescape
 
 __author__ = 'Shamal Faily'
 
@@ -379,7 +380,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'role':
-      p = RoleParameters(self.theName,self.theType,self.theShortCode,self.theDescription,[])
+      p = RoleParameters(self.theName,self.theType,unescape(self.theShortCode),unescape(self.theDescription),[])
       self.theRoleParameters.append(p)
       self.resetRoleAttributes()
     elif name == 'asset':
@@ -415,17 +416,17 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
         unoProperty,unoRationale = spDict['unobservability']
         ep = AssetEnvironmentProperties(envName,[cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty],[cRationale,iRationale,avRationale,acRationale,anRationale,panRationale,unlRationale,unoRationale])
         self.theEnvironmentProperties.append(ep)
-      p = AssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.isCritical,self.theCriticalRationale,self.theTags,self.theInterfaces,self.theEnvironmentProperties)
+      p = AssetParameters(self.theName,unescape(self.theShortCode),unescape(self.theDescription),unescape(self.theSignificance),self.theAssetType,self.isCritical,self.theCriticalRationale,self.theTags,self.theInterfaces,self.theEnvironmentProperties)
       self.theAssetParameters.append(p)
       self.resetAssetAttributes()
     elif name == 'security_property':
-      self.theSecurityProperties.append((self.theEnvironmentName,self.thePropertyName,self.thePropertyValue,self.theRationale))
+      self.theSecurityProperties.append((self.theEnvironmentName,self.thePropertyName,self.thePropertyValue,unescape(self.theRationale)))
       self.resetSecurityPropertyAttributes() 
     elif name == 'threatened_property':
-      self.theSpDict[self.thePropertyName] = (self.thePropertyValue,self.theRationale)
+      self.theSpDict[self.thePropertyName] = (self.thePropertyValue,unescape(self.theRationale))
       self.resetThreatenedPropertyAttributes()
     elif name == 'vulnerability':
-      p = VulnerabilityParameters(self.theName,self.theDescription,self.theType,self.theTags,self.theEnvironmentProperties)
+      p = VulnerabilityParameters(self.theName,unescape(self.theDescription),self.theType,self.theTags,self.theEnvironmentProperties)
       self.theVulnerabilities.append(p)
       self.resetVulnerabilityAttributes()
     elif name == 'vulnerability_environment':
@@ -433,7 +434,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.theEnvironmentProperties.append(p)
       self.resetVulnerabilityEnvironmentAttributes()
     elif name == 'attacker':
-      p = AttackerParameters(self.theName,self.theDescription,self.theImage,self.theTags,self.theEnvironmentProperties)
+      p = AttackerParameters(self.theName,unescape(self.theDescription),self.theImage,self.theTags,self.theEnvironmentProperties)
       self.theAttackerParameters.append(p)
       self.resetAttackerAttributes()
     elif name == 'attacker_environment':
@@ -441,7 +442,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.theEnvironmentProperties.append(p)
       self.resetAttackerEnvironmentAttributes()
     elif name == 'threat':
-      p = ThreatParameters(self.theName,self.theType,self.theMethod,self.theTags,self.theEnvironmentProperties)
+      p = ThreatParameters(self.theName,self.theType,unescape(self.theMethod),self.theTags,self.theEnvironmentProperties)
       self.theThreats.append(p)
       self.resetThreatAttributes()
     elif name == 'threat_environment':
@@ -462,7 +463,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.theRisks.append(p)
       self.resetRiskAttributes()
     elif name == 'misusecase':
-      p = MisuseCaseEnvironmentProperties(self.theEnvironmentName,self.theDescription)
+      p = MisuseCaseEnvironmentProperties(self.theEnvironmentName,unescape(self.theDescription))
       self.theEnvironmentProperties.append(p)
       self.resetRiskEnvironmentAttributes()
     elif name == 'response':
@@ -470,11 +471,11 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.theResponses.append(p)
       self.resetResponseAttributes()
     elif name == 'accept_environment':
-      p = AcceptEnvironmentProperties(self.theEnvironmentName,self.theCost,self.theDescription)
+      p = AcceptEnvironmentProperties(self.theEnvironmentName,self.theCost,unescape(self.theDescription))
       self.theEnvironmentProperties.append(p)
       self.resetResponseEnvironmentAttributes()
     elif name == 'transfer_environment':
-      p = TransferEnvironmentProperties(self.theEnvironmentName,self.theDescription,self.theResponseRoles)
+      p = TransferEnvironmentProperties(self.theEnvironmentName,unescape(self.theDescription),self.theResponseRoles)
       self.theEnvironmentProperties.append(p)
       self.resetResponseEnvironmentAttributes()
     elif name == 'deter_environment':
@@ -494,7 +495,7 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.theEnvironmentProperties.append(p)
       self.resetResponseEnvironmentAttributes()
     elif name == 'asset_association':
-      p = ClassAssociationParameters(self.theEnvironmentName,self.theHeadName,'asset',self.theHeadNav,self.theHeadAdornment,self.theHeadNry,self.theHeadRole,self.theTailRole,self.theTailNry,self.theTailAdornment,self.theTailNav,'asset',self.theTailName,self.theRationale)
+      p = ClassAssociationParameters(self.theEnvironmentName,self.theHeadName,'asset',self.theHeadNav,self.theHeadAdornment,self.theHeadNry,self.theHeadRole,self.theTailRole,self.theTailNry,self.theTailAdornment,self.theTailNav,'asset',self.theTailName,unescape(self.theRationale))
       self.theAssociations.append(p)
       self.resetAssociationAttributes()
     elif name == 'description':

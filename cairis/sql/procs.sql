@@ -914,6 +914,7 @@ drop procedure if exists threatenedProcesses;
 drop procedure if exists threatenedDataflows;
 drop procedure if exists defaultValue;
 drop procedure if exists deleteWidowedConcerns;
+drop function if exists xmlEscaped;
 
 delimiter //
 
@@ -13431,38 +13432,38 @@ begin
   declare gwrRef varchar(200);
   declare gwrConcept varchar(50);
   declare done int default 0;
-  declare crCursor cursor for select name,dimension_name,object_name,description from concept_reference; 
-  declare tcCursor cursor for select tc.id,t.name,tc.qualifier,tc.description from task_characteristic tc, task t where tc.task_id = t.id order by 2;
+  declare crCursor cursor for select name,dimension_name,object_name,xmlEscaped(description) from concept_reference; 
+  declare tcCursor cursor for select tc.id,t.name,tc.qualifier,xmlEscaped(tc.description) from task_characteristic tc, task t where tc.task_id = t.id order by 2;
   declare taskGroundsCursor cursor for
-    select 'document',dr.name,'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 0
+    select 'document',xmlEscaped(dr.name),'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 0
     union
-    select 'persona',cr.name,c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 0
+    select 'persona',xmlEscaped(cr.name),c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 0
     union
-    select 'usecase',cr.name,c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 0
+    select 'usecase',xmlEscaped(cr.name),c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 0
     union
-    select 'requirement',cr.name,concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 0 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    select 'requirement',xmlEscaped(cr.name),concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 0 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
     union
-    select 'requirement',cr.name,concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 0 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
+    select 'requirement',xmlEscaped(cr.name),concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 0 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
   declare taskWarrantCursor cursor for
-    select 'document',dr.name,'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 1
+    select 'document',xmlEscaped(dr.name),'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 1
     union
-    select 'persona',cr.name,c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 1
+    select 'persona',xmlEscaped(cr.name),c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 1
     union
-    select 'usecase',cr.name,c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 1
+    select 'usecase',xmlEscaped(cr.name),c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 1
     union
-    select 'requirement',cr.name,concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 1 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    select 'requirement',xmlEscaped(cr.name),concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 1 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
     union
-    select 'requirement',cr.name,concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 1 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
+    select 'requirement',xmlEscaped(cr.name),concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 1 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
   declare taskRebuttalCursor cursor for
-    select 'document',dr.name,'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 2
+    select 'document',xmlEscaped(dr.name),'' from task_characteristic_document pc, document_reference dr where pc.characteristic_id = tcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 2
     union
-    select 'persona',cr.name,c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 2
+    select 'persona',xmlEscaped(cr.name),c.name from task_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 2
     union
-    select 'usecase',cr.name,c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 2
+    select 'usecase',xmlEscaped(cr.name),c.name from task_characteristic_usecase pc, usecase_reference cr, usecase c where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.usecase_id = c.id and pc.characteristic_reference_type_id = 2
     union
-    select 'requirement',cr.name,concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 2 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    select 'requirement',xmlEscaped(cr.name),concat(a.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 2 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
     union
-    select 'requirement',cr.name,concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 2 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
+    select 'requirement',xmlEscaped(cr.name),concat(e.short_code,'-',c.label) from task_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = tcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 2 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id); 
   declare continue handler for not found set done = 1;
 
   if includeHeader = 0
@@ -13610,12 +13611,12 @@ begin
 
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">\n\n<usability>\n';
   declare done int default 0;
-  declare personaCursor cursor for select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
+  declare personaCursor cursor for select p.id,p.name,xmlEscaped(p.activities),xmlEscaped(p.attitudes),xmlEscaped(p.aptitudes),xmlEscaped(p.motivations),xmlEscaped(p.skills),xmlEscaped(p.intrinsic),xmlEscaped(p.contextual),p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
   declare personaEnvCursor cursor for select ep.environment_id,e.name from environment_persona ep, environment e where ep.persona_id = personaId and ep.environment_id = e.id;
   declare personaRolesCursor cursor for select r.name from persona_role sr, role r where sr.persona_id = personaId and sr.environment_id = envId and sr.role_id = r.id;
-  declare edCursor cursor for select name,version,publication_date,authors,description from external_document;
-  declare drCursor cursor for select distinct dr.name,ed.name,dr.contributor,dr.excerpt from document_reference dr, external_document ed where dr.document_id = ed.id;
-  declare pcCursor cursor for select pc.id,p.name,bv.name,pc.qualifier,pc.description from persona_characteristic pc, persona p, behavioural_variable bv where pc.persona_id = p.id and pc.variable_id = bv.id order by 2,3;
+  declare edCursor cursor for select name,version,publication_date,authors,xmlEscaped(description) from external_document;
+  declare drCursor cursor for select distinct dr.name,ed.name,dr.contributor,xmlEscaped(dr.excerpt) from document_reference dr, external_document ed where dr.document_id = ed.id;
+  declare pcCursor cursor for select pc.id,p.name,bv.name,pc.qualifier,xmlEscaped(pc.description) from persona_characteristic pc, persona p, behavioural_variable bv where pc.persona_id = p.id and pc.variable_id = bv.id order by 2,3;
 
   declare groundsCursor cursor for
     select 'document',dr.name,'' from persona_characteristic_document pc, document_reference dr where pc.characteristic_id = pcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 0
@@ -13725,7 +13726,7 @@ begin
     select 'threat',cr.name,c.name from persona_characteristic_threat pc, threat_reference cr, threat c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.threat_id = c.id and pc.characteristic_reference_type_id = 2
     union
     select 'vulnerability',cr.name,c.name from persona_characteristic_vulnerability pc, vulnerability_reference cr, vulnerability c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.vulnerability_id = c.id and pc.characteristic_reference_type_id = 2;
-  declare taskCursor cursor for select id,name,short_code,author,objective,assumption_id from task;
+  declare taskCursor cursor for select id,name,xmlEscaped(short_code),author,xmlEscaped(objective),assumption_id from task;
   declare taskEnvCursor cursor for select et.environment_id,e.name from environment_task et, environment e where et.task_id = taskId and et.environment_id = e.id;  
   declare taskPersonaCursor cursor for select p.name,duv.name,fv.name,dev.name,gv.name from persona p, task_persona tp, security_property_value duv, security_property_value fv, security_property_value dev, security_property_value gv where tp.task_id = taskId and tp.environment_id = envId and tp.persona_id = p.id and tp.duration_id = duv.id and tp.frequency_id = fv.id and tp.demands_id = dev.id and tp.goalsupport_id = gv.id;
   declare taskConcernCursor cursor for select a.name from task_asset tc, asset a where tc.task_id = taskId and tc.environment_id = envId and tc.asset_id = a.id;
@@ -13889,7 +13890,7 @@ begin
       then
         leave taskEnv_loop;
       end if;
-      set buf = concat(buf,'  <task_environment name=\"',envName,'\" >\n    <dependencies>',taskDependencies(taskId,envId),'</dependencies>\n');
+      set buf = concat(buf,'  <task_environment name=\"',envName,'\" >\n    <dependencies>',xmlEscaped(taskDependencies(taskId,envId)),'</dependencies>\n');
 
       open taskPersonaCursor;
       taskPersona_loop: loop
@@ -13915,9 +13916,9 @@ begin
       close taskConcernCursor;
       set done = 0;
 
-      set buf = concat(buf,'    <narrative>',taskNarrative(taskId,envId),'</narrative>\n');
-      set buf = concat(buf,'    <consequences>',taskConsequences(taskId,envId),'</consequences>\n');
-      set buf = concat(buf,'    <benefits>',taskBenefits(taskId,envId),'</benefits>\n');
+      set buf = concat(buf,'    <narrative>',xmlEscaped(taskNarrative(taskId,envId)),'</narrative>\n');
+      set buf = concat(buf,'    <consequences>',xmlEscaped(taskConsequences(taskId,envId)),'</consequences>\n');
+      set buf = concat(buf,'    <benefits>',xmlEscaped(taskBenefits(taskId,envId)),'</benefits>\n');
 
       open taskConcernAssocCursor;
       taskConcernAssoc_loop: loop
@@ -14104,13 +14105,13 @@ begin
   declare scope varchar(4000) default '';
   declare ncName varchar(100);
   declare ncEntry varchar(4000);
-  declare firstName varchar(100);
-  declare surName varchar(100);
-  declare affil varchar(100);
-  declare projRole varchar(50);
+  declare firstName varchar(100) default '';
+  declare surName varchar(100) default '';
+  declare affil varchar(100) default '';
+  declare projRole varchar(50) default '';
   declare revNo int;
-  declare revDate varchar(50);
-  declare revRemarks varchar(1000);
+  declare revDate varchar(50) default '';
+  declare revRemarks varchar(1000) default 'None';
   declare envId int;
   declare envName varchar(50);
   declare envShortCode varchar(100);
@@ -14118,27 +14119,27 @@ begin
   declare duplicatePolicy varchar(50);
   declare overridingEnvName varchar(50);
   declare subEnvName varchar(50);
-  declare noneValue varchar(4000);
-  declare lowValue varchar(4000);
-  declare medValue varchar(4000);
-  declare highValue varchar(4000);
+  declare noneValue varchar(4000) default '';
+  declare lowValue varchar(4000) default '';
+  declare medValue varchar(4000) default '';
+  declare highValue varchar(4000) default '';
   declare ncCount int default 0;
   declare contributorCount int default 0;
   declare revCount int default 0;
   declare compositeCount int default 0;
   declare done int default 0;
-  declare ncCursor cursor for select name,description from project_dictionary order by name;
+  declare ncCursor cursor for select name,xmlEscaped(description) from project_dictionary order by name;
   declare contribCursor cursor for select * from project_contributor order by 2;
-  declare revCursor cursor for select revision_no,revision_date,revision_remarks from project_revision order by 1;
-  declare envCursor cursor for select id,name,short_code,description from environment;
+  declare revCursor cursor for select revision_no,revision_date,xmlEscaped(revision_remarks) from project_revision order by 1;
+  declare envCursor cursor for select id,name,xmlEscaped(short_code),xmlEscaped(description) from environment;
   declare ceCursor cursor for select e.name from composite_environment ce, environment e where ce.composite_environment_id = envId and ce.environment_id = e.id;
   declare continue handler for not found set done = 1;
 
-  select description into projName from project_setting where name = 'Project Name';
-  select description into background from project_setting where name = 'Project Background';
-  select description into strategicGoals from project_setting where name = 'Project Goals';
+  select xmlEscaped(ifnull(description,'')) into projName from project_setting where name = 'Project Name';
+  select xmlEscaped(ifnull(description,'')) into background from project_setting where name = 'Project Background';
+  select xmlEscaped(ifnull(description,'')) into strategicGoals from project_setting where name = 'Project Goals';
   select description into richPic from project_setting where name = 'Rich Picture';
-  select description into scope from project_setting where name = 'Project Scope';
+  select xmlEscaped(ifnull(description,'')) into scope from project_setting where name = 'Project Scope';
 
   if includeHeader = 0
   then
@@ -14165,6 +14166,7 @@ begin
   end if;
   set done = 0;
 
+  
   select count(affiliation) into contributorCount from project_contributor limit 1;
   if contributorCount > 0
   then 
@@ -14176,6 +14178,7 @@ begin
       then
         leave contrib_loop;
       end if;
+
       set buf = concat(buf,'    <contributor first_name=\"',firstName,'\" surname=\"',surName,'\" affiliation=\"',affil,'\" role=\"',projRole,'\" />\n');
     end loop contrib_loop;
     close contribCursor;
@@ -14211,22 +14214,22 @@ begin
     end if;
     set buf = concat(buf,'<environment name=\"',envName,'\" short_code=\"',envShortCode,'\" >\n  <definition>',envDesc,'</definition>\n');
 
-    select description into noneValue from asset_value where id = 0 and environment_id = envId;
+    select xmlEscaped(description) into noneValue from asset_value where id = 0 and environment_id = envId;
     if isnull(noneValue)
     then
       set noneValue = 'None';
     end if;
-    select description into lowValue from asset_value where id = 1 and environment_id = envId;
+    select xmlEscaped(description) into lowValue from asset_value where id = 1 and environment_id = envId;
     if isnull(lowValue)
     then
       set lowValue = 'None';
     end if;
-    select description into medValue from asset_value where id = 2 and environment_id = envId;
+    select xmlEscaped(description) into medValue from asset_value where id = 2 and environment_id = envId;
     if isnull(medValue)
     then
       set medValue = 'None';
     end if;
-    select description into highValue from asset_value where id = 3 and environment_id = envId;
+    select xmlEscaped(description) into highValue from asset_value where id = 3 and environment_id = envId;
     if isnull(highValue)
     then
       set highValue = 'None';
@@ -17974,8 +17977,8 @@ begin
   declare vtCount int default 0;
   declare done int default 0;
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE tvtypes PUBLIC "-//CAIRIS//DTD TVTYPES 1.0//EN" "http://cairis.org/dtd/tvtypes.dtd">\n\n<tvtypes>\n';
-  declare vtCursor cursor for select name,description from vulnerability_type order by 1;
-  declare ttCursor cursor for select name,description from threat_type order by 1;
+  declare vtCursor cursor for select xmlEscaped(name),xmlEscaped(description) from vulnerability_type order by 1;
+  declare ttCursor cursor for select xmlEscaped(name),xmlEscaped(description) from threat_type order by 1;
   declare continue handler for not found set done = 1;
 
   if includeHeader = 0
@@ -18024,11 +18027,11 @@ begin
   declare lvCount int default 0;
   declare done int default 0;
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE domainvalues PUBLIC "-//CAIRIS//DTD DOMAINVALUES 1.0//EN" "http://cairis.org/dtd/domainvalues.dtd">\n\n<domainvalues>\n';
-  declare tvCursor cursor for select name,description from threat_value order by id;
-  declare rvCursor cursor for select name,description from risk_class order by id;
-  declare cvCursor cursor for select name,description from countermeasure_value order by id;
-  declare svCursor cursor for select name,description from severity order by id;
-  declare lvCursor cursor for select name,description from likelihood order by id;
+  declare tvCursor cursor for select xmlEscaped(name),xmlEscaped(description) from threat_value order by id;
+  declare rvCursor cursor for select xmlEscaped(name),xmlEscaped(description) from risk_class order by id;
+  declare cvCursor cursor for select xmlEscaped(name),xmlEscaped(description) from countermeasure_value order by id;
+  declare svCursor cursor for select xmlEscaped(name),xmlEscaped(description) from severity order by id;
+  declare lvCursor cursor for select xmlEscaped(name),xmlEscaped(description) from likelihood order by id;
   declare continue handler for not found set done = 1;
 
   if includeHeader = 0
@@ -24031,7 +24034,14 @@ begin
   delete from goal_concernassociation where target_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
   delete from task_concernassociation where source_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
   delete from task_concernassociation where target_id = assetId and environment_id not in (select environment_id from environment_asset where asset_id = assetId);
+end
+//
 
+create function xmlEscaped(buf text) 
+returns text
+deterministic 
+begin
+  return replace(replace(replace(replace(buf,'&','&amp;'),'>','&gt;'),'<','&lt;'),'"','&quot;');
 end
 //
 

@@ -24,12 +24,14 @@ def main(args=None):
   import cairis.core.BorgFactory
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Model Export')
   parser.add_argument('outputFile',help='output file name')
+  parser.add_argument('--user',dest='userName',help='user name', default='cairis_test')
+  parser.add_argument('--database',dest='dbName',help='database name',default='cairis_test')
   parser.add_argument('--type',dest='modelFormat',help='model type to export.  One of all, requirements, scenarios, usecases, architecture, attackpatterns or GRL')
   parser.add_argument('--persona',nargs='+',help='Persona name or ALL (relevant for GRL export only)')
   parser.add_argument('--task',nargs='+',help='Task name or ALL (relevant for GRL export only)')
   parser.add_argument('--environment',dest='envName',help='Environment name (relevant for GRL export only)')
   args = parser.parse_args() 
-  cairis.core.BorgFactory.initialise()
+  cairis.core.BorgFactory.initialise(user=args.userName,db=args.dbName)
   file_export(args.modelFormat,args.outputFile,args.persona,args.task,args.envName)
 
 def file_export(modelFormat = 'all', outputFile = None, persona = None, task = None, envName = None, session_id = None):

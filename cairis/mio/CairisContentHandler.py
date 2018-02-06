@@ -20,6 +20,8 @@ from xml.sax.handler import ContentHandler,EntityResolver
 from cairis.core.EnvironmentParameters import EnvironmentParameters
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 from cairis.core.Borg import Borg
+from xml.sax.saxutils import unescape
+
 
 __author__ = 'Shamal Faily'
 
@@ -157,31 +159,31 @@ class CairisContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'entry':
-      self.theNamingConventions.append((self.theCurrentNameEntry,self.theDefinition))
+      self.theNamingConventions.append((unescape(self.theCurrentNameEntry),unescape(self.theDefinition)))
     elif name == 'revision':
-      self.theRevisions.append((self.theCurrentRevNo,self.theCurrentRevDate,self.theRemarks))
+      self.theRevisions.append((self.theCurrentRevNo,unescape(self.theCurrentRevDate),unescape(self.theRemarks)))
     elif name == 'project_settings':
-      self.theProjectSettings = (self.theName,self.theBackground,self.theStrategicGoals,self.theScope,self.theNamingConventions,self.theContributors,self.theRevisions,self.theRichPicture)
+      self.theProjectSettings = (unescape(self.theName),unescape(self.theBackground),unescape(self.theStrategicGoals),unescape(self.theScope),self.theNamingConventions,self.theContributors,self.theRevisions,self.theRichPicture)
     elif name == 'asset_values':
-      nv = ValueTypeParameters('None',self.theNoneValue,'asset_value',self.theName)
+      nv = ValueTypeParameters('None',unescape(self.theNoneValue),'asset_value',unescape(self.theName))
       nv.setId(0)
       self.theAssetValues.append(nv)
 
-      lv = ValueTypeParameters('Low',self.theLowValue,'asset_value',self.theName)
+      lv = ValueTypeParameters('Low',unescape(self.theLowValue),'asset_value',unescape(self.theName))
       lv.setId(1)
       self.theAssetValues.append(lv)
 
-      mv = ValueTypeParameters('Medium',self.theMedValue,'asset_value',self.theName)
+      mv = ValueTypeParameters('Medium',unescape(self.theMedValue),'asset_value',unescape(self.theName))
       mv.setId(2)
       self.theAssetValues.append(mv)
 
-      hv = ValueTypeParameters('High',self.theHighValue,'asset_value',self.theName)
+      hv = ValueTypeParameters('High',unescape(self.theHighValue),'asset_value',unescape(self.theName))
       hv.setId(3)
       self.theAssetValues.append(hv)
 
       self.resetAssetValues()
     elif name == 'environment':
-      p = EnvironmentParameters(self.theName,self.theShortCode,self.theDefinition,self.theCompositeEnvironments,self.theDuplicateProperty,self.theOverridingEnvironment)
+      p = EnvironmentParameters(unescape(self.theName),unescape(self.theShortCode),unescape(self.theDefinition),self.theCompositeEnvironments,self.theDuplicateProperty,unescape(self.theOverridingEnvironment))
       p.setAssetValues(self.theAssetValues)
       self.theEnvironments.append(p)
       self.resetEnvironmentAttributes()

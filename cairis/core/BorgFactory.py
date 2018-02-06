@@ -119,6 +119,10 @@ def initialise(user='cairis_test',db='cairis_test_default'):
   dbPasswd = ''
   if (user == 'cairis_test'):
     dbPasswd = 'cairis_test'
+  else:
+    b.dbUser = user
+    b.dbPasswd = ''
+    b.dbName = db
   b.dbProxy = GUIDatabaseProxy(user=user,passwd=dbPasswd,db=db)
   initialiseDesktopSettings()
 

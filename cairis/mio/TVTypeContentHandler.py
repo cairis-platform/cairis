@@ -19,6 +19,7 @@
 from xml.sax.handler import ContentHandler,EntityResolver
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 from cairis.core.Borg import Borg
+from xml.sax.saxutils import unescape
 
 __author__ = 'Shamal Faily'
 
@@ -55,10 +56,10 @@ class TVTypeContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if (name == 'vulnerability_type'):
-      p = ValueTypeParameters(self.theName,self.theDescription,'vulnerability_type')
+      p = ValueTypeParameters(unescape(self.theName),unescape(self.theDescription),'vulnerability_type')
       self.theVulnerabilityTypes.append(p)
       self.resetAttributes() 
     if name == 'threat_type':
-      p = ValueTypeParameters(self.theName,self.theDescription,'threat_type')
+      p = ValueTypeParameters(unescape(self.theName),unescape(self.theDescription),'threat_type')
       self.theThreatTypes.append(p)
       self.resetAttributes() 

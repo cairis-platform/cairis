@@ -25,6 +25,8 @@ from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicPar
 from cairis.core.TaskParameters import TaskParameters
 from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
 from cairis.core.Borg import Borg
+from xml.sax.saxutils import unescape
+
 
 __author__ = 'Shamal Faily'
 
@@ -318,31 +320,31 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'persona':
-      p = PersonaParameters(self.theName,self.theActivities,self.theAttitudes,self.theAptitudes,self.theMotivations,self.theSkills,self.theIntrinsic,self.theContextual,self.theImage,self.isAssumptionPersona,self.theType,self.theTags,self.theEnvironmentProperties,{})
+      p = PersonaParameters(self.theName,unescape(self.theActivities),unescape(self.theAttitudes),unescape(self.theAptitudes),unescape(self.theMotivations),unescape(self.theSkills),unescape(self.theIntrinsic),unescape(self.theContextual),self.theImage,self.isAssumptionPersona,self.theType,self.theTags,self.theEnvironmentProperties,{})
       self.thePersonas.append(p)
       self.resetPersonaAttributes()
     elif name == 'persona_environment':
-      p = PersonaEnvironmentProperties(self.theEnvironmentName,self.isDirect,self.theNarrative,self.theRoles,{'narrative':{}})
+      p = PersonaEnvironmentProperties(self.theEnvironmentName,self.isDirect,unescape(self.theNarrative),self.theRoles,{'narrative':{}})
       self.theEnvironmentProperties.append(p)
       self.resetPersonaEnvironmentAttributes()
     elif name == 'external_document':
-      p = ExternalDocumentParameters(self.theName,self.theVersion,self.theDate,self.theAuthors,self.theDescription)
+      p = ExternalDocumentParameters(self.theName,self.theVersion,self.theDate,self.theAuthors,unescape(self.theDescription))
       self.theExternalDocuments.append(p)
       self.resetExternalDocumentAttributes()
     elif name == 'document_reference':
-      p = DocumentReferenceParameters(self.theName,self.theDocument,self.theContributor,self.theExcerpt)
+      p = DocumentReferenceParameters(self.theName,self.theDocument,self.theContributor,unescape(self.theExcerpt))
       self.theDocumentReferences.append(p)
       self.resetDocumentReferenceAttributes()
     elif name == 'persona_characteristic':
-      p = PersonaCharacteristicParameters(self.thePersona,self.theModalQualifier,self.theBvName,self.theDefinition,self.theGrounds,self.theWarrants,[],self.theRebuttals)
+      p = PersonaCharacteristicParameters(self.thePersona,self.theModalQualifier,self.theBvName,unescape(self.theDefinition),self.theGrounds,self.theWarrants,[],self.theRebuttals)
       self.thePersonaCharacteristics.append(p)
       self.resetPersonaCharacteristicAttributes()
     elif name == 'task':
-      p = TaskParameters(self.theName,self.theCode,self.theObjective,self.isAssumptionTask,self.theAuthor,self.theTags,self.theEnvironmentProperties)
+      p = TaskParameters(unescape(self.theName),unescape(self.theCode),unescape(self.theObjective),self.isAssumptionTask,self.theAuthor,self.theTags,self.theEnvironmentProperties)
       self.theTasks.append(p)
       self.resetTaskAttributes()
     elif name == 'task_environment':
-      p = TaskEnvironmentProperties(self.theEnvironmentName,self.theDependencies,self.theTaskPersonas,self.theConcerns,self.theConcernAssociations,self.theNarrative,self.theConsequences,self.theBenefits,{'narrative':{},'consequences':{},'benefits':{}})
+      p = TaskEnvironmentProperties(unescape(self.theEnvironmentName),unescape(self.theDependencies),self.theTaskPersonas,self.theConcerns,self.theConcernAssociations,unescape(self.theNarrative),unescape(self.theConsequences),unescape(self.theBenefits),{'narrative':{},'consequences':{},'benefits':{}})
       self.theEnvironmentProperties.append(p)
       self.resetTaskEnvironmentAttributes()
     elif name == 'activities':

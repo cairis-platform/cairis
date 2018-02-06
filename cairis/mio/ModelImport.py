@@ -788,7 +788,10 @@ def importTrustBoundaries(tbs,session_id):
 def importModelFile(importFile,isOverwrite = 1,session_id = None):
   try:
     b = Borg()
-    db_proxy = b.get_dbproxy(session_id)
+    db_proxy = b.dbProxy
+    if (session_id != None):
+      db_proxy = b.get_dbproxy(session_id)
+
     modelTxt = ''
     if isOverwrite == 1:
       db_proxy.clearDatabase(session_id)

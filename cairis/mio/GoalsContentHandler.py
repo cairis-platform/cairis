@@ -31,6 +31,7 @@ from cairis.core.Steps import Steps
 from cairis.core.Step import Step
 import cairis.core.RequirementFactory
 from cairis.core.Borg import Borg
+from xml.sax.saxutils import unescape
 
 __author__ = 'Shamal Faily'
 
@@ -357,52 +358,52 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'domainproperty':
-      p = DomainPropertyParameters(self.theName,self.theDefinition,self.theType,self.theOriginator,self.theTags)
+      p = DomainPropertyParameters(unescape(self.theName),unescape(self.theDefinition),self.theType,unescape(self.theOriginator),self.theTags)
       self.theDomainProperties.append(p)
       self.resetDomainPropertyAttributes()
     elif name == 'goal_environment':
-      p = GoalEnvironmentProperties(self.theEnvironmentName,'',self.theDefinition,self.theCategory,self.thePriority,self.theFitCriterion,self.theIssue,[],[],self.theConcerns,self.theConcernAssociations)
+      p = GoalEnvironmentProperties(self.theEnvironmentName,'',unescape(self.theDefinition),self.theCategory,self.thePriority,unescape(self.theFitCriterion),unescape(self.theIssue),[],[],self.theConcerns,self.theConcernAssociations)
       self.theEnvironmentProperties.append(p)
       self.resetGoalEnvironmentAttributes()
     elif name == 'obstacle_environment':
-      p = ObstacleEnvironmentProperties(self.theEnvironmentName,'',self.theDefinition,self.theCategory,[],[],self.theConcerns)
+      p = ObstacleEnvironmentProperties(self.theEnvironmentName,'',unescape(self.theDefinition),self.theCategory,[],[],self.theConcerns)
       p.theProbability = self.theProbability
-      p.theProbabilityRationale = self.theRationale
+      p.theProbabilityRationale = unescape(self.theRationale)
       self.theEnvironmentProperties.append(p)
       self.resetObstacleEnvironmentAttributes()
     elif name == 'goal':
-      p = GoalParameters(self.theName,self.theOriginator,self.theTags,self.theEnvironmentProperties)
+      p = GoalParameters(unescape(self.theName),unescape(self.theOriginator),self.theTags,self.theEnvironmentProperties)
       self.theGoals.append(p)
       self.resetGoalAttributes()
     elif name == 'obstacle':
-      p = ObstacleParameters(self.theName,self.theOriginator,self.theTags,self.theEnvironmentProperties)
+      p = ObstacleParameters(unescape(self.theName),unescape(self.theOriginator),self.theTags,self.theEnvironmentProperties)
       self.theObstacles.append(p)
       self.resetObstacleAttributes()
     elif name == 'requirement':
       reqId = self.dbProxy.newId()
-      r = cairis.core.RequirementFactory.build(reqId,self.theLabel,self.theName,self.theDescription,self.thePriority,self.theRationale,self.theFitCriterion,self.theOriginator,self.theType,self.theReference)
+      r = cairis.core.RequirementFactory.build(reqId,self.theLabel,unescape(self.theName),unescape(self.theDescription),self.thePriority,unescape(self.theRationale),unescape(self.theFitCriterion),unescape(self.theOriginator),self.theType,self.theReference)
       self.theRequirements.append((r,self.theReference,self.theReferenceType))
       self.resetRequirementAttributes()
     elif name == 'exception':
-      self.theCurrentStep.addException((self.theExcName,self.theExcType,self.theExcValue,self.theExcCat,self.theDefinition))
+      self.theCurrentStep.addException((self.theExcName,self.theExcType,self.theExcValue,self.theExcCat,unescape(self.theDefinition)))
     elif name == 'step':
       self.theCurrentStep.setTags(self.theTags)
       self.theSteps.append(self.theCurrentStep)
       self.theCurrentStep = None
     elif name == 'usecase_environment':
-      p = UseCaseEnvironmentProperties(self.theEnvironmentName,self.thePreconditions,self.theSteps,self.thePostconditions)
+      p = UseCaseEnvironmentProperties(self.theEnvironmentName,unescape(self.thePreconditions),self.theSteps,unescape(self.thePostconditions))
       self.theEnvironmentProperties.append(p)
       self.resetUseCaseEnvironmentAttributes()
     elif name == 'usecase':
-      p = UseCaseParameters(self.theName,self.theAuthor,self.theCode,self.theActors,self.theDescription,self.theTags,self.theEnvironmentProperties)
+      p = UseCaseParameters(self.theName,self.theAuthor,unescape(self.theCode),self.theActors,unescape(self.theDescription),self.theTags,self.theEnvironmentProperties)
       self.theUseCases.append(p)
       self.resetUseCaseAttributes()
     elif name == 'countermeasure':
-      p = CountermeasureParameters(self.theName,self.theDescription,self.theType,self.theTags,self.theEnvironmentProperties)
+      p = CountermeasureParameters(self.theName,unescape(self.theDescription),self.theType,self.theTags,self.theEnvironmentProperties)
       self.theCountermeasures.append(p)
       self.resetCountermeasureAttributes()
     elif name == 'mitigating_property':
-      self.theSpDict[self.thePropertyName] = (self.thePropertyValue,self.theDescription)
+      self.theSpDict[self.thePropertyName] = (self.thePropertyValue,unescape(self.theDescription))
       self.resetMitigatingPropertyAttributes()
     elif name == 'countermeasure_environment':
       cProperty,cRationale = self.theSpDict['confidentiality']
@@ -417,7 +418,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theEnvironmentProperties.append(p)
       self.resetCountermeasureEnvironmentAttributes()
     elif (name == 'target'):
-      self.theTargets.append(Target(self.theTargetName,self.theTargetEffectiveness,self.theRationale))
+      self.theTargets.append(Target(self.theTargetName,self.theTargetEffectiveness,unescape(self.theRationale)))
       self.theTargetResponses = []
     elif (name == 'description'):
       self.inDescription = 0

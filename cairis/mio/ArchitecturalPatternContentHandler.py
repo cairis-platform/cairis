@@ -26,6 +26,7 @@ from cairis.core.TemplateAssetParameters import TemplateAssetParameters
 from cairis.core.TemplateRequirementParameters import TemplateRequirementParameters
 from cairis.core.TemplateGoalParameters import TemplateGoalParameters
 from cairis.core.Borg import Borg
+from xml.sax.saxutils import unescape
 
 __author__ = 'Shamal Faily'
 
@@ -282,11 +283,11 @@ class ArchitecturalPatternContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if (name == 'component'):
-      p = ComponentParameters(self.theName,self.theDescription,self.theInterfaces,self.theStructure,self.theComponentRequirements,self.theComponentGoals,self.theComponentGoalAssociations)
+      p = ComponentParameters(unescape(self.theName),unescape(self.theDescription),self.theInterfaces,self.theStructure,self.theComponentRequirements,self.theComponentGoals,self.theComponentGoalAssociations)
       self.theComponents.append(p)
       self.resetComponentAttributes() 
     elif name == 'role':
-      p = RoleParameters(self.theName,self.theType,self.theShortCode,self.theDescription,[])
+      p = RoleParameters(unescape(self.theName),self.theType,unescape(self.theShortCode),unescape(self.theDescription),[])
       self.theRoles.append(p)
       self.resetRoleAttributes()
     elif name == 'asset':
@@ -334,29 +335,29 @@ class ArchitecturalPatternContentHandler(ContentHandler,EntityResolver):
       srValues.append(srDict['pseudonymity'])
       srValues.append(srDict['unlinkability'])
       srValues.append(srDict['unobservability'])
-      p = TemplateAssetParameters(self.theName,self.theShortCode,self.theDescription,self.theSignificance,self.theAssetType,self.theSurfaceType,self.theAccessRight,spValues,srValues,self.theTags,self.theInterfaces)
+      p = TemplateAssetParameters(unescape(self.theName),unescape(self.theShortCode),unescape(self.theDescription),unescape(self.theSignificance),self.theAssetType,unescape(self.theSurfaceType),unescape(self.theAccessRight),spValues,srValues,self.theTags,self.theInterfaces)
       self.theAssets.append(p)
       self.resetAssetAttributes()
     elif name == 'security_property':
-      self.theSecurityProperties.append((self.thePropertyName,self.thePropertyValue,self.theRationale))
+      self.theSecurityProperties.append((self.thePropertyName,self.thePropertyValue,unescape(self.theRationale)))
       self.resetSecurityPropertyAttributes()
     elif name == 'structure':
-      self.theStructure.append((self.theHeadName,self.theHeadAdornment,self.theHeadNav,self.theHeadNry,self.theHeadRole,self.theTailRole,self.theTailNry,self.theTailNav,self.theTailAdornment,self.theTailName))
+      self.theStructure.append((unescape(self.theHeadName),unescape(self.theHeadAdornment),unescape(self.theHeadNav),unescape(self.theHeadNry),unescape(self.theHeadRole),unescape(self.theTailRole),unescape(self.theTailNry),unescape(self.theTailNav),unescape(self.theTailAdornment),unescape(self.theTailName)))
       self.resetStructure()
     elif name == 'requirement':
-      p = TemplateRequirementParameters(self.theReqName,self.theAsset,self.theType,self.theDescription,self.theRationale,self.theFitCriterion)
+      p = TemplateRequirementParameters(unescape(self.theReqName),unescape(self.theAsset),unescape(self.theType),unescape(self.theDescription),unescape(self.theRationale),unescape(self.theFitCriterion))
       self.theRequirements.append(p)
       self.resetRequirementAttributes()
     elif name == 'goal':
-      p = TemplateGoalParameters(self.theName,self.theDefinition,self.theRationale,self.theConcerns,self.theResponsibilities)
+      p = TemplateGoalParameters(unescape(self.theName),unescape(self.theDefinition),unescape(self.theRationale),self.theConcerns,self.theResponsibilities)
       self.theGoals.append(p)
       self.resetGoalAttributes()
     elif name == 'connector':
-      p = ConnectorParameters(self.theName,self.theViewName,self.theFromName,self.theFromRole,self.theFromInterface,self.theToName,self.theToInterface,self.theToRole,self.theConnectorAsset,self.theProtocolName,self.theAccessRight)
+      p = ConnectorParameters(unescape(self.theName),unescape(self.theViewName),unescape(self.theFromName),unescape(self.theFromRole),unescape(self.theFromInterface),unescape(self.theToName),unescape(self.theToInterface),unescape(self.theToRole),unescape(self.theConnectorAsset),unescape(self.theProtocolName),unescape(self.theAccessRight))
       self.theConnectors.append(p)
       self.resetConnectorAttributes() 
     elif name == 'component_goal_association':
-      self.theComponentGoalAssociations.append((self.theGoalName,self.theSubGoalName,self.theRefType,self.theRationale))
+      self.theComponentGoalAssociations.append((unescape(self.theGoalName),unescape(self.theSubGoalName),self.theRefType,unescape(self.theRationale)))
       self.resetComponentGoalAssociationAttributes()
     elif name == 'description':
       self.inDescription = 0
@@ -371,8 +372,8 @@ class ArchitecturalPatternContentHandler(ContentHandler,EntityResolver):
     elif name == 'fit_criterion':
       self.inFitCriterion = 0
     elif name == 'access_right' or name == 'protocol' or name == 'privilege' or name == 'surface_type':
-      p = ValueTypeParameters(self.theName,self.theDescription,name,'',self.theScore,self.theRationale)
+      p = ValueTypeParameters(unescape(self.theName),unescape(self.theDescription),name,'',self.theScore,unescape(self.theRationale))
       self.theMetricTypes.append(p)
       self.resetValueTypeAttributes()
     elif name == 'architectural_pattern':
-      self.theViewParameters = ComponentViewParameters(self.theViewName,self.theSynopsis,self.theMetricTypes,self.theRoles,self.theAssets,self.theRequirements,self.theGoals,self.theComponents,self.theConnectors)
+      self.theViewParameters = ComponentViewParameters(unescape(self.theViewName),unescape(self.theSynopsis),self.theMetricTypes,self.theRoles,self.theAssets,self.theRequirements,self.theGoals,self.theComponents,self.theConnectors)
