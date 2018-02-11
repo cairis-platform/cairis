@@ -56,7 +56,9 @@ class RoleAPITests(CairisDaemonTestCase):
       RoleEnvironmentProperties(
         environmentName='Core Technology',
         responses=[('Prevent Unauthorised Certificate Access', 'High')],
-        countermeasures=['Location-based X.509 extension']
+        countermeasures=['Location-based X.509 extension'],
+        goals=[],
+        requirements=[]
       )
     ]
     self.new_role_dict = {

@@ -20,10 +20,14 @@ from .EnvironmentProperties import EnvironmentProperties
 __author__ = 'Shamal Faily'
 
 class RoleEnvironmentProperties(EnvironmentProperties):
-  def __init__(self,environmentName,responses,countermeasures):
+  def __init__(self,environmentName,responses,countermeasures,goals,requirements):
     EnvironmentProperties.__init__(self,environmentName)
     self.theResponses = responses
     self.theCountermeasures = countermeasures
+    self.theGoals = goals
+    self.theRequirements = requirements
 
   def responses(self): return self.theResponses
   def countermeasures(self): return self.theCountermeasures
+  def goals(self): return self.theGoals
+  def requirements(self): return self.theRequirements

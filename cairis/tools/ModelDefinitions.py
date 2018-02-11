@@ -644,7 +644,9 @@ class RoleEnvironmentPropertiesModel(object):
   resource_fields = {
     "theEnvironmentName": fields.String,
     "theResponses": fields.List(fields.List(fields.String)),
-    "theCountermeasures": fields.List(fields.String)
+    "theCountermeasures": fields.List(fields.String),
+    "theGoals": fields.List(fields.String),
+    "theRequirements": fields.List(fields.String)
   }
   required = list(resource_fields.keys())
 

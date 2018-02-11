@@ -216,24 +216,37 @@ mainContent.on("click", '.roleEnvironmentClick', function () {
   $(this).closest('tr').addClass('active').siblings().removeClass('active');
   $("#theCounterMeasures").find('tbody').empty();
   $("#theResponses").find('tbody').empty();
+  $("#theGoals").find('tbody').empty();
+  $("#theRequirements").find('tbody').empty();
   var text =  $(this).text();
   var environments = JSON.parse($.session.get("RoleEnvironments"));
   var textForCounterMeasures = [];
   var textForResponses = [];
+  var textForGoals = [];
+  var textForRequirements = [];
   var i =0;
-  var j  = 0;
   $.each(environments, function (index, obj) {
     if(obj.theEnvironmentName == text){
       $.each(obj.theCountermeasures, function (index, val) {
-        debugLogger("Found one" + val);
         textForCounterMeasures[i++] = "<tr><td>"+ val + "</td><tr>";
       });
-      var theResp = obj.theResponses;
-      $.each(theResp , function (index1, valu) {
-        textForResponses[j++] = "<tr><td>"+ valu.__python_tuple__[0] +"</td><td>"+ valu.__python_tuple__[1] +"</td></tr>";
+      i = 0;
+      $.each(obj.theResponses , function (index1, valu) {
+        textForResponses[i++] = "<tr><td>"+ valu.__python_tuple__[0] +"</td><td>"+ valu.__python_tuple__[1] +"</td></tr>";
       });
+      i = 0;
+      $.each(obj.theGoals , function (index1, val) {
+        textForGoals[i++] = "<tr><td>"+ val +"</td></tr>";
+      });
+      i = 0;
+      $.each(obj.theRequirements , function (index1, val) {
+        textForRequirements[i++] = "<tr><td>"+ val +"</td></tr>";
+      });
+      
       $("#theCounterMeasures").find('tbody').append(textForCounterMeasures.join(''));
       $("#theResponses").find('tbody').append(textForResponses.join(''));
+      $("#theGoals").find('tbody').append(textForGoals.join(''));
+      $("#theRequirements").find('tbody').append(textForRequirements.join(''));
     }
   })
 });

@@ -1420,7 +1420,9 @@ class MySQLDatabaseProxy:
       for environmentId,environmentName in self.dimensionEnvironments(roleId,'role'):
         roleResponses = self.roleResponsibilities(roleId,environmentId)
         roleCountermeasures = self.roleCountermeasures(roleId,environmentId)
-        properties = RoleEnvironmentProperties(environmentName,roleResponses,roleCountermeasures)
+        roleGoals = self.roleGoals(roleId,environmentId)
+        roleRequirements = self.roleRequirements(roleId,environmentId)
+        properties = RoleEnvironmentProperties(environmentName,roleResponses,roleCountermeasures,roleGoals,roleRequirements)
         environmentProperties.append(properties)
       parameters = RoleParameters(roleName,roleType,shortCode,roleDescription,environmentProperties)
       role = ObjectFactory.build(roleId,parameters)
@@ -1456,6 +1458,13 @@ class MySQLDatabaseProxy:
 
   def roleCountermeasures(self,roleId,environmentId):
     return self.responseList('call roleCountermeasures(:rId,:eId)',{'rId':roleId,'eId':environmentId},'MySQL error getting countermeasures for role id ' + str(roleId) + ' in environment ' + str(environmentId))
+
+  def roleGoals(self,roleId,environmentId):
+    return self.responseList('call roleGoalResponsibilities(:rId,:eId)',{'rId':roleId,'eId':environmentId},'MySQL error getting goals for role id ' + str(roleId) + ' in environment ' + str(environmentId))
+
+  def roleRequirements(self,roleId,environmentId):
+    return self.responseList('call roleRequirementResponsibilities(:rId,:eId)',{'rId':roleId,'eId':environmentId},'MySQL error getting requirements for role id ' + str(roleId) + ' in environment ' + str(environmentId))
+
 
   def getCountermeasures(self,constraintId = -1):
     cmRows = self.responseList('call getCountermeasures(:id)',{'id':constraintId},'MySQL error getting countermeasures')
