@@ -915,6 +915,7 @@ drop procedure if exists threatenedDataflows;
 drop procedure if exists defaultValue;
 drop procedure if exists deleteWidowedConcerns;
 drop function if exists xmlEscaped;
+drop function if exists cairisVersion;
 
 delimiter //
 
@@ -24042,6 +24043,22 @@ returns text
 deterministic 
 begin
   return replace(replace(replace(replace(buf,'&','&amp;'),'>','&gt;'),'<','&lt;'),'"','&quot;');
+end
+//
+
+create function cairisVersion()
+returns text
+deterministic
+begin
+  declare cmaj int;
+  declare cmin int;
+  declare cpat int;
+
+  select major into cmaj from version limit 1;
+  select minor into cmin from version limit 1;
+  select patch into cpat from version limit 1;
+
+  return concat(cmaj,'.',cmin,'.',cpat);
 end
 //
 

@@ -58,6 +58,7 @@
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><span class="glyphicon glyphicon-book"></span> System<span class="caret"></span></a>
             <ul class="dropdown-menu">
+              <li><a id="aboutClick" href="#">About</a></li>
               <li><a id="newDatabaseClick" href="#">New Database</a></li>
               <li><a id="openClick" href="#">Open Database</a></li>
               <li><a id="deleteClick" href="#">Delete Database</a></li>
@@ -1080,7 +1081,6 @@
     </div>
   </div>
   </div>
-
   <div class="modal fade" id="unsupportedModal" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -1093,6 +1093,19 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="cairisVersion" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">CAIRIS</h4>
+        </div>
+        <div class="modal-body">
+          <label class="control-label" id="theVersion">Version</label>
         </div>
       </div>
     </div>
@@ -1404,7 +1417,7 @@
   <script>
     LazyLoad.js(["dist/js/cairis/Cairis-UI.js","dist/js/cairis/buttonclicks.js", "dist/js/cairis/Cairis.js", "dist/js/cairis/readFile.js",
         "dist/js/cairis/threats.js", "dist/js/cairis/attackers.js", "dist/js/cairis/personas.js", "dist/js/cairis/templateassets.js","dist/js/cairis/templaterequirements.js","dist/js/cairis/templategoals.js","dist/js/cairis/goals.js", "dist/js/cairis/projectSettings.js", "dist/js/cairis/tasks.js", "dist/js/cairis/domainproperties.js", "dist/js/cairis/obstacles.js", "dist/js/cairis/countermeasures.js", "dist/js/cairis/usecases.js","dist/js/cairis/vulnerabilities.js","dist/js/cairis/architecturalpatterns.js","dist/js/cairis/requirements.js","dist/js/cairis/assets.js",
-        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/taskcharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js","dist/js/cairis/environments.js","dist/js/cairis/valuetypes.js","dist/js/cairis/locations.js","dist/js/cairis/traceability.js","dist/js/cairis/chernoff.js","dist/js/cairis/conceptreferences.js","dist/js/cairis/securitypatterns.js","dist/js/cairis/dataflows.js","dist/js/cairis/trustboundaries.js",
+        "dist/js/cairis/risks.js", "dist/js/cairis/fileImport.js", "dist/js/cairis/fileExport.js", "dist/js/cairis/responses.js","dist/js/cairis/dependencies.js","dist/js/cairis/genDoc.js","dist/js/cairis/findobjt.js","dist/js/cairis/externaldocuments.js","dist/js/cairis/documentreferences.js","dist/js/cairis/personacharacteristics.js","dist/js/cairis/taskcharacteristics.js","dist/js/cairis/homeSettings.js","dist/js/cairis/roles.js","dist/js/cairis/environments.js","dist/js/cairis/valuetypes.js","dist/js/cairis/locations.js","dist/js/cairis/traceability.js","dist/js/cairis/chernoff.js","dist/js/cairis/conceptreferences.js","dist/js/cairis/securitypatterns.js","dist/js/cairis/dataflows.js","dist/js/cairis/trustboundaries.js","dist/js/cairis/about.js",
         "dist/js/cairis/SVGhandler.js","dist/js/objects/jsonDefaultObjects.js","dist/js/cairis/assetassociations.js","dist/js/cairis/trello.js"], function () {
       console.log('Ready');
     });

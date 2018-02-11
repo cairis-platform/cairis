@@ -1013,6 +1013,14 @@ class FindModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
+class VersionModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theVersion': fields.String
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
 @swagger.model
 class AssetAssociationModel(object):
   resource_fields = {

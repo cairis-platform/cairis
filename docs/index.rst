@@ -37,6 +37,7 @@ CAIRIS documentation
    configurable
    searching
    gendoc
+   troubleshooting
 
 
 Indices and tables

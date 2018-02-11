@@ -322,6 +322,10 @@ class FindMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.FindModel)
   required = DefaultMessage.required
 
+class VersionMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.VersionModel)
+  required = DefaultMessage.required
+
 # region Swagger Doc
 @swagger.model
 @swagger.nested(

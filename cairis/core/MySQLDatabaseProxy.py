@@ -4552,3 +4552,6 @@ class MySQLDatabaseProxy:
 
   def defaultValue(self,valueType):
     return self.responseList('call defaultValue(:valueType)',{'valueType':valueType},'MySQL error getting default value for ' + valueType)[0]
+
+  def cairisVersion(self):
+    return self.responseList('select cairisVersion()',{},'MySQL error getting CAIRIS version')[0]

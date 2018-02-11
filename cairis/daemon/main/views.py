@@ -38,7 +38,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController, DirectoryController,TrustBoundaryController
+    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController, DirectoryController,TrustBoundaryController, VersionController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -448,6 +448,9 @@ api.add_resource(UseCaseController.UseCaseExceptionAPI, '/api/usecases/environme
 api.add_resource(ValueTypeController.ValueTypesAPI, '/api/value_types/type/<string:type_name>/environment/<string:environment_name>',endpoint='value_types')
 api.add_resource(ValueTypeController.ValueTypesByNameAPI, '/api/value_types/type/<string:type_name>/environment/<string:environment_name>/name/<string:object_name>',endpoint='value_type')
 api.add_resource(ValueTypeController.ValueTypesCreateAPI, '/api/value_types/',endpoint='create_value_type')
+
+# Version route
+api.add_resource(VersionController.VersionAPI, '/api/version',endpoint='version')
 
 # Vulnerability routes
 api.add_resource(VulnerabilityController.VulnerabilityAPI, '/api/vulnerabilities',endpoint='vulnerabilities')
