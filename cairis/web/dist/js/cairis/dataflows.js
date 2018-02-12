@@ -199,9 +199,9 @@ $(document).on("click", "#addNewDataflow", function () {
 
     refreshDimensionSelector($('#theDataflowEnvironmentName'),'environment',undefined,function() {
       $('#theDataflowFromType').val('entity');
-      refreshDimensionSelector($('#theDataflowFromName'),'entity',$('#theEnvironmentName').val(),function() {
+      refreshDimensionSelector($('#theDataflowFromName'),'entity',$('#theDataflowEnvironmentName').val(),function() {
         $('#theDataflowToType').val('process');
-        refreshDimensionSelector($('#theDataflowToName'),'process',$('#theEnvironmentName').val(),function() {
+        refreshDimensionSelector($('#theDataflowToName'),'process',$('#theDataflowEnvironmentName').val(),function() {
           $('#theDataflowName').val('');
           $.session.set("Dataflow", JSON.stringify(jQuery.extend(true, {},dataflowDefault )));
           $('#editDataflowOptionsForm').loadJSON(dataflowDefault, null);

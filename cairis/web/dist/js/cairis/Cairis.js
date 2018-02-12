@@ -1871,7 +1871,7 @@ function getNoOfRisks(callback) {
 }
 
 function validateClick(dimension,callback) {
-  if (['requirement','goal','obstacle','usecase','environment','dependency','asset','persona','dataflow','location','traceability'].indexOf(dimension) > -1) {
+  if (['requirement','goal','obstacle','usecase','environment','dependency','asset','persona','location','traceability'].indexOf(dimension) > -1) {
     dimensionCheck('environment',callback);
   }
   else if (dimension == 'attacker') {
@@ -1915,6 +1915,11 @@ function validateClick(dimension,callback) {
     dimensionCheck('persona',callback);
   }
   else if (dimension == 'trust_boundary') {
+    dimensionCheck('environment',function() {
+      dimensionCheck('usecase',callback);
+    });
+  }
+  else if (dimension == 'dataflow') {
     dimensionCheck('environment',function() {
       dimensionCheck('usecase',callback);
     });
