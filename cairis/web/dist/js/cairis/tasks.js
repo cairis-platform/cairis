@@ -298,6 +298,23 @@ mainContent.on('click', ".removeTaskConcern", function () {
   });
 });
 
+mainContent.on('click', ".removeConcernAssociation", function (e) {
+  e.preventDefault();
+  var envName = $.session.get("taskEnvironmentName");
+  var assocRow = $(this).closest('tr');
+  var rowIdx = assocRow.index();
+  assocRow.remove();
+  var task = JSON.parse($.session.get("Task"));
+  $.each(task.theEnvironmentProperties, function (index, env) {
+    if(env.theEnvironmentName == envName){
+      env.theConcernAssociations.splice( rowIdx ,1 );
+      $.session.set("Task", JSON.stringify(task));
+      return false;
+    }
+  });
+});
+
+
 function appendTaskPersona(persona,duration,frequency,demands,goalConflict) {
   $("#thePersonas").find("tbody").append("<tr><td class='removeTaskPersona'><i class='fa fa-minus'></i></td><td class='taskPersona'>" + persona + "</td><td>" + duration + "</td><td>" + frequency + "</td><td>" + demands + "</td><td>" + goalConflict +  "</td></tr>").animate('slow');
 }
