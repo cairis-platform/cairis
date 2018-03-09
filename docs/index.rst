@@ -24,10 +24,9 @@ CAIRIS documentation
    usecases
    dependencies
    patterns
-   df
    vulnerabilities
    attackers
-   threats
+   threats_tm
    risks
    locations
    responses
