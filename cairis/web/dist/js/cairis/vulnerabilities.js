@@ -294,7 +294,8 @@ function commitVulnerability() {
         theVul.theEnvironmentProperties[index].theSeverity= $("#theSeverity").val();
       }
     });
-    if($(this).hasClass("newVulnerability")){
+
+    if($("#UpdateVulnerability").hasClass("newVulnerability")) {
       postVulnerability(theVul, function () {
         clearLocalStorage('vulnerability');
         $('#menuBCClick').attr('dimension','vulnerability');
@@ -309,7 +310,6 @@ function commitVulnerability() {
       });
     }
   }
-  e.preventDefault();
 }
 
 
