@@ -130,8 +130,6 @@ class CImportTextAPI(Resource):
         raise ARMHTTPError(ex)
       except Exception as ex:
         raise CairisHTTPError(status_code=500,message=str(ex.message),status='Unknown error')
-    
-
     else:
       raise CairisHTTPError(status_code=BAD_REQUEST,message='The provided file is not a valid XML file',status='Invalid XML input')
 

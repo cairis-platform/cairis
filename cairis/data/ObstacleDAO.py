@@ -122,8 +122,6 @@ class ObstacleDAO(CairisDAO):
 
     try:
       obstacle_filter = 0
-      if obstacle_name != '': obstacle_filter = 1
-
       associationDictionary = self.db_proxy.obstacleModel(environment_name, obstacle_name, obstacle_filter)
       associations = KaosModel(list(associationDictionary.values()), environment_name, 'obstacle',obstacle_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
       dot_code = associations.graph()
