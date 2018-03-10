@@ -29,41 +29,38 @@ We can quickly render this tree into something machine readable using [graphviz]
 
 ```
 digraph AT {
-  node [shape=box];
-  edge [dir=none];
-
-  "Backdoor to host" [style=rounded];
+  "Backdoor to host" [shape=box,style=rounded];
   "or_1" [shape=triangle,label="or"];
-  "Exploit vsftpd backdoor" [style=rounded];
+  "Exploit vsftpd backdoor" [shape=box,style=rounded];
   "and_1" [shape=triangle,label="and"];
-  "Telnet to vulnerable host" [style=rounded];
-  "Append smiley to credentials" [style=rounded];
-  "Run vsftpd as daemon" [style=rounded];
+  "Telnet to vulnerable host" [shape=box,style=rounded];
+  "Append smiley to credentials" [shape=box,style=rounded];
+  "Run vsftpd as daemon" [shape=box,style=rounded];
   "or_2" [shape=triangle,label="or"];
   "and_2" [shape=triangle,label="and"];
-  "Disable telnet";
-  "Install exploited vsftpd package" [style=rounded];
-  "Build exploited vsftpd software" [style=rounded];
-  "Download exploited vsftpd source" [style=rounded];
-  "Compile exploited vsftpd source" [style=rounded];
-  "Configure inetd for vsftpd" [style=rounded];
-  "Disable vsftpd in inetd";
+  "Disable telnet" [shape=box];
+  "Install exploited vsftpd package" [shape=box,style=rounded];
+  "Build exploited vsftpd software" [shape=box,style=rounded];
+  "Download exploited vsftpd source" [shape=box,style=rounded];
+  "Compile exploited vsftpd source" [shape=box,style=rounded];
+  "Configure inetd for vsftpd" [shape=box,style=rounded];
+  "Disable vsftpd in inetd" [shape=box];
 
-  "Backdoor to host" -> "or_1";
-  "or_1" -> "Exploit vsftpd backdoor";
-  "Exploit vsftpd backdoor" -> "and_1";
-  "and_1" -> "Telnet to vulnerable host";
-  "Telnet to vulnerable host" -> "Disable telnet";
-  "and_1" -> "Append smiley to credentials";
-  "and_1" -> "Run vsftpd as daemon";
-  "Run vsftpd as daemon" -> "or_2";
-  "or_2" -> "Install exploited vsftpd package";
-  "or_2" -> "Build exploited vsftpd software";
-  "Build exploited vsftpd software" -> "and_2";
-  "and_2" -> "Download exploited vsftpd source";
-  "and_2" -> "Compile exploited vsftpd source";
-  "and_2" -> "Configure inetd for vsftpd";
-  "Configure inetd for vsftpd" -> "Disable vsftpd in inetd";
+  "Backdoor to host" -> "or_1" [dir=none];
+  "or_1" -> "Exploit vsftpd backdoor" [dir=none];
+  "Exploit vsftpd backdoor" -> "and_1" [dir=none];
+  "and_1" -> "Telnet to vulnerable host" [dir=none];
+  "Telnet to vulnerable host" -> "Disable telnet" [dir=none];
+  "and_1" -> "Append smiley to credentials" [dir=none];
+  "and_1" -> "Run vsftpd as daemon" [dir=none];
+  "Run vsftpd as daemon" -> "or_2" [dir=none];
+  "or_2" -> "Install exploited vsftpd package" [dir=none];
+  "or_2" -> "Build exploited vsftpd software" [dir=none];
+  "Build exploited vsftpd software" -> "and_2" [dir=none];
+  "and_2" -> "Download exploited vsftpd source" [dir=none];
+  "and_2" -> "Compile exploited vsftpd source" [dir=none];
+  "and_2" -> "Configure inetd for vsftpd" [dir=none];
+  "Configure inetd for vsftpd" -> "Disable vsftpd in inetd" [dir=none];
 }
 ```
 
@@ -77,151 +74,7 @@ We can use CAIRIS' [at2om.py](https://github.com/failys/CAIRIS/blob/master/cairi
 
 * The model contributors.  CAIRIS is concerned about the people that contribute to the model, so we should provide some details about how created the model so the contributors can be contacted should any queries arise resulting from the attack tree.
 
-* The name of the CAIRIS model file to be created.  CAIRIS model files are XML and validated against a [DTD]({{ site.baseurl }}/dtd/cairis_model.dtd) to ensure models are well-formed and valid.
-
-Armed with this information, we can run at2om.py, assuming we are in the CAIRIS source code directory when running the script.
-
-```
-$ ./at2om.py --context "Metasploitable default setup" --author "EHC Group A" --out Exploit_vsftpd_backdoor.xml $HOME/Exploit_vsftpd_backdoor_graphviz.dot
-```
-
-at2om.py generates this CAIRIS model, which can be imported directly into CAIRIS either using the GUI or the [cimport.py](https://github.com/failys/CAIRIS/blob/master/cairis/cairis/cimport.py) model import tool.
-
-```
-<?xml version="1.0"?>
-<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">
-
-<cairis_model>
-
-<cairis>
-  <project_settings name="Metasploitable default setup">
-    <contributors>
-      <contributor first_name="None" surname="None" affiliation="EHC Group A" role="Scribe" />
-    </contributors>
-  </project_settings>
-  <environment name="Metasploitable default setup" short_code="Metasploitable default setup">
-    <definition>Metasploitable default setup</definition>
-    <asset_values>
-      <none>TBC</none>
-      <low>TBC</low>
-      <medium>TBC</medium>
-      <high>TBC</high>
-    </asset_values>
-  </environment>
-</cairis>
-
-<goals>
-  <goal name="Disable telnet" originator="EHC Group A">
-    <goal_environment name="Metasploitable default setup" category="Maintain" priority="Medium">
-      <definition>"Disable telnet"</definition>
-      <fit_criterion>TBC</fit_criterion>
-      <issue>None</issue>
-    </goal_environment>
-  </goal>
-  <goal name="Disable vsftpd in inetd" originator="EHC Group A">
-    <goal_environment name="Metasploitable default setup" category="Maintain" priority="Medium">
-      <definition>"Disable vsftpd in inetd"</definition>
-      <fit_criterion>TBC</fit_criterion>
-      <issue>None</issue>
-    </goal_environment>
-  </goal>
-  <obstacle name="Append smiley to credentials" originator="EHC Group A">
-    <obstacle_environment name="Metasploitable default setup" category="Threat">
-      <definition>"Disable vsftpd in inetd"</definition>
-    </obstacle_environment>
-  </obstacle>
-  <obstacle name="Exploit vsftpd backdoor" originator="EHC Group A">
-    <obstacle_environment name="Metasploitable default setup" category="Threat">
-      <definition>"Disable vsftpd in inetd"</definition>
-    </obstacle_environment>
-  </obstacle>
-  <obstacle name="Install exploited vsftpd package" originator="EHC Group A">
-    <obstacle_environment name="Metasploitable default setup" category="Threat">
-      <definition>"Disable vsftpd in inetd"</definition>
-    </obstacle_environment>
-  </obstacle>
-  <obstacle name="Telnet to vulnerable host" originator="EHC Group A">
-    <obstacle_environment name="Metasploitable default setup" category="Threat">
-      <definition>"Disable vsftpd in inetd"</definition>
-    </obstacle_environment>
-  </obstacle>
-  <obstacle name="Compile exploited vsftpd source" originator="EHC Group A">
-    <obstacle_environment name="Metasploitable default setup" category="Threat">
-      <definition>"Disable vsftpd in inetd"</definition>
-    </obstacle_environment>
-  </obstacle>
-  <obstacle name="Configure inetd for vsftpd" originator="EHC Group A">
-    <obstacle_environment name="Metasploitable default setup" category="Threat">
-      <definition>"Disable vsftpd in inetd"</definition>
-    </obstacle_environment>
-  </obstacle>
-  <obstacle name="Download exploited vsftpd source" originator="EHC Group A">
-    <obstacle_environment name="Metasploitable default setup" category="Threat">
-      <definition>"Disable vsftpd in inetd"</definition>
-    </obstacle_environment>
-  </obstacle>
-  <obstacle name="Run vsftpd as daemon" originator="EHC Group A">
-    <obstacle_environment name="Metasploitable default setup" category="Threat">
-      <definition>"Disable vsftpd in inetd"</definition>
-    </obstacle_environment>
-  </obstacle>
-  <obstacle name="Backdoor to host" originator="EHC Group A">
-    <obstacle_environment name="Metasploitable default setup" category="Threat">
-      <definition>"Disable vsftpd in inetd"</definition>
-    </obstacle_environment>
-  </obstacle>
-  <obstacle name="Build exploited vsftpd software" originator="EHC Group A">
-    <obstacle_environment name="Metasploitable default setup" category="Threat">
-      <definition>"Disable vsftpd in inetd"</definition>
-    </obstacle_environment>
-  </obstacle>
-</goals>
-
-<associations>
-  <goal_association environment="Metasploitable default setup" goal_name="Configure inetd for vsftpd" goal_dim="obstacle" ref_type="resolve" subgoal_name="Disable vsftpd in inetd" subgoal_dim="goal" alternative_id="0">
-    <rationale>None</rationale>
-  </goal_association>
-  <goal_association environment="Metasploitable default setup" goal_name="Telnet to vulnerable host" goal_dim="obstacle" ref_type="resolve" subgoal_name="Disable telnet" subgoal_dim="goal" alternative_id="0">
-    <rationale>None</rationale>
-  </goal_association>
-  <goal_association environment="Metasploitable default setup" goal_name="Run vsftpd as daemon" goal_dim="obstacle" ref_type="or" subgoal_name="Install exploited vsftpd package" subgoal_dim="obstacle" alternative_id="0">
-    <rationale>None</rationale>
-  </goal_association>
-  <goal_association environment="Metasploitable default setup" goal_name="Run vsftpd as daemon" goal_dim="obstacle" ref_type="or" subgoal_name="Build exploited vsftpd software" subgoal_dim="obstacle" alternative_id="0">
-    <rationale>None</rationale>
-  </goal_association>
-  <goal_association environment="Metasploitable default setup" goal_name="Exploit vsftpd backdoor" goal_dim="obstacle" ref_type="and" subgoal_name="Run vsftpd as daemon" subgoal_dim="obstacle" alternative_id="0">
-    <rationale>None</rationale>
-  </goal_association>
-  <goal_association environment="Metasploitable default setup" goal_name="Exploit vsftpd backdoor" goal_dim="obstacle" ref_type="and" subgoal_name="Telnet to vulnerable host" subgoal_dim="obstacle" alternative_id="0">
-    <rationale>None</rationale>
-  </goal_association>
-  <goal_association environment="Metasploitable default setup" goal_name="Exploit vsftpd backdoor" goal_dim="obstacle" ref_type="and" subgoal_name="Append smiley to credentials" subgoal_dim="obstacle" alternative_id="0">
-    <rationale>None</rationale>
-  </goal_association>
-  <goal_association environment="Metasploitable default setup" goal_name="Build exploited vsftpd software" goal_dim="obstacle" ref_type="and" subgoal_name="Download exploited vsftpd source" subgoal_dim="obstacle" alternative_id="0">
-    <rationale>None</rationale>
-  </goal_association>
-  <goal_association environment="Metasploitable default setup" goal_name="Build exploited vsftpd software" goal_dim="obstacle" ref_type="and" subgoal_name="Compile exploited vsftpd source" subgoal_dim="obstacle" alternative_id="0">
-    <rationale>None</rationale>
-  </goal_association>
-  <goal_association environment="Metasploitable default setup" goal_name="Build exploited vsftpd software" goal_dim="obstacle" ref_type="and" subgoal_name="Configure inetd for vsftpd" subgoal_dim="obstacle" alternative_id="0">
-    <rationale>None</rationale>
-  </goal_association>
-  <goal_association environment="Metasploitable default setup" goal_name="Backdoor to host" goal_dim="obstacle" ref_type="or" subgoal_name="Exploit vsftpd backdoor" subgoal_dim="obstacle" alternative_id="0">
-    <rationale>None</rationale>
-  </goal_association>
-</associations>
-
-</cairis_model>
-```
-
-
- [This file]({{ site.baseurl }}/images/Exploit_vsftpd_backdoor.xml), which can be imported directly into CAIRIS using either the GUI, or the [cimport](https://github.com/failys/CAIRIS/blob/master/cairis/cairis/cimport.py) model import script.
-
-```
-$ ./cimport.py --type all --overwrite 1 Exploit_vsftpd_backdoor.xml
-```
+Armed with this information, we can import the attack tree into CAIRIS, but selecting the System / Import Model, selecting 'Attack Tree (Dot)' from the combo box, and providing the above information.
 
 With the model now imported into CAIRIS, it's possible to visualise the model, and start integrating insights from the model into the rest of a system's design.
 
