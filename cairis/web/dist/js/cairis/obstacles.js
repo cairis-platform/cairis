@@ -527,6 +527,11 @@ function fillObstacleOptionMenu(data,callback){
 function fillObstacleEditSubGoal(theSettableValue,theSettableType,refinement,target,rationale){
   if (theSettableType == undefined) {
     theSettableType = 'obstacle';
+    $('#obstacle_theSubgoalType').val(theSettableType);
+    theSettableValue = "";
+    refinement = "and";
+    target = "No";
+    rationale = "None";
   }
 
   refreshDimensionSelector($('#obstacle_theSubGoalName'),theSettableType,$.session.get("ObstacleEnvName"),function() {
@@ -542,6 +547,11 @@ function fillObstacleEditSubGoal(theSettableValue,theSettableType,refinement,tar
 function fillObstacleEditGoal(theSettableValue,theSettableType,refinement,target,rationale){
   if (theSettableType == undefined) {
     theSettableType = 'obstacle';
+    $('#obstacle_theGoalType').val(theSettableType);
+    theSettableValue = "";
+    refinement = "and";
+    target = "No";
+    rationale = "None";
   }
   refreshDimensionSelector($('#obstacle_theGoalName'),theSettableType,$.session.get("ObstacleEnvName"),function() {
     if (theSettableValue  != "undefined"){
@@ -554,11 +564,24 @@ function fillObstacleEditGoal(theSettableValue,theSettableType,refinement,target
 }
 
 mainContent.on('click', '#obstacle_theGoalType', function () {
-  refreshDimensionSelector($('#obstacle_theGoalName'),$('#obstacle_theGoalType').val(),$.session.get("ObstacleEnvName"),undefined,['All']);
+  var dimName = $('#obstacle_theGoalType').val();
+  refreshDimensionSelector($('#obstacle_theGoalName'),dimName,$.session.get("ObstacleEnvName"),function(){
+    if ((dimName == 'goal') || (dimName == 'requirement') || (dimName == 'domainproperty')) {
+      $('#obstacle_theGoalRefinementSelect').val('obstruct');
+    }
+  },['All']);
 });
 
 mainContent.on('click', '#obstacle_theSubgoalType', function () {
-  refreshDimensionSelector($('#obstacle_theSubGoalName'),$('#obstacle_theSubgoalType').val(),$.session.get("ObstacleEnvName"),undefined,['All']);
+  var dimName = $('#obstacle_theSubgoalType').val();
+  refreshDimensionSelector($('#obstacle_theSubGoalName'),dimName,$.session.get("ObstacleEnvName"),function(){
+    if ((dimName == 'goal') || (dimName == 'requirement')) {
+      $('#obstacle_theRefinementSelect').val('resolve');
+    }
+    else if (dimName == 'role') {
+      $('#obstacle_theRefinementSelect').val('responsible');
+    }
+  },['All']);
 });
 
 function appendObstacleEnvironment(text){

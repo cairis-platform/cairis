@@ -279,6 +279,11 @@ mainContent.on('click', '#addConcernAssociationstoGoal', function () {
 mainContent.on('click', '#addSubGoaltoGoal', function () {
   $("#editGoalSubGoal").attr('data-selectedIdx',undefined);
   $("#editGoalSubGoal").attr('data-currentGoal',undefined);
+  $("#theSubgoalType").val("goal");
+  $("#theSubGoalName").val("");
+  $("#theRefinementSelect").val("and");
+  $("#theAlternate").val("No");
+  $("#theGoalSubGoalRationale").val("");
   $("#editGoalSubGoal").modal('show');
 });
 
@@ -309,6 +314,11 @@ $(document).on('shown.bs.modal','#editGoalGoal',function() {
 mainContent.on('click', '#addGoaltoGoal', function () {
   $("#editGoalGoal").attr('data-selectedIdx',undefined);
   $("#editGoalGoal").attr('data-currentGoal',undefined);
+  $("#theGoalType").val("goal");
+  $("#theGoalName").val("");
+  $("#theGoalRefinementSelect").val("and");
+  $("#theGoalAlternate").val("No");
+  $("#theGoalGoalRationale").val("");
   $("#editGoalGoal").modal('show');
 });
 
@@ -805,5 +815,11 @@ mainContent.on('click', '#theSubgoalType', function () {
   }
   else {
     refreshDimensionSelector($('#theSubGoalName'),dimName,$.session.get("GoalEnvName"),undefined,['All']);
+    if (dimName == 'obstacle') {
+      $('#theRefinementSelect').val('conflict');
+    }
+    else if (dimName == 'role') {
+      $('#theRefinementSelect').val('responsible');
+    }
   }
 });

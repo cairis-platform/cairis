@@ -188,7 +188,7 @@ class KaosModel:
             elif (associationType == 'responsible'):
               objtUrl = 'linkresponsible#' + goalEnv + '/' + goalName + '/' + subGoalName + '/' + goalDimName + '/' + subGoalDimName
               self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',style='filled',color='red',label=' ',height='.2',width='.2',URL=objtUrl))
-            elif (associationType == 'conflict'):
+            elif ((associationType == 'conflict') or (associationType == 'obstruct')):
               objtUrl = 'linkconflict#' + goalEnv + '/' + goalName + '/' + subGoalName + '/' + goalDimName + '/' + subGoalDimName
               b = Borg()
               self.theGraph.add_node(pydot.Node(refNodeName,shapefile=b.staticDir + '/assets/modelConflict.png',margin=0,label='',height='.1',width='.1',URL=objtUrl,peripheries='0'))
