@@ -6385,7 +6385,6 @@ begin
   then 
     select id into goalId from goal where name = goalName;    
     select requirementId(subGoalName) into subGoalId;
-/*    select o.id into subGoalId from requirement o where o.name = subGoalName and o.version = (select max(i.version) from requirement i where i.id = o.id); */
     insert into goalrequirement_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values(associationId,environmentId,goalId,aTypeId,subGoalId,alternativeId,rationaleName);
   elseif goalDimName = 'goal' and subGoalDimName = 'task'
   then
@@ -6462,8 +6461,7 @@ begin
   elseif goalDimName = 'obstacle' and subGoalDimName = 'requirement'
   then
     select id into goalId from obstacle where name = goalName;    
-    call requirementLabelComponents(subGoalName,shortCode,reqLabel);
-    select o.id into subGoalId from requirement o where o.name = reqLabel and o.version = (select max(i.version) from requirement i where i.id = o.id);
+    select requirementId(subGoalName) into subGoalId;
     insert into obstaclerequirement_goalassociation(id,environment_id,goal_id,ref_type_id,subgoal_id,alternative_id,rationale) values(associationId,environmentId,goalId,aTypeId,subGoalId,alternativeId,rationaleName);
   elseif goalDimName = 'requirement' and subGoalDimName = 'obstacle'
   then
