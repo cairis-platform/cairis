@@ -3871,7 +3871,7 @@ CREATE VIEW quotation as
    select c.name code,'persona' artifact_type,p.name artifact_name,'Contextual' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'contextual',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id order by 1;
 
 
-INSERT INTO version (major,minor,patch) VALUES (1,5,3);
+INSERT INTO version (major,minor,patch) VALUES (1,5,4);
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');
 INSERT INTO trace_dimension values (1,'persona');
