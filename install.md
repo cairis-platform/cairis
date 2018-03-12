@@ -19,7 +19,7 @@ If you have Docker installed on your laptop or an available machine, the easiest
 
 * Download and run the container, and its linked mysql container:  
 {% highlight bash %}
-$ sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.5
+$ sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7
 $ sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
 {% endhighlight %}
 
