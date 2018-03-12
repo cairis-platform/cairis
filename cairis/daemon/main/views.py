@@ -77,6 +77,7 @@ def make_session():
 @main.route('/')
 @login_required
 def home():
+  request.args = {}
   return main.send_static_file('index.html')
 
 @main.route('/disconnect')
