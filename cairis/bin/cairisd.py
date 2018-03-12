@@ -28,6 +28,12 @@ app = create_app()
 manager = Manager(app)
 manager.add_command('runserver', Server(host='0.0.0.0', port=7071))
 
+@app.after_request
+def apply_caching(response):
+  response.headers["X-Frame-Options"] = "SAMEORIGIN"
+  return response
+
+
 class TestClient(Command):
   def run(self):
     app.test_client()

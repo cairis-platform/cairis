@@ -171,8 +171,6 @@ def get_image(path):
       return send_from_directory(web_img_dir, path)
     except AttributeError:
       return send_from_directory('static/images', path)
-
-
   return handle_error(err)
 
 # Architectural Pattern routes
