@@ -24,9 +24,9 @@ from cairis.daemon import create_app
 from cairis.daemon.CairisHTTPError import CairisHTTPError
 
 
-app = create_app()
+application = create_app()
 
-@app.after_request
+@application.after_request
 def apply_caching(response):
   response.headers["X-Frame-Options"] = "SAMEORIGIN"
   return response
@@ -34,7 +34,7 @@ def apply_caching(response):
 
 if __name__ == '__main__':
   try:
-    app.run() 
+    application.run() 
   except CairisHTTPError, e:
     print 'Fatal CAIRIS error: ' + str(e)
     sys.exit(-1)
