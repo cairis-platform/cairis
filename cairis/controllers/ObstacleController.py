@@ -384,3 +384,36 @@ class ObstaclesSummaryAPI(Resource):
     resp = make_response(json_serialize(objts, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp
+
+class GenerateVulnerabilityAPI(Resource):
+  #region Swagger Doc
+  @swagger.operation(
+    notes='Generates a vulnerability based on an obstacle',
+    nickname='generate-vulnerability',
+    parameters=[
+      {
+        "name": "session_id",
+        "description": "The ID of the user's session",
+        "required": False,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "query"
+      }
+    ],
+    responseMessages=[
+      {
+        'code': CONFLICT,
+        'message': 'A database error has occurred'
+      }
+    ]
+  )
+  #endregion
+  def post(self,name):
+    session_id = get_session_id(session, request)
+    dao = ObstacleDAO(session_id)
+    dao.generate_vulnerability(name)
+    dao.close()
+    resp_dict = {'message': 'Vulnerability successfully generated'}
+    resp = make_response(json_serialize(resp_dict), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp

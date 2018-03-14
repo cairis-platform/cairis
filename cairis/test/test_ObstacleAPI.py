@@ -183,8 +183,28 @@ class ObstacleAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(upd_obstacle, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
     self.logger.info('[%s] Obstacle: %s [%d]\n', method, upd_obstacle['theName'], upd_obstacle['theId'])
-  
     rv = self.app.delete('/api/obstacles/name/%s?session_id=test' % quote(obstacle_to_update.theName))
+
+  def test_generate_vulnerability(self):
+    method = 'test_generate_vulnerability'
+    url = '/api/obstacles/name/' + quote(self.existing_obstacle_name) + '/generate_vulnerability?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+
+    rv = self.app.post(url, content_type='application/json',data=jsonpickle.encode({'session_id':'test'}))
+    self.assertIsNotNone(rv.data, 'No response')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    json_resp = jsonpickle.decode(responseData)
+    self.assertIsNotNone(json_resp, 'No results after deserialization')
+    self.assertIsInstance(json_resp, dict)
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message in response')
+    self.logger.info('[%s] Message: %s\n', method, message)
+    self.assertGreater(message.find('successfully generated'), -1, 'Vulnerability not generated')
+
 
   def prepare_new_obstacle(self):
     new_goal_refinements = []

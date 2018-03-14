@@ -64,6 +64,18 @@ function createEditObstaclesTable(){
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
       $("#mainTable").find("tbody").removeClass();
+      $("#mainTable").find("tbody").addClass('obstacle-rows');
+      $('.obstacle-rows').contextMenu({
+        selector: 'td',
+        items: {
+          "generateVulnerability": {
+            name: "Generate Vulnerability",
+            callback: function(key, opt) {
+              generateVulnerability($(this).closest("tr").find("td").eq(1).html());
+            }
+          }
+        }
+      });
       activeElement("mainTable");
       sortTableByRow(0);
     },
@@ -694,4 +706,32 @@ function postObstacle(obstacle, callback){
     }
   });
 }
+
+function generateVulnerability(obsName) {
+  var output = {};
+  output.session_id = $.session.get('sessionID');
+  output = JSON.stringify(output);
+
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    crossDomain: true,
+    processData: false,
+    origin: serverIP,
+    data: output,
+    url: serverIP + "/api/obstacles/name/" + encodeURIComponent(obsName) + "/generate_vulnerability?session_id=" + $.session.get('sessionID'),
+    success: function (data) {
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+}
+
 

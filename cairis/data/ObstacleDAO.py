@@ -17,8 +17,12 @@
 
 from cairis.core.ARM import *
 from cairis.core.Obstacle import Obstacle
+from cairis.core.Vulnerability import Vulnerability
 from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
+from cairis.core.VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
 from cairis.core.ObstacleParameters import ObstacleParameters
+from cairis.core.VulnerabilityParameters import VulnerabilityParameters
+from cairis.core.GoalAssociationParameters import GoalAssociationParameters
 from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError, MalformedJSONHTTPError, ARMHTTPError, MissingParameterHTTPError, OverwriteNotAllowedHTTPError
 from cairis.misc.KaosModel import KaosModel
 from cairis.core.ValueType import ValueType
@@ -342,3 +346,14 @@ class ObstacleDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
+  def generate_vulnerability(self, name):
+    obs = self.db_proxy.dimensionObject(name,'obstacle')
+    vps = []
+    gaps = []
+    for op in obs.environmentProperties():
+      vps.append(VulnerabilityEnvironmentProperties(op.name(),'Negligible',op.concerns()))
+      gaps.append(GoalAssociationParameters(op.name(),obs.name(),'obstacle','and',obs.name() + '(V)','vulnerability'))
+    v = VulnerabilityParameters(obs.name() + '(V)',obs.name(),self.db_proxy.defaultValue('vulnerability_type'),[],vps)
+    self.db_proxy.addVulnerability(v)
+    for gap in gaps:
+      self.db_proxy.addGoalAssociation(gap)
