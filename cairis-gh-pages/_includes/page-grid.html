@@ -1,0 +1,6 @@
+<article class="tile" itemscope itemtype="http://schema.org/Article">
+  <a href="{{ site.url }}{{ page.url }}" title="{{ page.title }}" class="post-teaser">{% if page.image.teaser %}<img src="{{ site.url }}/images/{{ page.image.teaser }}" alt="teaser" itemprop="image">
+    {% else %}<img src="{{ site.url }}/images/{{ site.teaser }}" alt="teaser" itemprop="image">{% endif %}</a>
+  <h2 class="page-title" itemprop="name"><a href="{{ site.url }}{{ page.url }}">{{ page.title }}</a></h2>
+  <p class="page-excerpt" itemprop="description">{{ page.description | strip_html | truncate: 160 }}</p>
+</article><!-- /.tile -->

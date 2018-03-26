@@ -1,0 +1,69 @@
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<!-- DTD for CAIRIS security patterns -->
+
+<!ELEMENT security_patterns (access_right*,surface_type*,asset*,pattern*)>
+
+<!ELEMENT tag EMPTY>
+<!ATTLIST tag name CDATA #REQUIRED>
+
+<!ELEMENT access_right (description,rationale)>
+<!ATTLIST access_right name CDATA #REQUIRED>
+<!ATTLIST access_right value CDATA #REQUIRED>
+
+<!ELEMENT surface_type (description,rationale)>
+<!ATTLIST surface_type name CDATA #REQUIRED>
+<!ATTLIST surface_type value CDATA #REQUIRED>
+
+<!ELEMENT asset (description,tag*,significance,interface*,security_property*)>
+<!ATTLIST asset name CDATA #REQUIRED>
+<!ATTLIST asset short_code CDATA #REQUIRED>
+<!ATTLIST asset type (Information | Systems | Software | Hardware | People) #REQUIRED>
+<!ATTLIST asset surface_type CDATA #REQUIRED>
+<!ATTLIST asset access_right CDATA #REQUIRED>
+
+
+<!ELEMENT security_property (rationale)>
+<!ATTLIST security_property property (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
+<!ATTLIST security_property value (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
+
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT significance (#PCDATA)>
+
+<!ELEMENT pattern (context,problem,solution,structure+,requirement*)>
+<!ATTLIST pattern name CDATA #REQUIRED>
+<!ELEMENT context (#PCDATA)>
+<!ELEMENT problem (#PCDATA)>
+<!ELEMENT solution (#PCDATA)>
+<!ELEMENT structure EMPTY>
+<!ATTLIST structure head_asset CDATA #REQUIRED>
+<!ATTLIST structure head_adornment (Association | Aggregation | Composition | Inheritance) #REQUIRED>
+<!ATTLIST structure head_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST structure head_role CDATA #REQUIRED>
+<!ATTLIST structure tail_role CDATA #REQUIRED>
+<!ATTLIST structure tail_nry (1 | a | 1..a) #REQUIRED>
+<!ATTLIST structure tail_adornment (Association | Aggregation | Composition | Inheritance) #REQUIRED>
+<!ATTLIST structure tail_asset CDATA #REQUIRED>
+<!ELEMENT requirement (description,rationale,fit_criterion)>
+<!ATTLIST requirement asset CDATA #REQUIRED>
+<!ATTLIST requirement name CDATA #REQUIRED>
+<!ATTLIST requirement type (Functional | Data | Look_and_Feel | Usability | Performance | Operational | Maintainability | Portability | Security | Cultural_and_Political | Legal) #REQUIRED>
+<!ELEMENT fit_criterion (#PCDATA)>
