@@ -1,0 +1,80 @@
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<!-- DTD for CAIRIS attack patterns -->
+
+<!ELEMENT attack_pattern (obstacle*,intent,motivation+,applicability,structure,participant+,collaboration,consequences,implementation,known_uses?,related_patterns?)>
+
+<!ATTLIST attack_pattern name CDATA #REQUIRED>
+<!ATTLIST attack_pattern likelihood (Incredible | Improbable | Remote | Occasional | Probable | Frequent) #REQUIRED>
+<!ATTLIST attack_pattern severity (Negligible | Marginal | Critical | Catastrophic) #REQUIRED>
+
+<!ELEMENT obstacle (definition,concern*,responsibility*,probability?)>
+<!ATTLIST obstacle name CDATA #REQUIRED>
+<!ATTLIST obstacle category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat ) #REQUIRED>
+<!ELEMENT definition (#PCDATA)>
+<!ELEMENT concern EMPTY>
+<!ATTLIST concern name CDATA #REQUIRED>
+<!ELEMENT responsibility EMPTY>
+<!ATTLIST responsibility name CDATA #REQUIRED>
+<!ELEMENT probability (rationale)>
+<!ATTLIST probability value CDATA #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
+
+
+<!ELEMENT intent (#PCDATA)>
+
+<!ELEMENT motivation (description)>
+<!ATTLIST motivation goal (confidentiality | integrity | availability | accountability | anonymity | pseudonymity | unlinkability | unobservability) #REQUIRED>
+<!ATTLIST motivation value (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT applicability EMPTY>
+<!ATTLIST applicability environment CDATA #REQUIRED>
+
+<!ELEMENT structure EMPTY>
+<!ATTLIST structure attack CDATA #REQUIRED>
+<!ATTLIST structure exploit CDATA #REQUIRED>
+<!ATTLIST structure attack_obstacle CDATA #IMPLIED>
+<!ATTLIST structure exploit_obstacle CDATA #IMPLIED>
+
+<!ELEMENT participant (motive*,capability*)>
+<!ATTLIST participant name CDATA #REQUIRED>
+<!ELEMENT motive EMPTY>
+<!ATTLIST motive name CDATA #REQUIRED>
+<!ELEMENT capability EMPTY>
+<!ATTLIST capability name CDATA #REQUIRED>
+<!ATTLIST capability value (Low | Medium | High) #REQUIRED>
+
+<!ELEMENT collaboration (target+,exploit+)>
+<!ELEMENT target EMPTY>
+<!ATTLIST target name CDATA #REQUIRED>
+<!ELEMENT exploit EMPTY>
+<!ATTLIST exploit name CDATA #REQUIRED>
+
+<!ELEMENT consequences (#PCDATA)>
+<!ELEMENT implementation (description,obstacle_association*)>
+
+<!ELEMENT obstacle_association (rationale)>
+<!ATTLIST obstacle_association obstacle_name CDATA #REQUIRED>
+<!ATTLIST obstacle_association ref_type (and | or) #REQUIRED>
+<!ATTLIST obstacle_association subobstacle_name CDATA #REQUIRED>
+
+<!ELEMENT known_uses (#PCDATA)>
+<!ELEMENT related_patterns (#PCDATA)>
