@@ -1,0 +1,34 @@
+# Site navigation links
+
+- title: Getting started
+  url: /install.html
+  excerpt: "How to install and start CAIRIS"
+
+- title: Examples
+  url: /examples.html
+  excerpt: "Sample models"
+
+
+- title: Docs
+  url: http://cairis.readthedocs.io
+  excerpt: "CAIRIS Documentation"
+
+- title: Papers
+  url: /papers.html
+  excerpt: "Literature about CAIRIS' design, and lessons learned using it"
+
+- title: Blog
+  url: /blog.html
+  excerpt: "Posting about CAIRIS and related topics"
+
+- title: Media
+  url: /media.html
+  excerpt: "Videos about CAIRIS and Security-by-Design"
+
+- title: About
+  url: /about.html
+  excerpt: "About CAIRIS"
+
+- title: Contact Us
+  url: /contact.html
+  excerpt: "Contact us"

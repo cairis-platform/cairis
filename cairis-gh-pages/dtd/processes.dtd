@@ -1,0 +1,89 @@
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<!-- DTD for CAIRIS processes -->
+
+<!ELEMENT processes (internal_document*,code*,memo*,quotation*,code_network*,implied_process*)>
+
+<!ELEMENT internal_document (description,content)>
+<!ATTLIST internal_document name CDATA #REQUIRED>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT content (#PCDATA)>
+
+<!ELEMENT code (description,inclusion_criteria,example)>
+<!ATTLIST code name CDATA #REQUIRED>
+<!ATTLIST code type (context | event)  #REQUIRED>
+
+<!ELEMENT memo (description)>
+<!ATTLIST memo name CDATA #REQUIRED>
+
+<!ELEMENT inclusion_criteria (#PCDATA)>
+<!ELEMENT example (#PCDATA)>
+
+<!ELEMENT quotation (label,synopsis,intention?)>
+<!ATTLIST quotation type (code | memo) #REQUIRED>
+<!ATTLIST quotation name CDATA #REQUIRED>
+<!ATTLIST quotation artifact_type (persona | task | internal_document) #REQUIRED>
+<!ATTLIST quotation artifact_name CDATA #REQUIRED>
+<!ATTLIST quotation environment CDATA #IMPLIED>
+<!ATTLIST quotation section (none | activities | attitudes | aptitudes | motivations | skills | narrative | benefits | consequences) #REQUIRED>
+<!ATTLIST quotation start_index CDATA #REQUIRED>
+<!ATTLIST quotation to_index CDATA #REQUIRED>
+<!ELEMENT label (#PCDATA)>
+<!ELEMENT synopsis (#PCDATA)>
+
+<!ELEMENT code_network (implied_characteristic)>
+<!ATTLIST code_network persona CDATA #REQUIRED>
+<!ATTLIST code_network relationship_type (associated | implies | conflict | part-of) #REQUIRED>
+<!ATTLIST code_network from_code CDATA #REQUIRED>
+<!ATTLIST code_network to_code CDATA #REQUIRED>
+
+<!ELEMENT implied_characteristic (intention?,from_label+,to_label+)>
+<!ATTLIST implied_characteristic name CDATA #REQUIRED>
+<!ATTLIST implied_characteristic qualifier CDATA #REQUIRED>
+<!ATTLIST implied_characteristic type (Intrinsic | Contextual) #REQUIRED>
+
+<!ELEMENT intention EMPTY>
+<!ATTLIST intention name CDATA #REQUIRED>
+<!ATTLIST intention type (goal | softgoal | task) #REQUIRED>
+
+<!ELEMENT contribution EMPTY>
+<!ATTLIST contribution means_end (means | end) #REQUIRED>
+<!ATTLIST contribution value (Make | SomePositive | Help | Hurt | SomeNegative | Break) #REQUIRED>
+
+<!ELEMENT from_label (contribution?)>
+<!ATTLIST from_label name CDATA #REQUIRED>
+<!ATTLIST from_label reference_type (grounds | warrant | rebuttal) #REQUIRED>
+
+<!ELEMENT to_label (contribution?)>
+<!ATTLIST to_label name CDATA #REQUIRED>
+<!ATTLIST to_label reference_type (grounds | warrant | rebuttal) #REQUIRED>
+
+<!ELEMENT implied_process (description,relationship+,channel+,specification)>
+<!ATTLIST implied_process name CDATA #REQUIRED>
+<!ATTLIST implied_process persona CDATA #REQUIRED>
+<!ELEMENT relationship EMPTY>
+<!ATTLIST relationship from_code CDATA #REQUIRED>
+<!ATTLIST relationship to_code CDATA #REQUIRED>
+<!ATTLIST relationship relationship_type (associated | implies | conflict | part-of) #REQUIRED>
+<!ELEMENT channel EMPTY>
+<!ATTLIST channel name CDATA #REQUIRED>
+<!ATTLIST channel data_type CDATA #IMPLIED>
+<!ELEMENT summary (#PCDATA)>
+<!ELEMENT specification (#PCDATA)>
