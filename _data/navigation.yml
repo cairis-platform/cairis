@@ -9,7 +9,7 @@
   excerpt: "Sample models"
 
 - title: Docs
-  url: /rtd
+  url: https://cairis.readthedocs.io
   excerpt: "CAIRIS Documentation"
 
 - title: Papers
