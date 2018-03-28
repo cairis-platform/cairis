@@ -20,6 +20,9 @@ gems:
   - jekyll-paginate
   - jekyll-gist
 
+plugins:
+  - jekyll-redirect-from
+
 
 # Site owner
 owner:
