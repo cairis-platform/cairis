@@ -8,9 +8,8 @@
   url: /examples
   excerpt: "Sample models"
 
-
 - title: Docs
-  url: http://cairis.readthedocs.io
+  url: /rtd
   excerpt: "CAIRIS Documentation"
 
 - title: Papers
