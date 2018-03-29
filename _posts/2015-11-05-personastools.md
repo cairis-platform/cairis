@@ -8,13 +8,14 @@ image:
   teaser: cvertduc_teaser.gif
 ---
 
+
 ## What are personas? ##
 
 Personas are behavioural specifications that embody the goals and needs of archetypical users.  By *specification*, we usually mean some sort of narrative description, and by *archetypical* we mean typical users that might use some product or service we are building or evaluating.  They were originally introduced to deal with developer biases arising from the word 'user'; these biases might lead developers to bend and stretch assumptions about what 'users' should actually do.
 
 ## Why incorporate personas into design tools? ##
 
-Lots of people have talked about how personas might be better integrated into the software toolset of designers and engineers.  However, when we looked at how this might be done, we found very few (if any) examples of how this works in practice.  As UX is largely craft based, this isn't entirely surprising, but if we are serious about using personas to provide assurance for large scale and/or critical systems then this becomes problematic.  In such systems, personas might be woven into different design models, and different levels of abstraction.  If personas aren't properly specified, validated, or maintained then they might lead to exactly the sort of problems that personas were originally meant to solve.
+Lots of people have talked about how personas might be better integrated into the software toolset of designers and engineers.  However, when we looked at how this might be done, we found very few (if any) examples of how this works in practice.  As UX is largely craft-based, this isn't entirely surprising, but if we are serious about using personas to provide assurance for large scale and/or critical systems then this becomes problematic.  In such systems, personas might be woven into different design models and different levels of abstraction.  If personas aren't properly specified, validated, or maintained then they might lead to exactly the sort of problems that personas were originally meant to solve.
 
 ## How does CAIRIS do it? ##
 
@@ -55,7 +56,7 @@ You can find lots of examples of how these persona XML models look in practice b
 
 If you're serious about persona interchangeability, you also want to be concerned about how personas are going to evolve in line with other design models as well.  If personas are to be accorded the same consideration as other models by a project team then, if other models are version controlled, personas should be as well.
 
-Building on the previous guideline, this can be implemented quickly by storing personas in individual XML files, and adding them to a suitable version control system like [git](https://git-scm.com).
+Building on the previous guideline, this can be implemented quickly by storing personas in individual XML files and adding them to a suitable version control system like [git](https://git-scm.com).
 
 As we saw [here](https://github.com/webinos/webinos-design-data/tree/master/personas), this solution is trivial to implement if you're using something like [github](https://github.com).  As our webinos-data-data repository also illustrates, we can even incorporate personas into [build scripts](https://github.com/webinos/webinos-design-data/tree/master/scripts), so we can see if and how, from a design perspective, personas might 'break the build'.
 
@@ -65,7 +66,7 @@ In building personas into CAIRIS, we had three goals to get people thinking abou
 
 First, we wanted to draw attention to the need for decent-tool support for personas.  We don't see how personas can be seriously integrated into all stages of a product's design and engineering activities without it.
 
-Second, we wanted to provide an actual example of a software tool that 'builds personas in'.  The need for supporting persona interchangeability and version control seems self evident now, but -- in incorporating personas in CAIRIS -- we have demonstrated how this looks in practice.
+Second, we wanted to provide an actual example of a software tool that 'builds personas in'.  The need for supporting persona interchangeability and version control seems self-evident now, but -- in incorporating personas in CAIRIS -- we have demonstrated how this looks in practice.
 
 Finally, we wanted to raise the broader question 'whither software tools for personas?'.  For example, we have shown how version control for personas might work, but we were also dealing with anonymised data.  Providing these examples may not have worked out so well if we were working with sensitive data where more elaborate access control was a requirement. Still, provisioning CAIRIS for personas did at least raise issues that might have otherwise remained hidden.
 

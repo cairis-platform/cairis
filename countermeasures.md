@@ -3,11 +3,12 @@ layout: default
 title: Countermeasures
 ---
 
-## Overview ##
+
+## Overview ##
 
 After a response goal has been generated, goal modelling continues until one or more countermeasure requirements have been defined and associated with their parent goals.  Following this, a countermeasure can be defined.  Defining a countermeasure also has the effect of satisfying a response goal and resolving any obstacles associated with the underlying risk's threat or vulnerability.
 
-Countermeasures target a risk's threat, vulnerability, or both.  Countermeasures also have a level of effectiveness.  This effectiveness level determines how much the countermeasure reduces the likelihood of the associated threat, or severity of the associated vulnerability.
+Countermeasures target a risk's threat, vulnerability, or both.  Countermeasures also have a level of effectiveness.  This effectiveness level determines how much the countermeasure reduces the likelihood of the associated threat or severity of the associated vulnerability.
 
 Countermeasures are associated with roles, who may be responsible for developing, maintaining or using the countermeasure.  Consequently, countermeasures are also associated with tasks and, when defining a countermeasure, it is also necessary to indicate how much the countermeasure helps or hinders the properties of associated tasks.
 
@@ -17,23 +18,23 @@ Countermeasures are associated with roles, who may be responsible for developing
 
 ![fig:CountermeasureDialogUsability]({{ site.baseurl }}/images/CountermeasureDialogUsability.png "Countermeasure Dialog: Usability Page")
 
-* Click on the Countermeasure toolbar button to open the Countermeasures dialog box, and click on the Add button to open the Countermeasure dialog box.
+* Click on the Countermeasure toolbar button to open the Countermeasures dialogue box, and click on the Add button to open the Countermeasure dialogue box.
 
 * Enter the countermeasure name and description, and select the countermeasure type.  A countermeasure may be one of the following type: Information, Systems, Software, Hardware, or People.
 
-* Right click on the environment window to bring up the environment speed menu.  Select the add option and, from the Add environment window, select an environment to situate the  countermeasure in.  This will add the new environment to the environment list.
+* Right-click on the environment window to bring up the environment speed menu.  Select the add option and, from the Add environment window, select an environment to situate the countermeasure in.  This will add the new environment to the environment list.
 
 * After ensuring the environment is selected in the environment window, select the countermeasure cost
 
-* Click on the Security tab to display the security page.  Right click in the Requirements box, and select add from the speed menu to add the requirement (or requirements) this countermeasure refines.  Following this, right click on the Target list and select add to select the countermeasure's target/s, together with the countermeasure's effectiveness.  Finally, add the security properties fostered by this countermeasure via the security properties box at the bottom of the page.
+* Click on the Security tab to display the security page.  Right-click in the Requirements box and select add from the speed menu to add the requirement (or requirements) this countermeasure refines.  Following this, right click on the Target list and select add to select the countermeasure's target/s, together with the countermeasure's effectiveness.  Finally, add the security properties fostered by this countermeasure via the security properties box at the bottom of the page.
 
-* Click on the Usability tab to display the usability page.  Right click on the Roles box, and select add from the speed menu to add the roles associated with this countermeasure. Any tasks associated with these roles are automatically populated in the Task box at the bottom of the page, together with the person/s carrying out the task.  If the countermeasure helps or hinders a task, double click on the task and modify the task's attributes accordingly.
+* Click on the Usability tab to display the usability page.  Right click on the Roles box, and select add from the speed menu to add the roles associated with this countermeasure. Any tasks associated with these roles are automatically populated in the Task box at the bottom of the page, together with the person/s carrying out the task.  If the countermeasure helps or hinders a task, double-click on the task and modify the task's attributes accordingly.
 
 * Click on the Create button to add the new countermeasure.
 
-* Existing countermeasures can be modified by double clicking on the countermeasure in the Countermeasures dialog box, making the necessary changes, and clicking on the Update button.
+* Existing countermeasures can be modified by double-clicking on the countermeasure in the Countermeasures dialogue box, making the necessary changes, and clicking on the Update button.
 
-* To delete a countermeasure, select the countermeasure to delete in the Countermeasures dialog box, and select the Delete button.  If any artifacts are dependent on this countermeasure then a dialog box stating these dependencies are displayed.  The user has the option of selecting Yes to remove the countermeasure dependencies and the countermeasure itself, or No to cancel the deletion.
+* To delete a countermeasure, select the countermeasure to delete in the Countermeasures dialogue box, and select the Delete button.  If any artefacts are dependent on this countermeasure then a dialogue box stating these dependencies are displayed.  The user has the option of selecting Yes to remove the countermeasure dependencies and the countermeasure itself, or No to cancel the deletion.
 
 ## Generating countermeasure assets and security patterns ##
 
@@ -53,7 +54,7 @@ Countermeasures mitigate risks by targetting its risk elements, i.e. its threats
 
 First, situating assets may cause you to look at the environments where the assets are situated in a different light.  Changing properties of assets, or existing threats or vulnerabilities could increase the potency of the risk, thereby weakening the effect of the countermeasure.
 
-Existing threats or vulnerabilities can also explicitly weaken countermeasures.  If a countermeasure asset is associated with a threat or vulnerability then, when either artifact is created or modified, CAIRIS allows users to override the effectiveness of the related countermeasure.  The detail associated with the risk scores in the Risk Dialog box will indicate cases where countermeasures have been weakened by threats and/or vulnerabilities.
+Existing threats or vulnerabilities can also explicitly weaken countermeasures.  If a countermeasure asset is associated with a threat or vulnerability then, when either artefact is created or modified, CAIRIS allows users to override the effectiveness of the related countermeasure.  The detail associated with the risk scores in the Risk Dialog box will indicate cases where countermeasures have been weakened by threats and/or vulnerabilities.
 
 ## Mitigating weakening effects ##
 

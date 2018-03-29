@@ -17,11 +17,12 @@ image:
 
 ## Narrative
 
+
 #### Activities
 
 Rick is a clean-water plant operator, responsible for ensuring that
 water processed through the plant is in line with specified set-points.
-Rick's area of responsibility extend outside of the confines of the
+Rick's area of responsibility extends outside of the confines of the
 plant to include checking on pumping stations, which feed water into the
 plant's nearby reservoir.
 
@@ -34,9 +35,8 @@ investigate further.
 
 At the start of every shift, Rick checks AJS to see what work he is
 scheduled to carry out. He usually updates AJS based on the work he
-carried out before the end of his shift. Rick also maintains a paper
-work diary, which is updated after carrying out specific work or
-responding to problems. This, together with the status white board, is
+carried out before the end of his shift. Rick also maintains a paperwork diary, which is updated after carrying out specific work or
+responding to problems. This, together with the status whiteboard, is
 also useful for explaining any on-going issues when handing over to the
 next shift.
 
@@ -47,9 +47,9 @@ SCADA system he uses. "The only way the SCADA will get infected", Rick
 says, "is by an instrument tech plugging a virus infected laptop into
 it".
 
-Rick is aware of Information Security communiques on InfoPortal, but
+Rick is aware of Information Security communiques on InfoPortal but
 doesn't see how this is relevant to him. "We don't have laptops", says
-Rick, "and we don't leave site, so we don't leave anything in cars".
+Rick, "and we don't leave the site, so we don't leave anything in cars".
 Rick is, however, aware of Information Security controls. Rick knows
 that logout policies keep intruders from getting access to his
 workstation (although he thinks the logout period is too short given his
@@ -80,7 +80,7 @@ improvements to the HMI and start-up procedure. Although not fully in
 the loop about what is going on, he hopes that, like the current system,
 there will be productivity improvements without an adverse impact.
 
-Rick uses the SCADA's trend monitoring facilities as a indication of
+Rick uses the SCADA's trend monitoring facilities as an indication of
 possible problems. "If the trends freeze or flat-line", Rick says, "I
 need to go out and take a look at what's wrong". Because problems occur
 daily, and he is often on his own, Rick can still control the plant
@@ -98,7 +98,7 @@ eventual piecing together of the elements of an event.
 Although information security doesn't phase Rick too much, personal
 security does. Potentially facing off a scrap metal thief is a big worry
 for Rick. "The police don't respond to intruder alarms at a nearby
-pumping station any more due to false alarms", says Rick. "Because of
+pumping station anymore due to false alarms", says Rick. "Because of
 this, we've been told not to go out to these places on our own. We have
 a lone-worker system when people call us when we get to a particular
 station, but what happens if we get problems on the way?"
@@ -106,12 +106,12 @@ station, but what happens if we get problems on the way?"
 #### Skills
 
 Rick has a basic operating knowledge of Windows; enough to carry out his
-day-to-day routines, check his email, and navigate the main sections of
+day-to-day routines, check his email and navigate the main sections of
 InfoPortal.
 
 Rick isn't a power-user; he acknowledges that younger "whizz kids" are
 much more adept at using PCs than he is. Consequently, he only uses a
-sub-set of the desktop icons currently on his desktop. "I don't know
+subset of the desktop icons currently on his desktop. "I don't know
 what these other applications do", Rick says,"I've tried clicking on one
 and it just gives me a Data Protection Warning. I guess this means I'm
 not authorised to use it."
