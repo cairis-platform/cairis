@@ -15,113 +15,37 @@ image:
 
 [Image source](https://www.flickr.com/photos/ashleymackinnon/7524751112)
 
-## Narrative
-
 #### Activities
 
-Ben is a CREST Registered Penetration Tester at TeamRed LLP; he has been
-in his current post since finishing his undergraduate degree in
-computing 4 years ago. He is currently working in a team of three to
-carry out an infrastructure test for a regional supermarket chain; this
-also entails evaluating one of their mobile web apps.
+Ben is a CREST Registered Penetration Tester at TeamRed LLP; he has been in his current post since finishing his undergraduate degree in computing 4 years ago. He is currently working in a team of three to carry out an infrastructure test for a regional supermarket chain; this also entails evaluating one of their mobile web apps.
 
-Ben spends several times a week speaking with an IT team contact to
-explain on-going progress. Some of this time is spent clarifying whether
-certain systems are within scope, and ascertaining whether certain
-findings of interest are a cause for concern or not. Ben’s clients know
-their systems better than him, and will [justifiably] challenge concerns
-he raises if they don’t think assets are that important. On the other
-hand, Ben also knows that uneducated clients downplay risk, and blasé
-clients are often slow or reluctant to make any required changes.
+Ben spends several times a week speaking with an IT team contact to explain on-going progress. Some of this time is spent clarifying whether certain systems are within scope and ascertaining whether certain findings of interest are a cause for concern or not. Ben’s clients know their systems better than him, and will [justifiably] challenge concerns he raises if they don’t think assets are that important. On the other hand, Ben also knows that uneducated clients downplay risk, and blasé clients are often slow or reluctant to make any required changes.
 
-As the project draws, to a close, Ben will consider how best to explain
-fixes for any problems that are found, but IT teams don’t always like
-being told what they should do. His experience is that teams distrust
-his unstructured approach to getting at testing targets and, as a
-result, is sometimes treated with suspicion and occasional passive
-aggressiveness - particularly if any systems fall over during testing,
-irrespective of whether this has anything to do with testing.
-
+As the project draws, to a close, Ben will consider how best to explain fixes for any problems that are found, but IT teams don’t always like being told what they should do. His experience is that teams distrust his unstructured approach to getting at testing targets and, as a result, is sometimes treated with suspicion and occasional passive-aggressiveness - particularly if any systems fall over during testing, irrespective of whether this has anything to do with testing.
+ 
 #### Attitudes
 
-Ben feels that ethics is an important soft skill. Ben thinks that
-TeamRed’s code of conduct is largely common sense, but he also knows
-that unethical behaviour can damage his career should he lose his CREST
-credentials as a result of an audit by CREST or CESG. Ben realises that
-any social engineering activities he undertakes can lead to ethical
-risks given that he is expected to do whatever he has to do to
-compromise a target; this can include impersonating other people.
+Ben feels that ethics is an important soft skill. Ben thinks that TeamRed’s code of conduct is largely common sense, but he also knows that unethical behaviour can damage his career should he lose his CREST credentials as a result of an audit by CREST or CESG. Ben realises that any social engineering activities he undertakes can lead to ethical risks given that he is expected to do whatever he has to do to compromise a target; this can include impersonating other people.
 
-Ben finds that working on a testing team can be difficult when the
-client has commissioned the test because they have to as box-ticking
-exercise, rather than because they want to. Such tests are particularly
-difficult when systems are new and the level of accreditation isn’t
-clear, or the clients are focused on safeguarding proprietary
-information above all else. Such clients can also complain because they
-don’t understand what a penetration test entails, and what everyone’s
-responsibilities are before, during, and after a penetration test. This
-can be frustrating to Ben, particularly when his client contact is
-someone who is not security-savvy, or lacks the required authority to
-action any recommendations made.
+Ben finds that working on a testing team can be difficult when the client has commissioned the test because they have to as a box-ticking exercise, rather than because they want to. Such tests are particularly difficult when systems are new and the level of accreditation isn’t clear, or the clients are focused on safeguarding proprietary information above all else. Such clients can also complain because they don’t understand what a penetration test entails, and what everyone’s responsibilities are before, during, and after a penetration test. This can be frustrating to Ben, particularly when his client contact is someone who is not security-savvy or lacks the required authority to action any recommendations made.
 
-While open hostility is rare, Ben often finds his team’s relationship
-with client IT ‘blue’ team can be frosty at times. During engagements,
-Ben is proactive in making sure that misunderstandings do not occur due
-to communication problems. For example, Ben speaks regularly to the IT
-teams to confirm any expected behaviour during their engagement. While
-the client’s IT team may not be happy about his team’s presence, he does
-expect clients to remain professional during testing; this includes
-ensuring as few people as possible know about any ‘red team’ tests that
-might be underway, and ensuring that any systems being tested are not
-modified or made more secure during the testing process.
+While open hostility is rare, Ben often finds his team’s relationship with client IT ‘blue’ team can be frosty at times. During engagements, Ben is proactive in making sure that misunderstandings do not occur due to communication problems. For example, Ben speaks regularly to the IT teams to confirm any expected behaviour during their engagement. While the client’s IT team may not be happy about his team’s presence, he does expect clients to remain professional during testing; this includes ensuring as few people as possible know about any ‘red team’ tests that might be underway, and ensuring that any systems being tested are not modified or made more secure during the testing process.
 
 #### Aptitudes
 
-Ben takes his professional obligations seriously. He is sometimes asked
-to help with some specific management research or collaborate on white
-papers. As a result, he has some experience researching attacks from the
-literature, or incident reports raised by colleagues. He keeps track of
-various news feeds that report new vulnerabilities or threats, and
-attends internal seminars given by his colleagues on different topics of
-interest. Together, this research and general awareness of attacks and
-incidents in the wider community helps Ben understand the perspectives
-taken by attackers. Where the opportunity avails itself, he shares this
-perspective when keeping his clients appraised of anything new that
-might impact a current engagement.
+Ben takes his professional obligations seriously. He is sometimes asked to help with some specific management research or collaborate on white papers. As a result, he has some experience researching attacks from the literature or incident reports raised by colleagues. He keeps track of various news feeds that report new vulnerabilities or threats, and attends internal seminars given by his colleagues on different topics of interest. Together, this research and general awareness of attacks and incidents in the wider community helps Ben understand the perspectives taken by attackers. Where the opportunity avails itself, he shares this perspective when keeping his clients appraised of anything new that might impact a current engagement.
 
 #### Motivations
 
-Ben enjoys looking at problems from the perspective of the black hat. He
-realises that successful attacks are the product of multiple
-contributing factors, and is intrigued about the different vectors taken
-to compromise a target system. As Ben’s experience as grown, the more
-his security senses have become honed.
+Ben enjoys looking at problems from the perspective of the black hat. He realises that successful attacks are the product of multiple contributing factors, and is intrigued by the different vectors taken to compromise a target system. As Ben’s experience as grown, the more his security senses have become honed.
 
-Because there is no ‘pen testers guide to ethics’, Ben is motivated by
-the need to stay within the law. The ease within which laws can be
-broken is an ever present factor, as are the consequences of a criminal
-record to his career. For this reason, Ben avoids undertaking any
-testing which is clearly out of scope or in breach of the Computer
-Misuse Act, and will double check any technical information provided by
-clients, such as IP address ranges.
+Because there is no ‘pen testers guide to ethics’, Ben is motivated by the need to stay within the law. The ease of which laws can be broken is an ever present factor, as are the consequences of a criminal record to his career. For this reason, Ben avoids undertaking any testing which is clearly out of scope or in breach of the Computer Misuse Act, and will double check any technical information provided by clients, such as IP address ranges.
 
-Ben spent time shadowing more senior penetration testers during his
-initial engagements, and watching how they deal with clients during
-meetings and conference calls. Now his confidence has now grown, Ben has
-recently became a mentor for a more junior colleague shadowing him on
-his current project.
+Ben spent time shadowing more senior penetration testers during his initial engagements and watching how they deal with clients during meetings and conference calls. Now his confidence has now grown, Ben has recently became a mentor for a more junior colleague shadowing him on his current project.
 
 #### Skills
 
-By learning from incidents and open source reports about attacks and
-techniques used, Ben attempts to keep up-to-speed with the tools and
-technologies of black hats. Ben is not, however, a black hat himself and
-is conscious of the damage to the pen testing community that might arise
-if people thought he was. As a result, while Ben is free to choose the
-testing tools he wants, he generally relies on a toolkit of tried and
-tested tools, and will evaluate the output of any potential new tool
-before using it on an actual engagement. He makes notes on the
-usefulness and applicability of any tools he uses and/or customises.
+By learning from incidents and open source reports about attacks and techniques used, Ben attempts to keep up-to-speed with the tools and technologies of black hats. Ben is not, however, a black hat himself and is conscious of the damage to the pen testing community that might arise if people thought he was. As a result, while Ben is free to choose the testing tools he wants, he generally relies on a toolkit of tried and tested tools and will evaluate the output of any potential new tool before using it on an actual engagement. He makes notes on the usefulness and applicability of any tools he uses and/or customises.
 
 ## Argumentation Models
 
@@ -256,9 +180,10 @@ usefulness and applicability of any tools he uses and/or customises.
 
 #### Activities
 
+
 Matt is a director of assurance at TeamRed LLP. He started his career in
 IT around 12 years ago and, after some time working for one of the
-bigger consultancies, moved into penetration testing. He has been CHECK
+bigger consultancies moved into penetration testing. He has been CHECK
 and CREST accredited but, in recent years, has taken more responsibility
 for managing the penetration testing arm of his company.
 
@@ -281,8 +206,8 @@ the entire pen testing industry.
 
 To start building client confidence, scoping meetings are planned with a
 great deal of attention to detail - particularly given the risk of going
-out of scope and breaching the CMA. Experience has allowed Matt to get a
-gut feeling of possible risks that might be present in a system at an
+out of scope and breaching the CMA. Experience has allowed Matt to get
+the gut feeling of possible risks that might be present in a system at an
 early stage, so these meetings are used to confirm his understanding,
 explain potential threats, and communicate the strategy to be taken when
 undertaking the engagement.
@@ -345,7 +270,6 @@ enforced, and deliverables are quality controlled, such that any
 collected data is sanitised and all recommendations made are defensible.
 To support this, Matt feels that testing interactions with 3rd parties
 should be signed off before any engagement begins.
-
 
 
 ## Argumentation Models

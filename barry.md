@@ -19,7 +19,7 @@ image:
 
 #### Activities
 
-Much of Barry's work involves equipment modification and instrument calibration; this work arises from requests from Process, or activities as part of on-going projects to improve plant efficiency.  As part of these changes, Barry may need to modify alarms on outstations, and make minor changes to PLCs and HMIs.
+Much of Barry's work involves equipment modification and instrument calibration; this work arises from requests from Process, or activities as part of on-going projects to improve plant efficiency.  As part of these changes, Barry may need to modify alarms on outstations and make minor changes to PLCs and HMIs.
 
 Barry is often called out to troubleshoot problems at sites and kiosks within his area of operations in Dorset, which can also involve software changes ranging from simply downloading software to a device to clean up its memory, through to re-generating the software from configuration sheets if no software backup is available.
 
@@ -39,11 +39,11 @@ Due to the lack of ACME ICT support for PC hardware at his site, Barry has learn
 
 #### Motivations
 
-Barry gets annoyed when he needs to make a software change at a remote site, and finds that he can't get at the software he needs from a PLC or outstation, can't trust the on-site backup left behind or the software on his laptop.
+Barry gets annoyed when he needs to make a software change at a remote site and finds that he can't get at the software he needs from a PLC or outstation, can't trust the on-site backup left behind or the software on his laptop.
 
 #### Skills
 
-Barry doesn't have any specific experience of software repositories or version control.  He does, however, have lots of experience archiving and restoring PLC and telemetry software.
+Barry doesn't have any specific experience with software repositories or version control.  He does, however, have lots of experience archiving and restoring PLC and telemetry software.
 
 ## Further details
 

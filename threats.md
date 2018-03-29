@@ -13,28 +13,28 @@ A threat is also of a certain type.  CAIRIS is pre-loaded with a selection of th
 
 ![fig:ThreatDialog]({{ site.baseurl }}/images/ThreatDialog.png "Threat Dialog")
 
-* Click on the Threat toolbar button to open the Threats dialog box, and click on the Add button to open the Threat dialog box.
+* Click on the Threat toolbar button to open the Threats dialogue box, and click on the Add button to open the Threat dialogue box.
 
-* Enter the threat name, the method taken by an attacker to release the threat, and select the threat type.
+* Enter the threat name, the method is taken by an attacker to release the threat, and select the threat type.
 
-* Right click on the environment window to bring up the environment speed menu.  Select the add option and, from the Add environment window, select an environment to situate the threat in.  This will add the new environment to the environment list.
+* Right-click on the environment window to bring up the environment speed menu.  Select the add option and, from the Add environment window, select an environment to situate the threat in.  This will add the new environment to the environment list.
 
 * After ensuring the environment is selected in the environment window, select the threat's likelihood for this environment
 
-* Associate attackers with this threat by right clicking on the attacker box, selecting Add from the speed menu, and selecting one or more attackers associated with the environment.
+* Associate attackers with this threat by right-clicking on the attacker box, selecting Add from the speed menu, and selecting one or more attackers associated with the environment.
 
-* Add threatened assets by right clicking on the asset box, selecting Add from the speed menu, and selecting one or more assets from the selected environment.
+* Add threatened assets by right-clicking on the asset box, selecting Add from the speed menu, and selecting one or more assets from the selected environment.
 
-* Add the security properties to this threat by right clicking on the properties list, and selecting Add from the speed menu to open the Add Security Properties window.  From this window, a security property and its value can be added.
+* Add the security properties to this threat by right-clicking on the properties list, and selecting Add from the speed menu to open the Add Security Properties window.  From this window, a security property and its value can be added.
 
 * Click on the Create button to add the new threat.
 
-* Existing threats can be modified by double clicking on the threat in the Threats dialog box, making the necessary changes, and clicking on the Update button.
+* Existing threats can be modified by double-clicking on the threat in the Threats dialogue box, making the necessary changes, and clicking on the Update button.
 
-* To delete a threat, select the threat to delete in the Threats dialog box, and select the Delete button.  If any artifacts are dependent on this attacker then a dialog box stating these dependencies are displayed.  The user has the option of selecting Yes to remove the threat dependencies and the threat itself, or No to cancel the deletion.
+* To delete a threat, select the threat to delete in the Threats dialogue box, and select the Delete button.  If any artefacts are dependent on this attacker then a dialogue box stating these dependencies are displayed.  The user has the option of selecting Yes to remove the threat dependencies and the threat itself, or No to cancel the deletion.
 
 ## Importing threats ##
 
 ![fig:ImportThreatDialog]({{ site.baseurl }}/images/ImportThreatDialog.png "Import Threat")
 
-The CAIRIS database is pre-loaded with a database of template threats based on the Common Criteria.  To import one of these, select Import from the Threats dialog to open the Import Threat dialog. When a threat is selected, the Threat dialog is opened, and pre-populated with information from the template.
+The CAIRIS database is pre-loaded with a database of template threats based on the Common Criteria.  To import one of these, select Import from the Threats dialogue to open the Import Threat dialogue. When a threat is selected, the Threat dialogue is opened, and pre-populated with information from the template.
