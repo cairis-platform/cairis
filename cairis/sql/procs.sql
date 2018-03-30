@@ -5741,7 +5741,7 @@ begin
 
   if compositeCount <= 0
   then
-    select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,a.rationale rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
+    select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,a.rationale rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, environment_asset hea, environment_asset tea where a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id and hea.asset_id = ha.id and hea.environment_id = environmentId and tea.asset_id = ta.id and tea.environment_id = environmentId
     union
     select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,concat('Concerns Security Pattern ',sp.name) rationale from securitypattern_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, securitypattern_asset_template_asset hata, securitypattern_asset_template_asset tata,securitypattern sp where hea.environment_id = environmentId and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and hata.pattern_id = sp.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and tata.pattern_id = sp.id and a.pattern_id = sp.id
     union
@@ -5757,7 +5757,7 @@ begin
     union
     select -1,e.name,p.name,'persona',0,'Association','1','','','1','Association',0,'asset', a.name,concat('Concerns task ',t.name) rationale from persona p, asset a, environment e, task_asset ta, task_persona tp, task t where p.id = tp.persona_id and tp.environment_id = environmentId and tp.task_id = ta.task_id and ta.environment_id = tp.environment_id and ta.asset_id = a.id and ta.environment_id = e.id and ta.task_id = t.id
     union
-    select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,concat('Concerns goal ',g.name) rationale from goal_concernassociation ca, asset sa, multiplicity_type smt, asset ta, multiplicity_type tmt, environment e,goal g where ca.environment_id = environmentId and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id and ca.goal_id = g.id
+    select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,concat('Concerns goal ',g.name) rationale from goal_concernassociation ca, asset sa, multiplicity_type smt, asset ta, multiplicity_type tmt, environment e,goal g, environment_asset sea, environment_asset tea where ca.environment_id = environmentId and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id and ca.goal_id = g.id and sa.id = sea.asset_id and sea.environment_id = environmentId and ta.id = tea.asset_id and tea.environment_id = environmentId
     union
     select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,concat('Concerns task ',t.name) rationale from task_concernassociation ca, asset sa, multiplicity_type smt, asset ta, multiplicity_type tmt, environment e,task t where ca.environment_id = environmentId and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id and ca.task_id = t.id
     union
@@ -5809,7 +5809,7 @@ begin
 
   if compositeCount <= 0
   then
-    select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
+    select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, environment_asset hea, environment_asset tea where a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id and ha.id = hea.asset_id and hea.environment_id = environmentId and ta.id = tea.asset_id and tea.environment_id = environmentId
     union
     select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,'' rationale from securitypattern_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, securitypattern_asset_template_asset hata, securitypattern_asset_template_asset tata,securitypattern sp where hea.environment_id = environmentId and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and hata.pattern_id = sp.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and tata.pattern_id = sp.id and a.pattern_id = sp.id
     union
@@ -9375,11 +9375,16 @@ begin
   declare targetId int;
   declare targetMultiplicityId int;
   select id into envId from environment where name = envName;
-  select id into sourceId from asset where name = sourceName;
+
+  select id into sourceId from asset a, environment_asset ea where a.name = sourceName and a.id = ea.asset_id and ea.environment_id = envId;
   select id into sourceMultiplicityId from multiplicity_type where name = sourceMultiplicity;
-  select id into targetId from asset where name = targetName;
+  select id into targetId from asset a, environment_asset ea where a.name = targetName and a.id = ea.asset_id and ea.environment_id = envId;
   select id into targetMultiplicityId from multiplicity_type where name = targetMultiplicity;
-  insert into goal_concernassociation(goal_id,environment_id,source_id,source_multiplicity_id,link,target_id,target_multiplicity_id) values (goalId,envId,sourceId,sourceMultiplicityId,link,targetId,targetMultiplicityId);
+
+  if ((sourceId is not null) and (targetId is not null))
+  then
+    insert into goal_concernassociation(goal_id,environment_id,source_id,source_multiplicity_id,link,target_id,target_multiplicity_id) values (goalId,envId,sourceId,sourceMultiplicityId,link,targetId,targetMultiplicityId);
+  end if;
 end
 //
 
@@ -9416,14 +9421,17 @@ begin
   declare envId int;
   declare assetId int default -1;
   select id into envId from environment where name = envName;
-  select id into assetId from asset where name = assetName;
+  select id into assetId from asset a, environment_asset ea where a.name = assetName and a.id = ea.asset_id and ea.environment_id = envId;
 
   if assetId = -1
   then
     call importTemplateAssetIntoEnvironment(assetName,envName); 
   end if;
 
-  insert into goal_concern(goal_id,environment_id,asset_id) values (goalId,envId,assetId);
+  if assetId is not null
+  then
+    insert into goal_concern(goal_id,environment_id,asset_id) values (goalId,envId,assetId);
+  end if;
 end
 //
 
@@ -12245,7 +12253,7 @@ begin
   if compositeCount <= 0
   then
     insert into temp_classtree(id,environment,head_name,head_dim,head_nav,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_nav,tail_dim,tail_name,rationale)
-    select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.head_id = assetId and a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
+    select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, environment_asset hea, environment_asset tea where a.head_id = assetId and a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id and ha.id = hea.asset_id and hea.environment_id = environmentId and ta.id = tea.asset_id and tea.environment_id = environmentId
     union
     select -1,e.name,va.name,'asset',0,'Dependency','1','&lt;&lt;safeguards&gt;&gt;','','1','Association',0,'asset',ma.name,'' rationale from asset ma, asset va, environment e, countermeasure_asset ca, countermeasure_threat_target ctt, asset_threat at where ma.id = ca.asset_id and ca.asset_id = assetId and ca.countermeasure_id = ctt.countermeasure_id and ctt.threat_id = at.threat_id and at.asset_id = va.id and ctt.environment_id = environmentId and at.environment_id = environmentId and at.environment_id = e.id
     union 
@@ -12253,7 +12261,7 @@ begin
     union
     select -1,e.name,p.name,'persona',0,'Association','1','','','1','Association',0,'asset', a.name,'' rationale from persona p, asset a, environment e, task_asset ta, task_persona tp where ta.asset_id = assetId and p.id = tp.persona_id and tp.environment_id = environmentId and tp.task_id = ta.task_id and ta.environment_id = tp.environment_id and ta.asset_id = a.id and ta.environment_id = e.id
     union
-    select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.tail_id = assetId and a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
+    select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, environment_asset hea, environment_asset tea where a.tail_id = assetId and a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id and ha.id = hea.asset_id and hea.environment_id = environmentId and ta.id = tea.asset_id and tea.environment_id = environmentId
     union
     select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from goal_concernassociation ca, asset sa, multiplicity_type smt, asset ta, multiplicity_type tmt, environment e where ca.environment_id = environmentId and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id
     union
