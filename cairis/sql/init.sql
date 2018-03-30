@@ -20,6 +20,7 @@
 drop function if exists internalDocumentQuotationString;
 drop function if exists personaQuotationString;
 
+DROP VIEW IF EXISTS object_name;
 DROP VIEW IF EXISTS entity;
 DROP VIEW IF EXISTS datastore;
 DROP VIEW IF EXISTS dataflows;
@@ -3408,6 +3409,41 @@ end
 //
 
 delimiter ; 
+
+CREATE VIEW object_name as
+  select name from requirement
+  union
+  select name from domainproperty
+  union
+  select name from goal
+  union
+  select name from obstacle
+  union
+  select name from usecase
+  union
+  select name from role
+  union
+  select name from asset
+  union
+  select name from threat
+  union
+  select name from vulnerability
+  union
+  select name from risk
+  union
+  select name from response
+  union
+  select name from countermeasure
+  union 
+  select name from environment
+  union
+  select name from persona
+  union
+  select name from task
+  union 
+  select name from locations
+  union
+  select name from location;
 
 CREATE VIEW entity as
   select id,name,short_code,description,significance,asset_type_id,is_critical,critical_rationale from asset where asset_type_id in (1,3,4);

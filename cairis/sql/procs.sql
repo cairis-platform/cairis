@@ -10749,6 +10749,16 @@ begin
   execute stmt;
   deallocate prepare stmt;
   set objtCount = @objtCount;
+
+  if objtCount = 0
+  then
+    set ncSql = concat('select count(name) into @objtCount from object_name where name = "',objtName,'" limit 1');
+    set @sql = ncSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
+    set objtCount = @objtCount;
+  end if;
   select objtCount;
 end
 //
