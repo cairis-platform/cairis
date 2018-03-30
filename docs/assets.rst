@@ -9,7 +9,7 @@ Assets are situated in one or more environments. Security and Privacy properties
 associated with each asset for every environment it can be found in.  These properties are described below:
 
 ================= =======================================================================================================================================================================================  ======================================
-Property          Description                                                                                                               Reference
+Property          Description                                                                                                                                                                              Reference
 ================= =======================================================================================================================================================================================  ======================================
 Confidentiality   The property that information is not made available or disclosed to unauthorised individuals, entities, or processes.                                                                    ISO/IEC 27001
 Integrity         The property of safeguarding the accuracy or completeness of assets.                                                                                                                     ISO/IEC 27001
