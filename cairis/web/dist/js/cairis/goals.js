@@ -356,7 +356,7 @@ mainContent.on('click', ".deleteGoalEnv", function () {
   $.each(goal.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == envi){
       goal.theEnvironmentProperties.splice( index ,1 );
-      $.session.set("Attacker", JSON.stringify(goal));
+      $.session.set("Goal", JSON.stringify(goal));
       var UIenv =  $("#theGoalEnvironments").find("tbody");
       if(jQuery(UIenv).has(".goalEnvProperties").length){
         UIenv.find(".goalEnvProperties:first").trigger('click');
