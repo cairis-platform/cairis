@@ -6,17 +6,20 @@ asset in CAIRIS, we implicitly state that this needs to be secured in
 light of risks which subsequently get defined.
 
 Assets are situated in one or more environments. Security and Privacy properties are
-associated with each asset for every environment it can be found in.
-These properties are:
+associated with each asset for every environment it can be found in.  These properties are described below:
 
-- Confidentiality: the property that information is not made available or disclosed to unauthorised individuals, entities, or processes [ISO/IEC 27001].
-- Integrity: the property of safeguarding the accuracy or completeness of assets [ISO/IEC 27001].
-- Availability: the property of safeguarding the accuracy or completeness of assets [ISO/IEC 27001].
-- Accountability: the property that ensures the actions of an entity may be traced uniquely to an entity.
-- Anonymity: the property that other users or subjects are unable to determine the identity of a user bound to a subject or operation [Common Criteria Privacy Requirements].
-- Pseudonymity: the property that a set of users and/or subjects are unable to determine the identify of a user bound to a subject or operation, but that this user is still accountable for its action [Common Criteria Privacy Requirements].
-- Unlinkability: the property that users and/or subjects are unable to determine whether the same user caused certain operations in the system [Common Criteria Privacy Requirements].
-- Unobservability: the property that users and/or subjects cannot determine whether an operation is being performed [Common Criteria Privacy Requirements].
+================= =======================================================================================================================================================================================  ======================================
+Property          Description                                                                                                               Reference
+================= =======================================================================================================================================================================================  ======================================
+Confidentiality   The property that information is not made available or disclosed to unauthorised individuals, entities, or processes.                                                                    ISO/IEC 27001
+Integrity         The property of safeguarding the accuracy or completeness of assets.                                                                                                                     ISO/IEC 27001
+Availability      The property of being accessible and usable on demand by an authorised entity.                                                                                                           ISO/IEC 27001
+Accountability    The property that ensures the actions of an entity may be traced uniquely to an entity.                                     
+Anonymity         The property that other users or subjects are unable to determine the identity of a user bound to a subject or operation.                                                                Common Criteria Privacy Requirements
+Pseudonymity      The property that a set of users and/or subjects are unable to determine the identify of a user bound to a subject or operation, but that this user is still accountable for its action. Common Criteria Privacy Requirements
+Unlinkability     The property that users and/or subjects are unable to determine whether the same user caused certain operations in the system.                                                           Common Criteria Privacy Requirements
+Unobservability   The property that users and/or subjects cannot determine whether an operation is being performed.                                                                                         Common Criteria Privacy Requirements
+================= =======================================================================================================================================================================================  ======================================
 
 Each of these properties is associated with the
 value of None, Low, Medium, or High. The meaning of each of these values
