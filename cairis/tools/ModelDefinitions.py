@@ -51,6 +51,7 @@ from cairis.core.TaskEnvironmentProperties import TaskEnvironmentProperties
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from cairis.core.TransferEnvironmentProperties import TransferEnvironmentProperties
+from cairis.core.ValidationResult import ValidationResult
 from cairis.core.ValueType import ValueType
 from cairis.core.Vulnerability import Vulnerability
 from cairis.core.VulnerabilityEnvironmentProperties import VulnerabilityEnvironmentProperties
@@ -1022,6 +1023,18 @@ class VersionModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
+
+class ValidationModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theLabel': fields.String,
+    'theMessage': fields.String
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+  swagger_metadata = {
+    obj_id_field : gen_class_metadata(ValidationResult)
+  }
 
 @swagger.model
 class AssetAssociationModel(object):

@@ -104,6 +104,7 @@ from .LocationsParameters import LocationsParameters
 from .DataFlow import DataFlow
 from .DataFlowParameters import DataFlowParameters
 from .TrustBoundary import TrustBoundary
+from .ValidationResult import ValidationResult
 import string
 import os
 from numpy import *
@@ -4564,3 +4565,10 @@ class MySQLDatabaseProxy:
 
   def cairisVersion(self):
     return self.responseList('select cairisVersion()',{},'MySQL error getting CAIRIS version')[0]
+
+  def modelValidation(self,envName):
+    objtRows = self.responseList('call modelValidation(:envName)',{'envName':envName},'MySQL error validating model')
+    rows = []
+    for lbl,msg in objtRows:
+      rows.append(ValidationResult(lbl,msg))
+    return rows

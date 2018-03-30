@@ -38,7 +38,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
     UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController, DirectoryController,TrustBoundaryController, VersionController
+    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController, DirectoryController,TrustBoundaryController, VersionController, ValidationController
 from cairis.daemon.main import main, api
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -443,6 +443,9 @@ api.add_resource(UseCaseController.UseCaseByNameAPI, '/api/usecases/name/<string
 api.add_resource(UseCaseController.UseCaseRequirementsByNameAPI, '/api/usecases/name/<string:usecase_name>/requirements',endpoint='usecaserequirements')
 api.add_resource(UseCaseController.UseCaseGoalsByNameAPI, '/api/usecases/name/<string:usecase_name>/environment/<string:environment_name>/goals',endpoint='usecasegoals')
 api.add_resource(UseCaseController.UseCaseExceptionAPI, '/api/usecases/environment/<string:environment_name>/step/<string:step_name>/exception/<string:exception_name>/generate_obstacle',endpoint='usecasegenerateobstacle')
+
+# Validation route
+api.add_resource(ValidationController.ValidationAPI, '/api/validation/environment/<string:name>',endpoint='environmentvalidation')
 
 # Value Type routes
 api.add_resource(ValueTypeController.ValueTypesAPI, '/api/value_types/type/<string:type_name>/environment/<string:environment_name>',endpoint='value_types')

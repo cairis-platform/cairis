@@ -326,6 +326,10 @@ class VersionMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.VersionModel)
   required = DefaultMessage.required
 
+class ValidationMessage(DefaultMessage):
+  resource_fields = gen_message_fields(ModelDefinitions.ValidationModel)
+  required = DefaultMessage.required
+
 # region Swagger Doc
 @swagger.model
 @swagger.nested(

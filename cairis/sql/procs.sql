@@ -916,6 +916,7 @@ drop procedure if exists defaultValue;
 drop procedure if exists deleteWidowedConcerns;
 drop function if exists xmlEscaped;
 drop function if exists cairisVersion;
+drop procedure if exists modelValidation;
 
 delimiter //
 
@@ -24111,6 +24112,53 @@ begin
   select patch into cpat from version limit 1;
 
   return concat(cmaj,'.',cmin,'.',cpat);
+end
+//
+
+create procedure modelValidation(in envName text)
+begin
+  declare headAsset varchar(50);
+  declare headAssetType varchar(50);
+  declare headPropertyValue int;
+  declare headAssocType varchar(50);
+  declare headNry varchar(50);
+  declare tailNry varchar(50);
+  declare tailAssocType varchar(50);
+  declare tailPropertyValue int;
+  declare tailAssetType varchar(50);
+  declare tailAsset varchar(50);
+
+  declare environmentId int;
+  declare done int default 0;
+  declare assocCursor cursor for select ha.name,haty.name,hap.property_value_id,hat.name,hm.name,tm.name,tat.name,tap.property_value_id,taty.name,ta.name from classassociation a, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, asset_type haty, asset_type taty, asset_property hap, asset_property tap where a.environment_id = environmentId and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id and ha.asset_type_id = haty.id and ta.asset_type_id = taty.id and ha.id = hap.asset_id and a.environment_id = hap.environment_id and hap.property_id = 1 and ta.id = tap.asset_id and a.environment_id = tap.environment_id and tap.property_id = 1; 
+  declare continue handler for not found set done = 1;
+
+  select id into environmentId from environment where name = envName limit 1;
+
+  drop table if exists temp_vout;
+  create temporary table temp_vout (label varchar(200), message varchar(1000));
+
+  open assocCursor;
+  assoc_loop: loop
+    fetch assocCursor into headAsset,headAssetType,headPropertyValue,headAssocType,headNry,tailNry,tailAssocType,tailPropertyValue,tailAssetType,tailAsset;
+    if done = 1
+    then
+      leave assoc_loop;
+    end if;
+
+    if ((headAssocType = 'Aggregation' or headAssocType = 'Composition') and (tailAssocType = 'Association') and (headAssetType = 'System' or headAssetType = 'Software' or headAssetType = 'Hardware') and (tailAssetType = 'System' or tailAssetType = 'Software' or tailAssetType = 'Hardware') and (headPropertyValue < tailPropertyValue) )
+    then
+      insert into temp_vout(label,message) values('Composition/Aggregation Integrity Check',concat('Integrity of ',headAsset,' is lower than ',tailAsset,'.'));
+    end if;
+
+    if ((tailAssocType = 'Aggregation' or tailAssocType = 'Composition') and (headAssocType = 'Association') and (tailAssetType = 'System' or tailAssetType = 'Software' or tailAssetType = 'Hardware') and (headAssetType = 'System' or headAssetType = 'Software' or headAssetType = 'Hardware') and (tailPropertyValue < headPropertyValue) )
+    then
+      insert into temp_vout(label,message) values('Composition/Aggregation Integrity Check',concat('Integrity of ',tailAsset,' is lower than ',headAsset,'.'));
+    end if;
+
+  end loop assoc_loop;
+  close assocCursor;
+  select label,message from temp_vout;
 end
 //
 
