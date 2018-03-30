@@ -4,11 +4,19 @@ Roles & Personas
 Roles
 -----
 
-Roles represent the abstract classes representing human agents; these
-also encapsulate behaviours and responsibilities. CAIRIS supports 2
-types of role: stakeholder and attacker. Stakeholder roles represent
-human agents the system needs to be directly, or indirectly designed
-for. Attackers are human agents the system should not be designed for.
+Roles represent the abstract classes representing human agents; these also encapsulate behaviours and responsibilities.
+
+CAIRIS supports 5 types of role:
+
+=============== ================================================================================================= ===============
+Role            Description
+=============== ================================================================================================= ===============
+Stakeholder     Human agents the system needs to be directly or indirectly designed for.                          IRIS Meta-model
+Attacker        Human agents behaving maliciously.                                                                IRIS Meta-model
+Data Controller The entity that determines the purposes, conditions and means of the processing of personal data. GDPR
+Data Processor  The entity that processes data on behalf of the Data Controller.                                  GDPR
+Data Subject    A natural person whose personal data is processed by a controller or processor.                   GDPR
+=============== ================================================================================================= ===============
 
 Adding, updating, and deleting a role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
