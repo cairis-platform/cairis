@@ -12293,7 +12293,9 @@ begin
 
   if compositeCount <= 0
   then
-    select 'task' from_objt, t.name from_name, 'asset' to_objt, a.name to_name from task_asset ta, environment_asset ea, environment_task et, asset a, task t where ea.environment_id = environmentId and et.environment_id = environmentId and et.task_id = ta.task_id and ta.task_id = t.id and ea.asset_id = ta.asset_id and ta.asset_id = a.id
+    select 'task' from_objt, t.name from_name, 'asset' to_objt, a.name to_name from task_asset ta, environment_asset ea, environment_task et, asset a, task t, asset_threat at, risk r where ea.environment_id = environmentId and et.environment_id = environmentId and et.task_id = ta.task_id and ta.task_id = t.id and ea.asset_id = ta.asset_id and ta.asset_id = a.id and ta.asset_id = at.asset_id and ta.environment_id = at.environment_id and at.threat_id = r.threat_id and r.id = riskId
+    union
+    select 'task' from_objt, t.name from_name, 'asset' to_objt, a.name to_name from task_asset ta, environment_asset ea, environment_task et, asset a, task t, asset_vulnerability av, risk r where ea.environment_id = environmentId and et.environment_id = environmentId and et.task_id = ta.task_id and ta.task_id = t.id and ea.asset_id = ta.asset_id and ta.asset_id = a.id and ta.asset_id = av.asset_id and ta.environment_id = av.environment_id and av.vulnerability_id = r.vulnerability_id and r.id = riskId
     union
     select 'asset' from_objt,a.name from_name, 'threat' to_objt,t.name to_name from asset_threat at,asset a, threat t, risk r where at.environment_id = environmentId and at.asset_id = a.id and at.threat_id = t.id and t.id = r.threat_id and r.id = riskId
     union
