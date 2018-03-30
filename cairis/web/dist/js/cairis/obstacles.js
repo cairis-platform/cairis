@@ -269,6 +269,7 @@ function addObstacleEnvironment() {
   clearObstacleEnvironmentPanel();
   $("#obstacleProperties").show("fast");
   $.session.set("Obstacle", JSON.stringify(obstacle));
+  $("#theObstacleEnvironments").find("tbody").find(".obstacleEnvProperties:last").trigger('click');
 };
 
 function clearObstacleEnvironmentPanel() {

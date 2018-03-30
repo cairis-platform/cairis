@@ -109,7 +109,8 @@ mainContent.on('click', ".goalEnvProperties", function () {
 
   $.each(goal.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == name){
-      $('#goalProperties').loadJSON(env,null);
+      $('#theCategory').val(env.theCategory);
+      $('#thePriority').val(env.thePriority);
       $("#theIssue").val(env.theIssue);
       $("#theDefinition").val(env.theDefinition);
       $("#theFitCriterion").val(env.theFitCriterion);
@@ -345,6 +346,7 @@ function addGoalEnvironment() {
   $("#goalProperties").show("fast");
   $.session.set("GoalEnvName", text);
   $.session.set("Goal", JSON.stringify(goal));
+  $("#theGoalEnvironments").find("tbody").find(".goalEnvProperties:last").trigger('click');
 };
 
 mainContent.on('click', ".deleteGoalEnv", function () {
