@@ -1,7 +1,14 @@
 Model Validation
 ================
 
-CAIRIS has the ability to validate models for a given environment based on potential design problems.  The model validation checks currently supported are as follows:
+CAIRIS has the ability to validate models for a given environment based on potential design problems.  
+
+To validate a current CAIRIS model, click on the Models/Validate menu and select the environment to check the CAIRIS model for.
+
+.. figure:: MVForm.jpg
+   :alt: Model Validation results
+
+The model validation checks currently supported are as follows:
 
 ======================================= =======================================================================================================
 Check                                   Description

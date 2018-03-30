@@ -80,5 +80,5 @@ function validateModel() {
 }
 
 function appendResults(vr){
-  $("#theValidationResults").append('<tr class="mv-rows"><td>' + vr.theLabel +'</td><td>' + vr.theMessage + '</td><td></tr>');
+  $("#theValidationResults").append('<tr class="mv-rows"><td>' + vr.theLabel +'</td><td>' + vr.theMessage + '</td></tr>');
 }
