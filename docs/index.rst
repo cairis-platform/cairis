@@ -33,6 +33,7 @@ CAIRIS documentation
    countermeasures
    traceability
    architecturalpatterns
+   validation
    configurable
    searching
    gendoc
