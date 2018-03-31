@@ -192,6 +192,13 @@ main differences are goal filtering is not possible, only the obstacle
 tree is displayed, and obstacles refine to obstacles, as opposed to
 goals.
 
+A KAOS obstacle model can be seen as a goal-driven form of a *Fault Tree*. However, unlike fault trees, obstacle modelling is closely tied to other artifacts such as previous knowledge about attacks and information about the attackers that might carry these out.
+
+Where useful statistical data about possible attacks exists, this information can help us predict the likelihood of particular obstacles being satisfied. When a probability value is specified in obstacles for this likelihood then a rationale statement also needs to be provided to justify it. This is necessary because, when attack patterns are imported into a CAIRIS model, it may not be immediately obvious that the obstacle or the obstacle model arose from them.
+By proving this justification, we have some way of understanding the thinking that motivated this value. Based on these values, we can evaluate the probability of a particular cut of an obstacle tree based on the same equations used to evaluate the faults in a fault tree. For example, for an obstacle *O* with leaf goals *O1* and *O2*, the probability of *O1*  where *O1* and *O2* are AND-refinements is *O1* x *O2*; where *O1* and *O2* are OR-refinements then the probability is *O1* + *O2*.
+
+Obstacles are coloured with a shade of red based on the probability set when defining the obstacle.  The probability can be a real number between 0 and 1, where the default value is 0.
+
 For details on how to print obstacle models as SVG files, see the `Generating Documentation`_ section.
 
 
