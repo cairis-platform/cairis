@@ -9380,9 +9380,9 @@ begin
   declare targetMultiplicityId int;
   select id into envId from environment where name = envName;
 
-  select id into sourceId from asset a, environment_asset ea where a.name = sourceName and a.id = ea.asset_id and ea.environment_id = envId;
+  select a.id into sourceId from asset a, environment_asset ea where a.name = sourceName and a.id = ea.asset_id and ea.environment_id = envId;
   select id into sourceMultiplicityId from multiplicity_type where name = sourceMultiplicity;
-  select id into targetId from asset a, environment_asset ea where a.name = targetName and a.id = ea.asset_id and ea.environment_id = envId;
+  select a.id into targetId from asset a, environment_asset ea where a.name = targetName and a.id = ea.asset_id and ea.environment_id = envId;
   select id into targetMultiplicityId from multiplicity_type where name = targetMultiplicity;
 
   if ((sourceId is not null) and (targetId is not null))
@@ -9425,17 +9425,15 @@ begin
   declare envId int;
   declare assetId int default -1;
   select id into envId from environment where name = envName;
-  select id into assetId from asset a, environment_asset ea where a.name = assetName and a.id = ea.asset_id and ea.environment_id = envId;
+  select id into assetId from asset where name = assetName;
 
   if assetId = -1
   then
     call importTemplateAssetIntoEnvironment(assetName,envName); 
   end if;
 
-  if assetId is not null
-  then
-    insert into goal_concern(goal_id,environment_id,asset_id) values (goalId,envId,assetId);
-  end if;
+  insert into goal_concern(goal_id,environment_id,asset_id) values (goalId,envId,assetId);
+
 end
 //
 
