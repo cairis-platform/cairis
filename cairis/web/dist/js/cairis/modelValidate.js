@@ -49,6 +49,8 @@ $('#validateModelClick').click(function(){
 
 
 function validateModel() {
+  $('#menuBCClick').attr('dimension','model');
+  refreshMenuBreadCrumb('model');
   var envName = $('#chooseEnvironment').attr('data-chosenDimension');
 
   activeElement("objectViewer");

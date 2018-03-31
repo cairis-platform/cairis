@@ -917,6 +917,8 @@ drop procedure if exists deleteWidowedConcerns;
 drop function if exists xmlEscaped;
 drop function if exists cairisVersion;
 drop procedure if exists modelValidation;
+drop procedure if exists integrityAggregationAssociationCheck;
+drop procedure if exists PIProvisionCheck_task;
 
 delimiter //
 
@@ -24131,6 +24133,23 @@ end
 
 create procedure modelValidation(in envName text)
 begin
+  declare environmentId int;
+
+  select id into environmentId from environment where name = envName limit 1;
+
+  drop table if exists temp_vout;
+  create temporary table temp_vout (label varchar(200), message varchar(1000));
+
+  call integrityAggregationAssociationCheck(environmentId);
+  call PIProvisionCheck_task(environmentId);
+
+  select label,message from temp_vout;
+
+end
+//
+
+create procedure integrityAggregationAssociationCheck(in environmentId int)
+begin
   declare headAsset varchar(100);
   declare headAssetType varchar(50);
   declare headPropertyValue int;
@@ -24141,16 +24160,9 @@ begin
   declare tailPropertyValue int;
   declare tailAssetType varchar(50);
   declare tailAsset varchar(100);
-
-  declare environmentId int;
   declare done int default 0;
   declare assocCursor cursor for select ha.name,haty.name,hap.property_value_id,hat.name,hm.name,tm.name,tat.name,tap.property_value_id,taty.name,ta.name from classassociation a, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, asset_type haty, asset_type taty, asset_property hap, asset_property tap where a.environment_id = environmentId and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id and ha.asset_type_id = haty.id and ta.asset_type_id = taty.id and ha.id = hap.asset_id and a.environment_id = hap.environment_id and hap.property_id = 1 and ta.id = tap.asset_id and a.environment_id = tap.environment_id and tap.property_id = 1; 
   declare continue handler for not found set done = 1;
-
-  select id into environmentId from environment where name = envName limit 1;
-
-  drop table if exists temp_vout;
-  create temporary table temp_vout (label varchar(200), message varchar(1000));
 
   open assocCursor;
   assoc_loop: loop
@@ -24172,8 +24184,52 @@ begin
 
   end loop assoc_loop;
   close assocCursor;
-  select label,message from temp_vout;
 end
 //
+
+create procedure PIProvisionCheck_task(in environmentId int)
+begin
+  declare taskId int;
+  declare taskName varchar(100);
+  declare assetId int;
+  declare prCount int;
+  declare done int default 0;
+  declare taskCursor cursor for select t.name,t.id from environment_task et, task t where et.environment_id = environmentId and et.task_id = t.id;
+  declare provisionedAssetCursor cursor for select ta.asset_id from task_asset ta, provisioned_personal_information ppi where ta.task_id = taskId and ta.environment_id = environmentId and ta.asset_id = ppi.asset_id and ta.environment_id = ppi.environment_id union select ca.source_id from task_concernassociation ca, provisioned_personal_information ppi where ca.task_id = taskId and ca.environment_id = environmentId and ca.source_id = ppi.asset_id and ca.environment_id = ppi.environment_id union select ca.target_id from task_concernassociation ca, provisioned_personal_information ppi where ca.task_id = taskId and ca.environment_id = environmentId and ca.target_id = ppi.asset_id and ca.environment_id = ppi.environment_id;
+  declare roleCursor cursor for select pr.role_id from persona_role pr, task_persona tp where tp.task_id = taskId and tp.environment_id = environmentId and tp.persona_id = pr.persona_id and tp.environment_id = pr.environment_id;
+
+  declare continue handler for not found set done = 1;
+
+  open taskCursor;
+  task_loop: loop
+    fetch taskCursor into taskName,taskId;
+    if done = 1
+    then
+      leave task_loop;
+    end if;
+
+
+    open provisionedAssetCursor;
+    pa_loop: loop
+      fetch provisionedAssetCursor into assetId;
+      if done = 1
+      then
+        leave pa_loop;
+      end if;
+
+      select count(pr.role_id) into prCount from persona_role pr, task_persona tp, role r, role_type rt where tp.task_id = taskId and tp.environment_id = environmentId and tp.persona_id = pr.persona_id and tp.environment_id = pr.environment_id and pr.role_id = r.id and r.role_type_id = rt.id and rt.name in ('Data Processor','Data Controller');
+      if prCount = 0
+      then
+        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR)',concat('Task ',taskName,' handles PII but no personas associated with this task are data controllers or data processors'));
+      end if;
+    end loop pa_loop; 
+    close provisionedAssetCursor;
+    set done = 0;
+  end loop task_loop;
+  close taskCursor;
+  set done = 0;
+end
+//
+
 
 delimiter ;
