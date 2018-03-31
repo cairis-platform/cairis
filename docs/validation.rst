@@ -10,9 +10,10 @@ To validate a current CAIRIS model, click on the Models/Validate menu and select
 
 The model validation checks currently supported are as follows:
 
-======================================== ==================================================================================================================
-Check                                    Description
-======================================== ==================================================================================================================
-Composition/Aggregation Integrity Check  For Hardware/Software/Information assets, checks head asset integrity isn't lower than the tail asset.
-Lawfulness, Fairness, and Privacy (GDPR) Checks that at least one persona working with a task is fulfiling the role of a Data Processor or Data Controller.
-======================================== ==================================================================================================================
+=================================================================== ============================================================================================================================================
+Check                                                               Description
+=================================================================== ============================================================================================================================================
+Composition/Aggregation Integrity Check                             For Hardware/Software/Information assets, checks head asset integrity isn't lower than the tail asset.
+Lawfulness, Fairness, and Transparency (GDPR): Lawful data handling Checks at least one persona working with a task or use case involving PII is fulfiling the role of a Data Processor or Data Controller.
+Lawfulness, Fairness, and Tranaparency (GDPR): Necessary processing Checks any use case involving PII is associated with a necessary goal or requirement.
+=================================================================== ============================================================================================================================================

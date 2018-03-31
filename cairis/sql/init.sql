@@ -51,6 +51,7 @@ DROP VIEW IF EXISTS misusability_case;
 DROP VIEW IF EXISTS usecase_step_synopsis_actor;
 DROP VIEW IF EXISTS quotation;
 DROP VIEW IF EXISTS provisioned_personal_information;
+DROP VIEW IF EXISTS process_asset;
 
 DROP TABLE IF EXISTS trust_boundary_usecase;
 DROP TABLE IF EXISTS trust_boundary_asset;
@@ -3910,6 +3911,12 @@ CREATE VIEW quotation as
 CREATE VIEW provisioned_personal_information as
   select a.id asset_id, rar.environment_id environment_id from asset a, asset_type at, roleassetrole_dependency rar,role dr, role_type drt, role de, role_type det where rar.dependency_id = a.id and rar.depender_id = dr.id and dr.role_type_id = drt.id and drt.name = 'Data Controller' and rar.dependee_id = de.id and de.role_type_id = det.id and det.name = 'Stakeholder' and a.asset_type_id = at.id and at.name = 'Information';
 
+CREATE VIEW process_asset as
+  select dpp.to_id usecase_id,dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_process_process dpp where df.id = dfa.dataflow_id and df.id = dpp.dataflow_id
+  union
+  select dep.to_id usecase_id, dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_entity_process dep where df.id = dfa.dataflow_id and df.id = dep.dataflow_id
+  union
+  select ddp.to_id usecase_id, dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_datastore_process ddp where df.id = dfa.dataflow_id and df.id = ddp.dataflow_id;
 
 
 INSERT INTO version (major,minor,patch) VALUES (1,6,1);

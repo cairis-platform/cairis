@@ -377,7 +377,7 @@ mainContent.on('click', ".removeUseCaseActor", function () {
   var usecase = JSON.parse($.session.get("UseCase"));
   $.each(usecase.theActors, function (index2, actor) {
     if(actor == text){
-      usecase.theSteps.splice( index2 ,1 );
+      usecase.theActors.splice( index2 ,1 );
       $.session.set("UseCase", JSON.stringify(usecase));
       return false;
     }

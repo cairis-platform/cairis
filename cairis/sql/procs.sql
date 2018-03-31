@@ -918,7 +918,9 @@ drop function if exists xmlEscaped;
 drop function if exists cairisVersion;
 drop procedure if exists modelValidation;
 drop procedure if exists integrityAggregationAssociationCheck;
-drop procedure if exists PIProvisionCheck_task;
+drop procedure if exists lawfulDataHandling_task;
+drop procedure if exists lawfulDataHandling_usecase;
+drop procedure if exists necessaryProcessing_usecase;
 
 delimiter //
 
@@ -24141,7 +24143,9 @@ begin
   create temporary table temp_vout (label varchar(200), message varchar(1000));
 
   call integrityAggregationAssociationCheck(environmentId);
-  call PIProvisionCheck_task(environmentId);
+  call lawfulDataHandling_task(environmentId); 
+  call lawfulDataHandling_usecase(environmentId); 
+  call necessaryProcessing_usecase(environmentId); 
 
   select label,message from temp_vout;
 
@@ -24187,7 +24191,7 @@ begin
 end
 //
 
-create procedure PIProvisionCheck_task(in environmentId int)
+create procedure lawfulDataHandling_task(in environmentId int)
 begin
   declare taskId int;
   declare taskName varchar(100);
@@ -24197,7 +24201,6 @@ begin
   declare taskCursor cursor for select t.name,t.id from environment_task et, task t where et.environment_id = environmentId and et.task_id = t.id;
   declare provisionedAssetCursor cursor for select ta.asset_id from task_asset ta, provisioned_personal_information ppi where ta.task_id = taskId and ta.environment_id = environmentId and ta.asset_id = ppi.asset_id and ta.environment_id = ppi.environment_id union select ca.source_id from task_concernassociation ca, provisioned_personal_information ppi where ca.task_id = taskId and ca.environment_id = environmentId and ca.source_id = ppi.asset_id and ca.environment_id = ppi.environment_id union select ca.target_id from task_concernassociation ca, provisioned_personal_information ppi where ca.task_id = taskId and ca.environment_id = environmentId and ca.target_id = ppi.asset_id and ca.environment_id = ppi.environment_id;
   declare roleCursor cursor for select pr.role_id from persona_role pr, task_persona tp where tp.task_id = taskId and tp.environment_id = environmentId and tp.persona_id = pr.persona_id and tp.environment_id = pr.environment_id;
-
   declare continue handler for not found set done = 1;
 
   open taskCursor;
@@ -24231,5 +24234,109 @@ begin
 end
 //
 
+
+create procedure lawfulDataHandling_usecase(in environmentId int)
+begin
+  declare ucId int;
+  declare ucName varchar(200);
+  declare assetId int;
+  declare assetName varchar(100);
+  declare arCount int;
+  declare done int default 0;
+  declare ucCursor cursor for select uc.name,uc.id from environment_usecase eu, usecase uc where eu.environment_id = environmentId and eu.usecase_id = uc.id;
+  declare provisionedAssetCursor cursor for select pa.asset_id,a.name from asset a,process_asset pa, provisioned_personal_information ppi where pa.usecase_id = ucId and pa.asset_id = a.id and pa.environment_id = environmentId and pa.asset_id = ppi.asset_id and pa.environment_id = ppi.environment_id;
+  declare continue handler for not found set done = 1;
+
+  open ucCursor;
+  uc_loop: loop
+    fetch ucCursor into ucName,ucId;
+    if done = 1
+    then
+      leave uc_loop;
+    end if;
+
+    open provisionedAssetCursor;
+    pa_loop: loop
+      fetch provisionedAssetCursor into assetId,assetName;
+      if done = 1
+      then
+        leave pa_loop;
+      end if;
+
+      select count(ur.role_id) into arCount from usecase uc, usecase_role ur, process_asset pa, role r, role_type rt where uc.id = ucId and uc.id = ur.usecase_id and uc.id = pa.usecase_id and pa.environment_id = environmentId and ur.role_id = r.id and r.role_type_id = rt.id and rt.name in ('Data Controller','Data Processor');
+
+      if arCount = 0
+      then
+        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR): Lawful data handling',concat('Usecase ',ucName,' handles PII (',assetName,') but no actors associated with this use case are data controllers or data processors'));
+      end if; 
+
+    end loop pa_loop; 
+    close provisionedAssetCursor;
+    set done = 0;
+
+  end loop uc_loop;
+  close ucCursor;
+  set done = 0;
+
+end
+//
+
+
+create procedure necessaryProcessing_usecase(in environmentId int)
+begin
+  declare ucId int;
+  declare ucName varchar(200);
+  declare assetId int;
+  declare assetName varchar(100);
+  declare msg varchar(1000) default '';
+  declare done int default 0;
+  declare srgCount int default 0;
+  declare ucCursor cursor for select uc.name,uc.id from environment_usecase eu, usecase uc where eu.environment_id = environmentId and eu.usecase_id = uc.id;
+  declare provisionedAssetCursor cursor for select pa.asset_id,a.name from asset a,process_asset pa, provisioned_personal_information ppi where pa.usecase_id = ucId and pa.asset_id = a.id and pa.environment_id = environmentId and pa.asset_id = ppi.asset_id and pa.environment_id = ppi.environment_id;
+
+  declare srCursor cursor for select ru.requirement_id from requirement_usecase ru, asset_requirement ar where ru.usecase_id = ucId and ru.requirement_id = ar.requirement_id and ar.asset_id = assetId;
+  
+ 
+  declare continue handler for not found set done = 1;
+
+
+  open ucCursor;
+  uc_loop: loop
+    fetch ucCursor into ucName,ucId;
+    if done = 1
+    then
+      leave uc_loop;
+    end if;
+
+    open provisionedAssetCursor;
+    pa_loop: loop
+      fetch provisionedAssetCursor into assetId,assetName;
+      if done = 1
+      then
+        leave pa_loop;
+      end if;
+
+      set msg = concat('Usecase ',ucName,' handles PII (',assetName,') but no requirements or goals are associated with this usecase that concern the PII');
+      select count(ru.requirement_id) into srgCount from requirement_usecase ru, asset_requirement ar where ru.usecase_id = ucId and ru.requirement_id = ar.requirement_id and ar.asset_id = assetId;
+      if srgCount = 0
+      then
+        select count(ga.goal_id) into srgCount from goalusecase_goalassociation ga, goal_concern gc where ga.environment_id = environmentId and ga.subgoal_id = ucId and ga.goal_id = gc.goal_id and ga.environment_id = gc.environment_id and gc.asset_id = assetId;
+      end if;
+
+      if srgCount = 0
+      then
+        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR): Necessary processing',msg);
+      end if;
+
+    end loop pa_loop; 
+    close provisionedAssetCursor;
+    set done = 0;
+
+  end loop uc_loop;
+  close ucCursor;
+  set done = 0;
+
+end
+//
 
 delimiter ;
