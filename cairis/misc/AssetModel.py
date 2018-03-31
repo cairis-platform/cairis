@@ -126,7 +126,7 @@ class AssetModel:
         self.buildNode(tailDim,tailName)
         self.nodeList.add(tailName)
 
-      if ((headName,tailName) not in edgeList):
+      if (((headName,tailName) not in edgeList) and ((tailName,headName) not in edgeList)):
         headType = association.headType()
         headMultiplicity = association.headMultiplicity()
         headRole = association.headRole()
