@@ -198,6 +198,9 @@ For details on how to print obstacle models as SVG files, see the `Generating Do
 Adding, updating, and deleting requirements
 -------------------------------------------
 
+.. figure:: RequirementsTable.jpg
+   :alt: Requirements table
+
 Requirements are added and edited using the Requirements Editor, which is accessible by selecting the Requirements/Requirements menu option. Each requirement is associated with an asset, or an
 environment. Requirements associated with assets may specify the asset,
 constrain the asset, or reference it in some way. Requirements
@@ -215,13 +218,30 @@ identified.
 
 -  When the attributes have been entered, press Enter to commit the requirement to the database.
 
-
 -  By changing the asset in the Assets combo box, or the Environment in
    the Environments combo box, the editor will be reloaded with the
    requirement associated with the selected asset or environment.
 
 -  A requirement can be deleting by right clicking on any cell in the row to be removed, and selecting Remove from the speed menu. Deleting a requirement also has the effect of re-ordering the
    requirement labels.
+
+
+Visualising Requirements Quality using Chernoff Faces
+-----------------------------------------------------
+
+.. figure:: RequirementsModel.jpg
+   :alt: Requirements model
+
+Requirements quality is automatically scored based on requirements completeness, the presence of an imperative phrase, and ambiguity.
+
+These are displayed using cartoon *Chernoff Faces*.  Eye-brow shape indicates the completeness of a given requirement.  If no text is found in certain fields, or phrases like *TBC*, *none*, or *not defined* are present, the completeness score is marked down accordingly, and the eye-brows convey a negative mood.
+
+The eye shape indicates whether or not an imperative phrase exists in the requirement description.  If such a phrase exists then the eyes become vertically elongated. The mouth indicates the presence of weak or fuzzy phrases, such as *mostly*, *appropriate*, *normal*, or *adequate*; the presence of these phrases turn the smile into a frown.
+
+Chernoff Faces can be seen by viewing the Requirements model (accessible via the Models/Requirements menu) or the Risk model (accessible via the Models/Risk menu).
+
+
+
 
 Template Requirements
 ~~~~~~~~~~~~~~~~~~~~~
