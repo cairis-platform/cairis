@@ -445,7 +445,7 @@ CREATE TABLE tension (
 ) ENGINE=INNODB;
 CREATE TABLE asset_value (
   id INT NOT NULL, 
-  name VARCHAR(50), 
+  name VARCHAR(100), 
   description VARCHAR(4000), 
   environment_id INT NOT NULL,
   PRIMARY KEY(id,environment_id),
