@@ -1,7 +1,7 @@
 Dependencies
 ============
 
-CAIRIS supports the modelling of strategic dependencies between roles, where these *dependees* depend on *dependers* for a dependum (goals, assets, or tasks).
+CAIRIS supports the modelling of strategic dependencies between roles, where these *dependers* depend on *dependees* for a dependum (goals, assets, or tasks).
 
 Adding, updating, and deleting a dependency
 -------------------------------------------
@@ -32,3 +32,14 @@ Dependencies can be viewed by Responsibility models by clicking on the Models/Re
    :alt: dependency in responsibility model
 
 Dependencies are indicated by the rounded arrows that flow from the depender to the dependee through the dependum.
+
+
+Introducing Personal data into CAIRIS using dependencies
+--------------------------------------------------------
+
+Personal data can be introduced into CAIRIS by carrying out the following steps.
+
+1.  Create or edit a *Stakeholder* role, and associate with this with a new persona; this will  represent the external entity that acts as the origin of the PII, and the persona will be useful to capturing any assumptions or expectations that this entity might have.
+2.  Create or edit a *Data Controller* role.
+3.  Create a dependency between the Stakeholder dependee role and the Data Controller depender, where the dependum is a newly created or existing asset that you wish to designate as personal data.
+
