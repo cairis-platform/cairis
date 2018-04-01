@@ -920,7 +920,9 @@ drop procedure if exists modelValidation;
 drop procedure if exists integrityAggregationAssociationCheck;
 drop procedure if exists lawfulDataHandling_task;
 drop procedure if exists lawfulDataHandling_usecase;
+drop procedure if exists purposeLimitation_usecase;
 drop procedure if exists necessaryProcessing_usecase;
+drop procedure if exists accuracyCheck;
 
 delimiter //
 
@@ -24144,6 +24146,8 @@ begin
   call lawfulDataHandling_task(environmentId); 
   call lawfulDataHandling_usecase(environmentId); 
   call necessaryProcessing_usecase(environmentId); 
+  call purposeLimitation_usecase(environmentId); 
+  call accuracyCheck(environmentId);
 
   select label,message from temp_vout;
 
@@ -24221,7 +24225,7 @@ begin
       select count(pr.role_id) into prCount from persona_role pr, task_persona tp, role r, role_type rt where tp.task_id = taskId and tp.environment_id = environmentId and tp.persona_id = pr.persona_id and tp.environment_id = pr.environment_id and pr.role_id = r.id and r.role_type_id = rt.id and rt.name in ('Data Processor','Data Controller');
       if prCount = 0
       then
-        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR)',concat('Task ',taskName,' handles PII but no personas associated with this task are data controllers or data processors'));
+        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR)',concat('Task ',taskName,' handles personal data but no personas associated with this task are data controllers or data processors'));
       end if;
     end loop pa_loop; 
     close provisionedAssetCursor;
@@ -24280,7 +24284,7 @@ end
 //
 
 
-create procedure necessaryProcessing_usecase(in environmentId int)
+create procedure purposeLimitation_usecase(in environmentId int)
 begin
   declare ucId int;
   declare ucName varchar(200);
@@ -24292,8 +24296,6 @@ begin
   declare ucCursor cursor for select uc.name,uc.id from environment_usecase eu, usecase uc where eu.environment_id = environmentId and eu.usecase_id = uc.id;
   declare provisionedAssetCursor cursor for select pa.asset_id,a.name from asset a,process_asset pa, provisioned_personal_information ppi where pa.usecase_id = ucId and pa.asset_id = a.id and pa.environment_id = environmentId and pa.asset_id = ppi.asset_id and pa.environment_id = ppi.environment_id;
 
-  declare srCursor cursor for select ru.requirement_id from requirement_usecase ru, asset_requirement ar where ru.usecase_id = ucId and ru.requirement_id = ar.requirement_id and ar.asset_id = assetId;
-  
  
   declare continue handler for not found set done = 1;
 
@@ -24314,7 +24316,7 @@ begin
         leave pa_loop;
       end if;
 
-      set msg = concat('Usecase ',ucName,' handles PII (',assetName,') but no requirements or goals are associated with this usecase that concern the PII');
+      set msg = concat('Usecase ',ucName,' handles personal data (',assetName,') but no requirements or goals associated with this usecase process this data.');
       select count(ru.requirement_id) into srgCount from requirement_usecase ru, asset_requirement ar where ru.usecase_id = ucId and ru.requirement_id = ar.requirement_id and ar.asset_id = assetId;
       if srgCount = 0
       then
@@ -24323,7 +24325,7 @@ begin
 
       if srgCount = 0
       then
-        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR): Necessary processing',msg);
+        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR): Purpose limitation',msg);
       end if;
 
     end loop pa_loop; 
@@ -24332,6 +24334,68 @@ begin
 
   end loop uc_loop;
   close ucCursor;
+  set done = 0;
+
+end
+//
+
+create procedure necessaryProcessing_usecase(in environmentId int)
+begin
+  declare ucId int;
+  declare ucName varchar(200);
+  declare assetId int;
+  declare assetName varchar(100);
+  declare msg varchar(1000) default '';
+  declare done int default 0;
+  declare srgCount int default 0;
+  declare ucCursor cursor for select distinct uc.name,uc.id from environment_usecase eu, usecase uc, process_asset pa, provisioned_personal_information ppi where eu.environment_id = environmentId and eu.usecase_id = uc.id and eu.usecase_id = pa.usecase_id and eu.environment_id = pa.environment_id and pa.environment_id = ppi.environment_id and pa.asset_id = ppi.asset_id;
+  declare continue handler for not found set done = 1;
+
+
+  open ucCursor;
+  uc_loop: loop
+    fetch ucCursor into ucName,ucId;
+    if done = 1
+    then
+      leave uc_loop;
+    end if;
+
+    set msg = concat('Usecase ',ucName,' handles personal data, but no requirements or goals are associated with this usecase.');
+    select count(ru.requirement_id) into srgCount from requirement_usecase ru where ru.usecase_id = ucId;
+    if srgCount = 0
+    then
+      select count(ga.goal_id) into srgCount from goalusecase_goalassociation ga where ga.environment_id = environmentId and ga.subgoal_id = ucId;
+    end if;
+
+    if srgCount = 0
+    then
+      insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR): Necessary processing',msg);
+    end if;
+
+  end loop uc_loop;
+  close ucCursor;
+  set done = 0;
+end
+//
+
+create procedure accuracyCheck(in environmentId int)
+begin
+  declare assetName varchar(100);
+  declare done int default 0;
+  declare pdCursor cursor for select a.name from asset a, asset_property ap, security_property sp, environment_asset ea, provisioned_personal_information ppi where a.id = ea.asset_id and ea.environment_id = environmentId and ea.environment_id = ap.environment_id and ea.asset_id = ap.asset_id and ap.property_id = sp.id and sp.name = 'Integrity' and ap.property_value_id = 0 and ea.environment_id = ppi.environment_id and ea.asset_id = ppi.asset_id;
+  declare continue handler for not found set done = 1;
+
+
+  open pdCursor;
+  pd_loop: loop
+    fetch pdCursor into assetName;
+    if done = 1
+    then
+      leave pd_loop;
+    end if;
+    insert into temp_vout(label,message) values('Accuracy (GDPR)',concat(assetName,' is personal data, but has not Integrity security property.'));
+  end loop pd_loop;
+  close pdCursor;
   set done = 0;
 
 end
