@@ -52,6 +52,7 @@ DROP VIEW IF EXISTS usecase_step_synopsis_actor;
 DROP VIEW IF EXISTS quotation;
 DROP VIEW IF EXISTS provisioned_personal_information;
 DROP VIEW IF EXISTS process_asset;
+DROP VIEW IF EXISTS datastore_asset;
 
 DROP TABLE IF EXISTS trust_boundary_usecase;
 DROP TABLE IF EXISTS trust_boundary_asset;
@@ -3917,6 +3918,10 @@ CREATE VIEW process_asset as
   select dep.to_id usecase_id, dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_entity_process dep where df.id = dfa.dataflow_id and df.id = dep.dataflow_id
   union
   select ddp.to_id usecase_id, dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_datastore_process ddp where df.id = dfa.dataflow_id and df.id = ddp.dataflow_id;
+
+CREATE VIEW datastore_asset as
+  select dpd.to_id datastore_id, dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_process_datastore dpd where df.id = dfa.dataflow_id and df.id = dpd.dataflow_id;
+
 
 
 INSERT INTO version (major,minor,patch) VALUES (1,6,2);

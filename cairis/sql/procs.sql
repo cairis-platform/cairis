@@ -926,6 +926,7 @@ drop procedure if exists accuracyCheck;
 drop procedure if exists fairDataProcessing;
 drop procedure if exists dataMinimisation_usecase;
 drop procedure if exists criticalPrivacyRisks;
+drop procedure if exists storageLimitationCheck;
 
 delimiter //
 
@@ -24153,6 +24154,7 @@ begin
   call purposeLimitation_usecase(environmentId); 
   call accuracyCheck(environmentId);
   call dataMinimisation_usecase(environmentId);
+  call storageLimitationCheck(environmentId);
   call criticalPrivacyRisks(environmentId);
 
   select label,message from temp_vout;
@@ -24231,7 +24233,7 @@ begin
       select count(pr.role_id) into prCount from persona_role pr, task_persona tp, role r, role_type rt where tp.task_id = taskId and tp.environment_id = environmentId and tp.persona_id = pr.persona_id and tp.environment_id = pr.environment_id and pr.role_id = r.id and r.role_type_id = rt.id and rt.name in ('Data Processor','Data Controller');
       if prCount = 0
       then
-        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR)',concat('Task ',taskName,' handles personal data but no personas associated with this task are data controllers or data processors'));
+        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy: Lawful data handling',concat('Task ',taskName,' handles personal data but no personas associated with this task are data controllers or data processors'));
       end if;
     end loop pa_loop; 
     close provisionedAssetCursor;
@@ -24275,7 +24277,7 @@ begin
 
       if arCount = 0
       then
-        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR): Lawful data handling',concat('Usecase ',ucName,' handles PII (',assetName,') but no actors associated with this use case are data controllers or data processors'));
+        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy: Lawful data handling',concat('Usecase ',ucName,' handles PII (',assetName,') but no actors associated with this use case are data controllers or data processors'));
       end if; 
 
     end loop pa_loop; 
@@ -24331,7 +24333,7 @@ begin
 
       if srgCount = 0
       then
-        insert into temp_vout(label,message) values('Purpose limitation (GDPR)',msg);
+        insert into temp_vout(label,message) values('Purpose limitation: Data purpose',msg);
       end if;
 
     end loop pa_loop; 
@@ -24375,7 +24377,7 @@ begin
 
     if srgCount = 0
     then
-      insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR): Necessary processing',msg);
+      insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy: Necessary processing',msg);
     end if;
 
   end loop uc_loop;
@@ -24399,7 +24401,7 @@ begin
     then
       leave pd_loop;
     end if;
-    insert into temp_vout(label,message) values('Accuracy (GDPR)',concat(assetName,' is personal data, but has not Integrity security property.'));
+    insert into temp_vout(label,message) values('Accuracy: Personal data integrity',concat(assetName,' is personal data, but has not Integrity security property.'));
   end loop pd_loop;
   close pdCursor;
   set done = 0;
@@ -24427,7 +24429,7 @@ begin
     select count(*) into faCount from provisioned_personal_information where asset_id = assetId and environment_id = environmentId;
     if faCount = 0
     then
-      insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR): Fair data processing',concat(assetName,' has privacy properties, and is processed by use case ',ucName,'. However, ',assetName,' is not recognised as personal data.'));
+      insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy: Fair data processing',concat(assetName,' has privacy properties, and is processed by use case ',ucName,'. However, ',assetName,' is not recognised as personal data.'));
     end if;
   end loop pa_loop;
   close paCursor;
@@ -24454,7 +24456,7 @@ begin
     select count(*) into dmCount from process_asset where asset_id = assetId and environment_id = environmentId;
     if dmCount = 0
     then
-      insert into temp_vout(label,message) values('Data Minimisation (GDPR)',concat(assetName,' has privacy properties, but is not processed in any use cases.'));
+      insert into temp_vout(label,message) values('Data Minimisation: Private data processing',concat(assetName,' has privacy properties, but is not processed in any use cases.'));
     end if;
 
   end loop dm_loop;
@@ -24496,12 +24498,44 @@ begin
 
     if postScore > 0
     then
-      insert into temp_vout(label,message) values('Integrity & Confidentiality (GDPR)',concat(assetName,' is exposed to risk ',riskName,'.'));
+      insert into temp_vout(label,message) values('Integrity & Confidentiality: Unmitigated privacy risks',concat(assetName,' is exposed to risk ',riskName,'.'));
     end if;
   end loop piar_loop;
   close piarCursor;
 end
 //
 
+create procedure storageLimitationCheck(in environmentId int)
+begin
+  declare dsId int;
+  declare assetId int;
+  declare dsName varchar(200);
+  declare assetName varchar(200);
+  declare sdpCount int;
+  declare done int default 0;
+  declare dsCursor cursor for select da.datastore_id,ds.name, da.asset_id,a.name from datastore_asset da, asset ds, asset a, provisioned_personal_information ppi where da.environment_id = environmentId and da.datastore_id = ds.id and da.asset_id = a.id and da.asset_id = ppi.asset_id and da.environment_id = ppi.environment_id;
+  declare continue handler for not found set done = 1;
+
+
+  open dsCursor;
+  ds_loop: loop
+    fetch dsCursor into dsId,dsName,assetId,assetName;
+    if done = 1
+    then
+      leave ds_loop;
+    end if;
+
+    select count(dfa.asset_id) into sdpCount from dataflow_datastore_process ddp, dataflow df, dataflow_asset dfa where df.environment_id = environmentId and df.id = ddp.dataflow_id and ddp.from_id = dsId and df.id = dfa.dataflow_id and dfa.asset_id = assetId;
+
+    if sdpCount = 0
+    then
+      insert into temp_vout(label,message) values('Storage Limitation: Unprocessed personal data',concat(assetName,' is stored in ',dsName,', but is not processed.'));
+    end if;
+  end loop ds_loop;
+  close dsCursor;
+
+
+end
+//
 
 delimiter ;
