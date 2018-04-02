@@ -923,6 +923,7 @@ drop procedure if exists lawfulDataHandling_usecase;
 drop procedure if exists purposeLimitation_usecase;
 drop procedure if exists necessaryProcessing_usecase;
 drop procedure if exists accuracyCheck;
+drop procedure if exists fairDataProcessing;
 
 delimiter //
 
@@ -24143,6 +24144,7 @@ begin
   create temporary table temp_vout (label varchar(200), message varchar(1000));
 
   call integrityAggregationAssociationCheck(environmentId);
+  call fairDataProcessing(environmentId);
   call lawfulDataHandling_task(environmentId); 
   call lawfulDataHandling_usecase(environmentId); 
   call necessaryProcessing_usecase(environmentId); 
@@ -24325,7 +24327,7 @@ begin
 
       if srgCount = 0
       then
-        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR): Purpose limitation',msg);
+        insert into temp_vout(label,message) values('Purpose limitation (GDPR)',msg);
       end if;
 
     end loop pa_loop; 
@@ -24397,6 +24399,37 @@ begin
   end loop pd_loop;
   close pdCursor;
   set done = 0;
+end
+//
+
+create procedure fairDataProcessing(in environmentId int)
+begin
+  declare ucName varchar(200);
+  declare assetName varchar(200);
+  declare assetId int;
+  declare faCount int;
+  declare done int default 0;
+  declare paCursor cursor for select uc.name,a.name,a.id from asset a, environment_asset ea, process_asset pa, usecase uc, environment_usecase eu, asset_property ap, security_property sp where a.id = ea.asset_id and ea.environment_id = environmentId and ea.environment_id = pa.environment_id and ea.asset_id = pa.asset_id and pa.usecase_id = eu.usecase_id and pa.environment_id = eu.environment_id and eu.usecase_id = uc.id and ea.asset_id = ap.asset_id and ea.environment_id = ap.environment_id and ap.property_id = sp.id and sp.name in ('Anonymity','Pseudonymity','Unlinkability','Unobservability') and ap.property_value_id > 0;
+  declare continue handler for not found set done = 1;
+
+  open paCursor;
+  pa_loop: loop
+    fetch paCursor into ucName,assetName,assetId;
+    if done = 1
+    then
+      leave pa_loop;
+    end if;
+
+    select count(*) into faCount from provisioned_personal_information where asset_id = assetId and environment_id = environmentId;
+    if faCount = 0
+    then
+      insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy (GDPR): Fair data processing',concat(assetName,' has privacy properties, and is processed by use case ',ucName,'. However, ',assetName,' is not recognised as personal data.'));
+    end if;
+  end loop pa_loop;
+  close paCursor;
+
+
+
 
 end
 //

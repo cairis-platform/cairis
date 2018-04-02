@@ -37,7 +37,7 @@ Dependencies are indicated by the rounded arrows that flow from the depender to 
 Introducing Personal data into CAIRIS using dependencies
 --------------------------------------------------------
 
-Personal data can be introduced into CAIRIS by carrying out the following steps.
+Personal data can be recognised in CAIRIS by carrying out the following steps.
 
 1.  Create or edit a *Stakeholder* role, and associate with this with a new persona; this will  represent the external entity that acts as the origin of the PII, and the persona will be useful to capturing any assumptions or expectations that this entity might have.
 2.  Create or edit a *Data Controller* role.
