@@ -925,6 +925,7 @@ drop procedure if exists necessaryProcessing_usecase;
 drop procedure if exists accuracyCheck;
 drop procedure if exists fairDataProcessing;
 drop procedure if exists dataMinimisation_usecase;
+drop procedure if exists criticalPrivacyRisks;
 
 delimiter //
 
@@ -24152,6 +24153,7 @@ begin
   call purposeLimitation_usecase(environmentId); 
   call accuracyCheck(environmentId);
   call dataMinimisation_usecase(environmentId);
+  call criticalPrivacyRisks(environmentId);
 
   select label,message from temp_vout;
 
@@ -24459,5 +24461,47 @@ begin
   close dmCursor;
 end
 //
+
+create procedure criticalPrivacyRisks(in environmentId int)
+begin
+  declare riskName varchar(50);
+  declare threatId int;
+  declare vulId int;
+  declare assetName varchar(200);
+  declare preScore int;
+  declare postScore int;
+  declare detailsBuf text;
+  declare likelihoodName varchar(50);
+  declare severityName varchar(50);
+  declare threatLikelihood int;
+  declare vulSeverity int;
+  declare done int default 0;
+  declare piarCursor cursor for select distinct r.name,r.threat_id,r.vulnerability_id,a.name from risk r, threat_property tp, asset a, asset_threat at, asset_property ap, security_property asp, provisioned_personal_information ppi where r.threat_id = tp.threat_id and tp.environment_id = environmentId and tp.threat_id = at.threat_id and tp.environment_id = at.environment_id and at.asset_id = ap.asset_id and at.environment_id = ap.environment_id and ap.property_id = asp.id and asp.name in ('Confidentiality','Integrity','Anonymity','Pseudonymity','Unlinkability','Unobservability') and tp.property_id = ap.property_id and ap.property_value_id > 0 and tp.property_value_id > 0 and ap.asset_id = a.id and ap.asset_id = ppi.asset_id and ap.environment_id = ppi.environment_id;
+  declare continue handler for not found set done = 1;
+
+  open piarCursor;
+  piar_loop: loop
+    fetch piarCursor into riskName,threatId,vulId,assetName;
+    if done = 1
+    then
+      leave piar_loop;
+    end if;
+
+    select threat_likelihood(threatId,environmentId) into likelihoodName;
+    select vulnerability_severity(vulId,environmentId) into severityName;
+    select id into threatLikelihood from likelihood where name = likelihoodName;
+    select id into vulSeverity from severity where name = severityName;
+
+    call calculateRiskScore(threatId,vulId,threatLikelihood,vulSeverity,environmentId,-1,preScore,postScore,detailsBuf); 
+
+    if postScore > 0
+    then
+      insert into temp_vout(label,message) values('Integrity & Confidentiality (GDPR)',concat(assetName,' is exposed to risk ',riskName,'.'));
+    end if;
+  end loop piar_loop;
+  close piarCursor;
+end
+//
+
 
 delimiter ;
