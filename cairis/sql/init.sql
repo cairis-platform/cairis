@@ -591,7 +591,7 @@ CREATE TABLE asset_type (
 ) ENGINE=INNODB;
 CREATE TABLE asset (
   id INT NOT NULL,
-  name VARCHAR(50) NOT NULL,
+  name VARCHAR(200) NOT NULL,
   short_code VARCHAR(100) NOT NULL,
   description VARCHAR(1000),
   significance VARCHAR(1000),
@@ -1966,7 +1966,7 @@ CREATE TABLE surface_type (
 ) ENGINE=INNODB;
 CREATE TABLE template_asset (
   id INT NOT NULL,
-  name VARCHAR(50) NOT NULL,
+  name VARCHAR(200) NOT NULL,
   short_code VARCHAR(100) NOT NULL,
   description VARCHAR(1000),
   significance VARCHAR(1000),

@@ -1,12 +1,12 @@
 {
   "AssetParameters" : {
-    "theName" : 50,
+    "theName" : 200,
     "theShortCode" : 20,
     "theDescription" : 1000,
     "theSignificance" : 1000
   },
   "Asset" : {
-    "theName" : 50,
+    "theName" : 200,
     "theShortCode" : 20,
     "theDescription" : 1000,
     "theSignificance" : 1000

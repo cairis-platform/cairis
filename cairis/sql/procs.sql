@@ -4631,7 +4631,7 @@ begin
   declare cmId int;
   declare cmName varchar(100);
   declare assetId int;
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare vulId int;
   declare vulName varchar(200);
   declare obsId int;
@@ -4703,7 +4703,7 @@ end
 create procedure countermeasureDependents(in cmId int)
 begin
   declare assetId int;
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare assetCountermeasures int;
   declare taskCountermeasures int;
   declare taskId int;
@@ -4869,7 +4869,7 @@ create procedure domainPropertyDependents(in dpId int)
 begin
   declare done int default 0;
   declare assetId int;
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare assetCursor cursor for select distinct da.asset_id,a.name from domainproperty_asset da, asset a where da.domainproperty_id = dpId and da.asset_id = a.id;  
   declare continue handler for not found set done = 1;
 
@@ -10212,7 +10212,7 @@ begin
   declare done int default 0;
   declare criticalId int default 0;
   declare vulName varchar(200);
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare criticalCursor cursor for select a.is_critical,a.name from asset a, environment_asset ea,environment_vulnerability ev where ea.environment_id = envId and ea.asset_id = a.id and ea.environment_id = ev.environment_id and ev.vulnerability_id = vulId;
   declare continue handler for not found set done = 1;
 
@@ -10420,7 +10420,7 @@ create procedure situatePatternAsset(in assetId int, in patternId int)
 begin
   declare done int default 0;
   declare templateAssetId int;
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare typeName varchar(50);
   declare reqDesc varchar(255);
   declare reqName varchar(4000);
@@ -10621,7 +10621,7 @@ end
 create procedure securityPatternDependents(in cmId int)
 begin
   declare assetId int;
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare assetPatterns int;
   declare done int default 0;
   declare assetCursor cursor for select a.id,a.name from countermeasure_securitypattern csp, securitypattern_classassociation sc, securitypattern_asset_template_asset ata, asset a where csp.countermeasure_id = cmId and csp.pattern_id = sc.pattern_id and sc.head_id = ata.template_asset_id and ata.asset_id = a.id union select a.id,a.name from countermeasure_securitypattern csp, securitypattern_classassociation sc, securitypattern_asset_template_asset ata, asset a where csp.countermeasure_id = cmId and csp.pattern_id = sc.pattern_id and sc.tail_id = ata.template_asset_id and ata.asset_id = a.id and ata.pattern_id = sc.pattern_id;
@@ -12374,7 +12374,7 @@ begin
   declare assetId int;
   declare envId int;
   declare envName varchar(50);
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare assetShortCode varchar(20);
   declare assetDesc varchar(1000);
   declare assetSignif varchar(1000);
@@ -14041,7 +14041,7 @@ begin
   declare dependerName varchar(50);
   declare dependeeName varchar(50);
   declare depType varchar(50);
-  declare dependencyName varchar(50);
+  declare dependencyName varchar(200);
   declare maCount int default 0;
   declare gaCount int default 0;
   declare rrCount int default 0;
@@ -17235,7 +17235,7 @@ end
 create procedure goalEnvironmentDependents(in asId int,in envId int)
 begin
   declare assetId int;
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare goalId int;
   declare goalName varchar(100);
   declare obsId int;
@@ -19036,7 +19036,7 @@ create procedure situateComponentAsset(in assetId int, in componentName text)
 begin
   declare done int default 0;
   declare templateAssetId int;
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare componentId int;
   declare assetTemplateAssetCount int;
   declare continue handler for not found set done = 1;
@@ -19277,7 +19277,7 @@ begin
   declare reqFc longtext;
   declare reqId int;
   declare trId int;
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare done int;
   declare reqCursor cursor for select cr.label,rt.name,cr.name,cr.description,cr.rationale,cr.fit_criterion,ta.name from component_view_component cvc, component_requirement cr, requirement_type rt, template_asset ta where cvc.component_view_id = cvId and cvc.component_id = cr.component_id and cr.component_id = cId and cr.type_id = rt.id and cr.asset_id = ta.id order by cr.label;
   declare continue handler for not found set done = 1;
@@ -20125,7 +20125,7 @@ end
 create procedure situateComponentViewGoal(in cvId int, in cId int, in cName text, in envName text)
 begin
   declare goalName varchar(4000);
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare roleName varchar(255);
   declare assetId int;
   declare goalDef varchar(4000);
@@ -21084,7 +21084,7 @@ begin
   declare motiveName varchar(50);
   declare capName varchar(50);
   declare capValue varchar(50);
-  declare assetName varchar(50);
+  declare assetName varchar(200);
   declare implDesc varchar(5000);
   declare rotObsName varchar(200);
   declare isFirst int default 1;
@@ -23798,7 +23798,7 @@ begin
   declare fromType varchar (9);
   declare toName varchar (200);
   declare toType varchar (9);
-  declare assetName varchar (50);
+  declare assetName varchar (200);
   declare compName varchar (200);
   declare compType varchar (20);
   declare tbName varchar(50);
@@ -24242,7 +24242,7 @@ begin
   declare ucId int;
   declare ucName varchar(200);
   declare assetId int;
-  declare assetName varchar(100);
+  declare assetName varchar(200);
   declare arCount int;
   declare done int default 0;
   declare ucCursor cursor for select uc.name,uc.id from environment_usecase eu, usecase uc where eu.environment_id = environmentId and eu.usecase_id = uc.id;
@@ -24289,7 +24289,7 @@ begin
   declare ucId int;
   declare ucName varchar(200);
   declare assetId int;
-  declare assetName varchar(100);
+  declare assetName varchar(200);
   declare msg varchar(1000) default '';
   declare done int default 0;
   declare srgCount int default 0;
@@ -24344,7 +24344,7 @@ begin
   declare ucId int;
   declare ucName varchar(200);
   declare assetId int;
-  declare assetName varchar(100);
+  declare assetName varchar(200);
   declare msg varchar(1000) default '';
   declare done int default 0;
   declare srgCount int default 0;
@@ -24380,7 +24380,7 @@ end
 
 create procedure accuracyCheck(in environmentId int)
 begin
-  declare assetName varchar(100);
+  declare assetName varchar(200);
   declare done int default 0;
   declare pdCursor cursor for select a.name from asset a, asset_property ap, security_property sp, environment_asset ea, provisioned_personal_information ppi where a.id = ea.asset_id and ea.environment_id = environmentId and ea.environment_id = ap.environment_id and ea.asset_id = ap.asset_id and ap.property_id = sp.id and sp.name = 'Integrity' and ap.property_value_id = 0 and ea.environment_id = ppi.environment_id and ea.asset_id = ppi.asset_id;
   declare continue handler for not found set done = 1;
