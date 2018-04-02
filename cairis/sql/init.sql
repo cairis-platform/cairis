@@ -3919,7 +3919,7 @@ CREATE VIEW process_asset as
   select ddp.to_id usecase_id, dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_datastore_process ddp where df.id = dfa.dataflow_id and df.id = ddp.dataflow_id;
 
 
-INSERT INTO version (major,minor,patch) VALUES (1,6,1);
+INSERT INTO version (major,minor,patch) VALUES (1,6,2);
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');
 INSERT INTO trace_dimension values (1,'persona');
