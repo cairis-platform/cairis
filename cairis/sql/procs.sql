@@ -924,6 +924,7 @@ drop procedure if exists purposeLimitation_usecase;
 drop procedure if exists necessaryProcessing_usecase;
 drop procedure if exists accuracyCheck;
 drop procedure if exists fairDataProcessing;
+drop procedure if exists dataMinimisation_usecase;
 
 delimiter //
 
@@ -24150,6 +24151,7 @@ begin
   call necessaryProcessing_usecase(environmentId); 
   call purposeLimitation_usecase(environmentId); 
   call accuracyCheck(environmentId);
+  call dataMinimisation_usecase(environmentId);
 
   select label,message from temp_vout;
 
@@ -24427,10 +24429,34 @@ begin
     end if;
   end loop pa_loop;
   close paCursor;
+end
+//
 
+create procedure dataMinimisation_usecase(in environmentId int)
+begin
+  declare assetName varchar(200);
+  declare assetId int;
+  declare dmCount int;
+  declare done int default 0;
+  declare dmCursor cursor for select a.name,a.id from asset a, environment_asset ea, asset_property ap, security_property sp where ea.environment_id = environmentId and ea.asset_id = a.id and ea.environment_id = ap.environment_id and ap.asset_id = a.id and ap.property_id = sp.id and sp.name in ('Anonymity','Pseudonymity','Unlinkability','Unobservability') and ap.property_value_id > 0;
+  declare continue handler for not found set done = 1;
 
+  open dmCursor;
+  dm_loop: loop
+    fetch dmCursor into assetName,assetId; 
+    if done = 1
+    then
+      leave dm_loop;
+    end if;
 
+    select count(*) into dmCount from process_asset where asset_id = assetId and environment_id = environmentId;
+    if dmCount = 0
+    then
+      insert into temp_vout(label,message) values('Data Minimisation (GDPR)',concat(assetName,' has privacy properties, but is not processed in any use cases.'));
+    end if;
 
+  end loop dm_loop;
+  close dmCursor;
 end
 //
 

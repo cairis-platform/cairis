@@ -17,6 +17,7 @@ Composition/Aggregation Integrity Check                             For Hardware
 Lawfulness, Fairness, and Transparency (GDPR): Fair data processing Checks data with privacy properties is processed only if it's recognised as personal data.
 Lawfulness, Fairness, and Transparency (GDPR): Lawful data handling Checks at least one persona working with a task or use case involving personal data is fulfiling the role of a Data Processor or Data Controller.
 Lawfulness, Fairness, and Tranaparency (GDPR): Necessary processing Checks any use case involving personal data is associated with a necessary goal or requirement.
-Purpoe Limitation (GDPR)                                            Checks any use case involving personal data is associated with a necessary goal concerned with that personal data.
+Purpose Limitation (GDPR)                                           Checks any use case involving personal data is associated with a necessary goal concerned with that personal data.
+Data Minimisation (GDPR)                                            Checks that data with privacy properties are accounted for in processes.
 Accuracy (GDPR)                                                     Checks personal data has an Integrity security property.
 =================================================================== ==================================================================================================================================================
