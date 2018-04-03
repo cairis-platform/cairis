@@ -31,7 +31,7 @@ GDPR Principle                          Check                      Description
 ======================================  =========================  =================================================================================================================================================
 Lawfulness, Fairness, and Transparency  Fair data processing       Data with privacy properties is processed only if it's recognised as personal data.
 Lawfulness, Fairness, and Transparency  Lawful data handling       A persona working with a task or use case involving personal data is a Data Processor or Data Controller.
-Lawfulness, Fairness, and Tranaparency  Necessary processing       Use cases involving personal data are associated with a necessary goal or requirement.
+Lawfulness, Fairness, and Transparency  Necessary processing       Use cases involving personal data are associated with a necessary goal or requirement.
 Purpose Limitation                      Data purpose               Use cases involving personal data are associated with a necessary goal concerned with that personal data.
 Data Minimisation                       Private data processing    Data with privacy properties are accounted for in processes.
 Accuracy                                Personal data integrity    Personal data has an Integrity security property.
