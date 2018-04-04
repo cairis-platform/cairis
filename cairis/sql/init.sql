@@ -50,7 +50,7 @@ DROP VIEW IF EXISTS component_goal;
 DROP VIEW IF EXISTS misusability_case;
 DROP VIEW IF EXISTS usecase_step_synopsis_actor;
 DROP VIEW IF EXISTS quotation;
-DROP VIEW IF EXISTS provisioned_personal_information;
+DROP VIEW IF EXISTS personal_information;
 DROP VIEW IF EXISTS process_asset;
 DROP VIEW IF EXISTS datastore_asset;
 
@@ -3909,7 +3909,7 @@ CREATE VIEW quotation as
    union
    select c.name code,'persona' artifact_type,p.name artifact_name,'Contextual' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'contextual',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id order by 1;
 
-CREATE VIEW provisioned_personal_information as
+CREATE VIEW personal_information as
   select a.id asset_id, rar.environment_id environment_id from asset a, asset_type at, roleassetrole_dependency rar,role dr, role_type drt, role de, role_type det where rar.dependency_id = a.id and rar.depender_id = dr.id and dr.role_type_id = drt.id and drt.name = 'Data Controller' and rar.dependee_id = de.id and de.role_type_id = det.id and det.name = 'Stakeholder' and a.asset_type_id = at.id and at.name = 'Information';
 
 CREATE VIEW process_asset as

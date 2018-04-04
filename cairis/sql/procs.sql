@@ -24209,7 +24209,7 @@ begin
   declare prCount int;
   declare done int default 0;
   declare taskCursor cursor for select t.name,t.id from environment_task et, task t where et.environment_id = environmentId and et.task_id = t.id;
-  declare provisionedAssetCursor cursor for select ta.asset_id from task_asset ta, provisioned_personal_information ppi where ta.task_id = taskId and ta.environment_id = environmentId and ta.asset_id = ppi.asset_id and ta.environment_id = ppi.environment_id union select ca.source_id from task_concernassociation ca, provisioned_personal_information ppi where ca.task_id = taskId and ca.environment_id = environmentId and ca.source_id = ppi.asset_id and ca.environment_id = ppi.environment_id union select ca.target_id from task_concernassociation ca, provisioned_personal_information ppi where ca.task_id = taskId and ca.environment_id = environmentId and ca.target_id = ppi.asset_id and ca.environment_id = ppi.environment_id;
+  declare provisionedAssetCursor cursor for select ta.asset_id from task_asset ta, personal_information pi where ta.task_id = taskId and ta.environment_id = environmentId and ta.asset_id = pi.asset_id and ta.environment_id = pi.environment_id union select ca.source_id from task_concernassociation ca, personal_information pi where ca.task_id = taskId and ca.environment_id = environmentId and ca.source_id = pi.asset_id and ca.environment_id = pi.environment_id union select ca.target_id from task_concernassociation ca, personal_information pi where ca.task_id = taskId and ca.environment_id = environmentId and ca.target_id = pi.asset_id and ca.environment_id = pi.environment_id;
   declare roleCursor cursor for select pr.role_id from persona_role pr, task_persona tp where tp.task_id = taskId and tp.environment_id = environmentId and tp.persona_id = pr.persona_id and tp.environment_id = pr.environment_id;
   declare continue handler for not found set done = 1;
 
@@ -24254,7 +24254,7 @@ begin
   declare arCount int;
   declare done int default 0;
   declare ucCursor cursor for select uc.name,uc.id from environment_usecase eu, usecase uc where eu.environment_id = environmentId and eu.usecase_id = uc.id;
-  declare provisionedAssetCursor cursor for select pa.asset_id,a.name from asset a,process_asset pa, provisioned_personal_information ppi where pa.usecase_id = ucId and pa.asset_id = a.id and pa.environment_id = environmentId and pa.asset_id = ppi.asset_id and pa.environment_id = ppi.environment_id;
+  declare provisionedAssetCursor cursor for select pa.asset_id,a.name from asset a,process_asset pa, personal_information pi where pa.usecase_id = ucId and pa.asset_id = a.id and pa.environment_id = environmentId and pa.asset_id = pi.asset_id and pa.environment_id = pi.environment_id;
   declare continue handler for not found set done = 1;
 
   open ucCursor;
@@ -24302,7 +24302,7 @@ begin
   declare done int default 0;
   declare srgCount int default 0;
   declare ucCursor cursor for select uc.name,uc.id from environment_usecase eu, usecase uc where eu.environment_id = environmentId and eu.usecase_id = uc.id;
-  declare provisionedAssetCursor cursor for select pa.asset_id,a.name from asset a,process_asset pa, provisioned_personal_information ppi where pa.usecase_id = ucId and pa.asset_id = a.id and pa.environment_id = environmentId and pa.asset_id = ppi.asset_id and pa.environment_id = ppi.environment_id;
+  declare provisionedAssetCursor cursor for select pa.asset_id,a.name from asset a,process_asset pa, personal_information pi where pa.usecase_id = ucId and pa.asset_id = a.id and pa.environment_id = environmentId and pa.asset_id = pi.asset_id and pa.environment_id = pi.environment_id;
 
  
   declare continue handler for not found set done = 1;
@@ -24356,7 +24356,7 @@ begin
   declare msg varchar(1000) default '';
   declare done int default 0;
   declare srgCount int default 0;
-  declare ucCursor cursor for select distinct uc.name,uc.id from environment_usecase eu, usecase uc, process_asset pa, provisioned_personal_information ppi where eu.environment_id = environmentId and eu.usecase_id = uc.id and eu.usecase_id = pa.usecase_id and eu.environment_id = pa.environment_id and pa.environment_id = ppi.environment_id and pa.asset_id = ppi.asset_id;
+  declare ucCursor cursor for select distinct uc.name,uc.id from environment_usecase eu, usecase uc, process_asset pa, personal_information pi where eu.environment_id = environmentId and eu.usecase_id = uc.id and eu.usecase_id = pa.usecase_id and eu.environment_id = pa.environment_id and pa.environment_id = pi.environment_id and pa.asset_id = pi.asset_id;
   declare continue handler for not found set done = 1;
 
 
@@ -24390,7 +24390,7 @@ create procedure accuracyCheck(in environmentId int)
 begin
   declare assetName varchar(200);
   declare done int default 0;
-  declare pdCursor cursor for select a.name from asset a, asset_property ap, security_property sp, environment_asset ea, provisioned_personal_information ppi where a.id = ea.asset_id and ea.environment_id = environmentId and ea.environment_id = ap.environment_id and ea.asset_id = ap.asset_id and ap.property_id = sp.id and sp.name = 'Integrity' and ap.property_value_id = 0 and ea.environment_id = ppi.environment_id and ea.asset_id = ppi.asset_id;
+  declare pdCursor cursor for select a.name from asset a, asset_property ap, security_property sp, environment_asset ea, personal_information pi where a.id = ea.asset_id and ea.environment_id = environmentId and ea.environment_id = ap.environment_id and ea.asset_id = ap.asset_id and ap.property_id = sp.id and sp.name = 'Integrity' and ap.property_value_id = 0 and ea.environment_id = pi.environment_id and ea.asset_id = pi.asset_id;
   declare continue handler for not found set done = 1;
 
 
@@ -24426,7 +24426,7 @@ begin
       leave pa_loop;
     end if;
 
-    select count(*) into faCount from provisioned_personal_information where asset_id = assetId and environment_id = environmentId;
+    select count(*) into faCount from personal_information where asset_id = assetId and environment_id = environmentId;
     if faCount = 0
     then
       insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy: Fair data processing',concat(assetName,' has privacy properties, and is processed by use case ',ucName,'. However, ',assetName,' is not recognised as personal data.'));
@@ -24478,7 +24478,7 @@ begin
   declare threatLikelihood int;
   declare vulSeverity int;
   declare done int default 0;
-  declare piarCursor cursor for select distinct r.name,r.threat_id,r.vulnerability_id,a.name from risk r, threat_property tp, asset a, asset_threat at, asset_property ap, security_property asp, provisioned_personal_information ppi where r.threat_id = tp.threat_id and tp.environment_id = environmentId and tp.threat_id = at.threat_id and tp.environment_id = at.environment_id and at.asset_id = ap.asset_id and at.environment_id = ap.environment_id and ap.property_id = asp.id and asp.name in ('Confidentiality','Integrity','Anonymity','Pseudonymity','Unlinkability','Unobservability') and tp.property_id = ap.property_id and ap.property_value_id > 0 and tp.property_value_id > 0 and ap.asset_id = a.id and ap.asset_id = ppi.asset_id and ap.environment_id = ppi.environment_id;
+  declare piarCursor cursor for select distinct r.name,r.threat_id,r.vulnerability_id,a.name from risk r, threat_property tp, asset a, asset_threat at, asset_property ap, security_property asp, personal_information pi where r.threat_id = tp.threat_id and tp.environment_id = environmentId and tp.threat_id = at.threat_id and tp.environment_id = at.environment_id and at.asset_id = ap.asset_id and at.environment_id = ap.environment_id and ap.property_id = asp.id and asp.name in ('Confidentiality','Integrity','Anonymity','Pseudonymity','Unlinkability','Unobservability') and tp.property_id = ap.property_id and ap.property_value_id > 0 and tp.property_value_id > 0 and ap.asset_id = a.id and ap.asset_id = pi.asset_id and ap.environment_id = pi.environment_id;
   declare continue handler for not found set done = 1;
 
   open piarCursor;
@@ -24513,7 +24513,7 @@ begin
   declare assetName varchar(200);
   declare sdpCount int;
   declare done int default 0;
-  declare dsCursor cursor for select da.datastore_id,ds.name, da.asset_id,a.name from datastore_asset da, asset ds, asset a, provisioned_personal_information ppi where da.environment_id = environmentId and da.datastore_id = ds.id and da.asset_id = a.id and da.asset_id = ppi.asset_id and da.environment_id = ppi.environment_id;
+  declare dsCursor cursor for select da.datastore_id,ds.name, da.asset_id,a.name from datastore_asset da, asset ds, asset a, personal_information pi where da.environment_id = environmentId and da.datastore_id = ds.id and da.asset_id = a.id and da.asset_id = pi.asset_id and da.environment_id = pi.environment_id;
   declare continue handler for not found set done = 1;
 
 
