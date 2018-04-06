@@ -169,6 +169,11 @@ def buildModel(p,envName,modelType,graphFile,locsName = ''):
     if (model.size() == 0):
       return False
     drawGraph(model.graph(),'dot',graphFile)
+  elif (modelType == 'PersonalDataFlow'):
+    model = DataFlowDiagram(p.personalDataFlowDiagram(envName),envName,db_proxy=p)
+    if (model.size() == 0):
+      return False
+    drawGraph(model.graph(),'dot',graphFile)
   elif (modelType == 'Locations'):
     riskOverlay = p.locationsRiskModel(locsName,envName)
     model = LocationModel(locsName,envName,riskOverlay,db_proxy=p)
@@ -325,6 +330,217 @@ def projectPurpose(pSettings):
 """
   return chapterTxt
 
+def dpiaNeed(p,pSettings):
+  chapterTxt = """
+  <chapter><title>Motivation for DPIA</title>"""
+  if (len(pSettings) == 0):
+    return ""
+  chapterTxt += """
+    <section><title>Background</title>
+      <para>""" + paraText(pSettings['Project Background']) + """</para>
+    </section>
+    <section><title>Goals</title>
+      <para>""" + paraText(pSettings['Project Goals']) + """</para>
+    </section>
+    <section><title>Scope</title>
+      <para>""" + paraText(pSettings['Project Scope']) + """</para>
+    </section>
+  """
+  rpFile = pSettings['Rich Picture']
+  if (rpFile != ''):
+    chapterTxt += richPictureSection(rpFile)
+
+  environments = p.getEnvironments()
+  if (environments != None):
+    chapterTxt += """
+    <section><title>Contexts of Use</title>
+      <para>This section describes the environments within which the planned system will operate in.  Personal information, data flows, and privacy risks may vary based on these environments.</para>
+"""
+    for idx,environment in environments.items():
+      environmentName = environment.name()
+      chapterTxt +=  """
+      <section id=\'""" + environmentName.replace(" ","_") + "\' ><title>" + environmentName + "</title>"
+      chapterTxt += """
+        <section><title>Description</title>
+          <para>""" + paraText(environment.description()) + "</para>" + """
+        </section>
+        <section><title>Short Code</title>
+          <para>""" + paraText(environment.shortCode()) + "</para>" + """
+        </section>
+        <section><title>Asset Values</title>"""
+      avRows = []
+      for avt in p.getValueTypes('asset_value',environmentName):
+        avRows.append((avt.name(),avt.description()))
+      chapterTxt += buildTable( (environmentName + "AssetValues").replace(" ","_") + "AssetValuesTable","",['Value','Description'],avRows,0)
+      chapterTxt += """
+        </section>
+      </section>"""
+    chapterTxt += """ 
+    </section>
+  </chapter>
+"""
+  return chapterTxt
+
+
+
+def dpiaProcessing(p,docDir):
+  chapterTxt = """
+  <chapter><title>Processing</title>
+    <section><title>Roles</title>
+      <para>The following roles participate in processes and dataflows.  However, roles may also be fulfilled by potential attackers.</para>
+"""
+  roles = p.getRoles()
+  if (roles == None):
+    return ""
+  componentRows = []
+  for idx,role in roles.items():
+    componentRows.append((role.name(),role.description()))
+  chapterTxt += buildTable( "RolePropertiesTable"," Roles",['Name','Description'],componentRows,0) + """
+    </section>
+    <section><title>Nature of Processing</title>
+      <section><title>Data Flow Diagram (DFDs)</title>
+        <para>The DFDs in the following sub-sections illustrate the flow of personal data.</para>
+  """
+  envs = p.getEnvironments()
+  modelType = 'PersonalDataFlow'
+  for idx,env in envs.items():
+    environmentName = env.name()
+    modelFile = docDir + '/' + environmentName + modelType + 'Model'
+    if (buildModel(p,environmentName,modelType,modelFile) == True):
+      chapterTxt += """
+        <section><title>""" + environmentName + "</title>" 
+      chapterTxt += buildImage(modelFile,environmentName + ' ' + 'Data Flow Diagram')
+      chapterTxt += """
+        </section>"""
+  chapterTxt += """
+      </section>
+      <section><title>Data Mapping Tables</title>
+        <section><title>Processes</title>
+  """
+  chapterTxt += p.processDataMaps()
+  chapterTxt += """
+        </section>
+        <section><title>Data Stores</title>
+   """
+  chapterTxt += p.datastoreDataMaps()
+  chapterTxt += """
+        </section>
+      </section>
+    </section>
+    <section><title>Scope of Processing</title>
+      <section><title>Overview</title>
+        <para>The scope of processing is limited to the personal information described the following sub-sections.</para>
+      </section>
+    """
+  chapterTxt = buildAssetContent(p,docDir,chapterTxt,True)
+  chapterTxt += """
+    </section>
+    <section><title>Context of Processing</title>
+      <section><title>Overview</title>
+        <para>Our understanding of the data subjects is summarised by the personas below.</para>
+      </section>
+  """ 
+  chapterTxt = buildPersonas(p,docDir,chapterTxt,True)
+  chapterTxt += """
+    </section>
+    <section><title>Purpose of Processing</title>
+      <para>Personal information is processed in the use cases specified below.</para>
+   """
+  chapterTxt = buildUseCases(p,docDir,chapterTxt)
+  chapterTxt += """
+      </section>
+  </chapter>
+  """
+  return chapterTxt
+
+def dpiaConsultation(p,docDir):
+  chapterTxt = """
+  <chapter><title>Consultation</title>
+    <section><title>Overview</title>
+      <para>Individual views were sought when creating the personas.  These are described in the sections that follow.</para>
+    </section>
+  """
+  personas = p.getPersonas()
+  for idx,persona in personas.items():
+    personaName = persona.name()
+    chapterTxt += """
+     <section><title>""" + personaName + "</title>" + """
+    """
+    chapterTxt = buildPersonaRationale(p,personaName, docDir, chapterTxt)
+    chapterTxt += """
+     </section>
+    """
+  chapterTxt += """
+  </chapter>"""
+  return chapterTxt
+
+def dpiaNecessity(p,docDir):
+  chapterTxt = """
+  <chapter><title>Necessity and Proportionality</title>
+    <para>The table below describe the processes that handle personal data, and the goals that describe the necessity of this processing.</para>
+  """
+  envs = p.getEnvironments()
+  for idx,env in envs.items():
+    envName = env.name()
+    lpTable = p.lawfulProcessingTable(envName)
+    if (len(lpTable) > 0):
+      chapterTxt += """
+    <section><title>""" + envName + "</title>" + """
+      """
+      chapterTxt += buildTable( envName + "LPTable",envName + " Lawful Processing table",['Process','Personal Information','Goal','Definition','Fit Criterion','Issues'],lpTable,0) 
+      chapterTxt += """
+    </section>
+      """
+  chapterTxt += """
+  </chapter>
+  """
+  return chapterTxt
+
+def dpiaRisks(p,docDir):
+  chapterTxt = """
+  <chapter><title>Privacy Risks</title>
+
+    <section><title>Vulnerabilities</title>
+  """
+  chapterTxt = buildVulnerabilities(p,chapterTxt,True)
+  
+  chapterTxt += """
+    </section>
+    <section><title>Attackers</title>
+  """
+
+  chapterTxt = buildAttackers(p,chapterTxt,True)
+  chapterTxt += """
+    </section>
+    <section><title>Threat</title>
+  """
+
+  chapterTxt = buildThreats(p,chapterTxt,True)
+  chapterTxt += """
+    </section>
+    <section><title>Risk</title>
+  """
+
+  chapterTxt = buildRisks(p,docDir,chapterTxt,True)
+  chapterTxt += """
+    </section>
+  </chapter>
+  """
+  return chapterTxt
+
+def dpiaMeasures(p):
+  chapterTxt = """
+  <chapter><title>Risk Response Measures</title>
+  """
+
+  chapterTxt = buildResponses(p,chapterTxt,True)
+
+  chapterTxt += """
+  </chapter>
+  """
+  return chapterTxt
+
+
 def projectScope(pSettings,p,docDir):
   chapterTxt = """
   <chapter><title>Project Scope</title>"""
@@ -442,7 +658,13 @@ def useCases(p,docDir):
       <para>This chapter describes, in more abstract terms than tasks, the interaction which takes place between roles and the system.  Use Cases operationalise goals and requirements, and each step in a use case may lead to possible exceptions.  These exceptions may be related to obstacles.</para>
     </section>
 """
+  chapterTxt = buildUseCases(p,docDir,chapterTxt)
+  chapterTxt += """
+  </chapter>
+  """          
+  return chapterTxt
 
+def buildUseCases(p,docDir,chapterTxt):
   ucs = p.getUseCases()
   if (ucs == None):
     return ""
@@ -490,9 +712,6 @@ def useCases(p,docDir):
       </section>
     </section>
     """
-  chapterTxt += """
-  </chapter>
-  """          
   return chapterTxt
 
 
@@ -573,15 +792,12 @@ def personas(p,docDir):
     <section><title>Overview</title>
       <para>This project needs to be situated for the personas below and the work they carry out.  Primary personas should be the main focus of analysis, but it is important not to forget the role other types of persona might play.</para>
     </section>
-  """
-  roles = p.getRoles()
-  if (roles == None):
-    return ""
-
-  chapterTxt += """
     <section><title>Roles</title>
       <para>Personas may fulfil one or more of the below roles.  However, roles may also be fulfilled by potential attackers.</para>
 """
+  roles = p.getRoles()
+  if (roles == None):
+    return ""
   componentRows = []
   for idx,role in roles.items():
     componentRows.append((role.name(),role.description()))
@@ -589,6 +805,15 @@ def personas(p,docDir):
     </section>
     <section><title>Personas</title>
 """
+  chapterTxt = buildPersonas(p,docDir,chapterTxt,False)
+  chapterTxt += """
+    </section>
+  </chapter>
+  """          
+  return chapterTxt
+
+def buildPersonas(p,docDir,chapterTxt,isDpia = False):
+
   b = Borg()
   personas = p.getPersonas()
   for idx,persona in personas.items():
@@ -636,55 +861,64 @@ def personas(p,docDir):
         </section>
       """ 
     
-
-    chapterTxt += personaModelSection(p,persona.name(),docDir)
-
-    docRefs = p.getPersonaDocumentReferences(personaName)
-    if len(docRefs) > 0:
-      chapterTxt += """
-        <section><title>Document References</title>
-      """
-      chapterTxt += buildTable( personaName.replace(" ","_") + "DocumentReferencesTable",personaName + " Document References",['Reference','Document','Excerpt'],docRefs,0)
-      chapterTxt += """
-        </section>
-      """
-
-    edRefs = p.getPersonaExternalDocuments(personaName)
-    if len(edRefs) > 0:
-      chapterTxt += """
-        <section><title>External Documents</title>
-      """
-      chapterTxt += buildTable( personaName.replace(" ","_") + "ExternalDocumentReferencesTable",personaName + " External Documents",['Document','Version','Authors','Date'],edRefs,0)
-      chapterTxt += """
-        </section>
-      """
-
-    conRefs = p.getPersonaConceptReferences(personaName)
-    if len(conRefs) > 0:
-      chapterTxt += """
-        <section><title>Concept References</title>
-      """
-      chapterTxt += buildTable( personaName.replace(" ","_") + "ConceptReferencesTable",personaName + " Concept References",['Reference','Concept','Name','Excerpt'],conRefs,0)
-      chapterTxt += """
-        </section>
-      """
-
+    if (isDpia == False):
+      chapterTxt = buildPersonaRationale(p,persona.name(), docDir, chapterTxt)
     chapterTxt += """   
       </section>"""
-  chapterTxt += """
-    </section>
-  </chapter>
-  """          
+    return chapterTxt
+
+def buildPersonaRationale(p,personaName,docDir,chapterTxt):
+  chapterTxt += personaModelSection(p,personaName,docDir)
+
+  docRefs = p.getPersonaDocumentReferences(personaName)
+  if len(docRefs) > 0:
+    chapterTxt += """
+        <section><title>Document References</title>
+    """
+    chapterTxt += buildTable( personaName.replace(" ","_") + "DocumentReferencesTable",personaName + " Document References",['Reference','Document','Excerpt'],docRefs,0)
+    chapterTxt += """
+        </section>
+    """
+
+  edRefs = p.getPersonaExternalDocuments(personaName)
+  if len(edRefs) > 0:
+    chapterTxt += """
+        <section><title>External Documents</title>
+    """
+    chapterTxt += buildTable( personaName.replace(" ","_") + "ExternalDocumentReferencesTable",personaName + " External Documents",['Document','Version','Authors','Date'],edRefs,0)
+    chapterTxt += """
+        </section>
+    """
+
+  conRefs = p.getPersonaConceptReferences(personaName)
+  if len(conRefs) > 0:
+    chapterTxt += """
+      <section><title>Concept References</title>
+    """
+    chapterTxt += buildTable( personaName.replace(" ","_") + "ConceptReferencesTable",personaName + " Concept References",['Reference','Concept','Name','Excerpt'],conRefs,0)
+    chapterTxt += """
+        </section>
+    """
   return chapterTxt
 
 def attackers(p):
-  capabilityRows = listToRows(p.getValueTypes('capability'))
-  motivationRows = listToRows(p.getValueTypes('motivation'))
   chapterTxt = """
   <chapter><title>Attackers</title>
     <section><title>Overview</title>
       <para>This chapter describes the attackers the planned system needs to defend against.  These attackers will launch attacks, in the shape of threats, and take advantage of the vulnerabilities described by this specification.</para>
     </section>
+  """
+  chapterTxt = buildAttackers(p,chapterTxt)
+  chapterTxt += """
+  </chapter>
+  """          
+  return chapterTxt
+
+
+def buildAttackers(p,chapterTxt,isPia = False):
+  capabilityRows = listToRows(p.getValueTypes('capability'))
+  motivationRows = listToRows(p.getValueTypes('motivation'))
+  chapterTxt += """
     <section><title>Motivations</title>
     """ 
   chapterTxt += buildTable("AttackerMotivationTable","Attacker Motivations",['Motivation','Description'],motivationRows,0) + """
@@ -695,7 +929,12 @@ def attackers(p):
     </section>
 """
   b = Borg()
-  attackers = p.getAttackers()
+  attackers = None
+  if (isPia == True):
+    attackers = p.getPersonalAttackers()
+  else: 
+    attackers = p.getAttackers()
+
   if (attackers == None):
     return ""
   for idx,attacker in attackers.items():
@@ -711,9 +950,6 @@ def attackers(p):
       aaRows.append((environmentName,listToPara(eProps.roles()),listToPara(eProps.motives()),tuplesToPara(eProps.capabilities())))
     chapterTxt += buildTable( attackerName.replace(" ","_") + "PropertiesTable",attackerName + " environmental attributes",['Environment','Roles','Motives','Capabilities'],aaRows,0) + """
     </section>"""
-  chapterTxt += """
-  </chapter>
-  """          
   return chapterTxt
 
 def objectiveText(p,environmentName,threatName,vulName):
@@ -780,13 +1016,23 @@ def misuseCases(p):
 
 
 def assets(p,docDir):
-  assetTypeRows = listToRows(p.getValueTypes('asset_type'))
-  assetPropertyRows = listToRows(p.getValueTypes('asset_value'))
   chapterTxt = """
   <chapter><title>Assets</title>
     <section><title>Overview</title>
       <para>This chapter describes the most important assets in, or associated with, the planned system.</para>
     </section>
+  """
+  chapterTxt = buildAssetContent(p,docDir,chapterTxt,False)
+  chapterTxt += """
+  </chapter>
+  """          
+  return chapterTxt
+
+
+def buildAssetContent(p,docDir,chapterTxt,isPia = False):
+  assetTypeRows = listToRows(p.getValueTypes('asset_type'))
+  assetPropertyRows = listToRows(p.getValueTypes('asset_value'))
+  chapterTxt += """
     <section><title>Asset Types</title>
     """ 
   chapterTxt += buildTable("AssetTypesTable","Asset Types",['Type','Description'],assetTypeRows,0) + """
@@ -796,8 +1042,16 @@ def assets(p,docDir):
   chapterTxt += buildTable("AssetPropertiesTable","Asset Properties",['Property','Description'],assetPropertyRows,0) + """
     </section>
 """
-  chapterTxt += modelSection(p,'Asset',docDir)
-  objts = p.getAssets()
+
+  if (isPia == False):
+    chapterTxt += modelSection(p,'Asset',docDir)
+
+  objts = None
+  if (isPia == True):
+    objts = p.getPersonalInformation()
+  else:
+    objts = p.getAssets()
+
   if (objts == None):
     return ""
   for idx,objt in objts.items():
@@ -820,22 +1074,32 @@ def assets(p,docDir):
     chapterTxt += buildTable( objtName.replace(" ","_") + "PropertiesTable",objtName + " environmental attributes",['Environment','Security Properties'],oaRows,0)
     chapterTxt += """
       </section>"""
-  chapterTxt += """
-  </chapter>
-  """          
   return chapterTxt
 
+
+
+
 def threats(p):
-  threatTypeRows = listToRows(p.getValueTypes('threat_type'))
-  threatLhoodRows = listToRows(p.getValueTypes('likelihood'))
-  threatPropertyRows = listToRows(p.getValueTypes('threat_value'))
   chapterTxt = """
   <chapter><title>Threats</title>
     <section><title>Overview</title>
       <para>This chapter describes the threats which impact the planned system.</para>
     </section>
+  """ 
+  chapterTxt = buildThreats(p,chapterTxt)
+  chapterTxt += """
+  </chapter>
+  """          
+  return chapterTxt 
+
+def buildThreats(p,chapterTxt,isPia = False):
+  threatTypeRows = listToRows(p.getValueTypes('threat_type'))
+  threatLhoodRows = listToRows(p.getValueTypes('likelihood'))
+  threatPropertyRows = listToRows(p.getValueTypes('threat_value'))
+
+  chapterTxt += """
     <section><title>Threat Types</title>
-    """ 
+  """
   chapterTxt += buildTable("ThreatTypesTable","Threat Types",['Type','Description'],threatTypeRows,0) + """
     </section>
     <section><title>Threat Likelihoods</title>
@@ -847,8 +1111,12 @@ def threats(p):
   chapterTxt += buildTable("ThreatPropertiesTable","Threat Properties",['Property','Description'],threatPropertyRows,0) + """
     </section>
 """
+  objts = None
+  if (isPia == True):
+    objts = p.getPersonalThreats()
+  else:
+    objts = p.getThreats()
 
-  objts = p.getThreats()
   if (objts == None):
     return ""
   for idx,objt in objts.items():
@@ -864,19 +1132,26 @@ def threats(p):
       oaRows.append((environmentName,eProps.likelihood(),listToPara(eProps.attackers()),tuplesToPara(objt.propertyList(environmentName,'',''))))
     chapterTxt += buildTable( objtName.replace(" ","_") + "PropertiesTable",objtName + " environmental attributes",['Environment','Likelihood','Attackers','Security Properties'],oaRows,0) + """
       </section>"""
-  chapterTxt += """
-  </chapter>
-  """          
   return chapterTxt
 
 def vulnerabilities(p):
-  vulTypeRows = listToRows(p.getValueTypes('vulnerability_type'))
-  vulSevRows = listToRows(p.getValueTypes('severity'))
   chapterTxt = """
   <chapter><title>Vulnerabilities</title>
     <section><title>Overview</title>
       <para>This chapter describes the vulnerabilities evident in this system.  These vulnerabilities may arise due to the nature of the environment, the system itself, or some aspect of the system's design.</para>
     </section>
+  """
+  chapterTxt = buildVulnerabilities(p,chapterTxt)
+  chapterTxt += """
+  </chapter>
+  """          
+  return chapterTxt
+
+
+def buildVulnerabilities(p,chapterTxt,isPia = False):
+  vulTypeRows = listToRows(p.getValueTypes('vulnerability_type'))
+  vulSevRows = listToRows(p.getValueTypes('severity'))
+  chapterTxt += """
     <section><title>Vulnerability Types</title>
     """ 
   chapterTxt += buildTable("VulnerabilityTypesTable","Vulnerability Types",['Type','Description'],vulTypeRows,0) + """
@@ -886,7 +1161,13 @@ def vulnerabilities(p):
   chapterTxt += buildTable("VulnerabilitySeveritiesTable","Vulnerability Severities",['Type','Description'],vulSevRows,0) + """
     </section>
 """
-  objts = p.getVulnerabilities()
+
+  objts = None
+  if (isPia == True):
+    objts = p.getPersonalVulnerabilities()
+  else:
+    objts = p.getVulnerabilities()
+
   if (objts == None):
     return ""
   for idx,objt in objts.items():
@@ -914,9 +1195,6 @@ def vulnerabilities(p):
     chapterTxt += """
       </section>
     </section>"""
-  chapterTxt += """
-  </chapter>
-  """          
   return chapterTxt
 
 def modelSection(p,modelType,docDir):
@@ -1084,20 +1362,35 @@ def obstacles(p,docDir):
 
 
 def risks(p,docDir):
-  riskClassRows = listToRows(p.getValueTypes('risk_class'))
   chapterTxt = """
   <chapter><title>Risks</title>
     <section><title>Overview</title>
       <para>This chapter describes the identified risks which impact the planned system. These arise when attackers launch attacks, manifested as threats, which expose a vulnerability.  A risk is only evident if both the threat and vulnerability exist in at least one environment.</para>
     </section>
-    <section><title>Risk categories</title>
-"""
-  chapterTxt += buildTable("RiskCategoriesTable","Risk Categories",['Categoriry','Description'],riskClassRows,0) + """
-    </section>
-"""
-
+  """
   chapterTxt += modelSection(p,'Risk',docDir)
-  objts = p.getRisks()
+  chapterTxt = buildRisks(p,docDir,chapterTxt)
+  chapterTxt += """
+  </chapter>
+  """          
+  return chapterTxt
+
+
+def buildRisks(p,docDir,chapterTxt,isPia = False):
+  riskClassRows = listToRows(p.getValueTypes('risk_class'))
+  chapterTxt += """
+    <section><title>Risk categories</title>
+  """
+  chapterTxt += buildTable("RiskCategoriesTable","Risk Categories",['Category','Description'],riskClassRows,0) + """
+    </section>
+  """
+
+  objts = None
+  if (isPia == True):
+    objts = p.getPersonalRisks()
+  else:
+    objts = p.getRisks()
+
   if (objts == None):
     return ""
   for idx,objt in objts.items():
@@ -1128,9 +1421,6 @@ def risks(p,docDir):
     chapterTxt += """
       </section>
     </section>"""
-  chapterTxt += """
-  </chapter>
-  """          
   return chapterTxt
 
 def sectionHeader(sectTitle):
@@ -1332,7 +1622,19 @@ def responses(p):
   chapterTxt = """
   <chapter><title>Responses</title>
   """
-  responses = p.getResponses()
+  chapterTxt = buildResponses(p,chapterTxt)
+  chapterTxt += """
+  </chapter>
+  """
+  return chapterTxt
+
+def buildResponses(p,chapterTxt,isPia = False):
+  responses = None
+  if (isPia == True):
+    responses = p.getPersonalResponses()
+  else:
+    responses = p.getResponses()
+
   if (responses == None):
     return ""
   acceptTxt = ''
@@ -1369,9 +1671,6 @@ def responses(p):
     chapterTxt += mitigateTxt
 
 
-  chapterTxt += """
-  </chapter>
-  """
   return chapterTxt
 
 def countermeasures(p):
@@ -1696,14 +1995,37 @@ def buildPersonasBody(p,sectionFlags,docDir):
     specDoc += tasks(p,docDir)
   return specDoc
 
+def buildDPIABody(p,sectionFlags,docDir):
+  contributors = p.getContributors()
+  revisions = p.getRevisions()
+  pSettings = p.getProjectSettings()
+  specName = pSettings['Project Name'] + ' Data Protection Impact Assessment'
+  specDoc = bookHeader(specName,contributors,revisions)
+
+  if (sectionFlags[DPIA_NEED_ID]):
+    specDoc += dpiaNeed(p,pSettings)
+  if (sectionFlags[DPIA_PROCESSING_ID]):
+    specDoc += dpiaProcessing(p,docDir)
+  if (sectionFlags[DPIA_CONSULTATION_ID]):
+    specDoc += dpiaConsultation(p,docDir)
+  if (sectionFlags[DPIA_NECESSITY_ID]):
+    specDoc += dpiaNecessity(p,docDir)
+  if (sectionFlags[DPIA_RISKS_ID]):
+    specDoc += dpiaRisks(p,docDir)
+  if (sectionFlags[DPIA_MEASURES_ID]):
+    specDoc += dpiaMeasures(p)
+  return specDoc
+
 
 def build(dbProxy,docType,sectionFlags,typeFlags,fileName,docDir):
   p = dbProxy
 
   if (docType == 'Requirements'):
     specDoc = buildReqSpecBody(p,sectionFlags,docDir)
-  else:
+  elif (docType == 'Personas'):
     specDoc = buildPersonasBody(p,sectionFlags,docDir)
+  else:
+    specDoc = buildDPIABody(p,sectionFlags,docDir)
 
   specDoc += bookFooter()
 

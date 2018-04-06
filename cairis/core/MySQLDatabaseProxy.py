@@ -373,7 +373,12 @@ class MySQLDatabaseProxy:
     return self.responseList('call duplicateProperties(:id)',{'id':environmentId},'MySQL error getting duplicate properties associated with composite environment id ' + str(environmentId))[0]
 
   def getAttackers(self,constraintId = -1):
-    attackerRows = self.responseList('call getAttackers(:id)',{'id':constraintId},'MySQL error getting attackers' + str(constraintId))
+    return self.populateAttackers(self.responseList('call getAttackers(:id)',{'id':constraintId},'MySQL error getting attackers' + str(constraintId)))
+
+  def getPersonalAttackers(self):
+    return self.populateAttackers(self.responseList('call getPersonalAttackers()',{},'MySQL error getting personal attackers'))
+
+  def populateAttackers(self,attackerRows):
     attackers = {}
     for attackerId,attackerName,attackerDesc,attackerImage in attackerRows:
       tags = self.getTags(attackerName,'attacker')
@@ -581,7 +586,12 @@ class MySQLDatabaseProxy:
 
 
   def getAssets(self,constraintId = -1):
-    assetRows = self.responseList('call getAssets(:id)',{'id':constraintId},'MySQL error getting assets')
+    return self.populateAssets(self.responseList('call getAssets(:id)',{'id':constraintId},'MySQL error getting assets'))
+
+  def getPersonalInformation(self):
+    return self.populateAssets(self.responseList('call getPersonalInformation()',{},'MySQL error getting personal information'))
+
+  def populateAssets(self,assetRows):
     assets = {}
     for assetId,assetName,shortCode,assetDesc,assetSig,assetType,assetCriticality,assetCriticalRationale in assetRows:
       tags = self.getTags(assetName,'asset')
@@ -655,8 +665,13 @@ class MySQLDatabaseProxy:
 
 
   def getThreats(self,constraintId = -1):
+    return self.populateThreats(self.responseList('call getThreats(:id)',{'id':constraintId},'MySQL error getting threats'))
+
+  def getPersonalThreats(self):
+    return self.populateThreats(self.responseList('call getPersonalThreats()',{},'MySQL error getting personal threats'))
+   
+  def populateThreats(self,threatRows):
     threats = {}
-    threatRows = self.responseList('call getThreats(:id)',{'id':constraintId},'MySQL error getting threats')
     for threatId,threatName,threatType,thrMethod in threatRows: 
       tags = self.getTags(threatName,'threat')
       environmentProperties = []
@@ -781,7 +796,12 @@ class MySQLDatabaseProxy:
     self.commitDatabase(session)
 
   def getVulnerabilities(self,constraintId = -1):
-    vulRows = self.responseList('call getVulnerabilities(:id)',{'id':constraintId},'MySQL error getting vulnerabilities')
+    return self.populateVulnerabilities(self.responseList('call getVulnerabilities(:id)',{'id':constraintId},'MySQL error getting vulnerabilities'))
+
+  def getPersonalVulnerabilities(self):
+    return self.populateVulnerabilities(self.responseList('call getPersonalVulnerabilities()',{},'MySQL error getting personal vulnerabilities'))
+
+  def populateVulnerabilities(self,vulRows):
     vulnerabilities = {}
     for vulnerabilityId,vulnerabilityName,vulnerabilityDescription,vulnerabilityType in vulRows:
       tags = self.getTags(vulnerabilityName,'vulnerability')
@@ -1130,7 +1150,12 @@ class MySQLDatabaseProxy:
     return self.responseList('call traceDimensionList(:id,:from)',{'id':dimId,'from':isFrom},'MySQL error getting trace dimensions')
 
   def getRisks(self,constraintId = -1):
-    parameterList = self.responseList('call getRisks(:id)',{'id':constraintId},'MySQL error getting risks')
+    return self.populateRisks(self.responseList('call getRisks(:id)',{'id':constraintId},'MySQL error getting risks'))
+
+  def getPersonalRisks(self):
+    return self.populateRisks(self.responseList('call getPersonalRisks()',{},'MySQL error getting personal risks'))
+
+  def populateRisks(self,parameterList):
     risks = {}
     for parameters in parameterList:
       riskId = parameters[0]
@@ -1184,7 +1209,12 @@ class MySQLDatabaseProxy:
   def deleteMisuseCase(self,mcId): self.deleteObject(mcId,'misusecase')
     
   def getResponses(self,constraintId = -1):
-    responseRows = self.responseList('call getResponses(:id)',{'id':constraintId},'MySQL error getting responses')
+    return self.populateResponses(self.responseList('call getResponses(:id)',{'id':constraintId},'MySQL error getting responses'))
+
+  def getPersonalResponses(self):
+    return self.populateResponses(self.responseList('call getPersonalResponses()',{},'MySQL error getting personal responses'))
+
+  def populateResponses(self,responseRows):
     responses = {}
     for respId,respName,respType,respRisk in responseRows:
       tags = self.getTags(respName,'response')
@@ -4512,6 +4542,9 @@ class MySQLDatabaseProxy:
   def dataFlowDiagram(self,envName,filterElement = ''):
     return self.responseList('call dataFlowDiagram(:env,:fe)',{'env':envName,'fe':filterElement},'MySQL error getting data flow diagram')
 
+  def personalDataFlowDiagram(self,envName,filterElement = ''):
+    return self.responseList('call personalDataFlowDiagram(:env,:fe)',{'env':envName,'fe':filterElement},'MySQL error getting personal data flow diagram')
+
   def relabelRequirements(self,reqReference): self.updateDatabase('call relabelRequirements(:reqReference)',{'reqReference':reqReference},'MySQL error relabelling requirements')
 
   def getTrustBoundaries(self,constraintId = -1):
@@ -4572,3 +4605,12 @@ class MySQLDatabaseProxy:
     for lbl,msg in objtRows:
       rows.append(ValidationResult(lbl,msg))
     return rows
+
+  def processDataMaps(self):
+    return self.responseList('call processDataMaps()',{},'MySQL error getting process data maps')[0]
+  
+  def datastoreDataMaps(self):
+    return self.responseList('call datastoreDataMaps()',{},'MySQL error getting datastore data maps')[0]
+
+  def lawfulProcessingTable(self,envName):
+    return self.responseList('call lawfulProcessingTable(:envName)',{'envName':envName},'MySQL error getting lawful processing table')

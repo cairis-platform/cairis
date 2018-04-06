@@ -927,6 +927,18 @@ drop procedure if exists fairDataProcessing;
 drop procedure if exists dataMinimisation_usecase;
 drop procedure if exists criticalPrivacyRisks;
 drop procedure if exists storageLimitationCheck;
+drop function if exists processDataMap;
+drop procedure if exists processDataMaps;
+drop procedure if exists personalDataFlowDiagram;
+drop function if exists datastoreDataMap;
+drop procedure if exists datastoreDataMaps;
+drop procedure if exists getPersonalInformation;
+drop procedure if exists getPersonalAttackers;
+drop procedure if exists getPersonalVulnerabilities;
+drop procedure if exists getPersonalThreats;
+drop procedure if exists getPersonalRisks;
+drop procedure if exists getPersonalResponses;
+drop procedure if exists lawfulProcessingTable;
 
 delimiter //
 
@@ -23901,7 +23913,6 @@ end
 
 create procedure dataFlowDiagram(in envName text,in filterElement text)
 begin
-
   if filterElement != ''
   then
     select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_name = filterElement
@@ -24401,7 +24412,7 @@ begin
     then
       leave pd_loop;
     end if;
-    insert into temp_vout(label,message) values('Accuracy: Personal data integrity',concat(assetName,' is personal data, but has not Integrity security property.'));
+    insert into temp_vout(label,message) values('Accuracy: Personal data integrity',concat(assetName,' is personal data, but has no Integrity security property.'));
   end loop pd_loop;
   close pdCursor;
   set done = 0;
@@ -24533,9 +24544,340 @@ begin
     end if;
   end loop ds_loop;
   close dsCursor;
-
-
 end
 //
+
+create function processDataMap(environmentId int) 
+returns longtext
+deterministic 
+begin
+  declare tableBuf longtext;
+  declare assetId int;
+  declare colSpecs longtext;
+  declare colHdgs longtext;
+  declare colCount int default 0;
+  declare paCount int default 0;
+  declare assetName varchar(200);
+  declare colName varchar(200);
+  declare envName varchar(200);
+  declare ucId int;
+  declare done int default 0;
+  declare cnCursor cursor for select uc.name from process_asset pa, usecase uc where pa.environment_id = environment_id and pa.usecase_id = uc.id;
+  declare piCursor cursor for select pi.asset_id,a.name from personal_information pi, asset a where pi.environment_id = environmentId and pi.asset_id = a.id;
+  declare paCursor cursor for select distinct usecase_id from process_asset;
+  declare continue handler for not found set done = 1;
+
+  select name into envName from environment where id = environmentId;
+
+  select count(*) into colCount from process_asset;
+  if colCount = 0
+  then
+    return '';
+  else
+    set tableBuf = concat('    <table id="processdataMap_',envName,'"><title>Process Data Map</title>\n      <tgroup cols="',colCount + 1,'"\>\n        <thead>\n          <row>\n');
+    set colSpecs = '            <colspec align="left" />\n';
+    set colHdgs = '            <entry>Personal Information</entry>\n';
+
+    open cnCursor;
+    cn_loop: loop
+      fetch cnCursor into colName;
+      if done = 1
+      then
+        leave cn_loop;
+      end if;
+      set colSpecs = concat(colSpecs,'            <colspec align="left"/>\n');
+      set colHdgs = concat(colHdgs,'            <entry>',colName,'</entry>\n');
+    end loop cn_loop;
+    close cnCursor;
+    set done = 0;
+    set tableBuf = concat(tableBuf,colSpecs,colHdgs);
+    set tableBuf = concat(tableBuf,'          </row>\n        </thead>\n        <tbody>\n');
+
+    open piCursor;
+    pi_loop: loop
+      fetch piCursor into assetId, assetName;
+      if done = 1
+      then
+        leave pi_loop;
+      end if;
+      set tableBuf = concat(tableBuf,'          <row>\n            <entry>',assetName,'</entry>\n');
+
+      open paCursor;
+      pa_loop: loop
+        fetch paCursor into ucId;
+        if done = 1
+        then
+          leave pa_loop;
+        end if;
+        set tableBuf = concat(tableBuf,'            <entry>');   
+
+        select count(*) into paCount from process_asset pa, personal_information pi where pa.usecase_id = ucId and pa.environment_id = environmentId and pa.asset_id = assetId and pa.asset_id = pi.asset_id and pa.environment_id = pi.environment_id;
+        if paCount = 0
+        then
+          set tableBuf = concat(tableBuf,'N</entry>\n');
+        else
+          set tableBuf = concat(tableBuf,'Y</entry>\n');
+        end if;
+      end loop pa_loop;
+      close paCursor;
+      set done = 0;
+      set tableBuf = concat(tableBuf,'          </row>\n');
+
+    end loop pi_loop;
+    close piCursor;
+
+    set tableBuf = concat(tableBuf,'        </tbody>\n      </tgroup>\n    </table>\n'); 
+    return tableBuf;
+
+  end if;
+end
+//
+
+create procedure processDataMaps()
+begin
+  declare sectionBuf longtext default '';
+  declare envId int;
+  declare envName varchar(100);
+  declare done int default 0;
+  declare peCursor cursor for select distinct pi.environment_id,e.name from personal_information pi, environment e where pi.environment_id = e.id;
+  declare continue handler for not found set done = 1;
+
+  
+  open peCursor;
+  pe_loop: loop
+    fetch peCursor into envId, envName;
+    if done = 1
+    then
+      leave pe_loop;
+    end if;
+    set sectionBuf = concat(sectionBuf,'  <section><title>',envName,'</title>\n',processDataMap(envId),'  </section>\n');
+  end loop pe_loop;
+  close peCursor;
+  set done = 0;
+  select sectionBuf;  
+end
+//
+
+create procedure personalDataFlowDiagram(in envName text,in filterElement text)
+begin
+  if filterElement != ''
+  then
+    select dataflow, from_name, from_type, to_name, to_type from personal_dataflows where environment = envName and from_name = filterElement
+    union
+    select dataflow, from_name, from_type, to_name, to_type from personal_dataflows where environment = envName and to_name = filterElement
+    union
+    select dataflow, from_name, from_type, to_name, to_type from personal_dataflows where environment = envName and dataflow = filterElement;
+  else
+    select dataflow, from_name, from_type, to_name, to_type from personal_dataflows where environment = envName;
+  end if;
+end
+//
+
+create function datastoreDataMap(environmentId int) 
+returns longtext
+deterministic 
+begin
+  declare tableBuf longtext;
+  declare assetId int;
+  declare colSpecs longtext;
+  declare colHdgs longtext;
+  declare colCount int default 0;
+  declare daCount int default 0;
+  declare assetName varchar(200);
+  declare colName varchar(200);
+  declare envName varchar(200);
+  declare dsId int;
+  declare done int default 0;
+  declare cnCursor cursor for select a.name from datastore_asset da, asset a where da.environment_id = environment_id and da.asset_id = a.id;
+  declare piCursor cursor for select pi.asset_id,a.name from personal_information pi, asset a where pi.environment_id = environmentId and pi.asset_id = a.id;
+  declare daCursor cursor for select distinct asset_id from datastore_asset;
+  declare continue handler for not found set done = 1;
+
+  select name into envName from environment where id = environmentId;
+
+  select count(*) into colCount from datastore_personal_information;
+  if colCount = 0
+  then
+    return '';
+  else
+    set tableBuf = concat('    <table id="datastoredataMap_',envName,'"><title>Datastore Data Map</title>\n      <tgroup cols="',colCount + 1,'"\>\n        <thead>\n          <row>\n');
+    set colSpecs = '            <colspec align="left" />\n';
+    set colHdgs = '            <entry>Personal Information</entry>\n';
+
+    open cnCursor;
+    cn_loop: loop
+      fetch cnCursor into colName;
+      if done = 1
+      then
+        leave cn_loop;
+      end if;
+      set colSpecs = concat(colSpecs,'            <colspec align="left"/>\n');
+      set colHdgs = concat(colHdgs,'            <entry>',colName,'</entry>\n');
+    end loop cn_loop;
+    close cnCursor;
+    set done = 0;
+    set tableBuf = concat(tableBuf,colSpecs,colHdgs);
+    set tableBuf = concat(tableBuf,'          </row>\n        </thead>\n        <tbody>\n');
+
+    open piCursor;
+    pi_loop: loop
+      fetch piCursor into assetId, assetName;
+      if done = 1
+      then
+        leave pi_loop;
+      end if;
+      set tableBuf = concat(tableBuf,'          <row>\n            <entry>',assetName,'</entry>\n');
+
+      open daCursor;
+      da_loop: loop
+        fetch daCursor into dsId;
+        if done = 1
+        then
+          leave da_loop;
+        end if;
+        set tableBuf = concat(tableBuf,'            <entry>');   
+
+        select count(*) into daCount from datastore_asset da, personal_information pi where da.asset_id = dsId and da.environment_id = environmentId and da.asset_id = assetId and da.asset_id = pi.asset_id and da.environment_id = pi.environment_id;
+        if daCount = 0
+        then
+          set tableBuf = concat(tableBuf,'N</entry>\n');
+        else
+          set tableBuf = concat(tableBuf,'Y</entry>\n');
+        end if;
+      end loop da_loop;
+      close daCursor;
+      set done = 0;
+      set tableBuf = concat(tableBuf,'          </row>\n');
+
+    end loop pi_loop;
+    close piCursor;
+
+    set tableBuf = concat(tableBuf,'        </tbody>\n      </tgroup>\n    </table>\n'); 
+    return tableBuf;
+  end if;
+end
+//
+
+create procedure datastoreDataMaps()
+begin
+  declare sectionBuf longtext default '';
+  declare envId int;
+  declare envName varchar(100);
+  declare done int default 0;
+  declare peCursor cursor for select distinct pi.environment_id,e.name from personal_information pi, environment e where pi.environment_id = e.id;
+  declare continue handler for not found set done = 1;
+
+  
+  open peCursor;
+  pe_loop: loop
+    fetch peCursor into envId, envName;
+    if done = 1
+    then
+      leave pe_loop;
+    end if;
+    set sectionBuf = concat(sectionBuf,'  <section><title>',envName,'</title>\n',datastoreDataMap(envId),'  </section>\n');
+  end loop pe_loop;
+  close peCursor;
+  set done = 0;
+  select sectionBuf;  
+end
+//
+
+create procedure getPersonalInformation()
+begin
+  select a.id,a.name,a.short_code,a.description,a.significance,at.name,a.is_critical,a.critical_rationale from asset a,asset_type at,personal_information pi where a.asset_type_id = at.id and a.id = pi.asset_id;
+end
+//
+
+create procedure getPersonalAttackers()
+begin
+  select distinct a.id,a.name,a.description,a.image from attacker a, threat_attacker ta, asset_threat at, personal_information pi where a.id = ta.attacker_id and ta.threat_id = at.threat_id and at.asset_id = pi.asset_id ;
+end
+//
+
+create procedure getPersonalVulnerabilities()
+begin
+  select distinct v.id, v.name,v.description,vt.name from vulnerability v,vulnerability_type vt,asset_vulnerability av, personal_information pi where v.vulnerability_type_id = vt.id and v.id = av.vulnerability_id and av.asset_id = pi.asset_id;
+end
+//
+
+create procedure getPersonalThreats()
+begin
+  select distinct t.id, t.name, tt.name, t.method from threat t, threat_type tt, asset_threat at, personal_information pi where t.threat_type_id = tt.id and t.id = at.threat_id and at.asset_id = pi.asset_id;
+end
+//
+
+create procedure getPersonalRisks()
+begin
+  select distinct r.id, r.name,t.name,v.name from personal_risk r, threat t, vulnerability v where r.threat_id = t.id and r.vulnerability_id = v.id;
+end
+//
+
+create procedure getPersonalResponses()
+begin
+  select re.id,re.name,rt.name,r.name from response re,goal_category_type rt, personal_risk r where re.goal_category_type_id = rt.id and re.risk_id = r.id;
+end
+//
+
+create procedure lawfulProcessingTable(in envName text)
+begin
+  declare environmentId int;
+  declare ucId int;
+  declare ucName varchar(200);
+  declare assetId int;
+  declare assetName varchar(200);
+  declare goalId int;
+  declare goalName varchar(50) default '';
+  declare goalDef varchar(4000) default '';
+  declare goalFC varchar(1000) default '';
+  declare goalIssue varchar(1000) default '';
+  declare done int default 0;
+  declare noGoals int default 1;
+  declare paCursor cursor for select ppi.usecase_id,u.name,ppi.asset_id,a.name from process_personal_information ppi, usecase u, asset a where ppi.environment_id = environmentId and ppi.asset_id = a.id and ppi.usecase_id = u.id;
+  declare gaCursor cursor for select goal_id from goalusecase_goalassociation where environment_id = environmentId and subgoal_id = ucId;
+  declare continue handler for not found set done = 1;
+
+  select id into environmentId from environment where name = envName;
+
+  drop table if exists temp_lp;
+  create temporary table temp_lp (usecase varchar(200), asset varchar(200), goal varchar(50), definition varchar(4000), fitcriterion varchar(1000), issue varchar(1000) );
+
+  open paCursor;
+  pa_loop: loop
+    fetch paCursor into ucId, ucName, assetId, assetName;
+    if done = 1
+    then
+      leave pa_loop;
+    end if;
+
+    set noGoals = 1;
+    open gaCursor;
+    ga_loop: loop
+      fetch gaCursor into goalId;
+      if done = 1
+      then
+        if noGoals = 1
+        then
+          insert into temp_lp (usecase,asset,goal,definition,fitcriterion,issue) values(ucName,assetName,'None','None','None','None');
+        end if;
+        set noGoals = 0;
+        leave ga_loop;
+      end if;
+      select name into goalName from goal where id = goalId;
+      select definition into goalDef from goal_definition where goal_id = goalId and environment_id = environmentId;
+      select fitcriterion into goalFC from goal_fitcriterion where goal_id = goalId and environment_id = environmentId;
+      select issue into goalIssue from goal_issue where goal_id = goalId and environment_id = environmentId;
+      insert into temp_lp (usecase,asset,goal,definition,fitcriterion,issue) values(ucName,assetName,goalName,goalDef,goalFC,goalIssue);
+    end loop ga_loop;
+    close gaCursor;
+    set done = 0;
+  end loop pa_loop;
+  close paCursor;
+  set done = 0;
+  select usecase, asset, goal, definition, fitcriterion, issue from temp_lp;
+end
+//
+
+
 
 delimiter ;

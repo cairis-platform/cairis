@@ -22,7 +22,6 @@
 $("#genDocClick").click(function () {
   $('#menuBCClick').attr('dimension','documentation');
   refreshMenuBreadCrumb('documentation');
-//  showDocumentationForm();
 });
 
 function showDocumentationForm() {

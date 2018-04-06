@@ -43,6 +43,16 @@ class DocumentationAPITests(CairisDaemonTestCase):
     method = 'test_generate_documentation'
     url = '/api/documentation/type/Requirements/format/PDF?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
-
     rv = self.app.get(url, content_type='application/pdf')
     self.assertIsNotNone(rv.data, 'No response')
+
+    url = '/api/documentation/type/Personas/format/PDF?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url, content_type='application/pdf')
+    self.assertIsNotNone(rv.data, 'No response')
+
+    url = '/api/documentation/type/DPIA/format/PDF?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url, content_type='application/pdf')
+    self.assertIsNotNone(rv.data, 'No response')
+

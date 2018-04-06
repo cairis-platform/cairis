@@ -24,6 +24,7 @@ DROP VIEW IF EXISTS object_name;
 DROP VIEW IF EXISTS entity;
 DROP VIEW IF EXISTS datastore;
 DROP VIEW IF EXISTS dataflows;
+DROP VIEW IF EXISTS personal_dataflows;
 DROP VIEW IF EXISTS countermeasure_vulnerability_response_target;
 DROP VIEW IF EXISTS countermeasure_threat_response_target;
 DROP VIEW IF EXISTS redmine_requirement;
@@ -52,7 +53,10 @@ DROP VIEW IF EXISTS usecase_step_synopsis_actor;
 DROP VIEW IF EXISTS quotation;
 DROP VIEW IF EXISTS personal_information;
 DROP VIEW IF EXISTS process_asset;
+DROP VIEW IF EXISTS process_personal_information;
 DROP VIEW IF EXISTS datastore_asset;
+DROP VIEW IF EXISTS datastore_personal_information;
+DROP VIEW IF EXISTS personal_risk;
 
 DROP TABLE IF EXISTS trust_boundary_usecase;
 DROP TABLE IF EXISTS trust_boundary_asset;
@@ -3466,6 +3470,7 @@ CREATE VIEW dataflows as
   select d.name dataflow, e.name environment, fp.name from_name, 'process' from_type, td.name to_name, 'datastore' to_type from dataflow d, dataflow_process_datastore dpd, usecase fp, asset td, environment e where d.id = dpd.dataflow_id and d.environment_id = e.id and dpd.from_id = fp.id and dpd.to_id = td.id;
 
 
+
 CREATE VIEW countermeasure_vulnerability_response_target as 
   select distinct cvt.countermeasure_id,re.id response_id,cvt.vulnerability_id,cvt.environment_id from countermeasure_vulnerability_target cvt, environment_vulnerability ev, risk ri,response re where cvt.vulnerability_id = ev.vulnerability_id and cvt.environment_id = ev.environment_id and ev.vulnerability_id = ri.vulnerability_id and ri.id = re.risk_id;
 
@@ -3919,12 +3924,40 @@ CREATE VIEW process_asset as
   union
   select ddp.to_id usecase_id, dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_datastore_process ddp where df.id = dfa.dataflow_id and df.id = ddp.dataflow_id;
 
+CREATE VIEW process_personal_information as
+  select dpp.to_id usecase_id,dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_process_process dpp, personal_information pi where df.id = dfa.dataflow_id and df.id = dpp.dataflow_id and df.environment_id = pi.environment_id and dfa.asset_id = pi.asset_id
+  union
+  select dep.to_id usecase_id, dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_entity_process dep, personal_information pi where df.id = dfa.dataflow_id and df.id = dep.dataflow_id and df.environment_id = pi.environment_id and dfa.asset_id = pi.asset_id
+  union
+  select ddp.to_id usecase_id, dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_datastore_process ddp, personal_information pi where df.id = dfa.dataflow_id and df.id = ddp.dataflow_id and df.environment_id = pi.environment_id and dfa.asset_id = pi.asset_id;
+
+
 CREATE VIEW datastore_asset as
   select dpd.to_id datastore_id, dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_process_datastore dpd where df.id = dfa.dataflow_id and df.id = dpd.dataflow_id;
 
 
+CREATE VIEW datastore_personal_information as
+  select dpd.to_id datastore_id, dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_process_datastore dpd, personal_information pi where df.id = dfa.dataflow_id and df.id = dpd.dataflow_id and dfa.asset_id = pi.asset_id and df.environment_id = pi.environment_id;
 
-INSERT INTO version (major,minor,patch) VALUES (1,6,2);
+CREATE VIEW personal_dataflows as
+  select d.name dataflow, e.name environment,fp.name from_name,'process' from_type,tp.name to_name,'process' to_type from dataflow d, dataflow_process_process dpp, usecase fp, usecase tp, environment e, dataflow_asset dfa, personal_information pi where d.id = dpp.dataflow_id and d.environment_id = e.id and dpp.from_id = fp.id and dpp.to_id = tp.id and d.id = dfa.dataflow_id and dfa.asset_id = pi.asset_id and d.environment_id = pi.environment_id
+  union
+  select d.name dataflow, e.name environment, fe.name from_name, 'entity' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_entity_process dep, asset fe, usecase tp, environment e, dataflow_asset dfa, personal_information pi where d.id = dep.dataflow_id and d.environment_id = e.id and dep.from_id = fe.id and dep.to_id = tp.id and d.id = dfa.dataflow_id and dfa.asset_id = pi.asset_id and d.environment_id = pi.environment_id
+  union
+  select d.name dataflow, e.name environment, fp.name from_name, 'process' from_type, te.name to_name, 'entity' to_type from dataflow d, dataflow_process_entity dpe, usecase fp, asset te, environment e, dataflow_asset dfa, personal_information pi where d.id = dpe.dataflow_id and d.environment_id = e.id and dpe.from_id = fp.id and dpe.to_id = te.id and d.id = dfa.dataflow_id and dfa.asset_id = pi.asset_id and d.environment_id = pi.environment_id
+  union
+  select d.name dataflow, e.name environment, fd.name from_name, 'datastore' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_datastore_process ddp, asset fd, usecase tp, environment e, dataflow_asset dfa, personal_information pi where d.id = ddp.dataflow_id and d.environment_id = e.id and ddp.from_id = fd.id and ddp.to_id = tp.id and d.id = dfa.dataflow_id and dfa.asset_id = pi.asset_id and d.environment_id = pi.environment_id
+  union
+  select d.name dataflow, e.name environment, fp.name from_name, 'process' from_type, td.name to_name, 'datastore' to_type from dataflow d, dataflow_process_datastore dpd, usecase fp, asset td, environment e, dataflow_asset dfa, personal_information pi where d.id = dpd.dataflow_id and d.environment_id = e.id and dpd.from_id = fp.id and dpd.to_id = td.id and d.id = dfa.dataflow_id and dfa.asset_id = pi.asset_id and d.environment_id = pi.environment_id;
+
+CREATE VIEW personal_risk as
+  select r.id,r.name,r.threat_id,r.vulnerability_id,r.intent from risk r, asset_threat at, personal_information pi where r.threat_id = at.threat_id and at.asset_id = pi.asset_id and at.environment_id = pi.environment_id
+  union
+  select r.id,r.name,r.threat_id,r.vulnerability_id,r.intent from risk r, asset_vulnerability av, personal_information pi where r.vulnerability_id = av.vulnerability_id and av.asset_id = pi.asset_id and av.environment_id = pi.environment_id;
+
+
+
+INSERT INTO version (major,minor,patch) VALUES (1,6,3);
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');
 INSERT INTO trace_dimension values (1,'persona');
