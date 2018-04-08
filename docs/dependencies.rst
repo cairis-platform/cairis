@@ -39,7 +39,6 @@ Introducing Personal data into CAIRIS using dependencies
 
 Personal data can be recognised in CAIRIS by carrying out the following steps.
 
-1.  Create or edit a *Stakeholder* role, and associate with this with a new persona; this will  represent the external entity that acts as the origin of the PII, and the persona will be useful to capturing any assumptions or expectations that this entity might have.
+1.  Create or edit a *Data Subject* role, and associate with this with a new persona; this could represent the natural person whose data is subject to processing, or a data controller or processor from another system contributing this data.  The persona will be useful for capturing any assumptions or expectations this entity might have.
 2.  Create or edit a *Data Controller* role.
-3.  Create a dependency between the Stakeholder dependee role and the Data Controller depender, where the dependum is a newly created or existing asset that you wish to designate as personal data.
-
+3.  Create a dependency between the Data Subject dependee role and the Data Controller depender, where the dependum is a newly created or existing asset that you wish to designate as personal data.
