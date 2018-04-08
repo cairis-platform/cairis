@@ -3915,7 +3915,7 @@ CREATE VIEW quotation as
    select c.name code,'persona' artifact_type,p.name artifact_name,'Contextual' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'contextual',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id order by 1;
 
 CREATE VIEW personal_information as
-  select a.id asset_id, rar.environment_id environment_id from asset a, asset_type at, roleassetrole_dependency rar,role dr, role_type drt, role de, role_type det where rar.dependency_id = a.id and rar.depender_id = dr.id and dr.role_type_id = drt.id and drt.name = 'Data Controller' and rar.dependee_id = de.id and de.role_type_id = det.id and det.name = 'Stakeholder' and a.asset_type_id = at.id and at.name = 'Information';
+  select a.id asset_id, rar.environment_id environment_id from asset a, asset_type at, roleassetrole_dependency rar,role dr, role_type drt, role de, role_type det where rar.dependency_id = a.id and rar.depender_id = dr.id and dr.role_type_id = drt.id and drt.name = 'Data Controller' and rar.dependee_id = de.id and de.role_type_id = det.id and det.name = 'Data Subject' and a.asset_type_id = at.id and at.name = 'Information';
 
 CREATE VIEW process_asset as
   select dpp.to_id usecase_id,dfa.asset_id asset_id,df.environment_id environment_id from dataflow df, dataflow_asset dfa, dataflow_process_process dpp where df.id = dfa.dataflow_id and df.id = dpp.dataflow_id
