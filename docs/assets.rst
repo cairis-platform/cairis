@@ -134,7 +134,7 @@ These concerns can be shown by changing the Hide Concerns combo box value to Yes
 By clicking on a model element, information about that artifact can be
 viewed.
 
-For details on how to print asset models as SVG files, see the `Generating Documentation`_ section.
+For details on how to print asset models as SVG files, see `Generating Documentation`_.
 
 Template Assets
 ~~~~~~~~~~~~~~~
