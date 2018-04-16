@@ -56,6 +56,14 @@ Data flow diagrams (DFDs) are graphical models that model the flow of informatio
 Together with attack trees.  In threat modelling, DFD model elements can be encompassed by *trust boundaries*; these occur where entities with different privileges interact.
 
 
+Adding, updating, and deleting entities, processes, and data stores
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Entities are synonyms for assets of type *Systems*, *Hardware*, or *People*.  Data stores are synonyms for assets of type *Information*.  To add, update, or delete entities and data stores, you need to add, delete or update the synonymous asset.
+
+Procesess are synonyms for use cases. To add, update, or delete processes, you need to add, delete or update the synonymous use cases.
+
+
 Adding, updating, or deleting data flows
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
