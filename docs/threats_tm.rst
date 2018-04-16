@@ -115,7 +115,8 @@ By changing the environment name in the environment combo box, the DFD for a dif
 
 By clicking on a model element, information about that artifact can be viewed.
 
-For details on how to print DFDs as SVG files, see the `Generating Documentation`_ section.
+For details on how to print DFDs as SVG files, see :doc:`Generating Documentation </gendoc>`.
+
 
 
 Attack trees

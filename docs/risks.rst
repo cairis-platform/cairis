@@ -80,4 +80,4 @@ filtered type, and its directly associated assets. Filtering by artifact
 name displays only the filtered artifact, and its directly associated
 artifacts.
 
-For details on how to print models as SVG files, see the `Viewing Asset models`_ section.
+For details on how to print risk analysis models as SVG files, see :doc:`Generating Documentation </gendoc>`.

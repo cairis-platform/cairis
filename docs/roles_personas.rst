@@ -58,7 +58,8 @@ By changing the environment name in the environment combo box, the
 responsibility model for a different environment can be viewed.
 By clicking on a model element, information about that artifact can be viewed.
 
-For details on how to print models as SVG files, see the `Viewing Asset models`_ section.
+For details on how to print responsibility models as SVG files, see :doc:`Generating Documentation </gendoc>`.
+
 
 Personas
 --------

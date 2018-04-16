@@ -65,4 +65,4 @@ model for a different environment can be viewed. The model can also be filtered 
 By clicking on a model element, information about that artifact can be
 viewed.
 
-For details on how to print task models as SVG files, see the `Generating Documentation`_ section.
+For details on how to print task models as SVG files, see :doc:`Generating Documentation </gendoc>`.

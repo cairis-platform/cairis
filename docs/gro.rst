@@ -125,7 +125,8 @@ selected goal to be displayed as the root goal. Consequently, goals are
 only displayed if they are direct or indirect leafs of the filtered
 goal.
 
-For details on how to print models as SVG files, see the `Viewing Asset models`_ section.
+For details on how to print goal models as SVG files, see :doc:`Generating Documentation </gendoc>`.
+
 
 Template Goals
 ~~~~~~~~~~~~~~~
@@ -199,7 +200,7 @@ By proving this justification, we have some way of understanding the thinking th
 
 Obstacles are coloured with a shade of red based on the probability set when defining the obstacle.  The probability can be a real number between 0 and 1, where the default value is 0.
 
-For details on how to print obstacle models as SVG files, see the `Generating Documentation`_ section.
+For details on how to print obstacle models as SVG files, see :doc:`Generating Documentation </gendoc>`.
 
 
 Adding, updating, and deleting requirements
