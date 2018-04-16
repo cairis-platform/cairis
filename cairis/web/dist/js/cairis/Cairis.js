@@ -864,7 +864,7 @@ function refreshDimensionSelector(sBox,dimName,envName,callback,filterList) {
   });
 }
 
-function refreshSpecificSelector(sBox,urlPrefix,callback,filterList) {
+function refreshSpecificSelector(sBox,urlPrefix,callback,filterList,dimName) {
   var urlText = serverIP + urlPrefix;
   $.ajax({
     type: "GET",
@@ -882,7 +882,7 @@ function refreshSpecificSelector(sBox,urlPrefix,callback,filterList) {
       if (filterList != undefined) {
         data = data.filter(x => filterList.indexOf(x) < 0);
       }
-      if (data.length == 0 && filterList != undefined) {
+      if (data.length == 0 && filterList != undefined && dimName != undefined) {
         alert('All ' + dimName + 's have already been added.');
       }
       else {

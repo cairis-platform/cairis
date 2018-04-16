@@ -124,7 +124,7 @@ function createCountermeasuresTable(){
                 $('#chooseEnvironment').attr('data-chooseDimension',"Security Pattern");
 		$('#chooseEnvironment').attr('data-applyEnvironmentSelection',"associateWithSituatedPattern");
 		$('#chooseEnvironment').modal('show');
-	      },['All']);
+	      },['All'],'security patterns');
             }
           },
           "removeCountermeasurePattern": {

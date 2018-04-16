@@ -24288,7 +24288,7 @@ begin
 
       if arCount = 0
       then
-        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy: Lawful data handling',concat('Usecase ',ucName,' handles PII (',assetName,') but no actors associated with this use case are data controllers or data processors'));
+        insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy: Lawful data handling',concat('Usecase ',ucName,' handles personal data (',assetName,') but no actors associated with this use case are data controllers or data processors'));
       end if; 
 
     end loop pa_loop; 
