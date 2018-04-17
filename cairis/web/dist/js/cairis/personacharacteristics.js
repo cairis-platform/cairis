@@ -521,19 +521,19 @@ mainContent.on("click",".ground", function () {
 
   cr.tableId = "#theGrounds";
 
-
   $("#editCharacteristicReference").data("currentcr",JSON.stringify(cr));
   $("#editCharacteristicReference").data('loadcr',loadCharacteristicReference);
   $("#editCharacteristicReference").data("savecr",updateReferenceList);
   $("#editCharacteristicReference").modal('show');
 });
+
 mainContent.on("click",".warrant", function () {
   var propRow = $(this).closest("tr");
   var pc = JSON.parse($.session.get("PersonaCharacteristic"));
 
   var cr = {};
   cr.index = propRow.index();
-  var currentCr = pc.theGrounds[cr.index]
+  var currentCr = pc.theWarrant[cr.index]
   cr.name = currentCr.theReferenceName
   cr.description = currentCr.theReferenceDescription;
   cr.theSynopsis = currentCr.theReferenceSynopsis.theSynopsis
@@ -547,6 +547,7 @@ mainContent.on("click",".warrant", function () {
   $("#editCharacteristicReference").data("savecr",updateReferenceList);
   $("#editCharacteristicReference").modal('show');
 });
+
 mainContent.on("click",".rebuttal", function () {
   var propRow = $(this).closest("tr");
   var pc = JSON.parse($.session.get("PersonaCharacteristic"));
@@ -554,7 +555,7 @@ mainContent.on("click",".rebuttal", function () {
 
   var cr = {};
   cr.index = propRow.index();
-  var currentCr = pc.theGrounds[cr.index]
+  var currentCr = pc.theRebuttal[cr.index]
   cr.name = currentCr.theReferenceName
   cr.description = currentCr.theReferenceDescription;
   cr.theSynopsis = currentCr.theReferenceSynopsis.theSynopsis
