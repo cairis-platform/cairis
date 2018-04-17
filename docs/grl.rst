@@ -91,3 +91,5 @@ Generating a GRL model
 - Assuming you have a project open in jUCMNav, you can import this GRL file by selecting the File/Import menu in Eclipse to open the Import wizard, selecting the Other | Import UCM / GRL / URN option, and then selecting the generated GRL file.
 
 
+.. figure:: jucmnav.jpg
+   :alt: GRL model in jUCMNav
