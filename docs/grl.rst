@@ -39,7 +39,7 @@ GRL goals, soft goals, or tasks can be associated with persona characteristics, 
 .. figure:: crGrl.jpg
    :alt: Associating GRL with characteristic reference
 
-- Enter a synopsis for the ground, warrrant, or rebuttal reference tat expresses the reference in intentional terms.
+- Enter a synopsis that expresses the ground, warrrant, or rebuttal reference in intentional terms.
 
 - Select the GRL element type for this synopsis this can be either a goal or software.
 
@@ -47,7 +47,31 @@ GRL goals, soft goals, or tasks can be associated with persona characteristics, 
 
 - Use the Contribution box to indicate how much this reference contributes to achieving its means or end.  Possible values are Make, SomePositive, Help, Hurt, SomeNegative, Break.
 
-- Click on the Save button to close the dialog.
+- Click on the Save button to update the persona characteristic, and close the dialog.
 
-- Click on the Update button the persona characteristics form to update the persona characteristic.
+- Click on the Update button on the persona characteristic form to save the persona characteristic.
 
+Adding GRL elements to use cases
+--------------------------------
+
+Use cases can make a contribution to GRL elements associated with persona characteristics.  These use cases are associated with GRL goals, and the use case steps are refined as GRL tasks.  These are associated with either asset, component, or role actors.
+
+- To add these GRL elements and contribution relationships, open the use case to be updated, and select the Contribution folder.
+
+- Select the goal or soft goal the use case contributes to, indicate whether the use case is a means or an end in the intention relationships, and -- using the Contribution box -- indicate how much the use case contributes to achieving its means or ends.
+
+.. figure:: ucGrl.jpg
+   :alt: Associating GRL with a use case
+
+- Click on the Flow folder, and double click on the step you want to associate the GRL task with.
+
+.. figure:: ucsGrl.jpg
+   :alt: Associating GRL with a use case step
+
+- Enter a synopsis that expresses the use case step in intentional terms.
+
+- Select the GRL actor type and actor to associate the GRL task with.  Permissable actor types are assets, components, and roles.
+
+- Click on the Update button to update the use case step, and close the dialog.
+
+- Click on the Update button on the use case form to save the use case.
