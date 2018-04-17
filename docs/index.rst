@@ -22,6 +22,7 @@ CAIRIS documentation
    domainproperties
    gro
    usecases
+   grl
    dependencies
    patterns
    vulnerabilities
