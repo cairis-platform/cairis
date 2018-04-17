@@ -12,12 +12,12 @@ Generating Goal-oriented Requirements Language models
 .. figure:: pcToGrlMetaModel.jpg
    :alt: Conceptual model of CAIRIS and GRL elements
 
+
 Pre-requisite activities
 ------------------------
 
-To generate a GRL model, you need to create the CAIRIS model elements synonymous with the GRL model elements.  Typically, these will be persona characteristics and use cases.  You will also need to create a traceability association between a task that the personas of interest participate in, and the use cases.
+To generate a GRL model, you need to create the CAIRIS model elements synonymous with the GRL model elements.  Typically, these will be persona characteristics and use cases.  You will also need to create a traceability association between a task that the personas of interest participate in, and the use cases. For details on how to add traceability links, see :doc:`Traceability </traceability>`.
 
-For details on how to add traceability links, see :doc:`Traceability </traceability>`.
 
 Adding GRL elements to persona characteristics
 ----------------------------------------------
@@ -75,3 +75,19 @@ Use cases can make a contribution to GRL elements associated with persona charac
 - Click on the Update button to update the use case step, and close the dialog.
 
 - Click on the Update button on the use case form to save the use case.
+
+Generating a GRL model
+----------------------
+
+.. figure:: exportGrl.jpg
+   :alt: Exporting a GRL model
+
+- To generate a GRL model, select the System/Export GRL menu to open the Export GRL modal dialog.
+
+- Select the Environment, Task, and Persona to create the GRL model for.  Persona GRL elements will be present in the exported model only GRL elements have been associated with persona cases.  Task GRL elements will be present only if (i) a traceability link has been added between the use cases where GRL elements are elements.
+
+- Click on the Export button to generate a GRL file.
+
+- Assuming you have a project open in jUCMNav, you can import this GRL file by selecting the File/Import menu in Eclipse to open the Import wizard, selecting the Other | Import UCM / GRL / URN option, and then selecting the generated GRL file.
+
+
