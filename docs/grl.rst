@@ -12,3 +12,10 @@ Generating Goal-oriented Requirements Language models
 .. figure:: pcToGrlMetaModel.jpg
    :alt: Conceptual model of CAIRIS and GRL elements
 
+Pre-requisite activities
+------------------------
+
+To generate a GRL model, you need to create the CAIRIS model elements synonymous with the GRL model elements.  Typically, these will be persona characteristics and use cases.  You will also need to create a traceability association between a task that the personas of interest participate in, and the use cases.
+
+For details on how to print asset models as SVG files, see :doc:`Traceability </traceability>`.
+

@@ -3025,6 +3025,9 @@ class MySQLDatabaseProxy:
   def misusabilityToXml(self,includeHeader=True):
     return self.responseList('call misusabilityToXml(:head)',{'head':includeHeader},'MySQL error exporting misusability data to XML')[0]
 
+  def synopsesToXml(self,includeHeader=True):
+    return self.responseList('call synopsesToXml(:head)',{'head':includeHeader},'MySQL error exporting synopses data to XML')[0]
+
   def associationsToXml(self,includeHeader=True):
     return self.responseList('call associationsToXml(:head)',{'head':includeHeader},'MySQL error exporting association data to XML')[0]
 

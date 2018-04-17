@@ -939,6 +939,7 @@ drop procedure if exists getPersonalThreats;
 drop procedure if exists getPersonalRisks;
 drop procedure if exists getPersonalResponses;
 drop procedure if exists lawfulProcessingTable;
+drop procedure if exists synopsesToXml;
 
 delimiter //
 
@@ -24878,6 +24879,143 @@ begin
 end
 //
 
+create procedure synopsesToXml(in includeHeader int)
+begin
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE synopses PUBLIC "-//CAIRIS//DTD SYNOPSES 1.0//EN" "http://cairis.org/dtd/synopses.dtd">\n\n<synopses>\n';
+  declare csCount int default 0;
+  declare rsCount int default 0;
+  declare ssCount int default 0;
+  declare rcCount int default 0;
+  declare ucCount int default 0;
+  declare charName varchar(2000);
+  declare refName varchar(200);
+  declare synName varchar(1000);
+  declare synDim varchar(50);
+  declare aType varchar(50);
+  declare aName varchar(50);
+  declare envId int;
+  declare envName varchar(100);
+  declare ucName varchar(200);
+  declare stepNo int;
+  declare srcName varchar(2000);
+  declare destName varchar(2000);
+  declare meName varchar(100);
+  declare contName varchar(100);
 
+  declare done int default 0;
+
+  declare csCursor cursor for 
+    select pc.description,pcs.synopsis,td.name,'persona',p.name from persona_characteristic_synopsis pcs, persona_characteristic pc, trace_dimension td, persona p where pcs.characteristic_id = pc.id and pc.persona_id = p.id and pcs.dimension_id = td.id;
+  declare rsCursor cursor for
+    select dr.name,drs.synopsis,td.name,'persona',p.name from document_reference_synopsis drs,document_reference dr, trace_dimension td, persona p where drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id;
+  declare envCursor cursor for 
+    select id,name from environment;
+  declare ssCursor cursor for
+    select uc.name,ucss.step_no,ucss.synopsis,'asset',a.name from usecase uc, usecase_step_synopsis ucss, asset a where ucss.usecase_id = uc.id and ucss.environment_id = envId and ucss.actor_id = a.id and ucss.actor_type_id = 3
+    union
+    select uc.name,ucss.step_no,ucss.synopsis,'component',c.name from usecase uc, usecase_step_synopsis ucss, component c where ucss.usecase_id = uc.id and ucss.environment_id = envId and ucss.actor_id = c.id and ucss.actor_type_id = 21
+    union
+    select uc.name,ucss.step_no,ucss.synopsis,'role',r.name from usecase uc, usecase_step_synopsis ucss, role r where ucss.usecase_id = uc.id and ucss.environment_id = envId and ucss.actor_id = r.id and ucss.actor_type_id = 10;
+  declare rcCursor cursor for
+    select drs.synopsis, pcs.synopsis, ce.name, lc.name from document_reference_contribution drc, document_reference_synopsis drs, persona_characteristic_synopsis pcs, contribution_end ce, link_contribution lc where drc.reference_id = drs.id and drc.characteristic_id = pcs.characteristic_id and drc.end_id = lc.id and drc.contribution_id = ce.id
+    union
+    select drs.synopsis, uc.name, ce.name, lc.name from usecase_dr_contribution udc, document_reference_synopsis drs, usecase uc, contribution_end ce, link_contribution lc where udc.usecase_id = uc.id and udc.reference_id = drs.id and udc.end_id = lc.id and udc.contribution_id = ce.id;
+  declare ucCursor cursor for
+    select uc.name, pcs.synopsis, ce.name, lc.name from usecase_pc_contribution upc, usecase uc, persona_characteristic_synopsis pcs, contribution_end ce, link_contribution lc where upc.usecase_id = uc.id and upc.characteristic_id = pcs.characteristic_id and upc.end_id = lc.id and upc.contribution_id = ce.id;
+
+
+  declare continue handler for not found set done = 1;
+
+  if includeHeader = 0
+  then
+    set buf = '<synopses>\n';
+  end if;
+
+  open csCursor;
+  cs_loop: loop
+    fetch csCursor into charName,synName,synDim,aType,aName;
+    if done = 1
+    then
+      leave cs_loop;
+    end if;
+    set buf = concat(buf,'  <characteristic_synopsis characteristic="',charName,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" />\n');
+    set csCount = csCount + 1;
+  end loop cs_loop;
+  close csCursor;
+
+  set done = 0;
+  open rsCursor;
+  rs_loop: loop
+    fetch rsCursor into refName,synName,synDim,aType,aName;
+    if done = 1
+    then
+      leave rs_loop;
+    end if;
+    set buf = concat(buf,'  <reference_synopsis reference="',refName,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" />\n');
+    set rsCount = rsCount + 1;
+  end loop rs_loop;
+  close rsCursor;
+
+
+  set done = 0;
+  open envCursor;
+  env_loop: loop
+    fetch envCursor into envId,envName;
+    if done = 1
+    then
+      leave env_loop;
+    end if;
+
+    open ssCursor;
+    ss_loop: loop
+      fetch ssCursor into ucName,stepNo,synName,aType,aName;
+      if done = 1
+      then
+        leave ss_loop;
+      end if;
+
+      set buf = concat(buf,'  <step_synopsis environment="',envName,'" usecase="',ucName,'" step_no="',stepNo,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" />\n');
+      set ssCount = ssCount + 1;
+    end loop ss_loop;
+    close ssCursor;
+    set done = 0;
+
+  end loop env_loop;
+  close envCursor;
+  set done = 0;
+
+  set done = 0;
+  open rcCursor;
+  rc_loop: loop
+    fetch rcCursor into srcName,destName,meName,contName;
+    if done = 1
+    then
+      leave rc_loop;
+    end if;
+      set buf = concat(buf,'  <reference_contribution source="',srcName,'" destination="',destName,'" means_end="',meName,'" contribution="',contName,'" />\n');
+      set rcCount = rcCount + 1;
+  end loop rc_loop;
+  close rcCursor;
+
+  set done = 0;
+  open ucCursor;
+  uc_loop: loop
+    fetch ucCursor into ucName,refName,meName,contName;
+    if done = 1
+    then
+      leave uc_loop;
+    end if;
+    set buf = concat(buf,'  <usecase_contribution usecase="',ucName,'" referent="',refName,'" means_end="',meName,'" contribution="',contName,'" />\n');
+    set ucCount = ucCount + 1;
+
+  end loop uc_loop;
+  close ucCursor;
+
+
+  set buf = concat(buf,'</synopses>');
+  select buf,csCount,rsCount,ssCount,rcCount,ucCount;
+  
+end
+//
 
 delimiter ;
