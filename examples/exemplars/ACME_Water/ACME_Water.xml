@@ -1054,7 +1054,7 @@ Ben promptly installs a keylogger onto this PC before logging out.</narrative>
 <asset_association environment="Day"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="1" tail_name="PLC Event">
   <rationale>Events are specific to works network.</rationale>
 </asset_association>
-<asset_association environment="Day"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="1..a" tail_name="Suppress Event">
+<asset_association environment="Day"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="1" tail_name="Suppress Event">
   <rationale>Events are specific to works network.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="Works Diary" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Diary Entry">
