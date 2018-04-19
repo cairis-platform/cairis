@@ -2612,7 +2612,7 @@ Standard 7.11(vvv)</issue>
 <obstacle name="Ubiquitous identity data" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
     <definition>Ubiquitous identity data</definition>
-    <probability value="0.1" >
+    <probability value="0.5" >
       <rationale>We assume telemetry technicians know the areas and patterns well enough to spot anomalies arising from spoofed telemetry.</rationale>
     </probability>
   </obstacle_environment>
@@ -2700,8 +2700,8 @@ Standard 7.11(vvv)</issue>
 <obstacle name="Zero-day threat exploit" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
     <definition>Zero-day threat exploit</definition>
-    <probability value="0" >
-      <rationale></rationale>
+    <probability value="0.1" >
+      <rationale>Unlikely given the comparative significance of this part of the CNI.</rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
@@ -2732,16 +2732,16 @@ Standard 7.11(vvv)</issue>
 <obstacle name="Software incompatibility" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
     <definition>Software incompatibility</definition>
-    <probability value="0" >
-      <rationale></rationale>
+    <probability value="0.1" >
+      <rationale>Software is usually tested before deployment.</rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
 <obstacle name="Vendor passwords unchanged" originator="Anon" >
   <obstacle_environment name="Day" category="Integrity_Threat" >
     <definition>Vendor passwords unchanged</definition>
-    <probability value="0" >
-      <rationale></rationale>
+    <probability value="0.7" >
+      <rationale>Default passwords are often left unchanged.</rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
@@ -2756,16 +2756,16 @@ Standard 7.11(vvv)</issue>
 <obstacle name="Crafted packets" originator="Anon" >
   <obstacle_environment name="Day" category="Integrity_Threat" >
     <definition>Crafted packets</definition>
-    <probability value="0" >
-      <rationale></rationale>
+    <probability value="0.1" >
+      <rationale>Requires significant motivation and capability on the part of the likely attacks, which seems unlikely.</rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
 <obstacle name="Incomplete firewall rule-set" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
     <definition>Incomplete firewall rule-set</definition>
-    <probability value="0" >
-      <rationale></rationale>
+    <probability value="0.4" >
+      <rationale>May arise if applications are removed, modified, or added to the network, but occurs infrequently.</rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
