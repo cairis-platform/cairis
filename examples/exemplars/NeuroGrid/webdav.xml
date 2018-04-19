@@ -1,0 +1,319 @@
+<?xml version="1.0"?>
+<!DOCTYPE architectural_pattern PUBLIC "-//CAIRIS//DTD COMPONENT 1.0//EN" "https://cairis.org/dtd/architectural_pattern.dtd">
+
+<architectural_pattern name="WebDAV">
+<synopsis>A model WebDAV architectural pattern</synopsis>
+
+<access_right name="superuser" value="10">
+  <description>Superuser</description>
+  <rationale>Access to all resources</rationale>
+</access_right>
+<access_right name="authenticated" value="5">
+  <description>Authenticated user</description>
+  <rationale>Only authenticated users can access</rationale>
+</access_right>
+<access_right name="guest" value="1">
+  <description>Guest user</description>
+  <rationale>User can be anonymous</rationale>
+</access_right>
+
+<protocol name="HTTPS" value="1">
+  <description>HTTPS with mutual authentication</description>
+  <rationale>HTTPS with mutual authentication</rationale>
+</protocol>
+
+<privilege name="superuser" value="10">
+  <description>Operates with superuser privilege</description>
+  <rationale>Exposure to all resources</rationale>
+</privilege>
+<privilege name="authenticated" value="5">
+  <description>Operates with authenticated privileges</description>
+  <rationale>Exposure to resources authorised to the authenticated user.</rationale>
+</privilege>
+<privilege name="guest" value="1">
+  <description>Operates with guest privileges</description>
+  <rationale>Limited exposure to unauthorised resources</rationale>
+</privilege>
+
+<surface_type name="Binary" value="10">
+  <description>Binary / proprietary file format</description>
+  <rationale>Largely opaque / undefined</rationale>
+</surface_type>
+<surface_type name="Structured Text" value="5">
+  <description>Structured file format</description>
+  <rationale>File format validatable</rationale>
+</surface_type>
+
+<asset name="Web Server" short_code="WS" type="Software" surface_type="Binary" access_right="authenticated">
+  <description>Web Server</description>
+  <significance>Serves resources to HTTP clients</significance>
+  <security_property property="Integrity" value="Medium">
+    <rationale>Corrupting running of web server could lead to unauthorised access to resources</rationale>
+  </security_property>
+  <security_property property="Availability" value="Medium">
+    <rationale>Provides access to all web resources, not just those associated with WebDAV</rationale>
+  </security_property>
+</asset>
+<asset name="Web Server Module" short_code="WDM" type="Software" surface_type="Binary" access_right="authenticated">
+  <description>Plugin modules</description>
+  <significance>Plugins for TLS and WebDAV</significance>
+  <security_property property="Integrity" value="Medium">
+    <rationale>Corrupting running of web server could lead to unauthorised access to resources</rationale>
+  </security_property>
+</asset>
+<asset name="Password File" short_code="PWD" type="Information" surface_type="Structured Text" access_right="authenticated">
+  <description>WebDAV password file</description>
+  <significance>Supports WebDAV authentication</significance>
+  <security_property property="Confidentiality" value="High">
+    <rationale>Unauthorised access could lead to unauthorised access to resources</rationale>
+  </security_property>
+  <security_property property="Integrity" value="High">
+    <rationale>Corrupting running of web server could lead to unauthorised access to resources</rationale>
+  </security_property>
+</asset>
+<asset name="Host Configuration File" short_code="HCF" type="Information" surface_type="Structured Text" access_right="authenticated">
+  <description>Host configuration file</description>
+  <significance>Defines virtual hosts and allowable modules</significance>
+  <security_property property="Integrity" value="Medium">
+    <rationale>Corrupting running of web server could lead to unauthorised access to resources</rationale>
+  </security_property>
+</asset>
+<asset name="WebDAV Repository" short_code="WDR" type="Information" surface_type="Structured Text" access_right="authenticated">
+  <description>WebDAV Collection</description>
+  <significance>WebDAV Collection</significance>
+</asset>
+<asset name="WebDAV Collection" short_code="WDC" type="Information" surface_type="Structured Text" access_right="authenticated">
+  <description>WebDAV Collection</description>
+  <significance>WebDAV Collection</significance>
+</asset>
+<asset name="WebDAV Resource" short_code="WDRE" type="Information" surface_type="Structured Text" access_right="authenticated">
+  <description>WebDAV Resource</description>
+  <significance>WebDAV Resource</significance>
+</asset>
+<asset name="Property" short_code="WDPROP" type="Information" surface_type="Structured Text" access_right="authenticated">
+  <description>Resource property</description>
+  <significance>Resource property</significance>
+</asset>
+<asset name="Lock Token" short_code="LT" type="Information" surface_type="Structured Text" access_right="authenticated">
+  <description>Lock Token</description>
+  <significance>Lock Token</significance>
+</asset>
+<asset name="WebDAV Content" short_code="WDREQ" type="Information" surface_type="Structured Text" access_right="authenticated">
+  <description>WebDAV Content</description>
+  <significance>WebDAV Content</significance>
+  <security_property property="Confidentiality" value="Medium">
+    <rationale>Unauthorised access to requests could lead unauthorised access to resources</rationale>
+  </security_property>
+  <security_property property="Integrity" value="Medium">
+    <rationale>Corrupting requests could lead to unauthorised access to resources</rationale>
+  </security_property>
+  <security_property property="Availability" value="Low">
+    <rationale>Request availability correlates to QoS expectations</rationale>
+  </security_property>
+</asset>
+<asset name="Trust Store" short_code="TRUSTS" type="Software" surface_type="Binary" access_right="authenticated">
+  <description>Trust Store</description>
+  <significance>Stores certificates</significance>
+  <security_property property="Availability" value="Medium">
+    <rationale>Trust Store availability correlates to QoS expectations</rationale>
+  </security_property>
+</asset>
+<asset name="Server certificate" short_code="SERVERCERT" type="Information" surface_type="Structured Text" access_right="authenticated">
+  <description>Server Certificate</description>
+  <significance>Needed for mutual authentication</significance>
+  <security_property property="Confidentiality" value="Medium">
+    <rationale>Unauthorised access could lead unauthorised access to resources.</rationale>
+  </security_property>
+</asset>
+<asset name="User certificate" short_code="USERCERT" type="Information" surface_type="Structured Text" access_right="authenticated">
+  <description>User Certificate</description>
+  <significance>Needed for mutual authentication</significance>
+</asset>
+
+<goal name="WebDAV">
+  <definition>WebDAV shall extend HTTP/1.1 by providing a set of methods, headers, request entity body formats and response entity body formats for properties, collections, locking, and namespace operations.</definition>
+  <rationale>None</rationale>
+</goal>
+<goal name="Repository">
+  <definition>A WebDAV repository shall be a collection of WebDAV resources hosted at the same server address.</definition>
+  <rationale>None</rationale>
+  <concern name="WebDAV Repository"/>
+</goal>
+<goal name="Collection">
+  <definition>Collections shall act as a container of references to child resources.</definition>
+  <rationale>None</rationale>
+  <concern name="WebDAV Collection"/>
+</goal>
+<goal name="WebDAV Configuration">
+  <definition>WebDAV support shall be enabled as part of the web server's configuration.</definition>
+  <rationale>None</rationale>
+  <concern name="Host Configuration File"/>
+  <responsibility name="Sysadmin" />
+</goal>
+<goal name="Collection state">
+  <definition>A collection's state shall consist of at least a set of mappings between path segments and resources</definition>
+  <rationale>None</rationale>
+  <concern name="WebDAV Collection"/>
+</goal>
+<goal name="Collection mapping">
+  <definition>A collection shall contain no more than one mapping for a given path segment.</definition>
+  <rationale>None</rationale>
+  <concern name="WebDAV Collection"/>
+</goal>
+<goal name="Resource">
+  <definition>Resources shall support a hierarchical namespace where the hierarchy is delimited with the / character.</definition>
+  <rationale>None</rationale>
+  <concern name="WebDAV Resource"/>
+</goal>
+<goal name="Resource addressing">
+  <definition>A WebDAV resource shall be web object addressable with a URI.</definition>
+  <rationale>None</rationale>
+  <concern name="WebDAV Resource"/>
+</goal>
+<goal name="non-WebDAV resources">
+  <definition>Clients shall support WebDAV resources contained inside non-WebDAV resources.</definition>
+  <rationale>None</rationale>
+  <concern name="WebDAV Resource"/>
+  <responsibility name="Sysadmin"/>
+</goal>
+<goal name="Lock Token">
+  <definition>A lock token shall indicate a restriction placed on write operations to a resource.</definition>
+  <rationale>None</rationale>
+  <concern name="Lock Token"/>
+</goal>
+<goal name="Lock Token URI">
+  <definition>A lock token shall be represented as a URI.</definition>
+  <rationale>None</rationale>
+  <concern name="Lock Token"/>
+</goal>
+<goal name="Property">
+  <definition>Properties shall describe the state of a resource.</definition>
+  <rationale>None</rationale>
+  <concern name="Property"/>
+</goal>
+<goal name="Property elements">
+  <definition>Properties shall consist of name/value pairs expressed in XML, where names identify the property's syntax and semantics.</definition>
+  <rationale>None</rationale>
+  <concern name="Property"/>
+</goal>
+<goal name="Property value">
+  <definition>Properties shall consist of name/value pairs expressed in XML, where names identify the property's syntax and semantics.</definition>
+  <rationale>None</rationale>
+  <concern name="Property"/>
+</goal>
+<goal name="Property URI">
+  <definition>A property name shall be a universally unique identifier associated with a schema providing information about the syntax and semantics of the property.</definition>
+  <rationale>None</rationale>
+  <concern name="Property"/>
+</goal>
+<goal name="Property categories">
+  <definition>Allowable categories of properties shall be restricted to Live and Dead.</definition>
+  <rationale>None</rationale>
+  <concern name="Property"/>
+</goal>
+<goal name="Live Properties">
+  <definition>The syntax and semantics of Live properties shall be enforced by WebDAV servers.</definition>
+  <rationale>None</rationale>
+  <concern name="Property"/>
+</goal>
+<goal name="Dead Properties">
+  <definition>The syntax and semantics of Dead properties shall be enforced by WebDAV clients.</definition>
+  <rationale>None</rationale>
+  <concern name="Property"/>
+</goal>
+
+<component name="WebDAV Server">
+  <description>WebDav Server</description>
+  <interface name="proxy" type="provided" access_right="authenticated" privilege="authenticated" />
+  <structure head_asset="Web Server" head_adornment="Composition" head_nav="0" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Web Server Module" />
+  <structure head_asset="Web Server" head_adornment="Aggregation" head_nav="0" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Password File" />
+  <structure head_asset="Web Server" head_adornment="Aggregation" head_nav="0" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Host Configuration File" />
+  <structure head_asset="Web Server" head_adornment="Aggregation" head_nav="0" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_nav="0" tail_adornment="Association" tail_asset="WebDAV Collection" />
+  <structure head_asset="Web Server" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="a" tail_nav="0" tail_adornment="Association" tail_asset="WebDAV Repository" />
+  <structure head_asset="Web Server" head_adornment="Aggregation" head_nav="0" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Trust Store" />
+  <structure head_asset="Trust Store" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="a" tail_nav="0" tail_adornment="Association" tail_asset="Server certificate" />
+
+  <structure head_asset="WebDAV Repository" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="a" tail_nav="0" tail_adornment="Association" tail_asset="WebDAV Collection" />
+  <structure head_asset="WebDAV Collection" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="a" tail_nav="0" tail_adornment="Association" tail_asset="WebDAV Resource" />
+  <structure head_asset="WebDAV Resource" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Lock Token" />
+  <structure head_asset="WebDAV Resource" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Property" />
+  <component_goal name="WebDAV" />
+  <component_goal name="Repository"/>
+  <component_goal name="Collection"/>
+  <component_goal name="WebDAV Configuration"/>
+  <component_goal name="Collection state"/>
+  <component_goal name="Collection mapping"/>
+  <component_goal name="Resource"/>
+  <component_goal name="Resource addressing"/>
+  <component_goal name="non-WebDAV resources"/>
+  <component_goal name="Lock Token"/>
+  <component_goal name="Lock Token URI"/>
+  <component_goal name="Property"/>
+  <component_goal name="Property elements"/>
+  <component_goal name="Property value"/>
+  <component_goal name="Property URI"/>
+  <component_goal name="Property categories"/>
+  <component_goal name="Live Properties"/>
+  <component_goal name="Dead Properties"/>
+  <component_goal_association goal_name="WebDAV" ref_type="and" subgoal_name="Repository">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="WebDAV" ref_type="and" subgoal_name="Collection">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="WebDAV" ref_type="and" subgoal_name="Resource">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="WebDAV" ref_type="and" subgoal_name="WebDAV Configuration">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Collection" ref_type="and" subgoal_name="Collection state">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Collection" ref_type="and" subgoal_name="Collection mapping">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Resource" ref_type="and" subgoal_name="Property">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Resource" ref_type="and" subgoal_name="Resource addressing">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Resource" ref_type="and" subgoal_name="non-WebDAV resources">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Resource" ref_type="and" subgoal_name="Lock Token">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Lock Token" ref_type="and" subgoal_name="Lock Token URI">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Property" ref_type="and" subgoal_name="Property elements">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Property" ref_type="and" subgoal_name="Property value">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Property" ref_type="and" subgoal_name="Property URI">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Property" ref_type="and" subgoal_name="Property categories">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Property categories" ref_type="and" subgoal_name="Live Properties">
+    <rationale>None</rationale>
+  </component_goal_association>
+  <component_goal_association goal_name="Property categories" ref_type="and" subgoal_name="Dead Properties">
+    <rationale>None</rationale>
+  </component_goal_association>
+</component>
+<component name="WebDAV Client">
+  <description>WebDav Client</description>
+ <interface name="proxy" type="required" access_right="authenticated" privilege="authenticated" />
+ <structure head_asset="WebDAV Collection" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="a" tail_nav="0" tail_adornment="Association" tail_asset="WebDAV Resource" />
+ <structure head_asset="WebDAV Resource" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Lock Token" />
+ <structure head_asset="WebDAV Resource" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_nav="0" tail_adornment="Association" tail_asset="Property" />
+ <structure head_asset="Trust Store" head_adornment="Composition" head_nav="0" head_nry="1" head_role="" tail_role="" tail_nry="a" tail_nav="0" tail_adornment="Association" tail_asset="User certificate" />
+</component>
+<connector name="CS connection" from_component="WebDAV Client" from_interface="proxy" from_role="request-proxy" to_component="WebDAV Server" to_interface="proxy" to_role="provide-proxy" protocol="HTTPS" access_right="authenticated" asset_name="WebDAV Content" />
+</architectural_pattern>
