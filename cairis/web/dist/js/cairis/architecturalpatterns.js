@@ -66,15 +66,15 @@ function createArchitecturalPatternsTable(){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theInterfacesDER">';
+        textToInsert[i++] = '<td class="architecturalpattern-rows" name="theInterfacesDER">';
         textToInsert[i++] = item.theAttackSurfaceMetric[0];
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theChannelsDER">';
+        textToInsert[i++] = '<td class="architecturalpattern-rows" name="theChannelsDER">';
         textToInsert[i++] = item.theAttackSurfaceMetric[1];
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theUntrustedSurfaceDER">';
+        textToInsert[i++] = '<td class="architecturalpattern-rows" name="theUntrustedSurfaceDER">';
         textToInsert[i++] = item.theAttackSurfaceMetric[2];
         textToInsert[i++] = '</td>';
 
@@ -117,7 +117,7 @@ function createArchitecturalPatternsTable(){
 }
 
 $(document).on('click', "td.architecturalpattern-rows", function () {
-  var apName = $(this).text();
+  var apName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(apName);
   viewArchitecturalPattern(apName);
 });

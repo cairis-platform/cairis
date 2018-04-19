@@ -55,7 +55,7 @@ function createUseCasesTable(){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theDescription">';
+        textToInsert[i++] = '<td class="usecase-row" name="theDescription">';
         textToInsert[i++] = item.theDescription;
         textToInsert[i++] = '</td>';
 
@@ -104,7 +104,7 @@ function createUseCasesTable(){
 }
 
 $(document).on('click', "td.usecase-row", function () {
-  var ucName = $(this).text();
+  var ucName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(ucName);
   viewUseCase(ucName); 
 });

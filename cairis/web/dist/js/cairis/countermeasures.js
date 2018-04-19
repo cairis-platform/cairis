@@ -70,7 +70,7 @@ function createCountermeasuresTable(){
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theType">';
+        textToInsert[i++] = '<td class="countermeasure-rows" name="theType">';
         textToInsert[i++] = item.theType;
         textToInsert[i++] = '</td>';
 
@@ -156,7 +156,7 @@ function createCountermeasuresTable(){
 
 var mainContent = $("#objectViewer");
 $(document).on('click', "td.countermeasure-row", function () {
-  var cmName = $(this).text();
+  var cmName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(cmName);
   viewCountermeasure(cmName);
 });

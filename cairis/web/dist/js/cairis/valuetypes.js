@@ -152,7 +152,7 @@ function createValueTypesTable(valueType,envName){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theDescription">';
+        textToInsert[i++] = '<td class="valuetype-rows" name="theDescription">';
         textToInsert[i++] = item.theDescription;
         textToInsert[i++] = '</td>';
 
@@ -178,7 +178,7 @@ function createValueTypesTable(valueType,envName){
 
 $(document).on('click', "td.valuetype-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).text();
+  var name = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(name);
   var valueType = $.session.get("value_type");
   var envName = $.session.get("environment");

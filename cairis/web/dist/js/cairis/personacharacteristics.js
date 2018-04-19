@@ -54,11 +54,11 @@ function createPersonaCharacteristicsTable(){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theVariable">';
+        textToInsert[i++] = '<td class="personacharacteristic-rows" name="theVariable">';
         textToInsert[i++] = item.theVariable;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theCharacteristic">';
+        textToInsert[i++] = '<td class="personacharacteristic-rows" name="theCharacteristic">';
         textToInsert[i++] = item.theCharacteristic;
         textToInsert[i++] = '</td>';
 

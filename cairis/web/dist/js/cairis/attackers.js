@@ -54,7 +54,7 @@ function createAttackersTable(){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theType">';
+        textToInsert[i++] = '<td class="attacker-rows" name="theType">';
         textToInsert[i++] = item.theDescription;
         textToInsert[i++] = '</td>';
 
@@ -80,7 +80,7 @@ function createAttackersTable(){
 }
 
 $(document).on('click', "td.attacker-rows", function () {
-  var attackerName = $(this).text();
+  var attackerName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(attackerName);
   viewAttacker(attackerName);
 });

@@ -22,7 +22,7 @@
 
 $(document).on('click', "td.environment-rows",function(){
   activeElement("objectViewer");
-  var name = $(this).text();
+  var name = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(name);
   $.session.set("EnvironmentName", name);
 
@@ -327,7 +327,7 @@ function fillEnvironmentsTable(data, callback){
     textToInsert[i++] = item.theName;
     textToInsert[i++] = '</td>';
 
-    textToInsert[i++] = '<td name="theType">';
+    textToInsert[i++] = '<td class="environment-rows" name="theType">';
     textToInsert[i++] = item.theDescription;
     textToInsert[i++] = '</td></tr>';
   }

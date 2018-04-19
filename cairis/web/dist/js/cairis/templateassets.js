@@ -68,13 +68,10 @@ function fillTemplateAssetsTable(data, callback){
     textToInsert[i++] = item.theName;
     textToInsert[i++] = '</td>';
 
-    textToInsert[i++] = '<td name="theType">';
+    textToInsert[i++] = '<td class="template-asset-rows" name="theType">';
     textToInsert[i++] = item.theType;
     textToInsert[i++] = '</td>';
 
-    textToInsert[i++] = '<td name="theId" style="display:none;">';
-    textToInsert[i++] = item.theId;
-    textToInsert[i++] = '</td>';
     textToInsert[i++] = '</tr>';
 
   });
@@ -87,7 +84,7 @@ function fillTemplateAssetsTable(data, callback){
 }
 
 $(document).on('click', "td.template-asset-rows", function(){
-  var taName = $(this).attr('value');
+  var taName = $(this).closest("tr").find("td:eq(1)").attr('value');
   refreshObjectBreadCrumb(taName);
   viewTemplateAsset(taName);
 });

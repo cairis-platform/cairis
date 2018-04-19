@@ -59,11 +59,11 @@ function fillRolesTable(){
         textToInsert[i++] = value.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theShortCode">';
+        textToInsert[i++] = '<td class="role-rows" name="theShortCode">';
         textToInsert[i++] = value.theShortCode;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theType">';
+        textToInsert[i++] = '<td class="role-rows" name="theType">';
         textToInsert[i++] = value.theType;
         textToInsert[i++] = '</td>';
         textToInsert[i++] = '</tr>';
@@ -85,7 +85,7 @@ function fillRolesTable(){
 }
 
 $(document).on('click', "td.role-rows", function(){
-  var roleName = $(this).text();
+  var roleName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(roleName);
   viewRole(roleName);
 });

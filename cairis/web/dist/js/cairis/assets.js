@@ -56,7 +56,7 @@ function createAssetsTable(){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theType">';
+        textToInsert[i++] = '<td class="asset-row" name="theType">';
         textToInsert[i++] = item.theType;
         textToInsert[i++] = '</td>';
 
@@ -93,7 +93,7 @@ function createAssetsTable(){
 }
 
 $(document).on('click', "td.asset-row", function(){
-  var assetName = $(this).attr('value');
+  var assetName = $(this).closest("tr").find("td:eq(1)").attr('value');
   refreshObjectBreadCrumb(assetName);
   viewAsset(assetName);
 });

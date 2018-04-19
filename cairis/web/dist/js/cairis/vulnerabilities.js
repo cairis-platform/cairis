@@ -62,7 +62,7 @@ function createVulnerabilityTable(){
         textToInsert[i++] = item.theVulnerabilityName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theVulnerabilityType">';
+        textToInsert[i++] = '<td class="vulnerability-rows" name="theVulnerabilityType">';
         textToInsert[i++] = item.theVulnerabilityType;
         textToInsert[i++] = '</td>';
 
@@ -89,7 +89,7 @@ function createVulnerabilityTable(){
 
 
 $(document).on('click', "td.vulnerability-rows",function(){
-  var vulName = $(this).text();
+  var vulName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(vulName);
   viewVulnerability(vulName);
 });

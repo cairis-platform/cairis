@@ -66,7 +66,7 @@ function fillTemplateGoalsTable(data, callback){
     textToInsert[i++] = item.theName;
     textToInsert[i++] = '</td>';
 
-    textToInsert[i++] = '<td name="theDefinition">';
+    textToInsert[i++] = '<td class="template-goal-rows" name="theDefinition">';
     textToInsert[i++] = item.theDefinition;
     textToInsert[i++] = '</td>';
 
@@ -82,7 +82,7 @@ function fillTemplateGoalsTable(data, callback){
 }
 
 $(document).on('click', "td.template-goal-rows", function(){
-  var tgName = $(this).attr('value');
+  var tgName = $(this).closest("tr").find("td:eq(1)").attr('value');
   refreshObjectBreadCrumb(tgName);
   viewTemplateGoal(tgName);
 });

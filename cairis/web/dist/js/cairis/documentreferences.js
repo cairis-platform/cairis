@@ -61,7 +61,7 @@ function createDocumentReferencesTable(){
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theDocName">';
+        textToInsert[i++] = '<td class="documentreference-rows" name="theDocName">';
         textToInsert[i++] = item.theDocName;
         textToInsert[i++] = '</td>';
 
@@ -87,7 +87,7 @@ function createDocumentReferencesTable(){
 
 $(document).on('click', "td.documentreference-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).text();
+  var name = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(name);
   $.ajax({
     type: "GET",

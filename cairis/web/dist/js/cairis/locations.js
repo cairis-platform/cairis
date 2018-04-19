@@ -84,7 +84,7 @@ function createLocationsTable(){
 }
 
 $(document).on('click', "td.locations-rows", function () {
-  var name = $(this).text();
+  var name = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(name);
   viewLocations(name);
 });

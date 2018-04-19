@@ -101,7 +101,7 @@ function createSecurityPatternsTable(){
 }
 
 $(document).on('click', "td.securitypattern-rows", function () {
-  var spName = $(this).text();
+  var spName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(spName);
   viewSecurityPattern(spName);
 });

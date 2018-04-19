@@ -58,7 +58,7 @@ function createConceptReferencesTable(){
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theDimName">';
+        textToInsert[i++] = '<td class="conceptreference-rows" name="theDimName">';
         textToInsert[i++] = item.theDimName;
         textToInsert[i++] = '</td>';
 
@@ -84,7 +84,8 @@ function createConceptReferencesTable(){
 
 $(document).on('click', "td.conceptreference-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).text();
+  var name = $(this).closest("tr").find("td:eq(1)").text();
+
   $.ajax({
     type: "GET",
     dataType: "json",

@@ -60,7 +60,7 @@ function createTaskCharacteristicsTable(){
         textToInsert[i++] = item.theTaskName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theCharacteristic">';
+        textToInsert[i++] = '<td class="taskcharacteristic-rows" name="theCharacteristic">';
         textToInsert[i++] = item.theCharacteristic;
         textToInsert[i++] = '</td>';
 

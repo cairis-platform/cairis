@@ -85,7 +85,7 @@ function createTasksTable(){
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theObjective">';
+        textToInsert[i++] = '<td class="task-row" name="theObjective">';
         textToInsert[i++] = item.theObjective;
         textToInsert[i++] = '</td>';
 
@@ -132,7 +132,7 @@ function createTasksTable(){
 }
 
 $(document).on('click', "td.task-row", function () {
-  var taskName = $(this).text();
+  var taskName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(taskName);
   viewTask(taskName);
 });

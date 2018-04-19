@@ -61,7 +61,7 @@ function createExternalDocumentsTable(){
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theDescription">';
+        textToInsert[i++] = '<td class="externaldocument-rows" name="theDescription">';
         textToInsert[i++] = item.theDescription;
         textToInsert[i++] = '</td>';
 
@@ -85,7 +85,7 @@ function createExternalDocumentsTable(){
 
 $(document).on('click', "td.externaldocument-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).text();
+  var name = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(name);
   $.ajax({
     type: "GET",

@@ -54,9 +54,8 @@ function createEditObstaclesTable(){
         textToInsert[i++] = '<td class="obstacle-rows" name="theName">';
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
-        textToInsert[i++] = '<td name="theOriginator">';
+        textToInsert[i++] = '<td class="obstacle-rows" name="theOriginator">';
         textToInsert[i++] = item.theOriginator;
-        textToInsert[i++] = '</td>';
         textToInsert[i++] = '</td>';
         textToInsert[i++] = '</tr>';
       }
@@ -89,7 +88,7 @@ function createEditObstaclesTable(){
 }
 
 $(document).on('click', "td.obstacle-rows",function() {
-  var obsName = $(this).text();
+  var obsName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(obsName);
   viewObstacle(obsName);
 });

@@ -85,7 +85,7 @@ $(document).on('click', "#SelectResponseButton", function () {
 
 
 $(document).on('click', "td.response-rows", function () {
-  var responseName = $(this).text();
+  var responseName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(responseName);
   viewResponse(responseName);
 });
@@ -479,7 +479,7 @@ function createResponsesTable(){
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theType">';
+        textToInsert[i++] = '<td class="response-rows" name="theType">';
         textToInsert[i++] = item.theResponseType;
         textToInsert[i++] = '</td>';
 

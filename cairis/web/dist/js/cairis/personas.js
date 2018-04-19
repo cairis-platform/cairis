@@ -61,7 +61,7 @@ function createPersonasTable(){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="thePersonaType">';
+        textToInsert[i++] = '<td class-"persona-row" name="thePersonaType">';
         textToInsert[i++] = item.theType;
         textToInsert[i++] = '</td>';
 
@@ -86,7 +86,7 @@ function createPersonasTable(){
 }
 
 $(document).on('click', "td.persona-row", function () {
-  var personaName = $(this).text();
+  var personaName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(personaName);
   viewPersona(personaName);
 });

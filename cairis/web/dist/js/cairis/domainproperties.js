@@ -68,7 +68,7 @@ function createDomainPropertiesTable(){
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theType">';
+        textToInsert[i++] = '<td class="domainproperty-row" name="theType">';
         textToInsert[i++] = item.theType;
         textToInsert[i++] = '</td>';
 
@@ -93,7 +93,7 @@ function createDomainPropertiesTable(){
 }
 
 $(document).on('click', "td.domainproperty-row", function () {
-  var dpName = $(this).text();
+  var dpName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(dpName);
   viewDomainProperty(dpName);
 });

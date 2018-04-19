@@ -55,11 +55,11 @@ function createRisksTable(){
         textToInsert[i++] = item.theName
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theVulnerability">';
+        textToInsert[i++] = '<td class="risk-rows" name="theVulnerability">';
         textToInsert[i++] = item.theVulnerability;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theThreat">';
+        textToInsert[i++] = '<td class="risk-rows" name="theThreat">';
         textToInsert[i++] = item.theThreat;
         textToInsert[i++] = '</td>';
 
@@ -221,7 +221,7 @@ function toggleRiskWindows(){
 
 $(document).on('click', 'td.risk-rows', function () {
   activeElement("objectViewer");
-  var name = $(this).text();
+  var name = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(name);
   $.session.set("riskName", name);
   $.ajax({

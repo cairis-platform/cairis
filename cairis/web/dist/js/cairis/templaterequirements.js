@@ -68,7 +68,7 @@ function fillTemplateRequirementsTable(data, callback){
     textToInsert[i++] = item.theName;
     textToInsert[i++] = '</td>';
 
-    textToInsert[i++] = '<td name="theType">';
+    textToInsert[i++] = '<td class="template-requirement-rows" name="theType">';
     textToInsert[i++] = item.theType;
     textToInsert[i++] = '</td>';
 
@@ -84,7 +84,7 @@ function fillTemplateRequirementsTable(data, callback){
 }
 
 $(document).on('click', "td.template-requirement-rows", function(){
-  var trName = $(this).attr('value');
+  var trName = $(this).closest("tr").find("td:eq(1)").attr('value');
   refreshObjectBreadCrumb(trName);
   viewTemplateRequirement(trName);
 });

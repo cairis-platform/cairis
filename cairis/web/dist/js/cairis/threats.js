@@ -54,7 +54,7 @@ function createThreatsTable(){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theType">';
+        textToInsert[i++] = '<td class="threat-rows" name="theType">';
         textToInsert[i++] = item.theType;
         textToInsert[i++] = '</td>';
 
@@ -82,7 +82,7 @@ function createThreatsTable(){
 
 var mainContent = $("#objectViewer");
 $(document).on('click', "td.threat-rows", function () {
-  var thrName = $(this).text();
+  var thrName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(thrName);
   viewThreat(thrName);
 });

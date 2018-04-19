@@ -55,11 +55,11 @@ function createEditGoalsTable(){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="theOriginator">';
+        textToInsert[i++] = '<td class="goal-rows" name="theOriginator">';
         textToInsert[i++] = item.theOriginator;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td name="Status">';
+        textToInsert[i++] = '<td class="goal-rows" name="Status">';
         if(item.theStatus == 'black'){
           textToInsert[i++] = "Check";
         }
@@ -94,7 +94,7 @@ function createEditGoalsTable(){
 
 
 $(document).on('click', "td.goal-rows", function(){
-  var goalName = $(this).text();
+  var goalName = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(goalName);
   viewGoal(goalName);
 });
