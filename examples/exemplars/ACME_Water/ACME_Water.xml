@@ -415,13 +415,13 @@
   <significance>Compromising the EnterpriseSCADA server also compromising any connected clients and PLCs</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="integrity" value="High">
-    <rationale></rationale>
+    <rationale>Tampering could affect all connected PLCs and routers.</rationale>
   </security_property>
   <security_property environment="Day" property="availability" value="Medium">
-    <rationale></rationale>
+    <rationale>Inaccessibility impacts the maintainability of the connected SCADA infrastructure.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="High">
-    <rationale></rationale>
+    <rationale>Need to know who has maintained this system.</rationale>
   </security_property>
 </asset>
 <asset name="Firewall" short_code="F" type="Systems" is_critical="0">
@@ -429,13 +429,13 @@
   <significance>Compromising the firewalls compromises systems both within the works, and any external systems reliant on works data.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="integrity" value="Medium">
-    <rationale></rationale>
+    <rationale>Modifications to the firewall could expose the works network to attack.</rationale>
   </security_property>
   <security_property environment="Day" property="availability" value="High">
-    <rationale></rationale>
+    <rationale>Compromising the firewall could lead to an unacceptable degrading of performance of application on the works network.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="Medium">
-    <rationale></rationale>
+    <rationale>Useful to know who has maintained this system.</rationale>
   </security_property>
 </asset>
 <asset name="Corporate Network" short_code="CN" type="Systems" is_critical="0">
@@ -443,7 +443,7 @@
   <significance>Compromising the network may compromise the data passing through it.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="confidentiality" value="Medium">
-    <rationale></rationale>
+    <rationale>Network traffic contains commercially confidential data.</rationale>
   </security_property>
   <security_property environment="Day" property="integrity" value="Medium">
     <rationale></rationale>
@@ -460,16 +460,16 @@
   <significance>Compromising the telemetry network risks disrupting alarms sent to the bunker, or commands sent to remote kit.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="confidentiality" value="Low">
-    <rationale></rationale>
+    <rationale>Network traffic may reveal information about the configuration of devices on the network.</rationale>
   </security_property>
   <security_property environment="Day" property="integrity" value="High">
-    <rationale></rationale>
+    <rationale>Tampering with network traffic affects ACME's ability to monitor the water infrastructure if data is false or inaccurate.</rationale>
   </security_property>
   <security_property environment="Day" property="availability" value="High">
-    <rationale></rationale>
+    <rationale>Inaccessibility affects ACME's ability to monitor the water infrastructure.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="High">
-    <rationale></rationale>
+    <rationale>Changes to the network and network infrastructure need to be logged to assist troubleshooting activities.</rationale>
   </security_property>
 </asset>
 <asset name="Works Network" short_code="WN" type="Systems" is_critical="0">
@@ -477,22 +477,22 @@
   <significance>Compromising or disrupting the communication between devices on the SCADA network compromises the work of the SCADA application.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="confidentiality" value="Medium">
-    <rationale></rationale>
+    <rationale>Network traffic reveals information about the configuration of devices on the network.</rationale>
   </security_property>
   <security_property environment="Day" property="integrity" value="High">
-    <rationale></rationale>
+    <rationale>Tampering with network traffic affects ACME's ability to manage the plant infrastructure.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="High">
-    <rationale></rationale>
+    <rationale>Changes to the network and network infrastructure need to be logged to assist troubleshooting activities.</rationale>
   </security_property>
   <security_property environment="Night" property="confidentiality" value="Medium">
-    <rationale></rationale>
+    <rationale>Network traffic reveals information about the configuration of devices on the network.</rationale>
   </security_property>
   <security_property environment="Night" property="integrity" value="High">
-    <rationale></rationale>
+    <rationale>Tampering with the network traffic affects ACME's ability to manage the plant infrastructure.</rationale>
   </security_property>
   <security_property environment="Night" property="accountability" value="High">
-    <rationale></rationale>
+    <rationale>Changes to the network and network infrastructure need to be logged to assist troubleshooting activities.</rationale>
   </security_property>
 </asset>
 <asset name="Enterprise SCADA Network" short_code="ESN" type="Systems" is_critical="0">
@@ -500,16 +500,16 @@
   <significance>Compromising this network potentially compromises any assets connected to it.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="confidentiality" value="High">
-    <rationale></rationale>
+    <rationale>Network traffic reveals information about the configuration of connected devices, and sensitive information that may be used to control them..</rationale>
   </security_property>
   <security_property environment="Day" property="integrity" value="High">
-    <rationale></rationale>
+    <rationale>Tampering with network traffic affectss ACME's ability to manage the plant infrastructure.</rationale>
   </security_property>
   <security_property environment="Day" property="availability" value="Medium">
-    <rationale></rationale>
+    <rationale>Inaccessibility makes maintainability of connected devices difficult.</rationale>
   </security_property>
   <security_property environment="Day" property="accountability" value="High">
-    <rationale></rationale>
+    <rationale>Changes to the network and network infrastructure need to be logged to assist troubleshooting activities.</rationale>
   </security_property>
 </asset>
 <asset name="Intrusion Detection System" short_code="IDS" type="Systems" is_critical="0">
@@ -582,10 +582,10 @@
   <significance>Damaging the cabinet compromises all the assets on it.</significance>
   <critical_rationale></critical_rationale>
   <security_property environment="Day" property="integrity" value="Medium">
-    <rationale></rationale>
+    <rationale>Tampering could lead to physical damage to systems on the rack.</rationale>
   </security_property>
   <security_property environment="Day" property="availability" value="High">
-    <rationale></rationale>
+    <rationale>Physical damage to the cabinet affects all systems on the cabinet.</rationale>
   </security_property>
 </asset>
 <asset name="Modem" short_code="M" type="Hardware" is_critical="0">
@@ -995,154 +995,154 @@ Ben promptly installs a keylogger onto this PC before logging out.</narrative>
   <detect_environment name="Night" point="After" />
 </response>
 <asset_association environment="Day"  head_name="InfoPortal" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Corporate Network">
-  <rationale>TBC</rationale>
+  <rationale>Portal is on the corporate network.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="STCS Application" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="STCS credentials" >
-  <rationale>TBC</rationale>
+  <rationale>Credentials are needed to use STCS applications.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="Firewall" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Intrusion Detection System">
-  <rationale>TBC</rationale>
+  <rationale>Firewall mediates access to the IDS</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="Router" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Corporate Network">
-  <rationale>TBC</rationale>
+  <rationale>Routers mediates access to the corporate network.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="ICT PC" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Corporate Network">
-  <rationale>TBC</rationale>
+  <rationale>ICT PCs typically live on the corporate network.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="Router" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Telemetry Network">
-  <rationale>TBC</rationale>
+  <rationale>Routers mediate access to the telemetry network.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="ICT PC" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Telemetry Network"> 
-  <rationale>TBC</rationale>
+  <rationale>Some ICT PC applications interact with the telemetry network.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="SCADA Workstation" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Works Network">
-  <rationale>TBC</rationale>
+  <rationale>SCADA workstations live on a particular works network.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="EnterpriseSCADA Server" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Enterprise SCADA Network">
-  <rationale>TBC</rationale>
+  <rationale>Enterprise SCADA servers live in a particular Enterprise SCADA network.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="SCADA Workstation" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Enterprise SCADA Network">
-  <rationale>TBC</rationale>
+  <rationale>SCADA workstations live in a particular Enterprise SCADA network.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="ICT Application" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="ICT credentials">
   <rationale>It is assumed that telemetry technicians know the areas and patterns well enough to spot anomalies arising from spoofed telemetry </rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="ICT PC" head_nav="0" head_adornment="Aggregation" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="STCS Application">
-  <rationale>TBC</rationale>
+  <rationale>Some STCS applications are installed to control devices on the telemetry network.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="ICT PC" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="Modem">
-  <rationale>TBC</rationale>
+  <rationale>Some PCs have modems to allow remote access by engineers.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="SCADA Workstation" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="Modem">
-  <rationale>TBC</rationale>
+  <rationale>Some workstations have models to allow remote access by engineers.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="Laptop" head_nav="0" head_adornment="Aggregation" head_nry="1..a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="ICT Application">
-  <rationale>TBC</rationale>
+  <rationale>Corporate software is installed on technician laptops.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="Laptop" head_nav="0" head_adornment="Aggregation" head_nry="1..a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="STCS Application">
-  <rationale>TBC</rationale>
+  <rationale>Control software is installed on technician laptops.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="SCADA Workstation" head_nav="0" head_adornment="Aggregation" head_nry="1..a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="STCS Application">
-  <rationale>TBC</rationale>
+  <rationale>Control software is installed on SCADA workstations.</rationale>
 </asset_association>
-<asset_association environment="Day"  head_name="ICT cabinet" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Router">
-  <rationale>TBC</rationale>
+<asset_association environment="Day"  head_name="ICT cabinet" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Router">
+  <rationale>Routers are stored in cabinets.</rationale>
 </asset_association>
-<asset_association environment="Day"  head_name="ICT cabinet" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Firewall">
-  <rationale>TBC</rationale>
+<asset_association environment="Day"  head_name="ICT cabinet" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Firewall">
+  <rationale>Firewall appliances are stored in cabinets.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="1" tail_name="PLC Event">
-  <rationale>TBC</rationale>
+  <rationale>Events are specific to works network.</rationale>
 </asset_association>
-<asset_association environment="Day"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="1" tail_name="Suppress Event">
-  <rationale>TBC</rationale>
+<asset_association environment="Day"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="1..a" tail_name="Suppress Event">
+  <rationale>Events are specific to works network.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="Works Diary" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Diary Entry">
-  <rationale>TBC</rationale>
+  <rationale>A specific diary has multiple entries.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="PLC" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="PLC Event">
-  <rationale>TBC</rationale>
+  <rationale>Events are specific to PLCs.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="ICT PC" head_nav="0" head_adornment="Aggregation" head_nry="a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="ICT Application">
-  <rationale>TBC</rationale>
+  <rationale>Corporate applications are installed on corporate PCs.</rationale>
 </asset_association>
 <asset_association environment="Day"  head_name="Firewall" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Router">
-  <rationale>TBC</rationale>
+  <rationale>Network traffic flows through routers.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="InfoPortal" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Corporate Network">
-  <rationale>TBC</rationale>
+  <rationale>Portal is on corporate network.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="STCS Application" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="STCS credentials">
-  <rationale>TBC</rationale>
+  <rationale>Credentials are used to use STCS applications.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="Firewall" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Intrusion Detection System">
-  <rationale>TBC</rationale>
+  <rationale>Firewall mediates access to the IDS</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="Router" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Corporate Network">
-  <rationale>TBC</rationale>
+  <rationale>Router mediates access to the telemetry network.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="ICT PC" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Corporate Network">
-  <rationale>TBC</rationale>
+  <rationale>ICT PCs typically live on the corporate network.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="Router" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Telemetry Network">
-  <rationale>TBC</rationale>
+  <rationale>Routers mediate access to the telemetry network.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="ICT PC" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Telemetry Network">
-  <rationale>TBC</rationale>
+  <rationale>Some ICT PCs interact with the telemetry network.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="SCADA Workstation" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Works Network">
-  <rationale>TBC</rationale>
+  <rationale>SCADA workstations live on a particular works network.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="EnterpriseSCADA Server" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Enterprise SCADA Network">
-  <rationale>TBC</rationale>
+  <rationale>Enterprise SCADA servers live in a particular Enterprise SCADA network.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="SCADA Workstation" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="Enterprise SCADA Network">
-  <rationale>TBC</rationale>
+  <rationale>SCADA workstations live in a particular Enterprise SCADA network.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="ICT Application" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1" tail_adornment="Association" tail_nav="0" tail_name="ICT credentials">
-  <rationale>TBC</rationale>
+  <rationale>It is assumed that telemetry technicians know the areas and patterns well enough to spot anomalies arising from spoofed telemetry</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="ICT PC" head_nav="0" head_adornment="Aggregation" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="STCS Application">
-  <rationale>TBC</rationale>
+  <rationale>Some STCS applications are installed to control devices on the telemetry network.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="ICT PC" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="Modem">
-  <rationale>TBC</rationale>
+  <rationale>Some PCs have modems to allow remote access by engineers.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="SCADA Workstation" head_nav="0" head_adornment="Association" head_nry="a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="Modem">
-  <rationale>TBC</rationale>
+  <rationale>Some workstations have models to allow remote access by engineers.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="Laptop" head_nav="0" head_adornment="Aggregation" head_nry="1..a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="ICT Application">
-  <rationale>TBC</rationale>
+  <rationale>Corporate software is installed on technician laptops.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="Laptop" head_nav="0" head_adornment="Aggregation" head_nry="1..a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="STCS Application">
-  <rationale>TBC</rationale>
+  <rationale>Control software is installed on technician laptops.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="SCADA Workstation" head_nav="0" head_adornment="Aggregation" head_nry="1..a" head_role="" tail_role="" tail_nry="a" tail_adornment="Association" tail_nav="0" tail_name="STCS Application">
-  <rationale>TBC</rationale>
+  <rationale>Control software is installed on SCADA workstations.</rationale>
 </asset_association>
-<asset_association environment="Night"  head_name="ICT cabinet" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Router">
-  <rationale>TBC</rationale>
+<asset_association environment="Night"  head_name="ICT cabinet" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Router">
+  <rationale>Routers are stored in cabinets.</rationale>
 </asset_association>
-<asset_association environment="Night"  head_name="ICT cabinet" head_nav="0" head_adornment="Composition" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Firewall">
-  <rationale>TBC</rationale>
+<asset_association environment="Night"  head_name="ICT cabinet" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Firewall">
+  <rationale>Firewall appliances are stored in cabinets.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="1" tail_name="PLC Event">
-  <rationale>TBC</rationale>
+  <rationale>Events are specific to works network.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="Works Network" head_nav="0" head_adornment="Association" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="1" tail_name="Suppress Event">
-  <rationale>TBC</rationale>
+  <rationale>Events are specific to works network.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="Works Diary" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Diary Entry">
-  <rationale>TBC</rationale>
+  <rationale>A specific diary has multiple entries.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="PLC" head_nav="0" head_adornment="Aggregation" head_nry="1" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="PLC Event">
-  <rationale>TBC</rationale>
+  <rationale>Events are specific to PLCs.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="ICT PC" head_nav="0" head_adornment="Aggregation" head_nry="a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="ICT Application">
-  <rationale>TBC</rationale>
+  <rationale>Corporate applications are installed on corporate PCs.</rationale>
 </asset_association>
 <asset_association environment="Night"  head_name="Firewall" head_nav="0" head_adornment="Association" head_nry="1..a" head_role="" tail_role="" tail_nry="1..a" tail_adornment="Association" tail_nav="0" tail_name="Router">
-  <rationale>TBC</rationale>
+  <rationale>Network traffic flows through routers.</rationale>
 </asset_association>
 
 </riskanalysis>
@@ -2611,31 +2611,31 @@ Standard 7.11(vvv)</issue>
 </goal>
 <obstacle name="Ubiquitous identity data" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition>TBC</definition>
-    <probability value="0" >
+    <definition>Ubiquitous identity data</definition>
+    <probability value="0.1" >
       <rationale>We assume telemetry technicians know the areas and patterns well enough to spot anomalies arising from spoofed telemetry.</rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
 <obstacle name="Exposed ICT cabinets" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
-    <probability value="0" >
-      <rationale></rationale>
+    <definition>Exposed ICT cabinets</definition>
+    <probability value="0.5" >
+      <rationale>ICT cabinets are commonly exposed to allow quick access to technicians.</rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
 <obstacle name="Surplus equipment" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
-    <probability value="0" >
-      <rationale></rationale>
+    <definition>Surplus equipment</definition>
+    <probability value="0.5" >
+      <rationale>Redundant equipment is commonly left in various locations.</rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
 <obstacle name="Unsanitised equipment" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
+    <definition>Unsanitised equipment</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2643,7 +2643,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Accessible equipment" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
+    <definition>Accessible equipment</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2651,7 +2651,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Unused PC application" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
+    <definition>Unused PC application</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2659,7 +2659,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Redundant application" originator="Anon" >
   <obstacle_environment name="Day" category="Confidentiality_Threat" >
-    <definition></definition>
+    <definition>Redundant application</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2667,7 +2667,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Malware application" originator="Anon" >
   <obstacle_environment name="Day" category="Integrity_Threat" >
-    <definition></definition>
+    <definition>Malware application</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2675,7 +2675,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Malicious remote installation" originator="Anon" >
   <obstacle_environment name="Day" category="Accountability_Threat" >
-    <definition></definition>
+    <definition>Malicious remote installation</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2683,7 +2683,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Desktop installation" originator="Anon" >
   <obstacle_environment name="Day" category="Confidentiality_Threat" >
-    <definition></definition>
+    <definition>Desktop installation</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2691,7 +2691,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="DLL preloading" originator="Anon" >
   <obstacle_environment name="Day" category="Integrity_Threat" >
-    <definition></definition>
+    <definition>DLL preloading</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2699,7 +2699,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Zero-day threat exploit" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
+    <definition>Zero-day threat exploit</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2707,7 +2707,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Unscanned media" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
+    <definition>Unscanned media</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2715,7 +2715,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Scanning software disabled" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
+    <definition>Scanning software disabled</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2723,7 +2723,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Scanning software not installed" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
+    <definition>Scanning software not installed</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2731,7 +2731,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Software incompatibility" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
+    <definition>Software incompatibility</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2739,7 +2739,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Vendor passwords unchanged" originator="Anon" >
   <obstacle_environment name="Day" category="Integrity_Threat" >
-    <definition></definition>
+    <definition>Vendor passwords unchanged</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2747,7 +2747,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Undetected malicious traffic" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
+    <definition>Undetected malicious traffic</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2755,7 +2755,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Crafted packets" originator="Anon" >
   <obstacle_environment name="Day" category="Integrity_Threat" >
-    <definition></definition>
+    <definition>Crafted packets</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2763,7 +2763,7 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <obstacle name="Incomplete firewall rule-set" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
-    <definition></definition>
+    <definition>Incomplete firewall rule-set</definition>
     <probability value="0" >
       <rationale></rationale>
     </probability>
@@ -2847,7 +2847,6 @@ Standard 7.11(vvv)</issue>
   <fit_criterion>None</fit_criterion>
   <originator>Anon</originator>
 </requirement>
-
 <requirement name="Credentials non-disclosure" reference="ICT Credentials" reference_type="asset" label="3" type="Security" priority="1">
   <description>Access credentials to SCADA, Telemetry, and Control Systems shall not be disclosed.</description>
   <rationale>None</rationale>
@@ -2898,20 +2897,20 @@ Standard 7.11(vvv)</issue>
 </requirement>
 <requirement name="Authorised SMB or WebDAV connections" reference="Firewall" reference_type="asset" label="3" type="Security" priority="1" >
   <description>The firewall shall disallow outbound SMB or WebDAV connections unless explicitly authorised.</description>
-  <rationale>Rationale: several recent Windows Zero Day threats impact SCADA systems rely on outbound WebDav connections.</rationale>
+  <rationale>Several past Windows Zero Day threats impact SCADA systems rely on outbound WebDav connections.</rationale>
   <fit_criterion>TBC</fit_criterion>
   <originator>Anon</originator>
 </requirement>
 <requirement name="Firewall administration monitoring" reference="Firewall" reference_type="asset" label="4" type="Security" priority="3" >
   <description>Firewall administration activities shall be monitored.</description>
-  <rationale>None</rationale>
-  <fit_criterion>None</fit_criterion>
+  <rationale>Firewall is considered critical infrastructure.</rationale>
+  <fit_criterion>Logs are changed when the firewall is updated, and the log indicates who made what change.</fit_criterion>
   <originator>None</originator>
 </requirement>
 <requirement name="Hardware Firewall" reference="Firewall" reference_type="asset" label="5" type="Functional" priority="1" >
   <description>Firewalls shall be implemented using dedicated hardware.</description>
-  <rationale>None</rationale>
-  <fit_criterion>None</fit_criterion>
+  <rationale>Separate firewall appliances remove the risk of less critical hardware affecting network availability if this hardware hosts the firewall.</rationale>
+  <fit_criterion>TBC</fit_criterion>
   <originator>Standard 7.3(y)</originator>
 </requirement>
 <usecase name="Modify Telemetry Software" author="Anon" code="MTS" >
