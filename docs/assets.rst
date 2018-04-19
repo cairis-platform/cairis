@@ -58,6 +58,13 @@ Adding, updating, and deleting an asset
 
 -  Click on the Create button to add the new asset.
 
+.. raw:: html
+
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe src="https://www.youtube.com/embed/h5uQaMnuLbI" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+
+
 -  Existing assets can be modified by double clicking on the asset in
    the Assets dialog box, making the necessary changes, and clicking on
    the Update button.
@@ -131,8 +138,14 @@ This will display on the asset, and the other asset model elements immediately a
 By default, concern associations are hidden.  These are UML comment nodes that indicate elements from other CAIRIS models associated with asset.
 These concerns can be shown by changing the Hide Concerns combo box value to Yes.
 
-By clicking on a model element, information about that artifact can be
-viewed.
+By clicking on a model element, information about that artifact can be viewed.
+
+
+.. raw:: html
+
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe src="https://www.youtube.com/embed/zSo4RNUXCmw" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
 
 For details on how to print asset models as SVG files, see :doc:`Generating Documentation </gendoc>`.
 
