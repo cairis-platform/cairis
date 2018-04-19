@@ -2628,24 +2628,24 @@ Standard 7.11(vvv)</issue>
 <obstacle name="Surplus equipment" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
     <definition>Surplus equipment</definition>
-    <probability value="0.5" >
-      <rationale>Redundant equipment is commonly left in various locations.</rationale>
+    <probability value="0" >
+      <rationale></rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
 <obstacle name="Unsanitised equipment" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
     <definition>Unsanitised equipment</definition>
-    <probability value="0" >
-      <rationale></rationale>
+    <probability value="0.6" >
+      <rationale>Old equipment is often left unsanitised around plants.</rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
 <obstacle name="Accessible equipment" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
     <definition>Accessible equipment</definition>
-    <probability value="0" >
-      <rationale></rationale>
+    <probability value="0.8" >
+      <rationale>Equipment is available to most people with access to the site.</rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
@@ -2716,8 +2716,8 @@ Standard 7.11(vvv)</issue>
 <obstacle name="Scanning software disabled" originator="Anon" >
   <obstacle_environment name="Day" category="Vulnerability" >
     <definition>Scanning software disabled</definition>
-    <probability value="0" >
-      <rationale></rationale>
+    <probability value="0.8" >
+      <rationale>Scanning software is usually disabled as scans can cause an adverse reaction given the stability of some STCS applications.</rationale>
     </probability>
   </obstacle_environment>
 </obstacle>
