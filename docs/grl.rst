@@ -41,7 +41,7 @@ GRL goals, soft goals, or tasks can be associated with persona characteristics, 
 
 - Enter a synopsis that expresses the ground, warrrant, or rebuttal reference in intentional terms.
 
-- Select the GRL element type for this synopsis this can be either a goal or software.
+- Select the GRL element type for this synopsis this can be either a goal or soft goal.
 
 - Given the intentional relationship between this GRL element and the GRL goal, softgoal, or task associated with the persona characteristic, indicate whether this element is a means for achieving the characteristic element's end by selecting *Means* in the Means/End combo box.  Alternatively, if the characteristic's element is a means for achieving this GRL elements end then select *End*.
 
