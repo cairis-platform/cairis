@@ -32,6 +32,12 @@ Adding, updating, and deleting a role
 -  Click on the Create button to Add the new role to the CAIRIS
    database.
 
+.. raw:: html
+
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe src="https://www.youtube.com/embed/eEqr2X_mvGM" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+
 -  As responses and countermeasures are assigned to roles, the Role
    form is automatically updated to reflect these new dependencies.
    These dependencies can not be modified from the Role dialog.
