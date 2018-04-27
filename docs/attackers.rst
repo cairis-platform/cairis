@@ -24,7 +24,7 @@ Adding, updating, and deleting an attacker
 -  If you have decided to personalise the attacker with a picture, this
    can be added by clicking on avatar silhouette next to the attacker
    description, and selecting a image to represent the attacker. Please note that the image itself is NOT
-   imported into the database, only the file path to the picture.
+   imported into the database, only the file path to the picture.  The image will be uploaded to the directory corresponding with the upload_dir value in cairis.cnf.  Attacker images are loaded from the directory stipuloaded by the default_image_dir value in cairis.cnf.
 
 -  Click on the Add button in the environment table, and select an environment to situate the attacker in. This will add the new environment to the environment list.
 
