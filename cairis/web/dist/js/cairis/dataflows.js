@@ -109,6 +109,8 @@ $(document).on('click', "td.dataflow-rows", function(){
     $('#UpdateDataflow').text("Update");
     refreshDimensionSelector($('#theDataflowEnvironmentName'),'environment',undefined,function() {
       $('#theDataflowEnvironmentName').val(dataflow.theEnvironmentName);
+      $('#theDataflowFromType').val(dataflow.theFromType);
+      $('#theDataflowToType').val(dataflow.theToType);
       $('#theDataflowName').val(dataflow.theName);
       refreshDimensionSelector($('#theDataflowFromName'),dataflow.theFromType,dataflow.theEnvironmentName,function() {
         $('#theDataflowFromName').val(dataflow.theFromName);

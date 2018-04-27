@@ -2771,20 +2771,20 @@ Standard 7.11(vvv)</issue>
 </obstacle>
 <requirement name="Active Directory wifi control" reference="Corporate Network" reference_type="asset" label="1" type="Functional" priority="1" >
   <description>Access control to wifi devices shall be managed through Active Directory.</description>
-  <rationale>None</rationale>
-  <fit_criterion>None</fit_criterion>
+  <rationale>Active Directory enforces access control for ACME corporate devices.</rationale>
+  <fit_criterion>A wifi device is added to the corporate network but not to Active Directory.  Access to a resource in Active Directory fails.</fit_criterion>
   <originator>Standard 7.5(mm)</originator>
 </requirement>
 <requirement name="Communication device backdoors" reference="Corporate Network" reference_type="asset" label="2" type="Security" priority="1" >
   <description>Where vendor installed communication devices exist, backdoor access shall not be configured.</description>
-  <rationale>None</rationale>
-  <fit_criterion>None</fit_criterion>
+  <rationale>Backdoors are vulnerabilities</rationale>
+  <fit_criterion>Network scans find no backdoor access.</fit_criterion>
   <originator>Standard 7.6(tt)</originator>
 </requirement>
 <requirement name="Email routing" reference="Corporate Network" reference_type="asset" label="3" type="Functional" priority="1" >
   <description>Email from SCADA, Telemetry and Control Systems shall be routed through the corporate e-mail System.</description>
-  <rationale>None</rationale>
-  <fit_criterion>None</fit_criterion>
+  <rationale>Email services are managed by corporate IT.</rationale>
+  <fit_criterion></fit_criterion>
   <originator>Standard 7.7 (vv)</originator>
 </requirement>
 <requirement name="Port scan" reference="Corporate Network" reference_type="asset" label="4" type="Security" priority="1" >
@@ -2898,19 +2898,19 @@ Standard 7.11(vvv)</issue>
 <requirement name="Authorised SMB or WebDAV connections" reference="Firewall" reference_type="asset" label="3" type="Security" priority="1" >
   <description>The firewall shall disallow outbound SMB or WebDAV connections unless explicitly authorised.</description>
   <rationale>Several past Windows Zero Day threats impact SCADA systems rely on outbound WebDav connections.</rationale>
-  <fit_criterion>TBC</fit_criterion>
+  <fit_criterion>An unknown application attempts to open an SMB and WebDAV connection to an address that requires routing through the firewall and fails.</fit_criterion>
   <originator>Anon</originator>
 </requirement>
 <requirement name="Firewall administration monitoring" reference="Firewall" reference_type="asset" label="4" type="Security" priority="3" >
   <description>Firewall administration activities shall be monitored.</description>
   <rationale>Firewall is considered critical infrastructure.</rationale>
   <fit_criterion>Logs are changed when the firewall is updated, and the log indicates who made what change.</fit_criterion>
-  <originator>None</originator>
+  <originator>Anon</originator>
 </requirement>
 <requirement name="Hardware Firewall" reference="Firewall" reference_type="asset" label="5" type="Functional" priority="1" >
   <description>Firewalls shall be implemented using dedicated hardware.</description>
   <rationale>Separate firewall appliances remove the risk of less critical hardware affecting network availability if this hardware hosts the firewall.</rationale>
-  <fit_criterion>TBC</fit_criterion>
+  <fit_criterion>Firewall software fails to run if any STCS or corporate applications are running on the same device.</fit_criterion>
   <originator>Standard 7.3(y)</originator>
 </requirement>
 <usecase name="Modify Telemetry Software" author="Anon" code="MTS" >
