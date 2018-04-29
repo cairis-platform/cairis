@@ -7,7 +7,7 @@ title: Getting started
 
 # Live Demo
 
-A live demo of CAIRIS is available to use on [demo.cairis.org](https://demo.cairis.org).  The username and password you need are *test* and *test*.  
+A live demo of CAIRIS is available to use on [demo.cairis.org](https://demo.cairis.org).  The username and password you need are *test* and *test*. Internet Explorer isn't supported by CAIRIS.  CAIRIS does, however, work well with Edge, Safari, Chrome, Firefox, and Opera.
 
 The live demo comes with two example models: [NeuroGrid](https://cairis.org/NeuroGrid) and [ACME Water](https://cairis.org/ACME_Water).  To open these, select the System / Open Database menu, and choose the model to open.
 
@@ -27,7 +27,7 @@ sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=b
 {% endhighlight %}
 
 
-* From the web browser of your choice, connect to the CAIRIS URL, e.g. http://localhost
+* From your web browser, connect to the CAIRIS URL, e.g. http://localhost
 When asked for credentials, provide test/test
 
 * If you want to interact with a pre-existing CAIRIS model, you can find some examples on the CAIRIS github, repository, e.g. [NeuroGrid](https://github.com/failys/cairis/blob/master/examples/exemplars/NeuroGrid/NeuroGrid.xml). You can import this from the System/Import menu, selecting type 'Model', and the model file to import. Allow a minute or two for this import to complete.
