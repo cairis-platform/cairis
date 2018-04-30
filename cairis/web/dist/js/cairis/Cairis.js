@@ -114,7 +114,6 @@ $('#apcharacteristicbox').change(function() {
   var selection = $(this).find('option:selected').text();
   var pName = $('#appersonasbox').val();
   var bvName = $('#apbtbox').val();
-  appendPersonaCharacteristics(pName,bvName,'All');
   getPersonaView(pName,bvName,selection);
 });
 
@@ -1643,7 +1642,11 @@ $("#chooseEnvironment").on('shown.bs.modal', function() {
 $("#chooseEnvironment").on('click', '#chooseEnvironmentButton',function(e) {
   if ($('#chooseEnvironment').attr('data-chooseDimension') == 'persona') {
     refreshDimensionSelector($('#appersonasbox'),'persona',undefined,function() {
-      getPersonaView($('#chooseEnvironmentSelect').val(),'All','All');
+      var pName = $('#chooseEnvironmentSelect').val();
+      $('#apbtbox').val('All');
+      $('#apcharacteristicbox').val('All');
+      appendPersonaCharacteristics(pName,'All','All');
+      getPersonaView(pName,'All','All');
     });
   }
   else if ($('#chooseEnvironment').attr('data-chooseDimension') == 'misusability case') {

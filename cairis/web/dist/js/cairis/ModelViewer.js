@@ -114,7 +114,6 @@ $('#apcharacteristicbox').change(function() {
   var selection = $(this).find('option:selected').text();
   var pName = $('#appersonasbox').val();
   var bvName = $('#apbtbox').val();
-  appendPersonaCharacteristics(pName,bvName,'All');
   getPersonaView(pName,bvName,selection);
 });
 
