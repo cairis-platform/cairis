@@ -28,7 +28,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required, http_auth_required
 from flask_cors import CORS
 from flask_restful import Api, Resource
-from flask_restful_swagger import swagger
 from jsonpickle import encode
 
 from cairis.core.Borg import Borg
@@ -55,7 +54,7 @@ app.config['SECURITY_PASSWORD_SALT'] = b.passwordSalt
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:' + b.rPasswd + '@' + b.dbHost + '/cairis_user'
 
 db = SQLAlchemy(app)
-api = swagger.docs(Api(app), apiVersion='1.2.10', description='CAIRIS API', api_spec_url='/api/cairis')
+api = Api(app)
 cors = CORS(app)
 
 roles_users = db.Table('roles_users', db.Column('user_id', db.Integer(), db.ForeignKey('auth_user.id')), db.Column('role_id', db.Integer(), db.ForeignKey('auth_role.id')))
