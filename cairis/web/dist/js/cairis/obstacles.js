@@ -733,5 +733,3 @@ function generateVulnerability(obsName) {
     }
   });
 }
-
-

@@ -825,3 +825,5 @@ mainContent.on('click', '#theSubgoalType', function () {
     }
   }
 });
+
+mainContent.on('keypress','#theName',filterReservedChars);

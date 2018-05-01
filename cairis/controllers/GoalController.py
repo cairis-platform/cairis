@@ -17,9 +17,11 @@
 
 import sys
 if (sys.version_info > (3,)):
+  from urllib.parse import unquote
   import http.client
   from http.client import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 else:
+  from urllib import unquote
   import httplib
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
@@ -71,7 +73,7 @@ class GoalByNameAPI(Resource):
     coloured = request.args.get('coloured', False)
 
     dao = GoalDAO(session_id)
-    found_goal = dao.get_goal_by_name(name, coloured=(coloured == '1'))
+    found_goal = dao.get_goal_by_name(unquote(name), coloured=(coloured == '1'))
     dao.close()
 
     resp = make_response(json_serialize(found_goal, session_id=session_id))
@@ -83,7 +85,7 @@ class GoalByNameAPI(Resource):
 
     dao = GoalDAO(session_id)
     upd_goal = dao.from_json(request)
-    dao.update_goal(upd_goal, name)
+    dao.update_goal(upd_goal, unquote(name))
     dao.close()
 
     resp_dict = {'message': 'Goal successfully updated'}
@@ -95,7 +97,7 @@ class GoalByNameAPI(Resource):
     session_id = get_session_id(session, request)
 
     dao = GoalDAO(session_id)
-    dao.delete_goal(name)
+    dao.delete_goal(unquote(name))
     dao.close()
 
     resp_dict = {'message': 'Goal successfully deleted'}
@@ -146,7 +148,7 @@ class ResponsibilityModelAPI(Resource):
     if role == 'all': role = ''
 
     dao = GoalDAO(session_id)
-    dot_code = dao.get_responsibility_model(environment, role)
+    dot_code = dao.get_responsibility_model(unquote(environment), unquote(role))
     dao.close()
 
     resp = make_response(model_generator.generate(dot_code, model_type='responsibility',renderer='dot'), OK)
@@ -163,7 +165,7 @@ class GoalAssociationByNameAPI(Resource):
     session_id = get_session_id(session, request)
 
     dao = GoalAssociationDAO(session_id)
-    assoc = dao.get_goal_association(environment_name,goal_name,subgoal_name)
+    assoc = dao.get_goal_association(unquote(environment_name),unquote(goal_name),unquote(subgoal_name))
     dao.close()
 
     resp = make_response(json_serialize(assoc, session_id=session_id))
@@ -173,7 +175,7 @@ class GoalAssociationByNameAPI(Resource):
   def delete(self,environment_name,goal_name,subgoal_name):
     session_id = get_session_id(session, request)
     dao = GoalAssociationDAO(session_id)
-    dao.delete_goal_association(environment_name,goal_name,subgoal_name)
+    dao.delete_goal_association(unquote(environment_name),unquote(goal_name),unquote(subgoal_name))
     dao.close()
 
     resp_dict = {'message': 'Goal Association successfully deleted'}
